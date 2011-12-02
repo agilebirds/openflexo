@@ -19,8 +19,6 @@
  */
 package org.openflexo.components.browser.ontology;
 
-
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -31,36 +29,33 @@ import org.openflexo.toolbox.StringUtils;
 
 /**
  * Browser element representing the calc palette element
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class CalcDrawingConnectorBrowserElement extends BrowserElement
-{
+public class CalcDrawingConnectorBrowserElement extends BrowserElement {
 
-    protected CalcDrawingConnectorBrowserElement(ExampleDrawingConnector connector, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(connector, BrowserElementType.ONTOLOGY_CALC_DRAWING_CONNECTOR, browser, parent);
-    }
+	protected CalcDrawingConnectorBrowserElement(ExampleDrawingConnector connector, ProjectBrowser browser, BrowserElement parent) {
+		super(connector, BrowserElementType.ONTOLOGY_CALC_DRAWING_CONNECTOR, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-       	for (ExampleDrawingObject element : getConnector().getChilds()) {
-    		addToChilds(element);
-    	}
-     }
+	@Override
+	protected void buildChildrenVector() {
+		for (ExampleDrawingObject element : getConnector().getChilds()) {
+			addToChilds(element);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-    	if (StringUtils.isEmpty(getConnector().getName())) return "<"+FlexoLocalization.localizedForKey("unnamed")+">";
-        return getConnector().getName();
-    }
+	@Override
+	public String getName() {
+		if (StringUtils.isEmpty(getConnector().getName())) {
+			return "<" + FlexoLocalization.localizedForKey("unnamed") + ">";
+		}
+		return getConnector().getName();
+	}
 
-    protected ExampleDrawingConnector getConnector()
-    {
-        return (ExampleDrawingConnector) getObject();
-    }
+	protected ExampleDrawingConnector getConnector() {
+		return (ExampleDrawingConnector) getObject();
+	}
 
 }

@@ -43,8 +43,7 @@ import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.UndoManager;
 
-public class AdvancedPrefs extends ContextPreferences
-{
+public class AdvancedPrefs extends ContextPreferences {
 
 	private static final String CHEESE = "l@iUh%gvwe@#{8ç]74562";
 
@@ -60,10 +59,12 @@ public class AdvancedPrefs extends ContextPreferences
 
 	protected static final String BUG_REPORT_URL_KEY = "openFlexoBugReportURL";
 
+	protected static final String WEB_SERVICE_INSTANCE = "webServiceInstance";
 	protected static final String WEB_SERVICE_URL_KEY = "webServiceUrl";
 	protected static final String WEB_SERVICE_LOGIN_KEY = "webServiceLogin";
 	protected static final String WEB_SERVICE_PWD_KEY = "webServicePwd";
 	protected static final String WEB_SERVICE_REMEMBERANDDONTASKPARAMSANYMORE_KEY = "rememberAndDontAskWebServiceParamsAnymore";
+	protected static final String FLEXO_SERVER_INSTANCE_URL = "flexoserver_instance_url";
 
 	protected static final String ENABLE_UNDO_MANAGER = "enableUndoManager";
 
@@ -88,54 +89,45 @@ public class AdvancedPrefs extends ContextPreferences
 	private static final String PROXY_LOGIN = "ProxyLogin";
 	private static final String PROXY_PASSWORD = "ProxyPassword";
 
-
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return "advanced";
 	}
 
 	@Override
-	public File getInspectorFile()
-	{
+	public File getInspectorFile() {
 		return new FileResource("Config/Preferences/AdvancedPrefs.inspector");
 	}
 
-	public static File getLastVisitedDirectory()
-	{
+	public static File getLastVisitedDirectory() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getLastVisitedDirectory");
 		}
 		return getPreferences().getDirectoryProperty(LAST_VISITED_DIRECTORY_KEY, true);
 	}
 
-	public static void setLastVisitedDirectory(File f)
-	{
+	public static void setLastVisitedDirectory(File f) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setLastVisitedDirectory");
 		}
 		getPreferences().setDirectoryProperty(LAST_VISITED_DIRECTORY_KEY, f, true);
 	}
 
-	public static File getEclipseWorkspaceDirectory()
-	{
+	public static File getEclipseWorkspaceDirectory() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getEclipseWorkspaceDirectory");
 		}
 		return getPreferences().getDirectoryProperty(ECLIPSE_WORKSPACE_DIRECTORY_KEY, true);
 	}
 
-	public static void setEclipseWorkspaceDirectory(File f)
-	{
+	public static void setEclipseWorkspaceDirectory(File f) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setEclipseWorkspaceDirectory");
 		}
 		getPreferences().setDirectoryProperty(ECLIPSE_WORKSPACE_DIRECTORY_KEY, f, true);
 	}
 
-
-	public static String getBugReportDirectActionUrl()
-	{
+	public static String getBugReportDirectActionUrl() {
 		String answer = getPreferences().getProperty(BUG_REPORT_URL_KEY);
 		if (answer == null || answer.equals(String.valueOf(Boolean.TRUE))) {
 			setBugReportDirectActionUrl("https://support.openflexo.com/DLPM/WebObjects/DLPM.woa/wa/DirectReportDA/importFlexoBR");
@@ -144,48 +136,40 @@ public class AdvancedPrefs extends ContextPreferences
 		return answer;
 	}
 
-	public static void setBugReportDirectActionUrl(String hasWebobjects)
-	{
+	public static void setBugReportDirectActionUrl(String hasWebobjects) {
 		getPreferences().setProperty(BUG_REPORT_URL_KEY, hasWebobjects);
 	}
 
-	public static boolean getSynchronizedBrowser()
-	{
+	public static boolean getSynchronizedBrowser() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getSynchronizedBrowser");
 		}
-		return getPreferences().getProperty(SYNCHRONIZED_BROWSER)!="false";
+		return getPreferences().getProperty(SYNCHRONIZED_BROWSER) != "false";
 	}
 
-	public static void setSynchronizedBrowser(boolean synchronizedBrowser)
-	{
+	public static void setSynchronizedBrowser(boolean synchronizedBrowser) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setSynchronizedBrowser");
 		}
-		getPreferences().setProperty(SYNCHRONIZED_BROWSER, synchronizedBrowser?"true":"false");
+		getPreferences().setProperty(SYNCHRONIZED_BROWSER, synchronizedBrowser ? "true" : "false");
 	}
 
-
-	public static FlexoFont getBrowserFont()
-	{
+	public static FlexoFont getBrowserFont() {
 		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("getBrowserFont");
 		}
 		FlexoFont reply = FlexoFont.get(getPreferences().getProperty(BROWSERFONT_KEY));
-		return reply==null?new FlexoFont("Sans Serif",Font.PLAIN, 11):reply;
+		return reply == null ? new FlexoFont("Sans Serif", Font.PLAIN, 11) : reply;
 	}
 
-	public static void setBrowserFont(FlexoFont font)
-	{
+	public static void setBrowserFont(FlexoFont font) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setBrowserFont");
 		}
 		getPreferences().setProperty(BROWSERFONT_KEY, font.toString());
 	}
 
-
-	public static boolean getCloseOnMouseOut()
-	{
+	public static boolean getCloseOnMouseOut() {
 		String answer = getPreferences().getProperty(CLOSE_POPUP_ON_MOUSE_OUT);
 		if (answer == null) {
 			setCloseOnMouseOut(false);
@@ -194,14 +178,12 @@ public class AdvancedPrefs extends ContextPreferences
 		return Boolean.parseBoolean(answer);
 	}
 
-	public static void setCloseOnMouseOut(boolean closeOnMouseOut)
-	{
+	public static void setCloseOnMouseOut(boolean closeOnMouseOut) {
 		getPreferences().setProperty(CLOSE_POPUP_ON_MOUSE_OUT, String.valueOf(closeOnMouseOut));
 		CustomPopup.configuration.setCloseWhenPointerLeavesPopup(closeOnMouseOut);
 	}
 
-	public static boolean getEnableUndoManager()
-	{
+	public static boolean getEnableUndoManager() {
 		String answer = getPreferences().getProperty(ENABLE_UNDO_MANAGER);
 		if (answer == null) {
 			setEnableUndoManager(true);
@@ -209,14 +191,13 @@ public class AdvancedPrefs extends ContextPreferences
 		}
 		return Boolean.parseBoolean(answer);
 	}
-	public static void setEnableUndoManager(boolean enableUndoManager)
-	{
+
+	public static void setEnableUndoManager(boolean enableUndoManager) {
 		getPreferences().setProperty(ENABLE_UNDO_MANAGER, String.valueOf(enableUndoManager));
 		UndoManager.setEnable(enableUndoManager);
 	}
 
-	public static boolean getHightlightUncommentedItem()
-	{
+	public static boolean getHightlightUncommentedItem() {
 		String answer = getPreferences().getProperty(HIGHLIGHT_UNCOMMENTED_ITEMS);
 		if (answer == null) {
 			setHightlightUncommentedItem(false);
@@ -224,13 +205,12 @@ public class AdvancedPrefs extends ContextPreferences
 		}
 		return Boolean.parseBoolean(answer);
 	}
-	public static void setHightlightUncommentedItem(boolean enableUndoManager)
-	{
+
+	public static void setHightlightUncommentedItem(boolean enableUndoManager) {
 		getPreferences().setProperty(HIGHLIGHT_UNCOMMENTED_ITEMS, String.valueOf(enableUndoManager));
 	}
 
-	public static Integer getUndoLevels()
-	{
+	public static Integer getUndoLevels() {
 		Integer answer = getPreferences().getIntegerProperty(UNDO_LEVELS);
 		if (answer == null) {
 			setUndoLevels(20);
@@ -238,16 +218,15 @@ public class AdvancedPrefs extends ContextPreferences
 		}
 		return answer;
 	}
-	public static void setUndoLevels(Integer undoLevels)
-	{
+
+	public static void setUndoLevels(Integer undoLevels) {
 		getPreferences().setProperty(UNDO_LEVELS, String.valueOf(undoLevels.intValue()));
 		UndoManager.setUndoLevels(undoLevels);
 	}
 
-	public static LookAndFeel getLookAndFeel()
-	{
-		String returned = getPreferences().getProperty(ToolBox.getPLATFORM()+LOOK_AND_FEEL);
-		if (returned==null) {
+	public static LookAndFeel getLookAndFeel() {
+		String returned = getPreferences().getProperty(ToolBox.getPLATFORM() + LOOK_AND_FEEL);
+		if (returned == null) {
 			returned = getPreferences().getProperty(LOOK_AND_FEEL);
 		}
 		if (returned == null) {
@@ -257,19 +236,15 @@ public class AdvancedPrefs extends ContextPreferences
 		return LookAndFeel.get(returned);
 	}
 
-	public static String getLookAndFeelString()
-	{
+	public static String getLookAndFeelString() {
 		return LookAndFeel.lookAndFeelConverter.convertToString(getLookAndFeel());
 	}
 
-
-
-	public static void setLookAndFeel(LookAndFeel value)
-	{
-		if (value==null) {
+	public static void setLookAndFeel(LookAndFeel value) {
+		if (value == null) {
 			value = LookAndFeel.getDefaultLookAndFeel();
 		}
-		getPreferences().setProperty(ToolBox.getPLATFORM()+LOOK_AND_FEEL, LookAndFeel.lookAndFeelConverter.convertToString(value));
+		getPreferences().setProperty(ToolBox.getPLATFORM() + LOOK_AND_FEEL, LookAndFeel.lookAndFeelConverter.convertToString(value));
 		try {
 			ModuleLoader.setLookAndFeel(LookAndFeel.lookAndFeelConverter.convertToString(value));
 		} catch (ClassNotFoundException e) {
@@ -283,16 +258,13 @@ public class AdvancedPrefs extends ContextPreferences
 		}
 	}
 
-
-
 	public static String getAutoSaveDirectory() {
-		if (ModuleLoader.getAutoSaveDirectory()!=null) {
+		if (ModuleLoader.getAutoSaveDirectory() != null) {
 			return ModuleLoader.getAutoSaveDirectory().getAbsolutePath();
 		} else {
 			return FlexoLocalization.localizedForKey("time_traveling_is_disabled");
 		}
 	}
-
 
 	public static void save() {
 		FlexoPreferences.savePreferences(true);
@@ -300,23 +272,20 @@ public class AdvancedPrefs extends ContextPreferences
 
 	public static boolean hideFilteredObjects() {
 		Boolean hideFilteredObjects = getPreferences().getBooleanProperty(HIDE_FILTERED_OBJECTS);
-		if (hideFilteredObjects==null) {
+		if (hideFilteredObjects == null) {
 			setHideFilteredObjects(true);
 			hideFilteredObjects = Boolean.TRUE;
 		}
 		return hideFilteredObjects;
 	}
 
-	public static void setHideFilteredObjects(boolean enabled)
-	{
+	public static void setHideFilteredObjects(boolean enabled) {
 		getPreferences().setBooleanProperty(HIDE_FILTERED_OBJECTS, enabled);
 	}
 
-	public static String getWebServiceUrl()
-	{
+	public static String getWebServiceUrl() {
 		String answer = getPreferences().getProperty(WEB_SERVICE_URL_KEY);
-		if (answer == null)
-		{
+		if (answer == null) {
 			setWebServiceUrl("https://www.flexobpmserver.com/Flexo/WebObjects/FlexoServer.woa/ws/PPMWebService");
 			return getWebServiceUrl();
 		}
@@ -327,45 +296,38 @@ public class AdvancedPrefs extends ContextPreferences
 		return preferences(ADVANCED_PREFERENCES);
 	}
 
-	public static void setWebServiceUrl(String webServiceUrl)
-	{
+	public static void setWebServiceUrl(String webServiceUrl) {
 		getPreferences().setProperty(WEB_SERVICE_URL_KEY, webServiceUrl);
 	}
 
-	public static String getWebServiceLogin()
-	{
+	public static String getWebServiceLogin() {
 		String answer = getPreferences().getProperty(WEB_SERVICE_LOGIN_KEY);
 		return answer;
 	}
 
-	public static void setWebServiceLogin(String webServiceLogin)
-	{
+	public static void setWebServiceLogin(String webServiceLogin) {
 		getPreferences().setProperty(WEB_SERVICE_LOGIN_KEY, webServiceLogin);
 	}
 
-	public static String getWebServiceMd5Password()
-	{
+	public static String getWebServiceMd5Password() {
 		String answer = getPreferences().getProperty(WEB_SERVICE_PWD_KEY);
 		return answer;
 	}
 
-	public static void setWebServiceMd5Password(String webServiceMd5Password)
-	{
+	public static void setWebServiceMd5Password(String webServiceMd5Password) {
 		getPreferences().setProperty(WEB_SERVICE_PWD_KEY, webServiceMd5Password);
 	}
 
-	public static boolean getRememberAndDontAskWebServiceParamsAnymore()
-	{
+	public static boolean getRememberAndDontAskWebServiceParamsAnymore() {
 		Boolean b = getPreferences().getBooleanProperty(WEB_SERVICE_REMEMBERANDDONTASKPARAMSANYMORE_KEY);
-		if (b==null) {
+		if (b == null) {
 			setRememberAndDontAskWebServiceParamsAnymore(false);
 			return getRememberAndDontAskWebServiceParamsAnymore();
 		}
 		return b;
 	}
 
-	public static void setRememberAndDontAskWebServiceParamsAnymore(boolean rememberAndDontAskWebServiceParamsAnymore)
-	{
+	public static void setRememberAndDontAskWebServiceParamsAnymore(boolean rememberAndDontAskWebServiceParamsAnymore) {
 		getPreferences().setBooleanProperty(WEB_SERVICE_REMEMBERANDDONTASKPARAMSANYMORE_KEY, rememberAndDontAskWebServiceParamsAnymore);
 	}
 
@@ -377,17 +339,17 @@ public class AdvancedPrefs extends ContextPreferences
 			try {
 				System.setProperty("java.net.useSystemProxies", String.valueOf(getUseDefaultProxySettings()));
 				if (!getUseDefaultProxySettings() && !getNoProxy()) {
-					if (getProxyHost()!=null) {
-						System.setProperty("http.proxyHost",getProxyHost());
+					if (getProxyHost() != null) {
+						System.setProperty("http.proxyHost", getProxyHost());
 					}
-					if (getSProxyHost()!=null) {
-						System.setProperty("https.proxyHost",getSProxyHost());
+					if (getSProxyHost() != null) {
+						System.setProperty("https.proxyHost", getSProxyHost());
 					}
-					if (getProxyPort()!=null) {
-						System.setProperty("http.proxyPort",String.valueOf(getProxyPort()));
+					if (getProxyPort() != null) {
+						System.setProperty("http.proxyPort", String.valueOf(getProxyPort()));
 					}
-					if (getSProxyPort()!=null) {
-						System.setProperty("https.proxyPort",String.valueOf(getSProxyPort()));
+					if (getSProxyPort() != null) {
+						System.setProperty("https.proxyPort", String.valueOf(getSProxyPort()));
 					}
 				} else {
 					System.clearProperty("http.proxyHost");
@@ -401,36 +363,33 @@ public class AdvancedPrefs extends ContextPreferences
 		}
 	}
 
-	public static boolean getUseDefaultProxySettings()
-	{
+	public static boolean getUseDefaultProxySettings() {
 		Boolean b = getPreferences().getBooleanProperty(USE_DEFAULT_PROXY_SETTINGS);
-		if (b==null) {
-			setUseDefaultProxySettings(ProxyUtils.getAutoConfigURL()==null);
+		if (b == null) {
+			setUseDefaultProxySettings(ProxyUtils.getAutoConfigURL() == null);
 			return getUseDefaultProxySettings();
 		}
 		return b;
 	}
 
-	public static void setUseDefaultProxySettings(boolean useDefault)
-	{
+	public static void setUseDefaultProxySettings(boolean useDefault) {
 		getPreferences().setBooleanProperty(USE_DEFAULT_PROXY_SETTINGS, useDefault);
 		applyProxySettings();
 	}
 
-	public static boolean getNoProxy()
-	{
+	public static boolean getNoProxy() {
 		Boolean b = getPreferences().getBooleanProperty(NO_PROXY);
-		if (b==null) {
+		if (b == null) {
 			boolean noProxy = true;
-			if (ToolBox.getPLATFORM()==ToolBox.WINDOWS) {
+			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 				try {
 					noProxy = !ProxyUtils.isProxyEnabled();
 					if (logger.isLoggable(Level.INFO)) {
-						logger.info("This machine seems uses a proxy? "+!noProxy);
+						logger.info("This machine seems uses a proxy? " + !noProxy);
 					}
 				} catch (RuntimeException e) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.log(Level.WARNING,e.getMessage(),e);
+						logger.log(Level.WARNING, e.getMessage(), e);
 					}
 				}
 			}
@@ -440,33 +399,31 @@ public class AdvancedPrefs extends ContextPreferences
 		return b;
 	}
 
-	public static void setNoProxy(boolean noProxy)
-	{
+	public static void setNoProxy(boolean noProxy) {
 		getPreferences().setBooleanProperty(NO_PROXY, noProxy);
 		applyProxySettings();
 	}
 
-	public static String getProxyHost()
-	{
+	public static String getProxyHost() {
 		String proxyHost = getPreferences().getProperty(HTTP_PROXY_HOST);
-		if (proxyHost==null) {
-			if (ToolBox.getPLATFORM()==ToolBox.WINDOWS) {
+		if (proxyHost == null) {
+			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 				try {
 					if (ProxyUtils.autoDetectSettingsEnabled()) {
 						List<String[]> proxies = ProxyUtils.getProxiesFromAutoConfigURL(ProxyUtils.getAutoConfigURL(), 80);
-						if (proxies.size()>0) {
-							proxyHost = proxies.get(proxies.size()-1)[0];
+						if (proxies.size() > 0) {
+							proxyHost = proxies.get(proxies.size() - 1)[0];
 						}
 					}
-					if (proxyHost==null) {
+					if (proxyHost == null) {
 						String[] s = ProxyUtils.getHTTPProxyPort(false);
-						if (s!=null && s.length>0) {
+						if (s != null && s.length > 0) {
 							proxyHost = s[0];
 						}
 					}
 				} catch (RuntimeException e) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.log(Level.WARNING,e.getMessage(),e);
+						logger.log(Level.WARNING, e.getMessage(), e);
 					}
 				}
 			}
@@ -475,33 +432,31 @@ public class AdvancedPrefs extends ContextPreferences
 		return proxyHost;
 	}
 
-	public static void setProxyHost(String proxyHost)
-	{
-		getPreferences().setProperty(HTTP_PROXY_HOST, proxyHost,"proxyHost");
+	public static void setProxyHost(String proxyHost) {
+		getPreferences().setProperty(HTTP_PROXY_HOST, proxyHost, "proxyHost");
 		applyProxySettings();
 	}
 
-	public static Integer getProxyPort()
-	{
+	public static Integer getProxyPort() {
 		Integer proxyPort = getPreferences().getIntegerProperty(HTTP_PROXY_PORT);
-		if (proxyPort==null) {
-			if (ToolBox.getPLATFORM()==ToolBox.WINDOWS) {
+		if (proxyPort == null) {
+			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 				try {
 					if (ProxyUtils.autoDetectSettingsEnabled()) {
 						List<String[]> proxies = ProxyUtils.getProxiesFromAutoConfigURL(ProxyUtils.getAutoConfigURL(), 80);
-						if (proxies.size()>0) {
-							proxyPort = Integer.parseInt(proxies.get(proxies.size()-1)[1]);
+						if (proxies.size() > 0) {
+							proxyPort = Integer.parseInt(proxies.get(proxies.size() - 1)[1]);
 						}
 					}
-					if (proxyPort==null) {
+					if (proxyPort == null) {
 						String[] s = ProxyUtils.getHTTPProxyPort(false);
-						if (s!=null && s.length>1) {
+						if (s != null && s.length > 1) {
 							proxyPort = Integer.parseInt(s[1]);
 						}
 					}
 				} catch (RuntimeException e) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.log(Level.WARNING,e.getMessage(),e);
+						logger.log(Level.WARNING, e.getMessage(), e);
 					}
 				}
 			}
@@ -510,33 +465,31 @@ public class AdvancedPrefs extends ContextPreferences
 		return proxyPort;
 	}
 
-	public static void setProxyPort(Integer proxyPort)
-	{
-		getPreferences().setIntegerProperty(HTTP_PROXY_PORT, proxyPort,"proxyPort");
+	public static void setProxyPort(Integer proxyPort) {
+		getPreferences().setIntegerProperty(HTTP_PROXY_PORT, proxyPort, "proxyPort");
 		applyProxySettings();
 	}
 
-	public static String getSProxyHost()
-	{
+	public static String getSProxyHost() {
 		String proxyHost = getPreferences().getProperty(HTTPS_PROXY_HOST);
-		if (proxyHost==null) {
-			if (ToolBox.getPLATFORM()==ToolBox.WINDOWS) {
+		if (proxyHost == null) {
+			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 				try {
 					if (ProxyUtils.autoDetectSettingsEnabled()) {
 						List<String[]> proxies = ProxyUtils.getProxiesFromAutoConfigURL(ProxyUtils.getAutoConfigURL(), 443);
-						if (proxies.size()>0) {
-							proxyHost = proxies.get(proxies.size()-1)[0];
+						if (proxies.size() > 0) {
+							proxyHost = proxies.get(proxies.size() - 1)[0];
 						}
 					}
-					if (proxyHost==null) {
+					if (proxyHost == null) {
 						String[] s = ProxyUtils.getHTTPProxyPort(true);
-						if (s!=null && s.length>0) {
+						if (s != null && s.length > 0) {
 							proxyHost = s[0];
 						}
 					}
 				} catch (RuntimeException e) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.log(Level.WARNING,e.getMessage(),e);
+						logger.log(Level.WARNING, e.getMessage(), e);
 					}
 				}
 			}
@@ -545,33 +498,31 @@ public class AdvancedPrefs extends ContextPreferences
 		return proxyHost;
 	}
 
-	public static void setSProxyHost(String proxyHost)
-	{
-		getPreferences().setProperty(HTTPS_PROXY_HOST, proxyHost,"sProxyHost");
+	public static void setSProxyHost(String proxyHost) {
+		getPreferences().setProperty(HTTPS_PROXY_HOST, proxyHost, "sProxyHost");
 		applyProxySettings();
 	}
 
-	public static Integer getSProxyPort()
-	{
+	public static Integer getSProxyPort() {
 		Integer proxyPort = getPreferences().getIntegerProperty(HTTPS_PROXY_PORT);
-		if (proxyPort==null) {
-			if (ToolBox.getPLATFORM()==ToolBox.WINDOWS) {
+		if (proxyPort == null) {
+			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 				try {
 					if (ProxyUtils.autoDetectSettingsEnabled()) {
 						List<String[]> proxies = ProxyUtils.getProxiesFromAutoConfigURL(ProxyUtils.getAutoConfigURL(), 443);
-						if (proxies.size()>0) {
-							proxyPort = Integer.parseInt(proxies.get(proxies.size()-1)[1]);
+						if (proxies.size() > 0) {
+							proxyPort = Integer.parseInt(proxies.get(proxies.size() - 1)[1]);
 						}
 					}
-					if (proxyPort==null) {
+					if (proxyPort == null) {
 						String[] s = ProxyUtils.getHTTPProxyPort(true);
-						if (s!=null && s.length>1) {
+						if (s != null && s.length > 1) {
 							proxyPort = Integer.parseInt(s[1]);
 						}
 					}
 				} catch (RuntimeException e) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.log(Level.WARNING,e.getMessage(),e);
+						logger.log(Level.WARNING, e.getMessage(), e);
 					}
 				}
 			}
@@ -580,9 +531,8 @@ public class AdvancedPrefs extends ContextPreferences
 		return proxyPort;
 	}
 
-	public static void setSProxyPort(Integer proxyPort)
-	{
-		getPreferences().setIntegerProperty(HTTPS_PROXY_PORT, proxyPort,"sProxyPort");
+	public static void setSProxyPort(Integer proxyPort) {
+		getPreferences().setIntegerProperty(HTTPS_PROXY_PORT, proxyPort, "sProxyPort");
 		applyProxySettings();
 	}
 
@@ -593,24 +543,21 @@ public class AdvancedPrefs extends ContextPreferences
 		setSProxyPort(null);
 	}
 
-	public static String getProxyLogin()
-	{
+	public static String getProxyLogin() {
 		return getPreferences().getProperty(PROXY_LOGIN);
 	}
 
-	public static void setProxyLogin(String proxyLogin)
-	{
+	public static void setProxyLogin(String proxyLogin) {
 		getPreferences().setProperty(PROXY_LOGIN, proxyLogin);
 		applyProxySettings();
 	}
 
-	public static String getProxyPassword()
-	{
+	public static String getProxyPassword() {
 		String base64 = getPreferences().getProperty(PROXY_PASSWORD);
-		if (base64!=null) {
+		if (base64 != null) {
 			try {
-				String decoded = StringUtils.circularOffset(StringUtils.reverse(new String(Base64.decode(base64),"UTF-8")),-2);
-				if (decoded.length()<CHEESE.length()) {
+				String decoded = StringUtils.circularOffset(StringUtils.reverse(new String(Base64.decode(base64), "UTF-8")), -2);
+				if (decoded.length() < CHEESE.length()) {
 					return "";
 				}
 				return decoded.substring(CHEESE.length());
@@ -623,17 +570,43 @@ public class AdvancedPrefs extends ContextPreferences
 		}
 	}
 
-	public static void setProxyPassword(String proxyPassword)
-	{
-		if (proxyPassword!=null) {
+	public static void setProxyPassword(String proxyPassword) {
+		if (proxyPassword != null) {
 			try {
-				proxyPassword = new String(Base64.encode(StringUtils.reverse(StringUtils.circularOffset(CHEESE+proxyPassword,2)).getBytes("UTF-8")));
+				proxyPassword = new String(Base64.encode(StringUtils.reverse(StringUtils.circularOffset(CHEESE + proxyPassword, 2))
+						.getBytes("UTF-8")));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
 		}
 		getPreferences().setProperty(PROXY_PASSWORD, proxyPassword);
 		applyProxySettings();
+	}
+
+	public static String getFlexoServerInstanceURL() {
+		String answer = getPreferences().getProperty(FLEXO_SERVER_INSTANCE_URL);
+		if (answer == null || answer.trim().isEmpty()) {
+			setFlexoServerInstanceURL("http://flexoserverinstances.openflexo.com");
+			return getFlexoServerInstanceURL();
+		}
+		return answer;
+	}
+
+	public static void setFlexoServerInstanceURL(String url) {
+		getPreferences().setProperty(FLEXO_SERVER_INSTANCE_URL, url);
+	}
+
+	public static String getWebServiceInstance() {
+		String answer = getPreferences().getProperty(WEB_SERVICE_INSTANCE);
+		if (answer == null || answer.trim().isEmpty()) {
+			setWebServiceInstance("prod");
+			return getWebServiceInstance();
+		}
+		return answer;
+	}
+
+	public static void setWebServiceInstance(String wsInstanceID) {
+		getPreferences().setProperty(WEB_SERVICE_INSTANCE, wsInstanceID);
 	}
 
 }

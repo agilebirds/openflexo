@@ -24,60 +24,52 @@ import java.io.FileNotFoundException;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class CustomInspectorsResource extends FlexoDirectoryResource
-{
+public class CustomInspectorsResource extends FlexoDirectoryResource {
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public CustomInspectorsResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-   }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public CustomInspectorsResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public CustomInspectorsResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	public CustomInspectorsResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    public CustomInspectorsResource(FlexoProject aProject, FlexoProjectFile directory) throws InvalidFileNameException
-    {
-        this(aProject);
-        setResourceFile(directory);
-    }
+	public CustomInspectorsResource(FlexoProject aProject, FlexoProjectFile directory) throws InvalidFileNameException {
+		this(aProject);
+		setResourceFile(directory);
+	}
 
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.CUSTOM_INSPECTORS;
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.CUSTOM_INSPECTORS;
+	}
 
-    @Override
-	public String getName()
-    {
-        return getProject().getProjectName();
-    }
+	@Override
+	public String getName() {
+		return getProject().getProjectName();
+	}
 
-    /**
-     * Overrides performUpdating
-     * @see org.openflexo.foundation.rm.FlexoResource#performUpdating(org.openflexo.foundation.rm.FlexoResourceTree)
-     */
-    @Override
-    protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException
-    {
-        
-    }
-    
- 
+	/**
+	 * Overrides performUpdating
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#performUpdating(org.openflexo.foundation.rm.FlexoResourceTree)
+	 */
+	@Override
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException,
+			FileNotFoundException, ProjectLoadingCancelledException {
+
+	}
+
 }

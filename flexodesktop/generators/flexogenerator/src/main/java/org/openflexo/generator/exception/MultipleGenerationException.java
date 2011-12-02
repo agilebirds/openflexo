@@ -23,11 +23,10 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoException;
 
-
 public class MultipleGenerationException extends GenerationException {
 
 	private Vector<FlexoException> exceptions;
-	
+
 	public MultipleGenerationException() {
 		super(null);
 		exceptions = new Vector<FlexoException>();
@@ -36,13 +35,14 @@ public class MultipleGenerationException extends GenerationException {
 	public void addToExceptions(FlexoException exception) {
 		exceptions.add(exception);
 	}
-	
+
 	@Override
 	public String getMessage() {
 		StringBuffer sb = new StringBuffer();
 		for (FlexoException ex : exceptions) {
-			if (sb.length()>0)
+			if (sb.length() > 0) {
 				sb.append("\n");
+			}
 			sb.append(ex.getMessage());
 		}
 		return sb.toString();

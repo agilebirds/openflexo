@@ -24,19 +24,16 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ontology.ImportedOntology;
 
-
 /**
  * Browser element representing the project
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ImportedOntologyElement extends FlexoOntologyElement
-{
+public class ImportedOntologyElement extends FlexoOntologyElement {
 
-    protected ImportedOntologyElement(ImportedOntology ontology, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(ontology, BrowserElementType.IMPORTED_ONTOLOGY, browser,parent);
-    }
+	protected ImportedOntologyElement(ImportedOntology ontology, ProjectBrowser browser, BrowserElement parent) {
+		super(ontology, BrowserElementType.IMPORTED_ONTOLOGY, browser, parent);
+	}
 
 }

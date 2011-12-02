@@ -33,57 +33,61 @@ import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DuplicateDMMethodInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DuplicateDMMethodInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(DuplicateDMMethod.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<DuplicateDMMethod> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<DuplicateDMMethod>() {
-            @Override
-			public boolean run(ActionEvent e, DuplicateDMMethod action)
-            {
-                return true;
-           }
-        };
+	DuplicateDMMethodInitializer(DMControllerActionInitializer actionInitializer) {
+		super(DuplicateDMMethod.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<DuplicateDMMethod> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<DuplicateDMMethod>() {
-            @Override
-			public boolean run(ActionEvent e, DuplicateDMMethod action)
-            {
-                if (action.getMethodToDuplicate().getEntity() instanceof DMEOEntity && getControllerActionInitializer().getDMController().getCurrentEditedObject() == ((DMEOEntity) action.getMethodToDuplicate().getEntity()).getDMEOModel()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for DuplicateDMMethod in DMEOModelView");
-                    DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    dmEOModelView.getEoEntityTable().selectObject(action.getMethodToDuplicate().getEntity());
-                    dmEOModelView.getMethodTable().selectObject(action.getNewMethod());
-                } else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getMethodToDuplicate().getEntity()) {
-                    if (logger.isLoggable(Level.INFO))
-                        logger.info("Finalizer for DuplicateDMMethod in DMEOEntityView");
-                    DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    eoEntityView.getMethodTable().selectObject(action.getNewMethod());
-                    eoEntityView.getMethodTable().editCellAt(eoEntityView.getMethodTable().getModel().getIndexForColumnWithName(DMMethodTableModel.METHOD_NAME_COLUMN_TITLE), eoEntityView.getMethodTable().getModel().indexOf(action.getNewMethod()));
-                }
-            return true;
-          }
-        };
+	@Override
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	 
+
+	@Override
+	protected FlexoActionInitializer<DuplicateDMMethod> getDefaultInitializer() {
+		return new FlexoActionInitializer<DuplicateDMMethod>() {
+			@Override
+			public boolean run(ActionEvent e, DuplicateDMMethod action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<DuplicateDMMethod> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DuplicateDMMethod>() {
+			@Override
+			public boolean run(ActionEvent e, DuplicateDMMethod action) {
+				if (action.getMethodToDuplicate().getEntity() instanceof DMEOEntity
+						&& getControllerActionInitializer().getDMController().getCurrentEditedObject() == ((DMEOEntity) action
+								.getMethodToDuplicate().getEntity()).getDMEOModel()) {
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Finalizer for DuplicateDMMethod in DMEOModelView");
+					}
+					DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					dmEOModelView.getEoEntityTable().selectObject(action.getMethodToDuplicate().getEntity());
+					dmEOModelView.getMethodTable().selectObject(action.getNewMethod());
+				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getMethodToDuplicate()
+						.getEntity()) {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Finalizer for DuplicateDMMethod in DMEOEntityView");
+					}
+					DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					eoEntityView.getMethodTable().selectObject(action.getNewMethod());
+					eoEntityView.getMethodTable()
+							.editCellAt(
+									eoEntityView.getMethodTable().getModel()
+											.getIndexForColumnWithName(DMMethodTableModel.METHOD_NAME_COLUMN_TITLE),
+									eoEntityView.getMethodTable().getModel().indexOf(action.getNewMethod()));
+				}
+				return true;
+			}
+		};
+	}
+
 }

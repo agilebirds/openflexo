@@ -24,11 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
@@ -37,6 +32,9 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.ws.WSRepository;
 import org.openflexo.foundation.ws.WSRepositoryFolder;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Please comment this class
@@ -44,103 +42,91 @@ import org.openflexo.foundation.ws.WSService;
  * @author dvanvyve
  * 
  */
-public class WSERepositoryTableModel extends AbstractModel<WSService,DMRepository>
-{
+public class WSERepositoryTableModel extends AbstractModel<WSService, DMRepository> {
 
-    protected static final Logger logger = Logger.getLogger(WSERepositoryTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSERepositoryTableModel.class.getPackage().getName());
 
-    public WSERepositoryTableModel(WSService model, FlexoProject project)
-    {
-        super(model, project);
-        addToColumns(new IconColumn<DMRepository>("ws_repository_icon", 30) {
-            @Override
-			public Icon getIcon(DMRepository object)
-            {
-                return WSEIconLibrary.WS_REPOSITORY_ICON;
-            }
-        });
-        addToColumns(new IconColumn<DMRepository>("read_only", 25) {
-            @Override
-			public Icon getIcon(DMRepository object)
-            {
-                return ((object).isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
-            }
-            
-            @Override
-            public String getLocalizedTooltip(DMRepository repository) {
-            	return (repository.isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only"));
-            }
-        });
-        addToColumns(new StringColumn<DMRepository>("name", 190) {
-            @Override
-			public String getValue(DMRepository object)
-            {
-                return (object).getLocalizedName();
-            }
-        });
-        addToColumns(new StringColumn<DMRepository>("type", 190) {
-            @Override
-			public String getValue(DMRepository object)
-            {
-                 return FlexoLocalization.localizedForKey("web_service_repository");
-            }
-        });
-        addToColumns(new StringColumn<DMRepository>("description", 365) {
-            @Override
-			public String getValue(DMRepository object)
-            {
-                return (object).getDescription();
-            }
-/*
-            public void setValue(FlexoModelObject object, String aValue)
-            {
-                ((DMRepository) object).setDescription(aValue);
-            }
-            */
-        });
-        setRowHeight(20);
-    }
-    
-    public WSService getWSService(){
-    		return getModel();
-    }
+	public WSERepositoryTableModel(WSService model, FlexoProject project) {
+		super(model, project);
+		addToColumns(new IconColumn<DMRepository>("ws_repository_icon", 30) {
+			@Override
+			public Icon getIcon(DMRepository object) {
+				return WSEIconLibrary.WS_REPOSITORY_ICON;
+			}
+		});
+		addToColumns(new IconColumn<DMRepository>("read_only", 25) {
+			@Override
+			public Icon getIcon(DMRepository object) {
+				return ((object).isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+			}
 
-    public WSRepositoryFolder getWSDLRepositoryFolder(){
-    		if(getWSService()!=null)return getWSService().getWSRepositoryFolder();
-    		return null;
-    }
-    public Vector getWSDLRepositories()
-    {	
-        return getWSDLRepositoryFolder().getWSRepositories();
-    }
-    
-    
-    @Override
-	public DMRepository elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return ((WSRepository) getWSDLRepositories().get(row)).getWSDLRepository();
-         } else {
-            return null;
-        }
-    }
+			@Override
+			public String getLocalizedTooltip(DMRepository repository) {
+				return (repository.isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only"));
+			}
+		});
+		addToColumns(new StringColumn<DMRepository>("name", 190) {
+			@Override
+			public String getValue(DMRepository object) {
+				return (object).getLocalizedName();
+			}
+		});
+		addToColumns(new StringColumn<DMRepository>("type", 190) {
+			@Override
+			public String getValue(DMRepository object) {
+				return FlexoLocalization.localizedForKey("web_service_repository");
+			}
+		});
+		addToColumns(new StringColumn<DMRepository>("description", 365) {
+			@Override
+			public String getValue(DMRepository object) {
+				return (object).getDescription();
+			}
+			/*
+			            public void setValue(FlexoModelObject object, String aValue)
+			            {
+			                ((DMRepository) object).setDescription(aValue);
+			            }
+			            */
+		});
+		setRowHeight(20);
+	}
 
-    public DMRepository repositoryAt(int row)
-    {
-        return elementAt(row);
-    }
+	public WSService getWSService() {
+		return getModel();
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getWSDLRepositoryFolder() != null) {
-            return getWSDLRepositories().size();
-        }
-        return 0;
-    }
+	public WSRepositoryFolder getWSDLRepositoryFolder() {
+		if (getWSService() != null) {
+			return getWSService().getWSRepositoryFolder();
+		}
+		return null;
+	}
 
+	public Vector getWSDLRepositories() {
+		return getWSDLRepositoryFolder().getWSRepositories();
+	}
 
+	@Override
+	public DMRepository elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return ((WSRepository) getWSDLRepositories().get(row)).getWSDLRepository();
+		} else {
+			return null;
+		}
+	}
 
-   
+	public DMRepository repositoryAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getWSDLRepositoryFolder() != null) {
+			return getWSDLRepositories().size();
+		}
+		return 0;
+	}
 
 }

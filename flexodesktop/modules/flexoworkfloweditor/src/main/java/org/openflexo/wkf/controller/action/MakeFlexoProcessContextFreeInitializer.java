@@ -31,47 +31,39 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class MakeFlexoProcessContextFreeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    public MakeFlexoProcessContextFreeInitializer(ControllerActionInitializer actionInitializer)
-	{
-		super(MakeFlexoProcessContextFree.actionType,actionInitializer);
+	public MakeFlexoProcessContextFreeInitializer(ControllerActionInitializer actionInitializer) {
+		super(MakeFlexoProcessContextFree.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionInitializer<MakeFlexoProcessContextFree> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MakeFlexoProcessContextFree> getDefaultInitializer() {
 		return new FlexoActionInitializer<MakeFlexoProcessContextFree>() {
 			@Override
-			public boolean run(ActionEvent e, MakeFlexoProcessContextFree action)
-			{
+			public boolean run(ActionEvent e, MakeFlexoProcessContextFree action) {
 				return (action.getFocusedObject() != null);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MakeFlexoProcessContextFree> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MakeFlexoProcessContextFree> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MakeFlexoProcessContextFree>() {
 			@Override
-			public boolean run(ActionEvent e, MakeFlexoProcessContextFree action)
-			{
+			public boolean run(ActionEvent e, MakeFlexoProcessContextFree action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<MakeFlexoProcessContextFree> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<MakeFlexoProcessContextFree> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<MakeFlexoProcessContextFree>() {
 			@Override
-			public boolean handleException(FlexoException exception, MakeFlexoProcessContextFree action) 
-			{
+			public boolean handleException(FlexoException exception, MakeFlexoProcessContextFree action) {
 				exception.printStackTrace();
 				FlexoController.showError(exception.getLocalizedMessage());
 				return true;

@@ -19,51 +19,46 @@
  */
 package org.openflexo.components.browser.ontology;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing the ontology library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OEShapeElement extends BrowserElement
-{
+public class OEShapeElement extends BrowserElement {
 
-	protected OEShapeElement(ViewShape shape, ProjectBrowser browser, BrowserElement parent)
-	{
+	protected OEShapeElement(ViewShape shape, ProjectBrowser browser, BrowserElement parent) {
 		super(shape, BrowserElementType.OE_SHAPE, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (ViewObject o : getShape().getChilds()) {
 			addToChilds(o);
 		}
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		if (getShape().getName() != null) {
 			return getShape().getName();
-		}
-		else if (getShape().getGraphicalRepresentation() != null){
-			return "<"+FlexoLocalization.localizedForKey(((ShapeGraphicalRepresentation<?>)getShape().getGraphicalRepresentation()).getShape().getShapeType().name())+">";
+		} else if (getShape().getGraphicalRepresentation() != null) {
+			return "<"
+					+ FlexoLocalization.localizedForKey(((ShapeGraphicalRepresentation<?>) getShape().getGraphicalRepresentation())
+							.getShape().getShapeType().name()) + ">";
 		}
 		return "???";
 	}
 
-	protected ViewShape getShape()
-	{
+	protected ViewShape getShape() {
 		return (ViewShape) getObject();
 	}
 

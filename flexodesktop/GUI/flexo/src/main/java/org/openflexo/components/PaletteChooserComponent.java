@@ -21,26 +21,23 @@ package org.openflexo.components;
 
 import javax.swing.JFileChooser;
 
-
 import org.openflexo.AdvancedPrefs;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.utils.FlexoFileChooserUtils;
 
 /**
  * Abstract component allowing to choose a Flexo Project
  * 
  * @author sguerin
  */
-public abstract class PaletteChooserComponent extends JFileChooser
-{
+public abstract class PaletteChooserComponent extends JFileChooser {
 
-    public PaletteChooserComponent()
-    {
-        super();
-        setCurrentDirectory(AdvancedPrefs.getLastVisitedDirectory());
-        setDialogTitle(FlexoLocalization.localizedForKey("select_a_palette_directory"));
-        setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        setFileFilter(FlexoProject.getPaletteFileFilter());
-        setFileView(FlexoProject.getPaletteFileView());
-    }
+	public PaletteChooserComponent() {
+		super();
+		setCurrentDirectory(AdvancedPrefs.getLastVisitedDirectory());
+		setDialogTitle(FlexoLocalization.localizedForKey("select_a_palette_directory"));
+		setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		setFileFilter(FlexoFileChooserUtils.PALETTE_FILE_FILTER);
+		setFileView(FlexoFileChooserUtils.PALETTE_FILE_VIEW);
+	}
 }

@@ -19,100 +19,78 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-
-
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddDataPropertyStatement extends AddStatement<DataPropertyStatementPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddDataPropertyStatement.class.getPackage().getName());
 
-	private String value;
-	
 	public AddDataPropertyStatement() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddDataPropertyStatement;
 	}
-	
-	public OntologyProperty getDataProperty()
-	{
-		if (getPatternRole() != null) 
+
+	public OntologyProperty getDataProperty() {
+		if (getPatternRole() != null) {
 			return getPatternRole().getDataProperty();
+		}
 		return null;
 	}
-	
-	public void setDataProperty(OntologyProperty p)
-	{
-		if (getPatternRole() != null) 
+
+	public void setDataProperty(OntologyProperty p) {
+		if (getPatternRole() != null) {
 			getPatternRole().setDataProperty(p);
-	}
-	
-	public String _getValue()
-	{
-		return value;
-	}
-	
-	public void _setValue(String aValue)
-	{
-		value = aValue;
-	}
-	
-	private Vector<String> availableObjectValues = null;
-	
-	public Vector<String> getAvailableObjectValues()
-	{
-		if (availableObjectValues == null) {
-			availableObjectValues = new Vector<String>();
-			switch (getScheme().getEditionSchemeType()) {
-			case DropScheme:
-				availableObjectValues.add(EditionAction.CONTAINER);
-				availableObjectValues.add(EditionAction.CONTAINER_OF_CONTAINER);
-				break;
-			case LinkScheme:
-				availableObjectValues.add(EditionAction.FROM_TARGET);
-				availableObjectValues.add(EditionAction.TO_TARGET);
-				break;
-			default:
-				break;
-			}
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				availableObjectValues.add(pr.getPatternRoleName());
-			}
-			for (EditionPatternParameter p : getScheme().getParameters()) {
-				availableObjectValues.add(p.getName());
-			}
 		}
-		return availableObjectValues;
 	}
 
-	public Object getValue(EditionSchemeAction action)
-	{
-		return retrieveObject(_getValue(), action);
+	public Object getValue(EditionSchemeAction action) {
+		return getValue().getBindingValue(action);
 	}
-
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_OBJECT_PROPERTY_INSPECTOR;
 	}
 
-	
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-		if (getPatternRole() == null) {
-			return;
+	private ViewPointDataBinding value;
+
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+		@Override
+		public java.lang.reflect.Type getType() {
+			if (getDataProperty() != null) {
+				return ((OntologyDataProperty) getDataProperty()).getDataType().getAccessedType();
+			}
+			return Object.class;
+		};
+	};
+
+	public BindingDefinition getValueBindingDefinition() {
+		return VALUE;
+	}
+
+	public ViewPointDataBinding getValue() {
+		if (value == null) {
+			value = new ViewPointDataBinding(this, EditionActionBindingAttribute.value, getValueBindingDefinition());
 		}
-	}*/
+		return value;
+	}
+
+	public void setValue(ViewPointDataBinding value) {
+		value.setOwner(this);
+		value.setBindingAttribute(EditionActionBindingAttribute.value);
+		value.setBindingDefinition(getValueBindingDefinition());
+		this.value = value;
+	}
 
 }

@@ -40,133 +40,125 @@ import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.wkf.view.menu.WKFMenuBar;
 
-
 /**
- * Selection manager dedicated to Workflow editor This class manages a set of
- * FlexoModelObject instances which are all at the same level
- *
+ * Selection manager dedicated to Workflow editor This class manages a set of FlexoModelObject instances which are all at the same level
+ * 
  * Note that we don't select the data, but the views representing data.
- *
+ * 
  * @author sguerin
  */
-public class WKFSelectionManager extends SelectionManager
-{
+public class WKFSelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(WKFSelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WKFSelectionManager.class.getPackage().getName());
 
-    private FlexoLevel level = null;
+	private FlexoLevel level = null;
 
-    public WKFSelectionManager(WKFController controller)
-    {
-        super(controller);
-        WKFMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new WKFClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        level = null;
-        _contextualMenuManager = new WKFContextualMenuManager(this,controller.getEditor(),controller);
-   }
+	public WKFSelectionManager(WKFController controller) {
+		super(controller);
+		WKFMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new WKFClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		level = null;
+		_contextualMenuManager = new WKFContextualMenuManager(this, controller.getEditor(), controller);
+	}
 
-    public WKFController getWKFController()
-    {
-        return (WKFController) getController();
-    }
-
-     @Override
-	public boolean performSelectionSelectAll()
-    {
-    	 logger.info("Select all");
-       /* FlexoModelObject context = pasteContextForComponent(getLastClickedContainer());
-        if (context instanceof FlexoPetriGraph) {
-            FlexoPetriGraph pg = ((FlexoPetriGraph)context);
-            Vector newSelection = pg.getAllContainedObjectsAtThisLevel();
-            setSelectedObjects(newSelection);
-            return true;
-        } else {
-            return false;
-        }*/
-    	 return false;
-    }
-
-     @Override
-    public boolean performSelectionCut() 
-     {
-    	 _clipboard.performSelectionCut(getSelection());
-    	 FlexoPetriGraph parent = null;
-    	 for (FlexoModelObject o: new Vector<FlexoModelObject>(getSelection())) {
-    		 if (o instanceof PetriGraphNode) {
-    			 PetriGraphNode node = (PetriGraphNode) o;
-    			 if (parent==null)
-    				 parent = node.getParentPetriGraph();
-    			 else if (node.getParentPetriGraph()!=parent)
-    				 continue;
-    			 node.getParentPetriGraph().removeFromNodes(node);
-    		 }
-    		 if (o instanceof WKFArtefact) {
-    			 WKFArtefact annotation = (WKFArtefact) o;
-    			 if (parent==null)
-    				 parent = annotation.getParentPetriGraph();
-    			 else if (annotation.getParentPetriGraph()!=parent)
-    				 continue;
-    			 annotation.getParentPetriGraph().removeFromArtefacts(annotation);
-    		 }
-       		 if (o instanceof Role) {
-       			Role role = (Role) o;
-       			role.delete();
-    		 }
-   		 /*if (o instanceof FlexoPort) {
-    			 FlexoPort port = (FlexoPort) o;
-    			 ((FlexoPort) o).getPortRegistery().removeFromPorts(port);
-    		 }*/
-		 }
-    	 return true;
-    }
-
-
-    // ==========================================================================
-    // ================ Selection Management, public A.P.I
-    // ======================
-    // ==========================================================================
-
-      @Override
-	protected void fireSelectionBecomesEmpty()
-    {
-        super.fireSelectionBecomesEmpty();
-        level = null;
-    }
-
-    @Override
-	protected void fireSelectionIsNoMoreEmpty()
-    {
-        super.fireSelectionIsNoMoreEmpty();
-       if (getSelection().firstElement() instanceof LevelledObject) {
-           level = ((LevelledObject)getSelection().firstElement()).getLevel();
-       }
-    }
-
-    public FlexoLevel getSelectionLevel()
-    {
-        return level;
-    }
-
-     /**
-     * Returns the root object that can be currently edited
-     *
-     * @return FlexoObservable
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getWKFController().getCurrentFlexoProcess();
-    }
+	public WKFController getWKFController() {
+		return (WKFController) getController();
+	}
 
 	@Override
-	public FlexoModelObject getPasteContext()
-	{
+	public boolean performSelectionSelectAll() {
+		logger.info("Select all");
+		/* FlexoModelObject context = pasteContextForComponent(getLastClickedContainer());
+		 if (context instanceof FlexoPetriGraph) {
+		     FlexoPetriGraph pg = ((FlexoPetriGraph)context);
+		     Vector newSelection = pg.getAllContainedObjectsAtThisLevel();
+		     setSelectedObjects(newSelection);
+		     return true;
+		 } else {
+		     return false;
+		 }*/
+		return false;
+	}
+
+	@Override
+	public boolean performSelectionCut() {
+		_clipboard.performSelectionCut(getSelection());
+		FlexoPetriGraph parent = null;
+		for (FlexoModelObject o : new Vector<FlexoModelObject>(getSelection())) {
+			if (o instanceof PetriGraphNode) {
+				PetriGraphNode node = (PetriGraphNode) o;
+				if (parent == null) {
+					parent = node.getParentPetriGraph();
+				} else if (node.getParentPetriGraph() != parent) {
+					continue;
+				}
+				node.getParentPetriGraph().removeFromNodes(node);
+			}
+			if (o instanceof WKFArtefact) {
+				WKFArtefact annotation = (WKFArtefact) o;
+				if (parent == null) {
+					parent = annotation.getParentPetriGraph();
+				} else if (annotation.getParentPetriGraph() != parent) {
+					continue;
+				}
+				annotation.getParentPetriGraph().removeFromArtefacts(annotation);
+			}
+			if (o instanceof Role) {
+				Role role = (Role) o;
+				role.delete();
+			}
+			/*if (o instanceof FlexoPort) {
+				 FlexoPort port = (FlexoPort) o;
+				 ((FlexoPort) o).getPortRegistery().removeFromPorts(port);
+			 }*/
+		}
+		return true;
+	}
+
+	// ==========================================================================
+	// ================ Selection Management, public A.P.I
+	// ======================
+	// ==========================================================================
+
+	@Override
+	protected void fireSelectionBecomesEmpty() {
+		super.fireSelectionBecomesEmpty();
+		level = null;
+	}
+
+	@Override
+	protected void fireSelectionIsNoMoreEmpty() {
+		super.fireSelectionIsNoMoreEmpty();
+		if (getSelection().firstElement() instanceof LevelledObject) {
+			level = ((LevelledObject) getSelection().firstElement()).getLevel();
+		}
+	}
+
+	public FlexoLevel getSelectionLevel() {
+		return level;
+	}
+
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoObservable
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getWKFController().getCurrentFlexoProcess();
+	}
+
+	@Override
+	public FlexoModelObject getPasteContext() {
 		if (getWKFController().getCurrentModuleView() instanceof DrawingView) {
-			GraphicalRepresentation<?> gr = ((DrawingView)getWKFController().getCurrentModuleView()).getController().getLastSelectedGR();
-			if (gr!=null && gr.getDrawable() instanceof FlexoModelObject)
+			GraphicalRepresentation<?> gr = ((DrawingView) getWKFController().getCurrentModuleView()).getController().getLastSelectedGR();
+			if (gr != null && gr.getDrawable() instanceof FlexoModelObject) {
 				return (FlexoModelObject) gr.getDrawable();
-			else
-				return (FlexoModelObject) ((DrawingView<?>)getWKFController().getCurrentModuleView()).getDrawingGraphicalRepresentation().getDrawable();
+			} else {
+				return (FlexoModelObject) ((DrawingView<?>) getWKFController().getCurrentModuleView()).getDrawingGraphicalRepresentation()
+						.getDrawable();
+			}
 		}
 		return null;
 	}
@@ -175,20 +167,20 @@ public class WKFSelectionManager extends SelectionManager
 	public PastingGraphicalContext getPastingGraphicalContext() {
 		PastingGraphicalContext pgc = new PastingGraphicalContext();
 		if (getWKFController().getCurrentModuleView() instanceof DrawingView) {
-			DrawingView<?> moduleView = (DrawingView<?>)getWKFController().getCurrentModuleView();
+			DrawingView<?> moduleView = (DrawingView<?>) getWKFController().getCurrentModuleView();
 			DrawingController<?> controller = moduleView.getController();
 			GraphicalRepresentation<?> target = controller.getLastSelectedGR();
-			if (target==null) {
+			if (target == null) {
 				pgc.targetContainer = controller.getDrawingView();
 			} else {
 				pgc.targetContainer = (JComponent) moduleView.viewForObject(target);
 			}
-			if(controller.getLastClickedPoint()!=null) {
-				pgc.precisePastingLocation= controller.getLastClickedPoint();
-				pgc.pastingLocation = new Point((int)pgc.precisePastingLocation.getX(),(int)pgc.precisePastingLocation.getY());
+			if (controller.getLastClickedPoint() != null) {
+				pgc.precisePastingLocation = controller.getLastClickedPoint();
+				pgc.pastingLocation = new Point((int) pgc.precisePastingLocation.getX(), (int) pgc.precisePastingLocation.getY());
 			} else {
-				pgc.precisePastingLocation= new FGEPoint(0,0);
-				pgc.pastingLocation = new Point(0,0);
+				pgc.precisePastingLocation = new FGEPoint(0, 0);
+				pgc.pastingLocation = new Point(0, 0);
 			}
 		}
 		return pgc;

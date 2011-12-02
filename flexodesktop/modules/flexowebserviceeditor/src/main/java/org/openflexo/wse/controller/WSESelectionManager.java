@@ -26,70 +26,61 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.view.menu.WSEMenuBar;
 
-
 /**
  * Selection manager dedicated to this module
  * 
- * Note that we don't select the data, but the views representing data
- * This will be refactored, for FlexoModelObject instances to be managed,
- * instead of views (bad design)
+ * Note that we don't select the data, but the views representing data This will be refactored, for FlexoModelObject instances to be
+ * managed, instead of views (bad design)
  * 
  * @author yourname
  */
-public class WSESelectionManager extends SelectionManager
-{
+public class WSESelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(WSESelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSESelectionManager.class.getPackage().getName());
 
-    public WSESelectionManager(WSEController controller)
-    {
-        super(controller);
-        WSEMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new WSEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        _contextualMenuManager = new WSEContextualMenuManager(this,controller.getEditor(),controller);
-   }
+	public WSESelectionManager(WSEController controller) {
+		super(controller);
+		WSEMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new WSEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		_contextualMenuManager = new WSEContextualMenuManager(this, controller.getEditor(), controller);
+	}
 
-    public WSEController getWSEController()
-    {
-        return (WSEController) getController();
-    }
+	public WSEController getWSEController() {
+		return (WSEController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in this module");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("'Select All' not implemented yet in this module");
+		}
+		return false;
+	}
 
-    // ==================================================
-    // ========= Selection Management public API ========
-    // ==================================================
-    
+	// ==================================================
+	// ========= Selection Management public API ========
+	// ==================================================
 
+	// ==========================================================================
+	// ============================= Deletion
+	// ===================================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Deletion
-    // ===================================
-    // ==========================================================================
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoModelObject
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getWSEController().getCurrentDisplayedObjectAsModuleView();
+	}
 
+	@Override
+	public FlexoModelObject getPasteContext() {
+		// TODO please implement this
+		return null;
+	}
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoModelObject
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getWSEController().getCurrentDisplayedObjectAsModuleView();
-    }
-
-    @Override
-	public FlexoModelObject getPasteContext()
-    {
-        // TODO please implement this
-        return null;
-    }
-   
- }
+}

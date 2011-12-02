@@ -46,6 +46,7 @@ import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.inspector.InspectorCst;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
@@ -54,7 +55,6 @@ import org.openflexo.localization.LocalizedEditor;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.viewer.FlexoLoggingViewerWindow;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
@@ -88,6 +88,8 @@ public class FlexoApplication {
 
 	public static EventProcessor eventProcessor;
 
+	private static byte[] mem = new byte[1024 * 1024];
+
 	public static void flushPendingEvents(boolean blockUserEvents) {
 		eventProcessor.flushPendingEvents(blockUserEvents);
 	}
@@ -110,7 +112,7 @@ public class FlexoApplication {
 				enableAboutMenu.invoke(application, new Object[] { new Boolean(true) });
 				// ((com.apple.eawt.Application)application).setDockIconImage(ModuleLoader.getUserType().getIconImage().getImage());
 				Method setDockIconImage = application.getClass().getMethod("setDockIconImage", new Class[] { Image.class });
-				setDockIconImage.invoke(application, new Object[] { ModuleLoader.getUserType().getIconImage().getImage() });
+				setDockIconImage.invoke(application, new Object[] { IconLibrary.OPENFLEXO_NOTEXT_128.getImage() });
 				applicationAdapter = new FlexoApplicationAdapter();
 
 				Method addApplicationListener = application.getClass().getMethod("addApplicationListener",
@@ -214,6 +216,12 @@ public class FlexoApplication {
 				if (ProgressWindow.hasInstance()) {
 					ProgressWindow.hideProgressWindow();
 				}
+				if (exception instanceof OutOfMemoryError) {
+					if (mem != null) {
+						mem = null;
+					}
+				}
+
 				if (exception instanceof CancelException || exception.getCause() instanceof CancelException) {
 					return;
 				}
@@ -238,11 +246,11 @@ public class FlexoApplication {
 						if (exception instanceof InvalidParametersException) {
 							message = "InvalidParametersException: " + exception.getMessage() + ". Edit a bug report ?";
 						} else if (exception instanceof NotImplementedException) {
-							message = FlexoLocalization.localizedForKey("feature_not_implemented:_") + exception.getMessage() + " " + FlexoLocalization
-									.localizedForKey("would_you_like_to_send_a_report");
+							message = FlexoLocalization.localizedForKey("feature_not_implemented:_") + exception.getMessage() + " "
+									+ FlexoLocalization.localizedForKey("would_you_like_to_send_a_report");
 						} else {
-							message = FlexoLocalization.localizedForKey("unexpected_exception_occured") + " " + FlexoLocalization
-									.localizedForKey("would_you_like_to_send_a_report");
+							message = FlexoLocalization.localizedForKey("unexpected_exception_occured") + " "
+									+ FlexoLocalization.localizedForKey("would_you_like_to_send_a_report");
 						}
 					} catch (RuntimeException e3) {// This catch is here in case the localization layer has crashed
 						e3.printStackTrace();
@@ -346,11 +354,12 @@ public class FlexoApplication {
 			} else {
 				return true;
 			}
-			// ignore all out of memory errors,
-			// since they'll give us absolutely no debugging information
-			// and most likely, they will throw another OutOfMemoryException
+
+			// OutOfMemory error should definitely not be ignored. First, they can give a hint on where there is a problem. Secondly,
+			// if we ran out of memory, Flexo will not work anymore and bogus behaviour will appear everywhere. So definitely, no, we don't
+			// ignore.
 			if (bug instanceof OutOfMemoryError) {
-				return true;
+				return false;
 			}
 
 			// no bug? kinda impossible, but shouldn't report.
@@ -360,8 +369,9 @@ public class FlexoApplication {
 
 			// if the bug came from the FileChooser (Windows or Metal)
 			// or the AquaDirectoryModel, ignore it.
-			if (bug instanceof NullPointerException && (msg.indexOf("MetalFileChooserUI") != -1 || msg.indexOf("WindowsFileChooserUI") != -1 || msg
-					.indexOf("AquaDirectoryModel") != -1)) {
+			if (bug instanceof NullPointerException
+					&& (msg.indexOf("MetalFileChooserUI") != -1 || msg.indexOf("WindowsFileChooserUI") != -1 || msg
+							.indexOf("AquaDirectoryModel") != -1)) {
 				return true;
 			}
 

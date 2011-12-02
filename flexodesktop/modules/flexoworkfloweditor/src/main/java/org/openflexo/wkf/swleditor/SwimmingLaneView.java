@@ -29,46 +29,38 @@ import org.openflexo.wkf.controller.SwimmingLanePerspective;
 import org.openflexo.wkf.swleditor.SWLDrawEdgeControl.SWLDrawEdgeAction;
 import org.openflexo.wkf.swleditor.gr.NodePalette;
 
-
 public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> implements ModuleView<FlexoProcess> {
 
-	public SwimmingLaneView(SwimmingLaneRepresentation aDrawing,SwimmingLaneEditorController controller)
-	{
-		super(aDrawing,controller);
+	public SwimmingLaneView(SwimmingLaneRepresentation aDrawing, SwimmingLaneEditorController controller) {
+		super(aDrawing, controller);
 	}
 
 	@Override
-	public SwimmingLaneEditorController getController()
-	{
-		return (SwimmingLaneEditorController)super.getController();
+	public SwimmingLaneEditorController getController() {
+		return (SwimmingLaneEditorController) super.getController();
 	}
 
 	@Override
-	public void deleteModuleView()
-	{
+	public void deleteModuleView() {
 		getController().delete();
 	}
 
 	@Override
-	public SwimmingLanePerspective getPerspective()
-	{
+	public SwimmingLanePerspective getPerspective() {
 		return getController().getWKFController().SWIMMING_LANE_PERSPECTIVE;
 	}
 
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return getRepresentedObject().getProject();
 	}
 
 	@Override
-	public FlexoProcess getRepresentedObject()
-	{
+	public FlexoProcess getRepresentedObject() {
 		return getModel().getProcess();
 	}
 
 	@Override
-	public boolean isAutoscrolled()
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
 
@@ -85,36 +77,30 @@ public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> im
 
 	private SWLDrawEdgeAction _swlDrawEdgeAction;
 
-	public void  setDrawEdgeAction(SWLDrawEdgeAction action)
-	{
+	public void setDrawEdgeAction(SWLDrawEdgeAction action) {
 		_swlDrawEdgeAction = action;
 		repaint();
 	}
 
-	public void resetDrawEdgeAction()
-	{
+	public void resetDrawEdgeAction() {
 		_swlDrawEdgeAction = null;
 		repaint();
 	}
 
 	private NodePalette draggedNodePalette;
 
-	public void  setDraggedNodePalette(NodePalette palette)
-	{
+	public void setDraggedNodePalette(NodePalette palette) {
 		draggedNodePalette = palette;
 		repaint();
 	}
 
-	public void resetDraggedNodePalette()
-	{
+	public void resetDraggedNodePalette() {
 		draggedNodePalette = null;
 		repaint();
 	}
 
-
 	@Override
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		boolean isBuffering = isBuffering();
 		super.paint(g);
 		/*boolean paintRoleConstraints = !isBuffering && (_swlDrawEdgeAction!=null || draggedNodePalette!=null);
@@ -127,12 +113,11 @@ public class SwimmingLaneView extends DrawingView<SwimmingLaneRepresentation> im
 			}
 		}*/
 		if (_swlDrawEdgeAction != null && !isBuffering) {
-			_swlDrawEdgeAction.paint(g,getController());
+			_swlDrawEdgeAction.paint(g, getController());
 		}
 		if (draggedNodePalette != null && !isBuffering) {
-			draggedNodePalette.paint(g,getController());
+			draggedNodePalette.paint(g, getController());
 		}
 	}
-
 
 }

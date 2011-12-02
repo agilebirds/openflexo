@@ -27,61 +27,51 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 
+public class WKFPaste extends FlexoUndoableAction<WKFPaste, FlexoModelObject, FlexoModelObject> {
 
-public class WKFPaste extends FlexoUndoableAction<WKFPaste,FlexoModelObject,FlexoModelObject> 
-{
+	private static final Logger logger = Logger.getLogger(WKFPaste.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(WKFPaste.class.getPackage().getName());
+	public static FlexoActionType<WKFPaste, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<WKFPaste, FlexoModelObject, FlexoModelObject>(
+			"paste", FlexoActionType.editGroup) {
 
-    public static FlexoActionType<WKFPaste,FlexoModelObject,FlexoModelObject> actionType 
-    = new FlexoActionType<WKFPaste,FlexoModelObject,FlexoModelObject> ("paste",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public WKFPaste makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new WKFPaste(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public WKFPaste makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new WKFPaste(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return true;
-         }
-                
-    };
-    
-    WKFPaste (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) 
-    {
-        // Not yet implemented in Foundation, but in WKF module
-       logger.info ("PASTE on WKF");
-    }
-    
-    @Override
-	protected void undoAction(Object context) 
-    {
-        logger.warning ("UNDO PASTE on WKF not implemented yet !");
-    }
+	WKFPaste(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        logger.warning ("REDO PASTE on WKF not implemented yet !");
-    }
-    
+	@Override
+	protected void doAction(Object context) {
+		// Not yet implemented in Foundation, but in WKF module
+		logger.info("PASTE on WKF");
+	}
+
+	@Override
+	protected void undoAction(Object context) {
+		logger.warning("UNDO PASTE on WKF not implemented yet !");
+	}
+
+	@Override
+	protected void redoAction(Object context) {
+		logger.warning("REDO PASTE on WKF not implemented yet !");
+	}
 
 }

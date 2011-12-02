@@ -32,7 +32,6 @@ import org.openflexo.jedit.cd.GenericCodeDisplayer;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileFormat;
 
-
 public class CodeDisplayer {
 
 	private static final Logger logger = Logger.getLogger(CodeDisplayer.class.getPackage().getName());
@@ -40,9 +39,8 @@ public class CodeDisplayer {
 	private final CVSFile _cvsFile;
 	protected CodeDisplayerComponent _component;
 	private final FPSController _controller;
-	
-	public CodeDisplayer(CVSFile cvsFile, FPSController controller)
-	{
+
+	public CodeDisplayer(CVSFile cvsFile, FPSController controller) {
 		super();
 		_controller = controller;
 		_cvsFile = cvsFile;
@@ -51,19 +49,16 @@ public class CodeDisplayer {
 			addToFocusListener(_controller.getFooter());
 		}
 	}
-	
-	public CVSFile getCVSFile()
-	{
+
+	public CVSFile getCVSFile() {
 		return _cvsFile;
 	}
-	
-	public ResourceType getResourceType()
-	{
+
+	public ResourceType getResourceType() {
 		return _cvsFile.getResourceType();
 	}
-	
-	public FileFormat getFileFormat()
-	{
+
+	public FileFormat getFileFormat() {
 		if (getResourceType() != null) {
 			return getResourceType().getFormat();
 		}
@@ -73,79 +68,71 @@ public class CodeDisplayer {
 			return FileFormat.UNKNOWN_ASCII_FILE;
 		}
 	}
-	
-	public JComponent getComponent()
-	{
-		return (JComponent)_component;
+
+	public JComponent getComponent() {
+		return (JComponent) _component;
 	}
 
-	protected CodeDisplayerComponent buildComponent()
-	{
+	protected CodeDisplayerComponent buildComponent() {
 		if (getFileFormat().isBinary()) {
 			_component = new BinaryFileCodePanel();
-		}
-		else {
+		} else {
 			_component = new ASCIIFileCodePanel();
 		}
 		return _component;
 	}
-	
-	public void update()
-	{
+
+	public void update() {
 		if (_component != null) {
 			_component.update();
 		}
 	}
-	
-	public String getContentOnDisk()
-	{
+
+	public String getContentOnDisk() {
 		String returned = getCVSFile().getContentOnDisk();
 		if (returned == null) {
-			return FlexoLocalization.localizedForKey("unable_to_retrieve_content_for")+" "+getCVSFile().getFile().getAbsolutePath();
+			return FlexoLocalization.localizedForKey("unable_to_retrieve_content_for") + " " + getCVSFile().getFile().getAbsolutePath();
 		} else {
 			return returned;
 		}
 	}
-	
-	protected String getASCIIContentForFile (CVSFile aFile)
-	{
+
+	protected String getASCIIContentForFile(CVSFile aFile) {
 		if (aFile != null) {
 			return aFile.getContentOnDisk();
 		}
 		return null;
 	}
 
-	protected interface CodeDisplayerComponent
-	{
+	protected interface CodeDisplayerComponent {
 		public void update();
+
 		public void setEditable(boolean isEditable);
+
 		public String getEditedContent();
-		public void setEditedContent(CVSFile file); 
-		public void addToFocusListener (FocusListener aFocusListener);
+
+		public void setEditedContent(CVSFile file);
+
+		public void addToFocusListener(FocusListener aFocusListener);
 	}
 
-	protected class ASCIIFileCodePanel extends GenericCodeDisplayer implements CodeDisplayerComponent
-	{
-		protected ASCIIFileCodePanel() 
-		{
-			super(getContentOnDisk(),DefaultMergedDocumentType.getMergedDocumentType(getFileFormat()).getStyle());
+	protected class ASCIIFileCodePanel extends GenericCodeDisplayer implements CodeDisplayerComponent {
+		protected ASCIIFileCodePanel() {
+			super(getContentOnDisk(), DefaultMergedDocumentType.getMergedDocumentType(getFileFormat()).getStyle());
 		}
 
 		@Override
-		public void update() 
-		{
+		public void update() {
 			setText(getContentOnDisk());
 		}
-		
+
 		@Override
-		public String getEditedContent() 
-		{
+		public String getEditedContent() {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(CVSFile file) 
-		{
+		public void setEditedContent(CVSFile file) {
 			String newContent = getASCIIContentForFile(file);
 			if (newContent != null) {
 				setText(newContent);
@@ -153,51 +140,39 @@ public class CodeDisplayer {
 		}
 
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener) 
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
 
-	protected class BinaryFileCodePanel extends GenericCodeDisplayer implements CodeDisplayerComponent
-	{
-		protected BinaryFileCodePanel() 
-		{
-			super(getCVSFile().getFile().getAbsolutePath()+"\n"
-					+FlexoLocalization.localizedForKey("binary_file"),
-					null);
+	protected class BinaryFileCodePanel extends GenericCodeDisplayer implements CodeDisplayerComponent {
+		protected BinaryFileCodePanel() {
+			super(getCVSFile().getFile().getAbsolutePath() + "\n" + FlexoLocalization.localizedForKey("binary_file"), null);
 		}
 
 		@Override
-		public void update() 
-		{
-			setText(getCVSFile().getFile().getAbsolutePath()+"\n"
-					+FlexoLocalization.localizedForKey("binary_file"));
+		public void update() {
+			setText(getCVSFile().getFile().getAbsolutePath() + "\n" + FlexoLocalization.localizedForKey("binary_file"));
 		}
-		
+
 		@Override
-		public String getEditedContent() 
-		{
+		public String getEditedContent() {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(CVSFile file) 
-		{
+		public void setEditedContent(CVSFile file) {
 		}
 
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener) 
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
 
-
-	public void addToFocusListener (FocusListener aFocusListener)
-	{
+	public void addToFocusListener(FocusListener aFocusListener) {
 		_component.addToFocusListener(aFocusListener);
 	}
 }

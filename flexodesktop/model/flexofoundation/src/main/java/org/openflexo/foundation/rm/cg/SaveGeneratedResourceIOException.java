@@ -28,36 +28,33 @@ import org.openflexo.localization.FlexoLocalization;
 /**
  * 
  */
-public class SaveGeneratedResourceIOException extends SaveResourceException
-{
+public class SaveGeneratedResourceIOException extends SaveResourceException {
 
 	private IOException ioException;
-	
-    /**
-     * @param fileResource
-     */
-    public SaveGeneratedResourceIOException(FlexoFileResource fileResource, IOException exception)
-    {
-        super(fileResource);
-		ioException = exception;
-   }
 
-	public IOException getIOException()
-	{
+	/**
+	 * @param fileResource
+	 */
+	public SaveGeneratedResourceIOException(FlexoFileResource fileResource, IOException exception) {
+		super(fileResource);
+		ioException = exception;
+	}
+
+	public IOException getIOException() {
 		return ioException;
 	}
-	
+
 	@Override
-	public Throwable getCause()
-	{
+	public Throwable getCause() {
 		return ioException;
 	}
-	
+
 	@Override
 	public String getMessage() {
-		if (ioException!=null && ioException.getMessage()!=null)
-			return FlexoLocalization.localizedForKey("io_exception_occured")+": "+ioException.getMessage();
+		if (ioException != null && ioException.getMessage() != null) {
+			return FlexoLocalization.localizedForKey("io_exception_occured") + ": " + ioException.getMessage();
+		}
 		return super.getMessage();
 	}
-	
+
 }

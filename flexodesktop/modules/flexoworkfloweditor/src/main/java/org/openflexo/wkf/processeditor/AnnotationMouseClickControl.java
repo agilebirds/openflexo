@@ -28,7 +28,6 @@ import org.openflexo.fge.controller.MouseClickControlAction;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.wkf.processeditor.AbstractWKFPalette.WKFPaletteElement;
 
-
 public class AnnotationMouseClickControl extends MouseClickControl {
 
 	private static final class CreateAnnotationAction extends MouseClickControlAction {
@@ -38,17 +37,18 @@ public class AnnotationMouseClickControl extends MouseClickControl {
 		}
 
 		@Override
-		public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
-				MouseEvent event) {
-			WKFPaletteElement annotation = ((ProcessEditorController)controller).getArtefactPalette().getAnnotation();
+		public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+			WKFPaletteElement annotation = ((ProcessEditorController) controller).getArtefactPalette().getAnnotation();
 			if (annotation.acceptDragging(graphicalRepresentation)) {
-				annotation.elementDragged(graphicalRepresentation, new FGEPoint(event.getPoint().getX()/controller.getScale()-annotation.getGraphicalRepresentation().getBorder().left,event.getPoint().getY()/controller.getScale()-annotation.getGraphicalRepresentation().getBorder().top));
+				annotation.elementDragged(graphicalRepresentation, new FGEPoint(event.getPoint().getX() / controller.getScale()
+						- annotation.getGraphicalRepresentation().getBorder().left, event.getPoint().getY() / controller.getScale()
+						- annotation.getGraphicalRepresentation().getBorder().top));
 			}
 			return false;
 		}
 	}
 
 	public AnnotationMouseClickControl() {
-		super("create_annotation", MouseButton.LEFT, 2, new CreateAnnotationAction(),false,false,false,false);
+		super("create_annotation", MouseButton.LEFT, 2, new CreateAnnotationAction(), false, false, false, false);
 	}
 }

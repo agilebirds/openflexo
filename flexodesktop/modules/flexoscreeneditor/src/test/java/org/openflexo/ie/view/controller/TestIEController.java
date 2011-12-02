@@ -31,7 +31,6 @@ import org.openflexo.FlexoModuleTestCase;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.ie.IEOperationComponent;
-import org.openflexo.foundation.ie.TestReusableComponent;
 import org.openflexo.foundation.ie.action.DropIEElement;
 import org.openflexo.foundation.ie.action.DropPartialComponent;
 import org.openflexo.foundation.ie.action.MakePartialComponent;
@@ -51,6 +50,7 @@ import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.module.external.ExternalModuleDelegater;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
 public class TestIEController extends FlexoModuleTestCase {
@@ -64,20 +64,16 @@ public class TestIEController extends FlexoModuleTestCase {
 	protected void tearDown() throws Exception {
 	}
 
-	public void testSetSelectedComponent() {
-		// fail("Not yet implemented");
-	}
+	protected static final Logger logger = Logger.getLogger(TestIEController.class.getPackage().getName());
 
-	protected static final Logger logger = Logger.getLogger(TestReusableComponent.class.getPackage().getName());
-
-	private static FlexoEditor _editor;
-	private static FlexoProject _project;
-	private static File _projectDirectory;
-	private static String _projectIdentifier;
-	private static FlexoComponentLibrary _cl;
-	private static FlexoComponentFolder _cf;
-	private static IEOperationComponent _oc;
-	private static IEOperationComponent _targetComponent;
+	private FlexoEditor _editor;
+	private FlexoProject _project;
+	private File _projectDirectory;
+	private String _projectIdentifier;
+	private FlexoComponentLibrary _cl;
+	private FlexoComponentFolder _cf;
+	private IEOperationComponent _oc;
+	private IEOperationComponent _targetComponent;
 	private static final String TEST_REUSABLE_COMPONENT_VIEW = "TestReusableComponentView";
 	private static final String TEST_COMPONENT = "TestComponent";
 	private static final String PARTIAL_COMPONENT = "PartialTestComponent";
@@ -235,6 +231,7 @@ public class TestIEController extends FlexoModuleTestCase {
 				ModuleLoader.closeCurrentProject();
 			}
 		});
+		FileUtils.deleteDir(_projectDirectory);
 	}
 
 	/**
@@ -250,7 +247,7 @@ public class TestIEController extends FlexoModuleTestCase {
 			GeneralPreferences.setFavoriteModuleName(Module.IE_MODULE.getName());
 		}
 		ModuleLoader.fileNameToOpen = projectDirectory.getAbsolutePath();
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER"), false);
+		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
 		ModuleLoader.setProject(project);
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");

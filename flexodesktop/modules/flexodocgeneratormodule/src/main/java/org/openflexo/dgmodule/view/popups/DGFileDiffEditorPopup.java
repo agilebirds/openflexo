@@ -34,14 +34,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLogger;
-import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoDialog;
-import org.openflexo.view.listener.FlexoActionButton;
-
-
 import org.openflexo.components.AskParametersPanel;
 import org.openflexo.dgmodule.DGCst;
 import org.openflexo.dgmodule.controller.DGController;
@@ -55,13 +47,17 @@ import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.foundation.rm.cg.ContentSource.ContentSourceType;
 import org.openflexo.generator.action.ShowFileVersion;
 import org.openflexo.generator.rm.GenerationAvailableFileResource;
-
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.VerticalLayout;
+import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.listener.FlexoActionButton;
 
 /**
  * @author sylvain
  */
-public class DGFileDiffEditorPopup extends FlexoDialog
-{
+public class DGFileDiffEditorPopup extends FlexoDialog {
 	private Logger logger = FlexoLogger.getLogger(DGFileDiffEditorPopup.class.getPackage().getName());
 
 	protected CGFile _cgFile;
@@ -72,67 +68,63 @@ public class DGFileDiffEditorPopup extends FlexoDialog
 	protected ContentSourceEditor leftSourceEditor;
 	protected ContentSourceEditor rightSourceEditor;
 
-	public DGFileDiffEditorPopup (CGFile file, ContentSource leftSource, ContentSource rightSource, DGController controller)
-	{
-		super(controller.getFlexoFrame(),file.getFileName()+" - "+FlexoLocalization.localizedForKey("diff_editor"),false);
+	public DGFileDiffEditorPopup(CGFile file, ContentSource leftSource, ContentSource rightSource, DGController controller) {
+		super(controller.getFlexoFrame(), file.getFileName() + " - " + FlexoLocalization.localizedForKey("diff_editor"), false);
 		_cgFile = file;
 		_leftSource = leftSource;
 		_rightSource = rightSource;
 		_controller = controller;
-		
+
 		_header = new ViewHeader();
-		
+
 		customDiffCodeDisplayer = new CustomDiffDocDisplayer(
-				(org.openflexo.generator.rm.GenerationAvailableFileResource)file.getResource(),
-				_leftSource, _rightSource,controller);
-		
+				(org.openflexo.generator.rm.GenerationAvailableFileResource) file.getResource(), _leftSource, _rightSource, controller);
+
 		getContentPane().setLayout(new BorderLayout());
-	   	getContentPane().add(_header,BorderLayout.NORTH);
-	   	getContentPane().add(customDiffCodeDisplayer.getComponent(),BorderLayout.CENTER);
-    	JPanel controlPanel = new JPanel(new FlowLayout());
-    	JButton button = new JButton();
-    	button.setText(FlexoLocalization.localizedForKey("close",button));
-    	button.addActionListener(new ActionListener() {
+		getContentPane().add(_header, BorderLayout.NORTH);
+		getContentPane().add(customDiffCodeDisplayer.getComponent(), BorderLayout.CENTER);
+		JPanel controlPanel = new JPanel(new FlowLayout());
+		JButton button = new JButton();
+		button.setText(FlexoLocalization.localizedForKey("close", button));
+		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-			}            		
-    	});
-    	controlPanel.add(button);
-    	getContentPane().add(controlPanel,BorderLayout.SOUTH);
-    	setPreferredSize(new Dimension(1000,800));
-    	validate();
-    	pack();
- 	}
-	
+			}
+		});
+		controlPanel.add(button);
+		getContentPane().add(controlPanel, BorderLayout.SOUTH);
+		setPreferredSize(new Dimension(1000, 800));
+		validate();
+		pack();
+	}
+
 	private ViewHeader _header;
 
-	protected class ViewHeader extends JPanel
-	{
+	protected class ViewHeader extends JPanel {
 		JLabel icon;
 		JLabel title;
 		JLabel subTitle1;
 		JLabel subTitle2;
 		JPanel controlPanel;
 		Vector<FlexoActionButton> actionButtons = new Vector<FlexoActionButton>();
-		
-		protected ViewHeader()
-		{
+
+		protected ViewHeader() {
 			super(new BorderLayout());
 			icon = new JLabel(GeneratorIconLibrary.DIFF_EDITOR_ICON);
 			icon.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-			add(icon,BorderLayout.WEST);
-			title = new JLabel(_cgFile.getFileName(),SwingConstants.LEFT);
-			//title.setVerticalAlignment(JLabel.BOTTOM);
+			add(icon, BorderLayout.WEST);
+			title = new JLabel(_cgFile.getFileName(), SwingConstants.LEFT);
+			// title.setVerticalAlignment(JLabel.BOTTOM);
 			title.setFont(DGCst.HEADER_FONT);
 			title.setForeground(Color.BLACK);
 			title.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
-			subTitle1 = new JLabel(subTitleForLeftSource(),SwingConstants.LEFT);
+			subTitle1 = new JLabel(subTitleForLeftSource(), SwingConstants.LEFT);
 			subTitle1.setFont(DGCst.SUB_TITLE_FONT);
 			subTitle1.setForeground(Color.GRAY);
 			subTitle1.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
 			subTitle1.setVerticalAlignment(SwingConstants.BOTTOM);
-			subTitle2 = new JLabel(subTitleForRightSource(),SwingConstants.LEFT);
+			subTitle2 = new JLabel(subTitleForRightSource(), SwingConstants.LEFT);
 			subTitle2.setFont(DGCst.SUB_TITLE_FONT);
 			subTitle2.setForeground(Color.GRAY);
 			subTitle2.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
@@ -142,46 +134,45 @@ public class DGFileDiffEditorPopup extends FlexoDialog
 			labelsPanel.add(title);
 			labelsPanel.add(subTitle1);
 			labelsPanel.add(subTitle2);
-			add(labelsPanel,BorderLayout.CENTER);			
+			add(labelsPanel, BorderLayout.CENTER);
 
 			JPanel sourceEditorPanel = new JPanel(new FlowLayout());
-			leftSourceEditor = new ContentSourceEditor(_leftSource,FlexoLocalization.localizedForKey("left_source"));
-			rightSourceEditor = new ContentSourceEditor(_rightSource,FlexoLocalization.localizedForKey("right_source"));
+			leftSourceEditor = new ContentSourceEditor(_leftSource, FlexoLocalization.localizedForKey("left_source"));
+			rightSourceEditor = new ContentSourceEditor(_rightSource, FlexoLocalization.localizedForKey("right_source"));
 			sourceEditorPanel.add(leftSourceEditor.getComponent());
 			sourceEditorPanel.add(rightSourceEditor.getComponent());
-			add(sourceEditorPanel,BorderLayout.EAST);			
-			
+			add(sourceEditorPanel, BorderLayout.EAST);
+
 			update();
 		}
 
-
-		private String subTitleForLeftSource()
-		{
-			String returned = FlexoLocalization.localizedForKey("left_source")+" : "+_leftSource.getStringRepresentation();
-			if (_leftSource.getType() == ContentSourceType.HistoryVersion && _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
-				AbstractCGFileVersion fileVersion = ((AbstractGeneratedFile)_cgFile.getResource().getGeneratedResourceData()).getHistory().versionWithId(_leftSource.getVersion());
+		private String subTitleForLeftSource() {
+			String returned = FlexoLocalization.localizedForKey("left_source") + " : " + _leftSource.getStringRepresentation();
+			if (_leftSource.getType() == ContentSourceType.HistoryVersion
+					&& _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
+				AbstractCGFileVersion fileVersion = ((AbstractGeneratedFile) _cgFile.getResource().getGeneratedResourceData()).getHistory()
+						.versionWithId(_leftSource.getVersion());
 				if (fileVersion != null) {
-					returned += ", "+fileVersion.getDateAsString()+", "+fileVersion.getUserIdentifier(); 
+					returned += ", " + fileVersion.getDateAsString() + ", " + fileVersion.getUserIdentifier();
 				}
 			}
 			return returned;
 		}
 
-		private String subTitleForRightSource()
-		{
-			String returned = FlexoLocalization.localizedForKey("right_source")+" : "+_rightSource.getStringRepresentation();
-			if (_rightSource.getType() == ContentSourceType.HistoryVersion && _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
-				AbstractCGFileVersion fileVersion = ((AbstractGeneratedFile)_cgFile.getResource().getGeneratedResourceData()).getHistory().versionWithId(_rightSource.getVersion());
+		private String subTitleForRightSource() {
+			String returned = FlexoLocalization.localizedForKey("right_source") + " : " + _rightSource.getStringRepresentation();
+			if (_rightSource.getType() == ContentSourceType.HistoryVersion
+					&& _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
+				AbstractCGFileVersion fileVersion = ((AbstractGeneratedFile) _cgFile.getResource().getGeneratedResourceData()).getHistory()
+						.versionWithId(_rightSource.getVersion());
 				if (fileVersion != null) {
-					returned += ", "+fileVersion.getDateAsString()+", "+fileVersion.getUserIdentifier(); 
+					returned += ", " + fileVersion.getDateAsString() + ", " + fileVersion.getUserIdentifier();
 				}
 			}
 			return returned;
 		}
 
-
-		protected void update()
-		{
+		protected void update() {
 			title.setText(_cgFile.getFileName());
 			subTitle1.setText(subTitleForLeftSource());
 			subTitle2.setText(subTitleForRightSource());
@@ -190,27 +181,20 @@ public class DGFileDiffEditorPopup extends FlexoDialog
 			}
 		}
 
-
 	}
-	
-	protected class ContentSourceEditor
-	{
+
+	protected class ContentSourceEditor {
 		private AskParametersPanel component;
 		private EnumDropDownParameter<ContentSourceType> sourceParam;
 		private CGFileVersionParameter versionParam;
-		
-		protected ContentSourceEditor(ContentSource source, String label)
-		{
-			sourceParam = new EnumDropDownParameter<ContentSourceType> (
-					"source",
-					label,
-					source.getType(),
-					ContentSourceType.values()) {
+
+		protected ContentSourceEditor(ContentSource source, String label) {
+			sourceParam = new EnumDropDownParameter<ContentSourceType>("source", label, source.getType(), ContentSourceType.values()) {
 				@Override
-				public boolean accept(ContentSourceType value) 
-				{
-					return ShowFileVersion.getActionTypeFor(value).isEnabled(_cgFile,null,_controller.getEditor());
+				public boolean accept(ContentSourceType value) {
+					return ShowFileVersion.getActionTypeFor(value).isEnabled(_cgFile, null, _controller.getEditor());
 				}
+
 				@Override
 				public void setValue(ContentSourceType type) {
 					super.setValue(type);
@@ -218,8 +202,10 @@ public class DGFileDiffEditorPopup extends FlexoDialog
 				}
 			};
 			sourceParam.addParameter("showReset", "false");
-			AbstractCGFileVersion fileVersion = (source.getVersion()!=null && _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile?((AbstractGeneratedFile)_cgFile.getResource().getGeneratedResourceData()).getHistory().versionWithId(source.getVersion()):null);
-		    versionParam = new CGFileVersionParameter("version","version",_cgFile,fileVersion) {
+			AbstractCGFileVersion fileVersion = (source.getVersion() != null
+					&& _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile ? ((AbstractGeneratedFile) _cgFile
+					.getResource().getGeneratedResourceData()).getHistory().versionWithId(source.getVersion()) : null);
+			versionParam = new CGFileVersionParameter("version", "version", _cgFile, fileVersion) {
 				@Override
 				public void setValue(AbstractCGFileVersion fileVersion) {
 					super.setValue(fileVersion);
@@ -227,40 +213,35 @@ public class DGFileDiffEditorPopup extends FlexoDialog
 				}
 			};
 			versionParam.setDepends("source");
-			versionParam.setConditional("source="+'"'+ContentSourceType.HistoryVersion.getStringRepresentation()+'"');
-			component = new AskParametersPanel(
-					_cgFile.getProject(),sourceParam,versionParam);
+			versionParam.setConditional("source=" + '"' + ContentSourceType.HistoryVersion.getStringRepresentation() + '"');
+			component = new AskParametersPanel(_cgFile.getProject(), sourceParam, versionParam);
 		}
-		
-		protected AskParametersPanel getComponent()
-		{
+
+		protected AskParametersPanel getComponent() {
 			return component;
 		}
-		
-		protected ContentSource getUpdatedContentSource()
-		{
-			if ((sourceParam.getValue() == ContentSourceType.HistoryVersion)
-					&& (versionParam.getValue()==null) && _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)
-				versionParam.setValue(((AbstractGeneratedFile)_cgFile.getResource().getGeneratedResourceData()).getHistory().versionWithId(_cgFile.getRepository().getLastReleaseVersionIdentifier()));
-				return ContentSource.getContentSource(
-						sourceParam.getValue(),
-						(versionParam.getValue()!=null?versionParam.getValue().getVersionId():null));
-			}
 
-		
+		protected ContentSource getUpdatedContentSource() {
+			if ((sourceParam.getValue() == ContentSourceType.HistoryVersion) && (versionParam.getValue() == null)
+					&& _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
+				versionParam.setValue(((AbstractGeneratedFile) _cgFile.getResource().getGeneratedResourceData()).getHistory()
+						.versionWithId(_cgFile.getRepository().getLastReleaseVersionIdentifier()));
+			}
+			return ContentSource.getContentSource(sourceParam.getValue(), (versionParam.getValue() != null ? versionParam.getValue()
+					.getVersionId() : null));
+		}
+
 	}
 
-	protected void selectedSourcesChanged()
-	{
+	protected void selectedSourcesChanged() {
 		_rightSource = rightSourceEditor.getUpdatedContentSource();
 		_leftSource = leftSourceEditor.getUpdatedContentSource();
 		getContentPane().remove(customDiffCodeDisplayer.getComponent());
-		customDiffCodeDisplayer = new CustomDiffDocDisplayer(
-				(GenerationAvailableFileResource)_cgFile.getResource(),
-				_leftSource, _rightSource,_controller);
-	   	getContentPane().add(customDiffCodeDisplayer.getComponent(),BorderLayout.CENTER);
-	   	_header.update();
-	   	repaint();
+		customDiffCodeDisplayer = new CustomDiffDocDisplayer((GenerationAvailableFileResource) _cgFile.getResource(), _leftSource,
+				_rightSource, _controller);
+		getContentPane().add(customDiffCodeDisplayer.getComponent(), BorderLayout.CENTER);
+		_header.update();
+		repaint();
 	}
 
 }

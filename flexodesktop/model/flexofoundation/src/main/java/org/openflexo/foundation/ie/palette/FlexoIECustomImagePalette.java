@@ -29,7 +29,6 @@ import org.openflexo.foundation.ie.widget.IEButtonWidget;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoWebServerFileResource;
 
-
 public class FlexoIECustomImagePalette extends FlexoIEPalette<FlexoIECustomImagePalette.FlexoIECustomImage> {
 
 	public FlexoIECustomImagePalette(FlexoProject project) {
@@ -40,16 +39,18 @@ public class FlexoIECustomImagePalette extends FlexoIEPalette<FlexoIECustomImage
 	public boolean resizeScreenshots() {
 		return true;
 	}
-	
+
 	@Override
 	protected void loadWidgets() {
 		for (FlexoWebServerFileResource r : getProject().getSpecificImageResources()) {
 			File f = r.getFile();
-			if (!f.exists())
+			if (!f.exists()) {
 				continue;
+			}
 			Properties props = new Properties();
-			props.put(PaletteAttribute.XML.getAttributeTag(),
-					"<IEButton imageName=\"" +getProject().imageNameForFile(f)+ "\" inspector=\"Button.inspector\"  hyperlink_type=\""+HyperlinkType.IMAGE.getSerializationRepresentation()+"\" isMandatoryFlexoAction=\"false\" />");
+			props.put(PaletteAttribute.XML.getAttributeTag(), "<IEButton imageName=\"" + getProject().imageNameForFile(f)
+					+ "\" inspector=\"Button.inspector\"  hyperlink_type=\"" + HyperlinkType.IMAGE.getSerializationRepresentation()
+					+ "\" isMandatoryFlexoAction=\"false\" />");
 			props.put(PaletteAttribute.TARGET_CLASS_MODEL.getAttributeTag(), IEButtonWidget.class.getName());
 			FlexoIECustomImage w = new FlexoIECustomImage(f.getName(), props, r);
 			getWidgets().add(w);
@@ -65,20 +66,20 @@ public class FlexoIECustomImagePalette extends FlexoIEPalette<FlexoIECustomImage
 	public class FlexoIECustomImage extends FlexoIEPalette<FlexoIECustomImage>.FlexoIEPaletteWidget {
 
 		private FlexoWebServerFileResource resource;
-		
+
 		public FlexoIECustomImage(String name, Properties props, FlexoWebServerFileResource resource) {
 			super(name, props);
 			this.resource = resource;
 			this.screenshotFile = resource.getFile();
 		}
-		
+
 		@Override
 		public void deleteWidget() {
 			super.deleteWidget();
 			resource.delete(true);
 			getProject().resetAvailableImages();
 		}
-		
+
 		@Override
 		public boolean canDeleteWidget() {
 			return true;

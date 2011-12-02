@@ -21,33 +21,29 @@ package org.openflexo.toolbox;
 
 import java.util.Date;
 
-import org.openflexo.toolbox.DateUtils;
-
 import junit.framework.TestCase;
 
-public class TestDateUtils extends TestCase
-{
+public class TestDateUtils extends TestCase {
 
-	public void testParseDate()
-	{
-		//Pattern d/M/y must be used
-		Date[] dates = DateUtils.parseDate(new String[]{"1/1/2010", "2/2/2010", "3/2/10"});
+	public void testParseDate() {
+		// Pattern d/M/y must be used
+		Date[] dates = DateUtils.parseDate(new String[] { "1/1/2010", "2/2/2010", "3/2/10" });
 		assertTrue(dates[0].toString().equals("Fri Jan 01 00:00:00 CET 2010"));
 		assertTrue(dates[1].toString().equals("Tue Feb 02 00:00:00 CET 2010"));
 		assertTrue(dates[2].toString().equals("Wed Feb 03 00:00:00 CET 2010"));
-		
-		//Pattern M/d/y must be used
-		dates = DateUtils.parseDate(new String[]{"1/5/2010", "2/4/2010", "3/13/10"});
+
+		// Pattern M/d/y must be used
+		dates = DateUtils.parseDate(new String[] { "1/5/2010", "2/4/2010", "3/13/10" });
 		assertTrue(dates[0].toString().equals("Tue Jan 05 00:00:00 CET 2010"));
 		assertTrue(dates[1].toString().equals("Thu Feb 04 00:00:00 CET 2010"));
 		assertTrue(dates[2].toString().equals("Sat Mar 13 00:00:00 CET 2010"));
-		
-		//Pattern d/M/y H'h'm must be used
-		dates = DateUtils.parseDate(new String[]{"1/1/2010 12h24", "2/2/2010 21h56", "3/2/10 01h01"});
+
+		// Pattern d/M/y H'h'm must be used
+		dates = DateUtils.parseDate(new String[] { "1/1/2010 12h24", "2/2/2010 21h56", "3/2/10 01h01" });
 		assertTrue(dates[0].toString().equals("Fri Jan 01 12:24:00 CET 2010"));
 		assertTrue(dates[1].toString().equals("Tue Feb 02 21:56:00 CET 2010"));
 		assertTrue(dates[2].toString().equals("Wed Feb 03 01:01:00 CET 2010"));
-		
-		assertNull(DateUtils.parseDate(new String[]{"1/1/2010 12h24", "2/2/2010 21t56", "3/2/10 01h01"}));
+
+		assertNull(DateUtils.parseDate(new String[] { "1/1/2010 12h24", "2/2/2010 21t56", "3/2/10 01h01" }));
 	}
 }

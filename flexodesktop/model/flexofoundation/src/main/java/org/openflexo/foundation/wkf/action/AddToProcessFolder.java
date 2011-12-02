@@ -32,70 +32,64 @@ import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.InvalidParentProcessException;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
+public class AddToProcessFolder extends FlexoAction<AddToProcessFolder, FlexoModelObject, FlexoModelObject> {
 
-public class AddToProcessFolder extends FlexoAction<AddToProcessFolder,FlexoModelObject,FlexoModelObject>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AddToProcessFolder.class.getPackage().getName());
 
-    public static FlexoActionType<AddToProcessFolder,FlexoModelObject,FlexoModelObject> actionType
-    = new FlexoActionType<AddToProcessFolder,FlexoModelObject,FlexoModelObject> ("add_to_process_folder",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<AddToProcessFolder, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<AddToProcessFolder, FlexoModelObject, FlexoModelObject>(
+			"add_to_process_folder", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddToProcessFolder makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-        {
-            return new AddToProcessFolder(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddToProcessFolder makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new AddToProcessFolder(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return false;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return false;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return getProcessNode(object) != null && !getProcessNode(object).isImported();
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return getProcessNode(object) != null && !getProcessNode(object).isImported();
+		}
 
-    };
+	};
 
-    private FlexoProcessNode getProcessNode() {
-    	return getProcessNode(getFocusedObject());
+	private FlexoProcessNode getProcessNode() {
+		return getProcessNode(getFocusedObject());
 	}
 
-    static FlexoProcessNode getProcessNode(FlexoModelObject object) {
-    	if (object instanceof FlexoProcessNode)
-    		return (FlexoProcessNode) object;
-    	else if (object instanceof FlexoProcess) {
-    		return ((FlexoProcess)object).getProcessNode();
-    	}
+	static FlexoProcessNode getProcessNode(FlexoModelObject object) {
+		if (object instanceof FlexoProcessNode) {
+			return (FlexoProcessNode) object;
+		} else if (object instanceof FlexoProcess) {
+			return ((FlexoProcess) object).getProcessNode();
+		}
 		return null;
-    }
+	}
 
-    AddToProcessFolder (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	AddToProcessFolder(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    static {
-    	FlexoModelObject.addActionForClass(actionType, FlexoProcessNode.class);
-    	FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoProcessNode.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+	}
 
-    private ProcessFolder destination;
+	private ProcessFolder destination;
 
-    @Override
+	@Override
 	protected void doAction(Object context) throws InvalidParentProcessException, UndoException {
-    	if (getDestination()!=null) {
-    		getDestination().addToProcesses(getProcessNode());
-    	}
-    }
+		if (getDestination() != null) {
+			getDestination().addToProcesses(getProcessNode());
+		}
+	}
 
 	public void setDestination(ProcessFolder destination) {
 		this.destination = destination;

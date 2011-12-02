@@ -23,17 +23,17 @@ import org.openflexo.foundation.FlexoException;
 
 public class RepositoryCannotBeDeletedException extends FlexoException {
 
-	private String localizedMessage; 
+	private String localizedMessage;
 
 	public RepositoryCannotBeDeletedException(String localizedMessage) {
 		this.localizedMessage = localizedMessage;
 	}
-	
+
 	@Override
 	public String getLocalizedMessage() {
 		return localizedMessage;
 	}
-	
+
 	@Override
 	public String getMessage() {
 		return getLocalizedMessage();

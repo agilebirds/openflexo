@@ -54,268 +54,256 @@ import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 
-
 /**
  * Class used to graphically represent logs of current or past session of Flexo
  * 
  * @author sguerin
  */
-public class FlexoLoggingViewerWindow extends JDialog
-{
+public class FlexoLoggingViewerWindow extends JDialog {
 
-    public static Color BACK_COLOR;
-    
-    static final Logger logger = Logger.getLogger(FlexoLoggingViewerWindow.class.getPackage().getName());
+	public static Color BACK_COLOR;
 
-    private LogRecords _applicationLogs = null;
+	static final Logger logger = Logger.getLogger(FlexoLoggingViewerWindow.class.getPackage().getName());
 
-    LogRecords _logs = null;
+	private LogRecords _applicationLogs = null;
 
-    private Vector<File> _availableLogsFiles = new Vector<File>();
+	LogRecords _logs = null;
 
-    JComboBox comboBox;
+	private Vector<File> _availableLogsFiles = new Vector<File>();
 
-    private JTable loggingTable;
+	JComboBox comboBox;
 
-    public FlexoLoggingViewerWindow(File logFile)
-    {
-        super((Frame) null, FlexoLocalization.localizedForKey("logging_viewer"));
-        init();
-        switchToFile(logFile);
-    }
+	private JTable loggingTable;
 
-    public FlexoLoggingViewerWindow()
-    {
-        super((Frame) null, FlexoLocalization.localizedForKey("logging_viewer"));
-        init();
-    }
+	public FlexoLoggingViewerWindow(File logFile) {
+		super((Frame) null, FlexoLocalization.localizedForKey("logging_viewer"));
+		init();
+		switchToFile(logFile);
+	}
 
-    public FlexoLoggingViewerWindow(LogRecords applicationLogs)
-    {
-        super((Frame) null, FlexoLocalization.localizedForKey("logging_viewer"));
-        _applicationLogs = applicationLogs;
-        init();
-        switchToApplicationLogging();
-    }
+	public FlexoLoggingViewerWindow() {
+		super((Frame) null, FlexoLocalization.localizedForKey("logging_viewer"));
+		init();
+	}
 
-    protected LogRecords logsForFile(File aFile)
-    {
-        if (!_availableLogsFiles.contains(aFile)) {
-            _availableLogsFiles.add(aFile);
-            addToAvailableChoices(aFile);
-        }
-        if (!aFile.exists()) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("File " + aFile.getName() + " doesn't exist. Maybe you have to check your paths ?");
-            return null;
-        } else {
-            
-            XMLCoder.setTransformerFactoryClass("org.apache.xalan.processor.TransformerFactoryImpl");
+	public FlexoLoggingViewerWindow(LogRecords applicationLogs) {
+		super((Frame) null, FlexoLocalization.localizedForKey("logging_viewer"));
+		_applicationLogs = applicationLogs;
+		init();
+		switchToApplicationLogging();
+	}
 
-            StringEncoder.getDefaultInstance()._setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	protected LogRecords logsForFile(File aFile) {
+		if (!_availableLogsFiles.contains(aFile)) {
+			_availableLogsFiles.add(aFile);
+			addToAvailableChoices(aFile);
+		}
+		if (!aFile.exists()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("File " + aFile.getName() + " doesn't exist. Maybe you have to check your paths ?");
+			}
+			return null;
+		} else {
 
-            try {
-                return (LogRecords) XMLDecoder.decodeObjectWithMapping(new FileInputStream(aFile), FlexoLoggingManager.getLoggingMapping());
-            } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning(e.toString());
-            }
-        }
-        return null;
-    }
+			XMLCoder.setTransformerFactoryClass("org.apache.xalan.processor.TransformerFactoryImpl");
 
-    void switchToApplicationLogging()
-    {
-        switchTo(_applicationLogs);
-    }
+			StringEncoder.getDefaultInstance()._setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-    void switchToFile(File aFile)
-    {
-        LogRecords newLogs = logsForFile(aFile);
-        if (newLogs != null) {
-            switchTo(newLogs);
-        }
-    }
+			try {
+				return (LogRecords) XMLDecoder.decodeObjectWithMapping(new FileInputStream(aFile), FlexoLoggingManager.getLoggingMapping());
+			} catch (Exception e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning(e.toString());
+				}
+			}
+		}
+		return null;
+	}
 
-    private void addToAvailableChoices(File aFile)
-    {
-        File newItem = new File(aFile.getAbsolutePath());
-        comboBox.insertItemAt(newItem, comboBox.getItemCount());
-        comboBox.setSelectedItem(newItem);
-    }
+	void switchToApplicationLogging() {
+		switchTo(_applicationLogs);
+	}
 
-    private void init()
-    {
-        loggingTable = new JTable();
-        loggingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        ListSelectionModel rowSM = loggingTable.getSelectionModel();
-        rowSM.addListSelectionListener(new ListSelectionListener() {
-            @Override
-			public void valueChanged(ListSelectionEvent e)
-            {
-                // Ignore extra messages.
-                if (e.getValueIsAdjusting())
-                    return;
-                ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-                if (lsm.isSelectionEmpty()) {
-                    // no rows are selected
-                } else {
-                    int selectedRow = lsm.getMinSelectionIndex();
-                    LogRecord record = _logs.elementAt(selectedRow);
-                    // if (record.stackTrace != null) {
-                    System.err.println("Stack trace for '" + record.message + "':");
-                    System.err.println(record.getStackTraceAsString());
-                    /*
-                     * int beginAt; if (record.isUnhandledException) { beginAt =
-                     * 0; } else { beginAt = 6; } for (int i=beginAt; i<record.stackTrace.length;
-                     * i++) { System.err.println("\tat " +
-                     * record.stackTrace[i]); }
-                     */
-                    /*
-                     * } else { System.err.println ("Stack trace not
-                     * available"); }
-                     */
-                }
-            }
-        });
+	void switchToFile(File aFile) {
+		LogRecords newLogs = logsForFile(aFile);
+		if (newLogs != null) {
+			switchTo(newLogs);
+		}
+	}
 
-        JScrollPane scrollpane = new JScrollPane(loggingTable);
-        JPanel viewerPanel = new JPanel(new BorderLayout());
-        viewerPanel.setBackground(BACK_COLOR);
-        viewerPanel.add(controlPanel(), BorderLayout.NORTH);
-        viewerPanel.add(scrollpane, BorderLayout.CENTER);
-        viewerPanel.add(buttonPanel(), BorderLayout.SOUTH);
+	private void addToAvailableChoices(File aFile) {
+		File newItem = new File(aFile.getAbsolutePath());
+		comboBox.insertItemAt(newItem, comboBox.getItemCount());
+		comboBox.setSelectedItem(newItem);
+	}
 
-        getContentPane().add(viewerPanel);
-        setSize(1000, 600);
-        setLocation(100, 100);
-    }
+	private void init() {
+		loggingTable = new JTable();
+		loggingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ListSelectionModel rowSM = loggingTable.getSelectionModel();
+		rowSM.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// Ignore extra messages.
+				if (e.getValueIsAdjusting()) {
+					return;
+				}
+				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+				if (lsm.isSelectionEmpty()) {
+					// no rows are selected
+				} else {
+					int selectedRow = lsm.getMinSelectionIndex();
+					LogRecord record = _logs.elementAt(selectedRow);
+					// if (record.stackTrace != null) {
+					System.err.println("Stack trace for '" + record.message + "':");
+					System.err.println(record.getStackTraceAsString());
+					/*
+					 * int beginAt; if (record.isUnhandledException) { beginAt =
+					 * 0; } else { beginAt = 6; } for (int i=beginAt; i<record.stackTrace.length;
+					 * i++) { System.err.println("\tat " +
+					 * record.stackTrace[i]); }
+					 */
+					/*
+					 * } else { System.err.println ("Stack trace not
+					 * available"); }
+					 */
+				}
+			}
+		});
 
-    private void switchTo(LogRecords logs)
-    {
-        _logs = logs;
-        loggingTable.setModel(logs);
-        for (int i = 0; i < logs.getColumnCount(); i++) {
-            TableColumn col = loggingTable.getColumnModel().getColumn(i);
-            col.setPreferredWidth(getPreferedColumnSize(i));
-        }
-    }
+		JScrollPane scrollpane = new JScrollPane(loggingTable);
+		JPanel viewerPanel = new JPanel(new BorderLayout());
+		viewerPanel.setBackground(BACK_COLOR);
+		viewerPanel.add(controlPanel(), BorderLayout.NORTH);
+		viewerPanel.add(scrollpane, BorderLayout.CENTER);
+		viewerPanel.add(buttonPanel(), BorderLayout.SOUTH);
 
-    public int getPreferedColumnSize(int arg0)
-    {
-        switch (arg0) {
-        case 0:
-            return 50; // Level
-        case 1:
-            return 300; // Message
-        case 2:
-            return 120; // Package
-        case 3:
-            return 100; // Class
-        case 4:
-            return 120; // Method
-        case 5:
-            return 20; // Sequence
-        case 6:
-            return 100; // Date
-        case 7:
-            return 50; // Millis
-        case 8:
-            return 30; // Thread
-        default:
-            return 50;
-        }
-    }
+		getContentPane().add(viewerPanel);
+		setSize(1000, 600);
+		setLocation(100, 100);
+	}
 
-    protected JPanel buttonPanel()
-    {
-        JPanel answer = new JPanel(new FlowLayout());
-        answer.setBackground(BACK_COLOR);
-        JButton closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                dispose();
-                if (!FlexoLoggingManager.isInitialized()) {
-                    System.exit(0);
-                }
-            }
-        });
-        closeButton.setOpaque(false);
-        answer.add(closeButton);
-        JButton reloadConfButton;
-        if (FlexoLoggingManager.isInitialized()) {
-            reloadConfButton = new JButton(FlexoLocalization.localizedForKey("reload_configuration_file"));
-            reloadConfButton.addActionListener(new ActionListener() {
-                @Override
-				public void actionPerformed(ActionEvent e)
-                {
-                    try {
-                        LogManager.getLogManager().readConfiguration();
-                    } catch (IOException excep) {
-                        if (logger.isLoggable(Level.WARNING))
-                            logger.warning("Could not read logging configuration");
-                    }
-                }
-            });
-            reloadConfButton.setOpaque(false);
-            answer.add(reloadConfButton);
-        }
-        return answer;
-    }
+	private void switchTo(LogRecords logs) {
+		_logs = logs;
+		loggingTable.setModel(logs);
+		for (int i = 0; i < logs.getColumnCount(); i++) {
+			TableColumn col = loggingTable.getColumnModel().getColumn(i);
+			col.setPreferredWidth(getPreferedColumnSize(i));
+		}
+	}
 
-    protected JPanel controlPanel()
-    {
-        String[] availableChoices;
+	public int getPreferedColumnSize(int arg0) {
+		switch (arg0) {
+		case 0:
+			return 50; // Level
+		case 1:
+			return 300; // Message
+		case 2:
+			return 120; // Package
+		case 3:
+			return 100; // Class
+		case 4:
+			return 120; // Method
+		case 5:
+			return 20; // Sequence
+		case 6:
+			return 100; // Date
+		case 7:
+			return 50; // Millis
+		case 8:
+			return 30; // Thread
+		default:
+			return 50;
+		}
+	}
 
-        if (FlexoLoggingManager.isInitialized()) {
-            availableChoices = new String[2];
-            availableChoices[0] = FlexoLocalization.localizedForKey("application");
-            availableChoices[1] = FlexoLocalization.localizedForKey("open_log_file");
-        } else {
-            availableChoices = new String[1];
-            availableChoices[0] = FlexoLocalization.localizedForKey("open_log_file");
-        }
-        JPanel answer = new JPanel(new FlowLayout());
-        answer.setBackground(BACK_COLOR);
+	protected JPanel buttonPanel() {
+		JPanel answer = new JPanel(new FlowLayout());
+		answer.setBackground(BACK_COLOR);
+		JButton closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				if (!FlexoLoggingManager.isInitialized()) {
+					System.exit(0);
+				}
+			}
+		});
+		closeButton.setOpaque(false);
+		answer.add(closeButton);
+		JButton reloadConfButton;
+		if (FlexoLoggingManager.isInitialized()) {
+			reloadConfButton = new JButton(FlexoLocalization.localizedForKey("reload_configuration_file"));
+			reloadConfButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						LogManager.getLogManager().readConfiguration();
+					} catch (IOException excep) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Could not read logging configuration");
+						}
+					}
+				}
+			});
+			reloadConfButton.setOpaque(false);
+			answer.add(reloadConfButton);
+		}
+		return answer;
+	}
 
-        JLabel titleLabel = new JLabel(FlexoLocalization.localizedForKey("showing_logging_informations_for"));
-        comboBox = new JComboBox(availableChoices);
-        comboBox.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                int selectedIndex = comboBox.getSelectedIndex();
-                if ((selectedIndex == 0) && (FlexoLoggingManager.isInitialized())) {
-                    switchToApplicationLogging();
-                } else if (((selectedIndex == 1) && (FlexoLoggingManager.isInitialized())) || ((selectedIndex == 0) && (!FlexoLoggingManager.isInitialized()))) {
-                    JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
-                    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_a_log_file"));
-                    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                        // a file has been picked...
-                        try {
-                            File newLogFile = chooser.getSelectedFile();
-                            switchToFile(newLogFile);
-                        } catch (Exception exception) {
-                            if (logger.isLoggable(Level.WARNING))
-                                logger.warning(exception.getClass().getName());
-                            exception.printStackTrace();
-                        }
-                    }
-                } else {
-                    Object selectedObject = comboBox.getSelectedItem();
-                    if (selectedObject instanceof File) {
-                        switchToFile((File) selectedObject);
-                    }
-                }
-            }
-        });
-        answer.add(titleLabel);
-        answer.add(comboBox);
-        answer.setSize(800, 100);
-        return answer;
+	protected JPanel controlPanel() {
+		String[] availableChoices;
 
-    }
+		if (FlexoLoggingManager.isInitialized()) {
+			availableChoices = new String[2];
+			availableChoices[0] = FlexoLocalization.localizedForKey("application");
+			availableChoices[1] = FlexoLocalization.localizedForKey("open_log_file");
+		} else {
+			availableChoices = new String[1];
+			availableChoices[0] = FlexoLocalization.localizedForKey("open_log_file");
+		}
+		JPanel answer = new JPanel(new FlowLayout());
+		answer.setBackground(BACK_COLOR);
+
+		JLabel titleLabel = new JLabel(FlexoLocalization.localizedForKey("showing_logging_informations_for"));
+		comboBox = new JComboBox(availableChoices);
+		comboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedIndex = comboBox.getSelectedIndex();
+				if ((selectedIndex == 0) && (FlexoLoggingManager.isInitialized())) {
+					switchToApplicationLogging();
+				} else if (((selectedIndex == 1) && (FlexoLoggingManager.isInitialized()))
+						|| ((selectedIndex == 0) && (!FlexoLoggingManager.isInitialized()))) {
+					JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
+					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_a_log_file"));
+					if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+						// a file has been picked...
+						try {
+							File newLogFile = chooser.getSelectedFile();
+							switchToFile(newLogFile);
+						} catch (Exception exception) {
+							if (logger.isLoggable(Level.WARNING)) {
+								logger.warning(exception.getClass().getName());
+							}
+							exception.printStackTrace();
+						}
+					}
+				} else {
+					Object selectedObject = comboBox.getSelectedItem();
+					if (selectedObject instanceof File) {
+						switchToFile((File) selectedObject);
+					}
+				}
+			}
+		});
+		answer.add(titleLabel);
+		answer.add(comboBox);
+		answer.setSize(800, 100);
+		return answer;
+
+	}
 }

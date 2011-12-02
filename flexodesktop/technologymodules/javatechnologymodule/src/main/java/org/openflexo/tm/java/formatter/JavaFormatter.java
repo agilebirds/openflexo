@@ -37,7 +37,6 @@ import org.openflexo.sg.formatter.Formatter;
 import org.openflexo.sg.formatter.exception.FormattingException;
 import org.openflexo.toolbox.FileFormat;
 
-
 public class JavaFormatter implements Formatter {
 
 	private static final Logger logger = Logger.getLogger(JavaFormatter.class.getPackage().getName());
@@ -68,8 +67,7 @@ public class JavaFormatter implements Formatter {
 		Map<String, String> options = new HashMap<String, String>();
 
 		InputStream inputStream = null;
-		try
-		{
+		try {
 			inputStream = getClass().getResourceAsStream(DEFAULT_JAVA_FORMATTER_SETTINGS_RESOURCEPATH);
 			SAXBuilder sxb = new SAXBuilder();
 			org.jdom.Document document = sxb.build(getClass().getResourceAsStream(DEFAULT_JAVA_FORMATTER_SETTINGS_RESOURCEPATH));
@@ -81,11 +79,13 @@ public class JavaFormatter implements Formatter {
 
 			return options;
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Cannot load java formatter options ! The java formatter will be initialized with its default values. Cause: " + e.getMessage(), e);
+			logger.log(
+					Level.WARNING,
+					"Cannot load java formatter options ! The java formatter will be initialized with its default values. Cause: "
+							+ e.getMessage(), e);
 			e.printStackTrace();
 			return options;
-		}
-		finally {
+		} finally {
 			IOUtils.closeQuietly(inputStream);
 		}
 	}

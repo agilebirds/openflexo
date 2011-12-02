@@ -28,118 +28,114 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.fib.utils.BindingSelector;
 
-
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class BindingValueColumn<D extends Observable> extends CustomColumn<D,AbstractBinding>
-{
+public abstract class BindingValueColumn<D extends Observable> extends CustomColumn<D, AbstractBinding> {
 
-     protected static final Logger logger = Logger.getLogger(BindingValueColumn.class.getPackage().getName());
-      
-    public BindingValueColumn(String title, int defaultWidth, boolean allowsCompoundBinding)
-    {
-        super(title, defaultWidth);
-     }
+	protected static final Logger logger = Logger.getLogger(BindingValueColumn.class.getPackage().getName());
 
-    public abstract boolean allowsCompoundBinding(AbstractBinding value);
+	public BindingValueColumn(String title, int defaultWidth, boolean allowsCompoundBinding) {
+		super(title, defaultWidth);
+	}
 
-    public abstract boolean allowsNewEntryCreation(AbstractBinding value);
+	public abstract boolean allowsCompoundBinding(AbstractBinding value);
 
-    @Override
-	public Class<AbstractBinding> getValueClass()
-    {
-        return AbstractBinding.class;
-    }
+	public abstract boolean allowsNewEntryCreation(AbstractBinding value);
 
-    private BindingSelector _viewSelector;
+	@Override
+	public Class<AbstractBinding> getValueClass() {
+		return AbstractBinding.class;
+	}
 
-    private BindingSelector _editSelector;
+	private BindingSelector _viewSelector;
 
-    private void updateSelectorWith(BindingSelector selector,D rowObject, AbstractBinding value)
-    {
-    	AbstractBinding oldBV = selector.getEditedObject();
-        if ((oldBV == null) || (!oldBV.equals(value))) {
-            //selector.setEditedObjectAndUpdateBDAndOwner(value);
-            selector.setEditedObject(value);
-            selector.setRevertValue(value!=null?value.clone():null);
-            /*if (allowsNewEntryCreation(value)) {
-                selector.allowsNewEntryCreation();
-            }
-            else {
-                selector.denyNewEntryCreation();
-            }*/
-            selector.setBindable(getBindableFor(value,rowObject));
-            selector.setBindingDefinition(getBindingDefinitionFor(value,rowObject));
-            if (logger.isLoggable(Level.FINE))
-            	logger.fine("Selector: "+selector.toString()+" rowObject="+rowObject+""+" binding="+value+" with BindingDefinition "+getBindingDefinitionFor(value,rowObject));
-       }
-     }
-    
-    public abstract Bindable getBindableFor(AbstractBinding value, D rowObject);
-    public abstract BindingDefinition getBindingDefinitionFor(AbstractBinding value, D rowObject);
-    
-    @Override
-	protected BindingSelector getViewSelector(D rowObject, AbstractBinding value)
-    {
-        if (_viewSelector == null) {
-            _viewSelector = new BindingSelector(value) {
-            	@Override
-            	public String toString() {
-            		return "VIEW";
-            	}
-            };
-            _viewSelector.setFont(MEDIUM_FONT);
-        }
-        updateSelectorWith(_viewSelector,rowObject,value);
-        return _viewSelector;
-    }
+	private BindingSelector _editSelector;
 
-    @Override
-	protected BindingSelector getEditSelector(D rowObject, AbstractBinding value)
-    {
-        if (_editSelector == null) {
-            _editSelector = new BindingSelector(value) {
-                @Override
-				public void apply()
-                {
-                    super.apply();
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Apply");
-                    if (_editedRowObject != null) {
-                        setValue(_editedRowObject, getEditedObject());
-                    }
-                }
-               @Override
-			public void cancel()
-                {
-                    super.cancel();
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Cancel");
-                    if (_editedRowObject != null) {
-                        setValue(_editedRowObject, getRevertValue());
-                    }
-                }
-                	
-               	/*@Override
-               	public void setEditedObject(AbstractBinding object) {
-                   setBindable(getBindableFor(object,_editedRowObject));
-                   setBindingDefinition(getBindingDefinitionFor(object,_editedRowObject));
-               		super.setEditedObject(object);
-               	}*/
-               	@Override
-               	public String toString() {
-               		return "EDIT";
-               	}
-            };
-            _editSelector.setFont(NORMAL_FONT);
-        }
-        updateSelectorWith(_editSelector,rowObject,value);
-        return _editSelector;
-    }
-    
+	private void updateSelectorWith(BindingSelector selector, D rowObject, AbstractBinding value) {
+		AbstractBinding oldBV = selector.getEditedObject();
+		if ((oldBV == null) || (!oldBV.equals(value))) {
+			// selector.setEditedObjectAndUpdateBDAndOwner(value);
+			selector.setEditedObject(value);
+			selector.setRevertValue(value != null ? value.clone() : null);
+			/*if (allowsNewEntryCreation(value)) {
+			    selector.allowsNewEntryCreation();
+			}
+			else {
+			    selector.denyNewEntryCreation();
+			}*/
+			selector.setBindable(getBindableFor(value, rowObject));
+			selector.setBindingDefinition(getBindingDefinitionFor(value, rowObject));
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Selector: " + selector.toString() + " rowObject=" + rowObject + "" + " binding=" + value
+						+ " with BindingDefinition " + getBindingDefinitionFor(value, rowObject));
+			}
+		}
+	}
+
+	public abstract Bindable getBindableFor(AbstractBinding value, D rowObject);
+
+	public abstract BindingDefinition getBindingDefinitionFor(AbstractBinding value, D rowObject);
+
+	@Override
+	protected BindingSelector getViewSelector(D rowObject, AbstractBinding value) {
+		if (_viewSelector == null) {
+			_viewSelector = new BindingSelector(value) {
+				@Override
+				public String toString() {
+					return "VIEW";
+				}
+			};
+			_viewSelector.setFont(MEDIUM_FONT);
+		}
+		updateSelectorWith(_viewSelector, rowObject, value);
+		return _viewSelector;
+	}
+
+	@Override
+	protected BindingSelector getEditSelector(D rowObject, AbstractBinding value) {
+		if (_editSelector == null) {
+			_editSelector = new BindingSelector(value) {
+				@Override
+				public void apply() {
+					super.apply();
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Apply");
+					}
+					if (_editedRowObject != null) {
+						setValue(_editedRowObject, getEditedObject());
+					}
+				}
+
+				@Override
+				public void cancel() {
+					super.cancel();
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Cancel");
+					}
+					if (_editedRowObject != null) {
+						setValue(_editedRowObject, getRevertValue());
+					}
+				}
+
+				/*@Override
+				public void setEditedObject(AbstractBinding object) {
+				   setBindable(getBindableFor(object,_editedRowObject));
+				   setBindingDefinition(getBindingDefinitionFor(object,_editedRowObject));
+					super.setEditedObject(object);
+				}*/
+				@Override
+				public String toString() {
+					return "EDIT";
+				}
+			};
+			_editSelector.setFont(NORMAL_FONT);
+		}
+		updateSelectorWith(_editSelector, rowObject, value);
+		return _editSelector;
+	}
+
 }

@@ -29,26 +29,22 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  * @author sguerin
  * 
  */
-public class CalcDrawingShemaRemoved extends OEDataModification
-{
+public class CalcDrawingShemaRemoved extends OEDataModification {
 
-    private ViewPoint _parent;
+	private ViewPoint _parent;
 
-    public CalcDrawingShemaRemoved(ExampleDrawingShema shema, ViewPoint parent)
-    {
-        super(shema, null);
-        _parent = parent;
-    }
+	public CalcDrawingShemaRemoved(ExampleDrawingShema shema, ViewPoint parent) {
+		super(shema, null);
+		_parent = parent;
+	}
 
-    @Override
-    public ExampleDrawingShema oldValue()
-    {
-     	return (ExampleDrawingShema)super.oldValue();
-    }
-    
-    public ViewPoint getParent()
-    {
-        return _parent;
-    }
+	@Override
+	public ExampleDrawingShema oldValue() {
+		return (ExampleDrawingShema) super.oldValue();
+	}
+
+	public ViewPoint getParent() {
+		return _parent;
+	}
 
 }

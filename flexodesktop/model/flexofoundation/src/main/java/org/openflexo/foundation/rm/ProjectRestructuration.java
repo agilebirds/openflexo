@@ -25,16 +25,13 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
 
-
 /**
- * Utility class containing static methods used to restructure old Flexo
- * Projects
- *
+ * Utility class containing static methods used to restructure old Flexo Projects
+ * 
  * @author sguerin
- *
+ * 
  */
 public class ProjectRestructuration {
-
 
 	public static final String OELIB_EXTENSION = ".oelib";
 
@@ -68,10 +65,11 @@ public class ProjectRestructuration {
 
 	public static final String TS_EXTENSION = ".rmxml.ts";
 
+	public static final String SHEMA_EXTENSION = ".shema";
+
 	public static final String[] DOT_FILE_EXTENSIONS = { WKF_EXTENSION, WOLIB_EXTENSION, CG_EXTENSION, DG_EXTENSION, SG_EXTENSION,
-		TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION, OWL_EXTENSION,
-		OELIB_EXTENSION,
-		RM_EXTENSION, TS_EXTENSION };
+			TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION, OWL_EXTENSION,
+			OELIB_EXTENSION, RM_EXTENSION, TS_EXTENSION };
 
 	public static final String[] FILE_EXTENSIONS;
 
@@ -109,323 +107,6 @@ public class ProjectRestructuration {
 	public static final String ONTOLOGY_DIR = "Ontology";
 
 	public static final String SKOS_DIR = "SKOS";
-
-	/*
-	 * private static FlexoProgress progress;
-	 *
-	 * private static boolean restructureProjectHierarchy;
-	 */
-
-	// ==========================================================================
-	// ================= Loading without RM management
-	// ==========================
-	// ==========================================================================
-
-	/*
-	 * public static FlexoProject loadWithoutRM(File rmFile, File
-	 * aProjectDirectory, boolean needsToRestructureProjectHierarchy,
-	 * FlexoProgress aProgress) throws RuntimeException,
-	 * ProjectInitializerException { FlexoProject project = new
-	 * FlexoProject(aProjectDirectory); // File[] projectFiles =
-	 * aProjectDirectory.listFiles();
-	 *
-	 * progress = aProgress; restructureProjectHierarchy =
-	 * needsToRestructureProjectHierarchy;
-	 *
-	 * if (logger.isLoggable(Level.INFO))
-	 * logger.info("Building Resource Manager File for project: " +
-	 * rmFile.getAbsolutePath()); if (progress != null) { int steps =
-	 * aProjectDirectory.listFiles().length;
-	 * progress.resetSecondaryProgress(steps); }
-	 *
-	 * if (restructureProjectHierarchy) { if
-	 * (!ProjectRestructuration.getExpectedWorkflowDirectory
-	 * (aProjectDirectory).exists()) {
-	 * ProjectRestructuration.getExpectedWorkflowDirectory
-	 * (aProjectDirectory).mkdir(); } }
-	 *
-	 * FlexoProjectFile projectRMFile = new FlexoProjectFile(rmFile, project);
-	 * FlexoRMResource rmResource = new FlexoRMResource(project, projectRMFile);
-	 * try { project.setFlexoResource(rmResource);
-	 * project.registerResource(rmResource); } catch (DuplicateResourceException
-	 * e1) { // Warns about the exception if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Exception raised: " + e1.getClass().getName() +
-	 * ". See console for details."); e1.printStackTrace(); }
-	 *
-	 * // First, load the workflow if (progress != null) {
-	 * progress.setSecondaryProgress
-	 * (FlexoLocalization.localizedForKey("load_workflow_file")); }
-	 * FlexoWorkflowResource wkfRes = loadWorkflowWithoutRM(project);
-	 *
-	 * // Then, load the processes loadProcessesWithoutRM(project, wkfRes);
-	 *
-	 * registerCustomInspectors(project); registerCustomTemplates(project);
-	 *
-	 * try { // Eventually log the result if (logger.isLoggable(Level.FINE)) {
-	 * if (logger.isLoggable(Level.FINE)) logger.fine("Getting this RM File:\n"
-	 * + project.getFlexoRMResource().getResourceXMLRepresentation()); } // Save
-	 * RM file project.getFlexoRMResource().saveResourceData(); } catch
-	 * (Exception e) { // Warns about the exception if
-	 * (logger.isLoggable(Level.WARNING)) logger.warning("Exception raised: " +
-	 * e.getClass().getName() + ". See console for details.");
-	 * e.printStackTrace(); }
-	 *
-	 * // Yes !!! We succeeded to convert
-	 *
-	 * return project; }
-	 *
-	 * private static FlexoWorkflowResource loadWorkflowWithoutRM(FlexoProject
-	 * proj) throws ProjectInitializerException { // Load the workflow File
-	 * wkf_File = ProjectRestructuration.getWorkflowFile(proj,
-	 * restructureProjectHierarchy); FlexoProjectFile workflow_File = new
-	 * FlexoProjectFile(wkf_File, proj); FlexoWorkflowResource wkf_Res; try {
-	 * wkf_Res = new FlexoWorkflowResource(proj, workflow_File); } catch
-	 * (InvalidFileNameException e1) { workflow_File = new
-	 * FlexoProjectFile(FileUtils
-	 * .getValidFileName(workflow_File.getRelativePath()));
-	 * workflow_File.setProject(proj); try { wkf_Res = new
-	 * FlexoWorkflowResource(proj, workflow_File); } catch
-	 * (InvalidFileNameException e) { if (logger.isLoggable(Level.SEVERE))
-	 * logger.severe("Invalid workflow name. This should never happen"); return
-	 * null; } } FlexoWorkflow _workflow = wkf_Res.getResourceData();
-	 * _workflow.setWorkflowName(proj.getProjectName()); try {
-	 * proj.registerResource(wkf_Res); } catch (DuplicateResourceException e) {
-	 * // Warns about the exception if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Exception raised: " + e.getClass().getName() +
-	 * ". See console for details."); e.printStackTrace(); } return wkf_Res; }
-	 */
-	/*
-	 * private static void registerCustomInspectors(FlexoProject project) { File
-	 * projectDirectory = project.getProjectDirectory();
-	 *
-	 * File customInspectorsFile = new File(projectDirectory, "Inspector"); if
-	 * (customInspectorsFile.exists()) { // Regitering the resource
-	 * FlexoProjectFile resourceCustomInspectorsFile = new
-	 * FlexoProjectFile(customInspectorsFile, project); try {
-	 * CustomInspectorsResource ciRes = new CustomInspectorsResource(project,
-	 * resourceCustomInspectorsFile); project.registerResource(ciRes); } catch
-	 * (DuplicateResourceException e) { // Warns about the exception if
-	 * (logger.isLoggable(Level.WARNING)) logger.warning("Exception raised: " +
-	 * e.getClass().getName() + ". See console for details.");
-	 * e.printStackTrace(); return; } catch (InvalidFileNameException e) { if
-	 * (logger.isLoggable(Level.WARNING)) logger.warning("Exception raised:");
-	 * e.printStackTrace(); return; } if (logger.isLoggable(Level.INFO))
-	 * logger.info("Registered Custom Inspectors"); }
-	 *
-	 * }
-	 *
-	 * private static void registerCustomTemplates(FlexoProject project) { File
-	 * projectDirectory = project.getProjectDirectory();
-	 *
-	 * File customTemplatesFile = new File(projectDirectory, "Templates"); if
-	 * (customTemplatesFile.exists()) { // Regitering the resource
-	 * FlexoProjectFile resourceCustomTemplatesFile = new
-	 * FlexoProjectFile(customTemplatesFile, project); try {
-	 * CustomTemplatesResource ctRes = new CustomTemplatesResource(project,
-	 * "Templates", resourceCustomTemplatesFile);
-	 * project.registerResource(ctRes); } catch (DuplicateResourceException e) {
-	 * // Warns about the exception if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Exception raised: " + e.getClass().getName() +
-	 * ". See console for details."); e.printStackTrace(); return; } catch
-	 * (InvalidFileNameException e) { e.printStackTrace(); return; } if
-	 * (logger.isLoggable(Level.INFO))
-	 * logger.info("Registered Custom Templates"); }
-	 *
-	 * }
-	 */
-	/*
-	 * private static void loadProcessesWithoutRM(FlexoProject project,
-	 * FlexoWorkflowResource workflowResource) throws RuntimeException { File
-	 * projectDirectory = project.getProjectDirectory();
-	 *
-	 * for (Enumeration e = project.getFlexoWorkflow()._allProcesses();
-	 * e.hasMoreElements();) { FlexoProcessNode processNode = (FlexoProcessNode)
-	 * e.nextElement(); File processFile = new File(projectDirectory,
-	 * processNode.getFileName()); if (processFile.exists()) { if
-	 * (logger.isLoggable(Level.INFO)) logger.info("File " +
-	 * processFile.getAbsolutePath() + " found."); if
-	 * (restructureProjectHierarchy) { File expectedFile =
-	 * getExpectedProcessFile(project, processNode.getName()); // new File //
-	 * (ProjectRestructuration.getExpectedWorkflowDirectory(projectDirectory),
-	 * // processNode.getFileName()); if (processFile.renameTo(expectedFile)) {
-	 * if (logger.isLoggable(Level.INFO)) logger.info("File " +
-	 * processFile.getAbsolutePath() + " has been renamed to " +
-	 * expectedFile.getAbsolutePath()); processFile = expectedFile; } else { if
-	 * (logger.isLoggable(Level.INFO)) logger.info("File " +
-	 * processFile.getAbsolutePath() + " could not be renamed to " +
-	 * expectedFile.getAbsolutePath()); } } } else { processFile = new
-	 * File(ProjectRestructuration
-	 * .getExpectedWorkflowDirectory(projectDirectory),
-	 * processNode.getFileName()); if (!processFile.exists()) { if
-	 * (logger.isLoggable(Level.SEVERE)) logger.severe("File " +
-	 * processFile.getAbsolutePath() + " NOT found."); if
-	 * (logger.isLoggable(Level.INFO)) logger.info("Exiting application...");
-	 * throw new RuntimeException(); } } if (processFile.exists()) {
-	 * FlexoProjectFile flexoProjectFile = new FlexoProjectFile(processFile,
-	 * project); FlexoProcessResource processRes; try { processRes = new
-	 * FlexoProcessResource(project, processNode.getName(), workflowResource,
-	 * flexoProjectFile); } catch (InvalidFileNameException e1) { if
-	 * (logger.isLoggable(Level.SEVERE))
-	 * logger.severe("File name is not valid. This should not happen."); throw
-	 * new RuntimeException(); } // FlexoProcess process; try { if (progress !=
-	 * null) {progress.setSecondaryProgress(FlexoLocalization.localizedForKey(
-	 * "load_and_convert_process") + " " + processFile.getName()); } // process
-	 * = (FlexoProcess) processRes.loadResourceData();
-	 * project.registerResource(processRes);
-	 * findAndRegisterComponents(processRes, project); } catch
-	 * (LoadXMLResourceException e2) { // Warns about the exception if
-	 * (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not load process " + processNode.getName() +
-	 * " Exception raised: " + e2.getClass().getName() +
-	 * ". See console for details."); if (logger.isLoggable(Level.WARNING))
-	 * logger.warning(e2.getExtendedMessage()); e2.printStackTrace(); throw new
-	 * RuntimeException(); } catch (DuplicateResourceException e2) { // Warns
-	 * about the exception if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Exception raised: " + e2.getClass().getName() +
-	 * ". See console for details."); e2.printStackTrace(); throw new
-	 * RuntimeException(); } catch (FlexoFileNotFoundException e2) { // Warns
-	 * about the exception if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Exception raised: " + e.getClass().getName() +
-	 * ". See console for details."); e2.printStackTrace(); throw new
-	 * RuntimeException(); } catch (FlexoException e2) { // Warns about the
-	 * exception if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Exception raised: " + e.getClass().getName() +
-	 * ". See console for details."); e2.printStackTrace(); throw new
-	 * RuntimeException(); } } else { if (logger.isLoggable(Level.SEVERE))
-	 * logger.severe("File " + processFile.getAbsolutePath() + " NOT found.");
-	 * throw new RuntimeException(); } } }
-	 *
-	 * private static void findAndRegisterComponents(FlexoProcessResource
-	 * processRes, FlexoProject project) throws RuntimeException { File
-	 * projectDirectory = project.getProjectDirectory(); FlexoProcess process =
-	 * processRes.getResourceData();
-	 *
-	 * if (logger.isLoggable(Level.INFO))
-	 * logger.info("Finding and registering components for process " +
-	 * process.getName()); for (Enumeration e =
-	 * process.getAllComponents().elements(); e.hasMoreElements();) {
-	 * ComponentDefinition component = (ComponentDefinition) e.nextElement();
-	 * String componentFileName = component.getName() + ".woxml"; File
-	 * componentFile = new File(projectDirectory, componentFileName); if
-	 * (componentFile.exists()) { if (logger.isLoggable(Level.INFO))
-	 * logger.info("File " + componentFile.getAbsolutePath() + " found."); if
-	 * (restructureProjectHierarchy) { File expectedFile = new
-	 * File(ProjectRestructuration
-	 * .getExpectedDirectoryForComponent(projectDirectory, component),
-	 * componentFileName); if (!expectedFile.getParentFile().exists()) {
-	 * expectedFile.getParentFile().mkdirs(); } if
-	 * (componentFile.renameTo(expectedFile)) { if
-	 * (logger.isLoggable(Level.INFO)) logger.info("File " +
-	 * componentFile.getAbsolutePath() + " has been renamed to " +
-	 * expectedFile.getAbsolutePath()); componentFile = expectedFile; } else {
-	 * if (logger.isLoggable(Level.WARNING)) logger.warning("File " +
-	 * componentFile.getAbsolutePath() + " could not be renamed to " +
-	 * expectedFile.getAbsolutePath()); } } } else { componentFile = new
-	 * File(ProjectRestructuration
-	 * .getExpectedDirectoryForComponent(projectDirectory, component),
-	 * componentFileName); if (!componentFile.exists()) { if
-	 * (logger.isLoggable(Level.WARNING)) logger.warning("File " +
-	 * componentFile.getAbsolutePath() + " NOT found."); } } if
-	 * (componentFile.exists()) { // Regitering the resource if (progress !=
-	 * null) {progress.setSecondaryProgress(FlexoLocalization.localizedForKey(
-	 * "convert_component_file") + " " + componentFile.getName()); }
-	 * FlexoProjectFile resourceComponentFile = new
-	 * FlexoProjectFile(componentFile, project); FlexoComponentResource compRes
-	 * = null; FlexoComponentLibraryResource clResource =
-	 * project.getFlexoComponentLibraryResource(); try { if (component
-	 * instanceof OperationComponentDefinition) { compRes = new
-	 * FlexoOperationComponentResource(project, component.getName(), clResource,
-	 * resourceComponentFile); project.registerResource(compRes); } else if
-	 * (component instanceof TabComponentDefinition) { TabComponentDefinition
-	 * thumbnail = (TabComponentDefinition) component; compRes = new
-	 * FlexoTabComponentResource(project, thumbnail.getName(), clResource,
-	 * resourceComponentFile); project.registerResource(compRes); } else if
-	 * (component instanceof PopupComponentDefinition) { compRes = new
-	 * FlexoPopupComponentResource(project, component.getName(), clResource,
-	 * resourceComponentFile); project.registerResource(compRes); } } catch
-	 * (DuplicateResourceException e1) { // Warns about the exception if
-	 * (logger.isLoggable(Level.WARNING)) logger.warning("Exception raised: " +
-	 * e1.getClass().getName() + ". See console for details.");
-	 * e1.printStackTrace(); } catch (InvalidFileNameException e2) { if
-	 * (logger.isLoggable(Level.SEVERE))
-	 * logger.severe("Could not create component named: "
-	 * +resourceComponentFile.getRelativePath()); } if (compRes != null) { try {
-	 * compRes.loadResourceData(); if (compRes != null) {
-	 * compRes.saveResourceData(); // if (logger.isLoggable(Level.INFO))
-	 * logger.info // ("Registered component //
-	 * "+compRes.getComponentDefinition().getName()); } else { if
-	 * (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not register component " + component.getName()); }
-	 * } catch (LoadXMLResourceException exception) { // Warns about the
-	 * exception if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not load component " + component.getName() +
-	 * " Exception raised: " + exception.getClass().getName() +
-	 * ". See console for details."); if (logger.isLoggable(Level.WARNING))
-	 * logger.warning(exception.getExtendedMessage());
-	 * exception.printStackTrace(); if (logger.isLoggable(Level.INFO))
-	 * logger.info("Exiting application..."); throw new RuntimeException(); }
-	 * catch (SaveXMLResourceException exception) { // Warns about the exception
-	 * if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not save component " + component.getName() +
-	 * " Exception raised: " + exception.getClass().getName() +
-	 * ". See console for details."); exception.printStackTrace(); if
-	 * (logger.isLoggable(Level.INFO)) logger.info("Exiting application...");
-	 * throw new RuntimeException(); } catch
-	 * (SaveResourcePermissionDeniedException exception) { // Warns about the
-	 * exception if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not save component " + component.getName() +
-	 * " Write permission is denied !"); if (logger.isLoggable(Level.INFO))
-	 * logger.info("Exiting application..."); throw new RuntimeException();
-	 *
-	 * } catch (FlexoFileNotFoundException exception) { // Warns about the
-	 * exception if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not load component " + component.getName() +
-	 * " File not found !"); if (logger.isLoggable(Level.INFO))
-	 * logger.info("Exiting application..."); throw new RuntimeException(); }
-	 * catch (FlexoException exception) { // Warns about the exception if
-	 * (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not load component " + component.getName() +
-	 * " File not found !"); if (logger.isLoggable(Level.INFO))
-	 * logger.info("Exiting application..."); throw new RuntimeException(); } }
-	 * else { if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not register component " + component.getName()); }
-	 * } } }
-	 */
-	/*
-	 * private static File findWKFFile(File dir) { File[] fileArray =
-	 * dir.listFiles(); for (int i = 0; i < fileArray.length; i++) { if
-	 * (fileArray[i].getName().endsWith(".wkf")) return fileArray[i]; } return
-	 * null; }
-	 *
-	 * private static File getWorkflowFile(FlexoProject project, boolean
-	 * restructureProjectHierarchyFlag) throws ProjectInitializerException {
-	 * File wkfFile = getExpectedWorkflowFile(project,
-	 * project.getProjectName()); if (!wkfFile.exists()) { if
-	 * (logger.isLoggable(Level.INFO)) logger.info(wkfFile.getAbsolutePath() +
-	 * " NOT found, looking for a .wkf file..."); wkfFile =
-	 * findWKFFile(project.getProjectDirectory()); if (wkfFile == null) {
-	 * wkfFile =
-	 * findWKFFile(getExpectedWorkflowDirectory(project.getProjectDirectory()));
-	 * } if (wkfFile != null) { if (logger.isLoggable(Level.INFO))
-	 * logger.info(wkfFile.getAbsolutePath() + " found, choosing this one."); if
-	 * (restructureProjectHierarchyFlag) { if
-	 * (!wkfFile.renameTo(getExpectedWorkflowFile(project,
-	 * project.getProjectName()))) { if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Renaming to " + getExpectedWorkflowFile(project,
-	 * project.getProjectName()) + "FAILED"); } else { if
-	 * (logger.isLoggable(Level.INFO)) logger.info(wkfFile.getAbsolutePath() +
-	 * " has been renamed to " + getExpectedWorkflowFile(project,
-	 * project.getProjectName())); wkfFile = getExpectedWorkflowFile(project,
-	 * project.getProjectName()); } } } } if ((wkfFile == null) ||
-	 * (!wkfFile.exists())) { if (logger.isLoggable(Level.SEVERE))
-	 * logger.severe("Cannot find workflow file !"); if
-	 * (logger.isLoggable(Level.INFO)) logger.info("Exiting application...");
-	 * throw new ProjectInitializerException(); } return wkfFile; }
-	 */
-	// ==========================================================================
-	// ================= Expected files and directories
-	// =========================
-	// ==========================================================================
 
 	public static File getExpectedWorkflowDirectory(File projectDirectory) {
 		File returned = new File(projectDirectory, ProjectRestructuration.WORKFLOW_DIR);
@@ -514,8 +195,6 @@ public class ProjectRestructuration {
 		}
 		return returned;
 	}
-
-
 
 	public static File getExpectedGeneratedDocDirectory(File projectDirectory) {
 		File returned = new File(projectDirectory, ProjectRestructuration.GENERATED_DOC_DIR);

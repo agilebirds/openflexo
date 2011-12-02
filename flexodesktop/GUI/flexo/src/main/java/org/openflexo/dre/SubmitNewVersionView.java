@@ -27,102 +27,93 @@ import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.view.FlexoPerspective;
 
-
 public class SubmitNewVersionView extends AbstractDocItemView {
 
-    public boolean showDetails = false;
-    
-    public SubmitNewVersionView(DocItem docItem, Language language, FlexoEditor editor)
-    {
-        super(docItem,null,editor);
-        DocItemAction lastAction = docItem.getLastActionForLanguage(language);
-        languageCB.setSelectedItem(language);
-        if (lastAction != null) {
-            getDocResourceManager().beginVersionReview(lastAction.getVersion());
-            updateViewFromModel();                       
-            setCurrentAction(lastAction);
-        }
-        else {
-            getDocResourceManager().beginVersionSubmission(docItem,language);
-            updateViewFromModel();                       
-        }
-        inheritanceChildsListView.setEnabled(false);
-        embeddingChildsListView.setEnabled(false);
-        relatedToListView.setEnabled(false);
-        generalInfoPanel.parentItemRelatedToInheritanceDIS.setEnabled(false);
-        generalInfoPanel.parentItemRelatedToInheritanceDIS.setEnabled(false);
-        hideDetails();
-   }
-    
-    protected void hideDetails()
-    {
-        showDetails = false;
-        remove (bottomPanel);
-        remove (rightPanel);
-        revalidate();
-        repaint();
-    }
-    
-    protected void showDetails()
-    {
-        showDetails = true;
-        add (bottomPanel,BorderLayout.SOUTH);
-        add (rightPanel,BorderLayout.EAST);
-        revalidate();
-        repaint();
-    }
-    
-    @Override
-	protected HistoryPanel makeHistoryPanel()
-    {
-        return new SubmitNewVersionHistoryPanel();
-    }
-    
-    protected class SubmitNewVersionHistoryPanel extends HistoryPanel
-    {
-        
-        protected SubmitNewVersionHistoryPanel()
-        {
-            super();
-            actionList.setEnabled(false);
-            actionPanel.remove(editButton);
-            actionPanel.remove(submitReviewButton);
-            actionPanel.remove(approveButton);
-            actionPanel.remove(refuseButton);
-        }
-    }
+	public boolean showDetails = false;
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	public SubmitNewVersionView(DocItem docItem, Language language, FlexoEditor editor) {
+		super(docItem, null, editor);
+		DocItemAction lastAction = docItem.getLastActionForLanguage(language);
+		languageCB.setSelectedItem(language);
+		if (lastAction != null) {
+			getDocResourceManager().beginVersionReview(lastAction.getVersion());
+			updateViewFromModel();
+			setCurrentAction(lastAction);
+		} else {
+			getDocResourceManager().beginVersionSubmission(docItem, language);
+			updateViewFromModel();
+		}
+		inheritanceChildsListView.setEnabled(false);
+		embeddingChildsListView.setEnabled(false);
+		relatedToListView.setEnabled(false);
+		generalInfoPanel.parentItemRelatedToInheritanceDIS.setEnabled(false);
+		generalInfoPanel.parentItemRelatedToInheritanceDIS.setEnabled(false);
+		hideDetails();
+	}
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
-    
+	protected void hideDetails() {
+		showDetails = false;
+		remove(bottomPanel);
+		remove(rightPanel);
+		revalidate();
+		repaint();
+	}
+
+	protected void showDetails() {
+		showDetails = true;
+		add(bottomPanel, BorderLayout.SOUTH);
+		add(rightPanel, BorderLayout.EAST);
+		revalidate();
+		repaint();
+	}
+
+	@Override
+	protected HistoryPanel makeHistoryPanel() {
+		return new SubmitNewVersionHistoryPanel();
+	}
+
+	protected class SubmitNewVersionHistoryPanel extends HistoryPanel {
+
+		protected SubmitNewVersionHistoryPanel() {
+			super();
+			actionList.setEnabled(false);
+			actionPanel.remove(editButton);
+			actionPanel.remove(submitReviewButton);
+			actionPanel.remove(approveButton);
+			actionPanel.remove(refuseButton);
+		}
+	}
+
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
 	@Override
-	public boolean isAutoscrolled() 
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
 
@@ -130,6 +121,5 @@ public class SubmitNewVersionView extends AbstractDocItemView {
 	public FlexoPerspective getPerspective() {
 		return null;
 	}
-
 
 }

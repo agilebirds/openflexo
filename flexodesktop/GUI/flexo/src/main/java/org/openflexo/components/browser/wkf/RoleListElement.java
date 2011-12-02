@@ -27,10 +27,6 @@ import java.util.Vector;
 import javax.swing.Icon;
 import javax.swing.tree.TreePath;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ExpansionSynchronizedElement;
@@ -38,44 +34,44 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing all the roles of a process
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class RoleListElement extends BrowserElement implements ExpansionSynchronizedElement
-{
+public class RoleListElement extends BrowserElement implements ExpansionSynchronizedElement {
 
 	private HashSet<Role> observedRole;
 
-    public RoleListElement(RoleList roleList, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(roleList, BrowserElementType.ROLE_LIST, browser, parent);
-    }
+	public RoleListElement(RoleList roleList, ProjectBrowser browser, BrowserElement parent) {
+		super(roleList, BrowserElementType.ROLE_LIST, browser, parent);
+	}
 
 	@Override
 	public TreePath getTreePath() {
 		return super.getTreePath();
 	}
 
-    @Override
-    public Icon getIcon() {
-    	if (getRoleList().isImportedRoleList()) {
-    		return WKFIconLibrary.IMPORTED_ROLE_LIBRARY_ICON;
-    	} else {
-    		return super.getIcon();
-    	}
-    }
+	@Override
+	public Icon getIcon() {
+		if (getRoleList().isImportedRoleList()) {
+			return WKFIconLibrary.IMPORTED_ROLE_LIBRARY_ICON;
+		} else {
+			return super.getIcon();
+		}
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	if (observedRole==null)
-    		observedRole = new HashSet<Role>();
-    	clearObserving();
-        // We add the roles
+	@Override
+	protected void buildChildrenVector() {
+		if (observedRole == null) {
+			observedRole = new HashSet<Role>();
+		}
+		clearObserving();
+		// We add the roles
 		if (!getRoleList().isImportedRoleList()) {
 			switch (getProjectBrowser().getRoleViewMode()) {
 			case TOP_DOWN:
@@ -111,52 +107,52 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 				addToChilds(role);
 			}
 		}
-    }
+	}
 
-    private void clearObserving() {
-    	if (observedRole==null)
-    		observedRole = new HashSet<Role>();
-    	for (Role r : observedRole) {
+	private void clearObserving() {
+		if (observedRole == null) {
+			observedRole = new HashSet<Role>();
+		}
+		for (Role r : observedRole) {
 			r.deleteObserver(this);
 		}
-    	observedRole.clear();
-    }
+		observedRole.clear();
+	}
 
-    private void observeRole(Role role) {
-    	if (observedRole==null)
-    		observedRole = new HashSet<Role>();
-    	if (!observedRole.contains(role)) {
-    		role.addObserver(this);
-    		observedRole.add(role);
-    	}
-    }
+	private void observeRole(Role role) {
+		if (observedRole == null) {
+			observedRole = new HashSet<Role>();
+		}
+		if (!observedRole.contains(role)) {
+			role.addObserver(this);
+			observedRole.add(role);
+		}
+	}
 
-    @Override
-    public void delete() {
-    	super.delete();
-    	clearObserving();
-    	observedRole = null;
-    }
+	@Override
+	public void delete() {
+		super.delete();
+		clearObserving();
+		observedRole = null;
+	}
 
-    protected RoleList getRoleList()
-    {
-        return (RoleList) getObject();
-    }
+	protected RoleList getRoleList() {
+		return (RoleList) getObject();
+	}
 
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        return BrowserElementType.ROLE;
-    }
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		return BrowserElementType.ROLE;
+	}
 
-    @Override
-    public String getName() {
-    	if (getRoleList().isImportedRoleList()) {
-    		return FlexoLocalization.localizedForKey("imported_role_library");
-    	} else {
-    		return super.getName();
-    	}
-    }
+	@Override
+	public String getName() {
+		if (getRoleList().isImportedRoleList()) {
+			return FlexoLocalization.localizedForKey("imported_role_library");
+		} else {
+			return super.getName();
+		}
+	}
 
 	@Override
 	public void collapse() {

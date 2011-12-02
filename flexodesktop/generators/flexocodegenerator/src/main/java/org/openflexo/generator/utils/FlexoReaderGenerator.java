@@ -38,93 +38,92 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.localization.FlexoLocalization;
 
-
-public class FlexoReaderGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
-{
+public class FlexoReaderGenerator extends MetaGenerator<FlexoModelObject, CGRepository> {
 	private static final Logger logger = Logger.getLogger(FlexoReaderGenerator.class.getPackage().getName());
-	
+
 	private ProjectDocHTMLGenerator docProjectGenerator;
-	
-    public FlexoReaderGenerator(ProjectGenerator projectGenerator) throws GenerationException
-    {
-        super(projectGenerator,null);
-        _generators = new Hashtable<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>,ResourceToCopyGenerator>();
-        docProjectGenerator = new ProjectDocHTMLGenerator(projectGenerator.getProject(),projectGenerator.getRepository().getReaderRepository());
-    }
-    
-    @Override
-    public ProjectGenerator getProjectGenerator() {
-    	return (ProjectGenerator) super.getProjectGenerator();
-    }
-    
+
+	public FlexoReaderGenerator(ProjectGenerator projectGenerator) throws GenerationException {
+		super(projectGenerator, null);
+		_generators = new Hashtable<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>, ResourceToCopyGenerator>();
+		docProjectGenerator = new ProjectDocHTMLGenerator(projectGenerator.getProject(), projectGenerator.getRepository()
+				.getReaderRepository());
+	}
+
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public ProjectGenerator getProjectGenerator() {
+		return (ProjectGenerator) super.getProjectGenerator();
+	}
+
+	@Override
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public void generate(boolean forceRegenerate) throws GenerationException
-    {
-    	if (logger.isLoggable(Level.FINE))
-    		logger.fine("Called FlexoReaderGenerator.generate(forceRegenerate)");
-    	resetSecondaryProgressWindow(_generators.values().size());
-    	startGeneration();
-    	for (ResourceToCopyGenerator generator : _generators.values()) {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+generator.getIdentifier(),false);
-    		generator.generate(forceRegenerate);
-    	}
-    	stopGeneration();
-    }
-    
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
+	public void generate(boolean forceRegenerate) throws GenerationException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Called FlexoReaderGenerator.generate(forceRegenerate)");
+		}
+		resetSecondaryProgressWindow(_generators.values().size());
+		startGeneration();
+		for (ResourceToCopyGenerator generator : _generators.values()) {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + generator.getIdentifier(), false);
+			generator.generate(forceRegenerate);
+		}
+		stopGeneration();
+	}
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		docProjectGenerator.refreshConcernedResources();
 		Vector<CGFile> cgFiles = repository.getReaderRepository().getFiles();
 		resetSecondaryProgressWindow(cgFiles.size());
 		for (CGFile file : cgFiles) {
-			if (file.getResource()==null || file.getResource().getFile()==null)
+			if (file.getResource() == null || file.getResource().getFile() == null) {
 				continue;
+			}
 			ResourceToCopyGenerator generator = getGenerator(file.getResource());
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+file.getName(),false);
-			if (generator != null)
-				generator.buildResourcesAndSetGenerators(repository,resources);
-			else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Could not instanciate ResourceToCopyGenerator for "+file);
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + file.getName(), false);
+			if (generator != null) {
+				generator.buildResourcesAndSetGenerators(repository, resources);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not instanciate ResourceToCopyGenerator for " + file);
+				}
 			}
 		}
-		
+
 	}
 
-	private Hashtable<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>,ResourceToCopyGenerator> _generators;
-	
-	protected ResourceToCopyGenerator getGenerator(CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> resource)
-	{
+	private Hashtable<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>, ResourceToCopyGenerator> _generators;
+
+	protected ResourceToCopyGenerator getGenerator(
+			CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> resource) {
 		ResourceToCopyGenerator returned = _generators.get(resource);
 		if (returned == null) {
 			String relativePath;
 			try {
-				File temp  = resource.getFile().getParentFile().getCanonicalFile();
+				File temp = resource.getFile().getParentFile().getCanonicalFile();
 				File target = getRepository().getReaderRepository().getDirectory().getCanonicalFile();
 				relativePath = "";
 				while ((!temp.equals(target)) && (temp.getParentFile() != null)) {
-					if (relativePath.length()==0) {
+					if (relativePath.length() == 0) {
 						relativePath = temp.getName();
 					} else {
 						relativePath = temp.getName() + "/" + relativePath;
 					}
 					temp = temp.getParentFile();
 				}
-				if (temp==null || temp.getParentFile()==null) {
+				if (temp == null || temp.getParentFile() == null) {
 					return null;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				return null;
 			}
-			_generators.put(resource,returned=new ResourceToCopyGenerator(getProjectGenerator(),resource,projectGenerator.getRepository().getReaderSymbolicDirectory(),relativePath));
+			_generators.put(resource, returned = new ResourceToCopyGenerator(getProjectGenerator(), resource, projectGenerator
+					.getRepository().getReaderSymbolicDirectory(), relativePath));
 		}
 		return returned;
 	}

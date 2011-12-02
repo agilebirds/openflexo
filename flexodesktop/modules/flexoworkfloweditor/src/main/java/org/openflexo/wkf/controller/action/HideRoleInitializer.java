@@ -35,68 +35,67 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
-public class HideRoleInitializer extends ActionInitializer { 
+public class HideRoleInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	HideRoleInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(HideRole.actionType,actionInitializer);
+	HideRoleInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(HideRole.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
 	public WKFController getController() {
 		return (WKFController) super.getController();
 	}
-	
+
 	@Override
 	protected FlexoActionInitializer getDefaultInitializer() {
 		return new FlexoActionInitializer<HideRole>() {
 
 			@Override
 			public boolean run(ActionEvent event, HideRole action) {
-				if (action.getRole()!=null) {
-					action.getRole().setIsVisible(false, SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController().getCurrentFlexoProcess()));
-					if (action.getGlobalSelection()!=null) {
-						for (Role role:action.getGlobalSelection())
-							if (!SwimmingLaneRepresentation.roleMustBeShown(role, getController().getCurrentFlexoProcess()))
-								role.setIsVisible(false, SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController().getCurrentFlexoProcess()));
+				if (action.getRole() != null) {
+					action.getRole().setIsVisible(false,
+							SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController().getCurrentFlexoProcess()));
+					if (action.getGlobalSelection() != null) {
+						for (Role role : action.getGlobalSelection()) {
+							if (!SwimmingLaneRepresentation.roleMustBeShown(role, getController().getCurrentFlexoProcess())) {
+								role.setIsVisible(false, SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController()
+										.getCurrentFlexoProcess()));
+							}
+						}
 					}
 				}
 				return false;
 			}
-			
+
 		};
 	}
-	
+
 	@Override
-	protected FlexoActionVisibleCondition<HideRole,Role,Role> getVisibleCondition() {
+	protected FlexoActionVisibleCondition<HideRole, Role, Role> getVisibleCondition() {
 		return new FlexoActionVisibleCondition<HideRole, Role, Role>() {
 
 			@Override
-			public boolean isVisible(FlexoActionType<HideRole, Role, Role> actionType, Role object,
-					Vector<Role> globalSelection, FlexoEditor editor) {
-				return getController().getCurrentPerspective()==getController().SWIMMING_LANE_PERSPECTIVE
-				&& !SwimmingLaneRepresentation.roleMustBeShown(object, getController().getCurrentFlexoProcess());
+			public boolean isVisible(FlexoActionType<HideRole, Role, Role> actionType, Role object, Vector<Role> globalSelection,
+					FlexoEditor editor) {
+				return getController().getCurrentPerspective() == getController().SWIMMING_LANE_PERSPECTIVE
+						&& !SwimmingLaneRepresentation.roleMustBeShown(object, getController().getCurrentFlexoProcess());
 			}
-			
+
 		};
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<HideRole> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<HideRole> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<HideRole>() {
 			@Override
-			public boolean run(ActionEvent e, HideRole action)
-			{
+			public boolean run(ActionEvent e, HideRole action) {
 				return true;
 			}
 		};

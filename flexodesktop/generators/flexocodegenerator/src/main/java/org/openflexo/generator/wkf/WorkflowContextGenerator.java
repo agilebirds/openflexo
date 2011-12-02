@@ -29,37 +29,32 @@ import org.openflexo.generator.MetaGenerator;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.logging.FlexoLogger;
 
+public class WorkflowContextGenerator extends MetaGenerator<FlexoModelObject, CGRepository> {
+	private static final Logger logger = FlexoLogger.getLogger(WorkflowContextGenerator.class.getPackage().getName());
 
-public class WorkflowContextGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
-{
-    private static final Logger logger = FlexoLogger.getLogger(WorkflowContextGenerator.class.getPackage().getName());
+	public static final String PACKAGENAME = "org.openflexo.workflowcontext";
 
-    public static final String PACKAGENAME = "org.openflexo.workflowcontext";
-    
 	private WorkflowComponentInstanceGenerator workflowComponentInstanceGenerator;
 	private WorkflowProcessGenerator workflowProcessGenerator;
 	private BusinessDataStorageGenerator businessDataStorageGenerator;
-    
+
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-	public WorkflowContextGenerator(ProjectGenerator projectGenerator)
-    {
-    	super(projectGenerator,null);
-    }
-    
-    @Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-    {
+	public WorkflowContextGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null);
+	}
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		resetSecondaryProgressWindow(25);
 		workflowComponentInstanceGenerator = new WorkflowComponentInstanceGenerator((ProjectGenerator) getProjectGenerator(), PACKAGENAME);
-    	workflowProcessGenerator = new WorkflowProcessGenerator((ProjectGenerator) getProjectGenerator(), PACKAGENAME);
-    	businessDataStorageGenerator = new BusinessDataStorageGenerator((ProjectGenerator) getProjectGenerator(), PACKAGENAME);
+		workflowProcessGenerator = new WorkflowProcessGenerator((ProjectGenerator) getProjectGenerator(), PACKAGENAME);
+		businessDataStorageGenerator = new BusinessDataStorageGenerator((ProjectGenerator) getProjectGenerator(), PACKAGENAME);
 		workflowComponentInstanceGenerator.buildResourcesAndSetGenerators(repository, resources);
 		workflowProcessGenerator.buildResourcesAndSetGenerators(repository, resources);
 		businessDataStorageGenerator.buildResourcesAndSetGenerators(repository, resources);
-    }
+	}
 }

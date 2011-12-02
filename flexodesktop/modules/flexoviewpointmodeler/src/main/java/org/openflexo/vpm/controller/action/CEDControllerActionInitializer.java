@@ -25,7 +25,6 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.controller.CEDController;
 import org.openflexo.vpm.controller.CEDSelectionManager;
 
-
 /**
  * 
  * Action initializing for this module
@@ -34,60 +33,55 @@ import org.openflexo.vpm.controller.CEDSelectionManager;
  */
 public class CEDControllerActionInitializer extends ControllerActionInitializer {
 
-    private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    private CEDController _cedController;
-    
-    public CEDControllerActionInitializer(CEDController controller)
-    {
-        super(controller);
-        _cedController = controller;
-    }
-    
-    protected CEDController getCEDController()
-    {
-        return _cedController;
-    }
-    
-    protected CEDSelectionManager getCEDSelectionManager()
-    {
-        return getCEDController().getCEDSelectionManager();
-    }
-    
+	private CEDController _cedController;
 
-    
-    @Override
-	public void initializeActions()
-    {
-        super.initializeActions();
-        
-        (new CEDSetPropertyInitializer(this)).init();
-        
-        // CalcEditor perspective
-        (new CreateOntologyCalcInitializer(this)).init();
-        (new AddEditionPatternInitializer(this)).init();
-        (new DeleteEditionPatternInitializer(this)).init();
+	public CEDControllerActionInitializer(CEDController controller) {
+		super(controller);
+		_cedController = controller;
+	}
 
-        // CalcDrawing edition
-        (new CreateCalcDrawingShemaInitializer(this)).init();
-        (new DeleteCalcDrawingShemaInitializer(this)).init();
-        (new PushToPaletteInitializer(this)).init();
-        (new DeclareInEditionPatternInitializer(this)).init();
-        (new DeleteCalcShemaElementsInitializer(this)).init();
+	protected CEDController getCEDController() {
+		return _cedController;
+	}
 
-        // Palette edition
-        (new CreateCalcPaletteInitializer(this)).init();
-        (new DeleteCalcPaletteInitializer(this)).init();
-        (new AddCalcPaletteElementInitializer(this)).init();
-        (new DeleteCalcPaletteElementInitializer(this)).init();
-        
-        // OntologyEditor perspective
-        (new CreateOntologyClassInitializer(this)).init();
-        (new CreateOntologyIndividualInitializer(this)).init();
-        (new CreateObjectPropertyInitializer(this)).init();
-        (new CreateDataPropertyInitializer(this)).init();
-        (new DeleteOntologyObjectsInitializer(this)).init();
-        (new AddAnnotationStatementInitializer(this)).init();
-    }
-  
+	protected CEDSelectionManager getCEDSelectionManager() {
+		return getCEDController().getCEDSelectionManager();
+	}
+
+	@Override
+	public void initializeActions() {
+		super.initializeActions();
+
+		(new CEDSetPropertyInitializer(this)).init();
+
+		// CalcEditor perspective
+		(new CreateOntologyCalcInitializer(this)).init();
+		(new AddEditionPatternInitializer(this)).init();
+		(new DeleteEditionPatternInitializer(this)).init();
+
+		// CalcDrawing edition
+		(new CreateCalcDrawingShemaInitializer(this)).init();
+		(new DeleteCalcDrawingShemaInitializer(this)).init();
+		(new PushToPaletteInitializer(this)).init();
+		(new DeclareShapeInEditionPatternInitializer(this)).init();
+		(new DeclareConnectorInEditionPatternInitializer(this)).init();
+		(new DeleteCalcShemaElementsInitializer(this)).init();
+
+		// Palette edition
+		(new CreateCalcPaletteInitializer(this)).init();
+		(new DeleteCalcPaletteInitializer(this)).init();
+		(new AddCalcPaletteElementInitializer(this)).init();
+		(new DeleteCalcPaletteElementInitializer(this)).init();
+
+		// OntologyEditor perspective
+		(new CreateOntologyClassInitializer(this)).init();
+		(new CreateOntologyIndividualInitializer(this)).init();
+		(new CreateObjectPropertyInitializer(this)).init();
+		(new CreateDataPropertyInitializer(this)).init();
+		(new DeleteOntologyObjectsInitializer(this)).init();
+		(new AddAnnotationStatementInitializer(this)).init();
+	}
+
 }

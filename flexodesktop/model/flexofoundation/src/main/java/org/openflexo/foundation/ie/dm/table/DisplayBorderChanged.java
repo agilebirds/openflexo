@@ -22,14 +22,11 @@ package org.openflexo.foundation.ie.dm.table;
 import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-public class DisplayBorderChanged extends IEDataModification
-{
+public class DisplayBorderChanged extends IEDataModification {
 
-    public DisplayBorderChanged(IEWidget table)
-    {
-        super(table, null);
-        
-    }
-    
-    
+	public DisplayBorderChanged(IEWidget table) {
+		super(table, null);
+
+	}
+
 }

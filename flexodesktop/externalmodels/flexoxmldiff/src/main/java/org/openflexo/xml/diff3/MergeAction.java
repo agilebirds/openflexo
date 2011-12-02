@@ -23,17 +23,20 @@ public abstract class MergeAction {
 
 	protected MergeActionType _actionType;
 	private int _actionIndex;
-	
-	protected MergeAction(int actionIndex,MergeActionType actionType){
+
+	protected MergeAction(int actionIndex, MergeActionType actionType) {
 		super();
 		_actionIndex = actionIndex;
 		_actionType = actionType;
 	}
-	
-	public int getActionIndex(){
+
+	public int getActionIndex() {
 		return _actionIndex;
 	}
+
 	abstract public void execute();
+
 	abstract public void undo();
+
 	abstract public String getLabel();
 }

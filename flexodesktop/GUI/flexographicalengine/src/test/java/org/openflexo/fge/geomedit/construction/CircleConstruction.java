@@ -23,8 +23,7 @@ import org.openflexo.fge.geom.FGECircle;
 
 public abstract class CircleConstruction extends EllipsConstruction<FGECircle> {
 
-	public final FGECircle getCircle()
-	{
+	public final FGECircle getCircle() {
 		return getData();
 	}
 

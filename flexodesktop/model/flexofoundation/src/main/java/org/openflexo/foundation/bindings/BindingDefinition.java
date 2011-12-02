@@ -80,13 +80,15 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 		}
 	}
 
-	/*
-	 * public BindingDefinition(String variableName, DMEntity type, FlexoModelObject owner, boolean mandatory) { this(variableName,(type != null ? DMType.makeResolvedDMType(type) : null)
-	 * ,owner,mandatory); }
-	 * 
-	 * public BindingDefinition(String variableName, DMEntity type, FlexoModelObject owner, DMCardinality cardinality, boolean mandatory) { this(variableName,(type != null ?
-	 * DMType.makeResolvedDMType(type) : null) ,owner,cardinality,mandatory); }
-	 */
+	/*public BindingDefinition(String variableName, DMEntity type, FlexoModelObject owner, boolean mandatory)
+	{
+	    this(variableName,(type != null ? DMType.makeResolvedDMType(type) : null) ,owner,mandatory);
+	}
+
+	public BindingDefinition(String variableName, DMEntity type, FlexoModelObject owner, DMCardinality cardinality, boolean mandatory)
+	{
+	    this(variableName,(type != null ? DMType.makeResolvedDMType(type) : null) ,owner,cardinality,mandatory);
+	}*/
 
 	public BindingDefinition(String variableName, DMType type, FlexoModelObject owner, BindingDefinitionType bindingType, boolean mandatory) {
 		this(owner);
@@ -96,10 +98,11 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 		_bindingDefinitionType = bindingType;
 	}
 
-	/*
-	 * public BindingDefinition(String variableName, DMType type, FlexoModelObject owner, DMCardinality cardinality, boolean mandatory) { this(variableName, type, owner, mandatory); this.cardinality =
-	 * cardinality; }
-	 */
+	/*public BindingDefinition(String variableName, DMType type, FlexoModelObject owner, DMCardinality cardinality, boolean mandatory)
+	{
+	    this(variableName, type, owner, mandatory);
+	    this.cardinality = cardinality;
+	}*/
 
 	@Override
 	public boolean equals(Object object) {

@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.bindings.BindingAssignment;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.WKFBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -38,9 +38,9 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Represents a self activated activity node
- *
+ * 
  * @author sguerin
- *
+ * 
  */
 public final class SelfExecutableActivityNode extends ActivityNode implements SelfExecutableNode/*, Bindable*/
 {
@@ -50,8 +50,7 @@ public final class SelfExecutableActivityNode extends ActivityNode implements Se
 	/**
 	 * Constructor used during deserialization
 	 */
-	public SelfExecutableActivityNode(FlexoProcessBuilder builder)
-	{
+	public SelfExecutableActivityNode(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -59,16 +58,15 @@ public final class SelfExecutableActivityNode extends ActivityNode implements Se
 	/**
 	 * Default constructor
 	 */
-	public SelfExecutableActivityNode(FlexoProcess process)
-	{
+	public SelfExecutableActivityNode(FlexoProcess process) {
 		super(process);
 		assignments = new Vector<BindingAssignment>();
 		assignmentDescriptions = new Vector<String>();
 	}
-	
+
 	@Override
 	public void finalizeDeserialization(Object builder) {
-		for(int i=0;(i<assignments.size()) && (i<assignmentDescriptions.size());i++) {
+		for (int i = 0; (i < assignments.size()) && (i < assignmentDescriptions.size()); i++) {
 			String desc = assignmentDescriptions.get(i);
 			if ("null".equals(desc)) {
 				desc = null;
@@ -82,14 +80,12 @@ public final class SelfExecutableActivityNode extends ActivityNode implements Se
 	private BindingValue _executionPrimitive;
 
 	@Override
-	public WKFBindingDefinition getExecutionPrimitiveBindingDefinition()
-	{
-		return WKFBindingDefinition.get(this, EXECUTION_PRIMITIVE, (DMType)null,BindingDefinitionType.EXECUTE,false);
+	public WKFBindingDefinition getExecutionPrimitiveBindingDefinition() {
+		return WKFBindingDefinition.get(this, EXECUTION_PRIMITIVE, (DMType) null, BindingDefinitionType.EXECUTE, false);
 	}
 
 	@Override
-	public BindingValue getExecutionPrimitive()
-	{
+	public BindingValue getExecutionPrimitive() {
 		if (isBeingCloned()) {
 			return null;
 		}
@@ -97,8 +93,7 @@ public final class SelfExecutableActivityNode extends ActivityNode implements Se
 	}
 
 	@Override
-	public void setExecutionPrimitive(BindingValue executionPrimitive)
-	{
+	public void setExecutionPrimitive(BindingValue executionPrimitive) {
 		BindingValue oldBindingValue = _executionPrimitive;
 		_executionPrimitive = executionPrimitive;
 		if (_executionPrimitive != null) {
@@ -110,136 +105,117 @@ public final class SelfExecutableActivityNode extends ActivityNode implements Se
 	}
 
 	@Override
-	public String getDefaultName()
-	{
+	public String getDefaultName() {
 		return FlexoLocalization.localizedForKey("execution");
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.SELF_EXECUTABLE_ACTIVITY_INSPECTOR;
 	}
 
 	private Vector<BindingAssignment> assignments;
 
 	@Override
-	public Vector<BindingAssignment> getAssignments() 
-	{
+	public Vector<BindingAssignment> getAssignments() {
 		return assignments;
 	}
 
 	@Override
-	public void setAssignments(Vector<BindingAssignment> someAssignments) 
-	{
+	public void setAssignments(Vector<BindingAssignment> someAssignments) {
 		this.assignments = someAssignments;
 		setChanged();
-		notifyObservers(new WKFAttributeDataModification("assignments",null,null)); // TODO notify better
+		notifyObservers(new WKFAttributeDataModification("assignments", null, null)); // TODO notify better
 	}
 
 	@Override
-	public void addToAssignments(BindingAssignment assignment)
-	{
-		if (assignment==null) {
+	public void addToAssignments(BindingAssignment assignment) {
+		if (assignment == null) {
 			return;
 		}
 		assignment.setOwner(this);
 		assignments.add(assignment);
 		setChanged();
-		notifyObservers(new WKFAttributeDataModification("assignments",null,null)); // TODO notify better
+		notifyObservers(new WKFAttributeDataModification("assignments", null, null)); // TODO notify better
 	}
 
 	@Override
-	public void removeFromAssignments(BindingAssignment assignment)
-	{
+	public void removeFromAssignments(BindingAssignment assignment) {
 		assignment.setOwner(null);
 		assignments.remove(assignment);
 		setChanged();
-		notifyObservers(new WKFAttributeDataModification("assignments",null,null)); // TODO notify better
+		notifyObservers(new WKFAttributeDataModification("assignments", null, null)); // TODO notify better
 	}
 
 	private Vector<String> assignmentDescriptions;
-	
-	public Vector<String> getAssignmentDescriptions() 
-	{
+
+	public Vector<String> getAssignmentDescriptions() {
 		Vector<String> returned = new Vector<String>();
-		for(BindingAssignment a:getAssignments()) {
-			returned.add(a.getDescription()!=null?a.getDescription():"null");
+		for (BindingAssignment a : getAssignments()) {
+			returned.add(a.getDescription() != null ? a.getDescription() : "null");
 		}
 		return returned;
 	}
 
-	public void setAssignmentDescriptions(Vector<String> someAssignments) 
-	{
+	public void setAssignmentDescriptions(Vector<String> someAssignments) {
 		this.assignmentDescriptions = someAssignments;
 	}
 
-	public void addToAssignmentDescriptions(String assignment)
-	{
+	public void addToAssignmentDescriptions(String assignment) {
 		assignmentDescriptions.add(assignment);
 	}
 
-	public void removeFromAssignmentDescriptions(String assignment)
-	{
+	public void removeFromAssignmentDescriptions(String assignment) {
 		assignmentDescriptions.remove(assignment);
 	}
 
-	public BindingAssignment createAssignement()
-	{
+	public BindingAssignment createAssignement() {
 		BindingAssignment returned = new BindingAssignment(this);
 		addToAssignments(returned);
 		return returned;
 	}
 
-	public void deleteAssignement(BindingAssignment assignment)
-	{
+	public void deleteAssignement(BindingAssignment assignment) {
 		removeFromAssignments(assignment);
 	}
 
-	public boolean isAssignementDeletable(BindingAssignment assignment)
-	{
+	public boolean isAssignementDeletable(BindingAssignment assignment) {
 		return true;
 	}
 
 	@Override
-	public boolean mightHaveOperationPetriGraph()
-	{
+	public boolean mightHaveOperationPetriGraph() {
 		return false;
 	}
-	
+
 	private ActivityPetriGraph _executionPetriGraph = null;
 
 	@Override
-	public boolean hasExecutionPetriGraph() 
-	{
+	public boolean hasExecutionPetriGraph() {
 		return _executionPetriGraph != null;
 	}
 
 	@Override
-	public ActivityPetriGraph getExecutionPetriGraph() 
-	{
+	public ActivityPetriGraph getExecutionPetriGraph() {
 		return _executionPetriGraph;
 	}
 
-	public void setExecutionPetriGraph(ActivityPetriGraph executionPetriGraph) 
-	{
+	public void setExecutionPetriGraph(ActivityPetriGraph executionPetriGraph) {
 		_executionPetriGraph = executionPetriGraph;
 		_executionPetriGraph.setContainer(this, FlexoProcess.EXECUTION_CONTEXT);
 		setChanged();
 		notifyObservers(new PetriGraphSet(executionPetriGraph));
 	}
 
-    @Override
-	public boolean isInteractive()
-    {
-    	return false;
-    }
-    
 	@Override
-	public Vector<WKFObject> getAllEmbeddedWKFObjects()
-	{
+	public boolean isInteractive() {
+		return false;
+	}
+
+	@Override
+	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
 		Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
-		if (getExecutionPetriGraph()!=null) {
+		if (getExecutionPetriGraph() != null) {
 			returned.addAll(getExecutionPetriGraph().getAllEmbeddedWKFObjects());
 		}
 		return returned;

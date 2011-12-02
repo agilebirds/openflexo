@@ -34,10 +34,9 @@ import org.openflexo.help.FlexoHelp;
 import org.openflexo.module.Module;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
  * Abstract definition of module's menu bar. Automatically handles 'Modules' menu.
- *
+ * 
  * @author sguerin
  */
 public abstract class FlexoMenuBar extends JMenuBar {
@@ -63,21 +62,23 @@ public abstract class FlexoMenuBar extends JMenuBar {
 		add(getEditMenu(controller));
 		add(getWindowMenu(controller, module));
 		add(getToolsMenu(controller));
-		if (FlexoHelp.isAvailable())
+		if (FlexoHelp.isAvailable()) {
 			add(getHelpMenu(controller));
+		}
 
 	}
 
 	@Override
 	public JMenu add(JMenu c) {
-		if (c.getItemCount() == 0)
+		if (c.getItemCount() == 0) {
 			return c;
+		}
 		return super.add(c);
 	}
 
 	/**
 	 * Build if required and return default 'File' menu. This method must be overriden if specific items for related module should be added.
-	 *
+	 * 
 	 * @param controller
 	 * @return a FileMenu instance
 	 */
@@ -90,7 +91,7 @@ public abstract class FlexoMenuBar extends JMenuBar {
 
 	/**
 	 * Build if required and return default 'Edit' menu. This method must be overriden if specific items for related module should be added.
-	 *
+	 * 
 	 * @param controller
 	 * @return a EditMenu instance
 	 */
@@ -104,7 +105,7 @@ public abstract class FlexoMenuBar extends JMenuBar {
 	/**
 	 * Build if required and return default 'Window' menu. This method must be overriden if specific items for related module should be
 	 * added.
-	 *
+	 * 
 	 * @param controller
 	 * @param module
 	 *            TODO
@@ -119,7 +120,7 @@ public abstract class FlexoMenuBar extends JMenuBar {
 
 	/**
 	 * Returns 'Window' menu, asserting menu is already built
-	 *
+	 * 
 	 * @param controller
 	 * @param module
 	 *            TODO
@@ -132,7 +133,7 @@ public abstract class FlexoMenuBar extends JMenuBar {
 	/**
 	 * Build if required and return default 'Tools' menu. This method must be overriden if specific items for related module should be
 	 * added.
-	 *
+	 * 
 	 * @param controller
 	 * @return a ToolsMenu instance
 	 */
@@ -145,7 +146,7 @@ public abstract class FlexoMenuBar extends JMenuBar {
 
 	/**
 	 * Build if required and return default 'Help' menu. This method must be overriden if specific items for related module should be added.
-	 *
+	 * 
 	 * @param controller
 	 * @return a HelpMenu instance
 	 */

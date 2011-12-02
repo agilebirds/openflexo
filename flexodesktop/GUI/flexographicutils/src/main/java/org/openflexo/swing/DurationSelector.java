@@ -47,9 +47,7 @@ import javax.swing.event.ChangeListener;
 import org.openflexo.toolbox.Duration;
 import org.openflexo.toolbox.Duration.DurationUnit;
 
-
-public class DurationSelector extends TextFieldCustomPopup<Duration>
-{
+public class DurationSelector extends TextFieldCustomPopup<Duration> {
 	public static final Font NORMAL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
 	private static final String EMPTY_STRING = "";
@@ -58,50 +56,43 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 
 	protected DurationChooserPanel durationChooserPanel;
 
-	public DurationSelector()
-	{
+	public DurationSelector() {
 		this((Duration) null);
 	}
 
-	public DurationSelector(int col)
-	{
-		this((Duration) null,col);
+	public DurationSelector(int col) {
+		this((Duration) null, col);
 	}
 
-	public DurationSelector(Duration aDuration)
-	{
+	public DurationSelector(Duration aDuration) {
 		super(aDuration);
 		if (aDuration != null) {
 			_revertValue = aDuration.clone();
 		}
 	}
 
-	public DurationSelector(Duration aDuration, int col)
-	{
-		super(aDuration,col);
+	public DurationSelector(Duration aDuration, int col) {
+		super(aDuration, col);
 		if (aDuration != null) {
 			_revertValue = aDuration.clone();
 		}
 	}
 
 	@Override
-	protected ResizablePanel createCustomPanel(Duration editedObject)
-	{
+	protected ResizablePanel createCustomPanel(Duration editedObject) {
 		durationChooserPanel = new DurationChooserPanel(editedObject);
 		return durationChooserPanel;
 	}
 
 	@Override
-	public void updateCustomPanel(Duration editedObject)
-	{
+	public void updateCustomPanel(Duration editedObject) {
 		if (durationChooserPanel != null) {
 			durationChooserPanel.update(editedObject);
 		}
 	}
 
 	@Override
-	public String renderedString(Duration editedObject)
-	{
+	public String renderedString(Duration editedObject) {
 		if (editedObject != null) {
 			return getLocalizedStringRepresentation(editedObject);
 		} else {
@@ -109,36 +100,29 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 		}
 	}
 
-	public String getLocalizedStringRepresentation(Duration duration)
-	{
+	public String getLocalizedStringRepresentation(Duration duration) {
 		if (duration.getUnit() == null) {
 			return "";
 		}
-		return duration.getValue()+" "+localizedForKey(duration.getUnit().getLocalizedKey()+(duration.getValue()>1?"s":""));
+		return duration.getValue() + " " + localizedForKey(duration.getUnit().getLocalizedKey() + (duration.getValue() > 1 ? "s" : ""));
 	}
 
-
-
-	protected class DurationChooserPanel extends ResizablePanel
-	{
+	protected class DurationChooserPanel extends ResizablePanel {
 		ButtonsControlPanel controlPanel;
 		JSpinner valueChooser;
 		JComboBox unitChooser;
 
 		private Dimension defaultDimension = new Dimension(320, 90);
 
-		void update(Duration aDuration)
-		{
-			if (aDuration!=null) {
-				valueChooser.setValue((int)aDuration.getValue());
+		void update(Duration aDuration) {
+			if (aDuration != null) {
+				valueChooser.setValue((int) aDuration.getValue());
 			}
-			unitChooser.setSelectedItem(aDuration!=null?aDuration.getUnit():null);
+			unitChooser.setSelectedItem(aDuration != null ? aDuration.getUnit() : null);
 		}
 
-		protected DurationChooserPanel(Duration aDuration)
-		{
+		protected DurationChooserPanel(Duration aDuration) {
 			super();
-
 
 			unitChooser = new JComboBox(Duration.DurationUnit.values());
 			unitChooser.setSelectedItem(DurationUnit.DAYS);
@@ -147,10 +131,9 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == unitChooser) {
 						if (getEditedObject() == null) {
-							setEditedObject(new Duration((Integer)valueChooser.getValue(),(DurationUnit)unitChooser.getSelectedItem()));
-						}
-						else {
-							getEditedObject().setUnit((DurationUnit)unitChooser.getSelectedItem());
+							setEditedObject(new Duration((Integer) valueChooser.getValue(), (DurationUnit) unitChooser.getSelectedItem()));
+						} else {
+							getEditedObject().setUnit((DurationUnit) unitChooser.getSelectedItem());
 						}
 					}
 					fireEditedObjectChanged();
@@ -162,12 +145,11 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 					Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 					if (returned != null && returned instanceof JLabel && value != null) {
 						boolean isMultiple = (getEditedObject() != null ? getEditedObject().getValue() > 1 : false);
-						((JLabel)returned).setText(localizedForKey(((DurationUnit)value).getLocalizedKey()+(isMultiple?"s":"")));
+						((JLabel) returned).setText(localizedForKey(((DurationUnit) value).getLocalizedKey() + (isMultiple ? "s" : "")));
 					}
 					return returned;
 				}
 			});
-
 
 			SpinnerNumberModel valueModel = new SpinnerNumberModel(1, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
 			valueChooser = new JSpinner(valueModel);
@@ -176,14 +158,12 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 			valueChooser.setValue(1);
 			valueChooser.addChangeListener(new ChangeListener() {
 				@Override
-				public void stateChanged(ChangeEvent e)
-				{
+				public void stateChanged(ChangeEvent e) {
 					if (e.getSource() == valueChooser) {
 						if (getEditedObject() == null) {
-							setEditedObject(new Duration((Integer)valueChooser.getValue(),(DurationUnit)unitChooser.getSelectedItem()));
-						}
-						else {
-							getEditedObject().setValue((Integer)valueChooser.getValue());
+							setEditedObject(new Duration((Integer) valueChooser.getValue(), (DurationUnit) unitChooser.getSelectedItem()));
+						} else {
+							getEditedObject().setValue((Integer) valueChooser.getValue());
 						}
 					}
 					fireEditedObjectChanged();
@@ -202,30 +182,27 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 					return DurationSelector.this.localizedForKeyAndButton(key, component);
 				}
 			};
-			controlPanel.addButton("apply",new ActionListener() {
+			controlPanel.addButton("apply", new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					apply();
 				}
 			});
-			controlPanel.addButton("cancel",new ActionListener() {
+			controlPanel.addButton("cancel", new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					cancel();
 				}
 			});
-			controlPanel.addButton("reset",new ActionListener() {
+			controlPanel.addButton("reset", new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					setEditedObject(null);
 					apply();
 				}
 			});
 
-			controlPanel.applyFocusTraversablePolicyTo(this,true);
+			controlPanel.applyFocusTraversablePolicyTo(this, true);
 
 			setLayout(new BorderLayout());
 			add(valuesPanel, BorderLayout.CENTER);
@@ -241,53 +218,45 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 		}
 
 		@Override
-		public Dimension getDefaultSize()
-		{
+		public Dimension getDefaultSize() {
 			return defaultDimension;
 		}
 
 		@Override
-		public void setPreferredSize(Dimension aDimension)
-		{
+		public void setPreferredSize(Dimension aDimension) {
 			durationChooserPanel.setPreferredSize(aDimension);
 		}
 
 	}
 
 	@Override
-	public void apply()
-	{
-		setRevertValue(getEditedObject()!=null?getEditedObject().clone():getEditedObject());
+	public void apply() {
+		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : getEditedObject());
 		closePopup();
 		super.apply();
 	}
 
 	@Override
-	public void cancel()
-	{
+	public void cancel() {
 		setEditedObject(_revertValue);
 		closePopup();
 		super.cancel();
 	}
 
 	@Override
-	public void setRevertValue(Duration oldValue)
-	{
+	public void setRevertValue(Duration oldValue) {
 		_revertValue = oldValue;
 	}
 
-	public Duration getRevertValue()
-	{
+	public Duration getRevertValue() {
 		return _revertValue;
 	}
 
 	@Override
-	public void setEditedObject(Duration object)
-	{
+	public void setEditedObject(Duration object) {
 		if (object != null && object.getValue() == 0) {
 			super.setEditedObject(null);
-		}
-		else {
+		} else {
 			super.setEditedObject(object);
 		}
 
@@ -295,10 +264,10 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 		// cause all cells to display the same value.
 
 		String val = renderedString(getEditedObject());
-		if (val==null && getTextField().getText()==null) {
+		if (val == null && getTextField().getText() == null) {
 			return;
 		}
-		if (getTextField().getText()!=null && getTextField().getText().equals(val)) {
+		if (getTextField().getText() != null && getTextField().getText().equals(val)) {
 			return;
 		}
 		_isProgrammaticalySet = true;
@@ -307,8 +276,7 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 	}
 
 	// Override if required
-	public String localizedForKeyAndButton(String key, JButton component)
-	{
+	public String localizedForKeyAndButton(String key, JButton component) {
 		return key;
 	}
 
@@ -316,9 +284,8 @@ public class DurationSelector extends TextFieldCustomPopup<Duration>
 	protected void openPopup() {
 		super.openPopup();
 		if (durationChooserPanel != null) {
-			durationChooserPanel.controlPanel.applyFocusTraversablePolicyTo(durationChooserPanel,true);
+			durationChooserPanel.controlPanel.applyFocusTraversablePolicyTo(durationChooserPanel, true);
 		}
 	}
-
 
 }

@@ -34,110 +34,97 @@ import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * Abstract class implemented by all objects involved in Generated Code representation
-  *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class CGObject extends FlexoModelObject implements FlexoObserver, InspectableObject
-{
+public abstract class CGObject extends FlexoModelObject implements FlexoObserver, InspectableObject {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CGObject.class.getPackage().getName());
 
-    private GeneratedOutput _gc;
+	private GeneratedOutput _gc;
 
-    /**
-     * Default constructor
-     */
-    public CGObject(GeneratedOutput generatedCode)
-    {
-        super(generatedCode.getProject());
-        setGeneratedCode(generatedCode);
-    }
+	/**
+	 * Default constructor
+	 */
+	public CGObject(GeneratedOutput generatedCode) {
+		super(generatedCode.getProject());
+		setGeneratedCode(generatedCode);
+	}
 
-    public GeneratedOutput getGeneratedCode()
-    {
-        return _gc;
-    }
+	public GeneratedOutput getGeneratedCode() {
+		return _gc;
+	}
 
-    public void setGeneratedCode(GeneratedOutput gc)
-    {
-    	_gc = gc;
-    }
+	public void setGeneratedCode(GeneratedOutput gc) {
+		_gc = gc;
+	}
 
-    /**
-     * Returns reference to the main object in which this XML-serializable
-     * object is contained relating to storing scheme: here it's the component
-     * library
-     *
-     * @return the component library
-     */
-    @Override
-    public XMLStorageResourceData getXMLResourceData()
-    {
-        return getGeneratedCode();
-    }
+	/**
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * component library
+	 * 
+	 * @return the component library
+	 */
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return getGeneratedCode();
+	}
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
-    /**
-     * This consrtuctor should never be called anywhere by anyone except GeneratedOutput
-     */
-    public CGObject(FlexoProject project)
-    {
-        super(project);
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
+	/**
+	 * This consrtuctor should never be called anywhere by anyone except GeneratedOutput
+	 */
+	public CGObject(FlexoProject project) {
+		super(project);
+	}
 
-    // ==========================================================================
-    // ========================= XML Serialization ============================
-    // ==========================================================================
+	// ==========================================================================
+	// ========================= XML Serialization ============================
+	// ==========================================================================
 
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getGeneratedCode().getXMLMapping();
-    }
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getGeneratedCode().getXMLMapping();
+	}
 
-    // ==========================================================================
-    // ============================= Instance Methods
-    // ===========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Methods
+	// ===========================
+	// ==========================================================================
 
-    public void update(Observable observable, Object obj)
-    {
-        // Do nothing, since Observer interface is no more used
-        // See FlexoObserver
-    }
+	public void update(Observable observable, Object obj) {
+		// Do nothing, since Observer interface is no more used
+		// See FlexoObserver
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification obj)
-    {
-        // Ignored at this level: implements it in sub-classes
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification obj) {
+		// Ignored at this level: implements it in sub-classes
+	}
 
-    @Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-         Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-          return returned;
-    }
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		return returned;
+	}
 
-     @Override
-    public FlexoProject getProject()
-     {
-         if (getGeneratedCode()!=null)
-             return getGeneratedCode().getProject();
-         return null;
-     }
+	@Override
+	public FlexoProject getProject() {
+		if (getGeneratedCode() != null) {
+			return getGeneratedCode().getProject();
+		}
+		return null;
+	}
 
-     public void setProject(FlexoProject aProject)
-     {
-     }
+	public void setProject(FlexoProject aProject) {
+	}
 
 	protected boolean hasGenerationErrors = false;
 
@@ -158,15 +145,13 @@ public abstract class CGObject extends FlexoModelObject implements FlexoObserver
 	public abstract boolean isEnabled();
 
 	// ==========================================================================
-    // ========================== Embedding implementation  =====================
-    // ==========================================================================
+	// ========================== Embedding implementation =====================
+	// ==========================================================================
 
-    public abstract boolean isContainedIn(CGObject obj);
+	public abstract boolean isContainedIn(CGObject obj);
 
-    public boolean contains(CGObject obj)
-    {
-        return obj.isContainedIn(this);
-   }
-
+	public boolean contains(CGObject obj) {
+		return obj.isContainedIn(this);
+	}
 
 }

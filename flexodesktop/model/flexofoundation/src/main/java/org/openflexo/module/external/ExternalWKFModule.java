@@ -25,21 +25,22 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 
-
 /**
  * External view of the WKF Module
- *
+ * 
  * @author sguerin
  */
-public interface ExternalWKFModule extends ExternalModule
-{
+public interface ExternalWKFModule extends ExternalModule {
 
-    public FlexoWorkflow getFlexoWorkflow();
+	public FlexoWorkflow getFlexoWorkflow();
 
-    public JComponent createScreenshotForObject(FlexoModelObject target);
-    public JComponent createScreenshotForProcess(FlexoProcess target);
-    public float getScreenshotQuality();
-    public void finalizeScreenshotGeneration();
+	public JComponent createScreenshotForObject(FlexoModelObject target);
 
-    public Object getProcessRepresentation(FlexoProcess process, boolean showAll);
+	public JComponent createScreenshotForProcess(FlexoProcess target);
+
+	public float getScreenshotQuality();
+
+	public void finalizeScreenshotGeneration();
+
+	public Object getProcessRepresentation(FlexoProcess process, boolean showAll);
 }

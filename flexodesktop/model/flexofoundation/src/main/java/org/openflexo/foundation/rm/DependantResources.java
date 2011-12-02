@@ -29,166 +29,157 @@ import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
 import org.openflexo.logging.FlexoLogger;
 
 /**
- * Represents all the resources from which related resource depends (or more
- * exactely, MAY depends).
+ * Represents all the resources from which related resource depends (or more exactely, MAY depends).
  * 
  * @author sguerin
  * 
  */
-public class DependantResources extends ResourceList
-{
+public class DependantResources extends ResourceList {
 
-    private static final Logger logger = FlexoLogger.getLogger(DependantResources.class.getPackage().getName());
-    
-	public DependantResources()
-	{
+	private static final Logger logger = FlexoLogger.getLogger(DependantResources.class.getPackage().getName());
+
+	public DependantResources() {
 		super();
-		_resourceIncludingInactive = new Hashtable<DependancyAlgorithmScheme,Vector<FlexoResource<FlexoResourceData>>>();
-		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme,Vector<FlexoResource<FlexoResourceData>>>();
+		_resourceIncludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
+		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
 	}
 
-	public DependantResources(FlexoResource relatedResource)
-    {
-        super(relatedResource);
-		_resourceIncludingInactive = new Hashtable<DependancyAlgorithmScheme,Vector<FlexoResource<FlexoResourceData>>>();
-		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme,Vector<FlexoResource<FlexoResourceData>>>();
-    }
+	public DependantResources(FlexoResource<? extends FlexoResourceData> relatedResource) {
+		super(relatedResource);
+		_resourceIncludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
+		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
+	}
 
-    /**
-     * Overrides
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#addToResources(org.openflexo.foundation.rm.FlexoResource)
-     *      by setting inverse link (altered resource)
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#addToResources(org.openflexo.foundation.rm.FlexoResource)
-     */
-    @Override
-	public void addToResources(FlexoResource resource)
-    {
-        if (resource == getRelatedResource()) {
-            if (logger.isLoggable(Level.SEVERE))
-                logger.severe("A resource attempted to add itself to its dependant resource list"+this.getClass().getName()+"): this is strictly forbidden.\n\tYou must attempt to find the cause of this and FIX it!");
-            return;
-        }
-        if (getRelatedResource()!=null && resource.deeplyDependsOf(getRelatedResource())) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Trying to create a loop between "+getRelatedResource()+" and "+resource);
-            return;
-        }
-        super.addToResources(resource);
-        if (getRelatedResource() != null) {
-            if (!resource.getAlteredResources().contains(getRelatedResource())) {
-                resource.addToAlteredResources(getRelatedResource());
-            }
-        }
-    }
+	/**
+	 * Overrides
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#addToResources(org.openflexo.foundation.rm.FlexoResource) by setting inverse link
+	 *      (altered resource)
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#addToResources(org.openflexo.foundation.rm.FlexoResource)
+	 */
+	@Override
+	public void addToResources(FlexoResource resource) {
+		if (resource == getRelatedResource()) {
+			if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("A resource attempted to add itself to its dependant resource list" + this.getClass().getName()
+						+ "): this is strictly forbidden.\n\tYou must attempt to find the cause of this and FIX it!");
+			}
+			return;
+		}
+		if (getRelatedResource() != null && resource.deeplyDependsOf(getRelatedResource())) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Trying to create a loop between " + getRelatedResource() + " and " + resource);
+			}
+			return;
+		}
+		super.addToResources(resource);
+		if (getRelatedResource() != null) {
+			if (!resource.getAlteredResources().contains(getRelatedResource())) {
+				resource.addToAlteredResources(getRelatedResource());
+			}
+		}
+	}
 
-    /**
-     * Overrides
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#removeFromResources(org.openflexo.foundation.rm.FlexoResource)
-     *      by removing inverse link (altered resource)
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#removeFromResources(org.openflexo.foundation.rm.FlexoResource)
-     */
-    @Override
-	public void removeFromResources(FlexoResource resource)
-    {
-        super.removeFromResources(resource);
-        if (getRelatedResource() != null) {
-            if (resource.getAlteredResources().contains(getRelatedResource())) {
-                resource.removeFromAlteredResources(getRelatedResource());
-            }
-        }
-    }
+	/**
+	 * Overrides
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#removeFromResources(org.openflexo.foundation.rm.FlexoResource) by removing inverse link
+	 *      (altered resource)
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#removeFromResources(org.openflexo.foundation.rm.FlexoResource)
+	 */
+	@Override
+	public void removeFromResources(FlexoResource resource) {
+		super.removeFromResources(resource);
+		if (getRelatedResource() != null) {
+			if (resource.getAlteredResources().contains(getRelatedResource())) {
+				resource.removeFromAlteredResources(getRelatedResource());
+			}
+		}
+	}
 
-    /**
-     * Overrides
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#setRelatedResource(org.openflexo.foundation.rm.FlexoResource)
-     *      by refreshing inverse links (altered resources)
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#setRelatedResource(org.openflexo.foundation.rm.FlexoResource)
-     */
-    @Override
-	public void setRelatedResource(FlexoResource relatedResource)
-    {
-        super.setRelatedResource(relatedResource);
-        for (Enumeration en = elements(); en.hasMoreElements();) {
-            FlexoResource next = (FlexoResource) en.nextElement();
-            if (!next.getAlteredResources().contains(getRelatedResource())) {
-                next.addToAlteredResources(getRelatedResource());
-            }
-        }
-     }
+	/**
+	 * Overrides
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#setRelatedResource(org.openflexo.foundation.rm.FlexoResource) by refreshing inverse
+	 *      links (altered resources)
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#setRelatedResource(org.openflexo.foundation.rm.FlexoResource)
+	 */
+	@Override
+	public void setRelatedResource(FlexoResource relatedResource) {
+		super.setRelatedResource(relatedResource);
+		for (Enumeration en = elements(); en.hasMoreElements();) {
+			FlexoResource next = (FlexoResource) en.nextElement();
+			if (!next.getAlteredResources().contains(getRelatedResource())) {
+				next.addToAlteredResources(getRelatedResource());
+			}
+		}
+	}
 
-    @Override
-	public String getSerializationIdentifier()
-    {
-        return getRelatedResource().getSerializationIdentifier()+"_DR";
-    }
+	@Override
+	public String getSerializationIdentifier() {
+		return getRelatedResource().getSerializationIdentifier() + "_DR";
+	}
 
-    public Enumeration<FlexoResource<FlexoResourceData>> elements(boolean includeInactiveResource, DependancyAlgorithmScheme dependancyScheme) 
-    {
-    	return getResources(includeInactiveResource,dependancyScheme).elements();
-    }
+	public Enumeration<FlexoResource<FlexoResourceData>> elements(boolean includeInactiveResource,
+			DependancyAlgorithmScheme dependancyScheme) {
+		return getResources(includeInactiveResource, dependancyScheme).elements();
+	}
 
-    /** 
-     * Clear cache scheme
-     */
-    @Override
-	public void update()
-    {
-    	_resourceIncludingInactive.clear();
-    	_resourceExcludingInactive.clear();
-    }
-    
-    private Vector<FlexoResource<FlexoResourceData>> buildResources(boolean includeInactiveResource, DependancyAlgorithmScheme dependancyScheme) 
-    {
-    	Vector<FlexoResource<FlexoResourceData>> returned = new Vector<FlexoResource<FlexoResourceData>>();
-    	for (FlexoResource<FlexoResourceData> resource : this) {
-    		if (includeInactiveResource || resource.isActive()) {
-    			if (getRelatedResource().dependsOf(resource,dependancyScheme)) {
-    	  			returned.add(resource);
-    			}
-    		}
-    	}
-    	return returned;
-    }
+	/**
+	 * Clear cache scheme
+	 */
+	@Override
+	public void update() {
+		_resourceIncludingInactive.clear();
+		_resourceExcludingInactive.clear();
+	}
 
-    private Hashtable<DependancyAlgorithmScheme,Vector<FlexoResource<FlexoResourceData>>> _resourceIncludingInactive;
-    private Hashtable<DependancyAlgorithmScheme,Vector<FlexoResource<FlexoResourceData>>> _resourceExcludingInactive;
-    
-    /**
-     * Return list of resources with supplied options
-     * 
-     * TAKE CARE that trying to retrieve dependant resources with an optimistic scheme require that
-     * an update() was done on this object after the last modifications on the model, because this 
-     * method use a cache scheme. To be sure to get the good result in optimist scheme, do:
-     * update() then getResources(aBoolean,DependancyAlgorithmScheme.Optimistic).
-     * 
-     * @param includeInactiveResource
-     * @param dependancyScheme
-     * @return
-     */
-    public Vector<FlexoResource<FlexoResourceData>> getResources(boolean includeInactiveResource, DependancyAlgorithmScheme dependancyScheme) 
-    {
-    	Vector<FlexoResource<FlexoResourceData>> returned = null;
-    	if (includeInactiveResource) {
-    		returned = _resourceIncludingInactive.get(dependancyScheme);
-    		if (returned == null) {
-    			returned = buildResources(includeInactiveResource, dependancyScheme);
-    			_resourceIncludingInactive.put(dependancyScheme, returned);
-    		}
-    		return returned;
-    	}
-    	else {
-    		returned = _resourceExcludingInactive.get(dependancyScheme);
-    		if (returned == null) {
-    			returned = buildResources(includeInactiveResource, dependancyScheme);
-    			_resourceExcludingInactive.put(dependancyScheme, returned);
-    		}
-    		return returned;
-    	}
-    }
+	private Vector<FlexoResource<FlexoResourceData>> buildResources(boolean includeInactiveResource,
+			DependancyAlgorithmScheme dependancyScheme) {
+		Vector<FlexoResource<FlexoResourceData>> returned = new Vector<FlexoResource<FlexoResourceData>>();
+		for (FlexoResource<FlexoResourceData> resource : this) {
+			if (includeInactiveResource || resource.isActive()) {
+				if (getRelatedResource().dependsOf(resource, dependancyScheme)) {
+					returned.add(resource);
+				}
+			}
+		}
+		return returned;
+	}
+
+	private Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>> _resourceIncludingInactive;
+	private Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>> _resourceExcludingInactive;
+
+	/**
+	 * Return list of resources with supplied options
+	 * 
+	 * TAKE CARE that trying to retrieve dependant resources with an optimistic scheme require that an update() was done on this object
+	 * after the last modifications on the model, because this method use a cache scheme. To be sure to get the good result in optimist
+	 * scheme, do: update() then getResources(aBoolean,DependancyAlgorithmScheme.Optimistic).
+	 * 
+	 * @param includeInactiveResource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	public Vector<FlexoResource<FlexoResourceData>> getResources(boolean includeInactiveResource, DependancyAlgorithmScheme dependancyScheme) {
+		Vector<FlexoResource<FlexoResourceData>> returned = null;
+		if (includeInactiveResource) {
+			returned = _resourceIncludingInactive.get(dependancyScheme);
+			if (returned == null) {
+				returned = buildResources(includeInactiveResource, dependancyScheme);
+				_resourceIncludingInactive.put(dependancyScheme, returned);
+			}
+			return returned;
+		} else {
+			returned = _resourceExcludingInactive.get(dependancyScheme);
+			if (returned == null) {
+				returned = buildResources(includeInactiveResource, dependancyScheme);
+				_resourceExcludingInactive.put(dependancyScheme, returned);
+			}
+			return returned;
+		}
+	}
 }

@@ -23,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -35,9 +34,9 @@ import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.MetricsDefinition;
+import org.openflexo.foundation.wkf.MetricsDefinition.MetricsType;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
-import org.openflexo.foundation.wkf.MetricsDefinition.MetricsType;
 import org.openflexo.foundation.wkf.action.AddMetricsDefinition;
 import org.openflexo.foundation.wkf.action.AddMetricsValue;
 import org.openflexo.localization.FlexoLocalization;
@@ -49,21 +48,19 @@ public abstract class AddMetricsInitializer<A extends AddMetricsValue<A, T>, T e
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddMetricsInitializer(WKFControllerActionInitializer actionInitializer, FlexoActionType<A, T, WKFObject> actionType)
-	{
-		super(actionType,actionInitializer);
+	AddMetricsInitializer(WKFControllerActionInitializer actionInitializer, FlexoActionType<A, T, WKFObject> actionType) {
+		super(actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	protected abstract Vector<MetricsDefinition> getAvailableMetricsDefinitions(T object);
-	
+
 	protected abstract FlexoActionType<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> getAddMetricsDefinitionActionType();
-	
+
 	protected MetricsDefinition createMetricsDefinitionWithName(String name, MetricsType type, String description) {
 		AddMetricsDefinition add = getAddMetricsDefinitionActionType().makeNewAction(getProject().getWorkflow(), null, getEditor());
 		add.setNewMetricsName(name);
@@ -72,72 +69,74 @@ public abstract class AddMetricsInitializer<A extends AddMetricsValue<A, T>, T e
 		add.doAction();
 		return add.getNewMetricsDefinition();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<A> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<A> getDefaultInitializer() {
 		return new FlexoActionInitializer<A>() {
-            @Override
-			public boolean run(ActionEvent e, A action)
-            {
-            	ParameterDefinition[] params;
-            	TextFieldParameter metricsName = new TextFieldParameter("name","name",null);
-            	EnumDropDownParameter<MetricsType> type = new EnumDropDownParameter<MetricsType>("type","type",MetricsType.TEXT,MetricsType.values());
-            	TextAreaParameter description = new TextAreaParameter("description","description",null);
-            	String NEW_METRICS = FlexoLocalization.localizedForKey("new_metrics");
-            	String SELECT_EXISTING = FlexoLocalization.localizedForKey("select_existing");
-            	String[] contexts = { SELECT_EXISTING, NEW_METRICS };
-            	DynamicDropDownParameter<MetricsDefinition> metricsDefinition = null;
-            	RadioButtonListParameter choice = null;
-            	Vector<MetricsDefinition> availableMetricsDefinitions = getAvailableMetricsDefinitions(action.getFocusedObject());
-				if (availableMetricsDefinitions.size()>0) {
-            		params = new ParameterDefinition[5];
-            		choice = new RadioButtonListParameter("choice", "choice", SELECT_EXISTING, contexts);
+			@Override
+			public boolean run(ActionEvent e, A action) {
+				ParameterDefinition[] params;
+				TextFieldParameter metricsName = new TextFieldParameter("name", "name", null);
+				EnumDropDownParameter<MetricsType> type = new EnumDropDownParameter<MetricsType>("type", "type", MetricsType.TEXT,
+						MetricsType.values());
+				TextAreaParameter description = new TextAreaParameter("description", "description", null);
+				String NEW_METRICS = FlexoLocalization.localizedForKey("new_metrics");
+				String SELECT_EXISTING = FlexoLocalization.localizedForKey("select_existing");
+				String[] contexts = { SELECT_EXISTING, NEW_METRICS };
+				DynamicDropDownParameter<MetricsDefinition> metricsDefinition = null;
+				RadioButtonListParameter choice = null;
+				Vector<MetricsDefinition> availableMetricsDefinitions = getAvailableMetricsDefinitions(action.getFocusedObject());
+				if (availableMetricsDefinitions.size() > 0) {
+					params = new ParameterDefinition[5];
+					choice = new RadioButtonListParameter("choice", "choice", SELECT_EXISTING, contexts);
 					params[0] = choice;
-            		metricsDefinition = new DynamicDropDownParameter<MetricsDefinition>("definition","select_a_metrics",availableMetricsDefinitions,availableMetricsDefinitions.firstElement());
-            		metricsDefinition.setShowReset(false);
-            		metricsDefinition.setFormatter("name");
+					metricsDefinition = new DynamicDropDownParameter<MetricsDefinition>("definition", "select_a_metrics",
+							availableMetricsDefinitions, availableMetricsDefinitions.firstElement());
+					metricsDefinition.setShowReset(false);
+					metricsDefinition.setFormatter("name");
 					params[1] = metricsDefinition;
-            		params[1].setDepends("choice");
-            		params[1].setConditional("choice=\""+SELECT_EXISTING+"\"");
-            		params[2] = metricsName;
-            		params[2].setDepends("choice");
-            		params[2].setConditional("choice=\""+NEW_METRICS+"\"");
-            		params[3] = type;
-            		params[3].setDepends("choice");
-            		params[3].setConditional("choice=\""+NEW_METRICS+"\"");
-            		params[4] = description;
-            		params[4].setDepends("choice");
-            		params[4].setConditional("choice=\""+NEW_METRICS+"\"");
-            	} else {
-            		params = new ParameterDefinition[3];
-            		params[0] = metricsName;
-            		params[1] = type;
-            		params[2] = description;
-            	}
-                AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization.localizedForKey("add_metrics"), FlexoLocalization.localizedForKey("enter_parameters_for_metrics"), params);
-                if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                	boolean createNew = choice==null || choice.getValue().equals(NEW_METRICS);
-                	MetricsDefinition md = null;
-                	if (createNew) {
-                		if (metricsName.getValue()==null || metricsName.getValue().trim().length()==0) {
-                			FlexoController.notify(FlexoLocalization.localizedForKey("name_cannot_be_empty"));
-                			return false;
-                		}
-                		md = createMetricsDefinitionWithName(metricsName.getValue(),type.getValue(), description.getValue());
-                	} else {
-                		md = metricsDefinition.getValue();
-                	}
-                	if (md!=null) {
-                		action.setMetricsDefinition(md);
-                		return true;
-                	}
-                	return false;
-                } else {
-                    return false;
-                }
-            }
-        };
+					params[1].setDepends("choice");
+					params[1].setConditional("choice=\"" + SELECT_EXISTING + "\"");
+					params[2] = metricsName;
+					params[2].setDepends("choice");
+					params[2].setConditional("choice=\"" + NEW_METRICS + "\"");
+					params[3] = type;
+					params[3].setDepends("choice");
+					params[3].setConditional("choice=\"" + NEW_METRICS + "\"");
+					params[4] = description;
+					params[4].setDepends("choice");
+					params[4].setConditional("choice=\"" + NEW_METRICS + "\"");
+				} else {
+					params = new ParameterDefinition[3];
+					params[0] = metricsName;
+					params[1] = type;
+					params[2] = description;
+				}
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+						FlexoLocalization.localizedForKey("add_metrics"),
+						FlexoLocalization.localizedForKey("enter_parameters_for_metrics"), params);
+				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+					boolean createNew = choice == null || choice.getValue().equals(NEW_METRICS);
+					MetricsDefinition md = null;
+					if (createNew) {
+						if (metricsName.getValue() == null || metricsName.getValue().trim().length() == 0) {
+							FlexoController.notify(FlexoLocalization.localizedForKey("name_cannot_be_empty"));
+							return false;
+						}
+						md = createMetricsDefinitionWithName(metricsName.getValue(), type.getValue(), description.getValue());
+					} else {
+						md = metricsDefinition.getValue();
+					}
+					if (md != null) {
+						action.setMetricsDefinition(md);
+						return true;
+					}
+					return false;
+				} else {
+					return false;
+				}
+			}
+		};
 	}
 
 }

@@ -29,78 +29,76 @@ import org.openflexo.inspector.TabModelView;
 import org.openflexo.inspector.model.InnerTabWidget;
 import org.openflexo.inspector.widget.DenaliWidget.WidgetLayout;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public interface InnerTabWidgetView
-{
-    public JComponent getDynamicComponent();
+public interface InnerTabWidgetView {
+	public JComponent getDynamicComponent();
 
-    /**
-     * @param view
-     * @param i
-     */
-    public void setTabModelView(TabModelView view, int i);
+	/**
+	 * @param view
+	 * @param i
+	 */
+	public void setTabModelView(TabModelView view, int i);
 
-    /**
-     * @return
-     */
-    public boolean shouldExpandVertically();
+	/**
+	 * @return
+	 */
+	public boolean shouldExpandVertically();
 
-    /**
-     * @return
-     */
-    public boolean shouldExpandHorizontally();
+	/**
+	 * @return
+	 */
+	public boolean shouldExpandHorizontally();
 
-    /**
-     * @return
-     */
-    public boolean displayLabel();
+	/**
+	 * @return
+	 */
+	public boolean displayLabel();
 
-    /**
-     * @return
-     */
-    public WidgetLayout getWidgetLayout();
+	/**
+	 * @return
+	 */
+	public WidgetLayout getWidgetLayout();
 
-    /**
-     * @return
-     */
-    public Component getLabel();
-    
-    public InnerTabWidget getXMLModel();
+	/**
+	 * @return
+	 */
+	public Component getLabel();
 
-    /**
-     * @return
-     */
-    public String getName();
+	public InnerTabWidget getXMLModel();
 
-    /**
-     * @param newValue
-     * @param observedPropertyName
-     * @return
-     */
-    public boolean isStillVisible(Object newValue, String observedPropertyName);
+	/**
+	 * @return
+	 */
+	public String getName();
 
-    /**
-     * @param widget
-     * @return
-     */
-    public boolean dependsOfProperty(DenaliWidget widget);
+	/**
+	 * @param newValue
+	 * @param observedPropertyName
+	 * @return
+	 */
+	public boolean isStillVisible(Object newValue, String observedPropertyName);
 
-    /**
-     * @param newInspectable
-     */
-    public void switchObserved(InspectableObject newInspectable);
+	/**
+	 * @param widget
+	 * @return
+	 */
+	public boolean dependsOfProperty(DenaliWidget widget);
 
-    /**
-     * @param controller
-     */
-    public void setController(AbstractController controller);
+	/**
+	 * @param newInspectable
+	 */
+	public void switchObserved(InspectableObject newInspectable);
 
-    /**
+	/**
+	 * @param controller
+	 */
+	public void setController(AbstractController controller);
+
+	/**
      * 
      */
-    public void updateWidgetFromModel();
+	public void updateWidgetFromModel();
 }

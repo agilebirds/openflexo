@@ -25,35 +25,32 @@ import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-public class WOApplicationGenerator extends JavaClassGenerator
-{
+public class WOApplicationGenerator extends JavaClassGenerator {
 
-    private static final String TEMPLATE_NAME = "Application.java.vm";
+	private static final String TEMPLATE_NAME = "Application.java.vm";
 	private static final Logger logger = FlexoLogger.getLogger(WOApplicationGenerator.class.getPackage().getName());
 
-    public WOApplicationGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,projectGenerator.getProject().getDataModel().getWORepository().getCustomApplicationEntity());
-    }
+	public WOApplicationGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, projectGenerator.getProject().getDataModel().getWORepository().getCustomApplicationEntity());
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	/**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-        
-    }
-    
-    @Override
-    public String getTemplateName() {
-    	return TEMPLATE_NAME;
-    }
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
+
+	}
+
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 }

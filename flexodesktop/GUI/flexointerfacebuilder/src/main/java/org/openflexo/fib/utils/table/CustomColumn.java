@@ -33,10 +33,9 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.swing.CustomPopup;
-import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
+import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.ToolBox;
-
 
 /**
  * Please comment this class
@@ -44,170 +43,171 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public abstract class CustomColumn<D extends Observable,T> extends AbstractColumn<D,T> implements EditableColumn<D,T>
-{
+public abstract class CustomColumn<D extends Observable, T> extends
+		AbstractColumn<D, T> implements EditableColumn<D, T> {
 
-    public CustomColumn(String title, int defaultWidth)
-    {
-        super(title, defaultWidth, true);
-        _selectorCellRenderer = new SelectorCellRenderer();
-        _selectorCellEditor = new SelectorCellEditor();
-    }
+	public CustomColumn(String title, int defaultWidth) {
+		super(title, defaultWidth, true);
+		_selectorCellRenderer = new SelectorCellRenderer();
+		_selectorCellEditor = new SelectorCellEditor();
+	}
 
-    @Override
-	public boolean isCellEditableFor(D object)
-    {
-        return true;
-    }
+	@Override
+	public boolean isCellEditableFor(D object) {
+		return true;
+	}
 
-    @Override
-	public void setValueFor(D object, T value)
-    {
-        setValue(object, value);
-    }
+	@Override
+	public void setValueFor(D object, T value) {
+		setValue(object, value);
+		valueChanged(object, value);
+	}
 
-    public abstract void setValue(D object, T aValue);
+	public abstract void setValue(D object, T aValue);
 
-    @Override
-	public String toString()
-    {
-        return "SelectorColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
-    }
+	@Override
+	public String toString() {
+		return "SelectorColumn " + "[" + getTitle() + "]"
+				+ Integer.toHexString(hashCode());
+	}
 
-    @Override
-	public T getValueFor(D object)
-    {
-        return getValue(object);
-    }
+	@Override
+	public T getValueFor(D object) {
+		return getValue(object);
+	}
 
-    public abstract T getValue(D object);
+	public abstract T getValue(D object);
 
-    /**
-     * @return
-     */
-    @Override
-	public TableCellRenderer getCellRenderer()
-    {
-        return _selectorCellRenderer;
-    }
+	/**
+	 * @return
+	 */
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return _selectorCellRenderer;
+	}
 
-    private SelectorCellRenderer _selectorCellRenderer;
+	private SelectorCellRenderer _selectorCellRenderer;
 
-    protected class SelectorCellRenderer extends TabularViewCellRenderer
-    {
-        /**
-         * 
-         * Returns the selector cell renderer.
-         * 
-         * @param table
-         *            the <code>JTable</code>
-         * @param value
-         *            the value to assign to the cell at
-         *            <code>[row, column]</code>
-         * @param isSelected
-         *            true if cell is selected
-         * @param hasFocus
-         *            true if cell has focus
-         * @param row
-         *            the row of the cell to render
-         * @param column
-         *            the column of the cell to render
-         * @return the default table cell renderer
-         */
-        @Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-        {
-        	D rowObject = elementAt(row);
-            if ((isSelected) && (hasFocus)) {
-                CustomPopup<T> returned = getViewSelector(rowObject, (T) value);
-                if (ToolBox.getPLATFORM()==ToolBox.MACOS)
-                	setComponentBackground(returned, hasFocus, isSelected, row, column);
-                return returned;
-            } else {
-                Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                if (returned instanceof JLabel) {
-                    ((JLabel) returned).setText(getViewSelector(rowObject, (T) value).renderedString((T)value));
-                }
-                return returned;
-            }
-        }
-    }
+	protected class SelectorCellRenderer extends TabularViewCellRenderer {
+		/**
+		 * 
+		 * Returns the selector cell renderer.
+		 * 
+		 * @param table
+		 *            the <code>JTable</code>
+		 * @param value
+		 *            the value to assign to the cell at
+		 *            <code>[row, column]</code>
+		 * @param isSelected
+		 *            true if cell is selected
+		 * @param hasFocus
+		 *            true if cell has focus
+		 * @param row
+		 *            the row of the cell to render
+		 * @param column
+		 *            the column of the cell to render
+		 * @return the default table cell renderer
+		 */
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			D rowObject = elementAt(row);
+			if ((isSelected) && (hasFocus)) {
+				CustomPopup<T> returned = getViewSelector(rowObject, (T) value);
+				if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+					setComponentBackground(returned, hasFocus, isSelected, row,
+							column);
+				}
+				return returned;
+			} else {
+				Component returned = super.getTableCellRendererComponent(table,
+						value, isSelected, hasFocus, row, column);
+				if (returned instanceof JLabel) {
+					((JLabel) returned).setText(getViewSelector(rowObject,
+							(T) value).renderedString((T) value));
+				}
+				return returned;
+			}
+		}
+	}
 
-    protected abstract TextFieldCustomPopup<T> getViewSelector(D rowObject, T value);
+	protected abstract TextFieldCustomPopup<T> getViewSelector(D rowObject,
+			T value);
 
-    protected abstract TextFieldCustomPopup<T> getEditSelector(D rowObject, T value);
+	protected abstract TextFieldCustomPopup<T> getEditSelector(D rowObject,
+			T value);
 
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    @Override
-	public boolean requireCellEditor()
-    {
-        return true;
-    }
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean requireCellEditor() {
+		return true;
+	}
 
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    @Override
-	public TableCellEditor getCellEditor()
-    {
-        return _selectorCellEditor;
-    }
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	@Override
+	public TableCellEditor getCellEditor() {
+		return _selectorCellEditor;
+	}
 
-    protected SelectorCellEditor _selectorCellEditor;
+	protected SelectorCellEditor _selectorCellEditor;
 
-    protected class SelectorCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener, ApplyCancelListener
-    {
-    	TextFieldCustomPopup<T> _selector;
+	protected class SelectorCellEditor extends AbstractCellEditor implements
+			TableCellEditor, ActionListener, ApplyCancelListener {
+		TextFieldCustomPopup<T> _selector;
 
-        public SelectorCellEditor()
-        {
-            _selector = getEditSelector(null,null);
-            _selector.getTextField().setBorder(null);
-            _selector.addApplyCancelListener(this);
-        }
+		public SelectorCellEditor() {
+			_selector = getEditSelector(null, null);
+			_selector.getTextField().setBorder(null);
+			_selector.addApplyCancelListener(this);
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent e)
-        {
-            fireEditingStopped();
-        }
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEditingStopped();
+		}
 
-        // Implement the one CellEditor method that AbstractCellEditor doesn't.
-        @Override
-		public Object getCellEditorValue()
-        {
-            return _selector.getEditedObject();
-        }
+		// Implement the one CellEditor method that AbstractCellEditor doesn't.
+		@Override
+		public Object getCellEditorValue() {
+			return _selector.getEditedObject();
+		}
 
-        // Implement the one method defined by TableCellEditor.
-        @Override
-		public Component getTableCellEditorComponent(final JTable table, Object value, boolean isSelected, int row, int column)
-        {
-        	table.putClientProperty("terminateEditOnFocusLost", Boolean.FALSE);
-        	addCellEditorListener(new CellEditorListener() {
-        		@Override
+		// Implement the one method defined by TableCellEditor.
+		@Override
+		public Component getTableCellEditorComponent(final JTable table,
+				Object value, boolean isSelected, int row, int column) {
+			table.putClientProperty("terminateEditOnFocusLost", Boolean.FALSE);
+			addCellEditorListener(new CellEditorListener() {
+				@Override
 				public void editingCanceled(ChangeEvent e) {
-        			table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-        		}
-        		
-        		@Override
+					table.putClientProperty("terminateEditOnFocusLost",
+							Boolean.TRUE);
+				}
+
+				@Override
 				public void editingStopped(ChangeEvent e) {
-        			table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);        			
-        		}
-        	});
-        	_selector.getTextField().setBorder(null);
-            setEditedRowObject(elementAt(row));
-            _selector = getEditSelector(elementAt(row),(T)value);
-            /*_selector.setEditedObject((T)value);
-             _selector.setRevertValue((T) value);*/
-            return _selector;
-        }
+					table.putClientProperty("terminateEditOnFocusLost",
+							Boolean.TRUE);
+				}
+			});
+			_selector.getTextField().setBorder(null);
+			setEditedRowObject(elementAt(row));
+			_selector = getEditSelector(elementAt(row), (T) value);
+			/*
+			 * _selector.setEditedObject((T)value); _selector.setRevertValue((T)
+			 * value);
+			 */
+			return _selector;
+		}
 
 		@Override
 		public void fireApplyPerformed() {
@@ -216,31 +216,32 @@ public abstract class CustomColumn<D extends Observable,T> extends AbstractColum
 
 		@Override
 		public void fireCancelPerformed() {
-			actionPerformed(null);			
+			actionPerformed(null);
 		}
-		
+
 		@Override
 		protected void fireEditingCanceled() {
-			if (_selector != null) _selector.closePopup();
+			if (_selector != null) {
+				_selector.closePopup();
+			}
 			super.fireEditingCanceled();
 		}
 
 		@Override
 		protected void fireEditingStopped() {
-			if (_selector != null) 
+			if (_selector != null) {
 				_selector.closePopup();
+			}
 			super.fireEditingStopped();
-			
+
 		}
 
+	}
 
-    }
+	protected D _editedRowObject;
 
-    protected D _editedRowObject;
-
-    protected void setEditedRowObject(D anObject)
-    {
-        _editedRowObject = anObject;
-    }
+	protected void setEditedRowObject(D anObject) {
+		_editedRowObject = anObject;
+	}
 
 }

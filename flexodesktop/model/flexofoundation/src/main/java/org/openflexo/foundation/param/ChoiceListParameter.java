@@ -22,24 +22,19 @@ package org.openflexo.foundation.param;
 import org.openflexo.inspector.widget.DenaliWidget;
 import org.openflexo.kvc.ChoiceList;
 
-
 public class ChoiceListParameter<T extends ChoiceList> extends ParameterDefinition<T> {
 
-    public ChoiceListParameter(String name, String label, T defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.DROPDOWN;
-    }
+	public ChoiceListParameter(String name, String label, T defaultValue) {
+		super(name, label, defaultValue);
+	}
 
-   public void setShowReset(boolean showReset)
-   {
-   	addParameter("showReset",""+showReset);
-   }
-   
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.DROPDOWN;
+	}
+
+	public void setShowReset(boolean showReset) {
+		addParameter("showReset", "" + showReset);
+	}
 
 }

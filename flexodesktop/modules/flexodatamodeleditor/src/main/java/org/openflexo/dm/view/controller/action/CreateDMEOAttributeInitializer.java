@@ -34,62 +34,58 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class CreateDMEOAttributeInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDMEOAttributeInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(CreateDMEOAttribute.actionType,actionInitializer);
+	CreateDMEOAttributeInitializer(DMControllerActionInitializer actionInitializer) {
+		super(CreateDMEOAttribute.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<CreateDMEOAttribute> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateDMEOAttribute> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMEOAttribute>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMEOAttribute action)
-            {
-            	return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDMEOAttribute action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<CreateDMEOAttribute> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<CreateDMEOAttribute> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMEOAttribute>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMEOAttribute action)
-            {
-                if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getDMEOModel()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMEOAttribute in DMEOModelView");
-                    DMEOModelView dmEOModelView = (DMEOModelView)getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    dmEOModelView.getEoEntityTable().selectObject(action.getEntity());
-                    dmEOModelView.getEoAttributeTable().selectObject(action.getNewEOAttribute());
-                } else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMEOAttribute in DMEOEntityView");
-                    DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    eoEntityView.getEoAttributeTable().selectObject(action.getNewEOAttribute());
-                }
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDMEOAttribute action) {
+				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getDMEOModel()) {
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Finalizer for CreateDMEOAttribute in DMEOModelView");
+					}
+					DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					dmEOModelView.getEoEntityTable().selectObject(action.getEntity());
+					dmEOModelView.getEoAttributeTable().selectObject(action.getNewEOAttribute());
+				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Finalizer for CreateDMEOAttribute in DMEOEntityView");
+					}
+					DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					eoEntityView.getEoAttributeTable().selectObject(action.getNewEOAttribute());
+				}
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.DM_EOATTRIBUTE_ICON;
 	}
- 
+
 }

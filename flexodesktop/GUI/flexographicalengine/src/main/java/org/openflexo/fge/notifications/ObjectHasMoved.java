@@ -19,11 +19,9 @@
  */
 package org.openflexo.fge.notifications;
 
-
 public class ObjectHasMoved extends FGENotification {
 
-	public ObjectHasMoved()
-	{
-		super("location",null,null);
+	public ObjectHasMoved() {
+		super("location", null, null);
 	}
 }

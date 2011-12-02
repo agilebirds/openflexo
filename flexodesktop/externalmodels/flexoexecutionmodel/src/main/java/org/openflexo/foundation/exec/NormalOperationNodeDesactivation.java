@@ -23,17 +23,14 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
-
 public class NormalOperationNodeDesactivation extends NodeDesactivation<OperationNode> {
 
-	public NormalOperationNodeDesactivation(OperationNode node)
-	{
+	public NormalOperationNodeDesactivation(OperationNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) {
 		// Nothing special to do
 		return new Nop();
 	}

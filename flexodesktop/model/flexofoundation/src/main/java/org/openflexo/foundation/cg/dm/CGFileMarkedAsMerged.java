@@ -21,10 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.CGFile;
 
-public class CGFileMarkedAsMerged extends CGDataModification
-{
-    public CGFileMarkedAsMerged(CGFile file)
-    {
-        super(file,null);
-    }
+public class CGFileMarkedAsMerged extends CGDataModification {
+	public CGFileMarkedAsMerged(CGFile file) {
+		super(file, null);
+	}
 }

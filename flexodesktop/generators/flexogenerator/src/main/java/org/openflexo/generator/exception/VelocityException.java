@@ -22,13 +22,9 @@ package org.openflexo.generator.exception;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 
-
-
-public class VelocityException extends GenerationException
-{
- 	public VelocityException(Exception targetException, AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-	{
-		super("Exception while running Velocity","failed_running_velocity","See target exception",targetException);
+public class VelocityException extends GenerationException {
+	public VelocityException(Exception targetException, AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super("Exception while running Velocity", "failed_running_velocity", "See target exception", targetException);
 	}
 
 }

@@ -24,7 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.FlexoModelObject;
@@ -36,7 +35,6 @@ import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
-import org.openflexo.generator.Generator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.JavaAppendingException;
 import org.openflexo.generator.exception.JavaFormattingException;
@@ -48,7 +46,6 @@ import org.openflexo.generator.utils.MetaWOGenerator;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ToolBox;
-
 
 /**
  * @author gpolet
@@ -69,19 +66,22 @@ public abstract class CGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	/**
-	 * This method is very important, because it is the way we must identify or build all resources involved in code generation. After this list has been built, we just let ResourceManager do the
-	 * work.
+	 * This method is very important, because it is the way we must identify or build all resources involved in code generation. After this
+	 * list has been built, we just let ResourceManager do the work.
 	 * 
-	 * @param repository: repository where resources should be retrieved or built
-	 * @param resources: the list of resources we must retrieve or build
+	 * @param repository
+	 *            : repository where resources should be retrieved or built
+	 * @param resources
+	 *            : the list of resources we must retrieve or build
 	 */
 	// public abstract void buildResourcesAndSetGenerators (CGRepository repository, Vector<CGRepositoryFileResource> resources);
 
 	// public abstract ManyGeneratedCode generateCode() throws GenerationException;
 
 	public static String nameForComponentDefinition(ComponentDefinition componentDefinition) {
-		if (componentDefinition instanceof PopupComponentDefinition)
+		if (componentDefinition instanceof PopupComponentDefinition) {
 			return componentDefinition.getComponentName() + "Popup";
+		}
 		return componentDefinition.getComponentName();
 	}
 
@@ -101,48 +101,55 @@ public abstract class CGGenerator<T extends FlexoModelObject> extends Generator<
 	 * @param generator
 	 * @return UtilComponentJavaFileResource java file resource
 	 */
-	protected static UtilComponentJavaFileResource buildGeneratedResourceListForComponentGenerator(CGRepository repository, Vector<CGRepositoryFileResource> resources, MetaWOGenerator generator) {
+	protected static UtilComponentJavaFileResource buildGeneratedResourceListForComponentGenerator(CGRepository repository,
+			Vector<CGRepositoryFileResource> resources, MetaWOGenerator generator) {
 		generator.refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + generator.getIdentifier(), false);
 
 		// Java file
-		UtilComponentJavaFileResource javaResource = (UtilComponentJavaFileResource) generator.resourceForKeyWithCGFile(ResourceType.JAVA_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(
-				repository, generator.getIdentifier()));
+		UtilComponentJavaFileResource javaResource = (UtilComponentJavaFileResource) generator.resourceForKeyWithCGFile(
+				ResourceType.JAVA_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, generator.getIdentifier()));
 		if (javaResource == null) {
 			javaResource = GeneratedFileResourceFactory.createNewUtilComponentJavaFileResource(repository, generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created COMPONENT UTIL JAVA resource " + javaResource.getName());
+			}
 		} else {
 			javaResource.setGenerator(generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved COMPONENT UTIL JAVA resource " + javaResource.getName());
+			}
 		}
 		resources.add(javaResource);
 
 		// WO file
-		UtilComponentWOFileResource WOResource = (UtilComponentWOFileResource) generator.resourceForKeyWithCGFile(ResourceType.WO_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository,
-				generator.getIdentifier()));
+		UtilComponentWOFileResource WOResource = (UtilComponentWOFileResource) generator.resourceForKeyWithCGFile(ResourceType.WO_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, generator.getIdentifier()));
 		if (WOResource == null) {
 			WOResource = GeneratedFileResourceFactory.createNewUtilComponentWOFileResource(repository, generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created COMPONENT UTIL WO resource " + WOResource.getName());
+			}
 		} else {
 			WOResource.setGenerator(generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved COMPONENT UTIL WO resource " + WOResource.getName());
+			}
 		}
 		resources.add(WOResource);
 
 		// API file
-		UtilComponentAPIFileResource APIResource = (UtilComponentAPIFileResource) generator.getProject().resourceForKey(ResourceType.API_FILE,
-				GeneratorUtils.nameForRepositoryAndIdentifier(repository, generator.getIdentifier()));
+		UtilComponentAPIFileResource APIResource = (UtilComponentAPIFileResource) generator.getProject().resourceForKey(
+				ResourceType.API_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, generator.getIdentifier()));
 		if (APIResource == null) {
 			APIResource = GeneratedFileResourceFactory.createNewUtilComponentAPIFileResource(repository, generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created COMPONENT UTIL API resource " + APIResource.getName());
+			}
 		} else {
 			APIResource.setGenerator(generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved COMPONENT UTIL API resource " + APIResource.getName());
+			}
 		}
 		resources.add(APIResource);
 

@@ -23,17 +23,17 @@ import java.util.Collection;
 
 /**
  * Very simple object, basically just a record.
- *
+ * 
  * @version $Id: SimpleObject.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class SimpleObject extends QuidObject {
-  public SimpleObject(PetalNode parent, String name, Collection params) {
-    super(parent, name, params);
-  }
-  
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	public SimpleObject(PetalNode parent, String name, Collection params) {
+		super(parent, name, params);
+	}
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

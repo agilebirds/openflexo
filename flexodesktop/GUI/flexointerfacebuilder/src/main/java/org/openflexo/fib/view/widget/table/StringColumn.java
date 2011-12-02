@@ -28,29 +28,24 @@ import org.openflexo.fib.model.FIBTableColumn;
  * @author sguerin
  * 
  */
-public abstract class StringColumn extends AbstractColumn<String>
-{
+public abstract class StringColumn extends AbstractColumn<String> {
 
-    public StringColumn(FIBTableColumn columnModel, FIBTableModel tableModel, FIBController controller)
-    {
-    	super(columnModel,tableModel,controller);
-    }
+	public StringColumn(FIBTableColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+		super(columnModel, tableModel, controller);
+	}
 
-    @Override
-    public Class<String> getValueClass()
-    {
-    	return String.class;
-    }
-    
-     @Override
-	public String toString()
-    {
-        return "StringColumn " + "@" + Integer.toHexString(hashCode());
-    }
+	@Override
+	public Class<String> getValueClass() {
+		return String.class;
+	}
 
-     @Override
-    public boolean requireCellRenderer()
-    {
-    	return true;
-    }
+	@Override
+	public String toString() {
+		return "StringColumn " + "@" + Integer.toHexString(hashCode());
+	}
+
+	@Override
+	public boolean requireCellRenderer() {
+		return true;
+	}
 }

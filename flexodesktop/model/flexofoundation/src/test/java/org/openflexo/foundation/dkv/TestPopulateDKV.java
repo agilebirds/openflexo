@@ -23,12 +23,8 @@ import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.dkv.Domain;
-import org.openflexo.foundation.dkv.Key;
-import org.openflexo.foundation.dkv.Language;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileUtils;
-
 
 public class TestPopulateDKV extends DKVTestCase {
 
@@ -40,8 +36,7 @@ public class TestPopulateDKV extends DKVTestCase {
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		_editor = createProject("DKVTest");
 		_project = _editor.getProject();
 		Domain d1 = createDomain("d1", _editor);
@@ -69,8 +64,9 @@ public class TestPopulateDKV extends DKVTestCase {
 
 		saveProject(_project);
 		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null)
+		if (_project != null) {
 			_project.close();
+		}
 		_project = _editor.getProject();
 		d1 = null;
 		l1 = null;
@@ -89,13 +85,14 @@ public class TestPopulateDKV extends DKVTestCase {
 		k2 = d1.getKeyNamed("K2");
 		assertNotNull(k2);
 
-
 		assertEquals(d1.getValue(k1, l1).getValue(), "K1_en_français");
 		assertEquals(d1.getValue(k1, l2).getValue(), "K1_en_anglais");
 		assertEquals(d1.getValue(k2, l1).getValue(), "K2_en_français");
 		assertEquals(d1.getValue(k2, l2).getValue(), "K2_en_anglais");
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
+		_editor = null;
+		_project = null;
 	}
 
 	public TestPopulateDKV(String arg0) {

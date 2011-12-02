@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import java.util.ArrayList;
@@ -35,11 +34,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tFlow complex type.
+ * <p>
+ * Java class for tFlow complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tFlow">
@@ -57,111 +57,72 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tFlow", propOrder = {
-    "links",
-    "activity"
-})
-public class TFlow
-    extends TActivity
-{
+@XmlType(name = "tFlow", propOrder = { "links", "activity" })
+public class TFlow extends TActivity {
 
-    protected TLinks links;
-    @XmlElements({
-        @XmlElement(name = "wait", type = TWait.class),
-        @XmlElement(name = "scope", type = TScope.class),
-        @XmlElement(name = "compensateScope", type = TCompensateScope.class),
-        @XmlElement(name = "assign", type = TAssign.class),
-        @XmlElement(name = "if", type = TIf.class),
-        @XmlElement(name = "extensionActivity", type = TExtensionActivity.class),
-        @XmlElement(name = "forEach", type = TForEach.class),
-        @XmlElement(name = "while", type = TWhile.class),
-        @XmlElement(name = "validate", type = TValidate.class),
-        @XmlElement(name = "throw", type = TThrow.class),
-        @XmlElement(name = "sequence", type = TSequence.class),
-        @XmlElement(name = "pick", type = TPick.class),
-        @XmlElement(name = "flow", type = TFlow.class),
-        @XmlElement(name = "empty", type = TEmpty.class),
-        @XmlElement(name = "receive", type = TReceive.class),
-        @XmlElement(name = "reply", type = TReply.class),
-        @XmlElement(name = "rethrow", type = TRethrow.class),
-        @XmlElement(name = "exit", type = TExit.class),
-        @XmlElement(name = "compensate", type = TCompensate.class),
-        @XmlElement(name = "invoke", type = TInvoke.class),
-        @XmlElement(name = "repeatUntil", type = TRepeatUntil.class)
-    })
-    protected List<Object> activity;
+	protected TLinks links;
+	@XmlElements({ @XmlElement(name = "wait", type = TWait.class), @XmlElement(name = "scope", type = TScope.class),
+			@XmlElement(name = "compensateScope", type = TCompensateScope.class), @XmlElement(name = "assign", type = TAssign.class),
+			@XmlElement(name = "if", type = TIf.class), @XmlElement(name = "extensionActivity", type = TExtensionActivity.class),
+			@XmlElement(name = "forEach", type = TForEach.class), @XmlElement(name = "while", type = TWhile.class),
+			@XmlElement(name = "validate", type = TValidate.class), @XmlElement(name = "throw", type = TThrow.class),
+			@XmlElement(name = "sequence", type = TSequence.class), @XmlElement(name = "pick", type = TPick.class),
+			@XmlElement(name = "flow", type = TFlow.class), @XmlElement(name = "empty", type = TEmpty.class),
+			@XmlElement(name = "receive", type = TReceive.class), @XmlElement(name = "reply", type = TReply.class),
+			@XmlElement(name = "rethrow", type = TRethrow.class), @XmlElement(name = "exit", type = TExit.class),
+			@XmlElement(name = "compensate", type = TCompensate.class), @XmlElement(name = "invoke", type = TInvoke.class),
+			@XmlElement(name = "repeatUntil", type = TRepeatUntil.class) })
+	protected List<Object> activity;
 
-    /**
-     * Gets the value of the links property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TLinks }
-     *     
-     */
-    public TLinks getLinks() {
-        return links;
-    }
+	/**
+	 * Gets the value of the links property.
+	 * 
+	 * @return possible object is {@link TLinks }
+	 * 
+	 */
+	public TLinks getLinks() {
+		return links;
+	}
 
-    /**
-     * Sets the value of the links property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TLinks }
-     *     
-     */
-    public void setLinks(TLinks value) {
-        this.links = value;
-    }
+	/**
+	 * Sets the value of the links property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TLinks }
+	 * 
+	 */
+	public void setLinks(TLinks value) {
+		this.links = value;
+	}
 
-    /**
-     * Gets the value of the activity property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the activity property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getActivity().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TWait }
-     * {@link TScope }
-     * {@link TCompensateScope }
-     * {@link TAssign }
-     * {@link TIf }
-     * {@link TExtensionActivity }
-     * {@link TForEach }
-     * {@link TWhile }
-     * {@link TValidate }
-     * {@link TThrow }
-     * {@link TSequence }
-     * {@link TPick }
-     * {@link TFlow }
-     * {@link TEmpty }
-     * {@link TReceive }
-     * {@link TReply }
-     * {@link TRethrow }
-     * {@link TExit }
-     * {@link TCompensate }
-     * {@link TInvoke }
-     * {@link TRepeatUntil }
-     * 
-     * 
-     */
-    public List<Object> getActivity() {
-        if (activity == null) {
-            activity = new ArrayList<Object>();
-        }
-        return this.activity;
-    }
+	/**
+	 * Gets the value of the activity property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the activity property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getActivity().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link TWait } {@link TScope } {@link TCompensateScope } {@link TAssign }
+	 * {@link TIf } {@link TExtensionActivity } {@link TForEach } {@link TWhile } {@link TValidate } {@link TThrow } {@link TSequence }
+	 * {@link TPick } {@link TFlow } {@link TEmpty } {@link TReceive } {@link TReply } {@link TRethrow } {@link TExit } {@link TCompensate }
+	 * {@link TInvoke } {@link TRepeatUntil }
+	 * 
+	 * 
+	 */
+	public List<Object> getActivity() {
+		if (activity == null) {
+			activity = new ArrayList<Object>();
+		}
+		return this.activity;
+	}
 
 }

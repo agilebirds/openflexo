@@ -29,24 +29,23 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModelDefinition;
  * @author sguerin
  * 
  */
-public class ImplementationModelBuilder extends FlexoBuilder<ImplementationModelResource>
-{
+public class ImplementationModelBuilder extends FlexoBuilder<ImplementationModelResource> {
 
-    public ImplementationModel implementationModel = null;
-    
-    public ImplementationModelDefinition definition;
-    
-    /**
-     * Use this constructor to build an Operation Component
-     * 
-     * @param componentDefinition
-     */
-    public ImplementationModelBuilder(ImplementationModelDefinition def, ImplementationModelResource resource)
-    {
-        super(resource);
-        this.definition = def;
-        if (definition.isLoaded())
-        	implementationModel = definition.getImplementationModel();
-    }
+	public ImplementationModel implementationModel = null;
+
+	public ImplementationModelDefinition definition;
+
+	/**
+	 * Use this constructor to build an Operation Component
+	 * 
+	 * @param componentDefinition
+	 */
+	public ImplementationModelBuilder(ImplementationModelDefinition def, ImplementationModelResource resource) {
+		super(resource);
+		this.definition = def;
+		if (definition.isLoaded()) {
+			implementationModel = definition.getImplementationModel();
+		}
+	}
 
 }

@@ -26,49 +26,53 @@ import org.apache.velocity.runtime.log.LogChute;
 
 public class VelocityLogger implements LogChute {
 
-    /**
-     * Overrides init
-     * @see org.apache.velocity.runtime.log.LogSystem#init(org.apache.velocity.runtime.RuntimeServices)
-     */
-    @Override
-	public void init(RuntimeServices rs) throws Exception
-    {
-        
-    }
+	/**
+	 * Overrides init
+	 * 
+	 * @see org.apache.velocity.runtime.log.LogSystem#init(org.apache.velocity.runtime.RuntimeServices)
+	 */
+	@Override
+	public void init(RuntimeServices rs) throws Exception {
 
-    /**
-     * Overrides logVelocityMessage
-     * @see org.apache.velocity.runtime.log.LogSystem#logVelocityMessage(int, java.lang.String)
-     */
-    public void logVelocityMessage(int level, String message)
-    {
-    	switch (level) {
-    	case DEBUG_ID:
-    		if (FlexoVelocity.logger.isLoggable(Level.FINE))
-    			FlexoVelocity.logger.fine("Velocity debug: "+message);
-    		break;
+	}
+
+	/**
+	 * Overrides logVelocityMessage
+	 * 
+	 * @see org.apache.velocity.runtime.log.LogSystem#logVelocityMessage(int, java.lang.String)
+	 */
+	public void logVelocityMessage(int level, String message) {
+		switch (level) {
+		case DEBUG_ID:
+			if (FlexoVelocity.logger.isLoggable(Level.FINE)) {
+				FlexoVelocity.logger.fine("Velocity debug: " + message);
+			}
+			break;
 		case INFO_ID:
-			if (FlexoVelocity.logger.isLoggable(Level.INFO))
-				FlexoVelocity.logger.info("Velocity info: "+message);
+			if (FlexoVelocity.logger.isLoggable(Level.INFO)) {
+				FlexoVelocity.logger.info("Velocity info: " + message);
+			}
 			break;
 		case WARN_ID:
-			if (FlexoVelocity.logger.isLoggable(Level.WARNING))
-				FlexoVelocity.logger.warning("Velocity warning: "+message);
+			if (FlexoVelocity.logger.isLoggable(Level.WARNING)) {
+				FlexoVelocity.logger.warning("Velocity warning: " + message);
+			}
 			break;
 		case ERROR_ID:
-			if (FlexoVelocity.logger.isLoggable(Level.SEVERE))
-				FlexoVelocity.logger.severe("Velocity severe: "+message);
+			if (FlexoVelocity.logger.isLoggable(Level.SEVERE)) {
+				FlexoVelocity.logger.severe("Velocity severe: " + message);
+			}
 			break;
 		default:
 			break;
 		}
-    }
+	}
 
 	@Override
 	public boolean isLevelEnabled(int level) {
 		switch (level) {
-    	case DEBUG_ID:
-    		return FlexoVelocity.logger.isLoggable(Level.FINE);
+		case DEBUG_ID:
+			return FlexoVelocity.logger.isLoggable(Level.FINE);
 		case INFO_ID:
 			return FlexoVelocity.logger.isLoggable(Level.FINE);
 		case WARN_ID:
@@ -89,25 +93,29 @@ public class VelocityLogger implements LogChute {
 	@Override
 	public void log(int level, String message, Throwable t) {
 		switch (level) {
-    	case DEBUG_ID:
-    		if (FlexoVelocity.logger.isLoggable(Level.FINE))
-    			FlexoVelocity.logger.log(Level.FINE, "Velocity debug: "+message, t);
-    		break;
+		case DEBUG_ID:
+			if (FlexoVelocity.logger.isLoggable(Level.FINE)) {
+				FlexoVelocity.logger.log(Level.FINE, "Velocity debug: " + message, t);
+			}
+			break;
 		case INFO_ID:
-			if (FlexoVelocity.logger.isLoggable(Level.FINE))
-				FlexoVelocity.logger.log(Level.FINE, "Velocity info: "+message, t);
+			if (FlexoVelocity.logger.isLoggable(Level.FINE)) {
+				FlexoVelocity.logger.log(Level.FINE, "Velocity info: " + message, t);
+			}
 			break;
 		case WARN_ID:
-			if (FlexoVelocity.logger.isLoggable(Level.WARNING))
-				FlexoVelocity.logger.log(Level.WARNING, "Velocity warning: "+message, t);
+			if (FlexoVelocity.logger.isLoggable(Level.WARNING)) {
+				FlexoVelocity.logger.log(Level.WARNING, "Velocity warning: " + message, t);
+			}
 			break;
 		case ERROR_ID:
-			if (FlexoVelocity.logger.isLoggable(Level.SEVERE))
-				FlexoVelocity.logger.log(Level.SEVERE, "Velocity severe: "+message, t);
+			if (FlexoVelocity.logger.isLoggable(Level.SEVERE)) {
+				FlexoVelocity.logger.log(Level.SEVERE, "Velocity severe: " + message, t);
+			}
 			break;
 		default:
 			break;
 		}
 	}
-    
+
 }

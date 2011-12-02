@@ -49,7 +49,6 @@ import org.openflexo.foundation.ws.action.WSDelete;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * A ServiceInteface is attached to a FlexoProcess and contains all the service operations used in the context of WebServices.
  * 
@@ -97,8 +96,9 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 
 	@Override
 	public void setName(String aName) throws DuplicateWSObjectException, DuplicateWKFObjectException {
-		if (!isDeserializing())
+		if (!isDeserializing()) {
 			checkInterfaceName(getProcess(), aName, this);
+		}
 		// TODO: check that the serviceInterface is not used !
 		if (!isDeserializing() && isUsedInWebService() && _name != null && !_name.equals(aName)) {
 			WSPortType pt = getProject().getFlexoWSLibrary().getWSPortTypeNamed(getName());
@@ -110,7 +110,7 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 		}
 		_name = aName;
 		setChanged();
-		notifyObservers(new NameChanged(null,_name));
+		notifyObservers(new NameChanged(null, _name));
 	}
 
 	public static void checkInterfaceName(FlexoProcess process, String aName, ServiceInterface currentInt)
@@ -147,8 +147,9 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 		try {
 			ServiceOperation.checkOperationName(this, name, null);
 		} catch (DuplicateWKFObjectException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("An operation with the same name (" + name + ") already exist");
+			}
 			throw e;
 		}
 		ServiceOperation newOp = new ServiceOperation(this, name, relatedPort);
@@ -230,8 +231,9 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 
 	public boolean isUsedInWebService() {
 		WSPortType pt = getProject().getFlexoWSLibrary().getWSPortTypeNamed(getName());
-		if (pt != null && pt.getServiceInterface() != null && pt.getServiceInterface().equals(this))
+		if (pt != null && pt.getServiceInterface() != null && pt.getServiceInterface().equals(this)) {
 			return true;
+		}
 		return false;
 	}
 
@@ -296,8 +298,8 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 						// binding model based on variables of toEntry (operation's message)
 						// message def is from Port.
 						// a_pt=b_op
-						BindingVariable bvar = serviceOp.getInputMessageBindings().getBindingModel().bindingVariableNamed(
-								toEntry.getVariableName());
+						BindingVariable bvar = serviceOp.getInputMessageBindings().getBindingModel()
+								.bindingVariableNamed(toEntry.getVariableName());
 						bvalue.setBindingVariable(bvar);
 						binding.setBindingValue(bvalue);
 					}
@@ -320,15 +322,16 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 						// a_op=b_pt
 						ServiceMessageEntryBinding binding = serviceOp.getOutputMessageBindings().getBinding(toEntry);
 						BindingValue bvalue = new BindingValue(toEntry, serviceOp.getOutputMessageBindings());
-						BindingVariable bvar = serviceOp.getOutputMessageBindings().getBindingModel().bindingVariableNamed(
-								fromEntry.getVariableName());
+						BindingVariable bvar = serviceOp.getOutputMessageBindings().getBindingModel()
+								.bindingVariableNamed(fromEntry.getVariableName());
 						bvalue.setBindingVariable(bvar);
 						binding.setBindingValue(bvalue);
 					}
 				}
 			} catch (DuplicateWKFObjectException e) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("ServiceOperation already exist.");
+				}
 			}
 		}
 		return toInterface;

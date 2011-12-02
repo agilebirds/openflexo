@@ -30,116 +30,98 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.WKFObject;
 
+public class WKFMove extends FlexoUndoableAction<WKFMove, WKFObject, WKFObject> {
 
-public class WKFMove extends FlexoUndoableAction<WKFMove,WKFObject,WKFObject> 
-{
+	protected static final Logger logger = Logger.getLogger(WKFMove.class.getPackage().getName());
 
-    protected static final Logger logger = Logger.getLogger(WKFMove.class.getPackage().getName());
+	public static FlexoActionType<WKFMove, WKFObject, WKFObject> actionType = new FlexoActionType<WKFMove, WKFObject, WKFObject>(
+			"move_objects", FlexoActionType.editGroup) {
 
-    public static FlexoActionType<WKFMove,WKFObject,WKFObject> actionType 
-    = new FlexoActionType<WKFMove,WKFObject,WKFObject> ("move_objects",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public WKFMove makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new WKFMove(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public WKFMove makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new WKFMove(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return ((globalSelection != null) && (globalSelection.size() > 0));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) 
-        {
-            return ((globalSelection != null) && (globalSelection.size() > 0));
-        }
-                
-    };
-    
-    private String graphicalContext;
-    private Hashtable<WKFObject,Point2D.Double> initialLocations;
-    private Hashtable<WKFObject,Point2D.Double> newLocations;
-    private boolean wasInteractivelyPerformed = false;
-    
- 	protected WKFMove (WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-    	super(actionType, focusedObject, globalSelection, editor);
-    	initialLocations = new Hashtable<WKFObject, Point2D.Double>();
-    	newLocations = new Hashtable<WKFObject, Point2D.Double>();
-    }
+	};
 
-    @Override
-    protected void doAction(Object context) throws FlexoException 
-    {
-    	if (!wasInteractivelyPerformed()) {
-    		putObjectsToNewLocation();
-    	}
-    }
+	private String graphicalContext;
+	private Hashtable<WKFObject, Point2D.Double> initialLocations;
+	private Hashtable<WKFObject, Point2D.Double> newLocations;
+	private boolean wasInteractivelyPerformed = false;
 
-    @Override
-    protected void undoAction(Object context) throws FlexoException 
-    {
-    	putObjectsToInitialLocation();
-    }
+	protected WKFMove(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+		initialLocations = new Hashtable<WKFObject, Point2D.Double>();
+		newLocations = new Hashtable<WKFObject, Point2D.Double>();
+	}
 
-    @Override
-    
-    protected void redoAction(Object context) throws FlexoException 
-    {
-    	putObjectsToNewLocation();
-    }
-    
-   private void putObjectsToNewLocation()
-    {
-    	for (WKFObject o : newLocations.keySet()) {
-    		Point2D.Double newLocation = newLocations.get(o);
-     		o.setX(newLocation.x, getGraphicalContext());
-     		o.setY(newLocation.y, getGraphicalContext());
-    	}
-    }
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		if (!wasInteractivelyPerformed()) {
+			putObjectsToNewLocation();
+		}
+	}
 
-   private void putObjectsToInitialLocation()
-   {
-   	for (WKFObject o : initialLocations.keySet()) {
-   		Point2D.Double initialLocation = initialLocations.get(o);
-    		o.setX(initialLocation.x, getGraphicalContext());
-    		o.setY(initialLocation.y, getGraphicalContext());
-   	}
-   }
+	@Override
+	protected void undoAction(Object context) throws FlexoException {
+		putObjectsToInitialLocation();
+	}
 
-	public String getGraphicalContext()
-	{
+	@Override
+	protected void redoAction(Object context) throws FlexoException {
+		putObjectsToNewLocation();
+	}
+
+	private void putObjectsToNewLocation() {
+		for (WKFObject o : newLocations.keySet()) {
+			Point2D.Double newLocation = newLocations.get(o);
+			o.setX(newLocation.x, getGraphicalContext());
+			o.setY(newLocation.y, getGraphicalContext());
+		}
+	}
+
+	private void putObjectsToInitialLocation() {
+		for (WKFObject o : initialLocations.keySet()) {
+			Point2D.Double initialLocation = initialLocations.get(o);
+			o.setX(initialLocation.x, getGraphicalContext());
+			o.setY(initialLocation.y, getGraphicalContext());
+		}
+	}
+
+	public String getGraphicalContext() {
 		return graphicalContext;
 	}
 
-	public void setGraphicalContext(String graphicalContext)
-	{
+	public void setGraphicalContext(String graphicalContext) {
 		this.graphicalContext = graphicalContext;
 	}
 
-	public boolean wasInteractivelyPerformed() 
-	{
+	public boolean wasInteractivelyPerformed() {
 		return wasInteractivelyPerformed;
 	}
 
-	public void setWasInteractivelyPerformed(boolean wasInteractivelyPerformed) 
-	{
+	public void setWasInteractivelyPerformed(boolean wasInteractivelyPerformed) {
 		this.wasInteractivelyPerformed = wasInteractivelyPerformed;
 	}
 
-	public Hashtable<WKFObject, Point2D.Double> getInitialLocations() 
-	{
+	public Hashtable<WKFObject, Point2D.Double> getInitialLocations() {
 		return initialLocations;
 	}
 
-	public Hashtable<WKFObject, Point2D.Double> getNewLocations() 
-	{
+	public Hashtable<WKFObject, Point2D.Double> getNewLocations() {
 		return newLocations;
 	}
 

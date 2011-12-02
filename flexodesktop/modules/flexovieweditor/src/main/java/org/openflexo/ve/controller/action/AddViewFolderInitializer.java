@@ -28,43 +28,37 @@ import javax.swing.Icon;
 import javax.swing.JTree;
 
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.action.AddViewFolder;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddViewFolderInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddViewFolderInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(AddViewFolder.actionType,actionInitializer);
+	AddViewFolderInitializer(OEControllerActionInitializer actionInitializer) {
+		super(AddViewFolder.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddViewFolder> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddViewFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddViewFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddViewFolder action)
-			{
+			public boolean run(ActionEvent e, AddViewFolder action) {
 				ViewFolder parentFolder = null;
 				if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof ViewDefinition)) {
 					parentFolder = ((ViewDefinition) action.getFocusedObject()).getFolder();
@@ -76,13 +70,14 @@ public class AddViewFolderInitializer extends ActionInitializer {
 				if (parentFolder != null) {
 					String newFolderName = null;
 					while (newFolderName == null) {
-						newFolderName = FlexoController.askForStringMatchingPattern(FlexoLocalization
-								.localizedForKey("enter_name_for_the_new_folder"),
-								Pattern.compile(FileUtils.GOOD_CHARACTERS_REG_EXP + "+"), FlexoLocalization
-								.localizedForKey("folder_name_cannot_contain_:_\\_\"_:_*_?_<_>_/"));
-						if (newFolderName == null)
+						newFolderName = FlexoController.askForStringMatchingPattern(
+								FlexoLocalization.localizedForKey("enter_name_for_the_new_folder"),
+								Pattern.compile(FileUtils.GOOD_CHARACTERS_REG_EXP + "+"),
+								FlexoLocalization.localizedForKey("folder_name_cannot_contain_:_\\_\"_:_*_?_<_>_/"));
+						if (newFolderName == null) {
 							return false;
-						if (newFolderName.trim().length()==0) {
+						}
+						if (newFolderName.trim().length() == 0) {
 							FlexoController.showError(FlexoLocalization.localizedForKey("a_folder_name_cannot_be_empty"));
 							return false;
 						}
@@ -102,12 +97,10 @@ public class AddViewFolderInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddViewFolder> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddViewFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddViewFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddViewFolder action)
-			{
+			public boolean run(ActionEvent e, AddViewFolder action) {
 				// Update ProjectBrowser (normally it should be done with a
 				// notification)
 				// TODO: do it properly with a notification
@@ -127,10 +120,8 @@ public class AddViewFolderInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
-		return CGIconLibrary.FOLDER_ICON;
+	protected Icon getEnabledIcon() {
+		return IconLibrary.FOLDER_ICON;
 	}
-
 
 }

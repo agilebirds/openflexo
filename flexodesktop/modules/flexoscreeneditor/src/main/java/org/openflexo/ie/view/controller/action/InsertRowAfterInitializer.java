@@ -28,46 +28,37 @@ import org.openflexo.foundation.ie.action.InsertRowAfter;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class InsertRowAfterInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	InsertRowAfterInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(InsertRowAfter.actionType,actionInitializer);
+	InsertRowAfterInitializer(IEControllerActionInitializer actionInitializer) {
+		super(InsertRowAfter.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<InsertRowAfter> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<InsertRowAfter> getDefaultInitializer() {
 		return new FlexoActionInitializer<InsertRowAfter>() {
 			@Override
-			public boolean run(ActionEvent e, InsertRowAfter action)
-			{
+			public boolean run(ActionEvent e, InsertRowAfter action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<InsertRowAfter> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<InsertRowAfter> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<InsertRowAfter>() {
 			@Override
-			public boolean run(ActionEvent e, InsertRowAfter action)
-			{
+			public boolean run(ActionEvent e, InsertRowAfter action) {
 				return true;
 			}
 		};
 	}
-
-
 
 }

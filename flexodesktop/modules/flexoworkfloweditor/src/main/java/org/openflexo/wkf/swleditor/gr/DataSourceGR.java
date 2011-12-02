@@ -33,22 +33,23 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.WKFDataSource;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 
 	private static final Logger logger = Logger.getLogger(DataSourceGR.class.getPackage().getName());
 	private static final int NUMBER_OF_CYLINDER = 6;
-	private static final Color ODD_COLOR = new Color(233,235,53);
-	private static final Color EVEN_COLOR = new Color(211,101,38);
-	public static final BackgroundStyle EVEN_BACKGROUND = BackgroundStyle.makeColorGradientBackground(EVEN_COLOR, FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), BackgroundStyle.ColorGradient.ColorGradientDirection.NORTH_SOUTH);
-	public static final BackgroundStyle ODD_BACKROUND=BackgroundStyle.makeColorGradientBackground(ODD_COLOR, FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), BackgroundStyle.ColorGradient.ColorGradientDirection.NORTH_SOUTH);
+	private static final Color ODD_COLOR = new Color(233, 235, 53);
+	private static final Color EVEN_COLOR = new Color(211, 101, 38);
+	public static final BackgroundStyle EVEN_BACKGROUND = BackgroundStyle.makeColorGradientBackground(EVEN_COLOR,
+			FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), BackgroundStyle.ColorGradient.ColorGradientDirection.NORTH_SOUTH);
+	public static final BackgroundStyle ODD_BACKROUND = BackgroundStyle.makeColorGradientBackground(ODD_COLOR,
+			FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), BackgroundStyle.ColorGradient.ColorGradientDirection.NORTH_SOUTH);
 	public static final ForegroundStyle NO_FOREGROUND = ForegroundStyle.makeNone();
-	//private static final ForegroundStyle ODD_FOREGROUND = ForegroundStyle.makeStyle(ODD_COLOR);
 
-	//private boolean isUpdatingPosition = false;
+	// private static final ForegroundStyle ODD_FOREGROUND = ForegroundStyle.makeStyle(ODD_COLOR);
 
-	public DataSourceGR(WKFDataSource dataSource, SwimmingLaneRepresentation aDrawing)
-	{
+	// private boolean isUpdatingPosition = false;
+
+	public DataSourceGR(WKFDataSource dataSource, SwimmingLaneRepresentation aDrawing) {
 		super(dataSource, ShapeType.RECTANGLE, aDrawing);
 		setIsFloatingLabel(true);
 		setForeground(ForegroundStyle.makeNone());
@@ -58,30 +59,29 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 		setShapePainter(new ShapePainter() {
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
-				double height = 2.0/(NUMBER_OF_CYLINDER+1);
-				double halfHeight = height/2;
-				for(int i=NUMBER_OF_CYLINDER;i>0;i--) {
+				double height = 2.0 / (NUMBER_OF_CYLINDER + 1);
+				double halfHeight = height / 2;
+				for (int i = NUMBER_OF_CYLINDER; i > 0; i--) {
 					g.setDefaultForeground(NO_FOREGROUND);
-					g.setDefaultBackground(i%2==0?EVEN_BACKGROUND:ODD_BACKROUND);
+					g.setDefaultBackground(i % 2 == 0 ? EVEN_BACKGROUND : ODD_BACKROUND);
 					g.useDefaultBackgroundStyle();
-					//g.useDefaultForegroundStyle();
-					g.fillCircle(0, (i-1)*halfHeight, 1, height);
-					if (i>1)
-						g.fillRect(0, (i-1)*halfHeight, 1, halfHeight);
+					// g.useDefaultForegroundStyle();
+					g.fillCircle(0, (i - 1) * halfHeight, 1, height);
+					if (i > 1) {
+						g.fillRect(0, (i - 1) * halfHeight, 1, halfHeight);
+					}
 				}
 			}
 		});
 	}
 
 	@Override
-	protected boolean supportShadow()
-	{
+	protected boolean supportShadow() {
 		return false;
 	}
 
 	@Override
-	public void update (FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
 	}
 

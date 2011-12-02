@@ -43,173 +43,162 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class WSEView<O extends FlexoModelObject> extends CompoundTabularView<O> implements SelectionSynchronizedModuleView<O>, GraphicalFlexoObserver
-{
-    static final Logger logger = Logger.getLogger(WSEView.class.getPackage().getName());
+public abstract class WSEView<O extends FlexoModelObject> extends CompoundTabularView<O> implements SelectionSynchronizedModuleView<O>,
+		GraphicalFlexoObserver {
+	static final Logger logger = Logger.getLogger(WSEView.class.getPackage().getName());
 
-     public WSEView(O object, WSEController controller, String title)
-    {
-        super(object,controller,title);
-        object.addObserver(this);
-     }
+	public WSEView(O object, WSEController controller, String title) {
+		super(object, controller, title);
+		object.addObserver(this);
+	}
 
-    public WSEController getWSEController()
-    {
-        return (WSEController)getController();
-    }
+	public WSEController getWSEController() {
+		return (WSEController) getController();
+	}
 
-   /* public WSObject getWSObject()
-    {
-        return (WSObject)getModelObject();
-    }
-    
-    public WKFObject getWKFObject(){
-    		return (WKFObject) getModelObject();
-    }
-   
-    public DMObject	getDMObject(){
-    		return (DMObject) getModelObject();
-    }*/
-    
+	/* public WSObject getWSObject()
+	 {
+	     return (WSObject)getModelObject();
+	 }
+	 
+	 public WKFObject getWKFObject(){
+	 		return (WKFObject) getModelObject();
+	 }
+	
+	 public DMObject	getDMObject(){
+	 		return (DMObject) getModelObject();
+	 }*/
 
-    public WSETabularView findTabularViewContaining (FlexoModelObject anObject)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("findTabularViewContaining() "+this+" obj: "+anObject);
-         if (anObject == null) return null;
-        for (Enumeration en=getMasterTabularViews().elements(); en.hasMoreElements();) {
-            WSETabularView next = (WSETabularView)en.nextElement();
-            if (next.getModel().indexOf(anObject) > -1) {
-                return next;
-            }
-            
-            //HYPOTHESE: ca marche que pour des WSObject des WSObjects ! (hum hum...)
-            if(anObject instanceof WSObject){
-            WSObject parentObject = (WSObject)((WSObject)anObject).getParent();
-            if (next.getModel().indexOf(parentObject) > -1) {
-                if (next.getSelectedObjects().contains(parentObject)) {
-                    next.selectObject(parentObject);
-                }
-                for (Enumeration en2=next.getSlaveTabularViews().elements(); en2.hasMoreElements();) {
-                    WSETabularView next2 = (WSETabularView)en2.nextElement();
-                    if (next2.getModel().indexOf(anObject) > -1) {
-                        return next2;
-                    }
-                }
-             }
-            }
-             
-         }
-        return null;
-    }
-    
-    public void tryToSelect(FlexoModelObject anObject)
-    {
-        WSETabularView tabView = findTabularViewContaining(anObject);
-        if (tabView != null) {
-            tabView.selectObject(anObject);
-        }
-    }
-
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-    //	System.out.println(" UPDATE VIEW: "+this.getClass().getName() );
-        if (dataModification instanceof ObjectDeleted) {
-      //  	System.out.println("object deleted notification for object:"+ dataModification.oldValue() );
-      //  	System.out.println("DELETION MODIF BEGIN: loadedView:"+getWSEController().getLoadedViews());
-            if (dataModification.oldValue() == getModelObject()) {
-            		//fireObjectDeselected((FlexoModelObject)dataModification.oldValue());
-                
-        //    		System.out.println("delete this view");
-            		deleteModuleView();
-             }
-       	//System.out.println("DELETION MODIF END: loadedView:"+getWSEController().getLoadedViews());  
-        }
-        
-    }
-    
-    @Override
-	public O getRepresentedObject()
-    {
-        return getModelObject();
-    }
-    
-    public String getTitle()
-    {
-        FlexoModelObject obj = getModelObject();
-		if(obj instanceof DMObject )
-		return ((DMObject)obj).getLocalizedName();
-		else if(obj instanceof WSObject)
-			return ((WSObject)obj).getLocalizedName();
-		else if(obj instanceof FlexoProcess)
-			return ((FlexoProcess)obj).getName();
-		else if(obj instanceof FlexoPort)
-			return ((FlexoPort)obj).getName();
-		else if(obj instanceof AbstractMessageDefinition){
-			return ((AbstractMessageDefinition)obj).getName();
+	public WSETabularView findTabularViewContaining(FlexoModelObject anObject) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("findTabularViewContaining() " + this + " obj: " + anObject);
 		}
-		else if (obj instanceof ServiceInterface){
-			return ((ServiceInterface)obj).getName();
+		if (anObject == null) {
+			return null;
 		}
-		else if (obj instanceof ServiceOperation){
-			return ((ServiceOperation)obj).getName();
+		for (Enumeration en = getMasterTabularViews().elements(); en.hasMoreElements();) {
+			WSETabularView next = (WSETabularView) en.nextElement();
+			if (next.getModel().indexOf(anObject) > -1) {
+				return next;
+			}
+
+			// HYPOTHESE: ca marche que pour des WSObject des WSObjects ! (hum hum...)
+			if (anObject instanceof WSObject) {
+				WSObject parentObject = (WSObject) ((WSObject) anObject).getParent();
+				if (next.getModel().indexOf(parentObject) > -1) {
+					if (next.getSelectedObjects().contains(parentObject)) {
+						next.selectObject(parentObject);
+					}
+					for (Enumeration en2 = next.getSlaveTabularViews().elements(); en2.hasMoreElements();) {
+						WSETabularView next2 = (WSETabularView) en2.nextElement();
+						if (next2.getModel().indexOf(anObject) > -1) {
+							return next2;
+						}
+					}
+				}
+			}
+
 		}
 		return null;
-    }
+	}
 
-    @Override
-	public void deleteModuleView()
-    {
-        logger.info("Removing view !");
-        getWSEController().removeModuleView(this);   
-    }
+	public void tryToSelect(FlexoModelObject anObject) {
+		WSETabularView tabView = findTabularViewContaining(anObject);
+		if (tabView != null) {
+			tabView.selectObject(anObject);
+		}
+	}
 
-    @Override
-	public FlexoPerspective<FlexoModelObject> getPerspective()
-    {
-        return getWSEController().WSE_PERSPECTIVE;
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// System.out.println(" UPDATE VIEW: "+this.getClass().getName() );
+		if (dataModification instanceof ObjectDeleted) {
+			// System.out.println("object deleted notification for object:"+ dataModification.oldValue() );
+			// System.out.println("DELETION MODIF BEGIN: loadedView:"+getWSEController().getLoadedViews());
+			if (dataModification.oldValue() == getModelObject()) {
+				// fireObjectDeselected((FlexoModelObject)dataModification.oldValue());
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-    }
+				// System.out.println("delete this view");
+				deleteModuleView();
+			}
+			// System.out.println("DELETION MODIF END: loadedView:"+getWSEController().getLoadedViews());
+		}
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-    }
+	}
 
-    /**
-     * Returns flag indicating if this view is itself responsible for scroll management
-     * When not, Flexo will manage it's own scrollbar for you
-     * 
-     * @return
-     */
-    @Override
-	public boolean isAutoscrolled() 
-    {
-    	return false;
-    }
+	@Override
+	public O getRepresentedObject() {
+		return getModelObject();
+	}
 
-    @Override
-	public List<SelectionListener> getSelectionListeners(){
+	public String getTitle() {
+		FlexoModelObject obj = getModelObject();
+		if (obj instanceof DMObject) {
+			return ((DMObject) obj).getLocalizedName();
+		} else if (obj instanceof WSObject) {
+			return ((WSObject) obj).getLocalizedName();
+		} else if (obj instanceof FlexoProcess) {
+			return ((FlexoProcess) obj).getName();
+		} else if (obj instanceof FlexoPort) {
+			return ((FlexoPort) obj).getName();
+		} else if (obj instanceof AbstractMessageDefinition) {
+			return ((AbstractMessageDefinition) obj).getName();
+		} else if (obj instanceof ServiceInterface) {
+			return ((ServiceInterface) obj).getName();
+		} else if (obj instanceof ServiceOperation) {
+			return ((ServiceOperation) obj).getName();
+		}
+		return null;
+	}
+
+	@Override
+	public void deleteModuleView() {
+		logger.info("Removing view !");
+		getWSEController().removeModuleView(this);
+	}
+
+	@Override
+	public FlexoPerspective<FlexoModelObject> getPerspective() {
+		return getWSEController().WSE_PERSPECTIVE;
+	}
+
+	/**
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+	}
+
+	/**
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean isAutoscrolled() {
+		return false;
+	}
+
+	@Override
+	public List<SelectionListener> getSelectionListeners() {
 		Vector<SelectionListener> reply = new Vector<SelectionListener>();
 		reply.add(this);
 		return reply;

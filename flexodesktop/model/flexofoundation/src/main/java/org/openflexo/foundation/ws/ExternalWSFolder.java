@@ -28,66 +28,67 @@ import org.openflexo.logging.FlexoLogger;
 
 public class ExternalWSFolder extends WSFolder {
 
-	 private static final Logger logger = FlexoLogger.getLogger(ExternalWSFolder.class.getPackage()
-	            .getName());
-    /**
-     * @param dl
-     */
-    public ExternalWSFolder(FlexoWSLibrary dl)
-    {
-        super(dl);
-    }
+	private static final Logger logger = FlexoLogger.getLogger(ExternalWSFolder.class.getPackage().getName());
 
-    public Vector getExternalWSServices() {
-        return getWSLibrary().getExternalWSServices();
-    }
-    @Override
+	/**
+	 * @param dl
+	 */
+	public ExternalWSFolder(FlexoWSLibrary dl) {
+		super(dl);
+	}
+
+	public Vector getExternalWSServices() {
+		return getWSLibrary().getExternalWSServices();
+	}
+
+	@Override
 	public Vector getWSServices() {
-        return getExternalWSServices();
-    }
-    
-    /**
-     * Overrides getFullyQualifiedName
-     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-     */
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "EXTERNAL_WS_FOLDER";
-    }
- 
-    @Override
+		return getExternalWSServices();
+	}
+
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "EXTERNAL_WS_FOLDER";
+	}
+
+	@Override
 	public String getLocalizedDescription() {
 		return FlexoLocalization.localizedForKey("ws_external_folder_description");
-    }
-    
-    
-    @Override
+	}
+
+	@Override
 	public String getName() {
-    	   
-    	return "ws_external_ws_folder";
-    }
-    
-    @Override
-	public String getLocalizedName(){
+
+		return "ws_external_ws_folder";
+	}
+
+	@Override
+	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey(getName());
-}
-    
-    @Override
-	public void delete(){
-    		if (logger.isLoggable(Level.FINE)) logger.fine("delete: ExternalWSFolder");
-    		super.delete();
-    		deleteObservers();
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return getName();
-    }
-    
+	}
+
+	@Override
+	public void delete() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("delete: ExternalWSFolder");
+		}
+		super.delete();
+		deleteObservers();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
+
 }

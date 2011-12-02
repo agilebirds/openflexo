@@ -38,86 +38,83 @@ import org.openflexo.generator.rm.UtilComponentWOFileResource;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 
+public class WOMainGenerator extends MetaWOGenerator {
+	private static final Logger logger = FlexoLogger.getLogger(WOMainGenerator.class.getPackage().getName());
 
-public class WOMainGenerator extends MetaWOGenerator
-{
-    private static final Logger logger = FlexoLogger.getLogger(WOMainGenerator.class.getPackage().getName());
-
-    public WOMainGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,null,"Main","");
-    }
+	public WOMainGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null, "Main", "");
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public synchronized void generate(boolean forceRegenerate)
-    {
-       	if (!forceRegenerate && !needsGeneration()) return;
-    	try {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-    		VelocityContext velocityContext = defaultContext();
-    		String javaCode = merge("Main.java.vm", velocityContext);
-    		try {
-    			javaAppendingException = null;
-				javaCode = JavaCodeMerger.mergeJavaCode(javaCode,getEntity(),javaResource);
-    		} catch (JavaParseException e) {
-    			javaAppendingException = new JavaAppendingException(this, getEntity().getFullQualifiedName(), e);
-    			logger.warning("Could not parse generated code. Escape java merge.");
-    		}
-    		_javaFormattingException = null;
-    		try {
-    			javaCode = GeneratorFormatter.formatJavaCode(javaCode,"",getIdentifier(),this,getProject());
-    		}
-    		catch (JavaFormattingException javaFormattingException) {
-    			_javaFormattingException = javaFormattingException;
-    		}
-    		String apiCode = merge("Main.api.vm", velocityContext);
-    		String htmlCode = merge("Main.html.vm", velocityContext);
-    		String wodCode = merge("Main.wod.vm", velocityContext);
-    		generatedCode = new GeneratedComponent(getComponentClassName(), javaCode, apiCode, htmlCode, wodCode, GeneratorUtils.defaultWOO());
-    	} catch (GenerationException e) {
-    		setGenerationException(e);
+	@Override
+	public synchronized void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration()) {
+			return;
+		}
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			VelocityContext velocityContext = defaultContext();
+			String javaCode = merge("Main.java.vm", velocityContext);
+			try {
+				javaAppendingException = null;
+				javaCode = JavaCodeMerger.mergeJavaCode(javaCode, getEntity(), javaResource);
+			} catch (JavaParseException e) {
+				javaAppendingException = new JavaAppendingException(this, getEntity().getFullQualifiedName(), e);
+				logger.warning("Could not parse generated code. Escape java merge.");
+			}
+			_javaFormattingException = null;
+			try {
+				javaCode = GeneratorFormatter.formatJavaCode(javaCode, "", getIdentifier(), this, getProject());
+			} catch (JavaFormattingException javaFormattingException) {
+				_javaFormattingException = javaFormattingException;
+			}
+			String apiCode = merge("Main.api.vm", velocityContext);
+			String htmlCode = merge("Main.html.vm", velocityContext);
+			String wodCode = merge("Main.wod.vm", velocityContext);
+			generatedCode = new GeneratedComponent(getComponentClassName(), javaCode, apiCode, htmlCode, wodCode,
+					GeneratorUtils.defaultWOO());
+		} catch (GenerationException e) {
+			setGenerationException(e);
 		} catch (Exception e) {
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	} finally {
-    		stopGeneration();
-    	}
-    }
-    
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentJavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(UtilComponentJavaFileResource java)
-    {
-        
-    }
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		} finally {
+			stopGeneration();
+		}
+	}
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentWOFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(UtilComponentWOFileResource wo)
-    {
-        
-    }
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentJavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(UtilComponentJavaFileResource java) {
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentAPIFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(UtilComponentAPIFileResource api)
-    {
-        
-    }
+	}
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentWOFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(UtilComponentWOFileResource wo) {
+
+	}
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentAPIFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(UtilComponentAPIFileResource api) {
+
+	}
 
 }

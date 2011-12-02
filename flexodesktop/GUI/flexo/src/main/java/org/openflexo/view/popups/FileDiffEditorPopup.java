@@ -37,46 +37,43 @@ import org.openflexo.toolbox.TokenMarkerStyle;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
  * @author gpolet
  */
-public class FileDiffEditorPopup extends FlexoDialog
-{
+public class FileDiffEditorPopup extends FlexoDialog {
 	private Logger logger = FlexoLogger.getLogger(FileDiffEditorPopup.class.getPackage().getName());
 
 	private FlexoController controller;
-	
+
 	private String leftSource;
-	
+
 	private String rightSource;
-	
+
 	private DiffPanel diffPanel;
-	
-	public FileDiffEditorPopup (String leftTitle, String rightTitle, String leftSource, String rightSource, FlexoController controller)
-	{
-		super(controller.getFlexoFrame(),FlexoLocalization.localizedForKey("diff_editor"),false);
+
+	public FileDiffEditorPopup(String leftTitle, String rightTitle, String leftSource, String rightSource, FlexoController controller) {
+		super(controller.getFlexoFrame(), FlexoLocalization.localizedForKey("diff_editor"), false);
 		this.leftSource = leftSource;
 		this.rightSource = rightSource;
 		this.controller = controller;
-		
-		diffPanel = new DiffPanel(ComputeDiff.diff(leftSource, rightSource),TokenMarkerStyle.None,leftTitle,rightTitle,null,true);
+
+		diffPanel = new DiffPanel(ComputeDiff.diff(leftSource, rightSource), TokenMarkerStyle.None, leftTitle, rightTitle, null, true);
 		getContentPane().setLayout(new BorderLayout());
-	   	getContentPane().add(diffPanel,BorderLayout.CENTER);
-    	JPanel controlPanel = new JPanel(new FlowLayout());
-    	JButton button = new JButton();
-    	button.setText(FlexoLocalization.localizedForKey("close",button));
-    	button.addActionListener(new ActionListener() {
+		getContentPane().add(diffPanel, BorderLayout.CENTER);
+		JPanel controlPanel = new JPanel(new FlowLayout());
+		JButton button = new JButton();
+		button.setText(FlexoLocalization.localizedForKey("close", button));
+		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-			}            		
-    	});
-    	controlPanel.add(button);
-    	getContentPane().add(controlPanel,BorderLayout.SOUTH);
-    	setPreferredSize(new Dimension(1000,800));
-    	validate();
-    	pack();
- 	}
-	
+			}
+		});
+		controlPanel.add(button);
+		getContentPane().add(controlPanel, BorderLayout.SOUTH);
+		setPreferredSize(new Dimension(1000, 800));
+		validate();
+		pack();
+	}
+
 }

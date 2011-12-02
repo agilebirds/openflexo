@@ -24,47 +24,43 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dkv.DuplicateDKVObjectException;
 import org.openflexo.foundation.dkv.EmptyStringException;
 import org.openflexo.foundation.dkv.action.AddLanguageAction;
+import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddLanguageInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddLanguageInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(AddLanguageAction.actionType,actionInitializer);
+	AddLanguageInitializer(IEControllerActionInitializer actionInitializer) {
+		super(AddLanguageAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddLanguageAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddLanguageAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddLanguageAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddLanguageAction action)
-			{
+			public boolean run(ActionEvent e, AddLanguageAction action) {
 				DKVModel model = (action.getFocusedObject()).getDkvModel();
 				boolean ok = false;
 				while (!ok) {
 					String name = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_the_name_of_the_new_language"));
-					if (name == null)
+					if (name == null) {
 						return false;
+					}
 					if (name.trim().length() == 0) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("name_of_language_cannot_be_empty"));
 						continue;
@@ -86,12 +82,10 @@ public class AddLanguageInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddLanguageAction> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddLanguageAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddLanguageAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddLanguageAction action)
-			{
+			public boolean run(ActionEvent e, AddLanguageAction action) {
 				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewLanguage());
 				// getController().setCurrentEditedObjectAsModuleView(((AddLanguageAction)
 				// action).getNewLanguage());
@@ -101,10 +95,8 @@ public class AddLanguageInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SEIconLibrary.LANGUAGE_ICON;
 	}
-
 
 }

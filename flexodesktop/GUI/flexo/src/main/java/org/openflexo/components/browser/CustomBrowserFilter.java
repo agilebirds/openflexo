@@ -25,25 +25,20 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
- * Allows to filter some elements in a browser
- * The semantic of those filters is the OR:
- * if any of declared filter for a browser says that supplied element should be displayed,
- * display this element
+ * Allows to filter some elements in a browser The semantic of those filters is the OR: if any of declared filter for a browser says that
+ * supplied element should be displayed, display this element
  * 
  * @author sguerin
  * 
  */
-public abstract class CustomBrowserFilter extends BrowserFilter
-{
+public abstract class CustomBrowserFilter extends BrowserFilter {
 
-    private static final Logger logger = Logger.getLogger(CustomBrowserFilter.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CustomBrowserFilter.class.getPackage().getName());
 
-    public CustomBrowserFilter(String name, Icon icon)
-    {
-        super(name,icon);
-    }
+	public CustomBrowserFilter(String name, Icon icon) {
+		super(name, icon);
+	}
 
-    public abstract boolean accept(FlexoModelObject object);
+	public abstract boolean accept(FlexoModelObject object);
 }

@@ -19,30 +19,24 @@
  */
 package org.openflexo.xmlcode.examples.example5;
 
-
 /**
- * Class <code>Edge</code> is intented to represent an oriented edge object in
- * XML coding/decoding example.
+ * Class <code>Edge</code> is intented to represent an oriented edge object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Edge1 extends Edge
-{
+public class Edge1 extends Edge {
 
-    public Edge1()
-    {
-        super();
-    }
+	public Edge1() {
+		super();
+	}
 
-    public Edge1(int anIdentifier, Node origin, PreCondition destination)
-    {
-        super(anIdentifier,origin,destination);
-    }
+	public Edge1(int anIdentifier, Node origin, PreCondition destination) {
+		super(anIdentifier, origin, destination);
+	}
 
-    @Override
-	public String shortClassName()
-    {
-        return "Edge1";
-    }
+	@Override
+	public String shortClassName() {
+		return "Edge1";
+	}
 
 }

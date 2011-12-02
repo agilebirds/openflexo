@@ -35,118 +35,113 @@ import org.openflexo.generator.rm.GeneratedFileResourceFactory;
 import org.openflexo.generator.rm.ProjectTextFileResource;
 import org.openflexo.toolbox.FileFormat;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public abstract class MetaFileGenerator extends FlexoResourceGenerator<FlexoModelObject, GeneratedTextResource> implements IFlexoTextResourceGenerator
-{
-	
+public abstract class MetaFileGenerator extends FlexoResourceGenerator<FlexoModelObject, GeneratedTextResource> implements
+		IFlexoTextResourceGenerator {
+
 	private final ResourceType _type;
 	private final FileFormat _format;
 	private final String _fileName;
 	private final String _identifier;
 	protected TextFileResource textResource;
-	
-    /**
-     * @param projectGenerator
-     */
-    public MetaFileGenerator(ProjectGenerator projectGenerator, 
-    						FileFormat format, 
-    						ResourceType type, 
-    						String fileName, 
-    						String identifier)
-    {
-        super(projectGenerator);
-        _type = type;
-        _format = format;
-        _fileName = fileName;
-        _identifier = identifier;
-        if(_identifier==null){
-        	new Exception().printStackTrace();
-        	System.exit(-1);
-        }
-    }
-    
-    @Override
-    public ProjectGenerator getProjectGenerator() {
-    	return (ProjectGenerator) super.getProjectGenerator();
-    }
-    
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.MetaFileGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.ProjectTextFileResource)
-     */
-    public void rebuildDependanciesForResource(ProjectTextFileResource resource)
-    {
-        // TODO Auto-generated method stub
-        
-    }    
-    
-    /**
-     * Overrides getFileFormat
-     * @see org.openflexo.generator.FlexoTextResourceGenerator#getFileFormat()
-     */
-    @Override
-	public final FileFormat getFileFormat()
-    {
-        return _format;
-    }
 
-    /**
-     * Overrides getFileType
-     * @see org.openflexo.generator.FlexoTextResourceGenerator#getFileType()
-     */
-    @Override
-	public final ResourceType getFileType()
-    {
-        return _type;
-    }
-    
-    /**
-     * Overrides getFileName
-     * @see org.openflexo.generator.FlexoTextResourceGenerator#getFileName()
-     */
-    @Override
-	public final String getFileName()
-    {
-        return _fileName;
-    }
+	/**
+	 * @param projectGenerator
+	 */
+	public MetaFileGenerator(ProjectGenerator projectGenerator, FileFormat format, ResourceType type, String fileName, String identifier) {
+		super(projectGenerator);
+		_type = type;
+		_format = format;
+		_fileName = fileName;
+		_identifier = identifier;
+		if (_identifier == null) {
+			new Exception().printStackTrace();
+			System.exit(-1);
+		}
+	}
 
-    /**
-     * Overrides getIdentifier
-     * @see org.openflexo.generator.FlexoResourceGenerator#getIdentifier()
-     */
-    @Override
-	public final String getIdentifier()
-    {
-        return _identifier;
-    }
-    
-    /**
-     * Overrides buildResourcesAndSetGenerators
-     * @see org.openflexo.generator.CGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.CGRepository, Vector)
-     */
-    @Override
-    public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-    {
-        textResource = (ProjectTextFileResource)resourceForKeyWithCGFile(ResourceType.TEXT_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+	@Override
+	public ProjectGenerator getProjectGenerator() {
+		return (ProjectGenerator) super.getProjectGenerator();
+	}
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.MetaFileGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.ProjectTextFileResource)
+	 */
+	public void rebuildDependanciesForResource(ProjectTextFileResource resource) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Overrides getFileFormat
+	 * 
+	 * @see org.openflexo.generator.FlexoTextResourceGenerator#getFileFormat()
+	 */
+	@Override
+	public final FileFormat getFileFormat() {
+		return _format;
+	}
+
+	/**
+	 * Overrides getFileType
+	 * 
+	 * @see org.openflexo.generator.FlexoTextResourceGenerator#getFileType()
+	 */
+	@Override
+	public final ResourceType getFileType() {
+		return _type;
+	}
+
+	/**
+	 * Overrides getFileName
+	 * 
+	 * @see org.openflexo.generator.FlexoTextResourceGenerator#getFileName()
+	 */
+	@Override
+	public final String getFileName() {
+		return _fileName;
+	}
+
+	/**
+	 * Overrides getIdentifier
+	 * 
+	 * @see org.openflexo.generator.FlexoResourceGenerator#getIdentifier()
+	 */
+	@Override
+	public final String getIdentifier() {
+		return _identifier;
+	}
+
+	/**
+	 * Overrides buildResourcesAndSetGenerators
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.CGRepository, Vector)
+	 */
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		textResource = (ProjectTextFileResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
 		if (textResource == null) {
 			textResource = GeneratedFileResourceFactory.createNewProjectTextFileResource(repository, this);
-		}
-		else {
+		} else {
 			textResource.setGenerator(this);
 		}
-		resources.add(textResource);		
-    }
-    
-    @Override
-    public GeneratedTextResource getGeneratedCode() {
-    	if ((generatedCode==null) && (textResource!=null) && (textResource.getASCIIFile()!=null) && textResource.getASCIIFile().hasLastAcceptedContent()) {
-    		generatedCode = new GeneratedTextResource(getFileName()	, textResource.getASCIIFile().getLastAcceptedContent());
-    	}
-    	return generatedCode;
-    }
-    
+		resources.add(textResource);
+	}
+
+	@Override
+	public GeneratedTextResource getGeneratedCode() {
+		if ((generatedCode == null) && (textResource != null) && (textResource.getASCIIFile() != null)
+				&& textResource.getASCIIFile().hasLastAcceptedContent()) {
+			generatedCode = new GeneratedTextResource(getFileName(), textResource.getASCIIFile().getLastAcceptedContent());
+		}
+		return generatedCode;
+	}
+
 }

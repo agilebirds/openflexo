@@ -40,8 +40,6 @@ import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.widget.MultipleObjectSelector;
-
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -50,178 +48,165 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoDialog;
 
 /**
- * Popup allowing to choose some objects of a given type from
- * Flexo model objects hierarchy
+ * Popup allowing to choose some objects of a given type from Flexo model objects hierarchy
  * 
  * @author sguerin
  * 
  */
-public class MultipleObjectSelectorPopup extends FlexoDialog
-{
+public class MultipleObjectSelectorPopup extends FlexoDialog {
 
-	//TODO class must be typed !
-	
-    private static final Logger logger = Logger.getLogger(MultipleObjectSelectorPopup.class.getPackage().getName());
+	// TODO class must be typed !
 
-     private JTextArea _descriptionTA;
+	private static final Logger logger = Logger.getLogger(MultipleObjectSelectorPopup.class.getPackage().getName());
 
-     public static final int CANCEL = 0;
+	private JTextArea _descriptionTA;
 
-    public static final int VALIDATE = 1;
+	public static final int CANCEL = 0;
 
-    protected int returnedStatus = CANCEL;
+	public static final int VALIDATE = 1;
 
-    protected MultipleObjectSelector<? extends FlexoModelObject> choicePanel;
-    protected JPanel centerPanel;
-    
-    private BrowserConfiguration _browserConfiguration;
-    
-    public BrowserConfiguration getBrowserConfiguration()
-    {
-        return _browserConfiguration;
-    }
+	protected int returnedStatus = CANCEL;
 
-    protected String getPopupTitle()
-    {
-    	return _title;
-    }
-    
-    protected String getValidateButtonLabel()
-    {
-    	return FlexoLocalization.localizedForKey(_unlocalizedValidateButtonLabel);
-     }
-    
-   private String _title;
-   private String _unlocalizedValidateButtonLabel;
-    
-    public MultipleObjectSelectorPopup(String title, String label, String description, BrowserConfiguration browserConfiguration, FlexoProject project, Frame owner, FlexoEditor editor)
-   {
-	   this(title,label,description,"validate",browserConfiguration,project,owner,editor);
-   }
-   
-   public MultipleObjectSelectorPopup(String title, String label, String description, String unlocalizedValidateButtonLabel, BrowserConfiguration browserConfiguration, FlexoProject project, Frame owner, FlexoEditor editor)
-    {
-        super(owner);
- 
-        _browserConfiguration = browserConfiguration;
-        _unlocalizedValidateButtonLabel = unlocalizedValidateButtonLabel;
-        
-        _title = title;
-        
-        setTitle(getPopupTitle());
-        getContentPane().setLayout(new BorderLayout());
-        
-        setBackground(ColorCst.GUI_BACK_COLOR);
- 
-        JPanel topPanel = new JPanel();
- 
-        _descriptionTA = new JTextArea(3, 40);
-        _descriptionTA.setLineWrap(true);
-        _descriptionTA.setWrapStyleWord(true);
-        _descriptionTA.setFont(FlexoCst.MEDIUM_FONT);
-        _descriptionTA.setEditable(false);
-        _descriptionTA.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-        _descriptionTA.setText(description);
-        
-        topPanel.setLayout(new BorderLayout());
+	protected MultipleObjectSelector<? extends FlexoModelObject> choicePanel;
+	protected JPanel centerPanel;
 
-        if (label != null) {
-        	JLabel titleLabel = new JLabel(label,SwingConstants.CENTER);
-        	titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        	topPanel.add(titleLabel, BorderLayout.NORTH);
-        }
-        
-        topPanel.add(_descriptionTA, BorderLayout.CENTER);
+	private BrowserConfiguration _browserConfiguration;
 
-        choicePanel = new MultipleObjectSelector<FlexoModelObject>(
-        		browserConfiguration,
-        		new MultipleObjectSelector.ObjectSelectabilityDelegate<FlexoModelObject>() {
+	public BrowserConfiguration getBrowserConfiguration() {
+		return _browserConfiguration;
+	}
+
+	protected String getPopupTitle() {
+		return _title;
+	}
+
+	protected String getValidateButtonLabel() {
+		return FlexoLocalization.localizedForKey(_unlocalizedValidateButtonLabel);
+	}
+
+	private String _title;
+	private String _unlocalizedValidateButtonLabel;
+
+	public MultipleObjectSelectorPopup(String title, String label, String description, BrowserConfiguration browserConfiguration,
+			FlexoProject project, Frame owner, FlexoEditor editor) {
+		this(title, label, description, "validate", browserConfiguration, project, owner, editor);
+	}
+
+	public MultipleObjectSelectorPopup(String title, String label, String description, String unlocalizedValidateButtonLabel,
+			BrowserConfiguration browserConfiguration, FlexoProject project, Frame owner, FlexoEditor editor) {
+		super(owner);
+
+		_browserConfiguration = browserConfiguration;
+		_unlocalizedValidateButtonLabel = unlocalizedValidateButtonLabel;
+
+		_title = title;
+
+		setTitle(getPopupTitle());
+		getContentPane().setLayout(new BorderLayout());
+
+		setBackground(ColorCst.GUI_BACK_COLOR);
+
+		JPanel topPanel = new JPanel();
+
+		_descriptionTA = new JTextArea(3, 40);
+		_descriptionTA.setLineWrap(true);
+		_descriptionTA.setWrapStyleWord(true);
+		_descriptionTA.setFont(FlexoCst.MEDIUM_FONT);
+		_descriptionTA.setEditable(false);
+		_descriptionTA.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+		_descriptionTA.setText(description);
+
+		topPanel.setLayout(new BorderLayout());
+
+		if (label != null) {
+			JLabel titleLabel = new JLabel(label, SwingConstants.CENTER);
+			titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			topPanel.add(titleLabel, BorderLayout.NORTH);
+		}
+
+		topPanel.add(_descriptionTA, BorderLayout.CENTER);
+
+		choicePanel = new MultipleObjectSelector<FlexoModelObject>(browserConfiguration,
+				new MultipleObjectSelector.ObjectSelectabilityDelegate<FlexoModelObject>() {
 					@Override
 					public boolean isSelectable(FlexoModelObject object) {
 						// TODO: type this !!!
 						return true;
 					}
-        		},editor);
-        choicePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+				}, editor);
+		choicePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
 
-        JButton confirmButton = new JButton(getValidateButtonLabel());
-        JButton cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
+		JButton confirmButton = new JButton(getValidateButtonLabel());
+		JButton cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                performCancel();
-            }
-        });
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                performConfirm();
-            }
-        });
-        if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
-	        controlPanel.add(cancelButton);
-	        controlPanel.add(confirmButton);
-        } else {
-        	controlPanel.add(confirmButton);
-            controlPanel.add(cancelButton);
-        }
-        //confirmButton.setSelected(true);
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				performCancel();
+			}
+		});
+		confirmButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				performConfirm();
+			}
+		});
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			controlPanel.add(cancelButton);
+			controlPanel.add(confirmButton);
+		} else {
+			controlPanel.add(confirmButton);
+			controlPanel.add(cancelButton);
+		}
+		// confirmButton.setSelected(true);
 
-        centerPanel = new JPanel();
-        centerPanel.setLayout(new BorderLayout());
+		centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
 
-        centerPanel.add(choicePanel, BorderLayout.CENTER);
-        if (getAdditionalPanel() != null) {
-        centerPanel.add(getAdditionalPanel(), BorderLayout.SOUTH);
-        }
-        
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
+		centerPanel.add(choicePanel, BorderLayout.CENTER);
+		if (getAdditionalPanel() != null) {
+			centerPanel.add(getAdditionalPanel(), BorderLayout.SOUTH);
+		}
 
-        contentPanel.add(topPanel, BorderLayout.NORTH);
-        contentPanel.add(centerPanel, BorderLayout.CENTER);
-        contentPanel.add(controlPanel, BorderLayout.SOUTH);
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout(new BorderLayout());
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
-        getRootPane().setDefaultButton(confirmButton);
-        setModal(true);
-        validate();
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
-    }
+		contentPanel.add(topPanel, BorderLayout.NORTH);
+		contentPanel.add(centerPanel, BorderLayout.CENTER);
+		contentPanel.add(controlPanel, BorderLayout.SOUTH);
 
-    public JPanel getAdditionalPanel()
-    {
-        return null;
-    }
-    
-     public void performConfirm()
-    {
-         returnedStatus = VALIDATE;
-         dispose();
-    }
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		getRootPane().setDefaultButton(confirmButton);
+		setModal(true);
+		validate();
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
+	}
 
-     public void performCancel()
-     {
-          returnedStatus = CANCEL;
-          dispose();
-     }
+	public JPanel getAdditionalPanel() {
+		return null;
+	}
 
-    public int getStatus()
-    {
-        return returnedStatus;
-    }
+	public void performConfirm() {
+		returnedStatus = VALIDATE;
+		dispose();
+	}
 
-    public Vector<? extends FlexoModelObject> getSelectedObjects()
-    {
-        return choicePanel.getSelectedObjects();
-    }
+	public void performCancel() {
+		returnedStatus = CANCEL;
+		dispose();
+	}
+
+	public int getStatus() {
+		return returnedStatus;
+	}
+
+	public Vector<? extends FlexoModelObject> getSelectedObjects() {
+		return choicePanel.getSelectedObjects();
+	}
 
 }

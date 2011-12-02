@@ -25,33 +25,23 @@ import org.openflexo.diff.merge.DefaultMergedDocumentType;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
 /**
- * Utility class used to define AutomaticMergeResolvingModel for the
- * MergedDocumentType for each ResourceType.
+ * Utility class used to define AutomaticMergeResolvingModel for the MergedDocumentType for each ResourceType.
  * 
  * @author sylvain
  */
 public class WOXMLAutomergeInitializer {
 
-	public static void initialize()
-	{
-		DefaultAutomaticMergeResolvingModel woxmlAutomergeModel
-		= new FlexoAutomaticMergeResolvingModel();
+	public static void initialize() {
+		DefaultAutomaticMergeResolvingModel woxmlAutomergeModel = new FlexoAutomaticMergeResolvingModel();
 
-		ResourceType.OPERATION_COMPONENT.setMergedDocumentType(new DefaultMergedDocumentType(
-				DelimitingMethod.XML,
-				TokenMarkerStyle.XML,
+		ResourceType.OPERATION_COMPONENT.setMergedDocumentType(new DefaultMergedDocumentType(DelimitingMethod.XML, TokenMarkerStyle.XML,
 				woxmlAutomergeModel));
 
-		ResourceType.POPUP_COMPONENT.setMergedDocumentType(new DefaultMergedDocumentType(
-				DelimitingMethod.XML,
-				TokenMarkerStyle.XML,
+		ResourceType.POPUP_COMPONENT.setMergedDocumentType(new DefaultMergedDocumentType(DelimitingMethod.XML, TokenMarkerStyle.XML,
 				woxmlAutomergeModel));
 
-		ResourceType.TAB_COMPONENT.setMergedDocumentType(new DefaultMergedDocumentType(
-				DelimitingMethod.XML,
-				TokenMarkerStyle.XML,
+		ResourceType.TAB_COMPONENT.setMergedDocumentType(new DefaultMergedDocumentType(DelimitingMethod.XML, TokenMarkerStyle.XML,
 				woxmlAutomergeModel));
 
 	}

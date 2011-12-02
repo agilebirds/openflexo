@@ -25,54 +25,46 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.DuplicateStatusException;
 import org.openflexo.foundation.wkf.Status;
 
-
 /**
  * Browser element representing a Status
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class StatusElement extends BrowserElement
-{
+public class StatusElement extends BrowserElement {
 
-    public StatusElement(Status status, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(status, BrowserElementType.STATUS, browser, parent);
-    }
+	public StatusElement(Status status, ProjectBrowser browser, BrowserElement parent) {
+		super(status, BrowserElementType.STATUS, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // No children
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// No children
+	}
 
-    @Override
-	public String getName()
-    {
-    		if(getStatus()!=null&&getParent()!=null&&((StatusListElement)getParent()).getStatusList()!=null){
-    			if (getStatus().getProcess() != ((StatusListElement) getParent()).getStatusList().getProcess()) {
-    				return getStatus().getName() + " [" + getStatus().getProcess().getName() + "]";
-    			}
-    			return getStatus().getName();
-    		}
-    		return super.getName();
-    }
+	@Override
+	public String getName() {
+		if (getStatus() != null && getParent() != null && ((StatusListElement) getParent()).getStatusList() != null) {
+			if (getStatus().getProcess() != ((StatusListElement) getParent()).getStatusList().getProcess()) {
+				return getStatus().getName() + " [" + getStatus().getProcess().getName() + "]";
+			}
+			return getStatus().getName();
+		}
+		return super.getName();
+	}
 
-    protected Status getStatus()
-    {
-        return (Status) getObject();
-    }
+	protected Status getStatus() {
+		return (Status) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-	public void setName(String aName) throws DuplicateStatusException
-    {
-        getStatus().setName(aName);
-    }
+	@Override
+	public void setName(String aName) throws DuplicateStatusException {
+		getStatus().setName(aName);
+	}
 
 }

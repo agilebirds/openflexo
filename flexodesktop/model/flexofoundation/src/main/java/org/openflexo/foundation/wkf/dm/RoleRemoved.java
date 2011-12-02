@@ -27,17 +27,14 @@ import org.openflexo.foundation.wkf.Role;
  * @author sguerin
  * 
  */
-public class RoleRemoved extends WKFDataModification
-{
+public class RoleRemoved extends WKFDataModification {
 
-	public RoleRemoved(Role removedRole)
-    {
-        super("roles", removedRole, null);
-    }
-	
-	public Role getRemovedRole()
-	{
-		return (Role)oldValue();
+	public RoleRemoved(Role removedRole) {
+		super("roles", removedRole, null);
+	}
+
+	public Role getRemovedRole() {
+		return (Role) oldValue();
 	}
 
 }

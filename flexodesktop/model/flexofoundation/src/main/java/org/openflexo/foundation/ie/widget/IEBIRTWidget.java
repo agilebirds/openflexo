@@ -37,21 +37,20 @@ public class IEBIRTWidget extends AbstractInnerTableWidget {
 	/**
      * 
      */
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(IEBIRTWidget.class.getPackage().getName());
-    
-    private boolean usePercentage = true;
-    private GraphType graphType;
-    private int widthPixel=512;
-    private int heightPixel=350;
-    private int percentage = 100;
-    
-	public IEBIRTWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
-	
+
+	private boolean usePercentage = true;
+	private GraphType graphType;
+	private int widthPixel = 512;
+	private int heightPixel = 350;
+	private int percentage = 100;
+
+	public IEBIRTWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
+
 	public IEBIRTWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
 		super(woComponent, parent, prj);
 	}
@@ -68,7 +67,7 @@ public class IEBIRTWidget extends AbstractInnerTableWidget {
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		
+
 	}
 
 	@Override
@@ -85,15 +84,16 @@ public class IEBIRTWidget extends AbstractInnerTableWidget {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "BIRT_WIDGET."+getName();
+		return "BIRT_WIDGET." + getName();
 	}
 
 	public GraphType getGraphType() {
-		if (graphType==null)
+		if (graphType == null) {
 			graphType = GraphType.Pie;
+		}
 		return graphType;
 	}
-	
+
 	public String getImageName() {
 		return getGraphType().getImageName();
 	}
@@ -112,7 +112,7 @@ public class IEBIRTWidget extends AbstractInnerTableWidget {
 	public void setWidthPixel(int widthPixel) {
 		this.widthPixel = widthPixel;
 		setChanged();
-		notifyObservers(new IEDataModification("widthPixel",null,widthPixel));
+		notifyObservers(new IEDataModification("widthPixel", null, widthPixel));
 	}
 
 	public int getHeightPixel() {
@@ -122,7 +122,7 @@ public class IEBIRTWidget extends AbstractInnerTableWidget {
 	public void setHeightPixel(int heightPixel) {
 		this.heightPixel = heightPixel;
 		setChanged();
-		notifyObservers(new IEDataModification("heightPixel",null,heightPixel));
+		notifyObservers(new IEDataModification("heightPixel", null, heightPixel));
 	}
 
 	public boolean getUsePercentage() {
@@ -132,25 +132,25 @@ public class IEBIRTWidget extends AbstractInnerTableWidget {
 	public void setUsePercentage(boolean usePercentage) {
 		this.usePercentage = usePercentage;
 		setChanged();
-		notifyObservers(new IEDataModification("usePercentage",!usePercentage,usePercentage));
+		notifyObservers(new IEDataModification("usePercentage", !usePercentage, usePercentage));
 	}
-	
+
 	public int getPercentage() {
 		return percentage;
 	}
-	
+
 	public void setPercentage(int percentage) {
 		this.percentage = percentage;
 		setChanged();
-		notifyObservers(new IEDataModification("percentage",null,percentage));
+		notifyObservers(new IEDataModification("percentage", null, percentage));
 	}
-	
+
 	public boolean isOriginalSize() {
-		if (getGraphType()!=null) {
-			return getGraphType().getIcon().getIconWidth()==getWidthPixel() && getGraphType().getIcon().getIconHeight()==getHeightPixel();
+		if (getGraphType() != null) {
+			return getGraphType().getIcon().getIconWidth() == getWidthPixel()
+					&& getGraphType().getIcon().getIconHeight() == getHeightPixel();
 		}
 		return false;
 	}
-	
 
 }

@@ -36,176 +36,159 @@ import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
- * 'Delete instance' port associated to a PortRegistery associated to a
- * SubProcessNode
- *
+ * 'Delete instance' port associated to a PortRegistery associated to a SubProcessNode
+ * 
  * @author sguerin
- *
+ * 
  */
-public final class DeletePort extends AbstractInPort
-{
+public final class DeletePort extends AbstractInPort {
 
-    protected static final Logger logger = Logger.getLogger(DeletePort.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DeletePort.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public DeletePort(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public DeletePort(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public DeletePort(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public DeletePort(FlexoProcess process) {
+		super(process);
+	}
 
-    /**
-     * Constructor with process and name
-     */
-    public DeletePort(FlexoProcess process, String aName)
-    {
-        this(process);
-        setPortRegistery(process.getPortRegistery());
-        setName(aName);
-    }
+	/**
+	 * Constructor with process and name
+	 */
+	public DeletePort(FlexoProcess process, String aName) {
+		this(process);
+		setPortRegistery(process.getPortRegistery());
+		setName(aName);
+	}
 
-    @Override
-    public String getPrefixForFullQualifiedName()
-    {
-        return "DELETE_PORT";
-    }
+	@Override
+	public String getPrefixForFullQualifiedName() {
+		return "DELETE_PORT";
+	}
 
-    @Override
-    public String getInspectorName()
-    {
-        return Inspectors.WKF.DELETE_PORT_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WKF.DELETE_PORT_INSPECTOR;
+	}
 
-    @Override
-    public String getDefaultName()
-    {
-        return getDefaultInitialName();
-    }
+	@Override
+	public String getDefaultName() {
+		return getDefaultInitialName();
+	}
 
-    public static String getDefaultInitialName()
-    {
-        return FlexoLocalization.localizedForKey("delete_instance_port_name");
-    }
+	public static String getDefaultInitialName() {
+		return FlexoLocalization.localizedForKey("delete_instance_port_name");
+	}
 
-    // ==========================================================================
-    // ============================= Validation
-    // =================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Validation
+	// =================================
+	// ==========================================================================
 
-    @Override
-    public boolean isCorrectelyLinked()
-    {
-        boolean isCorrectelyLinked = false;
-        boolean foundValidEdge = false;
-        for (Enumeration e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
-            InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
-            AbstractNode nextNode = next.getNextNode();
-            if ((nextNode instanceof ActivityNode) && (((ActivityNode) nextNode).isEndNode())) {
-                if (!foundValidEdge) {
-                    foundValidEdge = true;
-                    isCorrectelyLinked = true;
-                } else {
-                    isCorrectelyLinked = false;
-                }
-            } else {
-                isCorrectelyLinked = false;
-            }
-        }
-        return isCorrectelyLinked;
-    }
+	@Override
+	public boolean isCorrectelyLinked() {
+		boolean isCorrectelyLinked = false;
+		boolean foundValidEdge = false;
+		for (Enumeration e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
+			InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
+			AbstractNode nextNode = next.getNextNode();
+			if ((nextNode instanceof ActivityNode) && (((ActivityNode) nextNode).isEndNode())) {
+				if (!foundValidEdge) {
+					foundValidEdge = true;
+					isCorrectelyLinked = true;
+				} else {
+					isCorrectelyLinked = false;
+				}
+			} else {
+				isCorrectelyLinked = false;
+			}
+		}
+		return isCorrectelyLinked;
+	}
 
-    Vector<InternalMessageInEdge> getInvalidOutgoingPostConditions()
-    {
-        Vector<InternalMessageInEdge> returnedVector = new Vector<InternalMessageInEdge>();
-        //boolean isCorrectelyLinked = false;
-        boolean foundValidEdge = false;
-        for (Enumeration e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
-            InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
-            AbstractNode nextNode = next.getNextNode();
-            if ((nextNode instanceof ActivityNode) && (((ActivityNode) nextNode).isEndNode())) {
-                if (!foundValidEdge) {
-                    foundValidEdge = true;
-                    //isCorrectelyLinked = true;
-                } else {
-                    //isCorrectelyLinked = false;
-                    returnedVector.add(next);
-                }
-            } else {
-                //isCorrectelyLinked = false;
-                returnedVector.add(next);
-            }
-        }
-        return returnedVector;
-    }
+	Vector<InternalMessageInEdge> getInvalidOutgoingPostConditions() {
+		Vector<InternalMessageInEdge> returnedVector = new Vector<InternalMessageInEdge>();
+		// boolean isCorrectelyLinked = false;
+		boolean foundValidEdge = false;
+		for (Enumeration e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
+			InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
+			AbstractNode nextNode = next.getNextNode();
+			if ((nextNode instanceof ActivityNode) && (((ActivityNode) nextNode).isEndNode())) {
+				if (!foundValidEdge) {
+					foundValidEdge = true;
+					// isCorrectelyLinked = true;
+				} else {
+					// isCorrectelyLinked = false;
+					returnedVector.add(next);
+				}
+			} else {
+				// isCorrectelyLinked = false;
+				returnedVector.add(next);
+			}
+		}
+		return returnedVector;
+	}
 
-    public static class DeletePortMustBeLinkedToAEndNode extends ValidationRule<DeletePortMustBeLinkedToAEndNode, DeletePort>
-    {
-        public DeletePortMustBeLinkedToAEndNode()
-        {
-            super(DeletePort.class, "delete_port_must_be_linked_to_a_end_node");
-        }
+	public static class DeletePortMustBeLinkedToAEndNode extends ValidationRule<DeletePortMustBeLinkedToAEndNode, DeletePort> {
+		public DeletePortMustBeLinkedToAEndNode() {
+			super(DeletePort.class, "delete_port_must_be_linked_to_a_end_node");
+		}
 
-        @Override
-        public ValidationIssue<DeletePortMustBeLinkedToAEndNode, DeletePort> applyValidation(DeletePort port)
-        {
-            if (!port.isCorrectelyLinked()) {
-                Vector invalidEdges = port.getInvalidOutgoingPostConditions();
-                ValidationError<DeletePortMustBeLinkedToAEndNode, DeletePort> error;
-                if (invalidEdges.size() == 0) {
-                    error = new ValidationError<DeletePortMustBeLinkedToAEndNode, DeletePort>(this, port, "port_has_no_outgoing_edges");
-                } else {
-                    error = new ValidationError<DeletePortMustBeLinkedToAEndNode, DeletePort>(this, port, "port_has_invalid_outgoing_edges");
-                    error.addToFixProposals(new DeleteInvalidEdges(invalidEdges));
-                }
-                return error;
-            }
-            return null;
-        }
+		@Override
+		public ValidationIssue<DeletePortMustBeLinkedToAEndNode, DeletePort> applyValidation(DeletePort port) {
+			if (!port.isCorrectelyLinked()) {
+				Vector invalidEdges = port.getInvalidOutgoingPostConditions();
+				ValidationError<DeletePortMustBeLinkedToAEndNode, DeletePort> error;
+				if (invalidEdges.size() == 0) {
+					error = new ValidationError<DeletePortMustBeLinkedToAEndNode, DeletePort>(this, port, "port_has_no_outgoing_edges");
+				} else {
+					error = new ValidationError<DeletePortMustBeLinkedToAEndNode, DeletePort>(this, port, "port_has_invalid_outgoing_edges");
+					error.addToFixProposals(new DeleteInvalidEdges(invalidEdges));
+				}
+				return error;
+			}
+			return null;
+		}
 
-        public static class DeleteInvalidEdges extends FixProposal<DeletePortMustBeLinkedToAEndNode, DeletePort>
-        {
-            public Vector invalidEdges;
+		public static class DeleteInvalidEdges extends FixProposal<DeletePortMustBeLinkedToAEndNode, DeletePort> {
+			public Vector invalidEdges;
 
-            public DeleteInvalidEdges(Vector invalidEdges)
-            {
-                super("delete_invalid_edges");
-                this.invalidEdges = invalidEdges;
-            }
+			public DeleteInvalidEdges(Vector invalidEdges) {
+				super("delete_invalid_edges");
+				this.invalidEdges = invalidEdges;
+			}
 
-            @Override
-            protected void fixAction()
-            {
-                for (Enumeration e = invalidEdges.elements(); e.hasMoreElements();) {
-                    InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
-                    next.delete();
-                }
-            }
-        }
-    }
+			@Override
+			protected void fixAction() {
+				for (Enumeration e = invalidEdges.elements(); e.hasMoreElements();) {
+					InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
+					next.delete();
+				}
+			}
+		}
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "delete_port";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "delete_port";
+	}
 
 }

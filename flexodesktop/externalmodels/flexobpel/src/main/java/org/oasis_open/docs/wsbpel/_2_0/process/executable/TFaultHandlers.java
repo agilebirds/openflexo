@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import java.util.ArrayList;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tFaultHandlers complex type.
+ * <p>
+ * Java class for tFaultHandlers complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tFaultHandlers">
@@ -56,69 +56,59 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tFaultHandlers", propOrder = {
-    "_catch",
-    "catchAll"
-})
-public class TFaultHandlers
-    extends TExtensibleElements
-{
+@XmlType(name = "tFaultHandlers", propOrder = { "_catch", "catchAll" })
+public class TFaultHandlers extends TExtensibleElements {
 
-    @XmlElement(name = "catch")
-    protected List<TCatch> _catch;
-    protected TActivityContainer catchAll;
+	@XmlElement(name = "catch")
+	protected List<TCatch> _catch;
+	protected TActivityContainer catchAll;
 
-    /**
-     * Gets the value of the catch property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the catch property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCatch().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TCatch }
-     * 
-     * 
-     */
-    public List<TCatch> getCatch() {
-        if (_catch == null) {
-            _catch = new ArrayList<TCatch>();
-        }
-        return this._catch;
-    }
+	/**
+	 * Gets the value of the catch property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the catch property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getCatch().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link TCatch }
+	 * 
+	 * 
+	 */
+	public List<TCatch> getCatch() {
+		if (_catch == null) {
+			_catch = new ArrayList<TCatch>();
+		}
+		return this._catch;
+	}
 
-    /**
-     * Gets the value of the catchAll property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TActivityContainer }
-     *     
-     */
-    public TActivityContainer getCatchAll() {
-        return catchAll;
-    }
+	/**
+	 * Gets the value of the catchAll property.
+	 * 
+	 * @return possible object is {@link TActivityContainer }
+	 * 
+	 */
+	public TActivityContainer getCatchAll() {
+		return catchAll;
+	}
 
-    /**
-     * Sets the value of the catchAll property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TActivityContainer }
-     *     
-     */
-    public void setCatchAll(TActivityContainer value) {
-        this.catchAll = value;
-    }
+	/**
+	 * Sets the value of the catchAll property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TActivityContainer }
+	 * 
+	 */
+	public void setCatchAll(TActivityContainer value) {
+		this.catchAll = value;
+	}
 
 }

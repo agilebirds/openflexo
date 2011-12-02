@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 package org.openflexo.fge.view.widget;
 
 import java.awt.BorderLayout;
@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -57,191 +56,171 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle>
-implements FIBCustomComponent<ForegroundStyle,FIBForegroundStyleSelector>
-{
+public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> implements
+		FIBCustomComponent<ForegroundStyle, FIBForegroundStyleSelector> {
 
-    @SuppressWarnings("hiding")
+	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBForegroundStyleSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ForegroundStylePanel.fib");
-    
-    private ForegroundStyle _revertValue;
 
-    protected ForegroundStyleDetailsPanel _selectorPanel;
+	private ForegroundStyle _revertValue;
 
-    
-    public FIBForegroundStyleSelector(ForegroundStyle editedObject)
-    {
-        super(editedObject);
-        setRevertValue(editedObject!=null?editedObject.clone():null);
-        setFocusable(true);
-    }
+	protected ForegroundStyleDetailsPanel _selectorPanel;
 
-	@Override
-	public void init(FIBCustom component, FIBController controller) 
-	{
+	public FIBForegroundStyleSelector(ForegroundStyle editedObject) {
+		super(editedObject);
+		setRevertValue(editedObject != null ? editedObject.clone() : null);
+		setFocusable(true);
 	}
 
 	@Override
-	public Class<ForegroundStyle> getRepresentedType()
-	{
+	public void init(FIBCustom component, FIBController controller) {
+	}
+
+	@Override
+	public Class<ForegroundStyle> getRepresentedType() {
 		return ForegroundStyle.class;
 	}
 
-    @Override
-	public void setRevertValue(ForegroundStyle oldValue)
-    {
-    	// WARNING: we need here to clone to keep track back of previous data !!!
-        if (oldValue != null) _revertValue = oldValue.clone();
-        else _revertValue = null;
-        if (logger.isLoggable(Level.FINE))
-        	logger.fine("Sets revert value to "+_revertValue);
-    }
-
-    @Override
-	public ForegroundStyle getRevertValue()
-    {
-        return _revertValue;
-    }
-
-     @Override
-	protected ResizablePanel createCustomPanel(ForegroundStyle editedObject)
-    {
-        _selectorPanel = makeCustomPanel(editedObject);
-        return _selectorPanel;
-    }
-
-    protected ForegroundStyleDetailsPanel makeCustomPanel(ForegroundStyle editedObject)
-    {
-    	return new ForegroundStyleDetailsPanel(editedObject);
-    }
-
-    @Override
-	public void updateCustomPanel(ForegroundStyle editedObject)
-    {
-         if (_selectorPanel != null) {
-            _selectorPanel.update();
-        }
-         getFrontComponent().update();
-    }
+	@Override
+	public void setRevertValue(ForegroundStyle oldValue) {
+		// WARNING: we need here to clone to keep track back of previous data !!!
+		if (oldValue != null) {
+			_revertValue = oldValue.clone();
+		} else {
+			_revertValue = null;
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Sets revert value to " + _revertValue);
+		}
+	}
 
 	@Override
-	public FIBForegroundStyleSelector getJComponent() 
-	{
+	public ForegroundStyle getRevertValue() {
+		return _revertValue;
+	}
+
+	@Override
+	protected ResizablePanel createCustomPanel(ForegroundStyle editedObject) {
+		_selectorPanel = makeCustomPanel(editedObject);
+		return _selectorPanel;
+	}
+
+	protected ForegroundStyleDetailsPanel makeCustomPanel(ForegroundStyle editedObject) {
+		return new ForegroundStyleDetailsPanel(editedObject);
+	}
+
+	@Override
+	public void updateCustomPanel(ForegroundStyle editedObject) {
+		if (_selectorPanel != null) {
+			_selectorPanel.update();
+		}
+		getFrontComponent().update();
+	}
+
+	@Override
+	public FIBForegroundStyleSelector getJComponent() {
 		return this;
 	}
 
-	public class ForegroundStyleDetailsPanel extends ResizablePanel
-    {
-        private FIBComponent fibComponent;
-        private FIBView fibView;
-        private CustomFIBController controller;
+	public class ForegroundStyleDetailsPanel extends ResizablePanel {
+		private FIBComponent fibComponent;
+		private FIBView fibView;
+		private CustomFIBController controller;
 
-        protected ForegroundStyleDetailsPanel(ForegroundStyle fs)
-        {
-        	super();
+		protected ForegroundStyleDetailsPanel(ForegroundStyle fs) {
+			super();
 
-        	fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
-        	controller = new CustomFIBController(fibComponent);
-    		fibView =  controller.buildView(fibComponent);
+			fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
+			controller = new CustomFIBController(fibComponent);
+			fibView = controller.buildView(fibComponent);
 
-        	controller.setDataObject(fs);
-        	
-        	setLayout(new BorderLayout());
-        	add(fibView.getResultingJComponent(),BorderLayout.CENTER);
+			controller.setDataObject(fs);
 
-        }
+			setLayout(new BorderLayout());
+			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
 
-        public void update()
-        {
-        	controller.setDataObject(getEditedObject());
-        }
-        
-        @Override
-		public Dimension getDefaultSize()
-        {
-        	return new Dimension(fibComponent.getWidth(),fibComponent.getHeight());
-        }
+		}
 
-        public void delete()
-        {
-        }
+		public void update() {
+			controller.setDataObject(getEditedObject(), true);
+		}
 
-		public class CustomFIBController extends FIBController<ForegroundStyle>
-    	{
-    		public CustomFIBController(FIBComponent component)
-    		{
-    			super(component);
-    		}
+		@Override
+		public Dimension getDefaultSize() {
+			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
+		}
 
-    		public void apply() 
-    		{
-    			FIBForegroundStyleSelector.this.apply();
-    		}
+		public void delete() {
+		}
 
-    		public void cancel() 
-    		{
-    			FIBForegroundStyleSelector.this.cancel();
-    		}
+		public class CustomFIBController extends FIBController<ForegroundStyle> {
+			public CustomFIBController(FIBComponent component) {
+				super(component);
+			}
 
-    		public void parameterChanged()
-    		{
-    			getFrontComponent().update();
-    		}
-    	}
+			public void apply() {
+				FIBForegroundStyleSelector.this.apply();
+			}
 
-    }
+			public void cancel() {
+				FIBForegroundStyleSelector.this.cancel();
+			}
 
-    @Override
-	public void apply()
-    {
-    	setRevertValue(getEditedObject()!=null?getEditedObject().clone():null);
-    	closePopup();
-        super.apply();
-    }
+			public void parameterChanged() {
+				getFrontComponent().update();
+			}
+		}
 
-    @Override
-	public void cancel()
-    {
-    	if(logger.isLoggable(Level.FINE))
-   		 logger.fine("CANCEL: revert to "+getRevertValue());
-        setEditedObject(getRevertValue());
-        closePopup();
-        super.cancel();
-    }
+	}
 
-    @Override
-	protected void deletePopup()
-    {
-        if (_selectorPanel != null) _selectorPanel.delete();
-        _selectorPanel = null;
-        super.deletePopup();
-    }
+	@Override
+	public void apply() {
+		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : null);
+		closePopup();
+		super.apply();
+	}
 
-   /* protected void pointerLeavesPopup()
-    {
-        cancel();
-    }*/
+	@Override
+	public void cancel() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("CANCEL: revert to " + getRevertValue());
+		}
+		setEditedObject(getRevertValue());
+		closePopup();
+		super.cancel();
+	}
 
-	public ForegroundStyleDetailsPanel getSelectorPanel() 
-	{
+	@Override
+	protected void deletePopup() {
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
+		_selectorPanel = null;
+		super.deletePopup();
+	}
+
+	/* protected void pointerLeavesPopup()
+	 {
+	     cancel();
+	 }*/
+
+	public ForegroundStyleDetailsPanel getSelectorPanel() {
 		return _selectorPanel;
 	}
-	
+
 	@Override
-	protected ForegroundStylePreviewPanel buildFrontComponent()
-	{
+	protected ForegroundStylePreviewPanel buildFrontComponent() {
 		return new ForegroundStylePreviewPanel();
 	}
-	
+
 	@Override
-	public ForegroundStylePreviewPanel getFrontComponent()
-	{
-		return (ForegroundStylePreviewPanel)super.getFrontComponent();
+	public ForegroundStylePreviewPanel getFrontComponent() {
+		return (ForegroundStylePreviewPanel) super.getFrontComponent();
 	}
-	
-	@Override
+
+	/*@Override
 	protected Border getDownButtonBorder()
 	{
 		return BorderFactory.createCompoundBorder(
@@ -252,36 +231,30 @@ implements FIBCustomComponent<ForegroundStyle,FIBForegroundStyleSelector>
 		//return BorderFactory.createEtchedBorder();
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
-	}
-	
-	
-	protected class ForegroundStylePreviewPanel extends JPanel
-	{
+	}*/
+
+	protected class ForegroundStylePreviewPanel extends JPanel {
 		private Drawing drawing;
 		private DrawingGraphicalRepresentation drawingGR;
 		private DrawingController<?> controller;
-		private Object p1,p2,line;
+		private Object p1, p2, line;
 		private ShapeGraphicalRepresentation lineGR;
-		
-		
-		
-		protected ForegroundStylePreviewPanel()
-		{
+
+		protected ForegroundStylePreviewPanel() {
 			super(new BorderLayout());
-			setBorder(BorderFactory.createEtchedBorder(Color.GRAY,Color.LIGHT_GRAY));
-			//setBorder(BorderFactory.createEtchedBorder());
-			setPreferredSize(new Dimension(40,19));
-			//setBackground(Color.WHITE);
-			
+			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
+			// setBorder(BorderFactory.createEtchedBorder());
+			setPreferredSize(new Dimension(40, 19));
+			// setBackground(Color.WHITE);
+
 			line = new Object();
-			
+
 			final Vector<Object> singleton = new Vector<Object>();
 			singleton.add(line);
-			
+
 			drawing = new Drawing<ForegroundStylePreviewPanel>() {
 				@Override
-				public List<?> getContainedObjects(Object aDrawable)
-				{
+				public List<?> getContainedObjects(Object aDrawable) {
 					if (aDrawable == ForegroundStylePreviewPanel.this) {
 						return singleton;
 					}
@@ -289,64 +262,63 @@ implements FIBCustomComponent<ForegroundStyle,FIBForegroundStyleSelector>
 				}
 
 				@Override
-				public Object getContainer(Object aDrawable)
-				{
-					if (aDrawable == line) return ForegroundStylePreviewPanel.this;
+				public Object getContainer(Object aDrawable) {
+					if (aDrawable == line) {
+						return ForegroundStylePreviewPanel.this;
+					}
 					return null;
 				}
 
 				@Override
-				public DrawingGraphicalRepresentation<ForegroundStylePreviewPanel> getDrawingGraphicalRepresentation()
-				{
+				public DrawingGraphicalRepresentation<ForegroundStylePreviewPanel> getDrawingGraphicalRepresentation() {
 					return drawingGR;
 				}
 
 				@Override
-				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable)
-				{
-					if (aDrawable == ForegroundStylePreviewPanel.this) return drawingGR;
-					else if (aDrawable == line) {
+				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
+					if (aDrawable == ForegroundStylePreviewPanel.this) {
+						return drawingGR;
+					} else if (aDrawable == line) {
 						return lineGR;
 					}
 					return null;
 				}
 
 				@Override
-				public ForegroundStylePreviewPanel getModel()
-				{
+				public ForegroundStylePreviewPanel getModel() {
 					return ForegroundStylePreviewPanel.this;
 				}
-				
+
 			};
-			drawingGR = new DrawingGraphicalRepresentation(drawing,false);
+			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			lineGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE,line,drawing);
+			lineGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE, line, drawing);
 			lineGR.setWidth(25);
 			lineGR.setHeight(0);
 			lineGR.setX(-5);
 			lineGR.setY(-2);
-			lineGR.setForeground(getEditedObject()!=null?getEditedObject():ForegroundStyle.makeDefault());
+			lineGR.setForeground(getEditedObject() != null ? getEditedObject() : ForegroundStyle.makeDefault());
 			lineGR.setBackground(BackgroundStyle.makeEmptyBackground());
 			lineGR.setShadowStyle(ShadowStyle.makeNone());
 			lineGR.setIsSelectable(false);
 			lineGR.setIsFocusable(false);
 			lineGR.setIsReadOnly(true);
-			lineGR.setBorder(new ShapeBorder(10,10,10,10));
-			
+			lineGR.setBorder(new ShapeBorder(10, 10, 10, 10));
+
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
 		}
-		
-		protected void update()
-		{
-			if (getEditedObject() == null) return;
+
+		protected void update() {
+			if (getEditedObject() == null) {
+				return;
+			}
 			lineGR.setForeground(getEditedObject());
 		}
-		
-		
+
 	}
 
 }

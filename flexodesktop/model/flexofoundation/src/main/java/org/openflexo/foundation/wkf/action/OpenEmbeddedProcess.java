@@ -29,45 +29,39 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 
+public class OpenEmbeddedProcess extends FlexoGUIAction<OpenEmbeddedProcess, SubProcessNode, WKFObject> {
 
-public class OpenEmbeddedProcess extends FlexoGUIAction<OpenEmbeddedProcess,SubProcessNode,WKFObject> 
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OpenEmbeddedProcess.class.getPackage().getName());
 
-    public static FlexoActionType<OpenEmbeddedProcess,SubProcessNode,WKFObject> actionType 
-    = new FlexoActionType<OpenEmbeddedProcess,SubProcessNode,WKFObject> ("open_embedded_process",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<OpenEmbeddedProcess, SubProcessNode, WKFObject> actionType = new FlexoActionType<OpenEmbeddedProcess, SubProcessNode, WKFObject>(
+			"open_embedded_process", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public OpenEmbeddedProcess makeNewAction(SubProcessNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new OpenEmbeddedProcess(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public OpenEmbeddedProcess makeNewAction(SubProcessNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new OpenEmbeddedProcess(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(SubProcessNode object, Vector<WKFObject> globalSelection) 
-        {
-            return object!=null;
-        }
+		@Override
+		protected boolean isVisibleForSelection(SubProcessNode object, Vector<WKFObject> globalSelection) {
+			return object != null;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(SubProcessNode object, Vector<WKFObject> globalSelection) 
-        {
-            return object!=null && object.getSubProcess() != null;
-        }
-                
-    };
-    
-    OpenEmbeddedProcess (SubProcessNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
-    
-    public FlexoProcess getProcessToOpen() {
-    	return getFocusedObject().getSubProcess();
-    }
+		@Override
+		protected boolean isEnabledForSelection(SubProcessNode object, Vector<WKFObject> globalSelection) {
+			return object != null && object.getSubProcess() != null;
+		}
+
+	};
+
+	OpenEmbeddedProcess(SubProcessNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	public FlexoProcess getProcessToOpen() {
+		return getFocusedObject().getSubProcess();
+	}
 }

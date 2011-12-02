@@ -25,44 +25,43 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 /**
- * The provider of CVS commands.
- * The implementation of this interface knows how to create a CVS command
- * from an array of arguments.
- *
- * @author  Martin Entlicher
+ * The provider of CVS commands. The implementation of this interface knows how to create a CVS command from an array of arguments.
+ * 
+ * @author Martin Entlicher
  */
 abstract class AbstractCommandProvider implements CommandProvider {
 
-    /**
-     * Get the name of this command.
-     * The default implementation returns the name of the implementing class.
-     */
-    @Override
+	/**
+	 * Get the name of this command. The default implementation returns the name of the implementing class.
+	 */
+	@Override
 	public String getName() {
-        String className = getClass().getName();
-        int dot = className.lastIndexOf('.');
-        if (dot > 0) {
-            return className.substring(dot + 1);
-        } else {
-            return className;
-        }
-    }
-    
-    @Override
+		String className = getClass().getName();
+		int dot = className.lastIndexOf('.');
+		if (dot > 0) {
+			return className.substring(dot + 1);
+		} else {
+			return className;
+		}
+	}
+
+	@Override
 	public String getUsage() {
-        return ResourceBundle.getBundle(CommandProvider.class.getPackage().getName()+".Bundle").getString(getName()+".usage"); // NOI18N
-    }
-    
-    @Override
+		return ResourceBundle.getBundle(CommandProvider.class.getPackage().getName() + ".Bundle").getString(getName() + ".usage"); // NOI18N
+	}
+
+	@Override
 	public void printShortDescription(PrintStream out) {
-        String msg = ResourceBundle.getBundle(CommandProvider.class.getPackage().getName()+".Bundle").getString(getName()+".shortDescription"); // NOI18N
-        out.print(msg);
-    }
-    
-    @Override
+		String msg = ResourceBundle.getBundle(CommandProvider.class.getPackage().getName() + ".Bundle").getString(
+				getName() + ".shortDescription"); // NOI18N
+		out.print(msg);
+	}
+
+	@Override
 	public void printLongDescription(PrintStream out) {
-        String msg = ResourceBundle.getBundle(CommandProvider.class.getPackage().getName()+".Bundle").getString(getName()+".longDescription"); // NOI18N
-        out.println(MessageFormat.format(msg, new Object[] { getUsage() }));
-    }
-    
+		String msg = ResourceBundle.getBundle(CommandProvider.class.getPackage().getName() + ".Bundle").getString(
+				getName() + ".longDescription"); // NOI18N
+		out.println(MessageFormat.format(msg, new Object[] { getUsage() }));
+	}
+
 }

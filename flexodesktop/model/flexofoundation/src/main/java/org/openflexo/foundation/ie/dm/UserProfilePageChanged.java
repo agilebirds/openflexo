@@ -21,11 +21,9 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 
-public class UserProfilePageChanged extends IEDataModification
-{
+public class UserProfilePageChanged extends IEDataModification {
 
-    public UserProfilePageChanged(ComponentDefinition cd)
-    {
-        super(null, cd);
-    }
+	public UserProfilePageChanged(ComponentDefinition cd) {
+		super(null, cd);
+	}
 }

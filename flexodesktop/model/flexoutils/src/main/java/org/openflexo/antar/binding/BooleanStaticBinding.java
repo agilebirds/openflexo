@@ -24,61 +24,52 @@ import org.openflexo.antar.expr.EvaluationType;
 public class BooleanStaticBinding extends StaticBinding<Boolean> {
 
 	private boolean value;
-	
-	public BooleanStaticBinding()
-	{
+
+	public BooleanStaticBinding() {
 		super();
 	}
-	
-	public BooleanStaticBinding(boolean aValue)
-	{
+
+	public BooleanStaticBinding(boolean aValue) {
 		super();
 		value = aValue;
 	}
-	
-   public BooleanStaticBinding(BindingDefinition bindingDefinition, Bindable owner, boolean aValue)
-    {
-    	super(bindingDefinition,owner);
+
+	public BooleanStaticBinding(BindingDefinition bindingDefinition, Bindable owner, boolean aValue) {
+		super(bindingDefinition, owner);
 		value = aValue;
-   }
+	}
 
 	@Override
-	public EvaluationType getEvaluationType()
-	{
+	public EvaluationType getEvaluationType() {
 		return EvaluationType.BOOLEAN;
 	}
 
-	public String getWodStringRepresentation(){
+	public String getWodStringRepresentation() {
 		return Boolean.toString(value);
 	}
 
 	@Override
-	public String getStringRepresentation() 
-	{
+	public String getStringRepresentation() {
 		return Boolean.toString(value);
 	}
 
 	@Override
-	public Boolean getValue() 
-	{
+	public Boolean getValue() {
 		return value;
 	}
 
 	@Override
-	public void setValue(Boolean aValue) 
-	{
+	public void setValue(Boolean aValue) {
 		value = aValue;
 	}
 
 	@Override
-	public Class<Boolean> getStaticBindingClass()
-	{
+	public Class<Boolean> getStaticBindingClass() {
 		return Boolean.class;
 	}
 
 	@Override
-	public BooleanStaticBinding clone()
-	{
+	public BooleanStaticBinding clone() {
 		BooleanStaticBinding returned = new BooleanStaticBinding();
 		returned.setsWith(this);
 		return returned;

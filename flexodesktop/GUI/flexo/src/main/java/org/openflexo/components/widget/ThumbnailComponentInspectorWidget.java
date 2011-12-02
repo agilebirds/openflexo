@@ -23,66 +23,59 @@ import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class ThumbnailComponentInspectorWidget extends AbstractComponentInspectorWidget
-{
+public class ThumbnailComponentInspectorWidget extends AbstractComponentInspectorWidget {
 
-    public ThumbnailComponentInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-    }
+	public ThumbnailComponentInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+	}
 
-    @Override
-	protected AbstractComponentSelector createComponentSelector()
-    {
-        return new ThumbnailComponentSelector(null, null) {
-            @Override
-			public void apply()
-            {
-                super.apply();
-                updateModelFromWidget();
-            }
+	@Override
+	protected AbstractComponentSelector createComponentSelector() {
+		return new ThumbnailComponentSelector(null, null) {
+			@Override
+			public void apply() {
+				super.apply();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void cancel()
-            {
-                super.cancel();
-                updateModelFromWidget();
-            }
+			@Override
+			public void cancel() {
+				super.cancel();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void newComponent()
-            {
-                super.newComponent();
-                updateModelFromWidget();
-            }
+			@Override
+			public void newComponent() {
+				super.newComponent();
+				updateModelFromWidget();
+			}
 
-        };
-    }
+		};
+	}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return TabComponentDefinition.class;
-    }
+	@Override
+	public Class getDefaultType() {
+		return TabComponentDefinition.class;
+	}
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
 
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
 
 }

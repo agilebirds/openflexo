@@ -21,5 +21,4 @@ public class AddToConsultedRoleInitializer extends AddToXRoleInitializer<AddToCo
 		return activity.getAvailableConsultedRoles();
 	}
 
-
 }

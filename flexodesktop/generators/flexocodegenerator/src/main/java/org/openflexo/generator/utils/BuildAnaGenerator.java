@@ -36,75 +36,66 @@ import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
+public class BuildAnaGenerator extends MetaFileGenerator {
+	private final Logger logger = FlexoLogger.getLogger(BuildAnaGenerator.class.getPackage().getName());
 
-public class BuildAnaGenerator extends MetaFileGenerator
-{
-    private final Logger logger = FlexoLogger.getLogger(BuildAnaGenerator.class.getPackage().getName());
+	private static final String FILE_NAME = "build.ana";
 
-    private static final String FILE_NAME = "build.ana";
+	private File lastGeneratedFile;
 
-    private File lastGeneratedFile;
+	public BuildAnaGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, FILE_NAME, FILE_NAME);
+	}
 
-    public BuildAnaGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, FILE_NAME, FILE_NAME);
-    }
+	@Override
+	public Logger getGeneratorLogger() {
+		return logger;
+	}
 
-    @Override
-	public Logger getGeneratorLogger()
-    {
-        return logger;
-    }
-
-    @Override
-	public void generate(boolean forceRegenerate)
-    {
-        if (!forceRegenerate && !needsGeneration()) {
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
 		}
-        try {
-            startGeneration();
-            if (logger.isLoggable(Level.INFO)) {
+		try {
+			startGeneration();
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Generating " + FILE_NAME);
 			}
-            VelocityContext velocityContext = defaultContext();
-            String javaCode = merge("build.ana.vm", velocityContext);
-            generatedCode = new GeneratedTextResource(FILE_NAME, javaCode);
-            lastGeneratedFile = generatedCode.saveToFile(getProjectGenerator().getRootOutputDirectory());
-            if (logger.isLoggable(Level.FINE)) {
+			VelocityContext velocityContext = defaultContext();
+			String javaCode = merge("build.ana.vm", velocityContext);
+			generatedCode = new GeneratedTextResource(FILE_NAME, javaCode);
+			lastGeneratedFile = generatedCode.saveToFile(getProjectGenerator().getRootOutputDirectory());
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Written " + FILE_NAME + " to directory " + getProjectGenerator().getRootOutputDirectory().getAbsolutePath());
 			}
-            stopGeneration();
-        } catch (GenerationException e) {
-            setGenerationException(e);
-        } catch (Exception e) {
-            setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
-        }
-    }
+			stopGeneration();
+		} catch (GenerationException e) {
+			setGenerationException(e);
+		} catch (Exception e) {
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		}
+	}
 
-    public File getFile()
-    {
-        return lastGeneratedFile!=null?lastGeneratedFile:new File(getProjectGenerator().getRootOutputDirectory(), FILE_NAME);
-    }
+	public File getFile() {
+		return lastGeneratedFile != null ? lastGeneratedFile : new File(getProjectGenerator().getRootOutputDirectory(), FILE_NAME);
+	}
 
-    @Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-    {
-        logger.warning("Not implemented");
-    }
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		logger.warning("Not implemented");
+	}
 
-    @Override
-	public String getRelativePath()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public String getRelativePath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -23,10 +23,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
@@ -34,6 +30,8 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.ws.ExternalWSFolder;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
 import org.openflexo.foundation.ws.WSFolder;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Please comment this class
@@ -41,77 +39,72 @@ import org.openflexo.foundation.ws.WSFolder;
  * @author sguerin
  * 
  */
-public class WSEFolderTableModel extends AbstractModel<FlexoWSLibrary,WSFolder>
-{
+public class WSEFolderTableModel extends AbstractModel<FlexoWSLibrary, WSFolder> {
 
-    protected static final Logger logger = Logger.getLogger(WSEFolderTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSEFolderTableModel.class.getPackage().getName());
 
-    public WSEFolderTableModel(FlexoWSLibrary library, FlexoProject project)
-    {
-        super(library, project);
-        addToColumns(new IconColumn<WSFolder>("ws_folder_icon", 30) {
-            @Override
-			public Icon getIcon(WSFolder object)
-            {
-            	if(object instanceof ExternalWSFolder)
-            		return WSEIconLibrary.WS_EXTERNAL_FOLDER_ICON;
-            	else 
-            		return WSEIconLibrary.WS_INTERNAL_FOLDER_ICON;
-            }
-            
-            @Override
-			public String getLocalizedTooltip(WSFolder object) {
-            	if (object instanceof ExternalWSFolder)
-					return FlexoLocalization.localizedForKey("external_ws_folder");
-				else
-					return FlexoLocalization.localizedForKey("internal_ws_folder");
+	public WSEFolderTableModel(FlexoWSLibrary library, FlexoProject project) {
+		super(library, project);
+		addToColumns(new IconColumn<WSFolder>("ws_folder_icon", 30) {
+			@Override
+			public Icon getIcon(WSFolder object) {
+				if (object instanceof ExternalWSFolder) {
+					return WSEIconLibrary.WS_EXTERNAL_FOLDER_ICON;
+				} else {
+					return WSEIconLibrary.WS_INTERNAL_FOLDER_ICON;
+				}
 			}
-        });
-         addToColumns(new StringColumn<WSFolder>("name", 200) {
-            @Override
-			public String getValue(WSFolder object)
-            {
-                return (object).getLocalizedName();
-            }
-        });
-         addToColumns(new StringColumn<WSFolder>("description", 570) {
-             @Override
-			public String getValue(WSFolder object)
-             {
-                 return (object).getLocalizedDescription();
-             }
-         });
-        setRowHeight(20);
-    }
 
-    public FlexoWSLibrary getWSLibrary()
-    {
-        return getModel();
-    }
+			@Override
+			public String getLocalizedTooltip(WSFolder object) {
+				if (object instanceof ExternalWSFolder) {
+					return FlexoLocalization.localizedForKey("external_ws_folder");
+				} else {
+					return FlexoLocalization.localizedForKey("internal_ws_folder");
+				}
+			}
+		});
+		addToColumns(new StringColumn<WSFolder>("name", 200) {
+			@Override
+			public String getValue(WSFolder object) {
+				return (object).getLocalizedName();
+			}
+		});
+		addToColumns(new StringColumn<WSFolder>("description", 570) {
+			@Override
+			public String getValue(WSFolder object) {
+				return (object).getLocalizedDescription();
+			}
+		});
+		setRowHeight(20);
+	}
 
-    @Override
-	public WSFolder elementAt(int row)
-    {
-        if (row == 0)
-            return getWSLibrary().getExternalWSFolder();
-        if (row == 1)
-        		return getWSLibrary().getInternalWSFolder();
-        return null;
-    }
+	public FlexoWSLibrary getWSLibrary() {
+		return getModel();
+	}
 
-    public WSFolder wsFolderAt(int row)
-    {
-        return elementAt(row);
-    }
+	@Override
+	public WSFolder elementAt(int row) {
+		if (row == 0) {
+			return getWSLibrary().getExternalWSFolder();
+		}
+		if (row == 1) {
+			return getWSLibrary().getInternalWSFolder();
+		}
+		return null;
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getWSLibrary() != null) {
-            int returned = 2;
-            return returned;
-        }
-        return 0;
-    }
+	public WSFolder wsFolderAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getWSLibrary() != null) {
+			int returned = 2;
+			return returned;
+		}
+		return 0;
+	}
 
 }

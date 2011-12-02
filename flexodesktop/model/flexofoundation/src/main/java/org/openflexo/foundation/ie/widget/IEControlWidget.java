@@ -23,8 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.dm.IEDataModification;
@@ -38,104 +38,95 @@ import org.openflexo.logging.FlexoLogger;
  * @author sguerin
  * 
  */
-public abstract class IEControlWidget extends AbstractInnerTableWidget
-{
-    
-    private static final Logger logger = FlexoLogger.getLogger(IEControlWidget.class.getPackage().getName());
+public abstract class IEControlWidget extends AbstractInnerTableWidget {
 
-    private boolean _exampleValueIsDefaultValue=false;
-    
-    private boolean _disabled = false;
+	private static final Logger logger = FlexoLogger.getLogger(IEControlWidget.class.getPackage().getName());
 
-    private AbstractBinding _bindingKeypath;
+	private boolean _exampleValueIsDefaultValue = false;
 
-    private RepetitionOperator isFilterForRepetition;
-    
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	private boolean _disabled = false;
 
-    public IEControlWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	private AbstractBinding _bindingKeypath;
 
+	private RepetitionOperator isFilterForRepetition;
 
-    public boolean getDisabled()
-    {
-        return _disabled;
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public void setDisabled(boolean disabled)
-    {
-        this._disabled = disabled;
-        setChanged();
-        notifyObservers(new IEDataModification("disabled",null,new Boolean(disabled)));
-    }
+	public IEControlWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    public boolean getExampleValueIsDefaultValue()
-    {
-        return _exampleValueIsDefaultValue;
-    }
+	public boolean getDisabled() {
+		return _disabled;
+	}
 
-    public void setExampleValueIsDefaultValue(boolean exampleValueIsDefaultValue)
-    {
-        _exampleValueIsDefaultValue = exampleValueIsDefaultValue;
-        setChanged();
-        notifyObservers(new IEDataModification("exampleValueIsDefaultValue",null,new Boolean(exampleValueIsDefaultValue)));
-    }
+	public void setDisabled(boolean disabled) {
+		this._disabled = disabled;
+		setChanged();
+		notifyObservers(new IEDataModification("disabled", null, new Boolean(disabled)));
+	}
 
-    public RepetitionOperator getIsFilterForRepetition() 
-    {
-        if (isFilterForRepetition!=null && isFilterForRepetition.isDeleted())
-            isFilterForRepetition = null;
-        return isFilterForRepetition;
-    }
-    
-    public void setIsFilterForRepetition(RepetitionOperator repetition)
-    {
-        isFilterForRepetition = repetition;
-        setChanged();
-        notifyModification("isFilterForRepetition", null, repetition);
-    }
-    
-    public AbstractBinding getBindingKeypath()
-    {
-        if (isBeingCloned())
-            return null;
-        return _bindingKeypath;
-    }
+	public boolean getExampleValueIsDefaultValue() {
+		return _exampleValueIsDefaultValue;
+	}
 
-    public void setBindingKeypath(AbstractBinding name)
-    {
-        _bindingKeypath = name;
-        if (_bindingKeypath != null) {
-            _bindingKeypath.setOwner(this);
-            _bindingKeypath.setBindingDefinition(getBindingKeypathDefinition());
-        }
-        setChanged();
-        notifyObservers(new IEDataModification("bindingKeypath",null,_bindingKeypath));
-    }
-    
-    public WidgetBindingDefinition getBindingKeypathDefinition()
-    {
-        return WidgetBindingDefinition.get(this, "bindingKeypath", Object.class, BindingDefinitionType.GET, false);
-    }
-    
+	public void setExampleValueIsDefaultValue(boolean exampleValueIsDefaultValue) {
+		_exampleValueIsDefaultValue = exampleValueIsDefaultValue;
+		setChanged();
+		notifyObservers(new IEDataModification("exampleValueIsDefaultValue", null, new Boolean(exampleValueIsDefaultValue)));
+	}
+
+	public RepetitionOperator getIsFilterForRepetition() {
+		if (isFilterForRepetition != null && isFilterForRepetition.isDeleted()) {
+			isFilterForRepetition = null;
+		}
+		return isFilterForRepetition;
+	}
+
+	public void setIsFilterForRepetition(RepetitionOperator repetition) {
+		isFilterForRepetition = repetition;
+		setChanged();
+		notifyModification("isFilterForRepetition", null, repetition);
+	}
+
+	public AbstractBinding getBindingKeypath() {
+		if (isBeingCloned()) {
+			return null;
+		}
+		return _bindingKeypath;
+	}
+
+	public void setBindingKeypath(AbstractBinding name) {
+		_bindingKeypath = name;
+		if (_bindingKeypath != null) {
+			_bindingKeypath.setOwner(this);
+			_bindingKeypath.setBindingDefinition(getBindingKeypathDefinition());
+		}
+		setChanged();
+		notifyObservers(new IEDataModification("bindingKeypath", null, _bindingKeypath));
+	}
+
+	public WidgetBindingDefinition getBindingKeypathDefinition() {
+		return WidgetBindingDefinition.get(this, "bindingKeypath", Object.class, BindingDefinitionType.GET, false);
+	}
+
 	@Override
 	public boolean areComponentInstancesValid() {
-    	return true;
-    }
-	
+		return true;
+	}
+
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.FINEST))
-			logger.finest("Verifying component instances for "+getClass().getName());
+		if (logger.isLoggable(Level.FINEST)) {
+			logger.finest("Verifying component instances for " + getClass().getName());
+		}
 	}
-	
+
 	@Override
-	public boolean generateJavascriptID(){
-    	return true;
-    }
+	public boolean generateJavascriptID() {
+		return true;
+	}
 }

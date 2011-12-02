@@ -34,30 +34,27 @@ import org.openflexo.foundation.wkf.RoleSpecialization;
 import org.openflexo.foundation.wkf.dm.RoleInserted;
 import org.openflexo.foundation.wkf.dm.RoleRemoved;
 
-
 public class RoleListRepresentation extends DefaultDrawing<RoleList> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(RoleListRepresentation.class.getPackage().getName());
 
 	private DrawingGraphicalRepresentation<RoleList> graphicalRepresentation;
 	private FlexoEditor editor;
-	
-	public RoleListRepresentation(RoleList aRoleList, FlexoEditor editor)
-	{
+
+	public RoleListRepresentation(RoleList aRoleList, FlexoEditor editor) {
 		super(aRoleList);
 		this.editor = editor;
 		graphicalRepresentation = new DrawingGraphicalRepresentation<RoleList>(this);
 		graphicalRepresentation.addToMouseClickControls(new RoleEditorController.ShowContextualMenuControl());
-		
+
 		aRoleList.addObserver(this);
-		
+
 		updateGraphicalObjectsHierarchy();
 
 	}
-	
+
 	@Override
-	protected void buildGraphicalObjectsHierarchy()
-	{
+	protected void buildGraphicalObjectsHierarchy() {
 		for (Role r : getRoleList().getRoles()) {
 			addDrawable(r, getRoleList());
 		}
@@ -68,52 +65,46 @@ public class RoleListRepresentation extends DefaultDrawing<RoleList> implements 
 			}
 		}
 	}
-	
-	public RoleList getRoleList()
-	{
+
+	public RoleList getRoleList() {
 		return getModel();
 	}
 
 	@Override
-	public DrawingGraphicalRepresentation<RoleList> getDrawingGraphicalRepresentation()
-	{
+	public DrawingGraphicalRepresentation<RoleList> getDrawingGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
-	{
-		return (GraphicalRepresentation<O>)buildGraphicalRepresentation(aDrawable);
+	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+		return (GraphicalRepresentation<O>) buildGraphicalRepresentation(aDrawable);
 	}
 
-	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable)
-	{
+	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable) {
 		if (aDrawable instanceof Role) {
-			return new RoleGR((Role)aDrawable,this);
+			return new RoleGR((Role) aDrawable, this);
 		}
 		if (aDrawable instanceof RoleSpecialization) {
-			return new RoleSpecializationGR((RoleSpecialization)aDrawable,this);
+			return new RoleSpecializationGR((RoleSpecialization) aDrawable, this);
 		}
-		logger.warning("Cannot build GraphicalRepresentation for "+aDrawable);
+		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) 
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getRoleList()) {
-			//logger.info("Notified "+dataModification);
+			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof RoleInserted) {
 				updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof RoleRemoved) {
+			} else if (dataModification instanceof RoleRemoved) {
 				updateGraphicalObjectsHierarchy();
-				//removeDrawable(((RoleRemoved)dataModification).getRemovedRole(), getRoleList());
+				// removeDrawable(((RoleRemoved)dataModification).getRemovedRole(), getRoleList());
 			}
 		}
 	}
-	
+
 	public FlexoEditor getEditor() {
 		return editor;
 	}

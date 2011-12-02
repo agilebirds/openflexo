@@ -40,67 +40,53 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.UtilsIconLibrary;
 
-
 public abstract class FPSBrowserElement extends BrowserElement {
 
-    static final Logger logger = Logger.getLogger(FPSBrowserElement.class.getPackage()
-            .getName());
-    
-	public FPSBrowserElement(FPSObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-	{
+	static final Logger logger = Logger.getLogger(FPSBrowserElement.class.getPackage().getName());
+
+	public FPSBrowserElement(FPSObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
 		super(object, elementType, browser, parent);
-	}
-	
-	@Override
-	public FPSObject getObject()
-	{
-		return (FPSObject)super.getObject();
 	}
 
 	@Override
-	public Icon getIcon()
-	{
+	public FPSObject getObject() {
+		return (FPSObject) super.getObject();
+	}
+
+	@Override
+	public Icon getIcon() {
 		if (getObject() == null) {
 			return null;
 		}
-		
+
 		ImageIcon returned = getBaseIcon();
 		Vector<IconMarker> markers = new Vector<IconMarker>();
-		
+
 		if (getObject() instanceof CVSObject) {
-			CVSObject cvsObject = (CVSObject)getObject();
+			CVSObject cvsObject = (CVSObject) getObject();
 			if (cvsObject.getDerivedStatus() == CVSStatus.UpToDate) {
 				// No marker to add
-			}
-			else if (cvsObject.getDerivedStatus() == CVSStatus.LocallyModified) {
+			} else if (cvsObject.getDerivedStatus() == CVSStatus.LocallyModified) {
 				markers.add(UtilsIconLibrary.LEFT_MODIFICATION);
-			}
-			else if (cvsObject.getDerivedStatus() == CVSStatus.MarkedAsMerged) {
+			} else if (cvsObject.getDerivedStatus() == CVSStatus.MarkedAsMerged) {
 				markers.add(UtilsIconLibrary.LEFT_MODIFICATION);
 				markers.add(IconLibrary.MERGE_OK);
-			}
-			else if (cvsObject.getDerivedStatus() == CVSStatus.LocallyAdded) {
+			} else if (cvsObject.getDerivedStatus() == CVSStatus.LocallyAdded) {
 				markers.add(UtilsIconLibrary.LEFT_ADDITION);
-			}
-			else if (cvsObject.getDerivedStatus() == CVSStatus.LocallyRemoved) {
+			} else if (cvsObject.getDerivedStatus() == CVSStatus.LocallyRemoved) {
 				markers.add(UtilsIconLibrary.LEFT_REMOVAL);
-			}
-			else if (cvsObject.getDerivedStatus() == CVSStatus.RemotelyModified) {
+			} else if (cvsObject.getDerivedStatus() == CVSStatus.RemotelyModified) {
 				markers.add(UtilsIconLibrary.RIGHT_MODIFICATION);
-			}
-			else if (cvsObject.getDerivedStatus() == CVSStatus.RemotelyAdded) {
+			} else if (cvsObject.getDerivedStatus() == CVSStatus.RemotelyAdded) {
 				markers.add(UtilsIconLibrary.RIGHT_ADDITION);
-			}
-			else if (cvsObject.getDerivedStatus() == CVSStatus.RemotelyRemoved) {
+			} else if (cvsObject.getDerivedStatus() == CVSStatus.RemotelyRemoved) {
 				markers.add(UtilsIconLibrary.RIGHT_REMOVAL);
-			}
-			else if (cvsObject.getDerivedStatus() == CVSStatus.Conflicting) {
+			} else if (cvsObject.getDerivedStatus() == CVSStatus.Conflicting) {
 				markers.add(UtilsIconLibrary.CONFLICT);
 				if (cvsObject instanceof CVSFile) {
-					if ((((CVSFile)cvsObject).getMerge() != null) 
-							&& ((CVSFile)cvsObject).getMerge().isResolved()) {
+					if ((((CVSFile) cvsObject).getMerge() != null) && ((CVSFile) cvsObject).getMerge().isResolved()) {
 						markers.add(IconLibrary.MERGE_OK);
-						//logger.info("Merge for "+((CVSFile)cvsObject).getFileName()+" is resolved");
+						// logger.info("Merge for "+((CVSFile)cvsObject).getFileName()+" is resolved");
 					}
 					/*else {
 						logger.info("Merge for "+((CVSFile)cvsObject).getFileName()+" is NOT resolved");
@@ -109,60 +95,52 @@ public abstract class FPSBrowserElement extends BrowserElement {
 						}
 					}*/
 				}
-			}
-			else {
+			} else {
 				markers.add(IconLibrary.QUESTION);
 			}
 		}
-		
+
 		// Get icon with all markers
 		IconMarker[] markersArray = markers.toArray(new IconMarker[markers.size()]);
 		returned = IconFactory.getImageIcon(returned, markersArray);
-		
+
 		if (!isEnabled()) {
 			returned = IconFactory.getDisabledIcon(returned);
 		}
 		return returned;
 	}
 
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		return getElementType().getIcon();
 	}
-	    
+
 	@Override
-	public boolean isSelectable() 
-	{
+	public boolean isSelectable() {
 		return isEnabled();
 	}
 
-	public boolean isEnabled()
-	{
+	public boolean isEnabled() {
 		return getObject().isEnabled();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-         if (_browser != null) {
-            if (dataModification instanceof FPSDataModification) {
-            	try {
-            		refreshWhenPossible();
-            	}
-            	catch (NullPointerException npe) {
-            		// Might happen in MT context, juste ignore it
-            	}
-            } else {
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (_browser != null) {
+			if (dataModification instanceof FPSDataModification) {
+				try {
+					refreshWhenPossible();
+				} catch (NullPointerException npe) {
+					// Might happen in MT context, juste ignore it
+				}
+			} else {
 				super.update(observable, dataModification);
 			}
-        }
-    }
-
-	@Override
-	public FPSBrowser getProjectBrowser() 
-	{
-		return (FPSBrowser)super.getProjectBrowser();
+		}
 	}
 
+	@Override
+	public FPSBrowser getProjectBrowser() {
+		return (FPSBrowser) super.getProjectBrowser();
+	}
 
 }

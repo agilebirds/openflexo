@@ -23,17 +23,16 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.jedit.ShellScriptTokenMarker;
 import org.openflexo.toolbox.FontCst;
 
-public class ShellScriptCodeDisplayer extends JEditTextArea{
+public class ShellScriptCodeDisplayer extends JEditTextArea {
 
-	public ShellScriptCodeDisplayer(String text)
-	{
+	public ShellScriptCodeDisplayer(String text) {
 		super();
 		setTokenMarker(new ShellScriptTokenMarker());
 		painter.setEOLMarkersPainted(false);
 		painter.setInvalidLinesPainted(false);
 		setFont(FontCst.CODE_FONT);
 		setEditable(false);
-		//setElectricScroll(1000);
+		// setElectricScroll(1000);
 		setFirstLine(0);
 		setText(text);
 	}

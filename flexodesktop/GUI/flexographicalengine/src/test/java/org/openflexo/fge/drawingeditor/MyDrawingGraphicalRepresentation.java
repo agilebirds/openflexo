@@ -23,20 +23,16 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 public class MyDrawingGraphicalRepresentation extends DrawingGraphicalRepresentation<MyDrawing> implements XMLSerializable {
 
 	// Called for LOAD
-	public MyDrawingGraphicalRepresentation(DrawingBuilder builder)
-	{
+	public MyDrawingGraphicalRepresentation(DrawingBuilder builder) {
 		this(builder.drawing);
 		initializeDeserialization();
 	}
-	
 
 	// Called for NEW
-	public MyDrawingGraphicalRepresentation(EditedDrawing editedDrawing) 
-	{
+	public MyDrawingGraphicalRepresentation(EditedDrawing editedDrawing) {
 		super(editedDrawing);
 
 		/*MouseClickControl showContextualMenu 

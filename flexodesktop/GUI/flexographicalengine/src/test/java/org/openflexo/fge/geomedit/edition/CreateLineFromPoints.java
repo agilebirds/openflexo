@@ -26,47 +26,39 @@ import org.openflexo.fge.geomedit.Line;
 import org.openflexo.fge.geomedit.construction.LineWithTwoPointsConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateLineFromPoints extends Edition {
-	
+
 	public CreateLineFromPoints(GeomEditController controller) {
-		super("Create line from points",controller);
-		inputs.add(new ObtainPoint("Select first point",controller));
-		inputs.add(new ObtainPoint("Select second point",controller));
+		super("Create line from points", controller);
+		inputs.add(new ObtainPoint("Select first point", controller));
+		inputs.add(new ObtainPoint("Select second point", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainPoint p1 = (ObtainPoint)inputs.get(0);
-		ObtainPoint p2 = (ObtainPoint)inputs.get(1);
-		
-		addObject (new Line(
-				getController().getDrawing().getModel(),
-				new LineWithTwoPointsConstruction(p1.getConstruction(),p2.getConstruction())));
+	public void performEdition() {
+		ObtainPoint p1 = (ObtainPoint) inputs.get(0);
+		ObtainPoint p2 = (ObtainPoint) inputs.get(1);
+
+		addObject(new Line(getController().getDrawing().getModel(), new LineWithTwoPointsConstruction(p1.getConstruction(),
+				p2.getConstruction())));
 
 	}
-	
+
 	/*public void addObject(GeometricObject object)
 	{
 		getController().getDrawing().getModel().addToChilds(object);
 	}*/
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
-		}
-		else if (currentStep == 1) {
+		} else if (currentStep == 1) {
 			// Nothing to draw
-			FGEPoint p1 = ((ObtainPoint)inputs.get(0)).getInputData();
+			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGELine(p1,lastMouseLocation)).paint(graphics);
+			(new FGELine(p1, lastMouseLocation)).paint(graphics);
 		}
 	}
 }
-
-

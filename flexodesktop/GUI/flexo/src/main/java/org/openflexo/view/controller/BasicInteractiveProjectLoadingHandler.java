@@ -23,94 +23,92 @@ import java.io.File;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 public class BasicInteractiveProjectLoadingHandler extends InteractiveProjectLoadingHandler {
 
-    private static final Logger logger = Logger.getLogger(BasicInteractiveProjectLoadingHandler.class.getPackage().getName());
-    
-    private boolean alreadyAnswer = false;
-    private boolean convertProject = false;
-    private File _projectDirectory;
-    
-    public BasicInteractiveProjectLoadingHandler(File projectDirectory)
-    {
-    	super();
-    	_projectDirectory = projectDirectory;
-    }
+	private static final Logger logger = Logger.getLogger(BasicInteractiveProjectLoadingHandler.class.getPackage().getName());
 
-    private boolean askForProjectConversion() throws ProjectLoadingCancelledException 
-    {
-    	String CONVERT = FlexoLocalization.localizedForKey("convert_project");
-    	String DONT_CONVERT = FlexoLocalization.localizedForKey("don't_convert_project");
-    	String CANCEL = FlexoLocalization.localizedForKey("cancel");
-    	int choice = FlexoController.selectOption(
-    			"<html><center>"+CGIconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg()+"<b>&nbsp;"+FlexoLocalization.localizedForKey("warning")+"</b></center><br>"
-				+"<center>"+_projectDirectory.getName()+"</center><br>"
-    			+FlexoLocalization.localizedForKey("this_project_seems_to_have_been_created_with_an_older_version_of_flexo")+"<br>"
-				+FlexoLocalization.localizedForKey("would_you_like_to_convert_entire_project_to_new_version_of_flexo_(recommanded)")+"<br></html>",
-    			CONVERT, CONVERT, DONT_CONVERT, CANCEL);
+	private boolean alreadyAnswer = false;
+	private boolean convertProject = false;
+	private File _projectDirectory;
 
+	public BasicInteractiveProjectLoadingHandler(File projectDirectory) {
+		super();
+		_projectDirectory = projectDirectory;
+	}
 
-    	if (choice == 0) { // CONVERT
-    		alreadyAnswer = true;
-    		return true;
-    	}
-     	else if (choice == 1) { // DONT_CONVERT
-       		alreadyAnswer = true;
-       		return false;
-    	}
-    	else {			
-    		throw new ProjectLoadingCancelledException();
-    	}
-    }
+	private boolean askForProjectConversion() throws ProjectLoadingCancelledException {
+		String CONVERT = FlexoLocalization.localizedForKey("convert_project");
+		String DONT_CONVERT = FlexoLocalization.localizedForKey("don't_convert_project");
+		String CANCEL = FlexoLocalization.localizedForKey("cancel");
+		int choice = FlexoController.selectOption(
+				"<html><center>"
+						+ IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg()
+						+ "<b>&nbsp;"
+						+ FlexoLocalization.localizedForKey("warning")
+						+ "</b></center><br>"
+						+ "<center>"
+						+ _projectDirectory.getName()
+						+ "</center><br>"
+						+ FlexoLocalization.localizedForKey("this_project_seems_to_have_been_created_with_an_older_version_of_flexo")
+						+ "<br>"
+						+ FlexoLocalization
+								.localizedForKey("would_you_like_to_convert_entire_project_to_new_version_of_flexo_(recommanded)")
+						+ "<br></html>", CONVERT, CONVERT, DONT_CONVERT, CANCEL);
 
-    @Override
-	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource)
-    throws ProjectLoadingCancelledException 
-    {
-    	if (isPerformingAutomaticConversion()) return true;
+		if (choice == 0) { // CONVERT
+			alreadyAnswer = true;
+			return true;
+		} else if (choice == 1) { // DONT_CONVERT
+			alreadyAnswer = true;
+			return false;
+		} else {
+			throw new ProjectLoadingCancelledException();
+		}
+	}
 
-    	if (!alreadyAnswer) {
-    		convertProject = askForProjectConversion();
-     	}
-   		return convertProject;
-   	    	
-     }
+	@Override
+	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
+		if (isPerformingAutomaticConversion()) {
+			return true;
+		}
 
-    @Override
-	public boolean useOlderMappingWhenLoadingFailure(FlexoXMLStorageResource resource)
-    throws ProjectLoadingCancelledException
-    {
-    	return true;
-    }
+		if (!alreadyAnswer) {
+			convertProject = askForProjectConversion();
+		}
+		return convertProject;
 
-    @Override
+	}
+
+	@Override
+	public boolean useOlderMappingWhenLoadingFailure(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
+		return true;
+	}
+
+	@Override
 	public boolean loadAndConvertAllOldResourcesToLatestVersion(FlexoProject project, FlexoProgress progress)
-    throws ProjectLoadingCancelledException 
-    {
-    	Vector<ResourceToConvert> resourcesToConvert = searchResourcesToConvert(project);
+			throws ProjectLoadingCancelledException {
+		Vector<ResourceToConvert> resourcesToConvert = searchResourcesToConvert(project);
 
-    	if (resourcesToConvert.size() > 0) {
- 
-        	if (!alreadyAnswer) {
-        		convertProject = askForProjectConversion();
-         	}
- 
-        	if (convertProject) {
-     			performConversion(project, resourcesToConvert, progress);
-    			return true;
-    		}
-    	}
+		if (resourcesToConvert.size() > 0) {
 
-    	return false;
-    }
+			if (!alreadyAnswer) {
+				convertProject = askForProjectConversion();
+			}
 
- 
+			if (convertProject) {
+				performConversion(project, resourcesToConvert, progress);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }

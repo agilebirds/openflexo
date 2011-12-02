@@ -28,23 +28,21 @@ import java.util.Vector;
  * @author sguerin
  * 
  */
-public class GraphBuilder
-{
+public class GraphBuilder {
 
-    public Vector nodes = new Vector();
+	public Vector nodes = new Vector();
 
-    public Vector edges = new Vector();
+	public Vector edges = new Vector();
 
-    @Override
-	public String toString()
-    {
-        String returned = "";
-        for (Enumeration e = nodes.elements(); e.hasMoreElements();) {
-            returned += ((Node) e.nextElement()).toString() + "\n";
-        }
-        for (Enumeration e = edges.elements(); e.hasMoreElements();) {
-            returned += ((Edge) e.nextElement()).toString() + "\n";
-        }
-        return returned;
-    }
+	@Override
+	public String toString() {
+		String returned = "";
+		for (Enumeration e = nodes.elements(); e.hasMoreElements();) {
+			returned += ((Node) e.nextElement()).toString() + "\n";
+		}
+		for (Enumeration e = edges.elements(); e.hasMoreElements();) {
+			returned += ((Edge) e.nextElement()).toString() + "\n";
+		}
+		return returned;
+	}
 }

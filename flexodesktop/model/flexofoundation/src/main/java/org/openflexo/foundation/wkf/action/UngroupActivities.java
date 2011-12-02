@@ -30,58 +30,50 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.ActivityGroup;
 import org.openflexo.foundation.wkf.WKFObject;
 
+public class UngroupActivities extends FlexoAction<UngroupActivities, ActivityGroup, WKFObject> {
 
-public class UngroupActivities extends FlexoAction<UngroupActivities,ActivityGroup,WKFObject> 
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(UngroupActivities.class.getPackage().getName());
 
-    public static FlexoActionType<UngroupActivities,ActivityGroup,WKFObject> actionType 
-    = new FlexoActionType<UngroupActivities,ActivityGroup,WKFObject> (
-    		"ungroup_activities",FlexoActionType.editGroup) {
+	public static FlexoActionType<UngroupActivities, ActivityGroup, WKFObject> actionType = new FlexoActionType<UngroupActivities, ActivityGroup, WKFObject>(
+			"ungroup_activities", FlexoActionType.editGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public UngroupActivities makeNewAction(ActivityGroup focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new UngroupActivities(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public UngroupActivities makeNewAction(ActivityGroup focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new UngroupActivities(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ActivityGroup group, Vector<WKFObject> globalSelection) 
-        {
-            return (group != null);
-        }
+		@Override
+		protected boolean isVisibleForSelection(ActivityGroup group, Vector<WKFObject> globalSelection) {
+			return (group != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ActivityGroup object, Vector<WKFObject> globalSelection) 
-        {
-            return isVisibleForSelection(object, globalSelection);
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (UngroupActivities.actionType, ActivityGroup.class);
-     }
-    
-    UngroupActivities (ActivityGroup focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
-    
-    @Override
-    protected void doAction(Object context) throws FlexoException 
-    {
-    	// TODO Auto-generated method stub
-    	System.out.println("Ungroup activities");
-    	System.out.println("focused = "+getFocusedObject());
-    	System.out.println("global selection = "+getGlobalSelection());
-    	
-    	getFocusedObject().ungroup();
-    }
+		@Override
+		protected boolean isEnabledForSelection(ActivityGroup object, Vector<WKFObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
+
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(UngroupActivities.actionType, ActivityGroup.class);
+	}
+
+	UngroupActivities(ActivityGroup focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		// TODO Auto-generated method stub
+		System.out.println("Ungroup activities");
+		System.out.println("focused = " + getFocusedObject());
+		System.out.println("global selection = " + getGlobalSelection());
+
+		getFocusedObject().ungroup();
+	}
 
 }

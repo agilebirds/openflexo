@@ -25,24 +25,20 @@ import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
-
 /**
  * External view of the IE Module
- *
+ * 
  * @author sguerin
  */
-public interface ExternalIEModule extends ExternalModule
-{
+public interface ExternalIEModule extends ExternalModule {
 
-    public ExternalIEController getIEExternalController();
+	public ExternalIEController getIEExternalController();
 
-    public void showScreenInterface(ComponentInstance component);
+	public void showScreenInterface(ComponentInstance component);
 
-    public void saveAll(boolean showConfirm);
+	public JComponent getWOComponentView(ExternalIEController controller, IEWOComponent component);
 
-    public JComponent getWOComponentView(ExternalIEController controller, IEWOComponent component);
+	public JComponent createViewForOperation(OperationNode operation);
 
-    public JComponent createViewForOperation(OperationNode operation);
-
-    public void finalizeScreenshot();
+	public void finalizeScreenshot();
 }

@@ -26,80 +26,69 @@ import javax.swing.DefaultCellEditor;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCheckBoxColumn;
 
-
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class CheckBoxColumn extends AbstractColumn<Boolean> implements EditableColumn<Boolean>
-{
-    private static final Logger logger = Logger.getLogger(CheckBoxColumn.class.getPackage().getName());
+public class CheckBoxColumn extends AbstractColumn<Boolean> implements EditableColumn<Boolean> {
+	private static final Logger logger = Logger.getLogger(CheckBoxColumn.class.getPackage().getName());
 
 	private DefaultCellEditor editor;
 
-    public CheckBoxColumn(FIBCheckBoxColumn columnModel, FIBTableModel tableModel, FIBController controller)
-    {
-        super(columnModel,tableModel,controller);
-    }
+	public CheckBoxColumn(FIBCheckBoxColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+		super(columnModel, tableModel, controller);
+	}
 
 	@Override
-	public FIBCheckBoxColumn getColumnModel()
-	{
-		return (FIBCheckBoxColumn)super.getColumnModel();
+	public FIBCheckBoxColumn getColumnModel() {
+		return (FIBCheckBoxColumn) super.getColumnModel();
 	}
-	
 
-    @Override
-	public Class<Boolean> getValueClass()
-    {
-        return Boolean.class;
-    }
+	@Override
+	public Class<Boolean> getValueClass() {
+		return Boolean.class;
+	}
 
-    @Override
-	public String toString()
-    {
-        return "BooleanColumn " + "@" + Integer.toHexString(hashCode());
-    }
-    
-    @Override
-	public boolean isCellEditableFor(Object object)
-    {
-        return true;
-    }
-    
-    
-    
-   /* @Override
-    public boolean requireCellRenderer() {
-    	return true;
-    }
+	@Override
+	public String toString() {
+		return "BooleanColumn " + "@" + Integer.toHexString(hashCode());
+	}
 
-    @Override
-    public TableCellRenderer getCellRenderer() {
-    	return getDefaultTableCellRenderer();
-    }
-    
-    @Override
-    public boolean requireCellEditor() {
-    	return true;
-    }
-    
-    @Override
-    public TableCellEditor getCellEditor() {
-    	if(editor==null) {
-    		editor = new DefaultCellEditor(new JCheckBox()) {
-    			@Override
-    			public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-    				final JCheckBox checkBox = (JCheckBox)super.getTableCellEditorComponent(table, value, isSelected, row, column);
-    				return checkBox;
-    			}   			
-     		};
-    	}
-    	return editor;
-    }
-    
-*/
+	@Override
+	public boolean isCellEditableFor(Object object) {
+		return true;
+	}
+
+	/* @Override
+	 public boolean requireCellRenderer() {
+	 	return true;
+	 }
+
+	 @Override
+	 public TableCellRenderer getCellRenderer() {
+	 	return getDefaultTableCellRenderer();
+	 }
+	 
+	 @Override
+	 public boolean requireCellEditor() {
+	 	return true;
+	 }
+	 
+	 @Override
+	 public TableCellEditor getCellEditor() {
+	 	if(editor==null) {
+	 		editor = new DefaultCellEditor(new JCheckBox()) {
+	 			@Override
+	 			public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+	 				final JCheckBox checkBox = (JCheckBox)super.getTableCellEditorComponent(table, value, isSelected, row, column);
+	 				return checkBox;
+	 			}   			
+	  		};
+	 	}
+	 	return editor;
+	 }
+	 
+	*/
 }

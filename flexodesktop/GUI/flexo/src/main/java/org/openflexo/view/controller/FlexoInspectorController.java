@@ -39,6 +39,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import org.apache.commons.io.IOUtils;
 import org.openflexo.GeneralPreferences;
@@ -65,250 +66,253 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 
-
 public abstract class FlexoInspectorController extends InspectorController {
 
-    private static final Logger logger = Logger.getLogger(FlexoInspectorController.class.getPackage().getName());
-    private static final InspectorWidgetConfiguration DEFAULT_CONFIGURATION = new InspectorWidgetConfiguration() {
+	private static final Logger logger = Logger.getLogger(FlexoInspectorController.class.getPackage().getName());
+	private static final InspectorWidgetConfiguration DEFAULT_CONFIGURATION = new InspectorWidgetConfiguration() {
 
 		@Override
-		public boolean showViewSourceButtonInWysiwyg()
-		{
+		public boolean showViewSourceButtonInWysiwyg() {
 			return ModuleLoader.getUserType() == UserType.DEVELOPER || ModuleLoader.getUserType() == UserType.MAINTAINER;
 		}
 
 	};
 
-    protected FlexoInspectorController(FlexoController controller)
-    {
-    	this(controller.new FlexoControllerInspectorDelegate(),
-    			new DefaultInspectorHelpDelegate(DocResourceManager.instance()));
-    }
+	protected FlexoInspectorController(FlexoController controller) {
+		this(controller.new FlexoControllerInspectorDelegate(), new DefaultInspectorHelpDelegate(DocResourceManager.instance()));
+	}
 
-    protected FlexoInspectorController(InspectorDelegate inspectorDelegate, HelpDelegate helpDelegate)
-    {
-    	super(inspectorDelegate,helpDelegate, DEFAULT_CONFIGURATION);
-    }
+	protected FlexoInspectorController(InspectorDelegate inspectorDelegate, HelpDelegate helpDelegate) {
+		super(inspectorDelegate, helpDelegate, DEFAULT_CONFIGURATION);
+	}
 
-    protected void loadAllCustomInspectors(FlexoProject project)
-    {
-    	if (project != null) {
-    		File customInspectorDirectory = project.getCustomInspectorsDirectory();
+	protected void loadAllCustomInspectors(FlexoProject project) {
+		if (project != null) {
+			File customInspectorDirectory = project.getCustomInspectorsDirectory();
 
-    		// Load custom inspectors
-    		if (customInspectorDirectory != null) {
-    			// Load custom inspectors
-    			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("load_custom_inspectors"));
-    			loadInspectors(customInspectorDirectory);
-    		}
+			// Load custom inspectors
+			if (customInspectorDirectory != null) {
+				// Load custom inspectors
+				ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("load_custom_inspectors"));
+				loadInspectors(customInspectorDirectory);
+			}
 
-    		updateSuperInspectors();
-    	}
-    }
+			updateSuperInspectors();
+		}
+	}
 
-    private void loadInspectors(File directory)
-    {
-        File[] files = directory.listFiles();
+	private void loadInspectors(File directory) {
+		File[] files = directory.listFiles();
 
-        int steps = files.length;
-        ProgressWindow.resetSecondaryProgressInstance(steps);
+		int steps = files.length;
+		ProgressWindow.resetSecondaryProgressInstance(steps);
 
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].getName().endsWith(".inspector")) {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Loading " + files[i].getName() + "...");
-                ProgressWindow
-                        .setSecondaryProgressInstance(FlexoLocalization.localizedForKey("loading") + " " + files[i].getName() + "...");
-                // String inspectorName =
-                // files[i].getName().substring(files[i].getName().lastIndexOf(".inspector"));
-                try {
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].getName().endsWith(".inspector")) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Loading " + files[i].getName() + "...");
+				}
+				ProgressWindow
+						.setSecondaryProgressInstance(FlexoLocalization.localizedForKey("loading") + " " + files[i].getName() + "...");
+				// String inspectorName =
+				// files[i].getName().substring(files[i].getName().lastIndexOf(".inspector"));
+				try {
 					importInspectorFile(files[i]);
 				} catch (FileNotFoundException e) {
-					logger.warning("File NOT FOUND: "+files[i]);
+					logger.warning("File NOT FOUND: " + files[i]);
 				}
-            }
-        }
-        updateSuperInspectors();
+			}
+		}
+		updateSuperInspectors();
 
-    }
+	}
 
-    protected void loadInspectors(InspectorGroup inspectorGroup)
-    {
-        if (inspectorGroup != null) {
-        	
-        	for(InspectorGroup currentInspectorGroup : new InspectorGroup[] {Inspectors.COMMON, inspectorGroup}) {
+	protected void loadInspectors(InspectorGroup inspectorGroup) {
+		if (inspectorGroup != null) {
 
-        		List<String> inspectorsToLoad = currentInspectorGroup.getAllInspectorNames();
-        		Hashtable<String,InspectorModel> loadedInspectors = new Hashtable<String,InspectorModel>();
+			for (InspectorGroup currentInspectorGroup : new InspectorGroup[] { Inspectors.COMMON, inspectorGroup }) {
 
-	            int steps = inspectorsToLoad.size();
-	            ProgressWindow.resetSecondaryProgressInstance(steps);
+				List<String> inspectorsToLoad = currentInspectorGroup.getAllInspectorNames();
+				Hashtable<String, InspectorModel> loadedInspectors = new Hashtable<String, InspectorModel>();
 
-	            for (String inspectorName : inspectorsToLoad) {
-	                if (inspectorName.endsWith(".inspector")) {
-	                    if (logger.isLoggable(Level.INFO))
-	                        logger.info("Loading " + inspectorName + "...");
-	                    ProgressWindow.setSecondaryProgressInstance(FlexoLocalization.localizedForKey("loading") + " " + inspectorName + "...");
-	                    String cleanedInspectorName = inspectorName.substring(0, inspectorName.length() - ".inspector".length());
-	                    if (loadedInspectors.get(cleanedInspectorName)==null) {
-	                    	InputStream inputStream = currentInspectorGroup.getInspectorStream(inspectorName);
-	                    	if(inputStream != null)
-	                    	{
-			                    try {
-			                    	loadedInspectors.put(cleanedInspectorName, importInspector(inspectorName, inputStream));
-			                    } finally {
-			                    	IOUtils.closeQuietly(inputStream);
-			                    }
-	                    	}
-	                    }
-	                }
-	            }
-	            updateSuperInspectors();
+				int steps = inspectorsToLoad.size();
+				ProgressWindow.resetSecondaryProgressInstance(steps);
 
-	            for (Enumeration<String> en = loadedInspectors.keys(); en.hasMoreElements();) {
-	                String inspectorName = en.nextElement();
-	                InspectorModel inspectorModel = loadedInspectors.get(inspectorName);
-	                inspectorModel.inspectorName = inspectorName;
-	                DocResourceManager.instance().importInspector(currentInspectorGroup, inspectorName, inspectorModel);
-	                cleanInspectorModel(inspectorModel);
-	            }
-        	}
-        }
-    }
+				for (String inspectorName : inspectorsToLoad) {
+					if (inspectorName.endsWith(".inspector")) {
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("Loading " + inspectorName + "...");
+						}
+						ProgressWindow.setSecondaryProgressInstance(FlexoLocalization.localizedForKey("loading") + " " + inspectorName
+								+ "...");
+						String cleanedInspectorName = inspectorName.substring(0, inspectorName.length() - ".inspector".length());
+						if (loadedInspectors.get(cleanedInspectorName) == null) {
+							InputStream inputStream = currentInspectorGroup.getInspectorStream(inspectorName);
+							if (inputStream != null) {
+								try {
+									loadedInspectors.put(cleanedInspectorName, importInspector(inspectorName, inputStream));
+								} finally {
+									IOUtils.closeQuietly(inputStream);
+								}
+							}
+						}
+					}
+				}
+				updateSuperInspectors();
 
-    /**
-     * @param inspectorModel
-     */
-    public static void cleanInspectorModel(InspectorModel inspectorModel)
-    {
-    	if (logger.isLoggable(Level.FINE))
-    		logger.fine("cleanInspectorModel "+inspectorModel.inspectorName);
-    	Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
-    	for (Enumeration<PropertyModel> en2 = inspectorModel.getAllPropertyModel().elements(); en2.hasMoreElements();) {
-    		PropertyModel propertyModel = en2.nextElement();
-    		Enumeration<String> en = new Hashtable<String, ParamModel>(propertyModel.parameters).keys();
-            while (en.hasMoreElements()) {
-                ParamModel p = propertyModel.parameters.get(en.nextElement());
-                if (p==null)
-                    continue;
-                cleanParameters(propertyModel.parameters, p);
-            }
-            if (propertyModel instanceof PropertyListModel) {
-                PropertyListModel plm = (PropertyListModel)propertyModel;
-                Iterator<PropertyListAction> i = plm.getActions().iterator();
-                while (i.hasNext()) {
-                    PropertyListAction pla = i.next();
-                    Enumeration<String> en1 = new Hashtable<String,ParamModel>(pla.parameters).keys();
-                    while (en1.hasMoreElements()) {
-                        ParamModel p1 = pla.parameters.get(en1.nextElement());
-                        if (p1==null)
-                            continue;
-                        cleanParameters(pla.parameters, p1);
-                    }
-                    if (parametersContainerIsDisplayable(pla, ModuleLoader.getUserType())) {
-                        //Let's keep it
-                    } else
-                        i.remove();
-                }
-                Iterator<PropertyListColumn> j = plm.getColumns().iterator();
-                while (j.hasNext()) {
-                    PropertyListColumn plc = j.next();
-                    Enumeration<String> en1 = new Hashtable<String,ParamModel>(plc.parameters).keys();
-                    while (en1.hasMoreElements()) {
-                        ParamModel p1 = plc.parameters.get(en1.nextElement());
-                        if (p1==null)
-                            continue;
-                        cleanParameters(plc.parameters, p1);
-                    }
-                    if (parametersContainerIsDisplayable(plc, ModuleLoader.getUserType())) {
-                        //Let's keep it
-                    } else
-                        j.remove();
-                }
-            }
-            if (parametersContainerIsDisplayable(propertyModel, ModuleLoader.getUserType())) {
-            	DocItem propertyModelItem = DocResourceManager.instance().getDocItemFor(propertyModel);
-            	if (propertyModelItem != null) {
-            		if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
-            			propertyModel.help = "<html>"
-            			+ propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getShortHTMLDescription()
-            			+ "</html>";
-            			logger.fine("Set text for"+propertyModel.name+" to be "+propertyModel.help);
-            		}
-            	}
-            } else {
-            	// This property should not be displayed
-            	logger.fine("Remove property " + propertyModel.name);
-            	propertyModel.getTabModel().removePropertyWithKey(propertyModel.name);
-            }
-        }
-    }
+				for (Enumeration<String> en = loadedInspectors.keys(); en.hasMoreElements();) {
+					String inspectorName = en.nextElement();
+					InspectorModel inspectorModel = loadedInspectors.get(inspectorName);
+					inspectorModel.inspectorName = inspectorName;
+					DocResourceManager.instance().importInspector(currentInspectorGroup, inspectorName, inspectorModel);
+					cleanInspectorModel(inspectorModel);
+				}
+			}
+		}
+	}
 
-    /**
-     * @param parameters
-     */
-    private static void cleanParameters(Hashtable<String, ParamModel> parameters, ParamModel paramModel)
-    {
-        Hashtable<String, ParamModel> clone = new Hashtable<String, ParamModel>(paramModel.parameters);
-        Enumeration<String> en = clone.keys();
-        while (en.hasMoreElements()) {
-            ParamModel p = paramModel.parameters.get(en.nextElement());
-            if (p==null)
-                continue;
-            if (p.parameters.size()>0)
-                cleanParameters(paramModel.parameters,p);
-            if (parametersContainerIsDisplayable(paramModel, ModuleLoader.getUserType())) {
-                // Let's keep it
-            } else {
-                parameters.remove(paramModel.name);
-        }
-    }
-    }
+	/**
+	 * @param inspectorModel
+	 */
+	public static void cleanInspectorModel(InspectorModel inspectorModel) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("cleanInspectorModel " + inspectorModel.inspectorName);
+		}
+		Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
+		for (Enumeration<PropertyModel> en2 = inspectorModel.getAllPropertyModel().elements(); en2.hasMoreElements();) {
+			PropertyModel propertyModel = en2.nextElement();
+			Enumeration<String> en = new Hashtable<String, ParamModel>(propertyModel.parameters).keys();
+			while (en.hasMoreElements()) {
+				ParamModel p = propertyModel.parameters.get(en.nextElement());
+				if (p == null) {
+					continue;
+				}
+				cleanParameters(propertyModel.parameters, p);
+			}
+			if (propertyModel instanceof PropertyListModel) {
+				PropertyListModel plm = (PropertyListModel) propertyModel;
+				Iterator<PropertyListAction> i = plm.getActions().iterator();
+				while (i.hasNext()) {
+					PropertyListAction pla = i.next();
+					Enumeration<String> en1 = new Hashtable<String, ParamModel>(pla.parameters).keys();
+					while (en1.hasMoreElements()) {
+						ParamModel p1 = pla.parameters.get(en1.nextElement());
+						if (p1 == null) {
+							continue;
+						}
+						cleanParameters(pla.parameters, p1);
+					}
+					if (parametersContainerIsDisplayable(pla, ModuleLoader.getUserType())) {
+						// Let's keep it
+					} else {
+						i.remove();
+					}
+				}
+				Iterator<PropertyListColumn> j = plm.getColumns().iterator();
+				while (j.hasNext()) {
+					PropertyListColumn plc = j.next();
+					Enumeration<String> en1 = new Hashtable<String, ParamModel>(plc.parameters).keys();
+					while (en1.hasMoreElements()) {
+						ParamModel p1 = plc.parameters.get(en1.nextElement());
+						if (p1 == null) {
+							continue;
+						}
+						cleanParameters(plc.parameters, p1);
+					}
+					if (parametersContainerIsDisplayable(plc, ModuleLoader.getUserType())) {
+						// Let's keep it
+					} else {
+						j.remove();
+					}
+				}
+			}
+			if (parametersContainerIsDisplayable(propertyModel, ModuleLoader.getUserType())) {
+				DocItem propertyModelItem = DocResourceManager.instance().getDocItemFor(propertyModel);
+				if (propertyModelItem != null) {
+					if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
+						propertyModel.help = "<html>"
+								+ propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getShortHTMLDescription()
+								+ "</html>";
+						logger.fine("Set text for" + propertyModel.name + " to be " + propertyModel.help);
+					}
+				}
+			} else {
+				// This property should not be displayed
+				logger.fine("Remove property " + propertyModel.name);
+				propertyModel.getTabModel().removePropertyWithKey(propertyModel.name);
+			}
+		}
+	}
 
-    private static boolean parametersContainerIsDisplayable(ParametersContainerModelObject paramContainer, UserType userType)
-    {
-        if (paramContainer.hasValueForParameter("visibleFor")) {
-            if (!evaluateVisibleCondition(paramContainer, userType))
-                return false;
-        }
-        if (paramContainer.hasValueForParameter("hiddenFor")) {
-            if (!evaluateHiddenCondition(paramContainer, userType))
-                return false;
-        }
-        return true;
-    }
+	/**
+	 * @param parameters
+	 */
+	private static void cleanParameters(Hashtable<String, ParamModel> parameters, ParamModel paramModel) {
+		Hashtable<String, ParamModel> clone = new Hashtable<String, ParamModel>(paramModel.parameters);
+		Enumeration<String> en = clone.keys();
+		while (en.hasMoreElements()) {
+			ParamModel p = paramModel.parameters.get(en.nextElement());
+			if (p == null) {
+				continue;
+			}
+			if (p.parameters.size() > 0) {
+				cleanParameters(paramModel.parameters, p);
+			}
+			if (parametersContainerIsDisplayable(paramModel, ModuleLoader.getUserType())) {
+				// Let's keep it
+			} else {
+				parameters.remove(paramModel.name);
+			}
+		}
+	}
 
-    private static boolean evaluateVisibleCondition(ParametersContainerModelObject paramContainer, UserType userType)
-    {
-        String condition = paramContainer.getValueForParameter("visibleFor");
-        StringTokenizer st = new StringTokenizer(condition, ",");
-        String token;
-        while (st.hasMoreTokens()) {
-            token = st.nextToken();
-            if (token.equalsIgnoreCase("ALL"))
-                return true;
-            UserType nextUT = UserType.getUserTypeNamed(token);
-            if ((nextUT != null) && (nextUT.equals(userType)))
-                return true;
-        }
-        return false;
-    }
+	private static boolean parametersContainerIsDisplayable(ParametersContainerModelObject paramContainer, UserType userType) {
+		if (paramContainer.hasValueForParameter("visibleFor")) {
+			if (!evaluateVisibleCondition(paramContainer, userType)) {
+				return false;
+			}
+		}
+		if (paramContainer.hasValueForParameter("hiddenFor")) {
+			if (!evaluateHiddenCondition(paramContainer, userType)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    private static boolean evaluateHiddenCondition(ParametersContainerModelObject paramContainer, UserType userType)
-    {
-        String condition = paramContainer.getValueForParameter("hiddenFor");
-        StringTokenizer st = new StringTokenizer(condition, ",");
-        String token;
-        while (st.hasMoreTokens()) {
-            token = st.nextToken();
-            if (token.equalsIgnoreCase("ALL"))
-                return false;
-            UserType nextUT = UserType.getUserTypeNamed(token);
-            if ((nextUT != null) && (nextUT.equals(userType)))
-                return false;
-        }
-        return true;
-    }
+	private static boolean evaluateVisibleCondition(ParametersContainerModelObject paramContainer, UserType userType) {
+		String condition = paramContainer.getValueForParameter("visibleFor");
+		StringTokenizer st = new StringTokenizer(condition, ",");
+		String token;
+		while (st.hasMoreTokens()) {
+			token = st.nextToken();
+			if (token.equalsIgnoreCase("ALL")) {
+				return true;
+			}
+			UserType nextUT = UserType.getUserTypeNamed(token);
+			if ((nextUT != null) && (nextUT.equals(userType))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean evaluateHiddenCondition(ParametersContainerModelObject paramContainer, UserType userType) {
+		String condition = paramContainer.getValueForParameter("hiddenFor");
+		StringTokenizer st = new StringTokenizer(condition, ",");
+		String token;
+		while (st.hasMoreTokens()) {
+			token = st.nextToken();
+			if (token.equalsIgnoreCase("ALL")) {
+				return false;
+			}
+			UserType nextUT = UserType.getUserTypeNamed(token);
+			if ((nextUT != null) && (nextUT.equals(userType))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/*private File _inspectorDirectory;
 
@@ -323,11 +327,11 @@ public abstract class FlexoInspectorController extends InspectorController {
 		}
 		return _inspectorDirectory;
 	}*/
-    
+
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		final JDialog dialog = new JDialog(frame);
-		dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+		dialog.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		JButton button = new JButton("Show dialog");
 		button.addActionListener(new ActionListener() {
 
@@ -347,6 +351,5 @@ public abstract class FlexoInspectorController extends InspectorController {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
-
 
 }

@@ -26,22 +26,19 @@ public class ParallelLineWithPointConstruction extends LineConstruction {
 
 	public LineConstruction lineConstruction;
 	public PointConstruction pointConstruction;
-	
-	public ParallelLineWithPointConstruction() 
-	{
+
+	public ParallelLineWithPointConstruction() {
 		super();
 	}
-	
-	public ParallelLineWithPointConstruction(LineConstruction aLineConstruction, PointConstruction aPointConstruction) 
-	{
+
+	public ParallelLineWithPointConstruction(LineConstruction aLineConstruction, PointConstruction aPointConstruction) {
 		this();
 		this.lineConstruction = aLineConstruction;
 		this.pointConstruction = aPointConstruction;
 	}
-	
+
 	@Override
-	protected FGELine computeData()
-	{
+	protected FGELine computeData() {
 		FGELine computedLine = lineConstruction.getLine().getParallelLine(pointConstruction.getPoint());
 		FGEPoint pp1 = computedLine.getProjection(lineConstruction.getLine().getP1());
 		FGEPoint pp2 = computedLine.getProjection(lineConstruction.getLine().getP2());
@@ -51,17 +48,14 @@ public class ParallelLineWithPointConstruction extends LineConstruction {
 	}
 
 	@Override
-	public String toString()
-	{
-		return "ParallelLineWithPointConstruction[\n"+"> "+lineConstruction.toString()+"\n> "+pointConstruction.toString()+"\n]";
+	public String toString() {
+		return "ParallelLineWithPointConstruction[\n" + "> " + lineConstruction.toString() + "\n> " + pointConstruction.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { lineConstruction, pointConstruction };
 		return returned;
 	}
-
 
 }

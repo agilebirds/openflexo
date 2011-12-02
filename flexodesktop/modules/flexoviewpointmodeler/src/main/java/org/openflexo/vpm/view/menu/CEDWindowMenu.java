@@ -31,38 +31,34 @@ import org.openflexo.module.Module;
 import org.openflexo.view.menu.WindowMenu;
 import org.openflexo.vpm.controller.CEDController;
 
-
 /**
  * 'Window' menu for this Module
  * 
  * @author yourname
  */
-public class CEDWindowMenu extends WindowMenu
-{
+public class CEDWindowMenu extends WindowMenu {
 
-    private static final Logger logger = Logger.getLogger(CEDWindowMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CEDWindowMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected CEDController _xxxController;
+	protected CEDController _xxxController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public CEDWindowMenu(CEDController controller)
-    {
-        super(controller,Module.XXX_MODULE);
-        _xxxController = controller;
-        // Put your actions here
-    }
+	public CEDWindowMenu(CEDController controller) {
+		super(controller, Module.XXX_MODULE);
+		_xxxController = controller;
+		// Put your actions here
+	}
 
-    public CEDController getXXXController()
-    {
-        return _xxxController;
-    }
+	public CEDController getXXXController() {
+		return _xxxController;
+	}
 }

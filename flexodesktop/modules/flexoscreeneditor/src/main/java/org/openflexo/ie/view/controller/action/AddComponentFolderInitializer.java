@@ -28,6 +28,12 @@ import javax.swing.Icon;
 import javax.swing.JTree;
 
 import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.ie.cl.ComponentDefinition;
+import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
+import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
+import org.openflexo.foundation.ie.cl.action.AddComponentFolder;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
@@ -35,36 +41,24 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
-import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
-import org.openflexo.foundation.ie.cl.action.AddComponentFolder;
-
 public class AddComponentFolderInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddComponentFolderInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(AddComponentFolder.actionType,actionInitializer);
+	AddComponentFolderInitializer(IEControllerActionInitializer actionInitializer) {
+		super(AddComponentFolder.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddComponentFolder> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddComponentFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddComponentFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddComponentFolder action)
-			{
+			public boolean run(ActionEvent e, AddComponentFolder action) {
 				FlexoComponentFolder parentFolder = null;
 				if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof ComponentDefinition)) {
 					parentFolder = ((ComponentDefinition) action.getFocusedObject()).getFolder();
@@ -76,13 +70,14 @@ public class AddComponentFolderInitializer extends ActionInitializer {
 				if (parentFolder != null) {
 					String newFolderName = null;
 					while (newFolderName == null) {
-						newFolderName = FlexoController.askForStringMatchingPattern(FlexoLocalization
-								.localizedForKey("enter_name_for_the_new_folder"),
-								Pattern.compile(FileUtils.GOOD_CHARACTERS_REG_EXP + "+"), FlexoLocalization
-								.localizedForKey("folder_name_cannot_contain_:_\\_\"_:_*_?_<_>_/"));
-						if (newFolderName == null)
+						newFolderName = FlexoController.askForStringMatchingPattern(
+								FlexoLocalization.localizedForKey("enter_name_for_the_new_folder"),
+								Pattern.compile(FileUtils.GOOD_CHARACTERS_REG_EXP + "+"),
+								FlexoLocalization.localizedForKey("folder_name_cannot_contain_:_\\_\"_:_*_?_<_>_/"));
+						if (newFolderName == null) {
 							return false;
-						if (newFolderName.trim().length()==0) {
+						}
+						if (newFolderName.trim().length() == 0) {
 							FlexoController.showError(FlexoLocalization.localizedForKey("a_folder_name_cannot_be_empty"));
 							return false;
 						}
@@ -102,12 +97,10 @@ public class AddComponentFolderInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddComponentFolder> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddComponentFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddComponentFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddComponentFolder action)
-			{
+			public boolean run(ActionEvent e, AddComponentFolder action) {
 				// Update ProjectBrowser (normally it should be done with a
 				// notification)
 				// TODO: do it properly with a notification
@@ -127,10 +120,8 @@ public class AddComponentFolderInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SEIconLibrary.IE_FOLDER_ICON;
 	}
-
 
 }

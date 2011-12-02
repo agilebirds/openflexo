@@ -218,9 +218,9 @@ public class DMPackage extends DMObject {
 			setChanged();
 			notifyObservers(new EntityUnregistered(entity));
 		}
-		/*
-		 * if (entities.size() == 0) { getRepository().deletePackage(this); }
-		 */
+		/*if (entities.size() == 0) {
+		    getRepository().deletePackage(this);
+		}*/
 	}
 
 	@Override

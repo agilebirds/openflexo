@@ -23,9 +23,7 @@ import java.io.File;
 
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.TextFile;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.generator.utils.PrototypeProcessBusinessDataSamplesGenerator;
-
 
 public class PrototypeProcessBusinessDataSamplesFile extends TextFile implements GenerationAvailableFile {
 
@@ -43,23 +41,20 @@ public class PrototypeProcessBusinessDataSamplesFile extends TextFile implements
 	}
 
 	@Override
-	public PrototypeProcessBusinessDataSamplesFileResource getFlexoResource()
-    {
-        return (PrototypeProcessBusinessDataSamplesFileResource)super.getFlexoResource();
-    }
+	public PrototypeProcessBusinessDataSamplesFileResource getFlexoResource() {
+		return (PrototypeProcessBusinessDataSamplesFileResource) super.getFlexoResource();
+	}
 
 	@Override
-	public PrototypeProcessBusinessDataSamplesGenerator getGenerator() 
-	{
+	public PrototypeProcessBusinessDataSamplesGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
-	
+
 	/**
 	 * @see org.openflexo.foundation.rm.cg.ASCIIFile#getEncoding()
 	 */
 	@Override
-	public String getEncoding()
-	{
+	public String getEncoding() {
 		return "Windows-1252";
 	}
 }

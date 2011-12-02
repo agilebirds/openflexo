@@ -23,22 +23,18 @@ import java.io.File;
 
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class FileSelectorParameter extends ParameterDefinition<File> {
 
-    //private ProcessSelectingConditional _fileSelectingConditional;
-    
-    public FileSelectorParameter(String name, String label, File defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.FileInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	// private ProcessSelectingConditional _fileSelectingConditional;
 
+	public FileSelectorParameter(String name, String label, File defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.FileInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

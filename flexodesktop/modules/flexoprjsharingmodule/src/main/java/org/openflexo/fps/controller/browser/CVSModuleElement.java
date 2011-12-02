@@ -34,12 +34,9 @@ import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSModule;
 import org.openflexo.fps.dm.CVSModuleDiscovered;
 
-
-public class CVSModuleElement extends FPSBrowserElement implements ExpansionSynchronizedElement
-{
-	public CVSModuleElement(CVSModule module, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(module, BrowserElementType.CVS_MODULE, browser,parent);
+public class CVSModuleElement extends FPSBrowserElement implements ExpansionSynchronizedElement {
+	public CVSModuleElement(CVSModule module, ProjectBrowser browser, BrowserElement parent) {
+		super(module, BrowserElementType.CVS_MODULE, browser, parent);
 	}
 
 	@Override
@@ -48,10 +45,11 @@ public class CVSModuleElement extends FPSBrowserElement implements ExpansionSync
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
-		if (logger.isLoggable(Level.FINE))
-			logger.fine("buildChildrenVector() for CVSModuleElement, explorer = "+getCVSExplorer()+ " isExplored="+getCVSExplorer().isExplored());
+	protected void buildChildrenVector() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("buildChildrenVector() for CVSModuleElement, explorer = " + getCVSExplorer() + " isExplored="
+					+ getCVSExplorer().isExplored());
+		}
 		if (getCVSExplorer().isExplored()) {
 			for (CVSModule module : getModule().getCVSModules()) {
 				addToChilds(module);
@@ -59,70 +57,59 @@ public class CVSModuleElement extends FPSBrowserElement implements ExpansionSync
 			for (CVSFile file : getModule().getCVSFiles()) {
 				addToChilds(file);
 			}
-		}
-		else if (!getCVSExplorer().isError()) {
+		} else if (!getCVSExplorer().isError()) {
 			addToChilds(getCVSExplorer());
 		}
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getModule().getModuleName();
 	}
 
-	public CVSModule getModule()
-	{
-		return (CVSModule)getObject();
+	public CVSModule getModule() {
+		return (CVSModule) getObject();
 	}
 
-	public CVSExplorer getCVSExplorer()
-	{
+	public CVSExplorer getCVSExplorer() {
 		return getModule().getCVSExplorer(getProjectBrowser());
 	}
 
 	@Override
-	public boolean isExpansionSynchronizedWithData()
-	{
+	public boolean isExpansionSynchronizedWithData() {
 		return true;
 	}
 
 	@Override
-	public boolean isExpanded()
-	{
+	public boolean isExpanded() {
 		return getCVSExplorer().wasExploringRequested();
 	}
 
 	@Override
-	public void expand()
-	{
-		if (!getCVSExplorer().wasExploringRequested())
+	public void expand() {
+		if (!getCVSExplorer().wasExploringRequested()) {
 			getCVSExplorer().explore();
+		}
 	}
 
 	@Override
-	public void collapse()
-	{
+	public void collapse() {
 		// Nothing to do
 	}
 
 	@Override
-	public boolean requiresExpansionFor(BrowserElement next)
-	{
+	public boolean requiresExpansionFor(BrowserElement next) {
 		return true;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
-		//logger.info("observable="+observable+" dataModification="+dataModification);
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// logger.info("observable="+observable+" dataModification="+dataModification);
 		if (dataModification instanceof CVSModuleDiscovered && getCVSExplorer().isExploring()) {
 			// Dont notify yet, wait for CVSExplored notification
-		}
-		else {
+		} else {
 			super.update(observable, dataModification);
 		}
 	}
-
 
 }

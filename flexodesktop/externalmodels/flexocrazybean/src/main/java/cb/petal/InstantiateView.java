@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents InstantiateView object
- *
+ * 
  * @version $Id: InstantiateView.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class InstantiateView extends QuiduView {
-  public InstantiateView(PetalNode parent, Collection params, int tag) {
-    super(parent, "InstantiateView", params, tag);
-  }
+	public InstantiateView(PetalNode parent, Collection params, int tag) {
+		super(parent, "InstantiateView", params, tag);
+	}
 
-  public InstantiateView() {
-    super("InstantiateView");
-  }
+	public InstantiateView() {
+		super("InstantiateView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

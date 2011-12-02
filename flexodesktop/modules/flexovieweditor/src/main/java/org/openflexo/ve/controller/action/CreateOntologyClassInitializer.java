@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ontology.action.CreateOntologyClass;
@@ -35,55 +35,43 @@ import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class CreateOntologyClassInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateOntologyClassInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(CreateOntologyClass.actionType,actionInitializer);
+	CreateOntologyClassInitializer(OEControllerActionInitializer actionInitializer) {
+		super(CreateOntologyClass.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateOntologyClass> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateOntologyClass> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateOntologyClass>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyClass action)
-			{
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						VECst.CREATE_ONTOLOGY_CLASS_DIALOG_FIB,
-						action, null, true);
+			public boolean run(ActionEvent e, CreateOntologyClass action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.CREATE_ONTOLOGY_CLASS_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
 	}
-	
 
 	@Override
-	protected FlexoActionFinalizer<CreateOntologyClass> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<CreateOntologyClass> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateOntologyClass>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyClass action)
-			{
-				((OEController)getController()).getSelectionManager().setSelectedObject(action.getNewClass());
+			public boolean run(ActionEvent e, CreateOntologyClass action) {
+				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewClass());
 				return true;
 			}
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
 	}
 

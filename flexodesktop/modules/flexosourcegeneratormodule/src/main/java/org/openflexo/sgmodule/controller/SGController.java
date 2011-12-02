@@ -47,7 +47,6 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.generator.action.AcceptDiskUpdate;
-import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -76,15 +75,14 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
 
-
 /**
  * Controller for this module
  * 
  * @author sylvain
  */
 public class SGController extends FlexoController implements SelectionManagingController/*
-																						 * , ConsistencyCheckingController
-																						 */
+* , ConsistencyCheckingController
+*/
 {
 
 	private static final Logger logger = Logger.getLogger(SGController.class.getPackage().getName());
@@ -253,9 +251,11 @@ public class SGController extends FlexoController implements SelectionManagingCo
 	}
 
 	/**
-	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view is not the current displayed view
+	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
+	 * is not the current displayed view
 	 * 
-	 * @param object: the object to focus on
+	 * @param object
+	 *            : the object to focus on
 	 */
 	@Override
 	public void selectAndFocusObject(FlexoModelObject object) {
@@ -277,8 +277,9 @@ public class SGController extends FlexoController implements SelectionManagingCo
 
 	public ProjectGenerator getProjectGenerator(SourceRepository repository) {
 		ProjectGenerator returned = _projectGenerators.get(repository);
-		if (!repository.isConnected())
+		if (!repository.isConnected()) {
 			return returned;
+		}
 		if (returned == null) {
 			try {
 				returned = new ProjectGenerator(getProject(), repository);
@@ -365,26 +366,33 @@ public class SGController extends FlexoController implements SelectionManagingCo
 				GeneratedResourceModifiedChoice choice = defaultGeneratedResourceModifiedChoice;
 				if (defaultGeneratedResourceModifiedChoice == GeneratedResourceModifiedChoice.ASK) {
 
-					RadioButtonListParameter<String> whatToDo = new RadioButtonListParameter<String>("whatToDo", "what_would_you_like_to_do",
-							GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(), GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(), GeneratedResourceModifiedChoice.REINJECT_IN_MODEL
-									.getLocalizedName(), GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL.getLocalizedName(), GeneratedResourceModifiedChoice.ACCEPT.getLocalizedName(),
-							GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT.getLocalizedName(), GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT.getLocalizedName());
+					RadioButtonListParameter<String> whatToDo = new RadioButtonListParameter<String>("whatToDo",
+							"what_would_you_like_to_do", GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),
+							GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),
+							GeneratedResourceModifiedChoice.REINJECT_IN_MODEL.getLocalizedName(),
+							GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL.getLocalizedName(),
+							GeneratedResourceModifiedChoice.ACCEPT.getLocalizedName(),
+							GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT.getLocalizedName(),
+							GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT.getLocalizedName());
 					CheckboxParameter rememberMyChoice = new CheckboxParameter("rememberMyChoice", "remember_my_choice", false);
-					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization.localizedForKey("resource_edited"), FlexoLocalization
-							.localizedForKey("resource")
-							+ " " + generatedResource.getFileName() + " " + FlexoLocalization.localizedForKey("has_been_edited"), whatToDo, rememberMyChoice);
+					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+							FlexoLocalization.localizedForKey("resource_edited"), FlexoLocalization.localizedForKey("resource") + " "
+									+ generatedResource.getFileName() + " " + FlexoLocalization.localizedForKey("has_been_edited"),
+							whatToDo, rememberMyChoice);
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.IGNORE.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.IGNORE;
 						} else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.REINJECT_IN_MODEL.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.REINJECT_IN_MODEL;
-						} else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL.getLocalizedName())) {
+						} else if (whatToDo.getValue().equals(
+								GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL;
 						} else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.ACCEPT;
 						} else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT;
-						} else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT.getLocalizedName())) {
+						} else if (whatToDo.getValue().equals(
+								GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT;
 						}
 						if (rememberMyChoice.getValue()) {
@@ -392,8 +400,9 @@ public class SGController extends FlexoController implements SelectionManagingCo
 						}
 					}
 				}
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("I will perform " + choice.getLocalizedName());
+				}
 				if (choice == GeneratedResourceModifiedChoice.ASK) {
 					choice = GeneratedResourceModifiedChoice.IGNORE;
 				}
@@ -404,18 +413,21 @@ public class SGController extends FlexoController implements SelectionManagingCo
 					resourceChangedOnDisk.add(generatedResource.getCGFile());
 					if (choice == GeneratedResourceModifiedChoice.IGNORE) {
 					} else if (choice == GeneratedResourceModifiedChoice.REINJECT_IN_MODEL) {
-						ReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor()).doAction();
+						ReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor())
+								.doAction();
 					} else if (choice == GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL) {
-						ReinjectInModel reinjectInModelAction = ReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor());
+						ReinjectInModel reinjectInModelAction = ReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(),
+								resourceChangedOnDisk, getEditor());
 						reinjectInModelAction.setAskReinjectionContext(false);
 						reinjectInModelAction.doAction();
 					} else if (choice == GeneratedResourceModifiedChoice.ACCEPT) {
 						AcceptDiskUpdate.actionType.makeNewAction(generatedResource.getCGFile(), null, getEditor()).doAction();
 					} else if (choice == GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT) {
-						AcceptDiskUpdateAndReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor()).doAction();
+						AcceptDiskUpdateAndReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk,
+								getEditor()).doAction();
 					} else if (choice == GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT) {
-						AcceptDiskUpdateAndReinjectInModel acceptDiskUpdateAndReinjectInModelAction = AcceptDiskUpdateAndReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(),
-								resourceChangedOnDisk, getEditor());
+						AcceptDiskUpdateAndReinjectInModel acceptDiskUpdateAndReinjectInModelAction = AcceptDiskUpdateAndReinjectInModel.actionType
+								.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor());
 						acceptDiskUpdateAndReinjectInModelAction.setAskReinjectionContext(false);
 						acceptDiskUpdateAndReinjectInModelAction.doAction();
 					}
@@ -452,19 +464,22 @@ public class SGController extends FlexoController implements SelectionManagingCo
 		}
 		if (object instanceof CGFile) {
 			CGFile cgFile = (CGFile) object;
-			return cgFile.getResource().getFile().getName() + (cgFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
+			return cgFile.getResource().getFile().getName()
+					+ (cgFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
 		}
 		if (object instanceof CGTemplate) {
 			CGTemplate cgTemplateFile = (CGTemplate) object;
 			return cgTemplateFile.getTemplateName()
-					+ (cgTemplateFile instanceof CGTemplateFile && ((CGTemplateFile) cgTemplateFile).isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
+					+ (cgTemplateFile instanceof CGTemplateFile && ((CGTemplateFile) cgTemplateFile).isEdited() ? "["
+							+ FlexoLocalization.localizedForKey("edited") + "]" : "");
 		}
 
 		return null;
 	}
 
 	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
-		if (moduleView.getRepresentedObject() instanceof CGObject && AbstractGCAction.repositoryForObject((CGObject) moduleView.getRepresentedObject()) instanceof SourceRepository) {
+		if (moduleView.getRepresentedObject() instanceof CGObject
+				&& AbstractGCAction.repositoryForObject((CGObject) moduleView.getRepresentedObject()) instanceof SourceRepository) {
 			_lastEditedCGRepository = (SourceRepository) AbstractGCAction.repositoryForObject((CGObject) moduleView.getRepresentedObject());
 		}
 		refreshFooter();

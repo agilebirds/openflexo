@@ -26,51 +26,49 @@ import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
  * Handles the Clear-sticky response.
- * @author  Milos Kleint
+ * 
+ * @author Milos Kleint
  */
 
 class ClearStickyResponse implements Response {
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            final String localPath = dis.readLine();
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			final String localPath = dis.readLine();
 
-            final String repositoryPath = dis.readLine();
-            //System.err.println("Repository path is: " + repositoryPath);
-            
-            final String absPath = services.convertPathname(localPath, repositoryPath);
-            if (services.getGlobalOptions().isExcluded(new File(absPath))) {
-                return;
-            }
-            
-            services.updateAdminData(localPath, repositoryPath, null);
-            // TODO: remove the Entries.static file (check user manual for
-            // file name first)
-            File absFile = new File(absPath, "CVS/Tag"); //NOI18N
-            if (absFile.exists()) {
-                absFile.delete();
-            }
-        }
-        catch (IOException e) {
-            throw new ResponseException(e);
-        }
-    }
+			final String repositoryPath = dis.readLine();
+			// System.err.println("Repository path is: " + repositoryPath);
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+			final String absPath = services.convertPathname(localPath, repositoryPath);
+			if (services.getGlobalOptions().isExcluded(new File(absPath))) {
+				return;
+			}
+
+			services.updateAdminData(localPath, repositoryPath, null);
+			// TODO: remove the Entries.static file (check user manual for
+			// file name first)
+			File absFile = new File(absPath, "CVS/Tag"); // NOI18N
+			if (absFile.exists()) {
+				absFile.delete();
+			}
+		} catch (IOException e) {
+			throw new ResponseException(e);
+		}
+	}
+
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

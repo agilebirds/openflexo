@@ -35,163 +35,154 @@ import org.openflexo.foundation.ie.widget.IEBrowserWidget;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 
+public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserWidget> implements ListDataListener {
 
-public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserWidget> implements ListDataListener
-{
+	private JList _jList;
 
-    private JList _jList;
+	private JScrollPane scrollPane;
 
-    private JScrollPane scrollPane;
+	public IEBrowserWidgetView(IEController ieController, IEBrowserWidget model, boolean addDnDSupport, IEWOComponentView view) {
+		super(ieController, model, addDnDSupport, view);
+		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
+		setLayout(layout);
+		_jList = new JList(getBrowserModel());
+		_jList.setFont(IETextAreaWidgetView.TEXTAREA_FONT);
+		_jList.setFocusable(false);
+		_jList.setOpaque(false);
+		_jList.setEnabled(false);
+		_jList.setVisibleRowCount(model.getVisibleRows());
+		_jList.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		TransparentMouseListener tml = new TransparentMouseListener(_jList, this);
+		_jList.addMouseListener(tml);
+		_jList.addMouseMotionListener(tml);
+		model.addListDataListener(this);
+		scrollPane = new JListPane(_jList);
+		add(scrollPane);
+	}
 
-    public IEBrowserWidgetView(IEController ieController, IEBrowserWidget model, boolean addDnDSupport, IEWOComponentView view)
-    {
-        super(ieController, model, addDnDSupport, view);
-        FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
-        setLayout(layout);
-        _jList = new JList(getBrowserModel());
-        _jList.setFont(IETextAreaWidgetView.TEXTAREA_FONT);
-        _jList.setFocusable(false);
-        _jList.setOpaque(false);
-        _jList.setEnabled(false);
-        _jList.setVisibleRowCount(model.getVisibleRows());
-        _jList.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        TransparentMouseListener tml = new TransparentMouseListener(_jList, this);
-        _jList.addMouseListener(tml);
-        _jList.addMouseMotionListener(tml);
-        model.addListDataListener(this);
-        scrollPane = new JListPane(_jList);
-        add(scrollPane);
-    }
+	protected class JListPane extends JScrollPane {
 
-    protected class JListPane extends JScrollPane
-    {
+		protected JList jList;
 
-        protected JList jList;
+		/**
+		 * @param textArea
+		 */
+		public JListPane(JList textArea) {
+			super(textArea, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_NEVER);
+			this.jList = textArea;
+		}
 
-        /**
-         * @param textArea
-         */
-        public JListPane(JList textArea)
-        {
-            super(textArea, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_NEVER);
-            this.jList = textArea;
-        }
+		/**
+		 * Overrides doLayout
+		 * 
+		 * @see java.awt.Container#doLayout()
+		 */
+		@Override
+		public void doLayout() {
+			super.doLayout();
+			getViewport().doLayout();
+			this.jList.doLayout();
+		}
 
-        /**
-         * Overrides doLayout
-         * 
-         * @see java.awt.Container#doLayout()
-         */
-        @Override
-        public void doLayout()
-        {
-            super.doLayout();
-            getViewport().doLayout();
-            this.jList.doLayout();
-        }
+		/**
+		 * Overrides getPreferredSize
+		 * 
+		 * @see javax.swing.JComponent#getPreferredSize()
+		 */
+		@Override
+		public Dimension getPreferredSize() {
+			Dimension d;
+			d = jList.getPreferredScrollableViewportSize();
+			if (getBrowserModel().getSize() == 0) {
+				d.width = 30;// Minimal size
+			} else {
+				d.width += (getInsets().left + getInsets().right + jList.getInsets().left + jList.getInsets().right);
+				if (getVerticalScrollBar() != null && getVerticalScrollBar().isVisible()) {
+					d.width += getVerticalScrollBar().getWidth();
+				}
+			}
+			d.height += (jList.getInsets().top + jList.getInsets().bottom);
+			return d;
+		}
+	}
 
-        /**
-         * Overrides getPreferredSize
-         * 
-         * @see javax.swing.JComponent#getPreferredSize()
-         */
-        @Override
-		public Dimension getPreferredSize()
-        {
-            Dimension d;
-            d = jList.getPreferredScrollableViewportSize();
-            if (getBrowserModel().getSize()==0)
-                d.width=30;// Minimal size
-            else {
-            d.width += (getInsets().left + getInsets().right + jList.getInsets().left + jList.getInsets().right);
-            if (getVerticalScrollBar()!=null && getVerticalScrollBar().isVisible())
-                d.width+=getVerticalScrollBar().getWidth();
-            }
-            d.height += (jList.getInsets().top + jList.getInsets().bottom);
-            return d;
-        }
-    }
+	/**
+	 * Overrides doLayout
+	 * 
+	 * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
+	 */
+	@Override
+	public void doLayout() {
+		scrollPane.doLayout();
+		super.doLayout();
+	}
 
-    /**
-     * Overrides doLayout
-     * 
-     * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
-     */
-    @Override
-    public void doLayout()
-    {
-        scrollPane.doLayout();
-        super.doLayout();
-    }
+	/**
+	 * Overrides getPreferredSize
+	 * 
+	 * @see javax.swing.JComponent#getPreferredSize()
+	 */
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null) {
+				return storedSize;
+			}
+		}
+		Dimension d = super.getPreferredSize();
+		if (getHoldsNextComputedPreferredSize()) {
+			storePrefSize(d);
+		}
+		return d;
+	}
 
-    /**
-     * Overrides getPreferredSize
-     * 
-     * @see javax.swing.JComponent#getPreferredSize()
-     */
-    @Override
-    public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null)return storedSize;
-        }
-        Dimension d = super.getPreferredSize();
-        if (getHoldsNextComputedPreferredSize())
-            storePrefSize(d);
-        return d;
-    }
+	public IEBrowserWidget getBrowserModel() {
+		return getModel();
+	}
 
-    public IEBrowserWidget getBrowserModel()
-    {
-        return getModel();
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification.propertyName() != null && dataModification.propertyName().equals("visibleRows")) {
+			_jList.setVisibleRowCount(getBrowserModel().getVisibleRows());
+			doLayout();
+			repaint();
+		} else {
+			super.update(observable, dataModification);
+		}
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (dataModification.propertyName() != null && dataModification.propertyName().equals("visibleRows")) {
-            _jList.setVisibleRowCount(getBrowserModel().getVisibleRows());
-            doLayout();
-            repaint();
-        } else
-            super.update(observable, dataModification);
-    }
+	/**
+	 * Overrides contentsChanged
+	 * 
+	 * @see javax.swing.event.ListDataListener#contentsChanged(javax.swing.event.ListDataEvent)
+	 */
+	@Override
+	public void contentsChanged(ListDataEvent e) {
+		doLayout();
+		repaint();
+	}
 
-    /**
-     * Overrides contentsChanged
-     * 
-     * @see javax.swing.event.ListDataListener#contentsChanged(javax.swing.event.ListDataEvent)
-     */
-    @Override
-	public void contentsChanged(ListDataEvent e)
-    {
-        doLayout();
-        repaint();
-    }
+	/**
+	 * Overrides intervalAdded
+	 * 
+	 * @see javax.swing.event.ListDataListener#intervalAdded(javax.swing.event.ListDataEvent)
+	 */
+	@Override
+	public void intervalAdded(ListDataEvent e) {
+		doLayout();
+		repaint();
+	}
 
-    /**
-     * Overrides intervalAdded
-     * 
-     * @see javax.swing.event.ListDataListener#intervalAdded(javax.swing.event.ListDataEvent)
-     */
-    @Override
-	public void intervalAdded(ListDataEvent e)
-    {
-        doLayout();
-        repaint();
-    }
-
-    /**
-     * Overrides intervalRemoved
-     * 
-     * @see javax.swing.event.ListDataListener#intervalRemoved(javax.swing.event.ListDataEvent)
-     */
-    @Override
-	public void intervalRemoved(ListDataEvent e)
-    {
-        doLayout();
-        repaint();
-    }
+	/**
+	 * Overrides intervalRemoved
+	 * 
+	 * @see javax.swing.event.ListDataListener#intervalRemoved(javax.swing.event.ListDataEvent)
+	 */
+	@Override
+	public void intervalRemoved(ListDataEvent e) {
+		doLayout();
+		repaint();
+	}
 
 }

@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import junit.framework.TestCase;
+
 import org.openflexo.xmlcode.Debugging;
 import org.openflexo.xmlcode.TestFileFinder;
 import org.openflexo.xmlcode.XMLCoder;
@@ -30,12 +32,9 @@ import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 
-import junit.framework.TestCase;
-
 /**
  * <p>
- * Class <code>Example3</code> is intented to show an example of xml
- * coding/decoding scheme
+ * Class <code>Example3</code> is intented to show an example of xml coding/decoding scheme
  * </p>
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
@@ -45,84 +44,80 @@ import junit.framework.TestCase;
  */
 public class Example3Test extends TestCase {
 
-    private static final File exampleModelFile = TestFileFinder.findTestFile("example3/ExampleModel.xml");
-    private static final File dataFile = TestFileFinder.findTestFile("example3/ExampleTestClass.xml");
-     private static final File resultFile = new File(new File(System.getProperty("java.io.tmpdir")),"ResultTestClass.xml");
-    
-    private String xmlData = "";
-    private XMLMapping aMapping;
- 
-    public Example3Test(String name) 
-    {
-        super(name);
-    }
+	private static final File exampleModelFile = TestFileFinder.findTestFile("example3/ExampleModel.xml");
+	private static final File dataFile = TestFileFinder.findTestFile("example3/ExampleTestClass.xml");
+	private static final File resultFile = new File(new File(System.getProperty("java.io.tmpdir")), "ResultTestClass.xml");
 
-    @Override
-	protected void setUp() throws Exception 
-    {
-        super.setUp();
-        
-        Debugging.disableDebug();
+	private String xmlData = "";
+	private XMLMapping aMapping;
 
-        if (!exampleModelFile.exists()) {
-            fail("File " + exampleModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
-        }
+	public Example3Test(String name) {
+		super(name);
+	}
 
-        if (!dataFile.exists()) {
-            fail("File " + dataFile.getName() + " doesn't exist. Maybe you have to check your paths ?");
-        }
-        
-        FileInputStream in;
-        byte[] buffer;
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
 
-        try {
-            in = new FileInputStream(dataFile);
-            buffer = new byte[in.available()];
-            in.read(buffer);
-            xmlData = new String(buffer);
-            in.close();
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+		Debugging.disableDebug();
 
-        XMLCoder.setTransformerFactoryClass("org.apache.xalan.processor.TransformerFactoryImpl");
-    }
+		if (!exampleModelFile.exists()) {
+			fail("File " + exampleModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+		}
 
-    @Override
-	protected void tearDown() throws Exception 
-    {
-        super.tearDown();
-     }
+		if (!dataFile.exists()) {
+			fail("File " + dataFile.getName() + " doesn't exist. Maybe you have to check your paths ?");
+		}
 
-    public void test1()
-    {
-        try {
-            Object anObject;
-            String result;
-            FileOutputStream out;
+		FileInputStream in;
+		byte[] buffer;
 
-            aMapping = new XMLMapping(exampleModelFile);
-            System.out.println("Reading, parsing and getting following model:\n" + aMapping.toString());
-            System.out.println("Reading data file:\n" + xmlData);
+		try {
+			in = new FileInputStream(dataFile);
+			buffer = new byte[in.available()];
+			in.read(buffer);
+			xmlData = new String(buffer);
+			in.close();
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 
-            anObject = XMLDecoder.decodeObjectWithMapping(xmlData, aMapping);
-            System.out.println("Obtaining by parsing string: " + anObject.toString());
+		XMLCoder.setTransformerFactoryClass("org.apache.xalan.processor.TransformerFactoryImpl");
+	}
 
-            anObject = XMLDecoder.decodeObjectWithMapping(new FileInputStream(dataFile), aMapping);
-            System.out.println("Obtaining by parsing stream: " + anObject.toString());
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
 
-            result = XMLCoder.encodeObjectWithMapping((XMLSerializable) anObject, aMapping);
-            System.out.println("Coding to XML and getting " + result);
+	public void test1() {
+		try {
+			Object anObject;
+			String result;
+			FileOutputStream out;
 
-            out = new FileOutputStream(resultFile);
-            XMLCoder.encodeObjectWithMapping((XMLSerializable) anObject, aMapping, out);
-            out.flush();
-            out.close();
+			aMapping = new XMLMapping(exampleModelFile);
+			System.out.println("Reading, parsing and getting following model:\n" + aMapping.toString());
+			System.out.println("Reading data file:\n" + xmlData);
 
-        } catch (Exception e) {
-        	e.printStackTrace();
-            fail (e.getMessage());
-        } 
-    }
+			anObject = XMLDecoder.decodeObjectWithMapping(xmlData, aMapping);
+			System.out.println("Obtaining by parsing string: " + anObject.toString());
+
+			anObject = XMLDecoder.decodeObjectWithMapping(new FileInputStream(dataFile), aMapping);
+			System.out.println("Obtaining by parsing stream: " + anObject.toString());
+
+			result = XMLCoder.encodeObjectWithMapping((XMLSerializable) anObject, aMapping);
+			System.out.println("Coding to XML and getting " + result);
+
+			out = new FileOutputStream(resultFile);
+			XMLCoder.encodeObjectWithMapping((XMLSerializable) anObject, aMapping, out);
+			out.flush();
+			out.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
 
 }

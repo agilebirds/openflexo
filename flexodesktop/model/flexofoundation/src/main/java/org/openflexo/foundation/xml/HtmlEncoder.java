@@ -28,8 +28,7 @@ import java.awt.Color;
  * <UL>
  * <LI>ASCII-characters from 000 till 031 are represented as &amp;#xxx;<BR>
  * (with xxx = the value of the character)
- * <LI>ASCII-characters from 032 t/m 127 are represented by the character
- * itself, except for:
+ * <LI>ASCII-characters from 032 t/m 127 are represented by the character itself, except for:
  * <UL>
  * <LI>'\n' becomes &lt;BR&gt;\n
  * <LI>&quot; becomes &amp;quot;
@@ -59,124 +58,120 @@ import java.awt.Color;
  * @author mario.maccarini@rug.ac.be
  */
 
-public class HtmlEncoder
-{
+public class HtmlEncoder {
 
-    // membervariables
+	// membervariables
 
-    /** List with the HTML translation of all the characters. */
-    private static final String[] htmlCode = new String[256];
+	/** List with the HTML translation of all the characters. */
+	private static final String[] htmlCode = new String[256];
 
-    static {
-        for (int i = 0; i < 10; i++) {
-            htmlCode[i] = "&#00" + i + ";";
-        }
+	static {
+		for (int i = 0; i < 10; i++) {
+			htmlCode[i] = "&#00" + i + ";";
+		}
 
-        for (int i = 10; i < 32; i++) {
-            htmlCode[i] = "&#0" + i + ";";
-        }
+		for (int i = 10; i < 32; i++) {
+			htmlCode[i] = "&#0" + i + ";";
+		}
 
-        for (int i = 32; i < 128; i++) {
-            htmlCode[i] = String.valueOf((char) i);
-        }
+		for (int i = 32; i < 128; i++) {
+			htmlCode[i] = String.valueOf((char) i);
+		}
 
-        // Special characters
-        htmlCode['\"'] = "&quot;"; // double quote
-        htmlCode['&'] = "&amp;"; // ampersand
-        htmlCode['<'] = "&lt;"; // lower than
-        htmlCode['>'] = "&gt;"; // greater than
+		// Special characters
+		htmlCode['\"'] = "&quot;"; // double quote
+		htmlCode['&'] = "&amp;"; // ampersand
+		htmlCode['<'] = "&lt;"; // lower than
+		htmlCode['>'] = "&gt;"; // greater than
 
-        for (int i = 128; i < 256; i++) {
-            htmlCode[i] = "&#" + i + ";";
-        }
-    }
+		for (int i = 128; i < 256; i++) {
+			htmlCode[i] = "&#" + i + ";";
+		}
+	}
 
-    // constructors
+	// constructors
 
-    /**
-     * This class will never be constructed.
-     * <P>
-     * HtmlEncoder only contains static methods.
-     */
+	/**
+	 * This class will never be constructed.
+	 * <P>
+	 * HtmlEncoder only contains static methods.
+	 */
 
-    private HtmlEncoder()
-    {
-        super();
-    }
+	private HtmlEncoder() {
+		super();
+	}
 
-    // methods
+	// methods
 
-    /**
-     * Converts a <CODE>String</CODE> to the HTML-format of this <CODE>String</CODE>.
-     * 
-     * @param string
-     *            The <CODE>String</CODE> to convert
-     * @return a <CODE>String</CODE>
-     */
+	/**
+	 * Converts a <CODE>String</CODE> to the HTML-format of this <CODE>String</CODE>.
+	 * 
+	 * @param string
+	 *            The <CODE>String</CODE> to convert
+	 * @return a <CODE>String</CODE>
+	 */
 
-    public static String encode(String string)
-    {
-        int n = string.length();
-        char character;
-        StringBuffer buffer = new StringBuffer();
-        // loop over all the characters of the String.
-        for (int i = 0; i < n; i++) {
-            character = string.charAt(i);
-            // the Htmlcode of these characters are added to a StringBuffer one
-            // by one
-            if (character < 256) {
-                buffer.append(htmlCode[character]);
-            } else {
-                // Improvement posted by Joachim Eyrich
-                buffer.append("&#").append((int) character).append(";");
-            }
-        }
-        return buffer.toString().trim();
-    }
+	public static String encode(String string) {
+		int n = string.length();
+		char character;
+		StringBuffer buffer = new StringBuffer();
+		// loop over all the characters of the String.
+		for (int i = 0; i < n; i++) {
+			character = string.charAt(i);
+			// the Htmlcode of these characters are added to a StringBuffer one
+			// by one
+			if (character < 256) {
+				buffer.append(htmlCode[character]);
+			} else {
+				// Improvement posted by Joachim Eyrich
+				buffer.append("&#").append((int) character).append(";");
+			}
+		}
+		return buffer.toString().trim();
+	}
 
-    /**
-     * Converts a <CODE>Color</CODE> into a HTML representation of this <CODE>Color</CODE>.
-     * 
-     * @param color
-     *            the <CODE>Color</CODE> that has to be converted.
-     * @return the HTML representation of this <COLOR>Color</COLOR>
-     */
+	/**
+	 * Converts a <CODE>Color</CODE> into a HTML representation of this <CODE>Color</CODE>.
+	 * 
+	 * @param color
+	 *            the <CODE>Color</CODE> that has to be converted.
+	 * @return the HTML representation of this <COLOR>Color</COLOR>
+	 */
 
-    public static String encode(Color color)
-    {
-        StringBuffer buffer = new StringBuffer("#");
-        if (color.getRed() < 16) {
-            buffer.append('0');
-        }
-        buffer.append(Integer.toString(color.getRed(), 16));
-        if (color.getGreen() < 16) {
-            buffer.append('0');
-        }
-        buffer.append(Integer.toString(color.getGreen(), 16));
-        if (color.getBlue() < 16) {
-            buffer.append('0');
-        }
-        buffer.append(Integer.toString(color.getBlue(), 16));
-        return buffer.toString();
-    }
+	public static String encode(Color color) {
+		StringBuffer buffer = new StringBuffer("#");
+		if (color.getRed() < 16) {
+			buffer.append('0');
+		}
+		buffer.append(Integer.toString(color.getRed(), 16));
+		if (color.getGreen() < 16) {
+			buffer.append('0');
+		}
+		buffer.append(Integer.toString(color.getGreen(), 16));
+		if (color.getBlue() < 16) {
+			buffer.append('0');
+		}
+		buffer.append(Integer.toString(color.getBlue(), 16));
+		return buffer.toString();
+	}
 
-    /**
-     * Translates the alignment value.
-     * 
-     * @param alignment
-     *            the alignment value
-     * @return the translated value
-     */
-    /*
-     * public static String getAlignment(int alignment) { switch(alignment) {
-     * case Element.ALIGN_LEFT: return HtmlTags.ALIGN_LEFT; case
-     * Element.ALIGN_CENTER: return HtmlTags.ALIGN_CENTER; case
-     * Element.ALIGN_RIGHT: return HtmlTags.ALIGN_RIGHT; case
-     * Element.ALIGN_JUSTIFIED: case Element.ALIGN_JUSTIFIED_ALL: return
-     * HtmlTags.ALIGN_JUSTIFIED; case Element.ALIGN_TOP: return
-     * HtmlTags.ALIGN_TOP; case Element.ALIGN_MIDDLE: return
-     * HtmlTags.ALIGN_MIDDLE; case Element.ALIGN_BOTTOM: return
-     * HtmlTags.ALIGN_BOTTOM; case Element.ALIGN_BASELINE: return
-     * HtmlTags.ALIGN_BASELINE; default: return ""; } }
-     */
+	/**
+	 * Translates the alignment value.
+	 * 
+	 * @param alignment
+	 *            the alignment value
+	 * @return the translated value
+	 */
+	/*
+	 * public static String getAlignment(int alignment) { switch(alignment) {
+	 * case Element.ALIGN_LEFT: return HtmlTags.ALIGN_LEFT; case
+	 * Element.ALIGN_CENTER: return HtmlTags.ALIGN_CENTER; case
+	 * Element.ALIGN_RIGHT: return HtmlTags.ALIGN_RIGHT; case
+	 * Element.ALIGN_JUSTIFIED: case Element.ALIGN_JUSTIFIED_ALL: return
+	 * HtmlTags.ALIGN_JUSTIFIED; case Element.ALIGN_TOP: return
+	 * HtmlTags.ALIGN_TOP; case Element.ALIGN_MIDDLE: return
+	 * HtmlTags.ALIGN_MIDDLE; case Element.ALIGN_BOTTOM: return
+	 * HtmlTags.ALIGN_BOTTOM; case Element.ALIGN_BASELINE: return
+	 * HtmlTags.ALIGN_BASELINE; default: return ""; } }
+	 */
 }

@@ -26,29 +26,27 @@ import org.openflexo.foundation.FlexoModelObject;
  * 
  * @author bmangez, sguerin
  */
-public interface SelectableView
-{
+public interface SelectableView {
 
-    /**
-     * Return boolean indicating if related object is selected
-     * 
-     * @return boolean
-     */
-    public boolean isSelected();
+	/**
+	 * Return boolean indicating if related object is selected
+	 * 
+	 * @return boolean
+	 */
+	public boolean isSelected();
 
-    /**
-     * Sets related object to be selected or not
-     * 
-     * @param b
-     */
-    public void setIsSelected(boolean b);
+	/**
+	 * Sets related object to be selected or not
+	 * 
+	 * @param b
+	 */
+	public void setIsSelected(boolean b);
 
-    /**
-     * Return represented object, instance of
-     * {@link org.openflexo.foundation.FlexoModelObject}
-     * 
-     * @return
-     */
-    public FlexoModelObject getObject();
+	/**
+	 * Return represented object, instance of {@link org.openflexo.foundation.FlexoModelObject}
+	 * 
+	 * @return
+	 */
+	public FlexoModelObject getObject();
 
 }

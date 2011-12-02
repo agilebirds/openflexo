@@ -21,12 +21,10 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-public class TopWidgetRemoved extends IEDataModification
-{
+public class TopWidgetRemoved extends IEDataModification {
 
-    public TopWidgetRemoved(IEWidget removedTable)
-    {
-        super(removedTable, null);
-    }
+	public TopWidgetRemoved(IEWidget removedTable) {
+		super(removedTable, null);
+	}
 
 }

@@ -31,7 +31,6 @@ import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
-
 public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 	private ForegroundStyle foreground;
@@ -40,9 +39,7 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 	private ForegroundStyle painterForeground;
 	private BackgroundStyle painterBackground;
 
-
-	public EndActivityNodeGR(ActivityNode activityNode, ProcessRepresentation aDrawing, boolean isInPalet)
-	{
+	public EndActivityNodeGR(ActivityNode activityNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
 
 		// Important: width is different from height here to avoid connector blinking when editing layout
@@ -67,8 +64,7 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
+			public void paintShape(FGEShapeGraphics g) {
 				g.useBackgroundStyle(painterBackground);
 				g.fillCircle(0.2, 0.2, 0.6, 0.6);
 			}
@@ -81,15 +77,13 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 		return BG_COLOR;
 	}
 
-	public ActivityNode getActivityNode()
-	{
+	public ActivityNode getActivityNode() {
 		return getDrawable();
 	}
 
 	@Override
-	public Rectangle getShape()
-	{
-		return (Rectangle)super.getShape();
+	public Rectangle getShape() {
+		return (Rectangle) super.getShape();
 	}
 
 	private boolean isInRoot() {
@@ -100,36 +94,32 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultX()
-	{
-		return isInRoot()?600:300;
+	public double _getDefaultX() {
+		return isInRoot() ? 600 : 300;
 	}
 
 	/**
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultY()
-	{
-		return (getActivityNode().getParentPetriGraph().getIndexForEndNode(getActivityNode()) * 80)+(isInRoot()?200:0);
+	public double _getDefaultY() {
+		return (getActivityNode().getParentPetriGraph().getIndexForEndNode(getActivityNode()) * 80) + (isInRoot() ? 200 : 0);
 	}
 
 	@Override
-	public double getDefaultLabelX() 
-	{
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+	public double getDefaultLabelX() {
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getX();
-		return getLeftBorder()+15;
+		}
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY() 
-	{
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+	public double getDefaultLabelY() {
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getY();
-		return getTopBorder()+40;
+		}
+		return getTopBorder() + 40;
 	}
-
-
 
 }

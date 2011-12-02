@@ -24,28 +24,25 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class PopupComponentElement extends ComponentElement
-{
+public class PopupComponentElement extends ComponentElement {
 
-    public PopupComponentElement(PopupComponentDefinition component, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(component, BrowserElementType.POPUP_COMPONENT, browser, parent);
-    }
+	public PopupComponentElement(PopupComponentDefinition component, ProjectBrowser browser, BrowserElement parent) {
+		super(component, BrowserElementType.POPUP_COMPONENT, browser, parent);
+	}
 
-    /**
-     * Overrides getFilteredElementType
-     * @see org.openflexo.components.browser.ie.ComponentElement#getFilteredElementType()
-     */
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        return BrowserElementType.POPUP_COMPONENT;
-    }
+	/**
+	 * Overrides getFilteredElementType
+	 * 
+	 * @see org.openflexo.components.browser.ie.ComponentElement#getFilteredElementType()
+	 */
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		return BrowserElementType.POPUP_COMPONENT;
+	}
 }

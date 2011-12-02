@@ -27,14 +27,11 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.action.GCAction;
 
+public abstract class DGAction<A extends DGAction<A, T1>, T1 extends CGObject> extends GCAction<A, T1> {
 
-public abstract class DGAction<A extends DGAction<A,T1>,T1 extends CGObject> extends GCAction<A,T1>
-{
+	private static final Logger logger = Logger.getLogger(DGAction.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DGAction.class.getPackage().getName());
-
-    protected DGAction (FlexoActionType<A,T1,CGObject> actionType, T1 focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType,focusedObject,globalSelection,editor);
-    }
+	protected DGAction(FlexoActionType<A, T1, CGObject> actionType, T1 focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 }

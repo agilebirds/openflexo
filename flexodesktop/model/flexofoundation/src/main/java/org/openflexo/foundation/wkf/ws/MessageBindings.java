@@ -24,7 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -111,15 +110,17 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 
 	@Override
 	public String getName() {
-		if (getMessageDefinition() != null)
+		if (getMessageDefinition() != null) {
 			return getMessageDefinition().getName();
+		}
 		return FlexoLocalization.localizedForKey("unbound");
 	}
 
 	@Override
 	public void setName(String aName) {
-		if (getMessageDefinition() != null)
+		if (getMessageDefinition() != null) {
 			getMessageDefinition().setName(aName);
+		}
 	}
 
 	public void setMessageDefinition(AbstractMessageDefinition messageDefinition) {
@@ -157,10 +158,11 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			return getProcess().getBindingModel();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void addToBindings(MessageEntryBinding value) {
@@ -205,8 +207,9 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 	}
 
 	private void updateBindings() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateBindings() in MessageBindings");
+		}
 		Vector<MessageEntryBinding> toRemove = new Vector<MessageEntryBinding>();
 		toRemove.addAll(_bindings);
 		for (Enumeration en = getMessageDefinition().getEntries().elements(); en.hasMoreElements();) {
@@ -225,8 +228,9 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 
 	@Override
 	public void update(FlexoObservable o, DataModification dataModification) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("received update in MessageBindings " + dataModification);
+		}
 		if ((o == getMessageDefinition()) && ((dataModification instanceof BindingAdded) || (dataModification instanceof BindingRemoved))) {
 			updateBindings();
 			setChanged();
@@ -249,8 +253,9 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 			MessageEntry newBD = getMessageDefinition().createNewMessageEntry();
 			return getBinding(newBD);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not create binding: cannot access MessageDefinition !");
+			}
 			return null;
 		}
 	}
@@ -269,8 +274,9 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 		if (getMessageDefinition() != null) {
 			getMessageDefinition().deleteMessageEntry(meb.getBindingDefinition());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not delete binding: cannot access MessageDefinition !");
+			}
 		}
 	}
 
@@ -278,8 +284,9 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 		if (getMessageDefinition() != null) {
 			return getMessageDefinition().isMessageEntryDeletable(meb.getBindingDefinition());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access binding: cannot access ComponentDefinition !");
+			}
 		}
 		return false;
 	}
@@ -385,8 +392,9 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 				bindingName = messageEntryBinding.getBindingDefinitionName();
 				if (message.getMessageEdge().getFlexoPort() != null) {
 					portName = message.getMessageEdge().getFlexoPort().getName();
-				} else
+				} else {
 					portName = "null";
+				}
 				BindingDefinition bd = aMessageEntryBinding.getBindingDefinition();
 				if (bd != null) {
 					Vector allAvailableBV = bd.searchMatchingBindingValue(message, 2);
@@ -468,8 +476,9 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
 
 	@Override
 	public FlexoLevel getLevel() {
-		if (_messageEdge != null)
+		if (_messageEdge != null) {
 			return _messageEdge.getLevel();
+		}
 		return FlexoLevel.ACTIVITY;
 	}
 

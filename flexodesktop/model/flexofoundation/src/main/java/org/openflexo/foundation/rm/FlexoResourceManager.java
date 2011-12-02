@@ -22,20 +22,18 @@ package org.openflexo.foundation.rm;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
-
 
 /**
  * This class is used to perform synchronization of all resources of a Flexo project. Global consistant states of all the resources of a
@@ -89,21 +87,15 @@ public class FlexoResourceManager {
 			@Override
 			public void run() {
 				Thread myThread = Thread.currentThread();
-				FlexoResource resource = null;
-				FlexoFileResource<? extends FlexoResourceData> fileResource = null;
 				while (_clockThread == myThread && !_stop) {
 					// if (logger.isLoggable(Level.FINER))
 					// logger.finer("Checking resources for project " + _editor.getProject());
 					try {
 						List<FlexoFileResource<? extends FlexoResourceData>> updatedResources = new ArrayList<FlexoFileResource<? extends FlexoResourceData>>();
-						for (Enumeration en = _editor.getProject().getResources().elements(); en.hasMoreElements();) {
-							resource = (FlexoResource) en.nextElement();
-							if (resource instanceof FlexoFileResource) {
-								fileResource = (FlexoFileResource<? extends FlexoResourceData>) resource;
-								if (fileResource.hasMoreRecentThanExpectedDiskUpdate()) {
-									updatedResources.add(fileResource);
-									logger.info("File " + fileResource + " update detected on " + _clockThread.getName());
-								}
+						for (FlexoFileResource<? extends FlexoResourceData> fileResource : _editor.getProject().getFileResources()) {
+							if (fileResource.hasMoreRecentThanExpectedDiskUpdate()) {
+								updatedResources.add(fileResource);
+								logger.info("File " + fileResource + " update detected on " + _clockThread.getName());
 							}
 						}
 						if (updatedResources.size() > 0 && _resourceUpdateHandler != null) {
@@ -152,6 +144,7 @@ public class FlexoResourceManager {
 				// simultaneously and might cause a popup
 				// because of some file modification when
 				// reloading the same project
+				_clockThread = null;
 			}
 		}
 	}
@@ -188,14 +181,12 @@ public class FlexoResourceManager {
 
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
 			FlexoResourceCenter resourceCenter) throws ProjectInitializerException, ProjectLoadingCancelledException {
-		return initializeExistingProject(aProjectDirectory, false, null, null, editorFactory, new DefaultProjectLoadingHandler(),
-				resourceCenter);
+		return initializeExistingProject(aProjectDirectory, null, null, editorFactory, new DefaultProjectLoadingHandler(), resourceCenter);
 	}
 
-	public static FlexoEditor initializeExistingProject(File aProjectDirectory, boolean restructureProjectHierarchy,
-			FlexoProgress progress, ResourceUpdateHandler resourceUpdateHandler, FlexoEditorFactory editorFactory,
-			ProjectLoadingHandler loadingHandler, FlexoResourceCenter resourceCenter) throws ProjectInitializerException,
-			ProjectLoadingCancelledException {
+	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoProgress progress,
+			ResourceUpdateHandler resourceUpdateHandler, FlexoEditorFactory editorFactory, ProjectLoadingHandler loadingHandler,
+			FlexoResourceCenter resourceCenter) throws ProjectInitializerException, ProjectLoadingCancelledException {
 		FlexoProject project = null;
 		if (!aProjectDirectory.exists()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -206,7 +197,7 @@ public class FlexoResourceManager {
 		File rmFile = getExpectedResourceManagerFile(aProjectDirectory);
 		if (!rmFile.exists()) {
 			throw new ProjectInitializerException(
-			"There is no rmxml file in project. Cannot load project without one. Use previous versions of Flexo first and then load with this new version.");
+					"There is no rmxml file in project. Cannot load project without one. Use previous versions of Flexo first and then load with this new version.");
 		} else {
 			try {
 				FlexoProject.restoreJarsIfNeeded(aProjectDirectory);

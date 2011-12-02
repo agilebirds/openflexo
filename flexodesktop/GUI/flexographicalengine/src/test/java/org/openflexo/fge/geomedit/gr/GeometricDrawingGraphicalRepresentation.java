@@ -22,28 +22,24 @@ package org.openflexo.fge.geomedit.gr;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.geomedit.GeometricDrawing;
 import org.openflexo.fge.geomedit.GeometricSet;
-import org.openflexo.fge.geomedit.ShowContextualMenuControl;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
+import org.openflexo.fge.geomedit.ShowContextualMenuControl;
 import org.openflexo.xmlcode.XMLSerializable;
-
 
 public class GeometricDrawingGraphicalRepresentation extends DrawingGraphicalRepresentation<GeometricSet> implements XMLSerializable {
 
 	// Called for LOAD
-	public GeometricDrawingGraphicalRepresentation(GeomEditBuilder builder)
-	{
+	public GeometricDrawingGraphicalRepresentation(GeomEditBuilder builder) {
 		this(builder.drawing);
 		initializeDeserialization();
 	}
-	
 
 	// Called for NEW
-	public GeometricDrawingGraphicalRepresentation(GeometricDrawing editedDrawing) 
-	{
+	public GeometricDrawingGraphicalRepresentation(GeometricDrawing editedDrawing) {
 		super(editedDrawing);
 		setWidth(10000);
 		setHeight(10000);
-		
+
 		/*MouseClickControl showContextualMenu 
 		= MouseClickControl.makeMouseClickControl("Show contextual menu", MouseButton.RIGHT, 1,
 				new CustomClickControlAction() {
@@ -61,13 +57,10 @@ public class GeometricDrawingGraphicalRepresentation extends DrawingGraphicalRep
 		});*/
 		addToMouseClickControls(new ShowContextualMenuControl());
 	}
-	
+
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "Drawing.inspector";
 	}
-	
 
-	
 }

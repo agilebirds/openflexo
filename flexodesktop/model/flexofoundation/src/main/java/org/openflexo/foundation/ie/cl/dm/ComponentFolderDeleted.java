@@ -24,17 +24,15 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ComponentFolderDeleted extends IEDataModification
-{
+public class ComponentFolderDeleted extends IEDataModification {
 
-    /**
-     * @param sub
-     */
-    public ComponentFolderDeleted(FlexoComponentFolder sub)
-    {
-        super(sub, null);
-    }
+	/**
+	 * @param sub
+	 */
+	public ComponentFolderDeleted(FlexoComponentFolder sub) {
+		super(sub, null);
+	}
 
 }

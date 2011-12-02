@@ -25,51 +25,47 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.widget.IERadioButtonWidget;
 
-
 /**
  * @author gpolet Created on 13 sept. 2005
  */
-public class IERadioButtonElement extends IEElement
-{
+public class IERadioButtonElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browserElementType
-     * @param browser
-     */
-    public IERadioButtonElement(FlexoModelObject widget, BrowserElementType browserElementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.RADIOBUTTON, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browserElementType
+	 * @param browser
+	 */
+	public IERadioButtonElement(FlexoModelObject widget, BrowserElementType browserElementType, ProjectBrowser browser,
+			BrowserElement parent) {
+		super(widget, BrowserElementType.RADIOBUTTON, browser, parent);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        // Empty block
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		// Empty block
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.openflexo.components.browser.BrowserElement#getName()
-     */
-    @Override
-	public String getName()
-    {
-        if (getRadioButton().getName() == null)
-            return "RadioButton";
-        else
-            return getRadioButton().getName();
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openflexo.components.browser.BrowserElement#getName()
+	 */
+	@Override
+	public String getName() {
+		if (getRadioButton().getName() == null) {
+			return "RadioButton";
+		} else {
+			return getRadioButton().getName();
+		}
+	}
 
-    public IERadioButtonWidget getRadioButton()
-    {
-        return (IERadioButtonWidget) getObject();
-    }
+	public IERadioButtonWidget getRadioButton() {
+		return (IERadioButtonWidget) getObject();
+	}
 
 }

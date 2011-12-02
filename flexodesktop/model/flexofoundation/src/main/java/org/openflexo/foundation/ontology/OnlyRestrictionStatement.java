@@ -28,50 +28,55 @@ public class OnlyRestrictionStatement extends ObjectRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(OnlyRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
-	private OntologyObject object;
-	
-	public OnlyRestrictionStatement(OntologyObject subject, Statement s, AllValuesFromRestriction r)
-	{
-		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		object = getOntologyLibrary().getOntologyObject(r.getAllValuesFrom().getURI());
+	private OntologyObjectProperty property;
+	private OntologyClass object;
+
+	public OnlyRestrictionStatement(OntologyObject subject, Statement s, AllValuesFromRestriction r) {
+		super(subject, s, r);
+		property = (OntologyObjectProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		object = (OntologyClass) getOntologyLibrary().getOntologyObject(r.getAllValuesFrom().getURI());
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "only_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "OnlyRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "OnlyRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyObject getObject() 
-	{
+	public OntologyClass getObject() {
 		return object;
 	}
 
 	@Override
-	public OntologyProperty getProperty() 
-	{
+	public OntologyObjectProperty getProperty() {
 		return property;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" only "+(getObject() != null ? getObject().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " only "
+				+ (getObject() != null ? getObject().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" only";
+		return property.getName() + " only";
+	}
+
+	@Override
+	public int getCardinality() {
+		return -1;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Only;
 	}
 
 }

@@ -22,8 +22,8 @@ package org.openflexo.foundation.ie.widget;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.dm.IEDataModification;
@@ -36,38 +36,38 @@ public class IEDynamicImage extends IEButtonWidget {
 	/**
      * 
      */
-    public static final String DYNAMIC_IMAGE_WIDGET = "dynamic_image_widget";
+	public static final String DYNAMIC_IMAGE_WIDGET = "dynamic_image_widget";
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(IEDynamicImage.class.getPackage().getName());
 
 	protected AbstractBinding _bindingImageUrl;
-	
-	public IEDynamicImage(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
-	
+
+	public IEDynamicImage(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
+
 	public IEDynamicImage(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
 		super(woComponent, parent, prj);
 		setWidthPixel(100);
 		setHeightPixel(100);
 	}
-	
+
 	@Override
 	public String getBeautifiedName() {
 		String s = super.getBeautifiedName();
-		if (s==null || s.trim().length()==0)
+		if (s == null || s.trim().length() == 0) {
 			return "A dynamic image";
+		}
 		return s;
 	}
-	
+
 	@Override
 	public boolean getUsePercentage() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean getMaintainAspectRatio() {
 		return false;
@@ -85,30 +85,28 @@ public class IEDynamicImage extends IEButtonWidget {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "DYNAMIC_IMAGE."+getName();
+		return "DYNAMIC_IMAGE." + getName();
 	}
 
-	public AbstractBinding getBindingImageUrl()
-    {
-        if (isBeingCloned())
-            return null;
-        return _bindingImageUrl;
-    }
+	public AbstractBinding getBindingImageUrl() {
+		if (isBeingCloned()) {
+			return null;
+		}
+		return _bindingImageUrl;
+	}
 
-    public void setBindingImageUrl(AbstractBinding value)
-    {
-    	_bindingImageUrl = value;
-        if (_bindingImageUrl != null) {
-        	_bindingImageUrl.setOwner(this);
-        	_bindingImageUrl.setBindingDefinition(getBindingImageUrlDefinition());
-        }
-        setChanged();
-        notifyObservers(new IEDataModification("bindingImageUrl", null, _bindingImageUrl));
-    }
+	public void setBindingImageUrl(AbstractBinding value) {
+		_bindingImageUrl = value;
+		if (_bindingImageUrl != null) {
+			_bindingImageUrl.setOwner(this);
+			_bindingImageUrl.setBindingDefinition(getBindingImageUrlDefinition());
+		}
+		setChanged();
+		notifyObservers(new IEDataModification("bindingImageUrl", null, _bindingImageUrl));
+	}
 
-    public WidgetBindingDefinition getBindingImageUrlDefinition()
-    {
-        return WidgetBindingDefinition.get(this, "bindingImageUrl", String.class, BindingDefinitionType.GET, false);
-    }
-    
+	public WidgetBindingDefinition getBindingImageUrlDefinition() {
+		return WidgetBindingDefinition.get(this, "bindingImageUrl", String.class, BindingDefinitionType.GET, false);
+	}
+
 }

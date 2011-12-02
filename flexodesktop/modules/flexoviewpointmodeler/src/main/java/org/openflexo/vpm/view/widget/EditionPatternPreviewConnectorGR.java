@@ -29,95 +29,81 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.viewpoint.LabelRepresentation.LabelRepresentationType;
 
-
-public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresentation<ConnectorPatternRole> implements GraphicalFlexoObserver,EditionPatternPreviewConstants {
+public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresentation<ConnectorPatternRole> implements
+		GraphicalFlexoObserver, EditionPatternPreviewConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewConnectorGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public EditionPatternPreviewConnectorGR()
-	{
-		super(ConnectorType.LINE,null,null,null,null);
+	public EditionPatternPreviewConnectorGR() {
+		super(ConnectorType.LINE, null, null, null, null);
 	}
 
-	public EditionPatternPreviewConnectorGR(ConnectorPatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing) 
-	{
-		super(ConnectorType.LINE,
-				aDrawing != null ? aDrawing.getStartShape(aPatternRole) : null,
-				aDrawing != null ? aDrawing.getEndShape(aPatternRole) : null,
-						aPatternRole, aDrawing);
+	public EditionPatternPreviewConnectorGR(ConnectorPatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing) {
+		super(ConnectorType.LINE, aDrawing != null ? aDrawing.getStartShape(aPatternRole) : null, aDrawing != null ? aDrawing
+				.getEndShape(aPatternRole) : null, aPatternRole, aDrawing);
 
-		init(aPatternRole,aDrawing);
+		init(aPatternRole, aDrawing);
 
 	}
 
 	private boolean isInitialized = false;
 
-	public boolean isInitialized()
-	{
+	public boolean isInitialized() {
 		return isInitialized;
 	}
 
-	public void init(ConnectorPatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing)
-	{
+	public void init(ConnectorPatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing) {
 		setDrawable(aPatternRole);
 		setDrawing(aDrawing);
-		
+
 		setStartObject(aDrawing.getStartShape(aPatternRole));
 		setEndObject(aDrawing.getEndShape(aPatternRole));
 
-		if (aPatternRole != null) aPatternRole.addObserver(this);
+		if (aPatternRole != null) {
+			aPatternRole.addObserver(this);
+		}
 
 		isInitialized = true;
 	}
-	
+
 	@Override
-	public void delete()
-	{
-		if (getDrawable() != null) getDrawable().deleteObserver(this);
+	public void delete() {
+		if (getDrawable() != null) {
+			getDrawable().deleteObserver(this);
+		}
 		super.delete();
 	}
 
 	@Override
-	public EditionPatternPreviewRepresentation getDrawing() 
-	{
-		return (EditionPatternPreviewRepresentation)super.getDrawing();
+	public EditionPatternPreviewRepresentation getDrawing() {
+		return (EditionPatternPreviewRepresentation) super.getDrawing();
 	}
-	
-	public ConnectorPatternRole getPatternRole()
-	{
+
+	public ConnectorPatternRole getPatternRole() {
 		return getDrawable();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getPatternRole()) {
 			if (dataModification instanceof NameChanged) {
-				//logger.info("received NameChanged notification");
+				// logger.info("received NameChanged notification");
 				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
-				//setText(getText());
+				// setText(getText());
 			}
 		}
 	}
 
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		if (getPatternRole() != null) {
-			if (getPatternRole().getLabelRepresentation() != null
-					&& getPatternRole().getLabelRepresentation().getType() != null
-					&& getPatternRole().getLabelRepresentation().getType() == LabelRepresentationType.StaticValue) {
-				return getPatternRole().getLabelRepresentation().getText();
-			}
-			else if (getPatternRole().getBoundPatternRole() != null) {
-				return getPatternRole().getBoundPatternRole().getPatternRoleName();
+			if (getPatternRole().getLabel() != null) {
+				return getPatternRole().getLabel().toString();
 			}
 			return getPatternRole().getPatternRoleName();
 		}
@@ -125,24 +111,17 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 	}
 
 	@Override
-	public void setTextNoNotification(String text) 
-	{
+	public void setTextNoNotification(String text) {
 		// Not allowed
 	}
-	
+
 	@Override
-	public void notifyObservers(Object arg)
-	{
+	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification
-				&& ((FGENotification)arg).isModelNotification()
-				&& getDrawing() != null 
-				&& !getDrawing().ignoreNotifications()
-				&& getPatternRole() != null)
+		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+				&& !getDrawing().ignoreNotifications() && getPatternRole() != null) {
 			getPatternRole().setChanged();
+		}
 	}
-	
-
-
 
 }

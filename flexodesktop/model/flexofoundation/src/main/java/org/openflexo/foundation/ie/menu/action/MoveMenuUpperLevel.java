@@ -33,81 +33,71 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class MoveMenuUpperLevel extends FlexoAction
-{
+public class MoveMenuUpperLevel extends FlexoAction {
 
-    protected static final Logger logger = FlexoLogger.getLogger(MoveMenuUpperLevel.class.getPackage().getName());
-    
-    public static FlexoActionType actionType = new FlexoActionType ("move_upper_level",FlexoActionType.defaultGroup) {
+	protected static final Logger logger = FlexoLogger.getLogger(MoveMenuUpperLevel.class.getPackage().getName());
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new MoveMenuUpperLevel(focusedObject, globalSelection,editor);
-        }
+	public static FlexoActionType actionType = new FlexoActionType("move_upper_level", FlexoActionType.defaultGroup) {
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new MoveMenuUpperLevel(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-        	return (object != null) && 
-            (object instanceof FlexoItemMenu) &&
-            (((FlexoItemMenu)object).getFather()!=null) &&
-            (((FlexoItemMenu)object).getFather().getFather()!=null);
-        }
-                
-    };
-    
-    private FlexoItemMenu itemMenu; 
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected MoveMenuUpperLevel(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-    /**
-     * Overrides doAction
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        FlexoItemMenu item = getItemMenu();
-        if ((item.getFather()!=null) && (item.getFather().getFather()!=null)) {
-            FlexoItemMenu newFather = item.getFather().getFather();
-            item.getFather().removeFromSubItems(item);
-            newFather.addToSubItems(item);
-            item.setFather(newFather);
-            if (logger.isLoggable(Level.INFO)) {
-				logger.info("Move menu "+item.getMenuLabel()+" to upper level");
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return (object != null) && (object instanceof FlexoItemMenu) && (((FlexoItemMenu) object).getFather() != null)
+					&& (((FlexoItemMenu) object).getFather().getFather() != null);
+		}
+
+	};
+
+	private FlexoItemMenu itemMenu;
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected MoveMenuUpperLevel(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		FlexoItemMenu item = getItemMenu();
+		if ((item.getFather() != null) && (item.getFather().getFather() != null)) {
+			FlexoItemMenu newFather = item.getFather().getFather();
+			item.getFather().removeFromSubItems(item);
+			newFather.addToSubItems(item);
+			item.setFather(newFather);
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Move menu " + item.getMenuLabel() + " to upper level");
 			}
-        }
-    }
+		}
+	}
 
-    public FlexoItemMenu getItemMenu()
-    {
-        return itemMenu;
-    }
+	public FlexoItemMenu getItemMenu() {
+		return itemMenu;
+	}
 
-    public void setItemMenu(FlexoItemMenu itemMenu)
-    {
-        this.itemMenu = itemMenu;
-    }
-
+	public void setItemMenu(FlexoItemMenu itemMenu) {
+		this.itemMenu = itemMenu;
+	}
 
 }

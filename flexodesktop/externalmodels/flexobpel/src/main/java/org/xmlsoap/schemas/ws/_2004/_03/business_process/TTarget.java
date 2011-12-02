@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,11 +30,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tTarget complex type.
+ * <p>
+ * Java class for tTarget complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tTarget">
@@ -51,35 +51,30 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tTarget")
-public class TTarget
-    extends TExtensibleElements
-{
+public class TTarget extends TExtensibleElements {
 
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String linkName;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String linkName;
 
-    /**
-     * Gets the value of the linkName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLinkName() {
-        return linkName;
-    }
+	/**
+	 * Gets the value of the linkName property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getLinkName() {
+		return linkName;
+	}
 
-    /**
-     * Sets the value of the linkName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLinkName(String value) {
-        this.linkName = value;
-    }
+	/**
+	 * Sets the value of the linkName property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setLinkName(String value) {
+		this.linkName = value;
+	}
 
 }

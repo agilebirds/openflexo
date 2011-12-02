@@ -21,17 +21,15 @@ package org.openflexo.jedit;
 
 import java.util.LinkedList;
 
-public class TextEditionHistory 
-{
+public class TextEditionHistory {
 	public static int MAX_UNDO_LEVELS = 10;
 
 	private JEditTextArea _textArea;
 	private LinkedList<String> list;
 	private int maxUndoLevels;
 	private int index;
-	
-	protected TextEditionHistory(JEditTextArea textArea) 
-	{
+
+	protected TextEditionHistory(JEditTextArea textArea) {
 		super();
 		_textArea = textArea;
 		list = new LinkedList<String>();
@@ -39,36 +37,35 @@ public class TextEditionHistory
 		index = -1;
 	}
 
-	public void retain()
-	{
-		if ((index > -1) && (list.size()-1 > index)) {
-			while (index < list.size()-1) list.removeLast();
+	public void retain() {
+		if ((index > -1) && (list.size() - 1 > index)) {
+			while (index < list.size() - 1) {
+				list.removeLast();
+			}
 		}
-		while (list.size() >= maxUndoLevels) list.remove();
+		while (list.size() >= maxUndoLevels) {
+			list.remove();
+		}
 		list.add(_textArea.getText());
 		index++;
 	}
 
-	public boolean isUndoable() 
-	{
+	public boolean isUndoable() {
 		return (index > 0);
 	}
-	
-	public void undo()
-	{
+
+	public void undo() {
 		if (isUndoable()) {
 			index--;
 			_textArea.setText(list.get(index));
 		}
 	}
 
-	public boolean isRedoable() 
-	{
-		return (index < list.size()-1);
+	public boolean isRedoable() {
+		return (index < list.size() - 1);
 	}
-	
-	public void redo()
-	{
+
+	public void redo() {
 		if (isRedoable()) {
 			index++;
 			_textArea.setText(list.get(index));

@@ -19,20 +19,16 @@
  */
 package org.openflexo.foundation.ws.dm;
 
+public class ExternalWSServiceRemoved extends WSDataModification {
 
-
-public class ExternalWSServiceRemoved extends WSDataModification
-{
-
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public ExternalWSServiceRemoved(Object oldValue)
-    {
-        super( oldValue, null);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public ExternalWSServiceRemoved(Object oldValue) {
+		super(oldValue, null);
+	}
 
 }

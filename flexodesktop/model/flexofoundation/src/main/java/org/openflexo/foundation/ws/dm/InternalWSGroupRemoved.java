@@ -19,20 +19,16 @@
  */
 package org.openflexo.foundation.ws.dm;
 
+public class InternalWSGroupRemoved extends WSDataModification {
 
-
-public class InternalWSGroupRemoved extends WSDataModification
-{
-
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public InternalWSGroupRemoved(Object oldValue)
-    {
-        super( oldValue, null);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public InternalWSGroupRemoved(Object oldValue) {
+		super(oldValue, null);
+	}
 
 }

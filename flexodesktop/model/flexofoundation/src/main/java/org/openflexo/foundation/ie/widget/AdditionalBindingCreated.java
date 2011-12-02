@@ -24,18 +24,16 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class AdditionalBindingCreated extends IEDataModification
-{
+public class AdditionalBindingCreated extends IEDataModification {
 
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public AdditionalBindingCreated(AdditionalBindingDefinition binding)
-    {
-        super(null, binding);
-    }
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public AdditionalBindingCreated(AdditionalBindingDefinition binding) {
+		super(null, binding);
+	}
 
 }

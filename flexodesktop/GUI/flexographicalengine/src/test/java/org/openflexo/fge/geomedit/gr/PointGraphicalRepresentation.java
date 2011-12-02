@@ -28,57 +28,50 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.ComputedControlPoint;
 import org.openflexo.fge.geomedit.DraggableControlPoint;
 import org.openflexo.fge.geomedit.GeometricDrawing;
-import org.openflexo.fge.geomedit.Point;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
+import org.openflexo.fge.geomedit.Point;
 import org.openflexo.fge.geomedit.construction.ExplicitPointConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class PointGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEPoint,Point> implements XMLSerializable 
-{
+public class PointGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEPoint, Point> implements XMLSerializable {
 	// Called for LOAD
-	public PointGraphicalRepresentation(GeomEditBuilder builder)
-	{
-		this(null,builder.drawing);
+	public PointGraphicalRepresentation(GeomEditBuilder builder) {
+		this(null, builder.drawing);
 		initializeDeserialization();
 	}
-	
-	public PointGraphicalRepresentation(Point point, GeometricDrawing aDrawing)
-	{
+
+	public PointGraphicalRepresentation(Point point, GeometricDrawing aDrawing) {
 		super(point, aDrawing);
 	}
 
 	@Override
-	protected List<ControlPoint> buildControlPointsForPoint(FGEPoint point)
-	{
+	protected List<ControlPoint> buildControlPointsForPoint(FGEPoint point) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
 
 		PointConstruction pc = getDrawable().getConstruction();
-		
+
 		if (pc instanceof ExplicitPointConstruction) {
-			returned.add(new DraggableControlPoint<FGEPoint>(this,"point",point,(ExplicitPointConstruction)pc) {
+			returned.add(new DraggableControlPoint<FGEPoint>(this, "point", point, (ExplicitPointConstruction) pc) {
 				@Override
-				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-				{
+				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+						FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
 					getGeometricObject().x = newAbsolutePoint.x;
 					getGeometricObject().y = newAbsolutePoint.y;
 					setPoint(newAbsolutePoint);
 					notifyGeometryChanged();
 					return true;
 				}
+
 				@Override
-				public void update(FGEPoint geometricObject)
-				{
+				public void update(FGEPoint geometricObject) {
 					setPoint(geometricObject);
 				}
 			});
-		}
-		else {
-			returned.add(new ComputedControlPoint<FGEPoint>(this,"point",point) {
+		} else {
+			returned.add(new ComputedControlPoint<FGEPoint>(this, "point", point) {
 				@Override
-				public void update(FGEPoint geometricObject)
-				{
+				public void update(FGEPoint geometricObject) {
 					setPoint(geometricObject);
 				}
 			});
@@ -86,6 +79,5 @@ public class PointGraphicalRepresentation extends GeometricObjectGraphicalRepres
 
 		return returned;
 	}
-	
 
 }

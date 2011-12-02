@@ -26,24 +26,20 @@ import org.openflexo.foundation.rm.FlexoGeneratedResource;
 /**
  * 
  */
-public class UnresolvedConflictException extends FlexoException
-{
+public class UnresolvedConflictException extends FlexoException {
 
-	private FlexoFileResource _generatedResource;	
-	
-    /**
-     * @param fileResource
-     */
-    public UnresolvedConflictException(FlexoGeneratedResource generatedResource)
-    {
-        super("Unresolved conflicts in "+generatedResource.getName(),"unresolved_conflicts");
-        _generatedResource = generatedResource;
-   }
+	private FlexoFileResource _generatedResource;
 
- 	public FlexoFileResource getFileResource()
-	{
-		return _generatedResource;
+	/**
+	 * @param fileResource
+	 */
+	public UnresolvedConflictException(FlexoGeneratedResource generatedResource) {
+		super("Unresolved conflicts in " + generatedResource.getName(), "unresolved_conflicts");
+		_generatedResource = generatedResource;
 	}
 
+	public FlexoFileResource getFileResource() {
+		return _generatedResource;
+	}
 
 }

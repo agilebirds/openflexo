@@ -21,7 +21,6 @@ package org.openflexo.dg.rm;
 
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.StyleDocGenerator;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -30,52 +29,48 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class StyleLatexFileResource extends LatexFileResource<StyleDocGenerator> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(StyleLatexFileResource.class.getPackage().getName());
+public class StyleLatexFileResource extends LatexFileResource<StyleDocGenerator> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(StyleLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public StyleLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public StyleLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public StyleLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public StyleLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    private boolean isObserverRegistered = false;
+	private boolean isObserverRegistered = false;
 
-    @Override
-	public String getName()
-    {
-        if (getCGFile()==null || getCGFile().getRepository()==null || getIdentifier()==null)
-            return super.getName();
-        registerObserverWhenRequired();
-        if (super.getName()==null)
-    		setName(nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier()));
-        return nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getIdentifier() == null) {
+			return super.getName();
+		}
+		registerObserverWhenRequired();
+		if (super.getName() == null) {
+			setName(nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier()));
+		}
+		return nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier());
+	}
 
-    public void registerObserverWhenRequired()
-    {
-        if (!isObserverRegistered) {
-            isObserverRegistered = true;
-        }
-    }
+	public void registerObserverWhenRequired() {
+		if (!isObserverRegistered) {
+			isObserverRegistered = true;
+		}
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
 }

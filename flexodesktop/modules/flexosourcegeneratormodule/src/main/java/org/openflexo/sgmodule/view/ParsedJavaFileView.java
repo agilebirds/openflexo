@@ -26,6 +26,13 @@ import java.util.logging.Logger;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.CGFile.FileContentEditor;
+import org.openflexo.foundation.rm.cg.ContentSource;
+import org.openflexo.foundation.rm.cg.JavaFileResource;
+import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.javaparser.FJPJavaElement;
 import org.openflexo.javaparser.FJPJavaEntity;
 import org.openflexo.javaparser.FJPJavaParseException;
@@ -37,16 +44,6 @@ import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.sgmodule.controller.browser.fjp.JavaParserBrowser;
 import org.openflexo.sgmodule.view.CodeDisplayer.ASCIIFileCodePanel;
 
-
-import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.cg.CGFile.FileContentEditor;
-import org.openflexo.foundation.rm.cg.ContentSource;
-import org.openflexo.foundation.rm.cg.JavaFileResource;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
-
-
 public class ParsedJavaFileView extends JSplitPane implements FileContentEditor {
 
 	private Logger logger = FlexoLogger.getLogger(ParsedJavaFileView.class.getPackage().getName());
@@ -56,49 +53,47 @@ public class ParsedJavaFileView extends JSplitPane implements FileContentEditor 
 	private JavaFileResource _javaFileResource;
 	private JavaParserBrowser _browser;
 	private JavaParserBrowserView _browserView;
-	
-	public ParsedJavaFileView (JavaFileResource javaFileResource, SGController controller, boolean editable)
-	{
+
+	public ParsedJavaFileView(JavaFileResource javaFileResource, SGController controller, boolean editable) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
-        _controller = controller;
-        _javaFileResource = javaFileResource;
-        if (editable) {
-        	javaCodeDisplayer = new CodeEditor((GenerationAvailableFileResource)javaFileResource,controller);
-        	javaCodeDisplayer.getComponent().requestFocus();
-        }
-        else {
-        	javaCodeDisplayer = new CodeDisplayer((GenerationAvailableFileResource)javaFileResource,ContentSource.CONTENT_ON_DISK,controller);
-        }
-        _browser = new JavaParserBrowser((SGJavaFile)javaFileResource.getCGFile(),_controller);
-        _browserRootObject = _browser.getRootObject();
-        _browserView = new JavaParserBrowserView(_browser);
-        _codePanel = (ASCIIFileCodePanel)javaCodeDisplayer.getComponent();
-        setLeftComponent(_codePanel);
-        setRightComponent(_browserView);
-        
-        Dimension preferredDim = javaCodeDisplayer.getComponent().getMinimumSize();
-        preferredDim.width = 100;
-        javaCodeDisplayer.getComponent().setMinimumSize(preferredDim);
-        setResizeWeight(1);
-        resetToPreferredSizes();
-        validate();
-        if (_browserRootObject instanceof FJPJavaParseException) {
-        	SwingUtilities.invokeLater(new Runnable() {
+		_controller = controller;
+		_javaFileResource = javaFileResource;
+		if (editable) {
+			javaCodeDisplayer = new CodeEditor((GenerationAvailableFileResource) javaFileResource, controller);
+			javaCodeDisplayer.getComponent().requestFocus();
+		} else {
+			javaCodeDisplayer = new CodeDisplayer((GenerationAvailableFileResource) javaFileResource, ContentSource.CONTENT_ON_DISK,
+					controller);
+		}
+		_browser = new JavaParserBrowser((SGJavaFile) javaFileResource.getCGFile(), _controller);
+		_browserRootObject = _browser.getRootObject();
+		_browserView = new JavaParserBrowserView(_browser);
+		_codePanel = (ASCIIFileCodePanel) javaCodeDisplayer.getComponent();
+		setLeftComponent(_codePanel);
+		setRightComponent(_browserView);
+
+		Dimension preferredDim = javaCodeDisplayer.getComponent().getMinimumSize();
+		preferredDim.width = 100;
+		javaCodeDisplayer.getComponent().setMinimumSize(preferredDim);
+		setResizeWeight(1);
+		resetToPreferredSizes();
+		validate();
+		if (_browserRootObject instanceof FJPJavaParseException) {
+			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					if (_browser != null && _browserRootObject != null) {
 						_browser.addToSelected(_browserRootObject);
 						_browserView.treeSingleClick(_browserRootObject);
 					}
-				}       		
-        	});
-        }
- 	}
-	
+				}
+			});
+		}
+	}
+
 	private FJPJavaElement _browserRootObject;
-	
-	public void update()
-	{
+
+	public void update() {
 		javaCodeDisplayer.update();
 		if (_browserRootObject != _browser.getRootObject()) {
 			_browser.update();
@@ -111,73 +106,65 @@ public class ParsedJavaFileView extends JSplitPane implements FileContentEditor 
 							_browser.addToSelected(_browserRootObject);
 							_browserView.treeSingleClick(_browserRootObject);
 						}
-					}       		
+					}
 				});
 			}
 		}
 	}
-	
+
 	private LinesHighlight _currentHighlight;
 	private ASCIIFileCodePanel _codePanel;
-	
-	private Color HIGHLIGHT_BG_COLOR = new Color(232,242,254);
-	private Color HIGHLIGHT_FG_COLOR = new Color(181,213,255);
 
-	public class JavaParserBrowserView extends BrowserView
-	{
+	private Color HIGHLIGHT_BG_COLOR = new Color(232, 242, 254);
+	private Color HIGHLIGHT_FG_COLOR = new Color(181, 213, 255);
 
-	    public JavaParserBrowserView(JavaParserBrowser browser)
-	    {
-	        super(browser, _controller.getKeyEventListener(), _controller.getEditor());
-	        setMinimumSize(new Dimension(SGCst.MINIMUM_BROWSER_VIEW_WIDTH, SGCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-	        setPreferredSize(new Dimension(SGCst.PREFERRED_BROWSER_VIEW_WIDTH, SGCst.PREFERRED_BROWSER_VIEW_HEIGHT));
-	        validate();
-	   }
+	public class JavaParserBrowserView extends BrowserView {
 
-	    @Override
-		public void treeSingleClick(FlexoModelObject object)
-	    {
-    		if (_currentHighlight != null) {
-    			_codePanel.getPainter().removeCustomHighlight(_currentHighlight);
-    			_currentHighlight = null;
-    		}
-	    	if (object instanceof FJPJavaEntity) {
-	    		int firstLine = ((FJPJavaEntity)object).getLineNumber();
-	    		int lastLine = firstLine+((FJPJavaEntity)object).getLinesCount();
-	    		_currentHighlight = new LinesHighlight(firstLine-1,lastLine-2,HIGHLIGHT_BG_COLOR,HIGHLIGHT_FG_COLOR);
-	   			_codePanel.getPainter().addCustomHighlight(_currentHighlight);
-	   			_codePanel.setFirstLine((firstLine>5?firstLine-5:firstLine));
-	    	}
-	    	else if (object instanceof FJPJavaParseException) {
-	    		int firstLine = ((FJPJavaParseException)object).getLine();
-	    		_currentHighlight = new LinesHighlight(firstLine-1,firstLine-1,new Color(255,214,214),Color.RED);
-	   			_codePanel.getPainter().addCustomHighlight(_currentHighlight);
-	   			_codePanel.setFirstLine((firstLine>5?firstLine-5:firstLine));
-	    	}
-	    }
+		public JavaParserBrowserView(JavaParserBrowser browser) {
+			super(browser, _controller.getKeyEventListener(), _controller.getEditor());
+			setMinimumSize(new Dimension(SGCst.MINIMUM_BROWSER_VIEW_WIDTH, SGCst.MINIMUM_BROWSER_VIEW_HEIGHT));
+			setPreferredSize(new Dimension(SGCst.PREFERRED_BROWSER_VIEW_WIDTH, SGCst.PREFERRED_BROWSER_VIEW_HEIGHT));
+			validate();
+		}
 
-	    @Override
-		public void treeDoubleClick(FlexoModelObject object)
-	    {
-	    }
+		@Override
+		public void treeSingleClick(FlexoModelObject object) {
+			if (_currentHighlight != null) {
+				_codePanel.getPainter().removeCustomHighlight(_currentHighlight);
+				_currentHighlight = null;
+			}
+			if (object instanceof FJPJavaEntity) {
+				int firstLine = ((FJPJavaEntity) object).getLineNumber();
+				int lastLine = firstLine + ((FJPJavaEntity) object).getLinesCount();
+				_currentHighlight = new LinesHighlight(firstLine - 1, lastLine - 2, HIGHLIGHT_BG_COLOR, HIGHLIGHT_FG_COLOR);
+				_codePanel.getPainter().addCustomHighlight(_currentHighlight);
+				_codePanel.setFirstLine((firstLine > 5 ? firstLine - 5 : firstLine));
+			} else if (object instanceof FJPJavaParseException) {
+				int firstLine = ((FJPJavaParseException) object).getLine();
+				_currentHighlight = new LinesHighlight(firstLine - 1, firstLine - 1, new Color(255, 214, 214), Color.RED);
+				_codePanel.getPainter().addCustomHighlight(_currentHighlight);
+				_codePanel.setFirstLine((firstLine > 5 ? firstLine - 5 : firstLine));
+			}
+		}
 
-	}
-	
-	@Override
-	public String getEditedContentForKey(String contentKey) 
-	{
-		return ((CodeEditor)javaCodeDisplayer).getEditedContentForKey(contentKey);
+		@Override
+		public void treeDoubleClick(FlexoModelObject object) {
+		}
+
 	}
 
 	@Override
-	public void setEditedContent(CGFile file) 
-	{
-		((CodeEditor)javaCodeDisplayer).setEditedContent(file);
+	public String getEditedContentForKey(String contentKey) {
+		return ((CodeEditor) javaCodeDisplayer).getEditedContentForKey(contentKey);
+	}
+
+	@Override
+	public void setEditedContent(CGFile file) {
+		((CodeEditor) javaCodeDisplayer).setEditedContent(file);
 	}
 
 	public CodeDisplayer getJavaCodeDisplayer() {
 		return javaCodeDisplayer;
 	}
-
 
 }

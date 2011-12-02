@@ -33,7 +33,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.sg.file.SGTextFileResource;
 import org.openflexo.sg.generationdef.FileEntry;
 
-
 /**
  * 
  * @author sylvain
@@ -50,8 +49,9 @@ public class SGTextFileGenerator extends SGGenerator<FlexoModelObject, Generated
 
 	@Override
 	public final void generate(boolean forceRegenerate) {
-		if (!needGeneration(forceRegenerate))
+		if (!needGeneration(forceRegenerate)) {
 			return;
+		}
 		try {
 			logger.info("Generate code for " + getFileEntry().name);
 			startGeneration();
@@ -69,7 +69,8 @@ public class SGTextFileGenerator extends SGGenerator<FlexoModelObject, Generated
 
 	@Override
 	public GeneratedTextResource getGeneratedCode() {
-		if (generatedCode == null && textResource != null && textResource.getTextFile() != null && textResource.getTextFile().hasLastAcceptedContent()) {
+		if (generatedCode == null && textResource != null && textResource.getTextFile() != null
+				&& textResource.getTextFile().hasLastAcceptedContent()) {
 			generatedCode = new GeneratedTextResource(getFileEntry().name, textResource.getTextFile().getLastAcceptedContent());
 		}
 		return generatedCode;

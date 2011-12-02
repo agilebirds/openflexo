@@ -37,7 +37,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentDefinition,ReusableComponentInstance> implements ITableRow {
+public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentDefinition, ReusableComponentInstance> implements ITableRow {
 
 	private static final Logger logger = FlexoLogger.getLogger(ITableRowReusableWidget.class.getPackage().getName());
 
@@ -61,10 +61,10 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 		super.finalizeDeserialization(builder);
 		getRootObject().setParent(getReusableComponentInstance());
 	}
-	
+
 	@Override
 	protected ReusableComponentInstance createComponentInstance(ReusableComponentDefinition componentDefinition, IEWOComponent woComponent) {
-		return new ReusableComponentInstance(componentDefinition,woComponent);
+		return new ReusableComponentInstance(componentDefinition, woComponent);
 	}
 
 	private ITableRow tableRow() {
@@ -132,6 +132,7 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 
 	/**
 	 * Overrides insertSpannedTD
+	 * 
 	 * @see org.openflexo.foundation.ie.widget.ITableRow#insertSpannedTD()
 	 */
 	@Override
@@ -141,21 +142,23 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 
 	/**
 	 * Overrides setTRRowIndex
+	 * 
 	 * @see org.openflexo.foundation.ie.widget.ITableRow#setTRRowIndex(org.openflexo.foundation.ie.widget.IEHTMLTableWidget.Incrementer)
 	 */
 	@Override
 	public void setTRRowIndex(Incrementer currentIndex) {
-		//Enumeration<ITableRow> en = elements();
+		// Enumeration<ITableRow> en = elements();
 		rowIndex = currentIndex.getValue();
 		getSequenceTR().setTRRowIndex(currentIndex);
-		//        while (en.hasMoreElements()) {
-		//            ITableRow row = (ITableRow) en.nextElement();
-		//            row.setTRRowIndex(currentIndex);
-		//        }
+		// while (en.hasMoreElements()) {
+		// ITableRow row = (ITableRow) en.nextElement();
+		// row.setTRRowIndex(currentIndex);
+		// }
 	}
 
 	/**
 	 * Overrides getAllTD
+	 * 
 	 * @see org.openflexo.foundation.ie.widget.ITableRow#getAllTD()
 	 */
 	@Override
@@ -166,15 +169,18 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 	@Override
 	public Vector<IESequenceTab> getAllTabContainers() {
 		Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
-		if (getRootObject() == null)
+		if (getRootObject() == null) {
 			return reply;
-		if (getRootObject() instanceof ITableRow)
+		}
+		if (getRootObject() instanceof ITableRow) {
 			reply.addAll(((ITableRow) getRootObject()).getAllTabContainers());
+		}
 		return reply;
 	}
 
 	/**
 	 * Overrides getRowCount
+	 * 
 	 * @see org.openflexo.foundation.ie.widget.ITableRow#getRowCount()
 	 */
 	@Override
@@ -184,6 +190,7 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 
 	/**
 	 * Overrides getAllTR
+	 * 
 	 * @see org.openflexo.foundation.ie.widget.ITableRow#getAllTR()
 	 */
 	@Override
@@ -193,6 +200,7 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 
 	/**
 	 * Overrides addTDatGridXInVector
+	 * 
 	 * @see org.openflexo.foundation.ie.widget.ITableRow#addTDatGridXInVector(int)
 	 */
 	public Vector<IETDWidget> addTDatGridXInVector(int gridX) {
@@ -202,6 +210,7 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 
 	/**
 	 * Overrides simplifySequenceTree
+	 * 
 	 * @see org.openflexo.foundation.ie.widget.ITableRow#simplifySequenceTree()
 	 */
 	@Override
@@ -212,15 +221,17 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 
 	@Override
 	public boolean areComponentInstancesValid() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 		return true;
 	}
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 	}
 
 	@Override
@@ -238,25 +249,26 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 	 * @param row
 	 * @return
 	 */
-	//    public IETRWidget getTRAtRow(int row)
-	//    {
-	//    	Enumeration<ITableRow> en = _rowIndexes.keys();
-	//    	while (en.hasMoreElements()) {
-	//    		ITableRow element = (ITableRow) en.nextElement();
-	//			if(_rowIndexes.get(element).intValue()==row)
-	//				return (IETRWidget)element;
-	//		}
-	//    	return null;
-	//    }
-	//    
-	//    public IETRWidget getTRAtRowRelative(int row)
-	//    {
-	//    	return getSequenceTR().getTRAtRow(row+rowIndex);
-	//    }
-	//    
+	// public IETRWidget getTRAtRow(int row)
+	// {
+	// Enumeration<ITableRow> en = _rowIndexes.keys();
+	// while (en.hasMoreElements()) {
+	// ITableRow element = (ITableRow) en.nextElement();
+	// if(_rowIndexes.get(element).intValue()==row)
+	// return (IETRWidget)element;
+	// }
+	// return null;
+	// }
+	//
+	// public IETRWidget getTRAtRowRelative(int row)
+	// {
+	// return getSequenceTR().getTRAtRow(row+rowIndex);
+	// }
+	//
 	public Enumeration<ITableRow> elements() {
-		if (getSequenceTR() != null)
+		if (getSequenceTR() != null) {
 			return getSequenceTR().elements();
+		}
 		Vector<ITableRow> v = new Vector<ITableRow>();
 		v.add((ITableRow) getRootObject());
 		return v.elements();
@@ -268,9 +280,8 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 	}
 
 	/**
-	 * Returns the absolute position of this row in the table. Negative values
-	 * mean that this TR has not been initialized properly. This value is also
-	 * known as the yLocation
+	 * Returns the absolute position of this row in the table. Negative values mean that this TR has not been initialized properly. This
+	 * value is also known as the yLocation
 	 * 
 	 * @return the absolute position of this row in the table.
 	 */

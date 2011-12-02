@@ -25,31 +25,26 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.view.DrawingView;
 
-
 public class DrawingViewMouseListener extends FGEViewMouseListener {
 
 	private static final Logger logger = Logger.getLogger(DrawingViewMouseListener.class.getPackage().getName());
-	
+
 	/*private boolean isRectangleSelecting = false;
 	private Point rectangleSelectingOrigin;
 	private Point currentMousePosition;*/
-	
-	public DrawingViewMouseListener(DrawingGraphicalRepresentation aDrawingGraphicalRepresentation, DrawingView aView)
-	{
-		super(aDrawingGraphicalRepresentation,aView);
+
+	public DrawingViewMouseListener(DrawingGraphicalRepresentation aDrawingGraphicalRepresentation, DrawingView aView) {
+		super(aDrawingGraphicalRepresentation, aView);
 	}
-	
-	public Drawing getDrawing()
-	{
+
+	public Drawing getDrawing() {
 		return getGraphicalRepresentation().getDrawing();
 	}
 
 	@Override
-	public DrawingView getView()
-	{
-		return (DrawingView)super.getView();
+	public DrawingView getView() {
+		return (DrawingView) super.getView();
 	}
-
 
 	/*public void mouseClicked(MouseEvent e) 
 	{
@@ -77,35 +72,35 @@ public class DrawingViewMouseListener extends FGEViewMouseListener {
 		}
 	}
 
-    public Rectangle getRectangleSelection()
-    {
-        if (rectangleSelectingOrigin != null && currentMousePosition != null) {
-            Point origin = new Point();
-            Dimension dim = new Dimension();
-            if (rectangleSelectingOrigin.x <= currentMousePosition.x) {
-                origin.x = rectangleSelectingOrigin.x;
-                dim.width = currentMousePosition.x - rectangleSelectingOrigin.x;
-            } else {
-                origin.x = currentMousePosition.x;
-                dim.width = rectangleSelectingOrigin.x - currentMousePosition.x;
-            }
-            if (rectangleSelectingOrigin.y <= currentMousePosition.y) {
-                origin.y = rectangleSelectingOrigin.y;
-                dim.height = currentMousePosition.y - rectangleSelectingOrigin.y;
-            } else {
-                origin.y = currentMousePosition.y;
-                dim.height = rectangleSelectingOrigin.y - currentMousePosition.y;
-            }
-            return new Rectangle(origin, dim);
-        } else {
-            return null;
-        }
-    }
+	public Rectangle getRectangleSelection()
+	{
+	    if (rectangleSelectingOrigin != null && currentMousePosition != null) {
+	        Point origin = new Point();
+	        Dimension dim = new Dimension();
+	        if (rectangleSelectingOrigin.x <= currentMousePosition.x) {
+	            origin.x = rectangleSelectingOrigin.x;
+	            dim.width = currentMousePosition.x - rectangleSelectingOrigin.x;
+	        } else {
+	            origin.x = currentMousePosition.x;
+	            dim.width = rectangleSelectingOrigin.x - currentMousePosition.x;
+	        }
+	        if (rectangleSelectingOrigin.y <= currentMousePosition.y) {
+	            origin.y = rectangleSelectingOrigin.y;
+	            dim.height = currentMousePosition.y - rectangleSelectingOrigin.y;
+	        } else {
+	            origin.y = currentMousePosition.y;
+	            dim.height = rectangleSelectingOrigin.y - currentMousePosition.y;
+	        }
+	        return new Rectangle(origin, dim);
+	    } else {
+	        return null;
+	    }
+	}
 
 	public boolean isRectangleSelecting()
 	{
 		return isRectangleSelecting;
 	}
-*/
+	*/
 
 }

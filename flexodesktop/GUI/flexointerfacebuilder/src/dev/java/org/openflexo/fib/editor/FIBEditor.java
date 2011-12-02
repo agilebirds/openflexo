@@ -20,6 +20,7 @@
 package org.openflexo.fib.editor;
 
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -35,6 +36,7 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -43,6 +45,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -73,7 +77,6 @@ import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
-
 
 public class FIBEditor implements FIBGenericEditor {
 
@@ -182,10 +185,10 @@ public class FIBEditor implements FIBGenericEditor {
 
 		public static void setLastFile(File file) {
 			List<File> files = getLastFiles();
-			if (files.contains(files)) {
+			if (files.contains(file)) {
 				files.remove(file);
-			} else if (files.size() == 10) {
-				files.remove(9);
+			} else if (files.size() == getLastFileCount()) {
+				files.remove(getLastFileCount() - 1);
 			}
 			files.add(0, file);
 			setLastFiles(files);
@@ -199,11 +202,10 @@ public class FIBEditor implements FIBGenericEditor {
 
 	public static File COMPONENT_LOCALIZATION_FIB = new FileResource("Fib/ComponentLocalization.fib");
 
-
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-	UnsupportedLookAndFeelException
-	{
-		//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UnsupportedLookAndFeelException {
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		/*DefaultExpressionParser parser = new DefaultExpressionParser();
 			try {
 				//Expression test = parser.parse("data.name.substring(0,1).toUpperCase()+data.name.substring(1,6)");
@@ -262,6 +264,8 @@ public class FIBEditor implements FIBGenericEditor {
 
 	private FIBEditorController editorController;
 
+	private ValidationWindow validationWindow;
+
 	@Override
 	public FIBInspectorController getInspector() {
 		return inspector;
@@ -272,23 +276,20 @@ public class FIBEditor implements FIBGenericEditor {
 		return palette;
 	}
 
-	public class EditedFIB
-	{
+	public class EditedFIB {
 		private String title;
 		private File fibFile;
 		private final FIBComponent fibComponent;
 
-		public EditedFIB(String title, File fibFile, FIBComponent fibComponent)
-		{
+		public EditedFIB(String title, File fibFile, FIBComponent fibComponent) {
 			super();
 			this.title = title;
 			this.fibFile = fibFile;
 			this.fibComponent = fibComponent;
 		}
 
-		public void save()
-		{
-			logger.info("Save to file "+fibFile.getAbsolutePath());
+		public void save() {
+			logger.info("Save to file " + fibFile.getAbsolutePath());
 
 			FIBLibrary.save(fibComponent, fibFile);
 
@@ -297,8 +298,7 @@ public class FIBEditor implements FIBGenericEditor {
 
 	private EditedFIB editedFIB;
 
-	public FIBEditor()
-	{
+	public FIBEditor() {
 		super();
 		frame = new JFrame();
 		frame.setBounds(FIBPreferences.getFrameBounds());
@@ -334,20 +334,15 @@ public class FIBEditor implements FIBGenericEditor {
 
 	private MenuBar menuBar;
 
-	private void updateFrameTitle()
-	{
+	private void updateFrameTitle() {
 		frame.setTitle("Flexo Interface Builder Editor");
 	}
 
-	public void showPanel()
-	{
+	public void showPanel() {
 		frame.setTitle("Flexo Interface Builder Editor");
 		mainPanel = new MainPanel();
 
 		menuBar = new MenuBar();
-
-
-
 
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
@@ -362,8 +357,7 @@ public class FIBEditor implements FIBGenericEditor {
 		frame.setVisible(true);
 	}
 
-	public void quit()
-	{
+	public void quit() {
 
 		// TODO: Check if a component needs to be saved.
 		/*for(FIBEditor.EditedFIB c: mainPanel.editedComponents) {
@@ -372,26 +366,23 @@ public class FIBEditor implements FIBGenericEditor {
 		System.exit(0);
 	}
 
-	public void closeFIB()
-	{
+	public void closeFIB() {
 		logger.warning("Not implemented yet");
 	}
 
-	public void newFIB()
-	{
+	public void newFIB() {
 		FIBPanel fibComponent = new FIBPanel();
 		fibComponent.setLayout(Layout.border);
 
 		EditedFIB newEditedFIB = new EditedFIB("New.fib", new File("NewComponent.fib"), fibComponent);
 
-		editorController = new FIBEditorController(fibComponent,this);
+		editorController = new FIBEditorController(fibComponent, this);
 
 		mainPanel.newEditedComponent(newEditedFIB, editorController);
 
 	}
 
-	public void loadFIB()
-	{
+	public void loadFIB() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File fibFile = fileChooser.getSelectedFile();
 			loadFIB(fibFile);
@@ -406,48 +397,44 @@ public class FIBEditor implements FIBGenericEditor {
 		mainPanel.newEditedComponent(newEditedFIB, editorController);
 	}
 
-	public void saveFIB()
-	{
+	public void saveFIB() {
 		if (editedFIB == null) {
 			return;
 		}
 		if (editedFIB.fibFile == null) {
 			saveFIBAs();
-		}
-		else {
+		} else {
 			editedFIB.save();
 		}
 	}
 
-	public void saveFIBAs()
-	{
+	public void saveFIBAs() {
 		if (editedFIB == null) {
 			return;
 		}
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			if (!file.getName().endsWith(".fib")) {
-				file = new File(file.getParentFile(),file.getName()+".fib");
+				file = new File(file.getParentFile(), file.getName() + ".fib");
 			}
+			FIBPreferences.setLastFile(file);
 			editedFIB.fibFile = file;
 			editedFIB.title = file.getName();
 			mainPanel.setTitleAt(mainPanel.getSelectedIndex(), editedFIB.title);
 			updateFrameTitle();
 			editedFIB.save();
-		}
-		else {
+		} else {
 			return;
 		}
 	}
 
-	public void testFIB()
-	{
+	public void testFIB() {
 		FIBView view = FIBController.makeView(editedFIB.fibComponent);
 
-		//Class testClass = null;
+		// Class testClass = null;
 		if (editedFIB.fibComponent.getDataClass() != null) {
 			try {
-				//testClass = Class.forName(editedFIB.fibComponent.getDataClassName());
+				// testClass = Class.forName(editedFIB.fibComponent.getDataClassName());
 				Object testData = editedFIB.fibComponent.getDataClass().newInstance();
 				view.getController().setDataObject(testData);
 			} catch (InstantiationException e) {
@@ -457,44 +444,65 @@ public class FIBEditor implements FIBGenericEditor {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			view.getController().updateWithoutDataObject();
 		}
 
-		JDialog testInterface = new JDialog(frame,"Test",false);
+		JDialog testInterface = new JDialog(frame, "Test", false);
 		testInterface.getContentPane().add(view.getResultingJComponent());
 		testInterface.validate();
 		testInterface.pack();
 		testInterface.setVisible(true);
 	}
 
-	public void localizeFIB()
-	{
+	public void localizeFIB() {
 		FIBComponent componentLocalizationComponent = FIBLibrary.instance().retrieveFIBComponent(COMPONENT_LOCALIZATION_FIB);
 
 		FIBView view = FIBController.makeView(componentLocalizationComponent);
 		view.getController().setDataObject(editorController.getController());
-		JDialog localizationInterface = new JDialog(frame,FlexoLocalization.localizedForKey(LOCALIZATION,"component_localization"),false);
+		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(LOCALIZATION, "component_localization"), false);
 		localizationInterface.getContentPane().add(view.getResultingJComponent());
 		localizationInterface.validate();
 		localizationInterface.pack();
 		localizationInterface.setVisible(true);
 	}
 
-	public void switchToLanguage(Language lang)
-	{
+	public void validateFIB() {
+		if (editedFIB != null && editedFIB.fibComponent != null) {
+			getValidationWindow().validateAndDisplayReportForComponent(editedFIB.fibComponent);
+		}
+	}
+
+	protected ValidationWindow getValidationWindow() {
+		if (validationWindow == null) {
+			validationWindow = new ValidationWindow(frame, editorController);
+		}
+		return validationWindow;
+	}
+
+	public void switchToLanguage(Language lang) {
 		FlexoLocalization.setCurrentLanguage(lang);
 		if (editorController != null) {
 			editorController.switchToLanguage(lang);
 		}
 	}
 
-
 	@Override
-	public JFrame getFrame()
-	{
+	public JFrame getFrame() {
 		return frame;
+	}
+
+	class LAFMenuItem extends JCheckBoxMenuItem {
+		private LookAndFeelInfo laf;
+
+		public LAFMenuItem(LookAndFeelInfo laf) {
+			super(laf.getName(), UIManager.getLookAndFeel().getClass().getName().equals(laf.getClassName()));
+			this.laf = laf;
+		}
+
+		public void updateState() {
+			setState(UIManager.getLookAndFeel().getClass().getName().equals(laf.getClassName()));
+		}
 	}
 
 	public class MenuBar extends JMenuBar implements PreferenceChangeListener {
@@ -531,6 +539,7 @@ public class FIBEditor implements FIBGenericEditor {
 		private JMenuItem testInterfaceItem;
 
 		private JMenuItem componentLocalizationItem;
+		private JMenuItem componentValidationItem;
 
 		private JMenu openRecent;
 
@@ -607,6 +616,42 @@ public class FIBEditor implements FIBGenericEditor {
 				}
 			});
 
+			final JMenu lafsItem = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "look_and_feel"));
+			final Vector<LAFMenuItem> lafsItems = new Vector<LAFMenuItem>();
+			for (final LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+				LAFMenuItem lafItem = new LAFMenuItem(laf);
+				lafsItems.add(lafItem);
+				lafItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						try {
+							UIManager.setLookAndFeel(laf.getClassName());
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (InstantiationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IllegalAccessException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (UnsupportedLookAndFeelException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						Window windows[] = frame.getOwnedWindows();
+						for (int j = 0; j < windows.length; j++) {
+							SwingUtilities.updateComponentTreeUI(windows[j]);
+						}
+						SwingUtilities.updateComponentTreeUI(frame);
+						for (LAFMenuItem me : lafsItems) {
+							me.updateState();
+						}
+					}
+				});
+				lafsItem.add(lafItem);
+			}
+
 			fileMenu.add(newItem);
 			fileMenu.add(loadItem);
 			fileMenu.add(openRecent);
@@ -616,6 +661,8 @@ public class FIBEditor implements FIBGenericEditor {
 			fileMenu.addSeparator();
 			fileMenu.add(testInterfaceItem);
 			fileMenu.add(componentLocalizationItem);
+
+			fileMenu.add(lafsItem);
 			languagesItem = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "switch_to_language"));
 			for (Language lang : Language.availableValues()) {
 				JMenuItem languageItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, lang.getName()));
@@ -680,10 +727,20 @@ public class FIBEditor implements FIBGenericEditor {
 				}
 			});
 
+			componentValidationItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "validate_component"));
+			componentValidationItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					validateFIB();
+				}
+			});
+
 			toolsMenu.add(inspectItem);
 			toolsMenu.add(logsItem);
 			toolsMenu.add(localizedItem);
 			toolsMenu.add(displayFileItem);
+			toolsMenu.addSeparator();
+			toolsMenu.add(componentValidationItem);
 
 			add(fileMenu);
 			add(editMenu);
@@ -714,7 +771,7 @@ public class FIBEditor implements FIBGenericEditor {
 		private void updateOpenRecent() {
 			openRecent.removeAll();
 			List<File> files = FIBPreferences.getLastFiles();
-			openRecent.setEnabled(files.size()!=0);
+			openRecent.setEnabled(files.size() != 0);
 			for (final File file : files) {
 				JMenuItem item = new JMenuItem(file.getName());
 				item.setToolTipText(file.getAbsolutePath());
@@ -729,35 +786,30 @@ public class FIBEditor implements FIBGenericEditor {
 		}
 	}
 
-	public class MainPanel extends JTabbedPane implements ChangeListener
-	{
+	public class MainPanel extends JTabbedPane implements ChangeListener {
 		private final Vector<EditedFIB> editedComponents;
-		private final Hashtable<EditedFIB,FIBEditorController> controllers;
+		private final Hashtable<EditedFIB, FIBEditorController> controllers;
 
-		public MainPanel()
-		{
+		public MainPanel() {
 			super();
 			editedComponents = new Vector<EditedFIB>();
 			controllers = new Hashtable<EditedFIB, FIBEditorController>();
 			addChangeListener(this);
 		}
 
-		public void newEditedComponent(EditedFIB edited, FIBEditorController controller)
-		{
+		public void newEditedComponent(EditedFIB edited, FIBEditorController controller) {
 			editedComponents.add(edited);
-			controllers.put(edited,controller);
-			add(controller.getEditorPanel(),edited.title);
+			controllers.put(edited, controller);
+			add(controller.getEditorPanel(), edited.title);
 			frame.validate();
-			setSelectedIndex(getComponentCount()-1);
+			setSelectedIndex(getComponentCount() - 1);
 		}
 
 		@Override
-		public void stateChanged(ChangeEvent e)
-		{
-			logger.info("Change for "+e);
+		public void stateChanged(ChangeEvent e) {
+			logger.info("Change for " + e);
 			int index = getSelectedIndex();
 			editedFIB = editedComponents.get(index);
 		}
 	}
 }
-

@@ -24,127 +24,135 @@ import java.io.File;
 import org.netbeans.lib.cvsclient.ClientServices;
 
 /**
- * This class is responsible for firing CVS events to registered listeners.
- * It can either fire events as they are generated or wait until a suitable
- * checkpoint and fire many events at once. This can prevent event storms
- * from degrading system performance.
- * @author  Robert Greig
+ * This class is responsible for firing CVS events to registered listeners. It can either fire events as they are generated or wait until a
+ * suitable checkpoint and fire many events at once. This can prevent event storms from degrading system performance.
+ * 
+ * @author Robert Greig
  */
 public class EventManager {
-    /**
-     * Registered listeners for events. This is an array for performance when
-     * firing events. We take the hit when adding or removing listeners - that
-     * should be a relatively rare occurrence.
-     */
-    private CVSListener[] listeners;
+	/**
+	 * Registered listeners for events. This is an array for performance when firing events. We take the hit when adding or removing
+	 * listeners - that should be a relatively rare occurrence.
+	 */
+	private CVSListener[] listeners;
 
-    /**
-     * Holds value of property fireEnhancedEventSet.
-     * If true, the library fires the EnhancedMessageEvents.
-     * Default is true. Some builders might work badly, if set to false.
-     */
-    private boolean fireEnhancedEventSet = true;
-    
-    private final ClientServices services;
+	/**
+	 * Holds value of property fireEnhancedEventSet. If true, the library fires the EnhancedMessageEvents. Default is true. Some builders
+	 * might work badly, if set to false.
+	 */
+	private boolean fireEnhancedEventSet = true;
 
-    /**
-     * Construct a new EventManager
-     */
-    public EventManager(ClientServices services) {
-        this.services = services;
-    }
+	private final ClientServices services;
 
-    /**
-     * Returns Client services implementation tied to this event manager.
-     * 
-     * @return a ClientServices implementation
-     */ 
-    public ClientServices getClientServices() {
-        return services;
-    }
+	/**
+	 * Construct a new EventManager
+	 */
+	public EventManager(ClientServices services) {
+		this.services = services;
+	}
 
-    /**
-     * Add a listener to the list.
-     * @param listener the listener to add
-     */
-    public synchronized void addCVSListener(CVSListener listener) {
-        if (listeners == null || listeners.length == 0) {
-            listeners = new CVSListener[1];
-        }
-        else {
-            // allocate a new array and copy existing listeners
-            CVSListener[] l = new CVSListener[listeners.length + 1];
-            for (int i = 0; i < listeners.length; i++) {
-                l[i] = listeners[i];
-            }
-            listeners = l;
-        }
-        listeners[listeners.length - 1] = listener;
-    }
+	/**
+	 * Returns Client services implementation tied to this event manager.
+	 * 
+	 * @return a ClientServices implementation
+	 */
+	public ClientServices getClientServices() {
+		return services;
+	}
 
-    /**
-     * Remove a listeners from the list
-     * @param listener the listener to remove
-     */
-    public synchronized void removeCVSListener(CVSListener listener) {
-        // TODO: test this method!!
-        if (listeners.length == 1) {
-            listeners = null;
-        }
-        else {
-            CVSListener[] l = new CVSListener[listeners.length - 1];
-            int i = 0;
-            while (i < l.length) {
-                if (listeners[i] == listener) {
-                    for (int j = i + 1; j < listeners.length; j++) {
-                        l[j - 1] = listeners[j];
-                    }
-                    break;
-                }
-                else {
-                    l[i] = listeners[i];
-                }
-                i++;
-            }
-            listeners = l;
-        }
-    }
+	/**
+	 * Add a listener to the list.
+	 * 
+	 * @param listener
+	 *            the listener to add
+	 */
+	public synchronized void addCVSListener(CVSListener listener) {
+		if (listeners == null || listeners.length == 0) {
+			listeners = new CVSListener[1];
+		} else {
+			// allocate a new array and copy existing listeners
+			CVSListener[] l = new CVSListener[listeners.length + 1];
+			for (int i = 0; i < listeners.length; i++) {
+				l[i] = listeners[i];
+			}
+			listeners = l;
+		}
+		listeners[listeners.length - 1] = listener;
+	}
 
-    /**
-     * Fire a CVSEvent to all the listeners
-     * @param e the event to send
-     */
-    public void fireCVSEvent(CVSEvent e) {
-        // if we have no listeners, then there is nothing to do
-        if (listeners == null || listeners.length == 0)
-            return;
-        if (e instanceof FileInfoEvent) {
-            File file = ((FileInfoEvent) e).getInfoContainer().getFile();
-            if (services.getGlobalOptions().isExcluded(file)) return;
-        }
-        CVSListener[] l = null;
-        synchronized (listeners) {
-            l = new CVSListener[listeners.length];
-            System.arraycopy(listeners, 0, l, 0, l.length);
-        }
+	/**
+	 * Remove a listeners from the list
+	 * 
+	 * @param listener
+	 *            the listener to remove
+	 */
+	public synchronized void removeCVSListener(CVSListener listener) {
+		// TODO: test this method!!
+		if (listeners.length == 1) {
+			listeners = null;
+		} else {
+			CVSListener[] l = new CVSListener[listeners.length - 1];
+			int i = 0;
+			while (i < l.length) {
+				if (listeners[i] == listener) {
+					for (int j = i + 1; j < listeners.length; j++) {
+						l[j - 1] = listeners[j];
+					}
+					break;
+				} else {
+					l[i] = listeners[i];
+				}
+				i++;
+			}
+			listeners = l;
+		}
+	}
 
-        for (int i = 0; i < l.length; i++) {
-            e.fireEvent(l[i]);
-        }
-    }
+	/**
+	 * Fire a CVSEvent to all the listeners
+	 * 
+	 * @param e
+	 *            the event to send
+	 */
+	public void fireCVSEvent(CVSEvent e) {
+		// if we have no listeners, then there is nothing to do
+		if (listeners == null || listeners.length == 0) {
+			return;
+		}
+		if (e instanceof FileInfoEvent) {
+			File file = ((FileInfoEvent) e).getInfoContainer().getFile();
+			if (services.getGlobalOptions().isExcluded(file)) {
+				return;
+			}
+		}
+		CVSListener[] l = null;
+		synchronized (listeners) {
+			l = new CVSListener[listeners.length];
+			System.arraycopy(listeners, 0, l, 0, l.length);
+		}
 
-    /** Getter for property fireEnhancedEventSet.
-     * @return Value of property fireEnhancedEventSet.
-     */
-    public boolean isFireEnhancedEventSet() {
-        return fireEnhancedEventSet;
-    }
+		for (int i = 0; i < l.length; i++) {
+			e.fireEvent(l[i]);
+		}
+	}
 
-    /** Setter for property fireEnhancedEventSet.
-     * @param fireEnhancedEventSet New value of property fireEnhancedEventSet.
-     */
-    public void setFireEnhancedEventSet(boolean fireEnhancedEventSet) {
-        this.fireEnhancedEventSet = fireEnhancedEventSet;
-    }
+	/**
+	 * Getter for property fireEnhancedEventSet.
+	 * 
+	 * @return Value of property fireEnhancedEventSet.
+	 */
+	public boolean isFireEnhancedEventSet() {
+		return fireEnhancedEventSet;
+	}
+
+	/**
+	 * Setter for property fireEnhancedEventSet.
+	 * 
+	 * @param fireEnhancedEventSet
+	 *            New value of property fireEnhancedEventSet.
+	 */
+	public void setFireEnhancedEventSet(boolean fireEnhancedEventSet) {
+		this.fireEnhancedEventSet = fireEnhancedEventSet;
+	}
 
 }

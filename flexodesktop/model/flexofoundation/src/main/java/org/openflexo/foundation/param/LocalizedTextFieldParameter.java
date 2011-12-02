@@ -25,36 +25,30 @@ import org.openflexo.inspector.widget.TextFieldWidget;
 
 public class LocalizedTextFieldParameter extends ParameterDefinition<LocalizedString> {
 
-    public LocalizedTextFieldParameter(String name, String label, LocalizedString defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-    public LocalizedTextFieldParameter(String name, String label, LocalizedString defaultValue, int cols)
-    {
-        this(name,label,defaultValue);
-        setColumns(cols);
-    }
-    
-    public void setValidateOnReturn(boolean validateOnReturn)
-    {
-    	addParameter(TextFieldWidget.VALIDATE_ON_RETURN,""+validateOnReturn);
-    }
-    
-    public void setIsPassword(boolean isPassword)
-    {
-    	addParameter(TextFieldWidget.PASSWORD_PARAM,""+isPassword);
-    }
-    
-    public void setColumns(int cols)
-    {
-    	addParameter(TextFieldWidget.COLUMNS_PARAM,""+cols);
-    }
+	public LocalizedTextFieldParameter(String name, String label, LocalizedString defaultValue) {
+		super(name, label, defaultValue);
+	}
 
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.LOCALIZED_TEXT_FIELD;
-    }
+	public LocalizedTextFieldParameter(String name, String label, LocalizedString defaultValue, int cols) {
+		this(name, label, defaultValue);
+		setColumns(cols);
+	}
+
+	public void setValidateOnReturn(boolean validateOnReturn) {
+		addParameter(TextFieldWidget.VALIDATE_ON_RETURN, "" + validateOnReturn);
+	}
+
+	public void setIsPassword(boolean isPassword) {
+		addParameter(TextFieldWidget.PASSWORD_PARAM, "" + isPassword);
+	}
+
+	public void setColumns(int cols) {
+		addParameter(TextFieldWidget.COLUMNS_PARAM, "" + cols);
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.LOCALIZED_TEXT_FIELD;
+	}
 
 }

@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.antar.expr.parser;
+
 import java.util.Vector;
 
 /*
@@ -29,160 +30,143 @@ import java.util.Vector;
 
 public class ParsedFunction extends Token {
 
-    private Word _call;
-    private Vector<Token> _parameters;
-    
-    public ParsedFunction(Word call, Vector<Token> parameters) throws ParseException
-    {
-        super();
-        _call = call;
-        _parameters = parameters;
-    }
-    
-    @Override
-	public String toString()
-    {
-        String returned = _call.toString()+"(";
-        boolean isFirst = true;
-        for (AbstractToken token : _parameters) {
-            returned += (isFirst?"":",")+token;
-            isFirst = false;
-        }
-        return returned+")";
-    }
-    
-    private static Token makeParameter (ListOfToken listOfToken) throws ParseException
-    {
-        if (listOfToken.size() == 0) throw new ParseException("Syntax error: invalid null operand");
-        
-        else if (listOfToken.size() == 1) {
-            if (listOfToken.firstElement() instanceof Token) {
-                return (Token)listOfToken.firstElement();
-            }
-            if (listOfToken.firstElement() instanceof ListOfToken) {
-                return makeParameter((ListOfToken)listOfToken.firstElement());
-            }
-           else {
-                throw new ParseException("Syntax error: invalid operand");
-            }
-        }
-       
-        else {
-            try {
-                //System.out.println("TRYING TO DECODE AS FUNCTION: "+listOfToken);
-               return makeFunction(listOfToken);
-            }
-            catch (ParseException e) {
-                //System.out.println("FAILED TO EXPRESS AS A FUNCTION: "+listOfToken);
-                //e.printStackTrace();
-                //System.out.println("TRY AS AN EXPRESSION: "+listOfToken);
-               return ParsedExpression.makeExpression(listOfToken);
-            }
-        }
-    }
+	private Word _call;
+	private Vector<Token> _parameters;
 
+	public ParsedFunction(Word call, Vector<Token> parameters) throws ParseException {
+		super();
+		_call = call;
+		_parameters = parameters;
+	}
 
-    
-    protected static ParsedFunction makeFunction(ListOfToken unparsedList) throws ParseException
-    {
-        if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof ListOfToken)) {
-            return makeFunction((ListOfToken)unparsedList.firstElement());
-        }
-        else {
-            // On y va, ca rigole plus
-        	// System.out.println("makeFunction with "+unparsedList);
-            if ((unparsedList.size() == 2)
-                    && (unparsedList.get(0) instanceof Word)
-                    && (unparsedList.get(1) instanceof ListOfToken)) {
-                ListOfToken unparsedParamList = (ListOfToken)unparsedList.get(1);
-                
-                // Reduce functions first
-                ListOfToken functionsReducedParamList = new ListOfToken();
-                for (int i=0; i<unparsedParamList.size(); i++) {
-                    AbstractToken tok = unparsedParamList.elementAt(i);
-                    if ((tok instanceof Word)
-                            && (i+1 < unparsedParamList.size())
-                            && (unparsedParamList.elementAt(i+1) instanceof ListOfToken)) {
-                        ListOfToken tryToBuildFunction = new ListOfToken();
-                        tryToBuildFunction.add(tok);
-                        tryToBuildFunction.add(unparsedParamList.elementAt(i+1));
-                        functionsReducedParamList.add(tryToBuildFunction);
-                        i++;
-                    }
-                    else {
-                        functionsReducedParamList.add(tok);
-                    }
-                }
+	@Override
+	public String toString() {
+		String returned = _call.toString() + "(";
+		boolean isFirst = true;
+		for (AbstractToken token : _parameters) {
+			returned += (isFirst ? "" : ",") + token;
+			isFirst = false;
+		}
+		return returned + ")";
+	}
 
-                //System.out.println("AFTER FUNCTION REDUCTION : "+functionsReducedParamList);
-                       
-                // Then reduce comma(s)
-                ListOfToken commaReducedParamList = new ListOfToken();
-                ListOfToken currentTokens = new ListOfToken();
-                for (AbstractToken tok : functionsReducedParamList) {
-                     if (tok instanceof Comma) {
-                        if (currentTokens.size() == 0) {
-                            throw new ParseException("Syntax error near "+tok);
-                        }
-                        else if (currentTokens.size() > 1) {
-                            ListOfToken newListOfTokens = new ListOfToken();
-                            newListOfTokens.addAll(currentTokens);
-                            commaReducedParamList.add(newListOfTokens);
-                        }
-                        else if (currentTokens.size() == 1) {
-                             commaReducedParamList.add(currentTokens.firstElement());
-                        }
-                        currentTokens.clear();
-                    }
-                    else {
-                         currentTokens.add(tok);
-                    }
-                }
-                if (currentTokens.size() > 1) {
-                    ListOfToken newListOfTokens = new ListOfToken();
-                    newListOfTokens.addAll(currentTokens);
-                    commaReducedParamList.add(newListOfTokens);
-                }
-                else if (currentTokens.size() == 1) {
-                     commaReducedParamList.add(currentTokens.firstElement());
-                }
-                currentTokens.clear();
-       
-                //System.out.println("AFTER COMMA REDUCTION : "+commaReducedParamList);
-                                
-                Vector<Token> paramList = new Vector<Token>();
-                
-                for (int i=0; i<commaReducedParamList.size(); i++) {
-                    AbstractToken tok = commaReducedParamList.elementAt(i);
-                   // Must be a token
-                    if (tok instanceof Token) {
-                        paramList.add((Token)tok);
-                     }
-                    else if (tok instanceof ListOfToken) {
-                        paramList.add(makeParameter((ListOfToken)tok));
-                    }
-                    else {
-                        throw new ParseException("Syntax error near "+tok);
-                    }
-                }
-                //System.out.println("paramList="+paramList);
-                
-                return new ParsedFunction((Word)unparsedList.get(0),paramList);
-            }
-            if (unparsedList.size() > 0)
-            	throw new ParseException("Syntax error near "+unparsedList.elementAt(0));
-            else throw new ParseException("Syntax error ar beginning");
+	private static Token makeParameter(ListOfToken listOfToken) throws ParseException {
+		if (listOfToken.size() == 0) {
+			throw new ParseException("Syntax error: invalid null operand");
+		} else if (listOfToken.size() == 1) {
+			if (listOfToken.firstElement() instanceof Token) {
+				return (Token) listOfToken.firstElement();
+			}
+			if (listOfToken.firstElement() instanceof ListOfToken) {
+				return makeParameter((ListOfToken) listOfToken.firstElement());
+			} else {
+				throw new ParseException("Syntax error: invalid operand");
+			}
+		}
 
-        }
-        
-    }
+		else {
+			try {
+				// System.out.println("TRYING TO DECODE AS FUNCTION: "+listOfToken);
+				return makeFunction(listOfToken);
+			} catch (ParseException e) {
+				// System.out.println("FAILED TO EXPRESS AS A FUNCTION: "+listOfToken);
+				// e.printStackTrace();
+				// System.out.println("TRY AS AN EXPRESSION: "+listOfToken);
+				return ParsedExpression.makeExpression(listOfToken);
+			}
+		}
+	}
 
-    public Word getCall() {
-        return _call;
-    }
+	protected static ParsedFunction makeFunction(ListOfToken unparsedList) throws ParseException {
+		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof ListOfToken)) {
+			return makeFunction((ListOfToken) unparsedList.firstElement());
+		} else {
+			// On y va, ca rigole plus
+			// System.out.println("makeFunction with "+unparsedList);
+			if ((unparsedList.size() == 2) && (unparsedList.get(0) instanceof Word) && (unparsedList.get(1) instanceof ListOfToken)) {
+				ListOfToken unparsedParamList = (ListOfToken) unparsedList.get(1);
 
-    public Vector<Token> getParameters() {
-        return _parameters;
-    }
+				// Reduce functions first
+				ListOfToken functionsReducedParamList = new ListOfToken();
+				for (int i = 0; i < unparsedParamList.size(); i++) {
+					AbstractToken tok = unparsedParamList.elementAt(i);
+					if ((tok instanceof Word) && (i + 1 < unparsedParamList.size())
+							&& (unparsedParamList.elementAt(i + 1) instanceof ListOfToken)) {
+						ListOfToken tryToBuildFunction = new ListOfToken();
+						tryToBuildFunction.add(tok);
+						tryToBuildFunction.add(unparsedParamList.elementAt(i + 1));
+						functionsReducedParamList.add(tryToBuildFunction);
+						i++;
+					} else {
+						functionsReducedParamList.add(tok);
+					}
+				}
+
+				// System.out.println("AFTER FUNCTION REDUCTION : "+functionsReducedParamList);
+
+				// Then reduce comma(s)
+				ListOfToken commaReducedParamList = new ListOfToken();
+				ListOfToken currentTokens = new ListOfToken();
+				for (AbstractToken tok : functionsReducedParamList) {
+					if (tok instanceof Comma) {
+						if (currentTokens.size() == 0) {
+							throw new ParseException("Syntax error near " + tok);
+						} else if (currentTokens.size() > 1) {
+							ListOfToken newListOfTokens = new ListOfToken();
+							newListOfTokens.addAll(currentTokens);
+							commaReducedParamList.add(newListOfTokens);
+						} else if (currentTokens.size() == 1) {
+							commaReducedParamList.add(currentTokens.firstElement());
+						}
+						currentTokens.clear();
+					} else {
+						currentTokens.add(tok);
+					}
+				}
+				if (currentTokens.size() > 1) {
+					ListOfToken newListOfTokens = new ListOfToken();
+					newListOfTokens.addAll(currentTokens);
+					commaReducedParamList.add(newListOfTokens);
+				} else if (currentTokens.size() == 1) {
+					commaReducedParamList.add(currentTokens.firstElement());
+				}
+				currentTokens.clear();
+
+				// System.out.println("AFTER COMMA REDUCTION : "+commaReducedParamList);
+
+				Vector<Token> paramList = new Vector<Token>();
+
+				for (int i = 0; i < commaReducedParamList.size(); i++) {
+					AbstractToken tok = commaReducedParamList.elementAt(i);
+					// Must be a token
+					if (tok instanceof Token) {
+						paramList.add((Token) tok);
+					} else if (tok instanceof ListOfToken) {
+						paramList.add(makeParameter((ListOfToken) tok));
+					} else {
+						throw new ParseException("Syntax error near " + tok);
+					}
+				}
+				// System.out.println("paramList="+paramList);
+
+				return new ParsedFunction((Word) unparsedList.get(0), paramList);
+			}
+			if (unparsedList.size() > 0) {
+				throw new ParseException("Syntax error near " + unparsedList.elementAt(0));
+			} else {
+				throw new ParseException("Syntax error ar beginning");
+			}
+
+		}
+
+	}
+
+	public Word getCall() {
+		return _call;
+	}
+
+	public Vector<Token> getParameters() {
+		return _parameters;
+	}
 
 }

@@ -24,22 +24,19 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.rm.FlexoGeneratedOutputResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 
-
 /**
  * Used only during XML serialization to build generated output
  * 
  * @author bmangez
  */
-public class GeneratedSourcesBuilder extends FlexoBuilder<FlexoGeneratedOutputResource>
-{
-    @SuppressWarnings("unused")
+public class GeneratedSourcesBuilder extends FlexoBuilder<FlexoGeneratedOutputResource> {
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GeneratedSourcesBuilder.class.getPackage().getName());
 
-    public GeneratedSources generatedSources;
+	public GeneratedSources generatedSources;
 
-    public GeneratedSourcesBuilder(FlexoGeneratedOutputResource resource)
-    {
-        super(resource);
-    }
+	public GeneratedSourcesBuilder(FlexoGeneratedOutputResource resource) {
+		super(resource);
+	}
 
 }

@@ -18,35 +18,36 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Decision object
- *
+ * 
  * @version $Id: Decision.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Decision extends QuidObject implements Named {
-  public Decision(PetalNode parent, Collection params) {
-    super(parent, "Decision", params);
-  }
+	public Decision(PetalNode parent, Collection params) {
+		super(parent, "Decision", params);
+	}
 
-  public Decision() {
-    super("Decision");
-  }
+	public Decision() {
+		super("Decision");
+	}
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

@@ -33,6 +33,8 @@ import org.openflexo.foundation.wkf.node.ANDOperator;
 import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.foundation.wkf.node.ComplexOperator;
 import org.openflexo.foundation.wkf.node.EventNode;
+import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
+import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.node.ExclusiveEventBasedOperator;
 import org.openflexo.foundation.wkf.node.IFOperator;
 import org.openflexo.foundation.wkf.node.InclusiveOperator;
@@ -45,15 +47,12 @@ import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode;
 import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
-import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
-import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.ws.DeletePort;
 import org.openflexo.foundation.wkf.ws.InOutPort;
 import org.openflexo.foundation.wkf.ws.InPort;
 import org.openflexo.foundation.wkf.ws.NewPort;
 import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
-import org.openflexo.wkf.swleditor.gr.ActionNodeGR;
 import org.openflexo.wkf.swleditor.gr.ActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.AnnotationGR;
 import org.openflexo.wkf.swleditor.gr.BeginActivityNodeGR;
@@ -69,7 +68,6 @@ import org.openflexo.wkf.swleditor.gr.OperatorORGR;
 import org.openflexo.wkf.swleditor.gr.PortGR;
 import org.openflexo.wkf.swleditor.gr.SelfExecActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.SubProcessNodeGR;
-
 
 public class ActivityPalette extends AbstractWKFPalette {
 
@@ -92,15 +90,17 @@ public class ActivityPalette extends AbstractWKFPalette {
 	private ContainerValidity DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(FlexoModelObject container) {
-			return container instanceof Role || container instanceof ActivityPetriGraph || container instanceof ActivityGroup || container instanceof WKFAnnotation;
+			return container instanceof Role || container instanceof ActivityPetriGraph || container instanceof ActivityGroup
+					|| container instanceof WKFAnnotation;
 		}
 	};
 
 	private ContainerValidity DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP_FOR_INTERACTIVE_NODE = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(FlexoModelObject container) {
-			return container instanceof Role || container instanceof ActivityPetriGraph && !(((ActivityPetriGraph) container)
-					.getContainer() instanceof SelfExecutableNode) || container instanceof ActivityGroup || container instanceof WKFAnnotation;
+			return container instanceof Role || container instanceof ActivityPetriGraph
+					&& !(((ActivityPetriGraph) container).getContainer() instanceof SelfExecutableNode)
+					|| container instanceof ActivityGroup || container instanceof WKFAnnotation;
 		}
 	};
 
@@ -429,39 +429,39 @@ public class ActivityPalette extends AbstractWKFPalette {
 		final InPort port = new InPort((FlexoProcess) null);
 		port.setName(portName);
 		port.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setY(y, ActivityNodeGR.SWIMMING_LANE_EDITOR);
-		port.setLabelX(25, ActionNodeGR.SWIMMING_LANE_EDITOR);
-		port.setLabelY(65, ActionNodeGR.SWIMMING_LANE_EDITOR);
+		port.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
 	}
 
 	private WKFPaletteElement makeOutPortElement(int x, int y, String portName) {
 		final OutPort port = new OutPort((FlexoProcess) null);
 		port.setName(portName);
-		port.setX(x, ActivityNodeGR.SWIMMING_LANE_EDITOR);
-		port.setY(y, ActivityNodeGR.SWIMMING_LANE_EDITOR);
-		port.setLabelX(25, ActionNodeGR.SWIMMING_LANE_EDITOR);
-		port.setLabelY(65, ActionNodeGR.SWIMMING_LANE_EDITOR);
+		port.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
 	}
 
 	private WKFPaletteElement makeInOutPortElement(int x, int y, String portName) {
 		final InOutPort port = new InOutPort((FlexoProcess) null);
 		port.setName(portName);
-		port.setX(x, ActivityNodeGR.SWIMMING_LANE_EDITOR);
-		port.setY(y, ActivityNodeGR.SWIMMING_LANE_EDITOR);
-		port.setLabelX(25, ActionNodeGR.SWIMMING_LANE_EDITOR);
-		port.setLabelY(65, ActionNodeGR.SWIMMING_LANE_EDITOR);
+		port.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
 	}
 
 	private WKFPaletteElement makeDeletePortElement(int x, int y, String portName) {
 		final DeletePort port = new DeletePort((FlexoProcess) null);
 		port.setName(portName);
-		port.setX(x, ActivityNodeGR.SWIMMING_LANE_EDITOR);
-		port.setY(y, ActivityNodeGR.SWIMMING_LANE_EDITOR);
-		port.setLabelX(25, ActionNodeGR.SWIMMING_LANE_EDITOR);
-		port.setLabelY(65, ActionNodeGR.SWIMMING_LANE_EDITOR);
+		port.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		port.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
 	}
 

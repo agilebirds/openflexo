@@ -23,12 +23,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.kvc.ChoiceList;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.FlexoController;
-
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.ChoiceListColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -37,6 +31,10 @@ import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.kvc.ChoiceList;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Please comment this class
@@ -44,101 +42,90 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
-public class DMEOModelTableModel extends AbstractModel<DMEORepository,DMEOModel>
-{
+public class DMEOModelTableModel extends AbstractModel<DMEORepository, DMEOModel> {
 
-    protected static final Logger logger = Logger.getLogger(DMEOModelTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DMEOModelTableModel.class.getPackage().getName());
 
-    public DMEOModelTableModel(DMEORepository repository, FlexoProject project)
-    {
-        super(repository, project);
-        addToColumns(new IconColumn<DMEOModel>("eoModel_icon", 30) {
-            @Override
-			public Icon getIcon(DMEOModel object)
-            {
-                return DMEIconLibrary.DM_EOMODEL_ICON;
-            }
-        });
-        addToColumns(new IconColumn<DMEOModel>("read_only", 25) {
-            @Override
-			public Icon getIcon(DMEOModel dmEOModel)
-            {
-                return (dmEOModel.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
-            }
-            
-            @Override
-            public String getLocalizedTooltip(DMEOModel dmEOModel) {
-            	return (dmEOModel.getRepository().isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only"));
-            }
-        });
-        addToColumns(new StringColumn<DMEOModel>("name", 200) {
-            @Override
-			public String getValue(DMEOModel dmEOModel)
-            {
-                return dmEOModel.getName();
-            }
-        });
-        addToColumns(new ChoiceListColumn<DMEOModel>("adaptor", 100) {
-            @Override
-			public ChoiceList getValue(DMEOModel dmEOModel)
-            {
-                return dmEOModel.getAdaptorType();
-            }
+	public DMEOModelTableModel(DMEORepository repository, FlexoProject project) {
+		super(repository, project);
+		addToColumns(new IconColumn<DMEOModel>("eoModel_icon", 30) {
+			@Override
+			public Icon getIcon(DMEOModel object) {
+				return DMEIconLibrary.DM_EOMODEL_ICON;
+			}
+		});
+		addToColumns(new IconColumn<DMEOModel>("read_only", 25) {
+			@Override
+			public Icon getIcon(DMEOModel dmEOModel) {
+				return (dmEOModel.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+			}
 
-            @Override
-			public void setValue(DMEOModel dmEOModel, ChoiceList aValue)
-            {
-                if (!dmEOModel.getRepository().isReadOnly()) {
-                    dmEOModel.setAdaptorType((DMEOAdaptorType) aValue);
-                } else if (dmEOModel.getAdaptorType() != aValue) {
-                    FlexoController.notify(FlexoLocalization.localizedForKey("could_not_modify_read_only_eomodel"));
-                }
-            }
+			@Override
+			public String getLocalizedTooltip(DMEOModel dmEOModel) {
+				return (dmEOModel.getRepository().isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only"));
+			}
+		});
+		addToColumns(new StringColumn<DMEOModel>("name", 200) {
+			@Override
+			public String getValue(DMEOModel dmEOModel) {
+				return dmEOModel.getName();
+			}
+		});
+		addToColumns(new ChoiceListColumn<DMEOModel>("adaptor", 100) {
+			@Override
+			public ChoiceList getValue(DMEOModel dmEOModel) {
+				return dmEOModel.getAdaptorType();
+			}
 
-            @Override
-			protected String renderChoiceListValue(ChoiceList value)
-            {
-                if (value != null)
-                    return ((DMEOAdaptorType) value).getName();
-                return "";
-            }
-        });
-        addToColumns(new StringColumn<DMEOModel>("database_server", 300) {
-            @Override
-			public String getValue(DMEOModel dmEOModel)
-            {
-                return dmEOModel.getDatabaseServer();
-            }
-        });
-    }
+			@Override
+			public void setValue(DMEOModel dmEOModel, ChoiceList aValue) {
+				if (!dmEOModel.getRepository().isReadOnly()) {
+					dmEOModel.setAdaptorType((DMEOAdaptorType) aValue);
+				} else if (dmEOModel.getAdaptorType() != aValue) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_modify_read_only_eomodel"));
+				}
+			}
 
-    public DMEORepository getDMEORepository()
-    {
-        return getModel();
-    }
+			@Override
+			protected String renderChoiceListValue(ChoiceList value) {
+				if (value != null) {
+					return ((DMEOAdaptorType) value).getName();
+				}
+				return "";
+			}
+		});
+		addToColumns(new StringColumn<DMEOModel>("database_server", 300) {
+			@Override
+			public String getValue(DMEOModel dmEOModel) {
+				return dmEOModel.getDatabaseServer();
+			}
+		});
+	}
 
-    @Override
-	public DMEOModel elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return (DMEOModel)getDMEORepository().getOrderedChildren().elementAt(row);
-        } else {
-            return null;
-        }
-    }
+	public DMEORepository getDMEORepository() {
+		return getModel();
+	}
 
-    public DMEOModel eoModelAt(int row)
-    {
-        return elementAt(row);
-    }
+	@Override
+	public DMEOModel elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return (DMEOModel) getDMEORepository().getOrderedChildren().elementAt(row);
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDMEORepository() != null) {
-            return getDMEORepository().getOrderedChildren().size();
-        }
-        return 0;
-    }
+	public DMEOModel eoModelAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getDMEORepository() != null) {
+			return getDMEORepository().getOrderedChildren().size();
+		}
+		return 0;
+	}
 
 }

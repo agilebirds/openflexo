@@ -23,20 +23,17 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 
-public class InspectorEntryRemoved extends OEDataModification
-{
+public class InspectorEntryRemoved extends OEDataModification {
 
 	private EditionPatternInspector _inspector;
 
-    public InspectorEntryRemoved(InspectorEntry entry, EditionPatternInspector inspector)
-    {
-        super(entry,null);
-        _inspector = inspector;
-    }
+	public InspectorEntryRemoved(InspectorEntry entry, EditionPatternInspector inspector) {
+		super(entry, null);
+		_inspector = inspector;
+	}
 
-    public EditionPatternInspector getInspector()
-    {
-        return _inspector;
-    }
+	public EditionPatternInspector getInspector() {
+		return _inspector;
+	}
 
 }

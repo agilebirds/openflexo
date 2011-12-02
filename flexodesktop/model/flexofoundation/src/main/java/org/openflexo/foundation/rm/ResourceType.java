@@ -39,57 +39,67 @@ import org.openflexo.toolbox.FileFormat.TextFileFormat;
 import org.openflexo.toolbox.FileFormat.TextSyntax;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.StringEncoder.Converter;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents type of a resource
- *
+ * 
  * @author sguerin
- *
+ * 
  */
 public abstract class ResourceType extends FlexoObject implements StringConvertable, ChoiceList, Serializable {
 	protected static final Logger logger = FlexoLogger.getLogger(ResourceType.class.getPackage().getName());
 
-	
-	public static TextFileFormat RM_FORMAT,LINKS_FORMAT,WORKFLOW_FORMAT,COMPONENT_LIBRARY_FORMAT,NAVIGATION_MENU_FORMAT,
-						PROCESS_FORMAT,OPERATION_COMPONENT_FORMAT,TAB_COMPONENT_FORMAT,MONITORING_SCREEN_FORMAT,MONITORING_COMPONENT_FORMAT,
-						GENERATED_CODE_FORMAT,GENERATED_SOURCES_FORMAT,GENERATED_DOC_FORMAT,IMPLEMENTATION_MODEL_FORMAT,TOC_FORMAT,
-						REUSABLE_COMPONENT_FORMAT,POPUP_COMPONENT_FORMAT,DATA_MODEL_FORMAT,PROJECT_ONTOLOGY_FORMAT,IMPORTED_ONTOLOGY_FORMAT,
-						OE_SHEMA_LIBRARY_FORMAT,OE_SHEMA_FORMAT,DKV_FORMAT,WS_LIBRARY_FORMAT;
+	public static TextFileFormat RM_FORMAT, LINKS_FORMAT, WORKFLOW_FORMAT, COMPONENT_LIBRARY_FORMAT, NAVIGATION_MENU_FORMAT,
+			PROCESS_FORMAT, OPERATION_COMPONENT_FORMAT, TAB_COMPONENT_FORMAT, MONITORING_SCREEN_FORMAT, MONITORING_COMPONENT_FORMAT,
+			GENERATED_CODE_FORMAT, GENERATED_SOURCES_FORMAT, GENERATED_DOC_FORMAT, IMPLEMENTATION_MODEL_FORMAT, TOC_FORMAT,
+			REUSABLE_COMPONENT_FORMAT, POPUP_COMPONENT_FORMAT, DATA_MODEL_FORMAT, PROJECT_ONTOLOGY_FORMAT, IMPORTED_ONTOLOGY_FORMAT,
+			OE_SHEMA_LIBRARY_FORMAT, OE_SHEMA_FORMAT, DKV_FORMAT, WS_LIBRARY_FORMAT;
 	public static DirectoryFormat PALETTE_FORMAT, TEMPLATES_FORMAT, INSPECTORS_FORMAT;
-	
+
 	static {
-		RM_FORMAT = FileFormat.registerTextFileFormat("RM","application/flexo/rmxml",TextSyntax.XML,"rmxml");
-		LINKS_FORMAT = FileFormat.registerTextFileFormat("LINKS","application/openflexo/rmxml",TextSyntax.XML,"links");
-		WORKFLOW_FORMAT = FileFormat.registerTextFileFormat("WORKFLOW","application/openflexo/wkf",TextSyntax.XML,"wkf");
-		COMPONENT_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("COMPONENT_LIBRARY","application/openflexo/wolib",TextSyntax.XML,"wolib");
-		NAVIGATION_MENU_FORMAT = FileFormat.registerTextFileFormat("MENU","application/openflexo/menu",TextSyntax.XML,"menu");
-		PROCESS_FORMAT = FileFormat.registerTextFileFormat("PROCESS","application/openflexo/process",TextSyntax.XML,"xml");
-		OPERATION_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("OPERATION_COMPONENT","application/openflexo/operation_component",TextSyntax.XML,"woxml");
-		TAB_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("TAB_COMPONENT","application/openflexo/tab_component",TextSyntax.XML,"woxml");
-		MONITORING_SCREEN_FORMAT = FileFormat.registerTextFileFormat("MONITORING_SCREEN","application/openflexo/monitoring_screen",TextSyntax.XML,"woxml");
-		MONITORING_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("MONITORING_COMPONENT","application/openflexo/monitoring_component",TextSyntax.XML,"woxml");
-		REUSABLE_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("REUSABLE_COMPONENT","application/openflexo/reusable_component",TextSyntax.XML,"woxml");
-		POPUP_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("POPUP_COMPONENT","application/openflexo/popup_component",TextSyntax.XML,"woxml");
-		GENERATED_CODE_FORMAT = FileFormat.registerTextFileFormat("GENERATED_CODE","application/openflexo/cg",TextSyntax.XML,"cg");
-		GENERATED_DOC_FORMAT = FileFormat.registerTextFileFormat("GENERATED_DOC","application/openflexo/dg",TextSyntax.XML,"dg");
-		GENERATED_SOURCES_FORMAT = FileFormat.registerTextFileFormat("GENERATED_SOURCES","application/openflexo/sg",TextSyntax.XML,"sg");
-		IMPLEMENTATION_MODEL_FORMAT = FileFormat.registerTextFileFormat("IMPLEMENTATION_MODEL","application/openflexo/implementation_model",TextSyntax.XML);
-		TOC_FORMAT = FileFormat.registerTextFileFormat("TOC","application/openflexo/toc",TextSyntax.XML,"toc");
-		DATA_MODEL_FORMAT = FileFormat.registerTextFileFormat("DATA_MODEL","application/openflexo/dm",TextSyntax.XML,"dm");
-		PROJECT_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("PROJECT_ONTOLOGY","application/openflexo/ontology",TextSyntax.XML,"owl");
-		IMPORTED_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("IMPORTED_ONTOLOGY","application/openflexo/ontology",TextSyntax.XML,"owl");
-		OE_SHEMA_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA_LIBRARY","application/openflexo/oelib",TextSyntax.XML,"oelib");
-		OE_SHEMA_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA","application/openflexo/shema",TextSyntax.XML,"shema");
-		DKV_FORMAT = FileFormat.registerTextFileFormat("DKV","application/openflexo/dkv",TextSyntax.XML,"dkv");
-		WS_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("WS_LIBRARY","application/openflexo/ws",TextSyntax.XML,"ws");
+		RM_FORMAT = FileFormat.registerTextFileFormat("RM", "application/flexo/rmxml", TextSyntax.XML, "rmxml");
+		LINKS_FORMAT = FileFormat.registerTextFileFormat("LINKS", "application/openflexo/rmxml", TextSyntax.XML, "links");
+		WORKFLOW_FORMAT = FileFormat.registerTextFileFormat("WORKFLOW", "application/openflexo/wkf", TextSyntax.XML, "wkf");
+		COMPONENT_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("COMPONENT_LIBRARY", "application/openflexo/wolib", TextSyntax.XML,
+				"wolib");
+		NAVIGATION_MENU_FORMAT = FileFormat.registerTextFileFormat("MENU", "application/openflexo/menu", TextSyntax.XML, "menu");
+		PROCESS_FORMAT = FileFormat.registerTextFileFormat("PROCESS", "application/openflexo/process", TextSyntax.XML, "xml");
+		OPERATION_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("OPERATION_COMPONENT", "application/openflexo/operation_component",
+				TextSyntax.XML, "woxml");
+		TAB_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("TAB_COMPONENT", "application/openflexo/tab_component", TextSyntax.XML,
+				"woxml");
+		MONITORING_SCREEN_FORMAT = FileFormat.registerTextFileFormat("MONITORING_SCREEN", "application/openflexo/monitoring_screen",
+				TextSyntax.XML, "woxml");
+		MONITORING_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("MONITORING_COMPONENT",
+				"application/openflexo/monitoring_component", TextSyntax.XML, "woxml");
+		REUSABLE_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("REUSABLE_COMPONENT", "application/openflexo/reusable_component",
+				TextSyntax.XML, "woxml");
+		POPUP_COMPONENT_FORMAT = FileFormat.registerTextFileFormat("POPUP_COMPONENT", "application/openflexo/popup_component",
+				TextSyntax.XML, "woxml");
+		GENERATED_CODE_FORMAT = FileFormat.registerTextFileFormat("GENERATED_CODE", "application/openflexo/cg", TextSyntax.XML, "cg");
+		GENERATED_DOC_FORMAT = FileFormat.registerTextFileFormat("GENERATED_DOC", "application/openflexo/dg", TextSyntax.XML, "dg");
+		GENERATED_SOURCES_FORMAT = FileFormat.registerTextFileFormat("GENERATED_SOURCES", "application/openflexo/sg", TextSyntax.XML, "sg");
+		IMPLEMENTATION_MODEL_FORMAT = FileFormat.registerTextFileFormat("IMPLEMENTATION_MODEL",
+				"application/openflexo/implementation_model", TextSyntax.XML);
+		TOC_FORMAT = FileFormat.registerTextFileFormat("TOC", "application/openflexo/toc", TextSyntax.XML, "toc");
+		DATA_MODEL_FORMAT = FileFormat.registerTextFileFormat("DATA_MODEL", "application/openflexo/dm", TextSyntax.XML, "dm");
+		PROJECT_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("PROJECT_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML,
+				"owl");
+		IMPORTED_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("IMPORTED_ONTOLOGY", "application/openflexo/ontology", TextSyntax.XML,
+				"owl");
+		OE_SHEMA_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA_LIBRARY", "application/openflexo/oelib", TextSyntax.XML,
+				"oelib");
+		OE_SHEMA_FORMAT = FileFormat.registerTextFileFormat("OE_SHEMA", "application/openflexo/shema", TextSyntax.XML, "shema");
+		DKV_FORMAT = FileFormat.registerTextFileFormat("DKV", "application/openflexo/dkv", TextSyntax.XML, "dkv");
+		WS_LIBRARY_FORMAT = FileFormat.registerTextFileFormat("WS_LIBRARY", "application/openflexo/ws", TextSyntax.XML, "ws");
 
 		PALETTE_FORMAT = FileFormat.registerDirectoryFormat("PALETTE", "directory/palette", "palette");
 		TEMPLATES_FORMAT = FileFormat.registerDirectoryFormat("TEMPLATES", "directory/templates");
 		INSPECTORS_FORMAT = FileFormat.registerDirectoryFormat("INSPECTORS", "directory/inspectors");
 	}
-	
+
 	public static final StringEncoder.Converter<ResourceType> resourceTypeConverter = new Converter<ResourceType>(ResourceType.class) {
 
 		@Override
@@ -833,21 +843,19 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 	}
-	
+
 	private static class ImplementationModelResourceType extends ResourceType {
 		ImplementationModelResourceType() {
 			super();
 		}
 
 		@Override
-		public String getName() 
-		{
+		public String getName() {
 			return "IMPLEMENTATION_MODEL";
 		}
 
 		@Override
-		public FileFormat getFormat() 
-		{
+		public FileFormat getFormat() {
 			return IMPLEMENTATION_MODEL_FORMAT;
 		}
 
@@ -862,8 +870,6 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		}
 
 	}
-	
-	
 
 	private static class GeneratedDocResourceType extends ResourceType {
 		GeneratedDocResourceType() {
@@ -1637,7 +1643,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 
 		/**
 		 * Overrides getName
-		 *
+		 * 
 		 * @see org.openflexo.foundation.rm.ResourceType#getName()
 		 */
 		@Override
@@ -1647,7 +1653,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 
 		/**
 		 * Overrides getFormat
-		 *
+		 * 
 		 * @see org.openflexo.foundation.rm.ResourceType#getFormat()
 		 */
 		@Override
@@ -1776,8 +1782,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 
 	private MergedDocumentType _mergedDocumentType = null;
 
-	public MergedDocumentType getDefaultMergedDocumentType() 
-	{
+	public MergedDocumentType getDefaultMergedDocumentType() {
 		return DefaultMergedDocumentType.getMergedDocumentType(getFormat());
 	}
 

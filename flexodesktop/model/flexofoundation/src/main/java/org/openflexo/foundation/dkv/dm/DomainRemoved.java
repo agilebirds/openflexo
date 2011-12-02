@@ -19,23 +19,20 @@
  */
 package org.openflexo.foundation.dkv.dm;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DomainRemoved extends DKVDataModification
-{
+public class DomainRemoved extends DKVDataModification {
 
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public DomainRemoved(Object oldValue)
-    {
-        super(-1, "domains", oldValue, null);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public DomainRemoved(Object oldValue) {
+		super(-1, "domains", oldValue, null);
+	}
 
 }

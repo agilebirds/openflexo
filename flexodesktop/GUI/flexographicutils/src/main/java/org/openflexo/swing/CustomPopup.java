@@ -56,7 +56,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 import org.openflexo.icon.UtilsIconLibrary;
 
@@ -114,17 +113,18 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 	protected abstract JComponent buildFrontComponent();
 
-	protected abstract Border getDownButtonBorder();
-
 	public CustomPopup(T editedObject) {
 		super();
 		_editedObject = editedObject;
 		setLayout(new BorderLayout());
-		add(_downButton = new JButton(UtilsIconLibrary.ARROW_DOWN), BorderLayout.WEST);
-		Border border = getDownButtonBorder();
+		add(_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_DOWN), BorderLayout.WEST);
+		_downButton.setDisabledIcon(UtilsIconLibrary.CUSTOM_POPUP_DOWN_DISABLED);
+		/*Border border = getDownButtonBorder();
 		if (border != null) {
 			_downButton.setBorder(border);
-		}
+		}*/
+		setOpaque(false);
+		_downButton.setBorder(BorderFactory.createEmptyBorder());
 		_frontComponent = buildFrontComponent();
 		add(_frontComponent, BorderLayout.CENTER);
 
@@ -442,7 +442,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 							}
 						} else if (e.getOppositeWindow() != parentWindow || FocusManager.getCurrentManager().getFocusOwner() != null
 								&& !_frontComponent.hasFocus()) {
-							//pointerLeavesPopup();
+							// pointerLeavesPopup();
 						}
 					}
 				}

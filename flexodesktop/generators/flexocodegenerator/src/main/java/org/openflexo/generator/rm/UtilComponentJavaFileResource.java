@@ -31,35 +31,32 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class UtilComponentJavaFileResource extends ComponentJavaFileResource<FlexoComponentResourceGenerator>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(UtilComponentJavaFileResource.class.getPackage().getName());
+public class UtilComponentJavaFileResource extends ComponentJavaFileResource<FlexoComponentResourceGenerator> {
+	protected static final Logger logger = FlexoLogger.getLogger(UtilComponentJavaFileResource.class.getPackage().getName());
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        if (getGenerator() instanceof MetaWOGenerator)
-            ((MetaWOGenerator)getGenerator()).rebuildDependanciesForResource(this);
-    }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		if (getGenerator() instanceof MetaWOGenerator) {
+			((MetaWOGenerator) getGenerator()).rebuildDependanciesForResource(this);
+		}
+	}
 
-    /**
-     * @param builder
-     */
-    public UtilComponentJavaFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public UtilComponentJavaFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public UtilComponentJavaFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public UtilComponentJavaFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
 }

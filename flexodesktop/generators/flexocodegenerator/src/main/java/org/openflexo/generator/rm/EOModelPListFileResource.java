@@ -35,10 +35,9 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.cg.PListFileResource;
 import org.openflexo.generator.cg.CGPListFile;
 import org.openflexo.generator.dm.EOModelPListGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 
-
-public class EOModelPListFileResource extends PListFileResource<EOModelPListGenerator,CGPListFile> implements GenerationAvailableFileResource, FlexoObserver{
+public class EOModelPListFileResource extends PListFileResource<EOModelPListGenerator, CGPListFile> implements
+		GenerationAvailableFileResource, FlexoObserver {
 
 	public EOModelPListFileResource(FlexoProjectBuilder builder) {
 		super(builder);
@@ -49,101 +48,97 @@ public class EOModelPListFileResource extends PListFileResource<EOModelPListGene
 		super(aProject);
 		// TODO Auto-generated constructor stub
 	}
+
 	private boolean isObserverRegistered = false;
-    
-    @Override
-	protected EOModelPListFile createGeneratedResourceData()
-    {
-        return new EOModelPListFile(getFile(),this);
-    }
-    
-    public DMEOModel getDMEOModel()
-    {
-        if (getGenerator() != null)
-            return getGenerator().getModel();
-        return null;
-    }
-    
-    public void registerObserverWhenRequired()
-    {
-        if (!isObserverRegistered && getDMEOModel() != null) {
-            isObserverRegistered = true;
-            getDMEOModel().addObserver(this);
-        }
-    }
 
-    /**
-     * Overrides update
-     * 
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (observable == getDMEOModel()) {
-            
-        }
-    }
-    
-    @Override
-	public EOModelPListFile getGeneratedResourceData()
-    {
-    	return (EOModelPListFile)super.getGeneratedResourceData();
-    }
-    
-    /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant
-     * resources
-     * 
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
-    @Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-    {
-    	if(resource instanceof FlexoRMResource)return false;
-        if (resource instanceof FlexoDMResource) {
-            FlexoDMResource dmRes = (FlexoDMResource) resource;
-            if (dmRes.isLoaded() && getDMEOModel() != null) {
-                try{
-                	if(getGenerator()!=null && getGenerator().pListCache!=null && getGenerator().pListCache.equals(getGenerator().generatePList()))
-                		return false;
-                }catch(CayenneRuntimeException e){
-                	return true;
-                }catch(NullPointerException e){
-                	return true;
-                }
-            	if (getDMEOModel().getLastUpdate().before(requestDate) || getDMEOModel().getLastUpdate().equals(requestDate)) {
-                    if (logger.isLoggable(Level.FINER))
-                        logger.finer("OPTIMIST DEPENDANCY CHECKING for PLIST EOMODEL " + getDMEOModel().getName());
-                    return false;
-                }
-            }
-        }
-        return super.optimisticallyDependsOf(resource, requestDate);
-    }
+	@Override
+	protected EOModelPListFile createGeneratedResourceData() {
+		return new EOModelPListFile(getFile(), this);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
+	public DMEOModel getDMEOModel() {
+		if (getGenerator() != null) {
+			return getGenerator().getModel();
+		}
+		return null;
+	}
 
-        if (getDMEOModel() != null) {
-            addToDependantResources(getProject().getFlexoDMResource());
-        }
-    }
+	public void registerObserverWhenRequired() {
+		if (!isObserverRegistered && getDMEOModel() != null) {
+			isObserverRegistered = true;
+			getDMEOModel().addObserver(this);
+		}
+	}
 
-    
-    static String getDefaultFileName()
-    {
-        return "index.eomodeld";
-    }
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable == getDMEOModel()) {
 
+		}
+	}
+
+	@Override
+	public EOModelPListFile getGeneratedResourceData() {
+		return (EOModelPListFile) super.getGeneratedResourceData();
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		if (resource instanceof FlexoRMResource) {
+			return false;
+		}
+		if (resource instanceof FlexoDMResource) {
+			FlexoDMResource dmRes = (FlexoDMResource) resource;
+			if (dmRes.isLoaded() && getDMEOModel() != null) {
+				try {
+					if (getGenerator() != null && getGenerator().pListCache != null
+							&& getGenerator().pListCache.equals(getGenerator().generatePList())) {
+						return false;
+					}
+				} catch (CayenneRuntimeException e) {
+					return true;
+				} catch (NullPointerException e) {
+					return true;
+				}
+				if (getDMEOModel().getLastUpdate().before(requestDate) || getDMEOModel().getLastUpdate().equals(requestDate)) {
+					if (logger.isLoggable(Level.FINER)) {
+						logger.finer("OPTIMIST DEPENDANCY CHECKING for PLIST EOMODEL " + getDMEOModel().getName());
+					}
+					return false;
+				}
+			}
+		}
+		return super.optimisticallyDependsOf(resource, requestDate);
+	}
+
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+
+		if (getDMEOModel() != null) {
+			addToDependantResources(getProject().getFlexoDMResource());
+		}
+	}
+
+	static String getDefaultFileName() {
+		return "index.eomodeld";
+	}
 
 }

@@ -33,91 +33,80 @@ import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * Defines a modal window allowing to perform check consistency, edit validation
- * report, and fix issues. This window is generally used to make partial consistency
- * checking on the model after a refactoring action.
+ * Defines a modal window allowing to perform check consistency, edit validation report, and fix issues. This window is generally used to
+ * make partial consistency checking on the model after a refactoring action.
  * 
  * @author sguerin
  * 
  */
-public class PartialConsistencyCheckDialog extends FlexoDialog implements ConsistencyCheckDialogInterface
-{
+public class PartialConsistencyCheckDialog extends FlexoDialog implements ConsistencyCheckDialogInterface {
 
-    private ConsistencyCheckingController _controller;
+	private ConsistencyCheckingController _controller;
 
-    private ValidationReportEditor _validationReportEditor;
+	private ValidationReportEditor _validationReportEditor;
 
-    private ValidationModelViewer _validationModelViewer;
+	private ValidationModelViewer _validationModelViewer;
 
-    public PartialConsistencyCheckDialog(String title, ConsistencyCheckingController controller,ValidationReport validationReport)
-    {
-        super(FlexoController.getActiveFrame(), true);
-        setTitle(title);
-        getContentPane().setLayout(new BorderLayout());
-        _validationReportEditor = new ValidationReportEditor(this, validationReport)
-        {
-            @Override
-			public String getCloseButtonName()
-            {
-                return "done";
-            }
-            
-            @Override
-			public void close()
-            {
-                _consistencyCheckDialog.dispose();       
-            }
-            
-            @Override
-			public void checkAgain()
-            {
-                if (_validationReport.getRootObject() != null) {
-                    consistencyCheckWithValidationModel(_validationReport.getRootObject(),_validationReport.getValidationModel());
-                    if (_validationReport.getRowCount() > 0) {
-                        setCurrentIssue(_validationReport.getIssueAt(_validationReport.getRowCount() - 1));
-                    }
-                }       
-            }           
-        };
-        _validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel());
-        _controller = controller;
-        _validationModelViewer.setValidationModel(validationReport.getValidationModel());
-                
-        JTabbedPane contentPanel = new JTabbedPane();
-        contentPanel.add(FlexoLocalization.localizedForKey("validation_report"), _validationReportEditor);
-        contentPanel.add(FlexoLocalization.localizedForKey("validation_model"), _validationModelViewer);
+	public PartialConsistencyCheckDialog(String title, ConsistencyCheckingController controller, ValidationReport validationReport) {
+		super(FlexoController.getActiveFrame(), true);
+		setTitle(title);
+		getContentPane().setLayout(new BorderLayout());
+		_validationReportEditor = new ValidationReportEditor(this, validationReport) {
+			@Override
+			public String getCloseButtonName() {
+				return "done";
+			}
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
+			@Override
+			public void close() {
+				_consistencyCheckDialog.dispose();
+			}
 
-        setSize(600, 500);
-        validate();
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-    }
+			@Override
+			public void checkAgain() {
+				if (_validationReport.getRootObject() != null) {
+					consistencyCheckWithValidationModel(_validationReport.getRootObject(), _validationReport.getValidationModel());
+					if (_validationReport.getRowCount() > 0) {
+						setCurrentIssue(_validationReport.getIssueAt(_validationReport.getRowCount() - 1));
+					}
+				}
+			}
+		};
+		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel());
+		_controller = controller;
+		_validationModelViewer.setValidationModel(validationReport.getValidationModel());
 
-    @Override
-	public ConsistencyCheckingController getController()
-    {
-        return _controller;
-    }
+		JTabbedPane contentPanel = new JTabbedPane();
+		contentPanel.add(FlexoLocalization.localizedForKey("validation_report"), _validationReportEditor);
+		contentPanel.add(FlexoLocalization.localizedForKey("validation_model"), _validationModelViewer);
 
-    public void setValidationReport(ValidationReport validationReport)
-    {
-        _validationReportEditor.setValidationReport(validationReport);
-        _validationModelViewer.setValidationModel(validationReport.getValidationModel());
-    }
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
 
-    public ValidationReport getValidationReport()
-    {
-        return _validationReportEditor.getValidationReport();
-    }
+		setSize(600, 500);
+		validate();
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+	}
 
-    public void consistencyCheck(Validable objectToValidate)
-    {
-        _validationReportEditor.consistencyCheckWithDefaultValidationModel(objectToValidate);
-        _validationModelViewer.setValidationModel(_validationReportEditor.getValidationReport().getValidationModel());
+	@Override
+	public ConsistencyCheckingController getController() {
+		return _controller;
+	}
 
-    }
+	public void setValidationReport(ValidationReport validationReport) {
+		_validationReportEditor.setValidationReport(validationReport);
+		_validationModelViewer.setValidationModel(validationReport.getValidationModel());
+	}
+
+	public ValidationReport getValidationReport() {
+		return _validationReportEditor.getValidationReport();
+	}
+
+	public void consistencyCheck(Validable objectToValidate) {
+		_validationReportEditor.consistencyCheckWithDefaultValidationModel(objectToValidate);
+		_validationModelViewer.setValidationModel(_validationReportEditor.getValidationReport().getValidationModel());
+
+	}
 
 }

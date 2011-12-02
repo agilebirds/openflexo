@@ -30,51 +30,41 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 
+public class ShowFileHistory extends FlexoGUIAction<ShowFileHistory, CGFile, CGObject> {
 
-public class ShowFileHistory extends FlexoGUIAction<ShowFileHistory,CGFile,CGObject>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShowFileHistory.class.getPackage().getName());
 
-    public static FlexoActionType<ShowFileHistory,CGFile,CGObject> actionType
-    = new FlexoActionType<ShowFileHistory,CGFile,CGObject> (
-    		"show_file_history",
-    		AbstractGCAction.versionningMenu,
-    		AbstractGCAction.versionningShowGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<ShowFileHistory, CGFile, CGObject> actionType = new FlexoActionType<ShowFileHistory, CGFile, CGObject>(
+			"show_file_history", AbstractGCAction.versionningMenu, AbstractGCAction.versionningShowGroup,
+			FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ShowFileHistory makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ShowFileHistory(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ShowFileHistory makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new ShowFileHistory(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return (object != null);
-       }
+		@Override
+		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return (object != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return ((object != null) && (object.getRepository().getManageHistory()));
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (ShowFileHistory.actionType, CGFile.class);
-    }
-    
+		@Override
+		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return ((object != null) && (object.getRepository().getManageHistory()));
+		}
 
-    ShowFileHistory (CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(ShowFileHistory.actionType, CGFile.class);
+	}
+
+	ShowFileHistory(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 }

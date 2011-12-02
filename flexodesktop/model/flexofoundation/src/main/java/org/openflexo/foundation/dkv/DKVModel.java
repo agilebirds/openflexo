@@ -27,9 +27,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dkv.action.AddDomainAction;
 import org.openflexo.foundation.dkv.action.AddLanguageAction;
@@ -49,351 +46,346 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoDKVModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVModel extends DKVObject implements XMLStorageResourceData
-{
+public class DKVModel extends DKVObject implements XMLStorageResourceData {
 
-    private FlexoDKVResource resource;
+	private FlexoDKVResource resource;
 
-    public static final Logger logger = FlexoLogger.getLogger(DKVModel.class.getPackage()
-            .getName());
+	public static final Logger logger = FlexoLogger.getLogger(DKVModel.class.getPackage().getName());
 
-    public static DKVModel createNewDKVModel(FlexoProject project)
-    {
-        DKVModel dl = new DKVModel(project);
-        File dkvFile = ProjectRestructuration.getExpectedDKVModelFile(project, project
-                .getProjectName());
-        FlexoProjectFile dkvModelFile = new FlexoProjectFile(dkvFile, project);
-        FlexoDKVResource dkvRes;
-        try {
-            dkvRes = new FlexoDKVResource(project, dl, dkvModelFile);
-        } catch (InvalidFileNameException e) {
-            dkvModelFile = new FlexoProjectFile(FileUtils.getValidFileName(dkvModelFile.getRelativePath()));
-            dkvModelFile.setProject(project);
-            try {
-                dkvRes = new FlexoDKVResource(project, dl, dkvModelFile);
-            } catch (InvalidFileNameException e1) {
-                if (logger.isLoggable(Level.SEVERE))
-                    logger.severe("Could not create DKV resource. Name: "+dkvModelFile.getRelativePath()+" is not valid. This should never happen.");
-                return null;
-            }
-        }
-        Language lg = new Language(dl,FlexoLocalization.localizedForKey("english"),true);
-        lg.setIsoCode("EN");
-        dl.addToLanguages(lg);
-        try {
-            dkvRes.saveResourceData();
-            project.registerResource(dkvRes);
-        } catch (Exception e1) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Exception raised: " + e1.getClass().getName()
-                        + ". See console for details.");
-            e1.printStackTrace();
-        }
-        return dl;
-    }
+	public static DKVModel createNewDKVModel(FlexoProject project) {
+		DKVModel dl = new DKVModel(project);
+		File dkvFile = ProjectRestructuration.getExpectedDKVModelFile(project, project.getProjectName());
+		FlexoProjectFile dkvModelFile = new FlexoProjectFile(dkvFile, project);
+		FlexoDKVResource dkvRes;
+		try {
+			dkvRes = new FlexoDKVResource(project, dl, dkvModelFile);
+		} catch (InvalidFileNameException e) {
+			dkvModelFile = new FlexoProjectFile(FileUtils.getValidFileName(dkvModelFile.getRelativePath()));
+			dkvModelFile.setProject(project);
+			try {
+				dkvRes = new FlexoDKVResource(project, dl, dkvModelFile);
+			} catch (InvalidFileNameException e1) {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("Could not create DKV resource. Name: " + dkvModelFile.getRelativePath()
+							+ " is not valid. This should never happen.");
+				}
+				return null;
+			}
+		}
+		Language lg = new Language(dl, FlexoLocalization.localizedForKey("english"), true);
+		lg.setIsoCode("EN");
+		dl.addToLanguages(lg);
+		try {
+			dkvRes.saveResourceData();
+			project.registerResource(dkvRes);
+		} catch (Exception e1) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
+			e1.printStackTrace();
+		}
+		return dl;
+	}
 
+	private DomainList domainList = new DomainList(this);
 
-    private DomainList domainList = new DomainList(this);
+	private LanguageList languageList = new LanguageList(this);
 
-    private LanguageList languageList = new LanguageList(this);
+	public DKVModel(FlexoDKVModelBuilder builder) {
+		this(builder.getProject());
+		builder.dkvModel = this;
+		resource = builder.resource;
+		initializeDeserialization(builder);
+	}
 
-     public DKVModel(FlexoDKVModelBuilder builder)
-    {
-        this(builder.getProject());
-        builder.dkvModel=this;
-        resource = builder.resource;
-        initializeDeserialization(builder);
-    }
-
-    /**
+	/**
      *
      */
-    public DKVModel(FlexoProject project)
-    {
-        super(project);
-        setProject(project);
-        dkvModel=this;
-        domainList = new DomainList(this);
-        languageList = new LanguageList(this);
-    }
+	public DKVModel(FlexoProject project) {
+		super(project);
+		setProject(project);
+		dkvModel = this;
+		domainList = new DomainList(this);
+		languageList = new LanguageList(this);
+	}
 
-    /**
-     * Overrides getXMLMapping
-     * @see org.openflexo.foundation.dkv.DKVObject#getXMLMapping()
-     */
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getProject().getXmlMappings().getDKVMapping();
-    }
-    
-    /**
-     * Overrides getFullyQualifiedName
-     *
-     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-     */
-    @Override
-    public String getFullyQualifiedName()
-    {
-        return "DOMAINLIST" + getProject().getProjectName();
-    }
+	/**
+	 * Overrides getXMLMapping
+	 * 
+	 * @see org.openflexo.foundation.dkv.DKVObject#getXMLMapping()
+	 */
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getProject().getXmlMappings().getDKVMapping();
+	}
 
-    /**
-     * Overrides getFlexoXMLFileResource
-     *
-     * @see org.openflexo.foundation.rm.XMLStorageResourceData#getFlexoXMLFileResource()
-     */
-    @Override
-	public FlexoXMLStorageResource getFlexoXMLFileResource()
-    {
-        return getFlexoResource();
-    }
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "DOMAINLIST" + getProject().getProjectName();
+	}
 
-    public boolean isDomainNameLegal(String domainName) throws DuplicateDKVObjectException, EmptyStringException
-    {
-        if (domainName==null)
-            throw new NullPointerException();
-        if (domainName.trim().length()==0)
-            throw new EmptyStringException();
-        Enumeration en = getDomains().elements();
-        while (en.hasMoreElements()) {
-            Domain dom = (Domain) en.nextElement();
-            if (dom.getName().equals(domainName))
-                throw new DuplicateDKVObjectException(dom);
-        }
-       return true;
-    }
+	/**
+	 * Overrides getFlexoXMLFileResource
+	 * 
+	 * @see org.openflexo.foundation.rm.XMLStorageResourceData#getFlexoXMLFileResource()
+	 */
+	@Override
+	public FlexoXMLStorageResource getFlexoXMLFileResource() {
+		return getFlexoResource();
+	}
 
-    public Domain addDomainNamed(String domainName) throws DuplicateDKVObjectException, EmptyStringException
-    {
-        if (domainName==null)
-            throw new NullPointerException();
-        if (domainName.trim().length()==0)
-            throw new EmptyStringException();
-        Enumeration en = getDomains().elements();
-        while (en.hasMoreElements()) {
-            Domain dom = (Domain) en.nextElement();
-            if (dom.getName().equals(domainName))
-                throw new DuplicateDKVObjectException(dom);
-        }
-        Domain dom = new Domain(this);
-        dom.setName(domainName);
-        addToDomains(dom);
-        addObserver(dom);
-        return dom;
-    }
+	public boolean isDomainNameLegal(String domainName) throws DuplicateDKVObjectException, EmptyStringException {
+		if (domainName == null) {
+			throw new NullPointerException();
+		}
+		if (domainName.trim().length() == 0) {
+			throw new EmptyStringException();
+		}
+		Enumeration en = getDomains().elements();
+		while (en.hasMoreElements()) {
+			Domain dom = (Domain) en.nextElement();
+			if (dom.getName().equals(domainName)) {
+				throw new DuplicateDKVObjectException(dom);
+			}
+		}
+		return true;
+	}
 
-    public boolean isLanguageNameLegal(String lgName) throws DuplicateDKVObjectException, EmptyStringException
-    {
-        if (lgName==null)
-            throw new NullPointerException();
-        if (lgName.trim().length()==0)
-            throw new EmptyStringException();
-        Enumeration en = getLanguages().elements();
-        while (en.hasMoreElements()) {
-            Language lg = (Language) en.nextElement();
-            if (lg.getName().equals(lgName))
-                throw new DuplicateDKVObjectException(lg);
-        }
-        return true;
-   }
+	public Domain addDomainNamed(String domainName) throws DuplicateDKVObjectException, EmptyStringException {
+		if (domainName == null) {
+			throw new NullPointerException();
+		}
+		if (domainName.trim().length() == 0) {
+			throw new EmptyStringException();
+		}
+		Enumeration en = getDomains().elements();
+		while (en.hasMoreElements()) {
+			Domain dom = (Domain) en.nextElement();
+			if (dom.getName().equals(domainName)) {
+				throw new DuplicateDKVObjectException(dom);
+			}
+		}
+		Domain dom = new Domain(this);
+		dom.setName(domainName);
+		addToDomains(dom);
+		addObserver(dom);
+		return dom;
+	}
 
-    public Language addLanguageNamed(String lgName) throws DuplicateDKVObjectException, EmptyStringException
-    {
-        if (lgName==null)
-            throw new NullPointerException();
-        if (lgName.trim().length()==0)
-            throw new EmptyStringException();
-        Enumeration en = getLanguages().elements();
-        while (en.hasMoreElements()) {
-            Language lg = (Language) en.nextElement();
-            if (lg.getName().equals(lgName))
-                throw new DuplicateDKVObjectException(lg);
-        }
-        Language lg = new Language(this);
-        lg.setName(lgName);
-        addToLanguages(lg);
-        return lg;
-    }
+	public boolean isLanguageNameLegal(String lgName) throws DuplicateDKVObjectException, EmptyStringException {
+		if (lgName == null) {
+			throw new NullPointerException();
+		}
+		if (lgName.trim().length() == 0) {
+			throw new EmptyStringException();
+		}
+		Enumeration en = getLanguages().elements();
+		while (en.hasMoreElements()) {
+			Language lg = (Language) en.nextElement();
+			if (lg.getName().equals(lgName)) {
+				throw new DuplicateDKVObjectException(lg);
+			}
+		}
+		return true;
+	}
 
-    public void addToDomains(Domain dom)
-    {
-        DomainAdded da = getDomainList().addToDomains(dom);
-        sortedDomains = null;
-        setChanged();
-        notifyObservers(da);
-     }
+	public Language addLanguageNamed(String lgName) throws DuplicateDKVObjectException, EmptyStringException {
+		if (lgName == null) {
+			throw new NullPointerException();
+		}
+		if (lgName.trim().length() == 0) {
+			throw new EmptyStringException();
+		}
+		Enumeration en = getLanguages().elements();
+		while (en.hasMoreElements()) {
+			Language lg = (Language) en.nextElement();
+			if (lg.getName().equals(lgName)) {
+				throw new DuplicateDKVObjectException(lg);
+			}
+		}
+		Language lg = new Language(this);
+		lg.setName(lgName);
+		addToLanguages(lg);
+		return lg;
+	}
 
-    public void removeFromDomains(Domain dom)
-    {
-        DomainRemoved dr = getDomainList().removeFromDomains(dom);
-        sortedDomains = null;
-        setChanged();
-        notifyObservers(dr);
-    }
+	public void addToDomains(Domain dom) {
+		DomainAdded da = getDomainList().addToDomains(dom);
+		sortedDomains = null;
+		setChanged();
+		notifyObservers(da);
+	}
 
-    public void addToLanguages(Language lg)
-    {
-        LanguageAdded la = getLanguageList().addToLanguages(lg);
-        setChanged();
-        notifyObservers(la);
-    }
+	public void removeFromDomains(Domain dom) {
+		DomainRemoved dr = getDomainList().removeFromDomains(dom);
+		sortedDomains = null;
+		setChanged();
+		notifyObservers(dr);
+	}
 
-    public void removeFromLanguage(Language lg)
-    {
-        LanguageRemoved lr = getLanguageList().removeFromLanguage(lg);
-         setChanged();
-        notifyObservers(lr);
-    }
+	public void addToLanguages(Language lg) {
+		LanguageAdded la = getLanguageList().addToLanguages(lg);
+		setChanged();
+		notifyObservers(la);
+	}
 
-    public Vector<Domain> getDomains()
-    {
-        return getDomainList().getDomains();
-    }
+	public void removeFromLanguage(Language lg) {
+		LanguageRemoved lr = getLanguageList().removeFromLanguage(lg);
+		setChanged();
+		notifyObservers(lr);
+	}
 
-    @Override
-    public void setName(String name) throws DuplicateDKVObjectException
-    {
-    	if(areSameValue(name, this.name))return;
-    	sortedDomains = null;
-    	super.setName(name);
-    }
+	public Vector<Domain> getDomains() {
+		return getDomainList().getDomains();
+	}
 
-    private Vector<Domain> sortedDomains;
+	@Override
+	public void setName(String name) throws DuplicateDKVObjectException {
+		if (areSameValue(name, this.name)) {
+			return;
+		}
+		sortedDomains = null;
+		super.setName(name);
+	}
 
-    public Vector<Domain> getSortedDomains(){
-    	if(sortedDomains==null){
-    		sortedDomains = (Vector<Domain>)getDomains().clone();
-    		Collections.sort(sortedDomains, new Comparator<Domain>(){
-    			@Override
-				public int compare(Domain o1, Domain o2)
-    			{
-    				return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
-    			}
-    		});
-    	}
-        return sortedDomains;
-    }
-    public void setDomains(Vector<Domain> domains)
-    {
-        getDomainList().setDomains(domains);
-    }
+	private Vector<Domain> sortedDomains;
 
-    public Vector<Language> getLanguages()
-    {
-        return getLanguageList().getLanguages();
-    }
+	public Vector<Domain> getSortedDomains() {
+		if (sortedDomains == null) {
+			sortedDomains = (Vector<Domain>) getDomains().clone();
+			Collections.sort(sortedDomains, new Comparator<Domain>() {
+				@Override
+				public int compare(Domain o1, Domain o2) {
+					return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
+				}
+			});
+		}
+		return sortedDomains;
+	}
 
-    public void setLanguages(Vector<Language> languages)
-    {
-        getLanguageList().setLanguages(languages);
-    }
+	public void setDomains(Vector<Domain> domains) {
+		getDomainList().setDomains(domains);
+	}
 
-    public Language getMainLanguage()
-    {
-        for (Language l : getLanguages())
-            if (l.getIsMain())
-                return l;
-        getLanguages().firstElement().setIsMain(true);
-        return getLanguages().firstElement();
-    }
+	public Vector<Language> getLanguages() {
+		return getLanguageList().getLanguages();
+	}
 
-    public class DomainList extends DKVObject {
+	public void setLanguages(Vector<Language> languages) {
+		getLanguageList().setLanguages(languages);
+	}
 
-        protected Vector<Domain> domains;
+	public Language getMainLanguage() {
+		for (Language l : getLanguages()) {
+			if (l.getIsMain()) {
+				return l;
+			}
+		}
+		getLanguages().firstElement().setIsMain(true);
+		return getLanguages().firstElement();
+	}
 
-        /**
-         * @param dl
-         */
-        public DomainList(DKVModel dl)
-        {
-            super(dl);
-            domains = new Vector<Domain>();
-        }
+	public class DomainList extends DKVObject {
 
-        public Vector<Domain> getDomains()
-        {
-            return domains;
-        }
+		protected Vector<Domain> domains;
 
-        public void setDomains(Vector<Domain> someDomains)
-        {
-            domains = someDomains;
-        }
+		/**
+		 * @param dl
+		 */
+		public DomainList(DKVModel dl) {
+			super(dl);
+			domains = new Vector<Domain>();
+		}
 
-        /**
-         * Overrides getFullyQualifiedName
-         * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-         */
-        @Override
-        public String getFullyQualifiedName()
-        {
-            return "DOMAIN_LIST";
-        }
+		public Vector<Domain> getDomains() {
+			return domains;
+		}
 
-        /**
-         * Overrides getClassNameKey
-         * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-         */
-        @Override
-        public String getClassNameKey()
-        {
-            return "domain_list";
-        }
+		public void setDomains(Vector<Domain> someDomains) {
+			domains = someDomains;
+		}
 
-        /**
-         * Overrides isDeleteAble
-         * @see org.openflexo.foundation.dkv.DKVObject#isDeleteAble()
-         */
-        @Override
-        public boolean isDeleteAble()
-        {
-            return false;
-        }
-        @Override
-        public void undelete(){
-        	//nothing to do since it can not be deleted :-)
-        }
-        /**
-         * Overrides getSpecificActionListForThatClass
-         * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
-         */
-        @Override
-        protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-        {
-            Vector<FlexoActionType> v= super.getSpecificActionListForThatClass();
-            v.add(AddDomainAction.actionType);
-            return v;
-        }
+		/**
+		 * Overrides getFullyQualifiedName
+		 * 
+		 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+		 */
+		@Override
+		public String getFullyQualifiedName() {
+			return "DOMAIN_LIST";
+		}
 
-        public DomainAdded addToDomains(Domain dom)
-        {
-            if (domains.contains(dom)) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Attempt to insert twice the same domain.");
-                return null;
-            }
-            domains.add(dom);
-            DomainAdded da = new DomainAdded(dom);
-           getDomainList().setChanged();
-            getDomainList().notifyObservers(da);
-            return da;
-         }
+		/**
+		 * Overrides getClassNameKey
+		 * 
+		 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+		 */
+		@Override
+		public String getClassNameKey() {
+			return "domain_list";
+		}
 
-        public DomainRemoved removeFromDomains(Domain dom)
-        {
-            domains.remove(dom);
-            DomainRemoved dr = new DomainRemoved(dom);
-            getDomainList().setChanged();
-            getDomainList().notifyObservers(dr);
-            return dr;
-        }
+		/**
+		 * Overrides isDeleteAble
+		 * 
+		 * @see org.openflexo.foundation.dkv.DKVObject#isDeleteAble()
+		 */
+		@Override
+		public boolean isDeleteAble() {
+			return false;
+		}
+
+		@Override
+		public void undelete() {
+			// nothing to do since it can not be deleted :-)
+		}
+
+		/**
+		 * Overrides getSpecificActionListForThatClass
+		 * 
+		 * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
+		 */
+		@Override
+		protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+			Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
+			v.add(AddDomainAction.actionType);
+			return v;
+		}
+
+		public DomainAdded addToDomains(Domain dom) {
+			if (domains.contains(dom)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Attempt to insert twice the same domain.");
+				}
+				return null;
+			}
+			domains.add(dom);
+			DomainAdded da = new DomainAdded(dom);
+			getDomainList().setChanged();
+			getDomainList().notifyObservers(da);
+			return da;
+		}
+
+		public DomainRemoved removeFromDomains(Domain dom) {
+			domains.remove(dom);
+			DomainRemoved dr = new DomainRemoved(dom);
+			getDomainList().setChanged();
+			getDomainList().notifyObservers(dr);
+			return dr;
+		}
 
 		@Override
 		public Vector getAllEmbeddedValidableObjects() {
@@ -402,234 +394,226 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData
 			return reply;
 		}
 
+	}
 
-    }
+	public class LanguageList extends DKVObject {
 
-    public class LanguageList extends DKVObject {
+		protected Vector<Language> languages;
 
-        protected Vector<Language> languages;
+		/**
+		 * @param dl
+		 */
+		public LanguageList(DKVModel dl) {
+			super(dl);
+			languages = new Vector<Language>();
+		}
 
-       /**
-         * @param dl
-         */
-        public LanguageList(DKVModel dl)
-        {
-            super(dl);
-            languages = new Vector<Language>();
-        }
+		public Vector<Language> getLanguages() {
+			return languages;
+		}
 
-        public Vector<Language> getLanguages()
-        {
-            return languages;
-        }
+		public void setLanguages(Vector<Language> someLanguages) {
+			languages = someLanguages;
+		}
 
-        public void setLanguages(Vector<Language> someLanguages)
-        {
-            languages = someLanguages;
-        }
+		/**
+		 * Overrides getFullyQualifiedName
+		 * 
+		 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+		 */
+		@Override
+		public String getFullyQualifiedName() {
+			return "LANGUAGE_LIST";
+		}
 
+		/**
+		 * Overrides getClassNameKey
+		 * 
+		 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+		 */
+		@Override
+		public String getClassNameKey() {
+			return "language_list";
+		}
 
-        /**
-         * Overrides getFullyQualifiedName
-         * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-         */
-        @Override
-        public String getFullyQualifiedName()
-        {
-            return "LANGUAGE_LIST";
-        }
+		/**
+		 * Overrides isDeleteAble
+		 * 
+		 * @see org.openflexo.foundation.dkv.DKVObject#isDeleteAble()
+		 */
+		@Override
+		public boolean isDeleteAble() {
+			return false;
+		}
 
-        /**
-         * Overrides getClassNameKey
-         * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-         */
-        @Override
-        public String getClassNameKey()
-        {
-            return "language_list";
-        }
+		@Override
+		public void undelete() {
+			// nothing to do since it can not be deleted :-)
+		}
 
-        /**
-         * Overrides isDeleteAble
-         * @see org.openflexo.foundation.dkv.DKVObject#isDeleteAble()
-         */
-        @Override
-        public boolean isDeleteAble()
-        {
-            return false;
-        }
-        @Override
-        public void undelete(){
-        	//nothing to do since it can not be deleted :-)
-        }
-        /**
-         * Overrides getSpecificActionListForThatClass
-         * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
-         */
-        @Override
-        protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-        {
-            Vector<FlexoActionType> v= super.getSpecificActionListForThatClass();
-            v.add(AddLanguageAction.actionType);
-            return v;
-        }
+		/**
+		 * Overrides getSpecificActionListForThatClass
+		 * 
+		 * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
+		 */
+		@Override
+		protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+			Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
+			v.add(AddLanguageAction.actionType);
+			return v;
+		}
 
-        public LanguageAdded addToLanguages(Language lg)
-        {
-            if (languages.contains(lg)) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Attempt to insert twice the same language.");
-                return null;
-            }
-            languages.add(lg);
-             LanguageAdded la = new LanguageAdded(lg);
-            getLanguageList().setChanged();
-            getLanguageList().notifyObservers(la);
-            return la;
-        }
+		public LanguageAdded addToLanguages(Language lg) {
+			if (languages.contains(lg)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Attempt to insert twice the same language.");
+				}
+				return null;
+			}
+			languages.add(lg);
+			LanguageAdded la = new LanguageAdded(lg);
+			getLanguageList().setChanged();
+			getLanguageList().notifyObservers(la);
+			return la;
+		}
 
-        public LanguageRemoved removeFromLanguage(Language lg)
-        {
-            if (!languages.contains(lg)) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Attempt to remove a language that can not be found: "
-                            + lg.getName());
-                return null;
-            }
-            languages.remove(lg);
-            LanguageRemoved lr = new LanguageRemoved(lg);
-             getLanguageList().setChanged();
-            getLanguageList().notifyObservers(lr);
-            return lr;
-        }
+		public LanguageRemoved removeFromLanguage(Language lg) {
+			if (!languages.contains(lg)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Attempt to remove a language that can not be found: " + lg.getName());
+				}
+				return null;
+			}
+			languages.remove(lg);
+			LanguageRemoved lr = new LanguageRemoved(lg);
+			getLanguageList().setChanged();
+			getLanguageList().notifyObservers(lr);
+			return lr;
+		}
 
-        @Override
-        public Vector getAllEmbeddedValidableObjects() {
+		@Override
+		public Vector getAllEmbeddedValidableObjects() {
 			Vector reply = new Vector();
 			reply.addAll(getLanguages());
 			return reply;
 		}
 
+	}
 
-    }
+	public static Logger getLogger() {
+		return logger;
+	}
 
-    public static Logger getLogger()
-    {
-        return logger;
-    }
+	public DomainList getDomainList() {
+		return domainList;
+	}
 
-    public DomainList getDomainList()
-    {
-        return domainList;
-    }
+	public LanguageList getLanguageList() {
+		return languageList;
+	}
 
-    public LanguageList getLanguageList()
-    {
-        return languageList;
-    }
+	public Domain getDomainNamed(String name) {
+		Enumeration en = getDomains().elements();
+		while (en.hasMoreElements()) {
+			Domain dom = (Domain) en.nextElement();
+			if (dom.getName().equals(name)) {
+				return dom;
+			}
+		}
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Domain " + name + " could not be found.");
+		}
+		return null;
+	}
 
-    public Domain getDomainNamed(String name)
-    {
-        Enumeration en = getDomains().elements();
-        while (en.hasMoreElements()) {
-            Domain dom = (Domain) en.nextElement();
-            if (dom.getName().equals(name))
-                return dom;
-        }
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Domain "+name+" could not be found.");
-        return null;
-    }
+	public String getNextDomainName() {
+		int i = 0;
+		while (true) {
+			if (getDomainNamed("Domain-" + i) == null) {
+				return "Domain-" + i;
+			}
+			i++;
+		}
+	}
 
-    public String getNextDomainName(){
-    	int i = 0;
-    	while(true){
-    		if(getDomainNamed("Domain-"+i)==null)return "Domain-"+i;
-    		i++;
-    	}
-    }
-
-    public Language getLanguageNamed(String lg_name)
-    {
-        Enumeration en = getLanguages().elements();
-        while (en.hasMoreElements()) {
-            Language lg = (Language) en.nextElement();
-            if (lg.getName().equals(lg_name))
-                return lg;
-        }
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Language "+lg_name+" could not be found.");
-        return null;
-    }
-
-    @Override
-	public FlexoDKVResource getFlexoResource()
-    {
-        return resource;
-    }
-
-    @Override
-	public void setFlexoResource(FlexoResource resource)
-    {
-        this.resource = (FlexoDKVResource)resource;
-    }
-
-    /**
-     * Overrides save
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#save()
-     */
-    @Override
-	public void save() throws SaveResourceException
-    {
-        resource.saveResourceData();
-    }
-
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "dkv_model";
-    }
-
-    /**
-     * Overrides isDeleteAble
-     * @see org.openflexo.foundation.dkv.DKVObject#isDeleteAble()
-     */
-    @Override
-    public boolean isDeleteAble()
-    {
-        return false;
-    }
-
-    @Override
-    public void undelete(){
-    	//nothing to do since it can not be deleted :-)
-    }
-
-    /**
-     * Overrides getSpecificActionListForThatClass
-     * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
-     */
-    @Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-        Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-        v.add(AddDomainAction.actionType);
-        v.add(AddLanguageAction.actionType);
-        return v;
-    }
+	public Language getLanguageNamed(String lg_name) {
+		Enumeration en = getLanguages().elements();
+		while (en.hasMoreElements()) {
+			Language lg = (Language) en.nextElement();
+			if (lg.getName().equals(lg_name)) {
+				return lg;
+			}
+		}
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Language " + lg_name + " could not be found.");
+		}
+		return null;
+	}
 
 	@Override
-    public Vector getAllEmbeddedValidableObjects() {
+	public FlexoDKVResource getFlexoResource() {
+		return resource;
+	}
+
+	@Override
+	public void setFlexoResource(FlexoResource resource) {
+		this.resource = (FlexoDKVResource) resource;
+	}
+
+	/**
+	 * Overrides save
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
+	 */
+	@Override
+	public void save() throws SaveResourceException {
+		resource.saveResourceData();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "dkv_model";
+	}
+
+	/**
+	 * Overrides isDeleteAble
+	 * 
+	 * @see org.openflexo.foundation.dkv.DKVObject#isDeleteAble()
+	 */
+	@Override
+	public boolean isDeleteAble() {
+		return false;
+	}
+
+	@Override
+	public void undelete() {
+		// nothing to do since it can not be deleted :-)
+	}
+
+	/**
+	 * Overrides getSpecificActionListForThatClass
+	 * 
+	 * @see org.openflexo.foundation.dkv.DKVObject#getSpecificActionListForThatClass()
+	 */
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
+		v.add(AddDomainAction.actionType);
+		v.add(AddLanguageAction.actionType);
+		return v;
+	}
+
+	@Override
+	public Vector getAllEmbeddedValidableObjects() {
 		Vector answer = new Vector();
 		answer.addAll(getDomains());
 		answer.addAll(getLanguages());
-        return answer;
+		return answer;
 	}
 
-
- }
+}

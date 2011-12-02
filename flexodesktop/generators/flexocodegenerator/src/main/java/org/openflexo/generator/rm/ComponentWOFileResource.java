@@ -40,74 +40,69 @@ import org.openflexo.generator.FlexoComponentResourceGenerator;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.cg.CGWOFile;
 import org.openflexo.generator.ie.ComponentGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.logging.FlexoLogger;
-
 
 /**
  * @author sylvain
- *
+ * 
  */
-public abstract class ComponentWOFileResource<G extends FlexoComponentResourceGenerator> extends WOFileResource<G,CGWOFile> implements GenerationAvailableFileResource, ComponentFileResource, FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(ComponentWOFileResource.class.getPackage().getName());
+public abstract class ComponentWOFileResource<G extends FlexoComponentResourceGenerator> extends WOFileResource<G, CGWOFile> implements
+		GenerationAvailableFileResource, ComponentFileResource, FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(ComponentWOFileResource.class.getPackage().getName());
 
-    protected boolean isObserverRegistered = false;
-    /**
-     * @param builder
-     */
-    public ComponentWOFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	protected boolean isObserverRegistered = false;
 
-    /**
-     * @param aProject
-     */
-    public ComponentWOFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param builder
+	 */
+	public ComponentWOFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    @Override
-	protected ComponentWOFile createGeneratedResourceData()
-    {
-        return new ComponentWOFile(getFile(),this);
-    }
-
-    @Override
-	public ComponentWOFile getGeneratedResourceData()
-    {
-    	return (ComponentWOFile)super.getGeneratedResourceData();
-    }
+	/**
+	 * @param aProject
+	 */
+	public ComponentWOFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
 	@Override
-	public ComponentDefinition getComponentDefinition()
-	{
-		if (getGenerator() != null)
+	protected ComponentWOFile createGeneratedResourceData() {
+		return new ComponentWOFile(getFile(), this);
+	}
+
+	@Override
+	public ComponentWOFile getGeneratedResourceData() {
+		return (ComponentWOFile) super.getGeneratedResourceData();
+	}
+
+	@Override
+	public ComponentDefinition getComponentDefinition() {
+		if (getGenerator() != null) {
 			return getGenerator().getComponentDefinition();
+		}
 		return null;
 	}
 
-    /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     *
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
-		}
-		else if (resource instanceof FlexoDMResource) {
-			FlexoDMResource dmRes = (FlexoDMResource)resource;
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
+		} else if (resource instanceof FlexoDMResource) {
+			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getComponentDefinition() != null && getComponentDefinition().getComponentDMEntity() != null) {
 				if (!requestDate.before(getComponentDefinition().getComponentDMEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER)) logger.finer("OPTIMIST DEPENDANCY CHECKING for WO COMPONENT "+getComponentDefinition().getName());
+					if (logger.isLoggable(Level.FINER)) {
+						logger.finer("OPTIMIST DEPENDANCY CHECKING for WO COMPONENT " + getComponentDefinition().getName());
+					}
 					return false;
 				}
 			}
@@ -115,37 +110,37 @@ public abstract class ComponentWOFileResource<G extends FlexoComponentResourceGe
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
 
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-    	super.rebuildDependancies();
+		if (getComponentDefinition() != null) {
 
-    	if (getComponentDefinition() != null) {
+			addToDependantResources(getProject().getFlexoDMResource());
+			addToDependantResources(getComponentDefinition().getComponentResource());
 
-    		addToDependantResources(getProject().getFlexoDMResource());
-    		addToDependantResources(getComponentDefinition().getComponentResource());
+			if (getComponentDefinition().getWOComponent() != null) {
+				for (Enumeration en = getComponentDefinition().getWOComponent().getAllComponentInstances().elements(); en.hasMoreElements();) {
+					ComponentInstance ci = (ComponentInstance) en.nextElement();
+					if (ci.getComponentDefinition() != null) {
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Found dependancy between " + this + " and " + ci.getComponentDefinition().getComponentResource());
+						}
+						addToDependantResources(ci.getComponentDefinition().getComponentResource());
+					} else {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Inconsistant data: ComponentInstance refers to an unknown ComponentDefinition "
+									+ ci.getComponentName());
+						}
+					}
+				}
+			}
 
-    		if (getComponentDefinition().getWOComponent() != null) {
-    			for (Enumeration en = getComponentDefinition().getWOComponent().getAllComponentInstances().elements(); en.hasMoreElements();) {
-    				ComponentInstance ci = (ComponentInstance) en.nextElement();
-    				if (ci.getComponentDefinition() != null) {
-    					if (logger.isLoggable(Level.FINE))
-    						logger.fine("Found dependancy between " + this + " and " + ci.getComponentDefinition().getComponentResource());
-    					addToDependantResources(ci.getComponentDefinition().getComponentResource());
-    				} else {
-    					if (logger.isLoggable(Level.WARNING))
-    						logger.warning("Inconsistant data: ComponentInstance refers to an unknown ComponentDefinition "
-    								+ ci.getComponentName());
-    				}
-    			}
-    		}
-
-    	}
-    }
+		}
+	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {

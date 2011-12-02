@@ -34,59 +34,49 @@ import org.openflexo.localization.FlexoLocalization;
 
 public abstract class TabularViewAction implements ActionListener {
 
-    private final FlexoActionType _actionType;
-    private String _unlocalizedName = null;
-    private final FlexoEditor _editor;
-    
-    public TabularViewAction(FlexoActionType actionType, FlexoEditor editor)
-    {
-        super();
-        _actionType = actionType;
-        _editor = editor;
-    }
-    
-    public TabularViewAction(FlexoActionType actionType, String actionName, FlexoEditor editor)
-    {
-        this(actionType,editor);
-        _unlocalizedName = actionName;
-    }
-    
-    @Override
-	public void actionPerformed(ActionEvent event)
-    {
-        FlexoAction action = _actionType.makeNewAction (getFocusedObject(),getGlobalSelection(), _editor);
-        action.actionPerformed(event);
-    }
+	private final FlexoActionType _actionType;
+	private String _unlocalizedName = null;
+	private final FlexoEditor _editor;
 
-    protected abstract Vector getGlobalSelection();
+	public TabularViewAction(FlexoActionType actionType, FlexoEditor editor) {
+		super();
+		_actionType = actionType;
+		_editor = editor;
+	}
 
-    protected abstract FlexoModelObject getFocusedObject();
+	public TabularViewAction(FlexoActionType actionType, String actionName, FlexoEditor editor) {
+		this(actionType, editor);
+		_unlocalizedName = actionName;
+	}
 
-    public FlexoActionType getActionType() 
-    {
-        return _actionType;
-    }
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		FlexoAction action = _actionType.makeNewAction(getFocusedObject(), getGlobalSelection(), _editor);
+		action.actionPerformed(event);
+	}
 
-    public String getLocalizedName (Component component)
-    {
-        if (_unlocalizedName == null) {
-            return _actionType.getLocalizedName(component);
-                       
-        }
-        else {
-            return FlexoLocalization.localizedForKey(_unlocalizedName,component);
-        }
-    }
+	protected abstract Vector getGlobalSelection();
 
-    public Icon getIcon ()
-    {
-    	return _editor.getEnabledIconFor(_actionType);
-    }
+	protected abstract FlexoModelObject getFocusedObject();
 
-    public Icon getDisabledIcon ()
-    {
-    	return _editor.getDisabledIconFor(_actionType);
-    }
+	public FlexoActionType getActionType() {
+		return _actionType;
+	}
+
+	public String getLocalizedName(Component component) {
+		if (_unlocalizedName == null) {
+			return _actionType.getLocalizedName(component);
+
+		} else {
+			return FlexoLocalization.localizedForKey(_unlocalizedName, component);
+		}
+	}
+
+	public Icon getIcon() {
+		return _editor.getEnabledIconFor(_actionType);
+	}
+
+	public Icon getDisabledIcon() {
+		return _editor.getDisabledIconFor(_actionType);
+	}
 }
-
-

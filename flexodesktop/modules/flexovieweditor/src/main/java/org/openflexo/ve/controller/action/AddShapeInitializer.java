@@ -24,6 +24,10 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.controller.OEController;
@@ -31,41 +35,31 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.action.AddShape;
-
-
 public class AddShapeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddShapeInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(AddShape.actionType,actionInitializer);
+	AddShapeInitializer(OEControllerActionInitializer actionInitializer) {
+		super(AddShape.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddShape> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddShape> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddShape>() {
 			@Override
-			public boolean run(ActionEvent e, AddShape action)
-			{
-				if ((action.getNewShapeName() != null || action.isNameSetToNull()) 
-						&& (action.getParent() != null))
+			public boolean run(ActionEvent e, AddShape action) {
+				if ((action.getNewShapeName() != null || action.isNameSetToNull()) && (action.getParent() != null)) {
 					return true;
+				}
 
 				ViewObject parent = action.getParent();
 				if (parent != null) {
-						action.setNewShapeName(FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_shape")));
+					action.setNewShapeName(FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_shape")));
 					return true;
 				}
 				return false;
@@ -74,23 +68,19 @@ public class AddShapeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddShape> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddShape> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddShape>() {
 			@Override
-			public boolean run(ActionEvent e, AddShape action)
-			{
-				((OEController)getController()).getSelectionManager().setSelectedObject(action.getNewShape());
+			public boolean run(ActionEvent e, AddShape action) {
+				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewShape());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return VEIconLibrary.SHAPE_ICON;
 	}
-
 
 }

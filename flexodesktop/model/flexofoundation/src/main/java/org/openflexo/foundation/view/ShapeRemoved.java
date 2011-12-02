@@ -27,20 +27,17 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
  * @author sguerin
  * 
  */
-public class ShapeRemoved extends OEDataModification
-{
+public class ShapeRemoved extends OEDataModification {
 
-    private ViewObject _parent;
+	private ViewObject _parent;
 
-    public ShapeRemoved(ViewShape shape, ViewObject parent)
-    {
-        super(shape, null);
-        _parent = parent;
-    }
+	public ShapeRemoved(ViewShape shape, ViewObject parent) {
+		super(shape, null);
+		_parent = parent;
+	}
 
-    public ViewObject getParent()
-    {
-        return _parent;
-    }
+	public ViewObject getParent() {
+		return _parent;
+	}
 
 }

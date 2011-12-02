@@ -24,98 +24,86 @@ import java.util.Vector;
 
 import org.openflexo.foundation.utils.FlexoListModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class ValidationRuleSet extends FlexoListModel
-{
+public class ValidationRuleSet extends FlexoListModel {
 
-    protected Class _type;
+	protected Class _type;
 
-    protected Vector<ValidationRule> _rules;
+	protected Vector<ValidationRule> _rules;
 
-    public ValidationRuleSet(Class type)
-    {
-        super();
-        _type = type;
-        _rules = new Vector<ValidationRule>();
-    }
+	public ValidationRuleSet(Class type) {
+		super();
+		_type = type;
+		_rules = new Vector<ValidationRule>();
+	}
 
-    /**
-     * @param type1
-     * @param vector
-     */
-    public ValidationRuleSet(Class type, Vector<ValidationRule> vectorOfRules)
-    {
-        this(type);
-        _rules = new Vector<ValidationRule>(vectorOfRules);
-    }
+	/**
+	 * @param type1
+	 * @param vector
+	 */
+	public ValidationRuleSet(Class type, Vector<ValidationRule> vectorOfRules) {
+		this(type);
+		_rules = new Vector<ValidationRule>(vectorOfRules);
+	}
 
-    public void addRule(ValidationRule rule)
-    {
-        if (!_rules.contains(rule)) {
-            _rules.add(rule);
-        }
-    }
+	public void addRule(ValidationRule rule) {
+		if (!_rules.contains(rule)) {
+			_rules.add(rule);
+		}
+	}
 
-    public void removeRule(ValidationRule rule)
-    {
-        if (_rules.contains(rule)) {
-            _rules.remove(rule);
-        }
-    }
+	public void removeRule(ValidationRule rule) {
+		if (_rules.contains(rule)) {
+			_rules.remove(rule);
+		}
+	}
 
-    public Enumeration<ValidationRule> elements()
-    {
-        return _rules.elements();
-    }
+	public Enumeration<ValidationRule> elements() {
+		return _rules.elements();
+	}
 
-    /**
-     * Implements
-     * 
-     * @see javax.swing.ListModel#getSize()
-     * @see javax.swing.ListModel#getSize()
-     */
-    @Override
-	public int getSize()
-    {
-        return _rules.size();
-    }
+	/**
+	 * Implements
+	 * 
+	 * @see javax.swing.ListModel#getSize()
+	 * @see javax.swing.ListModel#getSize()
+	 */
+	@Override
+	public int getSize() {
+		return _rules.size();
+	}
 
-    /**
-     * Implements
-     * 
-     * @see javax.swing.ListModel#getElementAt(int)
-     * @see javax.swing.ListModel#getElementAt(int)
-     */
-    @Override
-	public ValidationRule getElementAt(int index)
-    {
-        return _rules.get(index);
-    }
+	/**
+	 * Implements
+	 * 
+	 * @see javax.swing.ListModel#getElementAt(int)
+	 * @see javax.swing.ListModel#getElementAt(int)
+	 */
+	@Override
+	public ValidationRule getElementAt(int index) {
+		return _rules.get(index);
+	}
 
-    public Class getType()
-    {
-        return _type;
-    }
+	public Class getType() {
+		return _type;
+	}
 
-    public Vector<ValidationRule> getRules()
-    {
-        return _rules;
-    }
+	public Vector<ValidationRule> getRules() {
+		return _rules;
+	}
 
-    private String _typeName;
+	private String _typeName;
 
-    public String getTypeName()
-    {
-        if (_typeName == null) {
-        	_typeName = getType().getSimpleName();
-         }
-        return _typeName;
-    }
+	public String getTypeName() {
+		if (_typeName == null) {
+			_typeName = getType().getSimpleName();
+		}
+		return _typeName;
+	}
 
 }

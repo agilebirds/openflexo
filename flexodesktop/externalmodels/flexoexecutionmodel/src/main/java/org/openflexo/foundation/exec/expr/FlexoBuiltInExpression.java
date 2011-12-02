@@ -26,29 +26,25 @@ import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.java.JavaPrettyPrintable;
 
-
 public abstract class FlexoBuiltInExpression extends Expression implements JavaPrettyPrintable {
 
 	// We won't try to resolve those expression here
 	@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException 
-	{
+	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 		return this;
 	}
 
 	@Override
 	public abstract String toString();
-	
+
 	@Override
 	public int getDepth() {
 		return 0;
 	}
-	
+
 	@Override
-	protected Vector<Expression> getChilds()
-	{
+	protected Vector<Expression> getChilds() {
 		return null;
 	}
-
 
 }

@@ -27,45 +27,41 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public class OO3Color implements XMLSerializable
-{
+public class OO3Color implements XMLSerializable {
 
-    public String r;
+	public String r;
 
-    public String g;
+	public String g;
 
-    public String b;
+	public String b;
 
-    public String catalog;
+	public String catalog;
 
-    public String name;
+	public String name;
 
-    public String w;
+	public String w;
 
-    public String a;
+	public String a;
 
-    public static OO3Color textColor()
-    {
-        OO3Color returned = new OO3Color();
-        returned.catalog = "System";
-        returned.name = "textColor";
-        return returned;
-    }
+	public static OO3Color textColor() {
+		OO3Color returned = new OO3Color();
+		returned.catalog = "System";
+		returned.name = "textColor";
+		return returned;
+	}
 
-    public static OO3Color bgColor()
-    {
-        OO3Color returned = new OO3Color();
-        returned.w = "0";
-        returned.a = "0";
-        return returned;
-    }
+	public static OO3Color bgColor() {
+		OO3Color returned = new OO3Color();
+		returned.w = "0";
+		returned.a = "0";
+		return returned;
+	}
 
-    public static OO3Color rgbColor(float r, float g, float b)
-    {
-        OO3Color returned = new OO3Color();
-        returned.r = "" + r;
-        returned.g = "" + g;
-        returned.b = "" + b;
-        return returned;
-    }
+	public static OO3Color rgbColor(float r, float g, float b) {
+		OO3Color returned = new OO3Color();
+		returned.r = "" + r;
+		returned.g = "" + g;
+		returned.b = "" + b;
+		return returned;
+	}
 }

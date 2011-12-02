@@ -26,58 +26,52 @@ import org.openflexo.dm.view.menu.DMMenuBar;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 
-
 /**
  * Selection manager dedicated to Data Model Editor module
  * 
  * @author sguerin
  */
-public class DMSelectionManager extends SelectionManager
-{
+public class DMSelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(DMSelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DMSelectionManager.class.getPackage().getName());
 
-    public DMSelectionManager(DMController controller)
-    {
-        super(controller);
-        DMMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new DMClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        _contextualMenuManager = new DMContextualMenuManager(this,controller.getEditor());
-   }
+	public DMSelectionManager(DMController controller) {
+		super(controller);
+		DMMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new DMClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		_contextualMenuManager = new DMContextualMenuManager(this, controller.getEditor());
+	}
 
-    public DMController getDMController()
-    {
-        return (DMController) getController();
-    }
+	public DMController getDMController() {
+		return (DMController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in Interface Editor");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("'Select All' not implemented yet in Interface Editor");
+		}
+		return false;
+	}
 
-    // ==================================================
-    // ========= Selection Management public API ========
-    // ==================================================
-    
+	// ==================================================
+	// ========= Selection Management public API ========
+	// ==================================================
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoObservable
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getDMController().getCurrentEditedObject();
-    }
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoObservable
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getDMController().getCurrentEditedObject();
+	}
 
-    @Override
-	public FlexoModelObject getPasteContext() 
-    {
-        return getFocusedObject();
-    }
+	@Override
+	public FlexoModelObject getPasteContext() {
+		return getFocusedObject();
+	}
 
 }

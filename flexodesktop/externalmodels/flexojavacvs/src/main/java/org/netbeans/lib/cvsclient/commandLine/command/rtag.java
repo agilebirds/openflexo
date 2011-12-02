@@ -27,59 +27,59 @@ import org.netbeans.lib.cvsclient.commandLine.GetOpt;
 
 /**
  * Tag repository files.
- *
- * @author  Martin Entlicher
+ * 
+ * @author Martin Entlicher
  */
 public class rtag extends AbstractCommandProvider {
 
-    @Override
+	@Override
 	public String getName() {
-        return "rtag"; // NOI18N
-    }
+		return "rtag"; // NOI18N
+	}
 
-    @Override
+	@Override
 	public String[] getSynonyms() {
-        return new String[] { "rt" }; // NOI18N
-    }
+		return new String[] { "rt" }; // NOI18N
+	}
 
-    @Override
+	@Override
 	public Command createCommand(String[] args, int index, GlobalOptions gopt, String workDir) {
-        RtagCommand command = new RtagCommand();
-        command.setBuilder(null);
-        final String getOptString = command.getOptString();
-        GetOpt go = new GetOpt(args, getOptString);
-        int ch = -1;
-        go.optIndexSet(index);
-        boolean usagePrint = false;
-        String arg;
-        while ((ch = go.getopt()) != GetOpt.optEOF) {
-            boolean ok = command.setCVSCommand((char)ch, go.optArgGet());
-            if (!ok) {
-                usagePrint = true;
-            }
-        }
-        if (usagePrint) {
-            throw new IllegalArgumentException(getUsage());
-        }
-        int argIndex = go.optIndexGet();
-        // test if we have been passed the tag name
-        if (argIndex < args.length) {
-            command.setTag(args[argIndex]);
-        } else {
-            throw new IllegalArgumentException(getUsage());
-        }
-        int modulesArgsIndex = argIndex + 1;
-        // test if we have been passed any module arguments
-        if (modulesArgsIndex < args.length) {
-            String[] modulesArgs = new String[args.length - modulesArgsIndex];
-            // send the arguments as absolute paths
-            for (int i = modulesArgsIndex; i < args.length; i++) {
-                modulesArgs[i - modulesArgsIndex] = args[i];
-            }
-            command.setModules(modulesArgs);
-        }
-        return command;
-        
-    }
-    
+		RtagCommand command = new RtagCommand();
+		command.setBuilder(null);
+		final String getOptString = command.getOptString();
+		GetOpt go = new GetOpt(args, getOptString);
+		int ch = -1;
+		go.optIndexSet(index);
+		boolean usagePrint = false;
+		String arg;
+		while ((ch = go.getopt()) != GetOpt.optEOF) {
+			boolean ok = command.setCVSCommand((char) ch, go.optArgGet());
+			if (!ok) {
+				usagePrint = true;
+			}
+		}
+		if (usagePrint) {
+			throw new IllegalArgumentException(getUsage());
+		}
+		int argIndex = go.optIndexGet();
+		// test if we have been passed the tag name
+		if (argIndex < args.length) {
+			command.setTag(args[argIndex]);
+		} else {
+			throw new IllegalArgumentException(getUsage());
+		}
+		int modulesArgsIndex = argIndex + 1;
+		// test if we have been passed any module arguments
+		if (modulesArgsIndex < args.length) {
+			String[] modulesArgs = new String[args.length - modulesArgsIndex];
+			// send the arguments as absolute paths
+			for (int i = modulesArgsIndex; i < args.length; i++) {
+				modulesArgs[i - modulesArgsIndex] = args[i];
+			}
+			command.setModules(modulesArgs);
+		}
+		return command;
+
+	}
+
 }

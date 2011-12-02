@@ -33,60 +33,50 @@ import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class ExpandedActivityGroupGR extends ContainerGR<ActivityGroup> {
 
-
-	private static Color makeFadedColor(Color aColor)
-	{
+	private static Color makeFadedColor(Color aColor) {
 		return aColor.brighter();
 	}
 
-	public ExpandedActivityGroupGR(ActivityGroup object, ProcessRepresentation aDrawing) 
-	{
-		super(object, aDrawing,object.getColor(), makeFadedColor(object.getColor()));
+	public ExpandedActivityGroupGR(ActivityGroup object, ProcessRepresentation aDrawing) {
+		super(object, aDrawing, object.getColor(), makeFadedColor(object.getColor()));
 		setLayer(ACTIVITY_LAYER);
 	}
-	
-	public ActivityGroup getActivityGroup()
-	{
+
+	public ActivityGroup getActivityGroup() {
 		return getDrawable();
 	}
-	
+
 	@Override
-	public String getLabel()
-	{
+	public String getLabel() {
 		return getActivityGroup().getGroupName();
 	}
 
 	@Override
-	public void closingRequested() 
-	{
- 		OpenGroup.actionType.makeNewAction(getActivityGroup(), null, getDrawing().getEditor()).doAction();
+	public void closingRequested() {
+		OpenGroup.actionType.makeNewAction(getActivityGroup(), null, getDrawing().getEditor()).doAction();
 		/*getDrawing().invalidateGraphicalObjectsHierarchy(getActivityGroup());
 		getDrawing().updateGraphicalObjectsHierarchy();*/
 	}
-	
+
 	@Override
-	protected void updateDecorationForeground()
-	{
+	protected void updateDecorationForeground() {
 		super.updateDecorationForeground();
 		decorationForeground = ForegroundStyle.makeStyle(mainColor);
 		decorationForeground.setLineWidth(1);
 		decorationForeground.setDashStyle(DashStyle.BIG_DASHES);
 	}
-	
+
 	@Override
-	public void update (FlexoObservable observable, DataModification dataModification)
-	{
-		//logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
 		if (observable == getActivityGroup()) {
 			if (dataModification instanceof WKFAttributeDataModification) {
-				if (((WKFAttributeDataModification)dataModification).getAttributeName().equals("color")) {
+				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("color")) {
 					updateBackground(getActivityGroup().getColor(), makeFadedColor(getActivityGroup().getColor()));
 				}
-			}
-			else if (dataModification instanceof GroupUpdated) {
+			} else if (dataModification instanceof GroupUpdated) {
 				/*WKFGroup group = ((GroupUpdated)dataModification).newValue();
 				Vector<AbstractNode> nodesThatWereInGroup = ((GroupRemoved)dataModification).getNodesThatWereInGroup();
 				if (nodesThatWereInGroup != null) {
@@ -100,13 +90,13 @@ public class ExpandedActivityGroupGR extends ContainerGR<ActivityGroup> {
 				getDrawing().invalidateGraphicalObjectsHierarchy(getActivityGroup().getProcess());
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof ObjectVisibilityChanged) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Group visibility changed");
+				}
 				getDrawing().invalidateGraphicalObjectsHierarchy(getActivityGroup().getProcess());
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
 		}
 	}
-
 
 }

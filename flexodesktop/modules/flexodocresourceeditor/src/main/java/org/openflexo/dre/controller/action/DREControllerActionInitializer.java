@@ -25,7 +25,6 @@ import org.openflexo.dre.controller.DREController;
 import org.openflexo.dre.controller.DRESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 /**
  * 
  * Action initializing for this module
@@ -34,56 +33,47 @@ import org.openflexo.view.controller.ControllerActionInitializer;
  */
 public class DREControllerActionInitializer extends ControllerActionInitializer {
 
-    static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    private DREController _DREController;
-    
-    public DREControllerActionInitializer(DREController controller)
-    {
-        super(controller);
-        _DREController = controller;
-    }
-    
-    protected DREController getDREController()
-    {
-        return _DREController;
-    }
-    
-    protected DRESelectionManager getDRESelectionManager()
-    {
-        return getDREController().getDRESelectionManager();
-    }
+	private DREController _DREController;
 
+	public DREControllerActionInitializer(DREController controller) {
+		super(controller);
+		_DREController = controller;
+	}
 
+	protected DREController getDREController() {
+		return _DREController;
+	}
 
-    @Override
-	public void initializeActions()
-    {
-    	super.initializeActions();
+	protected DRESelectionManager getDRESelectionManager() {
+		return getDREController().getDRESelectionManager();
+	}
 
-        (new DRESetPropertyInitializer(this)).init();
+	@Override
+	public void initializeActions() {
+		super.initializeActions();
 
-        (new CreateDocItemInitializer(this)).init();
-    	(new CreateDocItemFolderInitializer(this)).init();
+		(new DRESetPropertyInitializer(this)).init();
 
-    	(new DeleteDocItemFolderInitializer(this)).init();
+		(new CreateDocItemInitializer(this)).init();
+		(new CreateDocItemFolderInitializer(this)).init();
 
-    	(new AddToInheritanceChildItemInitializer(this)).init();
-    	(new AddToEmbeddingChildItemInitializer(this)).init();
-    	(new AddToRelatedToItemInitializer(this)).init();
-    	(new RemoveInheritanceChildItemInitializer(this)).init();
-    	(new RemoveEmbeddingChildItemInitializer(this)).init();
-    	(new RemoveRelatedToItemInitializer(this)).init();
+		(new DeleteDocItemFolderInitializer(this)).init();
 
-    	(new SubmitVersionInitializer(this)).init();
-    	(new ApproveVersionInitializer(this)).init();
-    	(new RefuseVersionInitializer(this)).init(); 
+		(new AddToInheritanceChildItemInitializer(this)).init();
+		(new AddToEmbeddingChildItemInitializer(this)).init();
+		(new AddToRelatedToItemInitializer(this)).init();
+		(new RemoveInheritanceChildItemInitializer(this)).init();
+		(new RemoveEmbeddingChildItemInitializer(this)).init();
+		(new RemoveRelatedToItemInitializer(this)).init();
 
-    	(new GenerateHelpSetInitializer(this)).init();
-    	(new ImportDocSubmissionReportInitializer(this)).init();
-    }
+		(new SubmitVersionInitializer(this)).init();
+		(new ApproveVersionInitializer(this)).init();
+		(new RefuseVersionInitializer(this)).init();
 
-
-
+		(new GenerateHelpSetInitializer(this)).init();
+		(new ImportDocSubmissionReportInitializer(this)).init();
+	}
 
 }

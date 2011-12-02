@@ -23,11 +23,10 @@ import org.openflexo.fge.geom.FGEPoint;
 
 public abstract class PointConstruction extends GeometricConstruction<FGEPoint> {
 
-	public final FGEPoint getPoint()
-	{
+	public final FGEPoint getPoint() {
 		return getData();
 	}
-	
+
 	@Override
 	protected abstract FGEPoint computeData();
 }

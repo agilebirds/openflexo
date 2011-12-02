@@ -33,8 +33,8 @@ import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geomedit.ComputedControlPoint;
 import org.openflexo.fge.geomedit.DraggableControlPoint;
 import org.openflexo.fge.geomedit.GeometricDrawing;
-import org.openflexo.fge.geomedit.Polylin;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
+import org.openflexo.fge.geomedit.Polylin;
 import org.openflexo.fge.geomedit.construction.ExplicitPointConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.PolylinConstruction;
@@ -44,24 +44,19 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEPolylin,Polylin> implements XMLSerializable 
-{
+public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEPolylin, Polylin> implements XMLSerializable {
 	// Called for LOAD
-	public PolylinGraphicalRepresentation(GeomEditBuilder builder)
-	{
-		this(null,builder.drawing);
+	public PolylinGraphicalRepresentation(GeomEditBuilder builder) {
+		this(null, builder.drawing);
 		initializeDeserialization();
 	}
 
-	public PolylinGraphicalRepresentation(Polylin polylin, GeometricDrawing aDrawing)
-	{
+	public PolylinGraphicalRepresentation(Polylin polylin, GeometricDrawing aDrawing) {
 		super(polylin, aDrawing);
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingController controller)
-	{
+	public void paint(Graphics g, DrawingController controller) {
 		// TODO: un petit @brutal pour avancer, il faudrait faire les choses plus proprement
 		if (getGeometricObject() instanceof FGEPolylin) {
 			rebuildControlPoints();
@@ -71,22 +66,23 @@ public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepr
 
 	// DEBUG
 	@Override
-	public void paintGeometricObject(FGEGeometricGraphics graphics)
-	{
+	public void paintGeometricObject(FGEGeometricGraphics graphics) {
 		super.paintGeometricObject(graphics);
-		//System.out.println("getGeometricObject()"+getGeometricObject());
+		// System.out.println("getGeometricObject()"+getGeometricObject());
 		if (getGeometricObject() instanceof FGERectPolylin) {
-			FGERectPolylin rectPoly = (FGERectPolylin)getGeometricObject();
-			if (rectPoly.missingPath !=null) {
-				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.YELLOW,1.0f,DashStyle.SMALL_DASHES));
+			FGERectPolylin rectPoly = (FGERectPolylin) getGeometricObject();
+			if (rectPoly.missingPath != null) {
+				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.YELLOW, 1.0f, DashStyle.SMALL_DASHES));
 				rectPoly.missingPath.paint(graphics);
 			}
 			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.GREEN));
 			FGERectPolylin debugPolylin = rectPoly.makeNormalizedRectPolylin();
 			debugPolylin.paint(graphics);
-			for (FGEPoint p : debugPolylin.getPoints()) p.paint(graphics);
-			if (rectPoly.currentPointStartingSide !=null) {
-				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED,2.0f));
+			for (FGEPoint p : debugPolylin.getPoints()) {
+				p.paint(graphics);
+			}
+			if (rectPoly.currentPointStartingSide != null) {
+				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 2.0f));
 				rectPoly.currentPointStartingSide.paint(graphics);
 				rectPoly.currentPointEndingSide.paint(graphics);
 			}
@@ -99,16 +95,10 @@ public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepr
 						rectPoly.getOverlap());
 				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.GRAY));
 				tempPoly.paint(graphics);*/
-				FGERectPolylin polylinCrossingPoint
-				= FGERectPolylin.makeRectPolylinCrossingPoint(
-						rectPoly.getPointAt(1), 
-						rectPoly.getPointAt(3), 
-						rectPoly.getPointAt(2), 
-						true, 
-						rectPoly.getOverlapX(),
-						rectPoly.getOverlapY()
-						/*,null, 
-							null*/);
+				FGERectPolylin polylinCrossingPoint = FGERectPolylin.makeRectPolylinCrossingPoint(rectPoly.getPointAt(1),
+						rectPoly.getPointAt(3), rectPoly.getPointAt(2), true, rectPoly.getOverlapX(), rectPoly.getOverlapY()
+				/*,null, 
+					null*/);
 
 				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.BLUE));
 				polylinCrossingPoint.paint(graphics);
@@ -119,42 +109,39 @@ public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepr
 	}
 
 	@Override
-	protected List<ControlPoint> buildControlPointsForPolylin(FGEPolylin polylin)
-	{
+	protected List<ControlPoint> buildControlPointsForPolylin(FGEPolylin polylin) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
 
 		PolylinConstruction polylinContruction = getDrawable().getConstruction();
 
 		if (polylinContruction instanceof PolylinWithNPointsConstruction) {
 
-			for (int i = 0; i<((PolylinWithNPointsConstruction)polylinContruction).pointConstructions.size(); i++) {
-			
+			for (int i = 0; i < ((PolylinWithNPointsConstruction) polylinContruction).pointConstructions.size(); i++) {
+
 				final int pointIndex = i;
-				PointConstruction pc = ((PolylinWithNPointsConstruction)polylinContruction).pointConstructions.get(i);
-				
+				PointConstruction pc = ((PolylinWithNPointsConstruction) polylinContruction).pointConstructions.get(i);
+
 				if (pc instanceof ExplicitPointConstruction) {
-					returned.add(new DraggableControlPoint<FGEPolylin>(this,"pt"+i,pc.getPoint(),(ExplicitPointConstruction)pc) {
+					returned.add(new DraggableControlPoint<FGEPolylin>(this, "pt" + i, pc.getPoint(), (ExplicitPointConstruction) pc) {
 						@Override
-						public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-						{
+						public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+								FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
 							getGeometricObject().getPointAt(pointIndex).x = newAbsolutePoint.x;
 							getGeometricObject().getPointAt(pointIndex).y = newAbsolutePoint.y;
 							setPoint(newAbsolutePoint);
 							notifyGeometryChanged();
 							return true;
 						}
+
 						@Override
-						public void update(FGEPolylin geometricObject)
-						{
+						public void update(FGEPolylin geometricObject) {
 							setPoint(geometricObject.getPointAt(pointIndex));
 						}
 					});
-				}
-				else {
-					returned.add(new ComputedControlPoint<FGEPolylin>(this,"pt"+i,pc.getPoint()) {
+				} else {
+					returned.add(new ComputedControlPoint<FGEPolylin>(this, "pt" + i, pc.getPoint()) {
 						@Override
-						public void update(FGEPolylin geometricObject)
-						{
+						public void update(FGEPolylin geometricObject) {
 							setPoint(geometricObject.getPointAt(pointIndex));
 						}
 					});

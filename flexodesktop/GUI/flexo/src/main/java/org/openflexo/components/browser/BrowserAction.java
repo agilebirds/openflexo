@@ -28,7 +28,6 @@ import javax.swing.JFrame;
 import org.openflexo.components.browser.view.BrowserActionEvent;
 import org.openflexo.components.browser.view.BrowserActionListener;
 
-
 /**
  * Please comment this class
  * 
@@ -37,73 +36,62 @@ import org.openflexo.components.browser.view.BrowserActionListener;
  * 
  */
 @Deprecated
-public class BrowserAction
-{
+public class BrowserAction {
 
-    private BrowserElementType elementType;
+	private BrowserElementType elementType;
 
-    private String actionName;
+	private String actionName;
 
-    private ImageIcon actionIcon;
+	private ImageIcon actionIcon;
 
-    private Vector _listeners;
+	private Vector _listeners;
 
-    public BrowserAction(BrowserElementType elementType, String actionName)
-    {
-        super();
-        this.actionName = actionName;
-        this.elementType = elementType;
-        _listeners = new Vector();
-    }
+	public BrowserAction(BrowserElementType elementType, String actionName) {
+		super();
+		this.actionName = actionName;
+		this.elementType = elementType;
+		_listeners = new Vector();
+	}
 
-    public BrowserAction(BrowserElementType elementType, String actionName, ImageIcon actionIcon)
-    {
-        this(elementType, actionName);
-        this.actionIcon = actionIcon;
-    }
+	public BrowserAction(BrowserElementType elementType, String actionName, ImageIcon actionIcon) {
+		this(elementType, actionName);
+		this.actionIcon = actionIcon;
+	}
 
-    public String getActionName()
-    {
-        return actionName;
-    }
+	public String getActionName() {
+		return actionName;
+	}
 
-    public ImageIcon getActionIcon()
-    {
-        return actionIcon;
-    }
+	public ImageIcon getActionIcon() {
+		return actionIcon;
+	}
 
-    public void setActionName(String actionName)
-    {
-        this.actionName = actionName;
-    }
+	public void setActionName(String actionName) {
+		this.actionName = actionName;
+	}
 
-    public BrowserElementType getElementType()
-    {
-        return elementType;
-    }
+	public BrowserElementType getElementType() {
+		return elementType;
+	}
 
-    public void setElementType(BrowserElementType elementType)
-    {
-        this.elementType = elementType;
-    }
+	public void setElementType(BrowserElementType elementType) {
+		this.elementType = elementType;
+	}
 
-    public void addBrowserActionListener(BrowserActionListener aListener)
-    {
-        _listeners.add(aListener);
-    }
+	public void addBrowserActionListener(BrowserActionListener aListener) {
+		_listeners.add(aListener);
+	}
 
-    public void removeBrowserActionListener(BrowserActionListener aListener)
-    {
-        _listeners.remove(aListener);
-    }
+	public void removeBrowserActionListener(BrowserActionListener aListener) {
+		_listeners.remove(aListener);
+	}
 
-    public void fireBrowserActionEvent(BrowserElement element, JFrame frame)
-    {
-        BrowserActionEvent event = new BrowserActionEvent(element, frame);
-        for (Enumeration e = _listeners.elements(); e.hasMoreElements();) {
-            BrowserActionListener listener = (BrowserActionListener) e.nextElement();
-            listener.browserActionPerformed(event);
-        }
-    }
+	public void fireBrowserActionEvent(BrowserElement element, JFrame frame) {
+		BrowserActionEvent event = new BrowserActionEvent(element, frame);
+		for (Enumeration e = _listeners.elements(); e.hasMoreElements();) {
+			BrowserActionListener listener = (BrowserActionListener) e.nextElement();
+			listener.browserActionPerformed(event);
+		}
+	}
 
 }

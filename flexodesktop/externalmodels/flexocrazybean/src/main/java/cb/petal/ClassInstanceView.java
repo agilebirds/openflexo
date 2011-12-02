@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents ClassInstanceView object
- *
+ * 
  * @version $Id: ClassInstanceView.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ClassInstanceView extends QuiduView {
-  public ClassInstanceView(PetalNode parent, Collection params, int tag) {
-    super(parent, "ClassInstanceView", params, tag);
-  }
+	public ClassInstanceView(PetalNode parent, Collection params, int tag) {
+		super(parent, "ClassInstanceView", params, tag);
+	}
 
-  public ClassInstanceView() {
-    super("ClassInstanceView");
-  }
+	public ClassInstanceView() {
+		super("ClassInstanceView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

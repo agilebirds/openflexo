@@ -23,11 +23,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-
 
 public class Rectangle extends Shape {
 
@@ -35,52 +34,47 @@ public class Rectangle extends Shape {
 	private static final Logger logger = Logger.getLogger(Rectangle.class.getPackage().getName());
 
 	private FGEShape<?> _rectangle;
-	
+
 	private boolean isRounded = false;
 	private double arcSize = FGEConstants.DEFAULT_ROUNDED_RECTANGLE_ARC_SIZE;
-	
+
 	// *******************************************************************************
-	// *                               Constructor                                   *
+	// * Constructor *
 	// *******************************************************************************
-	
-	public Rectangle() 
-	{
+
+	public Rectangle() {
 		this(null);
 	}
-	
-	public Rectangle(ShapeGraphicalRepresentation aGraphicalRepresentation) 
-	{
+
+	public Rectangle(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 		updateShape();
 	}
-		
+
 	@Override
-	public ShapeType getShapeType()
-	{
+	public ShapeType getShapeType() {
 		return ShapeType.RECTANGLE;
 	}
-	
+
 	@Override
-	public void updateShape()
-	{
+	public void updateShape() {
 		if (getGraphicalRepresentation() != null) {
 			if (isRounded) {
-				double arcwidth = arcSize/getGraphicalRepresentation().getWidth();
-				double archeight = arcSize/getGraphicalRepresentation().getHeight();
-				_rectangle = new FGERoundRectangle(0,0,1,1,arcwidth,archeight,Filling.FILLED);
-			}
-			else {
-				_rectangle = new FGERectangle(0,0,1,1,Filling.FILLED);
+				double arcwidth = arcSize / getGraphicalRepresentation().getWidth();
+				double archeight = arcSize / getGraphicalRepresentation().getHeight();
+				_rectangle = new FGERoundRectangle(0, 0, 1, 1, arcwidth, archeight, Filling.FILLED);
+			} else {
+				_rectangle = new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 			}
 		}
 		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null)
+		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().notifyShapeChanged();
-	}	
+		}
+	}
 
 	@Override
-	public FGEShape<?> getShape()
-	{
+	public FGEShape<?> getShape() {
 		return _rectangle;
 	}
 
@@ -89,8 +83,7 @@ public class Rectangle extends Shape {
 	 * 
 	 * @return
 	 */
-	public double getArcSize()
-	{
+	public double getArcSize() {
 		return arcSize;
 	}
 
@@ -99,21 +92,18 @@ public class Rectangle extends Shape {
 	 * 
 	 * @param anArcSize
 	 */
-	public void setArcSize(double anArcSize)
-	{
+	public void setArcSize(double anArcSize) {
 		if (arcSize != anArcSize) {
 			arcSize = anArcSize;
 			updateShape();
 		}
 	}
 
-	public boolean getIsRounded()
-	{
+	public boolean getIsRounded() {
 		return isRounded;
 	}
 
-	public void setIsRounded(boolean aFlag)
-	{
+	public void setIsRounded(boolean aFlag) {
 		if (isRounded != aFlag) {
 			isRounded = aFlag;
 			updateShape();
@@ -133,12 +123,11 @@ public class Rectangle extends Shape {
 		}
 	}*/
 
-
 	@Override
-	public void notifyObjectResized()
-	{
-		if (getIsRounded()) setArcSize(arcSize);
+	public void notifyObjectResized() {
+		if (getIsRounded()) {
+			setArcSize(arcSize);
+		}
 	}
-
 
 }

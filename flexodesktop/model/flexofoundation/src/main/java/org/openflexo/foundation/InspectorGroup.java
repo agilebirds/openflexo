@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 public interface InspectorGroup {
 

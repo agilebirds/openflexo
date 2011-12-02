@@ -24,13 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -41,29 +34,30 @@ import org.openflexo.foundation.dkv.action.AddDomainAction;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddDomainInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddDomainInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(AddDomainAction.actionType,actionInitializer);
+	AddDomainInitializer(IEControllerActionInitializer actionInitializer) {
+		super(AddDomainAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddDomainAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddDomainAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddDomainAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddDomainAction action)
-			{
+			public boolean run(ActionEvent e, AddDomainAction action) {
 				DKVModel model = action.getFocusedObject().getDkvModel();
 				boolean ok = false;
 				while (!ok) {
@@ -73,12 +67,13 @@ public class AddDomainInitializer extends ActionInitializer {
 					parameters[1] = new TextAreaParameter("description", "description", "");
 					parameters[1].addParameter("columns", "20");
 					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
-							FlexoLocalization
-							        		.localizedForKey("create_new_domain"), FlexoLocalization.localizedForKey("enter_the_name_of_the_new_domain"), parameters);
+							FlexoLocalization.localizedForKey("create_new_domain"),
+							FlexoLocalization.localizedForKey("enter_the_name_of_the_new_domain"), parameters);
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						String newDomainName = (String) dialog.parameterValueWithName("newDomainName");
-						if (newDomainName == null)
+						if (newDomainName == null) {
 							return false;
+						}
 
 						if (newDomainName.trim().length() == 0) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("name_of_domain_cannot_be_empty"));
@@ -114,12 +109,10 @@ public class AddDomainInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddDomainAction> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddDomainAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddDomainAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddDomainAction action)
-			{
+			public boolean run(ActionEvent e, AddDomainAction action) {
 				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewDomain());
 				// getController().setCurrentEditedObjectAsModuleView(((AddDomainAction)
 				// action).getNewDomain());
@@ -129,10 +122,8 @@ public class AddDomainInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SEIconLibrary.DOMAIN_ICON;
 	}
-
 
 }

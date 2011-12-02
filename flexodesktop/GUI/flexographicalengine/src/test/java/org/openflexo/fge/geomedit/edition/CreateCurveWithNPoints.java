@@ -22,88 +22,77 @@ package org.openflexo.fge.geomedit.edition;
 import java.util.Vector;
 
 import org.openflexo.fge.geom.FGEComplexCurve;
+import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 import org.openflexo.fge.geomedit.ComplexCurve;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.ComplexCurveWithNPointsConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateCurveWithNPoints extends Edition {
-	
+
 	public CreateCurveWithNPoints(GeomEditController controller) {
-		super("Create curve from a list of points",controller);
-		appendNewPointEdition(controller,1);
+		super("Create curve from a list of points", controller);
+		appendNewPointEdition(controller, 1);
 	}
-	
-	private void appendNewPointEdition(final GeomEditController controller, int index)
-	{
-		ObtainPoint newObtainPoint = new ObtainPoint("Select point "+index,controller,true) {
+
+	private void appendNewPointEdition(final GeomEditController controller, int index) {
+		ObtainPoint newObtainPoint = new ObtainPoint("Select point " + index, controller, true) {
 			@Override
-			public void done()
-			{
-				appendNewPointEdition(controller,currentStep+2);
+			public void done() {
+				appendNewPointEdition(controller, currentStep + 2);
 				super.done();
 			}
-			
+
 			@Override
-			public void endEdition()
-			{
+			public void endEdition() {
 				System.out.println("End edition called");
 				super.done();
 			}
-		};		
+		};
 		inputs.add(newObtainPoint);
 	}
-	
-	
+
 	@Override
-	public void performEdition()
-	{
+	public void performEdition() {
 		Vector<PointConstruction> pc = new Vector<PointConstruction>();
 		for (EditionInput o : inputs) {
-			PointConstruction pp = ((ObtainPoint)o).getConstruction();
-			if (pp != null) pc.add(pp);
+			PointConstruction pp = ((ObtainPoint) o).getConstruction();
+			if (pp != null) {
+				pc.add(pp);
+			}
 		}
-		addObject (new ComplexCurve(
-				getController().getDrawing().getModel(),
-				new ComplexCurveWithNPointsConstruction(pc)));
+		addObject(new ComplexCurve(getController().getDrawing().getModel(), new ComplexCurveWithNPointsConstruction(pc)));
 	}
-	
+
 	/*public void addObject(GeometricObject object)
 	{
 		getController().getDrawing().getModel().addToChilds(object);
 	}*/
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		}
 		if (currentStep == 1) {
-			FGEPoint p1 = ((ObtainPoint)inputs.get(0)).getInputData();
+			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGESegment(p1,lastMouseLocation)).paint(graphics);
-		}
-		else {
+			(new FGESegment(p1, lastMouseLocation)).paint(graphics);
+		} else {
 			Vector<FGEPoint> pts = new Vector<FGEPoint>();
 			graphics.setDefaultForeground(focusedForegroundStyle);
-			for (int i=0; i<currentStep; i++) {
-				FGEPoint p = ((ObtainPoint)inputs.get(i)).getInputData();
+			for (int i = 0; i < currentStep; i++) {
+				FGEPoint p = ((ObtainPoint) inputs.get(i)).getInputData();
 				p.paint(graphics);
 				pts.add(p);
 			}
 			pts.add(lastMouseLocation);
-			(new FGEComplexCurve(Closure.OPEN_NOT_FILLED,pts)).paint(graphics);
-			
+			(new FGEComplexCurve(Closure.OPEN_NOT_FILLED, pts)).paint(graphics);
+
 		}
 	}
 }
-
-

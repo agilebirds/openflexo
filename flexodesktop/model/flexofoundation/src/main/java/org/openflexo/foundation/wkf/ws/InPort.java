@@ -37,147 +37,132 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Input data port associated to a PortRegistery associated to a SubProcessNode
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public final class InPort extends AbstractInPort
-{
+public final class InPort extends AbstractInPort {
 
-    protected static final Logger logger = Logger.getLogger(InPort.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(InPort.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public InPort(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public InPort(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Constructor with process and name
-     */
-    public InPort(FlexoProcess process, String aName)
-    {
-        this(process);
-        setPortRegistery(process.getPortRegistery());
-        setName(aName);
-    }
+	/**
+	 * Constructor with process and name
+	 */
+	public InPort(FlexoProcess process, String aName) {
+		this(process);
+		setPortRegistery(process.getPortRegistery());
+		setName(aName);
+	}
 
-    /**
-     * Default constructor
-     */
-    public InPort(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public InPort(FlexoProcess process) {
+		super(process);
+	}
 
-    @Override
-    public String getPrefixForFullQualifiedName()
-    {
-        return "IN_PORT";
-    }
+	@Override
+	public String getPrefixForFullQualifiedName() {
+		return "IN_PORT";
+	}
 
-    @Override
-    public String getInspectorName()
-    {
-        return Inspectors.WKF.IN_PORT_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WKF.IN_PORT_INSPECTOR;
+	}
 
-    @Override
-    public String getDefaultName()
-    {
-        return getDefaultInitialName();
-    }
+	@Override
+	public String getDefaultName() {
+		return getDefaultInitialName();
+	}
 
-    public static String getDefaultInitialName()
-    {
-        return FlexoLocalization.localizedForKey("in_port_name");
-    }
+	public static String getDefaultInitialName() {
+		return FlexoLocalization.localizedForKey("in_port_name");
+	}
 
-    // ==========================================================================
-    // ============================= Validation
-    // =================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Validation
+	// =================================
+	// ==========================================================================
 
-    @Override
-    public boolean isCorrectelyLinked()
-    {
-        return ((getOutgoingPostConditions().size() > 0) && (getInvalidOutgoingPostConditions().size() == 0));
-    }
+	@Override
+	public boolean isCorrectelyLinked() {
+		return ((getOutgoingPostConditions().size() > 0) && (getInvalidOutgoingPostConditions().size() == 0));
+	}
 
-    protected Vector getInvalidOutgoingPostConditions()
-    {
-        Vector<FlexoPostCondition<AbstractNode,AbstractNode>> returnedVector = new Vector<FlexoPostCondition<AbstractNode,AbstractNode>>();
-        for (Enumeration<FlexoPostCondition<AbstractNode,AbstractNode>> e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
-            FlexoPostCondition<AbstractNode,AbstractNode> next = e.nextElement();
-            if (!next.isEdgeValid()) {
-                returnedVector.add(next);
-            }
-        }
-        return returnedVector;
-    }
+	protected Vector getInvalidOutgoingPostConditions() {
+		Vector<FlexoPostCondition<AbstractNode, AbstractNode>> returnedVector = new Vector<FlexoPostCondition<AbstractNode, AbstractNode>>();
+		for (Enumeration<FlexoPostCondition<AbstractNode, AbstractNode>> e = getOutgoingPostConditions().elements(); e.hasMoreElements();) {
+			FlexoPostCondition<AbstractNode, AbstractNode> next = e.nextElement();
+			if (!next.isEdgeValid()) {
+				returnedVector.add(next);
+			}
+		}
+		return returnedVector;
+	}
 
-    public static class InPortMustBeLinkedToAtLeastAnActivityNode extends ValidationRule<InPortMustBeLinkedToAtLeastAnActivityNode, InPort>
-    {
-        public InPortMustBeLinkedToAtLeastAnActivityNode()
-        {
-            super(InPort.class, "in_port_must_be_linked_to_at_least_an_activity_node");
-        }
+	public static class InPortMustBeLinkedToAtLeastAnActivityNode extends ValidationRule<InPortMustBeLinkedToAtLeastAnActivityNode, InPort> {
+		public InPortMustBeLinkedToAtLeastAnActivityNode() {
+			super(InPort.class, "in_port_must_be_linked_to_at_least_an_activity_node");
+		}
 
-        @Override
-        public ValidationIssue<InPortMustBeLinkedToAtLeastAnActivityNode, InPort> applyValidation(final InPort port)
-        {
-            if (!port.isCorrectelyLinked()) {
-                Vector invalidEdges = port.getInvalidOutgoingPostConditions();
-                ValidationError<InPortMustBeLinkedToAtLeastAnActivityNode, InPort> error;
-                if (invalidEdges.size() == 0) {
-                    error = new ValidationError<InPortMustBeLinkedToAtLeastAnActivityNode, InPort>(this, port, "port_has_no_outgoing_edges");
-                } else {
-                    error = new ValidationError<InPortMustBeLinkedToAtLeastAnActivityNode, InPort>(this, port, "port_has_invalid_outgoing_edges");
-                    error.addToFixProposals(new DeleteInvalidEdges(invalidEdges));
-                }
-                return error;
-            }
-            return null;
-        }
+		@Override
+		public ValidationIssue<InPortMustBeLinkedToAtLeastAnActivityNode, InPort> applyValidation(final InPort port) {
+			if (!port.isCorrectelyLinked()) {
+				Vector invalidEdges = port.getInvalidOutgoingPostConditions();
+				ValidationError<InPortMustBeLinkedToAtLeastAnActivityNode, InPort> error;
+				if (invalidEdges.size() == 0) {
+					error = new ValidationError<InPortMustBeLinkedToAtLeastAnActivityNode, InPort>(this, port, "port_has_no_outgoing_edges");
+				} else {
+					error = new ValidationError<InPortMustBeLinkedToAtLeastAnActivityNode, InPort>(this, port,
+							"port_has_invalid_outgoing_edges");
+					error.addToFixProposals(new DeleteInvalidEdges(invalidEdges));
+				}
+				return error;
+			}
+			return null;
+		}
 
-        public static class DeleteInvalidEdges extends FixProposal<InPortMustBeLinkedToAtLeastAnActivityNode, InPort>
-        {
-            public Vector invalidEdges;
+		public static class DeleteInvalidEdges extends FixProposal<InPortMustBeLinkedToAtLeastAnActivityNode, InPort> {
+			public Vector invalidEdges;
 
-            public DeleteInvalidEdges(Vector invalidEdges)
-            {
-                super("delete_invalid_edges");
-                this.invalidEdges = invalidEdges;
-            }
+			public DeleteInvalidEdges(Vector invalidEdges) {
+				super("delete_invalid_edges");
+				this.invalidEdges = invalidEdges;
+			}
 
-            @Override
-            protected void fixAction()
-            {
-                for (Enumeration e = invalidEdges.elements(); e.hasMoreElements();) {
-                    InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
-                    next.delete();
-                }
-            }
-        }
+			@Override
+			protected void fixAction() {
+				for (Enumeration e = invalidEdges.elements(); e.hasMoreElements();) {
+					InternalMessageInEdge next = (InternalMessageInEdge) e.nextElement();
+					next.delete();
+				}
+			}
+		}
 
-    }
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "in_port";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "in_port";
+	}
 
 }

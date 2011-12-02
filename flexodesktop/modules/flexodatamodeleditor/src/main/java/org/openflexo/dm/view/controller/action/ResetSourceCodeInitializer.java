@@ -28,46 +28,38 @@ import org.openflexo.foundation.dm.action.ResetSourceCode;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class ResetSourceCodeInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ResetSourceCodeInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(ResetSourceCode.actionType,actionInitializer);
+	ResetSourceCodeInitializer(DMControllerActionInitializer actionInitializer) {
+		super(ResetSourceCode.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<ResetSourceCode> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ResetSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<ResetSourceCode>() {
-            @Override
-			public boolean run(ActionEvent e, ResetSourceCode action)
-            {
-            	return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, ResetSourceCode action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<ResetSourceCode> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<ResetSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ResetSourceCode>() {
-            @Override
-			public boolean run(ActionEvent e, ResetSourceCode action)
-            {
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, ResetSourceCode action) {
+				return true;
+			}
+		};
 	}
 
- 
 }

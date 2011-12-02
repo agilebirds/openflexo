@@ -27,49 +27,43 @@ import org.openflexo.foundation.ie.cl.ReusableComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IEReusableComponent extends IEPartialComponent
-{
+public class IEReusableComponent extends IEPartialComponent {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(IEReusableComponent.class.getPackage().getName());
 
+	/**
+	 * Constructor invoked during deserialization for IEPopupComponent
+	 * 
+	 * @param componentDefinition
+	 */
+	public IEReusableComponent(FlexoComponentBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * Constructor invoked during deserialization for IEPopupComponent
-     * 
-     * @param componentDefinition
-     */
-    public IEReusableComponent(FlexoComponentBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param model
+	 */
+	public IEReusableComponent(ComponentDefinition model, FlexoProject prj) {
+		super(model, prj);
+	}
 
-    /**
-     * @param model
-     */
-    public IEReusableComponent(ComponentDefinition model, FlexoProject prj)
-    {
-        super(model, prj);
-    }
-    
-    @Override
-    public ReusableComponentDefinition getComponentDefinition() {
-    	return (ReusableComponentDefinition) super.getComponentDefinition();
-    }
-    
-    @Override
-    public String getClassNameKey() {
-    	return "reusable_component";
-    }
+	@Override
+	public ReusableComponentDefinition getComponentDefinition() {
+		return (ReusableComponentDefinition) super.getComponentDefinition();
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "reusable_component";
+	}
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "REUSABLE_COMPONENT_"+getName();
+		return "REUSABLE_COMPONENT_" + getName();
 	}
 
 	@Override

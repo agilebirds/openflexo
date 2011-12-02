@@ -27,31 +27,29 @@ import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.OperatorNode;
 
-
 public class SendTokenOnTokenEdge extends SendToken<FlexoPostCondition<?, ?>> {
 
-	protected SendTokenOnTokenEdge(FlexoPostCondition<?, ?> edge)
-	{
+	protected SendTokenOnTokenEdge(FlexoPostCondition<?, ?> edge) {
 		super(edge);
 	}
 
 	@Override
-	protected ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException 
-	{
+	protected ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		AbstractNode end = getEdge().getEndNode();
-		
-		if (end == null)
+
+		if (end == null) {
 			throw new InvalidModelException("No end node defined on edge");
+		}
 		if (end instanceof FlexoPreCondition) {
-			return SendTokenToPrecondition.sendTokenToPrecondition((FlexoPreCondition) end,getEdge(), interprocedural);
+			return SendTokenToPrecondition.sendTokenToPrecondition((FlexoPreCondition) end, getEdge(), interprocedural);
 		} else if (end instanceof OperatorNode) {
-			return OperatorNodeExecution.executeNode((OperatorNode) end,getEdge(),interprocedural);
+			return OperatorNodeExecution.executeNode((OperatorNode) end, getEdge(), interprocedural);
 		} else if (end instanceof EventNode) {
 			return EventNodeExecution.executeNode((EventNode) end, interprocedural);
 		} else if (end instanceof FlexoNode) {
 			return NodeActivation.activateNode((FlexoNode) end, interprocedural);
-		} 
-		throw new NotSupportedException("Don't know what to do with "+end.getClass().getSimpleName());
+		}
+		throw new NotSupportedException("Don't know what to do with " + end.getClass().getSimpleName());
 	}
 
 }

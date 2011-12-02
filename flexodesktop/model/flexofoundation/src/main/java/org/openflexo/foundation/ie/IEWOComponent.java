@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -103,7 +104,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.ReservedKeyword;
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * Represents an abstract WOComponent
  * 
@@ -180,7 +180,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	@Override
 	public void initializeDeserialization(Object builder) {
 		super.initializeDeserialization(builder);
-		if (getProject() != null)
+		if (getProject() != null) {
 			getProject().getBindingValueConverter().setPreProcessor(new BindingValue.DecodingPreProcessor() {
 				@Override
 				public String preProcessString(String aString) {
@@ -190,6 +190,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 					return aString;
 				}
 			});
+		}
 	}
 
 	/**
@@ -198,8 +199,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	@Override
 	public void finalizeDeserialization(Object builder) {
 		if (rootSequence.getOperator() != null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("There is an operator on the root sequence. This is not allowed, I will remove it.");
+			}
 			rootSequence.resetOperator();
 		}
 		rootSequence.simplifySequenceTree();
@@ -207,11 +209,13 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Iterator<IESequenceTab> i = tabContainers.iterator();
 		while (i.hasNext()) {
 			IESequenceTab tab = i.next();
-			if (tab.isSubsequence())
+			if (tab.isSubsequence()) {
 				i.remove();
+			}
 		}
-		if (getProject() != null)
+		if (getProject() != null) {
 			getProject().getBindingValueConverter().setPreProcessor(null);
+		}
 		getComponentDefinition().setHasTabContainer(hasTabContainer());
 	}
 
@@ -251,10 +255,12 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 
 	@Override
 	public synchronized void setIsModified() {
-		if (ignoreNotifications())
+		if (ignoreNotifications()) {
 			return;
-		if (nameForWidgetMap != null)
+		}
+		if (nameForWidgetMap != null) {
 			nameForWidgetMap.clear();// Any modification is capable of modify the names of the objects.
+		}
 		lastUpdate = null;
 		super.setIsModified();
 		// lastUpdate = lastMemoryUpdate();
@@ -267,8 +273,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	 */
 	@Override
 	public Date getLastUpdate() {
-		if (lastUpdate == null)
+		if (lastUpdate == null) {
 			lastUpdate = lastMemoryUpdate();
+		}
 		if (lastUpdate == null) {
 			lastUpdate = super.getLastUpdate();
 		}
@@ -295,7 +302,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	// ==================================
 	// ==========================================================================
 	/**
-	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the WOComponent itself
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * WOComponent itself
 	 * 
 	 * @return this
 	 */
@@ -307,8 +315,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	public ComponentDefinition getComponentDefinition() {
 		if (_componentDefinition == null) {
 			if (getProject() == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No component def and no project for :" + getName());
+				}
 			}
 			_componentDefinition = getProject().getFlexoComponentLibrary().getComponentNamed(getName());
 		}
@@ -352,8 +361,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		if (getComponentDefinition() != null && !isSerializing()) {
 			if (getComponentDefinition().getDescription() == null || getComponentDefinition().getDescription().trim().length() == 0) {
 				return getRootSequence().getDescription();
-			} else
+			} else {
 				return getComponentDefinition().getDescription();
+			}
 		}
 		return null;
 	}
@@ -381,7 +391,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	@Override
-	public Hashtable<String, String> getSpecificDescriptions() {
+	public Map<String, String> getSpecificDescriptions() {
 		if (getComponentDefinition() != null && !isSerializing()) {
 			return getComponentDefinition().getSpecificDescriptions();
 		}
@@ -389,7 +399,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	@Override
-	public void setSpecificDescriptions(Hashtable<String, String> desc) {
+	public void setSpecificDescriptions(Map<String, String> desc) {
 		if (getComponentDefinition() != null && !isDeserializing()) {
 			getComponentDefinition().setSpecificDescriptions(desc);
 		}
@@ -509,8 +519,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		boolean isTopComponent = en.hasMoreElements();// If root sequence is empty then this component is not a top component
 		while (en.hasMoreElements()) {
 			IEWidget widget = (IEWidget) en.nextElement();
-			if (!widget.isTopComponent())
+			if (!widget.isTopComponent()) {
 				return false;
+			}
 		}
 		return isTopComponent;
 	}
@@ -522,12 +533,14 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 
 	public boolean isAListOfTableRows() {
 		Enumeration en = getRootSequence().getInnerWidgets().elements();
-		if (!en.hasMoreElements())
+		if (!en.hasMoreElements()) {
 			return false;
+		}
 		while (en.hasMoreElements()) {
 			IEWidget w = (IEWidget) en.nextElement();
-			if (!(w instanceof ITableRow))
+			if (!(w instanceof ITableRow)) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -578,8 +591,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	/**
 	 * Implements
 	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification) Receive a notification that has been propagated by the ResourceManager
-	 *      scheme and coming from a modification on an other resource
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification) Receive a
+	 *      notification that has been propagated by the ResourceManager scheme and coming from a modification on an other resource
 	 * 
 	 *      Handles ComponentNameChanged notifications
 	 * 
@@ -632,8 +645,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		for (Enumeration en = allIEObjects.elements(); en.hasMoreElements();) {
 			IEObject next = (IEObject) en.nextElement();
 			if (next instanceof IEReusableWidget) {
-				if (((IEReusableWidget) next).getReusableComponentInstance().equals(ci))
+				if (((IEReusableWidget) next).getReusableComponentInstance().equals(ci)) {
 					returned.add((IEReusableWidget) next);
+				}
 			}
 		}
 		IEReusableWidget[] answer = new IEReusableWidget[returned.size()];
@@ -652,8 +666,10 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		for (Enumeration en = allIEObjects.elements(); en.hasMoreElements();) {
 			IEObject next = (IEObject) en.nextElement();
 			if (next instanceof IEHyperlinkWidget) {
-				if (((IEHyperlinkWidget) next).getPopupComponentDefinition() != null && ((IEHyperlinkWidget) next).getPopupComponentDefinition().equals(ci.getComponentDefinition()))
+				if (((IEHyperlinkWidget) next).getPopupComponentDefinition() != null
+						&& ((IEHyperlinkWidget) next).getPopupComponentDefinition().equals(ci.getComponentDefinition())) {
 					returned.add((IEHyperlinkWidget) next);
+				}
 			}
 		}
 		IEHyperlinkWidget[] answer = new IEHyperlinkWidget[returned.size()];
@@ -675,8 +691,10 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
-			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null && (((IESequence) widget).getOperator() instanceof RepetitionOperator))
+			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null
+					&& ((IESequence) widget).getOperator() instanceof RepetitionOperator) {
 				reply.add((RepetitionOperator) ((IESequence) widget).getOperator());
+			}
 		}
 		return reply;
 	}
@@ -687,61 +705,70 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 			Enumeration en = getAllEmbeddedIEObjects(true).elements();
 			while (en.hasMoreElements()) {
 				IObject o = (IObject) en.nextElement();
-				if (o instanceof RepetitionOperator)
+				if (o instanceof RepetitionOperator) {
 					repetitions.add((RepetitionOperator) o);
+				}
 			}
 		}
 		return repetitions;
 	}
 
 	public Vector<IEHyperlinkWidget> getAvailableFlexoActions() {
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("getAvailableFlexoActions");
+		}
 		Vector<IEHyperlinkWidget> v = new Vector<IEHyperlinkWidget>();
 		Enumeration en = getAllButtonInterface().elements();
 		while (en.hasMoreElements()) {
 			IEHyperlinkWidget w = (IEHyperlinkWidget) en.nextElement();
-			if (w.getIsFlexoAction())
+			if (w.getIsFlexoAction()) {
 				v.add(w);
+			}
 		}
 		return v;
 	}
 
 	public Vector<IEHyperlinkWidget> getAvailableDisplayActions() {
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("getAvailableFlexoActions");
+		}
 		Vector<IEHyperlinkWidget> v = new Vector<IEHyperlinkWidget>();
 		Enumeration en = getAllButtonInterface().elements();
 		while (en.hasMoreElements()) {
 			IEHyperlinkWidget w = (IEHyperlinkWidget) en.nextElement();
-			if (w.getIsDisplayAction())
+			if (w.getIsDisplayAction()) {
 				v.add(w);
+			}
 		}
 		return v;
 	}
 
 	public String getInput() {
-		if (_componentDefinition != null)
+		if (_componentDefinition != null) {
 			return _componentDefinition.getInput();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setInput(String s) {
-		if (_componentDefinition != null)
+		if (_componentDefinition != null) {
 			_componentDefinition.setInput(s);
+		}
 	}
 
 	public String getBehavior() {
-		if (_componentDefinition != null)
+		if (_componentDefinition != null) {
 			return _componentDefinition.getBehavior();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setBehavior(String s) {
-		if (_componentDefinition != null)
+		if (_componentDefinition != null) {
 			_componentDefinition.setBehavior(s);
+		}
 	}
 
 	/**
@@ -781,9 +808,11 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this validation.
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
+	 * validation.
 	 * 
-	 * @param report, a ValidationReport object on which found issues are appened
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
 	public void validate(ValidationReport report) {
@@ -791,9 +820,11 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this validation.
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
+	 * validation.
 	 * 
-	 * @param report, a ValidationReport object on which found issues are appened
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
 	public void validate(ValidationReport report, ValidationModel validationModel) {
@@ -812,9 +843,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		if (top instanceof IEBlocWidget) {
 			IEBlocWidget block = (IEBlocWidget) top;
 			v.addAll(block.getAllDateTextfields());
-		} else if (top instanceof IEHTMLTableWidget)
+		} else if (top instanceof IEHTMLTableWidget) {
 			v.addAll(((IEHTMLTableWidget) top).getAllDateTextfields());
-		else if (top instanceof IESequenceTopComponent) {
+		} else if (top instanceof IESequenceTopComponent) {
 			Iterator<IETopComponent> i = ((IESequenceTopComponent) top).iterator();
 			while (i.hasNext()) {
 				IETopComponent obj = i.next();
@@ -858,8 +889,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration en = getAllEmbeddedIEObjects().elements();
 		while (en.hasMoreElements()) {
 			IEObject o = (IEObject) en.nextElement();
-			if (o instanceof IEControlWidget && ((IEControlWidget) o).getIsFilterForRepetition() == rep)
+			if (o instanceof IEControlWidget && ((IEControlWidget) o).getIsFilterForRepetition() == rep) {
 				v.add((IEControlWidget) o);
+			}
 		}
 		return v;
 	}
@@ -868,7 +900,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		return getHelpText() != null && getHelpText().trim().length() > 0;
 	}
 
-	public static class ComponentCannotHaveTwoListWithSameName extends ValidationRule<ComponentCannotHaveTwoListWithSameName, IEWOComponent> {
+	public static class ComponentCannotHaveTwoListWithSameName extends
+			ValidationRule<ComponentCannotHaveTwoListWithSameName, IEWOComponent> {
 		public ComponentCannotHaveTwoListWithSameName() {
 			super(IEWOComponent.class, "list_name_must_be_unique_in_a_component");
 		}
@@ -876,8 +909,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		@Override
 		public ValidationIssue<ComponentCannotHaveTwoListWithSameName, IEWOComponent> applyValidation(IEWOComponent wo) {
 			Vector<RepetitionOperator> allList = wo.getAllList();
-			if (allList.size() < 2)
+			if (allList.size() < 2) {
 				return null;
+			}
 			Hashtable<String, RepetitionOperator> h = new Hashtable<String, RepetitionOperator>();
 			Enumeration<RepetitionOperator> en = allList.elements();
 			while (en.hasMoreElements()) {
@@ -885,8 +919,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 				if (rep.getName() != null && h.get(rep.getName()) == null) {
 					h.put(rep.getName(), rep);
 				} else {
-					ValidationError<ComponentCannotHaveTwoListWithSameName, IEWOComponent> error = new ValidationError<ComponentCannotHaveTwoListWithSameName, IEWOComponent>(this, wo,
-							"list_name_must_be_unique_in_a_component");
+					ValidationError<ComponentCannotHaveTwoListWithSameName, IEWOComponent> error = new ValidationError<ComponentCannotHaveTwoListWithSameName, IEWOComponent>(
+							this, wo, "list_name_must_be_unique_in_a_component");
 					error.addToFixProposals(new ChangeListName(rep));
 					return error;
 				}
@@ -927,8 +961,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		while (en.hasMoreElements()) {
 			o = en.nextElement();
 			if (o instanceof IETabWidget) {
-				if (((IETabWidget) o).getTabComponentDefinition().equals(tabComponentDefinition))
+				if (((IETabWidget) o).getTabComponentDefinition().equals(tabComponentDefinition)) {
 					return (IETabWidget) o;
+				}
 			}
 		}
 		return null;
@@ -943,8 +978,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IEObject top = (IEObject) en.nextElement();
-			if (top instanceof IESequenceTab && ((IESequenceTab) top).isTabContainer())
+			if (top instanceof IESequenceTab && ((IESequenceTab) top).isTabContainer()) {
 				reply.add((IESequenceTab) top);
+			}
 		}
 		return reply;
 
@@ -986,8 +1022,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 			Iterator<IWidget> j = st.getAllNonSequenceWidget().iterator();
 			while (j.hasNext()) {
 				IETabWidget w = (IETabWidget) j.next();
-				if (w.getTabComponentDefinition() == component)
+				if (w.getTabComponentDefinition() == component) {
 					return w;
+				}
 			}
 		}
 		return null;
@@ -995,34 +1032,38 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 
 	public IESequenceTab getSequenceTabForTabComponent(TabComponentDefinition component) {
 		IETabWidget tabWidget = getTabWidgetForTabComponent(component);
-		if (tabWidget != null)
+		if (tabWidget != null) {
 			return tabWidget.getRootParent();
+		}
 		return null;
 	}
 
 	public void notifyWidgetAdded(IEWidget widget) {
-		if (widget instanceof RepetitionOperator)
+		if (widget instanceof RepetitionOperator) {
 			repetitions = null;
-		else if (widget instanceof IESequenceTab) {
-			if (!((IESequenceTab) widget).isSubsequence() && !tabContainers.contains(widget))
+		} else if (widget instanceof IESequenceTab) {
+			if (!((IESequenceTab) widget).isSubsequence() && !tabContainers.contains(widget)) {
 				tabContainers.add((IESequenceTab) widget);
+			}
 			getComponentDefinition().setHasTabContainer(hasTabContainer());
 		}
 	}
 
 	public void notifyWidgetRemoved(IEWidget widget) {
-		if (widget instanceof RepetitionOperator)
+		if (widget instanceof RepetitionOperator) {
 			repetitions = null;
-		else if (widget instanceof IESequenceTab) {
-			if (!((IESequenceTab) widget).isSubsequence())
+		} else if (widget instanceof IESequenceTab) {
+			if (!((IESequenceTab) widget).isSubsequence()) {
 				tabContainers.remove(widget);
+			}
 			getComponentDefinition().setHasTabContainer(hasTabContainer());
 		}
 	}
 
 	/**
-	 * Returns all the strings ({@link IEStringWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the strings ({@link IEStringWidget}) of this WOComponent. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the strings contained in this component.
 	 */
@@ -1032,15 +1073,17 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IEStringWidget)
+			if (o instanceof IEStringWidget) {
 				v.add((IEStringWidget) o);
+			}
 		}
 		return v;
 	}
 
 	/**
-	 * Returns all the textfields ({@link IETextFieldWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the textfields ({@link IETextFieldWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the textfields contained in this component.
 	 */
@@ -1050,15 +1093,17 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IETextFieldWidget)
+			if (o instanceof IETextFieldWidget) {
 				v.add((IETextFieldWidget) o);
+			}
 		}
 		return v;
 	}
 
 	/**
-	 * Returns all the textareas ({@link IETextAreaWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the textareas ({@link IETextAreaWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the textareas contained in this component.
 	 */
@@ -1068,15 +1113,17 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IETextAreaWidget)
+			if (o instanceof IETextAreaWidget) {
 				v.add((IETextAreaWidget) o);
+			}
 		}
 		return v;
 	}
 
 	/**
-	 * Returns all the dropdowns ({@link IEDropDownWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the dropdowns ({@link IEDropDownWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the dropdowns contained in this component.
 	 */
@@ -1086,15 +1133,17 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IEDropDownWidget)
+			if (o instanceof IEDropDownWidget) {
 				v.add((IEDropDownWidget) o);
+			}
 		}
 		return v;
 	}
 
 	/**
-	 * Returns all the browsers ({@link IEBrowserWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the browsers ({@link IEBrowserWidget}) of this WOComponent. You should not use directly this method but instead implement
+	 * a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used
+	 * to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the browsers contained in this component.
 	 */
@@ -1104,15 +1153,17 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IEBrowserWidget)
+			if (o instanceof IEBrowserWidget) {
 				v.add((IEBrowserWidget) o);
+			}
 		}
 		return v;
 	}
 
 	/**
-	 * Returns all the checkboxes ({@link IECheckBoxWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the checkboxes ({@link IECheckBoxWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the checkboxes contained in this component.
 	 */
@@ -1122,15 +1173,17 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IECheckBoxWidget)
+			if (o instanceof IECheckBoxWidget) {
 				v.add((IECheckBoxWidget) o);
+			}
 		}
 		return v;
 	}
 
 	/**
-	 * Returns all the radio buttons ({@link IERadioButtonWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the
-	 * methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the radio buttons ({@link IERadioButtonWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the radio buttons contained in this component.
 	 */
@@ -1140,15 +1193,17 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IERadioButtonWidget)
+			if (o instanceof IERadioButtonWidget) {
 				v.add((IERadioButtonWidget) o);
+			}
 		}
 		return v;
 	}
 
 	/**
-	 * Returns all the buttons ({@link IEButtonWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the buttons ({@link IEButtonWidget}) of this WOComponent. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the buttons contained in this component.
 	 */
@@ -1157,15 +1212,17 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o.getClass() == IEButtonWidget.class)
+			if (o.getClass() == IEButtonWidget.class) {
 				v.add((IEButtonWidget) o);
+			}
 		}
 		return v;
 	}
 
 	/**
-	 * Returns all the hyperlinks ({@link IEHyperlinkWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the hyperlinks ({@link IEHyperlinkWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the hyperlinks contained in this component.
 	 */
@@ -1175,8 +1232,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IEHyperlinkWidget)
+			if (o instanceof IEHyperlinkWidget) {
 				v.add((IEHyperlinkWidget) o);
+			}
 		}
 		return v;
 	}
@@ -1188,8 +1246,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 			IObject object = en.nextElement();
 			if (object instanceof IEWidget) {
 				Hashtable<String, String> props = ((IEWidget) object).getLocalizedProperties();
-				if (props.size() > 0)
+				if (props.size() > 0) {
 					reply.put((IEWidget) object, props);
+				}
 			}
 		}
 		return reply;
@@ -1203,23 +1262,29 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	public synchronized String getUniqueNameForWidget(IEWidget widget) {
-		if (getNameForWidgetMap().getKey(widget) != null)
+		if (getNameForWidgetMap().getKey(widget) != null) {
 			return (String) getNameForWidgetMap().getKey(widget);
-		if (logger.isLoggable(Level.WARNING))
-			logger.warning("Widget " + widget + " had no computed name meaning that it was probably not properly embedded in the WOComponent."
+		}
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Widget "
+					+ widget
+					+ " had no computed name meaning that it was probably not properly embedded in the WOComponent."
 					+ "I will compute its name now, but this can be source of instability in the names of the widgets. You should try to find why that widget was not embedded.");
+		}
 		return computeAndStoreNameForWidget(widget);
 	}
 
 	private synchronized String computeAndStoreNameForWidget(IEWidget widget) {
 		String base = ToolBox.uncapitalize(widget.getNiceName());
 		String attempt = base;
-		if (nameForWidgetMap.get(attempt) != null || (widget instanceof IELabelWidget) || ReservedKeyword.contains(attempt)) {
+		if (nameForWidgetMap.get(attempt) != null || widget instanceof IELabelWidget || ReservedKeyword.contains(attempt)) {
 			String widgetType = widget.getWidgetType();
-			if (widget instanceof IESequence && ((IESequence<?>) widget).getOperator() != null)
+			if (widget instanceof IESequence && ((IESequence<?>) widget).getOperator() != null) {
 				widgetType = ((IESequence<?>) widget).getOperator().getWidgetType();
-			if (base.toLowerCase().indexOf(widgetType.toLowerCase()) == -1)
+			}
+			if (base.toLowerCase().indexOf(widgetType.toLowerCase()) == -1) {
 				base = base + widgetType;
+			}
 			base = ToolBox.uncapitalize(base);
 			int i = 1;
 			attempt = base;
@@ -1263,11 +1328,13 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	public void setRootSequence(IESequenceWidget rootSequence) {
-		if (this.rootSequence != null)
+		if (this.rootSequence != null) {
 			this.rootSequence.setParent(null);
+		}
 		this.rootSequence = rootSequence;
-		if (this.rootSequence != null)
+		if (this.rootSequence != null) {
 			this.rootSequence.setParent(this);
+		}
 	}
 
 	public boolean hasAtLeastOneTabDefined() {
@@ -1283,8 +1350,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
-			if (widget instanceof IEHyperlinkWidget && ((IEHyperlinkWidget) widget).needAWorkflowConditional())
+			if (widget instanceof IEHyperlinkWidget && ((IEHyperlinkWidget) widget).needAWorkflowConditional()) {
 				reply.add((IEHyperlinkWidget) widget);
+			}
 		}
 		return reply;
 	}
@@ -1353,8 +1421,10 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
-			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null && (((IESequence) widget).getOperator() instanceof ConditionalOperator))
+			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null
+					&& ((IESequence) widget).getOperator() instanceof ConditionalOperator) {
 				reply.add((IESequence) widget);
+			}
 		}
 		return reply;
 	}

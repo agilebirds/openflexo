@@ -23,7 +23,6 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.toolbox.ImageIconResource;
 
-
 public class JavaIconLibrary {
 
 	public static final ImageIcon FJP_JAVA_FILE_ICON = new ImageIconResource("Icons/Java/JavaFile.gif");

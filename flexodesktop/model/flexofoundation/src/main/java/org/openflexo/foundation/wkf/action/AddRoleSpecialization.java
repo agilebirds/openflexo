@@ -30,86 +30,71 @@ import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleSpecialization;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
 
+public class AddRoleSpecialization extends FlexoAction<AddRoleSpecialization, Role, WorkflowModelObject> {
 
-public class AddRoleSpecialization extends FlexoAction<AddRoleSpecialization,Role,WorkflowModelObject>
-{
+	private static final Logger logger = Logger.getLogger(AddRoleSpecialization.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddRoleSpecialization.class.getPackage().getName());
+	public static FlexoActionType<AddRoleSpecialization, Role, WorkflowModelObject> actionType = new FlexoActionType<AddRoleSpecialization, Role, WorkflowModelObject>(
+			"add_a_specialized_role", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<AddRoleSpecialization,Role,WorkflowModelObject>  actionType
-    = new FlexoActionType<AddRoleSpecialization,Role,WorkflowModelObject> (
-    		"add_a_specialized_role",
-    		FlexoActionType.defaultGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddRoleSpecialization makeNewAction(Role focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
+			return new AddRoleSpecialization(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddRoleSpecialization makeNewAction(Role focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor)
-        {
-            return new AddRoleSpecialization(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
+			return role != null && !role.isImported();
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(Role role, Vector<WorkflowModelObject> globalSelection)
-        {
-            return role!=null && !role.isImported();
-        }
+		@Override
+		protected boolean isEnabledForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
+			return (role != null && !role.isDefaultRole() && !role.isImported() && role.getAvailableRolesForSpecialization().size() > 0);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(Role role, Vector<WorkflowModelObject> globalSelection)
-        {
-            return (role != null && !role.isDefaultRole() && !role.isImported() && role.getAvailableRolesForSpecialization().size() > 0);
-        }
+	};
 
-    };
+	private Role _newParentRole;
+	private String annotation;
+	private RoleSpecialization _newRoleSpecialization;
+	private boolean automaticallyCreateRoleSpecialization = false;
 
-   private Role _newParentRole;
-   private String annotation;
-   private RoleSpecialization _newRoleSpecialization;
-   private boolean automaticallyCreateRoleSpecialization = false;
+	AddRoleSpecialization(Role focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    AddRoleSpecialization (Role focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	@Override
+	protected void doAction(Object context) throws DuplicateRoleException {
+		logger.info("Add parent role");
+		if (getFocusedObject() != null && getNewParentRole() != null) {
+			_newRoleSpecialization = new RoleSpecialization(getFocusedObject(), getNewParentRole());
+			_newRoleSpecialization.setAnnotation(annotation);
+			getFocusedObject().addToRoleSpecializations(_newRoleSpecialization);
+		} else {
+			logger.warning("Focused role is null !");
+		}
+	}
 
-     @Override
-	protected void doAction(Object context) throws DuplicateRoleException
-    {
-        logger.info ("Add parent role");
-        if (getFocusedObject() != null && getNewParentRole() != null)  {
-        	_newRoleSpecialization = new RoleSpecialization(getFocusedObject(),getNewParentRole());
-        	_newRoleSpecialization.setAnnotation(annotation);
-            getFocusedObject().addToRoleSpecializations(_newRoleSpecialization);
-       }
-        else {
-            logger.warning("Focused role is null !");
-        }
-    }
+	public Role getNewParentRole() {
+		return _newParentRole;
+	}
 
-    public Role getNewParentRole()
-    {
-        return _newParentRole;
-    }
-
-    public void setNewParentRole(Role aParentRole)
-    {
-    	_newParentRole = aParentRole;
-    }
+	public void setNewParentRole(Role aParentRole) {
+		_newParentRole = aParentRole;
+	}
 
 	public RoleSpecialization getNewRoleSpecialization() {
 		return _newRoleSpecialization;
 	}
 
-	public boolean getRoleSpecializationAutomaticallyCreated()
-	{
+	public boolean getRoleSpecializationAutomaticallyCreated() {
 		return automaticallyCreateRoleSpecialization;
 	}
 
-	public void setRoleSpecializationAutomaticallyCreated(boolean automaticallyCreateRole)
-	{
+	public void setRoleSpecializationAutomaticallyCreated(boolean automaticallyCreateRole) {
 		this.automaticallyCreateRoleSpecialization = automaticallyCreateRole;
 	}
 

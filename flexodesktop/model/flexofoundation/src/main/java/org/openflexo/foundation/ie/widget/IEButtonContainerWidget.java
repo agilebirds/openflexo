@@ -30,7 +30,6 @@ import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
  * Represents an abstract container of buttons
  * 
@@ -38,203 +37,184 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
  * @author bmangez
  */
 @Deprecated
-public class IEButtonContainerWidget extends AbstractInnerTableWidget implements ButtonContainerInterface
-{
+public class IEButtonContainerWidget extends AbstractInnerTableWidget implements ButtonContainerInterface {
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    private Vector<IEButtonWidget> _buttonList;
+	private Vector<IEButtonWidget> _buttonList;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IEButtonContainerWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	public IEButtonContainerWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public IEButtonContainerWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-        _buttonList = new Vector<IEButtonWidget>();
-    }
+	public IEButtonContainerWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+		_buttonList = new Vector<IEButtonWidget>();
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return "ButtonContainer.inspector";
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return "ButtonContainer.inspector";
+	}
 
-    @Override
-    public void performOnDeleteOperations() {
-    	deleteButtons();
-    	super.performOnDeleteOperations();
-    }
-    
-    // ==========================================================================
-    // ================================= Generic methods =======================
-    // ==========================================================================
+	@Override
+	public void performOnDeleteOperations() {
+		deleteButtons();
+		super.performOnDeleteOperations();
+	}
 
-    public Vector<IEButtonWidget> getButtonList()
-    {
-        return _buttonList;
-    }
+	// ==========================================================================
+	// ================================= Generic methods =======================
+	// ==========================================================================
 
-    public void setButtonList(Vector<IEButtonWidget> list)
-    {
-        _buttonList = list;
-    }
+	public Vector<IEButtonWidget> getButtonList() {
+		return _buttonList;
+	}
 
-    public void addToButtonList(IEButtonWidget button)
-    {
-        addButton(button);
-    }
+	public void setButtonList(Vector<IEButtonWidget> list) {
+		_buttonList = list;
+	}
 
-    public void removeFromButtonList(IEButtonWidget button)
-    {
-        removeButton(button);
-    }
+	public void addToButtonList(IEButtonWidget button) {
+		addButton(button);
+	}
 
-    // ==========================================================================
-    // ============================= Instance Methods
-    // ===========================
-    // ==========================================================================
+	public void removeFromButtonList(IEButtonWidget button) {
+		removeButton(button);
+	}
 
-    private void deleteButtons()
-    {
-        Enumeration en = _buttonList.elements();
-        while (en.hasMoreElements()) {
-            ((IEWidget) en.nextElement()).delete();
-        }
-    }
+	// ==========================================================================
+	// ============================= Instance Methods
+	// ===========================
+	// ==========================================================================
 
-    @Override
-	public void removeButton(IEWidget buttonToRemove)
-    {
-        _buttonList.remove(buttonToRemove);
-        if (_buttonList.size() == 0) {
-            delete();
-        } else {
-            updateButtonIndex();
-        }
-        setChanged();
-        notifyObservers(new WidgetRemovedFromTable(buttonToRemove));
-    }
+	private void deleteButtons() {
+		Enumeration en = _buttonList.elements();
+		while (en.hasMoreElements()) {
+			((IEWidget) en.nextElement()).delete();
+		}
+	}
 
-    public void addButton(IEButtonWidget button, int index)
-    {
-        _buttonList.insertElementAt(button, Math.max(Math.min(_buttonList.size(), index), 0));
-        updateButtonIndex();
-        setChanged();
-        notifyObservers(new ButtonAdded(button));
-    }
+	@Override
+	public void removeButton(IEWidget buttonToRemove) {
+		_buttonList.remove(buttonToRemove);
+		if (_buttonList.size() == 0) {
+			delete();
+		} else {
+			updateButtonIndex();
+		}
+		setChanged();
+		notifyObservers(new WidgetRemovedFromTable(buttonToRemove));
+	}
 
-    public void addButton(IEButtonWidget button)
-    {
-        int insertionIndex = findInsertionIndex(_buttonList, ((Indexable) button).getIndex());
-        _buttonList.insertElementAt(button, insertionIndex);
-        button.setParent(this);
-        setChanged();
-        notifyObservers(new ButtonAdded(button));
-    }
+	public void addButton(IEButtonWidget button, int index) {
+		_buttonList.insertElementAt(button, Math.max(Math.min(_buttonList.size(), index), 0));
+		updateButtonIndex();
+		setChanged();
+		notifyObservers(new ButtonAdded(button));
+	}
 
-    public static int findInsertionIndex(Vector v, int wish)
-    {
-        int answer = 0;
-        if (v == null || v.size() == 0)
-            return answer;
-        while (answer < v.size() && answer < wish && wish > wishFor(v.elementAt(answer)))
-            answer++;
-        return answer;
-    }
+	public void addButton(IEButtonWidget button) {
+		int insertionIndex = findInsertionIndex(_buttonList, ((Indexable) button).getIndex());
+		_buttonList.insertElementAt(button, insertionIndex);
+		button.setParent(this);
+		setChanged();
+		notifyObservers(new ButtonAdded(button));
+	}
 
-    private static int wishFor(Object v)
-    {
-        return ((Indexable) v).getIndex();
-    }
+	public static int findInsertionIndex(Vector v, int wish) {
+		int answer = 0;
+		if (v == null || v.size() == 0) {
+			return answer;
+		}
+		while (answer < v.size() && answer < wish && wish > wishFor(v.elementAt(answer))) {
+			answer++;
+		}
+		return answer;
+	}
 
-    public Enumeration buttons()
-    {
-        return _buttonList.elements();
-    }
+	private static int wishFor(Object v) {
+		return ((Indexable) v).getIndex();
+	}
 
-    public void updateButtonIndex()
-    {
-        Enumeration en = _buttonList.elements();
-        int i = 0;
-        while (en.hasMoreElements()) {
-            ((IEWidget) en.nextElement()).setIndex(i);
-            i++;
-        }
-    }
+	public Enumeration buttons() {
+		return _buttonList.elements();
+	}
 
-    @Override
-	public int getButtonIndex(IEWidget button)
-    {
-        return _buttonList.indexOf(button);
-    }
+	public void updateButtonIndex() {
+		Enumeration en = _buttonList.elements();
+		int i = 0;
+		while (en.hasMoreElements()) {
+			((IEWidget) en.nextElement()).setIndex(i);
+			i++;
+		}
+	}
 
-    public int buttonCount()
-    {
-        return _buttonList.size();
-    }
+	@Override
+	public int getButtonIndex(IEWidget button) {
+		return _buttonList.indexOf(button);
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        Vector answer = new Vector();
-        answer.addAll(getButtonList());
-        return answer;
-    }
+	public int buttonCount() {
+		return _buttonList.size();
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Buttons";
-    }
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		Vector answer = new Vector();
+		answer.addAll(getButtonList());
+		return answer;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "button_container";
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "Buttons";
+	}
 
-    @Override
-    public void setWOComponent(IEWOComponent woComponent)
-    {
-    	if(noWOChange(woComponent))return;
-        super.setWOComponent(woComponent);
-        if (getButtonList()!=null) {
-            Enumeration<IEButtonWidget> en = getButtonList().elements();
-            while (en.hasMoreElements()) {
-                IEButtonWidget b = en.nextElement();
-                b.setWOComponent(woComponent);// This call is very important because it will update the WOComponent components cache
-            }
-        }
-    }
-    
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "button_container";
+	}
+
+	@Override
+	public void setWOComponent(IEWOComponent woComponent) {
+		if (noWOChange(woComponent)) {
+			return;
+		}
+		super.setWOComponent(woComponent);
+		if (getButtonList() != null) {
+			Enumeration<IEButtonWidget> en = getButtonList().elements();
+			while (en.hasMoreElements()) {
+				IEButtonWidget b = en.nextElement();
+				b.setWOComponent(woComponent);// This call is very important because it will update the WOComponent components cache
+			}
+		}
+	}
+
 	@Override
 	public boolean areComponentInstancesValid() {
-    	return true;
-    }
-	
+		return true;
+	}
+
 	@Override
 	public void removeInvalidComponentInstances() {
 	}

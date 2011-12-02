@@ -24,10 +24,8 @@ import java.util.List;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionListener;
 
-
 /**
- * This interface is implemented by all the ModuleView requiring to be
- * synchronized with a SelectionManager. Will act as a SelectionListener
+ * This interface is implemented by all the ModuleView requiring to be synchronized with a SelectionManager. Will act as a SelectionListener
  * of a SelectionManager
  * 
  * @author sguerin

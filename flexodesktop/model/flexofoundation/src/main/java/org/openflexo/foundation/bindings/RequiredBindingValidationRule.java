@@ -44,161 +44,149 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.localization.FlexoLocalization;
 
-public class RequiredBindingValidationRule<T extends IEObject> extends ValidationRule<RequiredBindingValidationRule<T>, T>
-{
-    private static final Logger logger = Logger.getLogger(RequiredBindingValidationRule.class.getPackage().getName());
-    
-    public String bindingName;
-    public String bindingDefinition;
-    
-    public RequiredBindingValidationRule(Class<T> objectType, String aBindingName,String aBindingDefinition)
-    {
-        super(objectType, "binding_must_be_defined");
-        this.bindingName = aBindingName;
-        this.bindingDefinition = aBindingDefinition;
-    }
+public class RequiredBindingValidationRule<T extends IEObject> extends ValidationRule<RequiredBindingValidationRule<T>, T> {
+	private static final Logger logger = Logger.getLogger(RequiredBindingValidationRule.class.getPackage().getName());
 
-    @Override
-	public String getLocalizedName()
-    {
-        if (bindingName != null) {
-            return FlexoLocalization.localizedForKeyWithParams("binding_named_($bindingName)_is_required",this);
-        }
-        return null;
-    }
+	public String bindingName;
+	public String bindingDefinition;
 
-    public String getLocalizedErrorMessageForUndefinedValue()
-    {
-        return FlexoLocalization.localizedForKeyWithParams("binding_named_($bindingName)_is_not_defined",this);
-    }
+	public RequiredBindingValidationRule(Class<T> objectType, String aBindingName, String aBindingDefinition) {
+		super(objectType, "binding_must_be_defined");
+		this.bindingName = aBindingName;
+		this.bindingDefinition = aBindingDefinition;
+	}
 
-    public String getLocalizedErrorMessageForInvalidValue()
-    {
-        return FlexoLocalization.localizedForKeyWithParams("binding_named_($bindingName)_has_invalid_value",this);
-    }
+	@Override
+	public String getLocalizedName() {
+		if (bindingName != null) {
+			return FlexoLocalization.localizedForKeyWithParams("binding_named_($bindingName)_is_required", this);
+		}
+		return null;
+	}
 
-    @Override
-	public ValidationIssue<RequiredBindingValidationRule<T>, T> applyValidation(final T object)
-    {
-        final FlexoModelObject validatedObject = object;
-        BindingDefinition bd = (BindingDefinition)validatedObject.objectForKey(bindingDefinition); 
-        AbstractBinding bv = (AbstractBinding)validatedObject.objectForKey(bindingName); 
-        if (bd == null) {
-            logger.warning ("Object of type "+object.getClass().getName()+" does not define any '"+bindingDefinition+"' binding definition");
-            return null;
-        }
-        else if (bd.getIsMandatory()){
-            if ((bv == null) || (!bv.isBindingValid())) {
-                ValidationError<RequiredBindingValidationRule<T>, T> error;
-                if (bv == null) {
-                    error = new ValidationError<RequiredBindingValidationRule<T>, T>(this, object, null) {
-                        @Override
+	public String getLocalizedErrorMessageForUndefinedValue() {
+		return FlexoLocalization.localizedForKeyWithParams("binding_named_($bindingName)_is_not_defined", this);
+	}
+
+	public String getLocalizedErrorMessageForInvalidValue() {
+		return FlexoLocalization.localizedForKeyWithParams("binding_named_($bindingName)_has_invalid_value", this);
+	}
+
+	@Override
+	public ValidationIssue<RequiredBindingValidationRule<T>, T> applyValidation(final T object) {
+		final FlexoModelObject validatedObject = object;
+		BindingDefinition bd = (BindingDefinition) validatedObject.objectForKey(bindingDefinition);
+		AbstractBinding bv = (AbstractBinding) validatedObject.objectForKey(bindingName);
+		if (bd == null) {
+			logger.warning("Object of type " + object.getClass().getName() + " does not define any '" + bindingDefinition
+					+ "' binding definition");
+			return null;
+		} else if (bd.getIsMandatory()) {
+			if ((bv == null) || (!bv.isBindingValid())) {
+				ValidationError<RequiredBindingValidationRule<T>, T> error;
+				if (bv == null) {
+					error = new ValidationError<RequiredBindingValidationRule<T>, T>(this, object, null) {
+						@Override
 						public String getLocalizedMessage() {
-                            return getLocalizedErrorMessageForUndefinedValue();
-                        }
-                    };
-                }
-                else { // !bv.isBindingValid()
-                    error = new ValidationError<RequiredBindingValidationRule<T>, T>(this, object, null) {
-                        @Override
+							return getLocalizedErrorMessageForUndefinedValue();
+						}
+					};
+				} else { // !bv.isBindingValid()
+					error = new ValidationError<RequiredBindingValidationRule<T>, T>(this, object, null) {
+						@Override
 						public String getLocalizedMessage() {
-                            return getLocalizedErrorMessageForInvalidValue();
-                        }
-                    };
-                }
-                    if (object instanceof IEWidget) {
-                    	error.addToFixProposals(new AddEntryToComponentAndSetBinding(bindingName,bd));
-                }
-               Vector allAvailableBV = bd.searchMatchingBindingValue((Bindable)validatedObject,2);
-                for (int i=0; i<allAvailableBV.size(); i++) {
-                    BindingValue proposal = (BindingValue) allAvailableBV.elementAt(i);
-                    error.addToFixProposals(new SetBinding(proposal));
-                }
-                return error;
-            }
-            return null;
-        }
-        return null;
-    }
-    
-    public class SetBinding extends FixProposal<RequiredBindingValidationRule<T>, T>
-    {
-    	public BindingValue bindingValue;
-    	
-    	public SetBinding(BindingValue aBindingValue)
-    	{
-    		super("set_binding_($bindingName)_to_($bindingValue.stringRepresentation)");
-    		bindingValue = aBindingValue;
-    	}
-    	
-    	@Override
-		protected void fixAction()
-    	{
-    		((FlexoModelObject)getObject()).setObjectForKey(bindingValue,bindingName); 
-    	}
-    	
-    	public String getBindingName()
-    	{
-    		return bindingName;
-    	}
-    	
-    	public void setBindingName() {}
-    }
-    
-    protected static ParameterDefinition[] buildParameters(BindingDefinition bd)
-    {
-    	ParameterDefinition[] returned = new ParameterDefinition[3];
-    	returned[0] = new TextFieldParameter("variableName","variable_name","");
-    	returned[1] = new DMEntityParameter("variableType","variable_type",bd.getType().getBaseEntity());
-    	returned[2] = new ChoiceListParameter<DMPropertyImplementationType>("implementationType","implementation_type",DMPropertyImplementationType.PUBLIC_FIELD);
-    	returned[2].addParameter("format","localizedName");
-    	return returned;
-    }
-    
-    public class AddEntryToComponentAndSetBinding extends ParameteredFixProposal<RequiredBindingValidationRule<T>, T>
-    {
-    	public BindingDefinition bindingDefinition;
-    	public String bindingName;
-    	
-    	public AddEntryToComponentAndSetBinding(String bindingName, BindingDefinition bd)
-    	{
-    		super("add_entry_and_set_($bindingName)_onto",buildParameters(bd));
-    		this.bindingName = bindingName;
-    		this.bindingDefinition = bd;
-    	}
-    	
-    	@Override
-		protected void fixAction()
-    	{
-    		String newVariableName = (String) getValueForParameter("variableName");
-    		DMEntity newVariableType = (DMEntity) getValueForParameter("variableType");
-    		DMPropertyImplementationType implementationType = (DMPropertyImplementationType) getValueForParameter("implementationType");
-    		((IEWidget)getObject()).createsBindingVariable(newVariableName,DMType.makeResolvedDMType(newVariableType),implementationType,false);
-    		DMProperty property = null;
-    		ComponentDMEntity componentDMEntity = ((IEWidget)getObject()).getComponentDMEntity();
-    		if (componentDMEntity != null) property = componentDMEntity.getDMProperty(newVariableName);
-    		if (property != null) {
-    			BindingVariable var = ((IEWidget)getObject()).getBindingModel().bindingVariableNamed("component");
-    			BindingValue newBindingValue = new BindingValue(bindingDefinition,getObject());
-    			newBindingValue.setBindingVariable(var);
-    			newBindingValue.addBindingPathElement(property);
-    			newBindingValue.connect();
-    			((FlexoModelObject)getObject()).setObjectForKey(newBindingValue,bindingName); 
-    		}
-    	}
-    	
-    	
-    }
-    
-    /**
-     * Overrides isValidForTarget
-     * @see org.openflexo.foundation.validation.ValidationRule#isValidForTarget(TargetType)
-     */
-    @Override
-	public boolean isValidForTarget(TargetType targetType)
-    {
-        return getObjectType()==ConditionalOperator.class || targetType!=CodeType.PROTOTYPE;
-    }
-    
+							return getLocalizedErrorMessageForInvalidValue();
+						}
+					};
+				}
+				if (object instanceof IEWidget) {
+					error.addToFixProposals(new AddEntryToComponentAndSetBinding(bindingName, bd));
+				}
+				Vector allAvailableBV = bd.searchMatchingBindingValue((Bindable) validatedObject, 2);
+				for (int i = 0; i < allAvailableBV.size(); i++) {
+					BindingValue proposal = (BindingValue) allAvailableBV.elementAt(i);
+					error.addToFixProposals(new SetBinding(proposal));
+				}
+				return error;
+			}
+			return null;
+		}
+		return null;
+	}
+
+	public class SetBinding extends FixProposal<RequiredBindingValidationRule<T>, T> {
+		public BindingValue bindingValue;
+
+		public SetBinding(BindingValue aBindingValue) {
+			super("set_binding_($bindingName)_to_($bindingValue.stringRepresentation)");
+			bindingValue = aBindingValue;
+		}
+
+		@Override
+		protected void fixAction() {
+			((FlexoModelObject) getObject()).setObjectForKey(bindingValue, bindingName);
+		}
+
+		public String getBindingName() {
+			return bindingName;
+		}
+
+		public void setBindingName() {
+		}
+	}
+
+	protected static ParameterDefinition[] buildParameters(BindingDefinition bd) {
+		ParameterDefinition[] returned = new ParameterDefinition[3];
+		returned[0] = new TextFieldParameter("variableName", "variable_name", "");
+		returned[1] = new DMEntityParameter("variableType", "variable_type", bd.getType().getBaseEntity());
+		returned[2] = new ChoiceListParameter<DMPropertyImplementationType>("implementationType", "implementation_type",
+				DMPropertyImplementationType.PUBLIC_FIELD);
+		returned[2].addParameter("format", "localizedName");
+		return returned;
+	}
+
+	public class AddEntryToComponentAndSetBinding extends ParameteredFixProposal<RequiredBindingValidationRule<T>, T> {
+		public BindingDefinition bindingDefinition;
+		public String bindingName;
+
+		public AddEntryToComponentAndSetBinding(String bindingName, BindingDefinition bd) {
+			super("add_entry_and_set_($bindingName)_onto", buildParameters(bd));
+			this.bindingName = bindingName;
+			this.bindingDefinition = bd;
+		}
+
+		@Override
+		protected void fixAction() {
+			String newVariableName = (String) getValueForParameter("variableName");
+			DMEntity newVariableType = (DMEntity) getValueForParameter("variableType");
+			DMPropertyImplementationType implementationType = (DMPropertyImplementationType) getValueForParameter("implementationType");
+			((IEWidget) getObject()).createsBindingVariable(newVariableName, DMType.makeResolvedDMType(newVariableType),
+					implementationType, false);
+			DMProperty property = null;
+			ComponentDMEntity componentDMEntity = ((IEWidget) getObject()).getComponentDMEntity();
+			if (componentDMEntity != null) {
+				property = componentDMEntity.getDMProperty(newVariableName);
+			}
+			if (property != null) {
+				BindingVariable var = ((IEWidget) getObject()).getBindingModel().bindingVariableNamed("component");
+				BindingValue newBindingValue = new BindingValue(bindingDefinition, getObject());
+				newBindingValue.setBindingVariable(var);
+				newBindingValue.addBindingPathElement(property);
+				newBindingValue.connect();
+				((FlexoModelObject) getObject()).setObjectForKey(newBindingValue, bindingName);
+			}
+		}
+
+	}
+
+	/**
+	 * Overrides isValidForTarget
+	 * 
+	 * @see org.openflexo.foundation.validation.ValidationRule#isValidForTarget(TargetType)
+	 */
+	@Override
+	public boolean isValidForTarget(TargetType targetType) {
+		return getObjectType() == ConditionalOperator.class || targetType != CodeType.PROTOTYPE;
+	}
+
 }
-

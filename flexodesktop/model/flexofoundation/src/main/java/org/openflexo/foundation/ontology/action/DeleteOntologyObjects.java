@@ -34,113 +34,106 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 
+public class DeleteOntologyObjects extends FlexoUndoableAction<DeleteOntologyObjects, OntologyObject, OntologyObject> {
 
-public class DeleteOntologyObjects extends FlexoUndoableAction<DeleteOntologyObjects,OntologyObject,OntologyObject>
-{
+	private static final Logger logger = Logger.getLogger(DeleteOntologyObjects.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DeleteOntologyObjects.class.getPackage().getName());
+	public static FlexoActionType<DeleteOntologyObjects, OntologyObject, OntologyObject> actionType = new FlexoActionType<DeleteOntologyObjects, OntologyObject, OntologyObject>(
+			"delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-    public static FlexoActionType<DeleteOntologyObjects,OntologyObject,OntologyObject> actionType 
-    = new FlexoActionType<DeleteOntologyObjects,OntologyObject,OntologyObject>(
-    		"delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public DeleteOntologyObjects makeNewAction(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) {
+			return new DeleteOntologyObjects(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public DeleteOntologyObjects makeNewAction(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor)
-        {
-            return new DeleteOntologyObjects(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(OntologyObject focusedObject, Vector<OntologyObject> globalSelection) {
+			Vector<OntologyObject> objectsToDelete = objectsToDelete(focusedObject, globalSelection);
+			if (objectsToDelete.size() == 0) {
+				return false;
+			}
+			for (OntologyObject o : globalSelection) {
+				if (o.getIsReadOnly()) {
+					return false;
+				}
+			}
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(OntologyObject focusedObject, Vector<OntologyObject> globalSelection)
-        {
-        	Vector<OntologyObject> objectsToDelete = objectsToDelete(focusedObject,globalSelection);
-        	if (objectsToDelete.size() == 0) return false;
-            for (OntologyObject o : globalSelection) {
-            	if (o.getIsReadOnly()) return false;
-            }
-            return true;
-         }
-
-    };
+	};
 
 	static {
-		FlexoModelObject.addActionForClass (DeleteOntologyObjects.actionType, OntologyObject.class);
+		FlexoModelObject.addActionForClass(DeleteOntologyObjects.actionType, OntologyObject.class);
 	}
 
-	protected static Vector<OntologyObject> objectsToDelete(OntologyObject focusedObject, Vector<OntologyObject> globalSelection)
-	{
+	protected static Vector<OntologyObject> objectsToDelete(OntologyObject focusedObject, Vector<OntologyObject> globalSelection) {
 		Vector<OntologyObject> returned = new Vector<OntologyObject>();
-        if (globalSelection == null || !globalSelection.contains(focusedObject)) {
-        	returned.add(focusedObject);
-        }
-        if (globalSelection != null) {
-        	for (AbstractOntologyObject o : globalSelection) {
-        		if (o instanceof OntologyClass
-        				|| o instanceof OntologyIndividual
-        				|| o instanceof OntologyObjectProperty
-        				|| o instanceof OntologyDataProperty) {
-        			returned.add((OntologyObject)o);
-        		}
-        	}
-        }
-        return returned;
+		if (globalSelection == null || !globalSelection.contains(focusedObject)) {
+			returned.add(focusedObject);
+		}
+		if (globalSelection != null) {
+			for (AbstractOntologyObject o : globalSelection) {
+				if (o instanceof OntologyClass || o instanceof OntologyIndividual || o instanceof OntologyObjectProperty
+						|| o instanceof OntologyDataProperty) {
+					returned.add((OntologyObject) o);
+				}
+			}
+		}
+		return returned;
 	}
-	
-	
-	protected DeleteOntologyObjects(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-        logger.info("Created DeleteOntologyObjects action focusedObject="+focusedObject+"globalSelection="+globalSelection);
-    }
 
-    @Override
-	protected void doAction(Object context)
-    {
-        if (logger.isLoggable(Level.INFO)) logger.info("DeleteOntologyObjects");
-        if (logger.isLoggable(Level.INFO)) logger.info("selection is: " + getGlobalSelection());
-        if (logger.isLoggable(Level.INFO)) logger.info("selection to delete is: " + getObjectsToDelete());
-        for (OntologyObject o : getObjectsToDelete()) {
-        	o.delete();
-        }
-    }
+	protected DeleteOntologyObjects(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+		logger.info("Created DeleteOntologyObjects action focusedObject=" + focusedObject + "globalSelection=" + globalSelection);
+	}
 
-    @Override
-	protected void undoAction(Object context)
-    {
-        logger.warning("UNDO DELETE not implemented yet !");
-    }
+	@Override
+	protected void doAction(Object context) {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("DeleteOntologyObjects");
+		}
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("selection is: " + getGlobalSelection());
+		}
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("selection to delete is: " + getObjectsToDelete());
+		}
+		for (OntologyObject o : getObjectsToDelete()) {
+			o.delete();
+		}
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        logger.warning("REDO DELETE not implemented yet !");
-    }
+	@Override
+	protected void undoAction(Object context) {
+		logger.warning("UNDO DELETE not implemented yet !");
+	}
 
-    private Vector<OntologyObject> _objectsToDelete;
+	@Override
+	protected void redoAction(Object context) {
+		logger.warning("REDO DELETE not implemented yet !");
+	}
 
-    /**
-     * This method returns all the objects on which the delete method needs to
-     * be called. This should not be done by some other code than the one
-     * located in the doAction method. This method can be used in either
-     * initialiazer or finalizer of the action.
-     * 
-     * @return All the objects to be deleted.
-     */
-    public Vector<OntologyObject> getObjectsToDelete()
-    {
-    	if (_objectsToDelete == null) {
-    		_objectsToDelete = objectsToDelete(getFocusedObject(), getGlobalSelection());
-    	}
-    	return _objectsToDelete;
-    } 
+	private Vector<OntologyObject> _objectsToDelete;
+
+	/**
+	 * This method returns all the objects on which the delete method needs to be called. This should not be done by some other code than
+	 * the one located in the doAction method. This method can be used in either initialiazer or finalizer of the action.
+	 * 
+	 * @return All the objects to be deleted.
+	 */
+	public Vector<OntologyObject> getObjectsToDelete() {
+		if (_objectsToDelete == null) {
+			_objectsToDelete = objectsToDelete(getFocusedObject(), getGlobalSelection());
+		}
+		return _objectsToDelete;
+	}
 
 }

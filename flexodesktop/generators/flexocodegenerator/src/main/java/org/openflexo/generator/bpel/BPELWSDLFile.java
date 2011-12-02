@@ -26,14 +26,13 @@ import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 
-
 public class BPELWSDLFile extends TextFile implements GenerationAvailableFile {
 
 	public BPELWSDLFile() {
 		super();
 	}
 
-	public BPELWSDLFile(File f,BPELWSDLFileResource resource) {
+	public BPELWSDLFile(File f, BPELWSDLFileResource resource) {
 		super(f);
 		try {
 			setFlexoResource(resource);
@@ -43,14 +42,12 @@ public class BPELWSDLFile extends TextFile implements GenerationAvailableFile {
 	}
 
 	@Override
-	public BPELWSDLFileResource getFlexoResource()
-    {
-        return (BPELWSDLFileResource)super.getFlexoResource(); 
-    }
+	public BPELWSDLFileResource getFlexoResource() {
+		return (BPELWSDLFileResource) super.getFlexoResource();
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
+	public FlexoResourceGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
 }

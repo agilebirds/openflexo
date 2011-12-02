@@ -42,113 +42,102 @@ import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 
-
 /**
  * @author gpolet
  * 
  */
-public class DuplicateComponentAction extends FlexoAction
-{
+public class DuplicateComponentAction extends FlexoAction {
 
-    protected static final Logger logger = Logger.getLogger(DuplicateComponentAction.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DuplicateComponentAction.class.getPackage().getName());
 
-    public static FlexoActionType actionType 
-    = new FlexoActionType("duplicate_component", FlexoActionType.defaultGroup) {
-    	
+	public static FlexoActionType actionType = new FlexoActionType("duplicate_component", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-        {
-            return new DuplicateComponentAction(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new DuplicateComponentAction(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return object instanceof TopComponentContainer || object instanceof OperationComponentDefinition
-                    || object instanceof PopupComponentDefinition || object instanceof TabComponentDefinition;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return object instanceof TopComponentContainer || object instanceof OperationComponentDefinition
+					|| object instanceof PopupComponentDefinition || object instanceof TabComponentDefinition;
+		}
 
-    };
+	};
 
-    protected DuplicateComponentAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	protected DuplicateComponentAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    private IEWOComponent component;
+	private IEWOComponent component;
 
-    private String newComponentName;
+	private String newComponentName;
 
-    private ComponentDefinition componentDef = null;
+	private ComponentDefinition componentDef = null;
 
-    @Override
-	protected void doAction(Object context)
-    {
-        try {
-            if (component instanceof IEOperationComponent) {
-                componentDef = new OperationComponentDefinition(newComponentName, component.getComponentDefinition()
-                        .getComponentLibrary(), component.getComponentDefinition().getFolder(), component.getProject());
-            } else if (component instanceof IEPopupComponent) {
-                componentDef = new PopupComponentDefinition(newComponentName, component.getComponentDefinition()
-                        .getComponentLibrary(), component.getComponentDefinition().getFolder(), component.getProject());
-            } else if (component instanceof IETabComponent) {
-                componentDef = new TabComponentDefinition(newComponentName, component.getComponentDefinition()
-                        .getComponentLibrary(), component.getComponentDefinition().getFolder(), component.getProject());
-            } else if (component instanceof IEMonitoringScreen) {
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Not implemented");
-            } else if (logger.isLoggable(Level.INFO))
-                    logger.info("Not implemented");
-        } catch (HeadlessException e) {
-            e.printStackTrace();
-            return;
-        } catch (DuplicateResourceException e) {
-            e.printStackTrace();
-            // Should not happen
-            return;
-        }
-        if (componentDef == null)
-            return;
-        Enumeration<IEWidget> en = component.getRootSequence().elements();
-        while (en.hasMoreElements()) {
-        	IEWidget obj = en.nextElement();
-        	IEWidget tcCopy = (IEWidget) obj.cloneUsingXMLMapping();
-        	componentDef.getWOComponent().getRootSequence().insertElementAt(tcCopy, Integer.MAX_VALUE);
-        }
-    }
+	@Override
+	protected void doAction(Object context) {
+		try {
+			if (component instanceof IEOperationComponent) {
+				componentDef = new OperationComponentDefinition(newComponentName, component.getComponentDefinition().getComponentLibrary(),
+						component.getComponentDefinition().getFolder(), component.getProject());
+			} else if (component instanceof IEPopupComponent) {
+				componentDef = new PopupComponentDefinition(newComponentName, component.getComponentDefinition().getComponentLibrary(),
+						component.getComponentDefinition().getFolder(), component.getProject());
+			} else if (component instanceof IETabComponent) {
+				componentDef = new TabComponentDefinition(newComponentName, component.getComponentDefinition().getComponentLibrary(),
+						component.getComponentDefinition().getFolder(), component.getProject());
+			} else if (component instanceof IEMonitoringScreen) {
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Not implemented");
+				}
+			} else if (logger.isLoggable(Level.INFO)) {
+				logger.info("Not implemented");
+			}
+		} catch (HeadlessException e) {
+			e.printStackTrace();
+			return;
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+			// Should not happen
+			return;
+		}
+		if (componentDef == null) {
+			return;
+		}
+		Enumeration<IEWidget> en = component.getRootSequence().elements();
+		while (en.hasMoreElements()) {
+			IEWidget obj = en.nextElement();
+			IEWidget tcCopy = (IEWidget) obj.cloneUsingXMLMapping();
+			componentDef.getWOComponent().getRootSequence().insertElementAt(tcCopy, Integer.MAX_VALUE);
+		}
+	}
 
-    public IEWOComponent getComponent()
-    {
-        return component;
-    }
+	public IEWOComponent getComponent() {
+		return component;
+	}
 
-    public void setComponent(IEWOComponent component)
-    {
-        this.component = component;
-    }
+	public void setComponent(IEWOComponent component) {
+		this.component = component;
+	}
 
-    public String getNewComponentName()
-    {
-        return newComponentName;
-    }
+	public String getNewComponentName() {
+		return newComponentName;
+	}
 
-    public void setNewComponentName(String newComponentName)
-    {
-        this.newComponentName = newComponentName;
-    }
+	public void setNewComponentName(String newComponentName) {
+		this.newComponentName = newComponentName;
+	}
 
-    public ComponentDefinition getComponentDefinition()
-    {
-        return componentDef;
-    }
+	public ComponentDefinition getComponentDefinition() {
+		return componentDef;
+	}
 }

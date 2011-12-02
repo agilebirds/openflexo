@@ -27,10 +27,10 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.wkf.FlexoProcess;
 
-
 public class ShowRoles extends FlexoGUIAction<ShowRoles, FlexoProcess, FlexoProcess> {
 
-	public static final FlexoActionType<ShowRoles, FlexoProcess, FlexoProcess> actionType = new FlexoActionType<ShowRoles, FlexoProcess, FlexoProcess>("show_roles",FlexoActionType.defaultGroup) {
+	public static final FlexoActionType<ShowRoles, FlexoProcess, FlexoProcess> actionType = new FlexoActionType<ShowRoles, FlexoProcess, FlexoProcess>(
+			"show_roles", FlexoActionType.defaultGroup) {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
@@ -44,22 +44,21 @@ public class ShowRoles extends FlexoGUIAction<ShowRoles, FlexoProcess, FlexoProc
 
 		@Override
 		public ShowRoles makeNewAction(FlexoProcess focusedObject, Vector<FlexoProcess> globalSelection, FlexoEditor editor) {
-			return new ShowRoles(focusedObject,globalSelection,editor);
+			return new ShowRoles(focusedObject, globalSelection, editor);
 		}
-		
+
 	};
 
 	static {
 		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
 	}
-	
-	protected ShowRoles(FlexoProcess focusedObject, Vector<FlexoProcess> globalSelection,
-			FlexoEditor editor) {
+
+	protected ShowRoles(FlexoProcess focusedObject, Vector<FlexoProcess> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	public FlexoProcess getProcess() {
 		return getFocusedObject();
 	}
-	
+
 }

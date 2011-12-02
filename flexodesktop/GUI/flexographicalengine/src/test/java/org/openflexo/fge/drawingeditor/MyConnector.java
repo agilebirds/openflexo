@@ -22,62 +22,47 @@ package org.openflexo.fge.drawingeditor;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 
-
-public class MyConnector extends MyDrawingElement
-{
+public class MyConnector extends MyDrawingElement {
 	private MyConnectorGraphicalRepresentation gr;
-	
+
 	// Called for LOAD
-	public MyConnector(DrawingBuilder builder)
-	{
+	public MyConnector(DrawingBuilder builder) {
 		super(builder.drawing.getModel());
 		initializeDeserialization();
 	}
-	
-	
+
 	// Called for NEW
-	public MyConnector(MyShape from, MyShape to, EditedDrawing drawing) 
-	{
+	public MyConnector(MyShape from, MyShape to, EditedDrawing drawing) {
 		super(drawing.getModel());
-		gr = new MyConnectorGraphicalRepresentation(
-				ConnectorType.LINE,
-				(MyShapeGraphicalRepresentation)drawing.getGraphicalRepresentation(from),
-				(MyShapeGraphicalRepresentation)drawing.getGraphicalRepresentation(to),
-				this,drawing);
+		gr = new MyConnectorGraphicalRepresentation(ConnectorType.LINE,
+				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(from),
+				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(to), this, drawing);
 	}
-	
+
 	@Override
-	public MyConnectorGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public MyConnectorGraphicalRepresentation getGraphicalRepresentation() {
 		return gr;
 	}
-	
-	public void setGraphicalRepresentation(MyConnectorGraphicalRepresentation aGR)
-	{
+
+	public void setGraphicalRepresentation(MyConnectorGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		gr = aGR;
 	}
 
-	public MyShape getStartShape()
-	{
+	public MyShape getStartShape() {
 		return getGraphicalRepresentation().getStartObject().getDrawable();
 	}
 
-	public MyShape geEndShape()
-	{
+	public MyShape geEndShape() {
 		return getGraphicalRepresentation().getEndObject().getDrawable();
 	}
-	
-	public MyShapeGraphicalRepresentation getStartObject()
-	{
+
+	public MyShapeGraphicalRepresentation getStartObject() {
 		return getGraphicalRepresentation().getStartObject();
 	}
 
-	public MyShapeGraphicalRepresentation getEndObject()
-	{
+	public MyShapeGraphicalRepresentation getEndObject() {
 		return getGraphicalRepresentation().getEndObject();
 	}
-
-
 
 }

@@ -30,60 +30,54 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 
+public class IECut extends FlexoUndoableAction<IECut, IEObject, IEObject> {
 
-public class IECut extends FlexoUndoableAction<IECut, IEObject, IEObject>
-{
+	private static final Logger logger = Logger.getLogger(IECut.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(IECut.class.getPackage().getName());
+	public static FlexoActionType<IECut, IEObject, IEObject> actionType = new FlexoActionType<IECut, IEObject, IEObject>("cut",
+			FlexoActionType.editGroup) {
 
-    public static FlexoActionType<IECut, IEObject, IEObject> actionType = new FlexoActionType<IECut, IEObject, IEObject> ("cut",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public IECut makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+			return new IECut(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public IECut makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) 
-        {
-            return new IECut(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(IEObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(IEObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return globalSelection != null && globalSelection.size() == 1
+					&& !(globalSelection.firstElement() instanceof ComponentDefinition)
+					&& !(globalSelection.firstElement() instanceof IEWOComponent)
+					&& !(globalSelection.firstElement() instanceof FlexoComponentFolder);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) 
-        {
-            return globalSelection!=null && globalSelection.size()==1 && !(globalSelection.firstElement() instanceof ComponentDefinition) && !(globalSelection.firstElement() instanceof IEWOComponent) && !(globalSelection.firstElement() instanceof FlexoComponentFolder);
-        }
-                
-    };
-    
-    IECut (IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) 
-    {
-        // Not yet implemented in Foundation, but in IE module
-        logger.info ("CUT on IE");
-    }
-    
-    @Override
-	protected void undoAction(Object context) 
-    {
-        logger.warning ("UNDO CUT on WKF not implemented yet !");
-    }
+	IECut(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        logger.warning ("REDO CUT on WKF not implemented yet !");
-    }
-    
+	@Override
+	protected void doAction(Object context) {
+		// Not yet implemented in Foundation, but in IE module
+		logger.info("CUT on IE");
+	}
+
+	@Override
+	protected void undoAction(Object context) {
+		logger.warning("UNDO CUT on WKF not implemented yet !");
+	}
+
+	@Override
+	protected void redoAction(Object context) {
+		logger.warning("REDO CUT on WKF not implemented yet !");
+	}
 
 }

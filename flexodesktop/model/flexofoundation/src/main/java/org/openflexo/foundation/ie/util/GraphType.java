@@ -23,7 +23,7 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ImageIconResource;
 
 public enum GraphType {
-	
+
 	SideBySideBar {
 		@Override
 		public String getImageName() {
@@ -136,19 +136,21 @@ public enum GraphType {
 
 	private ImageIconResource icon;
 	private FileResource fileResource;
-	
+
 	public abstract String getImageName();
-	
+
 	public ImageIconResource getIcon() {
-		if (icon==null)
-			icon = new ImageIconResource(PALETTE_DIRECTORY+getImageName());
+		if (icon == null) {
+			icon = new ImageIconResource(PALETTE_DIRECTORY + getImageName());
+		}
 		return icon;
 	}
-	
+
 	public FileResource getFileResource() {
-		if (fileResource==null)
-			fileResource = new FileResource(PALETTE_DIRECTORY+getImageName());
+		if (fileResource == null) {
+			fileResource = new FileResource(PALETTE_DIRECTORY + getImageName());
+		}
 		return fileResource;
 	}
-	
+
 }

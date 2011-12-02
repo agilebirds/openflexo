@@ -20,145 +20,123 @@
 package org.openflexo.components.widget;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Widget allowing to select an Ontology Object while browsing the ontology library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyProperty>
-{
+public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyProperty> {
 
-    protected static final String EMPTY_STRING = "";
-    protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
+	protected static final String EMPTY_STRING = "";
+	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
 
-    private OntologyLibrary ontologyLibrary;
+	private OntologyLibrary ontologyLibrary;
 
-    public OntologyPropertySelector(OntologyProperty object)
-    {
-        super(null, object, OntologyProperty.class);
-    }
+	public OntologyPropertySelector(OntologyProperty object) {
+		super(null, object, OntologyProperty.class);
+	}
 
-    public OntologyPropertySelector(OntologyLibrary ontologyLibrary, OntologyProperty object, int cols)
-    {
-        super(null, object, OntologyProperty.class, cols);
-        setOntologyLibrary(ontologyLibrary);
-    }
+	public OntologyPropertySelector(OntologyLibrary ontologyLibrary, OntologyProperty object, int cols) {
+		super(null, object, OntologyProperty.class, cols);
+		setOntologyLibrary(ontologyLibrary);
+	}
 
-    public OntologyLibrary getOntologyLibrary()
-    {
-    	return ontologyLibrary;
-    }
+	public OntologyLibrary getOntologyLibrary() {
+		return ontologyLibrary;
+	}
 
-    public void setOntologyLibrary(OntologyLibrary ontologyLibrary)
-    {
-    	this.ontologyLibrary = ontologyLibrary;
-    }
+	public void setOntologyLibrary(OntologyLibrary ontologyLibrary) {
+		this.ontologyLibrary = ontologyLibrary;
+	}
 
+	@Override
+	protected OntologyPropertySelectorPanel makeCustomPanel(OntologyProperty editedObject) {
+		return new OntologyPropertySelectorPanel();
+	}
 
-    @Override
-	protected OntologyPropertySelectorPanel makeCustomPanel(OntologyProperty editedObject)
-    {
-        return new OntologyPropertySelectorPanel();
-    }
+	@Override
+	public String renderedString(OntologyProperty editedObject) {
+		if (editedObject != null) {
+			return editedObject.getName();
+		}
+		return STRING_REPRESENTATION_WHEN_NULL;
+	}
 
-    @Override
-	public String renderedString(OntologyProperty editedObject)
-    {
-        if (editedObject != null) {
-            return editedObject.getName();
-        }
-        return STRING_REPRESENTATION_WHEN_NULL;
-    }
+	protected class OntologyPropertySelectorPanel extends AbstractSelectorPanel<OntologyProperty> {
+		protected OntologyPropertySelectorPanel() {
+			super(OntologyPropertySelector.this);
+		}
 
-    protected class OntologyPropertySelectorPanel extends AbstractSelectorPanel<OntologyProperty>
-    {
-        protected OntologyPropertySelectorPanel()
-        {
-            super(OntologyPropertySelector.this);
-        }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new OntologyBrowser();
+		}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new OntologyBrowser();
-        }
+	}
 
-    }
+	protected class OntologyBrowser extends ProjectBrowser {
 
-    protected class OntologyBrowser extends ProjectBrowser
-    {
+		protected OntologyBrowser() {
+			super((getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null), false);
+			init();
+		}
 
+		@Override
+		public void configure() {
+			if (hierarchicalMode) {
+				setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
+				setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE, true);
+				setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE, true);
+				setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.HIDE);
+				setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.HIDE);
+				setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.SHOW);
+				setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.SHOW);
+				setFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
+				setOEViewMode(OEViewMode.FullHierarchy);
+			} else {
+				setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
+				setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
+				setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
+				setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.HIDE);
+				setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.HIDE);
+				setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.SHOW);
+				setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.SHOW);
+				setFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
+				setOEViewMode(OEViewMode.PartialHierarchy);
+			}
+		}
 
-        protected OntologyBrowser()
-        {
-            super((getOntologyLibrary()!=null?getOntologyLibrary().getProject():null), false);
-            init();
-        }
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			return getOntologyLibrary();
+		}
 
-        @Override
-		public void configure()
-        {
-        	if (hierarchicalMode) {
-        		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
-        		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE, true);
-        		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE, true);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.HIDE);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.HIDE);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.SHOW);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.SHOW);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
-        		setOEViewMode(OEViewMode.FullHierarchy);
-        	}
-        	else {
-        		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
-        		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
-        		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.HIDE);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.HIDE);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.SHOW);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.SHOW);
-        		setFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
-        		setOEViewMode(OEViewMode.PartialHierarchy);
-        	}
-        }
+	}
 
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-            return getOntologyLibrary();
-        }
+	public void setNullStringRepresentation(String aString) {
+		STRING_REPRESENTATION_WHEN_NULL = aString;
+	}
 
-    }
+	@Override
+	public FlexoModelObject getRootObject() {
+		return getOntologyLibrary();
+	}
 
-    public void setNullStringRepresentation(String aString)
-    {
-        STRING_REPRESENTATION_WHEN_NULL = aString;
-    }
+	private boolean hierarchicalMode = true;
 
-    @Override
-    public FlexoModelObject getRootObject()
-    {
-     	return getOntologyLibrary();
-    }
-
-    private boolean hierarchicalMode = true;
-
-	public boolean getHierarchicalMode()
-	{
+	public boolean getHierarchicalMode() {
 		return hierarchicalMode;
 	}
 
-	public void setHierarchicalMode(boolean hierarchicalMode)
-	{
+	public void setHierarchicalMode(boolean hierarchicalMode) {
 		this.hierarchicalMode = hierarchicalMode;
 	}
 

@@ -31,100 +31,96 @@ import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DGScreenshotFile extends AbstractCGFile
-{
+public class DGScreenshotFile extends AbstractCGFile {
 
-    /**
-     * @param repository
-     * @param resource
-     */
-    public DGScreenshotFile(DGRepository repository, CGRepositoryFileResource resource)
-    {
-        super(repository, resource);
-    }
+	/**
+	 * @param repository
+	 * @param resource
+	 */
+	public DGScreenshotFile(DGRepository repository, CGRepositoryFileResource resource) {
+		super(repository, resource);
+	}
 
-    /**
+	/**
      * 
      */
-    public DGScreenshotFile(GeneratedOutput generatedDoc)
-    {
-        super(generatedDoc);
-    }
-    
-    /**
+	public DGScreenshotFile(GeneratedOutput generatedDoc) {
+		super(generatedDoc);
+	}
+
+	/**
      * 
      */
-    public DGScreenshotFile(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-    }
-    
-    /**
-     * Overrides getGenerator
-     * @see org.openflexo.dg.file.AbstractDGFile#getGenerator()
-     */
-    @Override
-    public IFlexoResourceGenerator getGenerator()
-    {
-        return getResource().getGenerator();
-    }
-    
-    /**
-     * Overrides needsMemoryGeneration
-     * @see org.openflexo.dg.file.AbstractDGFile#needsMemoryGeneration()
-     */
-    @Override
-    public boolean needsMemoryGeneration()
-    {
-        return false;
-    }
-    
-    /**
-     * Overrides getResource
-     * @see org.openflexo.foundation.cg.CGFile#getResource()
-     */
-    @Override
-    public FlexoCopiedResource getResource()
-    {
-        return (FlexoCopiedResource) super.getResource();
-    }
-    
-    /**
-     * Overrides getLastGenerationDate
-     * @see org.openflexo.foundation.cg.CGFile#getLastGenerationDate()
-     */
-    @Override
-    public Date getLastGenerationDate()
-    {
-        return new Date(((ScreenshotResource)getResource().getResourceToCopy()).getLastGenerationDate().getTime());
-    }
-    
-    /**
-     * Overrides isGenerationConflicting
-     * @see org.openflexo.foundation.cg.CGFile#isGenerationConflicting()
-     */
-    @Override
-    public boolean isGenerationConflicting()
-    {
-        // Screenshots are never in conflict
-        return false;
-    }
-    
-    /**
-     * Overrides getGenerationStatus
-     * @see org.openflexo.foundation.cg.CGFile#getGenerationStatus()
-     */
-    @Override
-    public GenerationStatus getGenerationStatus()
-    {
-        GenerationStatus status = super.getGenerationStatus();
-        if (status.isConflicting()) // Little hack to prevent screenshots from being in conflict
-            return GenerationStatus.GenerationModified;
-        return status;
-    }
+	public DGScreenshotFile(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+	}
+
+	/**
+	 * Overrides getGenerator
+	 * 
+	 * @see org.openflexo.dg.file.AbstractDGFile#getGenerator()
+	 */
+	@Override
+	public IFlexoResourceGenerator getGenerator() {
+		return getResource().getGenerator();
+	}
+
+	/**
+	 * Overrides needsMemoryGeneration
+	 * 
+	 * @see org.openflexo.dg.file.AbstractDGFile#needsMemoryGeneration()
+	 */
+	@Override
+	public boolean needsMemoryGeneration() {
+		return false;
+	}
+
+	/**
+	 * Overrides getResource
+	 * 
+	 * @see org.openflexo.foundation.cg.CGFile#getResource()
+	 */
+	@Override
+	public FlexoCopiedResource getResource() {
+		return (FlexoCopiedResource) super.getResource();
+	}
+
+	/**
+	 * Overrides getLastGenerationDate
+	 * 
+	 * @see org.openflexo.foundation.cg.CGFile#getLastGenerationDate()
+	 */
+	@Override
+	public Date getLastGenerationDate() {
+		return new Date(((ScreenshotResource) getResource().getResourceToCopy()).getLastGenerationDate().getTime());
+	}
+
+	/**
+	 * Overrides isGenerationConflicting
+	 * 
+	 * @see org.openflexo.foundation.cg.CGFile#isGenerationConflicting()
+	 */
+	@Override
+	public boolean isGenerationConflicting() {
+		// Screenshots are never in conflict
+		return false;
+	}
+
+	/**
+	 * Overrides getGenerationStatus
+	 * 
+	 * @see org.openflexo.foundation.cg.CGFile#getGenerationStatus()
+	 */
+	@Override
+	public GenerationStatus getGenerationStatus() {
+		GenerationStatus status = super.getGenerationStatus();
+		if (status.isConflicting()) {
+			return GenerationStatus.GenerationModified;
+		}
+		return status;
+	}
 }

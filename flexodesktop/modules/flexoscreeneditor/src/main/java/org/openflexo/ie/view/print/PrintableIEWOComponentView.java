@@ -33,72 +33,63 @@ import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.print.FlexoPrintableComponent;
 import org.openflexo.print.FlexoPrintableDelegate;
 
-
 public class PrintableIEWOComponentView extends IEWOComponentView implements FlexoPrintableComponent {
 
-    protected static final Logger logger = Logger.getLogger(PrintableIEWOComponentView.class.getPackage().getName());
-    
-    private FlexoPrintableDelegate _printableDelegate;
+	protected static final Logger logger = Logger.getLogger(PrintableIEWOComponentView.class.getPackage().getName());
 
-    public PrintableIEWOComponentView(ComponentInstance component, IEController controller)
-    {
-        super(controller,component);
-        _printableDelegate = new FlexoPrintableDelegate(this,controller);
-     }
-    
-    @Override
-	public FlexoPrintableDelegate getPrintableDelegate()
-    {
-        return _printableDelegate;
-    }
-    
-    @Override
-	public String getDefaultPrintableName()
-    {
-        return getModel().getName();
-    }
-    
-    @Override
-	public FlexoModelObject getFlexoModelObject(){
-    	return getModel();
-    }
+	private FlexoPrintableDelegate _printableDelegate;
 
-    @Override
-	public void paint(Graphics graphics)
-    {
-        FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D)graphics);
-        super.paint(graphics);
-        _printableDelegate.paintPostlude((Graphics2D)graphics, params);
-    }
-    
-    @Override
-	public void print(Graphics graphics)
-    {
-    	//logger.info("graphics="+graphics);
-        //FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D)graphics);
-        super.print(graphics);
-        //_printableDelegate.paintPostlude((Graphics2D)graphics, params);
-    }
-    
-    @Override
-	public Rectangle getOptimalBounds()
-    {
-        //return getFlexoProcess().getActivityPetriGraph().getOptimalBounds(true);
-        return new Rectangle(new Point(0,0),getSize());
-    }
+	public PrintableIEWOComponentView(ComponentInstance component, IEController controller) {
+		super(controller, component);
+		_printableDelegate = new FlexoPrintableDelegate(this, controller);
+	}
 
-    @Override
-	public void resizeComponent(Dimension aSize)
-    {
-        setSize(aSize);
-        setPreferredSize(aSize);
-    }
-    
-    @Override
-	public void refreshComponent()
-    {
-        revalidate();
-        repaint();
-    }
-    
+	@Override
+	public FlexoPrintableDelegate getPrintableDelegate() {
+		return _printableDelegate;
+	}
+
+	@Override
+	public String getDefaultPrintableName() {
+		return getModel().getName();
+	}
+
+	@Override
+	public FlexoModelObject getFlexoModelObject() {
+		return getModel();
+	}
+
+	@Override
+	public void paint(Graphics graphics) {
+		FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D) graphics);
+		super.paint(graphics);
+		_printableDelegate.paintPostlude((Graphics2D) graphics, params);
+	}
+
+	@Override
+	public void print(Graphics graphics) {
+		// logger.info("graphics="+graphics);
+		// FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D)graphics);
+		super.print(graphics);
+		// _printableDelegate.paintPostlude((Graphics2D)graphics, params);
+	}
+
+	@Override
+	public Rectangle getOptimalBounds() {
+		// return getFlexoProcess().getActivityPetriGraph().getOptimalBounds(true);
+		return new Rectangle(new Point(0, 0), getSize());
+	}
+
+	@Override
+	public void resizeComponent(Dimension aSize) {
+		setSize(aSize);
+		setPreferredSize(aSize);
+	}
+
+	@Override
+	public void refreshComponent() {
+		revalidate();
+		repaint();
+	}
+
 }

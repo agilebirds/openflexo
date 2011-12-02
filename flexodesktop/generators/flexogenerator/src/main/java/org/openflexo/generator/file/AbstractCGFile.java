@@ -32,76 +32,68 @@ import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.rm.GenerationAvailableFileResource;
 
-
 public abstract class AbstractCGFile extends CGFile {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AbstractCGFile.class.getPackage().getName());
 
-	public AbstractCGFile(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-     }
-    
-    public AbstractCGFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
-
-    public AbstractCGFile(GenerationRepository repository, CGRepositoryFileResource resource)
-    {
-        super(repository,resource);
-    }
-
-    public GenerationAvailableFileResource getGenerationAvailableFileResource()
-    {
-    	if (getResource() instanceof GenerationAvailableFileResource) {
-    		return (GenerationAvailableFileResource)getResource();
-    	}
-    	return null;
-    }
-    
-	public IFlexoResourceGenerator getGenerator()
-	{
-		if (getGenerationAvailableFileResource() != null) 
-			return getGenerationAvailableFileResource().getGenerator();
-		return null;
+	public AbstractCGFile(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
 	}
 
-	@Override
-	public boolean isCodeGenerationAvailable()
-	{
-		return (getGenerator() != null);
+	public AbstractCGFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
 	}
 
-	public GenerationException getGenerationException()
-	{
-		if (getGenerationAvailableFileResource() != null) {
-			return (GenerationException)getGenerationAvailableFileResource().getGenerationException();
+	public AbstractCGFile(GenerationRepository repository, CGRepositoryFileResource resource) {
+		super(repository, resource);
+	}
+
+	public GenerationAvailableFileResource getGenerationAvailableFileResource() {
+		if (getResource() instanceof GenerationAvailableFileResource) {
+			return (GenerationAvailableFileResource) getResource();
 		}
 		return null;
 	}
-	
+
+	public IFlexoResourceGenerator getGenerator() {
+		if (getGenerationAvailableFileResource() != null) {
+			return getGenerationAvailableFileResource().getGenerator();
+		}
+		return null;
+	}
+
 	@Override
-	public boolean hasGenerationErrors()
-	{
-		if (getMarkedAsDoNotGenerate())
+	public boolean isCodeGenerationAvailable() {
+		return (getGenerator() != null);
+	}
+
+	public GenerationException getGenerationException() {
+		if (getGenerationAvailableFileResource() != null) {
+			return (GenerationException) getGenerationAvailableFileResource().getGenerationException();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean hasGenerationErrors() {
+		if (getMarkedAsDoNotGenerate()) {
 			return false;
+		}
 		hasGenerationErrors = (getGenerationException() != null);
 		return hasGenerationErrors;
 	}
 
 	@Override
-	public void writeModifiedFile() throws SaveResourceException, FlexoException
-	{
+	public void writeModifiedFile() throws SaveResourceException, FlexoException {
 		// Before to write the file, ensure generation is up-to-date
-/*		if (getGenerator() != null) {
-			if (logger.isLoggable(Level.FINE))
-				logger.fine("Running generator if required");
-			getGenerator().generate(false);
-		}*/
-		
+		/*		if (getGenerator() != null) {
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Running generator if required");
+					getGenerator().generate(false);
+				}*/
+
 		// GPO: The above code has been commented. Unless we find a very good reason for calling the code above, we should not do this. Why?
 		// Well because! No, because when we call generate(false), we may trigger the generator to run again. So far it ain't too bad,
 		// except that when the generator is done, it sends a notification CGContentRegenerated and it causes the flag "mark as merged" to
@@ -110,30 +102,30 @@ public abstract class AbstractCGFile extends CGFile {
 		// the flag markAsMerged back to false
 		super.writeModifiedFile();
 	}
-	
-/*	public void dismissWhenUnchanged()
-	{
-		// Before to write the file, ensure generation is up-to-date
-		if (getGenerator() != null) {
-			if (logger.isLoggable(Level.FINE))
-				logger.fine("Running generator if required");
-			try {
-				getGenerator().generate(false);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
+
+	/*	public void dismissWhenUnchanged()
+		{
+			// Before to write the file, ensure generation is up-to-date
+			if (getGenerator() != null) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Running generator if required");
+				try {
+					getGenerator().generate(false);
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
 			}
+			super.dismissWhenUnchanged();
 		}
-		super.dismissWhenUnchanged();
-	}
-*/	
+	*/
 	@Override
-	public boolean needsMemoryGeneration()
-	{
-		if(getMarkedAsDoNotGenerate())return false;
-		//return (getGenerator() != null && getGenerator().needsGeneration());
+	public boolean needsMemoryGeneration() {
+		if (getMarkedAsDoNotGenerate()) {
+			return false;
+		}
+		// return (getGenerator() != null && getGenerator().needsGeneration());
 		return getResource().needsMemoryGeneration();
 	}
-
 
 }

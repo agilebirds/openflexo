@@ -26,54 +26,49 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.sgmodule.view.menu.SGMenuBar;
 
-
 /**
  * Selection manager dedicated to this module
  * 
  * @author sylvain
  */
-public class SGSelectionManager extends SelectionManager
-{
+public class SGSelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(SGSelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(SGSelectionManager.class.getPackage().getName());
 
-    public SGSelectionManager(SGController controller)
-    {
-        super(controller);
-        SGMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new SGClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        _contextualMenuManager = new SGContextualMenuManager(this,controller.getEditor(),controller);
-   }
+	public SGSelectionManager(SGController controller) {
+		super(controller);
+		SGMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new SGClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		_contextualMenuManager = new SGContextualMenuManager(this, controller.getEditor(), controller);
+	}
 
-    public SGController getSGController()
-    {
-        return (SGController) getController();
-    }
+	public SGController getSGController() {
+		return (SGController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in this module");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("'Select All' not implemented yet in this module");
+		}
+		return false;
+	}
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoModelObject
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getSGController().getCurrentDisplayedObjectAsModuleView();
-    }
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoModelObject
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getSGController().getCurrentDisplayedObjectAsModuleView();
+	}
 
-    @Override
-	public FlexoModelObject getPasteContext()
-    {
-        // TODO please implement this
-        return null;
-    }
+	@Override
+	public FlexoModelObject getPasteContext() {
+		// TODO please implement this
+		return null;
+	}
 
 }

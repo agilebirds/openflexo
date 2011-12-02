@@ -19,130 +19,129 @@
  */
 package org.openflexo.foundation.ie.util;
 
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-import org.openflexo.localization.FlexoLocalization;
+public enum HyperlinkActionType implements StringConvertable {
 
-public enum HyperlinkActionType implements StringConvertable
-{
-	
-	FLEXO_ACTION("FLEXO_ACTION","flexo_action"),
-	DISPLAY_ACTION("DISPLAY_ACTION","display_action");	
-	
+	FLEXO_ACTION("FLEXO_ACTION", "flexo_action"), DISPLAY_ACTION("DISPLAY_ACTION", "display_action");
+
 	private final String name;
 	private final String localizedKey;
 
-	public String getName(){
+	public String getName() {
 		return name;
 	}
-	public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(localizedKey);
-    }
-	HyperlinkActionType(String _name, String _locKey){
+
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(localizedKey);
+	}
+
+	HyperlinkActionType(String _name, String _locKey) {
 		this.name = _name;
 		this.localizedKey = _locKey;
 	}
-	
+
 	@Override
 	public Converter getConverter() {
 		return hyperlinkActionTypeConverter;
 	}
-	
-	public static final StringEncoder.EnumerationConverter<HyperlinkActionType> hyperlinkActionTypeConverter = new StringEncoder.EnumerationConverter<HyperlinkActionType>(HyperlinkActionType.class,"getName");
 
-/*
-    private static final Logger logger = FlexoLogger.getLogger(HyperlinkActionType.class.getPackage().getName());
- 
-    public static final HyperlinkActionType FLEXO_ACTION = new FlexoActionHyperlinkActionType();
-    
-    public static final HyperlinkActionType DISPLAY_ACTION = new DisplayActionHyperlinkActionType();
-    
-    public abstract String getName();
-    
-    public abstract String getLocalizedName();
-    
-    private final Vector<HyperlinkActionType> _availableValues = new Vector<HyperlinkActionType>();
-    
-    public static HyperlinkActionType get(String typeName)
-    {
-        for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
-            HyperlinkActionType temp = (HyperlinkActionType) e.nextElement();
-            if (temp.getName().equals(typeName)) {
-                return temp;
-            }
-        }
+	public static final StringEncoder.EnumerationConverter<HyperlinkActionType> hyperlinkActionTypeConverter = new StringEncoder.EnumerationConverter<HyperlinkActionType>(
+			HyperlinkActionType.class, "getName");
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find HyperlinkType named " + typeName);
-        return null;
-    }
+	/*
+	    private static final Logger logger = FlexoLogger.getLogger(HyperlinkActionType.class.getPackage().getName());
+	 
+	    public static final HyperlinkActionType FLEXO_ACTION = new FlexoActionHyperlinkActionType();
+	    
+	    public static final HyperlinkActionType DISPLAY_ACTION = new DisplayActionHyperlinkActionType();
+	    
+	    public abstract String getName();
+	    
+	    public abstract String getLocalizedName();
+	    
+	    private final Vector<HyperlinkActionType> _availableValues = new Vector<HyperlinkActionType>();
+	    
+	    public static HyperlinkActionType get(String typeName)
+	    {
+	        for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
+	            HyperlinkActionType temp = (HyperlinkActionType) e.nextElement();
+	            if (temp.getName().equals(typeName)) {
+	                return temp;
+	            }
+	        }
 
-    public static StringEncoder.Converter hyperlinkActionTypeConverter = new Converter(HyperlinkActionType.class) {
+	        if (logger.isLoggable(Level.WARNING))
+	            logger.warning("Could not find HyperlinkType named " + typeName);
+	        return null;
+	    }
 
-        public Object convertFromString(String value)
-        {
-            return get(value);
-        }
+	    public static StringEncoder.Converter hyperlinkActionTypeConverter = new Converter(HyperlinkActionType.class) {
 
-        public String convertToString(Object value)
-        {
-            return ((HyperlinkActionType) value).getName();
-        }
+	        public Object convertFromString(String value)
+	        {
+	            return get(value);
+	        }
 
-    };
-    
-    public static class FlexoActionHyperlinkActionType extends HyperlinkActionType{
+	        public String convertToString(Object value)
+	        {
+	            return ((HyperlinkActionType) value).getName();
+	        }
 
-        FlexoActionHyperlinkActionType(){}
-        
-        public String getName()
-        {
-            return "FLEXO_ACTION";
-        }
+	    };
+	    
+	    public static class FlexoActionHyperlinkActionType extends HyperlinkActionType{
 
-        public String getLocalizedName()
-        {
-            return FlexoLocalization.localizedForKey("flexo_action");
-        }
-        
-    }
-    
-    public static class DisplayActionHyperlinkActionType extends HyperlinkActionType{
+	        FlexoActionHyperlinkActionType(){}
+	        
+	        public String getName()
+	        {
+	            return "FLEXO_ACTION";
+	        }
 
-        DisplayActionHyperlinkActionType(){}
-        
-        public String getName()
-        {
-            return "DISPLAY_ACTION";
-        }
+	        public String getLocalizedName()
+	        {
+	            return FlexoLocalization.localizedForKey("flexo_action");
+	        }
+	        
+	    }
+	    
+	    public static class DisplayActionHyperlinkActionType extends HyperlinkActionType{
 
-        public String getLocalizedName()
-        {
-            return FlexoLocalization.localizedForKey("display_action");
-        }
-        
-    }
-    
-    public static Vector availableValues()
-    {
-        return FLEXO_ACTION.getAvailableValues();
-    }
-    
-    public Vector getAvailableValues()
-    {
-        if (_availableValues.size()==0){
-            _availableValues.add(FLEXO_ACTION);
-            _availableValues.add(DISPLAY_ACTION);
-        }
-        return _availableValues;
-    }
-    
-    public Converter getConverter()
-    {
-        return hyperlinkActionTypeConverter;
-    }
-    */
+	        DisplayActionHyperlinkActionType(){}
+	        
+	        public String getName()
+	        {
+	            return "DISPLAY_ACTION";
+	        }
+
+	        public String getLocalizedName()
+	        {
+	            return FlexoLocalization.localizedForKey("display_action");
+	        }
+	        
+	    }
+	    
+	    public static Vector availableValues()
+	    {
+	        return FLEXO_ACTION.getAvailableValues();
+	    }
+	    
+	    public Vector getAvailableValues()
+	    {
+	        if (_availableValues.size()==0){
+	            _availableValues.add(FLEXO_ACTION);
+	            _availableValues.add(DISPLAY_ACTION);
+	        }
+	        return _availableValues;
+	    }
+	    
+	    public Converter getConverter()
+	    {
+	        return hyperlinkActionTypeConverter;
+	    }
+	    */
 }

@@ -36,49 +36,44 @@ public class ImportWsdlInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ImportWsdlInitializer(WSEControllerActionInitializer actionInitializer)
-	{
-		super(ImportWsdl.actionType,actionInitializer);
+	ImportWsdlInitializer(WSEControllerActionInitializer actionInitializer) {
+		super(ImportWsdl.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WSEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WSEControllerActionInitializer)super.getControllerActionInitializer();
+	protected WSEControllerActionInitializer getControllerActionInitializer() {
+		return (WSEControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<ImportWsdl> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ImportWsdl> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportWsdl>() {
-            @Override
-			public boolean run(ActionEvent e, ImportWsdl action)
-            {
-                JFileChooser chooser = new JFileChooser("Please select an .wsdl file");
-                int returnVal = chooser.showOpenDialog(null);
-                if (returnVal != JFileChooser.APPROVE_OPTION)
-                    return false;
+			@Override
+			public boolean run(ActionEvent e, ImportWsdl action) {
+				JFileChooser chooser = new JFileChooser("Please select an .wsdl file");
+				int returnVal = chooser.showOpenDialog(null);
+				if (returnVal != JFileChooser.APPROVE_OPTION) {
+					return false;
+				}
 
-                action.setWsdlFile(chooser.getSelectedFile());
-                String newWSName = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_name_of_the_web_service"));
-                action.setNewWebServiceName(newWSName);
-                action.setProject(getProject());
-                return true;
-            }
-        };
+				action.setWsdlFile(chooser.getSelectedFile());
+				String newWSName = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_name_of_the_web_service"));
+				action.setNewWebServiceName(newWSName);
+				action.setProject(getProject());
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<ImportWsdl> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<ImportWsdl> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportWsdl>() {
-            @Override
-			public boolean run(ActionEvent e, ImportWsdl action)
-            {
-                logger.info("finalize WS");
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, ImportWsdl action) {
+				logger.info("finalize WS");
+				return true;
+			}
+		};
 	}
 
-  }
+}

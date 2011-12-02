@@ -28,51 +28,45 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 
-
 /**
- * Browser element representing a process not used in the parent process petri
- * graph
- *
+ * Browser element representing a process not used in the parent process petri graph
+ * 
  * @author dvanvyve
- *
+ * 
  */
-public class ServiceInterfaceElement extends BrowserElement
-{
+public class ServiceInterfaceElement extends BrowserElement {
 
-    public ServiceInterfaceElement(ServiceInterface serviceInterface, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(serviceInterface, BrowserElementType.SERVICE_INTERFACE, browser, parent);
-    }
+	public ServiceInterfaceElement(ServiceInterface serviceInterface, ProjectBrowser browser, BrowserElement parent) {
+		super(serviceInterface, BrowserElementType.SERVICE_INTERFACE, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // Adding operations
-        Vector operations = getServiceInterface().getOperations();
-        for (Enumeration e = operations.elements(); e.hasMoreElements();) {
-            addToChilds((ServiceOperation) e.nextElement());
-        }
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// Adding operations
+		Vector operations = getServiceInterface().getOperations();
+		for (Enumeration e = operations.elements(); e.hasMoreElements();) {
+			addToChilds((ServiceOperation) e.nextElement());
+		}
+	}
 
-    protected ServiceInterface getServiceInterface()
-    {
-        return (ServiceInterface) getObject();
-    }
-    @Override
-	public String getName()
-    {
-        return getServiceInterface().getName();
-    }
+	protected ServiceInterface getServiceInterface() {
+		return (ServiceInterface) getObject();
+	}
 
-   /* public boolean isNameEditable()
-    {
-        return true;
-    }
+	@Override
+	public String getName() {
+		return getServiceInterface().getName();
+	}
 
-    public void setName(String aName)
-    {
-        getServiceInterface().setName(aName);
-    }
-*/
+	/* public boolean isNameEditable()
+	 {
+	     return true;
+	 }
+
+	 public void setName(String aName)
+	 {
+	     getServiceInterface().setName(aName);
+	 }
+	*/
 
 }

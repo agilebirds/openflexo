@@ -31,82 +31,71 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Widget allowing to select a FlexoRole
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class FIBProcessSelector extends FIBModelObjectSelector<FlexoProcess>
-{
-    @SuppressWarnings("hiding")
+public class FIBProcessSelector extends FIBModelObjectSelector<FlexoProcess> {
+	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBProcessSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ProcessSelector.fib");
 
-	public FIBProcessSelector(FlexoProcess editedObject)
-    {
-        super(editedObject);
-    }
-	
-    @Override
-	protected CustomFIBController makeCustomFIBController(FIBComponent fibComponent)
-    {
-    	return new CustomFIBController(fibComponent,this);
-    }
-    
+	public FIBProcessSelector(FlexoProcess editedObject) {
+		super(editedObject);
+	}
+
+	@Override
+	protected CustomFIBController makeCustomFIBController(FIBComponent fibComponent) {
+		return new CustomFIBController(fibComponent, this);
+	}
+
 	/**
 	 * Override when required
 	 */
 	@Override
-	protected Enumeration<FlexoProcess> getAllSelectableValues()
-	{
-		if (getProject() != null)
+	protected Enumeration<FlexoProcess> getAllSelectableValues() {
+		if (getProject() != null) {
 			return getProject().getWorkflow().getSortedProcesses();
+		}
 		return null;
 	}
-	
+
 	@Override
-	protected boolean isAcceptableValue(FlexoModelObject o)
-	{
+	protected boolean isAcceptableValue(FlexoModelObject o) {
 		return super.isAcceptableValue(o);
 	}
-	
+
 	@Override
-	public File getFIBFile()
-	{
+	public File getFIBFile() {
 		return FIB_FILE;
 	}
 
 	@Override
-	public Class<FlexoProcess> getRepresentedType()
-	{
+	public Class<FlexoProcess> getRepresentedType() {
 		return FlexoProcess.class;
 	}
 
 	@Override
-	public String renderedString(FlexoProcess editedObject) 
-	{
-		if (editedObject != null)
+	public String renderedString(FlexoProcess editedObject) {
+		if (editedObject != null) {
 			return editedObject.getName();
+		}
 		return "";
 	}
 
-	public static class CustomFIBController extends FIBModelObjectSelector.CustomFIBController
-	{
-		public CustomFIBController(FIBComponent component, FIBProcessSelector selector)
-		{
-			super(component,selector);
+	public static class CustomFIBController extends FIBModelObjectSelector.CustomFIBController {
+		public CustomFIBController(FIBComponent component, FIBProcessSelector selector) {
+			super(component, selector);
 		}
 
-	    public Icon getIconForProcess(FlexoProcess process)
-	    {
-	    	return WKFIconLibrary.PROCESS_ICON;
-	    }
-	
-	}
+		public Icon getIconForProcess(FlexoProcess process) {
+			return WKFIconLibrary.PROCESS_ICON;
+		}
 
+	}
 
 	/*public static void main(String[] args)
 	{

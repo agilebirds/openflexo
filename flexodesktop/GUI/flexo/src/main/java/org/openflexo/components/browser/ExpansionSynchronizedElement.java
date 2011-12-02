@@ -23,22 +23,21 @@ import javax.swing.tree.TreePath;
 
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public interface ExpansionSynchronizedElement
-{
+public interface ExpansionSynchronizedElement {
 
-    public boolean isExpansionSynchronizedWithData();
+	public boolean isExpansionSynchronizedWithData();
 
-    public boolean isExpanded();
+	public boolean isExpanded();
 
-    public void expand();
+	public void expand();
 
-    public void collapse();
+	public void collapse();
 
-    public boolean requiresExpansionFor(BrowserElement next);
+	public boolean requiresExpansionFor(BrowserElement next);
 
-    public TreePath getTreePath();
+	public TreePath getTreePath();
 }

@@ -26,18 +26,15 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * Activity related of a set of sub-processes executed in paralell or sequential
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class MultipleInstanceSubProcessNode extends SubProcessNode
-{
+public class MultipleInstanceSubProcessNode extends SubProcessNode {
 
-	private static final Logger logger = Logger.getLogger(MultipleInstanceSubProcessNode.class.getPackage()
-			.getName());
+	private static final Logger logger = Logger.getLogger(MultipleInstanceSubProcessNode.class.getPackage().getName());
 
 	// isSequential == false -> FORK, isSequential == true -> LOOP
 	protected boolean isSequential = false;
@@ -50,8 +47,7 @@ public class MultipleInstanceSubProcessNode extends SubProcessNode
 	/**
 	 * Constructor used during deserialization
 	 */
-	public MultipleInstanceSubProcessNode(FlexoProcessBuilder builder)
-	{
+	public MultipleInstanceSubProcessNode(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -59,53 +55,45 @@ public class MultipleInstanceSubProcessNode extends SubProcessNode
 	/**
 	 * Default constructor
 	 */
-	public MultipleInstanceSubProcessNode(FlexoProcess process)
-	{
+	public MultipleInstanceSubProcessNode(FlexoProcess process) {
 		super(process);
 	}
 
 	/**
 	 * Dynamic constructor with ServiceInterface...
 	 */
-	public MultipleInstanceSubProcessNode(FlexoProcess process, ServiceInterface _interface)
-	{
+	public MultipleInstanceSubProcessNode(FlexoProcess process, ServiceInterface _interface) {
 		this(process);
 		setServiceInterface(_interface);
 	}
 
 	/**
 	 * Overrides delete
-	 *
+	 * 
 	 * @see org.openflexo.foundation.wkf.node.AbstractActivityNode#delete()
 	 */
 	@Override
-	public final void delete()
-	{
+	public final void delete() {
 		super.delete();
 		deleteObservers();
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.MULTIPLE_INSTANCE_SUB_PROCESS_NODE_INSPECTOR;
 	}
 
-	public boolean getIsSequential() 
-	{
+	public boolean getIsSequential() {
 		return isSequential;
 	}
 
-	public void setIsSequential(boolean isSequential) 
-	{
+	public void setIsSequential(boolean isSequential) {
 		this.isSequential = isSequential;
 	}
 
 	@Override
-	public boolean mightHaveOperationPetriGraph() 
-	{
+	public boolean mightHaveOperationPetriGraph() {
 		return true;
 	}
 
 }
-

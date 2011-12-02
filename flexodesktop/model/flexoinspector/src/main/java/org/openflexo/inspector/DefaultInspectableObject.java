@@ -25,20 +25,17 @@ import java.util.Vector;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.kvc.KVCObservableObject;
 
-
 public abstract class DefaultInspectableObject extends KVCObservableObject implements InspectableObject {
 
 	private HashSet<InspectorObserver> _inspectorObservers = new HashSet<InspectorObserver>();
 
 	@Override
-	public void deleteInspectorObserver(InspectorObserver obs)
-	{
+	public void deleteInspectorObserver(InspectorObserver obs) {
 		_inspectorObservers.remove(obs);
 	}
 
 	@Override
-	public void addInspectorObserver(InspectorObserver obs)
-	{
+	public void addInspectorObserver(InspectorObserver obs) {
 		if (obs == null) {
 			throw new NullPointerException();
 		}
@@ -48,8 +45,7 @@ public abstract class DefaultInspectableObject extends KVCObservableObject imple
 	}
 
 	@Override
-	public void notifyObservers(Object arg)
-	{
+	public void notifyObservers(Object arg) {
 		boolean hasChanged = hasChanged();
 
 		super.notifyObservers(arg);
@@ -65,27 +61,24 @@ public abstract class DefaultInspectableObject extends KVCObservableObject imple
 		// Notify all Inspector observers
 		if (arg instanceof InspectableModification) {
 			for (int i = arrLocal.length - 1; i >= 0; i--) {
-				((InspectorObserver) arrLocal[i]).update((InspectableObject) this, (InspectableModification)arg);
+				((InspectorObserver) arrLocal[i]).update((InspectableObject) this, (InspectableModification) arg);
 			}
 		}
 	}
 
 	@Override
-	public synchronized void deleteObservers()
-	{
+	public synchronized void deleteObservers() {
 		super.deleteObservers();
 		_inspectorObservers.clear();
 	}
 
 	@Override
-	public int countObservers()
-	{
+	public int countObservers() {
 		return super.countObservers() + _inspectorObservers.size();
 	}
 
 	@Override
-	public boolean isDeleted()
-	{
+	public boolean isDeleted() {
 		return false;
 	}
 
@@ -93,8 +86,7 @@ public abstract class DefaultInspectableObject extends KVCObservableObject imple
 	public abstract String getInspectorName();
 
 	@Override
-	public String getInspectorTitle()
-	{
+	public String getInspectorTitle() {
 		return null;
 	}
 

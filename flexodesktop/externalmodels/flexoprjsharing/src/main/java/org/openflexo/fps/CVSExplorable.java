@@ -25,19 +25,19 @@ import java.util.Vector;
 public interface CVSExplorable {
 
 	public CVSRepository getCVSRepository();
-	
+
 	public CVSExplorable getParent();
-	
+
 	public CVSExplorer getCVSExplorer(CVSExplorerListener explorerListener);
-	
+
 	public Vector<CVSModule> getCVSModules();
-	
+
 	public void notifyWillExplore();
-	
+
 	public void notifyHasExplored();
-	
+
 	public File getRepositoryExploringDirectory();
-	
+
 	public CVSExplorer explore(CVSExplorerListener explorerListener);
 
 }

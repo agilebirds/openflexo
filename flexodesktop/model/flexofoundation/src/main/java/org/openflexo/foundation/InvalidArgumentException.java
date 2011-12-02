@@ -21,19 +21,16 @@ package org.openflexo.foundation;
 
 import java.util.logging.Logger;
 
-
 public class InvalidArgumentException extends FlexoException {
 
 	private static final Logger logger = Logger.getLogger(InvalidArgumentException.class.getPackage().getName());
 
-	public InvalidArgumentException(String message, String localizationKey)
-	{
+	public InvalidArgumentException(String message, String localizationKey) {
 		super(message, localizationKey);
 	}
 
-	public InvalidArgumentException(String message)
-	{
+	public InvalidArgumentException(String message) {
 		super(message, "invalid_argument_exception_see_logs_for_details");
-		logger.warning("InvalidArgumentException: "+message);
+		logger.warning("InvalidArgumentException: " + message);
 	}
 }

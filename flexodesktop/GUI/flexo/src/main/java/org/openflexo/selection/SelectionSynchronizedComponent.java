@@ -23,84 +23,85 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
- * Implemented by components fully-synchronized with a SelectionManager
- * This means that this component, once registered in a SelectionManager,
- * reveive synchronization request, and can send it's own selection requests,
- * so that selection and the representation given by current component are
- * synchronized.
+ * Implemented by components fully-synchronized with a SelectionManager This means that this component, once registered in a
+ * SelectionManager, reveive synchronization request, and can send it's own selection requests, so that selection and the representation
+ * given by current component are synchronized.
  * 
  * @author sguerin
  */
 public interface SelectionSynchronizedComponent extends SelectionListener {
 
-    /**
-     * Returns the SelectionManager whose this component is connected to
-     * 
-     * @return the SelectionManager whose this component is connected to
-     */
-    public SelectionManager getSelectionManager();
-    
-    /**
-     * Return the current selection, as a Vector of FlexoModelObject
-     * 
-     * @return a Vector of FlexoModelObject
-     */
-    public Vector getSelection();
-    
-    /**
-     * Reset selection
-     */
-    public void resetSelection();
-    
-    /**
-     * Add supplied object to current selection
-     * 
-     * @param object: the object to add to selection
-     */
-    public void addToSelected(FlexoModelObject object);
-    
-    /**
-     * Remove supplied object from current selection
-     * 
-     * @param object: the object to remove from selection
-     */
-    public void removeFromSelected(FlexoModelObject object);
-    
-    /**
-     * Add supplied objects to current selection
-     * 
-     * @param objects: objects to add to selection, as a Vector of FlexoModelObject
-     */
-    public void addToSelected(Vector<? extends FlexoModelObject> objects);
-    
-    /**
-     * Remove supplied objects from current selection
-     * 
-      * @param objects: objects to remove from selection, as a Vector of FlexoModelObject
-     */
-    public void removeFromSelected(Vector<? extends FlexoModelObject> objects);
-    
-    /**
-     * Sets supplied vector of FlexoModelObjects to be the current Selection
-     * 
-     * @param objects: the object to set for current selection, as a Vector of FlexoModelObject
-     */
-    public void setSelectedObjects(Vector<? extends FlexoModelObject> objects);
-    
-    /**
-     * Return currently focused object
-     */
-    public FlexoModelObject getFocusedObject();
+	/**
+	 * Returns the SelectionManager whose this component is connected to
+	 * 
+	 * @return the SelectionManager whose this component is connected to
+	 */
+	public SelectionManager getSelectionManager();
 
-    /**
-     * Return boolean indicating if supplied object could be represented
-     * in current component
-     * 
-     * @param anObject
-     * @return a boolean
-     */
-    public boolean mayRepresents (FlexoModelObject anObject);
+	/**
+	 * Return the current selection, as a Vector of FlexoModelObject
+	 * 
+	 * @return a Vector of FlexoModelObject
+	 */
+	public Vector getSelection();
+
+	/**
+	 * Reset selection
+	 */
+	public void resetSelection();
+
+	/**
+	 * Add supplied object to current selection
+	 * 
+	 * @param object
+	 *            : the object to add to selection
+	 */
+	public void addToSelected(FlexoModelObject object);
+
+	/**
+	 * Remove supplied object from current selection
+	 * 
+	 * @param object
+	 *            : the object to remove from selection
+	 */
+	public void removeFromSelected(FlexoModelObject object);
+
+	/**
+	 * Add supplied objects to current selection
+	 * 
+	 * @param objects
+	 *            : objects to add to selection, as a Vector of FlexoModelObject
+	 */
+	public void addToSelected(Vector<? extends FlexoModelObject> objects);
+
+	/**
+	 * Remove supplied objects from current selection
+	 * 
+	 * @param objects
+	 *            : objects to remove from selection, as a Vector of FlexoModelObject
+	 */
+	public void removeFromSelected(Vector<? extends FlexoModelObject> objects);
+
+	/**
+	 * Sets supplied vector of FlexoModelObjects to be the current Selection
+	 * 
+	 * @param objects
+	 *            : the object to set for current selection, as a Vector of FlexoModelObject
+	 */
+	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects);
+
+	/**
+	 * Return currently focused object
+	 */
+	public FlexoModelObject getFocusedObject();
+
+	/**
+	 * Return boolean indicating if supplied object could be represented in current component
+	 * 
+	 * @param anObject
+	 * @return a boolean
+	 */
+	public boolean mayRepresents(FlexoModelObject anObject);
 
 }

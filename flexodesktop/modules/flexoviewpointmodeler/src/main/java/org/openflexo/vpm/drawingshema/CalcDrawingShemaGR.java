@@ -33,63 +33,52 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 
-
-public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDrawingShema> implements GraphicalFlexoObserver, CalcDrawingShemaConstants {
+public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDrawingShema> implements GraphicalFlexoObserver,
+		CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingShemaGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public CalcDrawingShemaGR()
-	{
+	public CalcDrawingShemaGR() {
 		this(null);
 	}
 
-	public CalcDrawingShemaGR(CalcDrawingShemaRepresentation aDrawing) 
-	{
+	public CalcDrawingShemaGR(CalcDrawingShemaRepresentation aDrawing) {
 		super(aDrawing);
 
-		if (aDrawing != null 
-				&& aDrawing.getShema() != null 
-				&& aDrawing.getShema().getGraphicalRepresentation() != null) {
-			setsWith((GraphicalRepresentation<?>)aDrawing.getShema().getGraphicalRepresentation());
+		if (aDrawing != null && aDrawing.getShema() != null && aDrawing.getShema().getGraphicalRepresentation() != null) {
+			setsWith((GraphicalRepresentation<?>) aDrawing.getShema().getGraphicalRepresentation());
 		}
 
 		addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl());
 
-		if (aDrawing != null 
-				&& aDrawing.getShema() != null) { 	
+		if (aDrawing != null && aDrawing.getShema() != null) {
 			aDrawing.getShema().setGraphicalRepresentation(this);
 			aDrawing.getShema().addObserver(this);
 		}
 
 	}
 
-
 	@Override
-	public CalcDrawingShemaRepresentation getDrawing() 
-	{
-		return (CalcDrawingShemaRepresentation)super.getDrawing();
+	public CalcDrawingShemaRepresentation getDrawing() {
+		return (CalcDrawingShemaRepresentation) super.getDrawing();
 	}
-	
-	public ExampleDrawingShema getShema()
-	{
-		if (getDrawing() != null)
+
+	public ExampleDrawingShema getShema() {
+		if (getDrawing() != null) {
 			return getDrawing().getShema();
+		}
 		return null;
 	}
 
-
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getShema()) {
-			//logger.info("Notified "+dataModification);
-			if ((dataModification instanceof CalcDrawingShapeInserted)
-					|| (dataModification instanceof CalcDrawingShapeRemoved)
+			// logger.info("Notified "+dataModification);
+			if ((dataModification instanceof CalcDrawingShapeInserted) || (dataModification instanceof CalcDrawingShapeRemoved)
 					|| (dataModification instanceof CalcDrawingConnectorInserted)
 					|| (dataModification instanceof CalcDrawingConnectorRemoved)) {
 				getDrawing().updateGraphicalObjectsHierarchy();
@@ -98,17 +87,12 @@ public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDr
 	}
 
 	@Override
-	public void notifyObservers(Object arg)
-	{
+	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification
-				&& ((FGENotification)arg).isModelNotification()
-				&& getDrawing() != null 
-				&& !getDrawing().ignoreNotifications()
-				&& getShema() != null
-				&& !getShema().ignoreNotifications())
+		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+				&& !getDrawing().ignoreNotifications() && getShema() != null && !getShema().ignoreNotifications()) {
 			getShema().setChanged();
+		}
 	}
-	
-	
+
 }

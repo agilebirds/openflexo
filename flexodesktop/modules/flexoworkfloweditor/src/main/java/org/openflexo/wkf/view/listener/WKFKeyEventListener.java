@@ -24,35 +24,30 @@ import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.listener.SelectionManagingKeyEventListener;
 import org.openflexo.wkf.controller.WKFController;
 
-
 /**
  * Key events listener used in the context of Workflow Editor
  * 
  * @author sguerin
  */
-public class WKFKeyEventListener extends SelectionManagingKeyEventListener
-{
+public class WKFKeyEventListener extends SelectionManagingKeyEventListener {
 
-    public WKFKeyEventListener(WKFController controller)
-    {
-        super(controller);
-    }
-
-    @Override
-    public WKFController getController() {
-    	return (WKFController)super.getController();
-    }
-    
-    @Override
-	protected SelectionManager getSelectionManager()
-    {
-        return getController().getWKFSelectionManager();
-    }
+	public WKFKeyEventListener(WKFController controller) {
+		super(controller);
+	}
 
 	@Override
-	public FlexoEditor getEditor() 
-	{
+	public WKFController getController() {
+		return (WKFController) super.getController();
+	}
+
+	@Override
+	protected SelectionManager getSelectionManager() {
+		return getController().getWKFSelectionManager();
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
 		return getController().getEditor();
 	}
-	
+
 }

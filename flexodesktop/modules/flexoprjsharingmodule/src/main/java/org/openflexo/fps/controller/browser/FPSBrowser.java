@@ -32,15 +32,13 @@ import org.openflexo.fps.FlexoAuthentificationException;
 import org.openflexo.fps.action.FlexoUnknownHostException;
 import org.openflexo.fps.controller.FPSController;
 
-
 /**
  * Browser for Code Generator module
  * 
  * @author sguerin
  * 
  */
-public abstract class FPSBrowser extends ConfigurableProjectBrowser implements FlexoObserver, CVSExplorerListener
-{
+public abstract class FPSBrowser extends ConfigurableProjectBrowser implements FlexoObserver, CVSExplorerListener {
 
 	private static final Logger logger = Logger.getLogger(FPSBrowser.class.getPackage().getName());
 
@@ -50,31 +48,27 @@ public abstract class FPSBrowser extends ConfigurableProjectBrowser implements F
 	// ==========================================================================
 
 	private FPSController _controller;
-	
+
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-    public FPSBrowser(BrowserConfiguration configuration, FPSController controller)
-    {
-        super(configuration, controller.getFPSSelectionManager());
+	public FPSBrowser(BrowserConfiguration configuration, FPSController controller) {
+		super(configuration, controller.getFPSSelectionManager());
 		_controller = controller;
-   }
+	}
 
-    public FPSBrowser(BrowserConfiguration configuration)
-    {
-        super(configuration);
-  }
+	public FPSBrowser(BrowserConfiguration configuration) {
+		super(configuration);
+	}
 
-	public FPSController getController() 
-	{
+	public FPSController getController() {
 		return _controller;
 	}
 
 	@Override
-	public void exploringFailed(CVSExplorable explorable, CVSExplorer explorer, Exception exception) 
-	{
+	public void exploringFailed(CVSExplorable explorable, CVSExplorer explorer, Exception exception) {
 		if (exception instanceof FlexoAuthentificationException) {
 			getController().handleAuthenticationException((FlexoAuthentificationException) exception);
 		} else if (exception instanceof FlexoUnknownHostException) {
@@ -83,10 +77,9 @@ public abstract class FPSBrowser extends ConfigurableProjectBrowser implements F
 	}
 
 	@Override
-	public void exploringSucceeded(CVSExplorable explorable, CVSExplorer explorer) 
-	{
-		logger.info("Exploring "+explorable+" was successfull");
-		focusOn((FlexoModelObject)explorer.getExplorable());
+	public void exploringSucceeded(CVSExplorable explorable, CVSExplorer explorer) {
+		logger.info("Exploring " + explorable + " was successfull");
+		focusOn((FlexoModelObject) explorer.getExplorable());
 	}
-	
+
 }

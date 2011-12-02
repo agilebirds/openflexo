@@ -174,8 +174,8 @@ public class FlexoHelp extends Observable {
 		}
 		if (directory == null) {
 			for (int i = 0; i < allFiles.length; i++) {
-				if (allFiles[i].getName().endsWith(".helpset") && (directory == null || allFiles[i].lastModified() > directory
-						.lastModified())) {
+				if (allFiles[i].getName().endsWith(".helpset")
+						&& (directory == null || allFiles[i].lastModified() > directory.lastModified())) {
 					directory = allFiles[i];
 				}
 			}

@@ -31,57 +31,47 @@ import org.openflexo.icon.FPSIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MarkAsMergedFilesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MarkAsMergedFilesInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(MarkAsMergedFiles.actionType,actionInitializer);
+	MarkAsMergedFilesInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(MarkAsMergedFiles.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<MarkAsMergedFiles> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MarkAsMergedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<MarkAsMergedFiles>() {
-            @Override
-			public boolean run(ActionEvent e, MarkAsMergedFiles action)
-            {
-     			return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, MarkAsMergedFiles action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<MarkAsMergedFiles> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<MarkAsMergedFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MarkAsMergedFiles>() {
-            @Override
-			public boolean run(ActionEvent e, MarkAsMergedFiles action)
-            {
-     			return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, MarkAsMergedFiles action) {
+				return true;
+			}
+		};
 	}
 
-    	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return FPSIconLibrary.FPS_MARK_AS_MERGED_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return FPSIconLibrary.FPS_MARK_AS_MERGED_DISABLED_ICON;
 	}
-
 
 }

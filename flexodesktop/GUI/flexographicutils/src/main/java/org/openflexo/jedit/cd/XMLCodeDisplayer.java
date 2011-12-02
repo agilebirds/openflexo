@@ -23,17 +23,16 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.jedit.XMLTokenMarker;
 import org.openflexo.toolbox.FontCst;
 
-public class XMLCodeDisplayer extends JEditTextArea{
+public class XMLCodeDisplayer extends JEditTextArea {
 
-	public XMLCodeDisplayer(String text)
-	{
+	public XMLCodeDisplayer(String text) {
 		super();
 		setTokenMarker(new XMLTokenMarker());
 		painter.setEOLMarkersPainted(false);
 		painter.setInvalidLinesPainted(false);
 		setFont(FontCst.CODE_FONT);
 		setEditable(false);
-		//setElectricScroll(1000);
+		// setElectricScroll(1000);
 		setFirstLine(0);
 		setText(text);
 	}

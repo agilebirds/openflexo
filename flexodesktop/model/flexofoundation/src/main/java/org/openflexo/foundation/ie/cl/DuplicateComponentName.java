@@ -24,7 +24,7 @@ import org.openflexo.foundation.FlexoException;
 public class DuplicateComponentName extends FlexoException {
 
 	private String name;
-	
+
 	public DuplicateComponentName(String newComponentName) {
 		this.name = newComponentName;
 	}

@@ -35,8 +35,6 @@ import org.openflexo.foundation.wkf.node.OROperator;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
-import org.openflexo.wkf.swleditor.gr.ActionNodeGR;
-import org.openflexo.wkf.swleditor.gr.ActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.BeginOperationNodeGR;
 import org.openflexo.wkf.swleditor.gr.EndOperationNodeGR;
 import org.openflexo.wkf.swleditor.gr.OperationNodeGR;
@@ -48,7 +46,6 @@ import org.openflexo.wkf.swleditor.gr.OperatorInclusiveGR;
 import org.openflexo.wkf.swleditor.gr.OperatorLOOPGR;
 import org.openflexo.wkf.swleditor.gr.OperatorORGR;
 import org.openflexo.wkf.swleditor.gr.SelfExecOperationNodeGR;
-
 
 public class OperationPalette extends AbstractWKFPalette {
 
@@ -65,8 +62,8 @@ public class OperationPalette extends AbstractWKFPalette {
 		@Override
 		public boolean isContainerValid(FlexoModelObject container) {
 			return (container instanceof OperationPetriGraph
-					&& !(((OperationPetriGraph)container).getContainer() instanceof SelfExecutableNode)
-					&& !(((OperationPetriGraph)container).getContainer() instanceof LOOPOperator));
+					&& !(((OperationPetriGraph) container).getContainer() instanceof SelfExecutableNode) && !(((OperationPetriGraph) container)
+					.getContainer() instanceof LOOPOperator));
 		}
 	};
 
@@ -92,14 +89,13 @@ public class OperationPalette extends AbstractWKFPalette {
 
 	private WKFPaletteElement iNCLUSIVEOperatorElement;
 
-	public OperationPalette()
-	{
-		super(300,170,"operation");
+	public OperationPalette() {
+		super(300, 170, "operation");
 
 		normalOperationElement = makeNormalOperationElement(10, 0, 80, 40);
 		selfExecOperationElement = makeSelfExecOperationElement(110, 0);
 		beginNodeElement = makeBeginNodeElement(160, 0);
-		endNodeElement = makeEndNodeElement(210,0);
+		endNodeElement = makeEndNodeElement(210, 0);
 
 		andOperatorElement = makeANDOperatorElement(10, 60);
 		orOperatorElement = makeOROperatorElement(82, 60);
@@ -108,7 +104,7 @@ public class OperationPalette extends AbstractWKFPalette {
 
 		iNCLUSIVEOperatorElement = makeINCLUSIVEOperatorElement(46, 105);
 		eXCLUSIVEEVENTBASEDOperatorElement = makeEXCLUSIVEEVENTBASEDOperatorElement(118, 105);
-		complexOperatorElement = makeCOMPLEXOperatorElement(190,105);
+		complexOperatorElement = makeCOMPLEXOperatorElement(190, 105);
 
 		makePalettePanel();
 	}
@@ -157,159 +153,115 @@ public class OperationPalette extends AbstractWKFPalette {
 		return loopOperatorElement;
 	}
 
-	private WKFPaletteElement makeNormalOperationElement(int x, int y, int width, int height)
-	{
-		final OperationNode node = new OperationNode((FlexoProcess)null);
+	private WKFPaletteElement makeNormalOperationElement(int x, int y, int width, int height) {
+		final OperationNode node = new OperationNode((FlexoProcess) null);
 		node.setName(node.getDefaultName());
-		node.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setWidth(width,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setHeight(height,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				node,
-				new OperationNodeGR(node,null,true),
-				DROP_ON_ACTIVITY_FOR_INTERACTIVE_NODE);
+		node.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setWidth(width, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setHeight(height, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(node, new OperationNodeGR(node, null, true), DROP_ON_ACTIVITY_FOR_INTERACTIVE_NODE);
 	}
 
-	private WKFPaletteElement makeBeginNodeElement(int x, int y)
-	{
-		final OperationNode node = new OperationNode((FlexoProcess)null);
+	private WKFPaletteElement makeBeginNodeElement(int x, int y) {
+		final OperationNode node = new OperationNode((FlexoProcess) null);
 		node.setNodeType(NodeType.BEGIN);
 		node.setName(node.getDefaultName());
-		node.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setLabelX(25,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setLabelY(50,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				node,
-				new BeginOperationNodeGR(node,null,true),
-				DROP_ON_ACTIVITY);
+		node.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setLabelY(50, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(node, new BeginOperationNodeGR(node, null, true), DROP_ON_ACTIVITY);
 	}
 
-	private WKFPaletteElement makeEndNodeElement(int x, int y)
-	{
-		final OperationNode node = new OperationNode((FlexoProcess)null);
+	private WKFPaletteElement makeEndNodeElement(int x, int y) {
+		final OperationNode node = new OperationNode((FlexoProcess) null);
 		node.setNodeType(NodeType.END);
 		node.setName(node.getDefaultName());
-		node.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setLabelX(25,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setLabelY(50,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				node,
-				new EndOperationNodeGR(node,null,true),
-				DROP_ON_ACTIVITY);
+		node.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setLabelY(50, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(node, new EndOperationNodeGR(node, null, true), DROP_ON_ACTIVITY);
 	}
 
-	private WKFPaletteElement makeSelfExecOperationElement(int x, int y)
-	{
-		final SelfExecutableOperationNode node = new SelfExecutableOperationNode((FlexoProcess)null);
+	private WKFPaletteElement makeSelfExecOperationElement(int x, int y) {
+		final SelfExecutableOperationNode node = new SelfExecutableOperationNode((FlexoProcess) null);
 		node.setName("EXEC");
-		node.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setLabelX(25,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setLabelY(50,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				node,
-				new SelfExecOperationNodeGR(node,null,true),
-				DROP_ON_ACTIVITY);
+		node.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		node.setLabelY(50, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(node, new SelfExecOperationNodeGR(node, null, true), DROP_ON_ACTIVITY);
 	}
 
-	private WKFPaletteElement makeLOOPOperatorElement(int x, int y)
-	{
-		final LOOPOperator operator = new LOOPOperator((FlexoProcess)null);
+	private WKFPaletteElement makeLOOPOperatorElement(int x, int y) {
+		final LOOPOperator operator = new LOOPOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelX(28,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelY(55,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorLOOPGR(operator,null,true),
-				DROP_ON_ACTIVITY);
+		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelX(28, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(operator, new OperatorLOOPGR(operator, null, true), DROP_ON_ACTIVITY);
 	}
 
-	private WKFPaletteElement makeANDOperatorElement(int x, int y)
-	{
-		final ANDOperator operator = new ANDOperator((FlexoProcess)null);
+	private WKFPaletteElement makeANDOperatorElement(int x, int y) {
+		final ANDOperator operator = new ANDOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelX(28,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelY(55,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorANDGR(operator,null,true),
-				DROP_ON_ACTIVITY);
+		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelX(28, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(operator, new OperatorANDGR(operator, null, true), DROP_ON_ACTIVITY);
 	}
 
-	private WKFPaletteElement makeOROperatorElement(int x, int y)
-	{
-		final OROperator operator = new OROperator((FlexoProcess)null);
+	private WKFPaletteElement makeOROperatorElement(int x, int y) {
+		final OROperator operator = new OROperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelX(28,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelY(55,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorORGR(operator,null,true),
-				DROP_ON_ACTIVITY);
+		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelX(28, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(operator, new OperatorORGR(operator, null, true), DROP_ON_ACTIVITY);
 	}
 
-	private WKFPaletteElement makeIFOperatorElement(int x, int y)
-	{
-		final IFOperator operator = new IFOperator((FlexoProcess)null);
+	private WKFPaletteElement makeIFOperatorElement(int x, int y) {
+		final IFOperator operator = new IFOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelX(28,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelY(55,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorIFGR(operator,null,true),
-				DROP_ON_ACTIVITY);
+		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelX(28, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(operator, new OperatorIFGR(operator, null, true), DROP_ON_ACTIVITY);
 	}
 
-	private WKFPaletteElement makeINCLUSIVEOperatorElement(int x, int y)
-	{
-		final InclusiveOperator operator = new InclusiveOperator((FlexoProcess)null);
+	private WKFPaletteElement makeINCLUSIVEOperatorElement(int x, int y) {
+		final InclusiveOperator operator = new InclusiveOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelX(30,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelY(55,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorInclusiveGR(operator,null,true),
-				DROP_ON_ACTIVITY);
+		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelX(30, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(operator, new OperatorInclusiveGR(operator, null, true), DROP_ON_ACTIVITY);
 	}
 
-	private WKFPaletteElement makeEXCLUSIVEEVENTBASEDOperatorElement(int x, int y)
-	{
-		final ExclusiveEventBasedOperator operator = new ExclusiveEventBasedOperator((FlexoProcess)null);
+	private WKFPaletteElement makeEXCLUSIVEEVENTBASEDOperatorElement(int x, int y) {
+		final ExclusiveEventBasedOperator operator = new ExclusiveEventBasedOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelX(30,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelY(55,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorExclusiveEventBasedGR(operator,null,true),
-				DROP_ON_ACTIVITY);
+		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelX(30, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(operator, new OperatorExclusiveEventBasedGR(operator, null, true), DROP_ON_ACTIVITY);
 	}
 
-	private WKFPaletteElement makeCOMPLEXOperatorElement(int x, int y)
-	{
-		final ComplexOperator operator = new ComplexOperator((FlexoProcess)null);
+	private WKFPaletteElement makeCOMPLEXOperatorElement(int x, int y) {
+		final ComplexOperator operator = new ComplexOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setY(y,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelX(30,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelY(55,SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorComplexGR(operator,null,true),
-				DROP_ON_ACTIVITY);
+		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelX(30, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(operator, new OperatorComplexGR(operator, null, true), DROP_ON_ACTIVITY);
 	}
 }

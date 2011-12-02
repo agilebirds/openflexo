@@ -24,35 +24,29 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 
-
 /**
  * Browser element representing the calc palette element
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class CalcPaletteElementBrowserElement extends BrowserElement
-{
+public class CalcPaletteElementBrowserElement extends BrowserElement {
 
-    protected CalcPaletteElementBrowserElement(ViewPointPaletteElement element, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(element, BrowserElementType.ONTOLOGY_CALC_PALETTE_ELEMENT, browser, parent);
-    }
+	protected CalcPaletteElementBrowserElement(ViewPointPaletteElement element, ProjectBrowser browser, BrowserElement parent) {
+		super(element, BrowserElementType.ONTOLOGY_CALC_PALETTE_ELEMENT, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    }
+	@Override
+	protected void buildChildrenVector() {
+	}
 
-    @Override
-	public String getName()
-    {
-        return getCalcElement().getName();
-    }
+	@Override
+	public String getName() {
+		return getCalcElement().getName();
+	}
 
-    protected ViewPointPaletteElement getCalcElement()
-    {
-        return (ViewPointPaletteElement) getObject();
-    }
+	protected ViewPointPaletteElement getCalcElement() {
+		return (ViewPointPaletteElement) getObject();
+	}
 
 }

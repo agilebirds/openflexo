@@ -24,37 +24,32 @@ import org.openflexo.antar.expr.parser.ExpressionParser.ConstantFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
 
-public class EvaluationContext 
-{
+public class EvaluationContext {
 	private ExpressionParser.ConstantFactory _constantFactory;
 	private ExpressionParser.VariableFactory _variableFactory;
 	private ExpressionParser.FunctionFactory _functionFactory;
-	
-	public EvaluationContext()
-	{
-		this(new ExpressionParser.DefaultConstantFactory(),
-				new ExpressionParser.DefaultVariableFactory(),
+
+	public EvaluationContext() {
+		this(new ExpressionParser.DefaultConstantFactory(), new ExpressionParser.DefaultVariableFactory(),
 				new ExpressionParser.DefaultFunctionFactory());
 	}
-	
-	public EvaluationContext(ConstantFactory constantFactory, VariableFactory variableFactory, FunctionFactory functionFactory)
-	{
+
+	public EvaluationContext(ConstantFactory constantFactory, VariableFactory variableFactory, FunctionFactory functionFactory) {
 		super();
 		_constantFactory = constantFactory;
 		_variableFactory = variableFactory;
 		_functionFactory = functionFactory;
 	}
-	
-	public ExpressionParser.ConstantFactory getConstantFactory() 
-	{
+
+	public ExpressionParser.ConstantFactory getConstantFactory() {
 		return _constantFactory;
 	}
-	public ExpressionParser.FunctionFactory getFunctionFactory()
-	{
+
+	public ExpressionParser.FunctionFactory getFunctionFactory() {
 		return _functionFactory;
 	}
-	public ExpressionParser.VariableFactory getVariableFactory() 
-	{
+
+	public ExpressionParser.VariableFactory getVariableFactory() {
 		return _variableFactory;
 	}
 }

@@ -40,30 +40,28 @@ import org.openflexo.jedit.TokenMarker;
 import org.openflexo.toolbox.FontCst;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
 public class HandConflictResolver extends JDialog {
 
 	private MergeChangeAction previous;
 	private MergeChange conflictChange;
 	private EditorTextArea editor;
-	
-	public HandConflictResolver(MergeChange conflictChange, TokenMarkerStyle style, MergeChangeAction previous, MergePanelElements owner)
-	{
-		super((JFrame)SwingUtilities.getAncestorOfClass(JFrame.class, owner.getComparePanel()),true);
-		
+
+	public HandConflictResolver(MergeChange conflictChange, TokenMarkerStyle style, MergeChangeAction previous, MergePanelElements owner) {
+		super((JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, owner.getComparePanel()), true);
+
 		this.previous = previous;
 		this.conflictChange = conflictChange;
 		conflictChange.setMergeChangeAction(previous);
 		String[] changeResult = conflictChange.getMergeChangeResult().getSignificativeTokens();
 		StringBuffer sb = new StringBuffer();
 		for (String line : changeResult) {
-			sb.append(line+"\n");
+			sb.append(line + "\n");
 		}
-		editor = new EditorTextArea(sb.toString(),style);
-		
-		JLabel title = new JLabel(owner.localizedForKey("please_resolve_conflict"),SwingConstants.CENTER);
-		title.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		
+		editor = new EditorTextArea(sb.toString(), style);
+
+		JLabel title = new JLabel(owner.localizedForKey("please_resolve_conflict"), SwingConstants.CENTER);
+		title.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
 		JPanel controlPanel = new JPanel(new FlowLayout());
 		JButton validateButton;
 		JButton cancelButton;
@@ -85,24 +83,22 @@ public class HandConflictResolver extends JDialog {
 		});
 		controlPanel.add(validateButton);
 		controlPanel.add(cancelButton);
-		
+
 		JPanel panel = new JPanel(new BorderLayout());
 
-		panel.add(title,BorderLayout.NORTH);
-		panel.add(editor,BorderLayout.CENTER);
-		panel.add(controlPanel,BorderLayout.SOUTH);
-		
+		panel.add(title, BorderLayout.NORTH);
+		panel.add(editor, BorderLayout.CENTER);
+		panel.add(controlPanel, BorderLayout.SOUTH);
+
 		getContentPane().add(panel);
-		
+
 		validate();
 		pack();
 		setVisible(true);
 	}
-	
-	protected class EditorTextArea extends JEditTextAreaWithHighlights
-	{
-		public EditorTextArea (String text, TokenMarkerStyle style)
-		{
+
+	protected class EditorTextArea extends JEditTextAreaWithHighlights {
+		public EditorTextArea(String text, TokenMarkerStyle style) {
 			super();
 			disableDefaultMouseWheelListener();
 			setTokenMarker(TokenMarker.makeTokenMarker(style));
@@ -112,14 +108,12 @@ public class HandConflictResolver extends JDialog {
 		}
 	}
 
-	public void ok()
-	{
+	public void ok() {
 		conflictChange.setCustomHandEdition(editor.getText());
 		conflictChange.setMergeChangeAction(MergeChangeAction.CustomEditing);
 	}
 
-	public void cancel()
-	{
+	public void cancel() {
 		conflictChange.setMergeChangeAction(previous);
 	}
 }

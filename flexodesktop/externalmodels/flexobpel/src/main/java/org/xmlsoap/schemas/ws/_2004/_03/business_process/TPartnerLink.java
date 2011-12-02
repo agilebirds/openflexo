@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,11 +31,12 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-
 /**
- * <p>Java class for tPartnerLink complex type.
+ * <p>
+ * Java class for tPartnerLink complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tPartnerLink">
@@ -56,139 +56,122 @@ import javax.xml.namespace.QName;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPartnerLink")
-public class TPartnerLink
-    extends TExtensibleElements
-{
+public class TPartnerLink extends TExtensibleElements {
 
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String name;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected QName partnerLinkType;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String myRole;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String partnerRole;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected TBoolean initializePartnerRole;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String name;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected QName partnerLinkType;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String myRole;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String partnerRole;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected TBoolean initializePartnerRole;
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the value of the name property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Sets the value of the name property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * Gets the value of the partnerLinkType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getPartnerLinkType() {
-        return partnerLinkType;
-    }
+	/**
+	 * Gets the value of the partnerLinkType property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getPartnerLinkType() {
+		return partnerLinkType;
+	}
 
-    /**
-     * Sets the value of the partnerLinkType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setPartnerLinkType(QName value) {
-        this.partnerLinkType = value;
-    }
+	/**
+	 * Sets the value of the partnerLinkType property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setPartnerLinkType(QName value) {
+		this.partnerLinkType = value;
+	}
 
-    /**
-     * Gets the value of the myRole property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMyRole() {
-        return myRole;
-    }
+	/**
+	 * Gets the value of the myRole property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getMyRole() {
+		return myRole;
+	}
 
-    /**
-     * Sets the value of the myRole property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMyRole(String value) {
-        this.myRole = value;
-    }
+	/**
+	 * Sets the value of the myRole property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setMyRole(String value) {
+		this.myRole = value;
+	}
 
-    /**
-     * Gets the value of the partnerRole property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPartnerRole() {
-        return partnerRole;
-    }
+	/**
+	 * Gets the value of the partnerRole property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getPartnerRole() {
+		return partnerRole;
+	}
 
-    /**
-     * Sets the value of the partnerRole property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPartnerRole(String value) {
-        this.partnerRole = value;
-    }
+	/**
+	 * Sets the value of the partnerRole property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setPartnerRole(String value) {
+		this.partnerRole = value;
+	}
 
-    /**
-     * Gets the value of the initializePartnerRole property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TBoolean }
-     *     
-     */
-    public TBoolean getInitializePartnerRole() {
-        return initializePartnerRole;
-    }
+	/**
+	 * Gets the value of the initializePartnerRole property.
+	 * 
+	 * @return possible object is {@link TBoolean }
+	 * 
+	 */
+	public TBoolean getInitializePartnerRole() {
+		return initializePartnerRole;
+	}
 
-    /**
-     * Sets the value of the initializePartnerRole property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TBoolean }
-     *     
-     */
-    public void setInitializePartnerRole(TBoolean value) {
-        this.initializePartnerRole = value;
-    }
+	/**
+	 * Sets the value of the initializePartnerRole property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TBoolean }
+	 * 
+	 */
+	public void setInitializePartnerRole(TBoolean value) {
+		this.initializePartnerRole = value;
+	}
 
 }

@@ -27,10 +27,9 @@ import java.util.List;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.toolbox.JavaResourceUtil;
 
-
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 public class SGJarInspectorGroup implements InspectorGroup {
 
@@ -46,7 +45,8 @@ public class SGJarInspectorGroup implements InspectorGroup {
 
 	public static final SGJarInspectorGroup INSTANCE = new SGJarInspectorGroup();
 
-	private Hashtable<String, JarInspectorDTO> allInspectors = new Hashtable<String, JarInspectorDTO>(); // <Inspector Name, JarInspectorDTO>
+	private Hashtable<String, JarInspectorDTO> allInspectors = new Hashtable<String, JarInspectorDTO>(); // <Inspector Name,
+																											// JarInspectorDTO>
 
 	private SGJarInspectorGroup() {
 
@@ -82,8 +82,9 @@ public class SGJarInspectorGroup implements InspectorGroup {
 	@Override
 	public InputStream getInspectorStream(String inspectorName) {
 		JarInspectorDTO jarInspectorDTO = allInspectors.get(inspectorName);
-		if (jarInspectorDTO == null)
+		if (jarInspectorDTO == null) {
 			return null;
+		}
 		return jarInspectorDTO.classFromJar.getResourceAsStream(jarInspectorDTO.resourceName);
 	}
 
@@ -91,10 +92,11 @@ public class SGJarInspectorGroup implements InspectorGroup {
 	 * Retrieve and record all inspectors available in resources of the jar/project folder where the specified class belongs. <br>
 	 * The inspectors must ends with .inspector.
 	 * 
-	 * @param clazz : a class which belongs to the jar/project folder
+	 * @param clazz
+	 *            : a class which belongs to the jar/project folder
 	 */
 	public void recordAllInspectors(Class<?> clazz) {
-		
+
 		for (String resourceName : JavaResourceUtil.getMatchingResources(clazz, ".inspector")) {
 			JarInspectorDTO jarInspectorDTO = new JarInspectorDTO(resourceName, clazz);
 			String inspectorName = resourceName.substring(resourceName.lastIndexOf('/') + 1);

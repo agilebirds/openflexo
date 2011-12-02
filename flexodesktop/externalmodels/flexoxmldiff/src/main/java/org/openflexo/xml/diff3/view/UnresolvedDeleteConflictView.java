@@ -26,32 +26,31 @@ import javax.swing.JPanel;
 
 import org.openflexo.xml.diff3.UnresolvedDeleteConflict;
 
-
 public class UnresolvedDeleteConflictView extends UnresolvedConflictView {
-	
+
 	private JPanel _choicePanel;
 	private JPanel _descriptionPanel;
-	
+
 	public UnresolvedDeleteConflictView(UnresolvedDeleteConflict model) {
 		super(model);
 	}
 
 	@Override
-	public UnresolvedDeleteConflict getModel(){
-		return (UnresolvedDeleteConflict)super.getModel();
+	public UnresolvedDeleteConflict getModel() {
+		return (UnresolvedDeleteConflict) super.getModel();
 	}
-	
+
 	@Override
 	public JPanel getChoicePane() {
 		refreshChoicePanel();
 		return _choicePanel;
 	}
-	
+
 	@Override
-	public void refreshChoicePanel(){
-		if(_choicePanel==null){
+	public void refreshChoicePanel() {
+		if (_choicePanel == null) {
 			_choicePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		}else{
+		} else {
 			_choicePanel.removeAll();
 			_choicePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		}
@@ -60,30 +59,37 @@ public class UnresolvedDeleteConflictView extends UnresolvedConflictView {
 		} else {
 			_choicePanel.setBackground(findBackgroundColor());
 			_choicePanel.add(new JLabel("You choose :"));
-			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction()))
-				_choicePanel.add(new JLabel(getModel().isMyDeletion()?"Delete object anyway.":"Restore the deleted object."));
-			else
-				_choicePanel.add(new JLabel(getModel().isMyDeletion()?"Restore the modified object.":"Delete the object (don't care about my changes)."));
+			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction())) {
+				_choicePanel.add(new JLabel(getModel().isMyDeletion() ? "Delete object anyway." : "Restore the deleted object."));
+			} else {
+				_choicePanel.add(new JLabel(getModel().isMyDeletion() ? "Restore the modified object."
+						: "Delete the object (don't care about my changes)."));
+			}
 		}
 		_choicePanel.validate();
 	}
-	
+
 	@Override
 	public JPanel getDescriptionPane() {
-		if(_descriptionPanel==null){
+		if (_descriptionPanel == null) {
 			_descriptionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			_descriptionPanel.add(new JLabel(getModel().getDeletedElementName()+" has been deleted by "+(getModel().isMyDeletion()?"you. But a third party has modified model under this deleted object.":"third party. But you have modified model under this deleted object.")));
+			_descriptionPanel.add(new JLabel(getModel().getDeletedElementName()
+					+ " has been deleted by "
+					+ (getModel().isMyDeletion() ? "you. But a third party has modified model under this deleted object."
+							: "third party. But you have modified model under this deleted object.")));
 		}
 		return _descriptionPanel;
 	}
 
 	@Override
 	public String getThirdPartyChangeText() {
-		return getModel().isMyDeletion()?"RESTORE:\n"+getModel().getXMLStringRepresentation(getModel().getElement1()):"DELETE "+getModel().getDeletedElementName();
+		return getModel().isMyDeletion() ? "RESTORE:\n" + getModel().getXMLStringRepresentation(getModel().getElement1()) : "DELETE "
+				+ getModel().getDeletedElementName();
 	}
 
 	@Override
 	public String getYourChangeText() {
-		return getModel().isMyDeletion()?"DELETE "+getModel().getDeletedElementName():"KEEP:\n"+getModel().getXMLStringRepresentation(getModel().getElement2());
+		return getModel().isMyDeletion() ? "DELETE " + getModel().getDeletedElementName() : "KEEP:\n"
+				+ getModel().getXMLStringRepresentation(getModel().getElement2());
 	}
 }

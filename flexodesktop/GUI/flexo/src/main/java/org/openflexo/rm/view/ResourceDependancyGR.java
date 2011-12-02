@@ -32,47 +32,36 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.rm.view.RMViewerRepresentation.ResourceDependancy;
 
-
-public class ResourceDependancyGR extends ConnectorGraphicalRepresentation<ResourceDependancy>  {
+public class ResourceDependancyGR extends ConnectorGraphicalRepresentation<ResourceDependancy> {
 
 	private ForegroundStyle foreground;
-	
-	public ResourceDependancyGR(ResourceDependancy dependancy, Drawing<?> aDrawing) 
-	{
-		super(ConnectorType.LINE,
-				(ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(dependancy.getR1()),
-				(ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(dependancy.getR2()),
-				dependancy,
-				aDrawing);
+
+	public ResourceDependancyGR(ResourceDependancy dependancy, Drawing<?> aDrawing) {
+		super(ConnectorType.LINE, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(dependancy.getR1()),
+				(ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(dependancy.getR2()), dependancy, aDrawing);
 		foreground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
 		foreground.setLineWidth(1.6);
 		setForeground(foreground);
 
 		setEndSymbol(EndSymbolType.PLAIN_ARROW);
-		setLayer(Math.max(getStartObject().getLayer(),getEndObject().getLayer())+1);
+		setLayer(Math.max(getStartObject().getLayer(), getEndObject().getLayer()) + 1);
 
 		setTextStyle(TextStyle.makeTextStyle(Color.GRAY, new Font("SansSerif", Font.ITALIC, 8)));
-		
-	}
-		
 
-	public ResourceDependancy getResourceDependancy()
-	{
+	}
+
+	public ResourceDependancy getResourceDependancy() {
 		return getDrawable();
 	}
-	
-	@Override
-	public RMViewerRepresentation getDrawing() 
-	{
-		return (RMViewerRepresentation)super.getDrawing();
-	}
-	
 
 	@Override
-	public String getText() 
-	{
+	public RMViewerRepresentation getDrawing() {
+		return (RMViewerRepresentation) super.getDrawing();
+	}
+
+	@Override
+	public String getText() {
 		return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getResourceDependancy().getLastSynchronizationDate());
 	}
-
 
 }

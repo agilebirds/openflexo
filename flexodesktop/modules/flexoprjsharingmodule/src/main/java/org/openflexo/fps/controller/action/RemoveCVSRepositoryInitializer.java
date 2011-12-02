@@ -24,74 +24,64 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.fps.action.RemoveCVSRepository;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.fps.action.RemoveCVSRepository;
-
-
 public class RemoveCVSRepositoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveCVSRepositoryInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(RemoveCVSRepository.actionType,actionInitializer);
+	RemoveCVSRepositoryInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(RemoveCVSRepository.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<RemoveCVSRepository> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveCVSRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveCVSRepository>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveCVSRepository action)
-            {
-            	return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_delete_this_CVS_repository_location"));
-           }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<RemoveCVSRepository> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<RemoveCVSRepository>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveCVSRepository action)
-            {
-            	return true;
-           }
-        };
-	}
-
-     @Override
- 	protected FlexoExceptionHandler<RemoveCVSRepository> getDefaultExceptionHandler() 
- 	{
- 		return new FlexoExceptionHandler<RemoveCVSRepository>() {
- 			@Override
-			public boolean handleException(FlexoException exception, RemoveCVSRepository action) {
- 	       		return true;
+			@Override
+			public boolean run(ActionEvent e, RemoveCVSRepository action) {
+				return FlexoController.confirm(FlexoLocalization
+						.localizedForKey("would_you_really_like_to_delete_this_CVS_repository_location"));
 			}
-        };
- 	}
-
+		};
+	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<RemoveCVSRepository> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<RemoveCVSRepository>() {
+			@Override
+			public boolean run(ActionEvent e, RemoveCVSRepository action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<RemoveCVSRepository> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<RemoveCVSRepository>() {
+			@Override
+			public boolean handleException(FlexoException exception, RemoveCVSRepository action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
- 
+
 }

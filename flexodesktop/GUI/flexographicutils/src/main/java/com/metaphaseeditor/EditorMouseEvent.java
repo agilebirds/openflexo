@@ -25,17 +25,17 @@ package com.metaphaseeditor;
 import javax.swing.text.AttributeSet;
 
 /**
- *
+ * 
  * @author Rudolf Visagie
  */
 public class EditorMouseEvent {
-    private AttributeSet nearestParagraphAttributes;
+	private AttributeSet nearestParagraphAttributes;
 
-    public AttributeSet getNearestParagraphAttributes() {
-        return nearestParagraphAttributes;
-    }
+	public AttributeSet getNearestParagraphAttributes() {
+		return nearestParagraphAttributes;
+	}
 
-    public void setNearestParagraphAttributes(AttributeSet nearestParagraphAttributes) {
-        this.nearestParagraphAttributes = nearestParagraphAttributes;
-    }
+	public void setNearestParagraphAttributes(AttributeSet nearestParagraphAttributes) {
+		this.nearestParagraphAttributes = nearestParagraphAttributes;
+	}
 }

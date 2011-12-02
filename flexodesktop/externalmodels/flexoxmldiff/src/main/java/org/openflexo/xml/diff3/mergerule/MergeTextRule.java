@@ -26,13 +26,14 @@ public abstract class MergeTextRule {
 
 	protected UnresolvedTextConflict _conflict;
 	protected MergeTextAction _action;
-	public MergeTextRule(UnresolvedTextConflict conflict){
+
+	public MergeTextRule(UnresolvedTextConflict conflict) {
 		super();
 		_conflict = conflict;
 	}
-	
+
 	public abstract MergeTextAction getAction();
-	
+
 	public abstract boolean canBeApplyed();
-	
+
 }

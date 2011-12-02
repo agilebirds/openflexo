@@ -32,33 +32,30 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class EditGeneratedFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	EditGeneratedFileInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(EditGeneratedFile.actionType,actionInitializer);
+	EditGeneratedFileInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(EditGeneratedFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<EditGeneratedFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<EditGeneratedFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditGeneratedFile action)
-			{
-				if(!(getControllerActionInitializer().getGeneratorController().moduleViewForObject(action.getFocusedObject()) instanceof FileContentEditor)){
-					getControllerActionInitializer().getGeneratorController().switchToPerspective(getControllerActionInitializer().getGeneratorController().CODE_GENERATOR_PERSPECTIVE);
+			public boolean run(ActionEvent e, EditGeneratedFile action) {
+				if (!(getControllerActionInitializer().getGeneratorController().moduleViewForObject(action.getFocusedObject()) instanceof FileContentEditor)) {
+					getControllerActionInitializer().getGeneratorController().switchToPerspective(
+							getControllerActionInitializer().getGeneratorController().CODE_GENERATOR_PERSPECTIVE);
 				}
-				FileContentEditor editor = (FileContentEditor)getControllerActionInitializer().getGeneratorController().moduleViewForObject(action.getFocusedObject());
+				FileContentEditor editor = (FileContentEditor) getControllerActionInitializer().getGeneratorController()
+						.moduleViewForObject(action.getFocusedObject());
 				if (editor != null) {
 					action.setFileContentEditor(editor);
 					return true;
@@ -69,28 +66,24 @@ public class EditGeneratedFileInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<EditGeneratedFile> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<EditGeneratedFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditGeneratedFile action)
-			{
+			public boolean run(ActionEvent e, EditGeneratedFile action) {
 				getControllerActionInitializer().getGeneratorController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
 				getControllerActionInitializer().getGeneratorController().selectAndFocusObject(action.getFocusedObject());
-				return true;            	
+				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.EDIT_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.EDIT_DISABLED_ICON;
 	}
 

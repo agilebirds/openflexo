@@ -26,8 +26,8 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ontology.action.DeleteOntologyObjects;
@@ -36,71 +36,59 @@ import org.openflexo.ve.VECst;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteOntologyObjectsInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(DeleteOntologyObjects.actionType,actionInitializer);
+	DeleteOntologyObjectsInitializer(OEControllerActionInitializer actionInitializer) {
+		super(DeleteOntologyObjects.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DeleteOntologyObjects> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeleteOntologyObjects> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteOntologyObjects>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteOntologyObjects action)
-            {
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						VECst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB,
-						action, null, true);
+			@Override
+			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<DeleteOntologyObjects> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<DeleteOntologyObjects>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteOntologyObjects action)
-            {
-                if (getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject()!=null
-                		&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted())
-                	getControllerActionInitializer().getOEController().getSelectionManager().resetSelection();
-                return true;
-          }
-        };
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<DeleteOntologyObjects> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeleteOntologyObjects>() {
+			@Override
+			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
+				if (getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
+					getControllerActionInitializer().getOEController().getSelectionManager().resetSelection();
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
 	}
 
-
 	@Override
-	public void init()
-	{
-        super.init();
-        getControllerActionInitializer().registerAction(DeleteOntologyObjects.actionType,KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+	public void init() {
+		super.init();
+		getControllerActionInitializer().registerAction(DeleteOntologyObjects.actionType,
+				KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
 	}
-	
 
 }

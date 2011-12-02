@@ -34,79 +34,72 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class AddMenu extends FlexoAction
-{
+public class AddMenu extends FlexoAction {
 
 	private FlexoItemMenu _newMenu;
-	
-    protected static final Logger logger = FlexoLogger.getLogger(AddMenu.class.getPackage().getName());
 
-    public static FlexoActionType actionType = new FlexoActionType("add_menu",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+	protected static final Logger logger = FlexoLogger.getLogger(AddMenu.class.getPackage().getName());
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-        {
-            return new AddMenu(focusedObject, globalSelection, editor);
-        }
+	public static FlexoActionType actionType = new FlexoActionType("add_menu", FlexoActionType.newMenu, FlexoActionType.defaultGroup,
+			FlexoActionType.ADD_ACTION_TYPE) {
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return true;
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new AddMenu(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return ((object != null) && (object instanceof FlexoItemMenu));
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-    };
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof FlexoItemMenu));
+		}
 
-    private String menuLabel;
+	};
 
-    private FlexoItemMenu father;
+	private String menuLabel;
 
-    protected AddMenu(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	private FlexoItemMenu father;
 
-    @Override
-	protected void doAction(Object context)
-    {
-        if (menuLabel == null)
-            return;
-        	_newMenu=FlexoItemMenu.createNewMenu(father.getProject().getFlexoNavigationMenu(), father, menuLabel);
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Added a new subMenuItem to folder " + father.getMenuLabel());
-    }
+	protected AddMenu(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public FlexoItemMenu getNewMenu(){
-    	return _newMenu;
-    }
-    
-    public FlexoItemMenu getFather()
-    {
-        return father;
-    }
+	@Override
+	protected void doAction(Object context) {
+		if (menuLabel == null) {
+			return;
+		}
+		_newMenu = FlexoItemMenu.createNewMenu(father.getProject().getFlexoNavigationMenu(), father, menuLabel);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Added a new subMenuItem to folder " + father.getMenuLabel());
+		}
+	}
 
-    public void setFather(FlexoItemMenu father)
-    {
-        this.father = father;
-    }
+	public FlexoItemMenu getNewMenu() {
+		return _newMenu;
+	}
 
-    public String getMenuLabel()
-    {
-        return menuLabel;
-    }
+	public FlexoItemMenu getFather() {
+		return father;
+	}
 
-    public void setMenuLabel(String menuLabel)
-    {
-        this.menuLabel = menuLabel;
-    }
+	public void setFather(FlexoItemMenu father) {
+		this.father = father;
+	}
+
+	public String getMenuLabel() {
+		return menuLabel;
+	}
+
+	public void setMenuLabel(String menuLabel) {
+		this.menuLabel = menuLabel;
+	}
 
 }

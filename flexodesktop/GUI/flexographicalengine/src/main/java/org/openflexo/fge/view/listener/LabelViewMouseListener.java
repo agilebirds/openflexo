@@ -24,21 +24,19 @@ import java.util.logging.Logger;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.view.LabelView;
 
-
 public class LabelViewMouseListener extends FGEViewMouseListener {
 
 	private static final Logger logger = Logger.getLogger(LabelViewMouseListener.class.getPackage().getName());
 
-	//private GraphicalRepresentation<?> graphicalRepresentation;
-	//private LabelView<?> labelView;
-	
-	public LabelViewMouseListener(GraphicalRepresentation aGraphicalRepresentation, LabelView<?> aView)
-	{
+	// private GraphicalRepresentation<?> graphicalRepresentation;
+	// private LabelView<?> labelView;
+
+	public LabelViewMouseListener(GraphicalRepresentation aGraphicalRepresentation, LabelView<?> aView) {
 		/*graphicalRepresentation = aGraphicalRepresentation;
 		labelView = aView;*/
-		super(aGraphicalRepresentation,aView);
+		super(aGraphicalRepresentation, aView);
 	}
-	
+
 	/*public void mouseClicked(MouseEvent e) 
 	{
 		GraphicalRepresentation focusedObject = getFocusRetriever().getFocusedObject(e);
@@ -168,6 +166,6 @@ public class LabelViewMouseListener extends FGEViewMouseListener {
 	{
 		return graphicalRepresentation;
 	}
-*/
+	*/
 
 }

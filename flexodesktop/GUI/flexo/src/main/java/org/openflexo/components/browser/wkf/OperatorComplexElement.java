@@ -24,12 +24,9 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.node.ComplexOperator;
 
+public class OperatorComplexElement extends OperatorNodeElement {
 
-public class OperatorComplexElement extends OperatorNodeElement
-{
-
-    public OperatorComplexElement(ComplexOperator node, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(node, BrowserElementType.OPERATOR_COMPLEX_NODE, browser,parent);
-    }
+	public OperatorComplexElement(ComplexOperator node, ProjectBrowser browser, BrowserElement parent) {
+		super(node, BrowserElementType.OPERATOR_COMPLEX_NODE, browser, parent);
+	}
 }

@@ -36,142 +36,127 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public abstract class ValidationIssue<R extends ValidationRule<R,V>, V extends Validable> extends FlexoListModel implements FlexoObserver
-{
+public abstract class ValidationIssue<R extends ValidationRule<R, V>, V extends Validable> extends FlexoListModel implements FlexoObserver {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationIssue.class.getPackage().getName());
 
-    private V _object;
+	private V _object;
 
-    private String _message;
+	private String _message;
 
-    private String _localizedMessage;
+	private String _localizedMessage;
 
-    private ValidationReport _validationReport;
-    
-    private R _cause;
+	private ValidationReport _validationReport;
 
-    private boolean _isLocalized;
-    
-    public ValidationIssue(V anObject, String aLocalizedMessage)
-    {
-        this(anObject,aLocalizedMessage,true);
-    }
+	private R _cause;
 
-    public ValidationIssue(V anObject, String aMessage, boolean isLocalized)
-    {
-        super();
-        _object = anObject;
-        _message = aMessage;
-        _isLocalized = isLocalized;
-        if (!isLocalized) {
+	private boolean _isLocalized;
+
+	public ValidationIssue(V anObject, String aLocalizedMessage) {
+		this(anObject, aLocalizedMessage, true);
+	}
+
+	public ValidationIssue(V anObject, String aMessage, boolean isLocalized) {
+		super();
+		_object = anObject;
+		_message = aMessage;
+		_isLocalized = isLocalized;
+		if (!isLocalized) {
 			_localizedMessage = aMessage;
 		}
-        if(_object instanceof FlexoObservable){
-        	((FlexoObservable)_object).addObserver(this);
-        }
-    }
+		if (_object instanceof FlexoObservable) {
+			((FlexoObservable) _object).addObserver(this);
+		}
+	}
 
-    public FlexoProject getProject()
-    {
-        if ((_object != null) && (_object instanceof FlexoModelObject)) {
-            return ((FlexoModelObject)_object).getProject();
-        }
-        return null;
-    }
-    
-    public String getMessage()
-    {
-        return _message;
-    }
+	public FlexoProject getProject() {
+		if ((_object != null) && (_object instanceof FlexoModelObject)) {
+			return ((FlexoModelObject) _object).getProject();
+		}
+		return null;
+	}
 
-    public String getLocalizedMessage()
-    {
-        if ((_localizedMessage == null) && (_message != null) && _isLocalized) {
-            _localizedMessage = FlexoLocalization.localizedForKeyWithParams(_message, this);
-        }
-        return _localizedMessage;
-    }
+	public String getMessage() {
+		return _message;
+	}
 
-    public void setMessage(String message)
-    {
-        this._message = message;
-    }
+	public String getLocalizedMessage() {
+		if ((_localizedMessage == null) && (_message != null) && _isLocalized) {
+			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(_message, this);
+		}
+		return _localizedMessage;
+	}
 
-    public V getObject()
-    {
-        return _object;
-    }
+	public void setMessage(String message) {
+		this._message = message;
+	}
 
-    public FlexoModelObject getSelectableObject()
-    {
-        if (_object instanceof FlexoModelObject) {
-            return (FlexoModelObject)_object;
-        }
-        return null;
-    }
+	public V getObject() {
+		return _object;
+	}
 
-    @Override
-	public int getSize()
-    {
-        return 0;
-    }
+	public FlexoModelObject getSelectableObject() {
+		if (_object instanceof FlexoModelObject) {
+			return (FlexoModelObject) _object;
+		}
+		return null;
+	}
 
-    @Override
-	public Object getElementAt(int index)
-    {
-        return null;
-    }
+	@Override
+	public int getSize() {
+		return 0;
+	}
 
-    public void setValidationReport(ValidationReport report)
-    {
-        _validationReport = report;
-    }
+	@Override
+	public Object getElementAt(int index) {
+		return null;
+	}
 
-    public ValidationReport getValidationReport()
-    {
-        return _validationReport;
-    }
+	public void setValidationReport(ValidationReport report) {
+		_validationReport = report;
+	}
 
-    private String _typeName;
+	public ValidationReport getValidationReport() {
+		return _validationReport;
+	}
 
-    public String getTypeName()
-    {
-        if (_typeName == null) {
-            StringTokenizer st = new StringTokenizer(getObject().getClass().getName(), ".");
-            while (st.hasMoreTokens()) {
-                _typeName = st.nextToken();
-            }
-        }
-        return _typeName;
-    }
+	private String _typeName;
 
-    @Override
+	public String getTypeName() {
+		if (_typeName == null) {
+			StringTokenizer st = new StringTokenizer(getObject().getClass().getName(), ".");
+			while (st.hasMoreTokens()) {
+				_typeName = st.nextToken();
+			}
+		}
+		return _typeName;
+	}
+
+	@Override
 	public abstract String toString();
 
 	public void setCause(R rule) {
 		_cause = rule;
 	}
-	
+
 	public R getCause() {
 		return _cause;
 	}
 
 	@Override
-	public void update(FlexoObservable observable,
-			DataModification dataModification) {
-		if(observable instanceof FlexoModelObject){
-			if(((FlexoModelObject)observable).isDeleted()){
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable instanceof FlexoModelObject) {
+			if (((FlexoModelObject) observable).isDeleted()) {
 				delete();
 			}
 		}
-		
+
 	}
 
 	public void delete() {
-		if(_object instanceof FlexoObservable){
-			((FlexoObservable)_object).deleteObserver(this);
+		if (_object instanceof FlexoObservable) {
+			((FlexoObservable) _object).deleteObserver(this);
 		}
 		_validationReport.removeFromValidationIssues(this);
 	}

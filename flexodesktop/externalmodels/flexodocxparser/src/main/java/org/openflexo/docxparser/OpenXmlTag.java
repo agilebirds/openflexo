@@ -21,42 +21,57 @@ package org.openflexo.docxparser;
 
 import org.dom4j.Element;
 
-public enum OpenXmlTag
-{
-	w_sdt, w_sdtContent, w_p, w_pPr, w_numPr, w_ilvl, w_numId, w_pStyle, w_hyperlink, w_r, w_rPr, w_drawing, 
-	w_rStyle, w_color, w_shd, w_highlight, w_sz, w_szCs, w_b, w_u, w_i, w_jc, w_t, 
-	w_val, w_fill, 
-	w_tgtFrame, w_tooltip, 
+public enum OpenXmlTag {
+	w_sdt,
+	w_sdtContent,
+	w_p,
+	w_pPr,
+	w_numPr,
+	w_ilvl,
+	w_numId,
+	w_pStyle,
+	w_hyperlink,
+	w_r,
+	w_rPr,
+	w_drawing,
+	w_rStyle,
+	w_color,
+	w_shd,
+	w_highlight,
+	w_sz,
+	w_szCs,
+	w_b,
+	w_u,
+	w_i,
+	w_jc,
+	w_t,
+	w_val,
+	w_fill,
+	w_tgtFrame,
+	w_tooltip,
 	w_anchor,
-	r_id, r_embed,  
+	r_id,
+	r_embed,
 	w_abstractNumId,
 	OTHER;
-	
-	public static OpenXmlTag getOpenXmlTag(Element element)
-	{
-		try
-		{
+
+	public static OpenXmlTag getOpenXmlTag(Element element) {
+		try {
 			return OpenXmlTag.valueOf(element.getQualifiedName().replaceAll(":", "_"));
-		}
-		catch(IllegalArgumentException e)
-		{
+		} catch (IllegalArgumentException e) {
 			return OTHER;
 		}
 	}
-	
-	public static OpenXmlTag[] getStylePropertyTags()
-	{
-		return new OpenXmlTag[] {w_pStyle, w_rStyle, w_color, w_shd, w_highlight, w_sz, w_szCs, w_b, w_u, w_i, w_jc};
+
+	public static OpenXmlTag[] getStylePropertyTags() {
+		return new OpenXmlTag[] { w_pStyle, w_rStyle, w_color, w_shd, w_highlight, w_sz, w_szCs, w_b, w_u, w_i, w_jc };
 	}
-	
-	public String getPrefix()
-	{
+
+	public String getPrefix() {
 		return this.name().substring(0, this.name().indexOf('_'));
 	}
-	
-	public String getTagName()
-	{
-		return this.name().substring(this.name().indexOf('_')+1);
+
+	public String getTagName() {
+		return this.name().substring(this.name().indexOf('_') + 1);
 	}
 }
-

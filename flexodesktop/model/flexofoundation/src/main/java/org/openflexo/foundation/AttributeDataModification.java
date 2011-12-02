@@ -25,17 +25,14 @@ package org.openflexo.foundation;
  * @author sguerin
  * 
  */
-public class AttributeDataModification extends DataModification
-{
+public class AttributeDataModification extends DataModification {
 
-    public AttributeDataModification(String attributeName, Object oldValue, Object newValue)
-    {
-        super(DataModification.ATTRIBUTE, attributeName, oldValue, newValue);
-    }
+	public AttributeDataModification(String attributeName, Object oldValue, Object newValue) {
+		super(DataModification.ATTRIBUTE, attributeName, oldValue, newValue);
+	}
 
-    public String getAttributeName()
-    {
-        return propertyName();
-    }
+	public String getAttributeName() {
+		return propertyName();
+	}
 
 }

@@ -31,55 +31,46 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RefreshHistoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RefreshHistoryInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(RefreshHistory.actionType,actionInitializer);
+	RefreshHistoryInitializer(DGControllerActionInitializer actionInitializer) {
+		super(RefreshHistory.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RefreshHistory> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RefreshHistory> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshHistory>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshHistory action)
-			{
+			public boolean run(ActionEvent e, RefreshHistory action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RefreshHistory> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RefreshHistory> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshHistory>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshHistory action)
-			{
+			public boolean run(ActionEvent e, RefreshHistory action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.REFRESH_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return IconLibrary.REFRESH_DISABLED_ICON;
 	}
 

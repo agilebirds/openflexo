@@ -26,58 +26,50 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
 /**
- * Represents a whole-page WOComponent representing a perspective to monitor a
- * FlexoProcess
+ * Represents a whole-page WOComponent representing a perspective to monitor a FlexoProcess
  * 
  * @author sguerin
  * 
  */
-public final class IEMonitoringScreen extends IEPageComponent
-{
+public final class IEMonitoringScreen extends IEPageComponent {
 
+	public IEMonitoringScreen(FlexoComponentBuilder builder) {
+		super(builder);
+		initializeDeserialization(builder);
+	}
 
-    public IEMonitoringScreen(FlexoComponentBuilder builder)
-    {
-        super(builder);
-        initializeDeserialization(builder);
-    }
-    
-    public IEMonitoringScreen(MonitoringScreenDefinition componentDefinition, FlexoProject prj)
-    {
-        super(componentDefinition, prj);
-    }
+	public IEMonitoringScreen(MonitoringScreenDefinition componentDefinition, FlexoProject prj) {
+		super(componentDefinition, prj);
+	}
 
-    public FlexoProcess getMonitoredProcess()
-    {
-        return getComponentDefinition().getProcess();
-    }
+	public FlexoProcess getMonitoredProcess() {
+		return getComponentDefinition().getProcess();
+	}
 
-    @Override
-    public MonitoringScreenDefinition getComponentDefinition() {
-    	return (MonitoringScreenDefinition) super.getComponentDefinition();
-    }
-    
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.IE.MONITORING_SCREEN_INSPECTOR;
-    }
+	@Override
+	public MonitoringScreenDefinition getComponentDefinition() {
+		return (MonitoringScreenDefinition) super.getComponentDefinition();
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        // TODO Auto-generated method stub
-        return "MonitoringScreen:" + getName();
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "monitoring_screen";
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.IE.MONITORING_SCREEN_INSPECTOR;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return "MonitoringScreen:" + getName();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "monitoring_screen";
+	}
 
 }

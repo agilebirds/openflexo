@@ -19,14 +19,13 @@
  */
 package org.openflexo.foundation.dm.javaparser;
 
-public interface ParsedJavadocItem
-    {
-		public String getTag();
+public interface ParsedJavadocItem {
+	public String getTag();
 
-		public String getParameterName();
+	public String getParameterName();
 
-		public String getParameterValue();
+	public String getParameterValue();
 
-		public void setParameterValue(String value);
+	public void setParameterValue(String value);
 
-   }
+}

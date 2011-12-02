@@ -22,33 +22,30 @@ package org.openflexo.dg.exception;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
 import org.openflexo.generator.exception.GenerationException;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class PDFGenerationFailedException extends GenerationException
-{
-	
+public class PDFGenerationFailedException extends GenerationException {
+
 	private String errorMessage;
 
-    /**
+	/**
 	 * @param message
 	 * @param projectGenerator
 	 */
-	public PDFGenerationFailedException(ProjectDocLatexGenerator projectGenerator)
-	{
+	public PDFGenerationFailedException(ProjectDocLatexGenerator projectGenerator) {
 		this(projectGenerator, null);
 	}
 
 	/**
-     * @param projectGenerator
-     * @param errorMessage TODO
-     * @param message
-     */
-    public PDFGenerationFailedException(ProjectDocLatexGenerator projectGenerator, String errorMessage)
-    {
-        super("pdf_generation_failed"+": "+errorMessage);
-    }
+	 * @param projectGenerator
+	 * @param errorMessage
+	 *            TODO
+	 * @param message
+	 */
+	public PDFGenerationFailedException(ProjectDocLatexGenerator projectGenerator, String errorMessage) {
+		super("pdf_generation_failed" + ": " + errorMessage);
+	}
 
 }

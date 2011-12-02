@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -50,7 +50,6 @@ import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.wkf.processeditor.gr.PortmapGR;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 
 	private static final Logger logger = Logger.getLogger(PortmapRegisteryGR.class.getPackage().getName());
@@ -61,8 +60,7 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 	public static final int PORTMAP_REGISTERY_WIDTH = 30;
 	public static final int PORTMAP_MARGIN = 3;
 
-	public PortmapRegisteryGR(PortMapRegistery portmapRegistery, SwimmingLaneRepresentation aDrawing)
-	{
+	public PortmapRegisteryGR(PortMapRegistery portmapRegistery, SwimmingLaneRepresentation aDrawing) {
 		super(portmapRegistery, ShapeType.RECTANGLE, aDrawing);
 		portmapRegistery.addObserver(this);
 
@@ -73,7 +71,7 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 		setForeground(foreground);
 		setBackground(background);
 
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0,0,0,0));
+		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, 0, 0, 0));
 		setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 
@@ -81,31 +79,29 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 	}
 
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
 	}
 
 	@Override
-	protected boolean supportShadow()
-	{
+	protected boolean supportShadow() {
 		return false;
 	}
-
 
 	private GraphicalRepresentation<?> parentGR = null;
 	private FGEArea parentOutline = null;
 
 	@Override
-	public FGEArea getLocationConstrainedArea()
-	{
+	public FGEArea getLocationConstrainedArea() {
 		GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
 		if (parentGR == null || parent != parentGR) {
 			if (parent != null && parent instanceof ShapeGraphicalRepresentation) {
-				parentOutline = ((ShapeGraphicalRepresentation<?>)parent).getShape().getOutline();
-				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(((ShapeGraphicalRepresentation<?>)parent).getWidth(), ((ShapeGraphicalRepresentation<?>)parent).getHeight()));
-				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(PORTMAP_REGISTERY_WIDTH/2-getBorder().left,PORTMAP_REGISTERY_WIDTH/2-getBorder().top));
-				//System.out.println("Rebuild outline = "+parentOutline);
+				parentOutline = ((ShapeGraphicalRepresentation<?>) parent).getShape().getOutline();
+				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
+						((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
+				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(
+						PORTMAP_REGISTERY_WIDTH / 2 - getBorder().left, PORTMAP_REGISTERY_WIDTH / 2 - getBorder().top));
+				// System.out.println("Rebuild outline = "+parentOutline);
 				parentGR = parent;
 			}
 		}
@@ -113,58 +109,48 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		PortMapRegistery portMapRegistery = getPortMapRegistery();
 		super.delete();
 		portMapRegistery.deleteObserver(this);
 	}
 
-
-	public PortMapRegistery getPortMapRegistery()
-	{
+	public PortMapRegistery getPortMapRegistery() {
 		return getDrawable();
 	}
 
 	@Override
-	public double getX()
-	{
+	public double getX() {
 		if (!getPortMapRegistery().hasLocationForContext(SWIMMING_LANE_EDITOR)) {
-			getPortMapRegistery().getX(SWIMMING_LANE_EDITOR,getDefaultX());
+			getPortMapRegistery().getX(SWIMMING_LANE_EDITOR, getDefaultX());
 		}
 		return getPortMapRegistery().getX(SWIMMING_LANE_EDITOR);
 	}
 
 	@Override
-	public void setXNoNotification(double posX)
-	{
-		getPortMapRegistery().setX(posX,SWIMMING_LANE_EDITOR);
+	public void setXNoNotification(double posX) {
+		getPortMapRegistery().setX(posX, SWIMMING_LANE_EDITOR);
 		refreshOrientation();
 	}
 
 	@Override
-	public double getY()
-	{
+	public double getY() {
 		if (!getPortMapRegistery().hasLocationForContext(SWIMMING_LANE_EDITOR)) {
-			getPortMapRegistery().getY(SWIMMING_LANE_EDITOR,getDefaultY());
+			getPortMapRegistery().getY(SWIMMING_LANE_EDITOR, getDefaultY());
 		}
 		return getPortMapRegistery().getY(SWIMMING_LANE_EDITOR);
 	}
 
 	@Override
-	public void setYNoNotification(double posY)
-	{
-		getPortMapRegistery().setY(posY,SWIMMING_LANE_EDITOR);
+	public void setYNoNotification(double posY) {
+		getPortMapRegistery().setY(posY, SWIMMING_LANE_EDITOR);
 		refreshOrientation();
 	}
 
-
 	@Override
-	public final void update (FlexoObservable observable, DataModification dataModification)
-	{
+	public final void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getPortMapRegistery()) {
-			if ((dataModification instanceof PortMapInserted)
-					|| (dataModification instanceof PortMapRemoved)) {
+			if ((dataModification instanceof PortMapInserted) || (dataModification instanceof PortMapRemoved)) {
 				parentGR = null;
 				refreshOrientation();
 				// GPO: We need to invalidate the hierarchy because portmaps play with visibility and not with add/remove
@@ -173,29 +159,22 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 				// Bug 1006069 Fix: Edges are not displayed anymore when adding ports to the process used by subprocess node
 				getDrawing().invalidateGraphicalObjectsHierarchy(getPortMapRegistery());
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof ObjectVisibilityChanged) {
-				//logger.info("Detected ObjectVisibilityChanged !!!");
+			} else if (dataModification instanceof ObjectVisibilityChanged) {
+				// logger.info("Detected ObjectVisibilityChanged !!!");
 				getDrawing().invalidateGraphicalObjectsHierarchy(getPortMapRegistery());
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof ObjectLocationChanged) {
+			} else if (dataModification instanceof ObjectLocationChanged) {
 				notifyObjectMoved();
 			}
 		}
 	}
 
-
 	@Override
-	public void update(Observable observable, Object dataModification)
-	{
+	public void update(Observable observable, Object dataModification) {
 		if (observable == getContainerGraphicalRepresentation()) {
-			if ((dataModification instanceof ObjectWillMove)
-					|| (dataModification instanceof ObjectWillResize)
-					|| (dataModification instanceof ObjectHasMoved)
-					|| (dataModification instanceof ObjectHasResized)
-					|| (dataModification instanceof ObjectMove)
-					|| (dataModification instanceof ObjectResized)
+			if ((dataModification instanceof ObjectWillMove) || (dataModification instanceof ObjectWillResize)
+					|| (dataModification instanceof ObjectHasMoved) || (dataModification instanceof ObjectHasResized)
+					|| (dataModification instanceof ObjectMove) || (dataModification instanceof ObjectResized)
 					|| (dataModification instanceof ShapeChanged)) {
 				// Reinit parent outline that will change
 				parentGR = null;
@@ -206,58 +185,60 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 
 	private SimplifiedCardinalDirection _orientation;
 
-	public SimplifiedCardinalDirection getOrientation()
-	{
-		if (_orientation == null) refreshOrientation();
+	public SimplifiedCardinalDirection getOrientation() {
+		if (_orientation == null) {
+			refreshOrientation();
+		}
 		return _orientation;
 	}
 
-	public void refreshOrientation()
-	{
-		SubProcessNodeGR subProcessNodeGR = (SubProcessNodeGR)getContainerGraphicalRepresentation();
-		FGEPoint locationInSubProcessNode = GraphicalRepresentation.convertNormalizedPoint(this, new FGEPoint(0.5,0.5), subProcessNodeGR);
-		SimplifiedCardinalDirection orientation = FGEPoint.getSimplifiedOrientation(new FGEPoint(0.5,0.5), locationInSubProcessNode);
+	public void refreshOrientation() {
+		SubProcessNodeGR subProcessNodeGR = (SubProcessNodeGR) getContainerGraphicalRepresentation();
+		FGEPoint locationInSubProcessNode = GraphicalRepresentation.convertNormalizedPoint(this, new FGEPoint(0.5, 0.5), subProcessNodeGR);
+		SimplifiedCardinalDirection orientation = FGEPoint.getSimplifiedOrientation(new FGEPoint(0.5, 0.5), locationInSubProcessNode);
 		if (orientation != _orientation) {
-			logger.info("Switch to orientation = "+orientation);
+			logger.info("Switch to orientation = " + orientation);
 			_orientation = orientation;
 			int portmapNb = 0;
 			for (FlexoPortMap pm : getPortMapRegistery().getPortMaps()) {
-				if (pm.getIsVisible()) portmapNb++;
+				if (pm.getIsVisible()) {
+					portmapNb++;
+				}
 			}
 			if (_orientation.isVertical()) { /* NORTH or SOUTH */
-				setWidthNoNotification(PortmapGR.PORTMAP_SIZE*portmapNb+PORTMAP_MARGIN*2);
+				setWidthNoNotification(PortmapGR.PORTMAP_SIZE * portmapNb + PORTMAP_MARGIN * 2);
 				setHeightNoNotification(PORTMAP_REGISTERY_WIDTH);
 				notifyObjectResized();
-			}
-			else { /* EAST or WEST */
-				setHeightNoNotification(PortmapGR.PORTMAP_SIZE*portmapNb+PORTMAP_MARGIN*2);
+			} else { /* EAST or WEST */
+				setHeightNoNotification(PortmapGR.PORTMAP_SIZE * portmapNb + PORTMAP_MARGIN * 2);
 				setWidthNoNotification(PORTMAP_REGISTERY_WIDTH);
 				notifyObjectResized();
 			}
-			//((SubProcessNodeGR)getContainerGraphicalRepresentation()).notifyShapeNeedsToBeRedrawn();
+			// ((SubProcessNodeGR)getContainerGraphicalRepresentation()).notifyShapeNeedsToBeRedrawn();
 		}
 	}
 
 	// Override to implement defaut automatic layout
-	public double getDefaultX()
-	{
-		ShapeGraphicalRepresentation parentGR = (ShapeGraphicalRepresentation)getGraphicalRepresentation(getPortMapRegistery().getSubProcessNode());
+	public double getDefaultX() {
+		ShapeGraphicalRepresentation parentGR = (ShapeGraphicalRepresentation) getGraphicalRepresentation(getPortMapRegistery()
+				.getSubProcessNode());
 		if (parentGR != null) {
 			int portmapNb = 0;
 			for (FlexoPortMap pm : getPortMapRegistery().getPortMaps()) {
-				if (pm.getIsVisible()) portmapNb++;
+				if (pm.getIsVisible()) {
+					portmapNb++;
+				}
 			}
-			double portmapRegisteryWidth = PortmapGR.PORTMAP_SIZE*portmapNb+6;
-			return computeConstrainedLocation(new FGEPoint((parentGR.getWidth()+parentGR.getBorder().left+parentGR.getBorder().right-portmapRegisteryWidth)/2,0)).x;
+			double portmapRegisteryWidth = PortmapGR.PORTMAP_SIZE * portmapNb + 6;
+			return computeConstrainedLocation(new FGEPoint(
+					(parentGR.getWidth() + parentGR.getBorder().left + parentGR.getBorder().right - portmapRegisteryWidth) / 2, 0)).x;
 		}
 		return 0;
 	}
 
 	// Override to implement defaut automatic layout
-	public double getDefaultY()
-	{
-		return computeConstrainedLocation(new FGEPoint(0,0)).y;
+	public double getDefaultY() {
+		return computeConstrainedLocation(new FGEPoint(0, 0)).y;
 	}
-
 
 }

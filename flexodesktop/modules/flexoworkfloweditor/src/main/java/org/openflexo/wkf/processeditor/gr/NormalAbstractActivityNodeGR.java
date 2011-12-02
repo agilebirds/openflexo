@@ -23,9 +23,9 @@ import java.awt.Color;
 
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -38,7 +38,6 @@ import org.openflexo.foundation.wkf.dm.RoleNameChange;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
-
 
 public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extends AbstractActivityNodeGR<O> {
 
@@ -63,8 +62,8 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 		}
 		else {*/
 		setMinimalHeight(NODE_MINIMAL_HEIGHT);
-		//}
-		//setDecorationPainter(new NodeDecorationPainter());
+		// }
+		// setDecorationPainter(new NodeDecorationPainter());
 	}
 
 	@Override
@@ -74,75 +73,69 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 
 	@Override
 	public FGESteppedDimensionConstraint getDimensionConstraintStep() {
-		if (getDrawing()!=null)
+		if (getDrawing() != null) {
 			return getDrawing().getDrawingGraphicalRepresentation().getDimensionConstraintsForObject(this);
+		}
 		return null;
 	}
 
 	@Override
-	public Rectangle getShape()
-	{
-		return (Rectangle)super.getShape();
+	public Rectangle getShape() {
+		return (Rectangle) super.getShape();
 	}
 
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
 		roleLabelTextStyle = TextStyle.makeTextStyle(Color.GRAY, getRoleFont().getFont());
 	}
 
 	protected FlexoFont getRoleFont() {
-		if (getWorkflow()!=null)
+		if (getWorkflow() != null) {
 			return getWorkflow().getRoleFont(WKFPreferences.getRoleFont());
-		else
+		} else {
 			return WKFPreferences.getRoleFont();
+		}
 	}
 
 	@Override
-	public double getWidth()
-	{
+	public double getWidth() {
 		if (!getNode().hasDimensionForContext(BASIC_PROCESS_EDITOR)) {
-			getNode().getWidth(BASIC_PROCESS_EDITOR,getDefaultWidth());
+			getNode().getWidth(BASIC_PROCESS_EDITOR, getDefaultWidth());
 		}
 		return getNode().getWidth(BASIC_PROCESS_EDITOR);
 	}
 
 	@Override
-	public void setWidthNoNotification(double width)
-	{
-		getNode().setWidth(width,BASIC_PROCESS_EDITOR);
+	public void setWidthNoNotification(double width) {
+		getNode().setWidth(width, BASIC_PROCESS_EDITOR);
 	}
 
-	public double getDefaultWidth()
-	{
+	public double getDefaultWidth() {
 		return DEFAULT_ACTIVITY_WIDTH;
 	}
 
 	@Override
-	public double getHeight()
-	{
+	public double getHeight() {
 		if (!getNode().hasDimensionForContext(BASIC_PROCESS_EDITOR)) {
-			getNode().getHeight(BASIC_PROCESS_EDITOR,getDefaultHeight());
+			getNode().getHeight(BASIC_PROCESS_EDITOR, getDefaultHeight());
 		}
 		return getNode().getHeight(BASIC_PROCESS_EDITOR);
 	}
 
 	@Override
-	public void setHeightNoNotification(double height)
-	{
-		getNode().setHeight(height,BASIC_PROCESS_EDITOR);
+	public void setHeightNoNotification(double height) {
+		getNode().setHeight(height, BASIC_PROCESS_EDITOR);
 	}
 
-	public double getDefaultHeight()
-	{
+	public double getDefaultHeight() {
 		return DEFAULT_ACTIVITY_HEIGHT;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
-		if (dataModification instanceof RoleColorChange || dataModification instanceof RoleChanged || "color".equals(dataModification.propertyName())) {
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof RoleColorChange || dataModification instanceof RoleChanged
+				|| "color".equals(dataModification.propertyName())) {
 			updateBackground();
 			return;
 		} else if (dataModification instanceof RoleNameChange) {
@@ -153,9 +146,9 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 		super.update(observable, dataModification);
 	}
 
-	private void updateBackground()
-	{
-		background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(), ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+	private void updateBackground() {
+		background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
+				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		setBackground(background);
 		updatePropertiesFromWKFPreferences();
 	}

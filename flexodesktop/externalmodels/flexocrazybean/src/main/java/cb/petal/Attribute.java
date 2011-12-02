@@ -18,49 +18,50 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Attribute object
- *
+ * 
  * @version $Id: Attribute.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Attribute extends PetalObject {
-  public Attribute(PetalNode parent, Collection params) {
-    super(parent, "Attribute", params);
-  }
+	public Attribute(PetalNode parent, Collection params) {
+		super(parent, "Attribute", params);
+	}
 
-  public Attribute() {
-    super("Attribute");
-  }
+	public Attribute() {
+		super("Attribute");
+	}
 
-  public String getTool() {
-    return getPropertyAsString("tool");
-  }
+	public String getTool() {
+		return getPropertyAsString("tool");
+	}
 
-  public void setTool(String o) {
-    defineProperty("tool", o);
-  }
+	public void setTool(String o) {
+		defineProperty("tool", o);
+	}
 
-  public String getAttributeName() {
-    return getPropertyAsString("name");
-  }
+	public String getAttributeName() {
+		return getPropertyAsString("name");
+	}
 
-  public void setAttributeName(String o) {
-    defineProperty("name", o);
-  }
+	public void setAttributeName(String o) {
+		defineProperty("name", o);
+	}
 
-  public PetalNode getValue() {
-    return getProperty("value");
-  }
+	public PetalNode getValue() {
+		return getProperty("value");
+	}
 
-  public void setValue(PetalNode o) {
-    defineProperty("value", o);
-  }
+	public void setValue(PetalNode o) {
+		defineProperty("value", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

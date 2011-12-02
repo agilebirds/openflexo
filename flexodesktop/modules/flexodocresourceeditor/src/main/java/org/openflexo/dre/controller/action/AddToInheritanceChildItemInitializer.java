@@ -22,7 +22,6 @@ package org.openflexo.dre.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.drm.DocItem;
@@ -40,55 +39,53 @@ public class AddToInheritanceChildItemInitializer extends ActionInitializer {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddToInheritanceChildItemInitializer(DREControllerActionInitializer actionInitializer)
-	{
-		super(AddToInheritanceChildItem.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DREControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DREControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<AddToInheritanceChildItem> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<AddToInheritanceChildItem>() {
-            @Override
-			public boolean run(ActionEvent e, AddToInheritanceChildItem action)
-            {
-                ParameterDefinition[] parameters = new ParameterDefinition[1];
-                parameters[0] = new DocItemParameter("childItem", "choose_an_item", null);
-                AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
-                        null, FlexoLocalization.localizedForKey("define_doc_item_relationships"), FlexoLocalization.localizedForKey("please_select_a_child_item_related_to_inheritance"), parameters);
-                if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                    DocItem newChildItem = (DocItem) dialog.parameterValueWithName("childItem");
-                    if (newChildItem == null)
-                        return false;
-                    action.setChildDocItem(newChildItem);
-                    return true;
-                } else {
-                    return false;
-                }
-           }
-        };
+	AddToInheritanceChildItemInitializer(DREControllerActionInitializer actionInitializer) {
+		super(AddToInheritanceChildItem.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<AddToInheritanceChildItem> getDefaultFinalizer() 
-	{
+	@Override
+	protected DREControllerActionInitializer getControllerActionInitializer() {
+		return (DREControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<AddToInheritanceChildItem> getDefaultInitializer() {
+		return new FlexoActionInitializer<AddToInheritanceChildItem>() {
+			@Override
+			public boolean run(ActionEvent e, AddToInheritanceChildItem action) {
+				ParameterDefinition[] parameters = new ParameterDefinition[1];
+				parameters[0] = new DocItemParameter("childItem", "choose_an_item", null);
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+						FlexoLocalization.localizedForKey("define_doc_item_relationships"),
+						FlexoLocalization.localizedForKey("please_select_a_child_item_related_to_inheritance"), parameters);
+				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+					DocItem newChildItem = (DocItem) dialog.parameterValueWithName("childItem");
+					if (newChildItem == null) {
+						return false;
+					}
+					action.setChildDocItem(newChildItem);
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<AddToInheritanceChildItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddToInheritanceChildItem>() {
-            @Override
-			public boolean run(ActionEvent e, AddToInheritanceChildItem action)
-            {
-                if (getControllerActionInitializer().getDREController().getCurrentDisplayedObjectAsModuleView() == action.getParentDocItem()) {
-                    AbstractDocItemView docItemView = (AbstractDocItemView)getControllerActionInitializer().getDREController().getCurrentModuleView();
-                    docItemView.updateViewFromModel();
-                }
-               return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, AddToInheritanceChildItem action) {
+				if (getControllerActionInitializer().getDREController().getCurrentDisplayedObjectAsModuleView() == action
+						.getParentDocItem()) {
+					AbstractDocItemView docItemView = (AbstractDocItemView) getControllerActionInitializer().getDREController()
+							.getCurrentModuleView();
+					docItemView.updateViewFromModel();
+				}
+				return true;
+			}
+		};
 	}
 
 }

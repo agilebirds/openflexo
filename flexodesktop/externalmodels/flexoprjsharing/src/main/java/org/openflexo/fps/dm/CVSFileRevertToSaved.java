@@ -21,11 +21,8 @@ package org.openflexo.fps.dm;
 
 import org.openflexo.fps.CVSFile;
 
-
-public class CVSFileRevertToSaved extends FPSDataModification
-{
-    public CVSFileRevertToSaved(CVSFile file)
-    {
-        super(null,file);
-    }
+public class CVSFileRevertToSaved extends FPSDataModification {
+	public CVSFileRevertToSaved(CVSFile file) {
+		super(null, file);
+	}
 }

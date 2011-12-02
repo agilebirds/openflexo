@@ -24,12 +24,11 @@ import org.openflexo.localization.FlexoLocalization;
 public abstract class Operator {
 
 	public abstract int getPriority();
-	
+
 	public abstract String getName();
-	
-	public String getLocalizedName()
-	{
+
+	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey(getName());
 	}
-	
+
 }

@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -38,100 +37,98 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ProjectLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoProject>> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(ProjectLatexFileResource.class.getPackage().getName());
+public class ProjectLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoProject>> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(ProjectLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public ProjectLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public ProjectLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public ProjectLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public ProjectLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    private boolean isObserverRegistered = false;
+	private boolean isObserverRegistered = false;
 
-    @Override
-	public String getName()
-    {
-    	if (getCGFile()==null || getCGFile().getRepository()==null || getProject()==null) return super.getName();
-    	registerObserverWhenRequired();
-    	if (super.getName()==null)
-    		setName(nameForRepositoryAndProject(getCGFile().getRepository(), getProject()));
-    	return nameForRepositoryAndProject(getCGFile().getRepository(), getProject());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getProject() == null) {
+			return super.getName();
+		}
+		registerObserverWhenRequired();
+		if (super.getName() == null) {
+			setName(nameForRepositoryAndProject(getCGFile().getRepository(), getProject()));
+		}
+		return nameForRepositoryAndProject(getCGFile().getRepository(), getProject());
+	}
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getProject() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getProject());
-            getProject().addObserver(this);
-    	}
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getProject() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
+			getProject().addObserver(this);
+		}
+	}
 
-    public static String nameForRepositoryAndProject(GenerationRepository repository, FlexoProject project)
-    {
-    	return repository.getName()+".PROJECT_LATEX."+project.getProjectName();
-    }
+	public static String nameForRepositoryAndProject(GenerationRepository repository, FlexoProject project) {
+		return repository.getName() + ".PROJECT_LATEX." + project.getProjectName();
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToDependantResources(getProject().getTOCResource());
-        addToDependantResources(getProject().getGeneratedDocResource());
-   }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getTOCResource());
+		addToDependantResources(getProject().getGeneratedDocResource());
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
 
 	}
 
-   /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     *
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof GeneratedDocResource) {
-			if (getGenerator()!=null) {
+			if (getGenerator() != null) {
 				if (!requestDate.before(getGenerator().getRepository().getLastUpdateDate())) {
-					if (logger.isLoggable(Level.FINER)) logger.finer("OPTIMIST DEPENDANCY CHECKING for DGRepository "+getRepository());
+					if (logger.isLoggable(Level.FINER)) {
+						logger.finer("OPTIMIST DEPENDANCY CHECKING for DGRepository " + getRepository());
+					}
 					return false;
 				}
 			}
 		} else if (resource instanceof FlexoTOCResource) {
-			if (getGenerator()!=null && getGenerator().getRepository().getTocRepository()!=null) {
+			if (getGenerator() != null && getGenerator().getRepository().getTocRepository() != null) {
 				if (!requestDate.before(getGenerator().getRepository().getTocRepository().getLastUpdateDate())) {
-					if (logger.isLoggable(Level.FINER)) logger.finer("OPTIMIST DEPENDANCY CHECKING for TOC ENTRY "+getRepository());
+					if (logger.isLoggable(Level.FINER)) {
+						logger.finer("OPTIMIST DEPENDANCY CHECKING for TOC ENTRY " + getRepository());
+					}
 					return false;
 				}
 			}
@@ -139,6 +136,5 @@ public class ProjectLatexFileResource extends LatexFileResource<DGLatexGenerator
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
-
 
 }

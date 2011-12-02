@@ -23,13 +23,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
 
-
 public abstract class FlexoWKFTestCase extends FlexoTestCase {
 
-		protected static final Logger logger = Logger.getLogger(FlexoWKFTestCase.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(FlexoWKFTestCase.class.getPackage().getName());
 
-		
-		public FlexoWKFTestCase(String arg0) {
-			super(arg0);
-		}
+	public FlexoWKFTestCase(String arg0) {
+		super(arg0);
+	}
 }

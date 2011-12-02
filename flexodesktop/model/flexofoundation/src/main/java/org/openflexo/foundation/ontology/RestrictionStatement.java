@@ -29,28 +29,25 @@ public abstract class RestrictionStatement extends OntologyStatement {
 	private static final Logger logger = Logger.getLogger(RestrictionStatement.class.getPackage().getName());
 
 	public static final String SUB_CLASS_URI = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
-	
+
 	protected Restriction restriction;
-	
-	
-	public RestrictionStatement(OntologyObject subject, Statement s, Restriction r)
-	{
-		super(subject,s);
+
+	public RestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
+		super(subject, s);
 		restriction = r;
 	}
-	
+
 	public abstract OntologyProperty getProperty();
 
 	@Override
 	public abstract String getName();
-	
-	public static enum RestrictionType
-	{
-		Some,
-		Only,
-		Min,
-		Max,
-		Exact;
+
+	public static enum RestrictionType {
+		Some, Only, Min, Max, Exact;
 	}
+
+	public abstract RestrictionType getRestrictionType();
+
+	public abstract int getCardinality();
 
 }

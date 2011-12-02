@@ -37,70 +37,69 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class OperationComponentJavaFileResource extends ComponentJavaFileResource<PageComponentGenerator> implements OperationComponentFileResource
-{
-    static final Logger logger = FlexoLogger.getLogger(OperationComponentJavaFileResource.class.getPackage().getName());
+public class OperationComponentJavaFileResource extends ComponentJavaFileResource<PageComponentGenerator> implements
+		OperationComponentFileResource {
+	static final Logger logger = FlexoLogger.getLogger(OperationComponentJavaFileResource.class.getPackage().getName());
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-    	super.rebuildDependancies();
-    	if (getGenerator() != null) {
-    		for (ComponentInstance ci : getComponentDefinition().getComponentInstances()) {
-    			if (ci instanceof OperationComponentInstance)
-    				addToDependantResources(((OperationComponentInstance)ci).getOperationNode().getProcess().getFlexoResource());
-    		}
-    	}
-    }
-    
-    /**
-     * @param builder
-     */
-    public OperationComponentJavaFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-
-    /**
-     * @param aProject
-     */
-    public OperationComponentJavaFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
-
-    /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     * 
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		if (getGenerator() != null) {
+			for (ComponentInstance ci : getComponentDefinition().getComponentInstances()) {
+				if (ci instanceof OperationComponentInstance) {
+					addToDependantResources(((OperationComponentInstance) ci).getOperationNode().getProcess().getFlexoResource());
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param builder
+	 */
+	public OperationComponentJavaFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
+
+	/**
+	 * @param aProject
+	 */
+	public OperationComponentJavaFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof FlexoProcessResource) {
-			FlexoProcessResource processRes = (FlexoProcessResource)resource;
+			FlexoProcessResource processRes = (FlexoProcessResource) resource;
 			if (processRes.isLoaded()) {
 				FlexoProcess concernedProcess = processRes.getResourceData();
 				if (getGenerator() != null) {
 					boolean iCanBeOptimistic = true;
 					for (ComponentInstance ci : getComponentDefinition().getComponentInstances()) {
 						if (ci instanceof OperationComponentInstance) {
-							OperationNode operationNode = ((OperationComponentInstance)ci).getOperationNode();
+							OperationNode operationNode = ((OperationComponentInstance) ci).getOperationNode();
 							if (operationNode.getProcess() == concernedProcess) {
 								if (!operationNode.getLastUpdate().before(requestDate)) {
 									iCanBeOptimistic = false;
 								}
 							}
 						}
-		    		}
-		    		if (iCanBeOptimistic) return false;
-		    	}
+					}
+					if (iCanBeOptimistic) {
+						return false;
+					}
+				}
 			}
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);

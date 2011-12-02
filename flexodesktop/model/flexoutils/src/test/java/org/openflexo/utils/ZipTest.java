@@ -25,24 +25,24 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import junit.framework.TestCase;
+
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ZipUtils;
-
-import junit.framework.TestCase;
 
 public class ZipTest extends TestCase {
 
 	private static final String INNER_FILE_NAME = "InnerFileName";
 	private static final String SUB_INNER_FILE_NAME = "SubInnerFileName";
 	private static final String INNER_DIRECTORY_NAME = "InnerDirectoryName";
-	
+
 	private static final String FILE_CONTENT = "²&é\"'(§è!çà)-azertyuiop^$qsdfghjklmùµ<wxcvbn,;:=³1234567890°_AZERTYUIOP¨*QSDFGHJKLM%%%£>WXCVBN?./+|@#^{}€[]µ´`\\~\n";
-	
+
 	private File directory;
 	private File innerFile;
 	private File innerDirectory;
 	private File subInnerFile;
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -50,30 +50,36 @@ public class ZipTest extends TestCase {
 		temp.delete();
 		assertTrue(temp.mkdir());
 		directory = temp;
-		System.err.println("Zip directory test: "+directory.getAbsolutePath());
-		innerFile = new File(directory,INNER_FILE_NAME);
+		System.err.println("Zip directory test: " + directory.getAbsolutePath());
+		innerFile = new File(directory, INNER_FILE_NAME);
 		assertTrue(innerFile.createNewFile());
 		FileUtils.saveToFile(innerFile, FILE_CONTENT);
-		innerDirectory = new File(directory,INNER_DIRECTORY_NAME);
+		innerDirectory = new File(directory, INNER_DIRECTORY_NAME);
 		assertTrue(innerDirectory.mkdir());
-		subInnerFile = new File(innerDirectory,SUB_INNER_FILE_NAME);
+		subInnerFile = new File(innerDirectory, SUB_INNER_FILE_NAME);
 		assertTrue(subInnerFile.createNewFile());
 		FileUtils.saveToFile(subInnerFile, FILE_CONTENT);
 	}
-	
+
+	@Override
+	protected void tearDown() throws Exception {
+		FileUtils.deleteDir(directory);
+		super.tearDown();
+	}
+
 	public void testZipUnzip() throws Exception {
 		File archive = File.createTempFile("ZipTestFile", ".zip");
-		System.err.println("Zip archive: "+archive.getAbsolutePath());
+		System.err.println("Zip archive: " + archive.getAbsolutePath());
 		ZipUtils.makeZip(archive, directory);
 		assertTrue(archive.exists());
 		ZipFile zipFile = new ZipFile(archive);
-		assertZipEntryCount(zipFile,2); // Directories don't count
-		File output = new File(System.getProperty("java.io.tmpdir"),"OutputOf"+archive.getName());
+		assertZipEntryCount(zipFile, 2); // Directories don't count
+		File output = new File(System.getProperty("java.io.tmpdir"), "OutputOf" + archive.getName());
 		ZipUtils.unzip(archive, output);
-		File extractedDirectory = new File(output,directory.getName());
-		File extractedInnerFile = new File(extractedDirectory,INNER_FILE_NAME);
-		File extractedInnerDirectory = new File(extractedDirectory,INNER_DIRECTORY_NAME);
-		File extractedSubInnerFile = new File(extractedInnerDirectory,SUB_INNER_FILE_NAME);
+		File extractedDirectory = new File(output, directory.getName());
+		File extractedInnerFile = new File(extractedDirectory, INNER_FILE_NAME);
+		File extractedInnerDirectory = new File(extractedDirectory, INNER_DIRECTORY_NAME);
+		File extractedSubInnerFile = new File(extractedInnerDirectory, SUB_INNER_FILE_NAME);
 		assertTrue(extractedDirectory.exists());
 		assertTrue(extractedDirectory.isDirectory());
 		assertTrue(extractedInnerDirectory.exists());
@@ -84,12 +90,14 @@ public class ZipTest extends TestCase {
 		assertTrue(extractedSubInnerFile.isFile());
 		assertEquals(FILE_CONTENT, FileUtils.fileContents(extractedInnerFile));
 		assertEquals(FILE_CONTENT, FileUtils.fileContents(extractedSubInnerFile));
+		FileUtils.deleteDir(output);
+		archive.delete();
 	}
 
 	public void testZipUnzipFiltered() throws Exception {
 		File archive = File.createTempFile("ZipTestFile", ".zip");
-		System.err.println("Zip archive: "+archive.getAbsolutePath());
-		ZipUtils.makeZip(archive, directory, null,new FileFilter() {
+		System.err.println("Zip archive: " + archive.getAbsolutePath());
+		ZipUtils.makeZip(archive, directory, null, new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
 				return !pathname.equals(innerFile);
@@ -97,13 +105,13 @@ public class ZipTest extends TestCase {
 		});
 		assertTrue(archive.exists());
 		ZipFile zipFile = new ZipFile(archive);
-		assertZipEntryCount(zipFile,1);
-		File output = new File(System.getProperty("java.io.tmpdir"),"OutputOf"+archive.getName());
+		assertZipEntryCount(zipFile, 1);
+		File output = new File(System.getProperty("java.io.tmpdir"), "OutputOf" + archive.getName());
 		ZipUtils.unzip(archive, output);
-		File extractedDirectory = new File(output,directory.getName());
-		File extractedInnerFile = new File(extractedDirectory,INNER_FILE_NAME);
-		File extractedInnerDirectory = new File(extractedDirectory,INNER_DIRECTORY_NAME);
-		File extractedSubInnerFile = new File(extractedInnerDirectory,SUB_INNER_FILE_NAME);
+		File extractedDirectory = new File(output, directory.getName());
+		File extractedInnerFile = new File(extractedDirectory, INNER_FILE_NAME);
+		File extractedInnerDirectory = new File(extractedDirectory, INNER_DIRECTORY_NAME);
+		File extractedSubInnerFile = new File(extractedInnerDirectory, SUB_INNER_FILE_NAME);
 		assertTrue(extractedDirectory.exists());
 		assertTrue(extractedDirectory.isDirectory());
 		assertTrue(extractedInnerDirectory.exists());
@@ -111,12 +119,14 @@ public class ZipTest extends TestCase {
 		assertFalse(extractedInnerFile.exists());
 		assertTrue(extractedSubInnerFile.exists());
 		assertTrue(extractedSubInnerFile.isFile());
+		FileUtils.deleteDir(output);
+		archive.delete();
 	}
-	
+
 	public void testZipUnzipFiltered2() throws Exception {
 		File archive = File.createTempFile("ZipTestFile", ".zip");
-		System.err.println("Zip archive: "+archive.getAbsolutePath());
-		ZipUtils.makeZip(archive, directory, null,new FileFilter() {
+		System.err.println("Zip archive: " + archive.getAbsolutePath());
+		ZipUtils.makeZip(archive, directory, null, new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
 				return !pathname.equals(subInnerFile);
@@ -124,31 +134,33 @@ public class ZipTest extends TestCase {
 		});
 		assertTrue(archive.exists());
 		ZipFile zipFile = new ZipFile(archive);
-		assertZipEntryCount(zipFile,1);
-		File output = new File(System.getProperty("java.io.tmpdir"),"OutputOf"+archive.getName());
+		assertZipEntryCount(zipFile, 1);
+		File output = new File(System.getProperty("java.io.tmpdir"), "OutputOf" + archive.getName());
 		ZipUtils.unzip(archive, output);
-		File extractedDirectory = new File(output,directory.getName());
-		File extractedInnerFile = new File(extractedDirectory,INNER_FILE_NAME);
-		File extractedInnerDirectory = new File(extractedDirectory,INNER_DIRECTORY_NAME);
-		File extractedSubInnerFile = new File(extractedInnerDirectory,SUB_INNER_FILE_NAME);
+		File extractedDirectory = new File(output, directory.getName());
+		File extractedInnerFile = new File(extractedDirectory, INNER_FILE_NAME);
+		File extractedInnerDirectory = new File(extractedDirectory, INNER_DIRECTORY_NAME);
+		File extractedSubInnerFile = new File(extractedInnerDirectory, SUB_INNER_FILE_NAME);
 		assertTrue(extractedDirectory.exists());
 		assertTrue(extractedDirectory.isDirectory());
 		assertFalse(extractedInnerDirectory.exists());
 		assertTrue(extractedInnerFile.exists());
 		assertFalse(extractedSubInnerFile.exists());
+		FileUtils.deleteDir(output);
+		archive.delete();
 	}
-	
+
 	/**
 	 * @param zipFile
 	 */
 	private void assertZipEntryCount(ZipFile zipFile, int expected) {
 		int count = 0;
-		Enumeration<? extends ZipEntry> en =zipFile.entries();
+		Enumeration<? extends ZipEntry> en = zipFile.entries();
 		while (en.hasMoreElements()) {
 			ZipEntry e = en.nextElement();
 			count++;
 		}
 		assertEquals(expected, count);
 	}
-	
+
 }

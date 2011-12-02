@@ -22,19 +22,18 @@ package org.openflexo.icon;
 import javax.swing.ImageIcon;
 
 import org.openflexo.toolbox.FileFormat;
-import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.toolbox.FileFormat.BinaryFileFormat;
 import org.openflexo.toolbox.FileFormat.DirectoryFormat;
 import org.openflexo.toolbox.FileFormat.ImageFileFormat;
 import org.openflexo.toolbox.FileFormat.TextFileFormat;
+import org.openflexo.toolbox.ImageIconResource;
 
 /**
- * Utility class containing all icons used in whole application
- * Note that this file will be relocated inside Flexo project for common icons, and in each module
- * for all module-specific icons
+ * Utility class containing all icons used in whole application Note that this file will be relocated inside Flexo project for common icons,
+ * and in each module for all module-specific icons
  * 
  * @author sylvain
- *
+ * 
  */
 public class FilesIconLibrary {
 
@@ -66,12 +65,11 @@ public class FilesIconLibrary {
 	public static final ImageIcon BIG_FOLDER_ICON = new ImageIconResource("Icons/MimeTypes/64x64/folder.png");
 	public static final ImageIcon BIG_WO_FILE_ICON = new ImageIconResource("Icons/MimeTypes/64x64/wo-wo.png");
 	public static final ImageIcon BIG_EO_MODEL_ICON = new ImageIconResource("Icons/MimeTypes/64x64/folder.png");
-	
+
 	public static final ImageIcon BIG_UNKNOWN_FILE_ICON = new ImageIconResource("Icons/MimeTypes/64x64/unknown.png");
 	public static final ImageIcon BIG_MISC_FILE_ICON = new ImageIconResource("Icons/MimeTypes/64x64/misc.png");
-	
-	public static ImageIcon bigIconForFileFormat(FileFormat format)
-	{
+
+	public static ImageIcon bigIconForFileFormat(FileFormat format) {
 		if (format instanceof TextFileFormat) {
 			if (format == FileFormat.JAVA) {
 				return BIG_JAVA_FILE_ICON;
@@ -111,7 +109,7 @@ public class FilesIconLibrary {
 				return BIG_MISC_FILE_ICON;
 			}
 		}
-		
+
 		else if (format instanceof DirectoryFormat) {
 			if (format == FileFormat.EOMODEL) {
 				return BIG_EO_MODEL_ICON;
@@ -121,7 +119,7 @@ public class FilesIconLibrary {
 				return BIG_FOLDER_ICON;
 			}
 		}
-		
+
 		else if (format instanceof BinaryFileFormat) {
 			if (format == FileFormat.ZIP) {
 				return BIG_ZIP_ICON;
@@ -131,14 +129,14 @@ public class FilesIconLibrary {
 				return BIG_BINARY_ICON;
 			}
 		}
-		
+
 		else if (format instanceof ImageFileFormat) {
 			return BIG_IMAGE_ICON;
 		}
-		
+
 		return BIG_UNKNOWN_FILE_ICON;
 	}
-	
+
 	// MEDIUM files
 	public static final ImageIcon MEDIUM_JAVA_FILE_ICON = new ImageIconResource("Icons/MimeTypes/32x32/text-x-java-2.png");
 	public static final ImageIcon MEDIUM_WOD_FILE_ICON = new ImageIconResource("Icons/MimeTypes/32x32/wo-wod.png");
@@ -167,12 +165,11 @@ public class FilesIconLibrary {
 	public static final ImageIcon MEDIUM_FOLDER_ICON = new ImageIconResource("Icons/MimeTypes/32x32/folder.png");
 	public static final ImageIcon MEDIUM_WO_FILE_ICON = new ImageIconResource("Icons/MimeTypes/32x32/wo-wo.png");
 	public static final ImageIcon MEDIUM_EO_MODEL_ICON = new ImageIconResource("Icons/MimeTypes/32x32/folder.png");
-	
+
 	public static final ImageIcon MEDIUM_UNKNOWN_FILE_ICON = new ImageIconResource("Icons/MimeTypes/32x32/unknown.png");
 	public static final ImageIcon MEDIUM_MISC_FILE_ICON = new ImageIconResource("Icons/MimeTypes/32x32/misc.png");
 
-	public static ImageIcon mediumIconForFileFormat(FileFormat format)
-	{
+	public static ImageIcon mediumIconForFileFormat(FileFormat format) {
 		if (format instanceof TextFileFormat) {
 			if (format == FileFormat.JAVA) {
 				return MEDIUM_JAVA_FILE_ICON;
@@ -212,7 +209,7 @@ public class FilesIconLibrary {
 				return MEDIUM_MISC_FILE_ICON;
 			}
 		}
-		
+
 		else if (format instanceof DirectoryFormat) {
 			if (format == FileFormat.EOMODEL) {
 				return MEDIUM_EO_MODEL_ICON;
@@ -222,7 +219,7 @@ public class FilesIconLibrary {
 				return MEDIUM_FOLDER_ICON;
 			}
 		}
-		
+
 		else if (format instanceof BinaryFileFormat) {
 			if (format == FileFormat.ZIP) {
 				return MEDIUM_ZIP_ICON;
@@ -232,14 +229,14 @@ public class FilesIconLibrary {
 				return MEDIUM_BINARY_ICON;
 			}
 		}
-		
+
 		else if (format instanceof ImageFileFormat) {
 			return MEDIUM_IMAGE_ICON;
 		}
-		
+
 		return MEDIUM_UNKNOWN_FILE_ICON;
 	}
-	
+
 	// SMALL files
 	public static final ImageIcon SMALL_JAVA_FILE_ICON = new ImageIconResource("Icons/MimeTypes/16x16/text-x-java-2.png");
 	public static final ImageIcon SMALL_WOD_FILE_ICON = new ImageIconResource("Icons/MimeTypes/16x16/wo-wod.png");
@@ -268,12 +265,11 @@ public class FilesIconLibrary {
 	public static final ImageIcon SMALL_FOLDER_ICON = new ImageIconResource("Icons/MimeTypes/16x16/folder.png");
 	public static final ImageIcon SMALL_WO_FILE_ICON = new ImageIconResource("Icons/MimeTypes/16x16/wo-wo.png");
 	public static final ImageIcon SMALL_EO_MODEL_ICON = new ImageIconResource("Icons/MimeTypes/16x16/folder.png");
-	
+
 	public static final ImageIcon SMALL_UNKNOWN_FILE_ICON = new ImageIconResource("Icons/MimeTypes/16x16/unknown.png");
 	public static final ImageIcon SMALL_MISC_FILE_ICON = new ImageIconResource("Icons/MimeTypes/16x16/misc.png");
-	
-	public static ImageIcon smallIconForFileFormat(FileFormat format)
-	{
+
+	public static ImageIcon smallIconForFileFormat(FileFormat format) {
 		if (format instanceof TextFileFormat) {
 			if (format == FileFormat.JAVA) {
 				return SMALL_JAVA_FILE_ICON;
@@ -313,7 +309,7 @@ public class FilesIconLibrary {
 				return SMALL_MISC_FILE_ICON;
 			}
 		}
-		
+
 		else if (format instanceof DirectoryFormat) {
 			if (format == FileFormat.EOMODEL) {
 				return SMALL_EO_MODEL_ICON;
@@ -323,7 +319,7 @@ public class FilesIconLibrary {
 				return SMALL_FOLDER_ICON;
 			}
 		}
-		
+
 		else if (format instanceof BinaryFileFormat) {
 			if (format == FileFormat.ZIP) {
 				return SMALL_ZIP_ICON;
@@ -333,13 +329,12 @@ public class FilesIconLibrary {
 				return SMALL_BINARY_ICON;
 			}
 		}
-		
+
 		else if (format instanceof ImageFileFormat) {
 			return SMALL_IMAGE_ICON;
 		}
-		
+
 		return SMALL_UNKNOWN_FILE_ICON;
 	}
-	
 
 }

@@ -27,60 +27,68 @@ import org.jdom.Element;
 
 public class AttributesDiff {
 
-	private Hashtable<String,Attribute> deletedAttributes;
-	private Hashtable<String,Attribute> addedAttributes;
-	private Hashtable<Attribute,Attribute> updatedAttributes;
+	private Hashtable<String, Attribute> deletedAttributes;
+	private Hashtable<String, Attribute> addedAttributes;
+	private Hashtable<Attribute, Attribute> updatedAttributes;
 	private boolean _noDiff = true;
 	private DocumentsMapping _documentMapping;
 	private Element _sourceElement;
-	public AttributesDiff(Element src,Element target,DocumentsMapping docMapping){
+
+	public AttributesDiff(Element src, Element target, DocumentsMapping docMapping) {
 		super();
 		_sourceElement = src;
 		_documentMapping = docMapping;
-		deletedAttributes = new Hashtable<String,Attribute>();
-		addedAttributes = new Hashtable<String,Attribute>();
-		updatedAttributes = new Hashtable<Attribute,Attribute>();
+		deletedAttributes = new Hashtable<String, Attribute>();
+		addedAttributes = new Hashtable<String, Attribute>();
+		updatedAttributes = new Hashtable<Attribute, Attribute>();
 		Iterator<Attribute> it = src.getAttributes().iterator();
 		Attribute item = null;
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			item = it.next();
-			if(target.getAttribute(item.getName())==null){
-				deletedAttributes.put(item.getName(),item);
+			if (target.getAttribute(item.getName()) == null) {
+				deletedAttributes.put(item.getName(), item);
 				_noDiff = false;
-			}else if(!item.getValue().equals(target.getAttributeValue(item.getName()))){
-				updatedAttributes.put(item,target.getAttribute(item.getName()));
+			} else if (!item.getValue().equals(target.getAttributeValue(item.getName()))) {
+				updatedAttributes.put(item, target.getAttribute(item.getName()));
 				_noDiff = false;
 			}
 		}
 		it = target.getAttributes().iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			item = it.next();
-			if(src.getAttribute(item.getName())==null){
-				addedAttributes.put(item.getName(),item);
+			if (src.getAttribute(item.getName()) == null) {
+				addedAttributes.put(item.getName(), item);
 				_noDiff = false;
 			}
 		}
 	}
-	public Element getSourceElement(){
+
+	public Element getSourceElement() {
 		return _sourceElement;
 	}
-	public DocumentsMapping getDocumentMapping(){
+
+	public DocumentsMapping getDocumentMapping() {
 		return _documentMapping;
 	}
-	public boolean noDiff(){
+
+	public boolean noDiff() {
 		return _noDiff;
 	}
-	public Hashtable<String,Attribute> getDeletedAttributes() {
+
+	public Hashtable<String, Attribute> getDeletedAttributes() {
 		return deletedAttributes;
 	}
-	public Hashtable<String,Attribute> getAddedAttributes() {
+
+	public Hashtable<String, Attribute> getAddedAttributes() {
 		return addedAttributes;
 	}
+
 	public Hashtable<Attribute, Attribute> getUpdatedAttributes() {
 		return updatedAttributes;
 	}
+
 	public boolean isUnchanged() {
-		return getDeletedAttributes().size()==0 && getAddedAttributes().size()==0 && getUpdatedAttributes().size()==0;
+		return getDeletedAttributes().size() == 0 && getAddedAttributes().size() == 0 && getUpdatedAttributes().size() == 0;
 	}
 
 }

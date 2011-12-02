@@ -39,69 +39,58 @@ import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
-public class DocxXmlFileResource<G extends DGDocxXMLGenerator<? extends FlexoModelObject>> extends TextFileResource<G, DGDocxXmlFile> implements GenerationAvailableFileResource, FlexoObserver
-{
+public class DocxXmlFileResource<G extends DGDocxXMLGenerator<? extends FlexoModelObject>> extends TextFileResource<G, DGDocxXmlFile>
+		implements GenerationAvailableFileResource, FlexoObserver {
 	protected static final Logger logger = FlexoLogger.getLogger(HTMLFileResource.class.getPackage().getName());
 
 	/**
 	 * @param builder
 	 */
-	public DocxXmlFileResource(FlexoProjectBuilder builder)
-	{
+	public DocxXmlFileResource(FlexoProjectBuilder builder) {
 		super(builder);
 	}
 
 	/**
 	 * @param aProject
 	 */
-	public DocxXmlFileResource(FlexoProject aProject)
-	{
+	public DocxXmlFileResource(FlexoProject aProject) {
 		super(aProject);
 	}
 
 	@Override
-	public String getFileName()
-	{
-		try
-		{
+	public String getFileName() {
+		try {
 			String fileName = super.getFileName();
 			if (fileName != null) {
 				return fileName;
 			}
-		}
-		catch (RuntimeException e)
-		{
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	@Override
-	protected DocxXmlFile createGeneratedResourceData()
-	{
+	protected DocxXmlFile createGeneratedResourceData() {
 		return new DocxXmlFile(getFile(), this);
 	}
 
 	@Override
-	public DocxXmlFile getGeneratedResourceData()
-	{
+	public DocxXmlFile getGeneratedResourceData() {
 		return (DocxXmlFile) super.getGeneratedResourceData();
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource,
-	 * asserting that this resource is contained in this resource's dependant
-	 * resources
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
 	 * 
 	 * @param resource
 	 * @param dependancyScheme
 	 * @return
 	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
-		if (resource instanceof TemplateLocator)
-		{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		if (resource instanceof TemplateLocator) {
 			return ((TemplateLocator) resource).needsUpdateForResource(this);
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
@@ -113,8 +102,7 @@ public class DocxXmlFileResource<G extends DGDocxXMLGenerator<? extends FlexoMod
 	 * @see org.openflexo.foundation.rm.cg.TextFileResource#getFileFormat()
 	 */
 	@Override
-	public FileFormat getResourceFormat()
-	{
+	public FileFormat getResourceFormat() {
 		return FileFormat.XML;
 	}
 
@@ -124,8 +112,7 @@ public class DocxXmlFileResource<G extends DGDocxXMLGenerator<? extends FlexoMod
 	 * @see org.openflexo.foundation.rm.cg.TextFileResource#getResourceType()
 	 */
 	@Override
-	public ResourceType getResourceType()
-	{
+	public ResourceType getResourceType() {
 		return ResourceType.DOCXXML_FILE;
 	}
 
@@ -135,8 +122,7 @@ public class DocxXmlFileResource<G extends DGDocxXMLGenerator<? extends FlexoMod
 	 * @see org.openflexo.foundation.rm.cg.TextFileResource#setFileFormat(org.openflexo.foundation.rm.ResourceFormat)
 	 */
 	@Override
-	public void setResourceFormat(FileFormat format)
-	{
+	public void setResourceFormat(FileFormat format) {
 		if (format != FileFormat.XML) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Who tried that? This is strictly forbidden. Yes you can thank me for preventing this kind of problem...");
@@ -151,14 +137,10 @@ public class DocxXmlFileResource<G extends DGDocxXMLGenerator<? extends FlexoMod
 	 *      org.openflexo.foundation.DataModification)
 	 */
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
-		if (observable == getGenerator().getObject())
-		{
-			if ((dataModification.propertyName() != null) && dataModification.equals("dontGenerate"))
-			{
-				if (getGenerator().getObject().getDontGenerate())
-				{
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable == getGenerator().getObject()) {
+			if ((dataModification.propertyName() != null) && dataModification.equals("dontGenerate")) {
+				if (getGenerator().getObject().getDontGenerate()) {
 					logger.info("Handle dont generate for object");
 					setGenerator(null);
 					getCGFile().setMarkedForDeletion(true);

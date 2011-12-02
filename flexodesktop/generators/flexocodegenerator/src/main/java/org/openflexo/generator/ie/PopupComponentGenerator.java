@@ -31,32 +31,28 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class PopupComponentGenerator extends ComponentGenerator
-{
-    
+public class PopupComponentGenerator extends ComponentGenerator {
+
 	protected Logger logger = FlexoLogger.getLogger(PopupComponentGenerator.class.getPackage().getName());
 
 	/**
-     * @param projectGenerator
-     * @param componentDefinition
-     * @param componentGeneratedName
-     */
-    public PopupComponentGenerator(ProjectGenerator projectGenerator, PopupComponentDefinition componentDefinition)
-    {
-        super(projectGenerator, componentDefinition, nameForComponentDefinition(componentDefinition));
-    }
+	 * @param projectGenerator
+	 * @param componentDefinition
+	 * @param componentGeneratedName
+	 */
+	public PopupComponentGenerator(ProjectGenerator projectGenerator, PopupComponentDefinition componentDefinition) {
+		super(projectGenerator, componentDefinition, nameForComponentDefinition(componentDefinition));
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		// Java
 		javaResource = GeneratedFileResourceFactory.createNewPopupComponentJavaFileResource(repository, this);
 		resources.add(javaResource);
@@ -69,11 +65,10 @@ public class PopupComponentGenerator extends ComponentGenerator
 		apiResource = GeneratedFileResourceFactory.createNewPopupComponentAPIFileResource(repository, this);
 		resources.add(apiResource);
 	}
-	
+
 	@Override
-	public PopupComponentDefinition getComponentDefinition()
-	{
-		return (PopupComponentDefinition)super.getComponentDefinition();
+	public PopupComponentDefinition getComponentDefinition() {
+		return (PopupComponentDefinition) super.getComponentDefinition();
 	}
 
 }

@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents ActivityStateView object
- *
+ * 
  * @version $Id: ActivityStateView.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ActivityStateView extends View {
-  public ActivityStateView(PetalNode parent, Collection params, int tag) {
-    super(parent, "ActivityStateView", params, tag);
-  }
+	public ActivityStateView(PetalNode parent, Collection params, int tag) {
+		super(parent, "ActivityStateView", params, tag);
+	}
 
-  public ActivityStateView() {
-    super("ActivityStateView");
-  }
+	public ActivityStateView() {
+		super("ActivityStateView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

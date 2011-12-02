@@ -26,145 +26,136 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.DeletableObject;
 
-
 /**
- * Represents a validation issue requiring attention embedded in a validation
- * report
- *
+ * Represents a validation issue requiring attention embedded in a validation report
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class ProblemIssue<R extends ValidationRule<R,V>, V extends Validable> extends ValidationIssue<R,V>
-{
+public abstract class ProblemIssue<R extends ValidationRule<R, V>, V extends Validable> extends ValidationIssue<R, V> {
 
-    private static final Logger logger = Logger.getLogger(ProblemIssue.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ProblemIssue.class.getPackage().getName());
 
-    private Vector<FixProposal<R,V>> _fixProposals;
+	private Vector<FixProposal<R, V>> _fixProposals;
 
-    private R _validationRule;
+	private R _validationRule;
 
-    private Vector<Validable> _relatedValidableObjects;
+	private Vector<Validable> _relatedValidableObjects;
 
-    public ProblemIssue(R rule, V anObject, String aMessage)
-    {
-        super(anObject, aMessage);
-        _validationRule = rule;
-        _fixProposals = new Vector<FixProposal<R,V>>();
-        _relatedValidableObjects = new Vector<Validable>();
-    }
+	public ProblemIssue(R rule, V anObject, String aMessage) {
+		super(anObject, aMessage);
+		_validationRule = rule;
+		_fixProposals = new Vector<FixProposal<R, V>>();
+		_relatedValidableObjects = new Vector<Validable>();
+	}
 
-    public ProblemIssue(R rule, V anObject, String aMessage, FixProposal<R,V> proposal)
-    {
-        this(rule, anObject, aMessage);
-        if (proposal!=null)
-        	addToFixProposals(proposal);
-    }
+	public ProblemIssue(R rule, V anObject, String aMessage, FixProposal<R, V> proposal) {
+		this(rule, anObject, aMessage);
+		if (proposal != null) {
+			addToFixProposals(proposal);
+		}
+	}
 
-    public ProblemIssue(R rule, V anObject, String aMessage, Vector<FixProposal<R,V>> fixProposals)
-    {
-        this(rule, anObject, aMessage);
-        if (fixProposals!=null)
-	        for (FixProposal<R,V> fp : fixProposals) {
-	        	addToFixProposals(fp);
-	        }
-    }
+	public ProblemIssue(R rule, V anObject, String aMessage, Vector<FixProposal<R, V>> fixProposals) {
+		this(rule, anObject, aMessage);
+		if (fixProposals != null) {
+			for (FixProposal<R, V> fp : fixProposals) {
+				addToFixProposals(fp);
+			}
+		}
+	}
 
-    public void addToFixProposals(FixProposal<R,V> proposal)
-    {
-        _fixProposals.add(proposal);
-        proposal.setProblemIssue(this);
-    }
+	public void addToFixProposals(FixProposal<R, V> proposal) {
+		_fixProposals.add(proposal);
+		proposal.setProblemIssue(this);
+	}
 
-    public boolean isFixable()
-    {
-        return _fixProposals.size() > 0;
-    }
+	public boolean isFixable() {
+		return _fixProposals.size() > 0;
+	}
 
-    @Override
-	public int getSize()
-    {
-        return _fixProposals.size();
-    }
+	@Override
+	public int getSize() {
+		return _fixProposals.size();
+	}
 
-    @Override
-	public FixProposal<R,V> getElementAt(int index)
-    {
-        if (_fixProposals == null) {
-            return null;
-        }
-        return (_fixProposals.elementAt(index));
-    }
+	@Override
+	public FixProposal<R, V> getElementAt(int index) {
+		if (_fixProposals == null) {
+			return null;
+		}
+		return (_fixProposals.elementAt(index));
+	}
 
-    public void revalidateAfterFixing(boolean isDeleteAction)
-    {
-        Vector<ValidationIssue> allIssuesToRemove = getValidationReport().issuesRegarding(getObject());
-        for (Enumeration e = getRelatedValidableObjects().elements(); e.hasMoreElements();) {
-            Validable relatedValidable = (Validable) e.nextElement();
-            allIssuesToRemove.addAll(getValidationReport().issuesRegarding(relatedValidable));
-        }
-        if (getObject().getAllEmbeddedValidableObjects() != null) {
-            for (Enumeration e = getObject().getAllEmbeddedValidableObjects().elements(); e.hasMoreElements();) {
-                Validable embeddedValidable = (Validable) e.nextElement();
-                allIssuesToRemove.addAll(getValidationReport().issuesRegarding(embeddedValidable));
-            }
-        }
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Remove related issues");
-        getValidationReport().removeFromValidationIssues(allIssuesToRemove);
-        if (!isDeleteAction) {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Revalidate");
-            ValidationReport newReportForThisObject = getObject().validate(getValidationReport().getValidationModel());
-            if (logger.isLoggable(Level.FINE))
-                logger.finer("Found " + newReportForThisObject.getValidationIssues().size() + " new issues for this revalidated object");
-            for (Enumeration e = newReportForThisObject.getValidationIssues().elements(); e.hasMoreElements();) {
-                ValidationIssue newIssue = (ValidationIssue) e.nextElement();
-                getValidationReport().addToValidationIssues(newIssue);
-            }
-        }
-        for (Enumeration e = getRelatedValidableObjects().elements(); e.hasMoreElements();) {
-            Validable relatedValidable = (Validable) e.nextElement();
-            if (!((relatedValidable instanceof DeletableObject) && (((DeletableObject) relatedValidable).isDeleted()))) {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Revalidate related");
-                ValidationReport newReportForRelatedObject = relatedValidable.validate(getValidationReport().getValidationModel());
-                if (logger.isLoggable(Level.FINE))
-                    logger.finer("Found " + newReportForRelatedObject.getValidationIssues().size() + " new issues for this revalidated related object");
-                for (Enumeration e2 = newReportForRelatedObject.getValidationIssues().elements(); e2.hasMoreElements();) {
-                    ValidationIssue newIssue = (ValidationIssue) e2.nextElement();
-                    getValidationReport().addToValidationIssues(newIssue);
-                }
-            }
-        }
-    }
+	public void revalidateAfterFixing(boolean isDeleteAction) {
+		Vector<ValidationIssue> allIssuesToRemove = getValidationReport().issuesRegarding(getObject());
+		for (Enumeration e = getRelatedValidableObjects().elements(); e.hasMoreElements();) {
+			Validable relatedValidable = (Validable) e.nextElement();
+			allIssuesToRemove.addAll(getValidationReport().issuesRegarding(relatedValidable));
+		}
+		if (getObject().getAllEmbeddedValidableObjects() != null) {
+			for (Enumeration e = getObject().getAllEmbeddedValidableObjects().elements(); e.hasMoreElements();) {
+				Validable embeddedValidable = (Validable) e.nextElement();
+				allIssuesToRemove.addAll(getValidationReport().issuesRegarding(embeddedValidable));
+			}
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Remove related issues");
+		}
+		getValidationReport().removeFromValidationIssues(allIssuesToRemove);
+		if (!isDeleteAction) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Revalidate");
+			}
+			ValidationReport newReportForThisObject = getObject().validate(getValidationReport().getValidationModel());
+			if (logger.isLoggable(Level.FINE)) {
+				logger.finer("Found " + newReportForThisObject.getValidationIssues().size() + " new issues for this revalidated object");
+			}
+			for (Enumeration e = newReportForThisObject.getValidationIssues().elements(); e.hasMoreElements();) {
+				ValidationIssue newIssue = (ValidationIssue) e.nextElement();
+				getValidationReport().addToValidationIssues(newIssue);
+			}
+		}
+		for (Enumeration e = getRelatedValidableObjects().elements(); e.hasMoreElements();) {
+			Validable relatedValidable = (Validable) e.nextElement();
+			if (!((relatedValidable instanceof DeletableObject) && (((DeletableObject) relatedValidable).isDeleted()))) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Revalidate related");
+				}
+				ValidationReport newReportForRelatedObject = relatedValidable.validate(getValidationReport().getValidationModel());
+				if (logger.isLoggable(Level.FINE)) {
+					logger.finer("Found " + newReportForRelatedObject.getValidationIssues().size()
+							+ " new issues for this revalidated related object");
+				}
+				for (Enumeration e2 = newReportForRelatedObject.getValidationIssues().elements(); e2.hasMoreElements();) {
+					ValidationIssue newIssue = (ValidationIssue) e2.nextElement();
+					getValidationReport().addToValidationIssues(newIssue);
+				}
+			}
+		}
+	}
 
-    public R getValidationRule()
-    {
-        return _validationRule;
-    }
+	public R getValidationRule() {
+		return _validationRule;
+	}
 
-    public Vector<Validable> getRelatedValidableObjects()
-    {
-        return _relatedValidableObjects;
-    }
+	public Vector<Validable> getRelatedValidableObjects() {
+		return _relatedValidableObjects;
+	}
 
-    public void setRelatedValidableObjects(Vector<Validable> relatedValidableObjects)
-    {
-        _relatedValidableObjects = relatedValidableObjects;
-    }
+	public void setRelatedValidableObjects(Vector<Validable> relatedValidableObjects) {
+		_relatedValidableObjects = relatedValidableObjects;
+	}
 
-    public void addToRelatedValidableObjects(Validable object)
-    {
-        _relatedValidableObjects.add(object);
-    }
+	public void addToRelatedValidableObjects(Validable object) {
+		_relatedValidableObjects.add(object);
+	}
 
-    public void addToRelatedValidableObjects(Vector<? extends Validable> someObjects)
-    {
-        _relatedValidableObjects.addAll(someObjects);
-    }
+	public void addToRelatedValidableObjects(Vector<? extends Validable> someObjects) {
+		_relatedValidableObjects.addAll(someObjects);
+	}
 
-    public void removeFromRelatedValidableObjects(Validable object)
-    {
-        _relatedValidableObjects.remove(object);
-    }
+	public void removeFromRelatedValidableObjects(Validable object) {
+		_relatedValidableObjects.remove(object);
+	}
 }

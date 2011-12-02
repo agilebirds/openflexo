@@ -21,30 +21,26 @@ package org.openflexo.foundation.dkv.dm;
 
 import org.openflexo.foundation.dkv.Language;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class LanguageAdded extends DKVDataModification
-{
-    private Language _addedLanguage;
+public class LanguageAdded extends DKVDataModification {
+	private Language _addedLanguage;
 
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public LanguageAdded(Language newValue)
-    {
-        super(-1, "languages", null, newValue);
-        _addedLanguage = newValue;
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public LanguageAdded(Language newValue) {
+		super(-1, "languages", null, newValue);
+		_addedLanguage = newValue;
+	}
 
-    public Language getAddedLanguage() 
-    {
-        return _addedLanguage;
-    }
+	public Language getAddedLanguage() {
+		return _addedLanguage;
+	}
 
 }

@@ -18,74 +18,79 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Label object
- *
+ * 
  * @version $Id: Label.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Label extends PetalObject implements Tagged {
-  public Label(PetalNode parent, Collection params) {
-    super(parent, "Label", params);
-    setTag(tag);
-  }
+	public Label(PetalNode parent, Collection params) {
+		super(parent, "Label", params);
+		setTag(tag);
+	}
 
-  public Label() {
-    super("Label");
-  }
+	public Label() {
+		super("Label");
+	}
 
-  private int tag = -1;
+	private int tag = -1;
 
-  @Override
-public void setTag(int t) { tag = t; }
+	@Override
+	public void setTag(int t) {
+		tag = t;
+	}
 
-  @Override
-public int  getTag()      { return tag; }
+	@Override
+	public int getTag() {
+		return tag;
+	}
 
-  public Location getLocation() {
-    return (Location)getProperty("location");
-  }
+	public Location getLocation() {
+		return (Location) getProperty("location");
+	}
 
-  public void setLocation(Location o) {
-    defineProperty("location", o);
-  }
+	public void setLocation(Location o) {
+		defineProperty("location", o);
+	}
 
-  public Font getFont() {
-    return (Font)getProperty("font");
-  }
+	public Font getFont() {
+		return (Font) getProperty("font");
+	}
 
-  public void setFont(Font o) {
-    defineProperty("font", o);
-  }
+	public void setFont(Font o) {
+		defineProperty("font", o);
+	}
 
-  public int getNlines() {
-    return getPropertyAsInteger("nlines");
-  }
+	public int getNlines() {
+		return getPropertyAsInteger("nlines");
+	}
 
-  public void setNlines(int o) {
-    defineProperty("nlines", o);
-  }
+	public void setNlines(int o) {
+		defineProperty("nlines", o);
+	}
 
-  public int getMaxWidth() {
-    return getPropertyAsInteger("max_width");
-  }
+	public int getMaxWidth() {
+		return getPropertyAsInteger("max_width");
+	}
 
-  public void setMaxWidth(int o) {
-    defineProperty("max_width", o);
-  }
+	public void setMaxWidth(int o) {
+		defineProperty("max_width", o);
+	}
 
-  public String getLabel() {
-    return getPropertyAsString("label");
-  }
+	public String getLabel() {
+		return getPropertyAsString("label");
+	}
 
-  public void setLabel(String o) {
-    defineProperty("label", o);
-  }
+	public void setLabel(String o) {
+		defineProperty("label", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

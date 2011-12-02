@@ -18,8 +18,8 @@
  *
  */
 package org.openflexo.antar.expr.parser;
-import org.openflexo.antar.expr.UnaryOperator;
 
+import org.openflexo.antar.expr.UnaryOperator;
 
 /*
  * Created on 4 janv. 2006 by sguerin
@@ -30,35 +30,30 @@ import org.openflexo.antar.expr.UnaryOperator;
 
 public class ParsedUnaryExpression extends ParsedExpression {
 
-    private ParsedOperator _operator;
-    private Token _operand;
-     
-    public ParsedUnaryExpression(ParsedOperator operator, ListOfToken operand) throws ParseException
-    {
-        this(operator,makeOperand(operand));
-    }
+	private ParsedOperator _operator;
+	private Token _operand;
 
-    public ParsedUnaryExpression(ParsedOperator operator, Token operand) 
-    {
-        super(operator);
-        _operator = operator;
-        _operand = operand;
-     }
-
-	public UnaryOperator getUnaryOperator()
-	{
-		return (UnaryOperator)getOperator().getOperator();
+	public ParsedUnaryExpression(ParsedOperator operator, ListOfToken operand) throws ParseException {
+		this(operator, makeOperand(operand));
 	}
 
-     @Override
-	public String toString()
-    {
-        return "("+_operator+_operand+")";
-    }
+	public ParsedUnaryExpression(ParsedOperator operator, Token operand) {
+		super(operator);
+		_operator = operator;
+		_operand = operand;
+	}
 
-	public Token getOperand() 
-	{
+	public UnaryOperator getUnaryOperator() {
+		return (UnaryOperator) getOperator().getOperator();
+	}
+
+	@Override
+	public String toString() {
+		return "(" + _operator + _operand + ")";
+	}
+
+	public Token getOperand() {
 		return _operand;
-	}    
+	}
 
 }

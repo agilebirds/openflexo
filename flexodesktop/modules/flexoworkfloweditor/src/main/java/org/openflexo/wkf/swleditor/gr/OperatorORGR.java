@@ -25,17 +25,14 @@ import org.openflexo.foundation.wkf.node.OROperator;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class OperatorORGR extends OperatorGR<OROperator> {
 
-	public OperatorORGR(OROperator operatorNode, SwimmingLaneRepresentation aDrawing,boolean isInPalet) 
-	{
-		super(operatorNode, aDrawing,isInPalet);
+	public OperatorORGR(OROperator operatorNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
+		super(operatorNode, aDrawing, isInPalet);
 	}
-	
+
 	@Override
-	public ImageIcon getImageIcon() 
-	{
+	public ImageIcon getImageIcon() {
 		return WKFIconLibrary.OR_OPERATOR_ICON;
 	}
 }

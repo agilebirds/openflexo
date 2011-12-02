@@ -19,64 +19,23 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-
-
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public abstract class AddStatement<R extends OntologicObjectPatternRole> extends EditionAction<R> {
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
-	private String subject;
-	
 	public AddStatement() {
 	}
-	
-	public String _getSubject()
-	{
-		return subject;
-	}
-	
-	public void _setSubject(String aSubject)
-	{
-		subject = aSubject;
-	}
-	
-	private Vector<String> availableSubjectValues = null;
-	
-	public Vector<String> getAvailableSubjectValues()
-	{
-		if (availableSubjectValues == null) {
-			availableSubjectValues = new Vector<String>();
-			switch (getScheme().getEditionSchemeType()) {
-			case DropScheme:
-				availableSubjectValues.add(EditionAction.CONTAINER);
-				availableSubjectValues.add(EditionAction.CONTAINER_OF_CONTAINER);
-				break;
-			case LinkScheme:
-				availableSubjectValues.add(EditionAction.FROM_TARGET);
-				availableSubjectValues.add(EditionAction.TO_TARGET);
-				break;
-			default:
-				break;
-			}
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				availableSubjectValues.add(pr.getPatternRoleName());
-			}
-			for (EditionPatternParameter p : getScheme().getParameters()) {
-				availableSubjectValues.add(p.getName());
-			}
-		}
-		return availableSubjectValues;
-	}
 
-	public OntologyObject getPropertySubject(EditionSchemeAction action)
-	{
-		return retrieveOntologyObject(_getSubject(), action);
+	public OntologyObject getPropertySubject(EditionSchemeAction action) {
+		return (OntologyObject) getSubject().getBindingValue(action);
 	}
 
 	@Override
@@ -89,14 +48,34 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 			return null;
 		}
 	}
-	
+
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(R patternRole) 
-	{
+	public void setPatternRole(R patternRole) {
 		super.setPatternRole(patternRole);
 	}
-	
+
+	private ViewPointDataBinding subject;
+
+	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, false);
+
+	public BindingDefinition getSubjectBindingDefinition() {
+		return SUBJECT;
+	}
+
+	public ViewPointDataBinding getSubject() {
+		if (subject == null) {
+			subject = new ViewPointDataBinding(this, EditionActionBindingAttribute.subject, getSubjectBindingDefinition());
+		}
+		return subject;
+	}
+
+	public void setSubject(ViewPointDataBinding subject) {
+		subject.setOwner(this);
+		subject.setBindingAttribute(EditionActionBindingAttribute.subject);
+		subject.setBindingDefinition(getSubjectBindingDefinition());
+		this.subject = subject;
+	}
 
 }

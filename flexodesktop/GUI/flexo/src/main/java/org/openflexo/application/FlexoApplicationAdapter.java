@@ -23,9 +23,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AboutDialog;
+import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.PreferencesController;
-
 
 import com.apple.eawt.ApplicationAdapter;
 import com.apple.eawt.ApplicationEvent;
@@ -35,35 +35,37 @@ import com.apple.eawt.ApplicationEvent;
  * 
  * @author sguerin
  */
-public class FlexoApplicationAdapter extends ApplicationAdapter
-{
+public class FlexoApplicationAdapter extends ApplicationAdapter {
 
-    private static final Logger logger = Logger.getLogger(FlexoApplicationAdapter.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoApplicationAdapter.class.getPackage().getName());
 
-    public void handleAbout(ApplicationEvent event)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("handleAbout");
-        event.setHandled(true);
-        new AboutDialog().setVisible(true);
-    }
+	public void handleAbout(ApplicationEvent event) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("handleAbout");
+		}
+		event.setHandled(true);
+		new AboutDialog();
+	}
 
-    public void handlePreferences(ApplicationEvent event)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("handlePreferences");
-        PreferencesController.instance().showPreferences();
-    }
+	public void handlePreferences(ApplicationEvent event) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("handlePreferences");
+		}
+		PreferencesController.instance().showPreferences();
+	}
 
-    public void handleQuit(ApplicationEvent event)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("handleQuit");
-        ModuleLoader.quit();
-    }
+	public void handleQuit(ApplicationEvent event) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("handleQuit");
+		}
+		try {
+			ModuleLoader.quit();
+		} catch (ProjectExitingCancelledException e) {
+		}
+	}
 
 	public void handleOpenFile(ApplicationEvent arg0) {
-		ModuleLoader.fileNameToOpen=arg0.getFilename();
+		ModuleLoader.fileNameToOpen = arg0.getFilename();
 	}
 
 }

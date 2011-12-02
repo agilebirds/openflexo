@@ -33,43 +33,39 @@ public class TangentLineWithCircleAndPointConstruction extends LineConstruction 
 	public CircleConstruction circleConstruction;
 	public PointConstruction pointConstruction;
 	public PointConstruction choosingPointConstruction;
-	
-	public TangentLineWithCircleAndPointConstruction() 
-	{
+
+	public TangentLineWithCircleAndPointConstruction() {
 		super();
 	}
-	
-	public TangentLineWithCircleAndPointConstruction(CircleConstruction circleConstruction, PointConstruction pointConstruction,  PointConstruction choosingPointConstruction) 
-	{
+
+	public TangentLineWithCircleAndPointConstruction(CircleConstruction circleConstruction, PointConstruction pointConstruction,
+			PointConstruction choosingPointConstruction) {
 		this();
 		this.circleConstruction = circleConstruction;
 		this.pointConstruction = pointConstruction;
 		this.choosingPointConstruction = choosingPointConstruction;
 	}
-	
+
 	@Override
-	protected FGELine computeData()
-	{
-		FGEUnionArea tangentPoints = FGECircle.getTangentsPointsToCircle(circleConstruction.getCircle(),pointConstruction.getPoint());
+	protected FGELine computeData() {
+		FGEUnionArea tangentPoints = FGECircle.getTangentsPointsToCircle(circleConstruction.getCircle(), pointConstruction.getPoint());
 		if (tangentPoints.isUnionOfPoints()) {
-			return new FGELine(tangentPoints.getNearestPoint(choosingPointConstruction.getPoint()),pointConstruction.getPoint());
+			return new FGELine(tangentPoints.getNearestPoint(choosingPointConstruction.getPoint()), pointConstruction.getPoint());
 		}
 		logger.warning("Received strange result for FGEEllips.getTangentsPointsToCircle()");
 		return null;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "TangentLineWithCircleAndPoint[\n"+"> "+circleConstruction.toString()+"\n> "+pointConstruction.toString()+"\n> "+choosingPointConstruction.toString()+"\n]";
+	public String toString() {
+		return "TangentLineWithCircleAndPoint[\n" + "> " + circleConstruction.toString() + "\n> " + pointConstruction.toString() + "\n> "
+				+ choosingPointConstruction.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { circleConstruction, pointConstruction, choosingPointConstruction };
 		return returned;
 	}
-
 
 }

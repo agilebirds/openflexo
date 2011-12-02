@@ -27,77 +27,69 @@ import java.util.Vector;
  * @author sguerin
  * 
  */
-public interface Validable
-{
+public interface Validable {
 
-    /**
-     * Return default validation model for this object
-     * 
-     * @return ValidationModel
-     */
-    public ValidationModel getDefaultValidationModel();
+	/**
+	 * Return default validation model for this object
+	 * 
+	 * @return ValidationModel
+	 */
+	public ValidationModel getDefaultValidationModel();
 
-    /**
-     * Returns a flag indicating if this object is valid according to default
-     * validation model
-     * 
-     * @return boolean
-     */
-    public boolean isValid();
+	/**
+	 * Returns a flag indicating if this object is valid according to default validation model
+	 * 
+	 * @return boolean
+	 */
+	public boolean isValid();
 
-    /**
-     * Returns a flag indicating if this object is valid according to specified
-     * validation model
-     * 
-     * @return boolean
-     */
-    public boolean isValid(ValidationModel validationModel);
+	/**
+	 * Returns a flag indicating if this object is valid according to specified validation model
+	 * 
+	 * @return boolean
+	 */
+	public boolean isValid(ValidationModel validationModel);
 
-    /**
-     * Validates this object by building new ValidationReport object Default
-     * validation model is used to perform this validation.
-     */
-    public ValidationReport validate();
+	/**
+	 * Validates this object by building new ValidationReport object Default validation model is used to perform this validation.
+	 */
+	public ValidationReport validate();
 
-    /**
-     * Validates this object by building new ValidationReport object Supplied
-     * validation model is used to perform this validation.
-     */
-    public ValidationReport validate(ValidationModel validationModel);
+	/**
+	 * Validates this object by building new ValidationReport object Supplied validation model is used to perform this validation.
+	 */
+	public ValidationReport validate(ValidationModel validationModel);
 
-    /**
-     * Validates this object by appending eventual issues to supplied
-     * ValidationReport. Default validation model is used to perform this
-     * validation.
-     * 
-     * @param report,
-     *            a ValidationReport object on which found issues are appened
-     */
-    public void validate(ValidationReport report);
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	public void validate(ValidationReport report);
 
-    /**
-     * Validates this object by appending eventual issues to supplied
-     * ValidationReport. Supplied validation model is used to perform this
-     * validation.
-     * 
-     * @param report,
-     *            a ValidationReport object on which found issues are appened
-     */
-    public void validate(ValidationReport report, ValidationModel validationModel);
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	public void validate(ValidationReport report, ValidationModel validationModel);
 
-    /**
-     * Return a vector of all embedded objects on which the validation will be
-     * performed
-     * 
-     * @return a Vector of Validable objects
-     */
-    public Vector<Validable> getAllEmbeddedValidableObjects();
+	/**
+	 * Return a vector of all embedded objects on which the validation will be performed
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	public Vector<Validable> getAllEmbeddedValidableObjects();
 
-    /**
-     * Returns fully qualified name for this object
-     * 
-     * @return
-     */
-    public String getFullyQualifiedName();
+	/**
+	 * Returns fully qualified name for this object
+	 * 
+	 * @return
+	 */
+	public String getFullyQualifiedName();
 
 }

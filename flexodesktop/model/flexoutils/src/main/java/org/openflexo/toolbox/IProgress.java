@@ -21,12 +21,12 @@ package org.openflexo.toolbox;
 
 public interface IProgress {
 
-    public void setProgress(String stepName);
+	public void setProgress(String stepName);
 
-    public void resetSecondaryProgress(int steps);
+	public void resetSecondaryProgress(int steps);
 
-    public void setSecondaryProgress(String stepName);
+	public void setSecondaryProgress(String stepName);
 
-    public void hideWindow();
+	public void hideWindow();
 
 }

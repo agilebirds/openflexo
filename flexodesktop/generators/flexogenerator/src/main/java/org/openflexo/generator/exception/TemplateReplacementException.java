@@ -24,20 +24,16 @@ import java.util.Map;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 
+public class TemplateReplacementException extends GenerationException {
+	public TemplateReplacementException(Exception targetException, String templateName, Map replacement,
+			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super("Template replacement exception", "template_replacement_exception", "Exception catched for template: " + templateName
+				+ "\nProperties:\n" + replacement, targetException);
+	}
 
-public class TemplateReplacementException extends GenerationException
-{
-    public TemplateReplacementException(Exception targetException, String templateName, Map replacement,
-    		 AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-    {
-        super("Template replacement exception", "template_replacement_exception", "Exception catched for template: " + templateName
-                + "\nProperties:\n" + replacement, targetException);
-    }
-
-    public TemplateReplacementException(String message, String localizationKey, String details, Exception targetException,
-    		 AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-    {
-        super(message, localizationKey, details, targetException);
-    }
+	public TemplateReplacementException(String message, String localizationKey, String details, Exception targetException,
+			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super(message, localizationKey, details, targetException);
+	}
 
 }

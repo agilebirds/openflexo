@@ -26,88 +26,77 @@ import javax.swing.JPanel;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class TestKVC extends KVCObject
-{
+public class TestKVC extends KVCObject {
 
-    private String testString = "init";
+	private String testString = "init";
 
-    private int testInt = 3;
+	private int testInt = 3;
 
-    private Date testDate = new Date();
+	private Date testDate = new Date();
 
-    private JPanel subObject = new JPanel();
+	private JPanel subObject = new JPanel();
 
-    public Date date2 = new Date();
+	public Date date2 = new Date();
 
-    public double unDouble = 9.8;
+	public double unDouble = 9.8;
 
-    public String getTestString()
-    {
-        System.out.println("getTestString");
-        return testString;
-    }
+	public String getTestString() {
+		System.out.println("getTestString");
+		return testString;
+	}
 
-    public void setTestString(String aString)
-    {
-        System.out.println("setTestString with " + aString);
-        testString = aString;
-    }
+	public void setTestString(String aString) {
+		System.out.println("setTestString with " + aString);
+		testString = aString;
+	}
 
-    public int getTestInt()
-    {
-        System.out.println("getTestInt");
-        return testInt;
-    }
+	public int getTestInt() {
+		System.out.println("getTestInt");
+		return testInt;
+	}
 
-    public void setTestInt(int anInt)
-    {
-        System.out.println("setTestInt with " + anInt);
-        testInt = anInt;
-    }
+	public void setTestInt(int anInt) {
+		System.out.println("setTestInt with " + anInt);
+		testInt = anInt;
+	}
 
-    public Date getTestDate()
-    {
-        System.out.println("getTestDate");
-        return testDate;
-    }
+	public Date getTestDate() {
+		System.out.println("getTestDate");
+		return testDate;
+	}
 
-    public void setTestDate(Date aDate)
-    {
-        System.out.println("setTestDate with " + aDate);
-        testDate = aDate;
-    }
+	public void setTestDate(Date aDate) {
+		System.out.println("setTestDate with " + aDate);
+		testDate = aDate;
+	}
 
-    public JPanel getSubObject()
-    {
-        System.out.println("getSubObject");
-        return subObject;
-    }
+	public JPanel getSubObject() {
+		System.out.println("getSubObject");
+		return subObject;
+	}
 
-    public void setSubObject(JPanel aSubObject)
-    {
-        System.out.println("setSubObject with " + aSubObject);
-        subObject = aSubObject;
-    }
+	public void setSubObject(JPanel aSubObject) {
+		System.out.println("setSubObject with " + aSubObject);
+		subObject = aSubObject;
+	}
 
-    public static void main(String[] args)
-    {
-        TestKVC test = new TestKVC();
-        test.setValueForKey("test1", "testString");
-        System.out.println("Result=" + test.valueForKey("testString"));
-        test.setValueForKey("7", "testInt");
-        System.out.println("Result=" + test.valueForKey("testInt"));
-        test.setValueForKey("18.789", "unDouble");
-        System.out.println("Result=" + test.valueForKey("unDouble"));
-        test.setIntegerValueForKey(9, "testInt");
-        System.out.println("Result=" + test.integerValueForKey("testInt"));
-        test.setObjectForKey(new Date(), "testDate");
-        System.out.println("Result=" + test.objectForKey("testDate"));
-        test.setObjectForKey(new JPanel(), "subObject");
-        System.out.println("Result=" + test.objectForKey("subObject"));
-        // Raised an exception here, because 3 is not parsable as a Date
-        test.setValueForKey("3", "date2");
-    }
+	public static void main(String[] args) {
+		TestKVC test = new TestKVC();
+		test.setValueForKey("test1", "testString");
+		System.out.println("Result=" + test.valueForKey("testString"));
+		test.setValueForKey("7", "testInt");
+		System.out.println("Result=" + test.valueForKey("testInt"));
+		test.setValueForKey("18.789", "unDouble");
+		System.out.println("Result=" + test.valueForKey("unDouble"));
+		test.setIntegerValueForKey(9, "testInt");
+		System.out.println("Result=" + test.integerValueForKey("testInt"));
+		test.setObjectForKey(new Date(), "testDate");
+		System.out.println("Result=" + test.objectForKey("testDate"));
+		test.setObjectForKey(new JPanel(), "subObject");
+		System.out.println("Result=" + test.objectForKey("subObject"));
+		// Raised an exception here, because 3 is not parsable as a Date
+		test.setValueForKey("3", "date2");
+	}
 }

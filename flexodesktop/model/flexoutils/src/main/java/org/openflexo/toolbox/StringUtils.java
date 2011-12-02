@@ -383,7 +383,7 @@ public class StringUtils {
 	 * Example : "Todo list" => "TodoList"; "DAO controller" => "daoController".
 	 * 
 	 * @param firstUpper
-	 *            <code>true</code> if the first letter has to be upper case.
+	 *            <code>true</code> if the first letter has to be uppercase.
 	 * @param string
 	 *            the string to transform into camel case
 	 * @return the camel case string

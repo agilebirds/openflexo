@@ -20,20 +20,20 @@
 package org.openflexo.foundation.bpel;
 
 public class BPELConstants {
-	static final String NAMESPACE_WSDL="http://schemas.xmlsoap.org/wsdl/";
-	static final String NAMESPACE_BPEL="http://docs.oasis-open.org/wsbpel/2.0/process/executable";
-	static final String NAMESPACE_SCHEMA="http://www.w3.org/2001/XMLSchema";
-	static final String NAMESPACE_PLINKTYPE="http://docs.oasis-open.org/wsbpel/2.0/plnktype";
-	static final String APPEND_PROCESS="Process";
-	static final String APPEND_SERVICE="Service";
-	static final String APPEND_ROLE="Role";
-	static final String APPEND_PARTNERLINKTYPE="PartnerLinkType";
-	static final String APPEND_PORTTYPE="PortType";
-	static final String THIS_NAMESPACE="http://default";
-	
+	static final String NAMESPACE_WSDL = "http://schemas.xmlsoap.org/wsdl/";
+	static final String NAMESPACE_BPEL = "http://docs.oasis-open.org/wsbpel/2.0/process/executable";
+	static final String NAMESPACE_SCHEMA = "http://www.w3.org/2001/XMLSchema";
+	static final String NAMESPACE_PLINKTYPE = "http://docs.oasis-open.org/wsbpel/2.0/plnktype";
+	static final String APPEND_PROCESS = "Process";
+	static final String APPEND_SERVICE = "Service";
+	static final String APPEND_ROLE = "Role";
+	static final String APPEND_PARTNERLINKTYPE = "PartnerLinkType";
+	static final String APPEND_PORTTYPE = "PortType";
+	static final String THIS_NAMESPACE = "http://default";
+
 	public static String normalise(String n) {
-		String toReturn=n.replaceAll(" ", "_");
+		String toReturn = n.replaceAll(" ", "_");
 		return toReturn;
 	}
-	
+
 }

@@ -36,88 +36,79 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class JavaFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends ASCIIFileResource<G,F>
-{
-    static final Logger logger = FlexoLogger.getLogger(JavaFileResource.class.getPackage().getName());
+public class JavaFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends ASCIIFileResource<G, F> {
+	static final Logger logger = FlexoLogger.getLogger(JavaFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public JavaFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public JavaFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public JavaFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public JavaFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    /**
-     * Overrides getResourceType
-     * 
-     * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
-     */
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.JAVA_FILE;
-    }
+	/**
+	 * Overrides getResourceType
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
+	 */
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.JAVA_FILE;
+	}
 
+	@Override
+	protected JavaFile createGeneratedResourceData() {
+		return new JavaFile(getFile());
+	}
 
-    @Override
-	protected JavaFile createGeneratedResourceData()
-    {
-        return new JavaFile(getFile());
-    }
-    
-     public JavaFile getJavaFile()
-    {
-        return (JavaFile) getGeneratedResourceData();
-    }
-     
-     private Date _lastModelReinjectingDate;
-     
- 	public Date getLastModelReinjectingDate()
-	{
+	public JavaFile getJavaFile() {
+		return (JavaFile) getGeneratedResourceData();
+	}
+
+	private Date _lastModelReinjectingDate;
+
+	public Date getLastModelReinjectingDate() {
 		if ((_lastModelReinjectingDate == null) || (getLastGenerationDate().getTime() > _lastModelReinjectingDate.getTime())) {
 			_lastModelReinjectingDate = getLastGenerationDate();
 		}
 		return _lastModelReinjectingDate;
 	}
 
-	public void setLastModelReinjectingDate(Date aDate)
-	{
+	public void setLastModelReinjectingDate(Date aDate) {
 		_lastModelReinjectingDate = aDate;
 	}
-	
+
 	private File _javaModelFile;
-	
+
 	/**
 	 * This file stores all known but ignored properties and methods
+	 * 
 	 * @return
 	 */
-	public File getJavaModelFile()
-	{
+	public File getJavaModelFile() {
 		if (_javaModelFile == null) {
-			_javaModelFile = new File(
-					getCGFile().getRepository().getCodeGenerationWorkingDirectory(),
-					getResourceFile().getRelativePath()+".JAVA_MODEL");
-			if (logger.isLoggable(Level.FINE))
-				logger.fine("_javaModelFile"+_javaModelFile.getAbsolutePath());
+			_javaModelFile = new File(getCGFile().getRepository().getCodeGenerationWorkingDirectory(), getResourceFile().getRelativePath()
+					+ ".JAVA_MODEL");
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("_javaModelFile" + _javaModelFile.getAbsolutePath());
+			}
 		}
 		return _javaModelFile;
 	}
-	
+
 	@Override
 	public String getGenerationResultKey() {
 		return GeneratedCodeResult.DEFAULT_KEY;
 	}
-	
-	public void registerObserverWhenRequired(){
-		//this method after each generation of the javacode and may be implemented in subclass
+
+	public void registerObserverWhenRequired() {
+		// this method after each generation of the javacode and may be implemented in subclass
 	}
 }

@@ -27,38 +27,32 @@ import java.util.Hashtable;
  * @author bmangez
  */
 
-public abstract class GeneratedCodeResult extends Hashtable<String, String>
-{
+public abstract class GeneratedCodeResult extends Hashtable<String, String> {
 	public static String DEFAULT_KEY = "DEFAULT";
 	private String _name;
-	
-    public GeneratedCodeResult(String name)
-    {
-        super();
-        _name = name;
-    }
 
-    protected void setDefaultCode(String value)
-    {
-    	addCode(DEFAULT_KEY, value);
-    }
-    
-    protected void addCode(String key, String value)
-    {
-        if (value != null) {
-            put(key, value);
-        } else {
-            remove(key);
-        }
-    }
+	public GeneratedCodeResult(String name) {
+		super();
+		_name = name;
+	}
 
-    public String name()
-    {
-        return _name;
-    }
-    
-    public String defaultCode()
-    {
-    	return get(DEFAULT_KEY);
-    }
+	protected void setDefaultCode(String value) {
+		addCode(DEFAULT_KEY, value);
+	}
+
+	protected void addCode(String key, String value) {
+		if (value != null) {
+			put(key, value);
+		} else {
+			remove(key);
+		}
+	}
+
+	public String name() {
+		return _name;
+	}
+
+	public String defaultCode() {
+		return get(DEFAULT_KEY);
+	}
 }

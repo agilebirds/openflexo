@@ -26,7 +26,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -39,9 +38,9 @@ import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
@@ -49,333 +48,304 @@ import org.openflexo.toolbox.ToolBox;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class CGRepository extends GenerationRepository implements ReferenceOwner
-{
+public class CGRepository extends GenerationRepository implements ReferenceOwner {
 
 	private static final Logger logger = FlexoLogger.getLogger(CGRepository.class.getPackage().getName());
 
-    private CodeType _targetType;
-    private String _superClassesGenerationSubPath;
-    private ProjectExternalRepository _warRepository;
+	private CodeType _targetType;
+	private String _superClassesGenerationSubPath;
+	private ProjectExternalRepository _warRepository;
 
-    private Format format;
+	private Format format;
 
-    private String warName;
-    private Date lastWarNameUpdate;
+	private String warName;
+	private Date lastWarNameUpdate;
 
-    private Date lastLoginPasswordUpdate;
+	private Date lastLoginPasswordUpdate;
 
-    private String prototypeLogin;
-    private String prototypePassword;
+	private String prototypeLogin;
+	private String prototypePassword;
 
-    private boolean includeReader = false;
-    private FlexoModelObjectReference<DGRepository> readerRepositoryReference;
+	private boolean includeReader = false;
+	private FlexoModelObjectReference<DGRepository> readerRepositoryReference;
 
-    /**
-     * Create a new GeneratedCodeRepository.
-     */
-    public CGRepository(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Create a new GeneratedCodeRepository.
+	 */
+	public CGRepository(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
+	}
 
+	/**
+	 * @throws DuplicateCodeRepositoryNameException
+	 * 
+	 */
+	public CGRepository(GeneratedCode generatedCode, String name, File directory) throws DuplicateCodeRepositoryNameException {
+		super(generatedCode, name, directory);
+	}
 
-    /**
-     * @throws DuplicateCodeRepositoryNameException
-     *
-     */
-    public CGRepository(GeneratedCode generatedCode, String name, File directory) throws DuplicateCodeRepositoryNameException
-    {
-        super(generatedCode, name, directory);
-    }
-
-
-    /**
-     * @param generatedCode
-     */
-    public CGRepository(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);
-    }
-
-    @Override
-    public void delete(FlexoProgress progress, boolean deleteFiles) 
-    {
-    	if (getReaderRepository()!=null)
-    		getReaderRepository().removeFromRepositoriedUsingAsReader(this);
-    	super.delete(progress, deleteFiles);
-    }
-
-    @Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-        Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-        returned.add(AddGeneratedCodeRepository.actionType);
-        return returned;
-    }
-
-
-    @Override
-    public CodeType getTarget() {
-    	return getTargetType();
-    }
-
-    public CodeType getTargetType()
-    {
-        if (_targetType == null)
-            _targetType = CodeType.PROTOTYPE;
-        return _targetType;
-    }
-
-    public void setTargetType(CodeType targetType)
-    {
-        CodeType old = this._targetType;
-        _targetType = targetType;
-        setChanged();
-        notifyObservers(new DataModification(DataModification.ATTRIBUTE,"targetType",old, targetType));
-    }
-
-    @Override
-    public boolean isEnabled() {
-    	return super.isEnabled() && (!includeReader() || (getReaderRepository().isEnabled()));
-    }
-
-    @Override
-    public boolean connect() {
-    	if (getReaderRepository()!=null)
-    		return getReaderRepository().connect() && super.connect();
-    	else
-    		return super.connect();
-    }
-
-    public ProjectExternalRepository getWarRepository()
-    {
-    	if(_warRepository==null)
-    		_warRepository = getProject().getExternalRepositoryWithKey(getName()+"WAR");
-        if (_warRepository == null) {
-            try {
-                _warRepository = getProject().setDirectoryForRepositoryName(getName()+"WAR", getDirectory()!=null?getDirectory().getParentFile():FileUtils.createTempDirectory(getProject().getProjectName()+"Application", ".war"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return _warRepository;
-    }
-
-    public File getWarDirectory()
-    {
-        if (getWarRepository() != null)
-            return getWarRepository().getDirectory();
-        return null;
-    }
-
-    public void setWarDirectory(File aDirectory)
-    {
-        if (getWarRepository() != null) {
-            File oldValue = getWarRepository().getDirectory();
-            getWarRepository().setDirectory(aDirectory);
-            setChanged();
-            notifyObservers(new CGDataModification("warDirectory",oldValue,aDirectory));
-        }
-    }
-
-    public String getWarName()
-    {
-        return warName;
-    }
-
-    public void setWarName(String warName) throws DuplicateCodeRepositoryNameException
-    {
-    	String oldName = this.warName;
-    	if (oldName==null) {
-    	    if(warName==null)
-    	        return;
-    	} else {
-    	    if(oldName.equals(warName))
-    	        return;
-    	}
-        this.warName = warName;
-        lastWarNameUpdate = new Date();
-        setChanged();
-        if (warName!=null && !warName.matches(ToolBox.WAR_NAME_ACCEPTABLE_CHARS)) {
-        	this.warName = ToolBox.getWarName(warName);
-        	notifyObserversAsReentrantModification(new DataModification(DataModification.CG_WAR,"warName",oldName,warName));
-        } else
-        	notifyObservers(new DataModification(DataModification.CG_WAR,"warName",oldName,warName));
-    }
-
-    public String getSuperClassesGenerationSubPath()
-    {
-        if (_superClassesGenerationSubPath == null) {
-            _superClassesGenerationSubPath = "/src/main/java/WebObjects/Core";
-        }
-        return _superClassesGenerationSubPath;
-     }
-
-    public void setSuperClassesGenerationSubPath(String subPath)
-    {
-        _superClassesGenerationSubPath = subPath;
-    }
-
-    /**
-     * Overrides getClassNameKey
-     *
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "generated_code_repository";
-    }
-
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.CG.CG_REPOSITORY_INSPECTOR;
-    }
-
-
-    public CGSymbolicDirectory getJavaSymbolicDirectory()
-    {
-        return getSymbolicDirectoryNamed(CGSymbolicDirectory.JAVA);
-    }
-
-    public CGSymbolicDirectory getResourcesSymbolicDirectory()
-    {
-        return getSymbolicDirectoryNamed(CGSymbolicDirectory.RESOURCES);
-    }
-
-    public CGSymbolicDirectory getWebResourcesSymbolicDirectory()
-    {
-        CGSymbolicDirectory reply = getSymbolicDirectoryNamed(CGSymbolicDirectory.WEBRESOURCES);
-    	if(reply==null){
-    		FlexoProjectFile webSymbDir = new FlexoProjectFile(getProject(), getSourceCodeRepository(),
-        			"/src/main/webresources");
-    		webSymbDir.getFile().mkdirs();
-        	setSymbolicDirectoryForKey(new CGSymbolicDirectory(this,
-                        CGSymbolicDirectory.WEBRESOURCES, webSymbDir), CGSymbolicDirectory.WEBRESOURCES);
-    	}
-    	return getSymbolicDirectoryNamed(CGSymbolicDirectory.WEBRESOURCES);
-    }
-
-    public CGSymbolicDirectory getLibSymbolicDirectory()
-    {
-        CGSymbolicDirectory reply = getSymbolicDirectoryNamed(CGSymbolicDirectory.LIB);
-    	if(reply==null){
-    		FlexoProjectFile libSymbDir = new FlexoProjectFile(getProject(), getSourceCodeRepository(),
-        			"/lib");
-    		libSymbDir.getFile().mkdirs();
-        	setSymbolicDirectoryForKey(new CGSymbolicDirectory(this,
-                        CGSymbolicDirectory.LIB, libSymbDir), CGSymbolicDirectory.LIB);
-    	}
-    	return getSymbolicDirectoryNamed(CGSymbolicDirectory.LIB);
-    }
-
-    public CGSymbolicDirectory getComponentsSymbolicDirectory()
-    {
-        return getSymbolicDirectoryNamed(CGSymbolicDirectory.COMPONENTS);
-    }
-
-    public CGSymbolicDirectory getProjectSymbolicDirectory()
-    {
-        return getSymbolicDirectoryNamed(CGSymbolicDirectory.PROJECT);
-    }
-
-    public CGSymbolicDirectory getReaderSymbolicDirectory()
-    {
-    	return getSymbolicDirectoryNamed(CGSymbolicDirectory.READER);
-    }
+	/**
+	 * @param generatedCode
+	 */
+	public CGRepository(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
 
 	@Override
-    protected void deleteExternalRepositories()
-	{
-		if (getWarRepository() != null)
+	public void delete(FlexoProgress progress, boolean deleteFiles) {
+		if (getReaderRepository() != null) {
+			getReaderRepository().removeFromRepositoriedUsingAsReader(this);
+		}
+		super.delete(progress, deleteFiles);
+	}
+
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(AddGeneratedCodeRepository.actionType);
+		return returned;
+	}
+
+	@Override
+	public CodeType getTarget() {
+		return getTargetType();
+	}
+
+	public CodeType getTargetType() {
+		if (_targetType == null) {
+			_targetType = CodeType.PROTOTYPE;
+		}
+		return _targetType;
+	}
+
+	public void setTargetType(CodeType targetType) {
+		CodeType old = this._targetType;
+		_targetType = targetType;
+		setChanged();
+		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "targetType", old, targetType));
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return super.isEnabled() && (!includeReader() || (getReaderRepository().isEnabled()));
+	}
+
+	@Override
+	public boolean connect() {
+		if (getReaderRepository() != null) {
+			return getReaderRepository().connect() && super.connect();
+		} else {
+			return super.connect();
+		}
+	}
+
+	public ProjectExternalRepository getWarRepository() {
+		if (_warRepository == null) {
+			_warRepository = getProject().getExternalRepositoryWithKey(getName() + "WAR");
+		}
+		if (_warRepository == null) {
+			try {
+				_warRepository = getProject().setDirectoryForRepositoryName(
+						getName() + "WAR",
+						getDirectory() != null ? getDirectory().getParentFile() : FileUtils.createTempDirectory(getProject()
+								.getProjectName() + "Application", ".war"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return _warRepository;
+	}
+
+	public File getWarDirectory() {
+		if (getWarRepository() != null) {
+			return getWarRepository().getDirectory();
+		}
+		return null;
+	}
+
+	public void setWarDirectory(File aDirectory) {
+		if (getWarRepository() != null) {
+			File oldValue = getWarRepository().getDirectory();
+			getWarRepository().setDirectory(aDirectory);
+			setChanged();
+			notifyObservers(new CGDataModification("warDirectory", oldValue, aDirectory));
+		}
+	}
+
+	public String getWarName() {
+		return warName;
+	}
+
+	public void setWarName(String warName) throws DuplicateCodeRepositoryNameException {
+		String oldName = this.warName;
+		if (oldName == null) {
+			if (warName == null) {
+				return;
+			}
+		} else {
+			if (oldName.equals(warName)) {
+				return;
+			}
+		}
+		this.warName = warName;
+		lastWarNameUpdate = new Date();
+		setChanged();
+		if (warName != null && !warName.matches(ToolBox.WAR_NAME_ACCEPTABLE_CHARS)) {
+			this.warName = ToolBox.getWarName(warName);
+			notifyObserversAsReentrantModification(new DataModification(DataModification.CG_WAR, "warName", oldName, warName));
+		} else {
+			notifyObservers(new DataModification(DataModification.CG_WAR, "warName", oldName, warName));
+		}
+	}
+
+	public String getSuperClassesGenerationSubPath() {
+		if (_superClassesGenerationSubPath == null) {
+			_superClassesGenerationSubPath = "/src/main/java/WebObjects/Core";
+		}
+		return _superClassesGenerationSubPath;
+	}
+
+	public void setSuperClassesGenerationSubPath(String subPath) {
+		_superClassesGenerationSubPath = subPath;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "generated_code_repository";
+	}
+
+	@Override
+	public String getInspectorName() {
+		return Inspectors.CG.CG_REPOSITORY_INSPECTOR;
+	}
+
+	public CGSymbolicDirectory getJavaSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.JAVA);
+	}
+
+	public CGSymbolicDirectory getResourcesSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.RESOURCES);
+	}
+
+	public CGSymbolicDirectory getWebResourcesSymbolicDirectory() {
+		CGSymbolicDirectory reply = getSymbolicDirectoryNamed(CGSymbolicDirectory.WEBRESOURCES);
+		if (reply == null) {
+			FlexoProjectFile webSymbDir = new FlexoProjectFile(getProject(), getSourceCodeRepository(), "/src/main/webresources");
+			webSymbDir.getFile().mkdirs();
+			setSymbolicDirectoryForKey(new CGSymbolicDirectory(this, CGSymbolicDirectory.WEBRESOURCES, webSymbDir),
+					CGSymbolicDirectory.WEBRESOURCES);
+		}
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.WEBRESOURCES);
+	}
+
+	public CGSymbolicDirectory getLibSymbolicDirectory() {
+		CGSymbolicDirectory reply = getSymbolicDirectoryNamed(CGSymbolicDirectory.LIB);
+		if (reply == null) {
+			FlexoProjectFile libSymbDir = new FlexoProjectFile(getProject(), getSourceCodeRepository(), "/lib");
+			libSymbDir.getFile().mkdirs();
+			setSymbolicDirectoryForKey(new CGSymbolicDirectory(this, CGSymbolicDirectory.LIB, libSymbDir), CGSymbolicDirectory.LIB);
+		}
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.LIB);
+	}
+
+	public CGSymbolicDirectory getComponentsSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.COMPONENTS);
+	}
+
+	public CGSymbolicDirectory getProjectSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.PROJECT);
+	}
+
+	public CGSymbolicDirectory getReaderSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.READER);
+	}
+
+	@Override
+	protected void deleteExternalRepositories() {
+		if (getWarRepository() != null) {
 			getProject().removeFromExternalRepositories(getWarRepository());
+		}
 		super.deleteExternalRepositories();
 	}
 
-	public void clearAllJavaParsingData(){
-		for(CGFile file:getFiles()){
+	public void clearAllJavaParsingData() {
+		for (CGFile file : getFiles()) {
 			file.clearParsingData();
 		}
 		getProject().getDataModel().getClassLibrary().clearLibrary();
 	}
 
-
 	public String getPrototypeLogin() {
 		return prototypeLogin;
 	}
 
-
 	public void setPrototypeLogin(String prototypeLogin) {
-	    String old = this.prototypeLogin;
+		String old = this.prototypeLogin;
 		this.prototypeLogin = prototypeLogin;
 		lastLoginPasswordUpdate = new Date();
 		setChanged();
-		notifyObservers(new CGDataModification("prototypeLogin",old, prototypeLogin));
+		notifyObservers(new CGDataModification("prototypeLogin", old, prototypeLogin));
 	}
-
 
 	public String getPrototypePassword() {
 		return prototypePassword;
 	}
 
-
 	public void setPrototypePassword(String prototypePassword) {
-        String old = this.prototypePassword;
-        this.prototypePassword = prototypePassword;
-        lastLoginPasswordUpdate = new Date();
-        setChanged();
-        notifyObservers(new CGDataModification("prototypePassword",old, prototypePassword));
+		String old = this.prototypePassword;
+		this.prototypePassword = prototypePassword;
+		lastLoginPasswordUpdate = new Date();
+		setChanged();
+		notifyObservers(new CGDataModification("prototypePassword", old, prototypePassword));
 	}
 
-    /**
-     * This date is use to perform fine tuning resource dependancies computing
-     *
-     * @return
-     */
-    public Date getLastWarNameUpdate()
-    {
-        if (lastWarNameUpdate == null) {
-            lastWarNameUpdate = super.getLastUpdate();
-        }
-        return lastWarNameUpdate;
-    }
+	/**
+	 * This date is use to perform fine tuning resource dependancies computing
+	 * 
+	 * @return
+	 */
+	public Date getLastWarNameUpdate() {
+		if (lastWarNameUpdate == null) {
+			lastWarNameUpdate = super.getLastUpdate();
+		}
+		return lastWarNameUpdate;
+	}
 
-    public void setLastWarNameUpdate(Date lastUpdate)
-    {
-        lastWarNameUpdate = lastUpdate;
-    }
+	public void setLastWarNameUpdate(Date lastUpdate) {
+		lastWarNameUpdate = lastUpdate;
+	}
 
-    /**
-     * This date is use to perform fine tuning resource dependancies computing
-     *
-     * @return
-     */
-    public Date getLastLoginPasswordUpdate()
-    {
-        if (lastLoginPasswordUpdate == null) {
-            lastLoginPasswordUpdate = super.getLastUpdate();
-        }
-        return lastLoginPasswordUpdate;
-    }
+	/**
+	 * This date is use to perform fine tuning resource dependancies computing
+	 * 
+	 * @return
+	 */
+	public Date getLastLoginPasswordUpdate() {
+		if (lastLoginPasswordUpdate == null) {
+			lastLoginPasswordUpdate = super.getLastUpdate();
+		}
+		return lastLoginPasswordUpdate;
+	}
 
-    public void setLastLoginPasswordUpdate(Date lastUpdate)
-    {
-        lastLoginPasswordUpdate = lastUpdate;
-    }
-
+	public void setLastLoginPasswordUpdate(Date lastUpdate) {
+		lastLoginPasswordUpdate = lastUpdate;
+	}
 
 	@Override
 	public Format getFormat() {
-		if (format==null)
+		if (format == null) {
 			return Format.WEBOBJECTS;
+		}
 		return format;
 	}
-
 
 	@Override
 	public void setFormat(Format format) {
@@ -383,11 +353,12 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	}
 
 	public boolean includeReader() {
-		if (includeReader && getReaderRepository()==null) {
-			if (logger.isLoggable(Level.WARNING))
-				logger.warning("Repository '"+getName()+"' should include reader but has no reader repository!");
+		if (includeReader && getReaderRepository() == null) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Repository '" + getName() + "' should include reader but has no reader repository!");
+			}
 		}
-		return includeReader && getReaderRepository()!=null;
+		return includeReader && getReaderRepository() != null;
 	}
 
 	public void setIncludeReader(boolean includeReader) {
@@ -395,7 +366,7 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	}
 
 	public DGRepository getReaderRepository() {
-		if (getReaderRepositoryReference()!=null) {
+		if (getReaderRepositoryReference() != null) {
 			return getReaderRepositoryReference().getObject(true);
 		}
 		return null;
@@ -405,7 +376,7 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		readerRepository.addToRepositoriedUsingAsReader(this);
 		readerRepository.addObserver(this);
 		if (readerRepositoryReference == null) {
-			setReaderRepositoryReference(new FlexoModelObjectReference<DGRepository>(getProject(),readerRepository));
+			setReaderRepositoryReference(new FlexoModelObjectReference<DGRepository>(getProject(), readerRepository));
 		}
 	}
 
@@ -423,32 +394,29 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	}
 
 	public void setReaderRepositoryReference(FlexoModelObjectReference<DGRepository> readerRepositoryReference) {
-		if (this.readerRepositoryReference!=null) {
+		if (this.readerRepositoryReference != null) {
 			this.readerRepositoryReference.delete();
 		}
 		this.readerRepositoryReference = readerRepositoryReference;
 		this.readerRepositoryReference.setOwner(this);
 	}
 
-
 	@Override
 	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
-		if(reference.getObject() instanceof DGRepository)
+		if (reference.getObject() instanceof DGRepository) {
 			setReaderRepository((DGRepository) reference.getObject());
+		}
 	}
-
 
 	@Override
 	public void objectCantBeFound(FlexoModelObjectReference reference) {
 
 	}
 
-
 	@Override
 	public void objectDeleted(FlexoModelObjectReference reference) {
 
 	}
-
 
 	@Override
 	public void objectSerializationIdChanged(FlexoModelObjectReference reference) {

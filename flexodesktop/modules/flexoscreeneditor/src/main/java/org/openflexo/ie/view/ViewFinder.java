@@ -28,86 +28,87 @@ import javax.swing.JComponent;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.ie.view.widget.IEWidgetView;
 
-
 /**
  * Utility class allowing to retrieve views from a model
  * 
  * @author sguerin
  * 
  */
-public class ViewFinder
-{
+public class ViewFinder {
 
-    private static final Logger logger = Logger.getLogger(ViewFinder.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ViewFinder.class.getPackage().getName());
 
-    public static IEWOComponentView getRootView(JComponent component)
-    {
-    	IEWOComponentView returned;
+	public static IEWOComponentView getRootView(JComponent component) {
+		IEWOComponentView returned;
 
-        Component parent = component.getParent();
-        if (parent == null) {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Could not retrieve Root View for component " + component + " [NO PARENT]");
-            returned = null;
-        } else if (parent instanceof IEWOComponentView) {
-            returned = (IEWOComponentView) parent;
-        } else if (parent instanceof IEViewManaging) {
-            returned = ((IEViewManaging) parent).getRootView();
-        } else {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Could not retrieve Root View for component " + component + " [PARENT=" + parent.getClass().getName() + "]");
-            returned = null;
-        }
-        return returned;
-    }
+		Component parent = component.getParent();
+		if (parent == null) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Could not retrieve Root View for component " + component + " [NO PARENT]");
+			}
+			returned = null;
+		} else if (parent instanceof IEWOComponentView) {
+			returned = (IEWOComponentView) parent;
+		} else if (parent instanceof IEViewManaging) {
+			returned = ((IEViewManaging) parent).getRootView();
+		} else {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Could not retrieve Root View for component " + component + " [PARENT=" + parent.getClass().getName() + "]");
+			}
+			returned = null;
+		}
+		return returned;
+	}
 
-    public static IEWidgetView findViewForModel(IEViewManaging component, IEObject object)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("findViewForModel called for " + object.getClass().getName() + " in " + component.getClass().getName());
+	public static IEWidgetView findViewForModel(IEViewManaging component, IEObject object) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("findViewForModel called for " + object.getClass().getName() + " in " + component.getClass().getName());
+		}
 
-        // First search inside
+		// First search inside
 
-        IEWidgetView lookInside = component.internallyFindViewForModel(object);
-        if (lookInside != null) {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Internally found !");
-            return lookInside;
-        }
-        // OK, let's look outside
-        if (component.getRootView() != null) {
-            IEWidgetView lookOutside = component.getRootView().internallyFindViewForModel(object);
-            if (lookOutside != null) {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Externally found !");
-                return lookOutside;
-            }
-        }
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find view for model " + object);
-        return null;
-    }
+		IEWidgetView lookInside = component.internallyFindViewForModel(object);
+		if (lookInside != null) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Internally found !");
+			}
+			return lookInside;
+		}
+		// OK, let's look outside
+		if (component.getRootView() != null) {
+			IEWidgetView lookOutside = component.getRootView().internallyFindViewForModel(object);
+			if (lookOutside != null) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Externally found !");
+				}
+				return lookOutside;
+			}
+		}
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Could not find view for model " + object);
+		}
+		return null;
+	}
 
-    public static IEWidgetView internallyFindViewForModel(JComponent component, IEObject object)
-    {
-        Component[] internalComponents = component.getComponents();
+	public static IEWidgetView internallyFindViewForModel(JComponent component, IEObject object) {
+		Component[] internalComponents = component.getComponents();
 
-        for (int i = 0; i < internalComponents.length; i++) {
-            if (internalComponents[i] instanceof IEWidgetView) {
-                IEWidgetView next = (IEWidgetView) internalComponents[i];
-                if (next.getModel().equals(object)) {
-                    return next;
-                }
-            }
-            if (internalComponents[i] instanceof IEViewManaging) {
-                IEViewManaging next = (IEViewManaging) internalComponents[i];
-                IEWidgetView tryDeeper = next.internallyFindViewForModel(object);
-                if (tryDeeper != null) {
-                    return tryDeeper;
-                }
-            }
-        }
-        return null;
-    }
+		for (int i = 0; i < internalComponents.length; i++) {
+			if (internalComponents[i] instanceof IEWidgetView) {
+				IEWidgetView next = (IEWidgetView) internalComponents[i];
+				if (next.getModel().equals(object)) {
+					return next;
+				}
+			}
+			if (internalComponents[i] instanceof IEViewManaging) {
+				IEViewManaging next = (IEViewManaging) internalComponents[i];
+				IEWidgetView tryDeeper = next.internallyFindViewForModel(object);
+				if (tryDeeper != null) {
+					return tryDeeper;
+				}
+			}
+		}
+		return null;
+	}
 
 }

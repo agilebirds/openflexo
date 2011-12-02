@@ -31,67 +31,54 @@ import java.awt.event.KeyListener;
 import javax.swing.JDialog;
 
 import org.openflexo.swing.DialogFactory;
-import org.openflexo.toolbox.ToolBox;
 
+public class FlexoDialog extends JDialog {
 
-public class FlexoDialog extends JDialog
-{
-
-	public FlexoDialog() throws HeadlessException
-	{
-		this((Frame)null);
+	public FlexoDialog() throws HeadlessException {
+		this((Frame) null);
 	}
 
-	public FlexoDialog(Frame owner) throws HeadlessException
-	{
-		super(ToolBox.getFrame(owner));
+	public FlexoDialog(Frame owner) throws HeadlessException {
+		super(FlexoFrame.getOwner(owner));
 		init();
 	}
 
-	public FlexoDialog(Frame owner, boolean modal) throws HeadlessException
-	{
-		super(ToolBox.getFrame(owner), modal);
+	public FlexoDialog(Frame owner, boolean modal) throws HeadlessException {
+		super(FlexoFrame.getOwner(owner), modal);
 		init();
 	}
 
-	public FlexoDialog(Frame owner, String title) throws HeadlessException
-	{
-		super(ToolBox.getFrame(owner), title);
+	public FlexoDialog(Frame owner, String title) throws HeadlessException {
+		super(FlexoFrame.getOwner(owner), title);
 		init();
 	}
 
-	public FlexoDialog(Frame owner, String title, boolean modal) throws HeadlessException
-	{
-		super(ToolBox.getFrame(owner), title, modal);
+	public FlexoDialog(Frame owner, String title, boolean modal) throws HeadlessException {
+		super(FlexoFrame.getOwner(owner), title, modal);
 		init();
 	}
 
-	public FlexoDialog(Dialog owner) throws HeadlessException
-	{
+	public FlexoDialog(Dialog owner) throws HeadlessException {
 		super(owner);
 		init();
 	}
 
-	public FlexoDialog(Dialog owner, boolean modal) throws HeadlessException
-	{
+	public FlexoDialog(Dialog owner, boolean modal) throws HeadlessException {
 		super(owner, modal);
 		init();
 	}
 
-	public FlexoDialog(Dialog owner, String title) throws HeadlessException
-	{
+	public FlexoDialog(Dialog owner, String title) throws HeadlessException {
 		super(owner, title);
 		init();
 	}
 
-	public FlexoDialog(Dialog owner, String title, boolean modal) throws HeadlessException
-	{
+	public FlexoDialog(Dialog owner, String title, boolean modal) throws HeadlessException {
 		super(owner, title, modal);
 		init();
 	}
 
-	private void init()
-	{
+	private void init() {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		addKeyListener(new KeyListener() {
 
@@ -116,28 +103,28 @@ public class FlexoDialog extends JDialog
 		// Don't put this flag to true again, as it lead to very severe issues
 		// while managing popup menu (see CustomPopup) which often appear below
 		// JDialog
-		//setAlwaysOnTop(true);
+		// setAlwaysOnTop(true);
 		setJMenuBar(null);
 	}
+
 	@Override
 	public void show() {
 		centerDialog();
 		/*if (FlexoModule.getActiveModule()!=null)
-        	FlexoModule.getActiveModule().getFlexoController().dismountWindowsOnTop(getBounds());*/
+			FlexoModule.getActiveModule().getFlexoController().dismountWindowsOnTop(getBounds());*/
 		super.show();
 	}
 
 	public void centerDialog() {
-		if (getOwner()!=null && getOwner().isVisible()) {
+		if (getOwner() != null && getOwner().isVisible()) {
 			Point locationOnScreen = getOwner().getLocationOnScreen();
-			if (locationOnScreen.x<0) {
-				locationOnScreen.x=0;
+			if (locationOnScreen.x < 0) {
+				locationOnScreen.x = 0;
 			}
-			if (locationOnScreen.y<0) {
-				locationOnScreen.y=0;
+			if (locationOnScreen.y < 0) {
+				locationOnScreen.y = 0;
 			}
-			Dimension dim = new Dimension(locationOnScreen.x+getOwner().getWidth()/2,
-					locationOnScreen.y+getOwner().getHeight()/2);
+			Dimension dim = new Dimension(locationOnScreen.x + getOwner().getWidth() / 2, locationOnScreen.y + getOwner().getHeight() / 2);
 			setLocation(dim.width - getSize().width / 2, dim.height - getSize().height / 2);
 		} else {
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -165,17 +152,17 @@ public class FlexoDialog extends JDialog
 
 		@Override
 		public Dialog getNewDialog(Frame owner, boolean modal) throws HeadlessException {
-			return new FlexoDialog(owner,modal);
+			return new FlexoDialog(owner, modal);
 		}
 
 		@Override
 		public Dialog getNewDialog(Frame owner, String title) throws HeadlessException {
-			return new FlexoDialog(owner,title);
+			return new FlexoDialog(owner, title);
 		}
 
 		@Override
 		public Dialog getNewDialog(Frame owner, String title, boolean modal) throws HeadlessException {
-			return new FlexoDialog(owner,title,modal);
+			return new FlexoDialog(owner, title, modal);
 		}
 
 		@Override
@@ -185,17 +172,17 @@ public class FlexoDialog extends JDialog
 
 		@Override
 		public Dialog getNewDialog(Dialog owner, boolean modal) throws HeadlessException {
-			return new FlexoDialog(owner,modal);
+			return new FlexoDialog(owner, modal);
 		}
 
 		@Override
 		public Dialog getNewDialog(Dialog owner, String title) throws HeadlessException {
-			return new FlexoDialog(owner,title);
+			return new FlexoDialog(owner, title);
 		}
 
 		@Override
 		public Dialog getNewDialog(Dialog owner, String title, boolean modal) throws HeadlessException {
-			return new FlexoDialog(owner,title,modal);
+			return new FlexoDialog(owner, title, modal);
 		}
 
 	};

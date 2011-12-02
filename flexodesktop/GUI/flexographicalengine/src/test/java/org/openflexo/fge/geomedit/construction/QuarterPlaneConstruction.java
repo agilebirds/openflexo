@@ -23,12 +23,11 @@ import org.openflexo.fge.geom.area.FGEQuarterPlane;
 
 public abstract class QuarterPlaneConstruction extends GeometricConstruction<FGEQuarterPlane> {
 
-	public final FGEQuarterPlane getQuarterPlane()
-	{
+	public final FGEQuarterPlane getQuarterPlane() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGEQuarterPlane computeData();
-	
+
 }

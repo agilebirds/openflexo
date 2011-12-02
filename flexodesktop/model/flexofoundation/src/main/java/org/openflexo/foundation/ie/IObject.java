@@ -31,78 +31,70 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.xml.FlexoXMLSerializable;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * 
  * @author gpolet
  * 
  */
-public interface IObject extends FlexoXMLSerializable, Validable
-{
-    @Override
+public interface IObject extends FlexoXMLSerializable, Validable {
+	@Override
 	public XMLMapping getXMLMapping();
 
-    public void update(Observable observable, Object obj);
+	public void update(Observable observable, Object obj);
 
-    public void update(FlexoObservable observable, DataModification obj);
+	public void update(FlexoObservable observable, DataModification obj);
 
-    public abstract FlexoProject getProject();
-    
-    public boolean isDeleted();
+	public abstract FlexoProject getProject();
 
-    // ==========================================================================
-    // ============================== KeyValueCoding
-    // ============================
-    // ==========================================================================
+	public boolean isDeleted();
 
-    /**
-     * Overrides the default KV-coding implementation by using dynamic
-     * properties if the searched properties could not be resolved for this
-     * instance.<b>
-     * 
-     * Overrides
-     * 
-     * @see org.openflexo.kvc.KeyValueCoding#objectForKey(java.lang.String)
-     * @see org.openflexo.kvc.KeyValueCoding#objectForKey(java.lang.String)
-     */
-    public Object objectForKey(String key);
+	// ==========================================================================
+	// ============================== KeyValueCoding
+	// ============================
+	// ==========================================================================
 
-    /**
-     * Overrides the default KV-coding implementation by using dynamic
-     * properties if the searched properties could not be resolved for this
-     * instance.<b> Additionaly send notifications about modified attribute
-     * 
-     * Overrides
-     * 
-     * @see org.openflexo.kvc.KeyValueCoding#setObjectForKey(java.lang.Object,
-     *      java.lang.String)
-     * @see org.openflexo.kvc.KeyValueCoding#setObjectForKey(java.lang.Object,
-     *      java.lang.String)
-     */
-    public void setObjectForKey(Object object, String key);
+	/**
+	 * Overrides the default KV-coding implementation by using dynamic properties if the searched properties could not be resolved for this
+	 * instance.<b>
+	 * 
+	 * Overrides
+	 * 
+	 * @see org.openflexo.kvc.KeyValueCoding#objectForKey(java.lang.String)
+	 * @see org.openflexo.kvc.KeyValueCoding#objectForKey(java.lang.String)
+	 */
+	public Object objectForKey(String key);
 
-    public Class getTypeForKey(String key);
+	/**
+	 * Overrides the default KV-coding implementation by using dynamic properties if the searched properties could not be resolved for this
+	 * instance.<b> Additionaly send notifications about modified attribute
+	 * 
+	 * Overrides
+	 * 
+	 * @see org.openflexo.kvc.KeyValueCoding#setObjectForKey(java.lang.Object, java.lang.String)
+	 * @see org.openflexo.kvc.KeyValueCoding#setObjectForKey(java.lang.Object, java.lang.String)
+	 */
+	public void setObjectForKey(Object object, String key);
 
-    @Override
+	public Class getTypeForKey(String key);
+
+	@Override
 	public ValidationModel getDefaultValidationModel();
 
-    /**
-     * Return a Vector of all embedded IEObjects: recursive method (Note must
-     * include itself in this vector)
-     * 
-     * @return a Vector of IEObject instances
-     */
-    public Vector getAllEmbeddedIEObjects();
+	/**
+	 * Return a Vector of all embedded IEObjects: recursive method (Note must include itself in this vector)
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	public Vector getAllEmbeddedIEObjects();
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    public abstract Vector<IObject> getEmbeddedIEObjects();
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	public abstract Vector<IObject> getEmbeddedIEObjects();
 
-    @Override
+	@Override
 	public Vector<Validable> getAllEmbeddedValidableObjects();
 
 	public Vector<FlexoModelObjectReference> getReferencers();

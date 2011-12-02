@@ -23,39 +23,34 @@ import java.awt.Color;
 
 /**
  * @author bmangez
- * @version $Id: IECSSClass.java,v 1.2 2011/09/12 11:46:58 gpolet Exp $ $Log:
- *          IECSSClass.java,v $ Revision 1.2 2005/04/18 15:19:07 sguerin Commit
- *          on 18/04/2005, Sylvain GUERIN, version 7.0.6 See committing
- *          documentation
+ * @version $Id: IECSSClass.java,v 1.2 2011/09/12 11:46:58 gpolet Exp $ $Log: IECSSClass.java,v $ Revision 1.2 2005/04/18 15:19:07 sguerin
+ *          Commit on 18/04/2005, Sylvain GUERIN, version 7.0.6 See committing documentation
  * 
- * Revision 1.1 2005/01/17 13:45:06 sguerin Commit on 17/01/2005, Sylvain GUERIN
- * Flexo 6.10 beta 3 See committing documentation
+ *          Revision 1.1 2005/01/17 13:45:06 sguerin Commit on 17/01/2005, Sylvain GUERIN Flexo 6.10 beta 3 See committing documentation
  * 
- * Revision 1.1 2005/01/07 12:49:40 sguerin *** empty log message ***
+ *          Revision 1.1 2005/01/07 12:49:40 sguerin *** empty log message ***
  * 
- * Revision 1.1 2004/10/14 07:39:24 benoit Some modifications
+ *          Revision 1.1 2004/10/14 07:39:24 benoit Some modifications
  * 
  * 
- * <B>Class Description</B>
+ *          <B>Class Description</B>
  */
-public class IECSSClass
-{
+public class IECSSClass {
 
-    /**
+	/**
      * 
      */
-    public IECSSClass()
-    {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	public IECSSClass() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    public String name;
+	public String name;
 
-    public Color backgroundColor;
+	public Color backgroundColor;
 
-    public Color foregroungColor;
+	public Color foregroungColor;
 
-    public String target;
+	public String target;
 
 }

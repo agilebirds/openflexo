@@ -48,26 +48,24 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.WKFIconLibrary;
 
-
 /**
  * Browser element representing the workflow
- *
+ * 
  * @author sguerin
- * @deprecated use ProcessElement because it has many impact to use the FlexoProcessNode instead (one of the main reason is that getObject returns a FlexoProcessNode instead of a FlexoProcess and many actions are registered on the FlexoProcess and not on FlexoProcessNode)
+ * @deprecated use ProcessElement because it has many impact to use the FlexoProcessNode instead (one of the main reason is that getObject
+ *             returns a FlexoProcessNode instead of a FlexoProcess and many actions are registered on the FlexoProcess and not on
+ *             FlexoProcessNode)
  */
 @Deprecated
-public class FlexoProcessNodeElement extends BrowserElement
-{
+public class FlexoProcessNodeElement extends BrowserElement {
 
 	@Deprecated
-    public FlexoProcessNodeElement(FlexoProcessNode node, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(node, BrowserElementType.PROCESS_NODE, browser, parent);
-    }
+	public FlexoProcessNodeElement(FlexoProcessNode node, ProjectBrowser browser, BrowserElement parent) {
+		super(node, BrowserElementType.PROCESS_NODE, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
+	@Override
+	protected void buildChildrenVector() {
 		if (isImported()) {
 			Vector<FlexoModelObject> processes = new Vector<FlexoModelObject>(getFlexoProcess().getProcessNode().getSubProcesses());
 			Collections.sort(processes, FlexoModelObject.NAME_COMPARATOR);
@@ -77,88 +75,89 @@ public class FlexoProcessNodeElement extends BrowserElement
 			return;
 		}
 
-    	for(Enumeration<ProcessFolder> en = getProcessNode().getSortedFolders();en.hasMoreElements();) {
-    		addToChilds(en.nextElement());
-    	}
-    	for (Enumeration<FlexoProcessNode> en = getProcessNode().getSortedOrphanSubprocesses();en.hasMoreElements();)
-   			addToChilds(en.nextElement().getProcess());
-    }
+		for (Enumeration<ProcessFolder> en = getProcessNode().getSortedFolders(); en.hasMoreElements();) {
+			addToChilds(en.nextElement());
+		}
+		for (Enumeration<FlexoProcessNode> en = getProcessNode().getSortedOrphanSubprocesses(); en.hasMoreElements();) {
+			addToChilds(en.nextElement().getProcess());
+		}
+	}
 
-    private boolean isImported() {
-    	return getProcessNode().isImported();
-    }
+	private boolean isImported() {
+		return getProcessNode().isImported();
+	}
 
-    @Override
-    public boolean isNameEditable() {
-    	return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-	public String getName()
-    {
-        return getProcessNode().getProcess().getName();
-    }
+	@Override
+	public String getName() {
+		return getProcessNode().getProcess().getName();
+	}
 
-    @Override
-    public void setName(String aName) throws FlexoException {
-    	try {
+	@Override
+	public void setName(String aName) throws FlexoException {
+		try {
 			getProcessNode().getProcess().setName(aName);
 		} catch (InvalidNameException e) {
 			throw new FlexoException(e.getLocalizedMessage(), e);
 		}
-    }
+	}
 
-    @Override
-    public Icon getIcon() {
-    	Icon icon = super.getIcon();
-    	IconMarker[] markers = getIconMarkers();
-    	if (markers!=null)
-    		return IconFactory.getImageIcon((ImageIcon) icon, markers);
-    	return icon;
-    }
+	@Override
+	public Icon getIcon() {
+		Icon icon = super.getIcon();
+		IconMarker[] markers = getIconMarkers();
+		if (markers != null) {
+			return IconFactory.getImageIcon((ImageIcon) icon, markers);
+		}
+		return icon;
+	}
 
-    private IconMarker[] getIconMarkers() {
-    	int count = 0;
-    	if (isImported()) {
-    		count++;
-    		if (getFlexoProcess().isDeletedOnServer())
-    			count++;
-    	} else if(getFlexoProcess().getIsWebService()) {
-    		count++;
-    	}
-    	IconMarker[] markers = null;
-    	if (count>0)
-    		markers = new IconMarker[count];
-    	if (isImported()) {
-    		markers[0] = IconLibrary.IMPORT;
-    		if (getFlexoProcess().isDeletedOnServer())
-    			markers[1] = IconLibrary.WARNING;
-    	} else if(getFlexoProcess().getIsWebService()) {
-    		markers[0] = WKFIconLibrary.WS_MARKER;
-    	}
-    	return markers;
-    }
+	private IconMarker[] getIconMarkers() {
+		int count = 0;
+		if (isImported()) {
+			count++;
+			if (getFlexoProcess().isDeletedOnServer()) {
+				count++;
+			}
+		} else if (getFlexoProcess().getIsWebService()) {
+			count++;
+		}
+		IconMarker[] markers = null;
+		if (count > 0) {
+			markers = new IconMarker[count];
+		}
+		if (isImported()) {
+			markers[0] = IconLibrary.IMPORT;
+			if (getFlexoProcess().isDeletedOnServer()) {
+				markers[1] = IconLibrary.WARNING;
+			}
+		} else if (getFlexoProcess().getIsWebService()) {
+			markers[0] = WKFIconLibrary.WS_MARKER;
+		}
+		return markers;
+	}
 
-    private FlexoProcess getFlexoProcess() {
+	private FlexoProcess getFlexoProcess() {
 		return getProcessNode().getProcess();
 	}
 
-	public FlexoProcessNode getProcessNode()
-    {
-        return (FlexoProcessNode) getObject();
-    }
+	public FlexoProcessNode getProcessNode() {
+		return (FlexoProcessNode) getObject();
+	}
 
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification) {
-    	if (dataModification instanceof ProcessNodeInserted
-    			|| dataModification instanceof ProcessNodeRemoved
-    			|| dataModification instanceof ProcessFolderAdded
-    			|| dataModification instanceof ProcessFolderRemoved
-    			|| dataModification instanceof ProcessAddedToFolder
-    			|| dataModification instanceof ProcessRemovedFromFolder)
-    		refreshWhenPossible();
-    	else
-    		super.update(observable, dataModification);
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ProcessNodeInserted || dataModification instanceof ProcessNodeRemoved
+				|| dataModification instanceof ProcessFolderAdded || dataModification instanceof ProcessFolderRemoved
+				|| dataModification instanceof ProcessAddedToFolder || dataModification instanceof ProcessRemovedFromFolder) {
+			refreshWhenPossible();
+		} else {
+			super.update(observable, dataModification);
+		}
+	}
 
 }

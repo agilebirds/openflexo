@@ -29,112 +29,110 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public enum TRCSSType implements StringConvertable
-{
+public enum TRCSSType implements StringConvertable {
 
-	DL_LIST_ROW1("DLListRow1"),
-	DL_LIST_ROW2("DLListRow2");
-	
-	
+	DL_LIST_ROW1("DLListRow1"), DL_LIST_ROW2("DLListRow2");
+
 	private final String name;
 
-	public String getName(){
+	public String getName() {
 		return name;
 	}
-	
-	TRCSSType(String _name){
+
+	TRCSSType(String _name) {
 		this.name = _name;
 	}
-	
+
 	@Override
 	public Converter getConverter() {
 		return trCSSTypeConverter;
 	}
-	
-	public static final StringEncoder.EnumerationConverter<TRCSSType> trCSSTypeConverter = new StringEncoder.EnumerationConverter<TRCSSType>(TRCSSType.class,"getName");
+
+	public static final StringEncoder.EnumerationConverter<TRCSSType> trCSSTypeConverter = new StringEncoder.EnumerationConverter<TRCSSType>(
+			TRCSSType.class, "getName");
 
 	/*
 	
-    private static final Logger logger = Logger.getLogger(TRCSSType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TRCSSType.class.getPackage().getName());
 
-    public static final TRCSSType DL_LIST_ROW1 = new DLListRow1Type();
+	public static final TRCSSType DL_LIST_ROW1 = new DLListRow1Type();
 
-    public static final TRCSSType DL_LIST_ROW2 = new DLListRow2Type();
+	public static final TRCSSType DL_LIST_ROW2 = new DLListRow2Type();
 
-    public static StringEncoder.Converter trCSSTypeConverter = new Converter(TRCSSType.class) {
+	public static StringEncoder.Converter trCSSTypeConverter = new Converter(TRCSSType.class) {
 
-        public Object convertFromString(String value)
-        {
-            return get(value);
-        }
+	    public Object convertFromString(String value)
+	    {
+	        return get(value);
+	    }
 
-        public String convertToString(Object value)
-        {
-            return ((TRCSSType) value).getName();
-        }
+	    public String convertToString(Object value)
+	    {
+	        return ((TRCSSType) value).getName();
+	    }
 
-    };
+	};
 
-    public static class DLListRow1Type extends TRCSSType implements Serializable
-    {
-        DLListRow1Type()
-        {
-        }
+	public static class DLListRow1Type extends TRCSSType implements Serializable
+	{
+	    DLListRow1Type()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "DLListRow1";
-        }
-    }
+	    public String getName()
+	    {
+	        return "DLListRow1";
+	    }
+	}
 
-    public static class DLListRow2Type extends TRCSSType implements Serializable
-    {
-        DLListRow2Type()
-        {
-        }
+	public static class DLListRow2Type extends TRCSSType implements Serializable
+	{
+	    DLListRow2Type()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "DLListRow2";
-        }
-    }
+	    public String getName()
+	    {
+	        return "DLListRow2";
+	    }
+	}
 
-    public abstract String getName();
+	public abstract String getName();
 
-    public static TRCSSType get(String typeName)
-    {
-        for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
-            TRCSSType temp = (TRCSSType) e.nextElement();
-            if (temp.getName().equals(typeName)) {
-                return temp;
-            }
-        }
+	public static TRCSSType get(String typeName)
+	{
+	    for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
+	        TRCSSType temp = (TRCSSType) e.nextElement();
+	        if (temp.getName().equals(typeName)) {
+	            return temp;
+	        }
+	    }
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find ListType named " + typeName);
-        return null;
-    }
+	    if (logger.isLoggable(Level.WARNING))
+	        logger.warning("Could not find ListType named " + typeName);
+	    return null;
+	}
 
-    private Vector<TRCSSType> _availableValues = null;
+	private Vector<TRCSSType> _availableValues = null;
 
-    public Vector getAvailableValues()
-    {
-        if (_availableValues == null) {
-            _availableValues = new Vector<TRCSSType>();
-            _availableValues.add(DL_LIST_ROW1);
-            _availableValues.add(DL_LIST_ROW2);
-        }
-        return _availableValues;
-    }
+	public Vector getAvailableValues()
+	{
+	    if (_availableValues == null) {
+	        _availableValues = new Vector<TRCSSType>();
+	        _availableValues.add(DL_LIST_ROW1);
+	        _availableValues.add(DL_LIST_ROW2);
+	    }
+	    return _availableValues;
+	}
 
-    public StringEncoder.Converter getConverter()
-    {
-        return trCSSTypeConverter;
-    }
+	public StringEncoder.Converter getConverter()
+	{
+	    return trCSSTypeConverter;
+	}
 
-    public static Vector availableValues()
-    {
-        return DL_LIST_ROW1.getAvailableValues();
-    }
+	public static Vector availableValues()
+	{
+	    return DL_LIST_ROW1.getAvailableValues();
+	}
 	*/
 }

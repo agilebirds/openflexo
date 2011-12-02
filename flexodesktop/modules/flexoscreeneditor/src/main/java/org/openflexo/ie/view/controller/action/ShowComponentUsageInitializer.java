@@ -43,55 +43,59 @@ public class ShowComponentUsageInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public ShowComponentUsageInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(ShowComponentUsage.actionType,actionInitializer);
+	public ShowComponentUsageInitializer(IEControllerActionInitializer actionInitializer) {
+		super(ShowComponentUsage.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ShowComponentUsage> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ShowComponentUsage> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowComponentUsage>() {
 			@Override
-			public boolean run(ActionEvent e, ShowComponentUsage action)
-			{
+			public boolean run(ActionEvent e, ShowComponentUsage action) {
 				StringBuilder sb = new StringBuilder();
 				ComponentDefinition cd = action.getComponentDefinition();
 				Vector<ComponentInstance> cis = action.getComponentDefinition().getComponentInstances();
 				for (ComponentInstance ci : cis) {
 					if (cd instanceof OperationComponentDefinition) {
-						if (ci.getOwner() instanceof OperationNode)
+						if (ci.getOwner() instanceof OperationNode) {
 							appendComponentInstance(ci, sb);
+						}
 					} else if (cd instanceof PopupComponentDefinition) {
-						if (ci.getOwner() instanceof IEHyperlinkWidget)
+						if (ci.getOwner() instanceof IEHyperlinkWidget) {
 							appendComponentInstance(ci, sb);
-					} else if (cd instanceof TabComponentDefinition)
-						if (ci.getOwner() instanceof IETabWidget)
+						}
+					} else if (cd instanceof TabComponentDefinition) {
+						if (ci.getOwner() instanceof IETabWidget) {
 							appendComponentInstance(ci, sb);
+						}
+					}
 				}
-				if (sb.length()==0)
-					sb.append(FlexoLocalization.localizedForKey("component")).append(" ").append(cd.getName()).append(" ").append(FlexoLocalization.localizedForKey("is_not_used"));
+				if (sb.length() == 0) {
+					sb.append(FlexoLocalization.localizedForKey("component")).append(" ").append(cd.getName()).append(" ")
+							.append(FlexoLocalization.localizedForKey("is_not_used"));
+				}
 				FlexoController.notify(sb.toString());
 				return true;
 			}
-			
+
 			private void appendComponentInstance(ComponentInstance ci, StringBuilder sb) {
 				if (ci.getXMLResourceData() instanceof FlexoModelObject) {
-					if (sb.length()==0)
-						sb.append(FlexoLocalization.localizedForKey("component")).append(" '").append(ci.getComponentName()).append("' ").append(FlexoLocalization.localizedForKey("is_used_in"));
+					if (sb.length() == 0) {
+						sb.append(FlexoLocalization.localizedForKey("component")).append(" '").append(ci.getComponentName()).append("' ")
+								.append(FlexoLocalization.localizedForKey("is_used_in"));
+					}
 					sb.append("\n");
-					sb.append("* ").append(((FlexoModelObject)ci.getOwner()).getDisplayableName()).append(" ");
-					sb.append(FlexoLocalization.localizedForKey("in")).append(" ").append(((FlexoModelObject)ci.getXMLResourceData()).getDisplayableName());
+					sb.append("* ").append(((FlexoModelObject) ci.getOwner()).getDisplayableName()).append(" ");
+					sb.append(FlexoLocalization.localizedForKey("in")).append(" ")
+							.append(((FlexoModelObject) ci.getXMLResourceData()).getDisplayableName());
 				}
 			}
 		};
 	}
 
-	
 }

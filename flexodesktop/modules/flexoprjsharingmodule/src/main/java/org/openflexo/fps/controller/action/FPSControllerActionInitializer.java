@@ -27,7 +27,6 @@ import org.openflexo.fps.controller.FPSController;
 import org.openflexo.fps.controller.FPSSelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 /**
  * 
  * Action initializing for this module
@@ -36,71 +35,65 @@ import org.openflexo.view.controller.ControllerActionInitializer;
  */
 public class FPSControllerActionInitializer extends ControllerActionInitializer {
 
-    private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    private FPSController _fpsController;
-    
-    public FPSControllerActionInitializer(FPSController controller)
-    {
-        super(controller);
-        _fpsController = controller;
-    }
-    
-    protected FPSController getFPSController()
-    {
-        return _fpsController;
-    }
-    
-    protected FPSSelectionManager getFPSSelectionManager()
-    {
-        return getFPSController().getFPSSelectionManager();
-    }
-    
+	private FPSController _fpsController;
 
-    
-    @Override
-	public void initializeActions()
-    {
-        super.initializeActions();
-        
-        (new FPSSetPropertyInitializer(this)).init();
+	public FPSControllerActionInitializer(FPSController controller) {
+		super(controller);
+		_fpsController = controller;
+	}
 
-        // CVS repositories actions
-        (new AddCVSRepositoryInitializer(this)).init();
-        (new RemoveCVSRepositoryInitializer(this)).init();
-                
-        // Refreshing
-        (new CVSRefreshInitializer(this)).init();
-        
-        // Obtaining projects
-        (new CheckoutProjectInitializer(this)).init();
-        (new OpenSharedProjectInitializer(this)).init();
-        (new ShareProjectInitializer(this)).init();
-        
-        // CVS operations
-        (new SynchronizeWithRepositoryInitializer(this)).init();
-        (new RefreshProjectInitializer(this)).init();
-        (new CommitFilesInitializer(this)).init();
-        (new UpdateFilesInitializer(this)).init();
-        (new MarkAsMergedFilesInitializer(this)).init();
-        (new OverrideAndUpdateFilesInitializer(this)).init();
-        (new OverrideAndCommitFilesInitializer(this)).init();
-         
-        // Edit operations
-        (new EditCVSFileInitializer(this)).init();
-        (new SaveCVSFileInitializer(this)).init();
-        (new RevertToSavedCVSFileInitializer(this)).init();
+	protected FPSController getFPSController() {
+		return _fpsController;
+	}
 
-        // CVSHistory
-        (new RetrieveCVSHistoryInitializer(this)).init();
-        
-      }
-  
-    public boolean handleAuthenticationException(FlexoAuthentificationException exception) {
-    	return getFPSController().handleAuthenticationException(exception);
-    }
-  
-    public boolean handleUnknownHostException(FlexoUnknownHostException exception) {
-    	return getFPSController().handleUnknownHostException(exception);
-    }
+	protected FPSSelectionManager getFPSSelectionManager() {
+		return getFPSController().getFPSSelectionManager();
+	}
+
+	@Override
+	public void initializeActions() {
+		super.initializeActions();
+
+		(new FPSSetPropertyInitializer(this)).init();
+
+		// CVS repositories actions
+		(new AddCVSRepositoryInitializer(this)).init();
+		(new RemoveCVSRepositoryInitializer(this)).init();
+
+		// Refreshing
+		(new CVSRefreshInitializer(this)).init();
+
+		// Obtaining projects
+		(new CheckoutProjectInitializer(this)).init();
+		(new OpenSharedProjectInitializer(this)).init();
+		(new ShareProjectInitializer(this)).init();
+
+		// CVS operations
+		(new SynchronizeWithRepositoryInitializer(this)).init();
+		(new RefreshProjectInitializer(this)).init();
+		(new CommitFilesInitializer(this)).init();
+		(new UpdateFilesInitializer(this)).init();
+		(new MarkAsMergedFilesInitializer(this)).init();
+		(new OverrideAndUpdateFilesInitializer(this)).init();
+		(new OverrideAndCommitFilesInitializer(this)).init();
+
+		// Edit operations
+		(new EditCVSFileInitializer(this)).init();
+		(new SaveCVSFileInitializer(this)).init();
+		(new RevertToSavedCVSFileInitializer(this)).init();
+
+		// CVSHistory
+		(new RetrieveCVSHistoryInitializer(this)).init();
+
+	}
+
+	public boolean handleAuthenticationException(FlexoAuthentificationException exception) {
+		return getFPSController().handleAuthenticationException(exception);
+	}
+
+	public boolean handleUnknownHostException(FlexoUnknownHostException exception) {
+		return getFPSController().handleUnknownHostException(exception);
+	}
 }

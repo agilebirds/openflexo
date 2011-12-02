@@ -35,31 +35,27 @@ import org.openflexo.module.external.ExternalDREModule;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-
 /**
  * DocResourceEditor module
- *
+ * 
  * @author yourname
  */
-public class DREModule extends FlexoModule implements ExternalDREModule
-{
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[]{Inspectors.DRE};
+public class DREModule extends FlexoModule implements ExternalDREModule {
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DRE };
+
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
-	 *
+	 * The 'main' method of module allow to launch this module as a single-module application
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		ToolBox.setPlatform();
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.DRE_MODULE);
 	}
 
-	public DREModule() throws Exception
-	{
+	public DREModule() throws Exception {
 		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
 		setFlexoController(new DREController(this));
 		getDREController().loadRelativeWindows();
@@ -72,34 +68,32 @@ public class DREModule extends FlexoModule implements ExternalDREModule
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public DREController getDREController()
-	{
+	public DREController getDREController() {
 		return (DREController) getFlexoController();
 	}
 
 	/**
 	 * Overrides getDefaultObjectToSelect
+	 * 
 	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
 	 */
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
+	public FlexoModelObject getDefaultObjectToSelect() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	/**
 	 * Overrides moduleWillClose
+	 * 
 	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
 	 */
 	@Override
-	public void moduleWillClose()
-	{
+	public void moduleWillClose() {
 		super.moduleWillClose();
 		DREPreferences.reset();
 	}

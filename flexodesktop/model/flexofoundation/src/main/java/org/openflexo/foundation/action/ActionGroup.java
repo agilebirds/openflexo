@@ -25,50 +25,42 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class ActionGroup {
 
-    private int _index;
-    private String _actionMenuName;
-    private Icon _smallIcon;
-   
-    public ActionGroup (String actionMenuName, int index)
-    {
-        super();
-        _actionMenuName = actionMenuName;
-        _index = index;
-    }
-    
-    public ActionGroup (String actionMenuName, int index, Icon icon)
-    {
-        this(actionMenuName,index);
-        setSmallIcon(icon);
-    }
-    
-    public String getUnlocalizedName ()
-    {
-        return _actionMenuName;
-    }
+	private int _index;
+	private String _actionMenuName;
+	private Icon _smallIcon;
 
-    public String getLocalizedName ()
-    {
-        return FlexoLocalization.localizedForKey(_actionMenuName);
-    }
+	public ActionGroup(String actionMenuName, int index) {
+		super();
+		_actionMenuName = actionMenuName;
+		_index = index;
+	}
 
-    public String getLocalizedDescription ()
-    {
-        return FlexoLocalization.localizedForKey(_actionMenuName+"_description");
-    }
-    
-    public Icon getSmallIcon() 
-    {
-        return _smallIcon;
-    }
+	public ActionGroup(String actionMenuName, int index, Icon icon) {
+		this(actionMenuName, index);
+		setSmallIcon(icon);
+	}
 
-    public void setSmallIcon(Icon smallIcon) 
-    {
-        _smallIcon = smallIcon;
-    }
+	public String getUnlocalizedName() {
+		return _actionMenuName;
+	}
 
-    public int getIndex() 
-    {
-        return _index;
-    }
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(_actionMenuName);
+	}
+
+	public String getLocalizedDescription() {
+		return FlexoLocalization.localizedForKey(_actionMenuName + "_description");
+	}
+
+	public Icon getSmallIcon() {
+		return _smallIcon;
+	}
+
+	public void setSmallIcon(Icon smallIcon) {
+		_smallIcon = smallIcon;
+	}
+
+	public int getIndex() {
+		return _index;
+	}
 }

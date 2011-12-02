@@ -29,130 +29,113 @@ import org.openflexo.localization.FlexoLocalization;
 
 public abstract class DMRepositoryFolder extends DMObject {
 
-    private Vector<DMRepository> _repositories;
-    private boolean _internalRepresentationNeedsToBeUpdated;
+	private Vector<DMRepository> _repositories;
+	private boolean _internalRepresentationNeedsToBeUpdated;
 
-    /**
-     * Default constructor
-     */
-    public DMRepositoryFolder(DMModel dmModel)
-    {
-        super(dmModel);
-        _repositories = new Vector<DMRepository>();
-        _internalRepresentationNeedsToBeUpdated = true;
-     }
+	/**
+	 * Default constructor
+	 */
+	public DMRepositoryFolder(DMModel dmModel) {
+		super(dmModel);
+		_repositories = new Vector<DMRepository>();
+		_internalRepresentationNeedsToBeUpdated = true;
+	}
 
-     public abstract int getRepositoriesCount();
+	public abstract int getRepositoriesCount();
 
-    public abstract DMRepository getRepositoryAtIndex(int index);
+	public abstract DMRepository getRepositoryAtIndex(int index);
 
-    @Override
+	@Override
 	public abstract String getName();
 
-    @Override
-	public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
 
-    public void setLocalizedName(String aName)
-    {
-        // avoid exception
-    }
+	public void setLocalizedName(String aName) {
+		// avoid exception
+	}
 
-    public String getLocalizedDescription()
-    {
-        return FlexoLocalization.localizedForKey(getName()+"_description");
-    }
+	public String getLocalizedDescription() {
+		return FlexoLocalization.localizedForKey(getName() + "_description");
+	}
 
-    public void setLocalizedDescription(String aName)
-    {
-        // avoid exception
-    }
+	public void setLocalizedDescription(String aName) {
+		// avoid exception
+	}
 
-    @Override
+	@Override
 	public void setName(String aName) throws InvalidNameException {
-    }
+	}
 
-    /**
-     * Overrides isNameValid
-     * @see org.openflexo.foundation.dm.DMObject#isNameValid()
-     */
-    @Override
-    public boolean isNameValid()
-    {
-        return true;
-    }
+	/**
+	 * Overrides isNameValid
+	 * 
+	 * @see org.openflexo.foundation.dm.DMObject#isNameValid()
+	 */
+	@Override
+	public boolean isNameValid() {
+		return true;
+	}
 
-    @Override
+	@Override
 	public abstract String getFullyQualifiedName();
 
-    /**
-     * Return String uniquely identifying inspector template which must be
-     * applied when trying to inspect this object
-     *
-     * @return a String value
-     */
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.DM.DM_REPOSITORY_FOLDER_INSPECTOR;
-    }
+	/**
+	 * Return String uniquely identifying inspector template which must be applied when trying to inspect this object
+	 * 
+	 * @return a String value
+	 */
+	@Override
+	public String getInspectorName() {
+		return Inspectors.DM.DM_REPOSITORY_FOLDER_INSPECTOR;
+	}
 
+	protected void updateInternalRepresentation() {
+		_internalRepresentationNeedsToBeUpdated = true;
+	}
 
-    protected void updateInternalRepresentation()
-    {
-        _internalRepresentationNeedsToBeUpdated = true;
-    }
+	private synchronized Vector<DMRepository> getInternalRepresentation() {
+		if (_internalRepresentationNeedsToBeUpdated) {
+			_repositories.clear();
+			for (int i = 0; i < getRepositoriesCount(); i++) {
+				_repositories.add(getRepositoryAtIndex(i));
+			}
+			_internalRepresentationNeedsToBeUpdated = false;
+		}
+		return _repositories;
+	}
 
-    private synchronized Vector<DMRepository> getInternalRepresentation()
-    {
-        if (_internalRepresentationNeedsToBeUpdated) {
-            _repositories.clear();
-            for (int i=0; i<getRepositoriesCount(); i++) {
-                _repositories.add(getRepositoryAtIndex(i));
-            }
-            _internalRepresentationNeedsToBeUpdated = false;
-        }
-        return _repositories;
-    }
+	@Override
+	public Vector<DMRepository> getEmbeddedDMObjects() {
+		return getInternalRepresentation();
+	}
 
-    @Override
-	public Vector<DMRepository> getEmbeddedDMObjects()
-    {
-        return getInternalRepresentation();
-    }
+	@Override
+	public boolean isDeletable() {
+		return false;
+	}
 
-    @Override
-	public boolean isDeletable()
-    {
-        return false;
-    }
+	@Override
+	public synchronized Vector<DMRepository> getOrderedChildren() {
+		return getInternalRepresentation();
+	}
 
-    @Override
-	public synchronized Vector<DMRepository> getOrderedChildren()
-    {
-         return getInternalRepresentation();
-    }
+	@Override
+	public TreeNode getParent() {
+		return getDMModel();
+	}
 
-    @Override
-	public TreeNode getParent()
-    {
-        return getDMModel();
-    }
+	@Override
+	public boolean getAllowsChildren() {
+		return true;
+	}
 
-    @Override
-	public boolean getAllowsChildren()
-    {
-        return true;
-    }
-
-    @Override
-	public void notifyReordering(DMObject cause)
-    {
-        _internalRepresentationNeedsToBeUpdated = true;
-         super.notifyReordering(cause);
-    }
-
+	@Override
+	public void notifyReordering(DMObject cause) {
+		_internalRepresentationNeedsToBeUpdated = true;
+		super.notifyReordering(cause);
+	}
 
 }

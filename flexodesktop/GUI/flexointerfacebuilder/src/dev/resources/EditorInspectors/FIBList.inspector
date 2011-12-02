@@ -20,15 +20,14 @@
 
 		<Tab name="AdvancedTab" title="Advanced" index="1" layout="twocols" font="SansSerif,0,11" >
 
-			<CheckBox data="data.autoSelectFirstRow" constraints="twocols(location=left)" />
-			<Label label="select_first_row" constraints="twocols(location=right)" />
-
 			<CheckBox data="data.createNewRowOnClick" constraints="twocols(location=left)" />
 			<Label label="create_new_row_on_click" constraints="twocols(location=right)" />
 
 			<CheckBox data="data.showFooter" constraints="twocols(location=left)"/>
 			<Label label="show_footer" constraints="twocols(location=right)"/>
 
+			<Label label="layout_orientation" constraints="twocols(location=left)" />
+			<DropDown data="data.layoutOrientation" constraints="twocols(location=right)" />
 		</Tab>
 
 		<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >

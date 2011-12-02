@@ -46,17 +46,15 @@ import org.openflexo.ve.controller.OEController;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-
 /**
  * Ontology Editor module
  * 
  * @author yourname
  */
-public class VEModule extends FlexoModule implements ExternalOEModule
-{
+public class VEModule extends FlexoModule implements ExternalOEModule {
 	private static final Logger logger = Logger.getLogger(VEModule.class.getPackage().getName());
 
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[]{Inspectors.VE};
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VE };
 
 	private DrawingController<? extends Drawing<? extends FlexoModelObject>> screenshotController;
 	private DrawingView<? extends Drawing<? extends FlexoModelObject>> screenshot = null;
@@ -64,71 +62,63 @@ public class VEModule extends FlexoModule implements ExternalOEModule
 	private FlexoModelObject screenshotObject;
 
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
+	 * The 'main' method of module allow to launch this module as a single-module application
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		ToolBox.setPlatform();
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.VE_MODULE);
 	}
 
-	public VEModule(InteractiveFlexoEditor projectEditor) throws Exception
-	{
+	public VEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
-		setFlexoController(new OEController(projectEditor,this));
+		setFlexoController(new OEController(projectEditor, this));
 		getOEController().loadRelativeWindows();
 		VEPreferences.init(getOEController());
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 
 		// Put here a code to display default view
-		//getOEController().setCurrentEditedObjectAsModuleView(projectEditor.getProject());
+		// getOEController().setCurrentEditedObjectAsModuleView(projectEditor.getProject());
 
 		projectEditor.getProject().getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
 		projectEditor.getProject().getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
 
 		// Retain here all necessary resources
-		//retain(<the_required_resource_data>);
+		// retain(<the_required_resource_data>);
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public OEController getOEController()
-	{
+	public OEController getOEController() {
 		return (OEController) getFlexoController();
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
+	public FlexoModelObject getDefaultObjectToSelect() {
 		return getOEController().getProject().getShemaLibrary();
 	}
 
 	@Override
-	public float getScreenshotQuality()
-	{
-		float reply = Float.valueOf(VEPreferences.getScreenshotQuality())/100f;
-		if(reply>1) {
+	public float getScreenshotQuality() {
+		float reply = Float.valueOf(VEPreferences.getScreenshotQuality()) / 100f;
+		if (reply > 1) {
 			return 1f;
 		}
-		if (reply<0.1f) {
+		if (reply < 0.1f) {
 			return 0.1f;
 		}
 		return reply;
 	}
 
 	@Override
-	public JComponent createScreenshotForShema(View target)
-	{
-		if (target==null) {
+	public JComponent createScreenshotForShema(View target) {
+		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
 			}
@@ -139,7 +129,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new VEShemaController(getOEController(),target);
+		screenshotController = new VEShemaController(getOEController(), target);
 
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();
@@ -148,7 +138,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule
 		screenshot.validate();
 		Dimension d = screenshot.getComputedMinimumSize();
 		d.height += 20;
-		d.width +=20;
+		d.width += 20;
 		screenshot.setSize(d);
 		screenshot.setPreferredSize(d);
 		target.resetIgnoreNotifications();
@@ -157,20 +147,18 @@ public class VEModule extends FlexoModule implements ExternalOEModule
 	}
 
 	@Override
-	public void finalizeScreenshotGeneration()
-	{
+	public void finalizeScreenshotGeneration() {
 		if (screenshot != null) {
 			screenshotObject.setIgnoreNotifications();
 			screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(drawWorkingArea);
 			screenshotObject.resetIgnoreNotifications();
 			screenshotController.delete();
-			if (screenshot.getParent()!=null) {
+			if (screenshot.getParent() != null) {
 				screenshot.getParent().remove(screenshot);
 			}
 			screenshotController = null;
 			screenshot = null;
 		}
 	}
-
 
 }

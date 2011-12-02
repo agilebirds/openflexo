@@ -31,11 +31,10 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
  * 
  * @author gpolet
- *
+ * 
  */
 public class IECLTreeDropTarget extends TreeDropTarget {
 
@@ -44,114 +43,117 @@ public class IECLTreeDropTarget extends TreeDropTarget {
 	}
 
 	@Override
-	public boolean targetAcceptsSource(BrowserElement target,
-			BrowserElement source) {
+	public boolean targetAcceptsSource(BrowserElement target, BrowserElement source) {
 		if (!(target instanceof ComponentFolderElement) && (target.getParent() instanceof ComponentFolderElement)) {
-            target = (ComponentFolderElement) target.getParent();
-        }
-        if (target instanceof ComponentFolderElement) {
-            FlexoComponentFolder targetFolder = (FlexoComponentFolder) ((ComponentFolderElement) target).getObject();
-            if (source instanceof ComponentFolderElement) {
-                FlexoComponentFolder sourceFolder = (FlexoComponentFolder) ((ComponentFolderElement) source).getObject();
-                if (sourceFolder.isRootFolder())
-                    return false;
-                FlexoComponentFolder srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ComponentFolderElement) source)
-                        .getParent()).getObject();
-                if (targetFolder == sourceFolder)
-                    return false;
-                if (targetFolder.getFolderNamed(sourceFolder.getName()) != null) {
-                    return false;
-                }
-                if (targetFolder != srcFolder && !sourceFolder.isFatherOf(targetFolder)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else if ((source instanceof ReusableComponentDefinitionElement) || (source instanceof ComponentElement)
-                    || (source instanceof MonitoringScreenDefinitionElement)) {
-                ComponentDefinition sourceComp = null;
-                FlexoComponentFolder srcFolder = null;
-                if (source instanceof ReusableComponentDefinitionElement) {
-                    sourceComp = ((ReusableComponentDefinitionElement) source).getComponentDefinition();
-                    srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ReusableComponentDefinitionElement) source)
-                            .getParent()).getObject();
-                } else if (source instanceof ComponentElement) {
-                    sourceComp = ((ComponentElement) source).getComponentDefinition();
-                    srcFolder = sourceComp.getFolder();
-                } else if (source instanceof MonitoringScreenDefinitionElement) {
-                    sourceComp = ((MonitoringScreenDefinitionElement) source).getComponentDefinition();
-                    srcFolder = sourceComp.getFolder();
-                }
-                if (targetFolder != srcFolder) {
-                    return true;
-                } else {
-                    return false;
-                }
+			target = (ComponentFolderElement) target.getParent();
+		}
+		if (target instanceof ComponentFolderElement) {
+			FlexoComponentFolder targetFolder = (FlexoComponentFolder) ((ComponentFolderElement) target).getObject();
+			if (source instanceof ComponentFolderElement) {
+				FlexoComponentFolder sourceFolder = (FlexoComponentFolder) ((ComponentFolderElement) source).getObject();
+				if (sourceFolder.isRootFolder()) {
+					return false;
+				}
+				FlexoComponentFolder srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ComponentFolderElement) source)
+						.getParent()).getObject();
+				if (targetFolder == sourceFolder) {
+					return false;
+				}
+				if (targetFolder.getFolderNamed(sourceFolder.getName()) != null) {
+					return false;
+				}
+				if (targetFolder != srcFolder && !sourceFolder.isFatherOf(targetFolder)) {
+					return true;
+				} else {
+					return false;
+				}
+			} else if ((source instanceof ReusableComponentDefinitionElement) || (source instanceof ComponentElement)
+					|| (source instanceof MonitoringScreenDefinitionElement)) {
+				ComponentDefinition sourceComp = null;
+				FlexoComponentFolder srcFolder = null;
+				if (source instanceof ReusableComponentDefinitionElement) {
+					sourceComp = ((ReusableComponentDefinitionElement) source).getComponentDefinition();
+					srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ReusableComponentDefinitionElement) source).getParent())
+							.getObject();
+				} else if (source instanceof ComponentElement) {
+					sourceComp = ((ComponentElement) source).getComponentDefinition();
+					srcFolder = sourceComp.getFolder();
+				} else if (source instanceof MonitoringScreenDefinitionElement) {
+					sourceComp = ((MonitoringScreenDefinitionElement) source).getComponentDefinition();
+					srcFolder = sourceComp.getFolder();
+				}
+				if (targetFolder != srcFolder) {
+					return true;
+				} else {
+					return false;
+				}
 
-            } else {
-                return false;
-            }
-        }
-        return false;
+			} else {
+				return false;
+			}
+		}
+		return false;
 	}
-	
+
 	@Override
 	public boolean handleDrop(BrowserElement moved, BrowserElement destination) {
 		if (!(destination instanceof ComponentFolderElement) && !(destination.getParent() instanceof ComponentFolderElement)) {
-            return false;
-        }
-        if (!(destination instanceof ComponentFolderElement) && (destination.getParent() instanceof ComponentFolderElement)) {
-            destination = (ComponentFolderElement) destination.getParent();
-        }
-        FlexoComponentFolder targetFolder = (FlexoComponentFolder) ((ComponentFolderElement) destination).getObject();
+			return false;
+		}
+		if (!(destination instanceof ComponentFolderElement) && (destination.getParent() instanceof ComponentFolderElement)) {
+			destination = (ComponentFolderElement) destination.getParent();
+		}
+		FlexoComponentFolder targetFolder = (FlexoComponentFolder) ((ComponentFolderElement) destination).getObject();
 
-        if (moved instanceof ComponentFolderElement) {
-            FlexoComponentFolder movedFolder = (FlexoComponentFolder) ((ComponentFolderElement) moved).getObject();
-            if (movedFolder.isRootFolder())
-                return false;
-            FlexoComponentFolder srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ComponentFolderElement) moved).getParent())
-                    .getObject();
-            if (targetFolder == movedFolder)
-                return false;
-            if (targetFolder.getFolderNamed(movedFolder.getName())!=null){
-                FlexoController.notify("there_is_already_a_folder_with that name");
-                return false;
-            }
-            
-            if (targetFolder != srcFolder && !movedFolder.isFatherOf(targetFolder)) {
-                srcFolder.removeFromSubFolders(movedFolder);
-                movedFolder.setFatherFolder(targetFolder);
-                targetFolder.addToSubFolders(movedFolder);
-                //srcFolder.getComponentLibrary().notifyTreeStructureChanged();
-            } else {
-                return false;
-            }
-        } else if ((moved instanceof ReusableComponentDefinitionElement)
-                || (moved instanceof ComponentElement) || (moved instanceof MonitoringScreenDefinitionElement)) {
-            ComponentDefinition movedComp = null;
-            FlexoComponentFolder srcFolder = null;
-            if (moved instanceof ReusableComponentDefinitionElement) {
-                movedComp = ((ReusableComponentDefinitionElement) moved).getComponentDefinition();
-                srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ReusableComponentDefinitionElement) moved).getParent())
-                        .getObject();
-            } else if (moved instanceof ComponentElement) {
-                movedComp = ((ComponentElement) moved).getComponentDefinition();
-                srcFolder = movedComp.getFolder();
-            } else if (moved instanceof MonitoringScreenDefinitionElement) {
-                movedComp = ((MonitoringScreenDefinitionElement) moved).getComponentDefinition();
-                srcFolder = movedComp.getFolder();
-            }
-            if (targetFolder != srcFolder) {
-                srcFolder.removeFromComponents(movedComp);
-                targetFolder.addToComponents(movedComp);
-                //srcFolder.getComponentLibrary().notifyTreeStructureChanged();
-            } else {
-                return false;
-            }
+		if (moved instanceof ComponentFolderElement) {
+			FlexoComponentFolder movedFolder = (FlexoComponentFolder) ((ComponentFolderElement) moved).getObject();
+			if (movedFolder.isRootFolder()) {
+				return false;
+			}
+			FlexoComponentFolder srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ComponentFolderElement) moved).getParent())
+					.getObject();
+			if (targetFolder == movedFolder) {
+				return false;
+			}
+			if (targetFolder.getFolderNamed(movedFolder.getName()) != null) {
+				FlexoController.notify("there_is_already_a_folder_with that name");
+				return false;
+			}
 
-        } else {
-            return false;
-        }
-        return true;
+			if (targetFolder != srcFolder && !movedFolder.isFatherOf(targetFolder)) {
+				srcFolder.removeFromSubFolders(movedFolder);
+				movedFolder.setFatherFolder(targetFolder);
+				targetFolder.addToSubFolders(movedFolder);
+				// srcFolder.getComponentLibrary().notifyTreeStructureChanged();
+			} else {
+				return false;
+			}
+		} else if ((moved instanceof ReusableComponentDefinitionElement) || (moved instanceof ComponentElement)
+				|| (moved instanceof MonitoringScreenDefinitionElement)) {
+			ComponentDefinition movedComp = null;
+			FlexoComponentFolder srcFolder = null;
+			if (moved instanceof ReusableComponentDefinitionElement) {
+				movedComp = ((ReusableComponentDefinitionElement) moved).getComponentDefinition();
+				srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ReusableComponentDefinitionElement) moved).getParent())
+						.getObject();
+			} else if (moved instanceof ComponentElement) {
+				movedComp = ((ComponentElement) moved).getComponentDefinition();
+				srcFolder = movedComp.getFolder();
+			} else if (moved instanceof MonitoringScreenDefinitionElement) {
+				movedComp = ((MonitoringScreenDefinitionElement) moved).getComponentDefinition();
+				srcFolder = movedComp.getFolder();
+			}
+			if (targetFolder != srcFolder) {
+				srcFolder.removeFromComponents(movedComp);
+				targetFolder.addToComponents(movedComp);
+				// srcFolder.getComponentLibrary().notifyTreeStructureChanged();
+			} else {
+				return false;
+			}
+
+		} else {
+			return false;
+		}
+		return true;
 	}
 }

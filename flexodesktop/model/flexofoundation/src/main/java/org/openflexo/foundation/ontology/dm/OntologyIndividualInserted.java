@@ -21,11 +21,8 @@ package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ontology.OntologyIndividual;
 
-
-public class OntologyIndividualInserted extends OEDataModification
-{
-    public OntologyIndividualInserted(OntologyIndividual individual)
-    {
-        super(null, individual);
-     }
+public class OntologyIndividualInserted extends OEDataModification {
+	public OntologyIndividualInserted(OntologyIndividual individual) {
+		super(null, individual);
+	}
 }

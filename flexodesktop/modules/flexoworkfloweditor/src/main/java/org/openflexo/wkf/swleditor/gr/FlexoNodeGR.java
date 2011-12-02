@@ -27,31 +27,32 @@ import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public abstract class FlexoNodeGR<O extends FlexoNode> extends PetriGraphNodeGR<O> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoNodeGR.class.getPackage().getName());
 
-	public FlexoNodeGR(O node, ShapeType shapeType, SwimmingLaneRepresentation aDrawing,boolean isInPalet) {
-		super(node, shapeType, aDrawing,isInPalet);
+	public FlexoNodeGR(O node, ShapeType shapeType, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
+		super(node, shapeType, aDrawing, isInPalet);
 	}
 
 	@Override
 	protected Vector<WKFNodeGR<?>> getFromInterestingNodeGR() {
 		Vector<WKFNodeGR<?>> v = super.getFromInterestingNodeGR();
-		for (FlexoPreCondition pc:getModel().getPreConditions()) {
+		for (FlexoPreCondition pc : getModel().getPreConditions()) {
 			PreConditionGR pcgr = (PreConditionGR) getGraphicalRepresentation(pc);
-			if (pcgr!=null)
+			if (pcgr != null) {
 				v.addAll(pcgr.getFromInterestingNodeGR());
+			}
 		}
 		return v;
 	}
 
 	@Override
 	protected void doLayoutMethod2() {
-		if (getNode().isBeginOrEndNode())
+		if (getNode().isBeginOrEndNode()) {
 			return;
+		}
 		super.doLayoutMethod2();
 	}
 

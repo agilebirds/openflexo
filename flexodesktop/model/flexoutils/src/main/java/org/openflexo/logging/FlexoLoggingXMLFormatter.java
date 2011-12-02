@@ -23,17 +23,15 @@ import java.util.logging.Handler;
 import java.util.logging.XMLFormatter;
 
 /**
- * Overrides default java.util.logging.XMLFormatter by removing link to default
- * DTD
+ * Overrides default java.util.logging.XMLFormatter by removing link to default DTD
  * 
  * @author sguerin
  */
-public class FlexoLoggingXMLFormatter extends XMLFormatter
-{
+public class FlexoLoggingXMLFormatter extends XMLFormatter {
 
-    @Override
-	public String getHead(Handler h)
-    {
-        return "<?xml version=" + '"' + "1.0" + '"' + " encoding=" + '"' + h.getEncoding() + '"' + " standalone=" + '"' + "no" + '"' + "?>\n<log>\n";
-    }
+	@Override
+	public String getHead(Handler h) {
+		return "<?xml version=" + '"' + "1.0" + '"' + " encoding=" + '"' + h.getEncoding() + '"' + " standalone=" + '"' + "no" + '"'
+				+ "?>\n<log>\n";
+	}
 }

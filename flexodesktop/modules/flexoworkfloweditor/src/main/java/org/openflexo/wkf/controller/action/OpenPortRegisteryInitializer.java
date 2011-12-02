@@ -34,20 +34,17 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.controller.WKFController;
 
-
 public class OpenPortRegisteryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OpenPortRegisteryInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(OpenPortRegistery.actionType,actionInitializer);
+	OpenPortRegisteryInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(OpenPortRegistery.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -62,18 +59,16 @@ public class OpenPortRegisteryInitializer extends ActionInitializer {
 			@Override
 			public boolean isVisible(FlexoActionType<OpenPortRegistery, FlexoProcess, WKFObject> actionType, FlexoProcess object,
 					Vector<WKFObject> globalSelection, FlexoEditor editor) {
-				return getController().getCurrentFlexoProcess()==object;
+				return getController().getCurrentFlexoProcess() == object;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<OpenPortRegistery> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<OpenPortRegistery> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenPortRegistery>() {
 			@Override
-			public boolean run(ActionEvent e, OpenPortRegistery action)
-			{
+			public boolean run(ActionEvent e, OpenPortRegistery action) {
 				return true;
 			}
 		};

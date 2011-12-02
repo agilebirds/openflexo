@@ -27,11 +27,10 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.action.MoveIEElement;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-
 /**
  * 
  * @author gpolet
- *
+ * 
  */
 public class IETreeDropTarget extends TreeDropTarget {
 
@@ -40,29 +39,31 @@ public class IETreeDropTarget extends TreeDropTarget {
 	}
 
 	@Override
-	public boolean targetAcceptsSource(BrowserElement target,
-			BrowserElement source) {
-		if (target==null||source==null)
+	public boolean targetAcceptsSource(BrowserElement target, BrowserElement source) {
+		if (target == null || source == null) {
 			return false;
+		}
 		FlexoModelObject targetObject = target.getObject();
 		FlexoModelObject sourceObject = source.getObject();
-		if (targetObject instanceof IEWidget && sourceObject instanceof IEWidget)
-			return IEDTListener.isValidDropTargetContainer((IEWidget)targetObject, (IEWidget) sourceObject);
+		if (targetObject instanceof IEWidget && sourceObject instanceof IEWidget) {
+			return IEDTListener.isValidDropTargetContainer((IEWidget) targetObject, (IEWidget) sourceObject);
+		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean handleDrop(BrowserElement moved, BrowserElement destination) {
 		FlexoModelObject targetObject = destination.getObject();
 		FlexoModelObject sourceObject = moved.getObject();
-		if (!(targetObject instanceof IEWidget) || !(sourceObject instanceof IEWidget))
+		if (!(targetObject instanceof IEWidget) || !(sourceObject instanceof IEWidget)) {
 			return false;
-		if (!targetAcceptsSource(destination, moved))
+		}
+		if (!targetAcceptsSource(destination, moved)) {
 			return false;
-        MoveIEElement moveAction = MoveIEElement.actionType.makeNewAction((IEWidget)targetObject, null, _browser
-                .getEditor());
-        moveAction.setMovedWidget((IEWidget) sourceObject);
-        moveAction.doAction();
-        return moveAction.hasActionExecutionSucceeded();
+		}
+		MoveIEElement moveAction = MoveIEElement.actionType.makeNewAction((IEWidget) targetObject, null, _browser.getEditor());
+		moveAction.setMovedWidget((IEWidget) sourceObject);
+		moveAction.doAction();
+		return moveAction.hasActionExecutionSucceeded();
 	}
 }

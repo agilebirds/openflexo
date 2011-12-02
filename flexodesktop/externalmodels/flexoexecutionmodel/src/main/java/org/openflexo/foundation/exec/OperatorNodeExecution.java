@@ -25,7 +25,6 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Procedure;
 import org.openflexo.antar.ProcedureCall;
 import org.openflexo.antar.expr.Constant;
-
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.ANDOperator;
 import org.openflexo.foundation.wkf.node.IFOperator;
@@ -43,88 +42,82 @@ public abstract class OperatorNodeExecution extends ControlGraphBuilder {
 	private static final Logger logger = FlexoLogger.getLogger(OperatorNodeExecution.class.getPackage().getName());
 
 	private OperatorNode operatorNode;
-	
-	public static ControlGraphBuilder getExecutionNodeBuilder (OperatorNode operatorNode, FlexoPostCondition<?, ?> edge) throws NotSupportedException, InvalidModelException
-	{
+
+	public static ControlGraphBuilder getExecutionNodeBuilder(OperatorNode operatorNode, FlexoPostCondition<?, ?> edge)
+			throws NotSupportedException, InvalidModelException {
 		if (operatorNode instanceof ANDOperator) {
-			return (new OperatorANDExecution((ANDOperator)operatorNode,edge));
+			return (new OperatorANDExecution((ANDOperator) operatorNode, edge));
 		}
-		
+
 		else if (operatorNode instanceof OROperator) {
-			return (new OperatorORExecution((OROperator)operatorNode));
+			return (new OperatorORExecution((OROperator) operatorNode));
 		}
-		
+
 		else if (operatorNode instanceof IFOperator) {
-			return (new OperatorIFExecution((IFOperator)operatorNode));
+			return (new OperatorIFExecution((IFOperator) operatorNode));
 		}
-		
+
 		else if (operatorNode instanceof LOOPOperator) {
-			return (new OperatorLOOPExecution((LOOPOperator)operatorNode));
+			return (new OperatorLOOPExecution((LOOPOperator) operatorNode));
 		}
-		
+
 		else if (operatorNode instanceof SWITCHOperator) {
-			return (new OperatorSWITCHExecution((SWITCHOperator)operatorNode));
+			return (new OperatorSWITCHExecution((SWITCHOperator) operatorNode));
 		}
-		
-		throw new NotSupportedException("Dont know what to do with a "+operatorNode);
-	
+
+		throw new NotSupportedException("Dont know what to do with a " + operatorNode);
+
 	}
-	
-	public static ControlGraph executeNode (OperatorNode operatorNode,FlexoPostCondition<?, ?> edge,boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
-		ControlGraphBuilder cgBuilder = getExecutionNodeBuilder(operatorNode,edge);
-		
+
+	public static ControlGraph executeNode(OperatorNode operatorNode, FlexoPostCondition<?, ?> edge, boolean interprocedural)
+			throws NotSupportedException, InvalidModelException {
+		ControlGraphBuilder cgBuilder = getExecutionNodeBuilder(operatorNode, edge);
+
 		if (cgBuilder != null) {
-					
+
 			if (interprocedural) {
 				Procedure procedure = cgBuilder.makeProcedure();
 				ProcedureCall returned = new ProcedureCall(procedure);
 				if (operatorNode instanceof ANDOperator) {
 					returned.addArgument(new Constant.IntegerConstant(edge.getFlexoID()));
 				}
-				returned.appendHeaderComment("Operator "+operatorNode.getName()+" is executing",true);
+				returned.appendHeaderComment("Operator " + operatorNode.getName() + " is executing", true);
+				return returned;
+			} else {
+				ControlGraph returned = cgBuilder.makeControlGraph(interprocedural);
+				returned.appendHeaderComment("Operator " + operatorNode.getName() + " is executing", true);
 				return returned;
 			}
-			else {
-				ControlGraph returned = cgBuilder.makeControlGraph(interprocedural);			
-				returned.appendHeaderComment("Operator "+operatorNode.getName()+" is executing",true);
-				return returned;
-			}
-		}
-		else {
-			throw new NotSupportedException("Dont know what to do with a "+operatorNode);
+		} else {
+			throw new NotSupportedException("Dont know what to do with a " + operatorNode);
 		}
 
 	}
-	
-	protected OperatorNodeExecution(OperatorNode operatorNode)
-	{
+
+	protected OperatorNodeExecution(OperatorNode operatorNode) {
 		super();
 		this.operatorNode = operatorNode;
 	}
-	
 
 	@Override
-	protected abstract ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException;
+	protected abstract ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException;
 
 	@Override
-	protected String getProcedureName()
-	{
-		return "executeOperator_"+ToolBox.capitalize(ToolBox.getJavaName(getOperatorNode().getName()))+"_"+getOperatorNode().getFlexoID();
+	protected String getProcedureName() {
+		return "executeOperator_" + ToolBox.capitalize(ToolBox.getJavaName(getOperatorNode().getName())) + "_"
+				+ getOperatorNode().getFlexoID();
 	}
 
-	public OperatorNode getOperatorNode() 
-	{
+	public OperatorNode getOperatorNode() {
 		return operatorNode;
 	}
 
 	@Override
-	protected String getProcedureComment()
-	{
+	protected String getProcedureComment() {
 		StringBuffer returned = new StringBuffer();
-		returned.append(FlexoLocalization.localizedForKeyWithParams("this_method_represents_code_to_be_executed_when_operator_($0)_is_executed",getOperatorNode().getName()));
+		returned.append(FlexoLocalization.localizedForKeyWithParams(
+				"this_method_represents_code_to_be_executed_when_operator_($0)_is_executed", getOperatorNode().getName()));
 		return returned.toString();
 	}
-	
 
 }

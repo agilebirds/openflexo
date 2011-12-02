@@ -26,11 +26,11 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.geom.FGEEllips;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
@@ -40,8 +40,7 @@ import org.openflexo.inspector.HasIcon;
 
 public interface ConnectorSymbol {
 
-	public static enum StartSymbolType implements ConnectorSymbol,HasIcon
-	{
+	public static enum StartSymbolType implements ConnectorSymbol, HasIcon {
 		NONE,
 		ARROW,
 		PLAIN_ARROW,
@@ -58,8 +57,7 @@ public interface ConnectorSymbol {
 		DEFAULT_FLOW;
 
 		@Override
-		public ImageIcon getIcon()
-		{
+		public ImageIcon getIcon() {
 			if (this == NONE) {
 				return FGEIconLibrary.START_NONE_ICON;
 			} else if (this == ARROW) {
@@ -91,8 +89,7 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public FGEArea getSymbol()
-		{
+		public FGEArea getSymbol() {
 			if (this == NONE) {
 				return SymbolShapes.EMPTY_AREA;
 			} else if (this == ARROW) {
@@ -126,8 +123,7 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor)
-		{
+		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor) {
 			if (this == NONE) {
 				return BackgroundStyle.makeEmptyBackground();
 			} else if (this == ARROW) {
@@ -162,8 +158,7 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle)
-		{
+		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle) {
 			if (this == NONE) {
 				return ForegroundStyle.makeNone();
 			} else if (this == ARROW) {
@@ -173,11 +168,9 @@ public interface ConnectorSymbol {
 			}
 		}
 
-
 	}
 
-	public static enum EndSymbolType implements ConnectorSymbol,HasIcon
-	{
+	public static enum EndSymbolType implements ConnectorSymbol, HasIcon {
 		NONE,
 		ARROW,
 		PLAIN_ARROW,
@@ -192,8 +185,7 @@ public interface ConnectorSymbol {
 		FILLED_DIAMOND;
 
 		@Override
-		public ImageIcon getIcon()
-		{
+		public ImageIcon getIcon() {
 			if (this == NONE) {
 				return FGEIconLibrary.END_NONE_ICON;
 			} else if (this == ARROW) {
@@ -223,8 +215,7 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public FGEArea getSymbol()
-		{
+		public FGEArea getSymbol() {
 			if (this == NONE) {
 				return SymbolShapes.EMPTY_AREA;
 			} else if (this == ARROW) {
@@ -254,8 +245,7 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor)
-		{
+		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor) {
 			if (this == NONE) {
 				return BackgroundStyle.makeEmptyBackground();
 			} else if (this == ARROW) {
@@ -286,8 +276,7 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle)
-		{
+		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle) {
 			if (this == NONE) {
 				return ForegroundStyle.makeNone();
 			} else if (this == ARROW) {
@@ -297,12 +286,9 @@ public interface ConnectorSymbol {
 			}
 		}
 
-
-
 	}
 
-	public static enum MiddleSymbolType implements ConnectorSymbol,HasIcon
-	{
+	public static enum MiddleSymbolType implements ConnectorSymbol, HasIcon {
 		NONE,
 		ARROW,
 		PLAIN_ARROW,
@@ -317,8 +303,7 @@ public interface ConnectorSymbol {
 		FILLED_DIAMOND;
 
 		@Override
-		public ImageIcon getIcon()
-		{
+		public ImageIcon getIcon() {
 			if (this == NONE) {
 				return FGEIconLibrary.MIDDLE_NONE_ICON;
 			} else if (this == ARROW) {
@@ -348,8 +333,7 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public FGEArea getSymbol()
-		{
+		public FGEArea getSymbol() {
 			// Translate to put the middle of the symbol at required location
 			AffineTransform translator = AffineTransform.getTranslateInstance(0.5, 0);
 			if (this == NONE) {
@@ -381,8 +365,7 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor)
-		{
+		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor) {
 			if (this == NONE) {
 				return BackgroundStyle.makeEmptyBackground();
 			} else if (this == ARROW) {
@@ -413,8 +396,7 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle)
-		{
+		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle) {
 			if (this == NONE) {
 				return ForegroundStyle.makeNone();
 			} else if (this == ARROW) {
@@ -424,61 +406,34 @@ public interface ConnectorSymbol {
 			}
 		}
 
-
 	}
 
-	public static class SymbolShapes
-	{
+	public static class SymbolShapes {
 		private static FGEArea EMPTY_AREA = new FGEEmptyArea();
-		static FGEArea BASIC_ARROW = new FGEUnionArea(
-				new FGESegment(new FGEPoint(0,0),new FGEPoint(1,0.5)),
-				new FGESegment(new FGEPoint(1,0.5),new FGEPoint(0,1)));
-		static FGEArea ARROW = new FGEPolygon(
-				Filling.FILLED,
-				new FGEPoint(0,0.1),
-				new FGEPoint(1,0.5),
-				new FGEPoint(0,0.9));
+		static FGEArea BASIC_ARROW = new FGEUnionArea(new FGESegment(new FGEPoint(0, 0), new FGEPoint(1, 0.5)), new FGESegment(
+				new FGEPoint(1, 0.5), new FGEPoint(0, 1)));
+		static FGEArea ARROW = new FGEPolygon(Filling.FILLED, new FGEPoint(0, 0.1), new FGEPoint(1, 0.5), new FGEPoint(0, 0.9));
 		/*private static FGEArea CENTERED_ARROW = new FGEPolygon(
 				Filling.FILLED,
 				new FGEPoint(0.5,0.1),
 				new FGEPoint(1.5,0.5),
 				new FGEPoint(0.5,0.9));*/
-		static FGEArea DOUBLE_ARROW = new FGEUnionArea(
-				new FGEPolygon(
-						Filling.FILLED,
-						new FGEPoint(0,0.2),
-						new FGEPoint(0.5,0.5),
-						new FGEPoint(0,0.8)),
-				new FGEPolygon(
-						Filling.FILLED,
-						new FGEPoint(0.5,0.2),
-						new FGEPoint(1.0,0.5),
-						new FGEPoint(0.5,0.8)));
-		static FGEArea CIRCLE = new FGEEllips(0,0,1,1,Filling.FILLED);
-		static FGEArea SQUARE = new FGERectangle(0,0,1,1,Filling.FILLED);
-		static FGEArea DIAMOND = new FGEPolygon(
-				Filling.FILLED,
-				new FGEPoint(0.5,0),
-				new FGEPoint(1,0.5),
-				new FGEPoint(0.5,1),
-				new FGEPoint(0,0.5));
-		static FGEArea LONG_DIAMOND = new FGEPolygon(
-				Filling.FILLED,
-				new FGEPoint(0.5,0.2),
-				new FGEPoint(1,0.5),
-				new FGEPoint(0.5,0.8),
-				new FGEPoint(0,0.5));
-		static FGEArea SLASH = new FGESegment(
-				new FGEPoint(0.0,0),
-				new FGEPoint(0.2,1));
+		static FGEArea DOUBLE_ARROW = new FGEUnionArea(new FGEPolygon(Filling.FILLED, new FGEPoint(0, 0.2), new FGEPoint(0.5, 0.5),
+				new FGEPoint(0, 0.8)), new FGEPolygon(Filling.FILLED, new FGEPoint(0.5, 0.2), new FGEPoint(1.0, 0.5),
+				new FGEPoint(0.5, 0.8)));
+		static FGEArea CIRCLE = new FGEEllips(0, 0, 1, 1, Filling.FILLED);
+		static FGEArea SQUARE = new FGERectangle(0, 0, 1, 1, Filling.FILLED);
+		static FGEArea DIAMOND = new FGEPolygon(Filling.FILLED, new FGEPoint(0.5, 0), new FGEPoint(1, 0.5), new FGEPoint(0.5, 1),
+				new FGEPoint(0, 0.5));
+		static FGEArea LONG_DIAMOND = new FGEPolygon(Filling.FILLED, new FGEPoint(0.5, 0.2), new FGEPoint(1, 0.5), new FGEPoint(0.5, 0.8),
+				new FGEPoint(0, 0.5));
+		static FGEArea SLASH = new FGESegment(new FGEPoint(0.0, 0), new FGEPoint(0.2, 1));
 	}
-
 
 	public FGEArea getSymbol();
 
 	public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor);
 
 	public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle);
-
 
 }

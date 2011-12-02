@@ -26,78 +26,73 @@ import org.openflexo.antar.java.JavaExpressionPrettyPrinter;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.xmlcode.StringEncoder.DateConverter;
 
-
 public class DateStaticBinding extends StaticBinding<Date> {
 
 	public static final DateConverter dateConverter = new DateConverter();
-	
+
 	private Date value;
-	
-	public DateStaticBinding()
-	{
+
+	public DateStaticBinding() {
 		super();
 	}
-	
-	public DateStaticBinding(Date aValue)
-	{
+
+	public DateStaticBinding(Date aValue) {
 		super();
 		value = aValue;
 	}
-	
-   public DateStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, Date aValue)
-    {
-    	super(bindingDefinition,owner);
-		if (aValue != null) value = (Date)aValue.clone(); else value = null;
-   }
+
+	public DateStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, Date aValue) {
+		super(bindingDefinition, owner);
+		if (aValue != null) {
+			value = (Date) aValue.clone();
+		} else {
+			value = null;
+		}
+	}
 
 	@Override
-	public EvaluationType getEvaluationType()
-	{
+	public EvaluationType getEvaluationType() {
 		return EvaluationType.DATE;
 	}
 
 	@Override
-	public String getStringRepresentation() 
-	{
-		return "["+dateConverter.convertToString(value)+"]";
+	public String getStringRepresentation() {
+		return "[" + dateConverter.convertToString(value) + "]";
 	}
+
 	@Override
 	public String getWodStringRepresentation() {
 		logger.severe("static date in wod files isn't supported yet");
 		return "\"static date in wod files isn't supported yet\"";
 	}
+
 	@Override
-	public Date getValue() 
-	{
+	public Date getValue() {
 		return value;
 	}
 
 	@Override
-	public void setValue(Date aValue) 
-	{
-		if (aValue != null)
-			value = (Date)aValue.clone();
+	public void setValue(Date aValue) {
+		if (aValue != null) {
+			value = (Date) aValue.clone();
+		}
 	}
 
 	@Override
-	public Class<Date> getStaticBindingClass()
-	{
+	public Class<Date> getStaticBindingClass() {
 		return Date.class;
 	}
 
 	@Override
-	public DateStaticBinding clone()
-	{
+	public DateStaticBinding clone() {
 		DateStaticBinding returned = new DateStaticBinding();
 		returned.setsWith(this);
 		return returned;
 	}
 
-    @Override
-    public String getJavaCodeStringRepresentation()
-    {
-    	return JavaExpressionPrettyPrinter.getJavaStringRepresentation(getValue());
-    }
-
+	@Override
+	public String getJavaCodeStringRepresentation() {
+		return JavaExpressionPrettyPrinter.getJavaStringRepresentation(getValue());
+	}
 
 }

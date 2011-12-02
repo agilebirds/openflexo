@@ -42,140 +42,132 @@ import org.openflexo.toolbox.FileFormat;
  * @author sylvain
  * 
  */
-public class BPELFileResource extends TextFileResource<BPELFileGenerator, CGTextFile> implements GenerationAvailableFileResource, FlexoObserver
-{
-    static Logger logger = FlexoLogger.getLogger(BPELFileResource.class.getPackage().getName());
-
-    /**
-     * @param builder
-     */
-    public BPELFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-
-    /**
-     * @param aProject
-     */
-    public BPELFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
-
-    public static String nameForRepositoryAndIdentifier(GenerationRepository repository, String identifier)
-    {
-    	return repository.getName()+".BPEL."+identifier;
-    }
-
-    protected String getIdentifier() 
-    {
-    	if (getGenerator() != null) 
-            return getGenerator().getIdentifier();
-    	return null;
-    }
-
-    @Override
-	public String getFileName() 
-    {
-    	if (getGenerator() != null) 
-            return getGenerator().getFileName();
-    	return null;
-    }
-
-    @Override
-	protected BPELFile createGeneratedResourceData()
-    {
-    	return new BPELFile(getFile(),this);
-    }
-    
-    @Override
-	public BPELFile getGeneratedResourceData()
-    {
-    	return (BPELFile)super.getGeneratedResourceData();
-    }
-
-    /**
-     * Overrides getFileFormat
-     * @see org.openflexo.foundation.rm.cg.TextFileResource#getFileFormat()
-     */
-    @Override
-    public FileFormat getResourceFormat()
-    {
-        return FileFormat.BPEL;
-    }
-    
-    /**
-     * Overrides getResourceType
-     * @see org.openflexo.foundation.rm.cg.TextFileResource#getResourceType()
-     */
-    @Override
-    public ResourceType getResourceType()
-    {
-        return ResourceType.BPEL;
-    }
-    
-   /**
-     * Overrides update
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-    	// TODO: is it required for BPEL ???
-        /*if (observable==getGenerator().getObject()) {
-            if (dataModification.propertyName()!=null && dataModification.equals("dontGenerate")) {
-                if (getGenerator().getObject().getDontGenerate()) {
-                    logger.info("Handle dont generate for object");
-                    setGenerator(null);
-                    getCGFile().setMarkedForDeletion(true);
-                    getCGFile().getRepository().refresh();
-                }
-            }
-        }*/
-    }
-
-    private boolean isObserverRegistered = false;
-
-    public void registerObserverWhenRequired()
-    {
-       	// TODO: is it required for BPEL ???
-    	/*if ((!isObserverRegistered) && (getEntity() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getEntity());
-    		getEntity().addObserver(this);
-    	}*/
-    }
-
-    /**
-     * Implements the dependancy model of BPEL
-     * BPEL file depends of DataModel and all processes
-     */
-    @Override
-    public void rebuildDependancies() {
-    	super.rebuildDependancies();
-        addToDependantResources(getProject().getFlexoDMResource());
-        for (FlexoProcess p : getProject().getAllLocalFlexoProcesses())
-        	addToDependantResources(p.getFlexoResource());
-    }
+public class BPELFileResource extends TextFileResource<BPELFileGenerator, CGTextFile> implements GenerationAvailableFileResource,
+		FlexoObserver {
+	static Logger logger = FlexoLogger.getLogger(BPELFileResource.class.getPackage().getName());
 
 	/**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     * 
-     * @param resource
-	 * @param dependancyScheme
-     * @return
-     */
+	 * @param builder
+	 */
+	public BPELFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
+
+	/**
+	 * @param aProject
+	 */
+	public BPELFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
+	public static String nameForRepositoryAndIdentifier(GenerationRepository repository, String identifier) {
+		return repository.getName() + ".BPEL." + identifier;
+	}
+
+	protected String getIdentifier() {
+		if (getGenerator() != null) {
+			return getGenerator().getIdentifier();
+		}
+		return null;
+	}
+
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public String getFileName() {
+		if (getGenerator() != null) {
+			return getGenerator().getFileName();
+		}
+		return null;
+	}
+
+	@Override
+	protected BPELFile createGeneratedResourceData() {
+		return new BPELFile(getFile(), this);
+	}
+
+	@Override
+	public BPELFile getGeneratedResourceData() {
+		return (BPELFile) super.getGeneratedResourceData();
+	}
+
+	/**
+	 * Overrides getFileFormat
+	 * 
+	 * @see org.openflexo.foundation.rm.cg.TextFileResource#getFileFormat()
+	 */
+	@Override
+	public FileFormat getResourceFormat() {
+		return FileFormat.BPEL;
+	}
+
+	/**
+	 * Overrides getResourceType
+	 * 
+	 * @see org.openflexo.foundation.rm.cg.TextFileResource#getResourceType()
+	 */
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.BPEL;
+	}
+
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// TODO: is it required for BPEL ???
+		/*if (observable==getGenerator().getObject()) {
+		    if (dataModification.propertyName()!=null && dataModification.equals("dontGenerate")) {
+		        if (getGenerator().getObject().getDontGenerate()) {
+		            logger.info("Handle dont generate for object");
+		            setGenerator(null);
+		            getCGFile().setMarkedForDeletion(true);
+		            getCGFile().getRepository().refresh();
+		        }
+		    }
+		}*/
+	}
+
+	private boolean isObserverRegistered = false;
+
+	public void registerObserverWhenRequired() {
+		// TODO: is it required for BPEL ???
+		/*if ((!isObserverRegistered) && (getEntity() != null)) {
+			isObserverRegistered = true;
+		    if (logger.isLoggable(Level.FINE))
+		        logger.fine("*** addObserver "+getFileName()+" for "+getEntity());
+			getEntity().addObserver(this);
+		}*/
+	}
+
+	/**
+	 * Implements the dependancy model of BPEL BPEL file depends of DataModel and all processes
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getFlexoDMResource());
+		for (FlexoProcess p : getProject().getAllLocalFlexoProcesses()) {
+			addToDependantResources(p.getFlexoResource());
+		}
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
 
-
 }
-

@@ -33,103 +33,92 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
+class MenuPerspective extends FlexoPerspective<FlexoItemMenu> {
 
-class MenuPerspective extends FlexoPerspective<FlexoItemMenu>
-	{
+	private final IEController _controller;
+	private MenuEditorBrowserView _menuEditorBrowserView;
 
-		private final IEController _controller;
-	    private MenuEditorBrowserView _menuEditorBrowserView;
+	/**
+	 * @param controller
+	 *            TODO
+	 * @param name
+	 */
+	public MenuPerspective(IEController controller) {
+		super("menu_perspective");
+		_controller = controller;
+		_menuEditorBrowserView = new MenuEditorBrowserView(controller);
+		_menuEditorBrowserView.setName(FlexoLocalization.localizedForKey("Menu", _menuEditorBrowserView));
+	}
 
-		/**
-		 * @param controller TODO
-		 * @param name
-		 */
-		public MenuPerspective(IEController controller)
-		{
-			super("menu_perspective");
-			_controller = controller;
-			_menuEditorBrowserView = new MenuEditorBrowserView(controller);
-			_menuEditorBrowserView.setName(FlexoLocalization.localizedForKey("Menu",_menuEditorBrowserView));
-		}
+	/**
+	 * Overrides getIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 */
+	@Override
+	public ImageIcon getActiveIcon() {
+		return SEIconLibrary.MENU_PERSPECTIVE_ACTIVE_ICON;
+	}
 
-		/**
-		 * Overrides getIcon
-		 * 
-		 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
-		 */
-		@Override
-		public ImageIcon getActiveIcon()
-		{
-			return SEIconLibrary.MENU_PERSPECTIVE_ACTIVE_ICON;
-		}
+	/**
+	 * Overrides getSelectedIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 */
+	@Override
+	public ImageIcon getSelectedIcon() {
+		return SEIconLibrary.MENU_PERSPECTIVE_SELECTED_ICON;
+	}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getSelectedIcon()
-		{
-			return SEIconLibrary.MENU_PERSPECTIVE_SELECTED_ICON;
+	@Override
+	public FlexoItemMenu getDefaultObject(FlexoModelObject proposedObject) {
+		if (proposedObject instanceof FlexoItemMenu) {
+			return (FlexoItemMenu) proposedObject;
 		}
+		return _controller.getProject().getFlexoNavigationMenu().getRootMenu();
+	}
 
-		@Override
-		public FlexoItemMenu getDefaultObject(FlexoModelObject proposedObject) 
-		{
-			if (proposedObject instanceof FlexoItemMenu) {
-				return (FlexoItemMenu)proposedObject;
-			}
-			return _controller.getProject().getFlexoNavigationMenu().getRootMenu();
-		}
+	@Override
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
+		return object instanceof FlexoItemMenu;
+	}
 
-		@Override
-		public boolean hasModuleViewForObject(FlexoModelObject object) 
-		{
-			return object instanceof FlexoItemMenu;
+	@Override
+	public ModuleView<FlexoItemMenu> createModuleViewForObject(FlexoItemMenu menu, FlexoController controller) {
+		if (menu.isRootMenu()) {
+			return new FlexoMenuRootItemView(menu, (IEController) controller);
+		} else {
+			return new FlexoMenuItemView(menu, (IEController) controller);
 		}
-		
-		@Override
-		public ModuleView<FlexoItemMenu> createModuleViewForObject(FlexoItemMenu menu, FlexoController controller) 
-		{
-			if (menu.isRootMenu())
-				return new FlexoMenuRootItemView(menu,(IEController)controller);
-			else 
-				return new FlexoMenuItemView(menu, (IEController)controller);
-		}
+	}
 
-		@Override
-		public boolean isAlwaysVisible() 
-		{
-			return true;
-		}
-		
-		@Override
-		public void notifyModuleViewDisplayed(ModuleView<?> moduleView) 
-		{
-			_controller.getSelectionManager().setSelectedObject(moduleView.getRepresentedObject());
-		}
+	@Override
+	public boolean isAlwaysVisible() {
+		return true;
+	}
 
-		@Override
-		public boolean doesPerspectiveControlLeftView() {
-			return true;
-		}
+	@Override
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+		_controller.getSelectionManager().setSelectedObject(moduleView.getRepresentedObject());
+	}
 
-		@Override
-		public JComponent getLeftView() 
-		{
-			return _menuEditorBrowserView;
-		}
-		
-		@Override
-		public boolean doesPerspectiveControlRightView() 
-		{
-			return true;
-		}
-		
-		@Override
-		public JComponent getRightView() 
-		{
-			return _controller.getDisconnectedDocInspectorPanel();
-		}
+	@Override
+	public boolean doesPerspectiveControlLeftView() {
+		return true;
+	}
+
+	@Override
+	public JComponent getLeftView() {
+		return _menuEditorBrowserView;
+	}
+
+	@Override
+	public boolean doesPerspectiveControlRightView() {
+		return true;
+	}
+
+	@Override
+	public JComponent getRightView() {
+		return _controller.getDisconnectedDocInspectorPanel();
+	}
 }

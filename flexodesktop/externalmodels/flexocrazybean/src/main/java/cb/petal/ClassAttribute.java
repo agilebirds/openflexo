@@ -18,66 +18,68 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents class attribute (aka field) of class object.
- *
+ * 
  * @version $Id: ClassAttribute.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ClassAttribute extends AccessObject {
-  static final long serialVersionUID = -5435324245812367476L;
+	static final long serialVersionUID = -5435324245812367476L;
 
-  public ClassAttribute(PetalNode parent, Collection params) {
-    super(parent, "ClassAttribute", params);
-  }
+	public ClassAttribute(PetalNode parent, Collection params) {
+		super(parent, "ClassAttribute", params);
+	}
 
-  public ClassAttribute() {
-    super("ClassAttribute");
-  }
+	public ClassAttribute() {
+		super("ClassAttribute");
+	}
 
-  public String getType() {
-    return getPropertyAsString("type");
-  }
+	public String getType() {
+		return getPropertyAsString("type");
+	}
 
-  public void setType(String o) {
-    defineProperty("type", o);
-  }
+	public void setType(String o) {
+		defineProperty("type", o);
+	}
 
-  public String getInitialValue() {
-    return getPropertyAsString("initv");
-  }
+	public String getInitialValue() {
+		return getPropertyAsString("initv");
+	}
 
-  public void setInitialValue(String o) {
-    defineProperty("initv", o);
-  }
+	public void setInitialValue(String o) {
+		defineProperty("initv", o);
+	}
 
-  public boolean getStatic() {
-    return getPropertyAsBoolean("static");
-  }
+	public boolean getStatic() {
+		return getPropertyAsBoolean("static");
+	}
 
-  public void setStatic(boolean s) {
-    defineProperty("static", s);
-  }
+	public void setStatic(boolean s) {
+		defineProperty("static", s);
+	}
 
-  public boolean getDerived() {
-     return getPropertyAsBoolean("derived");
-  }
+	public boolean getDerived() {
+		return getPropertyAsBoolean("derived");
+	}
 
-  public void setDerived(boolean s) {
-    defineProperty("derived", s);
-  }
+	public void setDerived(boolean s) {
+		defineProperty("derived", s);
+	}
 
-  public String getContainment() {
-    return getPropertyAsString("Containment");
-  }
+	public String getContainment() {
+		return getPropertyAsString("Containment");
+	}
 
-  public void setContainment(String o) {
-    defineProperty("Containment", o);
-  }
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	public void setContainment(String o) {
+		defineProperty("Containment", o);
+	}
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

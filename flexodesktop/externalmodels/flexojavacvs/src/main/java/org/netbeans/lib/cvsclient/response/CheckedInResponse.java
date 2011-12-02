@@ -30,78 +30,72 @@ import org.netbeans.lib.cvsclient.admin.Entry;
 import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
- * Indicates that a file has been successfully operated on, e.g. checked in,
- * added etc.
- * @author  Robert Greig
+ * Indicates that a file has been successfully operated on, e.g. checked in, added etc.
+ * 
+ * @author Robert Greig
  */
 class CheckedInResponse implements Response {
 
-    /** 
-     * The date Formatter used to parse and format dates.
-     * Format is: "EEE MMM dd HH:mm:ss yyyy"
-     */
-    private DateFormat dateFormatter;
-    
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            String localPath = dis.readLine();
-            //System.err.println("Pathname is: " + localPath);
-            String repositoryPath = dis.readLine();
-            //System.err.println("Repository path is: " + repositoryPath);
-            String entriesLine = dis.readLine();
-            //System.err.println("New entries line is: " + entriesLine);
-            // we set the date the file was last modified in the Entry line
-            // so that we can easily determine whether the file has been
-            // untouched
-            final File theFile = new File(services.convertPathname(localPath,
-                                                                   repositoryPath));
-            final Date date = new Date(theFile.lastModified());
-            final Entry entry = new Entry(entriesLine);
-            entry.setConflict(getDateFormatter().format(date));
+	/**
+	 * The date Formatter used to parse and format dates. Format is: "EEE MMM dd HH:mm:ss yyyy"
+	 */
+	private DateFormat dateFormatter;
 
-            //  for added and removed entries set the conflict to Dummy timestamp.
-            if (entry.isNewUserFile() ||
-                    entry.isUserFileToBeRemoved()) {
-                entry.setConflict(Entry.DUMMY_TIMESTAMP);
-            }
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			String localPath = dis.readLine();
+			// System.err.println("Pathname is: " + localPath);
+			String repositoryPath = dis.readLine();
+			// System.err.println("Repository path is: " + repositoryPath);
+			String entriesLine = dis.readLine();
+			// System.err.println("New entries line is: " + entriesLine);
+			// we set the date the file was last modified in the Entry line
+			// so that we can easily determine whether the file has been
+			// untouched
+			final File theFile = new File(services.convertPathname(localPath, repositoryPath));
+			final Date date = new Date(theFile.lastModified());
+			final Entry entry = new Entry(entriesLine);
+			entry.setConflict(getDateFormatter().format(date));
 
-            services.setEntry(theFile, entry);
-        }
-        catch (IOException e) {
-            throw new ResponseException((Exception)e.fillInStackTrace(), e.getLocalizedMessage());
-        }
-    }
+			// for added and removed entries set the conflict to Dummy timestamp.
+			if (entry.isNewUserFile() || entry.isUserFileToBeRemoved()) {
+				entry.setConflict(Entry.DUMMY_TIMESTAMP);
+			}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+			services.setEntry(theFile, entry);
+		} catch (IOException e) {
+			throw new ResponseException((Exception) e.fillInStackTrace(), e.getLocalizedMessage());
+		}
+	}
+
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
-    
-    /**
-     * Returns the DateFormatter instance that parses and formats date Strings.
-     * The exact format matches the one in Entry.getLastModifiedDateFormatter() method.
-     *
-     */
-    protected DateFormat getDateFormatter() {
-        if (dateFormatter == null) {
-            dateFormatter = new SimpleDateFormat(Entry.getLastModifiedDateFormatter().toPattern(), Locale.US);
-            dateFormatter.setTimeZone(Entry.getTimeZone());
-        }
-        return dateFormatter;
-    }
-    
+		return false;
+	}
+
+	/**
+	 * Returns the DateFormatter instance that parses and formats date Strings. The exact format matches the one in
+	 * Entry.getLastModifiedDateFormatter() method.
+	 * 
+	 */
+	protected DateFormat getDateFormatter() {
+		if (dateFormatter == null) {
+			dateFormatter = new SimpleDateFormat(Entry.getLastModifiedDateFormatter().toPattern(), Locale.US);
+			dateFormatter.setTimeZone(Entry.getTimeZone());
+		}
+		return dateFormatter;
+	}
+
 }

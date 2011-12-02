@@ -33,69 +33,62 @@ import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenOpened;
 import org.openflexo.foundation.wkf.node.LOOPOperator;
 import org.openflexo.localization.FlexoLocalization;
 
-public class OpenLoopedPetriGraph extends FlexoUndoableAction<OpenLoopedPetriGraph,LOOPOperator,WKFObject> 
-{
+public class OpenLoopedPetriGraph extends FlexoUndoableAction<OpenLoopedPetriGraph, LOOPOperator, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(OpenLoopedPetriGraph.class.getPackage().getName());
 
-	public static FlexoActionType<OpenLoopedPetriGraph,LOOPOperator,WKFObject> actionType 
-	= new FlexoActionType<OpenLoopedPetriGraph,LOOPOperator,WKFObject> ("open_execution_level",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<OpenLoopedPetriGraph, LOOPOperator, WKFObject> actionType = new FlexoActionType<OpenLoopedPetriGraph, LOOPOperator, WKFObject>(
+			"open_execution_level", FlexoActionType.defaultGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public OpenLoopedPetriGraph makeNewAction(LOOPOperator focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-		{
-			return new OpenLoopedPetriGraph(focusedObject, globalSelection,editor);
+		public OpenLoopedPetriGraph makeNewAction(LOOPOperator focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new OpenLoopedPetriGraph(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) 
-		{
+		protected boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
 	};
 
-    static {
-        FlexoModelObject.addActionForClass(OpenLoopedPetriGraph.actionType, LOOPOperator.class);
-    }
+	static {
+		FlexoModelObject.addActionForClass(OpenLoopedPetriGraph.actionType, LOOPOperator.class);
+	}
 
-	OpenLoopedPetriGraph (LOOPOperator focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-	{
-		super(actionType, focusedObject, globalSelection,editor);
+	OpenLoopedPetriGraph(LOOPOperator focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) 
-	{
+	protected void doAction(Object context) {
 		if (getExecutionPetriGraph() == null) {
-			// We use here a null editor because this action is embedded 
+			// We use here a null editor because this action is embedded
 			_createPetriGraph = CreateLoopedPetriGraph.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this).doAction();
 			getExecutionPetriGraph().setIsVisible(false);
 		}
 		logger.info("OpenLoopedPetriGraph");
- 		if (getExecutionPetriGraph() != null) {
+		if (getExecutionPetriGraph() != null) {
 			if (getExecutionPetriGraph().getIsVisible()) {
 				getExecutionPetriGraph().setIsVisible(false);
 				getFocusedObject().setChanged();
- 				getFocusedObject().notifyObservers(new PetriGraphHasBeenClosed(getExecutionPetriGraph()));
-			}
-			else {
+				getFocusedObject().notifyObservers(new PetriGraphHasBeenClosed(getExecutionPetriGraph()));
+			} else {
 				getExecutionPetriGraph().setIsVisible(true);
 				getFocusedObject().setChanged();
- 				getFocusedObject().notifyObservers(new PetriGraphHasBeenOpened(getExecutionPetriGraph()));
- 				getExecutionPetriGraph().setChanged();
- 				getExecutionPetriGraph().notifyObservers(new PetriGraphHasBeenOpened(getExecutionPetriGraph()));
+				getFocusedObject().notifyObservers(new PetriGraphHasBeenOpened(getExecutionPetriGraph()));
+				getExecutionPetriGraph().setChanged();
+				getExecutionPetriGraph().notifyObservers(new PetriGraphHasBeenOpened(getExecutionPetriGraph()));
 			}
- 		}
+		}
 	}
 
 	/**
@@ -105,19 +98,16 @@ public class OpenLoopedPetriGraph extends FlexoUndoableAction<OpenLoopedPetriGra
 		return getLOOPOperator().getExecutionPetriGraph();
 	}
 
-	public LOOPOperator getLOOPOperator()
-	{
+	public LOOPOperator getLOOPOperator() {
 		return getFocusedObject();
 	}
 
 	@Override
-	public String getLocalizedName ()
-	{
+	public String getLocalizedName() {
 		if ((getLOOPOperator()).getExecutionPetriGraph() != null) {
 			if ((getLOOPOperator()).getExecutionPetriGraph().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("close_loop_execution_level");
-			}
-			else {
+			} else {
 				return FlexoLocalization.localizedForKey("open_loop_execution_level");
 			}
 		}
@@ -126,14 +116,12 @@ public class OpenLoopedPetriGraph extends FlexoUndoableAction<OpenLoopedPetriGra
 	}
 
 	@Override
-	protected void undoAction(Object context) 
-	{
+	protected void undoAction(Object context) {
 		doAction(context);
 	}
 
 	@Override
-	protected void redoAction(Object context)
-	{
+	protected void redoAction(Object context) {
 		doAction(context);
 	}
 

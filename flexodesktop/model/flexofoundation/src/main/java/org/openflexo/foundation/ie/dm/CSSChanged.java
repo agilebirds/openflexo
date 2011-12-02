@@ -22,26 +22,20 @@ package org.openflexo.foundation.ie.dm;
 import org.openflexo.foundation.ie.util.TextCSSClass;
 
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class CSSChanged extends IEDataModification
-{
+public class CSSChanged extends IEDataModification {
 
-    public CSSChanged(TextCSSClass newValue)
-    {
-        super(null, newValue);
-    }
+	public CSSChanged(TextCSSClass newValue) {
+		super(null, newValue);
+	}
 
-    public CSSChanged(String propertyName, TextCSSClass newValue)
-    {
-        super(propertyName, null, newValue);
-    }
-    
-    public TextCSSClass getCSS()
-    {
-        return (TextCSSClass) newValue();
-    }
-    
-    
+	public CSSChanged(String propertyName, TextCSSClass newValue) {
+		super(propertyName, null, newValue);
+	}
+
+	public TextCSSClass getCSS() {
+		return (TextCSSClass) newValue();
+	}
+
 }

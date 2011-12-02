@@ -29,32 +29,25 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.controller.WKFController;
 
-
-public class ConvertIntoLocalProcessInitializer extends ActionInitializer
-{
+public class ConvertIntoLocalProcessInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public ConvertIntoLocalProcessInitializer(WKFControllerActionInitializer actionInitializer)
-	{
+	public ConvertIntoLocalProcessInitializer(WKFControllerActionInitializer actionInitializer) {
 		super(ConvertIntoLocalProcess.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
 		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ConvertIntoLocalProcess> getDefaultInitializer()
-	{
-		return new FlexoActionInitializer<ConvertIntoLocalProcess>()
-		{
+	protected FlexoActionInitializer<ConvertIntoLocalProcess> getDefaultInitializer() {
+		return new FlexoActionInitializer<ConvertIntoLocalProcess>() {
 			@Override
-			public boolean run(ActionEvent e, ConvertIntoLocalProcess action)
-			{
+			public boolean run(ActionEvent e, ConvertIntoLocalProcess action) {
 				return true;
 			}
 		};
@@ -64,15 +57,12 @@ public class ConvertIntoLocalProcessInitializer extends ActionInitializer
 	public WKFController getController() {
 		return (WKFController) super.getController();
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<ConvertIntoLocalProcess> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<ConvertIntoLocalProcess>()
-		{
+	protected FlexoActionFinalizer<ConvertIntoLocalProcess> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<ConvertIntoLocalProcess>() {
 			@Override
-			public boolean run(ActionEvent e, ConvertIntoLocalProcess action)
-			{
+			public boolean run(ActionEvent e, ConvertIntoLocalProcess action) {
 				return true;
 			}
 		};

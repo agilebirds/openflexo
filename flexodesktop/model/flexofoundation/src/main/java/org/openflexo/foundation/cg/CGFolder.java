@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 
-
 public class CGFolder extends CGObject implements CGPathElement {
 
 	@SuppressWarnings("unused")
@@ -38,32 +37,28 @@ public class CGFolder extends CGObject implements CGPathElement {
 	private Vector<CGFolder> _subFolders;
 	private Vector<CGFile> _files;
 	private String _name;
-	
-    public CGFolder(GenerationRepository repository, String name, CGPathElement parent)
-    {
-    	super(repository.getGeneratedCode());  
-    	_subFolders = new Vector<CGFolder>();
-    	_files = new Vector<CGFile>();
-    	setName(name);
-    	setParent(parent);
-    	//logger.info("Created new CGFolder "+toString());
-    }
+
+	public CGFolder(GenerationRepository repository, String name, CGPathElement parent) {
+		super(repository.getGeneratedCode());
+		_subFolders = new Vector<CGFolder>();
+		_files = new Vector<CGFile>();
+		setName(name);
+		setParent(parent);
+		// logger.info("Created new CGFolder "+toString());
+	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "cg_directory";
 	}
 
 	@Override
-	public String getFullyQualifiedName() 
-	{
-		return getParent().getFullyQualifiedName()+"."+getName();
+	public String getFullyQualifiedName() {
+		return getParent().getFullyQualifiedName() + "." + getName();
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.GENERATORS.CG_FOLDER_INSPECTOR;
 	}
 
@@ -72,68 +67,58 @@ public class CGFolder extends CGObject implements CGPathElement {
 		return _parent;
 	}
 
-	public void setParent(CGPathElement parent) 
-	{
+	public void setParent(CGPathElement parent) {
 		_parent = parent;
 	}
 
 	@Override
-	public synchronized Vector<CGFile> getFiles() 
-	{
+	public synchronized Vector<CGFile> getFiles() {
 		return _files;
 	}
 
-    public CGFile[] getSortedFiles()
-    {
-        CGFile[] files = getFiles().toArray(new CGFile[getFiles().size()]);
-        Arrays.sort(files, new Comparator<CGFile>() {
+	public CGFile[] getSortedFiles() {
+		CGFile[] files = getFiles().toArray(new CGFile[getFiles().size()]);
+		Arrays.sort(files, new Comparator<CGFile>() {
 
-            @Override
-			public int compare(CGFile o1, CGFile o2)
-            {
-                return o1.getFileName().toLowerCase().compareTo(o2.getFileName().toLowerCase());
-            }
-            
-        });
-        return files;
-    }
-    
+			@Override
+			public int compare(CGFile o1, CGFile o2) {
+				return o1.getFileName().toLowerCase().compareTo(o2.getFileName().toLowerCase());
+			}
+
+		});
+		return files;
+	}
+
 	@Override
-	public Vector<CGFolder> getSubFolders() 
-	{
+	public Vector<CGFolder> getSubFolders() {
 		return _subFolders;
 	}
 
-    public CGFolder[] getSortedSubFolders()
-    {
-        CGFolder[] folders = getSubFolders().toArray(new CGFolder[getSubFolders().size()]);
-        Arrays.sort(folders, new Comparator<CGFolder>() {
+	public CGFolder[] getSortedSubFolders() {
+		CGFolder[] folders = getSubFolders().toArray(new CGFolder[getSubFolders().size()]);
+		Arrays.sort(folders, new Comparator<CGFolder>() {
 
-            @Override
-			public int compare(CGFolder o1, CGFolder o2)
-            {
-                return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
-            }
-            
-        });
-        return folders;
-    }
-    
+			@Override
+			public int compare(CGFolder o1, CGFolder o2) {
+				return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
+			}
+
+		});
+		return folders;
+	}
+
 	protected boolean isEnabled = false;
-	
+
 	@Override
-	public boolean isEnabled()
-	{
+	public boolean isEnabled() {
 		return isEnabled;
 	}
 
-	public void setEnabled(boolean enabled)
-	{
+	public void setEnabled(boolean enabled) {
 		isEnabled = enabled;
 	}
 
-	protected void clearFiles()
-	{
+	protected void clearFiles() {
 		hasGenerationErrors = false;
 		needsRegeneration = false;
 		needsModelReinjection = false;
@@ -146,112 +131,101 @@ public class CGFolder extends CGObject implements CGPathElement {
 	}
 
 	@Override
-	public String getName() 
-	{
+	public String getName() {
 		return _name;
 	}
 
 	@Override
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		_name = name;
 	}
 
 	@Override
-	public CGFolder getDirectoryNamed(String aName)
-	{
+	public CGFolder getDirectoryNamed(String aName) {
 		for (CGFolder dir : getSubFolders()) {
-			if (dir.getName().equals(aName)) return dir;
+			if (dir.getName().equals(aName)) {
+				return dir;
+			}
 		}
 		return null;
 	}
 
-	public CGSymbolicDirectory getSymbolicDirectory()
-	{
+	public CGSymbolicDirectory getSymbolicDirectory() {
 		CGPathElement current = this;
 		while (!(current instanceof CGSymbolicDirectory) && (current.getParent() != null)) {
 			current = current.getParent();
 		}
 		if (current instanceof CGSymbolicDirectory) {
-			return (CGSymbolicDirectory)current;
+			return (CGSymbolicDirectory) current;
 		}
 		return null;
 	}
-	
-	public GenerationRepository getGeneratedCodeRepository() 
-	{
+
+	public GenerationRepository getGeneratedCodeRepository() {
 		return _repository;
 	}
 
-
 	@Override
-	public boolean hasGenerationErrors()
-	{
-		if (getGeneratedCodeRepository() != null)
+	public boolean hasGenerationErrors() {
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return hasGenerationErrors;
 	}
 
 	@Override
-	public boolean needsRegeneration()
-	{
-		if (getGeneratedCodeRepository() != null)
+	public boolean needsRegeneration() {
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return needsRegeneration;
 	}
 
 	@Override
-	public boolean needsModelReinjection()
-	{
-		if (getGeneratedCodeRepository() != null)
+	public boolean needsModelReinjection() {
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return needsModelReinjection;
 	}
 
 	@Override
-	public GenerationStatus getGenerationStatus()
-	{
-		if (getGeneratedCodeRepository() != null)
+	public GenerationStatus getGenerationStatus() {
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return generationStatus;
 	}
 
 	@Override
-	public String toString()
-	{
-		return super.toString()+"["+getName()+"]";
+	public String toString() {
+		return super.toString() + "[" + getName() + "]";
 	}
-	
-	// ==========================================================================
-    // ========================== Embedding implementation  =====================
-    // ==========================================================================
 
-	public boolean isContainedInFolder(CGFolder folder)
-	{
+	// ==========================================================================
+	// ========================== Embedding implementation =====================
+	// ==========================================================================
+
+	public boolean isContainedInFolder(CGFolder folder) {
 		CGPathElement current = this;
 		while ((current != folder) && (current.getParent() != null)) {
 			current = current.getParent();
 		}
 		return (current == folder);
 	}
-	
-    @Override
-	public boolean isContainedIn(CGObject obj)
-    {
-    	if (obj instanceof GeneratedOutput) {
-    		return (obj == getGeneratedCode());
-    	}
-    	else if (obj instanceof GenerationRepository) {
-    		return (obj == _repository);
-    	}
-    	else if (obj instanceof CGSymbolicDirectory) {
-    		return (obj == getSymbolicDirectory());
-    	}
-    	else if (obj instanceof CGFolder) {
-    		return isContainedInFolder((CGFolder)obj);
-    	}
-    	return false;
-    }
 
+	@Override
+	public boolean isContainedIn(CGObject obj) {
+		if (obj instanceof GeneratedOutput) {
+			return (obj == getGeneratedCode());
+		} else if (obj instanceof GenerationRepository) {
+			return (obj == _repository);
+		} else if (obj instanceof CGSymbolicDirectory) {
+			return (obj == getSymbolicDirectory());
+		} else if (obj instanceof CGFolder) {
+			return isContainedInFolder((CGFolder) obj);
+		}
+		return false;
+	}
 
 }

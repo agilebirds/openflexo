@@ -28,49 +28,55 @@ public class SomeDataRestrictionStatement extends DataRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(SomeDataRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
-	private DataType dataRange = DataType.Unknown;
-	
-	public SomeDataRestrictionStatement(OntologyObject subject, Statement s, SomeValuesFromRestriction r)
-	{
-		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		dataRange = getDataType(r.getSomeValuesFrom().getURI());
+	private OntologyDataProperty property;
+	private OntologicDataType dataRange;
+
+	public SomeDataRestrictionStatement(OntologyObject subject, Statement s, SomeValuesFromRestriction r) {
+		super(subject, s, r);
+		property = (OntologyDataProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		dataRange = OntologicDataType.fromURI(r.getSomeValuesFrom().getURI());
 	}
 
 	@Override
-	public DataType getDataRange()
-	{
+	public OntologicDataType getDataRange() {
 		return dataRange;
 	}
-	
+
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "some_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "SomeRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "SomeRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyProperty getProperty() 
-	{
+	public OntologyDataProperty getProperty() {
 		return property;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" some "+getDataRange();
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " some "
+				+ getDataRange();
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" some";
+		return property.getName() + " some";
 	}
+
+	@Override
+	public int getCardinality() {
+		return -1;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Some;
+	}
+
 }

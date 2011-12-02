@@ -27,52 +27,45 @@ import org.openflexo.fge.cp.GeometryAdjustingControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 
-
 public abstract class GeomEditAdjustingControlPoint<O extends FGEArea> extends GeometryAdjustingControlPoint<O> {
 
 	private String name;
-	
-	public GeomEditAdjustingControlPoint(GeometricGraphicalRepresentation<?> gr, String aName, FGEPoint pt)
-	{
-		super(gr,aName,pt);
+
+	public GeomEditAdjustingControlPoint(GeometricGraphicalRepresentation<?> gr, String aName, FGEPoint pt) {
+		super(gr, aName, pt);
 		name = aName;
 	}
 
 	@Override
-	public GeometricGraphicalRepresentation<?> getGraphicalRepresentation()
-	{
+	public GeometricGraphicalRepresentation<?> getGraphicalRepresentation() {
 		return super.getGraphicalRepresentation();
 	}
 
 	@Override
-	public boolean isDraggable()
-	{
+	public boolean isDraggable() {
 		return true;
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint)
-	{
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 	}
 
 	@Override
-	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) 
-	{
+	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event) {
 		return true;
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller)
-	{
+	public void stopDragging(DrawingController controller) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public abstract void update(O geometricObject);
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 }

@@ -27,31 +27,29 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.logging.FlexoLogger;
 
-public class DefaultProjectLoadingHandler implements ProjectLoadingHandler
-{
+public class DefaultProjectLoadingHandler implements ProjectLoadingHandler {
 	private static final Logger logger = FlexoLogger.getLogger(DefaultProjectLoadingHandler.class.getPackage().getName());
-	
+
 	@Override
-	public boolean loadAndConvertAllOldResourcesToLatestVersion(FlexoProject project, FlexoProgress progress) throws ProjectLoadingCancelledException
-	{
+	public boolean loadAndConvertAllOldResourcesToLatestVersion(FlexoProject project, FlexoProgress progress)
+			throws ProjectLoadingCancelledException {
 		return false;
 	}
-	
+
 	@Override
-	public boolean useOlderMappingWhenLoadingFailure(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException
-	{
+	public boolean useOlderMappingWhenLoadingFailure(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
 		return true;
 	}
-	
+
 	@Override
-	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException
-	{
+	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
 		return true;
 	}
 
 	@Override
 	public void notifySevereLoadingFailure(FlexoResource r, Exception e) {
-		if (logger.isLoggable(Level.SEVERE))
-			logger.log(Level.SEVERE,"Error loading resource "+r.getFullyQualifiedName(),e);
+		if (logger.isLoggable(Level.SEVERE)) {
+			logger.log(Level.SEVERE, "Error loading resource " + r.getFullyQualifiedName(), e);
+		}
 	}
 }

@@ -34,116 +34,111 @@ import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 
 /**
- * Defines the window allowing to perform check consistency, edit validation
- * report, and fix issues. This window is shared by all the modules.
- *
+ * Defines the window allowing to perform check consistency, edit validation report, and fix issues. This window is shared by all the
+ * modules.
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCheckDialogInterface
-{
+public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCheckDialogInterface {
 
-    private ConsistencyCheckingController _controller;
+	private ConsistencyCheckingController _controller;
 
-    private ValidationReportEditor _validationReportEditor;
+	private ValidationReportEditor _validationReportEditor;
 
-    private ValidationModelViewer _validationModelViewer;
+	private ValidationModelViewer _validationModelViewer;
 
-    public ConsistencyCheckDialog(ConsistencyCheckingController controller)
-    {
-        this(controller,new ValidationReport(controller.getDefaultValidationModel()));
-    }
+	public ConsistencyCheckDialog(ConsistencyCheckingController controller) {
+		this(controller, new ValidationReport(controller.getDefaultValidationModel()));
+	}
 
-    public ConsistencyCheckDialog(ConsistencyCheckingController controller, ValidationReport validationReport)
-    {
-    	this(controller,validationReport,FlexoLocalization.localizedForKey("consistency_check"));
-    }
+	public ConsistencyCheckDialog(ConsistencyCheckingController controller, ValidationReport validationReport) {
+		this(controller, validationReport, FlexoLocalization.localizedForKey("consistency_check"));
+	}
 
-   public ConsistencyCheckDialog(ConsistencyCheckingController controller, ValidationReport validationReport, String title)
-    {
-        super(controller!=null?controller.getFlexoFrame():FlexoModule.getActiveModule().getFlexoFrame(),false);
-        setController(controller);
-        //setIconImage(IconLibrary.FLEXO_ICON.getImage());
-        setTitle(title);
-        getContentPane().setLayout(new BorderLayout());
-        _validationReportEditor = new ValidationReportEditor(this, validationReport);
-        _validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel());
+	public ConsistencyCheckDialog(ConsistencyCheckingController controller, ValidationReport validationReport, String title) {
+		super(controller != null ? controller.getFlexoFrame() : FlexoModule.getActiveModule().getFlexoFrame(), false);
+		setController(controller);
+		// setIconImage(IconLibrary.FLEXO_ICON.getImage());
+		setTitle(title);
+		getContentPane().setLayout(new BorderLayout());
+		_validationReportEditor = new ValidationReportEditor(this, validationReport);
+		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel());
 
-        JTabbedPane contentPanel = new JTabbedPane();
-        contentPanel.add(FlexoLocalization.localizedForKey("validation_report"), _validationReportEditor);
-        if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease())
-            contentPanel.add(FlexoLocalization.localizedForKey("validation_model"), _validationModelViewer);
+		JTabbedPane contentPanel = new JTabbedPane();
+		contentPanel.add(FlexoLocalization.localizedForKey("validation_report"), _validationReportEditor);
+		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+			contentPanel.add(FlexoLocalization.localizedForKey("validation_model"), _validationModelViewer);
+		}
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
 
-        setSize(600, 500);
-        //setFocusableWindowState(false);
-        validate();
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-    }
+		setSize(600, 500);
+		// setFocusableWindowState(false);
+		validate();
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+	}
 
-    public void setController(ConsistencyCheckingController controller)
-    {
-        _controller = controller;
-        if (controller!=null && _validationModelViewer!=null)
-            _validationModelViewer.setValidationModel(controller.getDefaultValidationModel());
-    }
+	public void setController(ConsistencyCheckingController controller) {
+		_controller = controller;
+		if (controller != null && _validationModelViewer != null) {
+			_validationModelViewer.setValidationModel(controller.getDefaultValidationModel());
+		}
+	}
 
-    @Override
-	public ConsistencyCheckingController getController()
-    {
-        return _controller;
-    }
+	@Override
+	public ConsistencyCheckingController getController() {
+		return _controller;
+	}
 
-    public void setValidationReport(ValidationReport validationReport)
-    {
-    	if(_validationReportEditor.getValidationReport()!=null){
-    		_validationReportEditor.getValidationReport().delete();
-    	}
-        _validationReportEditor.setValidationReport(validationReport);
-        _validationModelViewer.setValidationModel(validationReport.getValidationModel());
-    }
+	public void setValidationReport(ValidationReport validationReport) {
+		if (_validationReportEditor.getValidationReport() != null) {
+			_validationReportEditor.getValidationReport().delete();
+		}
+		_validationReportEditor.setValidationReport(validationReport);
+		_validationModelViewer.setValidationModel(validationReport.getValidationModel());
+	}
 
-    public ValidationReport getValidationReport()
-    {
-        return _validationReportEditor.getValidationReport();
-    }
+	public ValidationReport getValidationReport() {
+		return _validationReportEditor.getValidationReport();
+	}
 
-    public void consistencyCheck(Validable objectToValidate)
-    {
-        _validationReportEditor.consistencyCheckWithDefaultValidationModel(objectToValidate);
-        _validationModelViewer.setValidationModel(_validationReportEditor.getValidationReport().getValidationModel());
-    }
+	public void consistencyCheck(Validable objectToValidate) {
+		_validationReportEditor.consistencyCheckWithDefaultValidationModel(objectToValidate);
+		_validationModelViewer.setValidationModel(_validationReportEditor.getValidationReport().getValidationModel());
+	}
 
-    /**
-     * Overrides dispose
-     * @see java.awt.Window#dispose()
-     */
-    @Override
-    public void dispose()
-    {
-    	if (_validationReportEditor!=null && _validationReportEditor.getValidationReport()!=null){
-    		_validationReportEditor.getValidationReport().delete();
-    	}
-        if (_validationModelViewer!=null && _validationModelViewer.getParent()!=null)
-            _validationModelViewer.getParent().remove(_validationModelViewer);
-        if (_validationReportEditor!=null && _validationReportEditor.getParent()!=null)
-            _validationReportEditor.getParent().remove(_validationReportEditor);
-        super.dispose();
-        if (_controller!=null)
-        	_controller.cleanUpValidationModel();
-        _controller = null;
-        _validationModelViewer = null;
-        _validationReportEditor = null;
-        isDisposed = true;
-    }
-    
-    private boolean isDisposed = false;
+	/**
+	 * Overrides dispose
+	 * 
+	 * @see java.awt.Window#dispose()
+	 */
+	@Override
+	public void dispose() {
+		if (_validationReportEditor != null && _validationReportEditor.getValidationReport() != null) {
+			_validationReportEditor.getValidationReport().delete();
+		}
+		if (_validationModelViewer != null && _validationModelViewer.getParent() != null) {
+			_validationModelViewer.getParent().remove(_validationModelViewer);
+		}
+		if (_validationReportEditor != null && _validationReportEditor.getParent() != null) {
+			_validationReportEditor.getParent().remove(_validationReportEditor);
+		}
+		super.dispose();
+		if (_controller != null) {
+			_controller.cleanUpValidationModel();
+		}
+		_controller = null;
+		_validationModelViewer = null;
+		_validationReportEditor = null;
+		isDisposed = true;
+	}
 
-	public boolean isDisposed() 
-	{
+	private boolean isDisposed = false;
+
+	public boolean isDisposed() {
 		return isDisposed;
 	}
 

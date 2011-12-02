@@ -26,7 +26,6 @@ import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.wkf.controller.WKFController;
 
-
 public class RoleEditorController extends SelectionManagingDrawingController<RoleListRepresentation> {
 
 	// Can be null!
@@ -34,36 +33,36 @@ public class RoleEditorController extends SelectionManagingDrawingController<Rol
 	private RolePalette _palette;
 
 	public RoleEditorController(RoleList roleList, FlexoEditor editor, SelectionManager selectionManager) {
-		super(new RoleListRepresentation(roleList, editor),selectionManager);
+		super(new RoleListRepresentation(roleList, editor), selectionManager);
 		_palette = new RolePalette();
 		registerPalette(_palette);
 		activatePalette(_palette);
 	}
 
-	public RoleEditorController(WKFController controller)
-	{
-		this(controller.getProject().getWorkflow().getRoleList(),controller.getEditor(),controller.getSelectionManager());
+	public RoleEditorController(WKFController controller) {
+		this(controller.getProject().getWorkflow().getRoleList(), controller.getEditor(), controller.getSelectionManager());
 		_controller = controller;
 	}
 
 	@Override
 	public void delete() {
-		if (_controller!=null) {
-			if (getDrawingView()!=null)
+		if (_controller != null) {
+			if (getDrawingView() != null) {
 				_controller.removeModuleView(getDrawingView());
+			}
 			_controller.ROLE_EDITOR_PERSPECTIVE.removeFromRoleController(this);
 		}
 		super.delete();
 	}
 
 	@Override
-	public DrawingView<RoleListRepresentation> makeDrawingView(RoleListRepresentation drawing)
-	{
-		return new RoleEditorView(drawing,this);
+	public DrawingView<RoleListRepresentation> makeDrawingView(RoleListRepresentation drawing) {
+		return new RoleEditorView(drawing, this);
 	}
 
 	/**
 	 * Returns the WKFController, if any (could be null).
+	 * 
 	 * @return
 	 */
 	public WKFController getWKFController() {
@@ -71,20 +70,16 @@ public class RoleEditorController extends SelectionManagingDrawingController<Rol
 	}
 
 	@Override
-	public RoleEditorView getDrawingView()
-	{
-		return (RoleEditorView)super.getDrawingView();
+	public RoleEditorView getDrawingView() {
+		return (RoleEditorView) super.getDrawingView();
 	}
 
-	public RolePalette getPalette()
-	{
+	public RolePalette getPalette() {
 		return _palette;
 	}
 
-	public FlexoEditor getEditor()
-	{
+	public FlexoEditor getEditor() {
 		return getDrawing().getEditor();
 	}
-
 
 }

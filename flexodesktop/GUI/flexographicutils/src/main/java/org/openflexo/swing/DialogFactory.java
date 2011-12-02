@@ -25,14 +25,22 @@ import java.awt.HeadlessException;
 
 public abstract class DialogFactory {
 
-    public abstract Dialog getNewDialog() throws HeadlessException;
-    public abstract Dialog getNewDialog(Frame owner) throws HeadlessException;
-    public abstract Dialog getNewDialog(Frame owner, boolean modal) throws HeadlessException;
-    public abstract Dialog getNewDialog(Frame owner, String title)throws HeadlessException;
-    public abstract Dialog getNewDialog(Frame owner, String title, boolean modal) throws HeadlessException;
-    public abstract Dialog getNewDialog(Dialog owner) throws HeadlessException;
-    public abstract Dialog getNewDialog(Dialog owner, boolean modal) throws HeadlessException;
-    public abstract Dialog getNewDialog(Dialog owner, String title)throws HeadlessException;
-    public abstract Dialog getNewDialog(Dialog owner, String title, boolean modal) throws HeadlessException;
+	public abstract Dialog getNewDialog() throws HeadlessException;
+
+	public abstract Dialog getNewDialog(Frame owner) throws HeadlessException;
+
+	public abstract Dialog getNewDialog(Frame owner, boolean modal) throws HeadlessException;
+
+	public abstract Dialog getNewDialog(Frame owner, String title) throws HeadlessException;
+
+	public abstract Dialog getNewDialog(Frame owner, String title, boolean modal) throws HeadlessException;
+
+	public abstract Dialog getNewDialog(Dialog owner) throws HeadlessException;
+
+	public abstract Dialog getNewDialog(Dialog owner, boolean modal) throws HeadlessException;
+
+	public abstract Dialog getNewDialog(Dialog owner, String title) throws HeadlessException;
+
+	public abstract Dialog getNewDialog(Dialog owner, String title, boolean modal) throws HeadlessException;
 
 }

@@ -25,17 +25,14 @@ package org.openflexo.foundation.wkf.dm;
  * @author gpolet
  * 
  */
-public class ObjectAlignementChanged extends WKFDataModification
-{
+public class ObjectAlignementChanged extends WKFDataModification {
 
+	public ObjectAlignementChanged(boolean isAlignedOnGrid) {
+		super("isAlignedOnGrid", new Boolean(!isAlignedOnGrid), new Boolean(isAlignedOnGrid));
+	}
 
-    public ObjectAlignementChanged(boolean isAlignedOnGrid)
-    {
-        super("isAlignedOnGrid", new Boolean(!isAlignedOnGrid), new Boolean(isAlignedOnGrid));
-    }
-
-    public ObjectAlignementChanged(int gridSize) {
-    	super("gridSize",null,gridSize);
+	public ObjectAlignementChanged(int gridSize) {
+		super("gridSize", null, gridSize);
 	}
 
 }

@@ -26,28 +26,26 @@ import java.util.Vector;
  * 
  * @author sguerin
  */
-public interface DeletableObject
-{
+public interface DeletableObject {
 
-    /**
-     * Delete this object
-     */
-    public void delete();
+	/**
+	 * Delete this object
+	 */
+	public void delete();
 
-    /**
-     * Build and return a vector of all the objects that will be deleted during
-     * this deletion
-     * 
-     * @param aVector
-     *            of DeletableObject
-     */
-    public Vector<? extends FlexoModelObject> getAllEmbeddedDeleted();
+	/**
+	 * Build and return a vector of all the objects that will be deleted during this deletion
+	 * 
+	 * @param aVector
+	 *            of DeletableObject
+	 */
+	public Vector<? extends FlexoModelObject> getAllEmbeddedDeleted();
 
-    /**
-     * Return a boolean indicating if this object has been deleted
-     * 
-     * @return
-     */
-    public boolean isDeleted();
+	/**
+	 * Return a boolean indicating if this object has been deleted
+	 * 
+	 * @return
+	 */
+	public boolean isDeleted();
 
 }

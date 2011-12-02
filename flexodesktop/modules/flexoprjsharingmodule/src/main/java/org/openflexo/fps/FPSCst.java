@@ -26,22 +26,20 @@ import java.awt.Font;
  * 
  * @author yourname
  */
-public class FPSCst
-{
+public class FPSCst {
 
-    public static final String DEFAULT_FPS_BROWSER_WINDOW_TITLE = "fps_browser";
+	public static final String DEFAULT_FPS_BROWSER_WINDOW_TITLE = "fps_browser";
 
-    public static final int MINIMUM_BROWSER_VIEW_WIDTH = 150;
-    public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 0;
-    public static final int PREFERRED_BROWSER_VIEW_WIDTH = 250;
-    public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 150;
+	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 150;
+	public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 0;
+	public static final int PREFERRED_BROWSER_VIEW_WIDTH = 250;
+	public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 150;
 
-    public static final int DEFAULT_MAINFRAME_WIDTH = 1000;
+	public static final int DEFAULT_MAINFRAME_WIDTH = 1000;
 
-    public static final int DEFAULT_MAINFRAME_HEIGHT = 700;
+	public static final int DEFAULT_MAINFRAME_HEIGHT = 700;
 
-    public static final Font HEADER_FONT = new Font("Verdana", Font.BOLD, 14);
-    public static final Font SUB_TITLE_FONT = new Font("Verdana", Font.ITALIC, 10);
+	public static final Font HEADER_FONT = new Font("Verdana", Font.BOLD, 14);
+	public static final Font SUB_TITLE_FONT = new Font("Verdana", Font.ITALIC, 10);
 
- 
 }

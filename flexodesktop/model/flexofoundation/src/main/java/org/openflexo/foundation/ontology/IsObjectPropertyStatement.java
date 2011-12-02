@@ -28,29 +28,24 @@ public class IsObjectPropertyStatement extends IsAStatement {
 	private static final Logger logger = Logger.getLogger(IsObjectPropertyStatement.class.getPackage().getName());
 
 	public static final String OBJECT_PROPERTY_URI = "http://www.w3.org/2002/07/owl#ObjectProperty";
-	
-	public IsObjectPropertyStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public IsObjectPropertyStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "is_object_property_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "IsObjectPropertyStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "IsObjectPropertyStatement: " + getStatement();
 	}
 
-
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" is an ObjectProperty";
+	public String toString() {
+		return getSubject().getName() + " is an ObjectProperty";
 	}
 
 }

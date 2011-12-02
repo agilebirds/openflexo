@@ -42,8 +42,7 @@ import org.openflexo.foundation.rm.cg.ContentSource.ContentSourceType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 
-public abstract class ASCIIFile extends AbstractGeneratedFile
-{
+public abstract class ASCIIFile extends AbstractGeneratedFile {
 	static final Logger logger = Logger.getLogger(ASCIIFile.class.getPackage().getName());
 
 	private DiffSource currentDiskContent = null;
@@ -51,343 +50,310 @@ public abstract class ASCIIFile extends AbstractGeneratedFile
 	private DiffSource lastAcceptedContent = null;
 	private Merge _generationMerge;
 	private ResultFileMerge _resultFileMerge;
-	
+
 	private boolean hasDiskVersion = false;
-	
-	/**
-	 * 
-	 */
-	public ASCIIFile(File f)
-	{
-		super(f);
-	}
-	
-	/**
-	 * 
-	 */
-	public ASCIIFile()
-	{
-		super();
-    }
 
 	/**
-	 * Returns flag indicating if merge for generation is actually raising conflicts
-	 * (collision in changes)
+	 * 
+	 */
+	public ASCIIFile(File f) {
+		super(f);
+	}
+
+	/**
+	 * 
+	 */
+	public ASCIIFile() {
+		super();
+	}
+
+	/**
+	 * Returns flag indicating if merge for generation is actually raising conflicts (collision in changes)
 	 */
 	@Override
-	public boolean isGenerationConflicting()
-	{
-		if(getGenerationMerge()==null) {
+	public boolean isGenerationConflicting() {
+		if (getGenerationMerge() == null) {
 			return false;
 		}
 		return getGenerationMerge().isReallyConflicting();
 	}
 
-	
 	/**
-     * @throws SaveGeneratedResourceIOException 
-     * @throws SaveGeneratedResourceException 
-     * @throws UnresolvedConflictException 
-      */
-    @Override
-	public void writeToFile(File aFile) throws SaveGeneratedResourceIOException, SaveGeneratedResourceException, UnresolvedConflictException
-    {
-    	if (logger.isLoggable(Level.FINE)) {
-			logger.fine("***** writeToFile() called in "+getFlexoResource().getFileName()+ " file "+aFile.getAbsolutePath()
-					+" on "+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(new Date()));
+	 * @throws SaveGeneratedResourceIOException
+	 * @throws SaveGeneratedResourceException
+	 * @throws UnresolvedConflictException
+	 */
+	@Override
+	public void writeToFile(File aFile) throws SaveGeneratedResourceIOException, SaveGeneratedResourceException,
+			UnresolvedConflictException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("***** writeToFile() called in " + getFlexoResource().getFileName() + " file " + aFile.getAbsolutePath() + " on "
+					+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(new Date()));
 		}
-    	
-    	File path = aFile.getParentFile();
-    	
-    	// Creates directory when non existant
-    	if (!path.exists()) {
+
+		File path = aFile.getParentFile();
+
+		// Creates directory when non existant
+		if (!path.exists()) {
 			path.mkdirs();
 		}
-    	
-    	// Save content
-    	try {
-    		    		
-    		// If no content available, throw exception
-    		if (getContentToWriteOnDisk() == null) {
-    			logger.warning("getContentToWriteOnDisk() is null ! for "+(getFlexoResource()!=null?getFlexoResource().getFullyQualifiedName():getFile()));
-    			throw new SaveGeneratedResourceException(getFlexoResource(),"Cannot access content to write on disk: "+(getFlexoResource()!=null?getFlexoResource().getFullyQualifiedName():getFile()));
-    		}
- 
-    		// If current generation is conflicting and not marked as merged, don't do it and throw exception
-    		if (hasDiskVersion 
-    				&& (getFlexoResource().getGenerationStatus() == GenerationStatus.ConflictingUnMerged)
-    				&& !(isOverrideScheduled())) {
+
+		// Save content
+		try {
+
+			// If no content available, throw exception
+			if (getContentToWriteOnDisk() == null) {
+				logger.warning("getContentToWriteOnDisk() is null ! for "
+						+ (getFlexoResource() != null ? getFlexoResource().getFullyQualifiedName() : getFile()));
+				throw new SaveGeneratedResourceException(getFlexoResource(), "Cannot access content to write on disk: "
+						+ (getFlexoResource() != null ? getFlexoResource().getFullyQualifiedName() : getFile()));
+			}
+
+			// If current generation is conflicting and not marked as merged, don't do it and throw exception
+			if (hasDiskVersion && (getFlexoResource().getGenerationStatus() == GenerationStatus.ConflictingUnMerged)
+					&& !(isOverrideScheduled())) {
 				throw new UnresolvedConflictException(getFlexoResource());
 			}
-    		
-    		boolean needsNotifyEndOfSaving = false;
-    		FileWritingLock lock = null;
-    		if (!getFlexoResource().isSaving()) {
-    			logger.warning("writeToFile() called in "+getFlexoResource().getFileName()+" outside of RM-saving scheme");
-    			lock = getFlexoResource().willWriteOnDisk();
-    			needsNotifyEndOfSaving = true;
-    		}
-    		
-    		// Save file in history if edited since last generation
-    		if (fileOnDiskHasBeenEdited() && manageHistory()) {
-    			getHistory().storeCurrentFileInHistory(CGVersionIdentifier.VersionType.DiskUpdate);
-    		}
-    		
-            if (logger.isLoggable(Level.FINEST)) {
-				logger.finest("Really writing "+aFile.getAbsolutePath()+" to disk");
+
+			boolean needsNotifyEndOfSaving = false;
+			FileWritingLock lock = null;
+			if (!getFlexoResource().isSaving()) {
+				logger.warning("writeToFile() called in " + getFlexoResource().getFileName() + " outside of RM-saving scheme");
+				lock = getFlexoResource().willWriteOnDisk();
+				needsNotifyEndOfSaving = true;
 			}
-      		// Save to file the new generation
-    		FileUtils.saveToFile(aFile, getContentToWriteOnDisk(), getEncoding()); 		
-    		
-            if (!aFile.exists()) {
-				throw new SaveGeneratedResourceIOException(getFlexoResource(),null);
+
+			// Save file in history if edited since last generation
+			if (fileOnDiskHasBeenEdited() && manageHistory()) {
+				getHistory().storeCurrentFileInHistory(CGVersionIdentifier.VersionType.DiskUpdate);
 			}
-            
-       		if (needsNotifyEndOfSaving) {
-       			getFlexoResource().hasWrittenOnDisk(lock);
-    		}
-       		if((getProject()!=null) && getProject().computeDiff){
-       			currentDiskContent = new DiffSource(getContentToWriteOnDisk());
-       			lastAcceptedContent = new DiffSource(getContentToWriteOnDisk());
-       		}
-       		// Save file in history
-       		if (manageHistory()) {
-       			getHistory().storeCurrentFileInHistory(CGVersionIdentifier.VersionType.GenerationIteration);
-       		}
-       		// Now save last generated
-      		saveLastGeneratedFile();
-      		    		
-       		// Now save last accepted
-      		saveLastAcceptedFile();
- 
-       		// If this was an overriding, discard it
-    		_overrideIsScheduled = false;
-    		if((getProject()!=null) && getProject().computeDiff) {
+
+			if (logger.isLoggable(Level.FINEST)) {
+				logger.finest("Really writing " + aFile.getAbsolutePath() + " to disk");
+			}
+			// Save to file the new generation
+			FileUtils.saveToFile(aFile, getContentToWriteOnDisk(), getEncoding());
+
+			if (!aFile.exists()) {
+				throw new SaveGeneratedResourceIOException(getFlexoResource(), null);
+			}
+
+			if (needsNotifyEndOfSaving) {
+				getFlexoResource().hasWrittenOnDisk(lock);
+			}
+			if ((getProject() != null) && getProject().isComputeDiff()) {
+				currentDiskContent = new DiffSource(getContentToWriteOnDisk());
+				lastAcceptedContent = new DiffSource(getContentToWriteOnDisk());
+			}
+			// Save file in history
+			if (manageHistory()) {
+				getHistory().storeCurrentFileInHistory(CGVersionIdentifier.VersionType.GenerationIteration);
+			}
+			// Now save last generated
+			saveLastGeneratedFile();
+
+			// Now save last accepted
+			saveLastAcceptedFile();
+
+			// If this was an overriding, discard it
+			_overrideIsScheduled = false;
+			if ((getProject() != null) && getProject().isComputeDiff()) {
 				rebuildMerges();
 			}
-     		
-       		hasDiskVersion = true;
-    	} 
-    	
-    	catch (IOException e) 
-    	{
-			throw new SaveGeneratedResourceIOException(getFlexoResource(),e);
-		}
-    }
 
-    private void saveLastGeneratedFile() throws IOException
-    {
-    	if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Try to save "+getLastGeneratedFile().getAbsolutePath());
+			hasDiskVersion = true;
 		}
-		 
+
+		catch (IOException e) {
+			throw new SaveGeneratedResourceIOException(getFlexoResource(), e);
+		}
+	}
+
+	private void saveLastGeneratedFile() throws IOException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Try to save " + getLastGeneratedFile().getAbsolutePath());
+		}
+
 		if (!getLastGeneratedFile().getParentFile().exists()) {
 			getLastGeneratedFile().getParentFile().mkdirs();
 		}
 		if (getCurrentGeneration() != null) {
 			try {
 				FileUtils.saveToFile(getLastGeneratedFile(), getCurrentGeneration(), getEncoding());
-				if((getProject()!=null) && getProject().computeDiff) {
+				if ((getProject() != null) && getProject().isComputeDiff()) {
 					lastGeneratedContent = new DiffSource(getCurrentGeneration());
 				}
-			}
-			catch (IOException e) {
-				logger.warning("IOException occured when trying to write "+getLastGeneratedFile().getAbsolutePath()+"parent="+getLastGeneratedFile().getParentFile());
+			} catch (IOException e) {
+				logger.warning("IOException occured when trying to write " + getLastGeneratedFile().getAbsolutePath() + "parent="
+						+ getLastGeneratedFile().getParentFile());
 				throw e;
 			}
-		}
-		else {
-			lastGeneratedContent = new DiffSource(
-					FlexoLocalization.localizedForKey("unable_to_access_last_generated_file")+"\n"
-					+ FlexoLocalization.localizedForKey("file")+" : "
-					+ getLastGeneratedFile().getAbsolutePath());
+		} else {
+			lastGeneratedContent = new DiffSource(FlexoLocalization.localizedForKey("unable_to_access_last_generated_file") + "\n"
+					+ FlexoLocalization.localizedForKey("file") + " : " + getLastGeneratedFile().getAbsolutePath());
 		}
 
-    }
-    
-    public void saveAsLastGenerated(String newContent) throws IOException
-    {
-       	if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Try to save "+getLastGeneratedFile().getAbsolutePath());
+	}
+
+	public void saveAsLastGenerated(String newContent) throws IOException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Try to save " + getLastGeneratedFile().getAbsolutePath());
 		}
-		 
+
 		if (!getLastGeneratedFile().getParentFile().exists()) {
 			getLastGeneratedFile().getParentFile().mkdirs();
 		}
-			try {
-				FileUtils.saveToFile(getLastGeneratedFile(), newContent, getEncoding());
-				lastGeneratedContent = new DiffSource(newContent);
-			}
-			catch (IOException e) {
-				logger.warning("IOException occured when trying to write "+getLastGeneratedFile().getAbsolutePath()+"parent="+getLastGeneratedFile().getParentFile());
-				throw e;
-			}
-    }
-    
-    private void saveLastAcceptedFile() throws IOException
-    {
-    	if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Try to save "+getLastAcceptedFile().getAbsolutePath());
+		try {
+			FileUtils.saveToFile(getLastGeneratedFile(), newContent, getEncoding());
+			lastGeneratedContent = new DiffSource(newContent);
+		} catch (IOException e) {
+			logger.warning("IOException occured when trying to write " + getLastGeneratedFile().getAbsolutePath() + "parent="
+					+ getLastGeneratedFile().getParentFile());
+			throw e;
 		}
- 
- 		if (!getLastAcceptedFile().getParentFile().exists()) {
+	}
+
+	private void saveLastAcceptedFile() throws IOException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Try to save " + getLastAcceptedFile().getAbsolutePath());
+		}
+
+		if (!getLastAcceptedFile().getParentFile().exists()) {
 			getLastAcceptedFile().getParentFile().mkdirs();
 		}
-  		
-  		FileUtils.saveToFile(getLastAcceptedFile(), getLastAcceptedContent(), getEncoding());
-    }
-    
-   protected File getLastAcceptedFile()
-    {
-	   if(getFlexoResource()==null) {
-		return null;
+
+		FileUtils.saveToFile(getLastAcceptedFile(), getLastAcceptedContent(), getEncoding());
 	}
-       	return getFlexoResource().getLastAcceptedFile();
-    }
-    
-    protected File getLastGeneratedFile()
-    {
-    	if(getFlexoResource()==null) {
+
+	protected File getLastAcceptedFile() {
+		if (getFlexoResource() == null) {
 			return null;
 		}
-    	return getFlexoResource().getLastGeneratedFile();
-    }
-    
- 	@Override
-	public void load() throws LoadGeneratedResourceIOException
-	{
-        if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Loading "+getFlexoResource().getFileName());
+		return getFlexoResource().getLastAcceptedFile();
+	}
+
+	protected File getLastGeneratedFile() {
+		if (getFlexoResource() == null) {
+			return null;
+		}
+		return getFlexoResource().getLastGeneratedFile();
+	}
+
+	@Override
+	public void load() throws LoadGeneratedResourceIOException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Loading " + getFlexoResource().getFileName());
 		}
 		try {
 			currentDiskContent = new DiffSource(FileUtils.fileContents(getFile(), getEncoding()));
-			if (getLastGeneratedFile()!=null) {
+			if (getLastGeneratedFile() != null) {
 				if (!getLastGeneratedFile().exists()) {
-					logger.warning("File does not exist: "+getLastGeneratedFile().getAbsolutePath()+", creating empty one");
+					logger.warning("File does not exist: " + getLastGeneratedFile().getAbsolutePath() + ", creating empty one");
 					FileUtils.saveToFile(getLastGeneratedFile(), currentDiskContent.getSourceString(), getEncoding());
 				}
 				lastGeneratedContent = new DiffSource(FileUtils.fileContents(getLastGeneratedFile(), getEncoding()));
 			} else {
-					logger.warning("Could not find file null");
+				logger.warning("Could not find file null");
 			}
-			if (getLastAcceptedFile()!=null) {
+			if (getLastAcceptedFile() != null) {
 				if (!getLastAcceptedFile().exists()) {
-					logger.warning("File does not exist: "+getLastAcceptedFile().getAbsolutePath()+", creating empty one");
+					logger.warning("File does not exist: " + getLastAcceptedFile().getAbsolutePath() + ", creating empty one");
 					FileUtils.saveToFile(getLastAcceptedFile(), currentDiskContent.getSourceString(), getEncoding());
 				}
 				lastAcceptedContent = new DiffSource(FileUtils.fileContents(getLastAcceptedFile(), getEncoding()));
 			} else {
-				if(getLastAcceptedFile()!=null) {
-					logger.warning("Could not find file "+getLastAcceptedFile().getAbsolutePath());
+				if (getLastAcceptedFile() != null) {
+					logger.warning("Could not find file " + getLastAcceptedFile().getAbsolutePath());
 				} else {
 					logger.warning("Could not find file null.");
 				}
 			}
 			hasDiskVersion = true;
-		}
-		catch (IOException e) {
-			throw new LoadGeneratedResourceIOException(getFlexoResource(),e);
+		} catch (IOException e) {
+			throw new LoadGeneratedResourceIOException(getFlexoResource(), e);
 		}
 		updateHistory();
 
 	}
-	
+
 	/**
-	 * Returns current generation
-	 * This is "pure" generation (direct output from the generators):
-	 * does NOT contain merge with changes registered for last accepted version
+	 * Returns current generation This is "pure" generation (direct output from the generators): does NOT contain merge with changes
+	 * registered for last accepted version
 	 * 
 	 * @return a String representation
 	 */
-    public abstract String getCurrentGeneration();
-    
+	public abstract String getCurrentGeneration();
+
 	/**
-	 * Returns current generated content
-	 * This content is obtained by merging current generation with
-	 * changes registered for last accepted version
+	 * Returns current generated content This content is obtained by merging current generation with changes registered for last accepted
+	 * version
 	 * 
 	 * @return a String representation
 	 */
-	public String getGeneratedMergedContent()
-	{
+	public String getGeneratedMergedContent() {
 		if (!hasDiskVersion) {
 			return getCurrentGeneration();
-		}
-		else {
+		} else {
 			return getGenerationMerge().getMergedSource().getSourceString();
 		}
 	}
-	
-    /**
-     * Returns content to write on disk
-     * This content is the merge from the current generated and 
-     * merge content with content extracted from the modified file
-     * on disk
-     * In case of an overriding, this is the overriden version
-     * 
-     * @return
-     */
-	public String getContentToWriteOnDisk()
-	{
+
+	/**
+	 * Returns content to write on disk This content is the merge from the current generated and merge content with content extracted from
+	 * the modified file on disk In case of an overriding, this is the overriden version
+	 * 
+	 * @return
+	 */
+	public String getContentToWriteOnDisk() {
 		if (!hasDiskVersion) {
 			return getCurrentGeneration();
-		}
-		else {
+		} else {
 			if (_overrideIsScheduled) {
 				return getContent(_overridenVersion);
 			}
-			if ((getProject()!=null) && getProject().computeDiff) {
+			if ((getProject() != null) && getProject().isComputeDiff()) {
 				return getResultFileMerge().getMergedSource().getSourceString();
 			} else {
 				return getCurrentGeneration();
 			}
 		}
 	}
-	
-	public String getContent(ContentSource contentSource)
-	{
-	 	if (contentSource.getType() == ContentSourceType.PureGeneration) {
-	 		return getCurrentGeneration();
-	 	}
-	 	else if (contentSource.getType() == ContentSourceType.GeneratedMerge) {
-	 		return getGeneratedMergedContent();
-	 	}
-	 	else if (contentSource.getType() == ContentSourceType.ResultFileMerge) {
-	 		return getContentToWriteOnDisk();
-	 	}
-	 	else if (contentSource.getType() == ContentSourceType.ContentOnDisk) {
-	 		return getCurrentDiskContent();
-	 	}
-	 	else if (contentSource.getType() == ContentSourceType.LastGenerated) {
-	 		return getLastGeneratedContent();
-	 	}
-	 	else if (contentSource.getType() == ContentSourceType.LastAccepted) {
-	 		return getLastAcceptedContent();
-	 	}
-	 	else if (contentSource.getType() == ContentSourceType.HistoryVersion) {
-	 		return getHistoryContent(contentSource.getVersion());
-	 	}
-	 	return null;
+
+	public String getContent(ContentSource contentSource) {
+		if (contentSource.getType() == ContentSourceType.PureGeneration) {
+			return getCurrentGeneration();
+		} else if (contentSource.getType() == ContentSourceType.GeneratedMerge) {
+			return getGeneratedMergedContent();
+		} else if (contentSource.getType() == ContentSourceType.ResultFileMerge) {
+			return getContentToWriteOnDisk();
+		} else if (contentSource.getType() == ContentSourceType.ContentOnDisk) {
+			return getCurrentDiskContent();
+		} else if (contentSource.getType() == ContentSourceType.LastGenerated) {
+			return getLastGeneratedContent();
+		} else if (contentSource.getType() == ContentSourceType.LastAccepted) {
+			return getLastAcceptedContent();
+		} else if (contentSource.getType() == ContentSourceType.HistoryVersion) {
+			return getHistoryContent(contentSource.getVersion());
+		}
+		return null;
 	}
-	
-	protected String getHistoryContent(CGVersionIdentifier versionId)
-	{
- 		try {
- 			if (getHistory().versionWithId(versionId) != null) {
+
+	protected String getHistoryContent(CGVersionIdentifier versionId) {
+		try {
+			if (getHistory().versionWithId(versionId) != null) {
 				return getHistory().versionWithId(versionId).getContent();
 			} else {
-				return "Unable to access version "+versionId+" for file "+getFlexoResource().getFileName();
+				return "Unable to access version " + versionId + " for file " + getFlexoResource().getFileName();
 			}
 		} catch (IOFlexoException e) {
 			e.printStackTrace();
-			return "Unable to access version "+versionId+" for file "+getFlexoResource().getFileName();
+			return "Unable to access version " + versionId + " for file " + getFlexoResource().getFileName();
 		}
-		
+
 	}
-	
+
 	@Override
-	public final void generate() throws FlexoException 
-	{
+	public final void generate() throws FlexoException {
 		if (!(getFlexoResource() instanceof GenerationAvailableFileResourceInterface)) {
 			throw new NotImplementedException("version_without_code_generator");
 		}
@@ -396,154 +362,139 @@ public abstract class ASCIIFile extends AbstractGeneratedFile
 		if (getFlexoResource().getGenerator().getGeneratedCode() == null) {
 			if (getFlexoResource().getGenerator().getGenerationException() == null) {
 				logger.warning("Both GeneratedCode and exception are null: this is should never happen !");
-			}
-			else {
-				throw (FlexoException)getFlexoResource().getGenerator().getGenerationException();
+			} else {
+				throw (FlexoException) getFlexoResource().getGenerator().getGenerationException();
 			}
 		}
 	}
 
 	@Override
-	public final void regenerate() throws FlexoException 
-	{
+	public final void regenerate() throws FlexoException {
 		if (!(getFlexoResource() instanceof GenerationAvailableFileResourceInterface)) {
 			throw new NotImplementedException("version_without_code_generator");
 		}
 
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("regenerate() called in "+getClass().getName());
+			logger.fine("regenerate() called in " + getClass().getName());
 		}
-		
+
 		// OK, generator has performed its job, i have now to handle merges
-		
-		if ((lastGeneratedContent == null) && (getProject()!=null) && getProject().computeDiff) {
-			throw new LoadGeneratedResourceIOException(getFlexoResource(),"Unable to access last generated content");
+
+		if ((lastGeneratedContent == null) && (getProject() != null) && getProject().isComputeDiff()) {
+			throw new LoadGeneratedResourceIOException(getFlexoResource(), "Unable to access last generated content");
 		}
-		if ((lastAcceptedContent == null) && (getProject()!=null) && getProject().computeDiff) {
-			throw new LoadGeneratedResourceIOException(getFlexoResource(),"Unable to access last accepted content");
+		if ((lastAcceptedContent == null) && (getProject() != null) && getProject().isComputeDiff()) {
+			throw new LoadGeneratedResourceIOException(getFlexoResource(), "Unable to access last accepted content");
 		}
-		
-		// Normally it's ok. 
+
+		// Normally it's ok.
 		// I don't do it now, otherwise, i will erase merging selections
-		//rebuildMerges();
-		
+		// rebuildMerges();
+
 	}
 
-	private void rebuildMerges()
-	{
+	private void rebuildMerges() {
 		rebuildGenerationMerge();
 		rebuildResultFileMerge();
 	}
-	
-	private void rebuildGenerationMerge()
-	{
+
+	private void rebuildGenerationMerge() {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("rebuildGenerationMerge() called in "+getFlexoResource().getFileName());
+			logger.fine("rebuildGenerationMerge() called in " + getFlexoResource().getFileName());
 		}
 		if (_generationMerge != null) {
 			_generationMerge.delete();
-            _generationMerge = null;
+			_generationMerge = null;
 		}
 
 		if (getCurrentGeneration() != null) {
-			_generationMerge = new Merge(_getLastGeneratedContent(),
-										 new DiffSource(getCurrentGeneration()),
-										 _getLastAcceptedContent(),
-										 getMergedDocumentType());
-			//logger.info("Resource "+getFlexoResource().getFileName()+" build generation merge");
-			//logger.info("_getLastGeneratedContent()="+_getLastGeneratedContent().getSourceString());
-			//logger.info("getCurrentGeneration()="+getCurrentGeneration());
-			//logger.info("_getLastAcceptedContent()="+_getLastAcceptedContent().getSourceString());
+			_generationMerge = new Merge(_getLastGeneratedContent(), new DiffSource(getCurrentGeneration()), _getLastAcceptedContent(),
+					getMergedDocumentType());
+			// logger.info("Resource "+getFlexoResource().getFileName()+" build generation merge");
+			// logger.info("_getLastGeneratedContent()="+_getLastGeneratedContent().getSourceString());
+			// logger.info("getCurrentGeneration()="+getCurrentGeneration());
+			// logger.info("_getLastAcceptedContent()="+_getLastAcceptedContent().getSourceString());
 		}
 
 	}
-	
-	private void rebuildResultFileMerge()
-	{
+
+	private void rebuildResultFileMerge() {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("rebuildResultFileMerge() called in "+getFlexoResource().getFileName());
+			logger.fine("rebuildResultFileMerge() called in " + getFlexoResource().getFileName());
 		}
 		if (_resultFileMerge != null) {
 			_resultFileMerge.delete();
-            _resultFileMerge = null;
+			_resultFileMerge = null;
 		}
 
 		if (getGenerationMerge() != null) {
-			_resultFileMerge = new ResultFileMerge(
-					_getLastAcceptedContent(),
-                    getGenerationMerge(),
-					getProject().computeDiff || hasCurrentDiskContent()?currentDiskContent:new DiffSource(""));
+			_resultFileMerge = new ResultFileMerge(_getLastAcceptedContent(), getGenerationMerge(), getProject().isComputeDiff()
+					|| hasCurrentDiskContent() ? currentDiskContent : new DiffSource(""));
 		}
 
 	}
-	
-	public static class ResultFileMerge extends Merge implements Observer 
-	{
+
+	public static class ResultFileMerge extends Merge implements Observer {
 		private final Merge _generationMerge;
 
-		public ResultFileMerge (DiffSource lastAcceptedContent, Merge generationMerge, DiffSource currentDiskContent)
-		{
-			super(lastAcceptedContent,generationMerge.getMergedSource(),currentDiskContent,generationMerge.getDocumentType());
+		public ResultFileMerge(DiffSource lastAcceptedContent, Merge generationMerge, DiffSource currentDiskContent) {
+			super(lastAcceptedContent, generationMerge.getMergedSource(), currentDiskContent, generationMerge.getDocumentType());
 			_generationMerge = generationMerge;
 			_generationMerge.addObserver(this);
 		}
 
 		@Override
-		public void update(Observable o, Object arg) 
-		{
+		public void update(Observable o, Object arg) {
 			// Generation merge changed
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("update() in ResultFileMerge, recompute merge");
 			}
 			recompute();
 		}
-		
+
 	}
 
-	public String getCurrentDiskContent() 
-	{
+	public String getCurrentDiskContent() {
 		if (currentDiskContent != null) {
 			return currentDiskContent.getSourceString();
 		} else {
-			logger.warning ("getCurrentDiskContent() called for null content: "+getFlexoResource().getFileName());
-			return "Unable to access current disk content for "+getFlexoResource().getFileName();
+			logger.warning("getCurrentDiskContent() called for null content: " + getFlexoResource().getFileName());
+			return "Unable to access current disk content for " + getFlexoResource().getFileName();
 		}
 	}
-	
-	public boolean hasCurrentDiskContent() 
-	{
+
+	public boolean hasCurrentDiskContent() {
 		return currentDiskContent != null;
 	}
 
-	public boolean hasLastAcceptedContent() 
-	{
+	public boolean hasLastAcceptedContent() {
 		return lastAcceptedContent != null;
 	}
-	
-	public String getLastAcceptedContent() 
-	{
+
+	public String getLastAcceptedContent() {
 		if (lastAcceptedContent != null) {
 			return lastAcceptedContent.getSourceString();
 		}
-		return FlexoLocalization.localizedForKey("unable_to_access_last_accepted_file")+"\n"
-        + (getFlexoResource().getLastGeneratedFile()!=null?(FlexoLocalization.localizedForKey("file")+" : "+getFlexoResource().getLastGeneratedFile().getAbsolutePath()):(FlexoLocalization.localizedForKey("file")+" "+FlexoLocalization.localizedForKey("of_resource")+" "+getFlexoResource()));
+		return FlexoLocalization.localizedForKey("unable_to_access_last_accepted_file")
+				+ "\n"
+				+ (getFlexoResource().getLastGeneratedFile() != null ? (FlexoLocalization.localizedForKey("file") + " : " + getFlexoResource()
+						.getLastGeneratedFile().getAbsolutePath()) : (FlexoLocalization.localizedForKey("file") + " "
+						+ FlexoLocalization.localizedForKey("of_resource") + " " + getFlexoResource()));
 	}
 
-	protected DiffSource _getLastGeneratedContent()
-	{
+	protected DiffSource _getLastGeneratedContent() {
 		if (lastGeneratedContent == null) {
 			if (getCurrentGeneration() != null) {
 				lastGeneratedContent = new DiffSource(getCurrentGeneration());
 			}
 		}
 		return lastGeneratedContent;
-		
+
 	}
-	
-	protected DiffSource _getLastAcceptedContent() 
-	{
+
+	protected DiffSource _getLastAcceptedContent() {
 		if (lastAcceptedContent == null) {
-			if (hasCurrentDiskContent() || getProject().computeDiff) {
+			if (hasCurrentDiskContent() || getProject().isComputeDiff()) {
 				lastAcceptedContent = new DiffSource(getCurrentDiskContent());
 			} else {
 				lastAcceptedContent = new DiffSource("");
@@ -552,33 +503,32 @@ public abstract class ASCIIFile extends AbstractGeneratedFile
 		return lastAcceptedContent;
 	}
 
-	public String getLastGeneratedContent()
-	{
+	public String getLastGeneratedContent() {
 		if (lastGeneratedContent != null) {
 			return lastGeneratedContent.getSourceString();
 		}
-        if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Last generated content not found for resource "+getFlexoResource());
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Last generated content not found for resource " + getFlexoResource());
 		}
-		return FlexoLocalization.localizedForKey("unable_to_access_last_generated_file")+"\n"
-		+ (getFlexoResource().getLastGeneratedFile()!=null?(FlexoLocalization.localizedForKey("file")+" : "+getFlexoResource().getLastGeneratedFile().getAbsolutePath()):(FlexoLocalization.localizedForKey("file")+" "+FlexoLocalization.localizedForKey("of_resource")+" "+getFlexoResource()));
+		return FlexoLocalization.localizedForKey("unable_to_access_last_generated_file")
+				+ "\n"
+				+ (getFlexoResource().getLastGeneratedFile() != null ? (FlexoLocalization.localizedForKey("file") + " : " + getFlexoResource()
+						.getLastGeneratedFile().getAbsolutePath()) : (FlexoLocalization.localizedForKey("file") + " "
+						+ FlexoLocalization.localizedForKey("of_resource") + " " + getFlexoResource()));
 	}
-	
+
 	@Override
-	public boolean hasVersionOnDisk()
-	{
+	public boolean hasVersionOnDisk() {
 		return hasDiskVersion;
 	}
 
-	public void notifyVersionChangedOnDisk(String newDiskContent)
-	{
+	public void notifyVersionChangedOnDisk(String newDiskContent) {
 		currentDiskContent = new DiffSource(newDiskContent);
 		rebuildMerges();
 	}
 
 	@Override
-	public void notifyVersionChangedOnDisk()
-	{
+	public void notifyVersionChangedOnDisk() {
 		try {
 			load();
 		} catch (LoadGeneratedResourceIOException e) {
@@ -587,16 +537,14 @@ public abstract class ASCIIFile extends AbstractGeneratedFile
 		rebuildMerges();
 	}
 
-	public Merge getGenerationMerge() 
-	{
+	public Merge getGenerationMerge() {
 		if (_generationMerge == null) {
 			rebuildGenerationMerge();
 		}
 		return _generationMerge;
 	}
 
-	public ResultFileMerge getResultFileMerge()
-	{
+	public ResultFileMerge getResultFileMerge() {
 		if (_resultFileMerge == null) {
 			rebuildResultFileMerge();
 		}
@@ -604,10 +552,9 @@ public abstract class ASCIIFile extends AbstractGeneratedFile
 	}
 
 	@Override
-	public void notifyRegenerated(CGContentRegenerated notification)
-	{
+	public void notifyRegenerated(CGContentRegenerated notification) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("notifyRegenerated() called in "+getFlexoResource().getFileName());
+			logger.fine("notifyRegenerated() called in " + getFlexoResource().getFileName());
 		}
 		if (!getFlexoResource().hasGenerationError()) {
 			rebuildMerges();
@@ -615,8 +562,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile
 	}
 
 	@Override
-	public void acceptDiskVersion() throws SaveGeneratedResourceIOException
-	{
+	public void acceptDiskVersion() throws SaveGeneratedResourceIOException {
 		// Save file in history
 		if (manageHistory()) {
 			getHistory().storeCurrentFileInHistory(CGVersionIdentifier.VersionType.DiskUpdate);
@@ -627,75 +573,62 @@ public abstract class ASCIIFile extends AbstractGeneratedFile
 			lastAcceptedContent = new DiffSource(getCurrentDiskContent());
 			saveLastAcceptedFile();
 		} catch (IOException e) {
-			throw new SaveGeneratedResourceIOException(getFlexoResource(),e);
+			throw new SaveGeneratedResourceIOException(getFlexoResource(), e);
 		}
 	}
 
 	private boolean _overrideIsScheduled = false;
 	private ContentSource _overridenVersion;
-	
+
 	@Override
-	public void overrideWith(ContentSource version)
-	{
+	public void overrideWith(ContentSource version) {
 		_overrideIsScheduled = true;
 		_overridenVersion = version;
 	}
 
 	@Override
-	public boolean isOverrideScheduled() 
-	{
+	public boolean isOverrideScheduled() {
 		return _overrideIsScheduled;
 	}
-	
+
 	@Override
-	public void cancelOverriding()
-	{
+	public void cancelOverriding() {
 		_overrideIsScheduled = false;
 		_overridenVersion = null;
 	}
-	
 
 	@Override
-	public ContentSource getScheduledOverrideVersion()
-	{
+	public ContentSource getScheduledOverrideVersion() {
 		return _overridenVersion;
 	}
 
 	@Override
-	public boolean doesGenerationKeepFileUnchanged()
-	{
+	public boolean doesGenerationKeepFileUnchanged() {
 		if (getResultFileMerge() == null) {
 			return false;
 		}
-		//logger.info("doesGenerationKeepFileUnchanged() called for "+getFlexoResource().getFileName()+ " changes="+_generationMerge.getChanges().size());
+		// logger.info("doesGenerationKeepFileUnchanged() called for "+getFlexoResource().getFileName()+
+		// " changes="+_generationMerge.getChanges().size());
 		return (getResultFileMerge().getChanges().size() == 0);
 	}
 
 	@Override
-	public boolean isTriviallyMergable()
-	{
-		return ((getGenerationMerge() != null)
-				&& (!getGenerationMerge().isReallyConflicting())
-				&& (getResultFileMerge() != null)
-				&& (!getResultFileMerge().isReallyConflicting()));
-	}
-	
-	@Override
-	public boolean areAllConflictsResolved()
-	{
-		return ((getGenerationMerge() != null)
-				&& (getGenerationMerge().isResolved())
-				&& (getResultFileMerge() != null)
-				&& (getResultFileMerge().isResolved()));
+	public boolean isTriviallyMergable() {
+		return ((getGenerationMerge() != null) && (!getGenerationMerge().isReallyConflicting()) && (getResultFileMerge() != null) && (!getResultFileMerge()
+				.isReallyConflicting()));
 	}
 
-	public MergedDocumentType getMergedDocumentType()
-	{
+	@Override
+	public boolean areAllConflictsResolved() {
+		return ((getGenerationMerge() != null) && (getGenerationMerge().isResolved()) && (getResultFileMerge() != null) && (getResultFileMerge()
+				.isResolved()));
+	}
+
+	public MergedDocumentType getMergedDocumentType() {
 		return DefaultMergedDocumentType.getMergedDocumentType(getFileFormat());
 	}
 
-	public String getEncoding()
-	{
+	public String getEncoding() {
 		return "UTF-8";
 	}
 }

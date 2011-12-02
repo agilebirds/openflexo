@@ -26,38 +26,36 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public interface IWidget extends IObject
-{
-    public IEObject getParent();
-    
-    public void setParent(IEObject parent);
-    
-    public void setIndex(int index);
-    
-    public int getIndex();
-    
-    public Vector<IWidget> getAllNonSequenceWidget();
-    
-    public void delete();
-    
-    public void removeFromContainer();
-    
-    public void setWOComponent(IEWOComponent component);
-    
-    public String getRawRowKeyPath();
-    
-    public boolean areComponentInstancesValid();
-    
-    public void removeInvalidComponentInstances();
+public interface IWidget extends IObject {
+	public IEObject getParent();
+
+	public void setParent(IEObject parent);
+
+	public void setIndex(int index);
+
+	public int getIndex();
+
+	public Vector<IWidget> getAllNonSequenceWidget();
+
+	public void delete();
+
+	public void removeFromContainer();
+
+	public void setWOComponent(IEWOComponent component);
+
+	public String getRawRowKeyPath();
+
+	public boolean areComponentInstancesValid();
+
+	public void removeInvalidComponentInstances();
 
 	public IEWOComponent getWOComponent();
- 
+
 	public Vector<IEHyperlinkWidget> getAllButtonInterface();
-	
+
 	public HTMLListDescriptor getHTMLListDescriptor();
 }

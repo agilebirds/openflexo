@@ -35,180 +35,166 @@ import javax.swing.JPanel;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 
-
 /**
- * Represents a widget able to edit a list of objects from a given list (maps a
- * Vector)
- *
+ * Represents a widget able to edit a list of objects from a given list (maps a Vector)
+ * 
  * @author sguerin
  */
-public class CheckBoxListWidget extends MultipleValuesWidget
-{
+public class CheckBoxListWidget extends MultipleValuesWidget {
 
-    private static final Logger logger = Logger.getLogger(CheckBoxListWidget.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CheckBoxListWidget.class.getPackage().getName());
 
-    private static final int DEFAULT_COLUMNS = 1;
+	private static final int DEFAULT_COLUMNS = 1;
 
-    private DenaliListModel _fullList;
+	private DenaliListModel _fullList;
 
-    private Vector _selectedList;
+	private Vector _selectedList;
 
-    private JCheckBox[] _checkBoxArray;
+	private JCheckBox[] _checkBoxArray;
 
-    private JPanel _panel;
+	private JPanel _panel;
 
-    private int columns;
+	private int columns;
 
-    /**
-     * @param model
-     */
-    public CheckBoxListWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _panel = new JPanel();
-        _panel.setOpaque(false);
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this));
+	/**
+	 * @param model
+	 */
+	public CheckBoxListWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_panel = new JPanel();
+		_panel.setOpaque(false);
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this));
 
-        if (model.hasValueForParameter("columns")) {
-            columns = model.getIntValueForParameter("columns");
-        }
-        else {
-            columns = DEFAULT_COLUMNS;
-        }
+		if (model.hasValueForParameter("columns")) {
+			columns = model.getIntValueForParameter("columns");
+		} else {
+			columns = DEFAULT_COLUMNS;
+		}
 
+	}
 
-    }
+	private class MyCheckBoxListener implements ActionListener {
+		JCheckBox cb;
 
-    private class MyCheckBoxListener implements ActionListener
-    {
-        JCheckBox cb;
+		Object val;
 
-        Object val;
+		public MyCheckBoxListener(JCheckBox checkBox, Object v) {
+			super();
+			cb = checkBox;
+			val = v;
+		}
 
-        public MyCheckBoxListener(JCheckBox checkBox, Object v)
-        {
-            super();
-            cb = checkBox;
-            val = v;
-        }
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (cb.isSelected()) {
+				addToSelected(val);
+			} else {
+				removeFromSelected(val);
+			}
+		}
+	}
 
-        @Override
-		public void actionPerformed(ActionEvent e)
-        {
-            if (cb.isSelected()) {
-                addToSelected(val);
-            } else {
-                removeFromSelected(val);
-            }
-        }
-    }
-
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
+	@Override
+	public synchronized void updateWidgetFromModel() {
 		widgetUpdating = true;
-       Object objectValue = getObjectValue();
-        _fullList = getListModel();
-        _panel.removeAll();
-        /*if (_fullList.getSize() < 6) {
-            _panel.setLayout(new GridLayout(_fullList.getSize(), 1));
-        } else {*/
-            _panel.setLayout(new GridLayout((_fullList.getSize() / columns) + (_fullList.getSize() % columns > 0 ? 1 : 0), columns));
-        //}
-        //_panel.setBackground(InspectorCst.BACK_COLOR);
-        _checkBoxArray = new JCheckBox[_fullList.getSize()];
-        for (int i = 0; i < _fullList.getSize(); i++) {
-            Object curItem = _fullList.getElementAt(i);
-            JCheckBox cb = new JCheckBox(getStringRepresentation(curItem), false);
-            cb.setOpaque(false);
-            //cb.setBackground(InspectorCst.BACK_COLOR);
-            cb.addActionListener(new MyCheckBoxListener(cb, curItem));
-            _panel.add(cb);
-            _checkBoxArray[i] = cb;
-        }
-        _selectedList = new Vector();
-        if (objectValue != null) {
-            if (objectValue instanceof Vector || (objectValue instanceof String && ((String) objectValue).startsWith("["))) {
-                if (objectValue instanceof String) {
-                    objectValue = convertStringToVector((String) objectValue);
-                }
-                Enumeration en2 = ((Vector) objectValue).elements();
+		Object objectValue = getObjectValue();
+		_fullList = getListModel();
+		_panel.removeAll();
+		/*if (_fullList.getSize() < 6) {
+		    _panel.setLayout(new GridLayout(_fullList.getSize(), 1));
+		} else {*/
+		_panel.setLayout(new GridLayout((_fullList.getSize() / columns) + (_fullList.getSize() % columns > 0 ? 1 : 0), columns));
+		// }
+		// _panel.setBackground(InspectorCst.BACK_COLOR);
+		_checkBoxArray = new JCheckBox[_fullList.getSize()];
+		for (int i = 0; i < _fullList.getSize(); i++) {
+			Object curItem = _fullList.getElementAt(i);
+			JCheckBox cb = new JCheckBox(getStringRepresentation(curItem), false);
+			cb.setOpaque(false);
+			// cb.setBackground(InspectorCst.BACK_COLOR);
+			cb.addActionListener(new MyCheckBoxListener(cb, curItem));
+			_panel.add(cb);
+			_checkBoxArray[i] = cb;
+		}
+		_selectedList = new Vector();
+		if (objectValue != null) {
+			if (objectValue instanceof Vector || (objectValue instanceof String && ((String) objectValue).startsWith("["))) {
+				if (objectValue instanceof String) {
+					objectValue = convertStringToVector((String) objectValue);
+				}
+				Enumeration en2 = ((Vector) objectValue).elements();
 
-                while (en2.hasMoreElements()) {
-                    Object cur = en2.nextElement();
-                    _selectedList.add(cur);
-                    int i = _fullList.indexOf(cur);
-                    _checkBoxArray[i].setSelected(true);
-                }
-            } else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Property " + _propertyModel.name + " is supposed to be a Vector or a String, not a " + getType());
-            }
-        }
-		widgetUpdating =false;
-   }
+				while (en2.hasMoreElements()) {
+					Object cur = en2.nextElement();
+					_selectedList.add(cur);
+					int i = _fullList.indexOf(cur);
+					_checkBoxArray[i].setSelected(true);
+				}
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Property " + _propertyModel.name + " is supposed to be a Vector or a String, not a " + getType());
+				}
+			}
+		}
+		widgetUpdating = false;
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-        if (getType() == Vector.class) {
-            setObjectValue(_selectedList);
-        } else if (getType() == String.class) {
-            setObjectValue(convertVectorToString(_selectedList));
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Property " + _propertyModel.name + " is supposed to be a Vector or a String, not a " + getType());
-        }
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		if (getType() == Vector.class) {
+			setObjectValue(_selectedList);
+		} else if (getType() == String.class) {
+			setObjectValue(convertVectorToString(_selectedList));
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Property " + _propertyModel.name + " is supposed to be a Vector or a String, not a " + getType());
+			}
+		}
+	}
 
-    private Vector convertStringToVector(String s)
-    {
-        Vector answer = new Vector();
-        s = s.replace('[', ' ');
-        s = s.replace(']', ' ');
-        s = s.trim();
-        StringTokenizer strTok = new StringTokenizer(s, ",", false);
-        while (strTok.hasMoreTokens()) {
-            answer.add(strTok.nextToken().trim());
-        }
-        return answer;
-    }
+	private Vector convertStringToVector(String s) {
+		Vector answer = new Vector();
+		s = s.replace('[', ' ');
+		s = s.replace(']', ' ');
+		s = s.trim();
+		StringTokenizer strTok = new StringTokenizer(s, ",", false);
+		while (strTok.hasMoreTokens()) {
+			answer.add(strTok.nextToken().trim());
+		}
+		return answer;
+	}
 
-    private String convertVectorToString(Vector v)
-    {
-        String returned = "[";
-        boolean isFirst = true;
-        for (Enumeration e = v.elements(); e.hasMoreElements();) {
-            String next = (String) e.nextElement();
-            if (!isFirst) {
-                returned = returned + ",";
-                isFirst = false;
-            }
-            returned = returned + next;
-        }
-        returned = returned + "]";
-        return returned;
-    }
+	private String convertVectorToString(Vector v) {
+		String returned = "[";
+		boolean isFirst = true;
+		for (Enumeration e = v.elements(); e.hasMoreElements();) {
+			String next = (String) e.nextElement();
+			if (!isFirst) {
+				returned = returned + ",";
+				isFirst = false;
+			}
+			returned = returned + next;
+		}
+		returned = returned + "]";
+		return returned;
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _panel;
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return _panel;
+	}
 
-    public void addToSelected(Object v)
-    {
-        _selectedList.add(v);
-        updateModelFromWidget();
-    }
+	public void addToSelected(Object v) {
+		_selectedList.add(v);
+		updateModelFromWidget();
+	}
 
-    public void removeFromSelected(Object v)
-    {
-        _selectedList.remove(v);
-        updateModelFromWidget();
-    }
+	public void removeFromSelected(Object v) {
+		_selectedList.remove(v);
+		updateModelFromWidget();
+	}
 
 }

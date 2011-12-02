@@ -33,45 +33,40 @@ import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class GoToCorrespondingWOInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	GoToCorrespondingWOInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(GoToCorrespondingWO.actionType,actionInitializer);
+	GoToCorrespondingWOInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(GoToCorrespondingWO.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
-     @Override
-	protected FlexoActionFinalizer<GoToCorrespondingWO> getDefaultFinalizer() 
-	{
+
+	@Override
+	protected FlexoActionFinalizer<GoToCorrespondingWO> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GoToCorrespondingWO>() {
-            @Override
-			public boolean run(ActionEvent e, GoToCorrespondingWO action)
-            {
-                CGJavaFile file = action.getFocusedObject();
-                for (CGFile f : file.getRepository().getFiles()) {
-                    if ((f!=file) && (f instanceof CGWOFile) && (f.getResource()!=null) && (f.getResource().getGenerator()==file.getResource().getGenerator())) {
-                        getController().setCurrentEditedObjectAsModuleView(f);
-                        return true;
-                    }
-                }
-       			return false;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, GoToCorrespondingWO action) {
+				CGJavaFile file = action.getFocusedObject();
+				for (CGFile f : file.getRepository().getFiles()) {
+					if ((f != file) && (f instanceof CGWOFile) && (f.getResource() != null)
+							&& (f.getResource().getGenerator() == file.getResource().getGenerator())) {
+						getController().setCurrentEditedObjectAsModuleView(f);
+						return true;
+					}
+				}
+				return false;
+			}
+		};
 	}
-     
-     @Override
-    protected Icon getEnabledIcon() 
-     {
-     	return FilesIconLibrary.SMALL_WO_FILE_ICON;
-    }
+
+	@Override
+	protected Icon getEnabledIcon() {
+		return FilesIconLibrary.SMALL_WO_FILE_ICON;
+	}
 
 }

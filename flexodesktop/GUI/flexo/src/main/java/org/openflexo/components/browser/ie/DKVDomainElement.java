@@ -26,55 +26,51 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.dkv.Domain;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVDomainElement extends BrowserElement
-{
+public class DKVDomainElement extends BrowserElement {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public DKVDomainElement(Domain object,
-            ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.DKV_DOMAIN, browser, parent);
-    }
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public DKVDomainElement(Domain object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.DKV_DOMAIN, browser, parent);
+	}
 
-    /**
-     * Overrides getName
-     * @see org.openflexo.components.browser.BrowserElement#getName()
-     */
-    @Override
-	public String getName()
-    {
-        return ((Domain)getObject()).getName();
-    }
+	/**
+	 * Overrides getName
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#getName()
+	 */
+	@Override
+	public String getName() {
+		return ((Domain) getObject()).getName();
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        Domain dom = (Domain) getObject();
-        addToChilds(dom.getKeyList());
-        //addToChilds(dom.getValueList());
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		Domain dom = (Domain) getObject();
+		addToChilds(dom.getKeyList());
+		// addToChilds(dom.getValueList());
+	}
 
-    /**
-     * Overrides update
-     * @see org.openflexo.components.browser.BrowserElement#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-    }
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+	}
 
 }

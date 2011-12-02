@@ -53,17 +53,19 @@ import org.apache.xmlbeans.impl.common.XmlErrorWatcher;
 import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument;
 import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument.Schema;
 
-public class MySchemaTypeSystemCompiler
-{
-	  public static SchemaTypeSystem compile2(String name, SchemaTypeSystem existingSTS,
-		        XmlObject[] schemas, BindingConfig config, SchemaTypeLoader linkTo, Filer filer, XmlOptions options){
-		  try{
-		  SchemaTypeSystem sys= XmlBeans.compileXmlBeans( name,  existingSTS, schemas,  config,  linkTo,  filer,  options) ;
-		  return sys;
-		  }catch(XmlException e){e.printStackTrace(); return null;}
-		
-	  }
-	
+public class MySchemaTypeSystemCompiler {
+	public static SchemaTypeSystem compile2(String name, SchemaTypeSystem existingSTS, XmlObject[] schemas, BindingConfig config,
+			SchemaTypeLoader linkTo, Filer filer, XmlOptions options) {
+		try {
+			SchemaTypeSystem sys = XmlBeans.compileXmlBeans(name, existingSTS, schemas, config, linkTo, filer, options);
+			return sys;
+		} catch (XmlException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
 	/*
 	SchemaTypeSystem sts = XmlBeans.compileXsd(new XmlObject[]
 	                                                         { XmlObject.Factory.parse(myXSDFile) },
@@ -73,247 +75,211 @@ public class MySchemaTypeSystemCompiler
 	                                                         { sts, XmlBeans.getBuiltinTypeSystem() });
 	                                                      XmlObject mydoc = stl.parse(instanceFile, null, null);
 	                                                      System.out.println("Document valid: " + mydoc.validate());
-	  */                                                    
+	  */
 
-    /**
-     * Please do not invoke this method directly as the signature could change unexpectedly.
-     * Use one of
-     * {@link XmlBeans#loadXsd(XmlObject[])},
-     * {@link XmlBeans#compileXsd(XmlObject[], SchemaTypeLoader, XmlOptions)},
-     * or
-     * {@link XmlBeans#compileXmlBeans(String, SchemaTypeSystem, XmlObject[], BindingConfig, SchemaTypeLoader, Filer, XmlOptions)}
-     */
-    public static SchemaTypeSystemImpl compile(String name, SchemaTypeSystem existingSTS,
-        XmlObject[] input, BindingConfig config, SchemaTypeLoader linkTo, Filer filer, XmlOptions options)
-        throws XmlException
-    {
-        options = XmlOptions.maskNull(options);
-        ArrayList schemas = new ArrayList();
+	/**
+	 * Please do not invoke this method directly as the signature could change unexpectedly. Use one of
+	 * {@link XmlBeans#loadXsd(XmlObject[])}, {@link XmlBeans#compileXsd(XmlObject[], SchemaTypeLoader, XmlOptions)}, or
+	 * {@link XmlBeans#compileXmlBeans(String, SchemaTypeSystem, XmlObject[], BindingConfig, SchemaTypeLoader, Filer, XmlOptions)}
+	 */
+	public static SchemaTypeSystemImpl compile(String name, SchemaTypeSystem existingSTS, XmlObject[] input, BindingConfig config,
+			SchemaTypeLoader linkTo, Filer filer, XmlOptions options) throws XmlException {
+		options = XmlOptions.maskNull(options);
+		ArrayList schemas = new ArrayList();
 
-        if (input != null)
-        {
-            for (int i = 0; i < input.length; i++)
-            {
-                if (input[i] instanceof Schema)
-                    schemas.add(input[i]);
-                else if (input[i] instanceof SchemaDocument && ((SchemaDocument)input[i]).getSchema() != null)
-                    schemas.add(((SchemaDocument)input[i]).getSchema());
-                else
-                    throw new XmlException("Thread " + Thread.currentThread().getName() +  ": The " + i + "th supplied input is not a schema document: its type is " + input[i].schemaType());
-            }
-        }
+		if (input != null) {
+			for (int i = 0; i < input.length; i++) {
+				if (input[i] instanceof Schema) {
+					schemas.add(input[i]);
+				} else if (input[i] instanceof SchemaDocument && ((SchemaDocument) input[i]).getSchema() != null) {
+					schemas.add(((SchemaDocument) input[i]).getSchema());
+				} else {
+					throw new XmlException("Thread " + Thread.currentThread().getName() + ": The " + i
+							+ "th supplied input is not a schema document: its type is " + input[i].schemaType());
+				}
+			}
+		}
 
-        Collection userErrors = (Collection)options.get(XmlOptions.ERROR_LISTENER);
-        XmlErrorWatcher errorWatcher = new XmlErrorWatcher(userErrors);
+		Collection userErrors = (Collection) options.get(XmlOptions.ERROR_LISTENER);
+		XmlErrorWatcher errorWatcher = new XmlErrorWatcher(userErrors);
 
-        /** MODIF FROM ORIGINAL: javaize set to TRUE
-        *SchemaTypeSystemImpl stsi = compileImpl(existingSTS, name,
-        *    (Schema[])schemas.toArray(new Schema[schemas.size()]),
-        *    config, linkTo, options, errorWatcher, filer!=null, null, null, null);
-        */
-        SchemaTypeSystemImpl stsi = compileImpl(existingSTS, name,
-                (Schema[])schemas.toArray(new Schema[schemas.size()]),
-                config, linkTo, options, errorWatcher, true, null, null, null);
-        
-        // if there is an error and compile didn't recover (stsi==null), throw exception
-        if (errorWatcher.hasError() && stsi == null)
-        {
-            throw new XmlException(errorWatcher.firstError());
-        }
+		/**
+		 * MODIF FROM ORIGINAL: javaize set to TRUE SchemaTypeSystemImpl stsi = compileImpl(existingSTS, name, (Schema[])schemas.toArray(new
+		 * Schema[schemas.size()]), config, linkTo, options, errorWatcher, filer!=null, null, null, null);
+		 */
+		SchemaTypeSystemImpl stsi = compileImpl(existingSTS, name, (Schema[]) schemas.toArray(new Schema[schemas.size()]), config, linkTo,
+				options, errorWatcher, true, null, null, null);
 
-        /** MODIF FROM ORIGINAL: DO NOT WRITE FILES
-        if (stsi != null && !stsi.isIncomplete() && filer != null)
-        {
-            stsi.save(filer);
-            generateTypes(stsi, filer, options);
-        }
-        */
-        return stsi;
-    }
+		// if there is an error and compile didn't recover (stsi==null), throw exception
+		if (errorWatcher.hasError() && stsi == null) {
+			throw new XmlException(errorWatcher.firstError());
+		}
 
-    //
-    // Compiles a SchemaTypeSystem
-    //
-    public static SchemaTypeSystemImpl compileImpl( SchemaTypeSystem system, String name,
-        Schema[] schemas, BindingConfig config, SchemaTypeLoader linkTo,
-        XmlOptions options, Collection outsideErrors, boolean javaize,
-        URI baseURI, Map sourcesToCopyMap, File schemasDir)
-    {
-        if (linkTo == null)
-            throw new IllegalArgumentException("Must supply linkTo");
+		/**
+		 * MODIF FROM ORIGINAL: DO NOT WRITE FILES if (stsi != null && !stsi.isIncomplete() && filer != null) { stsi.save(filer);
+		 * generateTypes(stsi, filer, options); }
+		 */
+		return stsi;
+	}
 
-        XmlErrorWatcher errorWatcher = new XmlErrorWatcher(outsideErrors);
-        boolean incremental = system != null;
+	//
+	// Compiles a SchemaTypeSystem
+	//
+	public static SchemaTypeSystemImpl compileImpl(SchemaTypeSystem system, String name, Schema[] schemas, BindingConfig config,
+			SchemaTypeLoader linkTo, XmlOptions options, Collection outsideErrors, boolean javaize, URI baseURI, Map sourcesToCopyMap,
+			File schemasDir) {
+		if (linkTo == null) {
+			throw new IllegalArgumentException("Must supply linkTo");
+		}
 
-        // construct the state
-        StscState state = StscState.start();
-        boolean validate = (options == null || !options.hasOption(XmlOptions.COMPILE_NO_VALIDATION));
-        try
-        {
-            state.setErrorListener(errorWatcher);
-            state.setBindingConfig(config);
-            state.setOptions(options);
-            state.setGivenTypeSystemName(name);
-            state.setSchemasDir(schemasDir);
-            if (baseURI != null)
-                state.setBaseUri(baseURI);
+		XmlErrorWatcher errorWatcher = new XmlErrorWatcher(outsideErrors);
+		boolean incremental = system != null;
 
-            // construct the classpath (you always get the builtin types)
-            linkTo = SchemaTypeLoaderImpl.build(new SchemaTypeLoader[] { BuiltinSchemaTypeSystem.get(), linkTo }, null, null);
-            state.setImportingTypeLoader(linkTo);
+		// construct the state
+		StscState state = StscState.start();
+		boolean validate = (options == null || !options.hasOption(XmlOptions.COMPILE_NO_VALIDATION));
+		try {
+			state.setErrorListener(errorWatcher);
+			state.setBindingConfig(config);
+			state.setOptions(options);
+			state.setGivenTypeSystemName(name);
+			state.setSchemasDir(schemasDir);
+			if (baseURI != null) {
+				state.setBaseUri(baseURI);
+			}
 
-            List validSchemas = new ArrayList(schemas.length);
+			// construct the classpath (you always get the builtin types)
+			linkTo = SchemaTypeLoaderImpl.build(new SchemaTypeLoader[] { BuiltinSchemaTypeSystem.get(), linkTo }, null, null);
+			state.setImportingTypeLoader(linkTo);
 
-            // load all the xsd files into it
-            if (validate)
-            {
-                XmlOptions validateOptions = new XmlOptions().setErrorListener(errorWatcher);
-                if (options.hasOption(XmlOptions.VALIDATE_TREAT_LAX_AS_SKIP))
-                    validateOptions.setValidateTreatLaxAsSkip();
-                for (int i = 0; i < schemas.length; i++)
-                {
-                    if (schemas[i].validate(validateOptions))
-                        validSchemas.add(schemas[i]);
-                }
-            }
-            else
-            {
-                validSchemas.addAll(Arrays.asList(schemas));
-            }
+			List validSchemas = new ArrayList(schemas.length);
 
-            Schema[] startWith = (Schema[])validSchemas.toArray(new Schema[validSchemas.size()]);
+			// load all the xsd files into it
+			if (validate) {
+				XmlOptions validateOptions = new XmlOptions().setErrorListener(errorWatcher);
+				if (options.hasOption(XmlOptions.VALIDATE_TREAT_LAX_AS_SKIP)) {
+					validateOptions.setValidateTreatLaxAsSkip();
+				}
+				for (int i = 0; i < schemas.length; i++) {
+					if (schemas[i].validate(validateOptions)) {
+						validSchemas.add(schemas[i]);
+					}
+				}
+			} else {
+				validSchemas.addAll(Arrays.asList(schemas));
+			}
 
-            if (incremental)
-            {
-                Set namespaces = new HashSet();
-                startWith = getSchemasToRecompile((SchemaTypeSystemImpl)system, startWith, namespaces);
-                state.initFromTypeSystem((SchemaTypeSystemImpl)system, namespaces);
-            }
-            else
-            {
-                state.setDependencies(new SchemaDependencies());
-            }
+			Schema[] startWith = (Schema[]) validSchemas.toArray(new Schema[validSchemas.size()]);
 
-            // deal with imports and includes
-            StscImporter.SchemaToProcess[] schemasAndChameleons = StscImporter.resolveImportsAndIncludes(startWith);
+			if (incremental) {
+				Set namespaces = new HashSet();
+				startWith = getSchemasToRecompile((SchemaTypeSystemImpl) system, startWith, namespaces);
+				state.initFromTypeSystem((SchemaTypeSystemImpl) system, namespaces);
+			} else {
+				state.setDependencies(new SchemaDependencies());
+			}
 
-            // call the translator so that it may also perform magic
-            StscTranslator.addAllDefinitions(schemasAndChameleons);
+			// deal with imports and includes
+			StscImporter.SchemaToProcess[] schemasAndChameleons = StscImporter.resolveImportsAndIncludes(startWith);
 
-            // call the resolver to do its magic
-            StscResolver.resolveAll();
-            
-            // call the checker to check both restrictions and defaults
-            StscChecker.checkAll();
+			// call the translator so that it may also perform magic
+			StscTranslator.addAllDefinitions(schemasAndChameleons);
 
-            // call the javaizer to do its magic
-            StscJavaizer.javaizeAllTypes(javaize);
+			// call the resolver to do its magic
+			StscResolver.resolveAll();
 
-            // construct the loader out of the state
-           
-            StscState.get().sts().loadFromStscState(state);
+			// call the checker to check both restrictions and defaults
+			StscChecker.checkAll();
 
-            // fill in the source-copy map
-            if (sourcesToCopyMap != null)
-                sourcesToCopyMap.putAll(state.sourceCopyMap());
+			// call the javaizer to do its magic
+			StscJavaizer.javaizeAllTypes(javaize);
 
-            if (errorWatcher.hasError())
-            {
-                // EXPERIMENTAL: recovery from compilation errors and partial type system
-                if (state.allowPartial() && state.getRecovered() == errorWatcher.size())
-                {
-                    // if partial type system allowed and all errors were recovered
-                    StscState.get().sts().setIncomplete(true);
-                }
-                else
-                {
-                    // if any non-recoverable errors, return null
-                    return null;
-                }
-            }
+			// construct the loader out of the state
 
-            if (system != null)
-                ((SchemaTypeSystemImpl) system).setIncomplete(true);
+			StscState.get().sts().loadFromStscState(state);
 
-            return StscState.get().sts();
-        }
-        finally
-        {
-            StscState.end();
-        }
-    }
+			// fill in the source-copy map
+			if (sourcesToCopyMap != null) {
+				sourcesToCopyMap.putAll(state.sourceCopyMap());
+			}
 
-    /**
-     * Get the list of Schemas to be recompiled, based on the list of Schemas that
-     * were modified.
-     * We make use of the depencency information that we stored in the typesystem
-     * and of the entity resolvers that have been set up
-     */
-    private static Schema[] getSchemasToRecompile(SchemaTypeSystemImpl system,
-        Schema[] modified, Set namespaces)
-    {
-        Set modifiedFiles = new HashSet();
-        Map haveFile = new HashMap();
-        List result = new ArrayList();
-        for (int i = 0; i < modified.length; i++)
-        {
-            String fileURL = modified[i].documentProperties().getSourceName();
-            if (fileURL == null)
-                throw new IllegalArgumentException("One of the Schema files passed in" +
-                    " doesn't have the source set, which prevents it to be incrementally" +
-                    " compiled");
-            modifiedFiles.add(fileURL);
-            haveFile.put(fileURL, modified[i]);
-            result.add(modified[i]);
-        }
-        SchemaDependencies dep = system.getDependencies();
-        List nss = dep.getNamespacesTouched(modifiedFiles);
-        namespaces.addAll(dep.computeTransitiveClosure(nss));
-        List needRecompilation = dep.getFilesTouched(namespaces);
-        StscState.get().setDependencies(new SchemaDependencies(dep, namespaces));
-        for (int i = 0; i < needRecompilation.size(); i++)
-        {
-            String url = (String) needRecompilation.get(i);
-            Schema have = (Schema) haveFile.get(url);
-            if (have == null)
-            {
-                // We have to load the file from the entity resolver
-                try
-                {
-                    XmlObject xdoc = StscImporter.DownloadTable.
-                        downloadDocument(StscState.get().getS4SLoader(), null, url);
-                    XmlOptions voptions = new XmlOptions();
-                    voptions.setErrorListener(StscState.get().getErrorListener());
-                    if (!(xdoc instanceof SchemaDocument) || !xdoc.validate(voptions))
-                    {
-                        StscState.get().error("Referenced document is not a valid schema, URL = " + url, XmlErrorCodes.CANNOT_FIND_RESOURCE, null);
-                        continue;
-                    }
+			if (errorWatcher.hasError()) {
+				// EXPERIMENTAL: recovery from compilation errors and partial type system
+				if (state.allowPartial() && state.getRecovered() == errorWatcher.size()) {
+					// if partial type system allowed and all errors were recovered
+					StscState.get().sts().setIncomplete(true);
+				} else {
+					// if any non-recoverable errors, return null
+					return null;
+				}
+			}
 
-                    SchemaDocument sDoc = (SchemaDocument)xdoc;
+			if (system != null) {
+				((SchemaTypeSystemImpl) system).setIncomplete(true);
+			}
 
-                    result.add(sDoc.getSchema());
-                }
-                catch (java.net.MalformedURLException mfe)
-                {
-                    StscState.get().error(XmlErrorCodes.EXCEPTION_LOADING_URL, new Object[] { "MalformedURLException", url, mfe.getMessage() }, null);
-                    continue;
-                }
-                catch (java.io.IOException ioe)
-                {
-                    StscState.get().error(XmlErrorCodes.EXCEPTION_LOADING_URL, new Object[] { "IOException", url, ioe.getMessage() }, null);
-                    continue;
-                }
-                catch (XmlException xmle)
-                {
-                    StscState.get().error(XmlErrorCodes.EXCEPTION_LOADING_URL, new Object[] { "XmlException", url, xmle.getMessage() }, null);
-                    continue;
-                }
-            }
-        }
-        return (Schema[]) result.toArray(new Schema[result.size()]);
-    }
+			return StscState.get().sts();
+		} finally {
+			StscState.end();
+		}
+	}
 
+	/**
+	 * Get the list of Schemas to be recompiled, based on the list of Schemas that were modified. We make use of the depencency information
+	 * that we stored in the typesystem and of the entity resolvers that have been set up
+	 */
+	private static Schema[] getSchemasToRecompile(SchemaTypeSystemImpl system, Schema[] modified, Set namespaces) {
+		Set modifiedFiles = new HashSet();
+		Map haveFile = new HashMap();
+		List result = new ArrayList();
+		for (int i = 0; i < modified.length; i++) {
+			String fileURL = modified[i].documentProperties().getSourceName();
+			if (fileURL == null) {
+				throw new IllegalArgumentException("One of the Schema files passed in"
+						+ " doesn't have the source set, which prevents it to be incrementally" + " compiled");
+			}
+			modifiedFiles.add(fileURL);
+			haveFile.put(fileURL, modified[i]);
+			result.add(modified[i]);
+		}
+		SchemaDependencies dep = system.getDependencies();
+		List nss = dep.getNamespacesTouched(modifiedFiles);
+		namespaces.addAll(dep.computeTransitiveClosure(nss));
+		List needRecompilation = dep.getFilesTouched(namespaces);
+		StscState.get().setDependencies(new SchemaDependencies(dep, namespaces));
+		for (int i = 0; i < needRecompilation.size(); i++) {
+			String url = (String) needRecompilation.get(i);
+			Schema have = (Schema) haveFile.get(url);
+			if (have == null) {
+				// We have to load the file from the entity resolver
+				try {
+					XmlObject xdoc = StscImporter.DownloadTable.downloadDocument(StscState.get().getS4SLoader(), null, url);
+					XmlOptions voptions = new XmlOptions();
+					voptions.setErrorListener(StscState.get().getErrorListener());
+					if (!(xdoc instanceof SchemaDocument) || !xdoc.validate(voptions)) {
+						StscState.get().error("Referenced document is not a valid schema, URL = " + url,
+								XmlErrorCodes.CANNOT_FIND_RESOURCE, null);
+						continue;
+					}
 
-  
+					SchemaDocument sDoc = (SchemaDocument) xdoc;
+
+					result.add(sDoc.getSchema());
+				} catch (java.net.MalformedURLException mfe) {
+					StscState.get().error(XmlErrorCodes.EXCEPTION_LOADING_URL,
+							new Object[] { "MalformedURLException", url, mfe.getMessage() }, null);
+					continue;
+				} catch (java.io.IOException ioe) {
+					StscState.get().error(XmlErrorCodes.EXCEPTION_LOADING_URL, new Object[] { "IOException", url, ioe.getMessage() }, null);
+					continue;
+				} catch (XmlException xmle) {
+					StscState.get().error(XmlErrorCodes.EXCEPTION_LOADING_URL, new Object[] { "XmlException", url, xmle.getMessage() },
+							null);
+					continue;
+				}
+			}
+		}
+		return (Schema[]) result.toArray(new Schema[result.size()]);
+	}
+
 }

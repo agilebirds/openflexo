@@ -29,51 +29,43 @@ import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.toolbox.TokenMarkerStyle;
 import org.openflexo.xmlcode.StringEncoder;
 
-
 /**
- * Utility class used to define AutomaticMergeResolvingModel for the
- * MergedDocumentType for each ResourceType.
+ * Utility class used to define AutomaticMergeResolvingModel for the MergedDocumentType for each ResourceType.
  * 
  * @author sylvain
  */
 public class DMAutomergeInitializer {
 
-    protected static final XMLAutomaticMergeResolvingRule NEWEST_LAST_UPDATE 
-   = new XMLAutomaticMergeResolvingRule() {
-	   @Override
-	public String getMergedResult(MergeChange change) 
-	   {
-		   String leftDateAsString = extractContainerAttributeValueFromLeft(change, "lastUpdate");
-		   String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastUpdate");
-		   Date leftDate = StringEncoder.decodeObject(leftDateAsString,Date.class);
-		   Date rightDate = StringEncoder.decodeObject(rightDateAsString,Date.class);
-		   if (leftDate.after(rightDate)) {
-			return change.getLeftText();
+	protected static final XMLAutomaticMergeResolvingRule NEWEST_LAST_UPDATE = new XMLAutomaticMergeResolvingRule() {
+		@Override
+		public String getMergedResult(MergeChange change) {
+			String leftDateAsString = extractContainerAttributeValueFromLeft(change, "lastUpdate");
+			String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastUpdate");
+			Date leftDate = StringEncoder.decodeObject(leftDateAsString, Date.class);
+			Date rightDate = StringEncoder.decodeObject(rightDateAsString, Date.class);
+			if (leftDate.after(rightDate)) {
+				return change.getLeftText();
+			}
+			return change.getRightText();
 		}
-		   return change.getRightText();
-	   }
-	   @Override
-	public boolean isApplicable(MergeChange change) 
-	   {
-		   return isInsideAnXMLAttributeValueConflict(change, "lastUpdate");
-	   }			
-	   @Override
-	public String getDescription() 
-	   {
-		   return "choosen_newest_last_update";
-	   }
-   };
 
-	public static void initialize()
-	{
-		DefaultAutomaticMergeResolvingModel dmAutomergeModel
-		= new FlexoAutomaticMergeResolvingModel();
+		@Override
+		public boolean isApplicable(MergeChange change) {
+			return isInsideAnXMLAttributeValueConflict(change, "lastUpdate");
+		}
+
+		@Override
+		public String getDescription() {
+			return "choosen_newest_last_update";
+		}
+	};
+
+	public static void initialize() {
+		DefaultAutomaticMergeResolvingModel dmAutomergeModel = new FlexoAutomaticMergeResolvingModel();
 
 		dmAutomergeModel.addToDetailedRules(NEWEST_LAST_UPDATE);
 
-		ResourceType.DATA_MODEL.setMergedDocumentType(new DefaultMergedDocumentType(
-				DelimitingMethod.XML,
-				TokenMarkerStyle.XML,
+		ResourceType.DATA_MODEL.setMergedDocumentType(new DefaultMergedDocumentType(DelimitingMethod.XML, TokenMarkerStyle.XML,
 				dmAutomergeModel));
 
 	}

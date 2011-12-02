@@ -25,34 +25,31 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DuplicateDocTypeException extends FlexoException
-{
+public class DuplicateDocTypeException extends FlexoException {
 
-    private DocType docType;
-    
-    /**
-     * @param dt
-     */
-    public DuplicateDocTypeException(DocType dt)
-    {
-        this.docType = dt;
-    }
+	private DocType docType;
 
-    public DocType getDocType()
-    {
-        return docType;
-    }
-    
-    /**
-     * Overrides getLocalizedMessage
-     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-     */
-    @Override
-    public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("duplicate_doc_type");
-    }
+	/**
+	 * @param dt
+	 */
+	public DuplicateDocTypeException(DocType dt) {
+		this.docType = dt;
+	}
+
+	public DocType getDocType() {
+		return docType;
+	}
+
+	/**
+	 * Overrides getLocalizedMessage
+	 * 
+	 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+	 */
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("duplicate_doc_type");
+	}
 
 }

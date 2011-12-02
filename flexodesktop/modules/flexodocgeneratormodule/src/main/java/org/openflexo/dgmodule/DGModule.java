@@ -34,31 +34,27 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * Documentation generator module
- *
+ * 
  * @author gpolet
  */
-public class DGModule extends FlexoModule
-{
+public class DGModule extends FlexoModule {
 
 	private static final Logger logger = Logger.getLogger(DGModule.class.getPackage().getName());
 
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[]{Inspectors.GENERATORS,Inspectors.DE,Inspectors.DG};
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.DE, Inspectors.DG };
 
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
-	 *
+	 * The 'main' method of module allow to launch this module as a single-module application
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.DG_MODULE);
 	}
 
-	public DGModule(InteractiveFlexoEditor projectEditor) throws Exception
-	{
+	public DGModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 		setFlexoController(new DGController(projectEditor, this));
 		DGPreferences.init(getDGController());
@@ -72,34 +68,31 @@ public class DGModule extends FlexoModule
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public DGController getDGController()
-	{
+	public DGController getDGController() {
 		return (DGController) getFlexoController();
 	}
 
 	/**
 	 * Overrides getDefaultObjectToSelect
-	 *
+	 * 
 	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
 	 */
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
+	public FlexoModelObject getDefaultObjectToSelect() {
 		return getProject().getGeneratedDoc();
 	}
 
 	/**
 	 * Overrides moduleWillClose
+	 * 
 	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
 	 */
 	@Override
-	public void moduleWillClose()
-	{
+	public void moduleWillClose() {
 		super.moduleWillClose();
 		getProject().getGeneratedDoc().setFactory(null);
 		DGPreferences.reset();

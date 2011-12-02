@@ -40,222 +40,213 @@ import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * Simple widget allowing to display/edit a String
  * 
  * @author bmangez
  */
-public class TextFieldAndLabelWidget extends DenaliWidget<String>
-{
+public class TextFieldAndLabelWidget extends DenaliWidget<String> {
 
-    private static final Logger logger = Logger.getLogger(TextFieldAndLabelWidget.class.getPackage()
-            .getName());
+	private static final Logger logger = Logger.getLogger(TextFieldAndLabelWidget.class.getPackage().getName());
 
-    private JTextField _textField;
-    private JLabel widgetLabel;
-    private JPanel _panel;
+	private JTextField _textField;
+	private JLabel widgetLabel;
+	private JPanel _panel;
 
-    boolean validateOnReturn;
+	boolean validateOnReturn;
 
-    // private boolean hasFocus = false;
+	// private boolean hasFocus = false;
 
-    private static final int DEFAULT_COLUMNS = 5;
+	private static final int DEFAULT_COLUMNS = 5;
 
-    public static final String COLUMNS_PARAM = "columns";
-    public static final String PASSWORD_PARAM = "password";
+	public static final String COLUMNS_PARAM = "columns";
+	public static final String PASSWORD_PARAM = "password";
 
-    public static final String VALIDATE_ON_RETURN = "validateOnReturn";
+	public static final String VALIDATE_ON_RETURN = "validateOnReturn";
 
-    public static final String ADDITIONAL_LABEL = "additionalLabel";
+	public static final String ADDITIONAL_LABEL = "additionalLabel";
 
-    public TextFieldAndLabelWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        if (model.hasValueForParameter(PASSWORD_PARAM) && model.getBooleanValueForParameter(PASSWORD_PARAM)) {
-            _textField = new JPasswordField() {
-                /**
-                 * Overrides getMinimumSize
-                 * @see javax.swing.JComponent#getMinimumSize()
-                 */
-                @Override
-                public Dimension getMinimumSize()
-                {
-                    return MINIMUM_SIZE;
-                }
-            };
-        } 
-        else {
-        	_textField = new JTextField() {
-                /**
-                 * Overrides getMinimumSize
-                 * @see javax.swing.JComponent#getMinimumSize()
-                 */
-                @Override
-                public Dimension getMinimumSize()
-                {
-                    return MINIMUM_SIZE;
-                }
-            };
-        }
-        
-        widgetLabel = new JLabel("prout");
-        widgetLabel.setFont(DEFAULT_MEDIUM_FONT);
-        _panel = new JPanel(new BorderLayout());
-        _panel.add(_textField,BorderLayout.CENTER);
-        _panel.add(widgetLabel,BorderLayout.SOUTH);
-        
-        
-        if (model.hasValueForParameter(VALIDATE_ON_RETURN)) {
-            validateOnReturn = model.getBooleanValueForParameter(VALIDATE_ON_RETURN);
-        } else {
-            validateOnReturn = false;
-        }
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("validateOnReturn=" + validateOnReturn);
-        if (model.hasValueForParameter(COLUMNS_PARAM)) {
-            int colNb = model.getIntValueForParameter(COLUMNS_PARAM);
-            _textField.setColumns(colNb > 0 ? colNb : DEFAULT_COLUMNS);
-        } else {
-            _textField.setColumns(DEFAULT_COLUMNS);
-        }
-        _textField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-			public void changedUpdate(DocumentEvent e)
-            {
-                // if (logger.isLoggable(Level.FINE)) logger.finer
-                // ("changedUpdate() validateOnReturn="+validateOnReturn+"
-                // widgetUpdating="+widgetUpdating);
-                if ((!validateOnReturn) && (!widgetUpdating)) {
-                    // if (logger.isLoggable(Level.FINE)) logger.fine
-                    // ("changedUpdate()");e
-                    updateModelFromWidget();
-                }
-            }
+	public TextFieldAndLabelWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		if (model.hasValueForParameter(PASSWORD_PARAM) && model.getBooleanValueForParameter(PASSWORD_PARAM)) {
+			_textField = new JPasswordField() {
+				/**
+				 * Overrides getMinimumSize
+				 * 
+				 * @see javax.swing.JComponent#getMinimumSize()
+				 */
+				@Override
+				public Dimension getMinimumSize() {
+					return MINIMUM_SIZE;
+				}
+			};
+		} else {
+			_textField = new JTextField() {
+				/**
+				 * Overrides getMinimumSize
+				 * 
+				 * @see javax.swing.JComponent#getMinimumSize()
+				 */
+				@Override
+				public Dimension getMinimumSize() {
+					return MINIMUM_SIZE;
+				}
+			};
+		}
 
-            @Override
-			public void insertUpdate(DocumentEvent e)
-            {
-                // if (logger.isLoggable(Level.FINE)) logger.finer
-                // ("insertUpdate() validateOnReturn="+validateOnReturn+"
-                // widgetUpdating="+widgetUpdating);
-                if ((!validateOnReturn) && (!widgetUpdating)) {
-                    // if (logger.isLoggable(Level.FINE)) logger.fine
-                    // ("insertUpdate()");
-                	try {
+		widgetLabel = new JLabel("prout");
+		widgetLabel.setFont(DEFAULT_MEDIUM_FONT);
+		_panel = new JPanel(new BorderLayout());
+		_panel.add(_textField, BorderLayout.CENTER);
+		_panel.add(widgetLabel, BorderLayout.SOUTH);
+
+		if (model.hasValueForParameter(VALIDATE_ON_RETURN)) {
+			validateOnReturn = model.getBooleanValueForParameter(VALIDATE_ON_RETURN);
+		} else {
+			validateOnReturn = false;
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("validateOnReturn=" + validateOnReturn);
+		}
+		if (model.hasValueForParameter(COLUMNS_PARAM)) {
+			int colNb = model.getIntValueForParameter(COLUMNS_PARAM);
+			_textField.setColumns(colNb > 0 ? colNb : DEFAULT_COLUMNS);
+		} else {
+			_textField.setColumns(DEFAULT_COLUMNS);
+		}
+		_textField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// if (logger.isLoggable(Level.FINE)) logger.finer
+				// ("changedUpdate() validateOnReturn="+validateOnReturn+"
+				// widgetUpdating="+widgetUpdating);
+				if ((!validateOnReturn) && (!widgetUpdating)) {
+					// if (logger.isLoggable(Level.FINE)) logger.fine
+					// ("changedUpdate()");e
+					updateModelFromWidget();
+				}
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				// if (logger.isLoggable(Level.FINE)) logger.finer
+				// ("insertUpdate() validateOnReturn="+validateOnReturn+"
+				// widgetUpdating="+widgetUpdating);
+				if ((!validateOnReturn) && (!widgetUpdating)) {
+					// if (logger.isLoggable(Level.FINE)) logger.fine
+					// ("insertUpdate()");
+					try {
 						if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 							if (e.getLength() == 1) {
-								char c = _textField.getText().charAt(
-										e.getOffset());
-								if (c == '´' || c == 'ˆ' || c=='˜'||c=='`'||c=='¨')
+								char c = _textField.getText().charAt(e.getOffset());
+								if (c == '´' || c == 'ˆ' || c == '˜' || c == '`' || c == '¨') {
 									return;
+								}
 							}
 						}
 					} catch (RuntimeException e1) {
 						e1.printStackTrace();
 					}
-                		
-                    updateModelFromWidget();
-                }
-            }
 
-            @Override
-			public void removeUpdate(DocumentEvent e)
-            {
-                // if (logger.isLoggable(Level.FINE)) logger.finer
-                // ("removeUpdate() validateOnReturn="+validateOnReturn+"
-                // widgetUpdating="+widgetUpdating);
-                if ((!validateOnReturn) && (!widgetUpdating)) {
-                    // if (logger.isLoggable(Level.FINE)) logger.fine
-                    // ("removeUpdate()");
-                    updateModelFromWidget();
-                }
-            }
-        });
-        _textField.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                // if (logger.isLoggable(Level.FINE)) logger.fine
-                // ("actionPerformed()");
-                updateModelFromWidget();
-            }
-        });
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                super.focusGained(arg0);
-               _textField.selectAll();
-            }
-        });
-    }
+					updateModelFromWidget();
+				}
+			}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return String.class;
-    }
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// if (logger.isLoggable(Level.FINE)) logger.finer
+				// ("removeUpdate() validateOnReturn="+validateOnReturn+"
+				// widgetUpdating="+widgetUpdating);
+				if ((!validateOnReturn) && (!widgetUpdating)) {
+					// if (logger.isLoggable(Level.FINE)) logger.fine
+					// ("removeUpdate()");
+					updateModelFromWidget();
+				}
+			}
+		});
+		_textField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// if (logger.isLoggable(Level.FINE)) logger.fine
+				// ("actionPerformed()");
+				updateModelFromWidget();
+			}
+		});
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				super.focusGained(arg0);
+				_textField.selectAll();
+			}
+		});
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        // if (logger.isLoggable(Level.FINE)) logger.fine ("BEGIN
-        // updateWidgetFromModel()");
-        if (modelUpdating)
-            return;
-        widgetUpdating = true;
-        int caret = _textField.getCaretPosition();
-        _textField.setText(getStringValue());
-        if (caret>-1 && caret<_textField.getDocument().getLength())
-        	_textField.setCaretPosition(caret);
-        widgetLabel.setText(getAdditionalLabelValue());
-        widgetUpdating = false;
-        // if (logger.isLoggable(Level.INFO)) logger.info ("END
-        // updateWidgetFromModel()");
-        
-    }
+	@Override
+	public Class getDefaultType() {
+		return String.class;
+	}
 
-    public String getAdditionalLabelValue()
-    {
-    	//System.out.println("getAdditionalLabelValue(): "+getPropertyModel());
-    	if (getPropertyModel().hasValueForParameter(ADDITIONAL_LABEL)) {
-    		String additionalLabelPath = getPropertyModel().getValueForParameter(ADDITIONAL_LABEL);
-    		//System.out.println("additionalLabelPath="+additionalLabelPath);
-    		KeyValueCoding targetObject = PropertyModel.getTargetObject(getModel(),additionalLabelPath);
-    		//System.out.println("targetObject="+targetObject);
-    		String lastAccessor = PropertyModel.getLastAccessor(additionalLabelPath);
-    		//System.out.println("lastAccessor="+lastAccessor);
-    		if (targetObject != null) {
-    			Object returned = targetObject.objectForKey(lastAccessor);
-        		//System.out.println("returned="+returned);
-        		if (returned instanceof String) return (String)returned;
-        	} 
-    	}
-    	return "";
-    	}
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		// if (logger.isLoggable(Level.FINE)) logger.fine ("BEGIN
+		// updateWidgetFromModel()");
+		if (modelUpdating) {
+			return;
+		}
+		widgetUpdating = true;
+		int caret = _textField.getCaretPosition();
+		_textField.setText(getStringValue());
+		if (caret > -1 && caret < _textField.getDocument().getLength()) {
+			_textField.setCaretPosition(caret);
+		}
+		widgetLabel.setText(getAdditionalLabelValue());
+		widgetUpdating = false;
+		// if (logger.isLoggable(Level.INFO)) logger.info ("END
+		// updateWidgetFromModel()");
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-        // if (logger.isLoggable(Level.INFO)) logger.info ("BEGIN
-        // updateModelFromWidget()");
-        modelUpdating = true;
-        if (logger.isLoggable(Level.FINE)) logger.fine("updateModelFromWidget() in TextFieldWidget");
-        setStringValue(_textField.getText());
-        widgetLabel.setText(getAdditionalLabelValue());
-        modelUpdating = false;
-        // if (logger.isLoggable(Level.INFO)) logger.info ("END
-        // updateModelFromWidget()");
-    }
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _panel;
-    }
+	public String getAdditionalLabelValue() {
+		// System.out.println("getAdditionalLabelValue(): "+getPropertyModel());
+		if (getPropertyModel().hasValueForParameter(ADDITIONAL_LABEL)) {
+			String additionalLabelPath = getPropertyModel().getValueForParameter(ADDITIONAL_LABEL);
+			// System.out.println("additionalLabelPath="+additionalLabelPath);
+			KeyValueCoding targetObject = PropertyModel.getTargetObject(getModel(), additionalLabelPath);
+			// System.out.println("targetObject="+targetObject);
+			String lastAccessor = PropertyModel.getLastAccessor(additionalLabelPath);
+			// System.out.println("lastAccessor="+lastAccessor);
+			if (targetObject != null) {
+				Object returned = targetObject.objectForKey(lastAccessor);
+				// System.out.println("returned="+returned);
+				if (returned instanceof String) {
+					return (String) returned;
+				}
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		// if (logger.isLoggable(Level.INFO)) logger.info ("BEGIN
+		// updateModelFromWidget()");
+		modelUpdating = true;
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("updateModelFromWidget() in TextFieldWidget");
+		}
+		setStringValue(_textField.getText());
+		widgetLabel.setText(getAdditionalLabelValue());
+		modelUpdating = false;
+		// if (logger.isLoggable(Level.INFO)) logger.info ("END
+		// updateModelFromWidget()");
+	}
+
+	@Override
+	public JComponent getDynamicComponent() {
+		return _panel;
+	}
 
 }

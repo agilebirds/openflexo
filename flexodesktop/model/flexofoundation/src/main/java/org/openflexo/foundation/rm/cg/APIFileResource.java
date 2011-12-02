@@ -30,36 +30,29 @@ import org.openflexo.foundation.rm.ResourceType;
  * @author sylvain
  * 
  */
-public class APIFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends ASCIIFileResource<G,F>
-{
+public class APIFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends ASCIIFileResource<G, F> {
 
-	public APIFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-     }
+	public APIFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    public APIFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	public APIFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-    public ResourceType getResourceType()
-    {
-        return ResourceType.API_FILE;
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.API_FILE;
+	}
 
+	@Override
+	protected APIFile createGeneratedResourceData() {
+		return new APIFile(getFile());
+	}
 
-    @Override
-	protected APIFile createGeneratedResourceData()
-    {
-        return new APIFile(getFile());
-    }
-    
-     public APIFile getAPIFile()
-    {
-        return (APIFile) getGeneratedResourceData();
-    }
+	public APIFile getAPIFile() {
+		return (APIFile) getGeneratedResourceData();
+	}
 
 	@Override
 	public String getGenerationResultKey() {

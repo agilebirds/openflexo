@@ -31,92 +31,79 @@ import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.cl.IECLObject;
 
+public class AddComponentFolder extends FlexoAction<AddComponentFolder, IECLObject, IECLObject> {
 
-public class AddComponentFolder extends FlexoAction<AddComponentFolder,IECLObject,IECLObject>
-{
+	private static final Logger logger = Logger.getLogger(AddComponentFolder.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddComponentFolder.class.getPackage().getName());
+	public static FlexoActionType<AddComponentFolder, IECLObject, IECLObject> actionType = new FlexoActionType<AddComponentFolder, IECLObject, IECLObject>(
+			"add_new_component_folder", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<AddComponentFolder,IECLObject,IECLObject> actionType = new FlexoActionType<AddComponentFolder,IECLObject,IECLObject> ("add_new_component_folder",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddComponentFolder makeNewAction(IECLObject focusedObject, Vector<IECLObject> globalSelection, FlexoEditor editor) {
+			return new AddComponentFolder(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddComponentFolder makeNewAction(IECLObject focusedObject, Vector<IECLObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddComponentFolder(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(IECLObject object, Vector<IECLObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(IECLObject object, Vector<IECLObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(IECLObject object, Vector<IECLObject> globalSelection) {
+			return ((object != null) && ((object instanceof FlexoComponentFolder) || (object instanceof FlexoComponentLibrary) || (object instanceof ComponentDefinition)));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(IECLObject object, Vector<IECLObject> globalSelection) 
-        {
-            return ((object != null) 
-                    && ((object instanceof FlexoComponentFolder)
-                            || (object instanceof FlexoComponentLibrary)|| (object instanceof ComponentDefinition)));
-        }
-                
-    };
-    
-    private FlexoComponentFolder _newFolder;
-    private FlexoComponentFolder _parentFolder;
-    private String _newFolderName;
-    
-    AddComponentFolder (IECLObject focusedObject, Vector<IECLObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) throws InvalidParametersException
-    {
-        logger.info ("Add component folder");
-        if (getFocusedObject() != null) {
-            if (getParentFolder() != null) {
-                _newFolder = FlexoComponentFolder.createNewFolder(getParentFolder().getComponentLibrary(), getParentFolder(), getNewFolderName());
-            }
-            else {
-            	if (!getFocusedObject().getProject().getFlexoComponentLibrary().hasRootFolder()) {
-            		_parentFolder = FlexoComponentFolder.createNewRootFolder(getFocusedObject().getProject().getFlexoComponentLibrary());
-            	}
-            	_parentFolder = getFocusedObject().getProject().getFlexoComponentLibrary().getRootFolder();
-                 _newFolder = FlexoComponentFolder.createNewFolder(getParentFolder().getComponentLibrary(), getParentFolder(), getNewFolderName());
-            }
-        }
-        else {
-        	throw new InvalidParametersException("unable to create component folder: no focused object supplied");
-        }
-    }
+	private FlexoComponentFolder _newFolder;
+	private FlexoComponentFolder _parentFolder;
+	private String _newFolderName;
 
-    public String getNewFolderName() 
-    {
-        return _newFolderName;
-    }
+	AddComponentFolder(IECLObject focusedObject, Vector<IECLObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public void setNewFolderName(String newFolderName) 
-    {
-        _newFolderName = newFolderName;
-    }
+	@Override
+	protected void doAction(Object context) throws InvalidParametersException {
+		logger.info("Add component folder");
+		if (getFocusedObject() != null) {
+			if (getParentFolder() != null) {
+				_newFolder = FlexoComponentFolder.createNewFolder(getParentFolder().getComponentLibrary(), getParentFolder(),
+						getNewFolderName());
+			} else {
+				if (!getFocusedObject().getProject().getFlexoComponentLibrary().hasRootFolder()) {
+					_parentFolder = FlexoComponentFolder.createNewRootFolder(getFocusedObject().getProject().getFlexoComponentLibrary());
+				}
+				_parentFolder = getFocusedObject().getProject().getFlexoComponentLibrary().getRootFolder();
+				_newFolder = FlexoComponentFolder.createNewFolder(getParentFolder().getComponentLibrary(), getParentFolder(),
+						getNewFolderName());
+			}
+		} else {
+			throw new InvalidParametersException("unable to create component folder: no focused object supplied");
+		}
+	}
 
-    public FlexoComponentFolder getParentFolder()
-    {
-        return _parentFolder;
-    }
+	public String getNewFolderName() {
+		return _newFolderName;
+	}
 
-    public void setParentFolder(FlexoComponentFolder parentFolder) 
-    {
-        _parentFolder = parentFolder;
-    }
+	public void setNewFolderName(String newFolderName) {
+		_newFolderName = newFolderName;
+	}
 
-    public FlexoComponentFolder getNewFolder() {
-        return _newFolder;
-    }
+	public FlexoComponentFolder getParentFolder() {
+		return _parentFolder;
+	}
 
-    
+	public void setParentFolder(FlexoComponentFolder parentFolder) {
+		_parentFolder = parentFolder;
+	}
+
+	public FlexoComponentFolder getNewFolder() {
+		return _newFolder;
+	}
+
 }

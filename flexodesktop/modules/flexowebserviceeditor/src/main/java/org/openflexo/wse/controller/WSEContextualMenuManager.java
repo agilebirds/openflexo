@@ -30,7 +30,6 @@ import org.openflexo.foundation.wkf.action.AddServiceOperation;
 import org.openflexo.foundation.wkf.action.WKFDelete;
 import org.openflexo.selection.ContextualMenuManager;
 
-
 /**
  * 
  * Contextual menu manager for this module
@@ -39,28 +38,30 @@ import org.openflexo.selection.ContextualMenuManager;
  */
 public class WSEContextualMenuManager extends ContextualMenuManager {
 
-    private WSEController _controller;
-    
-    public WSEContextualMenuManager(WSESelectionManager selectionManager, FlexoEditor editor, WSEController controller)
-    {
-        super(selectionManager,editor);
-        _controller = controller;
-    }
-    
-     @Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e)
-    {
-         // put some code here to detect focused object
-         // finally calls super's implementation
-          return super.getFocusedObject(focusedComponent,e);
-    }
-     
-     @Override
-	public boolean acceptAction(FlexoActionType actionType){
-    	 	if(actionType.equals(WKFDelete.actionType)) return false;
-    	 	else if (actionType.equals(AddServiceInterface.actionType)) return false;
-    	 	else if (actionType.equals(AddServiceOperation.actionType)) return false;
-    	 	return true;
-     }
+	private WSEController _controller;
+
+	public WSEContextualMenuManager(WSESelectionManager selectionManager, FlexoEditor editor, WSEController controller) {
+		super(selectionManager, editor);
+		_controller = controller;
+	}
+
+	@Override
+	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+		// put some code here to detect focused object
+		// finally calls super's implementation
+		return super.getFocusedObject(focusedComponent, e);
+	}
+
+	@Override
+	public boolean acceptAction(FlexoActionType actionType) {
+		if (actionType.equals(WKFDelete.actionType)) {
+			return false;
+		} else if (actionType.equals(AddServiceInterface.actionType)) {
+			return false;
+		} else if (actionType.equals(AddServiceOperation.actionType)) {
+			return false;
+		}
+		return true;
+	}
 
 }

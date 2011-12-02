@@ -27,82 +27,78 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
  * @author gpolet
  * 
  */
-public class IESpanTDWidget extends IETDWidget
-{
+public class IESpanTDWidget extends IETDWidget {
 
-    private IETDWidget spanner;
+	private IETDWidget spanner;
 
-    public IESpanTDWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, null,builder.getProject());
-        initializeDeserialization(builder);
-    }
-    
-    /**
-     * @param woComponent
-     * @param parent
-     * @param prj
-     */
-    public IESpanTDWidget(IEWOComponent woComponent, IESequenceTD parent, IETDWidget spanner, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-        this.spanner = spanner;
-        if (spanner!=null)
-        	this.spanner.addToSpannedTD(this);
-    }
+	public IESpanTDWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public IETDWidget getSpanner()
-    {
-        return spanner;
-    }
+	/**
+	 * @param woComponent
+	 * @param parent
+	 * @param prj
+	 */
+	public IESpanTDWidget(IEWOComponent woComponent, IESequenceTD parent, IETDWidget spanner, FlexoProject prj) {
+		super(woComponent, parent, prj);
+		this.spanner = spanner;
+		if (spanner != null) {
+			this.spanner.addToSpannedTD(this);
+		}
+	}
 
-    /**
-     * Returns true if the current span TD is on the same row than the spanner
-     * @return true if yLocation = spanner.yLocation
-     */
-    public boolean isOnRowSide()
-    {
-        return getYLocation() == getSpanner().getYLocation();
-    }
+	public IETDWidget getSpanner() {
+		return spanner;
+	}
 
-    /**
-     * Returns true if the current span TD is on the same column than the spanner
-     * @return true if xLocation = spanner.xLocation
-     */
-    public boolean isOnColSide()
-    {
-        return getXLocation() == getSpanner().getXLocation();
-    }
+	/**
+	 * Returns true if the current span TD is on the same row than the spanner
+	 * 
+	 * @return true if yLocation = spanner.yLocation
+	 */
+	public boolean isOnRowSide() {
+		return getYLocation() == getSpanner().getYLocation();
+	}
 
-    /**
-     * Overrides makeRealDelete
-     * 
-     * @see org.openflexo.foundation.ie.widget.IETDWidget#makeRealDelete(boolean)
-     */
-    @Override
-    public void makeRealDelete(boolean notify)
-    {
-        if (getSpanner() != null)
-            getSpanner().removeFromSpannedTD(this);
-        super.makeRealDelete(notify);
-    }
+	/**
+	 * Returns true if the current span TD is on the same column than the spanner
+	 * 
+	 * @return true if xLocation = spanner.xLocation
+	 */
+	public boolean isOnColSide() {
+		return getXLocation() == getSpanner().getXLocation();
+	}
 
-    /**
+	/**
+	 * Overrides makeRealDelete
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IETDWidget#makeRealDelete(boolean)
+	 */
+	@Override
+	public void makeRealDelete(boolean notify) {
+		if (getSpanner() != null) {
+			getSpanner().removeFromSpannedTD(this);
+		}
+		super.makeRealDelete(notify);
+	}
+
+	/**
      * 
      */
-    public void replaceByNormalTD()
-    {
-        getParent().replaceByNormalTD(this);
-    }
-    
-    /**
-     * Overrides notifyDisplayNeedsRefresh
-     * @see org.openflexo.foundation.ie.widget.IETDWidget#notifyDisplayNeedsRefresh()
-     */
-    @Override
-    public void notifyDisplayNeedsRefresh()
-    {
-        // Span TD are not represented, therefore, display that don't exist don't need a refresh
-    }
+	public void replaceByNormalTD() {
+		getParent().replaceByNormalTD(this);
+	}
+
+	/**
+	 * Overrides notifyDisplayNeedsRefresh
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IETDWidget#notifyDisplayNeedsRefresh()
+	 */
+	@Override
+	public void notifyDisplayNeedsRefresh() {
+		// Span TD are not represented, therefore, display that don't exist don't need a refresh
+	}
 
 }

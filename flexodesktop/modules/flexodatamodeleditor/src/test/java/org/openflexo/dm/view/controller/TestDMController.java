@@ -127,7 +127,7 @@ public class TestDMController extends FlexoModuleTestCase {
 			GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		}
 		ModuleLoader.fileNameToOpen = projectDirectory.getAbsolutePath();
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER"), false);
+		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
 		ModuleLoader.setProject(project);
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");

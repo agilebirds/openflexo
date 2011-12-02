@@ -24,8 +24,7 @@ import java.util.Vector;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 
-public class Language extends DRMObject implements ChoiceList,
-		Comparable<Language> {
+public class Language extends DRMObject implements ChoiceList, Comparable<Language> {
 
 	private String identifier;
 	private String name;
@@ -39,8 +38,7 @@ public class Language extends DRMObject implements ChoiceList,
 		super(docResourceCenter);
 	}
 
-	protected static Language createLanguage(String anIdentifier, String aName,
-			DocResourceCenter docResourceCenter) {
+	protected static Language createLanguage(String anIdentifier, String aName, DocResourceCenter docResourceCenter) {
 		Language returned = new Language(docResourceCenter);
 		returned.identifier = anIdentifier;
 		returned.name = aName;

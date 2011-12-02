@@ -22,46 +22,41 @@ package org.openflexo.dg.rm;
 import java.io.File;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.html.DGTextGenerator;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
+
 /**
  * 
  * @author gpolet
- *
+ * 
  */
-public class WorkflowTextFile extends TextFile implements GenerationAvailableFile
-{
+public class WorkflowTextFile extends TextFile implements GenerationAvailableFile {
 
 	protected static final Logger logger = FlexoLogger.getLogger(WorkflowTextFile.class.getPackage().getName());
 
-    public WorkflowTextFile(File f, WorkflowTextFileResource resource)
-	{
+	public WorkflowTextFile(File f, WorkflowTextFileResource resource) {
 		super(f);
 		try {
 			setFlexoResource(resource);
 		} catch (DuplicateResourceException e) {
 			e.printStackTrace();
 		}
-    }
+	}
 
-	public WorkflowTextFile()
-	{
+	public WorkflowTextFile() {
 		super();
-    }
-
-    @Override
-	public WorkflowTextFileResource getFlexoResource()
-    {
-        return (WorkflowTextFileResource)super.getFlexoResource();
-    }
+	}
 
 	@Override
-	public DGTextGenerator getGenerator() 
-	{
+	public WorkflowTextFileResource getFlexoResource() {
+		return (WorkflowTextFileResource) super.getFlexoResource();
+	}
+
+	@Override
+	public DGTextGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
-	}	
+	}
 }

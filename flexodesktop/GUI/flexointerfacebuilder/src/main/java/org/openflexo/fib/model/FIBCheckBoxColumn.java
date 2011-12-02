@@ -24,14 +24,12 @@ import java.lang.reflect.Type;
 public class FIBCheckBoxColumn extends FIBTableColumn {
 
 	@Override
-	public Type getDefaultDataClass()
-	{
+	public Type getDefaultDataClass() {
 		return Boolean.class;
 	}
 
 	@Override
-	public ColumnType getColumnType()
-	{
+	public ColumnType getColumnType() {
 		return ColumnType.CheckBox;
 	}
 }

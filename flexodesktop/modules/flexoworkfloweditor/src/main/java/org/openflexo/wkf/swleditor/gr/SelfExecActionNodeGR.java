@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-
 import java.awt.Color;
 import java.util.logging.Logger;
 
@@ -28,14 +27,13 @@ import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
+import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;
 import org.openflexo.foundation.wkf.node.SelfExecutableActionNode;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
-
 
 public class SelfExecActionNodeGR extends AbstractActionNodeGR {
 
@@ -44,14 +42,13 @@ public class SelfExecActionNodeGR extends AbstractActionNodeGR {
 	private final ForegroundStyle foreground;
 	private final BackgroundImage background;
 
-	public SelfExecActionNodeGR(SelfExecutableActionNode actionNode, SwimmingLaneRepresentation aDrawing,boolean isInPalet)
-	{
-		super(actionNode, aDrawing,isInPalet);
+	public SelfExecActionNodeGR(SelfExecutableActionNode actionNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
+		super(actionNode, aDrawing, isInPalet);
 
 		setWidth(30);
 		setHeight(30);
 
-		//setText(getActionNode().getName());
+		// setText(getActionNode().getName());
 		setIsFloatingLabel(true);
 
 		foreground = ForegroundStyle.makeStyle(Color.BLACK);
@@ -67,47 +64,41 @@ public class SelfExecActionNodeGR extends AbstractActionNodeGR {
 		setBackground(background);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 
-		addToMouseClickControls(new ExecutionPetriGraphOpener(),true);
+		addToMouseClickControls(new ExecutionPetriGraphOpener(), true);
 	}
 
 	@Override
-	public SelfExecutableActionNode getActionNode()
-	{
-		return (SelfExecutableActionNode)super.getActionNode();
+	public SelfExecutableActionNode getActionNode() {
+		return (SelfExecutableActionNode) super.getActionNode();
 	}
 
 	public class ExecutionPetriGraphOpener extends MouseClickControl {
 
-		public ExecutionPetriGraphOpener()
-		{
-			super("ExecutionPetriGraphOpener", MouseButton.LEFT, 2,
-					new CustomClickControlAction() {
+		public ExecutionPetriGraphOpener() {
+			super("ExecutionPetriGraphOpener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, java.awt.event.MouseEvent event)
-				{
+				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						java.awt.event.MouseEvent event) {
 					logger.info("Opening Execution petri graph by double-clicking");
-					OpenExecutionPetriGraph.actionType.makeNewAction(getActionNode(),null,getDrawing().getEditor()).doAction();
+					OpenExecutionPetriGraph.actionType.makeNewAction(getActionNode(), null, getDrawing().getEditor()).doAction();
 					getDrawing().updateGraphicalObjectsHierarchy();
 					return true;
 				}
-			},
-			false,false,false,false);
+			}, false, false, false, false);
 		}
 
 	}
 
 	@Override
-	public double getDefaultLabelX()
-	{
+	public double getDefaultLabelX() {
 		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getX();
 		}
-		return getLeftBorder()+15;
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY()
-	{
+	public double getDefaultLabelY() {
 		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getY();
 		}

@@ -26,25 +26,21 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
-
 public class GeneratorContextualMenuManager extends ContextualMenuManager {
 
-    private GeneratorController _controller;
-    
-    public GeneratorContextualMenuManager(GeneratorSelectionManager selectionManager, FlexoEditor editor, GeneratorController controller)
-    {
-        super(selectionManager,editor);
-        _controller = controller;
-    }
-    
-     @Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e)
-    {
-         return super.getFocusedObject(focusedComponent,e);
-    }
+	private GeneratorController _controller;
 
- 	public GeneratorController getController() 
-	{
+	public GeneratorContextualMenuManager(GeneratorSelectionManager selectionManager, FlexoEditor editor, GeneratorController controller) {
+		super(selectionManager, editor);
+		_controller = controller;
+	}
+
+	@Override
+	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+		return super.getFocusedObject(focusedComponent, e);
+	}
+
+	public GeneratorController getController() {
 		return _controller;
 	}
 

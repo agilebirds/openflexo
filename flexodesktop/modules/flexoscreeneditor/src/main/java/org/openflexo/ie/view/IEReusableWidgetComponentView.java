@@ -24,35 +24,36 @@ import java.awt.Toolkit;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.ie.view.controller.IEController;
 
-
 public class IEReusableWidgetComponentView extends IEWOComponentView {
 
-	public IEReusableWidgetComponentView(IEController ctrl, ComponentInstance c){
-		super(ctrl,c);
+	public IEReusableWidgetComponentView(IEController ctrl, ComponentInstance c) {
+		super(ctrl, c);
 	}
 
 	@Override
 	public int getMaxWidth() {
-		if (getParent()!=null)
+		if (getParent() != null) {
 			return getParent().getWidth();
+		}
 		return 0;
 	}
-	
+
 	@Override
 	protected int getMaxHeight() {
-        if (dropZone==null)
-            return Toolkit.getDefaultToolkit().getScreenSize().height-100;
-        int h = dropZone.getPreferredSize().height+50;
-        if (h<100)
-        	h=100;
-        return h;
+		if (dropZone == null) {
+			return Toolkit.getDefaultToolkit().getScreenSize().height - 100;
+		}
+		int h = dropZone.getPreferredSize().height + 50;
+		if (h < 100) {
+			h = 100;
+		}
+		return h;
 	}
-	
-    @Override
-    public void deleteModuleView()
-    {
-        logger.info("ReusableWidgetComponentView view deleted !");
-        super.deleteModuleView();
-    }
+
+	@Override
+	public void deleteModuleView() {
+		logger.info("ReusableWidgetComponentView view deleted !");
+		super.deleteModuleView();
+	}
 
 }

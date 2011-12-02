@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.bpel;
 
-
 public class BPELWriters {
-	
+
 }

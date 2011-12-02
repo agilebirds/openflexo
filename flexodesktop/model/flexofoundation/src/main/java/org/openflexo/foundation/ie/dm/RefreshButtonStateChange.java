@@ -19,11 +19,9 @@
  */
 package org.openflexo.foundation.ie.dm;
 
-public class RefreshButtonStateChange extends IEDataModification
-{
+public class RefreshButtonStateChange extends IEDataModification {
 
-    public RefreshButtonStateChange(boolean isVisible)
-    {
-        super(null, new Boolean(isVisible));
-    }
+	public RefreshButtonStateChange(boolean isVisible) {
+		super(null, new Boolean(isVisible));
+	}
 }

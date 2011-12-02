@@ -25,37 +25,32 @@ public class PointMiddleOfTwoPointsConstruction extends PointConstruction {
 
 	public PointConstruction pointConstruction1;
 	public PointConstruction pointConstruction2;
-	
-	public PointMiddleOfTwoPointsConstruction() 
-	{
+
+	public PointMiddleOfTwoPointsConstruction() {
 		super();
 	}
-	
-	public PointMiddleOfTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2) 
-	{
+
+	public PointMiddleOfTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2) {
 		this();
 		this.pointConstruction1 = pointConstruction1;
 		this.pointConstruction2 = pointConstruction2;
 	}
-	
+
 	@Override
-	protected FGEPoint computeData()
-	{
-		return FGEPoint.middleOf(pointConstruction1.getPoint(),pointConstruction2.getPoint());
+	protected FGEPoint computeData() {
+		return FGEPoint.middleOf(pointConstruction1.getPoint(), pointConstruction2.getPoint());
 	}
 
 	@Override
-	public String toString()
-	{
-		return "PointMiddleOfTwoPointsConstruction[\n"+"> "+pointConstruction1.toString()+"\n> "+pointConstruction2.toString()+"\n]";
+	public String toString() {
+		return "PointMiddleOfTwoPointsConstruction[\n" + "> " + pointConstruction1.toString() + "\n> " + pointConstruction2.toString()
+				+ "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { pointConstruction1, pointConstruction2 };
 		return returned;
 	}
-
 
 }

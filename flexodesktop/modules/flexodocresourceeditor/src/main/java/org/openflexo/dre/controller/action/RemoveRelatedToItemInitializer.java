@@ -28,45 +28,38 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RemoveRelatedToItemInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveRelatedToItemInitializer(DREControllerActionInitializer actionInitializer)
-	{
-		super(RemoveRelatedToItem.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DREControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DREControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<RemoveRelatedToItem> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<RemoveRelatedToItem>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveRelatedToItem action)
-            {
-               	return true;
-            }
-        };
+	RemoveRelatedToItemInitializer(DREControllerActionInitializer actionInitializer) {
+		super(RemoveRelatedToItem.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<RemoveRelatedToItem> getDefaultFinalizer() 
-	{
+	@Override
+	protected DREControllerActionInitializer getControllerActionInitializer() {
+		return (DREControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<RemoveRelatedToItem> getDefaultInitializer() {
+		return new FlexoActionInitializer<RemoveRelatedToItem>() {
+			@Override
+			public boolean run(ActionEvent e, RemoveRelatedToItem action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<RemoveRelatedToItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveRelatedToItem>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveRelatedToItem action)
-            {
-               	return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, RemoveRelatedToItem action) {
+				return true;
+			}
+		};
 	}
 
 }

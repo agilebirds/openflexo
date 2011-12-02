@@ -26,81 +26,66 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.utils.FlexoProjectFile;
 
-
 /**
- * This class represents a Directory Flexo resource. A Directory FlexoResource
- * represent some objects handled by Flexo Application Suite (all concerned
- * modules), which are stored in a directory, generally located in related
- * {@link FlexoProject} project directory.
+ * This class represents a Directory Flexo resource. A Directory FlexoResource represent some objects handled by Flexo Application Suite
+ * (all concerned modules), which are stored in a directory, generally located in related {@link FlexoProject} project directory.
  * 
  * @author sguerin
  */
-public abstract class FlexoDirectoryResource extends FlexoFileResource
-{
-    private static final Logger logger = Logger.getLogger(FlexoDirectoryResource.class.getPackage().getName());
+public abstract class FlexoDirectoryResource extends FlexoFileResource {
+	private static final Logger logger = Logger.getLogger(FlexoDirectoryResource.class.getPackage().getName());
 
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public FlexoDirectoryResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public FlexoDirectoryResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-    }
+	public FlexoDirectoryResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    public FlexoDirectoryResource(FlexoProject aProject)
-    {
-        super(aProject);
-   }
+	public FlexoDirectoryResource(FlexoProject aProject, FlexoProjectFile directory) throws InvalidFileNameException {
+		this(aProject);
+		setResourceFile(directory);
+	}
 
-    public FlexoDirectoryResource(FlexoProject aProject, FlexoProjectFile directory) throws InvalidFileNameException
-    {
-        this(aProject);
-        setResourceFile(directory);
-    }
+	public File getResourceDirectory() {
+		return getFile();
+	}
 
-    public File getResourceDirectory()
-    {
-    	return getFile();
-    }
+	public File getDirectory() {
+		return getFile();
+	}
 
-    public File getDirectory()
-    {
-    	return getFile();
-    }
+	@Override
+	public File getFile() {
+		File returned = super.getFile();
+		if (returned.isDirectory()) {
+			return returned;
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("File " + returned.getAbsolutePath() + " is supposed to be a directory");
+			}
+			return null;
+		}
+	}
 
-    @Override
-	public File getFile()
-    {
-    	File returned = super.getFile();	
-        if (returned.isDirectory()) {
-            return returned;
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("File " + returned.getAbsolutePath() + " is supposed to be a directory");
-            return null;
-        }
-    }
-
-    /**
-     * This date is VERY IMPORTANT and CRITICAL since this is the date used by ResourceManager
-     * to compute dependancies between resources. This method returns the date that must be considered
-     * as last known update for this resource
-     * 
-     * Here simply returns disk last modified date
-     * 
-     * @return a Date object
-     */
-   @Override
-public Date getLastUpdate()
-    {
-        return getDiskLastModifiedDate();
-    }
-
-    
+	/**
+	 * This date is VERY IMPORTANT and CRITICAL since this is the date used by ResourceManager to compute dependancies between resources.
+	 * This method returns the date that must be considered as last known update for this resource
+	 * 
+	 * Here simply returns disk last modified date
+	 * 
+	 * @return a Date object
+	 */
+	@Override
+	public Date getLastUpdate() {
+		return getDiskLastModifiedDate();
+	}
 
 }

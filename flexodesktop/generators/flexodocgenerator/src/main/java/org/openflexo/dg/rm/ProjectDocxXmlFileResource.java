@@ -36,20 +36,16 @@ import org.openflexo.foundation.rm.FlexoTOCResource;
 import org.openflexo.foundation.rm.GeneratedDocResource;
 import org.openflexo.foundation.wkf.FlexoProcess;
 
-
-public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGenerator<FlexoProject>> implements FlexoObserver
-{
+public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGenerator<FlexoProject>> implements FlexoObserver {
 	private static final String RELS_SUFFIX = ".FILERELS";
 
 	private boolean isObserverRegistered = false;
 
-	public ProjectDocxXmlFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	public ProjectDocxXmlFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-	public ProjectDocxXmlFileResource(DGDocxXMLGenerator<FlexoProject> generator, DocxTemplatesEnum docxTemplate)
-	{
+	public ProjectDocxXmlFileResource(DGDocxXMLGenerator<FlexoProject> generator, DocxTemplatesEnum docxTemplate) {
 		super(generator.getProject());
 		setGenerator(generator);
 		generator.addDocxResource(this, docxTemplate);
@@ -57,27 +53,26 @@ public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
 	}
 
 	@Override
-	public String getName()
-	{
-		if(super.getName() == null && getCGFile()!=null && getCGFile().getRepository() != null && getGenerator() != null && getGenerator().getDocxTemplateForResource(this) != null)
+	public String getName() {
+		if (super.getName() == null && getCGFile() != null && getCGFile().getRepository() != null && getGenerator() != null
+				&& getGenerator().getDocxTemplateForResource(this) != null) {
 			setName(nameForRepositoryAndDocxTemplate(getCGFile().getRepository(), getGenerator().getDocxTemplateForResource(this)));
+		}
 
 		return super.getName();
 	}
 
-	public void registerObserverWhenRequired()
-	{
-		if ((!isObserverRegistered) && (getProject() != null))
-		{
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getProject() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
 			getProject().addObserver(this);
 		}
 	}
 
-	public static String nameForRepositoryAndDocxTemplate(GenerationRepository repository, DocxTemplatesEnum docxTemplate)
-	{
+	public static String nameForRepositoryAndDocxTemplate(GenerationRepository repository, DocxTemplatesEnum docxTemplate) {
 		return repository.getName() + ".PROJECT_DOCX." + docxTemplate;
 	}
 
@@ -85,17 +80,17 @@ public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
 	 * Rebuild resource dependancies for this resource
 	 */
 	@Override
-	public void rebuildDependancies()
-	{
+	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		if(getGenerator()!=null && getGenerator().getDocxTemplateForResource(this).getIsFullProjectDependent())
-		{
-			for(FlexoProcess process : getProject().getAllLocalFlexoProcesses())
+		if (getGenerator() != null && getGenerator().getDocxTemplateForResource(this).getIsFullProjectDependent()) {
+			for (FlexoProcess process : getProject().getAllLocalFlexoProcesses()) {
 				addToDependantResources(process.getFlexoResource());
+			}
 			addToDependantResources(getProject().getWorkflow().getFlexoResource());
 			addToDependantResources(getProject().getDataModel().getFlexoResource());
-			for(ComponentDefinition comp:getProject().getFlexoComponentLibrary().getAllComponentList())
+			for (ComponentDefinition comp : getProject().getFlexoComponentLibrary().getAllComponentList()) {
 				addToDependantResources(comp.getComponentResource());
+			}
 			addToDependantResources(getProject().getFlexoComponentLibraryResource().getFlexoResource());
 			addToDependantResources(getProject().getFlexoDKVResource());
 		}
@@ -103,43 +98,35 @@ public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource,
-	 * asserting that this resource is contained in this resource's dependant
-	 * resources
-	 *
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
 	 * @param resource
 	 * @param dependancyScheme
 	 * @return
 	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
-		if (resource instanceof GeneratedDocResource)
-		{
-			if (getGenerator() != null)
-			{
-				if (!requestDate.before(getGenerator().getRepository().getLastUpdateDate()))
-				{
-					if (logger.isLoggable(Level.FINER))
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		if (resource instanceof GeneratedDocResource) {
+			if (getGenerator() != null) {
+				if (!requestDate.before(getGenerator().getRepository().getLastUpdateDate())) {
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for DGRepository " + getRepository());
+					}
 					return false;
 				}
 			}
-		}
-		else if (resource instanceof FlexoTOCResource)
-		{
-			if (getGenerator() != null && getGenerator().getRepository().getTocRepository() != null)
-			{
-				if (!requestDate.before(getGenerator().getRepository().getTocRepository().getLastUpdateDate()))
-				{
-					if (logger.isLoggable(Level.FINER))
+		} else if (resource instanceof FlexoTOCResource) {
+			if (getGenerator() != null && getGenerator().getRepository().getTocRepository() != null) {
+				if (!requestDate.before(getGenerator().getRepository().getTocRepository().getLastUpdateDate())) {
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for TOC ENTRY " + getRepository());
+					}
 					return false;
 				}
 			}
@@ -149,22 +136,23 @@ public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
 	}
 
 	@Override
-	public String getFileName()
-	{
-		if(getFile() != null)
+	public String getFileName() {
+		if (getFile() != null) {
 			return getFile().getName();
+		}
 
-    	if (getGenerator() != null)
-            return getGenerator().getFileNameForResource(this);
+		if (getGenerator() != null) {
+			return getGenerator().getFileNameForResource(this);
+		}
 
-    	return null;
+		return null;
 	}
 
 	@Override
-	public String getGenerationResultKey()
-	{
-		if(getGenerator() != null)
+	public String getGenerationResultKey() {
+		if (getGenerator() != null) {
 			return getGenerator().getGenerationResultKeyForResource(this);
+		}
 		logger.warning("Attempt to get a GenerationResultKey on a resource without generator !");
 		return null;
 	}

@@ -30,61 +30,51 @@ import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFGroup;
 
+public class WKFCut extends FlexoUndoableAction<WKFCut, FlexoModelObject, FlexoModelObject> {
 
-public class WKFCut extends FlexoUndoableAction<WKFCut,FlexoModelObject,FlexoModelObject> 
-{
+	private static final Logger logger = Logger.getLogger(WKFCut.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(WKFCut.class.getPackage().getName());
+	public static FlexoActionType<WKFCut, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<WKFCut, FlexoModelObject, FlexoModelObject>(
+			"cut", FlexoActionType.editGroup) {
 
-    public static FlexoActionType<WKFCut,FlexoModelObject,FlexoModelObject> actionType 
-    = new FlexoActionType<WKFCut,FlexoModelObject,FlexoModelObject> ("cut",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public WKFCut makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new WKFCut(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public WKFCut makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new WKFCut(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return isEnabledForSelection(object, globalSelection);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return isEnabledForSelection(object, globalSelection);
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return !(object instanceof FlexoPetriGraph) && !(object instanceof FlexoProcess) && !(object instanceof WKFGroup);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-        	return !(object instanceof FlexoPetriGraph) && !(object instanceof FlexoProcess) && !(object instanceof WKFGroup);
-        }
-                
-    };
-    
-    WKFCut (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) 
-    {
-        // Not yet implemented in Foundation, but in WKF module
-        logger.info ("CUT on WKF");
-    }
-    
-    @Override
-	protected void undoAction(Object context) 
-    {
-        logger.warning ("UNDO CUT on WKF not implemented yet !");
-    }
+	WKFCut(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        logger.warning ("REDO CUT on WKF not implemented yet !");
-    }
-    
+	@Override
+	protected void doAction(Object context) {
+		// Not yet implemented in Foundation, but in WKF module
+		logger.info("CUT on WKF");
+	}
+
+	@Override
+	protected void undoAction(Object context) {
+		logger.warning("UNDO CUT on WKF not implemented yet !");
+	}
+
+	@Override
+	protected void redoAction(Object context) {
+		logger.warning("REDO CUT on WKF not implemented yet !");
+	}
 
 }

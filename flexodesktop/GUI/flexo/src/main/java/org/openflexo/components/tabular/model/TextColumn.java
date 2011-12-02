@@ -35,295 +35,255 @@ import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class TextColumn<D extends FlexoModelObject> extends AbstractColumn<D,String> implements EditableColumn<D,String>, HeightAdjustableColumn
-{
+public abstract class TextColumn<D extends FlexoModelObject> extends AbstractColumn<D, String> implements EditableColumn<D, String>,
+		HeightAdjustableColumn {
 
-    public TextColumn(String title, int defaultWidth)
-    {
-        this(title, defaultWidth, true);
-    }
+	public TextColumn(String title, int defaultWidth) {
+		this(title, defaultWidth, true);
+	}
 
-    public TextColumn(String title, int defaultWidth, boolean isResizable)
-    {
-        this(title, defaultWidth, isResizable, true);
-    }
+	public TextColumn(String title, int defaultWidth, boolean isResizable) {
+		this(title, defaultWidth, isResizable, true);
+	}
 
-    public TextColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle)
-    {
-        super(title, defaultWidth, isResizable, displayTitle);
-        _textCellEditor = new TextCellEditor();
-        _textCellRenderer = new TextCellRenderer();
-        _taForRow = new Vector();
-    }
+	public TextColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle) {
+		super(title, defaultWidth, isResizable, displayTitle);
+		_textCellEditor = new TextCellEditor();
+		_textCellRenderer = new TextCellRenderer();
+		_taForRow = new Vector();
+	}
 
-    @Override
-	public Class getValueClass()
-    {
-        return String.class;
-    }
+	@Override
+	public Class getValueClass() {
+		return String.class;
+	}
 
-    @Override
-	public String getValueFor(D object)
-    {
-        return getValue(object);
-    }
+	@Override
+	public String getValueFor(D object) {
+		return getValue(object);
+	}
 
-    public abstract String getValue(D object);
+	public abstract String getValue(D object);
 
-    @Override
-	public boolean isCellEditableFor(D object)
-    {
-        return true;
-    }
+	@Override
+	public boolean isCellEditableFor(D object) {
+		return true;
+	}
 
-    @Override
-	public void setValueFor(D object, String value)
-    {
-        setValue(object, value);
-    }
+	@Override
+	public void setValueFor(D object, String value) {
+		setValue(object, value);
+	}
 
-    public abstract void setValue(D object, String aValue);
+	public abstract void setValue(D object, String aValue);
 
-    @Override
-	public String toString()
-    {
-        return "TextColumn " + "@" + Integer.toHexString(hashCode());
-    }
-    
-    /**
-     * @return
-     */
-    @Override
-	public TableCellRenderer getCellRenderer()
-    {
-        return _textCellRenderer;
-    }
+	@Override
+	public String toString() {
+		return "TextColumn " + "@" + Integer.toHexString(hashCode());
+	}
 
-    private TextCellRenderer _textCellRenderer;
+	/**
+	 * @return
+	 */
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return _textCellRenderer;
+	}
 
-    protected class TextCellRenderer extends TabularViewCellRenderer
-    {
-        /**
-         * 
-         * Returns the selector cell renderer.
-         * 
-         * @param table
-         *            the <code>JTable</code>
-         * @param value
-         *            the value to assign to the cell at
-         *            <code>[row, column]</code>
-         * @param isSelected
-         *            true if cell is selected
-         * @param hasFocus
-         *            true if cell has focus
-         * @param row
-         *            the row of the cell to render
-         * @param column
-         *            the column of the cell to render
-         * @return the default table cell renderer
-         */
-        @Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-        {
-            TextColumnEditor returned = getEditorForRow(row);
-            setComponentBackground(returned.getTextArea(), hasFocus, isSelected, row, column);
-            returned.setText((String)value);
-            returned.setEditable(false);
-            return returned.getTextArea();
-        }
-    }
+	private TextCellRenderer _textCellRenderer;
 
-    private Vector _taForRow;
-    
-    protected TextColumnEditor getEditorForRow(int row)
-    {
-        if (_taForRow.size() <= row) {
-            for (int i=_taForRow.size(); i<=row; i++) {
-                TextColumnEditor newEditor = new TextColumnEditor(i);
-                _taForRow.add(newEditor);
-            }
-        }
-        return (TextColumnEditor)_taForRow.elementAt(row);
-    }
+	protected class TextCellRenderer extends TabularViewCellRenderer {
+		/**
+		 * 
+		 * Returns the selector cell renderer.
+		 * 
+		 * @param table
+		 *            the <code>JTable</code>
+		 * @param value
+		 *            the value to assign to the cell at <code>[row, column]</code>
+		 * @param isSelected
+		 *            true if cell is selected
+		 * @param hasFocus
+		 *            true if cell has focus
+		 * @param row
+		 *            the row of the cell to render
+		 * @param column
+		 *            the column of the cell to render
+		 * @return the default table cell renderer
+		 */
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			TextColumnEditor returned = getEditorForRow(row);
+			setComponentBackground(returned.getTextArea(), hasFocus, isSelected, row, column);
+			returned.setText((String) value);
+			returned.setEditable(false);
+			return returned.getTextArea();
+		}
+	}
 
-    protected class TextColumnEditor
-    {
-        protected JTextArea _textArea;
-        private int _row;
-        private TextColumnDocumentListener _docListener;
-        protected int knownLC = 0;
-        
-        protected TextColumnEditor(int row)
-        {
-            _row = row;
-            _textArea = new JTextArea();
-            _textArea.setRows(1);
-            _textArea.setLineWrap(true);
-            _textArea.setWrapStyleWord(true);
-            _docListener = new TextColumnDocumentListener(_textArea,row);
-            _textArea.getDocument().addDocumentListener(_docListener);           
-        }
-        
-        public void setEditable(boolean b) 
-        {
-            _textArea.setEditable(b);
-        }
+	private Vector _taForRow;
 
-        public void setText(String aText) 
-        {
-            _textArea.getDocument().removeDocumentListener(_docListener);           
-            _textArea.setText(aText);
-            _textArea.getDocument().addDocumentListener(_docListener);   
-            if (knownLC != _textArea.getLineCount()) {
-                knownLC = _textArea.getLineCount();
-                 fireRowHeightChanged(_row);
-            }
-            knownLC = _textArea.getLineCount();
-        }
+	protected TextColumnEditor getEditorForRow(int row) {
+		if (_taForRow.size() <= row) {
+			for (int i = _taForRow.size(); i <= row; i++) {
+				TextColumnEditor newEditor = new TextColumnEditor(i);
+				_taForRow.add(newEditor);
+			}
+		}
+		return (TextColumnEditor) _taForRow.elementAt(row);
+	}
 
-        protected class TextColumnDocumentListener implements DocumentListener
-        {
-            private int _row;
-            private JTextArea _textArea;
-            
-            protected TextColumnDocumentListener(JTextArea textArea, int row)
-            {
-                super();
-                _row = row;
-                _textArea = textArea;
-            }
+	protected class TextColumnEditor {
+		protected JTextArea _textArea;
+		private int _row;
+		private TextColumnDocumentListener _docListener;
+		protected int knownLC = 0;
 
-            @Override
-			public void insertUpdate(DocumentEvent e) 
-            {
-                textChanged(e);
-            }
+		protected TextColumnEditor(int row) {
+			_row = row;
+			_textArea = new JTextArea();
+			_textArea.setRows(1);
+			_textArea.setLineWrap(true);
+			_textArea.setWrapStyleWord(true);
+			_docListener = new TextColumnDocumentListener(_textArea, row);
+			_textArea.getDocument().addDocumentListener(_docListener);
+		}
 
-            @Override
-			public void removeUpdate(DocumentEvent e) 
-            {
-                textChanged(e);
-            }
+		public void setEditable(boolean b) {
+			_textArea.setEditable(b);
+		}
 
-            @Override
-			public void changedUpdate(DocumentEvent e) 
-            {
-                textChanged(e);
-            }
-            
-            private void textChanged(DocumentEvent e) 
-            {
-                //logger.fine("Text changed for row "+_row+" lc="+_textArea.getLineCount()+" row="+_textArea.getRows()+" height="+_textArea.getHeight());
-                if (knownLC != _textArea.getLineCount()) {
-                    knownLC = _textArea.getLineCount();
-                     fireRowHeightChanged(_row);
-                }
-            }
-        }
+		public void setText(String aText) {
+			_textArea.getDocument().removeDocumentListener(_docListener);
+			_textArea.setText(aText);
+			_textArea.getDocument().addDocumentListener(_docListener);
+			if (knownLC != _textArea.getLineCount()) {
+				knownLC = _textArea.getLineCount();
+				fireRowHeightChanged(_row);
+			}
+			knownLC = _textArea.getLineCount();
+		}
 
-        public JTextArea getTextArea() 
-        {
-            return _textArea;
-        }
+		protected class TextColumnDocumentListener implements DocumentListener {
+			private int _row;
+			private JTextArea _textArea;
 
-        public int getDesiredSize() 
-        {
-           return 16*_textArea.getLineCount();
-        }
+			protected TextColumnDocumentListener(JTextArea textArea, int row) {
+				super();
+				_row = row;
+				_textArea = textArea;
+			}
 
-    }
-    
-     
-    
-    @Override
-	public boolean requireCellEditor()
-    {
-        return true;
-    }
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				textChanged(e);
+			}
 
-    @Override
-	public TableCellEditor getCellEditor()
-    {
-        return _textCellEditor;
-    }
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				textChanged(e);
+			}
 
-    private TextCellEditor _textCellEditor;
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				textChanged(e);
+			}
 
-    protected class TextCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener
-    {
-        //protected Hashtable _taForObject;
-       protected JTextArea _currentTA;
+			private void textChanged(DocumentEvent e) {
+				// logger.fine("Text changed for row "+_row+" lc="+_textArea.getLineCount()+" row="+_textArea.getRows()+" height="+_textArea.getHeight());
+				if (knownLC != _textArea.getLineCount()) {
+					knownLC = _textArea.getLineCount();
+					fireRowHeightChanged(_row);
+				}
+			}
+		}
 
-        public TextCellEditor()
-        {
-        }
+		public JTextArea getTextArea() {
+			return _textArea;
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent e)
-        {
-            fireEditingStopped();
-        }
+		public int getDesiredSize() {
+			return 16 * _textArea.getLineCount();
+		}
 
-        @Override
-		protected void fireEditingStopped() 
-        {
-            super.fireEditingStopped();
-        }
-        
-       @Override
-	public Object getCellEditorValue()
-        {
-            return _currentTA.getText();
-        }
-        
-         @Override
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
-        {
-             TextColumnEditor returned = getEditorForRow(row);
-             returned.setText((String)value);
-             returned.setEditable(true);
-             _currentTA = returned.getTextArea();
-            return returned.getTextArea();
-        }
-    }
+	}
 
-    private Vector _rowHeightListeners = new Vector();
-    
-   @Override
-public void addRowHeightListener(RowHeightListener rhl)
-   {
-       _rowHeightListeners.add(rhl);
-   }
-    
-    @Override
-	public void removeRowHeightListener(RowHeightListener rhl)
-    {
-        _rowHeightListeners.remove(rhl);
-    }
+	@Override
+	public boolean requireCellEditor() {
+		return true;
+	}
 
-    @Override
-	public void fireRowHeightChanged(int row)
-    {
-        //logger.fine("On change de nb de lignes !!!!! row="+row+" desired size is now "+getRowHeight(row));
-        if (getRowHeight(row) > 0) {
-            for (Enumeration en=_rowHeightListeners.elements(); en.hasMoreElements();) {
-                RowHeightListener next = (RowHeightListener)en.nextElement();
-                next.notifyRowHeightChanged(row,getRowHeight(row));
-            }
-        }
-    }
-    
-    @Override
-	public int getRowHeight(int row)
-    {
-        return getEditorForRow(row).getDesiredSize();
-    }
+	@Override
+	public TableCellEditor getCellEditor() {
+		return _textCellEditor;
+	}
+
+	private TextCellEditor _textCellEditor;
+
+	protected class TextCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
+		// protected Hashtable _taForObject;
+		protected JTextArea _currentTA;
+
+		public TextCellEditor() {
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEditingStopped();
+		}
+
+		@Override
+		protected void fireEditingStopped() {
+			super.fireEditingStopped();
+		}
+
+		@Override
+		public Object getCellEditorValue() {
+			return _currentTA.getText();
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+			TextColumnEditor returned = getEditorForRow(row);
+			returned.setText((String) value);
+			returned.setEditable(true);
+			_currentTA = returned.getTextArea();
+			return returned.getTextArea();
+		}
+	}
+
+	private Vector _rowHeightListeners = new Vector();
+
+	@Override
+	public void addRowHeightListener(RowHeightListener rhl) {
+		_rowHeightListeners.add(rhl);
+	}
+
+	@Override
+	public void removeRowHeightListener(RowHeightListener rhl) {
+		_rowHeightListeners.remove(rhl);
+	}
+
+	@Override
+	public void fireRowHeightChanged(int row) {
+		// logger.fine("On change de nb de lignes !!!!! row="+row+" desired size is now "+getRowHeight(row));
+		if (getRowHeight(row) > 0) {
+			for (Enumeration en = _rowHeightListeners.elements(); en.hasMoreElements();) {
+				RowHeightListener next = (RowHeightListener) en.nextElement();
+				next.notifyRowHeightChanged(row, getRowHeight(row));
+			}
+		}
+	}
+
+	@Override
+	public int getRowHeight(int row) {
+		return getEditorForRow(row).getDesiredSize();
+	}
 
 }

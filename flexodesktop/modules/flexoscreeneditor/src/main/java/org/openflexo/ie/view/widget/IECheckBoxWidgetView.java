@@ -38,131 +38,129 @@ import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 
-
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBoxWidget>
-{
+public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBoxWidget> {
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
-    private transient JCheckBox _jCheckBox;
-    
-    private JPanel container;
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
+	private transient JCheckBox _jCheckBox;
 
-    protected boolean isUpdatingModel=false;
-    
-    public static final Font TEXTFIELD_FONT = new Font("SansSerif", Font.PLAIN, 10);
+	private JPanel container;
 
+	protected boolean isUpdatingModel = false;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	public static final Font TEXTFIELD_FONT = new Font("SansSerif", Font.PLAIN, 10);
 
-    public IECheckBoxWidgetView(IEController ieController, IECheckBoxWidget model, boolean addDnDSupport, IEWOComponentView view)
-    {
-        super(ieController, model, addDnDSupport,view);
-        FlowLayout layout = new FlowLayout(FlowLayout.LEFT,0,0);
-        setLayout(layout);
-        _jCheckBox = new JCheckBox();
-        _jCheckBox.addActionListener(new ActionListener() {
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                isUpdatingModel=true;
-                getCheckBoxModel().setValue(((JCheckBox)e.getSource()).isSelected());
-                isUpdatingModel=false;
-            }}
-        );
-        _jCheckBox.setFont(TEXTFIELD_FONT);
-        container = new JPanel(new FlowLayout(FlowLayout.CENTER,4,4));
-        container.setOpaque(false);
-        container.add(_jCheckBox);
-        container.validate();
-        container.doLayout();
-        add(container);
-        
-        _jCheckBox.setEnabled(true);
-        _jCheckBox.setFocusable(false);
-        _jCheckBox.setOpaque(false);
-        if (getCheckBoxModel().getDescription() != null) {
-            _jCheckBox.setToolTipText(getCheckBoxModel().getDescription());
-        }
-        TransparentMouseListener tml = new TransparentMouseListener(_jCheckBox, this);
-        _jCheckBox.addMouseListener(tml);
-        _jCheckBox.addMouseMotionListener(tml);
-        _jCheckBox.setSelected(getCheckBoxModel().getValue());
-        _jCheckBox.setBackground(getBackgroundColor());
-        setBackground(getBackgroundColor());
-    }
+	public IECheckBoxWidgetView(IEController ieController, IECheckBoxWidget model, boolean addDnDSupport, IEWOComponentView view) {
+		super(ieController, model, addDnDSupport, view);
+		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
+		setLayout(layout);
+		_jCheckBox = new JCheckBox();
+		_jCheckBox.addActionListener(new ActionListener() {
 
-    public IECheckBoxWidget getCheckBoxModel()
-    {
-        return getModel();
-    }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				isUpdatingModel = true;
+				getCheckBoxModel().setValue(((JCheckBox) e.getSource()).isSelected());
+				isUpdatingModel = false;
+			}
+		});
+		_jCheckBox.setFont(TEXTFIELD_FONT);
+		container = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 4));
+		container.setOpaque(false);
+		container.add(_jCheckBox);
+		container.validate();
+		container.doLayout();
+		add(container);
 
-    @Override
-	public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null)return storedSize;
-        }
-    	if(getModel().getParent() instanceof IETDWidget){
+		_jCheckBox.setEnabled(true);
+		_jCheckBox.setFocusable(false);
+		_jCheckBox.setOpaque(false);
+		if (getCheckBoxModel().getDescription() != null) {
+			_jCheckBox.setToolTipText(getCheckBoxModel().getDescription());
+		}
+		TransparentMouseListener tml = new TransparentMouseListener(_jCheckBox, this);
+		_jCheckBox.addMouseListener(tml);
+		_jCheckBox.addMouseMotionListener(tml);
+		_jCheckBox.setSelected(getCheckBoxModel().getValue());
+		_jCheckBox.setBackground(getBackgroundColor());
+		setBackground(getBackgroundColor());
+	}
+
+	public IECheckBoxWidget getCheckBoxModel() {
+		return getModel();
+	}
+
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null) {
+				return storedSize;
+			}
+		}
+		if (getModel().getParent() instanceof IETDWidget) {
 			Dimension d = container.getPreferredSize();
-            d.width+=2;
-            d.height+=2;
-            if (getHoldsNextComputedPreferredSize())
-                storePrefSize(d);
+			d.width += 2;
+			d.height += 2;
+			if (getHoldsNextComputedPreferredSize()) {
+				storePrefSize(d);
+			}
 			return d;
 		}
-        Dimension d = super.getPreferredSize();
-        if (getHoldsNextComputedPreferredSize())
-            storePrefSize(d);
-        return d;
-    }
-    // ==========================================================================
-    // ============================= Observer
-    // ===================================
-    // ==========================================================================
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-     */
-    @Override
-	public void update(FlexoObservable arg0, DataModification modif)
-    {
-        if (modif.modificationType() == DataModification.ATTRIBUTE) {
-            if (modif.propertyName().equals(IECheckBoxWidget.ATTRIB_DEFAULTVALUE_NAME)) {
-                if (!isUpdatingModel)
-                    _jCheckBox.setSelected(getCheckBoxModel().getValue());
-            } else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-                if (getParent() != null) {
-                    getParent().doLayout();
-                    ((JComponent) getParent()).repaint();
-                }
+		Dimension d = super.getPreferredSize();
+		if (getHoldsNextComputedPreferredSize()) {
+			storePrefSize(d);
+		}
+		return d;
+	}
 
-            }
-        }
-        if (modif instanceof SpanChanged) {
-            if (getParent() != null) {
-                getParent().doLayout();
-                ((JComponent) getParent()).repaint();
-            }
-        } else if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
-            delete();
-        } else
-            super.update(arg0, modif);
-    }
+	// ==========================================================================
+	// ============================= Observer
+	// ===================================
+	// ==========================================================================
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	@Override
+	public void update(FlexoObservable arg0, DataModification modif) {
+		if (modif.modificationType() == DataModification.ATTRIBUTE) {
+			if (modif.propertyName().equals(IECheckBoxWidget.ATTRIB_DEFAULTVALUE_NAME)) {
+				if (!isUpdatingModel) {
+					_jCheckBox.setSelected(getCheckBoxModel().getValue());
+				}
+			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
+				if (getParent() != null) {
+					getParent().doLayout();
+					((JComponent) getParent()).repaint();
+				}
+
+			}
+		}
+		if (modif instanceof SpanChanged) {
+			if (getParent() != null) {
+				getParent().doLayout();
+				((JComponent) getParent()).repaint();
+			}
+		} else if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
+			delete();
+		} else {
+			super.update(arg0, modif);
+		}
+	}
 
 }

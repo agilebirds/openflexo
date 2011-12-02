@@ -25,116 +25,104 @@ import java.util.Date;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
-
 /**
- * This class represents a Flexo resource. A FlexoResource represent an object
- * handled by Flexo Application Suite (all concerned modules), which is simply
- * stored in memory.
+ * This class represents a Flexo resource. A FlexoResource represent an object handled by Flexo Application Suite (all concerned modules),
+ * which is simply stored in memory.
  * 
  * @author sguerin
  */
-public class FlexoMemoryResource extends FlexoResource
-{
-
-	
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public FlexoMemoryResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-   }
-
-    public FlexoMemoryResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
-
-    public boolean needsSaving()
-    {
-        return false;
-    }
+public class FlexoMemoryResource extends FlexoResource {
 
 	/**
-	 * Override this
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
 	 */
-     @Override
-	public boolean isToBeSerialized()
-    {
-        return false;
-    }
+	public FlexoMemoryResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-     /**
-      * This date is VERY IMPORTANT and CRITICAL since this is the date used by ResourceManager
-      * to compute dependancies between resources. This method returns the date that must be considered
-      * as last known update for this resource
-      * 
-      * Please override this method
-      * 
-      * @return a Date object
-      */
-    @Override
-	public synchronized Date getLastUpdate()
-    {
-        return new Date();
-    }
+	public FlexoMemoryResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
+	public boolean needsSaving() {
+		return false;
+	}
 
 	/**
 	 * Override this
 	 */
 	@Override
-	public String getName() 
-	{
+	public boolean isToBeSerialized() {
+		return false;
+	}
+
+	/**
+	 * This date is VERY IMPORTANT and CRITICAL since this is the date used by ResourceManager to compute dependancies between resources.
+	 * This method returns the date that must be considered as last known update for this resource
+	 * 
+	 * Please override this method
+	 * 
+	 * @return a Date object
+	 */
+	@Override
+	public synchronized Date getLastUpdate() {
+		return new Date();
+	}
+
+	/**
+	 * Override this
+	 */
+	@Override
+	public String getName() {
 		return null;
 	}
 
 	/**
 	 * Override this
 	 */
-    @Override
-	public void setName(String aName)
-    {
-    }
-    
+	@Override
+	public void setName(String aName) {
+	}
+
 	/**
 	 * Override this
 	 */
 	@Override
-	public ResourceType getResourceType() 
-	{
+	public ResourceType getResourceType() {
 		return null;
 	}
 
 	private String _resourceClassName;
-	
-	public String _getResourceClassName()
-	{
-		if (_resourceClassName != null) return _resourceClassName;
-		else return this.getClass().getName();
+
+	public String _getResourceClassName() {
+		if (_resourceClassName != null) {
+			return _resourceClassName;
+		} else {
+			return this.getClass().getName();
+		}
 	}
 
-	public void _setResourceClassName(String aClassName)
-	{
+	public void _setResourceClassName(String aClassName) {
 		_resourceClassName = aClassName;
 	}
 
-    /**
-     * Overrides performUpdating
-     * @see org.openflexo.foundation.rm.FlexoResource#performUpdating(org.openflexo.foundation.rm.FlexoResourceTree)
-     */
-    @Override
-    protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException
-    {
-        
-    }
+	/**
+	 * Overrides performUpdating
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#performUpdating(org.openflexo.foundation.rm.FlexoResourceTree)
+	 */
+	@Override
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException,
+			FileNotFoundException, ProjectLoadingCancelledException, FlexoException {
 
-    @Override
-    public void rebuildDependancies() {
-    	// We cannot put in any resource list, otherwise it will be serialized!
-    }
-    
+	}
+
+	@Override
+	public void rebuildDependancies() {
+		// We cannot put in any resource list, otherwise it will be serialized!
+	}
+
 }

@@ -20,5 +20,5 @@
 package org.openflexo.foundation.imported;
 
 public enum DeltaStatus {
-	NEW,DELETED,UPDATED,UNCHANGED;
+	NEW, DELETED, UPDATED, UNCHANGED;
 }

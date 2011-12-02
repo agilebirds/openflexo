@@ -39,75 +39,65 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DMPasteInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DMPasteInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(DMPaste.actionType,actionInitializer);
+	DMPasteInitializer(DMControllerActionInitializer actionInitializer) {
+		super(DMPaste.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DMPaste> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DMPaste> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMPaste>() {
-            @Override
-			public boolean run(ActionEvent e, DMPaste action)
-            {
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, DMPaste action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<DMPaste> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<DMPaste> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DMPaste>() {
-            @Override
-			public boolean run(ActionEvent e, DMPaste action)
-            {
-            	getControllerActionInitializer().getDMSelectionManager().performSelectionPaste();
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, DMPaste action) {
+				getControllerActionInitializer().getDMSelectionManager().performSelectionPaste();
+				return true;
+			}
+		};
 	}
 
- 	/**
- 	 * Please override if required
- 	 * Default implementation return null
- 	 * 
- 	 * @return null
- 	 */
- 	@Override
-	protected FlexoActionEnableCondition getEnableCondition()
- 	{
- 		return new FlexoActionEnableCondition<DMPaste,DMObject,DMObject>() {
-  			@Override
-			public boolean isEnabled(FlexoActionType<DMPaste, DMObject, DMObject> actionType, DMObject object, Vector<DMObject> globalSelection, FlexoEditor editor) {
-	               return getControllerActionInitializer().getDMSelectionManager().hasCopiedData();
+	/**
+	 * Please override if required Default implementation return null
+	 * 
+	 * @return null
+	 */
+	@Override
+	protected FlexoActionEnableCondition getEnableCondition() {
+		return new FlexoActionEnableCondition<DMPaste, DMObject, DMObject>() {
+			@Override
+			public boolean isEnabled(FlexoActionType<DMPaste, DMObject, DMObject> actionType, DMObject object,
+					Vector<DMObject> globalSelection, FlexoEditor editor) {
+				return getControllerActionInitializer().getDMSelectionManager().hasCopiedData();
 			}
 
-        };
- 	}
+		};
+	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.PASTE_ICON;
 	}
- 
+
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_V, FlexoCst.META_MASK);
 	}
 

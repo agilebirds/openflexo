@@ -25,106 +25,94 @@ import java.util.Iterator;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
+public class GroupModel extends ParametersContainerModelObject implements XMLSerializable, InnerTabWidget {
 
-public class GroupModel extends ParametersContainerModelObject implements XMLSerializable, InnerTabWidget
-{
+	public String name;
 
-    public String name;
+	private Hashtable<String, PropertyModel> properties;
 
-    private Hashtable<String,PropertyModel> properties;
+	private TabModel tabModel;
 
-    private TabModel tabModel;
+	public Integer constraint;
 
-    public Integer constraint;
-    
-    public GroupModel()
-    {
-        super();
-        properties = new Hashtable<String,PropertyModel>();
-    }
+	public GroupModel() {
+		super();
+		properties = new Hashtable<String, PropertyModel>();
+	}
 
-    /**
-     * @param model
-     */
-    public void setInspectorModel(InspectorModel model)
-    {
-        _inspectorModel = model;
-    }
+	/**
+	 * @param model
+	 */
+	public void setInspectorModel(InspectorModel model) {
+		_inspectorModel = model;
+	}
 
-    public InspectorModel getInspectorModel()
-    {
-        return _inspectorModel;
-    }
+	public InspectorModel getInspectorModel() {
+		return _inspectorModel;
+	}
 
-    private InspectorModel _inspectorModel;
+	private InspectorModel _inspectorModel;
 
-    /**
-     * @param depends
-     * @return
-     */
-    public PropertyModel getPropertyNamed(String depends)
-    {
-        for (Enumeration e = properties.elements(); e.hasMoreElements();) {
-            PropertyModel next = (PropertyModel) e.nextElement();
-            if (next.name.equals(depends))
-                return next;
-        }
-        return null;
-    }
+	/**
+	 * @param depends
+	 * @return
+	 */
+	public PropertyModel getPropertyNamed(String depends) {
+		for (Enumeration e = properties.elements(); e.hasMoreElements();) {
+			PropertyModel next = (PropertyModel) e.nextElement();
+			if (next.name.equals(depends)) {
+				return next;
+			}
+		}
+		return null;
+	}
 
-    public String getWidgetTypeForProperty(String propName)
-    {
-        Iterator it = properties.values().iterator();
-        PropertyModel prop = null;
-        while (it.hasNext()) {
-            prop = ((PropertyModel) it.next());
-            if (prop.name.equals(propName))
-                return prop.getWidget();
-        }
-        return null;
-    }
+	public String getWidgetTypeForProperty(String propName) {
+		Iterator it = properties.values().iterator();
+		PropertyModel prop = null;
+		while (it.hasNext()) {
+			prop = ((PropertyModel) it.next());
+			if (prop.name.equals(propName)) {
+				return prop.getWidget();
+			}
+		}
+		return null;
+	}
 
-    public Hashtable<String,PropertyModel> getProperties() {
-        return properties;
-    }
+	public Hashtable<String, PropertyModel> getProperties() {
+		return properties;
+	}
 
-    public void setProperties(Hashtable<String,PropertyModel> prop) {
-        this.properties = prop;
-    }
+	public void setProperties(Hashtable<String, PropertyModel> prop) {
+		this.properties = prop;
+	}
 
-    public void setPropertyForKey(PropertyModel propertyModel, String key)
-    {
-        properties.put(key,propertyModel);
-        if (getTabModel()!=null)
-            propertyModel.setTabModel(getTabModel());
-    }
+	public void setPropertyForKey(PropertyModel propertyModel, String key) {
+		properties.put(key, propertyModel);
+		if (getTabModel() != null) {
+			propertyModel.setTabModel(getTabModel());
+		}
+	}
 
-    public boolean removePropertyWithKey(String key)
-    {
-        return properties.remove(key)!=null;
-    }
-    
-    @Override
-	public int getIndex()
-    {
-        return constraint;
-    }
+	public boolean removePropertyWithKey(String key) {
+		return properties.remove(key) != null;
+	}
 
-    public TabModel getTabModel()
-    {
-        return tabModel;
-    }
+	@Override
+	public int getIndex() {
+		return constraint;
+	}
 
-    public void setTabModel(TabModel tabModel)
-    {
-        this.tabModel = tabModel;
-        for (Enumeration e = properties.elements(); e.hasMoreElements();) {
-            PropertyModel next = (PropertyModel) e.nextElement();
-            next.setTabModel(tabModel);
-        }
-    }
+	public TabModel getTabModel() {
+		return tabModel;
+	}
 
+	public void setTabModel(TabModel tabModel) {
+		this.tabModel = tabModel;
+		for (Enumeration e = properties.elements(); e.hasMoreElements();) {
+			PropertyModel next = (PropertyModel) e.nextElement();
+			next.setTabModel(tabModel);
+		}
+	}
 
 }
-
-

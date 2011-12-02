@@ -39,147 +39,150 @@ import org.openflexo.swing.MouseResizer;
 import org.openflexo.swing.MouseResizer.MouseResizerDelegate;
 import org.openflexo.toolbox.WRLocator;
 
-
 /**
  * @author bmangez
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements MouseResizerDelegate
-{
+public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements MouseResizerDelegate {
 
-    private static final Logger logger = Logger.getLogger(IEButtonWidgetView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEButtonWidgetView.class.getPackage().getName());
 
-    private File imageIconFile;
-    private ImageIcon imageIcon;
-    private Image image;
-    private MouseResizer resizer;
-    
-    /**
-     * @param model
-     */
-    public IEButtonWidgetView(IEController ieController, IEButtonWidget model, boolean addDnDSupport, IEWOComponentView componentView)
-    {
-        super(ieController, model, addDnDSupport,componentView);
-        //File imageIconFile = getImageIconPath(model);
-        setBorder(null);
-        setOpaque(false);
-        computeImage();
-        resizer = new MouseResizer(this,this);
-    }
-    
-    private void computeImage() {
-    	imageIconFile = WRLocator.locate(getModel().getProject().getProjectDirectory(), getModel().getImageName(),getCSSName()==null?FlexoCSS.CONTENTO.getName():getCSSName());
-    	if (imageIconFile==null)
-    		imageIconFile = WRLocator.AGILE_BIRDS_LOGO;
-        imageIcon = new ImageIcon(imageIconFile.getAbsolutePath());
-        image = imageIcon.getImage();
-    }
-    
-    protected Image getImage() {
-    	return image;
-    }
-    
-    @Override
-    public boolean isDragEnabled() {
-    	if (resizer.getMode()!=MouseResizer.ResizeMode.NONE)
-    		return false;
-    	return super.isDragEnabled();
-    }
-    
-    /*private void createViewForButtonWithName(String imageName) {
-        if (_label==null)
-            _label = new JLabel();
-        File imageIconFile = null;
-        if (imageName!=null) 
-            imageIconFile = WRLocator.locate(imageName,getCSSName()==null?FlexoCSS.CONTENTO.getName():getCSSName());
-        if (imageIconFile != null) {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Found icon " + imageIconFile.getAbsolutePath());
-            _label.setText(null);
-            _label.setIcon(new ImageIcon(imageIconFile.getAbsolutePath()));
-            _label.setOpaque(false);
-            _label.setPreferredSize(new Dimension(_label.getIcon().getIconWidth(), _label.getIcon().getIconHeight()));
-        } else {
-            if (logger.isLoggable(Level.WARNING) && imageName!=null)
-                logger.warning("Image with name "+imageName+" could not be found");
-            _label.setIcon(null);
-            _label.setText(FlexoLocalization.localizedForKey("image_not_found",_label));
-        }
-        if (_label.getParent()==null)
-            add(_label, BorderLayout.CENTER);
-    }*/
-    
-    @Override
-    public void paint(Graphics g) {
-    	g.drawImage(getImage(), 0, 0, getSize().width, getSize().height, null);
-    	super.paint(g);
-    }
-    
-    /**
-     * Overrides getPreferredSize
-     * @see javax.swing.JComponent#getPreferredSize()
-     */
-    @Override
-    public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null)return storedSize;
-        }
-        Dimension d;
-        if (getModel().getUsePercentage()) {
-        	int width, height;
-        	width = getPixelWidthUsingPercentage();
-        	height = Math.round((float)width/(float)getModel().getImageInformation().getWidth() * getModel().getImageInformation().getHeight()); 
-        	d = new Dimension(width,height);
-        } else {
-        	d = new Dimension(getModel().getWidthPixel(),getModel().getHeightPixel());
-        }
-        if (getHoldsNextComputedPreferredSize())
-            storePrefSize(d);
-        return d;
-    }
-    
-    private int getPixelWidthUsingPercentage() {
-    	int width;
-    	if (getParent() instanceof IESequenceWidgetWidgetView) {
-    		width = ((IESequenceWidgetWidgetView)getParent()).getAvailableWidth();
-    	} else {
-    		width = getParent().getSize().width;
-    	}
-    	width = width* getModel().getWidthPercentage()/100;
-    	return width;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-     */
+	private File imageIconFile;
+	private ImageIcon imageIcon;
+	private Image image;
+	private MouseResizer resizer;
 
-    @Override
-	public void update(FlexoObservable arg0, DataModification arg1)
-    {
-        if (getModel() == arg0 && arg1 instanceof ButtonRemoved) {
-            JComponent parent = (JComponent) getParent();
-            delete();
-            parent.validate();
-            parent.repaint();
-        } else if (getModel()==arg0 && arg1.propertyName()=="file"){
-        	computeImage();
-            revalidate();
-            repaint();
-        } else if (getModel()==arg0 && (arg1.propertyName()=="heightPixel" || arg1.propertyName()=="widthPixel")){
-        	doLayout();
-        	paintImmediately(getBounds());
-        } else if (getModel()==arg0 && (arg1.propertyName()=="usePercentage" || arg1.propertyName()=="widthPercentage")){
-        	doLayout();
-        	paintImmediately(getBounds());
-        } else
-            super.update(arg0, arg1);
-    }
+	/**
+	 * @param model
+	 */
+	public IEButtonWidgetView(IEController ieController, IEButtonWidget model, boolean addDnDSupport, IEWOComponentView componentView) {
+		super(ieController, model, addDnDSupport, componentView);
+		// File imageIconFile = getImageIconPath(model);
+		setBorder(null);
+		setOpaque(false);
+		computeImage();
+		resizer = new MouseResizer(this, this);
+	}
+
+	private void computeImage() {
+		imageIconFile = WRLocator.locate(getModel().getProject().getProjectDirectory(), getModel().getImageName(),
+				getCSSName() == null ? FlexoCSS.CONTENTO.getName() : getCSSName());
+		if (imageIconFile == null) {
+			imageIconFile = WRLocator.AGILE_BIRDS_LOGO;
+		}
+		imageIcon = new ImageIcon(imageIconFile.getAbsolutePath());
+		image = imageIcon.getImage();
+	}
+
+	protected Image getImage() {
+		return image;
+	}
+
+	@Override
+	public boolean isDragEnabled() {
+		if (resizer.getMode() != MouseResizer.ResizeMode.NONE) {
+			return false;
+		}
+		return super.isDragEnabled();
+	}
+
+	/*private void createViewForButtonWithName(String imageName) {
+	    if (_label==null)
+	        _label = new JLabel();
+	    File imageIconFile = null;
+	    if (imageName!=null) 
+	        imageIconFile = WRLocator.locate(imageName,getCSSName()==null?FlexoCSS.CONTENTO.getName():getCSSName());
+	    if (imageIconFile != null) {
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("Found icon " + imageIconFile.getAbsolutePath());
+	        _label.setText(null);
+	        _label.setIcon(new ImageIcon(imageIconFile.getAbsolutePath()));
+	        _label.setOpaque(false);
+	        _label.setPreferredSize(new Dimension(_label.getIcon().getIconWidth(), _label.getIcon().getIconHeight()));
+	    } else {
+	        if (logger.isLoggable(Level.WARNING) && imageName!=null)
+	            logger.warning("Image with name "+imageName+" could not be found");
+	        _label.setIcon(null);
+	        _label.setText(FlexoLocalization.localizedForKey("image_not_found",_label));
+	    }
+	    if (_label.getParent()==null)
+	        add(_label, BorderLayout.CENTER);
+	}*/
+
+	@Override
+	public void paint(Graphics g) {
+		g.drawImage(getImage(), 0, 0, getSize().width, getSize().height, null);
+		super.paint(g);
+	}
+
+	/**
+	 * Overrides getPreferredSize
+	 * 
+	 * @see javax.swing.JComponent#getPreferredSize()
+	 */
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null) {
+				return storedSize;
+			}
+		}
+		Dimension d;
+		if (getModel().getUsePercentage()) {
+			int width, height;
+			width = getPixelWidthUsingPercentage();
+			height = Math.round((float) width / (float) getModel().getImageInformation().getWidth()
+					* getModel().getImageInformation().getHeight());
+			d = new Dimension(width, height);
+		} else {
+			d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
+		}
+		if (getHoldsNextComputedPreferredSize()) {
+			storePrefSize(d);
+		}
+		return d;
+	}
+
+	private int getPixelWidthUsingPercentage() {
+		int width;
+		if (getParent() instanceof IESequenceWidgetWidgetView) {
+			width = ((IESequenceWidgetWidgetView) getParent()).getAvailableWidth();
+		} else {
+			width = getParent().getSize().width;
+		}
+		width = width * getModel().getWidthPercentage() / 100;
+		return width;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+
+	@Override
+	public void update(FlexoObservable arg0, DataModification arg1) {
+		if (getModel() == arg0 && arg1 instanceof ButtonRemoved) {
+			JComponent parent = (JComponent) getParent();
+			delete();
+			parent.validate();
+			parent.repaint();
+		} else if (getModel() == arg0 && arg1.propertyName() == "file") {
+			computeImage();
+			revalidate();
+			repaint();
+		} else if (getModel() == arg0 && (arg1.propertyName() == "heightPixel" || arg1.propertyName() == "widthPixel")) {
+			doLayout();
+			paintImmediately(getBounds());
+		} else if (getModel() == arg0 && (arg1.propertyName() == "usePercentage" || arg1.propertyName() == "widthPercentage")) {
+			doLayout();
+			paintImmediately(getBounds());
+		} else {
+			super.update(arg0, arg1);
+		}
+	}
 
 	@Override
 	public void resizeBy(int deltaX, int deltaY) {
@@ -187,19 +190,21 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 
 	@Override
 	public void resizeDirectlyBy(int deltaX, int deltaY) {
-		if (getModel().getUsePercentage()){
+		if (getModel().getUsePercentage()) {
 			int widthPercentage = getModel().getWidthPercentage();
 			int w = getPixelWidthUsingPercentage();
-			int newWidthPercentage = widthPercentage+(int)(((double)deltaX/(double)w)*100);
-			if (newWidthPercentage!=widthPercentage) {
+			int newWidthPercentage = widthPercentage + (int) (((double) deltaX / (double) w) * 100);
+			if (newWidthPercentage != widthPercentage) {
 				getModel().setWidthPercentage(newWidthPercentage);
 			}
 		} else {
-			Dimension d = new Dimension(getModel().getWidthPixel(),getModel().getHeightPixel());
-			if (deltaY!=0)
-				getModel().setHeightPixel(d.height+deltaY);
-			if (deltaX!=0)
-				getModel().setWidthPixel(d.width+deltaX);
+			Dimension d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
+			if (deltaY != 0) {
+				getModel().setHeightPixel(d.height + deltaY);
+			}
+			if (deltaX != 0) {
+				getModel().setWidthPixel(d.width + deltaX);
+			}
 		}
 	}
 

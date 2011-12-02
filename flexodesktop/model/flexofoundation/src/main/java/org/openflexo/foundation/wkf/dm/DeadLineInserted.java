@@ -30,15 +30,13 @@ import org.openflexo.foundation.wkf.FlexoProcess;
  * 
  */
 @Deprecated
-public class DeadLineInserted extends WKFDataModification
-{
+public class DeadLineInserted extends WKFDataModification {
 
-    public FlexoProcess parentProcess;
+	public FlexoProcess parentProcess;
 
-    public DeadLineInserted(DeadLine insertedDeadLine, FlexoProcess parentProcess)
-    {
-        super(null, insertedDeadLine);
-        this.parentProcess = parentProcess;
-    }
+	public DeadLineInserted(DeadLine insertedDeadLine, FlexoProcess parentProcess) {
+		super(null, insertedDeadLine);
+		this.parentProcess = parentProcess;
+	}
 
 }

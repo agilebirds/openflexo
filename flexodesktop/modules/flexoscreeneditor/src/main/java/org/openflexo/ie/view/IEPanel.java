@@ -40,15 +40,11 @@ import org.openflexo.ie.view.listener.IEKeyEventListener;
 import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 
-
 /**
- * Abstract parent class for all classes representing views in IE Module that
- * must preempt the focus At this level are implemented the fact that all those
- * classes are focusable and have the same FocusListener which is the unique
- * instance of {@link IEFocusListener}. As views managing focus, they
- * implements a way to request the focus when the mouse entered in. As views
- * managing focus, they all have the same KeyListener which is the unique
- * instance of {@link IEKeyEventListener}.
+ * Abstract parent class for all classes representing views in IE Module that must preempt the focus At this level are implemented the fact
+ * that all those classes are focusable and have the same FocusListener which is the unique instance of {@link IEFocusListener}. As views
+ * managing focus, they implements a way to request the focus when the mouse entered in. As views managing focus, they all have the same
+ * KeyListener which is the unique instance of {@link IEKeyEventListener}.
  * 
  * <ul>
  * <li>All instances of
@@ -57,8 +53,7 @@ import org.openflexo.view.listener.FlexoKeyEventListener;
  * IEPanel
  * </pre>
  * 
- * are able to retrieve their root component, as an instance of
- * {@link IEWOComponentView}, see {@link getRootView()}</li>
+ * are able to retrieve their root component, as an instance of {@link IEWOComponentView}, see {@link getRootView()}</li>
  * <li>All instances of
  * 
  * <pre>
@@ -75,7 +70,9 @@ import org.openflexo.view.listener.FlexoKeyEventListener;
  * 
  * <pre>
  * IEWidget
- * </pre>, see {@link findViewForModel(IEWidget)}</li>
+ * </pre>
+ * 
+ * , see {@link findViewForModel(IEWidget)}</li>
  * <li>All instances of
  * 
  * <pre>
@@ -92,100 +89,90 @@ import org.openflexo.view.listener.FlexoKeyEventListener;
  * 
  * <pre>
  * IEWidget
- * </pre>, see {@link findViewForModel(IEWidget)}</li>
+ * </pre>
+ * 
+ * , see {@link findViewForModel(IEWidget)}</li>
  * </ul>
  * 
  * @author sguerin
  */
-public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoActionSource<FlexoModelObject, FlexoModelObject>
-{
+public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoActionSource<FlexoModelObject, FlexoModelObject> {
 
-    protected static final Logger logger = Logger.getLogger(IEPanel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(IEPanel.class.getPackage().getName());
 
-    private IEWOComponentView _rootView;
+	private IEWOComponentView _rootView;
 
-    private IEController _ieController;
+	private IEController _ieController;
 
-    protected IEPanel(IEController iecontroller)
-    {
-        super();
-        setVisible(true);
-        _ieController = iecontroller;
-        setFocusable(true);
-        setBackground(Color.WHITE);
-        setOpaque(true);
-        _rootView = null;
-        addFocusListener(IEFocusListener.instance());
-        addKeyListener(getKeyEventListener());
-        addMouseListener(new MouseAdapter() {
-            @Override
-			public void mouseEntered(MouseEvent e)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.finest("Mouse entered in " + getClass().getName() + ", try to get the focus");
-                // requestFocus();
-            }
+	protected IEPanel(IEController iecontroller) {
+		super();
+		setVisible(true);
+		_ieController = iecontroller;
+		setFocusable(true);
+		setBackground(Color.WHITE);
+		setOpaque(true);
+		_rootView = null;
+		addFocusListener(IEFocusListener.instance());
+		addKeyListener(getKeyEventListener());
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.finest("Mouse entered in " + getClass().getName() + ", try to get the focus");
+					// requestFocus();
+				}
+			}
 
-            @Override
-			public void mouseClicked(MouseEvent e)
-            {
-                requestFocus();
-            }
-        });
-    }
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				requestFocus();
+			}
+		});
+	}
 
-    public IEController getIEController()
-    {
-        return _ieController;
-    }
+	public IEController getIEController() {
+		return _ieController;
+	}
 
-    protected FlexoKeyEventListener getKeyEventListener()
-    {
-        return getIEController().getKeyEventListener();
-    }
+	protected FlexoKeyEventListener getKeyEventListener() {
+		return getIEController().getKeyEventListener();
+	}
 
-    @Override
-	public IEWOComponentView getRootView()
-    {
-        if (_rootView == null) {
-            _rootView = ViewFinder.getRootView(this);
-        }
-        return _rootView;
-    }
+	@Override
+	public IEWOComponentView getRootView() {
+		if (_rootView == null) {
+			_rootView = ViewFinder.getRootView(this);
+		}
+		return _rootView;
+	}
 
-    @Override
-	public IEWidgetView findViewForModel(IEObject object)
-    {
-        return ViewFinder.findViewForModel(this, object);
-    }
+	@Override
+	public IEWidgetView findViewForModel(IEObject object) {
+		return ViewFinder.findViewForModel(this, object);
+	}
 
-    @Override
-	public IEWidgetView internallyFindViewForModel(IEObject object)
-    {
-        return ViewFinder.internallyFindViewForModel(this, object);
-    }
+	@Override
+	public IEWidgetView internallyFindViewForModel(IEObject object) {
+		return ViewFinder.internallyFindViewForModel(this, object);
+	}
 
-    public Color colorFromConceptualColor(FlexoConceptualColor conceptualColor, FlexoCSS css)
-    {
-        return IEViewUtils.colorFromConceptualColor(conceptualColor,css);
-    }
-    
-    @Override
-	public FlexoEditor getEditor()
-    {
-        return getIEController().getEditor();
-    }
+	public Color colorFromConceptualColor(FlexoConceptualColor conceptualColor, FlexoCSS css) {
+		return IEViewUtils.colorFromConceptualColor(conceptualColor, css);
+	}
 
-    @Override
-	public FlexoModelObject getFocusedObject()
-    {
-        return getIEController().getSelectionManager().getFocusedObject();
-    }
+	@Override
+	public FlexoEditor getEditor() {
+		return getIEController().getEditor();
+	}
 
-    @Override
-	public Vector<FlexoModelObject> getGlobalSelection()
-    {
-        return getIEController().getSelectionManager().getSelection();
-    }
+	@Override
+	public FlexoModelObject getFocusedObject() {
+		return getIEController().getSelectionManager().getFocusedObject();
+	}
+
+	@Override
+	public Vector<FlexoModelObject> getGlobalSelection() {
+		return getIEController().getSelectionManager().getSelection();
+	}
 
 }

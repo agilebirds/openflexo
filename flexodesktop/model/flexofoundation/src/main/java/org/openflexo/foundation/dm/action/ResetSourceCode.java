@@ -31,13 +31,12 @@ import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.dm.javaparser.ParserNotInstalledException;
 import org.openflexo.foundation.dm.javaparser.SourceCodeOwner;
 
-
-public class ResetSourceCode extends FlexoAction<ResetSourceCode,DMObject,DMObject> {
+public class ResetSourceCode extends FlexoAction<ResetSourceCode, DMObject, DMObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateDMEOEntity.class.getPackage().getName());
 
-	public static FlexoActionType<ResetSourceCode,DMObject,DMObject> actionType = new FlexoActionType<ResetSourceCode,DMObject,DMObject>("reset_source_code", 
-			FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<ResetSourceCode, DMObject, DMObject> actionType = new FlexoActionType<ResetSourceCode, DMObject, DMObject>(
+			"reset_source_code", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
@@ -54,7 +53,7 @@ public class ResetSourceCode extends FlexoAction<ResetSourceCode,DMObject,DMObje
 
 		@Override
 		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
-			return object!=null;
+			return object != null;
 		}
 
 	};
@@ -67,12 +66,12 @@ public class ResetSourceCode extends FlexoAction<ResetSourceCode,DMObject,DMObje
 	protected void doAction(Object context) {
 		HashSet<DMObject> visited = new HashSet<DMObject>();
 		HashSet<SourceCodeOwner> codeOwner = new HashSet<SourceCodeOwner>();
-		if (getFocusedObject()!=null) {
-			processToAdditionOfSourceCodeOwner(getFocusedObject(), visited,codeOwner);
+		if (getFocusedObject() != null) {
+			processToAdditionOfSourceCodeOwner(getFocusedObject(), visited, codeOwner);
 		}
-		if (getGlobalSelection()!=null) {
+		if (getGlobalSelection() != null) {
 			for (DMObject object : getGlobalSelection()) {
-				processToAdditionOfSourceCodeOwner(object, visited,codeOwner);
+				processToAdditionOfSourceCodeOwner(object, visited, codeOwner);
 			}
 		}
 		for (SourceCodeOwner sourceCodeOwner : codeOwner) {
@@ -89,8 +88,9 @@ public class ResetSourceCode extends FlexoAction<ResetSourceCode,DMObject,DMObje
 	}
 
 	private void processToAdditionOfSourceCodeOwner(DMObject object, HashSet<DMObject> visited, HashSet<SourceCodeOwner> codeOwner) {
-		if (visited.contains(object))
+		if (visited.contains(object)) {
 			return;
+		}
 		visited.add(object);
 		if (object instanceof SourceCodeOwner && !codeOwner.contains(object)) {
 			codeOwner.add((SourceCodeOwner) object);

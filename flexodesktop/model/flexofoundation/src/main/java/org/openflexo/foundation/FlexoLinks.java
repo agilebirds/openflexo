@@ -25,9 +25,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoLinksResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -41,6 +38,8 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoLinksBuilder;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.xmlcode.XMLMapping;
 
 public class FlexoLinks extends FlexoModelObject implements XMLStorageResourceData {
 
@@ -48,33 +47,35 @@ public class FlexoLinks extends FlexoModelObject implements XMLStorageResourceDa
 
 	public static FlexoLinks createLinks(FlexoProject project) {
 		FlexoLinks links = new FlexoLinks(project);
-        File linksFile = ProjectRestructuration.getExpectedLinksFile(project);
-        FlexoProjectFile linksModelFile = new FlexoProjectFile(linksFile, project);
-        FlexoLinksResource linksRes;
-        try {
-            linksRes = new FlexoLinksResource(project, links, linksModelFile);
-        } catch (InvalidFileNameException e) {
-            linksModelFile = new FlexoProjectFile(FileUtils.getValidFileName(linksModelFile.getRelativePath()));
-            linksModelFile.setProject(project);
-            try {
-                linksRes = new FlexoLinksResource(project, links, linksModelFile);
-            } catch (InvalidFileNameException e1) {
-                if (logger.isLoggable(Level.SEVERE))
-                    logger.severe("Could not create Links resource. Name: "+linksModelFile.getRelativePath()+" is not valid. This should never happen.");
-                return null;
-            }
-        }
-        try {
-            linksRes.saveResourceData();
-            project.registerResource(linksRes);
-        } catch (Exception e1) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Exception raised: " + e1.getClass().getName()
-                        + ". See console for details.");
-            e1.printStackTrace();
-        }
-        return links;
+		File linksFile = ProjectRestructuration.getExpectedLinksFile(project);
+		FlexoProjectFile linksModelFile = new FlexoProjectFile(linksFile, project);
+		FlexoLinksResource linksRes;
+		try {
+			linksRes = new FlexoLinksResource(project, links, linksModelFile);
+		} catch (InvalidFileNameException e) {
+			linksModelFile = new FlexoProjectFile(FileUtils.getValidFileName(linksModelFile.getRelativePath()));
+			linksModelFile.setProject(project);
+			try {
+				linksRes = new FlexoLinksResource(project, links, linksModelFile);
+			} catch (InvalidFileNameException e1) {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("Could not create Links resource. Name: " + linksModelFile.getRelativePath()
+							+ " is not valid. This should never happen.");
+				}
+				return null;
+			}
+		}
+		try {
+			linksRes.saveResourceData();
+			project.registerResource(linksRes);
+		} catch (Exception e1) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
+			e1.printStackTrace();
+		}
+		return links;
 	}
 
 	private FlexoLinksResource resource;
@@ -105,38 +106,39 @@ public class FlexoLinks extends FlexoModelObject implements XMLStorageResourceDa
 		links.add(link);
 		link.setLinks(this);
 		setChanged();
-		if (link.getObject1().getObject()!=null) {
-			updateReferencesForObject(link.getObject1().getObject(),link);
+		if (link.getObject1().getObject() != null) {
+			updateReferencesForObject(link.getObject1().getObject(), link);
 		}
-		if (link.getObject2().getObject()!=null) {
-			updateReferencesForObject(link.getObject2().getObject(),link);
+		if (link.getObject2().getObject() != null) {
+			updateReferencesForObject(link.getObject2().getObject(), link);
 		}
 	}
 
 	protected void updateReferencesForObject(FlexoModelObject object, FlexoLink link) {
 		Vector<FlexoLink> l = referencesToObjects.get(object);
-		if (l==null)
-			referencesToObjects.put(object, l=new Vector<FlexoLink>());
+		if (l == null) {
+			referencesToObjects.put(object, l = new Vector<FlexoLink>());
+		}
 		l.add(link);
 	}
 
 	public void removeFromLinks(FlexoLink link) {
 		links.remove(link);
 		link.setLinks(null);
-		if (link.getObject1().getObject()!=null) {
-			Vector<FlexoLink> l=referencesToObjects.get(link.getObject1().getObject());
-			if (l!=null) {
+		if (link.getObject1().getObject() != null) {
+			Vector<FlexoLink> l = referencesToObjects.get(link.getObject1().getObject());
+			if (l != null) {
 				l.remove(link);
-				if (link.getObject2().getObject()!=null) {
+				if (link.getObject2().getObject() != null) {
 					link.getObject2().getObject().notifyLinksChanged();
 				}
 			}
 		}
-		if (link.getObject2().getObject()!=null) {
-			Vector<FlexoLink> l=referencesToObjects.get(link.getObject2().getObject());
-			if (l!=null) {
+		if (link.getObject2().getObject() != null) {
+			Vector<FlexoLink> l = referencesToObjects.get(link.getObject2().getObject());
+			if (l != null) {
 				l.remove(link);
-				if (link.getObject1().getObject()!=null) {
+				if (link.getObject1().getObject() != null) {
 					link.getObject1().getObject().notifyLinksChanged();
 				}
 			}

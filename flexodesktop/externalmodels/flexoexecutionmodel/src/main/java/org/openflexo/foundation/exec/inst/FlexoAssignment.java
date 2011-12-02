@@ -24,38 +24,32 @@ import org.openflexo.foundation.bindings.BindingAssignment;
 public class FlexoAssignment extends CustomInstruction {
 
 	private BindingAssignment assignment;
-	
-	public FlexoAssignment (BindingAssignment anAssignment)
-	{
+
+	public FlexoAssignment(BindingAssignment anAssignment) {
 		super();
 		this.assignment = anAssignment;
 	}
 
-	public BindingAssignment getBindingAssignment() 
-	{
+	public BindingAssignment getBindingAssignment() {
 		return assignment;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "[Assignment:"+assignment.getStringRepresentation()+"]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return assignment.getReceiver().getSetterJavaCodeStringRepresentation(assignment.getValue())+";";
+	public String toString() {
+		return "[Assignment:" + assignment.getStringRepresentation() + "]";
 	}
-	
+
 	@Override
-	public FlexoAssignment clone()
-	{
+	public String getJavaStringRepresentation() {
+		return assignment.getReceiver().getSetterJavaCodeStringRepresentation(assignment.getValue()) + ";";
+	}
+
+	@Override
+	public FlexoAssignment clone() {
 		FlexoAssignment returned = new FlexoAssignment(assignment);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
 		return returned;
 	}
-
 
 }

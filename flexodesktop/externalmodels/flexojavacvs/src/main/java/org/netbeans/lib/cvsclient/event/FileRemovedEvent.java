@@ -21,39 +21,44 @@ package org.netbeans.lib.cvsclient.event;
 
 /**
  * Indicates that a file has been removed.
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 public class FileRemovedEvent extends CVSEvent {
 
-    /**
-     * The path of the file that has been removed.
-     */
-    protected String path;
+	/**
+	 * The path of the file that has been removed.
+	 */
+	protected String path;
 
-    /**
-     * Construct a FileRemovedEvent
-     * @param source the source of the event
-     * @param path The path of the file that has been removed
-     */
-    public FileRemovedEvent(Object source, String path) {
-        super(source);
-        this.path = path;
-    }
+	/**
+	 * Construct a FileRemovedEvent
+	 * 
+	 * @param source
+	 *            the source of the event
+	 * @param path
+	 *            The path of the file that has been removed
+	 */
+	public FileRemovedEvent(Object source, String path) {
+		super(source);
+		this.path = path;
+	}
 
-    /**
-     * Get the path of the file that has been removed.
-     */
-    public String getFilePath() {
-        return path;
-    }
+	/**
+	 * Get the path of the file that has been removed.
+	 */
+	public String getFilePath() {
+		return path;
+	}
 
-    /**
-     * Fire the event to the event listener. Subclasses should call the
-     * appropriate method on the listener to dispatch this event.
-     * @param listener the event listener
-     */
-    @Override
+	/**
+	 * Fire the event to the event listener. Subclasses should call the appropriate method on the listener to dispatch this event.
+	 * 
+	 * @param listener
+	 *            the event listener
+	 */
+	@Override
 	protected void fireEvent(CVSListener listener) {
-        listener.fileRemoved(this);
-    }
+		listener.fileRemoved(this);
+	}
 }

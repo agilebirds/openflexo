@@ -30,56 +30,49 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 
+public class ShowComponentUsage extends FlexoGUIAction<ShowComponentUsage, IEObject, IEObject> {
 
-public class ShowComponentUsage extends FlexoGUIAction<ShowComponentUsage,IEObject,IEObject> 
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShowComponentUsage.class.getPackage().getName());
 
-    public static FlexoActionType<ShowComponentUsage,IEObject,IEObject> actionType 
-    = new FlexoActionType<ShowComponentUsage,IEObject,IEObject> (
-    		"show_where_component_is_used",
-    		FlexoActionType.inspectGroup) {
+	public static FlexoActionType<ShowComponentUsage, IEObject, IEObject> actionType = new FlexoActionType<ShowComponentUsage, IEObject, IEObject>(
+			"show_where_component_is_used", FlexoActionType.inspectGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ShowComponentUsage makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ShowComponentUsage(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ShowComponentUsage makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+			return new ShowComponentUsage(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) 
-        {
-            return (object instanceof ComponentDefinition || object instanceof IEWOComponent);
-        }
-                
-    };
-    
-    protected ShowComponentUsage (IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return (object instanceof ComponentDefinition || object instanceof IEWOComponent);
+		}
 
-    public FlexoProject getProject()
-    {
-    	if (getFocusedObject() != null)
-    		return getFocusedObject().getProject();
-    	return null;
-    }
+	};
 
-    public ComponentDefinition getComponentDefinition() {
-    	if (getFocusedObject() instanceof IEWOComponent)
-    		return ((IEWOComponent)getFocusedObject()).getComponentDefinition();
-    	return (ComponentDefinition) getFocusedObject();
-    }
+	protected ShowComponentUsage(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	public FlexoProject getProject() {
+		if (getFocusedObject() != null) {
+			return getFocusedObject().getProject();
+		}
+		return null;
+	}
+
+	public ComponentDefinition getComponentDefinition() {
+		if (getFocusedObject() instanceof IEWOComponent) {
+			return ((IEWOComponent) getFocusedObject()).getComponentDefinition();
+		}
+		return (ComponentDefinition) getFocusedObject();
+	}
 }

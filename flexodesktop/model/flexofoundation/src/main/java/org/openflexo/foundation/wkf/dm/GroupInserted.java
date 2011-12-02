@@ -21,17 +21,14 @@ package org.openflexo.foundation.wkf.dm;
 
 import org.openflexo.foundation.wkf.WKFGroup;
 
-public class GroupInserted extends WKFDataModification
-{
+public class GroupInserted extends WKFDataModification {
 
-     public GroupInserted(WKFGroup insertedGroup)
-    {
-        super(null, insertedGroup);
-     }
+	public GroupInserted(WKFGroup insertedGroup) {
+		super(null, insertedGroup);
+	}
 
-     @Override
-    public WKFGroup newValue()
-     {
-    	return (WKFGroup)super.newValue();
-    }
+	@Override
+	public WKFGroup newValue() {
+		return (WKFGroup) super.newValue();
+	}
 }

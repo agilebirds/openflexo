@@ -38,18 +38,18 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -63,11 +63,10 @@ import org.openflexo.foundation.wkf.action.DropWKFElement;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.WKFNode;
 import org.openflexo.wkf.WKFCst;
+import org.openflexo.wkf.swleditor.AbstractWKFPalette.WKFPaletteElement;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
-import org.openflexo.wkf.swleditor.AbstractWKFPalette.WKFPaletteElement;
-
 
 public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEditorConstants, Observer {
 
@@ -83,46 +82,39 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	private FGERectangle dataObjectRect;
 	private FGERectangle dataSourceRect;
 
-	private static final int SPACING=5;
+	private static final int SPACING = 5;
 	private static final int ELEMENTS_HEIGHT = 8;
 	private static final int ELEMENTS_WIDTH = 12;
 
 	private static final int PALETTE_WIDTH = 15;
-	private static final int PALETTE_HEIGHT = 4*ELEMENTS_HEIGHT+5*SPACING;
+	private static final int PALETTE_HEIGHT = 4 * ELEMENTS_HEIGHT + 5 * SPACING;
 
 	private static final ForegroundStyle NONE = ForegroundStyle.makeNone();
 	private static final BackgroundStyle DEFAULT = BackgroundStyle.makeColoredBackground(Color.WHITE);
 	private static final ForegroundStyle NODE_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_DARK_GREEN, 1.0f);
 	private static final ForegroundStyle EDGE_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BROWN, 1.0f);
 	private static final ForegroundStyle DATA_OBJECT_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BLUE, 1.0f);
-	//private static final ForegroundStyle AND_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BORDEAU, 1.0f);
-	private static final BackgroundStyle NODE_BACKGROUND = BackgroundStyle.makeColorGradientBackground(FGEUtils.NICE_DARK_GREEN, Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+	// private static final ForegroundStyle AND_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BORDEAU, 1.0f);
+	private static final BackgroundStyle NODE_BACKGROUND = BackgroundStyle.makeColorGradientBackground(FGEUtils.NICE_DARK_GREEN,
+			Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 
-	static  {
+	static {
 		DEFAULT.setUseTransparency(true);
 		DEFAULT.setTransparencyLevel(0.3f);
 		NODE_BACKGROUND.setUseTransparency(true);
 		NODE_BACKGROUND.setTransparencyLevel(0.7f);
 	}
 
-	private static FGERoundRectangle makeRoundRect(WKFNodeGR<?> nodeGR)
-	{
-		double x = nodeGR.getWidth()+SPACING;
-		double y = (nodeGR.getHeight()-PALETTE_HEIGHT)/2;
+	private static FGERoundRectangle makeRoundRect(WKFNodeGR<?> nodeGR) {
+		double x = nodeGR.getWidth() + SPACING;
+		double y = (nodeGR.getHeight() - PALETTE_HEIGHT) / 2;
 		double width = PALETTE_WIDTH;
 		double height = PALETTE_HEIGHT;
-		return new FGERoundRectangle(
-				x/nodeGR.getWidth(),
-				y/nodeGR.getHeight(),
-				width/nodeGR.getWidth(),
-				height/nodeGR.getHeight(),
-				13.0/nodeGR.getWidth(),
-				13.0/nodeGR.getHeight(),
-				Filling.FILLED);
+		return new FGERoundRectangle(x / nodeGR.getWidth(), y / nodeGR.getHeight(), width / nodeGR.getWidth(), height / nodeGR.getHeight(),
+				13.0 / nodeGR.getWidth(), 13.0 / nodeGR.getHeight(), Filling.FILLED);
 	}
 
-	public NodePalette(WKFNodeGR<?> nodeGR, FlexoPetriGraph target)
-	{
+	public NodePalette(WKFNodeGR<?> nodeGR, FlexoPetriGraph target) {
 		super(nodeGR, makeRoundRect(nodeGR));
 		this.nodeGR = nodeGR;
 		this.target = target;
@@ -131,13 +123,12 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	}
 
 	@Override
-	public boolean isDraggable()
-	{
+	public boolean isDraggable() {
 		return true;
 	}
 
 	protected Point currentDraggingLocationInDrawingView = null;
-	//protected FGEPoint currentAbsoluteLocationInDrawingView = null;
+	// protected FGEPoint currentAbsoluteLocationInDrawingView = null;
 	protected boolean drawEdge = false;
 	protected boolean isDnd = false;
 	protected WKFNodeGR<?> to = null;
@@ -148,67 +139,70 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	private Rectangle previousRectangle;
 	private Mode mode;
 
-	public void paint(Graphics g, SwimmingLaneEditorController controller)
-	{
+	public void paint(Graphics g, SwimmingLaneEditorController controller) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null) {
 			FGEShape<?> fgeShape = nodeGR.getShape().getOutline();
 			DrawingGraphicalRepresentation<?> drawingGR = controller.getDrawingGraphicalRepresentation();
 			double scale = controller.getScale();
-			FGEPoint nearestOnOutline = fgeShape.getNearestPoint(drawingGR.convertLocalViewCoordinatesToRemoteNormalizedPoint(currentDraggingLocationInDrawingView, nodeGR, scale));
+			FGEPoint nearestOnOutline = fgeShape.getNearestPoint(drawingGR.convertLocalViewCoordinatesToRemoteNormalizedPoint(
+					currentDraggingLocationInDrawingView, nodeGR, scale));
 			/*nodeGR.convertLocalNormalizedPointToRemoteViewCoordinates(this.normalizedStartPoint, controller.getDrawingGraphicalRepresentation(), controller.getScale())*/
 			Point fromPoint = nodeGR.convertLocalNormalizedPointToRemoteViewCoordinates(nearestOnOutline, drawingGR, scale);
 			Point toPoint = currentDraggingLocationInDrawingView;
 
-			if (mode==Mode.EDGE) {
+			if (mode == Mode.EDGE) {
 				if (to != null && isDnd) {
-					//toPoint = drawingGR.convertRemoteNormalizedPointToLocalViewCoordinates(to.getShape().getShape().getCenter(), to, scale);
+					// toPoint = drawingGR.convertRemoteNormalizedPointToLocalViewCoordinates(to.getShape().getShape().getCenter(), to,
+					// scale);
 					g.setColor(WKFCst.OK);
 				} else {
 					g.setColor(Color.RED);
 				}
 
 			} else {
-				if (isDnd)
+				if (isDnd) {
 					g.setColor(WKFCst.OK);
-				else
+				} else {
 					g.setColor(Color.RED);
+				}
 			}
 			g.drawLine(fromPoint.x, fromPoint.y, toPoint.x, toPoint.y);
-			int x,y,w,h;
-			if (fromPoint.x>=toPoint.x) {
+			int x, y, w, h;
+			if (fromPoint.x >= toPoint.x) {
 				x = toPoint.x;
 				w = fromPoint.x - toPoint.x;
 			} else {
 				x = fromPoint.x;
 				w = toPoint.x - fromPoint.x;
 			}
-			if (fromPoint.y>=toPoint.y) {
+			if (fromPoint.y >= toPoint.y) {
 				y = toPoint.y;
 				h = fromPoint.y - toPoint.y;
 			} else {
 				y = fromPoint.y;
 				h = toPoint.y - fromPoint.y;
 			}
-			previousRectangle = new Rectangle(x,y,w,h);
+			previousRectangle = new Rectangle(x, y, w, h);
 		}
 	}
 
 	@Override
 	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		mode = null;
-		if (nodeRect.contains(startPoint))
+		if (nodeRect.contains(startPoint)) {
 			mode = Mode.NODE;
-		else if (edgeRect.contains(startPoint))
+		} else if (edgeRect.contains(startPoint)) {
 			mode = Mode.EDGE;
-		else if (dataObjectRect.contains(startPoint))
+		} else if (dataObjectRect.contains(startPoint)) {
 			mode = Mode.DATA_OBJECT;
-		else if (dataSourceRect.contains(startPoint))
+		} else if (dataSourceRect.contains(startPoint)) {
 			mode = Mode.DATA_SOURCE;
-		if (mode!=null) {
+		}
+		if (mode != null) {
 			drawEdge = true;
 			normalizedStartPoint = startPoint;
 			this.controller = controller;
-			((SwimmingLaneView)controller.getDrawingView()).setDraggedNodePalette(this);
+			((SwimmingLaneView) controller.getDrawingView()).setDraggedNodePalette(this);
 		} else {
 			drawEdge = false;
 		}
@@ -222,37 +216,40 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 			FGEPaintManager paintManager = drawingView.getPaintManager();
 			// Attempt to repaint relevant zone only
 			Rectangle oldBounds = previousRectangle;
-			if (oldBounds!=null) {
-				oldBounds.x-=1;
-				oldBounds.y-=1;
-				oldBounds.width+=2;
-				oldBounds.height+=2;
+			if (oldBounds != null) {
+				oldBounds.x -= 1;
+				oldBounds.y -= 1;
+				oldBounds.width += 2;
+				oldBounds.height += 2;
 			}
-
 
 			focusedGR = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
 			if (focusedGR instanceof WKFNodeGR && focusedGR != nodeGR) {
-				to = (WKFNodeGR<?>)focusedGR;
+				to = (WKFNodeGR<?>) focusedGR;
 			} else {
 				to = null;
 			}
 
-			currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component)event.getSource(),event.getPoint(),controller.getDrawingView());
+			currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+					controller.getDrawingView());
 			if (!isDnd) {
-				isDnd = nodeGR.convertLocalNormalizedPointToRemoteViewCoordinates(normalizedStartPoint, controller.getDrawingGraphicalRepresentation(), controller.getScale()).distance(currentDraggingLocationInDrawingView)>5;
+				isDnd = nodeGR.convertLocalNormalizedPointToRemoteViewCoordinates(normalizedStartPoint,
+						controller.getDrawingGraphicalRepresentation(), controller.getScale()).distance(
+						currentDraggingLocationInDrawingView) > 5;
 			}
 
 			// Attempt to repaint relevant zone only
 			Rectangle newBounds = getBoundsToRepaint(drawingView);
 			Rectangle boundsToRepaint;
-			if (oldBounds!=null)
+			if (oldBounds != null) {
 				boundsToRepaint = oldBounds.union(newBounds);
-			else
+			} else {
 				boundsToRepaint = newBounds;
-			paintManager.repaint(drawingView,boundsToRepaint);
+			}
+			paintManager.repaint(drawingView, boundsToRepaint);
 
 			// Alternative @brutal zone
-			//paintManager.repaint(drawingView);
+			// paintManager.repaint(drawingView);
 
 			return true;
 		}
@@ -260,8 +257,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	}
 
 	// Attempt to repaint relevant zone only
-	private Rectangle getBoundsToRepaint(DrawingView<?> drawingView)
-	{
+	private Rectangle getBoundsToRepaint(DrawingView<?> drawingView) {
 		ShapeView<?> fromView = drawingView.shapeViewForObject(nodeGR);
 		Rectangle fromViewBounds = SwingUtilities.convertRectangle(fromView, fromView.getBounds(), drawingView);
 		Rectangle boundsToRepaint = fromViewBounds;
@@ -277,14 +273,14 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 			boundsToRepaint = fromViewBounds.union(lastLocationBounds);
 		}
 
-		//logger.fine("boundsToRepaint="+boundsToRepaint);
+		// logger.fine("boundsToRepaint="+boundsToRepaint);
 
 		return boundsToRepaint;
 	}
 
 	@Override
 	public void stopDragging(DrawingController<?> controller) {
-		if (drawEdge && currentDraggingLocationInDrawingView!=null && isDnd) {
+		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				WKFNode to = null;
 				WKFPaletteElement element = null;
@@ -292,42 +288,52 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 				GraphicalRepresentation<?> targetGR = null;
 				if (target.isRootPetriGraph()) {
 					GraphicalRepresentation<?> gr = focusedGR;
-					while (gr!=null) {
+					while (gr != null) {
 						if (gr.getDrawable() instanceof Role) {
-							role = (Role)gr.getDrawable();
+							role = (Role) gr.getDrawable();
 							targetGR = gr;
 							break;
 						}
 						gr = gr.getContainerGraphicalRepresentation();
 					}
 				}
-				if (targetGR==null)
+				if (targetGR == null) {
 					targetGR = controller.getGraphicalRepresentation(target);
-				if (targetGR==null)
+				}
+				if (targetGR == null) {
 					targetGR = controller.getDrawingGraphicalRepresentation();
-				SimplifiedCardinalDirection direction = FGEPoint.getSimplifiedOrientation(new FGEPoint(nodeGR.convertLocalNormalizedPointToRemoteViewCoordinates(this.normalizedStartPoint, controller.getDrawingGraphicalRepresentation(), controller.getScale())), new FGEPoint(currentDraggingLocationInDrawingView));
+				}
+				SimplifiedCardinalDirection direction = FGEPoint.getSimplifiedOrientation(
+						new FGEPoint(nodeGR.convertLocalNormalizedPointToRemoteViewCoordinates(this.normalizedStartPoint,
+								controller.getDrawingGraphicalRepresentation(), controller.getScale())), new FGEPoint(
+								currentDraggingLocationInDrawingView));
 				Point dropPoint = currentDraggingLocationInDrawingView;
-				if (dropPoint.x<0)
-					dropPoint.x=0;
-				if (dropPoint.y<0)
-					dropPoint.y=0;
-				Point p = GraphicalRepresentation.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint , targetGR, controller.getScale());
-				FGEPoint dropLocation = new FGEPoint(p.x/controller.getScale(),p.y/controller.getScale());
+				if (dropPoint.x < 0) {
+					dropPoint.x = 0;
+				}
+				if (dropPoint.y < 0) {
+					dropPoint.y = 0;
+				}
+				Point p = GraphicalRepresentation.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, targetGR,
+						controller.getScale());
+				FGEPoint dropLocation = new FGEPoint(p.x / controller.getScale(), p.y / controller.getScale());
 				switch (mode) {
 				case NODE:
-					if (target.getLevel()==FlexoLevel.ACTIVITY)
-						element = ((SwimmingLaneEditorController)controller).getActivityPalette().getNormalActivityElement();
-					else if (target.getLevel()==FlexoLevel.OPERATION)
-						element = ((SwimmingLaneEditorController)controller).getOperationPalette().getNormalOperationElement();
-					else if (target.getLevel()==FlexoLevel.ACTION)
-						element = ((SwimmingLaneEditorController)controller).getActionPalette().getFlexoActionElement();
-					else
-						return ;
+					if (target.getLevel() == FlexoLevel.ACTIVITY) {
+						element = ((SwimmingLaneEditorController) controller).getActivityPalette().getNormalActivityElement();
+					} else if (target.getLevel() == FlexoLevel.OPERATION) {
+						element = ((SwimmingLaneEditorController) controller).getOperationPalette().getNormalOperationElement();
+					} else if (target.getLevel() == FlexoLevel.ACTION) {
+						element = ((SwimmingLaneEditorController) controller).getActionPalette().getFlexoActionElement();
+					} else {
+						return;
+					}
 					to = createElement(element, dropLocation, target, role, direction);
 					break;
 				case EDGE:
-					if (this.to!=null)
+					if (this.to != null) {
 						to = this.to.getDrawable();
+					}
 					break;
 				case DATA_SOURCE:
 					/*if (target.getLevel()==FlexoLevel.ACTIVITY)
@@ -338,29 +344,33 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 						element = ((SwimmingLaneEditorController)controller).getActionPalette().getAndOperatorElement();
 					else
 						return ;*/
-					to = createElement(((SwimmingLaneEditorController)controller).getArtefactPalette().getDataSourceElement(), dropLocation, target, role, direction);
+					to = createElement(((SwimmingLaneEditorController) controller).getArtefactPalette().getDataSourceElement(),
+							dropLocation, target, role, direction);
 					break;
 				case DATA_OBJECT:
-					if (target.getLevel()==FlexoLevel.ACTIVITY)
-						element = ((SwimmingLaneEditorController)controller).getActivityPalette().getOROperatorElement();
-					else if (target.getLevel()==FlexoLevel.OPERATION)
-						element = ((SwimmingLaneEditorController)controller).getOperationPalette().getOrOperatorElement();
-					else if (target.getLevel()==FlexoLevel.ACTION)
-						element = ((SwimmingLaneEditorController)controller).getActionPalette().getOrOperatorElement();
-					else
-						return ;
-					to = createElement(((SwimmingLaneEditorController)controller).getArtefactPalette().getDataFileElement(), dropLocation, target, role, direction);
+					if (target.getLevel() == FlexoLevel.ACTIVITY) {
+						element = ((SwimmingLaneEditorController) controller).getActivityPalette().getOROperatorElement();
+					} else if (target.getLevel() == FlexoLevel.OPERATION) {
+						element = ((SwimmingLaneEditorController) controller).getOperationPalette().getOrOperatorElement();
+					} else if (target.getLevel() == FlexoLevel.ACTION) {
+						element = ((SwimmingLaneEditorController) controller).getActionPalette().getOrOperatorElement();
+					} else {
+						return;
+					}
+					to = createElement(((SwimmingLaneEditorController) controller).getArtefactPalette().getDataFileElement(), dropLocation,
+							target, role, direction);
 					break;
 
 				default:
 					break;
 				}
-				if (to==null)
+				if (to == null) {
 					return;
+				}
 				if (nodeGR.getDrawable() instanceof AbstractNode && to instanceof AbstractNode) {
-					CreateEdge createEdgeAction = CreateEdge.actionType.makeNewAction((AbstractNode)nodeGR.getDrawable(), null,
+					CreateEdge createEdgeAction = CreateEdge.actionType.makeNewAction((AbstractNode) nodeGR.getDrawable(), null,
 							((SwimmingLaneEditorController) controller).getEditor());
-					createEdgeAction.setStartingNode((AbstractNode)nodeGR.getDrawable());
+					createEdgeAction.setStartingNode((AbstractNode) nodeGR.getDrawable());
 					createEdgeAction.setEndNode((AbstractNode) to);
 					createEdgeAction.doAction();
 				} else {
@@ -371,7 +381,9 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 					createEdgeAction.doAction();
 				}
 				switch (mode) {
-				case NODE: case DATA_SOURCE: case DATA_OBJECT:
+				case NODE:
+				case DATA_SOURCE:
+				case DATA_OBJECT:
 					controller.setSelectedObject(controller.getGraphicalRepresentation(to));
 					break;
 
@@ -380,7 +392,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 				}
 			} finally {
 				resetVariables();
-				((SwimmingLaneView)controller.getDrawingView()).resetDraggedNodePalette();
+				((SwimmingLaneView) controller.getDrawingView()).resetDraggedNodePalette();
 				DrawingView<?> drawingView = controller.getDrawingView();
 				FGEPaintManager paintManager = drawingView.getPaintManager();
 				paintManager.invalidate(drawingView.getDrawingGraphicalRepresentation());
@@ -399,22 +411,25 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 		currentDraggingLocationInDrawingView = null;
 	}
 
-	private WKFNode createElement(WKFPaletteElement element, FGEPoint dropLocation, FlexoPetriGraph container, Role role, SimplifiedCardinalDirection direction) 
-	{
+	private WKFNode createElement(WKFPaletteElement element, FGEPoint dropLocation, FlexoPetriGraph container, Role role,
+			SimplifiedCardinalDirection direction) {
 		FGEPoint locationInDrawing = null;
-		if (controller.getGraphicalRepresentation(container)!=null)
-			locationInDrawing = dropLocation.transform(GraphicalRepresentation.convertCoordinatesAT(controller.getGraphicalRepresentation(container), controller.getDrawingGraphicalRepresentation(), 1.0));//gr.getLocationInDrawing();
-		DropWKFElement drop = element.createAndExecuteDropElementAction(dropLocation, container, role,false);
-		if (drop.getObject()!=null) {
-			ShapeGraphicalRepresentation<?> gr=(ShapeGraphicalRepresentation<?>) controller.getGraphicalRepresentation(drop.getObject());
-			if (locationInDrawing==null)
+		if (controller.getGraphicalRepresentation(container) != null) {
+			locationInDrawing = dropLocation.transform(GraphicalRepresentation.convertCoordinatesAT(
+					controller.getGraphicalRepresentation(container), controller.getDrawingGraphicalRepresentation(), 1.0));// gr.getLocationInDrawing();
+		}
+		DropWKFElement drop = element.createAndExecuteDropElementAction(dropLocation, container, role, false);
+		if (drop.getObject() != null) {
+			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) controller.getGraphicalRepresentation(drop.getObject());
+			if (locationInDrawing == null) {
 				locationInDrawing = gr.getLocationInDrawing();
+			}
 			double xOffset = 0;
 			double yOffset = 0;
-			if (gr!=null) {
-				if (gr.getBorder()!=null) {
-					xOffset-=gr.getBorder().left;
-					yOffset-=gr.getBorder().top;
+			if (gr != null) {
+				if (gr.getBorder() != null) {
+					xOffset -= gr.getBorder().left;
+					yOffset -= gr.getBorder().top;
 				}
 				/*switch (direction) {
 
@@ -435,24 +450,26 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 				default:
 					break;
 				}*/
-				xOffset-=gr.getWidth()/2;
-				yOffset-=gr.getHeight()/2;
-				if (xOffset<0 && -xOffset>locationInDrawing.x)
+				xOffset -= gr.getWidth() / 2;
+				yOffset -= gr.getHeight() / 2;
+				if (xOffset < 0 && -xOffset > locationInDrawing.x) {
 					xOffset = -locationInDrawing.x;
-				if (yOffset<0 && -yOffset>locationInDrawing.y)
+				}
+				if (yOffset < 0 && -yOffset > locationInDrawing.y) {
 					yOffset = -locationInDrawing.y;
-				gr.setX(gr.getX()+xOffset);
-				gr.setY(gr.getY()+yOffset);
+				}
+				gr.setX(gr.getX() + xOffset);
+				gr.setY(gr.getY() + yOffset);
 			}
 		}
 		return (WKFNode) drop.getObject();
 	}
 
 	@Override
-	public Rectangle paint(FGEGraphics drawingGraphics)
-	{
-		if (!nodeGR.getIsSelected() || nodeGR.isResizing() || nodeGR.isMoving())
+	public Rectangle paint(FGEGraphics drawingGraphics) {
+		if (!nodeGR.getIsSelected() || nodeGR.isResizing() || nodeGR.isMoving()) {
 			return null;
+		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(nodeGR, drawingGraphics.getGraphicalRepresentation());
 
 		Graphics2D oldGraphics = drawingGraphics.cloneGraphics();
@@ -463,14 +480,17 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 		FGERoundRectangle nodeRect = (FGERoundRectangle) this.nodeRect.transform(at);
 		FGERectangle edgeRect = (FGERectangle) this.edgeRect.transform(at);
 		FGERectangle orRect = (FGERectangle) this.dataObjectRect.transform(at);
-		double arrowSize = 4/**drawingGraphics.getScale()*/;
-		FGERegularPolygon orPoly = new FGERegularPolygon(orRect.x+(PALETTE_WIDTH-ELEMENTS_HEIGHT)/2,orRect.y,ELEMENTS_HEIGHT,ELEMENTS_HEIGHT,Filling.FILLED,4,90);
+		double arrowSize = 4/** drawingGraphics.getScale() */
+		;
+		FGERegularPolygon orPoly = new FGERegularPolygon(orRect.x + (PALETTE_WIDTH - ELEMENTS_HEIGHT) / 2, orRect.y, ELEMENTS_HEIGHT,
+				ELEMENTS_HEIGHT, Filling.FILLED, 4, 90);
 		/*FGEPoint northEast = orPoly.getSegments().get(0).getMiddle();
 		FGEPoint southEast = orPoly.getSegments().get(1).getMiddle();
 		FGEPoint southWest = orPoly.getSegments().get(2).getMiddle();
 		FGEPoint northWest = orPoly.getSegments().get(3).getMiddle();*/
 		FGERectangle andRect = (FGERectangle) this.dataSourceRect.transform(at);
-		AffineTransform translateAndResize = AffineTransform.getTranslateInstance(orRect.x+(PALETTE_WIDTH-ELEMENTS_HEIGHT)/2, orRect.y);
+		AffineTransform translateAndResize = AffineTransform.getTranslateInstance(orRect.x + (PALETTE_WIDTH - ELEMENTS_HEIGHT) / 2,
+				orRect.y);
 		translateAndResize.concatenate(AffineTransform.getScaleInstance(ELEMENTS_HEIGHT, ELEMENTS_HEIGHT));
 		FGEPolygon dataObjectPoly = DataObjectGR.fileShape.transform(translateAndResize);
 
@@ -489,27 +509,26 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 
 		// 2. Edge
 		drawingGraphics.setDefaultForeground(EDGE_FOREGROUND);
-		//drawingGraphics.setDefaultBackground(EDGE_BACKGROUND);
+		// drawingGraphics.setDefaultBackground(EDGE_BACKGROUND);
 		drawingGraphics.useDefaultForegroundStyle();
-		//drawingGraphics.useDefaultBackgroundStyle();
+		// drawingGraphics.useDefaultBackgroundStyle();
 		FGEPoint eastPt = edgeRect.getEastPt();
 		FGEPoint westPt = edgeRect.getWestPt();
-		drawingGraphics.drawLine(westPt.x,westPt.y,eastPt.x-arrowSize,eastPt.y);
-		drawingGraphics.drawLine(eastPt.x-arrowSize, edgeRect.y, eastPt.x-arrowSize, edgeRect.y+ELEMENTS_HEIGHT);
-		drawingGraphics.drawLine(eastPt.x-arrowSize, edgeRect.y, eastPt.x, eastPt.y);
-		drawingGraphics.drawLine(eastPt.x-arrowSize, edgeRect.y+ELEMENTS_HEIGHT, eastPt.x, eastPt.y);
+		drawingGraphics.drawLine(westPt.x, westPt.y, eastPt.x - arrowSize, eastPt.y);
+		drawingGraphics.drawLine(eastPt.x - arrowSize, edgeRect.y, eastPt.x - arrowSize, edgeRect.y + ELEMENTS_HEIGHT);
+		drawingGraphics.drawLine(eastPt.x - arrowSize, edgeRect.y, eastPt.x, eastPt.y);
+		drawingGraphics.drawLine(eastPt.x - arrowSize, edgeRect.y + ELEMENTS_HEIGHT, eastPt.x, eastPt.y);
 
 		// 3. DataObject
 		drawingGraphics.setDefaultForeground(DATA_OBJECT_FOREGROUND);
-		//drawingGraphics.setDefaultBackground(OR_BACKGROUND);
+		// drawingGraphics.setDefaultBackground(OR_BACKGROUND);
 		drawingGraphics.useDefaultForegroundStyle();
 		drawingGraphics.drawPolygon(dataObjectPoly);
-		//drawingGraphics.useDefaultBackgroundStyle();
+		// drawingGraphics.useDefaultBackgroundStyle();
 		/*drawingGraphics.drawPolygon(orPoly);
 		double orOffset = 1;
 		drawingGraphics.drawLine(northWest.x+orOffset, northWest.y+orOffset, southEast.x-orOffset, southEast.y-orOffset);
 		drawingGraphics.drawLine(northEast.x-orOffset, northEast.y+orOffset, southWest.x+orOffset, southWest.y-orOffset);*/
-
 
 		// 4. DataSource
 		/*drawingGraphics.setDefaultForeground(AND_FOREGROUND);
@@ -520,34 +539,35 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 		double andOffset = 2;
 		drawingGraphics.drawLine(north.x, north.y+andOffset,south.x, south.y-andOffset);
 		drawingGraphics.drawLine(west.x+andOffset, west.y,east.x-andOffset, east.y);*/
-		int NUMBER_OF_CYLINDER=4;
-		double height = (double)2*ELEMENTS_HEIGHT/(NUMBER_OF_CYLINDER+1);
-		double halfHeight = height/2;
-		double x = andRect.x+(PALETTE_WIDTH-ELEMENTS_HEIGHT)/2;
-		for(int i=NUMBER_OF_CYLINDER;i>0;i--) {
+		int NUMBER_OF_CYLINDER = 4;
+		double height = (double) 2 * ELEMENTS_HEIGHT / (NUMBER_OF_CYLINDER + 1);
+		double halfHeight = height / 2;
+		double x = andRect.x + (PALETTE_WIDTH - ELEMENTS_HEIGHT) / 2;
+		for (int i = NUMBER_OF_CYLINDER; i > 0; i--) {
 			drawingGraphics.setDefaultForeground(DataSourceGR.NO_FOREGROUND);
-			drawingGraphics.setDefaultBackground(i%2==0?DataSourceGR.EVEN_BACKGROUND:DataSourceGR.ODD_BACKROUND);
+			drawingGraphics.setDefaultBackground(i % 2 == 0 ? DataSourceGR.EVEN_BACKGROUND : DataSourceGR.ODD_BACKROUND);
 			drawingGraphics.useDefaultBackgroundStyle();
-			double y = andRect.y+(i-1)*halfHeight;
+			double y = andRect.y + (i - 1) * halfHeight;
 			drawingGraphics.fillCircle(x, y, ELEMENTS_HEIGHT, height);
-			if (i>1)
+			if (i > 1) {
 				drawingGraphics.fillRect(x, y, ELEMENTS_HEIGHT, halfHeight);
+			}
 		}
 
 		drawingGraphics.releaseClonedGraphics(oldGraphics);
-		return drawingGraphics.getGraphicalRepresentation().convertNormalizedRectangleToViewCoordinates(paletteRect.getBoundingBox(), drawingGraphics.getScale());
+		return drawingGraphics.getGraphicalRepresentation().convertNormalizedRectangleToViewCoordinates(paletteRect.getBoundingBox(),
+				drawingGraphics.getScale());
 
 	}
 
 	@Override
-	public boolean isClickable()
-	{
+	public boolean isClickable() {
 		return false;
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (o==nodeGR) {
+		if (o == nodeGR) {
 			if (arg instanceof ObjectResized) {
 				updateElements();
 			}
@@ -556,13 +576,19 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 
 	private void updateElements() {
 		setArea(makeRoundRect(nodeGR));
-		AffineTransform at = AffineTransform.getScaleInstance(1/nodeGR.getWidth(), 1/nodeGR.getHeight());
+		AffineTransform at = AffineTransform.getScaleInstance(1 / nodeGR.getWidth(), 1 / nodeGR.getHeight());
 
-		nodeRect = (FGERoundRectangle) new FGERoundRectangle(nodeGR.getWidth()+SPACING+(PALETTE_WIDTH-ELEMENTS_WIDTH)/2+0.5,(nodeGR.getHeight()-PALETTE_HEIGHT)/2+SPACING,ELEMENTS_WIDTH,ELEMENTS_HEIGHT,2,2,Filling.FILLED).transform(at);
-		edgeRect = (FGERectangle) new FGERectangle(nodeGR.getWidth()+SPACING+(PALETTE_WIDTH-ELEMENTS_WIDTH)/2,(nodeGR.getHeight()-PALETTE_HEIGHT)/2+SPACING+(SPACING+ELEMENTS_HEIGHT),ELEMENTS_WIDTH,ELEMENTS_HEIGHT,Filling.FILLED).transform(at);
-		dataObjectRect = (FGERectangle) new FGERectangle(nodeGR.getWidth()+SPACING+(PALETTE_WIDTH-ELEMENTS_WIDTH)/2,(nodeGR.getHeight()-PALETTE_HEIGHT)/2+SPACING+2*(SPACING+ELEMENTS_HEIGHT),ELEMENTS_WIDTH,ELEMENTS_HEIGHT,Filling.FILLED).transform(at);
-		dataSourceRect = (FGERectangle) new FGERectangle(nodeGR.getWidth()+SPACING+(PALETTE_WIDTH-ELEMENTS_WIDTH)/2,(nodeGR.getHeight()-PALETTE_HEIGHT)/2+SPACING+3*(SPACING+ELEMENTS_HEIGHT),ELEMENTS_WIDTH,ELEMENTS_HEIGHT,Filling.FILLED).transform(at);
+		nodeRect = (FGERoundRectangle) new FGERoundRectangle(nodeGR.getWidth() + SPACING + (PALETTE_WIDTH - ELEMENTS_WIDTH) / 2 + 0.5,
+				(nodeGR.getHeight() - PALETTE_HEIGHT) / 2 + SPACING, ELEMENTS_WIDTH, ELEMENTS_HEIGHT, 2, 2, Filling.FILLED).transform(at);
+		edgeRect = (FGERectangle) new FGERectangle(nodeGR.getWidth() + SPACING + (PALETTE_WIDTH - ELEMENTS_WIDTH) / 2,
+				(nodeGR.getHeight() - PALETTE_HEIGHT) / 2 + SPACING + (SPACING + ELEMENTS_HEIGHT), ELEMENTS_WIDTH, ELEMENTS_HEIGHT,
+				Filling.FILLED).transform(at);
+		dataObjectRect = (FGERectangle) new FGERectangle(nodeGR.getWidth() + SPACING + (PALETTE_WIDTH - ELEMENTS_WIDTH) / 2,
+				(nodeGR.getHeight() - PALETTE_HEIGHT) / 2 + SPACING + 2 * (SPACING + ELEMENTS_HEIGHT), ELEMENTS_WIDTH, ELEMENTS_HEIGHT,
+				Filling.FILLED).transform(at);
+		dataSourceRect = (FGERectangle) new FGERectangle(nodeGR.getWidth() + SPACING + (PALETTE_WIDTH - ELEMENTS_WIDTH) / 2,
+				(nodeGR.getHeight() - PALETTE_HEIGHT) / 2 + SPACING + 3 * (SPACING + ELEMENTS_HEIGHT), ELEMENTS_WIDTH, ELEMENTS_HEIGHT,
+				Filling.FILLED).transform(at);
 
 	}
 }
-

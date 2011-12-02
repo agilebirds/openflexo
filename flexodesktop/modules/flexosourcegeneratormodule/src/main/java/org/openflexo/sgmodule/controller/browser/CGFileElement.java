@@ -40,74 +40,63 @@ import org.openflexo.icon.IconMarker;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sg.file.SGJavaFile;
 
-
-public class CGFileElement extends SGBrowserElement
-{
-	public CGFileElement(CGFile file, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(file, BrowserElementType.GENERATED_CODE_FILE, browser,parent);
+public class CGFileElement extends SGBrowserElement {
+	public CGFileElement(CGFile file, ProjectBrowser browser, BrowserElement parent) {
+		super(file, BrowserElementType.GENERATED_CODE_FILE, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
-		if ((getFile()!=null) && (getFile().getRepository()!=null) && getFile().getRepository().getManageHistory() 
-				&& (getFile().getResource()!=null) && getFile().getResource().isLoaded() && (getFile().getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
-			for (CGFileReleaseVersion releaseVersion : 
-				((AbstractGeneratedFile)getFile().getResource().getGeneratedResourceData()).getHistory().getReleasesVersion()) {
+	protected void buildChildrenVector() {
+		if ((getFile() != null) && (getFile().getRepository() != null) && getFile().getRepository().getManageHistory()
+				&& (getFile().getResource() != null) && getFile().getResource().isLoaded()
+				&& (getFile().getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+			for (CGFileReleaseVersion releaseVersion : ((AbstractGeneratedFile) getFile().getResource().getGeneratedResourceData())
+					.getHistory().getReleasesVersion()) {
 				addToChilds(releaseVersion);
 			}
 		}
 	}
 
 	@Override
-	public String getName()
-	{
-		String returned = getFile().getFileName()
-		+(getFile().isEdited()?"["+FlexoLocalization.localizedForKey("edited")+"]":"");
+	public String getName() {
+		String returned = getFile().getFileName() + (getFile().isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
 		if (logger.isLoggable(Level.FINE)) {
 			if (getFile() instanceof AbstractCGFile) {
-				if (((AbstractCGFile)getFile()).getGenerationException() != null) {
+				if (((AbstractCGFile) getFile()).getGenerationException() != null) {
 					returned += "[ERROR]";
 				}
 			}
-			returned += "/"+getResource().getGenerationStatus().toString();
+			returned += "/" + getResource().getGenerationStatus().toString();
 			if (getResource().needsGeneration()) {
-				returned += "<"+getResource().getNeedsUpdateReason();
+				returned += "<" + getResource().getNeedsUpdateReason();
 			}
 		}
 		return returned;
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		ImageIcon returned = FilesIconLibrary.smallIconForFileFormat(getFile().getFileFormat());
 		if (returned == null) {
 			returned = super.getBaseIcon();
 		}
-		if ((getProjectBrowser() !=null) && (getProjectBrowser() instanceof SGBrowser)) {
-			SGBrowser browser = (SGBrowser)getProjectBrowser();
+		if ((getProjectBrowser() != null) && (getProjectBrowser() instanceof SGBrowser)) {
+			SGBrowser browser = (SGBrowser) getProjectBrowser();
 			if ((browser.getController() != null)
 					&& (browser.getController().getCurrentPerspective() == browser.getController().MODEL_REINJECTION_PERSPECTIVE)
-					&& (getFile() instanceof SGJavaFile)
-					&& (((SGJavaFile)getFile()).getParseException() != null)) {
+					&& (getFile() instanceof SGJavaFile) && (((SGJavaFile) getFile()).getParseException() != null)) {
 				returned = IconFactory.getImageIcon(returned, IconLibrary.ERROR2);
 			}
 		}
 		return returned;
-		
-		
-		
+
 	}
 
-	public CGFile getFile()
-	{
-		return (CGFile)getObject();
+	public CGFile getFile() {
+		return (CGFile) getObject();
 	}
 
-	public CGRepositoryFileResource getResource()
-	{
+	public CGRepositoryFileResource getResource() {
 		return getFile().getResource();
 	}
 
@@ -115,12 +104,11 @@ public class CGFileElement extends SGBrowserElement
 	{
 		return (GeneratorBrowser)super.getProjectBrowser();
 	}*/
-	
+
 	@Override
-	public boolean isEnabled()
-	{
-		if ((getProjectBrowser() !=null) && (getProjectBrowser() instanceof SGBrowser)) {
-			SGBrowser browser = (SGBrowser)getProjectBrowser();
+	public boolean isEnabled() {
+		if ((getProjectBrowser() != null) && (getProjectBrowser() instanceof SGBrowser)) {
+			SGBrowser browser = (SGBrowser) getProjectBrowser();
 			if ((browser.getController() != null)
 					&& (browser.getController().getCurrentPerspective() == browser.getController().MODEL_REINJECTION_PERSPECTIVE)
 					&& !getFile().supportModelReinjection()) {
@@ -129,11 +117,10 @@ public class CGFileElement extends SGBrowserElement
 		}
 		return super.isEnabled();
 	}
-    
+
 	@Override
-	protected Vector<IconMarker> getMarkers()
-	{
-		if(getFile().getMarkedAsDoNotGenerate()){
+	protected Vector<IconMarker> getMarkers() {
+		if (getFile().getMarkedAsDoNotGenerate()) {
 			Vector<IconMarker> markers = new Vector<IconMarker>();
 			markers.add(GeneratorIconLibrary.DO_NOT_GENERATE);
 			return markers;

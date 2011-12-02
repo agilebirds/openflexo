@@ -31,67 +31,57 @@ import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.ProjectGenerator;
-import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
-public class ImportInModel extends GCAction<ImportInModel,CGObject>
-{
+public class ImportInModel extends GCAction<ImportInModel, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ImportInModel.class.getPackage().getName());
 
-	public static FlexoActionType<ImportInModel,CGObject,CGObject> actionType 
-	= new FlexoActionType<ImportInModel,CGObject,CGObject> ("import_in_model",
-			MODEL_MENU,MODEL_GROUP1,FlexoActionType.NORMAL_ACTION_TYPE) 
-	{
+	public static FlexoActionType<ImportInModel, CGObject, CGObject> actionType = new FlexoActionType<ImportInModel, CGObject, CGObject>(
+			"import_in_model", MODEL_MENU, MODEL_GROUP1, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public ImportInModel makeNewAction(CGObject object, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ImportInModel(object, globalSelection, editor);
-        }
+		 * Factory method
+		 */
+		@Override
+		public ImportInModel makeNewAction(CGObject object, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new ImportInModel(object, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) 
-    	{
-            return (object instanceof AbstractCGFile);
-    	}
+		@Override
+		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
+			return (object instanceof AbstractCGFile);
+		}
 
-    	@Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) 
-    	{
-            GenerationRepository repository = getRepository(object, globalSelection);
-            if (!(repository instanceof CGRepository))
-                return false;
-        	ProjectGenerator pg = (ProjectGenerator) getProjectGenerator(repository);
-            return pg != null && pg.hasBeenInitialized();
-    	}
+		@Override
+		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+			GenerationRepository repository = getRepository(object, globalSelection);
+			if (!(repository instanceof CGRepository)) {
+				return false;
+			}
+			ProjectGenerator pg = (ProjectGenerator) getProjectGenerator(repository);
+			return pg != null && pg.hasBeenInitialized();
+		}
 
 	};
-	
-    static {
-        FlexoModelObject.addActionForClass (ImportInModel.actionType, CGObject.class);
-    }
-    
-    ImportInModel (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException
-    {
-    	logger.info ("Import in model");
-       	
-       	ProjectGenerator pg = (ProjectGenerator) getProjectGenerator();
-    	pg.setAction(this);
+	static {
+		FlexoModelObject.addActionForClass(ImportInModel.actionType, CGObject.class);
+	}
+
+	ImportInModel(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+		logger.info("Import in model");
+
+		ProjectGenerator pg = (ProjectGenerator) getProjectGenerator();
+		pg.setAction(this);
 		// Refresh repository
-    	getRepository().refresh();
-     	((CGRepository)getRepository()).clearAllJavaParsingData();
-    }
+		getRepository().refresh();
+		((CGRepository) getRepository()).clearAllJavaParsingData();
+	}
 
- 
 }

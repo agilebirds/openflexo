@@ -26,27 +26,22 @@ import org.openflexo.fps.CVSExplorer;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.localization.FlexoLocalization;
 
-public class CVSExplorerElement extends FPSBrowserElement
-{
-	public CVSExplorerElement(CVSExplorer explorer, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(explorer, BrowserElementType.CVS_EXPLORER, browser,parent);
+public class CVSExplorerElement extends FPSBrowserElement {
+	public CVSExplorerElement(CVSExplorer explorer, ProjectBrowser browser, BrowserElement parent) {
+		super(explorer, BrowserElementType.CVS_EXPLORER, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return FlexoLocalization.localizedForKey("pending...");
 	}
 
-	public CVSRepository getCVSRepository()
-	{
-		return (CVSRepository)getObject();
+	public CVSRepository getCVSRepository() {
+		return (CVSRepository) getObject();
 	}
 
 }

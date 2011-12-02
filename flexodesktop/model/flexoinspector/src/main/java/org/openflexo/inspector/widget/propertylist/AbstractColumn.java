@@ -39,217 +39,199 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public abstract class AbstractColumn
-{
+public abstract class AbstractColumn {
 
-    private static final Logger logger = Logger.getLogger(AbstractColumn.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AbstractColumn.class.getPackage().getName());
 
-    private String _title;
+	private String _title;
 
-    private int _defaultWidth;
+	private int _defaultWidth;
 
-    private boolean _isResizable;
+	private boolean _isResizable;
 
-    private boolean _displayTitle;
+	private boolean _displayTitle;
 
-    private PropertyListTableModel _model;
-    
-    private String tooltipKey;
-    
-    private PropertyListCellRenderer _defaultTableCellRenderer;
-    
-    public AbstractColumn(String unlocalizedTitle, int defaultWidth, boolean isResizable)
-    {
-        this(unlocalizedTitle, defaultWidth, isResizable, true);
-    }
+	private PropertyListTableModel _model;
 
-    public AbstractColumn(String unlocalizedTitle, int defaultWidth, boolean isResizable, boolean displayTitle)
-    {
-        super();
-        _title = unlocalizedTitle;
-        _defaultWidth = defaultWidth;
-        _isResizable = isResizable;
-        _displayTitle = displayTitle;
-    }
+	private String tooltipKey;
 
-    protected void setModel(PropertyListTableModel model)
-    {
-        _model = model;
-    }
+	private PropertyListCellRenderer _defaultTableCellRenderer;
 
-    protected PropertyListTableModel getModel()
-    {
-        return _model;
-    }
+	public AbstractColumn(String unlocalizedTitle, int defaultWidth, boolean isResizable) {
+		this(unlocalizedTitle, defaultWidth, isResizable, true);
+	}
 
-    public InspectableObject elementAt(int row)
-    {
-        return _model.elementAt(row);
-    }
+	public AbstractColumn(String unlocalizedTitle, int defaultWidth, boolean isResizable, boolean displayTitle) {
+		super();
+		_title = unlocalizedTitle;
+		_defaultWidth = defaultWidth;
+		_isResizable = isResizable;
+		_displayTitle = displayTitle;
+	}
 
-    public String getTitle()
-    {
-        return _title;
-    }
+	protected void setModel(PropertyListTableModel model) {
+		_model = model;
+	}
 
-    public void setTitle(String title)
-    {
-        _title = title;
-    }
+	protected PropertyListTableModel getModel() {
+		return _model;
+	}
 
-    public String getLocalizedTitle()
-    {
-        if ((_title == null) || (!_displayTitle)) {
-            return " ";
-        }
-        return FlexoLocalization.localizedForKey(getTitle());
-    }
+	public InspectableObject elementAt(int row) {
+		return _model.elementAt(row);
+	}
 
-    public int getDefaultWidth()
-    {
-        return _defaultWidth;
-    }
+	public String getTitle() {
+		return _title;
+	}
 
-    public boolean getResizable()
-    {
-        return _isResizable;
-    }
+	public void setTitle(String title) {
+		_title = title;
+	}
 
-    public void setDefaultWidth(int width)
-    {
-        _defaultWidth = width;
-    }
+	public String getLocalizedTitle() {
+		if ((_title == null) || (!_displayTitle)) {
+			return " ";
+		}
+		return FlexoLocalization.localizedForKey(getTitle());
+	}
 
-    public abstract Class getValueClass();
+	public int getDefaultWidth() {
+		return _defaultWidth;
+	}
 
-    public boolean isCellEditableFor(InspectableObject object)
-    {
-        return false;
-    }
+	public boolean getResizable() {
+		return _isResizable;
+	}
 
-    public abstract Object getValueFor(InspectableObject object);
+	public void setDefaultWidth(int width) {
+		_defaultWidth = width;
+	}
 
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    public boolean requireCellRenderer()
-    {
-        return false;
-    }
+	public abstract Class getValueClass();
 
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    public TableCellRenderer getCellRenderer()
-    {
-    	return getDefaultTableCellRenderer();
-    }
+	public boolean isCellEditableFor(InspectableObject object) {
+		return false;
+	}
+
+	public abstract Object getValueFor(InspectableObject object);
+
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	public boolean requireCellRenderer() {
+		return false;
+	}
+
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	public TableCellRenderer getCellRenderer() {
+		return getDefaultTableCellRenderer();
+	}
 
 	/**
 	 * @return
 	 */
 	protected TableCellRenderer getDefaultTableCellRenderer() {
 		if (_defaultTableCellRenderer == null) {
-            _defaultTableCellRenderer = new PropertyListCellRenderer();
-        }
-        return _defaultTableCellRenderer;
+			_defaultTableCellRenderer = new PropertyListCellRenderer();
+		}
+		return _defaultTableCellRenderer;
 	}
 
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    public boolean requireCellEditor()
-    {
-        return false;
-    }
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	public boolean requireCellEditor() {
+		return false;
+	}
 
-    public String getTooltip(InspectableObject object) {
-    	if (getModel()!=null && tooltipKey!=null)
-    		return (String) object.objectForKey(tooltipKey);
-    	return null;
-    }
-    
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    public TableCellEditor getCellEditor()
-    {
-        return null;
-    }
+	public String getTooltip(InspectableObject object) {
+		if (getModel() != null && tooltipKey != null) {
+			return (String) object.objectForKey(tooltipKey);
+		}
+		return null;
+	}
 
-    public PropertyListColumn getPropertyListColumn(){
-    	return getModel().getPropertyListColumnWithTitle(_title);
-    }
-    
-    public void notifyValueChangedFor(InspectableObject object)
-    {
-    	if (logger.isLoggable(Level.FINE))
-    		logger.fine("notifyValueChangedFor "+object);
-         // Following will force the whole row where object was modified to be updated
-        // (In case of some computed cells are to be updated according to ths new value)
-         getModel().fireTableRowsUpdated(getModel().indexOf(object), getModel().indexOf(object));
-    }
-    
-    protected class PropertyListCellRenderer extends DefaultTableCellRenderer
-    {
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	public TableCellEditor getCellEditor() {
+		return null;
+	}
 
-        /**
-         * 
-         * Returns the cell renderer.
-         * 
-         * @param table
-         *            the <code>JTable</code>
-         * @param value
-         *            the value to assign to the cell at
-         *            <code>[row, column]</code>
-         * @param isSelected
-         *            true if cell is selected
-         * @param hasFocus
-         *            true if cell has focus
-         * @param row
-         *            the row of the cell to render
-         * @param column
-         *            the column of the cell to render
-         * @return the default table cell renderer
-         */
-        @Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-        {
-            Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            /*if (!isSelected || ToolBox.getPLATFORM()==ToolBox.MACOS)
-            	setComponentBackground(returned, hasFocus, isSelected, row, column);*/
-            if (returned instanceof JComponent)
-            	((JComponent)returned).setToolTipText(getTooltip(getModel().elementAt(row)));
-            
-            return returned;
-        }
+	public PropertyListColumn getPropertyListColumn() {
+		return getModel().getPropertyListColumnWithTitle(_title);
+	}
 
-       /* protected void setComponentBackground(Component component, boolean hasFocus, boolean isSelected, int row, int column)
-        {
-            if ((hasFocus) && ((getModel() != null) && (getModel().isCellEditable(row, column))) && (isSelected)) {
-                component.setForeground(FlexoCst.SELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
-            } else {
-                component.setForeground(FlexoCst.UNSELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
-            }
-            if (isSelected) {
-                component.setBackground(FlexoCst.SELECTED_LINES_TABULAR_VIEW_COLOR);
-            } else {
-                if (row % 2 == 0) {
-                    component.setBackground(FlexoCst.ODD_LINES_TABULAR_VIEW_COLOR);
-                } else {
-                    component.setBackground(FlexoCst.NON_ODD_LINES_TABULAR_VIEW_COLOR);
-                }
-            }
-        }*/
-    }
+	public void notifyValueChangedFor(InspectableObject object) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("notifyValueChangedFor " + object);
+		}
+		// Following will force the whole row where object was modified to be updated
+		// (In case of some computed cells are to be updated according to ths new value)
+		getModel().fireTableRowsUpdated(getModel().indexOf(object), getModel().indexOf(object));
+	}
+
+	protected class PropertyListCellRenderer extends DefaultTableCellRenderer {
+
+		/**
+		 * 
+		 * Returns the cell renderer.
+		 * 
+		 * @param table
+		 *            the <code>JTable</code>
+		 * @param value
+		 *            the value to assign to the cell at <code>[row, column]</code>
+		 * @param isSelected
+		 *            true if cell is selected
+		 * @param hasFocus
+		 *            true if cell has focus
+		 * @param row
+		 *            the row of the cell to render
+		 * @param column
+		 *            the column of the cell to render
+		 * @return the default table cell renderer
+		 */
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			/*if (!isSelected || ToolBox.getPLATFORM()==ToolBox.MACOS)
+				setComponentBackground(returned, hasFocus, isSelected, row, column);*/
+			if (returned instanceof JComponent) {
+				((JComponent) returned).setToolTipText(getTooltip(getModel().elementAt(row)));
+			}
+
+			return returned;
+		}
+
+		/* protected void setComponentBackground(Component component, boolean hasFocus, boolean isSelected, int row, int column)
+		 {
+		     if ((hasFocus) && ((getModel() != null) && (getModel().isCellEditable(row, column))) && (isSelected)) {
+		         component.setForeground(FlexoCst.SELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
+		     } else {
+		         component.setForeground(FlexoCst.UNSELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
+		     }
+		     if (isSelected) {
+		         component.setBackground(FlexoCst.SELECTED_LINES_TABULAR_VIEW_COLOR);
+		     } else {
+		         if (row % 2 == 0) {
+		             component.setBackground(FlexoCst.ODD_LINES_TABULAR_VIEW_COLOR);
+		         } else {
+		             component.setBackground(FlexoCst.NON_ODD_LINES_TABULAR_VIEW_COLOR);
+		         }
+		     }
+		 }*/
+	}
 
 	public void setTooltipKey(String tooltipKey) {
 		this.tooltipKey = tooltipKey;

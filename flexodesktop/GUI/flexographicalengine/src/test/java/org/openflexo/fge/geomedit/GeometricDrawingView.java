@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.edition.EditionInputMethod;
@@ -38,61 +37,54 @@ import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.logging.FlexoLogger;
 
-public class GeometricDrawingView extends DrawingView<GeometricDrawing>
-{
-	
+public class GeometricDrawingView extends DrawingView<GeometricDrawing> {
+
 	private static final Logger logger = FlexoLogger.getLogger(GeometricDrawingView.class.getPackage().getName());
 
 	private FGEPoint lastMouseLocation;
-	
-	
-	public GeometricDrawingView(GeometricDrawing drawing,DrawingController<GeometricDrawing> controller)
-	{
-		super(drawing,controller);
+
+	public GeometricDrawingView(GeometricDrawing drawing, DrawingController<GeometricDrawing> controller) {
+		super(drawing, controller);
 		lastMouseLocation = new FGEPoint();
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
-			public void mouseMoved(MouseEvent e)
-			{
-				Point ptInView = SwingUtilities.convertPoint((Component)e.getSource(), e.getPoint(), getController().getDrawingView());
-				lastMouseLocation.x = (ptInView.x)/getController().getScale();
-				lastMouseLocation.y = (ptInView.y)/getController().getScale();
-				getController().getPositionLabel().setText(((int)lastMouseLocation.x)+" x "+((int)lastMouseLocation.y));
-				if (getController().getCurrentEdition() != null && getController().getCurrentEdition().requireRepaint(lastMouseLocation.clone())) {
+			public void mouseMoved(MouseEvent e) {
+				Point ptInView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getController().getDrawingView());
+				lastMouseLocation.x = (ptInView.x) / getController().getScale();
+				lastMouseLocation.y = (ptInView.y) / getController().getScale();
+				getController().getPositionLabel().setText(((int) lastMouseLocation.x) + " x " + ((int) lastMouseLocation.y));
+				if (getController().getCurrentEdition() != null
+						&& getController().getCurrentEdition().requireRepaint(lastMouseLocation.clone())) {
 					getPaintManager().repaint(GeometricDrawingView.this);
-				}				
+				}
 			}
 		});
 	}
-	
 
 	@Override
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		super.paint(g);
-		
+
 		if (getController().getCurrentEdition() != null) {
 			Graphics2D g2 = (Graphics2D) g;
-			graphics.createGraphics(g2,getController());
+			graphics.createGraphics(g2, getController());
 			getController().getCurrentEdition().paint(graphics, lastMouseLocation);
 			graphics.releaseGraphics();
 		}
 	}
-	
+
 	@Override
-	public GeomEditController getController()
-	{
-		return (GeomEditController)super.getController();
+	public GeomEditController getController() {
+		return (GeomEditController) super.getController();
 	}
-	
+
 	private EditionInputMethod inputMethod;
-	
-	public void enableEditionInputMethod(EditionInputMethod anInputMethod)
-	{
+
+	public void enableEditionInputMethod(EditionInputMethod anInputMethod) {
 		if (inputMethod != null) {
 			removeMouseListener(inputMethod);
 			removeMouseMotionListener(inputMethod);
-		}	
+		}
 		inputMethod = anInputMethod;
 		removeMouseListener(getMouseListener());
 		removeMouseMotionListener(getMouseListener());
@@ -100,8 +92,7 @@ public class GeometricDrawingView extends DrawingView<GeometricDrawing>
 		addMouseMotionListener(anInputMethod);
 	}
 
-	public void disableEditionInputMethod()
-	{
+	public void disableEditionInputMethod() {
 		if (inputMethod != null) {
 			removeMouseListener(inputMethod);
 			removeMouseMotionListener(inputMethod);
@@ -110,17 +101,15 @@ public class GeometricDrawingView extends DrawingView<GeometricDrawing>
 			inputMethod = null;
 		}
 	}
-	
+
 	@Override
-	public void update(Observable o, Object notification)
-	{
+	public void update(Observable o, Object notification) {
 		if (notification instanceof GraphicalRepresentationAdded) {
 			getController().notifiedObjectAdded();
-		}
-		else if (notification instanceof GraphicalRepresentationAdded) {
+		} else if (notification instanceof GraphicalRepresentationAdded) {
 			getController().notifiedObjectRemoved();
 		}
 		super.update(o, notification);
 	}
-	
+
 }

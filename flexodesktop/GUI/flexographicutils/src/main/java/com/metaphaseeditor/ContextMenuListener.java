@@ -23,9 +23,9 @@
 package com.metaphaseeditor;
 
 /**
- *
+ * 
  * @author Rudolf Visagie
  */
 public interface ContextMenuListener {
-    void beforeContextMenuPopup();
+	void beforeContextMenuPopup();
 }

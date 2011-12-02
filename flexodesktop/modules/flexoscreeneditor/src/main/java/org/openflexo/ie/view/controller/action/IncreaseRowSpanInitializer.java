@@ -34,29 +34,24 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class IncreaseRowSpanInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	IncreaseRowSpanInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(IncreaseRowSpan.actionType,actionInitializer);
+	IncreaseRowSpanInitializer(IEControllerActionInitializer actionInitializer) {
+		super(IncreaseRowSpan.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<IncreaseRowSpan> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<IncreaseRowSpan> getDefaultInitializer() {
 		return new FlexoActionInitializer<IncreaseRowSpan>() {
 			@Override
-			public boolean run(ActionEvent e, IncreaseRowSpan action)
-			{
+			public boolean run(ActionEvent e, IncreaseRowSpan action) {
 				if (action.getInvoker() instanceof IETDWidgetView
 						&& ((IETDWidgetView) action.getInvoker()).getSequenceModel().getParent() instanceof IETDWidget) {
 					IETDWidgetView invoker = (IETDWidgetView) action.getInvoker();
@@ -72,8 +67,7 @@ public class IncreaseRowSpanInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<IncreaseRowSpan> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<IncreaseRowSpan> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<IncreaseRowSpan>() {
 			@Override
 			public boolean handleException(FlexoException exception, IncreaseRowSpan action) {
@@ -83,6 +77,5 @@ public class IncreaseRowSpanInitializer extends ActionInitializer {
 			}
 		};
 	}
-
 
 }

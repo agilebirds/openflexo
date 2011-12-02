@@ -26,36 +26,32 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 public class Oval extends Shape {
 
 	private FGEEllips ellips;
-	
-	public Oval() 
-	{
+
+	public Oval() {
 		this(null);
 	}
-	
-	public Oval(ShapeGraphicalRepresentation aGraphicalRepresentation) 
-	{
+
+	public Oval(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 		updateShape();
 	}
-	
-	@Override
-	public void updateShape()
-	{
-		ellips = new FGEEllips(0,0,1,1,Filling.FILLED);
-		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null)
-			getGraphicalRepresentation().notifyShapeChanged();
-	}	
 
 	@Override
-	public ShapeType getShapeType()
-	{
+	public void updateShape() {
+		ellips = new FGEEllips(0, 0, 1, 1, Filling.FILLED);
+		rebuildControlPoints();
+		if (getGraphicalRepresentation() != null) {
+			getGraphicalRepresentation().notifyShapeChanged();
+		}
+	}
+
+	@Override
+	public ShapeType getShapeType() {
 		return ShapeType.OVAL;
 	}
 
 	@Override
-	public FGEEllips getShape()
-	{
+	public FGEEllips getShape() {
 		return ellips;
 	}
 }

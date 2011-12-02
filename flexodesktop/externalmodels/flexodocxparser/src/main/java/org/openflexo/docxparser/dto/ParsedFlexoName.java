@@ -22,32 +22,27 @@ package org.openflexo.docxparser.dto;
 import org.openflexo.docxparser.dto.api.IParsedFlexoName;
 import org.openflexo.docxparser.dto.api.IParsedFlexoObject;
 
-public class ParsedFlexoName implements IParsedFlexoName
-{
+public class ParsedFlexoName implements IParsedFlexoName {
 	private IParsedFlexoObject flexoObject;
 	private String flexoName;
 
-	public ParsedFlexoName(IParsedFlexoObject flexoObject)
-	{
+	public ParsedFlexoName(IParsedFlexoObject flexoObject) {
 		this.flexoObject = flexoObject;
 		this.flexoObject.setParsedFlexoName(this);
 	}
 
 	@Override
-	public String getFlexoName()
-	{
+	public String getFlexoName() {
 		return flexoName;
 	}
 
 	@Override
-	public void setFlexoName(String flexoName)
-	{
+	public void setFlexoName(String flexoName) {
 		this.flexoName = flexoName;
 	}
 
 	@Override
-	public IParsedFlexoObject getParsedFlexoObject()
-	{
+	public IParsedFlexoObject getParsedFlexoObject() {
 		return flexoObject;
 	}
 }

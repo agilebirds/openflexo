@@ -26,10 +26,10 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoProperty;
 
-
 public class DeleteFlexoProperty extends FlexoAction<DeleteFlexoProperty, FlexoProperty, FlexoProperty> {
 
-	public static final FlexoActionType<DeleteFlexoProperty, FlexoProperty, FlexoProperty> actionType = new FlexoActionType<DeleteFlexoProperty, FlexoProperty, FlexoProperty>("delete_flexo_property") {
+	public static final FlexoActionType<DeleteFlexoProperty, FlexoProperty, FlexoProperty> actionType = new FlexoActionType<DeleteFlexoProperty, FlexoProperty, FlexoProperty>(
+			"delete_flexo_property") {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoProperty object, Vector<FlexoProperty> globalSelection) {
@@ -43,25 +43,26 @@ public class DeleteFlexoProperty extends FlexoAction<DeleteFlexoProperty, FlexoP
 
 		@Override
 		public DeleteFlexoProperty makeNewAction(FlexoProperty focusedObject, Vector<FlexoProperty> globalSelection, FlexoEditor editor) {
-			return new DeleteFlexoProperty(focusedObject, globalSelection,editor);
+			return new DeleteFlexoProperty(focusedObject, globalSelection, editor);
 		}
-		
-	};	
-	
+
+	};
+
 	static {
 		FlexoModelObject.addActionForClass(actionType, FlexoProperty.class);
 	}
-	
+
 	public DeleteFlexoProperty(FlexoProperty focusedObject, Vector<FlexoProperty> globalSelection, FlexoEditor editor) {
-		super(actionType,focusedObject,globalSelection,editor);
+		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		Vector<FlexoModelObject> properties = getGlobalSelectionAndFocusedObject();
 		for (FlexoModelObject object : properties) {
-			if (object instanceof FlexoProperty)
-				((FlexoProperty)object).delete();
+			if (object instanceof FlexoProperty) {
+				((FlexoProperty) object).delete();
+			}
 		}
 	}
 

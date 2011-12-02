@@ -23,43 +23,38 @@ import java.util.Vector;
 
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class RadioButtonListParameter<T> extends ParameterDefinition<T> {
 
 	private Vector<T> _availableValues;
 
-	public RadioButtonListParameter(String name, String label, T defaultValue, T... availableValues)
-	{
-		super(name,label,defaultValue);
+	public RadioButtonListParameter(String name, String label, T defaultValue, T... availableValues) {
+		super(name, label, defaultValue);
 		_availableValues = new Vector<T>();
-		for (int i=0; i<availableValues.length; i++) {
+		for (int i = 0; i < availableValues.length; i++) {
 			_availableValues.add(availableValues[i]);
 		}
-		addParameter("dynamiclist","params."+name+".availableValues");
+		addParameter("dynamiclist", "params." + name + ".availableValues");
 		/* allValues = "";
-        boolean isFirst = true;
-        for (int i=0; i<availableValues.length; i++) {
-            allValues += (isFirst?availableValues[i]:","+availableValues[i]);
-            isFirst = false;
-        }
-        addParameter("staticlist",allValues);*/
+		boolean isFirst = true;
+		for (int i=0; i<availableValues.length; i++) {
+		    allValues += (isFirst?availableValues[i]:","+availableValues[i]);
+		    isFirst = false;
+		}
+		addParameter("staticlist",allValues);*/
 	}
 
-	public RadioButtonListParameter(String name, String label, T defaultValue, Vector<T> availableValues)
-	{
-		super(name,label,defaultValue);
+	public RadioButtonListParameter(String name, String label, T defaultValue, Vector<T> availableValues) {
+		super(name, label, defaultValue);
 		_availableValues = availableValues;
-		addParameter("dynamiclist","params."+name+".availableValues");
+		addParameter("dynamiclist", "params." + name + ".availableValues");
 	}
 
 	@Override
-	public String getWidgetName()
-	{
+	public String getWidgetName() {
 		return DenaliWidget.RADIOBUTTON_LIST;
 	}
 
-	public Vector<T> getAvailableValues()
-	{
+	public Vector<T> getAvailableValues() {
 		return _availableValues;
 	}
 

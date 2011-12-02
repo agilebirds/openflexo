@@ -34,145 +34,143 @@ import org.openflexo.inspector.widget.DoubleWidget;
 import org.openflexo.inspector.widget.IntegerWidget;
 import org.openflexo.inspector.widget.TextFieldWidget;
 
-
 /**
  * Please comment this class
  * 
  * @author gpolet
  * 
  */
-public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsValue>
-{
+public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsValue> {
 
-    protected static final Logger logger = Logger.getLogger(MetricsValueInspectorWidget.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(MetricsValueInspectorWidget.class.getPackage().getName());
 
-    protected DenaliWidget<? extends Object> currentWidget;
+	protected DenaliWidget<? extends Object> currentWidget;
 
-    private DurationInspectorWidget durationWidget;
-    private IntegerWidget integerWidget;
-    private DoubleWidget doubleWidget;
-    private TextFieldWidget textFieldWidget;
-    private CheckBoxWidget checkBoxWidget;
-    
-    public MetricsValueInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        PropertyModel localStringModel = new PropertyModel();
-        localStringModel._tabModelName = model._tabModelName;
-        localStringModel.name = "stringValue";
-        PropertyModel localDurationModel = new PropertyModel();
-        localDurationModel._tabModelName = model._tabModelName;
-        localDurationModel.name = "durationValue";
-        PropertyModel localIntModel = new PropertyModel();
-        localIntModel._tabModelName = model._tabModelName;
-        localIntModel.name = "intValue";
-        PropertyModel localDoubleModel = new PropertyModel();
-        localDoubleModel._tabModelName = model._tabModelName;
-        localDoubleModel.name = "doubleValue";
-        PropertyModel localBooleanModel = new PropertyModel();
-        localBooleanModel._tabModelName = model._tabModelName;
-        localBooleanModel.name = "booleanValue";
-        durationWidget = new DurationInspectorWidget(localDurationModel,controller);
-        integerWidget = new IntegerWidget(localIntModel,controller);
-        doubleWidget = new DoubleWidget(localDoubleModel,controller);
-        textFieldWidget = new TextFieldWidget(localStringModel,controller);
-        checkBoxWidget = new CheckBoxWidget(localBooleanModel,controller);
-    }
+	private DurationInspectorWidget durationWidget;
+	private IntegerWidget integerWidget;
+	private DoubleWidget doubleWidget;
+	private TextFieldWidget textFieldWidget;
+	private CheckBoxWidget checkBoxWidget;
 
-    @Override
-	public Class getDefaultType()
-    {
-        return MetricsValue.class;
-    }
+	public MetricsValueInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		PropertyModel localStringModel = new PropertyModel();
+		localStringModel._tabModelName = model._tabModelName;
+		localStringModel.name = "stringValue";
+		PropertyModel localDurationModel = new PropertyModel();
+		localDurationModel._tabModelName = model._tabModelName;
+		localDurationModel.name = "durationValue";
+		PropertyModel localIntModel = new PropertyModel();
+		localIntModel._tabModelName = model._tabModelName;
+		localIntModel.name = "intValue";
+		PropertyModel localDoubleModel = new PropertyModel();
+		localDoubleModel._tabModelName = model._tabModelName;
+		localDoubleModel.name = "doubleValue";
+		PropertyModel localBooleanModel = new PropertyModel();
+		localBooleanModel._tabModelName = model._tabModelName;
+		localBooleanModel.name = "booleanValue";
+		durationWidget = new DurationInspectorWidget(localDurationModel, controller);
+		integerWidget = new IntegerWidget(localIntModel, controller);
+		doubleWidget = new DoubleWidget(localDoubleModel, controller);
+		textFieldWidget = new TextFieldWidget(localStringModel, controller);
+		checkBoxWidget = new CheckBoxWidget(localBooleanModel, controller);
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        if (currentWidget!=null)
-        	currentWidget.updateWidgetFromModel();
-    }
+	@Override
+	public Class getDefaultType() {
+		return MetricsValue.class;
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-    	if(currentWidget!=null)
-    		currentWidget.updateModelFromWidget();
-    	super.updateModelFromWidget();
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		if (currentWidget != null) {
+			currentWidget.updateWidgetFromModel();
+		}
+	}
 
-    private void updateWidget() {
-    	if (getObjectValue()!=null) {
-    		switch (getObjectValue().getMetricsDefinition().getType()) {
-    		case TEXT:
-    			currentWidget = textFieldWidget;
-    			break;
-    		case NUMBER:
-    			currentWidget = integerWidget;
-    			break;
-    		case DOUBLE:
-    			currentWidget = doubleWidget;
-    			break;
-    		case TIME:
-    			currentWidget = durationWidget;
-    			break;
-    		case TRUE_FALSE:
-    			currentWidget = checkBoxWidget;
-    			break;
-    		}
-    	}
-    }
-    
-    @Override
-    public void switchObserved(InspectableObject inspectable) {
-    	super.switchObserved(inspectable);
-    	updateWidget();
-    	if (currentWidget!=null)
-    		currentWidget.switchObserved(inspectable);
-    }
-    
-    @Override
-    public void setModel(InspectableObject value) {
-    	if (value==getModel())
-    		return;
-    	super.setModel(value);
-    	updateWidget();
-    	if (currentWidget!=null)
-    		currentWidget.switchObserved(value);
-    }
-    
-    @Override
-	public JComponent getDynamicComponent()
-    {
-    	if (currentWidget!=null)
-    		return currentWidget.getDynamicComponent();
-    	return null;
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		if (currentWidget != null) {
+			currentWidget.updateModelFromWidget();
+		}
+		super.updateModelFromWidget();
+	}
 
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        super.setProject(aProject);
-    }
+	private void updateWidget() {
+		if (getObjectValue() != null) {
+			switch (getObjectValue().getMetricsDefinition().getType()) {
+			case TEXT:
+				currentWidget = textFieldWidget;
+				break;
+			case NUMBER:
+				currentWidget = integerWidget;
+				break;
+			case DOUBLE:
+				currentWidget = doubleWidget;
+				break;
+			case TIME:
+				currentWidget = durationWidget;
+				break;
+			case TRUE_FALSE:
+				currentWidget = checkBoxWidget;
+				break;
+			}
+		}
+	}
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (currentWidget==durationWidget)
-    		durationWidget.fireEditingCanceled();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (currentWidget==durationWidget)
-    		durationWidget.fireEditingStopped();
-    }
+	@Override
+	public void switchObserved(InspectableObject inspectable) {
+		super.switchObserved(inspectable);
+		updateWidget();
+		if (currentWidget != null) {
+			currentWidget.switchObserved(inspectable);
+		}
+	}
 
-    @Override
-    public boolean disableTerminateEditOnFocusLost() {
-    	return true;
-    }
+	@Override
+	public void setModel(InspectableObject value) {
+		if (value == getModel()) {
+			return;
+		}
+		super.setModel(value);
+		updateWidget();
+		if (currentWidget != null) {
+			currentWidget.switchObserved(value);
+		}
+	}
+
+	@Override
+	public JComponent getDynamicComponent() {
+		if (currentWidget != null) {
+			return currentWidget.getDynamicComponent();
+		}
+		return null;
+	}
+
+	@Override
+	public void setProject(FlexoProject aProject) {
+		super.setProject(aProject);
+	}
+
+	@Override
+	public void fireEditingCanceled() {
+		if (currentWidget == durationWidget) {
+			durationWidget.fireEditingCanceled();
+		}
+	}
+
+	@Override
+	public void fireEditingStopped() {
+		if (currentWidget == durationWidget) {
+			durationWidget.fireEditingStopped();
+		}
+	}
+
+	@Override
+	public boolean disableTerminateEditOnFocusLost() {
+		return true;
+	}
 }

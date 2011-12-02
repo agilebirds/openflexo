@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents DecisionView object
- *
+ * 
  * @version $Id: DecisionView.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class DecisionView extends View {
-  public DecisionView(PetalNode parent, Collection params, int tag) {
-    super(parent, "DecisionView", params, tag);
-  }
+	public DecisionView(PetalNode parent, Collection params, int tag) {
+		super(parent, "DecisionView", params, tag);
+	}
 
-  public DecisionView() {
-    super("DecisionView");
-  }
+	public DecisionView() {
+		super("DecisionView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

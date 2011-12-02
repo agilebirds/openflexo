@@ -26,77 +26,66 @@ import org.openflexo.fge.geom.FGEArc.ArcType;
 public class Arc extends Shape {
 
 	private FGEArc arc;
-	
+
 	private int angleStart = 0;
 	private int angleExtent = 90;
 	private ArcType arcType = ArcType.PIE;
-	
-	public Arc() 
-	{
+
+	public Arc() {
 		this(null);
 	}
-	
-	public Arc(ShapeGraphicalRepresentation aGraphicalRepresentation) 
-	{
+
+	public Arc(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 		updateShape();
 	}
-	
+
 	@Override
-	public ShapeType getShapeType()
-	{
+	public ShapeType getShapeType() {
 		return ShapeType.ARC;
 	}
 
 	@Override
-	public void updateShape()
-	{
-		arc = new FGEArc(0,0,1,1,angleStart,angleExtent,arcType);
+	public void updateShape() {
+		arc = new FGEArc(0, 0, 1, 1, angleStart, angleExtent, arcType);
 		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null)
+		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().notifyShapeChanged();
-	}	
-	
+		}
+	}
+
 	@Override
-	public FGEArc getShape()
-	{
+	public FGEArc getShape() {
 		return arc;
 	}
-	
-	public int getAngleStart()
-	{
+
+	public int getAngleStart() {
 		return angleStart;
 	}
 
-	public void setAngleStart(int anAngle)
-	{
+	public void setAngleStart(int anAngle) {
 		if (angleStart != anAngle) {
 			angleStart = anAngle;
 			updateShape();
 		}
 	}
 
-
-	public int getAngleExtent()
-	{
+	public int getAngleExtent() {
 		return angleExtent;
 	}
 
-	public void setAngleExtent(int anAngle)
-	{
+	public void setAngleExtent(int anAngle) {
 		if (angleExtent != anAngle) {
 			angleExtent = anAngle;
 			updateShape();
 		}
 	}
 
-	public ArcType getArcType()
-	{
+	public ArcType getArcType() {
 		return arcType;
 	}
 
-	public void setArcType(ArcType anArcType)
-	{
+	public void setArcType(ArcType anArcType) {
 		if (arcType != anArcType) {
 			arcType = anArcType;
 			updateShape();

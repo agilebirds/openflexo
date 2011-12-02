@@ -23,19 +23,16 @@ import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class CVSRepositoryParameter extends ParameterDefinition<CVSRepository> {
 
-    public CVSRepositoryParameter(String name, String label, CVSRepository defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className",CVSRepositoryInspectorWidget.class.getName());
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public CVSRepositoryParameter(String name, String label, CVSRepository defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", CVSRepositoryInspectorWidget.class.getName());
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

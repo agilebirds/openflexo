@@ -21,19 +21,16 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.IEObject;
 
-public class WidgetAddedToSequence extends IEDataModification
-{
+public class WidgetAddedToSequence extends IEDataModification {
 
-    private int index=-1;
-    
-    public WidgetAddedToSequence(IEObject addedWidget, int index)
-    {
-        super(null,addedWidget);
-        this.index=index;
-    }
+	private int index = -1;
 
-    public int getIndex()
-    {
-        return index;
-    }
+	public WidgetAddedToSequence(IEObject addedWidget, int index) {
+		super(null, addedWidget);
+		this.index = index;
+	}
+
+	public int getIndex() {
+		return index;
+	}
 }

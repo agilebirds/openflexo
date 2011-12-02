@@ -34,65 +34,61 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class VersionningPerspective extends FlexoPerspective<FlexoModelObject>
- {
+public class VersionningPerspective extends FlexoPerspective<FlexoModelObject> {
 
-	 /**
+	/**
 	 * 
 	 */
 	private final DGController dgController;
 
 	/**
-	  * @param dgController TODO
+	 * @param dgController
+	 *            TODO
 	 * @param name
-	  */
-	 public VersionningPerspective(DGController dgController)
-	 {
-		 super("versionning");
+	 */
+	public VersionningPerspective(DGController dgController) {
+		super("versionning");
 		this.dgController = dgController;
-	 }
+	}
 
-	 /**
-	  * Overrides getIcon
-	  * 
-	  * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
-	  */
-	 @Override
-	public ImageIcon getActiveIcon()
-	 {
-		 return DGIconLibrary.DG_VP_ACTIVE_ICON;
-	 }
+	/**
+	 * Overrides getIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 */
+	@Override
+	public ImageIcon getActiveIcon() {
+		return DGIconLibrary.DG_VP_ACTIVE_ICON;
+	}
 
-	 /**
-	  * Overrides getSelectedIcon
-	  * 
-	  * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	  */
-	 @Override
-	public ImageIcon getSelectedIcon()
-	 {
-		 return DGIconLibrary.DG_VP_SELECTED_ICON;
-	 }
+	/**
+	 * Overrides getSelectedIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 */
+	@Override
+	public ImageIcon getSelectedIcon() {
+		return DGIconLibrary.DG_VP_SELECTED_ICON;
+	}
 
-	 @Override
-	public JPanel getFooter()
-	 {
-		 return this.dgController._footer;
-	 }
+	@Override
+	public JPanel getFooter() {
+		return this.dgController._footer;
+	}
 
-	 @Override
-	 public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject)
-	 {
-		 if (proposedObject instanceof CGFile) {
+	@Override
+	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+		if (proposedObject instanceof CGFile) {
 			return proposedObject;
 		}
-		 return null;
-	 }
+		return null;
+	}
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedDoc) || (object instanceof DGRepository) || (object instanceof DGLatexFile) || (object instanceof DGScreenshotFile) || (object instanceof CGTemplate)
-				|| (object instanceof TOCEntry) || (object instanceof TOCRepository) || (object instanceof TOCData));
+		return ((object instanceof GeneratedDoc) || (object instanceof DGRepository) || (object instanceof DGLatexFile)
+				|| (object instanceof DGScreenshotFile) || (object instanceof CGTemplate) || (object instanceof TOCEntry)
+				|| (object instanceof TOCRepository) || (object instanceof TOCData));
 	}
 
 	@Override
@@ -118,18 +114,15 @@ public class VersionningPerspective extends FlexoPerspective<FlexoModelObject>
 		return null;
 	}
 
+	@Override
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+		if (moduleView.getRepresentedObject() instanceof CGObject) {
+			this.dgController._lastEditedCGRepository = AbstractGCAction.repositoryForObject((CGObject) moduleView.getRepresentedObject());
+		}
+		this.dgController.refreshFooter();
+		if (moduleView instanceof DGFileModuleView) {
+			((DGFileModuleView) moduleView).refresh();
+		}
+	}
 
-	  @Override
-	  public void notifyModuleViewDisplayed(ModuleView<?> moduleView)
-	  {
-		  if (moduleView.getRepresentedObject() instanceof CGObject) {
-			  this.dgController._lastEditedCGRepository = AbstractGCAction.repositoryForObject((CGObject) moduleView.getRepresentedObject());
-		  }
-		  this.dgController.refreshFooter();
-		  if (moduleView instanceof DGFileModuleView) {
-			  ((DGFileModuleView) moduleView).refresh();
-		  }
-	  }
-
-
- }
+}

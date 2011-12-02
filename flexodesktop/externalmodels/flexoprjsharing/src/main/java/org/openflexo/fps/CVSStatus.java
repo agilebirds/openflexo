@@ -21,79 +21,58 @@ package org.openflexo.fps;
 
 import org.openflexo.localization.FlexoLocalization;
 
-public enum CVSStatus 
-{
-	UpToDate,  // Remote status: up-to-date
-	LocallyModified,  // Locally modified
-	LocallyAdded,	// Unresolved conflicts (no entry for file)
-	LocallyRemoved,	// Locally removed
-	RemotelyModified,	// Remotely modified
-	RemotelyAdded,	// Remotely added
-	RemotelyRemoved,	// Remotely removed
-	Conflicting,	// File had conflicts on merge
-	ConflictingAdded,	// File had conflicts on merge, added both sides
-	ConflictingRemoved,	// File had conflicts on merge, removed both sides
-	MarkedAsMerged,	// File had conflicts on merge, but now conflicts are declared as solved
-	//Erased,		// Needs Checkout
-	//NoFile,		// Needs Checkout (no entry for file)
-	//Unknown;	// Unresolved conflicts (no entry for file)
-	CVSIgnored,  // Ignored file
+public enum CVSStatus {
+	UpToDate, // Remote status: up-to-date
+	LocallyModified, // Locally modified
+	LocallyAdded, // Unresolved conflicts (no entry for file)
+	LocallyRemoved, // Locally removed
+	RemotelyModified, // Remotely modified
+	RemotelyAdded, // Remotely added
+	RemotelyRemoved, // Remotely removed
+	Conflicting, // File had conflicts on merge
+	ConflictingAdded, // File had conflicts on merge, added both sides
+	ConflictingRemoved, // File had conflicts on merge, removed both sides
+	MarkedAsMerged, // File had conflicts on merge, but now conflicts are declared as solved
+	// Erased, // Needs Checkout
+	// NoFile, // Needs Checkout (no entry for file)
+	// Unknown; // Unresolved conflicts (no entry for file)
+	CVSIgnored, // Ignored file
 	Removed, // Removed file
 	Unknown; // ???
-	
-	public boolean isUpToDate()
-	{
+
+	public boolean isUpToDate() {
 		return this == UpToDate;
 	}
 
-	public boolean isUnknown()
-	{
+	public boolean isUnknown() {
 		return this == Unknown;
 	}
 
-	public boolean isIgnored()
-	{
+	public boolean isIgnored() {
 		return this == CVSIgnored;
 	}
 
-	public boolean isLocallyModified()
-	{
-		return ((this == LocallyModified)
-				|| (this == LocallyAdded)
-				|| (this == LocallyRemoved)
-				|| (this == MarkedAsMerged)
-				|| isConflicting());
+	public boolean isLocallyModified() {
+		return ((this == LocallyModified) || (this == LocallyAdded) || (this == LocallyRemoved) || (this == MarkedAsMerged) || isConflicting());
 	}
 
-	public boolean isRemotelyModified()
-	{
-		return ((this == RemotelyModified)
-				|| (this == RemotelyAdded)
-				|| (this == RemotelyRemoved)
-				|| isConflicting());
+	public boolean isRemotelyModified() {
+		return ((this == RemotelyModified) || (this == RemotelyAdded) || (this == RemotelyRemoved) || isConflicting());
 	}
 
-	public boolean isConflicting()
-	{
-		return ((this == Conflicting)
-				|| (this == ConflictingAdded)
-				|| (this == ConflictingRemoved));
-	}
-	
-	public boolean isUnderCVS()
-	{
-		return (this != CVSIgnored
-				&& this != Unknown
-				&& this != LocallyAdded);
-	}
-	
-	public String getLocalizedStringRepresentation()
-	{
-		return FlexoLocalization.localizedForKey("CVSStatus_"+getUnlocalizedStringRepresentation());
+	public boolean isConflicting() {
+		return ((this == Conflicting) || (this == ConflictingAdded) || (this == ConflictingRemoved));
 	}
 
-	public String getUnlocalizedStringRepresentation()
-	{
+	public boolean isUnderCVS() {
+		return (this != CVSIgnored && this != Unknown && this != LocallyAdded);
+	}
+
+	public String getLocalizedStringRepresentation() {
+		return FlexoLocalization.localizedForKey("CVSStatus_" + getUnlocalizedStringRepresentation());
+	}
+
+	public String getUnlocalizedStringRepresentation() {
 		return toString();
 	}
 }

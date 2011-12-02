@@ -35,161 +35,150 @@ import org.openflexo.foundation.wkf.ws.OutputPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * Edge linking a FlexoNode to a OutPort
  * 
  * @author sguerin
  * 
  */
-public final class InternalMessageOutEdge extends InternalMessageEdge<PetriGraphNode, FlexoPort> implements PortEntry
-{
+public final class InternalMessageOutEdge extends InternalMessageEdge<PetriGraphNode, FlexoPort> implements PortEntry {
 
-    private static final Logger logger = Logger.getLogger(InternalMessageOutEdge.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(InternalMessageOutEdge.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public InternalMessageOutEdge(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public InternalMessageOutEdge(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public InternalMessageOutEdge(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public InternalMessageOutEdge(FlexoProcess process) {
+		super(process);
+	}
 
-    /**
-     * Constructor with start node, next port and process
-     */
-    public InternalMessageOutEdge(PetriGraphNode startNode, FlexoPort nextPort, FlexoProcess process) throws InvalidEdgeException
-    {
-        this(process);
-        if (nextPort.getProcess() == process && startNode.getProcess() == process && nextPort.isOutPort()) {
-        	setStartNode(startNode);
-            setEndNode(nextPort);
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Inconsistent data while building InternalMessageOutEdge !");
-            throw new InvalidEdgeException(this);
-        }
-        if (!isEdgeValid()) {
-        	resetStartAndEndNode();
-            throw new InvalidEdgeException(this);
-        }
-     }
+	/**
+	 * Constructor with start node, next port and process
+	 */
+	public InternalMessageOutEdge(PetriGraphNode startNode, FlexoPort nextPort, FlexoProcess process) throws InvalidEdgeException {
+		this(process);
+		if (nextPort.getProcess() == process && startNode.getProcess() == process && nextPort.isOutPort()) {
+			setStartNode(startNode);
+			setEndNode(nextPort);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Inconsistent data while building InternalMessageOutEdge !");
+			}
+			throw new InvalidEdgeException(this);
+		}
+		if (!isEdgeValid()) {
+			resetStartAndEndNode();
+			throw new InvalidEdgeException(this);
+		}
+	}
 
-    /**
-     * Constructor with start node, next port
-     */
-    public InternalMessageOutEdge(PetriGraphNode startNode, FlexoPort nextPort) throws InvalidEdgeException
-    {
-        this(startNode, nextPort, startNode.getProcess());
-    }
+	/**
+	 * Constructor with start node, next port
+	 */
+	public InternalMessageOutEdge(PetriGraphNode startNode, FlexoPort nextPort) throws InvalidEdgeException {
+		this(startNode, nextPort, startNode.getProcess());
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.WKF.INTERNAL_MESSAGE_OUT_EDGE_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WKF.INTERNAL_MESSAGE_OUT_EDGE_INSPECTOR;
+	}
 
-    @Override
-	public PortRegistery getPortRegistery()
-    {
-        if (getEndNode() != null) {
-            return getEndNode().getPortRegistery();
-        }
-        return null;
-    }
+	@Override
+	public PortRegistery getPortRegistery() {
+		if (getEndNode() != null) {
+			return getEndNode().getPortRegistery();
+		}
+		return null;
+	}
 
-    // ==========================================================================
-    // ============================= Validation
-    // =================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Validation
+	// =================================
+	// ==========================================================================
 
-    @Override
-	public boolean isEdgeValid()
-    {
-        // Such edges are valid if and only if they link to a OUT port a
-        // FlexoNode of any level
-        // located in the petri graph of the sub-process where the port
-        // registery
-        // is registered
+	@Override
+	public boolean isEdgeValid() {
+		// Such edges are valid if and only if they link to a OUT port a
+		// FlexoNode of any level
+		// located in the petri graph of the sub-process where the port
+		// registery
+		// is registered
 
-        if (getStartNode() == null || getEndNode() == null || !getEndNode().isOutPort())
-            return false;
+		if (getStartNode() == null || getEndNode() == null || !getEndNode().isOutPort()) {
+			return false;
+		}
 
-        return (getStartNode().getProcess() == getPortRegistery().getProcess());
-    }
+		return (getStartNode().getProcess() == getPortRegistery().getProcess());
+	}
 
-    public static class InternalMessageOutEdgeMustBeValid extends ValidationRule<InternalMessageOutEdgeMustBeValid,InternalMessageOutEdge>
-    {
-        public InternalMessageOutEdgeMustBeValid()
-        {
-            super(InternalMessageOutEdge.class, "internal_message_out_edge_must_be_valid");
-        }
+	public static class InternalMessageOutEdgeMustBeValid extends ValidationRule<InternalMessageOutEdgeMustBeValid, InternalMessageOutEdge> {
+		public InternalMessageOutEdgeMustBeValid() {
+			super(InternalMessageOutEdge.class, "internal_message_out_edge_must_be_valid");
+		}
 
-        @Override
-		public ValidationIssue<InternalMessageOutEdgeMustBeValid,InternalMessageOutEdge> applyValidation(InternalMessageOutEdge edge)
-        {
-            if (!edge.isEdgeValid()) {
-                ValidationError<InternalMessageOutEdgeMustBeValid,InternalMessageOutEdge> error = new ValidationError<InternalMessageOutEdgeMustBeValid,InternalMessageOutEdge>(this, edge, "internal_message_out_edge_is_not_valid");
-                error.addToFixProposals(new DeletionFixProposal<InternalMessageOutEdgeMustBeValid,InternalMessageOutEdge>("delete_this_message_edge"));
-                return error;
-            }
-            return null;
-        }
+		@Override
+		public ValidationIssue<InternalMessageOutEdgeMustBeValid, InternalMessageOutEdge> applyValidation(InternalMessageOutEdge edge) {
+			if (!edge.isEdgeValid()) {
+				ValidationError<InternalMessageOutEdgeMustBeValid, InternalMessageOutEdge> error = new ValidationError<InternalMessageOutEdgeMustBeValid, InternalMessageOutEdge>(
+						this, edge, "internal_message_out_edge_is_not_valid");
+				error.addToFixProposals(new DeletionFixProposal<InternalMessageOutEdgeMustBeValid, InternalMessageOutEdge>(
+						"delete_this_message_edge"));
+				return error;
+			}
+			return null;
+		}
 
-    }
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "internal_message_out_edge";
-    }
-    
-    @Override
-	public FlexoPort getFlexoPort()
-    {
-    	return getEndNode();
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "internal_message_out_edge";
+	}
 
-    @Override
-	public MessageDefinition getInputMessageDefinition()
-    {
-    	return null;
-    }
+	@Override
+	public FlexoPort getFlexoPort() {
+		return getEndNode();
+	}
 
-    @Override
-	public MessageDefinition getOutputMessageDefinition()
-    {
-    	if (getFlexoPort()!=null && isOutputPort()) {
-    		return ((OutputPort)getFlexoPort()).getOutputMessageDefinition();
-    	}
-    	return null;
-    }
-    
-    @Override
-    public Class<PetriGraphNode> getStartNodeClass() {
-    	return PetriGraphNode.class;
-    }
+	@Override
+	public MessageDefinition getInputMessageDefinition() {
+		return null;
+	}
 
-    @Override
-    public Class<FlexoPort> getEndNodeClass() {
-    	return FlexoPort.class;
-    }
+	@Override
+	public MessageDefinition getOutputMessageDefinition() {
+		if (getFlexoPort() != null && isOutputPort()) {
+			return ((OutputPort) getFlexoPort()).getOutputMessageDefinition();
+		}
+		return null;
+	}
+
+	@Override
+	public Class<PetriGraphNode> getStartNodeClass() {
+		return PetriGraphNode.class;
+	}
+
+	@Override
+	public Class<FlexoPort> getEndNodeClass() {
+		return FlexoPort.class;
+	}
 }

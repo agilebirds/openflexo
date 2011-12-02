@@ -23,13 +23,11 @@ import org.openflexo.foundation.FlexoException;
 
 public class InvalidParametersException extends FlexoException {
 
-    /**
-     * @param string
-     */
-    public InvalidParametersException(String string)
-    {
-        super(string,string);
-    }
-
+	/**
+	 * @param string
+	 */
+	public InvalidParametersException(String string) {
+		super(string, string);
+	}
 
 }

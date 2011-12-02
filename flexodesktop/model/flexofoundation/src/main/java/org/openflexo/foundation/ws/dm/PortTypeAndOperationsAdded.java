@@ -21,22 +21,18 @@ package org.openflexo.foundation.ws.dm;
 
 import org.openflexo.foundation.wkf.FlexoProcess;
 
+public class PortTypeAndOperationsAdded extends WSDataModification {
 
-
-public class PortTypeAndOperationsAdded extends WSDataModification
-{
-
-    /**
-     * intended only to refresh the WSEBrowser tree.
-     * 
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public PortTypeAndOperationsAdded(FlexoProcess newValue)
-    {
-        super( null, newValue);
-    }
+	/**
+	 * intended only to refresh the WSEBrowser tree.
+	 * 
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public PortTypeAndOperationsAdded(FlexoProcess newValue) {
+		super(null, newValue);
+	}
 
 }

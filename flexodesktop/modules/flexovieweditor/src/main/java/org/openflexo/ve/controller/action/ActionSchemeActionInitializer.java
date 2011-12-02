@@ -39,44 +39,37 @@ public class ActionSchemeActionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ActionSchemeActionInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(null,actionInitializer);
+	ActionSchemeActionInitializer(OEControllerActionInitializer actionInitializer) {
+		super(null, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ActionSchemeAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ActionSchemeAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<ActionSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, ActionSchemeAction action)
-			{
-				return ParametersRetriever.retrieveParameters(action,false);
+			public boolean run(ActionEvent e, ActionSchemeAction action) {
+				return ParametersRetriever.retrieveParameters(action, action.escapeParameterRetrievingWhenValid);
 			}
 		};
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<ActionSchemeAction> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ActionSchemeAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ActionSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, ActionSchemeAction action)
-			{
+			public boolean run(ActionEvent e, ActionSchemeAction action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<ActionSchemeAction> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<ActionSchemeAction> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<ActionSchemeAction>() {
 			@Override
 			public boolean handleException(FlexoException exception, ActionSchemeAction action) {
@@ -89,12 +82,9 @@ public class ActionSchemeActionInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return null;
 	}
-
 
 }

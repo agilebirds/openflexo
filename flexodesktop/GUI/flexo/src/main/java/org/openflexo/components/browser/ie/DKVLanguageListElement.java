@@ -25,41 +25,36 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dkv.DKVModel;
-import org.openflexo.foundation.dkv.Language;
 import org.openflexo.foundation.dkv.DKVModel.LanguageList;
-
+import org.openflexo.foundation.dkv.Language;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVLanguageListElement extends BrowserElement
-{
+public class DKVLanguageListElement extends BrowserElement {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public DKVLanguageListElement(DKVModel.LanguageList object,
-            ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.DKV_LANGUAGE_LIST, browser, parent);
-    }
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public DKVLanguageListElement(DKVModel.LanguageList object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.DKV_LANGUAGE_LIST, browser, parent);
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        DKVModel.LanguageList ll = (LanguageList) getObject();
-        Enumeration en = ll.getLanguages().elements();
-        while (en.hasMoreElements()) {
-            addToChilds((Language) en.nextElement());
-        }
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		DKVModel.LanguageList ll = (LanguageList) getObject();
+		Enumeration en = ll.getLanguages().elements();
+		while (en.hasMoreElements()) {
+			addToChilds((Language) en.nextElement());
+		}
+	}
 
 }

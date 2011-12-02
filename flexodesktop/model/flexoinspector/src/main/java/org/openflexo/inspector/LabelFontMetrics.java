@@ -25,14 +25,11 @@ import java.awt.FontMetrics;
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class LabelFontMetrics extends FontMetrics
-{
+public class LabelFontMetrics extends FontMetrics {
 
-    public LabelFontMetrics(Font f)
-    {
-        super(f);
-    }
+	public LabelFontMetrics(Font f) {
+		super(f);
+	}
 }

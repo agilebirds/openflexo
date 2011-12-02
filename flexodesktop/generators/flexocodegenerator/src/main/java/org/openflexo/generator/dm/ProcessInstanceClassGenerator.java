@@ -23,7 +23,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.apache.velocity.VelocityContext;
-
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.generator.GeneratorUtils;
 import org.openflexo.foundation.dm.DMEntity;
@@ -35,72 +34,70 @@ import org.openflexo.generator.rm.UtilJavaFileResource;
 import org.openflexo.generator.utils.JavaClassGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-public class ProcessInstanceClassGenerator extends JavaClassGenerator
-{
+public class ProcessInstanceClassGenerator extends JavaClassGenerator {
 
-    protected static final String TEMLPATE_NAME = "ProcessInstanceClass.java.vm";
-    private Vector<String> imports;
-    private static final Logger logger = FlexoLogger.getLogger(CustomClassGenerator.class.getPackage().getName());
-    public ProcessInstanceClassGenerator(org.openflexo.generator.ProjectGenerator projectGenerator, DMEntity entity)
-    {
-        super(projectGenerator, entity);
-    }
+	protected static final String TEMLPATE_NAME = "ProcessInstanceClass.java.vm";
+	private Vector<String> imports;
+	private static final Logger logger = FlexoLogger.getLogger(CustomClassGenerator.class.getPackage().getName());
+
+	public ProcessInstanceClassGenerator(org.openflexo.generator.ProjectGenerator projectGenerator, DMEntity entity) {
+		super(projectGenerator, entity);
+	}
 
 	@Override
-    public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public VelocityContext defaultContext() 
-    {
-        VelocityContext context = super.defaultContext();
-        imports = new Vector<String>();
-        context.put("entity", getEntity());
+	@Override
+	public VelocityContext defaultContext() {
+		VelocityContext context = super.defaultContext();
+		imports = new Vector<String>();
+		context.put("entity", getEntity());
 
-        context.put("props", getEntity().getProperties());
+		context.put("props", getEntity().getProperties());
 
-        return context;
-    }
+		return context;
+	}
 
-    public String addToImports(String fullClassName)
-    {
-    	if (fullClassName==null)
-    		return null;
-        if (!imports.contains(fullClassName.trim()))
-        	if(fullClassName.indexOf(".")>-1 && !fullClassName.trim().startsWith("java.lang."))
-        		if(!fullClassName.startsWith("default_package"))imports.add(fullClassName.trim());
-        return fullClassName;
-    }
-    
-    @Override
-    public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-	{
-		// Java file
-    	javaResource  = (UtilJavaFileResource)resourceForKeyWithCGFile(ResourceType.JAVA_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
-		if (javaResource == null) {
-			javaResource = GeneratedFileResourceFactory.createNewUtilJavaFileResource(repository,this);
-			logger.info("Created DMENTITY JAVA resource "+javaResource.getName());
+	public String addToImports(String fullClassName) {
+		if (fullClassName == null) {
+			return null;
 		}
-		else {
+		if (!imports.contains(fullClassName.trim())) {
+			if (fullClassName.indexOf(".") > -1 && !fullClassName.trim().startsWith("java.lang.")) {
+				if (!fullClassName.startsWith("default_package")) {
+					imports.add(fullClassName.trim());
+				}
+			}
+		}
+		return fullClassName;
+	}
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		// Java file
+		javaResource = (UtilJavaFileResource) resourceForKeyWithCGFile(ResourceType.JAVA_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		if (javaResource == null) {
+			javaResource = GeneratedFileResourceFactory.createNewUtilJavaFileResource(repository, this);
+			logger.info("Created DMENTITY JAVA resource " + javaResource.getName());
+		} else {
 			javaResource.setGenerator(this);
-			logger.info("Successfully retrieved DMENTITY JAVA resource "+javaResource.getName());
+			logger.info("Successfully retrieved DMENTITY JAVA resource " + javaResource.getName());
 		}
 		javaResource.registerObserverWhenRequired();
 		resources.add(javaResource);
 	}
 
-
 	@Override
 	public void rebuildDependanciesForResource(JavaFileResource resource) {
-		
+
 	}
 
 	@Override
 	public String getTemplateName() {
 		return TEMLPATE_NAME;
 	}
-
 
 }

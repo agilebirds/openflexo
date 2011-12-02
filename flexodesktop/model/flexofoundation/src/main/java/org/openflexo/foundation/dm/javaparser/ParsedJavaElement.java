@@ -19,13 +19,12 @@
  */
 package org.openflexo.foundation.dm.javaparser;
 
-public interface ParsedJavaElement
-{
+public interface ParsedJavaElement {
 	public ParsedJavadoc getJavadoc();
-	
+
 	public int getLineNumber();
 
 	public String getUniqueIdentifier();
-	
+
 	public String[] getModifiers();
 }

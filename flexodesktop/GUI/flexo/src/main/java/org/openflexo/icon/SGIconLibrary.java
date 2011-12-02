@@ -27,17 +27,15 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of SGModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class SGIconLibrary extends GeneratorIconLibrary {
 
 	// Module icons
-	public static final ImageIcon SG_ACTIVE_ICON = new ImageIconResource("Icons/SG/SG_A_Small.gif");
-	public static final ImageIcon SG_UNACTIVE_ICON = new ImageIconResource("Icons/SG/SG_NA_Small.gif");
-	public static final ImageIcon SG_SELECTED_ICON = new ImageIconResource("Icons/SG/SG_S_Small.gif");
-	public static final ImageIcon SG_BIG_ACTIVE_ICON = new ImageIconResource("Icons/SG/SG_A.gif");
-	public static final ImageIcon SG_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/SG/SG_NA.gif");
-	public static final ImageIcon SG_BIG_SELECTED_ICON = new ImageIconResource("Icons/SG/SG_S.gif");
+	public static final ImageIcon SG_SMALL_ICON = new ImageIconResource("Icons/SG/module-sg-16.png");
+	public static final ImageIcon SG_MEDIUM_ICON = new ImageIconResource("Icons/SG/module-sg-32.png");
+	public static final ImageIcon SG_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/SG/module-sg-hover-32.png");
+	public static final ImageIcon SG_BIG_ICON = new ImageIconResource("Icons/SG/module-sg-hover-64.png");
 
 	// Perspective icons
 	public static final ImageIcon SG_MRP_ACTIVE_ICON = new ImageIconResource("Icons/SG/MRPerspective_A.gif");
@@ -46,7 +44,7 @@ public class SGIconLibrary extends GeneratorIconLibrary {
 	public static final ImageIcon SG_SGP_SELECTED_ICON = new ImageIconResource("Icons/SG/SGPerspective_S.gif");
 	public static final ImageIcon SG_VP_ACTIVE_ICON = new ImageIconResource("Icons/SG/VersionningPerspective_A.gif");
 	public static final ImageIcon SG_VP_SELECTED_ICON = new ImageIconResource("Icons/SG/VersionningPerspective_S.gif");
-	
+
 	// Model icons
 	public static final ImageIcon GENERATED_CODE_ICON = new ImageIconResource("Icons/SG/GeneratedCode.gif");
 	public static final ImageIcon GENERATED_CODE_REPOSITORY_ICON = new ImageIconResource("Icons/SG/GeneratedCodeRepository.gif");
@@ -54,6 +52,5 @@ public class SGIconLibrary extends GeneratorIconLibrary {
 	public static final ImageIcon JAVA_SOURCE_FOLDER_ICON = new ImageIconResource("Icons/SG/JavaSourceFolder.gif");
 	public static final ImageIcon TARGET_ICON = new ImageIconResource("Icons/SG/Target.gif");
 	public static final ImageIcon TARGET_FOLDER_ICON = new ImageIconResource("Icons/SG/TargetFolder.gif");
-
 
 }

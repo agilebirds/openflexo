@@ -27,65 +27,54 @@ import org.openflexo.foundation.FlexoModelObject;
  * @author sguerin
  * 
  */
-public abstract class CheckColumn<D extends FlexoModelObject> extends AbstractColumn<D,Boolean> implements EditableColumn<D,Boolean>
-{
+public abstract class CheckColumn<D extends FlexoModelObject> extends AbstractColumn<D, Boolean> implements EditableColumn<D, Boolean> {
 
-    public CheckColumn(String title, int defaultWidth)
-    {
-        super(title, defaultWidth, false);
-    }
+	public CheckColumn(String title, int defaultWidth) {
+		super(title, defaultWidth, false);
+	}
 
-    @Override
-	public String getLocalizedTitle()
-    {
-        return " ";
-    }
+	@Override
+	public String getLocalizedTitle() {
+		return " ";
+	}
 
-    @Override
-	public Class getValueClass()
-    {
-        return Boolean.class;
-    }
+	@Override
+	public Class getValueClass() {
+		return Boolean.class;
+	}
 
-    @Override
-	public Boolean getValueFor(D object)
-    {
-        return getBooleanValue(object);
-    }
+	@Override
+	public Boolean getValueFor(D object) {
+		return getBooleanValue(object);
+	}
 
-    public abstract Boolean getBooleanValue(D object);
+	public abstract Boolean getBooleanValue(D object);
 
-    public abstract void setBooleanValue(D object, Boolean aBoolean);
+	public abstract void setBooleanValue(D object, Boolean aBoolean);
 
-    @Override
-	public String toString()
-    {
-        return "CheckColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
-    }
+	@Override
+	public String toString() {
+		return "CheckColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
+	}
 
-    /**
-     * No custom cell renderer: use JTable default one
-     * 
-     * @return
-     */
-    @Override
-	public boolean requireCellRenderer()
-    {
-        return false;
-    }
+	/**
+	 * No custom cell renderer: use JTable default one
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean requireCellRenderer() {
+		return false;
+	}
 
-    @Override
-	public boolean isCellEditableFor(FlexoModelObject object)
-    {
-        return true;
-    }
+	@Override
+	public boolean isCellEditableFor(FlexoModelObject object) {
+		return true;
+	}
 
-    @Override
-	public void setValueFor(D object, Boolean value) 
-    {
-        setBooleanValue(object,value);
-    }
-
-
+	@Override
+	public void setValueFor(D object, Boolean value) {
+		setBooleanValue(object, value);
+	}
 
 }

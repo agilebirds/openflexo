@@ -24,18 +24,15 @@ import java.io.File;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.rm.FlexoProject;
 
+public interface DataImporter {
 
-public interface DataImporter
-{
-
-    /**
-     * This is the generic importing method.
-     * Return an object representing all new imported data (might be
-     * what you want depending on kind of importer....)
-     * 
-     * @param project
-     * @param importedFile
-     * @return
-     */
-    public Object importInProject (FlexoProject project, File importedFile, Object[] parameters) throws FlexoException;
+	/**
+	 * This is the generic importing method. Return an object representing all new imported data (might be what you want depending on kind
+	 * of importer....)
+	 * 
+	 * @param project
+	 * @param importedFile
+	 * @return
+	 */
+	public Object importInProject(FlexoProject project, File importedFile, Object[] parameters) throws FlexoException;
 }

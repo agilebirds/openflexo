@@ -23,27 +23,28 @@ import java.io.File;
 
 /**
  * Implements the CVS concept of File Modes (permissions).
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 public class FileMode {
-    /**
-     * The underlying file
-     */
-    private File file;
+	/**
+	 * The underlying file
+	 */
+	private File file;
 
-    /**
-     * Construct a new file mode from a file.
-     */
-    public FileMode(File file) {
-        this.file = file;
-    }
+	/**
+	 * Construct a new file mode from a file.
+	 */
+	public FileMode(File file) {
+		this.file = file;
+	}
 
-    /**
-     * Returns a CVS-compatible file mode string
-     */
-    @Override
+	/**
+	 * Returns a CVS-compatible file mode string
+	 */
+	@Override
 	public String toString() {
-        // TODO: really implement this!
-        return "u=rw,g=r,o=r"; //NOI18N
-    }
+		// TODO: really implement this!
+		return "u=rw,g=r,o=r"; // NOI18N
+	}
 }

@@ -42,7 +42,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 
 	public static final String NO_WAR = "-nowar";
 
-	public static final String LOGIN_ARGUMENT_PREFIX= "-login=";
+	public static final String LOGIN_ARGUMENT_PREFIX = "-login=";
 
 	public static final String PASSWORD_ARGUMENT_PREFIX = "-password=";
 
@@ -74,7 +74,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 						outputPath = outputPath.substring(1);
 					}
 					if (outputPath.endsWith("\"")) {
-						outputPath = outputPath.substring(0,outputPath.length()-1);
+						outputPath = outputPath.substring(0, outputPath.length() - 1);
 					}
 				} else if (args[i].startsWith(WAR_NAME_ARGUMENT_PREFIX)) {
 					warName = args[i].substring(WAR_NAME_ARGUMENT_PREFIX.length());
@@ -82,7 +82,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 						warName = warName.substring(1);
 					}
 					if (warName.endsWith("\"")) {
-						warName = warName.substring(0,warName.length()-1);
+						warName = warName.substring(0, warName.length() - 1);
 					}
 				} else if (args[i].startsWith(LOGIN_ARGUMENT_PREFIX)) {
 					login = args[i].substring(LOGIN_ARGUMENT_PREFIX.length());
@@ -90,7 +90,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 						login = login.substring(1);
 					}
 					if (login.endsWith("\"")) {
-						login = login.substring(0,login.length()-1);
+						login = login.substring(0, login.length() - 1);
 					}
 				} else if (args[i].startsWith(PASSWORD_ARGUMENT_PREFIX)) {
 					password = args[i].substring(PASSWORD_ARGUMENT_PREFIX.length());
@@ -98,7 +98,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 						password = password.substring(1);
 					}
 					if (password.endsWith("\"")) {
-						password = password.substring(0,password.length()-1);
+						password = password.substring(0, password.length() - 1);
 					}
 				} else if (args[i].startsWith(WORKING_DIR)) {
 					workingDir = args[i].substring(WORKING_DIR.length());
@@ -106,14 +106,14 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 						workingDir = workingDir.substring(1);
 					}
 					if (workingDir.endsWith("\"")) {
-						workingDir = workingDir.substring(0,workingDir.length()-1);
+						workingDir = workingDir.substring(0, workingDir.length() - 1);
 					}
 				} else if (args[i].equals(NO_WAR)) {
 					nowar = true;
 				}
 			}
 		}
-		if (outputPath == null || warName==null) {
+		if (outputPath == null || warName == null) {
 			StringBuilder sb = new StringBuilder();
 			if (args.length > 0) {
 				for (int i = 0; i < args.length; i++) {
@@ -122,10 +122,11 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 			}
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Missing argument. Usage java " + FlexoCodeGeneratorMain.class.getName() + " "
-						+ RESOURCE_PATH_ARGUMENT_PREFIX + " " + WAR_DIR_ARGUMENT_PREFIX+" "+ WAR_NAME_ARGUMENT_PREFIX + " " + CODE_TYPE_ARGUMENT_PREFIX + " "
-						+ TEMPLATES_ARGUMENT_PREFIX + " " + "\n" + (args.length > 0 ? sb.toString() : "No arguments !!!"));
+						+ RESOURCE_PATH_ARGUMENT_PREFIX + " " + WAR_DIR_ARGUMENT_PREFIX + " " + WAR_NAME_ARGUMENT_PREFIX + " "
+						+ CODE_TYPE_ARGUMENT_PREFIX + " " + TEMPLATES_ARGUMENT_PREFIX + " " + "\n"
+						+ (args.length > 0 ? sb.toString() : "No arguments !!!"));
 			}
-			if (outputPath==null) {
+			if (outputPath == null) {
 				throw new MissingArgumentException(WAR_DIR_ARGUMENT_PREFIX);
 			} else {
 				throw new MissingArgumentException(WAR_NAME_ARGUMENT_PREFIX);
@@ -136,17 +137,18 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 	@Override
 	protected void run() throws FlexoRunException {
 		File output = null;
-		if (workingDir!=null) {
+		if (workingDir != null) {
 			output = new File(workingDir);
 			output.mkdirs();
 			if (!output.exists() || !output.canWrite()) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Output path: "+output.getAbsolutePath()+" either does not exist or does not have write permissions.");
+					logger.warning("Output path: " + output.getAbsolutePath()
+							+ " either does not exist or does not have write permissions.");
 				}
 				output = null;
 			}
 		}
-		if (output==null) {
+		if (output == null) {
 			try {
 				output = FileUtils.createTempDirectory("CodeOutput", "");
 			} catch (IOException e) {
@@ -156,7 +158,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 			}
 		}
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Working directory is: "+output.getAbsolutePath());
+			logger.info("Working directory is: " + output.getAbsolutePath());
 		}
 		File srcDir = new File(output, "Source");
 		File docDir = new File(output, "Doc");
@@ -165,15 +167,15 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 		docDir.mkdirs();
 		warDir.mkdirs();
 		if (project != null) {
-			project.computeDiff = false;
+			project.setComputeDiff(false);
 
-			AddGeneratedCodeRepository addReaderRepo = AddGeneratedCodeRepository.actionType.makeNewAction(editor.getProject().getGeneratedDoc(), null, editor);
+			AddGeneratedCodeRepository addReaderRepo = AddGeneratedCodeRepository.actionType.makeNewAction(editor.getProject()
+					.getGeneratedDoc(), null, editor);
 			addReaderRepo.setNewGeneratedCodeRepositoryName("ReaderRepositoryProto");
 			addReaderRepo.setNewGeneratedCodeRepositoryDirectory(docDir);
 			addReaderRepo.setFormat(Format.HTML);
 			addReaderRepo.doAction();
 			DGRepository readerRepository = (DGRepository) addReaderRepo.getNewGeneratedCodeRepository();
-
 
 			AddGeneratedCodeRepository add = AddGeneratedCodeRepository.actionType.makeNewAction(editor.getProject().getGeneratedCode(),
 					null, editor);
@@ -190,43 +192,46 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 				e.printStackTrace();
 			}
 			((CGRepository) add.getNewGeneratedCodeRepository()).setManageHistory(false);
-			if (login!=null) {
+			if (login != null) {
 				((CGRepository) add.getNewGeneratedCodeRepository()).setPrototypeLogin(login);
 			}
-			if (password!=null) {
+			if (password != null) {
 				((CGRepository) add.getNewGeneratedCodeRepository()).setPrototypePassword(password);
 			}
 			if (!add.hasActionExecutionSucceeded()) {
 				handleActionFailed(add);
 			}
-			if (templates!=null) {
-				AddCustomTemplateRepository custom = AddCustomTemplateRepository.actionType.makeNewAction(project.getGeneratedCode().getTemplates(), null, editor);
+			if (templates != null) {
+				AddCustomTemplateRepository custom = AddCustomTemplateRepository.actionType.makeNewAction(project.getGeneratedCode()
+						.getTemplates(), null, editor);
 				custom.setNewCustomTemplatesRepositoryName("FlexoServerTemplates");
-				custom.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(project,"FlexoServerTemplates"));
+				custom.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(project, "FlexoServerTemplates"));
 				custom.doAction();
 				if (!custom.hasActionExecutionSucceeded()) {
 					handleActionFailed(custom);
 				}
-				ImportTemplates importTemplates = ImportTemplates.actionType.makeNewAction(project.getGeneratedCode().getTemplates().getApplicationRepository(), null, editor);
+				ImportTemplates importTemplates = ImportTemplates.actionType.makeNewAction(project.getGeneratedCode().getTemplates()
+						.getApplicationRepository(), null, editor);
 				importTemplates.setExternalTemplateDirectory(templates);
 				importTemplates.setRepository(custom.getNewCustomTemplatesRepository());
 				importTemplates.doAction();
 				if (!importTemplates.hasActionExecutionSucceeded()) {
 					handleActionFailed(importTemplates);
 				}
-				((CGRepository) add.getNewGeneratedCodeRepository()).setPreferredTemplateRepository(custom.getNewCustomTemplatesRepository());
+				((CGRepository) add.getNewGeneratedCodeRepository()).setPreferredTemplateRepository(custom
+						.getNewCustomTemplatesRepository());
 			}
 			codeType = add.getNewTargetType().toString();
-			SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(add
-					.getNewGeneratedCodeRepository(), null, editor);
+			SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+					add.getNewGeneratedCodeRepository(), null, editor);
 			sync.setSaveBeforeGenerating(false);
 			sync.setContinueAfterValidation(true);
 			sync.doAction();
 			if (!sync.hasActionExecutionSucceeded()) {
 				handleActionFailed(sync);
 			}
-			WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewAction(add
-					.getNewGeneratedCodeRepository(), null, editor);
+			WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewAction(add.getNewGeneratedCodeRepository(),
+					null, editor);
 			write.setSaveBeforeGenerating(false);
 			write.doAction();
 			if (!write.hasActionExecutionSucceeded()) {
@@ -245,7 +250,8 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 			if (!war.hasActionExecutionSucceeded()) {
 				handleActionFailed(war);
 			}
-			File warFile = war.getGeneratedWar();//new File(warDir,((CGRepository) add.getNewGeneratedCodeRepository()).getWarName()+ ".war");
+			File warFile = war.getGeneratedWar();// new File(warDir,((CGRepository) add.getNewGeneratedCodeRepository()).getWarName()+
+													// ".war");
 			if (!warFile.exists()) {
 				File[] files = warDir.listFiles(new FilenameFilter() {
 
@@ -254,15 +260,15 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 						return name.endsWith(".war");
 					}
 				});
-				if (files==null || files.length==0) {
+				if (files == null || files.length == 0) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("War file not found at "+warDir.getAbsolutePath());
+						logger.warning("War file not found at " + warDir.getAbsolutePath());
 					}
 					setExitCode(WAR_NOT_FOUND);
 					return;
 				}
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("War file has been found at "+files[0].getAbsolutePath()+" but is not what was expected");
+					logger.warning("War file has been found at " + files[0].getAbsolutePath() + " but is not what was expected");
 				}
 			}
 			if (logger.isLoggable(Level.INFO)) {

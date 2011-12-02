@@ -22,16 +22,13 @@ package org.openflexo.fps.automerge;
 import org.openflexo.diff.merge.DefaultAutomaticMergeResolvingModel;
 import org.openflexo.localization.FlexoLocalization;
 
-public class FlexoAutomaticMergeResolvingModel extends DefaultAutomaticMergeResolvingModel 
-{
-	public FlexoAutomaticMergeResolvingModel()
-	{
+public class FlexoAutomaticMergeResolvingModel extends DefaultAutomaticMergeResolvingModel {
+	public FlexoAutomaticMergeResolvingModel() {
 		super();
 	}
 
 	@Override
-	protected String localizedForKey(String key)
-	{
+	protected String localizedForKey(String key) {
 		return FlexoLocalization.localizedForKey(key);
 	}
 

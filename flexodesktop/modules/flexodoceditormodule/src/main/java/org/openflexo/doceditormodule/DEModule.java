@@ -35,29 +35,26 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * Documentation generator module
- *
+ * 
  * @author gpolet
  */
-public class DEModule extends FlexoModule
-{
+public class DEModule extends FlexoModule {
 
 	private static final Logger logger = Logger.getLogger(DEModule.class.getPackage().getName());
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[]{Inspectors.DE};
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DE };
+
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
-	 *
+	 * The 'main' method of module allow to launch this module as a single-module application
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.DE_MODULE);
 	}
 
-	public DEModule(InteractiveFlexoEditor projectEditor) throws Exception
-	{
+	public DEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 		setFlexoController(new DEController(projectEditor, this));
 		DEPreferences.init(getDEController());
@@ -71,34 +68,31 @@ public class DEModule extends FlexoModule
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public DEController getDEController()
-	{
+	public DEController getDEController() {
 		return (DEController) getFlexoController();
 	}
 
 	/**
 	 * Overrides getDefaultObjectToSelect
-	 *
+	 * 
 	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
 	 */
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
+	public FlexoModelObject getDefaultObjectToSelect() {
 		return getProject().getTOCData();
 	}
 
 	/**
 	 * Overrides moduleWillClose
+	 * 
 	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
 	 */
 	@Override
-	public void moduleWillClose()
-	{
+	public void moduleWillClose() {
 		super.moduleWillClose();
 		DEPreferences.reset();
 	}

@@ -29,46 +29,41 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author sylvain
- *
+ * 
  */
-public class PopupComponentWOFileResource extends ComponentWOFileResource<PopupComponentGenerator> implements PopupComponentFileResource
-{
-    protected static final Logger logger = FlexoLogger.getLogger(PopupComponentWOFileResource.class.getPackage().getName());
+public class PopupComponentWOFileResource extends ComponentWOFileResource<PopupComponentGenerator> implements PopupComponentFileResource {
+	protected static final Logger logger = FlexoLogger.getLogger(PopupComponentWOFileResource.class.getPackage().getName());
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getComponentDefinition());
-    		getComponentDefinition().addObserver(this);
-    	}
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());
+			}
+			getComponentDefinition().addObserver(this);
+		}
+	}
 
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-    }
+	/**
+	 * @param builder
+	 */
+	public PopupComponentWOFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param builder
-     */
-    public PopupComponentWOFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-
-    /**
-     * @param aProject
-     */
-    public PopupComponentWOFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public PopupComponentWOFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
 }

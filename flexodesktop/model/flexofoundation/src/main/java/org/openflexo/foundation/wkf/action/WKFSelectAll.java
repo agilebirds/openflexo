@@ -26,39 +26,33 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 
+public class WKFSelectAll extends FlexoGUIAction<WKFSelectAll, FlexoModelObject, FlexoModelObject> {
 
-public class WKFSelectAll extends FlexoGUIAction<WKFSelectAll,FlexoModelObject,FlexoModelObject>
-{
+	public static FlexoActionType<WKFSelectAll, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<WKFSelectAll, FlexoModelObject, FlexoModelObject>(
+			"select_all", FlexoActionType.editGroup) {
 
-    public static FlexoActionType<WKFSelectAll,FlexoModelObject,FlexoModelObject> actionType 
-    = new FlexoActionType<WKFSelectAll,FlexoModelObject,FlexoModelObject> ("select_all",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public WKFSelectAll makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new WKFSelectAll(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public WKFSelectAll makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new WKFSelectAll(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return true;
-        }
-                
-    };
-    
-    WKFSelectAll (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
-    
+	};
+
+	WKFSelectAll(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
 }

@@ -70,7 +70,6 @@ import org.openflexo.generator.action.AcceptDiskUpdate;
 import org.openflexo.generator.action.AcceptDiskUpdateAndReinjectInModel;
 import org.openflexo.generator.action.ReinjectInModel;
 import org.openflexo.generator.exception.GenerationException;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
@@ -79,8 +78,8 @@ import org.openflexo.jedit.JEditTextArea.CursorPositionListener;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.GeneratedResourceModifiedChoice;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.InteractiveFlexoResourceUpdateHandler.GeneratedResourceModifiedHook;
+import org.openflexo.module.ModuleLoader;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
@@ -92,14 +91,12 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
 
-
 /**
  * Controller for Generator module
  * 
  * @author sguerin
  */
-public class GeneratorController extends FlexoController implements SelectionManagingController
-{
+public class GeneratorController extends FlexoController implements SelectionManagingController {
 
 	protected static final Logger logger = Logger.getLogger(GeneratorController.class.getPackage().getName());
 
@@ -124,7 +121,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 
 	public static FileResource flexoTemplatesDirectory = new FileResource(FileCst.GENERATOR_TEMPLATES_REL_PATH);
 
-	protected Hashtable<GenerationRepository,ProjectGenerator> _projectGenerators;
+	protected Hashtable<GenerationRepository, ProjectGenerator> _projectGenerators;
 
 	protected CGFooter _footer;
 
@@ -139,8 +136,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 	 * @param workflowFile
 	 * @throws Exception
 	 */
-	public GeneratorController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception
-	{
+	public GeneratorController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
 		super(projectEditor, module);
 		_CGGeneratedResourceModifiedHook = new CGGeneratedResourceModifiedHook();
 		if (ModuleLoader.getFlexoResourceUpdateHandler() != null) {
@@ -152,7 +148,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		addToPerspectives(CODE_GENERATOR_PERSPECTIVE);
 		addToPerspectives(VERSIONNING_PERSPECTIVE);
 		addToPerspectives(MODEL_REINJECTION_PERSPECTIVE);
-		_projectGenerators = new Hashtable<GenerationRepository,ProjectGenerator>();
+		_projectGenerators = new Hashtable<GenerationRepository, ProjectGenerator>();
 		_generatorMenuBar = (GeneratorMenuBar) createAndRegisterNewMenuBar();
 		_generatorKeyEventListener = new GeneratorKeyEventListener(this);
 		_generatorFrame = new GeneratorFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _generatorKeyEventListener,
@@ -167,78 +163,65 @@ public class GeneratorController extends FlexoController implements SelectionMan
 	}
 
 	/**
-	 * Creates a new instance of MenuBar for the module this controller refers
-	 * to
+	 * Creates a new instance of MenuBar for the module this controller refers to
 	 * 
 	 * @return
 	 */
 	@Override
-	protected FlexoMenuBar createNewMenuBar()
-	{
+	protected FlexoMenuBar createNewMenuBar() {
 		return new GeneratorMenuBar(this);
 	}
 
-	public GeneratorMenuBar getEditorMenuBar()
-	{
+	public GeneratorMenuBar getEditorMenuBar() {
 		return _generatorMenuBar;
 	}
 
-	public GeneratorKeyEventListener getGeneratorKeyEventListener()
-	{
+	public GeneratorKeyEventListener getGeneratorKeyEventListener() {
 		return _generatorKeyEventListener;
 	}
 
 	@Override
-	protected FlexoMainPane createMainPane()
-	{
+	protected FlexoMainPane createMainPane() {
 		return new GeneratorMainPane(this, getEmptyPanel(), getFlexoFrame());
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer()
-	{
+	public ControllerActionInitializer createControllerActionInitializer() {
 		return new GeneratorControllerActionInitializer(this);
 	}
 
-	public GeneratorKeyEventListener getKeyEventListener()
-	{
+	public GeneratorKeyEventListener getKeyEventListener() {
 		return _generatorKeyEventListener;
 	}
 
-	public void initProgressWindow(String msg, int steps)
-	{
+	public void initProgressWindow(String msg, int steps) {
 		ProgressWindow.showProgressWindow(msg, steps);
 	}
 
-	public void refreshProgressWindow(String msg)
-	{
+	public void refreshProgressWindow(String msg) {
 		ProgressWindow.setProgressInstance(msg);
 	}
 
-	public void refreshSecondaryProgressWindow(String msg)
-	{
+	public void refreshSecondaryProgressWindow(String msg) {
 		ProgressWindow.setSecondaryProgressInstance(msg);
 	}
 
-	public void disposeProgressWindow()
-	{
+	public void disposeProgressWindow() {
 		ProgressWindow.hideProgressWindow();
 	}
 
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 
 	}
 
-	public ProjectGenerator getProjectGenerator(CGRepository repository)
-	{
+	public ProjectGenerator getProjectGenerator(CGRepository repository) {
 		ProjectGenerator returned = _projectGenerators.get(repository);
 		if (!repository.isConnected()) {
 			return returned;
 		}
 		if (returned == null) {
 			try {
-				returned = new ProjectGenerator(getProject(),repository);
+				returned = new ProjectGenerator(getProject(), repository);
 			} catch (GenerationException e) {
 				showError(e.getLocalizedMessage());
 				return null;
@@ -248,23 +231,18 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		return returned;
 	}
 
-	public Enumeration<ProjectGenerator> getProjectGenerators() 
-	{
+	public Enumeration<ProjectGenerator> getProjectGenerators() {
 		return _projectGenerators.elements();
 	}
-
-
 
 	/**
 	 * 
 	 */
 	@Override
-	public void initInspectors()
-	{
+	public void initInspectors() {
 		super.initInspectors();
 		getGeneratorSelectionManager().addObserver(getSharedInspectorController());
 	}
-
 
 	// =========================================================
 	// ================ Selection management ===================
@@ -273,38 +251,33 @@ public class GeneratorController extends FlexoController implements SelectionMan
 	private GeneratorSelectionManager _selectionManager;
 
 	@Override
-	public SelectionManager getSelectionManager()
-	{
+	public SelectionManager getSelectionManager() {
 		return getGeneratorSelectionManager();
 	}
 
-	public GeneratorSelectionManager getGeneratorSelectionManager()
-	{
+	public GeneratorSelectionManager getGeneratorSelectionManager() {
 		return _selectionManager;
 	}
 
-
 	/**
-	 * Select the view representing supplied object, if this view exists.
-	 * Try all to really display supplied object, even if required view
+	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
 	 * is not the current displayed view
 	 * 
-	 * @param object: the object to focus on
+	 * @param object
+	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object)
-	{
+	public void selectAndFocusObject(FlexoModelObject object) {
 		if (object instanceof CGFile) {
 			setCurrentEditedObjectAsModuleView(object);
 		}
-		getSelectionManager().setSelectedObject(object);    
+		getSelectionManager().setSelectedObject(object);
 	}
 
-	public GenerationRepository getCurrentGeneratedCodeRepository()
-	{
+	public GenerationRepository getCurrentGeneratedCodeRepository() {
 		FlexoModelObject object = getCurrentDisplayedObjectAsModuleView();
 		if (object instanceof CGObject) {
-			return AbstractGCAction.repositoryForObject((CGObject)object);
+			return AbstractGCAction.repositoryForObject((CGObject) object);
 		}
 		return null;
 	}
@@ -313,51 +286,41 @@ public class GeneratorController extends FlexoController implements SelectionMan
 
 	protected Vector<GenerationRepository> observedRepositories = new Vector<GenerationRepository>();
 
-	public void refreshFooter()
-	{
+	public void refreshFooter() {
 		_footer.refresh();
 	}
 
-	private void createFooter()
-	{
+	private void createFooter() {
 		_footer = new CGFooter();
 	}
 
-
-	public GenerationRepository getLastEditedCGRepository()
-	{
+	public GenerationRepository getLastEditedCGRepository() {
 		return _lastEditedCGRepository;
 	}
 
-	private final Hashtable<CGFile,Hashtable<ContentSource,CGFileVersionPopup>> storedPopups
-	= new  Hashtable<CGFile,Hashtable<ContentSource,CGFileVersionPopup>>();
+	private final Hashtable<CGFile, Hashtable<ContentSource, CGFileVersionPopup>> storedPopups = new Hashtable<CGFile, Hashtable<ContentSource, CGFileVersionPopup>>();
 
-	public CGFileVersionPopup getPopupShowingFileVersion (CGFile aFile, ContentSource contentSource)
-	{
+	public CGFileVersionPopup getPopupShowingFileVersion(CGFile aFile, ContentSource contentSource) {
 		if (storedPopups.get(aFile) == null) {
-			Hashtable<ContentSource,CGFileVersionPopup> newHashtable 
-			= new Hashtable<ContentSource,CGFileVersionPopup>();
-			storedPopups.put(aFile,newHashtable);
+			Hashtable<ContentSource, CGFileVersionPopup> newHashtable = new Hashtable<ContentSource, CGFileVersionPopup>();
+			storedPopups.put(aFile, newHashtable);
 		}
 		if (storedPopups.get(aFile).get(contentSource) == null) {
-			CGFileVersionPopup newPopup = new CGFileVersionPopup(aFile,contentSource,this);
-			storedPopups.get(aFile).put(contentSource,newPopup);
+			CGFileVersionPopup newPopup = new CGFileVersionPopup(aFile, contentSource, this);
+			storedPopups.get(aFile).put(contentSource, newPopup);
 		}
 		return storedPopups.get(aFile).get(contentSource);
 	}
 
-	public void deletePopupShowingFileVersion (CGFile aFile, ContentSource contentSource)
-	{
+	public void deletePopupShowingFileVersion(CGFile aFile, ContentSource contentSource) {
 		storedPopups.get(aFile).remove(contentSource);
 	}
 
-	public CGFooter getFooter() 
-	{
+	public CGFooter getFooter() {
 		return _footer;
 	}
 
-	public class CGFooter extends JPanel implements GraphicalFlexoObserver,FocusListener, CursorPositionListener
-	{
+	public class CGFooter extends JPanel implements GraphicalFlexoObserver, FocusListener, CursorPositionListener {
 
 		private final JLabel statusLabel;
 		private final JPanel statusCountPanel;
@@ -373,10 +336,9 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		private final JLabel cursorPositionLabel;
 		private final JLabel editorStatusLabel;
 
-		public CGFooter()
-		{
-			super(new GridLayout(1,3));
-			statusLabel = new JLabel("012345678901234567890123456789012345678901234567890123456789",SwingConstants.LEFT);
+		public CGFooter() {
+			super(new GridLayout(1, 3));
+			statusLabel = new JLabel("012345678901234567890123456789012345678901234567890123456789", SwingConstants.LEFT);
 			statusLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 			add(statusLabel);
@@ -386,47 +348,47 @@ public class GeneratorController extends FlexoController implements SelectionMan
 			generationModifiedLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusCountPanel.add(generationModifiedLabel);
 			statusCountPanel.add(new JLabel(UtilsIconLibrary.LEFT_MODIFICATION_ICON));
-			statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			diskModifiedLabel = new JLabel("5");
 			diskModifiedLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusCountPanel.add(diskModifiedLabel);
 			statusCountPanel.add(new JLabel(UtilsIconLibrary.RIGHT_MODIFICATION_ICON));
-			statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			conflictsLabel = new JLabel("8");
 			conflictsLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusCountPanel.add(conflictsLabel);
 			statusCountPanel.add(new JLabel(UtilsIconLibrary.CONFLICT_ICON));
-			statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-			statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			needsMemoryGenerationLabel = new JLabel("1");
 			needsMemoryGenerationLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusCountPanel.add(needsMemoryGenerationLabel);
 			statusCountPanel.add(new JLabel(GeneratorIconLibrary.GENERATE_CODE_ICON));
-			statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			needsReinjectionLabel = new JLabel("1");
 			needsReinjectionLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusCountPanel.add(needsReinjectionLabel);
 			statusCountPanel.add(new JLabel(GeneratorIconLibrary.NEEDS_MODEL_REINJECTION_ICON));
-			statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-			statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			errorsLabel = new JLabel("0");
 			errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusCountPanel.add(errorsLabel);
-			statusCountPanel.add(new JLabel(CGIconLibrary.UNFIXABLE_ERROR_ICON));
+			statusCountPanel.add(new JLabel(IconLibrary.UNFIXABLE_ERROR_ICON));
 			add(statusCountPanel);
 
 			editorInfoPanel = new JPanel(new FlowLayout());
 			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-			editorInfoPanel.add(Box.createRigidArea(new Dimension(3,16)));
-			cursorPositionLabel = new JLabel("-:-",SwingConstants.CENTER);
-			cursorPositionLabel.setPreferredSize(new Dimension(50,16));
+			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			cursorPositionLabel = new JLabel("-:-", SwingConstants.CENTER);
+			cursorPositionLabel.setPreferredSize(new Dimension(50, 16));
 			cursorPositionLabel.setFont(FlexoCst.MEDIUM_FONT);
 			editorInfoPanel.add(cursorPositionLabel);
-			editorInfoPanel.add(Box.createRigidArea(new Dimension(3,16)));
+			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-			editorInfoPanel.add(Box.createRigidArea(new Dimension(3,16)));
+			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			editorStatusLabel = new JLabel("");
 			editorStatusLabel.setFont(FlexoCst.MEDIUM_FONT);
 			editorInfoPanel.add(editorStatusLabel);
@@ -435,36 +397,32 @@ public class GeneratorController extends FlexoController implements SelectionMan
 
 		}
 
-		public void refresh()
-		{
+		public void refresh() {
 			GenerationRepository repositoryToConsider = getCurrentGeneratedCodeRepository();
-			//logger.info("Refresh footer with "+repositoryToConsider);
+			// logger.info("Refresh footer with "+repositoryToConsider);
 			boolean displayItemStatus;
 			if (repositoryToConsider != null) {
 				if (!observedRepositories.contains(repositoryToConsider)) {
 					observedRepositories.add(repositoryToConsider);
 					repositoryToConsider.addObserver(this);
 				}
-				String repName = "["+repositoryToConsider.getName()+"] ";
+				String repName = "[" + repositoryToConsider.getName() + "] ";
 				if (!repositoryToConsider.isConnected()) {
-					statusLabel.setText(repName+FlexoLocalization.localizedForKey("repository_disconnected"));
-					statusLabel.setForeground(Color.BLACK);   
+					statusLabel.setText(repName + FlexoLocalization.localizedForKey("repository_disconnected"));
+					statusLabel.setForeground(Color.BLACK);
 					displayItemStatus = false;
-				}
-				else {
+				} else {
 					if ((_projectGenerators.get(repositoryToConsider) == null)
 							|| !_projectGenerators.get(repositoryToConsider).hasBeenInitialized()) {
-						statusLabel.setText(repName+FlexoLocalization.localizedForKey("code_generation_not_synchronized"));
+						statusLabel.setText(repName + FlexoLocalization.localizedForKey("code_generation_not_synchronized"));
 						displayItemStatus = false;
-					}
-					else {
-						statusLabel.setText(repName+FlexoLocalization.localizedForKey("code_generation_is_synchronized"));
+					} else {
+						statusLabel.setText(repName + FlexoLocalization.localizedForKey("code_generation_is_synchronized"));
 						displayItemStatus = true;
 					}
-					statusLabel.setForeground(Color.BLACK);       			
+					statusLabel.setForeground(Color.BLACK);
 				}
-			}
-			else {
+			} else {
 				statusLabel.setText(FlexoLocalization.localizedForKey("no_repository_selected"));
 				statusLabel.setForeground(Color.GRAY);
 				displayItemStatus = false;
@@ -472,19 +430,18 @@ public class GeneratorController extends FlexoController implements SelectionMan
 
 			if (displayItemStatus) {
 				generationModifiedLabel.setForeground(Color.BLACK);
-				generationModifiedLabel.setText(""+repositoryToConsider.getGenerationModifiedCount());
+				generationModifiedLabel.setText("" + repositoryToConsider.getGenerationModifiedCount());
 				diskModifiedLabel.setForeground(Color.BLACK);
-				diskModifiedLabel.setText(""+repositoryToConsider.getDiskModifiedCount());
+				diskModifiedLabel.setText("" + repositoryToConsider.getDiskModifiedCount());
 				conflictsLabel.setForeground(Color.BLACK);
-				conflictsLabel.setText(""+repositoryToConsider.getConflictsCount());
+				conflictsLabel.setText("" + repositoryToConsider.getConflictsCount());
 				needsMemoryGenerationLabel.setForeground(Color.BLACK);
-				needsMemoryGenerationLabel.setText(""+repositoryToConsider.getNeedsMemoryGenerationCount());
+				needsMemoryGenerationLabel.setText("" + repositoryToConsider.getNeedsMemoryGenerationCount());
 				needsReinjectionLabel.setForeground(Color.BLACK);
-				needsReinjectionLabel.setText(""+repositoryToConsider.getNeedsModelReinjectionCount());
+				needsReinjectionLabel.setText("" + repositoryToConsider.getNeedsModelReinjectionCount());
 				errorsLabel.setForeground(Color.BLACK);
-				errorsLabel.setText(""+repositoryToConsider.getErrorsCount());
-			}
-			else {
+				errorsLabel.setText("" + repositoryToConsider.getErrorsCount());
+			} else {
 				generationModifiedLabel.setForeground(Color.GRAY);
 				generationModifiedLabel.setText("-");
 				diskModifiedLabel.setForeground(Color.GRAY);
@@ -506,26 +463,23 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		}
 
 		@Override
-		public void update(FlexoObservable observable, DataModification dataModification) 
-		{
+		public void update(FlexoObservable observable, DataModification dataModification) {
 			refresh();
 		}
 
 		@Override
-		public void focusGained(FocusEvent e)
-		{
+		public void focusGained(FocusEvent e) {
 			if (e.getComponent() instanceof JEditTextArea) {
-				((JEditTextArea)e.getComponent()).addToCursorPositionListener(this);
-				_activeGenericCodeDisplayer = ((JEditTextArea)e.getComponent());
+				((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
+				_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
 				refresh();
 			}
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) 
-		{
+		public void focusLost(FocusEvent e) {
 			if (e.getComponent() instanceof JEditTextArea) {
-				((JEditTextArea)e.getComponent()).removeFromCursorPositionListener(this);
+				((JEditTextArea) e.getComponent()).removeFromCursorPositionListener(this);
 				if (_activeGenericCodeDisplayer == e.getComponent()) {
 					_activeGenericCodeDisplayer = null;
 				}
@@ -536,22 +490,19 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		private JEditTextArea _activeGenericCodeDisplayer;
 
 		@Override
-		public void positionChanged(int newPosX, int newPosY) 
-		{
+		public void positionChanged(int newPosX, int newPosY) {
 			refreshEditorInfoPanel();
-		}	
+		}
 
-
-		private void refreshEditorInfoPanel()
-		{
-			//logger.info("refreshEditorInfoPanel()");
+		private void refreshEditorInfoPanel() {
+			// logger.info("refreshEditorInfoPanel()");
 			if (_activeGenericCodeDisplayer == null) {
 				cursorPositionLabel.setText("-");
 				editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
-			}
-			else {
-				cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY()+":"+_activeGenericCodeDisplayer.getCursorX());
-				editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable()?FlexoLocalization.localizedForKey("edition"):FlexoLocalization.localizedForKey("read_only")));
+			} else {
+				cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
+				editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+						: FlexoLocalization.localizedForKey("read_only")));
 			}
 		}
 
@@ -559,67 +510,55 @@ public class GeneratorController extends FlexoController implements SelectionMan
 
 	private CGGeneratedResourceModifiedHook _CGGeneratedResourceModifiedHook;
 
-	public class CGGeneratedResourceModifiedHook implements GeneratedResourceModifiedHook
-	{
+	public class CGGeneratedResourceModifiedHook implements GeneratedResourceModifiedHook {
 		private GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice = GeneratedResourceModifiedChoice.ASK;
 
-		protected CGGeneratedResourceModifiedHook()
-		{
+		protected CGGeneratedResourceModifiedHook() {
 			defaultGeneratedResourceModifiedChoice = GeneratorPreferences.getGeneratedResourceModifiedChoice();
 		}
 
-		public GeneratedResourceModifiedChoice getDefaultGeneratedResourceModifiedChoice()
-		{
+		public GeneratedResourceModifiedChoice getDefaultGeneratedResourceModifiedChoice() {
 			return defaultGeneratedResourceModifiedChoice;
 		}
 
-		public void setDefaultGeneratedResourceModifiedChoice (GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice) {
+		public void setDefaultGeneratedResourceModifiedChoice(GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice) {
 			this.defaultGeneratedResourceModifiedChoice = defaultGeneratedResourceModifiedChoice;
 		}
 
 		@Override
-		public void handleGeneratedResourceModified(FlexoGeneratedResource aGeneratedResource) 
-		{
+		public void handleGeneratedResourceModified(FlexoGeneratedResource aGeneratedResource) {
 			if (aGeneratedResource instanceof CGRepositoryFileResource) {
-				CGRepositoryFileResource generatedResource = (CGRepositoryFileResource)aGeneratedResource;
+				CGRepositoryFileResource generatedResource = (CGRepositoryFileResource) aGeneratedResource;
 				GeneratedResourceModifiedChoice choice = defaultGeneratedResourceModifiedChoice;
 				if (defaultGeneratedResourceModifiedChoice == GeneratedResourceModifiedChoice.ASK) {
 
-					RadioButtonListParameter<String> whatToDo 
-					= new RadioButtonListParameter<String>(
-							"whatToDo",
-							"what_would_you_like_to_do",
-							GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),
+					RadioButtonListParameter<String> whatToDo = new RadioButtonListParameter<String>("whatToDo",
+							"what_would_you_like_to_do", GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),
 							GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),
 							GeneratedResourceModifiedChoice.REINJECT_IN_MODEL.getLocalizedName(),
 							GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL.getLocalizedName(),
 							GeneratedResourceModifiedChoice.ACCEPT.getLocalizedName(),
 							GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT.getLocalizedName(),
 							GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT.getLocalizedName());
-					CheckboxParameter rememberMyChoice 
-					= new CheckboxParameter("rememberMyChoice","remember_my_choice",false);
-					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-							getProject(), 
-							null,
-							FlexoLocalization.localizedForKey("resource_edited"),FlexoLocalization.localizedForKey("resource")+" "+generatedResource.getFileName()
-							+" "+FlexoLocalization.localizedForKey("has_been_edited"), whatToDo, rememberMyChoice);
+					CheckboxParameter rememberMyChoice = new CheckboxParameter("rememberMyChoice", "remember_my_choice", false);
+					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+							FlexoLocalization.localizedForKey("resource_edited"), FlexoLocalization.localizedForKey("resource") + " "
+									+ generatedResource.getFileName() + " " + FlexoLocalization.localizedForKey("has_been_edited"),
+							whatToDo, rememberMyChoice);
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.IGNORE.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.IGNORE;
-						}
-						else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.REINJECT_IN_MODEL.getLocalizedName())) {
+						} else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.REINJECT_IN_MODEL.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.REINJECT_IN_MODEL;
-						}
-						else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL.getLocalizedName())) {
+						} else if (whatToDo.getValue().equals(
+								GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL;
-						}
-						else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT.getLocalizedName())) {
+						} else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.ACCEPT;
-						}
-						else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT.getLocalizedName())) {
+						} else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT;
-						}
-						else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT.getLocalizedName())) {
+						} else if (whatToDo.getValue().equals(
+								GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT.getLocalizedName())) {
 							choice = GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT;
 						}
 						if (rememberMyChoice.getValue()) {
@@ -628,7 +567,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 					}
 				}
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("I will perform "+choice.getLocalizedName());
+					logger.fine("I will perform " + choice.getLocalizedName());
 				}
 				if (choice == GeneratedResourceModifiedChoice.ASK) {
 					choice = GeneratedResourceModifiedChoice.IGNORE;
@@ -639,24 +578,22 @@ public class GeneratorController extends FlexoController implements SelectionMan
 					Vector<CGObject> resourceChangedOnDisk = new Vector<CGObject>();
 					resourceChangedOnDisk.add(generatedResource.getCGFile());
 					if (choice == GeneratedResourceModifiedChoice.IGNORE) {
-					}
-					else if (choice == GeneratedResourceModifiedChoice.REINJECT_IN_MODEL) {
-						ReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor()).doAction();
-					}
-					else if (choice == GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL) {
-						ReinjectInModel reinjectInModelAction = ReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor());
+					} else if (choice == GeneratedResourceModifiedChoice.REINJECT_IN_MODEL) {
+						ReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor())
+								.doAction();
+					} else if (choice == GeneratedResourceModifiedChoice.AUTOMATICALLY_REINJECT_IN_MODEL) {
+						ReinjectInModel reinjectInModelAction = ReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(),
+								resourceChangedOnDisk, getEditor());
 						reinjectInModelAction.setAskReinjectionContext(false);
 						reinjectInModelAction.doAction();
-					}
-					else if (choice == GeneratedResourceModifiedChoice.ACCEPT) {
+					} else if (choice == GeneratedResourceModifiedChoice.ACCEPT) {
 						AcceptDiskUpdate.actionType.makeNewAction(generatedResource.getCGFile(), null, getEditor()).doAction();
-					}
-					else if (choice == GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT) {
-						AcceptDiskUpdateAndReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor()).doAction();
-					}
-					else if (choice == GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT) {
-						AcceptDiskUpdateAndReinjectInModel acceptDiskUpdateAndReinjectInModelAction 
-						= AcceptDiskUpdateAndReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor());
+					} else if (choice == GeneratedResourceModifiedChoice.ACCEPT_AND_REINJECT) {
+						AcceptDiskUpdateAndReinjectInModel.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk,
+								getEditor()).doAction();
+					} else if (choice == GeneratedResourceModifiedChoice.ACCEPT_AND_AUTOMATICALLY_REINJECT) {
+						AcceptDiskUpdateAndReinjectInModel acceptDiskUpdateAndReinjectInModelAction = AcceptDiskUpdateAndReinjectInModel.actionType
+								.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor());
 						acceptDiskUpdateAndReinjectInModelAction.setAskReinjectionContext(false);
 						acceptDiskUpdateAndReinjectInModelAction.doAction();
 					}
@@ -664,37 +601,32 @@ public class GeneratorController extends FlexoController implements SelectionMan
 			}
 		}
 
-
 	}
 
 	public CGGeneratedResourceModifiedHook getCGGeneratedResourceModifiedHook() {
 		return _CGGeneratedResourceModifiedHook;
 	}
 
-	public void setCGGeneratedResourceModifiedHook(
-			CGGeneratedResourceModifiedHook generatedResourceModifiedHook) {
+	public void setCGGeneratedResourceModifiedHook(CGGeneratedResourceModifiedHook generatedResourceModifiedHook) {
 		_CGGeneratedResourceModifiedHook = generatedResourceModifiedHook;
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object)
-	{
+	public String getWindowTitleforObject(FlexoModelObject object) {
 		if (object instanceof GeneratedOutput) {
 			return FlexoLocalization.localizedForKey("generated_code");
-		}
-		else if (object instanceof CGRepository) {
-			return ((CGRepository)object).getName();
-		}
-		else if (object instanceof CGFile) {
-			CGFile cgFile = (CGFile)object;
-			return cgFile.getResource().getFile().getName()+(cgFile.isEdited()?"["+FlexoLocalization.localizedForKey("edited")+"]":"");
-		}
- else if (object instanceof CGTemplate) {
+		} else if (object instanceof CGRepository) {
+			return ((CGRepository) object).getName();
+		} else if (object instanceof CGFile) {
+			CGFile cgFile = (CGFile) object;
+			return cgFile.getResource().getFile().getName()
+					+ (cgFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
+		} else if (object instanceof CGTemplate) {
 			CGTemplate cgTemplateFile = (CGTemplate) object;
 			return cgTemplateFile.getTemplateName()
-					+ ((cgTemplateFile instanceof CGTemplateFile) && ((CGTemplateFile) cgTemplateFile).isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
+					+ ((cgTemplateFile instanceof CGTemplateFile) && ((CGTemplateFile) cgTemplateFile).isEdited() ? "["
+							+ FlexoLocalization.localizedForKey("edited") + "]" : "");
 		}
-
 
 		return null;
 	}

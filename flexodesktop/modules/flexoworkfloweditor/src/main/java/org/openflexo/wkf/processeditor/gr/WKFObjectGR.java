@@ -34,14 +34,12 @@ import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
-public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRepresentation<O>
-implements GraphicalFlexoObserver, ProcessEditorConstants {
+public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRepresentation<O> implements GraphicalFlexoObserver,
+		ProcessEditorConstants {
 
 	private static final Logger logger = Logger.getLogger(WKFObjectGR.class.getPackage().getName());
 
-	public WKFObjectGR(O object, ShapeType shapeType, ProcessRepresentation aDrawing)
-	{
+	public WKFObjectGR(O object, ShapeType shapeType, ProcessRepresentation aDrawing) {
 		super(shapeType, object, aDrawing);
 		object.addObserver(this);
 		addToMouseClickControls(new ProcessEditorController.ShowContextualMenuControl(false));
@@ -58,8 +56,9 @@ implements GraphicalFlexoObserver, ProcessEditorConstants {
 
 	@Override
 	public FGEArea getLocationConstrainedArea() {
-		if (getDrawing()!=null)
+		if (getDrawing() != null) {
 			return getDrawing().getDrawingGraphicalRepresentation().getLocationConstraintsForObject(this);
+		}
 		return null;
 	}
 
@@ -67,14 +66,12 @@ implements GraphicalFlexoObserver, ProcessEditorConstants {
 		return false;
 	}
 
-	public O getModel()
-	{
+	public O getModel() {
 		return getDrawable();
 	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		O model = getModel();
 		super.delete();
 		model.deleteObserver(this);
@@ -82,21 +79,22 @@ implements GraphicalFlexoObserver, ProcessEditorConstants {
 
 	@Override
 	public boolean getIsVisible() {
-		if (getDrawing()!=null)
+		if (getDrawing() != null) {
 			return getDrawing().isVisible(getModel());
-		else
+		} else {
 			return true;
+		}
 	}
 
 	@Override
-	public ProcessRepresentation getDrawing()
-	{
-		return (ProcessRepresentation)super.getDrawing();
+	public ProcessRepresentation getDrawing() {
+		return (ProcessRepresentation) super.getDrawing();
 	}
 
 	public FlexoWorkflow getWorkflow() {
-		if (getDrawable().getProcess()!=null)
+		if (getDrawable().getProcess() != null) {
 			return getDrawable().getProcess().getWorkflow();
+		}
 		return null;
 	}
 
@@ -105,10 +103,10 @@ implements GraphicalFlexoObserver, ProcessEditorConstants {
 		checkAndUpdateLocationIfRequired();
 	}
 
-	public void updatePropertiesFromWKFPreferences()
-	{
-		if (supportShadow() && ((getWorkflow()!=null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows()))
-				|| (getWorkflow()==null && WKFPreferences.getShowShadows()))) {
+	public void updatePropertiesFromWKFPreferences() {
+		if (supportShadow()
+				&& ((getWorkflow() != null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows())) || (getWorkflow() == null && WKFPreferences
+						.getShowShadows()))) {
 			setShadowStyle(ShadowStyle.makeDefault());
 		} else {
 			setShadowStyle(ShadowStyle.makeNone());

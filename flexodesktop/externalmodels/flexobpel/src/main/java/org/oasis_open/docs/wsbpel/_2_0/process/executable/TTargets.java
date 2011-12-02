@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import java.util.ArrayList;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tTargets complex type.
+ * <p>
+ * Java class for tTargets complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tTargets">
@@ -56,69 +56,59 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tTargets", propOrder = {
-    "joinCondition",
-    "target"
-})
-public class TTargets
-    extends TExtensibleElements
-{
+@XmlType(name = "tTargets", propOrder = { "joinCondition", "target" })
+public class TTargets extends TExtensibleElements {
 
-    protected TCondition joinCondition;
-    @XmlElement(required = true)
-    protected List<TTarget> target;
+	protected TCondition joinCondition;
+	@XmlElement(required = true)
+	protected List<TTarget> target;
 
-    /**
-     * Gets the value of the joinCondition property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TCondition }
-     *     
-     */
-    public TCondition getJoinCondition() {
-        return joinCondition;
-    }
+	/**
+	 * Gets the value of the joinCondition property.
+	 * 
+	 * @return possible object is {@link TCondition }
+	 * 
+	 */
+	public TCondition getJoinCondition() {
+		return joinCondition;
+	}
 
-    /**
-     * Sets the value of the joinCondition property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TCondition }
-     *     
-     */
-    public void setJoinCondition(TCondition value) {
-        this.joinCondition = value;
-    }
+	/**
+	 * Sets the value of the joinCondition property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TCondition }
+	 * 
+	 */
+	public void setJoinCondition(TCondition value) {
+		this.joinCondition = value;
+	}
 
-    /**
-     * Gets the value of the target property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the target property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getTarget().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TTarget }
-     * 
-     * 
-     */
-    public List<TTarget> getTarget() {
-        if (target == null) {
-            target = new ArrayList<TTarget>();
-        }
-        return this.target;
-    }
+	/**
+	 * Gets the value of the target property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the target property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getTarget().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link TTarget }
+	 * 
+	 * 
+	 */
+	public List<TTarget> getTarget() {
+		if (target == null) {
+			target = new ArrayList<TTarget>();
+		}
+		return this.target;
+	}
 
 }

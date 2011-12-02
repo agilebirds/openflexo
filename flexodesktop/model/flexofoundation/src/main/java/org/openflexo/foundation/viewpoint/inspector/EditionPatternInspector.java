@@ -23,14 +23,14 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.DefaultBindingFactory;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
 import org.openflexo.logging.FlexoLogger;
@@ -39,7 +39,7 @@ import org.openflexo.logging.FlexoLogger;
  * Represents inspector associated with an Edition Pattern
  * 
  * @author sylvain
- *
+ * 
  */
 public class EditionPatternInspector extends ViewPointObject implements Bindable {
 
@@ -48,153 +48,134 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	private String inspectorTitle;
 	private EditionPattern _editionPattern;
 	private Vector<InspectorEntry> entries;
-	
+
 	private BindingModel _bindingModel;
 
-	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep)
-	{
+	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep) {
 		EditionPatternInspector returned = new EditionPatternInspector();
 		returned.setInspectorTitle(ep.getName());
 		ep.setInspector(returned);
 		return returned;
 	}
-	
-	public EditionPatternInspector() 
-	{
+
+	public EditionPatternInspector() {
 		super();
 		entries = new Vector<InspectorEntry>();
 	}
 
-	public EditionPattern getEditionPattern() 
-	{
+	public EditionPattern getEditionPattern() {
 		return _editionPattern;
 	}
 
-	public void setEditionPattern(EditionPattern editionPattern)
-	{
+	public void setEditionPattern(EditionPattern editionPattern) {
 		_editionPattern = editionPattern;
 	}
 
 	@Override
-	public ViewPoint getCalc() 
-	{
-		if (getEditionPattern() != null)
+	public ViewPoint getCalc() {
+		if (getEditionPattern() != null) {
 			return getEditionPattern().getCalc();
+		}
 		return null;
 	}
 
-	public ViewPointLibrary getCalcLibrary() 
-	{
+	public ViewPointLibrary getCalcLibrary() {
 		return getCalc().getViewPointLibrary();
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return null;
 	}
 
 	@Override
-	public String getInspectorTitle()
-	{
+	public String getInspectorTitle() {
 		return inspectorTitle;
 	}
 
-	public void setInspectorTitle(String inspectorTitle)
-	{
+	public void setInspectorTitle(String inspectorTitle) {
 		this.inspectorTitle = inspectorTitle;
 	}
 
-	public Vector<InspectorEntry> getEntries() 
-	{
+	public Vector<InspectorEntry> getEntries() {
 		return entries;
 	}
 
-	public void setEntries(Vector<InspectorEntry> someEntries)
-	{
+	public void setEntries(Vector<InspectorEntry> someEntries) {
 		entries = someEntries;
 	}
 
-	public void addToEntries(InspectorEntry anEntry)
-	{
+	public void addToEntries(InspectorEntry anEntry) {
 		anEntry.setInspector(this);
 		entries.add(anEntry);
 		setChanged();
 		notifyObservers(new InspectorEntryInserted(anEntry, this));
 	}
 
-	public void removeFromEntries(InspectorEntry anEntry)
-	{
+	public void removeFromEntries(InspectorEntry anEntry) {
 		anEntry.setInspector(null);
 		entries.remove(anEntry);
 		setChanged();
 		notifyObservers(new InspectorEntryRemoved(anEntry, this));
 	}
-	
-	public TextFieldInspectorEntry createNewTextField()
-	{
+
+	public TextFieldInspectorEntry createNewTextField() {
 		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
 		newEntry.setName("textfield");
 		newEntry.setLabel("textfield");
 		addToEntries(newEntry);
 		return newEntry;
 	}
-	
-	public TextAreaInspectorEntry createNewTextArea()
-	{
+
+	public TextAreaInspectorEntry createNewTextArea() {
 		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry();
 		newEntry.setName("textarea");
 		newEntry.setLabel("textarea");
 		addToEntries(newEntry);
 		return newEntry;
 	}
-	
-	public IntegerInspectorEntry createNewInteger()
-	{
+
+	public IntegerInspectorEntry createNewInteger() {
 		IntegerInspectorEntry newEntry = new IntegerInspectorEntry();
 		newEntry.setName("integer");
 		newEntry.setLabel("integer");
 		addToEntries(newEntry);
 		return newEntry;
 	}
-	
-	public CheckboxInspectorEntry createNewCheckbox()
-	{
+
+	public CheckboxInspectorEntry createNewCheckbox() {
 		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry();
 		newEntry.setName("checkbox");
 		newEntry.setLabel("checkbox");
 		addToEntries(newEntry);
 		return newEntry;
 	}
-	
-	@Override
-	public BindingFactory getBindingFactory() 
-	{
-		return BINDING_FACTORY;
+
+	public InspectorEntry deleteEntry(InspectorEntry entry) {
+		removeFromEntries(entry);
+		entry.delete();
+		return entry;
 	}
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
-			if (_bindingModel == null) createBindingModel();
-			return _bindingModel;
+	public BindingModel getBindingModel() {
+		if (_bindingModel == null) {
+			createBindingModel();
+		}
+		return _bindingModel;
 	}
-	
-	public void updateBindingModel()
-	{
+
+	public void updateBindingModel() {
 		logger.fine("updateBindingModel()");
 		_bindingModel = null;
 		createBindingModel();
 	}
-	
-	private void createBindingModel()
-	{
+
+	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 		for (PatternRole role : getEditionPattern().getPatternRoles()) {
-			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role));
-		}	
+			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role, (EditionPatternInstance) null));
+		}
 	}
 
-	private static DefaultBindingFactory BINDING_FACTORY = new EditionPatternInspectorBindingFactory();
-
- }
+}

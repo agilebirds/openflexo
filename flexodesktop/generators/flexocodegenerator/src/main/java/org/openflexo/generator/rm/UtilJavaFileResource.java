@@ -38,7 +38,7 @@ import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.cg.CGJavaFile;
-import org.openflexo.generator.utils.JavaClassGenerator;
+import org.openflexo.generator.utils.JavaClassGenerator; 
 import org.openflexo.logging.FlexoLogger;
 
 /**

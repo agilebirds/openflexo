@@ -24,6 +24,9 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.viewpoint.action.AddEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -31,56 +34,44 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.CEDController;
 
-
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.AddEditionPattern;
-
 public class AddEditionPatternInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddEditionPatternInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(AddEditionPattern.actionType,actionInitializer);
+	AddEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(AddEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddEditionPattern> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddEditionPattern> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, AddEditionPattern action)
-			{
-				action.setNewEditionPatternName(FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_edition_pattern")));
+			public boolean run(ActionEvent e, AddEditionPattern action) {
+				action.setNewEditionPatternName(FlexoController.askForString(FlexoLocalization
+						.localizedForKey("name_for_new_edition_pattern")));
 				return (action.getNewEditionPatternName() != null);
 			}
 		};
 	}
-	
 
 	@Override
-	protected FlexoActionFinalizer<AddEditionPattern> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddEditionPattern> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, AddEditionPattern action)
-			{
-				((CEDController)getController()).setCurrentEditedObjectAsModuleView(action.getNewEditionPattern());
+			public boolean run(ActionEvent e, AddEditionPattern action) {
+				((CEDController) getController()).setCurrentEditedObjectAsModuleView(action.getNewEditionPattern());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return VPMIconLibrary.EDITION_PATTERN_ICON;
 	}
 

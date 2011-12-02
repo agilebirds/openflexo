@@ -28,7 +28,8 @@ public interface Formatter {
 	 * 
 	 * @param input
 	 * @return a well formated string, depending on the implementation.
-	 * @throws FormattingException if the formatting fails.
+	 * @throws FormattingException
+	 *             if the formatting fails.
 	 */
 	public String format(String input) throws FormattingException;
 

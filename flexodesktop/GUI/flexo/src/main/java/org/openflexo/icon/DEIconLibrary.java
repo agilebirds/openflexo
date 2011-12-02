@@ -23,32 +23,28 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.toolbox.ImageIconResource;
 
-
 /**
  * Utility class containing all icons used in context of DEModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class DEIconLibrary extends IconLibrary {
 
 	// Module icons
-	public static final ImageIcon DE_ACTIVE_ICON = new ImageIconResource("Icons/DE/DE_A_Small.gif");
-	public static final ImageIcon DE_UNACTIVE_ICON = new ImageIconResource("Icons/DE/DE_NA_Small.gif");
-	public static final ImageIcon DE_SELECTED_ICON = new ImageIconResource("Icons/DE/DE_S_Small.gif");
-	public static final ImageIcon DE_BIG_ACTIVE_ICON = new ImageIconResource("Icons/DE/DE_A.gif");
-	public static final ImageIcon DE_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/DE/DE_NA.gif");
-	public static final ImageIcon DE_BIG_SELECTED_ICON = new ImageIconResource("Icons/DE/DE_S.gif");
+	public static final ImageIcon DE_SMALL_ICON = new ImageIconResource("Icons/DG/module-dg-16.png");
+	public static final ImageIcon DE_MEDIUM_ICON = new ImageIconResource("Icons/DG/module-dg-32.png");
+	public static final ImageIcon DE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/DG/module-dg-hover-32.png");
+	public static final ImageIcon DE_BIG_ICON = new ImageIconResource("Icons/DG/module-dg-hover-64.png");
 
 	// Perspective icons
 	public static final ImageIcon DE_DE_ACTIVE_ICON = new ImageIconResource("Icons/DE/DocEditorPerspective_A.png");
 	public static final ImageIcon DE_DE_SELECTED_ICON = new ImageIconResource("Icons/DE/DocEditorPerspective_S.png");
-	
+
 	// Model icons
-    
+
 	public static final ImageIcon TOC_ENTRY = new ImageIconResource("Icons/DE/TocEntry.gif");
 	public static final ImageIcon TOC_REPOSITORY = new ImageIconResource("Icons/DE/TOCRepository.png");
 	public static final ImageIcon TOC_ENTRY_BIG = new ImageIconResource("Icons/DE/TocEntryBig.png");
-	
-    
+
 }

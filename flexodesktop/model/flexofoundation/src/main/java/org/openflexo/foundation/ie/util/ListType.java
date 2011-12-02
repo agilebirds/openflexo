@@ -19,14 +19,12 @@
  */
 package org.openflexo.foundation.ie.util;
 
-
 /**
  * Represents type of a list (FETCH,ACCESSOR)
  * 
  * @author sguerin
  * 
  */
-public enum ListType
-{
-	FETCH,	ACCESSOR;
+public enum ListType {
+	FETCH, ACCESSOR;
 }

@@ -29,8 +29,7 @@ public class OROperator extends CommonOutputOperatorNode {
 	/**
 	 * Constructor used during deserialization
 	 */
-	public OROperator(FlexoProcessBuilder builder)
-	{
+	public OROperator(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -38,14 +37,12 @@ public class OROperator extends CommonOutputOperatorNode {
 	/**
 	 * Default constructor
 	 */
-	public OROperator(FlexoProcess process)
-	{
+	public OROperator(FlexoProcess process) {
 		super(process);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.OPERATOR_OR_INSPECTOR;
 	}
 

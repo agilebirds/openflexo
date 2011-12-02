@@ -25,44 +25,45 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
 import org.openflexo.fge.geom.FGEGeometricObject;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.logging.FlexoLogger;
 
 public class FGEGrid implements FGEArea {
 
 	private static final Logger logger = FlexoLogger.getLogger(FGEGrid.class.getPackage().getName());
-	
+
 	public FGEPoint origin;
 	public double hStep;
 	public double vStep;
-	
+
 	public FGEGrid() {
-		this(new FGEPoint(0,0),1.0,1.0);
+		this(new FGEPoint(0, 0), 1.0, 1.0);
 	}
-	
+
 	public FGEGrid(FGEPoint origin, double hStep, double vStep) {
 		this.origin = origin;
 		this.hStep = hStep;
-		this.vStep = vStep; 
+		this.vStep = vStep;
 	}
-	
+
 	public double getHorizontalStep() {
 		return hStep;
 	}
-	
+
 	public double getVerticalStep() {
 		return vStep;
 	}
-	
+
 	@Override
 	public boolean containsArea(FGEArea a) {
-		if (a instanceof FGEPoint)
+		if (a instanceof FGEPoint) {
 			return containsPoint((FGEPoint) a);
+		}
 		if (a instanceof FGEGrid) {
-			FGEGrid grid = ((FGEGrid)a);
+			FGEGrid grid = ((FGEGrid) a);
 			return grid.origin.equals(origin) && grid.hStep == hStep && grid.vStep == vStep;
 		}
 		return false;
@@ -75,13 +76,13 @@ public class FGEGrid implements FGEArea {
 
 	@Override
 	public boolean containsPoint(FGEPoint p) {
-		return Math.abs(Math.IEEEremainder((p.x - origin.x),hStep))< FGEGeometricObject.EPSILON && 
-		Math.abs(Math.IEEEremainder((p.y - origin.y),vStep))< FGEGeometricObject.EPSILON;
+		return Math.abs(Math.IEEEremainder((p.x - origin.x), hStep)) < FGEGeometricObject.EPSILON
+				&& Math.abs(Math.IEEEremainder((p.y - origin.y), vStep)) < FGEGeometricObject.EPSILON;
 	}
 
 	@Override
 	public FGEArea exclusiveOr(FGEArea area) {
-		return new FGEExclusiveOrArea(this,area);
+		return new FGEExclusiveOrArea(this, area);
 	}
 
 	@Override
@@ -97,29 +98,29 @@ public class FGEGrid implements FGEArea {
 
 	@Override
 	public FGEPoint getNearestPoint(FGEPoint point) {
-		FGEPoint translatedPoint = new FGEPoint(point.x-origin.x,point.y-origin.y);
-		FGEPoint remainderPoint = new FGEPoint(Math.IEEEremainder(translatedPoint.x, hStep),Math.IEEEremainder(translatedPoint.y, vStep));
-		FGEPoint ulPoint = new FGEPoint(point.x-remainderPoint.x,point.y-remainderPoint.y);
-		
+		FGEPoint translatedPoint = new FGEPoint(point.x - origin.x, point.y - origin.y);
+		FGEPoint remainderPoint = new FGEPoint(Math.IEEEremainder(translatedPoint.x, hStep), Math.IEEEremainder(translatedPoint.y, vStep));
+		FGEPoint ulPoint = new FGEPoint(point.x - remainderPoint.x, point.y - remainderPoint.y);
+
 		double distanceUL = point.distance(ulPoint);
-		double distanceUR = point.distance(ulPoint.x+hStep, ulPoint.y);
-		double distanceLL = point.distance(ulPoint.x, ulPoint.y+vStep);
-		double distanceLR = point.distance(ulPoint.x+hStep, ulPoint.y+vStep);
-		if (distanceUL<=distanceUR && distanceUL<=distanceLL && distanceUL<=distanceLR) {
+		double distanceUR = point.distance(ulPoint.x + hStep, ulPoint.y);
+		double distanceLL = point.distance(ulPoint.x, ulPoint.y + vStep);
+		double distanceLR = point.distance(ulPoint.x + hStep, ulPoint.y + vStep);
+		if (distanceUL <= distanceUR && distanceUL <= distanceLL && distanceUL <= distanceLR) {
 			// Upper left is closest
 			return ulPoint;
-		} else if (distanceUR<=distanceUL && distanceUR<=distanceLL && distanceUR<=distanceLR) {
+		} else if (distanceUR <= distanceUL && distanceUR <= distanceLL && distanceUR <= distanceLR) {
 			// Upper right is closest
-			ulPoint.x+=hStep;
+			ulPoint.x += hStep;
 			return ulPoint;
-		} else if (distanceLL<=distanceUR && distanceLL<=distanceUL && distanceLL<=distanceLR) {
+		} else if (distanceLL <= distanceUR && distanceLL <= distanceUL && distanceLL <= distanceLR) {
 			// Lower left is closest
-			ulPoint.y+=vStep;
+			ulPoint.y += vStep;
 			return ulPoint;
 		} else {
 			// Lower right is closest
-			ulPoint.x+=hStep;
-			ulPoint.y+=vStep;
+			ulPoint.x += hStep;
+			ulPoint.y += vStep;
 			return ulPoint;
 		}
 	}
@@ -147,13 +148,14 @@ public class FGEGrid implements FGEArea {
 
 	@Override
 	public void paint(FGEGraphics g) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("TODO");
+		}
 	}
 
 	@Override
 	public FGEArea substract(FGEArea area, boolean isStrict) {
-		return new FGESubstractionArea(this,area,isStrict);
+		return new FGESubstractionArea(this, area, isStrict);
 	}
 
 	@Override
@@ -163,12 +165,12 @@ public class FGEGrid implements FGEArea {
 
 	@Override
 	public FGEArea union(FGEArea area) {
-		return new FGEUnionArea(this,area);
+		return new FGEUnionArea(this, area);
 	}
 
 	@Override
 	public FGEGrid clone() {
-		return new FGEGrid(new FGEPoint(origin),hStep,vStep);
+		return new FGEGrid(new FGEPoint(origin), hStep, vStep);
 	}
-	
+
 }

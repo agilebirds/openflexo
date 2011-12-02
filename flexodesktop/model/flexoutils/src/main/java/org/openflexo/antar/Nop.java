@@ -19,29 +19,24 @@
  */
 package org.openflexo.antar;
 
-
 public class Nop extends Instruction {
 
-	public Nop()
-	{
+	public Nop() {
 		super();
 	}
-	
-	public Nop(String inlineComment)
-	{
+
+	public Nop(String inlineComment) {
 		this();
 		setInlineComment(inlineComment);
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "NOP";
 	}
-	
+
 	@Override
-	public Nop clone()
-	{
+	public Nop clone() {
 		Nop returned = new Nop();
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

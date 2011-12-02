@@ -24,7 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.exec.ControlGraphFactories;
@@ -35,72 +34,69 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.localization.FlexoLocalization;
 
-
 /**
  * @author gpolet
  * 
  */
-public class ControlGraphsGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
-{
+public class ControlGraphsGenerator extends MetaGenerator<FlexoModelObject, CGRepository> {
 	private static final Logger logger = Logger.getLogger(ControlGraphsGenerator.class.getPackage().getName());
-	
-    public ControlGraphsGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,null);
-        _generators = new Hashtable<FlexoProcess,ControlGraphGenerator>();
-    }
-    
-    @Override
-    public ProjectGenerator getProjectGenerator() {
-    	return (ProjectGenerator) super.getProjectGenerator();
-    }
-    
+
+	public ControlGraphsGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null);
+		_generators = new Hashtable<FlexoProcess, ControlGraphGenerator>();
+	}
+
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public ProjectGenerator getProjectGenerator() {
+		return (ProjectGenerator) super.getProjectGenerator();
+	}
+
+	@Override
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public void generate(boolean forceRegenerate) throws GenerationException
-    {
-    	if (logger.isLoggable(Level.FINE))
-    		logger.fine("Called ComponentsGenerator.generate(forceRegenerate)");
-    	resetSecondaryProgressWindow(_generators.values().size());
-    	startGeneration();
-    	for (ControlGraphGenerator generator : _generators.values()) {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+generator.getProcess().getName(),false);
-    		generator.generate(forceRegenerate);
-    	}
-    	stopGeneration();
-    }
-    
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
+	public void generate(boolean forceRegenerate) throws GenerationException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Called ComponentsGenerator.generate(forceRegenerate)");
+		}
+		resetSecondaryProgressWindow(_generators.values().size());
+		startGeneration();
+		for (ControlGraphGenerator generator : _generators.values()) {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + generator.getProcess().getName(), false);
+			generator.generate(forceRegenerate);
+		}
+		stopGeneration();
+	}
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		ControlGraphFactories.init();
 		Vector<FlexoProcess> allProcesses = getProject().getFlexoWorkflow().getAllLocalFlexoProcesses();
 		resetSecondaryProgressWindow(allProcesses.size());
 		for (FlexoProcess p : allProcesses) {
-			if(p.getExecutionClassName()==null)continue;
+			if (p.getExecutionClassName() == null) {
+				continue;
+			}
 			ControlGraphGenerator generator = getGenerator(p);
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+p.getName(),false);
-			if (generator != null)
-				generator.buildResourcesAndSetGenerators(repository,resources);
-			else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Could not instanciate ControlGraph Generator for "+p.getName());
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + p.getName(), false);
+			if (generator != null) {
+				generator.buildResourcesAndSetGenerators(repository, resources);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not instanciate ControlGraph Generator for " + p.getName());
+				}
 			}
 		}
 	}
 
-	private Hashtable<FlexoProcess,ControlGraphGenerator> _generators;
-	
-	protected ControlGraphGenerator getGenerator(FlexoProcess process)
-	{
+	private Hashtable<FlexoProcess, ControlGraphGenerator> _generators;
+
+	protected ControlGraphGenerator getGenerator(FlexoProcess process) {
 		ControlGraphGenerator returned = _generators.get(process);
 		if (returned == null) {
-			_generators.put(process,returned=new ControlGraphGenerator(getProjectGenerator(),process));
+			_generators.put(process, returned = new ControlGraphGenerator(getProjectGenerator(), process));
 		}
 		return returned;
 	}

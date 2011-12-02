@@ -35,8 +35,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
-public class FileSelector extends TextFieldCustomPopup<File>
-{
+public class FileSelector extends TextFieldCustomPopup<File> {
 	public static final Font NORMAL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
 	private static final String EMPTY_STRING = "";
@@ -51,61 +50,51 @@ public class FileSelector extends TextFieldCustomPopup<File>
 
 	int dialogType = JFileChooser.OPEN_DIALOG;
 
-	public FileSelector()
-	{
+	public FileSelector() {
 		this((File) null);
 	}
 
-	public FileSelector(FileFilter aFileFilter)
-	{
+	public FileSelector(FileFilter aFileFilter) {
 		this(null, aFileFilter);
 	}
 
-	public FileSelector(File aFile)
-	{
+	public FileSelector(File aFile) {
 		super(aFile);
 		_oldValue = aFile;
 	}
 
-	public FileSelector(File aFile, FileFilter aFileFilter)
-	{
+	public FileSelector(File aFile, FileFilter aFileFilter) {
 		this(aFile);
 		setFileFilter(aFileFilter);
 	}
 
-	public FileSelector(File aFile, FileFilter aFileFilter, int aFileSelectionMode)
-	{
+	public FileSelector(File aFile, FileFilter aFileFilter, int aFileSelectionMode) {
 		this(aFile);
 		setFileFilter(aFileFilter);
 		fileSelectionMode = aFileSelectionMode;
 	}
 
-	public FileSelector(File aFile, FileFilter aFileFilter, int aFileSelectionMode, int aDialogType)
-	{
+	public FileSelector(File aFile, FileFilter aFileFilter, int aFileSelectionMode, int aDialogType) {
 		this(aFile);
 		setFileFilter(aFileFilter);
 		fileSelectionMode = aFileSelectionMode;
 		dialogType = aDialogType;
 	}
 
-	public File getEditedFile()
-	{
+	public File getEditedFile() {
 		return getEditedObject();
 	}
 
-	public void setEditedFile(File aFile)
-	{
+	public void setEditedFile(File aFile) {
 		setEditedObject(aFile);
 	}
 
-	public File getFile(Object currentEditedObject)
-	{
+	public File getFile(Object currentEditedObject) {
 		return (File) currentEditedObject;
 	}
 
 	@Override
-	protected ResizablePanel createCustomPanel(File editedObject)
-	{
+	protected ResizablePanel createCustomPanel(File editedObject) {
 		fileChooserPanel = new FileChooserPanel(getFile(editedObject));
 		if (_fileFilter != null) {
 			fileChooserPanel.setFileFilter(_fileFilter);
@@ -114,16 +103,14 @@ public class FileSelector extends TextFieldCustomPopup<File>
 	}
 
 	@Override
-	public void updateCustomPanel(File editedObject)
-	{
+	public void updateCustomPanel(File editedObject) {
 		if (fileChooserPanel != null) {
 			fileChooserPanel.update(getFile(editedObject));
 		}
 	}
 
 	@Override
-	public String renderedString(File editedObject)
-	{
+	public String renderedString(File editedObject) {
 		if (editedObject != null) {
 			return (getFile(editedObject)).getName();
 		} else {
@@ -131,29 +118,25 @@ public class FileSelector extends TextFieldCustomPopup<File>
 		}
 	}
 
-	public void setFileFilter(FileFilter aFilter)
-	{
+	public void setFileFilter(FileFilter aFilter) {
 		_fileFilter = aFilter;
 		if (fileChooserPanel != null) {
 			fileChooserPanel.setFileFilter(aFilter);
 		}
 	}
 
-	protected class FileChooserPanel extends ResizablePanel implements ActionListener
-	{
+	protected class FileChooserPanel extends ResizablePanel implements ActionListener {
 		private JFileChooser fileChooser;
 
 		private Dimension defaultDimension = new Dimension(500, 400);
 
-		void update(File aFile)
-		{
+		void update(File aFile) {
 			fileChooser.setSelectedFile(aFile);
 		}
 
-		protected FileChooserPanel(File aFile)
-		{
+		protected FileChooserPanel(File aFile) {
 			super();
-			fileChooser = FlexoFileChooser.getFileChooser(aFile!=null?aFile.getAbsolutePath():null);
+			fileChooser = FlexoFileChooser.getFileChooser(aFile != null ? aFile.getAbsolutePath() : null);
 			fileChooser.addActionListener(this);
 			fileChooser.setFileSelectionMode(fileSelectionMode);
 			fileChooser.setDialogType(dialogType);
@@ -169,22 +152,19 @@ public class FileSelector extends TextFieldCustomPopup<File>
 			fileChooser.setMaximumSize(defaultDimension);
 		}
 
-		public void setFileFilter(FileFilter aFilter)
-		{
+		public void setFileFilter(FileFilter aFilter) {
 			if (aFilter != null) {
 				fileChooser.setFileFilter(aFilter);
 			}
 		}
 
 		@Override
-		public Dimension getDefaultSize()
-		{
+		public Dimension getDefaultSize() {
 			return defaultDimension;
 		}
 
 		@Override
-		public void setPreferredSize(Dimension aDimension)
-		{
+		public void setPreferredSize(Dimension aDimension) {
 			fileChooser.setPreferredSize(aDimension);
 		}
 
@@ -195,8 +175,7 @@ public class FileSelector extends TextFieldCustomPopup<File>
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
 				setEditedFile(fileChooser.getSelectedFile());
 				apply();
@@ -208,29 +187,25 @@ public class FileSelector extends TextFieldCustomPopup<File>
 	}
 
 	@Override
-	public void apply()
-	{
+	public void apply() {
 		setRevertValue(getEditedObject());
 		closePopup();
 		super.apply();
 	}
 
 	@Override
-	public void cancel()
-	{
+	public void cancel() {
 		setEditedObject(_oldValue);
 		closePopup();
 		super.cancel();
 	}
 
 	@Override
-	public void setRevertValue(File oldValue)
-	{
+	public void setRevertValue(File oldValue) {
 		_oldValue = oldValue;
 	}
 
-	public File getRevertValue()
-	{
+	public File getRevertValue() {
 		return _oldValue;
 	}
 

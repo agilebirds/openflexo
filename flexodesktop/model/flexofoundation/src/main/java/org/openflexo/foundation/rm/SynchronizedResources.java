@@ -22,104 +22,92 @@ package org.openflexo.foundation.rm;
 import java.util.Enumeration;
 
 /**
- * Represents all the resources which are required to be in sync with a given
- * resource. This relation generally means that some information is redondant
- * between two resources. Redondant information should always be avoided but is
- * sometime required (for example to perform a lookup with a name between
- * different resources).
+ * Represents all the resources which are required to be in sync with a given resource. This relation generally means that some information
+ * is redondant between two resources. Redondant information should always be avoided but is sometime required (for example to perform a
+ * lookup with a name between different resources).
  * 
- * A modification on related resource may modify one or more of synchronized
- * resources.
+ * A modification on related resource may modify one or more of synchronized resources.
  * 
  * @author sguerin
  * 
  */
-public class SynchronizedResources extends ResourceList
-{
+public class SynchronizedResources extends ResourceList {
 
-    public SynchronizedResources()
-    {
-        super();
-    }
+	public SynchronizedResources() {
+		super();
+	}
 
-    public SynchronizedResources(FlexoResource relatedResource)
-    {
-        super(relatedResource);
-    }
+	public SynchronizedResources(FlexoResource relatedResource) {
+		super(relatedResource);
+	}
 
-    /**
-     * Overrides
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#addToResources(org.openflexo.foundation.rm.FlexoResource)
-     *      by setting inverse link (altered resource)
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#addToResources(org.openflexo.foundation.rm.FlexoResource)
-     */
-    @Override
-	public void addToResources(FlexoResource<FlexoResourceData> resource)
-    {
-        super.addToResources(resource);
-        if (getRelatedResource() != null) {
-            if (!resource.getSynchronizedResources().contains(getRelatedResource())) {
-                resource.addToSynchronizedResources(getRelatedResource());
-            }
-        }
-    }
+	/**
+	 * Overrides
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#addToResources(org.openflexo.foundation.rm.FlexoResource) by setting inverse link
+	 *      (altered resource)
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#addToResources(org.openflexo.foundation.rm.FlexoResource)
+	 */
+	@Override
+	public void addToResources(FlexoResource resource) {
+		super.addToResources(resource);
+		if (getRelatedResource() != null) {
+			if (!resource.getSynchronizedResources().contains(getRelatedResource())) {
+				resource.addToSynchronizedResources(getRelatedResource());
+			}
+		}
+	}
 
-    /**
-     * Overrides
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#removeFromResources(org.openflexo.foundation.rm.FlexoResource)
-     *      by removing inverse link (altered resource)
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#removeFromResources(org.openflexo.foundation.rm.FlexoResource)
-     */
-    @Override
-	public void removeFromResources(FlexoResource<FlexoResourceData> resource)
-    {
-        super.removeFromResources(resource);
-        if (getRelatedResource() != null) {
-            if (resource.getSynchronizedResources().contains(getRelatedResource())) {
-                resource.removeFromSynchronizedResources(getRelatedResource());
-            }
-        }
+	/**
+	 * Overrides
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#removeFromResources(org.openflexo.foundation.rm.FlexoResource) by removing inverse link
+	 *      (altered resource)
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#removeFromResources(org.openflexo.foundation.rm.FlexoResource)
+	 */
+	@Override
+	public void removeFromResources(FlexoResource resource) {
+		super.removeFromResources(resource);
+		if (getRelatedResource() != null) {
+			if (resource.getSynchronizedResources().contains(getRelatedResource())) {
+				resource.removeFromSynchronizedResources(getRelatedResource());
+			}
+		}
 
-    }
+	}
 
-    /**
-     * Overrides
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#setRelatedResource(org.openflexo.foundation.rm.FlexoResource)
-     *      by refreshing inverse links (altered resources)
-     * 
-     * @see org.openflexo.foundation.rm.ResourceList#setRelatedResource(org.openflexo.foundation.rm.FlexoResource)
-     */
-    @Override
-	public void setRelatedResource(FlexoResource relatedResource)
-    {
-        super.setRelatedResource(relatedResource);
-        for (Enumeration en = elements(); en.hasMoreElements();) {
-            FlexoResource next = (FlexoResource) en.nextElement();
-            if (!next.getSynchronizedResources().contains(getRelatedResource())) {
-                next.addToSynchronizedResources(getRelatedResource());
-            }
-        }
-    }
+	/**
+	 * Overrides
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#setRelatedResource(org.openflexo.foundation.rm.FlexoResource) by refreshing inverse
+	 *      links (altered resources)
+	 * 
+	 * @see org.openflexo.foundation.rm.ResourceList#setRelatedResource(org.openflexo.foundation.rm.FlexoResource)
+	 */
+	@Override
+	public void setRelatedResource(FlexoResource relatedResource) {
+		super.setRelatedResource(relatedResource);
+		for (Enumeration en = elements(); en.hasMoreElements();) {
+			FlexoResource next = (FlexoResource) en.nextElement();
+			if (!next.getSynchronizedResources().contains(getRelatedResource())) {
+				next.addToSynchronizedResources(getRelatedResource());
+			}
+		}
+	}
 
-    @Override
-	public String getSerializationIdentifier()
-    {
-        return getRelatedResource().getSerializationIdentifier()+"_SR";
-    }
-    
-    /** 
-     * Clear cache scheme
-     */
-    @Override
-	public void update()
-    {
-    	// No cache implemented for synchronized resources
-    }
+	@Override
+	public String getSerializationIdentifier() {
+		return getRelatedResource().getSerializationIdentifier() + "_SR";
+	}
 
+	/**
+	 * Clear cache scheme
+	 */
+	@Override
+	public void update() {
+		// No cache implemented for synchronized resources
+	}
 
 }

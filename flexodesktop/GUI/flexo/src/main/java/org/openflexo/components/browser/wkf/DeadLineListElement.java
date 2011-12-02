@@ -27,41 +27,35 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.DeadLine;
 import org.openflexo.foundation.wkf.DeadLineList;
 
-
 /**
  * Browser element representing DeadLines of a process
- *
+ * 
  * @author sguerin
  * @deprecated since version 1.2
- *
+ * 
  */
 @Deprecated
-public class DeadLineListElement extends BrowserElement
-{
+public class DeadLineListElement extends BrowserElement {
 
-    public DeadLineListElement(DeadLineList deadLineList, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(deadLineList, BrowserElementType.DEADLINE_LIST, browser, parent);
-    }
+	public DeadLineListElement(DeadLineList deadLineList, ProjectBrowser browser, BrowserElement parent) {
+		super(deadLineList, BrowserElementType.DEADLINE_LIST, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // We add the deadlines
-        DeadLineList deadLineList = getDeadLineList();
-        for (Enumeration e = deadLineList.getDeadLines().elements(); e.hasMoreElements();) {
-            addToChilds((DeadLine) e.nextElement());
-        }
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// We add the deadlines
+		DeadLineList deadLineList = getDeadLineList();
+		for (Enumeration e = deadLineList.getDeadLines().elements(); e.hasMoreElements();) {
+			addToChilds((DeadLine) e.nextElement());
+		}
+	}
 
-    protected DeadLineList getDeadLineList()
-    {
-        return (DeadLineList) getObject();
-    }
+	protected DeadLineList getDeadLineList() {
+		return (DeadLineList) getObject();
+	}
 
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        return BrowserElementType.DEADLINE;
-    }
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		return BrowserElementType.DEADLINE;
+	}
 }

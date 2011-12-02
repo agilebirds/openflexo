@@ -23,26 +23,24 @@ import java.awt.Color;
 
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * Constants used by FlexoInspector project
- *
+ * 
  * @author sguerin
  */
-public class InspectorCst
-{
+public class InspectorCst {
 
-    public static final int INSPECTOR_WINDOW_WIDTH = 375;
+	public static final int INSPECTOR_WINDOW_WIDTH = 375;
 
-    public static final int INSPECTOR_WINDOW_HEIGHT = 400;
+	public static final int INSPECTOR_WINDOW_HEIGHT = 400;
 
-    public static final Color SELECTED_TEXT_COLOR = new Color(145, 170, 208);
+	public static final Color SELECTED_TEXT_COLOR = new Color(145, 170, 208);
 
-    public static final Color SELECTED_LINES_PROPERTY_LIST_TABLE_VIEW_COLOR = new Color(181, 213, 255);
+	public static final Color SELECTED_LINES_PROPERTY_LIST_TABLE_VIEW_COLOR = new Color(181, 213, 255);
 
-    public static final Color ODD_LINES_PROPERTY_LIST_TABLE_VIEW_COLOR = new Color(237, 243, 254);
+	public static final Color ODD_LINES_PROPERTY_LIST_TABLE_VIEW_COLOR = new Color(237, 243, 254);
 
-    public static final Color NON_ODD_LINES_PROPERTY_LIST_TABLE_VIEW_COLOR = Color.WHITE;
+	public static final Color NON_ODD_LINES_PROPERTY_LIST_TABLE_VIEW_COLOR = Color.WHITE;
 
-    public static Color BACK_COLOR = ToolBox.getPLATFORM()==ToolBox.MACOS ? null : Color.WHITE;
+	public static Color BACK_COLOR = ToolBox.getPLATFORM() == ToolBox.MACOS ? null : Color.WHITE;
 }

@@ -21,9 +21,8 @@ package org.openflexo.module.external;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public interface ExternalIEController
-{
-    
+public interface ExternalIEController {
+
 }

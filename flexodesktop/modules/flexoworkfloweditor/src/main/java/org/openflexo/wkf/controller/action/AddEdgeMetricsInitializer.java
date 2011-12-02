@@ -33,14 +33,12 @@ import org.openflexo.foundation.wkf.action.AddMetricsDefinition;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
-public class AddEdgeMetricsInitializer extends AddMetricsInitializer<AddEdgeMetricsValue,FlexoPostCondition<?, ?>> {
+public class AddEdgeMetricsInitializer extends AddMetricsInitializer<AddEdgeMetricsValue, FlexoPostCondition<?, ?>> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddEdgeMetricsInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(actionInitializer,AddEdgeMetricsValue.actionType);
+	AddEdgeMetricsInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(actionInitializer, AddEdgeMetricsValue.actionType);
 	}
 
 	@Override
@@ -49,12 +47,12 @@ public class AddEdgeMetricsInitializer extends AddMetricsInitializer<AddEdgeMetr
 	}
 
 	@Override
-	protected Vector<MetricsDefinition> getAvailableMetricsDefinitions(FlexoPostCondition<?,?> postCondition) {
+	protected Vector<MetricsDefinition> getAvailableMetricsDefinitions(FlexoPostCondition<?, ?> postCondition) {
 		Vector<MetricsDefinition> v = new Vector<MetricsDefinition>(getProject().getWorkflow().getEdgeMetricsDefinitions());
-		for (MetricsValue mv: postCondition.getMetricsValues()) {
+		for (MetricsValue mv : postCondition.getMetricsValues()) {
 			v.remove(mv.getMetricsDefinition());
 		}
 		return v;
 	}
-	
+
 }

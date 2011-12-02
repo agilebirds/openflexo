@@ -24,42 +24,39 @@ import org.openflexo.antar.java.JavaExpressionPrettyPrinter;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.toolbox.Duration;
 
-
 public class DurationStaticBinding extends StaticBinding<Duration> {
 
 	private Duration value;
-	
-	public DurationStaticBinding()
-	{
+
+	public DurationStaticBinding() {
 		super();
 	}
-	
-	public DurationStaticBinding(Duration aValue)
-	{
+
+	public DurationStaticBinding(Duration aValue) {
 		super();
 		value = aValue.clone();
 	}
-	
-   public DurationStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, Duration aValue)
-    {
-    	super(bindingDefinition,owner);
-		if (aValue != null) value = aValue.clone();
-   }
+
+	public DurationStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, Duration aValue) {
+		super(bindingDefinition, owner);
+		if (aValue != null) {
+			value = aValue.clone();
+		}
+	}
 
 	@Override
-	public EvaluationType getEvaluationType()
-	{
+	public EvaluationType getEvaluationType() {
 		return EvaluationType.DURATION;
 	}
 
 	@Override
-	public String getStringRepresentation() 
-	{
-		if (value != null)
-			return "["+value.getSerializationRepresentation()+"]";
+	public String getStringRepresentation() {
+		if (value != null) {
+			return "[" + value.getSerializationRepresentation() + "]";
+		}
 		return "[null]";
 	}
-	
+
 	@Override
 	public String getWodStringRepresentation() {
 		logger.severe("duration in wod files isn't supported yet");
@@ -67,35 +64,30 @@ public class DurationStaticBinding extends StaticBinding<Duration> {
 	}
 
 	@Override
-	public Duration getValue() 
-	{
+	public Duration getValue() {
 		return value;
 	}
 
 	@Override
-	public void setValue(Duration aValue) 
-	{
+	public void setValue(Duration aValue) {
 		value = aValue.clone();
 	}
 
 	@Override
-	public Class<Duration> getStaticBindingClass()
-	{
+	public Class<Duration> getStaticBindingClass() {
 		return Duration.class;
 	}
 
 	@Override
-	public DurationStaticBinding clone()
-	{
+	public DurationStaticBinding clone() {
 		DurationStaticBinding returned = new DurationStaticBinding();
 		returned.setsWith(this);
 		return returned;
 	}
 
-    @Override
-    public String getJavaCodeStringRepresentation()
-    {
-    	return JavaExpressionPrettyPrinter.getJavaStringRepresentation(getValue());
-    }
+	@Override
+	public String getJavaCodeStringRepresentation() {
+		return JavaExpressionPrettyPrinter.getJavaStringRepresentation(getValue());
+	}
 
 }

@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Defines all the inspectors used in the project
  * 
@@ -122,8 +121,10 @@ public class Inspectors {
 		private Vector<String> _allInspectors;
 		private File _inspectorDirectory;
 
+		@Override
 		public abstract String getName();
 
+		@Override
 		public boolean containsInspector(String inspectorName) {
 			return getAllInspectorNames().contains(inspectorName);
 		}
@@ -131,6 +132,7 @@ public class Inspectors {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public List<String> getAllInspectorNames() {
 			if (_allInspectors == null) {
 				_allInspectors = new Vector<String>();
@@ -143,18 +145,21 @@ public class Inspectors {
 						_allInspectors.add(value);
 					} catch (IllegalArgumentException e) {
 						// Warns about the exception
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+						}
 						e.printStackTrace();
 					} catch (IllegalAccessException e) {
 						// Warns about the exception
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+						}
 						e.printStackTrace();
 					} catch (Exception e) {
 						// Warns about the exception
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+						}
 						e.printStackTrace();
 					}
 				}
@@ -165,12 +170,14 @@ public class Inspectors {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public InputStream getInspectorStream(String inspectorName) {
 
 			File nextFile = new File(getInspectorDirectory(), inspectorName);
 			if (!nextFile.exists()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("File " + nextFile.getAbsolutePath() + " not found, search everywere");
+				}
 				nextFile = new FileResource("Config/Inspector/" + inspectorName);
 			}
 
@@ -182,8 +189,9 @@ public class Inspectors {
 					e.printStackTrace();
 				}
 			}
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("File " + nextFile.getAbsolutePath() + " REALLY not found");
+			}
 			return null;
 		}
 
@@ -192,10 +200,13 @@ public class Inspectors {
 				_inspectorDirectory = new FileResource(getExpectedProjectName() + "/src/main/resources/Config/Inspector");
 				if (!_inspectorDirectory.exists()) {
 					_inspectorDirectory = new FileResource("Config/Inspector");
-					if (!_inspectorDirectory.exists())
-						logger.warning("Inspector directory NOT FOUND ! (searched " + getExpectedProjectName() + "/src/main/resources/Config/Inspector)");
-				} else
+					if (!_inspectorDirectory.exists()) {
+						logger.warning("Inspector directory NOT FOUND ! (searched " + getExpectedProjectName()
+								+ "/src/main/resources/Config/Inspector)");
+					}
+				} else {
 					logger.info("Found " + _inspectorDirectory);
+				}
 			}
 			return _inspectorDirectory;
 		}
@@ -286,9 +297,9 @@ public class Inspectors {
 
 		public String BEGIN_NODE_INSPECTOR = "BeginNode.inspector";
 
-		//public String START_EVENT_INSPECTOR = "StartEvent.inspector";
+		// public String START_EVENT_INSPECTOR = "StartEvent.inspector";
 
-		//public String END_EVENT_INSPECTOR = "EndEvent.inspector";
+		// public String END_EVENT_INSPECTOR = "EndEvent.inspector";
 
 		public String END_NODE_INSPECTOR = "EndNode.inspector";
 
@@ -396,29 +407,29 @@ public class Inspectors {
 
 		public String PORTMAP_REGISTERY_INSPECTOR = "PortMapRegistery.inspector";
 
-		//public String MAIL_IN_INSPECTOR = "MailIn.inspector";
+		// public String MAIL_IN_INSPECTOR = "MailIn.inspector";
 
-		//public String MAIL_OUT_INSPECTOR = "MailOut.inspector";
+		// public String MAIL_OUT_INSPECTOR = "MailOut.inspector";
 
-		//public String TIMER_INSPECTOR = "Timer.inspector";
+		// public String TIMER_INSPECTOR = "Timer.inspector";
 
-		//public String TIME_OUT_INSPECTOR = "TimeOut.inspector";
+		// public String TIME_OUT_INSPECTOR = "TimeOut.inspector";
 
-		//public String FAULT_THROWER_INSPECTOR = "FaultThrower.inspector";
+		// public String FAULT_THROWER_INSPECTOR = "FaultThrower.inspector";
 
-		//public String FAULT_HANDLER_INSPECTOR = "FaultHandler.inspector";
+		// public String FAULT_HANDLER_INSPECTOR = "FaultHandler.inspector";
 
-		//public String CANCEL_THROWER_INSPECTOR = "CancelThrower.inspector";
+		// public String CANCEL_THROWER_INSPECTOR = "CancelThrower.inspector";
 
-		//public String CANCEL_HANDLER_INSPECTOR = "CancelHandler.inspector";
+		// public String CANCEL_HANDLER_INSPECTOR = "CancelHandler.inspector";
 
-		//public String COMPENSATE_THROWER_INSPECTOR = "CompensateThrower.inspector";
+		// public String COMPENSATE_THROWER_INSPECTOR = "CompensateThrower.inspector";
 
-		//public String COMPENSATE_HANDLER_INSPECTOR = "CompensateHandler.inspector";
+		// public String COMPENSATE_HANDLER_INSPECTOR = "CompensateHandler.inspector";
 
-		//public String CHECKPOINT_INSPECTOR = "Checkpoint.inspector";
+		// public String CHECKPOINT_INSPECTOR = "Checkpoint.inspector";
 
-		//public String REVERT_INSPECTOR = "Revert.inspector";
+		// public String REVERT_INSPECTOR = "Revert.inspector";
 
 		public String SELF_EXECUTABLE_ACTIVITY_INSPECTOR = "SelfExecutableActivityNode.inspector";
 

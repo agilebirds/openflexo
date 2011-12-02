@@ -26,51 +26,47 @@ import java.util.Vector;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * Class <code>TestClass</code> is intented to represent a command object in
- * XML coding/decoding example.
+ * Class <code>TestClass</code> is intented to represent a command object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class TestClass implements XMLSerializable
-{
+public class TestClass implements XMLSerializable {
 
-    public File testFile;
+	public File testFile;
 
-    public URL testURL;
+	public URL testURL;
 
-    public Vector<String> testVector;
+	public Vector<String> testVector;
 
-    public File[] fileArray;
+	public File[] fileArray;
 
-    public Foo[] fooArray;
+	public Foo[] fooArray;
 
-    @Override
-	public String toString()
-    {
+	@Override
+	public String toString() {
 
-        String returnedString = "TestClass\n";
-        returnedString += "testFile= " + testFile + "\n";
-        returnedString += "testURL= " + testURL + "\n";
-        returnedString += "testVector= " + testVector + "\n";
-        returnedString += "fileArray=";
-        if (fileArray != null) {
-            for (int i = 0; i < fileArray.length; i++) {
-                returnedString += " " + fileArray[i];
-            }
-        } else {
-            returnedString += "null\n";
-        }
-        returnedString += "\nfooArray=";
-        if (fooArray != null) {
-            for (int i = 0; i < fooArray.length; i++) {
-                returnedString += " " + fooArray[i];
-            }
-        } else {
-            returnedString += "null\n";
-        }
-        return returnedString;
-    }
+		String returnedString = "TestClass\n";
+		returnedString += "testFile= " + testFile + "\n";
+		returnedString += "testURL= " + testURL + "\n";
+		returnedString += "testVector= " + testVector + "\n";
+		returnedString += "fileArray=";
+		if (fileArray != null) {
+			for (int i = 0; i < fileArray.length; i++) {
+				returnedString += " " + fileArray[i];
+			}
+		} else {
+			returnedString += "null\n";
+		}
+		returnedString += "\nfooArray=";
+		if (fooArray != null) {
+			for (int i = 0; i < fooArray.length; i++) {
+				returnedString += " " + fooArray[i];
+			}
+		} else {
+			returnedString += "null\n";
+		}
+		return returnedString;
+	}
 
 }

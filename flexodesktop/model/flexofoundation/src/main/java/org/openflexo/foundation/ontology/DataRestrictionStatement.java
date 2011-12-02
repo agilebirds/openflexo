@@ -28,22 +28,13 @@ public abstract class DataRestrictionStatement extends RestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(DataRestrictionStatement.class.getPackage().getName());
 
-	public DataRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
-	{
-		super(subject,s,r);
+	public DataRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
+		super(subject, s, r);
 	}
-	
-	public abstract DataType getDataRange();
-	
-	public static enum DataType 
-	{
-		String,
-		Unknown
-	}
-	
-	public static DataType getDataType(String dataTypeAsString) 
-	{
-		if (dataTypeAsString.equals("http://www.w3.org/2001/XMLSchema#string")) return DataType.String;
-		return DataType.Unknown;
-	}
+
+	public abstract OntologicDataType getDataRange();
+
+	@Override
+	public abstract OntologyDataProperty getProperty();
+
 }

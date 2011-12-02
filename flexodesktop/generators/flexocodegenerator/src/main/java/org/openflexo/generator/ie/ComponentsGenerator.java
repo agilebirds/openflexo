@@ -38,155 +38,151 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.utils.StaticComponentGenerator;
 import org.openflexo.localization.FlexoLocalization;
 
-
 /**
  * @author gpolet
  * 
  */
-public class ComponentsGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
-{
+public class ComponentsGenerator extends MetaGenerator<FlexoModelObject, CGRepository> {
 	private static final Logger logger = Logger.getLogger(ComponentsGenerator.class.getPackage().getName());
-	
-	private Hashtable<ComponentDefinition,ComponentGenerator> generators;
+
+	private Hashtable<ComponentDefinition, ComponentGenerator> generators;
 	private Hashtable<PopupComponentDefinition, PopupLinkComponentGenerator> popupLinkGenerators;
 	private Hashtable<String, StaticComponentGenerator> staticComponentsGenerators;
-	
-    public ComponentsGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,null);
-        generators = new Hashtable<ComponentDefinition,ComponentGenerator>();
-        popupLinkGenerators = new Hashtable<PopupComponentDefinition, PopupLinkComponentGenerator>();
-        staticComponentsGenerators = new Hashtable<String, StaticComponentGenerator>();
-   }
-    
-    @Override
-    public ProjectGenerator getProjectGenerator() {
-    	return (ProjectGenerator) super.getProjectGenerator();
-    }
-    
+
+	public ComponentsGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null);
+		generators = new Hashtable<ComponentDefinition, ComponentGenerator>();
+		popupLinkGenerators = new Hashtable<PopupComponentDefinition, PopupLinkComponentGenerator>();
+		staticComponentsGenerators = new Hashtable<String, StaticComponentGenerator>();
+	}
+
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public ProjectGenerator getProjectGenerator() {
+		return (ProjectGenerator) super.getProjectGenerator();
+	}
+
+	@Override
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public void generate(boolean forceRegenerate) throws GenerationException
-    {
-    	if (logger.isLoggable(Level.FINE))
-    		logger.fine("Called ComponentsGenerator.generate(forceRegenerate)");
-    	resetSecondaryProgressWindow(generators.values().size()+popupLinkGenerators.size());
-    	startGeneration();
-    	for (PopupLinkComponentGenerator generator : popupLinkGenerators.values()) {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+generator.getGeneratedComponentName(),false);
-    		generator.generate(forceRegenerate);
-    	}
-    	for (ComponentGenerator generator : generators.values()) {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+generator.getGeneratedComponentName(),false);
-    		generator.generate(forceRegenerate);
-    	}
-    	stopGeneration();
-    }
-    
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
+	public void generate(boolean forceRegenerate) throws GenerationException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Called ComponentsGenerator.generate(forceRegenerate)");
+		}
+		resetSecondaryProgressWindow(generators.values().size() + popupLinkGenerators.size());
+		startGeneration();
+		for (PopupLinkComponentGenerator generator : popupLinkGenerators.values()) {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + generator.getGeneratedComponentName(),
+					false);
+			generator.generate(forceRegenerate);
+		}
+		for (ComponentGenerator generator : generators.values()) {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + generator.getGeneratedComponentName(),
+					false);
+			generator.generate(forceRegenerate);
+		}
+		stopGeneration();
+	}
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		Hashtable<ComponentDefinition, ComponentGenerator> hash = new Hashtable<ComponentDefinition, ComponentGenerator>();
 		Hashtable<PopupComponentDefinition, PopupLinkComponentGenerator> links = new Hashtable<PopupComponentDefinition, PopupLinkComponentGenerator>();
-		for(TabComponentDefinition tcd:getProject().getFlexoComponentLibrary().getTabComponentList()) {
+		for (TabComponentDefinition tcd : getProject().getFlexoComponentLibrary().getTabComponentList()) {
 			ComponentGenerator generator = getGenerator(tcd);
 			if (generator != null) {
-				hash.put(tcd,generator);
-				generator.buildResourcesAndSetGenerators(repository,resources);
-			}
-			else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Could not instanciate ComponentGenerator for "+tcd);
+				hash.put(tcd, generator);
+				generator.buildResourcesAndSetGenerators(repository, resources);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not instanciate ComponentGenerator for " + tcd);
+				}
 			}
 		}
-		for(PopupComponentDefinition pcd:getProject().getFlexoComponentLibrary().getPopupsComponentList()) {
-			if (pcd.isHelper())
+		for (PopupComponentDefinition pcd : getProject().getFlexoComponentLibrary().getPopupsComponentList()) {
+			if (pcd.isHelper()) {
 				continue;
+			}
 			PopupLinkComponentGenerator linkGenerator = getPopupLinkGenerator(pcd);
 			if (linkGenerator != null) {
-				links.put(pcd,linkGenerator);
-				linkGenerator.buildResourcesAndSetGenerators(repository,resources);
-			}
-			else {
-				if (logger.isLoggable(Level.WARNING))
-					logger.warning("Could not instanciate ComponentGenerator for "+pcd);
+				links.put(pcd, linkGenerator);
+				linkGenerator.buildResourcesAndSetGenerators(repository, resources);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not instanciate ComponentGenerator for " + pcd);
+				}
 			}
 			ComponentGenerator generator = getGenerator(pcd);
 			if (generator != null) {
-				hash.put(pcd,generator);
-				generator.buildResourcesAndSetGenerators(repository,resources);
-			}
-			else {
-				if (logger.isLoggable(Level.WARNING))
-					logger.warning("Could not instanciate ComponentGenerator for "+pcd);
+				hash.put(pcd, generator);
+				generator.buildResourcesAndSetGenerators(repository, resources);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not instanciate ComponentGenerator for " + pcd);
+				}
 			}
 		}
-		for(OperationComponentDefinition ocd:getProject().getFlexoComponentLibrary().getOperationsComponentList()) {
+		for (OperationComponentDefinition ocd : getProject().getFlexoComponentLibrary().getOperationsComponentList()) {
 			ComponentGenerator generator = getGenerator(ocd);
 			if (generator != null) {
-				hash.put(ocd,generator);
-				generator.buildResourcesAndSetGenerators(repository,resources);
-			}
-			else {
-				if (logger.isLoggable(Level.WARNING))
-					logger.warning("Could not instanciate ComponentGenerator for "+ocd);
+				hash.put(ocd, generator);
+				generator.buildResourcesAndSetGenerators(repository, resources);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not instanciate ComponentGenerator for " + ocd);
+				}
 			}
 		}
-		
+
 		if (getTarget() == CodeType.PROTOTYPE) {
-			//Add page to manage samples
+			// Add page to manage samples
 			StaticComponentGenerator generator = getStaticComponentGenerator("PrototypeSamplesAdminPage", "PrototypeSamplesAdminPage");
-			if (generator != null)
-				generator.buildResourcesAndSetGenerators(repository,resources);
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			if (generator != null) {
+				generator.buildResourcesAndSetGenerators(repository, resources);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate StaticComponentGenerator for PrototypeSamplesAdminPage");
+				}
 			}
 		}
-		
+
 		generators.clear();
 		popupLinkGenerators.clear();
 		generators = hash;
 		popupLinkGenerators = links;
 	}
 
-	protected ComponentGenerator getGenerator(ComponentDefinition def)
-	{
+	protected ComponentGenerator getGenerator(ComponentDefinition def) {
 		ComponentGenerator returned = generators.get(def);
 		if (returned == null) {
-			if (def instanceof OperationComponentDefinition)
-				generators.put(def,returned=new PageComponentGenerator(getProjectGenerator(),(OperationComponentDefinition) def));
-			else if (def instanceof PopupComponentDefinition)
-				generators.put(def,returned=new PopupComponentGenerator(getProjectGenerator(),(PopupComponentDefinition) def));
-			else if (def instanceof TabComponentDefinition)
-				generators.put(def,returned=new TabComponentGenerator(getProjectGenerator(),(TabComponentDefinition) def));
+			if (def instanceof OperationComponentDefinition) {
+				generators.put(def, returned = new PageComponentGenerator(getProjectGenerator(), (OperationComponentDefinition) def));
+			} else if (def instanceof PopupComponentDefinition) {
+				generators.put(def, returned = new PopupComponentGenerator(getProjectGenerator(), (PopupComponentDefinition) def));
+			} else if (def instanceof TabComponentDefinition) {
+				generators.put(def, returned = new TabComponentGenerator(getProjectGenerator(), (TabComponentDefinition) def));
+			}
 		}
 		return returned;
 	}
-	
-	protected PopupLinkComponentGenerator getPopupLinkGenerator(PopupComponentDefinition def)
-	{
+
+	protected PopupLinkComponentGenerator getPopupLinkGenerator(PopupComponentDefinition def) {
 		PopupLinkComponentGenerator returned = popupLinkGenerators.get(def);
 		if (returned == null) {
-			popupLinkGenerators.put(def,returned=new PopupLinkComponentGenerator(getProjectGenerator(),def));
+			popupLinkGenerators.put(def, returned = new PopupLinkComponentGenerator(getProjectGenerator(), def));
 		}
 		return returned;
 	}
-	
-	protected StaticComponentGenerator getStaticComponentGenerator(String templateNamePrefix, String componentName)
-	{
+
+	protected StaticComponentGenerator getStaticComponentGenerator(String templateNamePrefix, String componentName) {
 		StaticComponentGenerator returned = staticComponentsGenerators.get(componentName);
-		if(returned == null)
-		{
+		if (returned == null) {
 			returned = new StaticComponentGenerator(getProjectGenerator(), templateNamePrefix, componentName);
 			staticComponentsGenerators.put(componentName, returned);
 		}
-		
+
 		return returned;
 	}
 }

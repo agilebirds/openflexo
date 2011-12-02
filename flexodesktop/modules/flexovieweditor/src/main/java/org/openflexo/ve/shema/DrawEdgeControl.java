@@ -32,12 +32,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
@@ -51,58 +49,52 @@ public class DrawEdgeControl extends MouseDragControl {
 	protected VEShapeGR fromShape = null;
 	protected VEShapeGR toShape = null;
 
-	public DrawEdgeControl()
-	{
-		super("Draw edge", MouseButton.LEFT,false,true,false,false); // CTRL DRAG
+	public DrawEdgeControl() {
+		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
 		action = new DrawEdgeAction();
 	}
 
-	protected class DrawEdgeAction extends CustomDragControlAction
-	{
+	protected class DrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-		{
+		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event) {
 			if (graphicalRepresentation instanceof VEShapeGR) {
 				drawEdge = true;
-				fromShape = (VEShapeGR)graphicalRepresentation;
-				((VEShemaView)controller.getDrawingView()).setDrawEdgeAction(this);
+				fromShape = (VEShapeGR) graphicalRepresentation;
+				((VEShemaView) controller.getDrawingView()).setDrawEdgeAction(this);
 				return true;
 			}
 			return false;
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, final DrawingController<?> controller, MouseEvent event, boolean isSignificativeDrag)
-		{
+		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, final DrawingController<?> controller,
+				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge) {
 				Vector<LinkScheme> availableConnectors = new Vector<LinkScheme>();
 				if (fromShape != null && toShape != null) {
 					// Lets look if we match a CalcPaletteConnector
 					final ViewShape from = fromShape.getDrawable();
 					final ViewShape to = toShape.getDrawable();
-					if (from.getShema().getCalc() != null
-							&& from.getLinkedConcept() instanceof OntologyObject
-							&& to.getLinkedConcept() instanceof OntologyObject ) {
-						availableConnectors =
-							from.getShema().getCalc().getConnectorsMatching(
-									(OntologyObject)from.getLinkedConcept(),
-									(OntologyObject)to.getLinkedConcept());
+					if (from.getShema().getCalc() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
+						availableConnectors = from.getShema().getCalc()
+								.getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
 
 					}
 
-					if (availableConnectors.size()>0) {
+					if (availableConnectors.size() > 0) {
 						JPopupMenu popup = new JPopupMenu();
 						for (final LinkScheme linkScheme : availableConnectors) {
-							//final CalcPaletteConnector connector = availableConnectors.get(linkScheme);
-							//System.out.println("Available: "+paletteConnector.getEditionPattern().getName());
-							JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(linkScheme.getLabel()!=null?linkScheme.getLabel():linkScheme.getName()));
+							// final CalcPaletteConnector connector = availableConnectors.get(linkScheme);
+							// System.out.println("Available: "+paletteConnector.getEditionPattern().getName());
+							JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(linkScheme.getLabel() != null ? linkScheme
+									.getLabel() : linkScheme.getName()));
 							menuItem.addActionListener(new ActionListener() {
 								@Override
-								public void actionPerformed(ActionEvent e)
-								{
-									//System.out.println("Action "+paletteConnector.getEditionPattern().getName());
-									LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(
-											from.getShema(), null, ((VEShemaController)controller).getOEController().getEditor());
+								public void actionPerformed(ActionEvent e) {
+									// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
+									LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null,
+											((VEShemaController) controller).getOEController().getEditor());
 									action.setLinkScheme(linkScheme);
 									action.setFromShape(from);
 									action.setToShape(to);
@@ -115,8 +107,7 @@ public class DrawEdgeControl extends MouseDragControl {
 						JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey("graphical_connector_only"));
 						menuItem.addActionListener(new ActionListener() {
 							@Override
-							public void actionPerformed(ActionEvent e)
-							{
+							public void actionPerformed(ActionEvent e) {
 								AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((VEShemaController) controller)
 										.getOEController().getEditor());
 								action.setToShape(to);
@@ -124,11 +115,11 @@ public class DrawEdgeControl extends MouseDragControl {
 								action.doAction();
 							}
 						});
-						menuItem.setToolTipText(FlexoLocalization.localizedForKey("draw_basic_graphical_connector_without_ontologic_semantic"));
+						menuItem.setToolTipText(FlexoLocalization
+								.localizedForKey("draw_basic_graphical_connector_without_ontologic_semantic"));
 						popup.add(menuItem);
 						popup.show(event.getComponent(), event.getX(), event.getY());
-					}
-					else {
+					} else {
 						AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((VEShemaController) controller)
 								.getOEController().getEditor());
 						action.setToShape(to);
@@ -136,39 +127,35 @@ public class DrawEdgeControl extends MouseDragControl {
 						action.doAction();
 					}
 
-
 				}
 				drawEdge = false;
 				fromShape = null;
 				toShape = null;
-				((VEShemaView)controller.getDrawingView()).setDrawEdgeAction(null);
+				((VEShemaView) controller.getDrawingView()).setDrawEdgeAction(null);
 				return true;
 			}
 			return false;
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-		{
+		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event) {
 			if (drawEdge) {
 				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof VEShapeGR
-						&& gr != fromShape
-						&& !fromShape.getAncestors().contains(gr.getDrawable())) {
-					toShape = (VEShapeGR)gr;
-				}
-				else {
+				if (gr instanceof VEShapeGR && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
+					toShape = (VEShapeGR) gr;
+				} else {
 					toShape = null;
 				}
-				currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component)event.getSource(),event.getPoint(),controller.getDrawingView());
+				currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+						controller.getDrawingView());
 				controller.getDrawingView().repaint();
 				return true;
 			}
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController controller)
-		{
+		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());
@@ -177,8 +164,7 @@ public class DrawEdgeControl extends MouseDragControl {
 					to = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 							toShape.getShape().getShape().getCenter(), toShape, controller.getScale());
 					g.setColor(Color.BLUE);
-				}
-				else {
+				} else {
 					g.setColor(Color.RED);
 				}
 				g.drawLine(from.x, from.y, to.x, to.y);

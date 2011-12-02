@@ -36,8 +36,8 @@ import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.PostBuildStart;
 import org.openflexo.foundation.cg.dm.PostBuildStop;
 import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
-import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
+import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCModification;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -47,120 +47,114 @@ import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DGRepository extends GenerationRepository
-{
+public class DGRepository extends GenerationRepository {
 
-    private static final Logger logger = FlexoLogger.getLogger(DGRepository.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(DGRepository.class.getPackage().getName());
 
-    private DocType docType;
+	private DocType docType;
 
-    private String postProductName;
+	private String postProductName;
 
-    private String docTitle;
+	private String docTitle;
 
-    private String customer;
+	private String customer;
 
-    private String version;
+	private String version;
 
-    private String author;
+	private String author;
 
-    private String reviewer;
+	private String reviewer;
 
-    private String systemName;
+	private String systemName;
 
-    private String systemVersion;
+	private String systemVersion;
 
 	private Date lastUpdateDate;
 
-    private ProjectExternalRepository postBuildRepository;
+	private ProjectExternalRepository postBuildRepository;
 
-    private TOCRepository tocRepository;
+	private TOCRepository tocRepository;
 
-    private Format format;
+	private Format format;
 
-    private FlexoModelObjectReference<TOCRepository> tocRepositoryRef;
+	private FlexoModelObjectReference<TOCRepository> tocRepositoryRef;
 
-    private Vector<CGRepository> repositoriedUsingAsReader;
+	private Vector<CGRepository> repositoriedUsingAsReader;
 
-    /**
-     * Create a new GeneratedCodeRepository.
-     */
-    public DGRepository(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Create a new GeneratedCodeRepository.
+	 */
+	public DGRepository(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Creates a new repository
-     * @throws DuplicateCodeRepositoryNameException
-     *
-     */
-    public DGRepository(GeneratedDoc generatedDoc, String name, DocType docType, Format format, File directory) throws DuplicateCodeRepositoryNameException
-    {
-        super(generatedDoc, name, directory);
-        this.repositoriedUsingAsReader = new Vector<CGRepository>();
-        this.docType = docType;
-        this.format = format;
-    }
+	/**
+	 * Creates a new repository
+	 * 
+	 * @throws DuplicateCodeRepositoryNameException
+	 * 
+	 */
+	public DGRepository(GeneratedDoc generatedDoc, String name, DocType docType, Format format, File directory)
+			throws DuplicateCodeRepositoryNameException {
+		super(generatedDoc, name, directory);
+		this.repositoriedUsingAsReader = new Vector<CGRepository>();
+		this.docType = docType;
+		this.format = format;
+	}
 
-    /**
-     * @param generatedCode
-     */
-    public DGRepository(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);
-        this.repositoriedUsingAsReader = new Vector<CGRepository>();
-    }
+	/**
+	 * @param generatedCode
+	 */
+	public DGRepository(GeneratedOutput generatedCode) {
+		super(generatedCode);
+		this.repositoriedUsingAsReader = new Vector<CGRepository>();
+	}
 
-     @Override
-    protected void deleteExternalRepositories() 
-    {
-    	if (getPostBuildRepository()!=null)
-    		getProject().removeFromExternalRepositories(getPostBuildRepository());
-    	super.deleteExternalRepositories();
-    }
+	@Override
+	protected void deleteExternalRepositories() {
+		if (getPostBuildRepository() != null) {
+			getProject().removeFromExternalRepositories(getPostBuildRepository());
+		}
+		super.deleteExternalRepositories();
+	}
 
-    @Override
-    public boolean isEnabled() {
-    	return super.isEnabled() && (getFormat()==Format.HTML || getTocRepository()!=null);
-    }
+	@Override
+	public boolean isEnabled() {
+		return super.isEnabled() && (getFormat() == Format.HTML || getTocRepository() != null);
+	}
 
-    /**
-     * Overrides getGeneratedCode
-     *
-     * @see org.openflexo.foundation.cg.CGObject#getGeneratedCode()
-     */
-    public GeneratedDoc getGeneratedDoc()
-    {
-        return (GeneratedDoc) super.getGeneratedCode();
-    }
+	/**
+	 * Overrides getGeneratedCode
+	 * 
+	 * @see org.openflexo.foundation.cg.CGObject#getGeneratedCode()
+	 */
+	public GeneratedDoc getGeneratedDoc() {
+		return (GeneratedDoc) super.getGeneratedCode();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     *
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "generated_doc_repository";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "generated_doc_repository";
+	}
 
-    /**
-     * Overrides getInspectorName
-     *
-     * @see org.openflexo.inspector.InspectableObject#getInspectorName()
-     */
-    @Override
-	public String getInspectorName()
-    {
-    	switch (getFormat()) {
+	/**
+	 * Overrides getInspectorName
+	 * 
+	 * @see org.openflexo.inspector.InspectableObject#getInspectorName()
+	 */
+	@Override
+	public String getInspectorName() {
+		switch (getFormat()) {
 		case HTML:
 			return Inspectors.DG.DG_REPOSITORY_HTML_INSPECTOR;
 		case LATEX:
@@ -170,78 +164,77 @@ public class DGRepository extends GenerationRepository
 		default:
 			return Inspectors.DG.DG_REPOSITORY_INSPECTOR;
 		}
-    }
+	}
 
-    public CGSymbolicDirectory getLatexSymbolicDirectory()
-    {
-        return getSymbolicDirectoryNamed(CGSymbolicDirectory.LATEX);
-    }
+	public CGSymbolicDirectory getLatexSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.LATEX);
+	}
 
-    public CGSymbolicDirectory getHTMLSymbolicDirectory()
-    {
-    	return getSymbolicDirectoryNamed(CGSymbolicDirectory.HTML);
-    }
+	public CGSymbolicDirectory getHTMLSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.HTML);
+	}
 
-    public CGSymbolicDirectory getDocxSymbolicDirectory()
-    {
-    	return getSymbolicDirectoryNamed(CGSymbolicDirectory.DOCX);
-    }
+	public CGSymbolicDirectory getDocxSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.DOCX);
+	}
 
-    public CGSymbolicDirectory getJSSymbolicDirectory()
-    {
-    	return getSymbolicDirectoryNamed(CGSymbolicDirectory.JS_PROCESSES);
-    }
+	public CGSymbolicDirectory getJSSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.JS_PROCESSES);
+	}
 
-    public CGSymbolicDirectory getSymbolicDirectory()
-    {
-    	return getSymbolicDirectoryNamed(CGSymbolicDirectory.JS_PROCESSES);
-    }
+	public CGSymbolicDirectory getSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.JS_PROCESSES);
+	}
 
-    public CGSymbolicDirectory getFiguresSymbolicDirectory()
-    {
-        return getSymbolicDirectoryNamed(CGSymbolicDirectory.FIGURES);
-    }
+	public CGSymbolicDirectory getFiguresSymbolicDirectory() {
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.FIGURES);
+	}
 
-    public CGSymbolicDirectory getSrcSymbolicDirectory() {
-    	if (getFormat()==Format.LATEX)
-    		return getLatexSymbolicDirectory();
-    	return getHTMLSymbolicDirectory();
-    }
+	public CGSymbolicDirectory getSrcSymbolicDirectory() {
+		if (getFormat() == Format.LATEX) {
+			return getLatexSymbolicDirectory();
+		}
+		return getHTMLSymbolicDirectory();
+	}
 
-    public CGSymbolicDirectory getResourcesSymbolicDirectory()
-    {
-    	if (getFormat()==Format.LATEX)
-    		return getFiguresSymbolicDirectory();
-    	return getSymbolicDirectoryNamed(CGSymbolicDirectory.RESOURCES);
-    }
+	public CGSymbolicDirectory getResourcesSymbolicDirectory() {
+		if (getFormat() == Format.LATEX) {
+			return getFiguresSymbolicDirectory();
+		}
+		return getSymbolicDirectoryNamed(CGSymbolicDirectory.RESOURCES);
+	}
 
-    @Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-    	Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-        v.add(AddGeneratedCodeRepository.actionType);
-    	v.add(AddTOCEntry.actionType);
-    	return v;
-    }
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
+		v.add(AddGeneratedCodeRepository.actionType);
+		v.add(AddTOCEntry.actionType);
+		return v;
+	}
 
+	public ProjectExternalRepository getPostBuildRepository() {
+		if (postBuildRepository == null) {
+			postBuildRepository = getProject().getExternalRepositoryWithKey(getName() + getFormat().getPostBuildKey());
+			if (postBuildRepository == null) {
+				postBuildRepository = getProject().setDirectoryForRepositoryName(
+						getName() + getFormat().getPostBuildKey(),
+						getDirectory() != null ? getDirectory().getParentFile() : new File(System.getProperty("user.home") + "/"
+								+ getFormat().getPostBuildKey() + "/" + getName()));
+			}
+			if (postBuildRepository.getDirectory() == null) {
+				postBuildRepository.setDirectory(getDirectory() != null ? getDirectory().getParentFile() : new File(System
+						.getProperty("user.home") + "/" + getFormat().getPostBuildKey() + "/" + getName()));
+			}
+		}
+		return postBuildRepository;
+	}
 
-    public ProjectExternalRepository getPostBuildRepository()
-    {
-        if (postBuildRepository == null) {
-            postBuildRepository = getProject().getExternalRepositoryWithKey(getName() + getFormat().getPostBuildKey());
-            if (postBuildRepository==null)
-                postBuildRepository = getProject().setDirectoryForRepositoryName(getName() + getFormat().getPostBuildKey(),getDirectory()!=null?getDirectory().getParentFile():new File(System.getProperty("user.home") + "/"+getFormat().getPostBuildKey()+"/" + getName()));
-            if (postBuildRepository.getDirectory()==null)
-                postBuildRepository.setDirectory(getDirectory()!=null?getDirectory().getParentFile():new File(System.getProperty("user.home") + "/"+getFormat().getPostBuildKey()+"/" + getName()));
-        }
-        return postBuildRepository;
-    }
-
-    private String docTypeAsString;
+	private String docTypeAsString;
 
 	public Date getLastUpdateDate() {
-		if (lastUpdateDate == null)
+		if (lastUpdateDate == null) {
 			lastUpdateDate = getLastUpdate();
+		}
 		return lastUpdateDate;
 	}
 
@@ -254,247 +247,228 @@ public class DGRepository extends GenerationRepository
 		return getDocType();
 	}
 
-    public DocType getDocType()
-    {
-        if (docType == null && getProject().getDocTypes().size() > 0)
-            docType = getProject().getDocTypes().get(0);
-        if (docTypeAsString!=null) {
-        	DocType dt = getProject().getDocTypeNamed(docTypeAsString);
-        	if (dt!=null) {
-        		docType = dt;
-        		docTypeAsString = null;
-        	}
-        }
-        return docType;
-    }
+	public DocType getDocType() {
+		if (docType == null && getProject().getDocTypes().size() > 0) {
+			docType = getProject().getDocTypes().get(0);
+		}
+		if (docTypeAsString != null) {
+			DocType dt = getProject().getDocTypeNamed(docTypeAsString);
+			if (dt != null) {
+				docType = dt;
+				docTypeAsString = null;
+			}
+		}
+		return docType;
+	}
 
-    public void setDocType(DocType docType)
-    {
-    	if (docType!=null) {
-    		this.docType = docType;
-    		setChanged();
-    		notifyObservers(new CGDataModification("docType", null, docType));
-    	}
-    }
+	public void setDocType(DocType docType) {
+		if (docType != null) {
+			this.docType = docType;
+			setChanged();
+			notifyObservers(new CGDataModification("docType", null, docType));
+		}
+	}
 
-    public String getDocTypeAsString()
-    {
-        if (getDocType()!=null)
-        	return getDocType().getName();
-        else
-        	return null;
-    }
+	public String getDocTypeAsString() {
+		if (getDocType() != null) {
+			return getDocType().getName();
+		} else {
+			return null;
+		}
+	}
 
-    public void setDocTypeAsString(String docType)
-    {
-        this.docTypeAsString = docType;
-    }
+	public void setDocTypeAsString(String docType) {
+		this.docTypeAsString = docType;
+	}
 
-    /**
-     * @return
-     */
-    public File getPostBuildDirectory()
-    {
-        return getPostBuildRepository().getDirectory();
-    }
+	/**
+	 * @return
+	 */
+	public File getPostBuildDirectory() {
+		return getPostBuildRepository().getDirectory();
+	}
 
-    /**
-     * @param selectedFile
-     */
-    public void setPostBuildDirectory(File selectedFile)
-    {
-    	if (getPostBuildRepository() != null) {
-    		File old = getPostBuildRepository().getDirectory();
-    		getPostBuildRepository().setDirectory(selectedFile);
-    		setChanged();
-    		notifyObservers(new CGDataModification("pdfDirectory",old,selectedFile));
-    	}
-    	else if (logger.isLoggable(Level.WARNING))
-    		logger.warning("pdf repository is null");
-    }
+	/**
+	 * @param selectedFile
+	 */
+	public void setPostBuildDirectory(File selectedFile) {
+		if (getPostBuildRepository() != null) {
+			File old = getPostBuildRepository().getDirectory();
+			getPostBuildRepository().setDirectory(selectedFile);
+			setChanged();
+			notifyObservers(new CGDataModification("pdfDirectory", old, selectedFile));
+		} else if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("pdf repository is null");
+		}
+	}
 
-    public String getPostProductName()
-    {
-        if (postProductName == null)
-            postProductName = getName()+getFormat().getPostBuildFileExtension();
-        return postProductName;
-    }
+	public String getPostProductName() {
+		if (postProductName == null) {
+			postProductName = getName() + getFormat().getPostBuildFileExtension();
+		}
+		return postProductName;
+	}
 
-    public void setPostProductName(String pdfName)
-    {
-        this.postProductName = pdfName;
-        setChanged();
-        notifyObservers(new CGDataModification("pdfName", null, pdfName));
-    }
+	public void setPostProductName(String pdfName) {
+		this.postProductName = pdfName;
+		setChanged();
+		notifyObservers(new CGDataModification("pdfName", null, pdfName));
+	}
 
-    public String getAuthor()
-    {
-    	if(getTocRepository()!=null){
-    		return getTocRepository().getAuthor();
-    	}
-        return author;
-    }
+	public String getAuthor() {
+		if (getTocRepository() != null) {
+			return getTocRepository().getAuthor();
+		}
+		return author;
+	}
 
-    public void setAuthor(String author)
-    {
-        this.author = author;
-        lastUpdateDate = new Date();
-        setChanged();
-        notifyObservers(new CGDataModification("author", null, author));
-    }
+	public void setAuthor(String author) {
+		this.author = author;
+		lastUpdateDate = new Date();
+		setChanged();
+		notifyObservers(new CGDataModification("author", null, author));
+	}
 
-    public String getCustomer()
-    {
-    	if(getTocRepository()!=null){
-    		return getTocRepository().getCustomer();
-    	}
-        return customer;
-    }
+	public String getCustomer() {
+		if (getTocRepository() != null) {
+			return getTocRepository().getCustomer();
+		}
+		return customer;
+	}
 
-    public void setCustomer(String customer)
-    {
-        this.customer = customer;
-        lastUpdateDate = new Date();
-        setChanged();
-        notifyObservers(new CGDataModification("customer", null, customer));
-    }
+	public void setCustomer(String customer) {
+		this.customer = customer;
+		lastUpdateDate = new Date();
+		setChanged();
+		notifyObservers(new CGDataModification("customer", null, customer));
+	}
 
-    public String getDocTitle()
-    {
-    	if(getTocRepository()!=null){
-    		return getTocRepository().getDocTitle();
-    	}
-        return docTitle;
-    }
+	public String getDocTitle() {
+		if (getTocRepository() != null) {
+			return getTocRepository().getDocTitle();
+		}
+		return docTitle;
+	}
 
-    public void setDocTitle(String docTitle)
-    {
-        this.docTitle = docTitle;
-        lastUpdateDate = new Date();
-        setChanged();
-        notifyObservers(new CGDataModification("docTitle", null, docTitle));
-    }
+	public void setDocTitle(String docTitle) {
+		this.docTitle = docTitle;
+		lastUpdateDate = new Date();
+		setChanged();
+		notifyObservers(new CGDataModification("docTitle", null, docTitle));
+	}
 
-    public String getReviewer()
-    {
-    	if(getTocRepository()!=null){
-    		return getTocRepository().getReviewer();
-    	}
-        return reviewer;
-    }
+	public String getReviewer() {
+		if (getTocRepository() != null) {
+			return getTocRepository().getReviewer();
+		}
+		return reviewer;
+	}
 
-    public void setReviewer(String reviewer)
-    {
-        String old = this.reviewer;
-        this.reviewer = reviewer;
-        lastUpdateDate = new Date();
-        setChanged();
-        notifyObservers(new CGDataModification("reviewer", old, reviewer));
-    }
+	public void setReviewer(String reviewer) {
+		String old = this.reviewer;
+		this.reviewer = reviewer;
+		lastUpdateDate = new Date();
+		setChanged();
+		notifyObservers(new CGDataModification("reviewer", old, reviewer));
+	}
 
-    public String getVersion()
-    {
-    	if(getTocRepository()!=null){
-    		return getTocRepository().getVersion();
-    	}
-        return version;
-    }
+	public String getVersion() {
+		if (getTocRepository() != null) {
+			return getTocRepository().getVersion();
+		}
+		return version;
+	}
 
-    public void setVersion(String version)
-    {
-        String old = this.version;
-        this.version = version;
-        lastUpdateDate = new Date();
-        setChanged();
-        notifyObservers(new CGDataModification("version", old, version));
-    }
+	public void setVersion(String version) {
+		String old = this.version;
+		this.version = version;
+		lastUpdateDate = new Date();
+		setChanged();
+		notifyObservers(new CGDataModification("version", old, version));
+	}
 
-    public String getSystemName()
-    {
-    	if(getTocRepository()!=null){
-    		return getTocRepository().getSystemName();
-    	}
-        return systemName;
-    }
+	public String getSystemName() {
+		if (getTocRepository() != null) {
+			return getTocRepository().getSystemName();
+		}
+		return systemName;
+	}
 
-    public void setSystemName(String systemName)
-    {
-        this.systemName = systemName;
-        lastUpdateDate = new Date();
-        setChanged();
-        notifyObservers(new CGDataModification("systemName", null, systemName));
-    }
+	public void setSystemName(String systemName) {
+		this.systemName = systemName;
+		lastUpdateDate = new Date();
+		setChanged();
+		notifyObservers(new CGDataModification("systemName", null, systemName));
+	}
 
-    public String getSystemVersion()
-    {
-    	if(getTocRepository()!=null){
-    		return getTocRepository().getSystemVersion();
-    	}
-        return systemVersion;
-    }
+	public String getSystemVersion() {
+		if (getTocRepository() != null) {
+			return getTocRepository().getSystemVersion();
+		}
+		return systemVersion;
+	}
 
-    public void setSystemVersion(String systemVersion)
-    {
-        this.systemVersion = systemVersion;
-        lastUpdateDate = new Date();
-        setChanged();
-        notifyObservers(new CGDataModification("systemVersion", null, systemVersion));
-    }
+	public void setSystemVersion(String systemVersion) {
+		this.systemVersion = systemVersion;
+		lastUpdateDate = new Date();
+		setChanged();
+		notifyObservers(new CGDataModification("systemVersion", null, systemVersion));
+	}
 
-    public ImageFile getLogo() {
-    	if (getTocRepository()!=null)
-    		return getTocRepository().getLogo();
-    	return null;
-    }
+	public ImageFile getLogo() {
+		if (getTocRepository() != null) {
+			return getTocRepository().getLogo();
+		}
+		return null;
+	}
 
-    public File getPostBuildFile()
-    {
-        if (!getPostProductName().endsWith(getFormat().getPostBuildFileExtension()))
-            setPostProductName(getPostProductName()+getFormat().getPostBuildFileExtension());
-        return new File(getPostBuildDirectory(),getPostProductName());
-    }
+	public File getPostBuildFile() {
+		if (!getPostProductName().endsWith(getFormat().getPostBuildFileExtension())) {
+			setPostProductName(getPostProductName() + getFormat().getPostBuildFileExtension());
+		}
+		return new File(getPostBuildDirectory(), getPostProductName());
+	}
 
-    public TOCEntry getTOCEntryWithID(DocSection id) {
-    	if (getTocRepository()!=null)
-    		return getTocRepository().getTOCEntryWithID(id);
-    	else
-    		return null;
-    }
+	public TOCEntry getTOCEntryWithID(DocSection id) {
+		if (getTocRepository() != null) {
+			return getTocRepository().getTOCEntryWithID(id);
+		} else {
+			return null;
+		}
+	}
 
-    public TOCEntry getTOCEntryForObject(FlexoModelObject object) {
-    	if (getTocRepository()!=null)
-    		return getTocRepository().getTOCEntryForObject(object);
-    	else
-    		return null;
-    }
+	public TOCEntry getTOCEntryForObject(FlexoModelObject object) {
+		if (getTocRepository() != null) {
+			return getTocRepository().getTOCEntryForObject(object);
+		} else {
+			return null;
+		}
+	}
 
-    /**
+	/**
      *
      */
-    public void notifyPostBuildStop()
-    {
-        setChanged(false);
-        notifyObservers(new PostBuildStop());
-    }
+	public void notifyPostBuildStop() {
+		setChanged(false);
+		notifyObservers(new PostBuildStop());
+	}
 
-    /**
+	/**
      *
      */
-    public void notifyPostBuildStart()
-    {
-        setChanged(false);
-        notifyObservers(new PostBuildStart());
-    }
+	public void notifyPostBuildStart() {
+		setChanged(false);
+		notifyObservers(new PostBuildStart());
+	}
 
-    public String getLocalizedPdfInfoString()
-    {
-        return FlexoLocalization.localizedForKey("pdf_info_string");
-    }
+	public String getLocalizedPdfInfoString() {
+		return FlexoLocalization.localizedForKey("pdf_info_string");
+	}
 
 	public TOCRepository getTocRepository() {
-		if (tocRepository==null && tocRepositoryRef!=null) {
+		if (tocRepository == null && tocRepositoryRef != null) {
 			tocRepository = tocRepositoryRef.getObject(true);
-			if (tocRepository!=null && !isSerializing()) {
+			if (tocRepository != null && !isSerializing()) {
 				setChanged();
 				notifyObservers(new CGRepositoryConnected(this));
 			}
@@ -503,20 +477,22 @@ public class DGRepository extends GenerationRepository
 	}
 
 	public void setTocRepository(TOCRepository tocRepository) {
-		if (tocRepository==this.tocRepository)
+		if (tocRepository == this.tocRepository) {
 			return;
+		}
 		this.tocRepository = tocRepository;
-		if (tocRepositoryRef!=null) {
+		if (tocRepositoryRef != null) {
 			tocRepositoryRef.delete();
 			tocRepositoryRef = null;
 		}
-		if (tocRepository!=null)
-			tocRepositoryRef = new FlexoModelObjectReference<TOCRepository>(getProject(),tocRepository);
-		else
+		if (tocRepository != null) {
+			tocRepositoryRef = new FlexoModelObjectReference<TOCRepository>(getProject(), tocRepository);
+		} else {
 			tocRepositoryRef = null;
+		}
 		setChanged();
-		notifyObservers(new TOCModification(null,tocRepository));
-		if (tocRepository!=null) {
+		notifyObservers(new TOCModification(null, tocRepository));
+		if (tocRepository != null) {
 			setChanged();
 			notifyObservers(new CGRepositoryConnected(this));
 		}
@@ -532,8 +508,9 @@ public class DGRepository extends GenerationRepository
 
 	@Override
 	public Format getFormat() {
-		if (format==null)
+		if (format == null) {
 			format = Format.LATEX; // For compatibility reason
+		}
 		return format;
 	}
 

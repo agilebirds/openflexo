@@ -25,17 +25,13 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.JavaFile;
 import org.openflexo.generator.FlexoResourceGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 
+public class UtilJavaFile extends JavaFile implements GenerationAvailableFile {
 
-public class UtilJavaFile extends JavaFile implements GenerationAvailableFile
-{
+	protected static final Logger logger = FlexoLogger.getLogger(UtilJavaFile.class.getPackage().getName());
 
-    protected static final Logger logger = FlexoLogger.getLogger(UtilJavaFile.class.getPackage().getName());
-
-     public UtilJavaFile(File f, UtilJavaFileResource resource)
-	{
+	public UtilJavaFile(File f, UtilJavaFileResource resource) {
 		super(f);
 		try {
 			setFlexoResource(resource);
@@ -43,23 +39,20 @@ public class UtilJavaFile extends JavaFile implements GenerationAvailableFile
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
+	}
 
-	public UtilJavaFile()
-	{
+	public UtilJavaFile() {
 		super();
-    }
-
-    @Override
-	public UtilJavaFileResource getFlexoResource()
-    {
-        return (UtilJavaFileResource)super.getFlexoResource();
-    }
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
+	public UtilJavaFileResource getFlexoResource() {
+		return (UtilJavaFileResource) super.getFlexoResource();
+	}
+
+	@Override
+	public FlexoResourceGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
-	
+
 }

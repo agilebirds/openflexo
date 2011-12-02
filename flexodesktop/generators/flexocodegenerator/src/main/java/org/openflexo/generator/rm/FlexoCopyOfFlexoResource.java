@@ -33,28 +33,25 @@ import org.openflexo.generator.cg.CGWebServerImageFile;
 import org.openflexo.generator.utils.ResourceToCopyGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class FlexoCopyOfFlexoResource extends CopyOfFlexoResource<ResourceToCopyGenerator, CGWebServerImageFile> implements GenerationAvailableFileResource
-{
+public class FlexoCopyOfFlexoResource extends CopyOfFlexoResource<ResourceToCopyGenerator, CGWebServerImageFile> implements
+		GenerationAvailableFileResource {
 
-    public static final Logger logger = FlexoLogger.getLogger(FlexoCopiedResource.class.getPackage().getName());
+	public static final Logger logger = FlexoLogger.getLogger(FlexoCopiedResource.class.getPackage().getName());
 
-    public FlexoCopyOfFlexoResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-    
-    /**
-     * @param aProject
-     */
-    public FlexoCopyOfFlexoResource(FlexoProject aProject, FlexoFileResource resourceToCopy)
-    {
-        super(aProject,resourceToCopy);
-    }
+	public FlexoCopyOfFlexoResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
+
+	/**
+	 * @param aProject
+	 */
+	public FlexoCopyOfFlexoResource(FlexoProject aProject, FlexoFileResource resourceToCopy) {
+		super(aProject, resourceToCopy);
+	}
 
 	@Override
 	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
@@ -63,11 +60,11 @@ public class FlexoCopyOfFlexoResource extends CopyOfFlexoResource<ResourceToCopy
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
-	
-    @Override
-    public CopyOfFlexoResourceData getGeneratedResourceData() {
-    	return (CopyOfFlexoResourceData)super.getGeneratedResourceData();
-    }
+
+	@Override
+	public CopyOfFlexoResourceData getGeneratedResourceData() {
+		return (CopyOfFlexoResourceData) super.getGeneratedResourceData();
+	}
 
 	@Override
 	protected CopyOfFlexoResourceData createGeneratedResourceData() {

@@ -26,10 +26,9 @@ package org.openflexo.xmlcode;
  * @author sguerin
  * 
  */
-public interface StringRepresentable
-{
+public interface StringRepresentable {
 
-    @Override
+	@Override
 	public String toString();
 
 }

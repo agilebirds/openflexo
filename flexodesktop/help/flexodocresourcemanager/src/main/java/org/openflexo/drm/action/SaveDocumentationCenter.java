@@ -28,47 +28,41 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class SaveDocumentationCenter extends FlexoAction {
 
-public class SaveDocumentationCenter extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(SaveDocumentationCenter.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(SaveDocumentationCenter.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("save_documentation_center", FlexoActionType.defaultGroup,
+			FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("save_documentation_center",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new SaveDocumentationCenter(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new SaveDocumentationCenter(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
-                
-    };
-    
-   SaveDocumentationCenter (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) 
-    {
-      logger.info ("SaveDocumentationCenter");
-      DocResourceManager.instance().save();
-    }
+	SaveDocumentationCenter(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
- }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("SaveDocumentationCenter");
+		DocResourceManager.instance().save();
+	}
+
+}

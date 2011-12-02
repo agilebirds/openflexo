@@ -31,33 +31,27 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.CEDController;
 
-
 /**
  * Represents the main pane for this module
  * 
  * @author yourname
  */
-public class CEDMainPane extends FlexoMainPane implements GraphicalFlexoObserver
-{
+public class CEDMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-	public CEDMainPane(ModuleView moduleView, CEDFrame mainFrame, CEDController controller)
-	{
-		super(moduleView,mainFrame,controller);
+	public CEDMainPane(ModuleView moduleView, CEDFrame mainFrame, CEDController controller) {
+		super(moduleView, mainFrame, controller);
 	}
 
-	public void showBrowser()
-	{
+	public void showBrowser() {
 		showLeftView();
 	}
 
-	public void hideBrowser()
-	{
+	public void hideBrowser() {
 		hideLeftView();
 	}
 
 	@Override
-	protected  FlexoModelObject getParentObject(FlexoModelObject object)
-	{
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
 		// Implements it if required
 		return null;
 	}

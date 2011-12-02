@@ -49,7 +49,6 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 
-
 public class CurveConnector extends Connector {
 
 	private static final Logger logger = Logger.getLogger(CurveConnector.class.getPackage().getName());
@@ -139,7 +138,7 @@ public class CurveConnector extends Connector {
 			cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(cp2RelativeToEndObject);
 			if (cp2RelativeToEndObject != null) {
 				newP2 = GraphicalRepresentation
-				.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
+						.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
 			}
 
 			if (cpPosition == null) {
@@ -174,7 +173,7 @@ public class CurveConnector extends Connector {
 			}
 
 			newP1 = GraphicalRepresentation
-			.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject, getGraphicalRepresentation());
+					.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject, getGraphicalRepresentation());
 			newP2 = GraphicalRepresentation.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
 
 		}
@@ -313,7 +312,7 @@ public class CurveConnector extends Connector {
 	private FGESegment getCenterToCenterSegment() {
 		return new FGESegment(GraphicalRepresentation.convertNormalizedPoint(getStartObject(), getStartObject().getShape().getShape()
 				.getCenter(), getGraphicalRepresentation()), GraphicalRepresentation.convertNormalizedPoint(getEndObject(), getEndObject()
-						.getShape().getShape().getCenter(), getGraphicalRepresentation()));
+				.getShape().getShape().getCenter(), getGraphicalRepresentation()));
 	}
 
 	@Override

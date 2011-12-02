@@ -24,73 +24,64 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-
-
 import org.openflexo.components.MultipleObjectSelectorPopup;
-import org.openflexo.dm.view.popups.SelectClassesPopup;
 import org.openflexo.dm.view.popups.UpdateClassesPopup;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dm.action.UpdateLoadableDMEntity;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
 
 public class UpdateLoadableDMEntityInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	UpdateLoadableDMEntityInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(UpdateLoadableDMEntity.actionType,actionInitializer);
+	UpdateLoadableDMEntityInitializer(DMControllerActionInitializer actionInitializer) {
+		super(UpdateLoadableDMEntity.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<UpdateLoadableDMEntity> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<UpdateLoadableDMEntity> getDefaultInitializer() {
 		return new FlexoActionInitializer<UpdateLoadableDMEntity>() {
-            @Override
-			public boolean run(ActionEvent e, UpdateLoadableDMEntity action)
-            {
-                action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
-                UpdateClassesPopup popup = new UpdateClassesPopup(action.getUpdatedEntities(), getProject(), getControllerActionInitializer().getDMController(), action.getFlexoProgress());
-                action.hideFlexoProgress();
-                popup.setVisible(true);
-                if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
-                    action.setUpdatedSet(popup.getDMSet());
-                    return true;
-                } else {
-                    return false;
-                }
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, UpdateLoadableDMEntity action) {
+				action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
+				UpdateClassesPopup popup = new UpdateClassesPopup(action.getUpdatedEntities(), getProject(),
+						getControllerActionInitializer().getDMController(), action.getFlexoProgress());
+				action.hideFlexoProgress();
+				popup.setVisible(true);
+				if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
+					action.setUpdatedSet(popup.getDMSet());
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<UpdateLoadableDMEntity> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<UpdateLoadableDMEntity> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UpdateLoadableDMEntity>() {
-            @Override
-			public boolean run(ActionEvent e, UpdateLoadableDMEntity action)
-            {
-            	getControllerActionInitializer().getDMController().getSelectionManager().setSelectedObjects(action.getUpdatedEntities());
-                return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, UpdateLoadableDMEntity action) {
+				getControllerActionInitializer().getDMController().getSelectionManager().setSelectedObjects(action.getUpdatedEntities());
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.REFRESH_ICON;
 	}
- 
+
 }

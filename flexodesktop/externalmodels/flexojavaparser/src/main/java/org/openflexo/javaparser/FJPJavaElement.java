@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.inspector.InspectableObject;
 
-
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -38,84 +37,69 @@ public abstract class FJPJavaElement extends TemporaryFlexoModelObject implement
 	private static final Logger logger = Logger.getLogger(FJPJavaElement.class.getPackage().getName());
 
 	protected FJPJavaSource javaSource;
-	
-	public FJPJavaElement(FJPJavaSource aJavaSource)
-	{
+
+	public FJPJavaElement(FJPJavaSource aJavaSource) {
 		super();
 		javaSource = aJavaSource;
 	}
-	
-	public JavaParser getJavaParser()
-	{
+
+	public JavaParser getJavaParser() {
 		return getJavaSource().getJavaParser();
 	}
 
-	public FJPJavaSource getJavaSource() 
-	{
+	public FJPJavaSource getJavaSource() {
 		return javaSource;
 	}
 
-	public FJPJavaClass getClass (JavaClass aClass)
-	{
+	public FJPJavaClass getClass(JavaClass aClass) {
 		return getJavaSource().getClass(aClass);
 	}
-	
-	public FJPJavaMethod getMethod (JavaMethod aMethod)
-	{
+
+	public FJPJavaMethod getMethod(JavaMethod aMethod) {
 		return getJavaSource().getMethod(aMethod);
 	}
-	
-	public FJPJavaField getField (JavaField aField)
-	{
+
+	public FJPJavaField getField(JavaField aField) {
 		return getJavaSource().getField(aField);
 	}
 
-	public FJPJavaElement getFJPJavaElement(AbstractJavaEntity abstractJavaEntity)
-	{
+	public FJPJavaElement getFJPJavaElement(AbstractJavaEntity abstractJavaEntity) {
 		return getJavaSource().getFJPJavaElement(abstractJavaEntity);
 	}
 
-	protected FJPJavaClass[] retrieveClasses(JavaClass[] someClasses)
-	{
+	protected FJPJavaClass[] retrieveClasses(JavaClass[] someClasses) {
 		return getJavaSource().retrieveClasses(someClasses);
 	}
-	
-	protected FJPJavaMethod[] retrieveMethods(JavaMethod[] someMethods)
-	{
+
+	protected FJPJavaMethod[] retrieveMethods(JavaMethod[] someMethods) {
 		return getJavaSource().retrieveMethods(someMethods);
 	}
-	
-	protected FJPJavaField[] retrieveFields(JavaField[] someFields)
-	{
+
+	protected FJPJavaField[] retrieveFields(JavaField[] someFields) {
 		return getJavaSource().retrieveFields(someFields);
 	}
-	
-	public ClassLibrary getClassLibrary() 
-	{
+
+	public ClassLibrary getClassLibrary() {
 		return getJavaSource().getClassLibrary();
 	}
 
-	public String getClassNamePrefix() 
-	{
+	public String getClassNamePrefix() {
 		return getJavaSource().getClassNamePrefix();
 	}
 
-	public Type getType(String fullQualifiedName)
-	{
+	public Type getType(String fullQualifiedName) {
 		return getJavaParser().getType(fullQualifiedName);
 	}
-	
-	public Type getType(Class aClass)
-	{
+
+	public Type getType(Class aClass) {
 		return getJavaParser().getType(aClass);
 	}
-	
-	public FJPJavaClass getClassByName(String fullQualifiedName)
-	{
+
+	public FJPJavaClass getClassByName(String fullQualifiedName) {
 		return getJavaParser().getClassByName(fullQualifiedName);
 	}
 
 	@Override
 	public abstract String getInspectorName();
-	
+
 }

@@ -19,14 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-
-
-
 public abstract class AddShemaElementAction<R extends PatternRole> extends EditionAction<R> {
 
 	public AddShemaElementAction() {
 	}
-		
+
 	/*@Override
 	protected void updatePatternRoleType()
 	{

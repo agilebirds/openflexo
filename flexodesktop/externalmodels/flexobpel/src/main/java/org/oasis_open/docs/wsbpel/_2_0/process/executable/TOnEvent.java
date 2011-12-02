@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,11 +32,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-
 /**
- * <p>Java class for tOnEvent complex type.
+ * <p>
+ * Java class for tOnEvent complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tOnEvent">
@@ -56,90 +56,77 @@ import javax.xml.namespace.QName;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tOnEvent", propOrder = {
-    "scope"
-})
-public class TOnEvent
-    extends TOnMsgCommon
-{
+@XmlType(name = "tOnEvent", propOrder = { "scope" })
+public class TOnEvent extends TOnMsgCommon {
 
-    @XmlElement(required = true)
-    protected TScope scope;
-    @XmlAttribute
-    protected QName messageType;
-    @XmlAttribute
-    protected QName element;
+	@XmlElement(required = true)
+	protected TScope scope;
+	@XmlAttribute
+	protected QName messageType;
+	@XmlAttribute
+	protected QName element;
 
-    /**
-     * Gets the value of the scope property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TScope }
-     *     
-     */
-    public TScope getScope() {
-        return scope;
-    }
+	/**
+	 * Gets the value of the scope property.
+	 * 
+	 * @return possible object is {@link TScope }
+	 * 
+	 */
+	public TScope getScope() {
+		return scope;
+	}
 
-    /**
-     * Sets the value of the scope property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TScope }
-     *     
-     */
-    public void setScope(TScope value) {
-        this.scope = value;
-    }
+	/**
+	 * Sets the value of the scope property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TScope }
+	 * 
+	 */
+	public void setScope(TScope value) {
+		this.scope = value;
+	}
 
-    /**
-     * Gets the value of the messageType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getMessageType() {
-        return messageType;
-    }
+	/**
+	 * Gets the value of the messageType property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getMessageType() {
+		return messageType;
+	}
 
-    /**
-     * Sets the value of the messageType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setMessageType(QName value) {
-        this.messageType = value;
-    }
+	/**
+	 * Sets the value of the messageType property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setMessageType(QName value) {
+		this.messageType = value;
+	}
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getElement() {
-        return element;
-    }
+	/**
+	 * Gets the value of the element property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getElement() {
+		return element;
+	}
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setElement(QName value) {
-        this.element = value;
-    }
+	/**
+	 * Sets the value of the element property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setElement(QName value) {
+		this.element = value;
+	}
 
 }

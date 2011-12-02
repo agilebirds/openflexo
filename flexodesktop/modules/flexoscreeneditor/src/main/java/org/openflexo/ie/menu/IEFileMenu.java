@@ -39,196 +39,176 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 
-
 /**
  * TODO : Description for this file
  * 
  * @author benoit
  */
-public class IEFileMenu extends FileMenu
-{
+public class IEFileMenu extends FileMenu {
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-    protected IEController _controller;
-    public ExportPaletteItem exportPaletteItem;
-    public ImportPaletteItem importPaletteItem;
-    public ImportImageItem importImageItem;
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	protected IEController _controller;
+	public ExportPaletteItem exportPaletteItem;
+	public ImportPaletteItem importPaletteItem;
+	public ImportImageItem importImageItem;
 
-    public IEFileMenu(IEController controller)
-    {
-        super(controller);
-        _controller = controller;
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    @Override
-	public void addSpecificItems()
-    {
-    }
-    
-    @Override
-    protected boolean addExportItems() {
-    	super.addExportItems();
-    	addToExportItems(exportPaletteItem = new ExportPaletteItem());
-    	return true;
-    }
-    
-    @Override
-    protected boolean addImportItems() {
-    	super.addImportItems();
-    	addToImportItems(importPaletteItem = new ImportPaletteItem());
-    	addToImportItems(importImageItem = new ImportImageItem());
-    	return true;
-    }
+	public IEFileMenu(IEController controller) {
+		super(controller);
+		_controller = controller;
+	}
 
-    @Override
-	public void addPrintItems()
-    {
-        add(new FlexoMenuItem(PrintComponentAction.actionType, getController()) {
-            @Override
-			public FlexoModelObject getFocusedObject() 
-            {
-            	if (_controller.getCurrentEditedComponent()!=null)
-            		return _controller.getCurrentEditedComponent().getComponentDefinition();
-            	else
-            		return _controller.getProject().getFlexoComponentLibrary();
-            }           
-            @Override
-			public Vector getGlobalSelection() 
-            {
-                return null;
-            }
-        });
-    }
-    
+	@Override
+	public void addSpecificItems() {
+	}
 
-    public IEController getIEController()
-    {
-        return _controller;
-    }
+	@Override
+	protected boolean addExportItems() {
+		super.addExportItems();
+		addToExportItems(exportPaletteItem = new ExportPaletteItem());
+		return true;
+	}
 
-    public class ExportPaletteItem extends FlexoMenuItem
-    {
+	@Override
+	protected boolean addImportItems() {
+		super.addImportItems();
+		addToImportItems(importPaletteItem = new ImportPaletteItem());
+		addToImportItems(importImageItem = new ImportImageItem());
+		return true;
+	}
 
-        public ExportPaletteItem()
-        {
-            super(new ExportPaletteAction(), "export_palette", null, getController(), true);
-        }
+	@Override
+	public void addPrintItems() {
+		add(new FlexoMenuItem(PrintComponentAction.actionType, getController()) {
+			@Override
+			public FlexoModelObject getFocusedObject() {
+				if (_controller.getCurrentEditedComponent() != null) {
+					return _controller.getCurrentEditedComponent().getComponentDefinition();
+				} else {
+					return _controller.getProject().getFlexoComponentLibrary();
+				}
+			}
 
-    }
+			@Override
+			public Vector getGlobalSelection() {
+				return null;
+			}
+		});
+	}
 
-    public class ExportPaletteAction extends AbstractAction
-    {
-        public ExportPaletteAction()
-        {
-            super();
-        }
+	public IEController getIEController() {
+		return _controller;
+	}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-            File paletteDir = NewPaletteComponent.getPaletteDirectory();
-            if(paletteDir!=null){
-            	File[] fileList = getController().getProject().getCustomWidgetPalette().getPaletteDirectory().listFiles();
-            	for(int i=0;i<fileList.length;i++){
-            		try {
+	public class ExportPaletteItem extends FlexoMenuItem {
+
+		public ExportPaletteItem() {
+			super(new ExportPaletteAction(), "export_palette", null, getController(), true);
+		}
+
+	}
+
+	public class ExportPaletteAction extends AbstractAction {
+		public ExportPaletteAction() {
+			super();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			File paletteDir = NewPaletteComponent.getPaletteDirectory();
+			if (paletteDir != null) {
+				File[] fileList = getController().getProject().getCustomWidgetPalette().getPaletteDirectory().listFiles();
+				for (int i = 0; i < fileList.length; i++) {
+					try {
 						FileUtils.copyFileToDir(new FileInputStream(fileList[i]), fileList[i].getName(), paletteDir);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-            	}
-            }
-        }
-    }
+				}
+			}
+		}
+	}
 
-    
-    
-    
-    
-    
-    public class ImportPaletteItem extends FlexoMenuItem
-    {
+	public class ImportPaletteItem extends FlexoMenuItem {
 
-        public ImportPaletteItem()
-        {
-            super(new ImportPaletteAction(), "import_palette", null, getController(), true);
-        }
+		public ImportPaletteItem() {
+			super(new ImportPaletteAction(), "import_palette", null, getController(), true);
+		}
 
-    }
+	}
 
-    public class ImportPaletteAction extends AbstractAction
-    {
-        public ImportPaletteAction()
-        {
-            super();
-        }
+	public class ImportPaletteAction extends AbstractAction {
+		public ImportPaletteAction() {
+			super();
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-            File paletteDir = OpenPaletteComponent.getPaletteDirectory();
-            if(paletteDir!=null){
-            	File[] fileList = paletteDir.listFiles();
-            	for(int i=0;i<fileList.length;i++){
-            		if(fileList[i].getName().endsWith(".woxml")){
-            			File f = new File(getController().getProject().getIECustomPaletteDirectory(),fileList[i].getName());
-            			boolean performCopy = true;
-            			if(f.exists()){
-            				performCopy = FlexoController.confirm("A widget named :"+fileList[i].getName().substring(0,fileList[i].getName().length()-6)+" exists already.\nOverride it ?");
-            			}
-            			if(performCopy){
-        					try {
-        						FileUtils.copyFileToDir(new FileInputStream(fileList[i]), fileList[i].getName(), getController().getProject().getIECustomPaletteDirectory());
-        						File screenshot = new File(fileList[i].getParentFile(),fileList[i].getName().substring(0, fileList[i].getName().length()-".woxml".length())+".screenshot");
-        						if (screenshot.exists())
-        							FileUtils.copyFileToDir(new FileInputStream(screenshot), screenshot.getName(), getController().getProject().getIECustomPaletteDirectory());
-        					} catch (FileNotFoundException e) {
-        						e.printStackTrace();
-        					} catch (IOException e) {
-        						e.printStackTrace();
-        					}
-            			}
-            		}
-            	}
-            	getController().getProject().getCustomWidgetPalette().refresh();
-            }
-        }
-    }
-    
-    public class ImportImageItem extends FlexoMenuItem
-    {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			File paletteDir = OpenPaletteComponent.getPaletteDirectory();
+			if (paletteDir != null) {
+				File[] fileList = paletteDir.listFiles();
+				for (int i = 0; i < fileList.length; i++) {
+					if (fileList[i].getName().endsWith(".woxml")) {
+						File f = new File(getController().getProject().getIECustomPaletteDirectory(), fileList[i].getName());
+						boolean performCopy = true;
+						if (f.exists()) {
+							performCopy = FlexoController.confirm("A widget named :"
+									+ fileList[i].getName().substring(0, fileList[i].getName().length() - 6)
+									+ " exists already.\nOverride it ?");
+						}
+						if (performCopy) {
+							try {
+								FileUtils.copyFileToDir(new FileInputStream(fileList[i]), fileList[i].getName(), getController()
+										.getProject().getIECustomPaletteDirectory());
+								File screenshot = new File(fileList[i].getParentFile(), fileList[i].getName().substring(0,
+										fileList[i].getName().length() - ".woxml".length())
+										+ ".screenshot");
+								if (screenshot.exists()) {
+									FileUtils.copyFileToDir(new FileInputStream(screenshot), screenshot.getName(), getController()
+											.getProject().getIECustomPaletteDirectory());
+								}
+							} catch (FileNotFoundException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+				getController().getProject().getCustomWidgetPalette().refresh();
+			}
+		}
+	}
 
-        public ImportImageItem()
-        {
-            super(new ImportImageAction(), "import_image", null, getController(), true);
-        }
+	public class ImportImageItem extends FlexoMenuItem {
 
-    }
+		public ImportImageItem() {
+			super(new ImportImageAction(), "import_image", null, getController(), true);
+		}
 
-    public class ImportImageAction extends AbstractAction
-    {
-        public ImportImageAction()
-        {
-            super();
-        }
+	}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-        	ImportImage importImage = ImportImage.actionType.makeNewAction(null, null,getController().getEditor());
-        	importImage.doAction();
-            //getController().getProject().notifyCustomWidgetPaletteNeedRefresh();
-        }
-    }
-    
-    
+	public class ImportImageAction extends AbstractAction {
+		public ImportImageAction() {
+			super();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			ImportImage importImage = ImportImage.actionType.makeNewAction(null, null, getController().getEditor());
+			importImage.doAction();
+			// getController().getProject().notifyCustomWidgetPaletteNeedRefresh();
+		}
+	}
+
 }

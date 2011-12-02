@@ -25,47 +25,38 @@ import java.util.logging.Logger;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.vpm.drawingshema.DrawEdgeControl.DrawEdgeAction;
 
-
 public class CalcDrawingShemaView extends DrawingView<CalcDrawingShemaRepresentation> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingShemaView.class.getPackage().getName());
 
-	public CalcDrawingShemaView(CalcDrawingShemaRepresentation aDrawing,CalcDrawingShemaController controller)
-	{
-		super(aDrawing,controller);
+	public CalcDrawingShemaView(CalcDrawingShemaRepresentation aDrawing, CalcDrawingShemaController controller) {
+		super(aDrawing, controller);
 	}
 
 	@Override
-	public CalcDrawingShemaController getController() 
-	{
-		return (CalcDrawingShemaController)super.getController();
+	public CalcDrawingShemaController getController() {
+		return (CalcDrawingShemaController) super.getController();
 	}
-	
 
 	private DrawEdgeAction _drawEdgeAction;
 
-	public void  setDrawEdgeAction(DrawEdgeAction action) 
-	{
+	public void setDrawEdgeAction(DrawEdgeAction action) {
 		_drawEdgeAction = action;
 	}
 
-	public void resetDrawEdgeAction() 
-	{
+	public void resetDrawEdgeAction() {
 		_drawEdgeAction = null;
 		repaint();
 	}
 
-
-
 	@Override
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		boolean isBuffering = isBuffering();
 		super.paint(g);
 		if (_drawEdgeAction != null && !isBuffering) {
-			_drawEdgeAction.paint(g,getController());
+			_drawEdgeAction.paint(g, getController());
 		}
 	}
-	
+
 }

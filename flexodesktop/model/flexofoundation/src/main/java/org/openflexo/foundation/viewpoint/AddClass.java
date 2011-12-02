@@ -21,64 +21,41 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
-
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddClass extends AddConcept<ClassPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
-	private String newClassName;
-	
 	public AddClass() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddClass;
 	}
-	
-	public String _getNewClassName() 
-	{
-		return newClassName;
-	}
 
-	public void _setNewClassName(String aClassName) 
-	{
-		this.newClassName = aClassName;
-	}
-	
-	public EditionPatternParameter getNewClassNameParameter()
-	{
-		return getScheme().getParameter(newClassName);
-	}
-	
-	public void setNewClassNameParameter(EditionPatternParameter param)
-	{
-		newClassName = param.getName();
-	}
-	
 	@Override
-	public OntologyClass getOntologyClass()
-	{
-		if (getPatternRole() != null) 
+	public OntologyClass getOntologyClass() {
+		if (getPatternRole() != null) {
 			return getPatternRole().getOntologicType();
+		}
 		return null;
 	}
-	
+
 	@Override
-	public void setOntologyClass(OntologyClass ontologyClass)
-	{
-		if (getPatternRole() != null) 
+	public void setOntologyClass(OntologyClass ontologyClass) {
+		if (getPatternRole() != null) {
 			getPatternRole().setOntologicType(ontologyClass);
+		}
 	}
 
-
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_CLASS_INSPECTOR;
 	}
 
@@ -89,4 +66,27 @@ public class AddClass extends AddConcept<ClassPatternRole> {
 			return;
 		}
 	}*/
+
+	private ViewPointDataBinding className;
+
+	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, false);
+
+	public BindingDefinition getClassNameBindingDefinition() {
+		return CLASS_NAME;
+	}
+
+	public ViewPointDataBinding getClassName() {
+		if (className == null) {
+			className = new ViewPointDataBinding(this, EditionActionBindingAttribute.className, getClassNameBindingDefinition());
+		}
+		return className;
+	}
+
+	public void setClassName(ViewPointDataBinding className) {
+		className.setOwner(this);
+		className.setBindingAttribute(EditionActionBindingAttribute.className);
+		className.setBindingDefinition(getClassNameBindingDefinition());
+		this.className = className;
+	}
+
 }

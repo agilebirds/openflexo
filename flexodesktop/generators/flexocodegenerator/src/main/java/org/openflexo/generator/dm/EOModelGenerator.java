@@ -36,66 +36,62 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author gpolet
  * 
  */
-public class EOModelGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
-{
-    private static final Logger logger = FlexoLogger.getLogger(EOModelGenerator.class.getPackage().getName());
+public class EOModelGenerator extends MetaGenerator<FlexoModelObject, CGRepository> {
+	private static final Logger logger = FlexoLogger.getLogger(EOModelGenerator.class.getPackage().getName());
 
-    private Hashtable<DMEOEntity,EOEntityPListGenerator> _entityGenerators;
-    private Hashtable<DMEOEntity,GenericRecordGenerator> _entityClassGenerators;
-    private DMEOModel _eoModel;
-    private EOModelPListGenerator _eomodelPlistGenerator;
-    /**
-     * @param projectGenerator
-     * @param object
-     */
-    public EOModelGenerator(ProjectGenerator dataModelGenerator, DMEOModel eoModel)
-    {
-        super(dataModelGenerator, eoModel);
-        _eoModel = eoModel;
-        _entityGenerators = new Hashtable<DMEOEntity,EOEntityPListGenerator>();
-        _entityClassGenerators = new Hashtable<DMEOEntity, GenericRecordGenerator>();
-        //eoModel.addObserver(this);
-    }
+	private Hashtable<DMEOEntity, EOEntityPListGenerator> _entityGenerators;
+	private Hashtable<DMEOEntity, GenericRecordGenerator> _entityClassGenerators;
+	private DMEOModel _eoModel;
+	private EOModelPListGenerator _eomodelPlistGenerator;
 
-    @Override
-    public ProjectGenerator getProjectGenerator() {
-    	return (ProjectGenerator) super.getProjectGenerator();
-    }
-    
+	/**
+	 * @param projectGenerator
+	 * @param object
+	 */
+	public EOModelGenerator(ProjectGenerator dataModelGenerator, DMEOModel eoModel) {
+		super(dataModelGenerator, eoModel);
+		_eoModel = eoModel;
+		_entityGenerators = new Hashtable<DMEOEntity, EOEntityPListGenerator>();
+		_entityClassGenerators = new Hashtable<DMEOEntity, GenericRecordGenerator>();
+		// eoModel.addObserver(this);
+	}
+
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public ProjectGenerator getProjectGenerator() {
+		return (ProjectGenerator) super.getProjectGenerator();
+	}
+
+	@Override
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		if (!getEOModel().getDMModel().getEOCodeGenerationActivated()) {
 			getEOModel().getDMModel().activateEOCodeGeneration();
 		}
-	    Hashtable<DMEOEntity,EOEntityPListGenerator> entityGenerators = new Hashtable<DMEOEntity, EOEntityPListGenerator>();
-	    Hashtable<DMEOEntity,GenericRecordGenerator> entityClassGenerators = new Hashtable<DMEOEntity, GenericRecordGenerator>();
+		Hashtable<DMEOEntity, EOEntityPListGenerator> entityGenerators = new Hashtable<DMEOEntity, EOEntityPListGenerator>();
+		Hashtable<DMEOEntity, GenericRecordGenerator> entityClassGenerators = new Hashtable<DMEOEntity, GenericRecordGenerator>();
 
-        for (DMEOEntity entity : getEOModel().getEntities()) {
-            //if(entity.getClassProperties().size()==0)continue;
-            entity.getGeneratedCode(); // Here to force pre-computation of code.
-            GenericRecordGenerator generator = getGenericRecordGenerator(entity);
-            entityClassGenerators.put(entity, generator);
+		for (DMEOEntity entity : getEOModel().getEntities()) {
+			// if(entity.getClassProperties().size()==0)continue;
+			entity.getGeneratedCode(); // Here to force pre-computation of code.
+			GenericRecordGenerator generator = getGenericRecordGenerator(entity);
+			entityClassGenerators.put(entity, generator);
 			generator.buildResourcesAndSetGenerators(repository, resources);
-        }
+		}
 		for (DMEOEntity entity : getEOModel().getEntities()) {
 			EOEntityPListGenerator generator = getGenerator(entity);
 			entityGenerators.put(entity, generator);
 			generator.buildResourcesAndSetGenerators(repository, resources);
 		}
-		if(_eomodelPlistGenerator == null){
-			_eomodelPlistGenerator = new EOModelPListGenerator(getProjectGenerator(),getEOModel());
+		if (_eomodelPlistGenerator == null) {
+			_eomodelPlistGenerator = new EOModelPListGenerator(getProjectGenerator(), getEOModel());
 		}
 		_eomodelPlistGenerator.buildResourcesAndSetGenerators(repository, resources);
 		getEOModel().getDMModel().getClassLibrary().clearLibrary();
@@ -105,45 +101,43 @@ public class EOModelGenerator extends MetaGenerator<FlexoModelObject, CGReposito
 		_entityGenerators = entityGenerators;
 	}
 
-    private EOEntityPListGenerator getGenerator(DMEOEntity e)
-    {
-        if (_entityGenerators.get(e)==null) {
-            _entityGenerators.put(e, new EOEntityPListGenerator(getProjectGenerator(),e));
-        }
-        return _entityGenerators.get(e);
-    }
-    
-    private GenericRecordGenerator getGenericRecordGenerator(DMEOEntity e)
-    {
-        if (_entityClassGenerators.get(e)==null) {
-            _entityClassGenerators.put(e, new GenericRecordGenerator(getProjectGenerator(),e));
-        }
-        return _entityClassGenerators.get(e);
-    }
+	private EOEntityPListGenerator getGenerator(DMEOEntity e) {
+		if (_entityGenerators.get(e) == null) {
+			_entityGenerators.put(e, new EOEntityPListGenerator(getProjectGenerator(), e));
+		}
+		return _entityGenerators.get(e);
+	}
 
-    @Override
-	public void generate(boolean forceRegenerate) throws GenerationException
-    {
+	private GenericRecordGenerator getGenericRecordGenerator(DMEOEntity e) {
+		if (_entityClassGenerators.get(e) == null) {
+			_entityClassGenerators.put(e, new GenericRecordGenerator(getProjectGenerator(), e));
+		}
+		return _entityClassGenerators.get(e);
+	}
+
+	@Override
+	public void generate(boolean forceRegenerate) throws GenerationException {
 		startGeneration();
-        for (DMEOEntity entity : getEOModel().getEntities()) {
-            if(entity.getClassProperties().size()==0)continue;
-            getGenerator(entity).generate(forceRegenerate);
-        }
-        for (DMEOEntity entity : getEOModel().getEntities()) {
-            getGenerator(entity).generate(forceRegenerate);
-        }
-        _eomodelPlistGenerator.generate(forceRegenerate);
+		for (DMEOEntity entity : getEOModel().getEntities()) {
+			if (entity.getClassProperties().size() == 0) {
+				continue;
+			}
+			getGenerator(entity).generate(forceRegenerate);
+		}
+		for (DMEOEntity entity : getEOModel().getEntities()) {
+			getGenerator(entity).generate(forceRegenerate);
+		}
+		_eomodelPlistGenerator.generate(forceRegenerate);
 		stopGeneration();
-   }
+	}
 
- 	public DMEOModel getEOModel() 
-	{
+	public DMEOModel getEOModel() {
 		return _eoModel;
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if(dataModification instanceof EOEntityInserted){
+		if (dataModification instanceof EOEntityInserted) {
 			refreshConcernedResources();
 		}
 		super.update(observable, dataModification);

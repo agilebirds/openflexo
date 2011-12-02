@@ -22,19 +22,15 @@ package org.openflexo.doceditor.view.listener;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 
-
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class DEKeyEventListener extends FlexoKeyEventListener
-{
+public class DEKeyEventListener extends FlexoKeyEventListener {
 
-    public DEKeyEventListener(DEController controller)
-    {
-        super(controller);
-    }
+	public DEKeyEventListener(DEController controller) {
+		super(controller);
+	}
 
 }

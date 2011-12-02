@@ -22,8 +22,6 @@
 
 package com.metaphaseeditor.action;
 
-import com.metaphaseeditor.MetaphaseEditorException;
-import com.metaphaseeditor.MetaphaseEditorPanel;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
@@ -34,31 +32,35 @@ import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import com.metaphaseeditor.MetaphaseEditorException;
+import com.metaphaseeditor.MetaphaseEditorPanel;
+
 public class InsertHtmlAction extends StyledEditorKit.StyledTextAction {
 
-    private MetaphaseEditorPanel editorPanel;
-    private String html;
-    private Tag htmlTag;
-    private HTMLEditorKit editorKit = new HTMLEditorKit();
+	private MetaphaseEditorPanel editorPanel;
+	private String html;
+	private Tag htmlTag;
+	private HTMLEditorKit editorKit = new HTMLEditorKit();
 
-    public InsertHtmlAction(MetaphaseEditorPanel editorPanel, String actionName, String html, Tag htmlTag) {
-        super(actionName);
-        this.editorPanel = editorPanel;
-        this.html = html;
-        this.htmlTag = htmlTag;
-    }
+	public InsertHtmlAction(MetaphaseEditorPanel editorPanel, String actionName, String html, Tag htmlTag) {
+		super(actionName);
+		this.editorPanel = editorPanel;
+		this.html = html;
+		this.htmlTag = htmlTag;
+	}
 
-    public void actionPerformed(ActionEvent ae) {
-        try {
-            JTextPane textPane = editorPanel.getHtmlTextPane();
-            HTMLDocument doc = (HTMLDocument) textPane.getDocument();
-            int pos = textPane.getCaretPosition();
-            editorKit.insertHTML(doc, pos, html, 0, 0, htmlTag);
-            editorPanel.refreshAfterAction();
-        } catch (IOException e) {
-            throw new MetaphaseEditorException(e.getMessage(), e);
-        } catch (BadLocationException e) {
-            throw new MetaphaseEditorException(e.getMessage(), e);
-        }
-    }
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		try {
+			JTextPane textPane = editorPanel.getHtmlTextPane();
+			HTMLDocument doc = (HTMLDocument) textPane.getDocument();
+			int pos = textPane.getCaretPosition();
+			editorKit.insertHTML(doc, pos, html, 0, 0, htmlTag);
+			editorPanel.refreshAfterAction();
+		} catch (IOException e) {
+			throw new MetaphaseEditorException(e.getMessage(), e);
+		} catch (BadLocationException e) {
+			throw new MetaphaseEditorException(e.getMessage(), e);
+		}
+	}
 }

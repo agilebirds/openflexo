@@ -26,132 +26,126 @@ import org.openflexo.foundation.dkv.dm.DKVDataModification;
 import org.openflexo.foundation.xml.FlexoDKVModelBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class Value extends DKVObject implements InspectableObject
-{
+public class Value extends DKVObject implements InspectableObject {
 
-    private String value;
-    
-    private Language language;
-    
-    private Key key;
-    
-    public Value(FlexoDKVModelBuilder builder) {
-        this(builder.dkvModel);
-        initializeDeserialization(builder);
-    }
-    
-    protected Value(DKVModel dkvModel) {
-        super(dkvModel);
-    }
-    
-    /**
-     * @param dl
-     */
-    protected Value(DKVModel dl, Key key, Language lg)
-    {
-        this(dl);
-        this.key=key;
-        this.language=lg;
-    }
+	private String value;
 
-    public Long getObjectFlexoID() {
-        return new Long(getFlexoID());
-    }
-    
-    /**
-     * Overrides getFullyQualifiedName
-     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-     */
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return language.name+"."+key.name;
-    }
+	private Language language;
 
-    public String getValue()
-    {
-        return value;
-    }
+	private Key key;
 
-    public void setValue(String value)
-    {
-        String old = this.value;
-        if (value!=null && value.trim().length()==0) {
-            this.value=null;
-        } else
-            this.value = value;
-        setChanged();
-        notifyObservers(new DKVDataModification(-1,"value",old,this.value));
-    }
+	public Value(FlexoDKVModelBuilder builder) {
+		this(builder.dkvModel);
+		initializeDeserialization(builder);
+	}
 
-    public Key getKey()
-    {
-        return key;
-    }
+	protected Value(DKVModel dkvModel) {
+		super(dkvModel);
+	}
 
-    public void setKey(Key key)
-    {
-        this.key = key;
-    }
+	/**
+	 * @param dl
+	 */
+	protected Value(DKVModel dl, Key key, Language lg) {
+		this(dl);
+		this.key = key;
+		this.language = lg;
+	}
 
-    public Language getLanguage()
-    {
-        return language;
-    }
+	public Long getObjectFlexoID() {
+		return new Long(getFlexoID());
+	}
 
-    public void setLanguage(Language language)
-    {
-        this.language = language;
-    }
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return language.name + "." + key.name;
+	}
 
-    /**
-     * Overrides getInspectorName
-     * @see org.openflexo.inspector.InspectableObject#getInspectorName()
-     */
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.IE.VALUE_INSPECTOR;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    public String getDisplayString() {
-        if (value==null)
-            return getFullyQualifiedName();
-        return value;
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "dkv_value";
-    }
+	public void setValue(String value) {
+		String old = this.value;
+		if (value != null && value.trim().length() == 0) {
+			this.value = null;
+		} else {
+			this.value = value;
+		}
+		setChanged();
+		notifyObservers(new DKVDataModification(-1, "value", old, this.value));
+	}
 
-    /**
-     * Overrides isDeleteAble
-     * @see org.openflexo.foundation.dkv.DKVObject#isDeleteAble()
-     */
-    @Override
-	public boolean isDeleteAble()
-    {
-        return false;
-    }
+	public Key getKey() {
+		return key;
+	}
 
-    @Override
-	public void undelete(){
-    	
-    }
+	public void setKey(Key key) {
+		this.key = key;
+	}
+
+	public Language getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+
+	/**
+	 * Overrides getInspectorName
+	 * 
+	 * @see org.openflexo.inspector.InspectableObject#getInspectorName()
+	 */
+	@Override
+	public String getInspectorName() {
+		return Inspectors.IE.VALUE_INSPECTOR;
+	}
+
+	public String getDisplayString() {
+		if (value == null) {
+			return getFullyQualifiedName();
+		}
+		return value;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "dkv_value";
+	}
+
+	/**
+	 * Overrides isDeleteAble
+	 * 
+	 * @see org.openflexo.foundation.dkv.DKVObject#isDeleteAble()
+	 */
+	@Override
+	public boolean isDeleteAble() {
+		return false;
+	}
+
+	@Override
+	public void undelete() {
+
+	}
+
 	@Override
 	public Vector getAllEmbeddedValidableObjects() {
 		return null;
 	}
-    
+
 }

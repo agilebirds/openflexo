@@ -29,36 +29,30 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.cg.version.CGFileIntermediateVersion;
 import org.openflexo.foundation.cg.version.CGFileReleaseVersion;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
+import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconMarker;
 
-
-public class FileReleaseVersionElement extends GCBrowserElement
-{
-	public FileReleaseVersionElement(CGFileReleaseVersion fileReleaseVersion, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(fileReleaseVersion, BrowserElementType.FILE_RELEASE_VERSION, browser,parent);
+public class FileReleaseVersionElement extends GCBrowserElement {
+	public FileReleaseVersionElement(CGFileReleaseVersion fileReleaseVersion, ProjectBrowser browser, BrowserElement parent) {
+		super(fileReleaseVersion, BrowserElementType.FILE_RELEASE_VERSION, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (CGFileIntermediateVersion version : getReleaseVersion().getIntermediateVersions()) {
 			addToChilds(version);
 		}
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getReleaseVersion().getStringRepresentation();
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		ImageIcon returned = FilesIconLibrary.smallIconForFileFormat(getReleaseVersion().getCGFile().getFileFormat());
 		if (returned == null) {
 			returned = super.getBaseIcon();
@@ -67,19 +61,17 @@ public class FileReleaseVersionElement extends GCBrowserElement
 	}
 
 	@Override
-	public Icon getIcon()
-	{
+	public Icon getIcon() {
 		ImageIcon returned = getBaseIcon();
 		Vector<IconMarker> markers = new Vector<IconMarker>();
-		markers.add(CGIconLibrary.RELEASE_VERSION);
+		markers.add(GeneratorIconLibrary.RELEASE_VERSION);
 		IconMarker[] markersArray = markers.toArray(new IconMarker[markers.size()]);
 		returned = IconFactory.getImageIcon(returned, markersArray);
 		return returned;
 	}
 
-	public CGFileReleaseVersion getReleaseVersion()
-	{
-		return (CGFileReleaseVersion)getObject();
+	public CGFileReleaseVersion getReleaseVersion() {
+		return (CGFileReleaseVersion) getObject();
 	}
 
 }

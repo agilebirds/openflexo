@@ -27,75 +27,62 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class RemoveRelatedToItem extends FlexoAction {
 
-public class RemoveRelatedToItem extends FlexoAction 
-{
+	public static FlexoActionType actionType = new FlexoActionType("remove_related_to_item", FlexoActionType.defaultGroup,
+			FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("remove_related_to_item",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new RemoveRelatedToItem(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new RemoveRelatedToItem(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DocItem) && (globalSelection.size() > 0) && (globalSelection.firstElement() instanceof DocItem));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DocItem)
-                    && (globalSelection.size() > 0)
-                    && (globalSelection.firstElement() instanceof DocItem));
-        }
-                
-    };
-    
-    private DocItem _docItemToRemove;
-    
-    RemoveRelatedToItem (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) 
-    {
-       if ((getOppositeDocItem() != null) && (getDocItemToRemove() != null)) {
-           getOppositeDocItem().removeFromRelatedToItems(getDocItemToRemove());
-       }
-    }
+	private DocItem _docItemToRemove;
 
-   public void setDocItemToRemove(DocItem docItemToRemove) 
-   {
-       _docItemToRemove = docItemToRemove;
-   }
+	RemoveRelatedToItem(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public DocItem getDocItemToRemove()
-   {
-       if (_docItemToRemove == null) {
-           if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
-               _docItemToRemove = (DocItem)getFocusedObject();
-            }           
-       }
-       return _docItemToRemove;
-   }
+	@Override
+	protected void doAction(Object context) {
+		if ((getOppositeDocItem() != null) && (getDocItemToRemove() != null)) {
+			getOppositeDocItem().removeFromRelatedToItems(getDocItemToRemove());
+		}
+	}
 
-   public DocItem getOppositeDocItem()
-   {
-       if ((getGlobalSelection().size() > 0) 
-               && (getGlobalSelection().firstElement() instanceof DocItem)) {
-           return (DocItem)getGlobalSelection().firstElement();
-       }
-       return null;
-   }
+	public void setDocItemToRemove(DocItem docItemToRemove) {
+		_docItemToRemove = docItemToRemove;
+	}
 
-  }
+	public DocItem getDocItemToRemove() {
+		if (_docItemToRemove == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+				_docItemToRemove = (DocItem) getFocusedObject();
+			}
+		}
+		return _docItemToRemove;
+	}
+
+	public DocItem getOppositeDocItem() {
+		if ((getGlobalSelection().size() > 0) && (getGlobalSelection().firstElement() instanceof DocItem)) {
+			return (DocItem) getGlobalSelection().firstElement();
+		}
+		return null;
+	}
+
+}

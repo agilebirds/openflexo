@@ -31,7 +31,6 @@ import org.openflexo.antar.expr.parser.StringValue;
 import org.openflexo.antar.expr.parser.Value;
 import org.openflexo.toolbox.Duration;
 
-
 public abstract class Constant<V> extends Expression {
 
 	@Override
@@ -40,35 +39,33 @@ public abstract class Constant<V> extends Expression {
 	}
 
 	@Override
-	public int getDepth()
-	{
+	public int getDepth() {
 		return 0;
 	}
 
 	@Override
-	protected Vector<Expression> getChilds()
-	{
+	protected Vector<Expression> getChilds() {
 		return null;
 	}
-	
+
 	public abstract V getValue();
-	
+
 	public abstract Value getParsingValue();
 
-	public static abstract class BooleanConstant extends Constant<Boolean>
-	{
-		public static BooleanConstant get(boolean value)
-		{
-			if (value) return TRUE;
-			else return FALSE;
+	public static abstract class BooleanConstant extends Constant<Boolean> {
+		public static BooleanConstant get(boolean value) {
+			if (value) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
 		}
-		
+
 		@Override
-		public EvaluationType getEvaluationType()
-		{
+		public EvaluationType getEvaluationType() {
 			return EvaluationType.BOOLEAN;
 		}
-		
+
 		@Override
 		public abstract Boolean getValue();
 
@@ -77,31 +74,31 @@ public abstract class Constant<V> extends Expression {
 			public Boolean getValue() {
 				return true;
 			}
+
 			@Override
 			public Value getParsingValue() {
 				return new BooleanValue(true);
 			}
 		};
-		
+
 		public static final BooleanConstant FALSE = new BooleanConstant() {
 			@Override
 			public Boolean getValue() {
 				return false;
 			}
+
 			@Override
 			public Value getParsingValue() {
 				return new BooleanValue(false);
 			}
 		};
 	}
-	
-	public static class StringConstant extends Constant<String>
-	{
+
+	public static class StringConstant extends Constant<String> {
 		private String value;
-		
+
 		@Override
-		public EvaluationType getEvaluationType()
-		{
+		public EvaluationType getEvaluationType() {
 			return EvaluationType.STRING;
 		}
 
@@ -124,14 +121,12 @@ public abstract class Constant<V> extends Expression {
 			return new StringValue(value);
 		}
 	}
-	
-	public static class EnumConstant extends Constant<Enum>
-	{
+
+	public static class EnumConstant extends Constant<Enum> {
 		private String name;
-		
+
 		@Override
-		public EvaluationType getEvaluationType()
-		{
+		public EvaluationType getEvaluationType() {
 			return EvaluationType.ENUM;
 		}
 
@@ -152,29 +147,24 @@ public abstract class Constant<V> extends Expression {
 		public Value getParsingValue() {
 			return new StringValue(name);
 		}
-		
+
 		@Override
-		public Enum getValue() 
-		{
-			//TODO !
+		public Enum getValue() {
+			// TODO !
 			return null;
 		}
 	}
-	
-	public static abstract class ArithmeticConstant<V extends Number> extends Constant<V>
-	{
+
+	public static abstract class ArithmeticConstant<V extends Number> extends Constant<V> {
 		public abstract double getArithmeticValue();
 
-		
 	}
-	
-	public static class IntegerConstant extends ArithmeticConstant<Long>
-	{
+
+	public static class IntegerConstant extends ArithmeticConstant<Long> {
 		private long value;
-		
+
 		@Override
-		public EvaluationType getEvaluationType()
-		{
+		public EvaluationType getEvaluationType() {
 			return EvaluationType.ARITHMETIC_INTEGER;
 		}
 
@@ -196,21 +186,19 @@ public abstract class Constant<V> extends Expression {
 		public double getArithmeticValue() {
 			return getValue();
 		}
-		
+
 		@Override
 		public Value getParsingValue() {
 			return new IntValue(value);
 		}
 
 	}
-	
-	public static class FloatConstant extends ArithmeticConstant<Double>
-	{
+
+	public static class FloatConstant extends ArithmeticConstant<Double> {
 		private double value;
-		
+
 		@Override
-		public EvaluationType getEvaluationType()
-		{
+		public EvaluationType getEvaluationType() {
 			return EvaluationType.ARITHMETIC_FLOAT;
 		}
 
@@ -227,7 +215,7 @@ public abstract class Constant<V> extends Expression {
 		public void setValue(double value) {
 			this.value = value;
 		}
-		
+
 		@Override
 		public double getArithmeticValue() {
 			return getValue();
@@ -239,29 +227,29 @@ public abstract class Constant<V> extends Expression {
 		}
 
 	}
-	
-	public static class FloatSymbolicConstant extends FloatConstant implements SymbolicConstant
-	{
+
+	public static class FloatSymbolicConstant extends FloatConstant implements SymbolicConstant {
 		private String symbol;
-		
-		private FloatSymbolicConstant(String symbol,double value) {
+
+		private FloatSymbolicConstant(String symbol, double value) {
 			super(value);
 			this.symbol = symbol;
 		}
+
 		@Override
 		public String getSymbol() {
 			return symbol;
 		}
+
 		public void setSymbol(String symbol) {
 			this.symbol = symbol;
 		}
-		
-		public static FloatSymbolicConstant PI = new FloatSymbolicConstant("pi",Math.PI);
-		public static FloatSymbolicConstant E = new FloatSymbolicConstant("e",Math.E);
-		
+
+		public static FloatSymbolicConstant PI = new FloatSymbolicConstant("pi", Math.PI);
+		public static FloatSymbolicConstant E = new FloatSymbolicConstant("e", Math.E);
+
 		@Override
-		public String getValueAsString()
-		{
+		public String getValueAsString() {
 			return Double.toString(getValue());
 		}
 
@@ -271,20 +259,15 @@ public abstract class Constant<V> extends Expression {
 		}
 
 	}
-	
 
-	
 	@Override
 	public abstract EvaluationType getEvaluationType();
 
-	
-	public static class DateConstant extends Constant<Date>
-	{
+	public static class DateConstant extends Constant<Date> {
 		private Date date;
-		
+
 		@Override
-		public EvaluationType getEvaluationType()
-		{
+		public EvaluationType getEvaluationType() {
 			return EvaluationType.DATE;
 		}
 
@@ -307,77 +290,64 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		@Override
-		public Date getValue() 
-		{
+		public Date getValue() {
 			return getDate();
 		}
 
 	}
-	
-	public static abstract class DateSymbolicConstant extends DateConstant implements SymbolicConstant
-	{
+
+	public static abstract class DateSymbolicConstant extends DateConstant implements SymbolicConstant {
 		private String symbol;
-		
-		DateSymbolicConstant(String symbol) 
-		{
+
+		DateSymbolicConstant(String symbol) {
 			super(null);
 			this.symbol = symbol;
 		}
-		
+
 		@Override
-		public String getSymbol() 
-		{
+		public String getSymbol() {
 			return symbol;
 		}
-		
-		public void setSymbol(String symbol) 
-		{
+
+		public void setSymbol(String symbol) {
 			this.symbol = symbol;
 		}
-		
-		public static final DateSymbolicConstant TODAY = new DateSymbolicConstant("today")
-		{
+
+		public static final DateSymbolicConstant TODAY = new DateSymbolicConstant("today") {
 			@Override
 			public Date computeDateForNow() {
-				// TODO replace with new implementation of org.openflexo.toolbox.Date 
+				// TODO replace with new implementation of org.openflexo.toolbox.Date
 				return new Date();
 			}
 		};
-		
-		public static final DateSymbolicConstant NOW = new DateSymbolicConstant("now")
-		{
+
+		public static final DateSymbolicConstant NOW = new DateSymbolicConstant("now") {
 			@Override
 			public Date computeDateForNow() {
-				// TODO replace with new implementation of org.openflexo.toolbox.Date 
+				// TODO replace with new implementation of org.openflexo.toolbox.Date
 				return new Date();
 			}
 		};
-		
+
 		@Override
-		public String getValueAsString()
-		{
+		public String getValueAsString() {
 			return getSymbol();
 		}
 
 		@Override
-		public Expression evaluate(EvaluationContext context)
-		{
+		public Expression evaluate(EvaluationContext context) {
 			return new DateConstant(computeDateForNow());
 		}
-		
+
 		public abstract Date computeDateForNow();
 
 	}
-	
 
-	
-	public static class DurationConstant extends Constant<Duration>
-	{
+	public static class DurationConstant extends Constant<Duration> {
 		private Duration duration;
-		
+
 		@Override
-		public EvaluationType getEvaluationType()
-		{
+		public EvaluationType getEvaluationType() {
 			return EvaluationType.DURATION;
 		}
 
@@ -386,85 +356,70 @@ public abstract class Constant<V> extends Expression {
 			this.duration = duration;
 		}
 
-		public Duration getDuration()
-		{
+		public Duration getDuration() {
 			return duration;
 		}
 
-		public void setDuration(Duration duration) 
-		{
+		public void setDuration(Duration duration) {
 			this.duration = duration;
 		}
 
 		@Override
-		public Value getParsingValue() 
-		{
+		public Value getParsingValue() {
 			return new DurationValue(duration);
 		}
-		
+
 		@Override
-		public Duration getValue() 
-		{
+		public Duration getValue() {
 			return getDuration();
 		}
 	}
-	
-	public static class ObjectSymbolicConstant extends Constant<Object> implements SymbolicConstant
-	{
+
+	public static class ObjectSymbolicConstant extends Constant<Object> implements SymbolicConstant {
 		private String symbol;
-		
-		private ObjectSymbolicConstant(String symbol) 
-		{
+
+		private ObjectSymbolicConstant(String symbol) {
 			super();
 			this.symbol = symbol;
 		}
-		
+
 		@Override
-		public String getSymbol()
-		{
+		public String getSymbol() {
 			return symbol;
 		}
-		
-		public void setSymbol(String symbol) 
-		{
+
+		public void setSymbol(String symbol) {
 			this.symbol = symbol;
 		}
-		
+
 		public static final ObjectSymbolicConstant NULL = new ObjectSymbolicConstant("null");
 		public static final ObjectSymbolicConstant THIS = new ObjectSymbolicConstant("this");
-		
+
 		@Override
-		public String getValueAsString()
-		{
+		public String getValueAsString() {
 			return getSymbol();
 		}
 
 		@Override
-		public Expression evaluate(EvaluationContext context)
-		{
+		public Expression evaluate(EvaluationContext context) {
 			return this;
 		}
 
 		@Override
-		public EvaluationType getEvaluationType() 
-		{
+		public EvaluationType getEvaluationType() {
 			return EvaluationType.LITERAL;
 		}
 
 		@Override
-		public Value getParsingValue() 
-		{
+		public Value getParsingValue() {
 			return null;
 		}
 
 		@Override
 		public Object getValue() {
-			// TODO 
+			// TODO
 			return null;
 		}
 	}
-	
 
-	
-	
 }

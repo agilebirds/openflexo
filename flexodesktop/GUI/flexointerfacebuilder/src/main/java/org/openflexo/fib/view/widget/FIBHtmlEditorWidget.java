@@ -31,122 +31,119 @@ import org.openflexo.fib.view.FIBWidgetView;
 import com.metaphaseeditor.MetaphaseEditorConfiguration;
 import com.metaphaseeditor.MetaphaseEditorPanel;
 
-
 /**
  * Represents a widget able to edit an HTML fragment
  * 
  * @author sylvain
  */
-public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor,MetaphaseEditorPanel,String>
-{
+public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseEditorPanel, String> {
 
-    private static final Logger logger = Logger.getLogger(FIBHtmlEditorWidget.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FIBHtmlEditorWidget.class.getPackage().getName());
 
-    private MetaphaseEditorConfiguration _editorConfiguration;
-    private final MetaphaseEditorPanel _editor;
-    boolean validateOnReturn;
+	private MetaphaseEditorConfiguration _editorConfiguration;
+	private final MetaphaseEditorPanel _editor;
+	boolean validateOnReturn;
 
-    public FIBHtmlEditorWidget(FIBHtmlEditor model, FIBController controller)
-    {
-        super(model,controller);
-        _editor = new MetaphaseEditorPanel(_editorConfiguration = buildConfiguration());
-       /* _editor.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e)
-            {
-                 if ((!validateOnReturn) && (!widgetUpdating))
-                     updateModelFromWidget();
-            }
+	public FIBHtmlEditorWidget(FIBHtmlEditor model, FIBController controller) {
+		super(model, controller);
+		_editor = new MetaphaseEditorPanel(_editorConfiguration = buildConfiguration());
+		/* _editor.getDocument().addDocumentListener(new DocumentListener() {
+		     public void changedUpdate(DocumentEvent e)
+		     {
+		          if ((!validateOnReturn) && (!widgetUpdating))
+		              updateModelFromWidget();
+		     }
 
-            public void insertUpdate(DocumentEvent e)
-            {
-                if ((!validateOnReturn) && (!widgetUpdating))
-                    updateModelFromWidget();
-            }
+		     public void insertUpdate(DocumentEvent e)
+		     {
+		         if ((!validateOnReturn) && (!widgetUpdating))
+		             updateModelFromWidget();
+		     }
 
-            public void removeUpdate(DocumentEvent e)
-            {
-                if ((!validateOnReturn) && (!widgetUpdating))
-                    updateModelFromWidget();
-            }
-        });*/
-        updateFont();
-    }
-    
-	protected void updateHtmlEditorConfiguration()
-	{
+		     public void removeUpdate(DocumentEvent e)
+		     {
+		         if ((!validateOnReturn) && (!widgetUpdating))
+		             updateModelFromWidget();
+		     }
+		 });*/
+		updateFont();
+	}
+
+	protected void updateHtmlEditorConfiguration() {
 		_editor.updateComponents(_editorConfiguration = buildConfiguration());
 	}
 
-    
-   private MetaphaseEditorConfiguration buildConfiguration()
-    {
-    	MetaphaseEditorConfiguration returned = new MetaphaseEditorConfiguration();
-    	for (FIBHtmlEditorOption  o : getComponent().getOptionsInLine1()) {
-    		returned.addToOptions(o.makeMetaphaseEditorOption(1));
-    	}
-       	for (FIBHtmlEditorOption  o : getComponent().getOptionsInLine2()) {
-    		returned.addToOptions(o.makeMetaphaseEditorOption(2));
-    	}
-       	for (FIBHtmlEditorOption  o : getComponent().getOptionsInLine3()) {
-    		returned.addToOptions(o.makeMetaphaseEditorOption(3));
-    	}
-       	return returned;
-    }
-    
-    @Override
-    public void focusGained(FocusEvent event)
-    {
-    	super.focusGained(event);
-    	//_editor.selectAll();
-    }
-
-     @Override
-	public synchronized boolean updateWidgetFromModel()
-    {
-    	if (notEquals(getValue(), _editor.getDocument())) {
-    		if (modelUpdating) return false;
-    		if (getValue() != null && (getValue()+"\n").equals(_editor.getDocument())) return false;
-    		widgetUpdating = true;
-    		if (getValue() != null)
-    			_editor.setDocument(getValue());
-    		widgetUpdating = false;
-    		return true;
-    	}
-    	return false;
-    }
-
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized boolean updateModelFromWidget()
-    {
-    	if (notEquals(getValue(), _editor.getDocument())) {
-    		modelUpdating = true;
-    		if (logger.isLoggable(Level.FINE)) logger.fine("updateModelFromWidget() in TextAreaWidget");
-    		setValue(_editor.getDocument());
-    		modelUpdating = false;
-    		return true;
-    	}
-    	return false;
-    }
+	private MetaphaseEditorConfiguration buildConfiguration() {
+		MetaphaseEditorConfiguration returned = new MetaphaseEditorConfiguration();
+		for (FIBHtmlEditorOption o : getComponent().getOptionsInLine1()) {
+			returned.addToOptions(o.makeMetaphaseEditorOption(1));
+		}
+		for (FIBHtmlEditorOption o : getComponent().getOptionsInLine2()) {
+			returned.addToOptions(o.makeMetaphaseEditorOption(2));
+		}
+		for (FIBHtmlEditorOption o : getComponent().getOptionsInLine3()) {
+			returned.addToOptions(o.makeMetaphaseEditorOption(3));
+		}
+		return returned;
+	}
 
 	@Override
-	public MetaphaseEditorPanel getJComponent()
-	{
+	public void focusGained(FocusEvent event) {
+		super.focusGained(event);
+		// _editor.selectAll();
+	}
+
+	@Override
+	public synchronized boolean updateWidgetFromModel() {
+		if (notEquals(getValue(), _editor.getDocument())) {
+			if (modelUpdating) {
+				return false;
+			}
+			if (getValue() != null && (getValue() + "\n").equals(_editor.getDocument())) {
+				return false;
+			}
+			widgetUpdating = true;
+			if (getValue() != null) {
+				_editor.setDocument(getValue());
+			}
+			widgetUpdating = false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized boolean updateModelFromWidget() {
+		if (notEquals(getValue(), _editor.getDocument())) {
+			modelUpdating = true;
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("updateModelFromWidget() in TextAreaWidget");
+			}
+			setValue(_editor.getDocument());
+			modelUpdating = false;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public MetaphaseEditorPanel getJComponent() {
 		return _editor;
 	}
 
 	@Override
-	public MetaphaseEditorPanel getDynamicJComponent()
-	{
+	public MetaphaseEditorPanel getDynamicJComponent() {
 		return _editor;
 	}
 
 	@Override
-	public void updateFont()
-	{
+	public void updateFont() {
 		super.updateFont();
-		if (getFont() != null) _editor.setFont(getFont());
+		if (getFont() != null) {
+			_editor.setFont(getFont());
+		}
 	}
 }

@@ -22,21 +22,18 @@ package org.openflexo.generator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class WARBuildingException extends GenerationException
-{
+public class WARBuildingException extends GenerationException {
 
-    /**
-     * @param e
-     * @param generator
-     */
-    public WARBuildingException(Exception e)
-    {
-        super(e.getMessage(), "war_building_exception", ToolBox.stackTraceAsAString(e), e);
-    }
+	/**
+	 * @param e
+	 * @param generator
+	 */
+	public WARBuildingException(Exception e) {
+		super(e.getMessage(), "war_building_exception", ToolBox.stackTraceAsAString(e), e);
+	}
 
 }

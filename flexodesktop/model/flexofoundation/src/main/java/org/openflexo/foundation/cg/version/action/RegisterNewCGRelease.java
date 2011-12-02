@@ -23,8 +23,6 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.StringRepresentable;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGFile;
@@ -35,59 +33,48 @@ import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.version.CGRelease;
 import org.openflexo.foundation.cg.version.CGVersionIdentifier;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.StringRepresentable;
 
-public class RegisterNewCGRelease extends AbstractGCAction<RegisterNewCGRelease,GenerationRepository>
-{
+public class RegisterNewCGRelease extends AbstractGCAction<RegisterNewCGRelease, GenerationRepository> {
 
-	public enum IncrementType implements StringRepresentable
-	{
-		IncrementMajor,
-		IncrementMinor;
-		
+	public enum IncrementType implements StringRepresentable {
+		IncrementMajor, IncrementMinor;
+
 		@Override
-		public String toString() 
-		{
+		public String toString() {
 			return FlexoLocalization.localizedForKey(super.toString());
 		}
 	}
-	
-    private static final Logger logger = Logger.getLogger(RegisterNewCGRelease.class.getPackage().getName());
 
-    public static FlexoActionType<RegisterNewCGRelease,GenerationRepository,CGObject> actionType 
-    = new FlexoActionType<RegisterNewCGRelease,GenerationRepository,CGObject> (
-    		"register_new_release",
-    		versionningMenu,
-    		versionningActionsGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+	private static final Logger logger = Logger.getLogger(RegisterNewCGRelease.class.getPackage().getName());
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RegisterNewCGRelease makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RegisterNewCGRelease(focusedObject, globalSelection, editor);
-        }
+	public static FlexoActionType<RegisterNewCGRelease, GenerationRepository, CGObject> actionType = new FlexoActionType<RegisterNewCGRelease, GenerationRepository, CGObject>(
+			"register_new_release", versionningMenu, versionningActionsGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        @Override
-		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) 
-        {
-            return true;
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RegisterNewCGRelease makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new RegisterNewCGRelease(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) 
-        {
-            return (object != null);
-        }
-                
-    };
-    
-    RegisterNewCGRelease (GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-    
+		@Override
+		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			return true;
+		}
+
+		@Override
+		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			return (object != null);
+		}
+
+	};
+
+	RegisterNewCGRelease(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
 	private String _name;
 	private String _description;
 	private Date _date;
@@ -95,87 +82,75 @@ public class RegisterNewCGRelease extends AbstractGCAction<RegisterNewCGRelease,
 	private CGVersionIdentifier _versionIdentifier;
 
 	private CGRelease _newCGRelease;
-	
-    @Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException
-    {
-        logger.info ("Register new CGRelease");
- 
-    	makeFlexoProgress(FlexoLocalization.localizedForKey("release_as") +  " "
-    			+ getVersionIdentifier().versionAsString(), getFocusedObject().getFiles().size()+1);
 
-        _newCGRelease = new CGRelease(getFocusedObject());
-        _newCGRelease.setName(getName());
-        _newCGRelease.setDescription(getDescription());
-        _newCGRelease.setDate(getDate());
-        _newCGRelease.setUserId(getUserId());
-        _newCGRelease.setVersionIdentifier(getVersionIdentifier());
-        getFocusedObject().addToReleases(_newCGRelease);
-        
-        for (CGFile file : getFocusedObject().getFiles()) {
-    		setProgress(FlexoLocalization.localizedForKey("release") +  " " + file.getFileName());
-        	file.releaseAs(_newCGRelease);
-        }
-        
-    	// Refreshing repository
-        getFocusedObject().refresh();
+	@Override
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException {
+		logger.info("Register new CGRelease");
 
-    	hideFlexoProgress();
+		makeFlexoProgress(FlexoLocalization.localizedForKey("release_as") + " " + getVersionIdentifier().versionAsString(),
+				getFocusedObject().getFiles().size() + 1);
 
-    }
+		_newCGRelease = new CGRelease(getFocusedObject());
+		_newCGRelease.setName(getName());
+		_newCGRelease.setDescription(getDescription());
+		_newCGRelease.setDate(getDate());
+		_newCGRelease.setUserId(getUserId());
+		_newCGRelease.setVersionIdentifier(getVersionIdentifier());
+		getFocusedObject().addToReleases(_newCGRelease);
 
-	public String getDescription() 
-	{
+		for (CGFile file : getFocusedObject().getFiles()) {
+			setProgress(FlexoLocalization.localizedForKey("release") + " " + file.getFileName());
+			file.releaseAs(_newCGRelease);
+		}
+
+		// Refreshing repository
+		getFocusedObject().refresh();
+
+		hideFlexoProgress();
+
+	}
+
+	public String getDescription() {
 		return _description;
 	}
 
-	public void setDescription(String description) 
-	{
+	public void setDescription(String description) {
 		_description = description;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		_name = name;
 	}
 
-	public String getUserId() 
-	{
+	public String getUserId() {
 		return _userId;
 	}
 
-	public void setUserId(String userId)
-	{
+	public void setUserId(String userId) {
 		_userId = userId;
 	}
 
-	public CGVersionIdentifier getVersionIdentifier()
-	{
+	public CGVersionIdentifier getVersionIdentifier() {
 		return _versionIdentifier;
 	}
 
-	public void setVersionIdentifier(CGVersionIdentifier versionIdentifier) 
-	{
+	public void setVersionIdentifier(CGVersionIdentifier versionIdentifier) {
 		_versionIdentifier = versionIdentifier;
 	}
 
-	public Date getDate()
-	{
+	public Date getDate() {
 		return _date;
 	}
 
-	public void setDate(Date date)
-	{
+	public void setDate(Date date) {
 		_date = date;
 	}
 
-	public CGRelease getNewCGRelease() 
-	{
+	public CGRelease getNewCGRelease() {
 		return _newCGRelease;
 	}
 

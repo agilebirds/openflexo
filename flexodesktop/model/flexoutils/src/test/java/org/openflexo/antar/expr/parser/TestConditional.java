@@ -25,36 +25,30 @@ import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
 
 public class TestConditional {
 
-	
-	public static void main(String[] args) 
-	{
+	public static void main(String[] args) {
 		DefaultExpressionParser parser = new DefaultExpressionParser();
 
 		System.out.println("ok");
-		
+
 		try {
 			Expression parsed = parser.parse("coucou=true");
-			Expression evaluation = parsed.evaluate(
-					new EvaluationContext(
-							new ExpressionParser.DefaultConstantFactory(),
-							new VariableFactory() {
-								@Override
-								public Expression makeVariable(Word value) {
-									System.out.println("Hop");
-									if (value.getValue().equals("coucou")) return Constant.BooleanConstant.TRUE;
-									return new Variable(value.getValue());
-								}
-							},
-							new ExpressionParser.DefaultFunctionFactory()));
-			System.out.println("parsed="+parsed);
-			System.out.println("evaluation="+evaluation+" is a "+evaluation.getClass().getName());
+			Expression evaluation = parsed.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(),
+					new VariableFactory() {
+						@Override
+						public Expression makeVariable(Word value) {
+							System.out.println("Hop");
+							if (value.getValue().equals("coucou")) {
+								return Constant.BooleanConstant.TRUE;
+							}
+							return new Variable(value.getValue());
+						}
+					}, new ExpressionParser.DefaultFunctionFactory()));
+			System.out.println("parsed=" + parsed);
+			System.out.println("evaluation=" + evaluation + " is a " + evaluation.getClass().getName());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,6 +56,6 @@ public class TestConditional {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }

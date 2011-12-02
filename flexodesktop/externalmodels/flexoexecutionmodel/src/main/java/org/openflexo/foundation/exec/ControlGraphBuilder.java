@@ -34,83 +34,83 @@ import org.openflexo.foundation.exec.expr.ConditionPrimitiveExpression;
 import org.openflexo.foundation.exec.inst.CodeCall;
 import org.openflexo.foundation.exec.inst.FlexoAssignment;
 
-
 public abstract class ControlGraphBuilder {
 
-	protected abstract ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException;
+	protected abstract ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException;
 
 	protected abstract String getProcedureName();
-	
-	/** 
+
+	/**
 	 * Override this when required
+	 * 
 	 * @return
 	 */
-	protected String getProcedureComment()
-	{
+	protected String getProcedureComment() {
 		return null;
 	}
-	
-	protected Procedure makeProcedure() throws InvalidModelException,NotSupportedException
-	{
-		return new Procedure(getProcedureName(),makeControlGraph(true),getProcedureComment());
+
+	protected Procedure makeProcedure() throws InvalidModelException, NotSupportedException {
+		return new Procedure(getProcedureName(), makeControlGraph(true), getProcedureComment());
 	}
 
-	protected ControlGraph makeControlGraphForExecutionPrimitive (BindingValue executionPrimitive)
-	{
+	protected ControlGraph makeControlGraphForExecutionPrimitive(BindingValue executionPrimitive) {
 		return new CodeCall(executionPrimitive);
 	}
 
-	protected ControlGraph makeControlGraphForAssignment (BindingAssignment assignment)
-	{
+	protected ControlGraph makeControlGraphForAssignment(BindingAssignment assignment) {
 		return new FlexoAssignment(assignment);
 	}
 
-	protected Expression makeCondition (AbstractBinding conditionPrimitive)
-	{
+	protected Expression makeCondition(AbstractBinding conditionPrimitive) {
 		return new ConditionPrimitiveExpression(conditionPrimitive);
 	}
 
-	protected ControlGraph makeSequentialControlGraph(ControlGraph... statements)
-	{
+	protected ControlGraph makeSequentialControlGraph(ControlGraph... statements) {
 		Vector<ControlGraph> listOfStatements = new Vector<ControlGraph>();
 		for (ControlGraph statement : statements) {
-			if (statement != null 
-					&& !(statement instanceof Nop && !statement.hasComment())) 
+			if (statement != null && !(statement instanceof Nop && !statement.hasComment())) {
 				listOfStatements.add(statement);
+			}
 		}
 		return makeSequentialControlGraph(listOfStatements);
 	}
-	
-	protected ControlGraph makeSequentialControlGraph(Vector<ControlGraph> listOfStatements)
-	{
-		if (listOfStatements == null || listOfStatements.size() == 0) return new Nop();
-		
+
+	protected ControlGraph makeSequentialControlGraph(Vector<ControlGraph> listOfStatements) {
+		if (listOfStatements == null || listOfStatements.size() == 0) {
+			return new Nop();
+		}
+
 		if (listOfStatements.size() == 1) {
 			return listOfStatements.firstElement();
 		}
-		
+
 		else {
 			Sequence returned = new Sequence();
-			for (ControlGraph statement : listOfStatements) returned.addToStatements(statement);
+			for (ControlGraph statement : listOfStatements) {
+				returned.addToStatements(statement);
+			}
 			returned.normalize();
 			return returned.normalize();
 		}
 	}
-	
-	protected ControlGraph makeFlowControlGraph(Vector<ControlGraph> listOfStatements)
-	{
-		if (listOfStatements == null || listOfStatements.size() == 0) return new Nop();
-		
+
+	protected ControlGraph makeFlowControlGraph(Vector<ControlGraph> listOfStatements) {
+		if (listOfStatements == null || listOfStatements.size() == 0) {
+			return new Nop();
+		}
+
 		if (listOfStatements.size() == 1) {
 			return listOfStatements.firstElement();
 		}
-		
+
 		else {
 			Flow returned = new Flow();
-			for (ControlGraph statement : listOfStatements) returned.addToStatements(statement);
+			for (ControlGraph statement : listOfStatements) {
+				returned.addToStatements(statement);
+			}
 			returned.normalize();
 			return returned.normalize();
 		}
 	}
-	
+
 }

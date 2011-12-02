@@ -24,7 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.wkf.dm.ProcessFolderAdded;
@@ -37,88 +36,94 @@ public abstract class FlexoFolderContainerNode extends WorkflowModelObject {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoFolderContainerNode.class.getPackage().getName());
 
-    private Vector<ProcessFolder> folders;
+	private Vector<ProcessFolder> folders;
 
 	public FlexoFolderContainerNode(FlexoProject project, FlexoWorkflow workflow) {
 		super(project, workflow);
-        folders = new Vector<ProcessFolder>();
+		folders = new Vector<ProcessFolder>();
 	}
 
 	@Override
 	public void delete() {
-    	for (ProcessFolder folder: new Vector<ProcessFolder>(getFolders())) {
-    		folder.delete();
-    	}
+		for (ProcessFolder folder : new Vector<ProcessFolder>(getFolders())) {
+			folder.delete();
+		}
 		super.delete();
 	}
 
-    public Vector<ProcessFolder> getFolders() {
+	public Vector<ProcessFolder> getFolders() {
 		return folders;
 	}
 
-    public void setFolders(Vector<ProcessFolder> folders) {
+	public void setFolders(Vector<ProcessFolder> folders) {
 		this.folders = folders;
 	}
 
-    public void addToFolders(ProcessFolder folder) {
-    	if (folder==this)
-    		return;
-    	if (!folders.contains(folder)) {
-    		if (!isDeserializing()) {
-	    		for(FlexoProcessNode node:folder.getProcesses()) {
-	    			if (node.getFatherProcessNode()!=getProcessNode()) {
-	    				if (logger.isLoggable(Level.WARNING))
-							logger.warning("Folder "+folder.getName()+" cannot be added to "+this.getName()+" because process "+node.getName()+" is not one of my sub-processes");
-	    				return;
-	    			}
-	    		}
-    		}
-    		folders.add(folder);
-    		folder.setParent(this);
-    		if (!isDeserializing()) {
-	    		folder.setIndexValue(folders.size());
-	    		setChanged();
-	    		notifyObservers(new ProcessFolderAdded(folder));
-    		}
-    	}
-    }
+	public void addToFolders(ProcessFolder folder) {
+		if (folder == this) {
+			return;
+		}
+		if (!folders.contains(folder)) {
+			if (!isDeserializing()) {
+				for (FlexoProcessNode node : folder.getProcesses()) {
+					if (node.getFatherProcessNode() != getProcessNode()) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Folder " + folder.getName() + " cannot be added to " + this.getName() + " because process "
+									+ node.getName() + " is not one of my sub-processes");
+						}
+						return;
+					}
+				}
+			}
+			folders.add(folder);
+			folder.setParent(this);
+			if (!isDeserializing()) {
+				folder.setIndexValue(folders.size());
+				setChanged();
+				notifyObservers(new ProcessFolderAdded(folder));
+			}
+		}
+	}
 
-    public void removeFromFolders(ProcessFolder folder) {
-    	if (folders.contains(folder)) {
-    		folders.remove(folder);
-    		folder.setParent(null);
-    		FlexoIndexManager.reIndexObjectOfArray(folders.toArray(new ProcessFolder[0]));
-    		setChanged();
-    		notifyObservers(new ProcessFolderRemoved(folder));
-    	}
-    }
+	public void removeFromFolders(ProcessFolder folder) {
+		if (folders.contains(folder)) {
+			folders.remove(folder);
+			folder.setParent(null);
+			FlexoIndexManager.reIndexObjectOfArray(folders.toArray(new ProcessFolder[0]));
+			setChanged();
+			notifyObservers(new ProcessFolderRemoved(folder));
+		}
+	}
 
-    public ProcessFolder getFolderWithName(String name) {
-    	if (name==null)
-    		return null;
-		for (ProcessFolder folder:getFolders()) {
-			if (name.equals(folder.getName()))
+	public ProcessFolder getFolderWithName(String name) {
+		if (name == null) {
+			return null;
+		}
+		for (ProcessFolder folder : getFolders()) {
+			if (name.equals(folder.getName())) {
 				return folder;
+			}
 		}
 		return null;
-    }
+	}
 
-    public Enumeration<ProcessFolder> getSortedFolders() {
-    	disableObserving();
-		ProcessFolder[]o = FlexoIndexManager.sortArray(getFolders().toArray(new ProcessFolder[0]));
+	public Enumeration<ProcessFolder> getSortedFolders() {
+		disableObserving();
+		ProcessFolder[] o = FlexoIndexManager.sortArray(getFolders().toArray(new ProcessFolder[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
-    }
+	}
 
 	public String getNewFolderName() {
 		String base = FlexoLocalization.localizedForKey("process_folder");
 		String attempt = base;
-		int i=0;
-		while(getFolderWithName(attempt)!=null || attempt.equals(getName()))
-			attempt = base+"-"+i++;
+		int i = 0;
+		while (getFolderWithName(attempt) != null || attempt.equals(getName())) {
+			attempt = base + "-" + i++;
+		}
 		return attempt;
 	}
 
-    public abstract FlexoProcessNode getProcessNode();
+	public abstract FlexoProcessNode getProcessNode();
 
 }

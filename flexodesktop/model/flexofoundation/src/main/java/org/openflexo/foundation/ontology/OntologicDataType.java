@@ -21,8 +21,7 @@ package org.openflexo.foundation.ontology;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 
-public enum OntologicDataType
-{
+public enum OntologicDataType {
 	// TODO: see http://www.w3.org/TR/xmlschema-2/ to complete list
 
 	String {
@@ -30,10 +29,12 @@ public enum OntologicDataType
 		public Class<?> getAccessedType() {
 			return String.class;
 		}
+
 		@Override
 		public java.lang.String getURI() {
 			return "http://www.w3.org/2001/XMLSchema#string";
 		}
+
 		@Override
 		public Object valueFromLiteral(Literal literal) {
 			return literal.getString();
@@ -44,10 +45,12 @@ public enum OntologicDataType
 		public Class<?> getAccessedType() {
 			return Integer.class;
 		}
+
 		@Override
 		public java.lang.String getURI() {
 			return "http://www.w3.org/2001/XMLSchema#integer";
 		}
+
 		@Override
 		public Object valueFromLiteral(Literal literal) {
 			return literal.getInt();
@@ -58,10 +61,12 @@ public enum OntologicDataType
 		public Class<?> getAccessedType() {
 			return Integer.class;
 		}
+
 		@Override
 		public java.lang.String getURI() {
 			return "http://www.w3.org/2001/XMLSchema#short";
 		}
+
 		@Override
 		public Object valueFromLiteral(Literal literal) {
 			return literal.getShort();
@@ -72,10 +77,12 @@ public enum OntologicDataType
 		public Class<?> getAccessedType() {
 			return Integer.class;
 		}
+
 		@Override
 		public java.lang.String getURI() {
 			return "http://www.w3.org/2001/XMLSchema#long";
 		}
+
 		@Override
 		public Object valueFromLiteral(Literal literal) {
 			return literal.getLong();
@@ -86,10 +93,12 @@ public enum OntologicDataType
 		public Class<?> getAccessedType() {
 			return Integer.class;
 		}
+
 		@Override
 		public java.lang.String getURI() {
 			return "http://www.w3.org/2001/XMLSchema#byte";
 		}
+
 		@Override
 		public Object valueFromLiteral(Literal literal) {
 			return literal.getByte();
@@ -100,10 +109,12 @@ public enum OntologicDataType
 		public Class<?> getAccessedType() {
 			return Integer.class;
 		}
+
 		@Override
 		public java.lang.String getURI() {
 			return "http://www.w3.org/2001/XMLSchema#float";
 		}
+
 		@Override
 		public Object valueFromLiteral(Literal literal) {
 			return literal.getFloat();
@@ -114,10 +125,12 @@ public enum OntologicDataType
 		public Class<?> getAccessedType() {
 			return Integer.class;
 		}
+
 		@Override
 		public java.lang.String getURI() {
 			return "http://www.w3.org/2001/XMLSchema#double";
 		}
+
 		@Override
 		public Object valueFromLiteral(Literal literal) {
 			return literal.getDouble();
@@ -128,10 +141,12 @@ public enum OntologicDataType
 		public Class<?> getAccessedType() {
 			return Integer.class;
 		}
+
 		@Override
 		public java.lang.String getURI() {
 			return "http://www.w3.org/2001/XMLSchema#boolean";
 		}
+
 		@Override
 		public Object valueFromLiteral(Literal literal) {
 			return literal.getBoolean();
@@ -139,13 +154,16 @@ public enum OntologicDataType
 	};
 
 	public abstract Class<?> getAccessedType();
+
 	public abstract String getURI();
+
 	public abstract Object valueFromLiteral(Literal literal);
-	
-	public static OntologicDataType fromURI(String uri)
-	{
+
+	public static OntologicDataType fromURI(String uri) {
 		for (OntologicDataType dt : values()) {
-			if (dt.getURI().equals(uri)) return dt;
+			if (dt.getURI().equals(uri)) {
+				return dt;
+			}
 		}
 		return null;
 	}

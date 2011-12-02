@@ -23,57 +23,56 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.apache.velocity.VelocityContext;
-
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.utils.JavaClassGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-public class CustomClassGenerator extends JavaClassGenerator
-{
+public class CustomClassGenerator extends JavaClassGenerator {
 
-    protected static final String TEMLPATE_NAME = "CustomClass.java.vm";
-    private Vector<String> imports;
-    private static final Logger logger = FlexoLogger.getLogger(CustomClassGenerator.class.getPackage().getName());
+	protected static final String TEMLPATE_NAME = "CustomClass.java.vm";
+	private Vector<String> imports;
+	private static final Logger logger = FlexoLogger.getLogger(CustomClassGenerator.class.getPackage().getName());
 
-    public CustomClassGenerator(ProjectGenerator projectGenerator, DMEntity entity)
-    {
-        super(projectGenerator, entity);
-    }
+	public CustomClassGenerator(ProjectGenerator projectGenerator, DMEntity entity) {
+		super(projectGenerator, entity);
+	}
 
 	@Override
-    public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public VelocityContext defaultContext()
-    {
-        VelocityContext context = super.defaultContext();
-        imports = new Vector<String>();
-        context.put("entity", getObject());
+	@Override
+	public VelocityContext defaultContext() {
+		VelocityContext context = super.defaultContext();
+		imports = new Vector<String>();
+		context.put("entity", getObject());
 
-        context.put("props", getEntity().getProperties());
+		context.put("props", getEntity().getProperties());
 
-        return context;
-    }
+		return context;
+	}
 
-    public String addToImports(String fullClassName)
-    {
-    	if (fullClassName==null)
-    		return null;
-        if (!imports.contains(fullClassName.trim()))
-        	if(fullClassName.indexOf(".")>-1 && !fullClassName.trim().startsWith("java.lang."))
-        		if(!fullClassName.startsWith("default_package"))imports.add(fullClassName.trim());
-        return fullClassName;
-    }
-    
+	public String addToImports(String fullClassName) {
+		if (fullClassName == null) {
+			return null;
+		}
+		if (!imports.contains(fullClassName.trim())) {
+			if (fullClassName.indexOf(".") > -1 && !fullClassName.trim().startsWith("java.lang.")) {
+				if (!fullClassName.startsWith("default_package")) {
+					imports.add(fullClassName.trim());
+				}
+			}
+		}
+		return fullClassName;
+	}
+
 	@Override
 	public void rebuildDependanciesForResource(JavaFileResource resource) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

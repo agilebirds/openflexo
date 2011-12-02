@@ -33,125 +33,115 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.toolbox.StringUtils;
 
-
 /**
  * Represents a 'TextArea' widget
  * 
  * @author bmangez
  */
-public class IETextAreaWidget extends IEEditableTextWidget implements ExtensibleWidget
-{
-    /**
+public class IETextAreaWidget extends IEEditableTextWidget implements ExtensibleWidget {
+	/**
      * 
      */
-    public static final String TEXTAREA_WIDGET = "textarea_widget";
-    private int _rows = 4;
+	public static final String TEXTAREA_WIDGET = "textarea_widget";
+	private int _rows = 4;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IETextAreaWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	public IETextAreaWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public IETextAreaWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	public IETextAreaWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return "TextArea.inspector";
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return "TextArea.inspector";
+	}
 
-    public int getRows()
-    {
-        return _rows;
-    }
+	public int getRows() {
+		return _rows;
+	}
 
-    public void setRows(int _rows) throws InvalidArgumentException
-    {
-        if (_rows<1)
-            throw new InvalidArgumentException("Negative numbers are not valid for rows number: "+_rows,null);
-        this._rows = _rows;
-        setChanged();
-        notifyObservers(new IEDataModification("rows",null,new Integer(_rows)));
-    }
+	public void setRows(int _rows) throws InvalidArgumentException {
+		if (_rows < 1) {
+			throw new InvalidArgumentException("Negative numbers are not valid for rows number: " + _rows, null);
+		}
+		this._rows = _rows;
+		setChanged();
+		notifyObservers(new IEDataModification("rows", null, new Integer(_rows)));
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        return EMPTY_IOBJECT_VECTOR;
-    }
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		return EMPTY_IOBJECT_VECTOR;
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-    		return getWOComponent().getName()+"."+getName()+"(TextArea)";
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return getWOComponent().getName() + "." + getName() + "(TextArea)";
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return TEXTAREA_WIDGET;
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return TEXTAREA_WIDGET;
+	}
 
-    /**
-     * Overrides isDate
-     * @see org.openflexo.foundation.ie.widget.IEEditableTextWidget#isDate()
-     */
-    @Override
-    public boolean isDate()
-    {
-        return false;
-    }
+	/**
+	 * Overrides isDate
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEEditableTextWidget#isDate()
+	 */
+	@Override
+	public boolean isDate() {
+		return false;
+	}
 
-    /**
-     * Overrides isNumber
-     * @see org.openflexo.foundation.ie.widget.IEEditableTextWidget#isNumber()
-     */
-    @Override
-    public boolean isNumber()
-    {
-        return false;
-    }
+	/**
+	 * Overrides isNumber
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEEditableTextWidget#isNumber()
+	 */
+	@Override
+	public boolean isNumber() {
+		return false;
+	}
 
-    /**
-     * Overrides isText
-     * @see org.openflexo.foundation.ie.widget.IEEditableTextWidget#isText()
-     */
-    @Override
-    public boolean isText()
-    {
-        return true;
-    }
+	/**
+	 * Overrides isText
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEEditableTextWidget#isText()
+	 */
+	@Override
+	public boolean isText() {
+		return true;
+	}
 
 	/**
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithValueList#getValueList(org.openflexo.foundation.wkf.FlexoProcess)
 	 */
 	@Override
-	public List<Object> getValueList(FlexoProcess process)
-	{
+	public List<Object> getValueList(FlexoProcess process) {
 		List<Object> result = new ArrayList<Object>();
-		if(!StringUtils.isEmpty(getValue()))
+		if (!StringUtils.isEmpty(getValue())) {
 			result.add(getValue());
+		}
 		return result;
 	}
 
-    
 }

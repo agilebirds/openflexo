@@ -25,62 +25,61 @@ import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
-
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.controller.FlexoController;
 
-public class NewPaletteComponent extends PaletteChooserComponent
-{
+public class NewPaletteComponent extends PaletteChooserComponent {
 
-    private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage().getName());
 
-    protected NewPaletteComponent()
-    {
-        super();
-    }
+	protected NewPaletteComponent() {
+		super();
+	}
 
-    public static File getPaletteDirectory()
-    {
-        NewPaletteComponent chooser = new NewPaletteComponent();
-        File newProjectDir = null;
-        int returnVal = chooser.showSaveDialog(null);
-        if (returnVal == JFileChooser.CANCEL_OPTION)
-            return null;
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            if (isValidProjectName(chooser.getSelectedFile().getName())) {
-                newProjectDir = chooser.getSelectedFile();
-                File newFileDir = chooser.getSelectedFile().getParentFile();
-                if (!newProjectDir.getName().toLowerCase().endsWith(".iepalette")) {
-                    newProjectDir = new File(newProjectDir.getAbsolutePath() + ".iepalette");
-                }
-                if (!newProjectDir.exists()) {
-                    newProjectDir.mkdir();
-                } else {
-                    if (!FlexoController.confirm(FlexoLocalization.localizedForKey("palette_already_exists_do_you_want_to_replace_it")))
-                        newProjectDir = null;
-                }
-            } else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Invalid palette name. The following characters are not allowed: "
-                            + FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
-                FlexoController.notify(FlexoLocalization.localizedForKey("palette_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
-            }
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("No project specified !");
-        }
-        return newProjectDir;
-    }
+	public static File getPaletteDirectory() {
+		NewPaletteComponent chooser = new NewPaletteComponent();
+		File newProjectDir = null;
+		int returnVal = chooser.showSaveDialog(null);
+		if (returnVal == JFileChooser.CANCEL_OPTION) {
+			return null;
+		}
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if (isValidProjectName(chooser.getSelectedFile().getName())) {
+				newProjectDir = chooser.getSelectedFile();
+				File newFileDir = chooser.getSelectedFile().getParentFile();
+				if (!newProjectDir.getName().toLowerCase().endsWith(".iepalette")) {
+					newProjectDir = new File(newProjectDir.getAbsolutePath() + ".iepalette");
+				}
+				if (!newProjectDir.exists()) {
+					newProjectDir.mkdir();
+				} else {
+					if (!FlexoController.confirm(FlexoLocalization.localizedForKey("palette_already_exists_do_you_want_to_replace_it"))) {
+						newProjectDir = null;
+					}
+				}
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Invalid palette name. The following characters are not allowed: "
+							+ FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
+				}
+				FlexoController.notify(FlexoLocalization.localizedForKey("palette_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
+			}
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("No project specified !");
+			}
+		}
+		return newProjectDir;
+	}
 
-    /**
-     * @param absolutePath
-     * @return
-     */
-    public static boolean isValidProjectName(String absolutePath)
-    {
-        return absolutePath != null && absolutePath.trim().length() > 0
-                && !FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_PATTERN.matcher(absolutePath).find();
-    }
+	/**
+	 * @param absolutePath
+	 * @return
+	 */
+	public static boolean isValidProjectName(String absolutePath) {
+		return absolutePath != null && absolutePath.trim().length() > 0
+				&& !FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_PATTERN.matcher(absolutePath).find();
+	}
 
 }

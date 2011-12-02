@@ -28,11 +28,13 @@ public abstract class ObjectRestrictionStatement extends RestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(ObjectRestrictionStatement.class.getPackage().getName());
 
-	public ObjectRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
-	{
-		super(subject,s,r);
+	public ObjectRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
+		super(subject, s, r);
 	}
-	
-	public abstract OntologyObject getObject();
+
+	public abstract OntologyClass getObject();
+
+	@Override
+	public abstract OntologyObjectProperty getProperty();
 
 }

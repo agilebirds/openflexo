@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.fge.geomedit;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -40,20 +41,17 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.swing.FlexoFileChooser;
-import org.openflexo.toolbox.FileResource;
-
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
-
+import org.openflexo.swing.FlexoFileChooser;
+import org.openflexo.toolbox.FileResource;
 
 public class GeomEdit {
 
 	private static final Logger logger = FlexoLogger.getLogger(GeomEdit.class.getPackage().getName());
 
-	public static void main(String[] args) 
-	{
+	public static void main(String[] args) {
 		try {
 			FlexoLoggingManager.initialize();
 			FlexoLoggingManager.setKeepLogTrace(true);
@@ -70,13 +68,12 @@ public class GeomEdit {
 		editor.showPanel();
 
 	}
-	
+
 	private JFrame frame;
 	private FlexoFileChooser fileChooser;
 	private FIBInspectorController inspector;
 
-	public GeomEdit()
-	{
+	public GeomEdit() {
 		super();
 		frame = new JFrame();
 		fileChooser = new FlexoFileChooser(frame);
@@ -84,110 +81,100 @@ public class GeomEdit {
 		fileChooser.setCurrentDirectory(new FileResource("GeomEditExamples"));
 		inspector = new FIBInspectorController(frame);
 	}
-	
+
 	private Vector<GeometricSet> _drawings = new Vector<GeometricSet>();
 	private JPanel mainPanel;
 	private JTabbedPane tabbedPane;
-	
+
 	private GeometricSet currentDrawing;
-	
-	private class DrawingViewPanel extends JPanel
-	{
+
+	private class DrawingViewPanel extends JPanel {
 		private JPanel controlPanel;
 		private JLabel editionLabel;
 		private JLabel positionLabel;
 		private JScrollPane scrollPane;
-		
+
 		private GeometricDrawingView drawingView;
-		
+
 		private JSplitPane splitPane;
-		
-		private DrawingViewPanel(GeometricDrawingView v) 
-		{
+
+		private DrawingViewPanel(GeometricDrawingView v) {
 			super();
 			drawingView = v;
-			
+
 			setLayout(new BorderLayout());
 			scrollPane = new JScrollPane(v);
 			controlPanel = v.getController().getControlPanel();
 			editionLabel = v.getController().getEditionLabel();
 			positionLabel = v.getController().getPositionLabel();
-			
-			add(controlPanel,BorderLayout.NORTH);
-			
+
+			add(controlPanel, BorderLayout.NORTH);
+
 			JScrollPane browser = new JScrollPane(v.getController().getTree());
-			//browser.setPreferredSize(new Dimension(200,200));
-			splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,browser,scrollPane);
+			// browser.setPreferredSize(new Dimension(200,200));
+			splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, browser, scrollPane);
 			splitPane.setDividerLocation(150);
 			splitPane.setResizeWeight(0);
-			
-			add(splitPane,BorderLayout.CENTER);
-			
+
+			add(splitPane, BorderLayout.CENTER);
+
 			JPanel bottom = new JPanel(new BorderLayout());
-			bottom.add(editionLabel,BorderLayout.WEST);
-			bottom.add(positionLabel,BorderLayout.EAST);
-			
-			add(bottom,BorderLayout.SOUTH);
-			
+			bottom.add(editionLabel, BorderLayout.WEST);
+			bottom.add(positionLabel, BorderLayout.EAST);
+
+			add(bottom, BorderLayout.SOUTH);
+
 			validate();
 		}
 	}
-	
-	private void addDrawing(GeometricSet drawing)
-	{
+
+	private void addDrawing(GeometricSet drawing) {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
 			tabbedPane.addChangeListener(new ChangeListener() {
 				@Override
-				public void stateChanged(ChangeEvent e)
-				{
-					DrawingViewPanel c = (DrawingViewPanel)tabbedPane.getSelectedComponent();
+				public void stateChanged(ChangeEvent e) {
+					DrawingViewPanel c = (DrawingViewPanel) tabbedPane.getSelectedComponent();
 					drawingSwitched(c.drawingView.getDrawing().getModel());
 				}
 			});
-			mainPanel.add(tabbedPane,BorderLayout.CENTER);
+			mainPanel.add(tabbedPane, BorderLayout.CENTER);
 		}
 		_drawings.add(drawing);
-		tabbedPane.add(drawing.getTitle(),new DrawingViewPanel(drawing.getEditedDrawing().getController().getDrawingView()));
+		tabbedPane.add(drawing.getTitle(), new DrawingViewPanel(drawing.getEditedDrawing().getController().getDrawingView()));
 		switchToDrawing(drawing);
 	}
-	
-	private void removeDrawing(GeometricSet drawing)
-	{
-		
+
+	private void removeDrawing(GeometricSet drawing) {
+
 	}
-	
-	public void switchToDrawing(GeometricSet drawing)
-	{
+
+	public void switchToDrawing(GeometricSet drawing) {
 		tabbedPane.setSelectedIndex(_drawings.indexOf(drawing));
 	}
-	
-	private void drawingSwitched(GeometricSet drawing)
-	{
+
+	private void drawingSwitched(GeometricSet drawing) {
 		if (currentDrawing != null) {
 			mainPanel.remove(currentDrawing.getEditedDrawing().getController().getScalePanel());
 			currentDrawing.getEditedDrawing().getController().deleteObserver(inspector);
 		}
 		currentDrawing = drawing;
-		mainPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel(),BorderLayout.NORTH);
+		mainPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel(), BorderLayout.NORTH);
 		currentDrawing.getEditedDrawing().getController().addObserver(inspector);
 		updateFrameTitle();
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
-	
-	private void updateFrameTitle()
-	{
-		frame.setTitle("GeomEdit - "+currentDrawing.getTitle());
+
+	private void updateFrameTitle() {
+		frame.setTitle("GeomEdit - " + currentDrawing.getTitle());
 	}
-	
-	private void updateTabTitle()
-	{
+
+	private void updateTabTitle() {
 		tabbedPane.setTitleAt(_drawings.indexOf(currentDrawing), currentDrawing.getTitle());
 	}
-	
-	public void showPanel() 
-	{
+
+	public void showPanel() {
 		frame.setTitle("GeomEdit");
 		mainPanel = new JPanel(new BorderLayout());
 
@@ -196,8 +183,7 @@ public class GeomEdit {
 		JMenu editMenu = new JMenu(FlexoLocalization.localizedForKey("edit"));
 		JMenu toolsMenu = new JMenu(FlexoLocalization.localizedForKey("tools"));
 		JMenu helpMenu = new JMenu(FlexoLocalization.localizedForKey("help"));
-		
-		
+
 		JMenuItem newItem = new JMenuItem(FlexoLocalization.localizedForKey("new_drawing"));
 		newItem.addActionListener(new ActionListener() {
 			@Override
@@ -205,7 +191,7 @@ public class GeomEdit {
 				newDrawing();
 			}
 		});
-		
+
 		JMenuItem loadItem = new JMenuItem(FlexoLocalization.localizedForKey("open_drawing"));
 		loadItem.addActionListener(new ActionListener() {
 			@Override
@@ -213,7 +199,7 @@ public class GeomEdit {
 				loadDrawing();
 			}
 		});
-		
+
 		JMenuItem saveItem = new JMenuItem(FlexoLocalization.localizedForKey("save_drawing"));
 		saveItem.addActionListener(new ActionListener() {
 			@Override
@@ -221,7 +207,7 @@ public class GeomEdit {
 				saveDrawing();
 			}
 		});
-		
+
 		JMenuItem saveAsItem = new JMenuItem(FlexoLocalization.localizedForKey("save_drawing_as"));
 		saveAsItem.addActionListener(new ActionListener() {
 			@Override
@@ -229,7 +215,7 @@ public class GeomEdit {
 				saveDrawingAs();
 			}
 		});
-		
+
 		JMenuItem closeItem = new JMenuItem(FlexoLocalization.localizedForKey("close_drawing"));
 		closeItem.addActionListener(new ActionListener() {
 			@Override
@@ -237,7 +223,7 @@ public class GeomEdit {
 				closeDrawing();
 			}
 		});
-		
+
 		JMenuItem quitItem = new JMenuItem(FlexoLocalization.localizedForKey("quit"));
 		quitItem.addActionListener(new ActionListener() {
 			@Override
@@ -245,7 +231,7 @@ public class GeomEdit {
 				quit();
 			}
 		});
-		
+
 		fileMenu.add(newItem);
 		fileMenu.add(loadItem);
 		fileMenu.add(saveItem);
@@ -253,7 +239,7 @@ public class GeomEdit {
 		fileMenu.add(closeItem);
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);
-		
+
 		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey("inspect"));
 		inspectItem.addActionListener(new ActionListener() {
 			@Override
@@ -269,26 +255,26 @@ public class GeomEdit {
 				FlexoLoggingManager.showLoggingViewer();
 			}
 		});
-		
+
 		JMenuItem localizedItem = new JMenuItem(FlexoLocalization.localizedForKey("localized_editor"));
 		localizedItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			       FlexoLocalization.showLocalizedEditor();
+				FlexoLocalization.showLocalizedEditor();
 			}
 		});
-		
+
 		toolsMenu.add(inspectItem);
 		toolsMenu.add(logsItem);
 		toolsMenu.add(localizedItem);
-		
+
 		mb.add(fileMenu);
 		mb.add(editMenu);
 		mb.add(toolsMenu);
 		mb.add(helpMenu);
-		
+
 		frame.setJMenuBar(mb);
-		
+
 		/*EditedDrawing ed = drawing.getEditedDrawing();
 		DrawingController<EditedDrawing> dc = new MyDrawingController(ed);
 		panel.add(new JScrollPane(dc.getDrawingView()), BorderLayout.CENTER);
@@ -344,8 +330,6 @@ public class GeomEdit {
 			}
 		});*/
 
-
-
 		/*JPanel controlPanel = new JPanel(new FlowLayout());
 		controlPanel.add(newButton);
 		controlPanel.add(loadButton);
@@ -357,7 +341,7 @@ public class GeomEdit {
 
 		mainPanel.add(controlPanel,BorderLayout.SOUTH);*/
 
-		frame.setPreferredSize(new Dimension(1000,800));
+		frame.setPreferredSize(new Dimension(1000, 800));
 		frame.getContentPane().add(mainPanel);
 		frame.validate();
 		frame.pack();
@@ -365,20 +349,17 @@ public class GeomEdit {
 		frame.setVisible(true);
 
 	}
-	
-	public void quit()
-	{
+
+	public void quit() {
 		frame.dispose();
 		System.exit(0);
 	}
 
-	public void closeDrawing()
-	{
+	public void closeDrawing() {
 		logger.warning("Not implemented yet");
 	}
 
-	public void newDrawing()
-	{
+	public void newDrawing() {
 		/*(new Thread(new Runnable() {
 			public void run()
 			{
@@ -396,46 +377,45 @@ public class GeomEdit {
 
 		GeometricSet newDrawing = GeometricSet.makeNewDrawing();
 		addDrawing(newDrawing);
-		
+
 	}
 
-	public void loadDrawing()
-	{
+	public void loadDrawing() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			GeometricSet loadedDrawing = GeometricSet.load(file);
-			if (loadedDrawing != null)
+			if (loadedDrawing != null) {
 				addDrawing(loadedDrawing);
+			}
 		}
 	}
 
-	public void saveDrawing()
-	{
-		if (currentDrawing == null) return;
+	public void saveDrawing() {
+		if (currentDrawing == null) {
+			return;
+		}
 		if (currentDrawing.file == null) {
 			saveDrawingAs();
-		}
-		else {
+		} else {
 			currentDrawing.save();
 		}
 	}
 
-	public void saveDrawingAs()
-	{
-		if (currentDrawing == null) return;
+	public void saveDrawingAs() {
+		if (currentDrawing == null) {
+			return;
+		}
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			if (!file.getName().endsWith(".drw")) file = new File(file.getParentFile(),file.getName()+".drw");
+			if (!file.getName().endsWith(".drw")) {
+				file = new File(file.getParentFile(), file.getName() + ".drw");
+			}
 			currentDrawing.file = file;
 			updateFrameTitle();
 			updateTabTitle();
 			currentDrawing.save();
-		}
-		else {
+		} else {
 			return;
 		}
 	}
 }
-
-
-

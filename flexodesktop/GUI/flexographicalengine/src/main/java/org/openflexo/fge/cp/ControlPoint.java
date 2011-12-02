@@ -28,42 +28,42 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEGraphics;
 
-
 public abstract class ControlPoint extends ControlArea<FGEPoint> {
 
 	private static final Logger logger = Logger.getLogger(ControlPoint.class.getPackage().getName());
 
-	public ControlPoint(GraphicalRepresentation<?> aGraphicalRepresentation, FGEPoint pt)
-	{
-		super(aGraphicalRepresentation,pt);
+	public ControlPoint(GraphicalRepresentation<?> aGraphicalRepresentation, FGEPoint pt) {
+		super(aGraphicalRepresentation, pt);
 	}
-	
-	public FGEPoint getPoint()
-	{
+
+	public FGEPoint getPoint() {
 		return getArea();
 	}
 
-	public void setPoint(FGEPoint point)
-	{
+	public void setPoint(FGEPoint point) {
 		setArea(point);
 	}
-	
-	//@SuppressWarnings("unchecked")
+
+	// @SuppressWarnings("unchecked")
 	@Override
-	public Rectangle paint(FGEGraphics graphics)
-	{
+	public Rectangle paint(FGEGraphics graphics) {
 		if (getGraphicalRepresentation() == null) {
 			logger.warning("Unexpected null GraphicalRepresentation");
 			return null;
 		}
 		graphics.useDefaultForegroundStyle();
-		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(getGraphicalRepresentation(), graphics.getGraphicalRepresentation());				
-		return graphics.drawControlPoint(getPoint().transform(at), FGEConstants.CONTROL_POINT_SIZE);
-		
-		/*Point location = drawingView.getGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(getPoint(), getGraphicalRepresentation(), drawingView.getScale());
-		graphics.setColor(mainColor);
-		graphics.fillRect(location.x-FGEConstants.CONTROL_POINT_SIZE, location.y-FGEConstants.CONTROL_POINT_SIZE, FGEConstants.CONTROL_POINT_SIZE*2, FGEConstants.CONTROL_POINT_SIZE*2);
-		return new Rectangle(location.x-FGEConstants.CONTROL_POINT_SIZE, location.y-FGEConstants.CONTROL_POINT_SIZE, FGEConstants.CONTROL_POINT_SIZE*2, FGEConstants.CONTROL_POINT_SIZE*2);*/
+		if (isEmbeddedInComponentHierarchy(graphics)) {
+			AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(getGraphicalRepresentation(),
+					graphics.getGraphicalRepresentation());
+			return graphics.drawControlPoint(getPoint().transform(at), FGEConstants.CONTROL_POINT_SIZE);
+		} else {
+			return graphics.drawControlPoint(getPoint(), FGEConstants.CONTROL_POINT_SIZE);
+		}
+
+	}
+
+	public boolean isEmbeddedInComponentHierarchy(FGEGraphics graphics) {
+		return getGraphicalRepresentation().isConnectedToDrawing();
 	}
 
 }

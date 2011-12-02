@@ -30,7 +30,6 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
 
-
 public class ConvertIntoLocalRole extends FlexoAction<ConvertIntoLocalRole, Role, Role> {
 
 	public static final FlexoActionType<ConvertIntoLocalRole, Role, Role> actionType = new FlexoActionType<ConvertIntoLocalRole, Role, Role>(
@@ -38,7 +37,8 @@ public class ConvertIntoLocalRole extends FlexoAction<ConvertIntoLocalRole, Role
 
 		@Override
 		protected boolean isEnabledForSelection(Role object, Vector<Role> globalSelection) {
-			return isVisibleForSelection(object, globalSelection) && object.getWorkflow().getRoleList().roleWithName(object.getName())==null;
+			return isVisibleForSelection(object, globalSelection)
+					&& object.getWorkflow().getRoleList().roleWithName(object.getName()) == null;
 		}
 
 		@Override

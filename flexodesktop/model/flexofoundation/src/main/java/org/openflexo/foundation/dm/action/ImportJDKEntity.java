@@ -31,126 +31,107 @@ import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.JDKRepository;
 import org.openflexo.foundation.dm.LoadableDMEntity;
 
+public class ImportJDKEntity extends FlexoAction<ImportJDKEntity, DMObject, DMObject> {
 
-public class ImportJDKEntity extends FlexoAction<ImportJDKEntity,DMObject,DMObject> 
-{
+	private static final Logger logger = Logger.getLogger(ImportJDKEntity.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(ImportJDKEntity.class.getPackage().getName());
+	public static FlexoActionType<ImportJDKEntity, DMObject, DMObject> actionType = new FlexoActionType<ImportJDKEntity, DMObject, DMObject>(
+			"import_class", FlexoActionType.importMenu, FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<ImportJDKEntity,DMObject,DMObject> actionType 
-    = new FlexoActionType<ImportJDKEntity,DMObject,DMObject> ("import_class",FlexoActionType.importMenu,FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ImportJDKEntity makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new ImportJDKEntity(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ImportJDKEntity makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ImportJDKEntity(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return ((object != null) && ((object instanceof JDKRepository) || ((object instanceof DMPackage) && (((DMPackage) object)
+					.getRepository() instanceof JDKRepository))));
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return ((object != null) 
-                    && ((object instanceof JDKRepository)
-                            || ((object instanceof DMPackage) 
-                                    && (((DMPackage)object).getRepository() instanceof JDKRepository))));
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return isVisibleForSelection(object,globalSelection);
-        }
-                
-    };
-    
-    ImportJDKEntity (DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    private String packageName;
-    private String className;
-    private boolean _importGetOnlyProperties = false;
-    private boolean _importMethods = false;
+	ImportJDKEntity(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    private DMEntity _newEntity;
- 
-    @Override
-	protected void doAction(Object context) 
-    {
-        logger.info ("ImportJDKEntity"); 
-        if (getJDKRepository() != null) {
-            Class importedClass = getClassToImport();
-            if (importedClass != null) {
-                 _newEntity = LoadableDMEntity.createLoadableDMEntity(importedClass,getJDKRepository().getDMModel(),getImportGetOnlyProperties(),getImportMethods());
-            }
-        }
-    }
-    
-    public Class getClassToImport()
-    {
-        try {
-            return Class.forName(packageName+"."+className);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-        
-    }
-    
-    public JDKRepository getJDKRepository() 
-    {
-        if (getFocusedObject() != null) {
-            return (getFocusedObject()).getDMModel().getJDKRepository();
-        }           
-        return null;
-    }
+	private String packageName;
+	private String className;
+	private boolean _importGetOnlyProperties = false;
+	private boolean _importMethods = false;
 
-    public DMEntity getNewEntity() 
-    {
-        return _newEntity;
-    }
+	private DMEntity _newEntity;
 
-    public String getClassName() 
-    {
-        return className;
-    }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("ImportJDKEntity");
+		if (getJDKRepository() != null) {
+			Class importedClass = getClassToImport();
+			if (importedClass != null) {
+				_newEntity = LoadableDMEntity.createLoadableDMEntity(importedClass, getJDKRepository().getDMModel(),
+						getImportGetOnlyProperties(), getImportMethods());
+			}
+		}
+	}
 
-    public void setClassName(String className)
-    {
-        this.className = className;
-    }
+	public Class getClassToImport() {
+		try {
+			return Class.forName(packageName + "." + className);
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
 
-    public String getPackageName()
-    {
-        return packageName;
-    }
+	}
 
-    public void setPackageName(String packageName) 
-    {
-        this.packageName = packageName;
-    }
+	public JDKRepository getJDKRepository() {
+		if (getFocusedObject() != null) {
+			return (getFocusedObject()).getDMModel().getJDKRepository();
+		}
+		return null;
+	}
 
-    public boolean getImportGetOnlyProperties() 
-    {
-        return _importGetOnlyProperties;
-    }
+	public DMEntity getNewEntity() {
+		return _newEntity;
+	}
 
-    public void setImportGetOnlyProperties(boolean importGetOnlyProperties) 
-    {
-        _importGetOnlyProperties = importGetOnlyProperties;
-    }
+	public String getClassName() {
+		return className;
+	}
 
-    public boolean getImportMethods()
-    {
-        return _importMethods;
-    }
+	public void setClassName(String className) {
+		this.className = className;
+	}
 
-    public void setImportMethods(boolean importMethods) 
-    {
-        _importMethods = importMethods;
-    }
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+
+	public boolean getImportGetOnlyProperties() {
+		return _importGetOnlyProperties;
+	}
+
+	public void setImportGetOnlyProperties(boolean importGetOnlyProperties) {
+		_importGetOnlyProperties = importGetOnlyProperties;
+	}
+
+	public boolean getImportMethods() {
+		return _importMethods;
+	}
+
+	public void setImportMethods(boolean importMethods) {
+		_importMethods = importMethods;
+	}
 
 }

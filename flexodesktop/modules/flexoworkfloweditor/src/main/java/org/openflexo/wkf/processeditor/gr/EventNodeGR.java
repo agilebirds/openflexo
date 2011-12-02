@@ -43,7 +43,6 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.utils.EventShapePainter;
 
-
 public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 
 	public static final int EVENT_NODE_SIZE = 31;
@@ -52,11 +51,11 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 
 	private static final Font specialPaletteFont = new Font("SansSerif", Font.BOLD, 10);
 
-	public EventNodeGR(EventNode eventNode, ProcessRepresentation aDrawing){
-		this(eventNode, aDrawing,false);
+	public EventNodeGR(EventNode eventNode, ProcessRepresentation aDrawing) {
+		this(eventNode, aDrawing, false);
 	}
-	public EventNodeGR(EventNode eventNode, ProcessRepresentation aDrawing,boolean isInPalet)
-	{
+
+	public EventNodeGR(EventNode eventNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(eventNode, ShapeType.CIRCLE, aDrawing, isInPalet);
 		this.isInPalette = isInPalet;
 		setWidth(EVENT_NODE_SIZE);
@@ -65,128 +64,113 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 		updateBackgroundForeground();
 		setShapePainter(new EventShapePainter(getDrawable()));
 
-		//		if (getEventNode().getImageIcon() != null) {
-		//			foreground = ForegroundStyle.makeNone();
-		//			background = BackgroundStyle.makeImageBackground(getEventNode().getImageIcon());
-		//			((BackgroundImage)background).setScaleX(1);
-		//			((BackgroundImage)background).setScaleY(1);
+		// if (getEventNode().getImageIcon() != null) {
+		// foreground = ForegroundStyle.makeNone();
+		// background = BackgroundStyle.makeImageBackground(getEventNode().getImageIcon());
+		// ((BackgroundImage)background).setScaleX(1);
+		// ((BackgroundImage)background).setScaleY(1);
 		//
-		//		}
-		//		else {
-		//			foreground = ForegroundStyle.makeStyle(Color.BLACK);
-		//			foreground.setLineWidth(getEventNode().isEnd()?1.8:0.6);
-		//			background = BackgroundStyle.makeColoredBackground(getMainBgColor());
-		//		}
+		// }
+		// else {
+		// foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		// foreground.setLineWidth(getEventNode().isEnd()?1.8:0.6);
+		// background = BackgroundStyle.makeColoredBackground(getMainBgColor());
+		// }
 
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
-		if(getEventNode().getBoundaryOf()!=null){
+		if (getEventNode().getBoundaryOf() != null) {
 			setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
 		}
 		if (getEventNode().getLevel() == FlexoLevel.ACTIVITY) {
-			setLayer(ACTIVITY_LAYER+1);
-		}
-		else if (getEventNode().getLevel() == FlexoLevel.OPERATION) {
-			setLayer(OPERATION_LAYER+1);
-		}
-		else if (getEventNode().getLevel() == FlexoLevel.ACTION) {
-			setLayer(ACTION_LAYER+1);
+			setLayer(ACTIVITY_LAYER + 1);
+		} else if (getEventNode().getLevel() == FlexoLevel.OPERATION) {
+			setLayer(OPERATION_LAYER + 1);
+		} else if (getEventNode().getLevel() == FlexoLevel.ACTION) {
+			setLayer(ACTION_LAYER + 1);
 		}
 
 		updatePropertiesFromWKFPreferences();
-		if(isInPalette){
+		if (isInPalette) {
 			getTextStyle().setFont(specialPaletteFont);
 			setShadowStyle(ShadowStyle.makeNone());
 		}
-		if(eventNode.getEventType()==EVENT_TYPE.NonInteruptive || eventNode.getEventType()==EVENT_TYPE.NonInteruptiveBoundary){
+		if (eventNode.getEventType() == EVENT_TYPE.NonInteruptive || eventNode.getEventType() == EVENT_TYPE.NonInteruptiveBoundary) {
 			setSpecificStroke(FGEConstants.DASHED);
 		}
 
 	}
 
 	@Override
-	public boolean hasNodePalette()
-	{
+	public boolean hasNodePalette() {
 		return !isInPalette;
 	}
 
 	@Override
-	public int getTopBorder()
-	{
+	public int getTopBorder() {
 		return (isInPalette ? 1 : super.getTopBorder());
 	}
 
 	@Override
-	public int getBottomBorder()
-	{
+	public int getBottomBorder() {
 		return (isInPalette ? 1 : super.getBottomBorder());
 	}
 
 	@Override
-	public int getLeftBorder()
-	{
+	public int getLeftBorder() {
 		return (isInPalette ? 1 : super.getLeftBorder());
 	}
 
 	@Override
-	public int getRightBorder()
-	{
+	public int getRightBorder() {
 		return (isInPalette ? 1 : super.getRightBorder());
 	}
 
-
 	private void updateBackgroundForeground() {
 		foreground = ForegroundStyle.makeDefault();
-		foreground.setLineWidth(getEventNode().isEnd()?2.0:0.6);
+		foreground.setLineWidth(getEventNode().isEnd() ? 2.0 : 0.6);
 		background = BackgroundStyle.makeColoredBackground(getMainBgColor());
 		setForeground(foreground);
 		setBackground(background);
 	}
 
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK, getWorkflow()!=null?getWorkflow().getEventFont(WKFPreferences.getEventNodeFont()).getFont():WKFPreferences.getEventNodeFont().getFont()));
+		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+				getWorkflow() != null ? getWorkflow().getEventFont(WKFPreferences.getEventNodeFont()).getFont() : WKFPreferences
+						.getEventNodeFont().getFont()));
 		setIsMultilineAllowed(true);
 	}
 
-
-	public EventNode getEventNode()
-	{
+	public EventNode getEventNode() {
 		return getDrawable();
 	}
 
 	@Override
-	public Circle getShape()
-	{
-		return (Circle)super.getShape();
+	public Circle getShape() {
+		return (Circle) super.getShape();
 	}
 
 	@Override
-	public double getDefaultLabelX()
-	{
+	public double getDefaultLabelX() {
 		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getX();
 		}
-		return getLeftBorder()+15;
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY()
-	{
+	public double getDefaultLabelY() {
 		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getY();
 		}
 		return getTopBorder() + getHeight() + getTextStyle().getFont().getSize() + 5;
 	}
 
-
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof DataModification) {
-			if ("eventType".equals((dataModification).propertyName())
-					|| "isCatching".equals((dataModification).propertyName())) {
+			if ("eventType".equals((dataModification).propertyName()) || "isCatching".equals((dataModification).propertyName())) {
 				updateBackgroundForeground();
 				notifyShapeNeedsToBeRedrawn();
 			} else {
@@ -198,21 +182,21 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 	private GraphicalRepresentation<?> parentGR = null;
 	private FGEArea parentOutline = null;
 
-
 	@Override
-	public FGEArea getLocationConstrainedArea()
-	{
-		if(getEventNode().getBoundaryOf()==null) {
+	public FGEArea getLocationConstrainedArea() {
+		if (getEventNode().getBoundaryOf() == null) {
 			return null;
 		}
 		GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
 		if (parentGR == null || parent != parentGR) {
 			if (parent != null && parent instanceof ShapeGraphicalRepresentation) {
-				parentOutline = ((ShapeGraphicalRepresentation<?>)parent).getShape().getOutline();
-				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(((ShapeGraphicalRepresentation<?>)parent).getWidth(), ((ShapeGraphicalRepresentation<?>)parent).getHeight()));
-				ShapeBorder parentBorder = ((ShapeGraphicalRepresentation<?>)parent).getBorder();
-				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(parentBorder.left-20,parentBorder.top-20));
-				//System.out.println("Rebuild outline = "+parentOutline);
+				parentOutline = ((ShapeGraphicalRepresentation<?>) parent).getShape().getOutline();
+				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
+						((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
+				ShapeBorder parentBorder = ((ShapeGraphicalRepresentation<?>) parent).getBorder();
+				parentOutline = parentOutline
+						.transform(AffineTransform.getTranslateInstance(parentBorder.left - 20, parentBorder.top - 20));
+				// System.out.println("Rebuild outline = "+parentOutline);
 				parentGR = parent;
 			}
 		}

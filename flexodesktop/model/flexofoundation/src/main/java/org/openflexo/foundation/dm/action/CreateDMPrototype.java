@@ -28,49 +28,40 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMPackage;
 
+public class CreateDMPrototype extends FlexoAction {
 
-public class CreateDMPrototype extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(CreateDMPrototype.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDMPrototype.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("add_prototype", FlexoActionType.newMenu, FlexoActionType.defaultGroup,
+			FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("add_prototype",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new CreateDMPrototype(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMPrototype(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DMPackage) && (!((DMPackage) object).getRepository().isReadOnly()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DMPackage)
-                    && (!((DMPackage)object).getRepository().isReadOnly()));
-        }
-                
-    };
-    
-     CreateDMPrototype (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) 
-    {
-      logger.warning ("CreateDMPrototype not implemented yet");
-    }
+	CreateDMPrototype(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
+	@Override
+	protected void doAction(Object context) {
+		logger.warning("CreateDMPrototype not implemented yet");
+	}
 
 }

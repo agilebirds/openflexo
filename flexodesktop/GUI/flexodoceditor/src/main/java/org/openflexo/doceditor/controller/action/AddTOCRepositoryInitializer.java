@@ -29,14 +29,6 @@ import javax.swing.Icon;
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.AskParametersDialog.ValidationCondition;
-import org.openflexo.icon.DEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.xmlcode.XMLDecoder;
-
-
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -48,6 +40,12 @@ import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
+import org.openflexo.icon.DEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.xmlcode.XMLDecoder;
 
 public class AddTOCRepositoryInitializer extends ActionInitializer {
 
@@ -64,7 +62,7 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 				ParameterDefinition[] def = new ParameterDefinition[3];
 				def[0] = new TextFieldParameter("name", "toc_name", "");
 				ChoiceListParameter<DocType> docTypeParameter = new ChoiceListParameter<DocType>("docType", "base_model", getProject()
-						.getDocTypes().firstElement());
+						.getDocTypes().get(0));
 				docTypeParameter.setShowReset(false);
 				def[1] = docTypeParameter;
 
@@ -87,10 +85,10 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), getController().getFlexoFrame(),
 						FlexoLocalization.localizedForKey("enter_parameters"),
 						FlexoLocalization.localizedForKey("enter_parameters_for_table_of_content"), new ValidationCondition() {
-							@Override
-							public boolean isValid(ParametersModel model) {
-								boolean b = model.parameterForKey("name").getValue() != null && ((String) model.parameterForKey("name")
-										.getValue()).trim().length() > 0;
+					@Override
+					public boolean isValid(ParametersModel model) {
+						boolean b = model.parameterForKey("name").getValue() != null
+								&& ((String) model.parameterForKey("name").getValue()).trim().length() > 0;
 								if (!b) {
 									errorMessage = FlexoLocalization.localizedForKey("name_cannot_be_empty");
 								}
@@ -105,9 +103,9 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 									b = false;
 								}
 								return b;
-							}
+					}
 
-						}, def);
+				}, def);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					action.setRepositoryName((String) def[0].getValue());
 					action.setDocType((DocType) def[1].getValue());

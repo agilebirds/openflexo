@@ -35,94 +35,81 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.node.LOOPOperator;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 
+public class CreateLoopedPetriGraph extends FlexoUndoableAction<CreateLoopedPetriGraph, LOOPOperator, WKFObject> {
 
-public class CreateLoopedPetriGraph extends FlexoUndoableAction<CreateLoopedPetriGraph,LOOPOperator,WKFObject> 
-{
+	private static final Logger logger = Logger.getLogger(CreateLoopedPetriGraph.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateLoopedPetriGraph.class.getPackage().getName());
+	public static FlexoActionType<CreateLoopedPetriGraph, LOOPOperator, WKFObject> actionType = new FlexoActionType<CreateLoopedPetriGraph, LOOPOperator, WKFObject>(
+			"create_petri_graph", FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<CreateLoopedPetriGraph,LOOPOperator,WKFObject> actionType 
-    = new FlexoActionType<CreateLoopedPetriGraph,LOOPOperator,WKFObject> ("create_petri_graph",FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateLoopedPetriGraph makeNewAction(LOOPOperator focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new CreateLoopedPetriGraph(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateLoopedPetriGraph makeNewAction(LOOPOperator focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateLoopedPetriGraph(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
+			return false; // Action is never visible but always active.
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) 
-        {
-            return false; // Action is never visible but always active.
-        }
+		@Override
+		protected boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
+			return object instanceof SelfExecutableNode && ((SelfExecutableNode) object).getExecutionPetriGraph() == null;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) 
-        {
-            return object instanceof SelfExecutableNode 
-            && ((SelfExecutableNode)object).getExecutionPetriGraph() == null;
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass(CreateLoopedPetriGraph.actionType, LOOPOperator.class);
-   }
+	};
 
-    CreateLoopedPetriGraph (LOOPOperator focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(CreateLoopedPetriGraph.actionType, LOOPOperator.class);
+	}
 
-    public LOOPOperator getLOOPOperator()
-    {
-    	return getFocusedObject();
-    }
-    
+	CreateLoopedPetriGraph(LOOPOperator focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context) 
-    {
-    	LOOPOperator loop = getLOOPOperator();
-    	if (loop.getExecutionPetriGraph() == null) {
-    		logger.info("CreatePetriGraph");
-    		if (loop.getLevel() == FlexoLevel.ACTIVITY) {
-    			newPetriGraph = ActivityPetriGraph.createNewActivityPetriGraph(loop);
-    		} else if (loop.getLevel() == FlexoLevel.OPERATION) {
-    			newPetriGraph = OperationPetriGraph.createNewOperationPetriGraph(loop);
-    		} else if (loop.getLevel() == FlexoLevel.ACTION) {
-    			newPetriGraph = ActionPetriGraph.createNewActionPetriGraph(loop);
-    		} 
-    		System.out.println("newPetriGraph="+newPetriGraph+" of "+newPetriGraph.getClass());
-    		System.out.println("getAllBeginNodes()="+newPetriGraph.getAllBeginNodes());
-    		System.out.println("getAllEndNodes()="+newPetriGraph.getAllEndNodes());
-    		objectCreated("NEW_PETRI_GRAPH",newPetriGraph);
-    		objectCreated("NEW_BEGIN_NODE",newPetriGraph.getAllBeginNodes().firstElement());
-    		objectCreated("NEW_END_NODE",newPetriGraph.getAllEndNodes().firstElement());
-    	}
-    }
+	public LOOPOperator getLOOPOperator() {
+		return getFocusedObject();
+	}
 
-    @Override
-	protected void undoAction(Object context) 
-    {
+	@Override
+	protected void doAction(Object context) {
+		LOOPOperator loop = getLOOPOperator();
+		if (loop.getExecutionPetriGraph() == null) {
+			logger.info("CreatePetriGraph");
+			if (loop.getLevel() == FlexoLevel.ACTIVITY) {
+				newPetriGraph = ActivityPetriGraph.createNewActivityPetriGraph(loop);
+			} else if (loop.getLevel() == FlexoLevel.OPERATION) {
+				newPetriGraph = OperationPetriGraph.createNewOperationPetriGraph(loop);
+			} else if (loop.getLevel() == FlexoLevel.ACTION) {
+				newPetriGraph = ActionPetriGraph.createNewActionPetriGraph(loop);
+			}
+			System.out.println("newPetriGraph=" + newPetriGraph + " of " + newPetriGraph.getClass());
+			System.out.println("getAllBeginNodes()=" + newPetriGraph.getAllBeginNodes());
+			System.out.println("getAllEndNodes()=" + newPetriGraph.getAllEndNodes());
+			objectCreated("NEW_PETRI_GRAPH", newPetriGraph);
+			objectCreated("NEW_BEGIN_NODE", newPetriGraph.getAllBeginNodes().firstElement());
+			objectCreated("NEW_END_NODE", newPetriGraph.getAllEndNodes().firstElement());
+		}
+	}
+
+	@Override
+	protected void undoAction(Object context) {
 		logger.info("CreatePetriGraph: UNDO");
 		newPetriGraph.delete();
-    }
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
+	@Override
+	protected void redoAction(Object context) {
 		logger.info("CreatePetriGraph: REDO");
-        doAction(context);
-   }
+		doAction(context);
+	}
 
-    private FlexoPetriGraph newPetriGraph = null;
+	private FlexoPetriGraph newPetriGraph = null;
 
-	public FlexoPetriGraph getNewPetriGraph() 
-	{
+	public FlexoPetriGraph getNewPetriGraph() {
 		return newPetriGraph;
 	}
 

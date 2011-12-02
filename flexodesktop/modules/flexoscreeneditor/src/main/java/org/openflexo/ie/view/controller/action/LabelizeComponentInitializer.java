@@ -28,46 +28,38 @@ import org.openflexo.foundation.ie.action.LabelizeComponentAction;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class LabelizeComponentInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	LabelizeComponentInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(LabelizeComponentAction.actionType,actionInitializer);
+	LabelizeComponentInitializer(IEControllerActionInitializer actionInitializer) {
+		super(LabelizeComponentAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<LabelizeComponentAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<LabelizeComponentAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<LabelizeComponentAction>() {
 			@Override
-			public boolean run(ActionEvent e, LabelizeComponentAction action)
-			{
-                action.setComponent(action.getFocusedObject().getWOComponent());
+			public boolean run(ActionEvent e, LabelizeComponentAction action) {
+				action.setComponent(action.getFocusedObject().getWOComponent());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<LabelizeComponentAction> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<LabelizeComponentAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<LabelizeComponentAction>() {
 			@Override
-			public boolean run(ActionEvent e, LabelizeComponentAction action)
-			{
+			public boolean run(ActionEvent e, LabelizeComponentAction action) {
 				return true;
 			}
 		};
 	}
-
 
 }

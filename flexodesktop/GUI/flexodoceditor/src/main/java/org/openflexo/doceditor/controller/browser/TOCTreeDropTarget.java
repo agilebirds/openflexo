@@ -21,7 +21,6 @@ package org.openflexo.doceditor.controller.browser;
 
 import java.util.Vector;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
@@ -36,49 +35,50 @@ import org.openflexo.view.controller.FlexoController;
 public class TOCTreeDropTarget extends TreeDropTarget {
 
 	private FlexoEditor editor;
-	
+
 	public TOCTreeDropTarget(FlexoJTree tree, ProjectBrowser browser) {
 		super(tree, browser);
 		editor = tree.getEditor();
 	}
-	
+
 	@Override
-	public boolean targetAcceptsSource(BrowserElement targ,
-			BrowserElement source) {
+	public boolean targetAcceptsSource(BrowserElement targ, BrowserElement source) {
 		if (source instanceof TOCEntryElement) {
-			TOCEntry dragged = ((TOCEntryElement)source).getEntry();
+			TOCEntry dragged = ((TOCEntryElement) source).getEntry();
 			if (targ instanceof TOCEntryElement) {
-				TOCEntry over = ((TOCEntryElement)targ).getEntry();
-				if (over==null || dragged==null)
+				TOCEntry over = ((TOCEntryElement) targ).getEntry();
+				if (over == null || dragged == null) {
 					return false;
+				}
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
-				return MoveTOCEntry.actionType.isEnabled(over,v , editor);
-			} else if (targ instanceof TOCRepositoryElement){
-				TOCRepository over = ((TOCRepositoryElement)targ).getRepository();
-				if (over==null || dragged==null)
+				return MoveTOCEntry.actionType.isEnabled(over, v, editor);
+			} else if (targ instanceof TOCRepositoryElement) {
+				TOCRepository over = ((TOCRepositoryElement) targ).getRepository();
+				if (over == null || dragged == null) {
 					return false;
+				}
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
-				return MoveTOCEntry.actionType.isEnabled(over,v , editor);
+				return MoveTOCEntry.actionType.isEnabled(over, v, editor);
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean handleDrop(BrowserElement source, BrowserElement targ) {
 		if (targetAcceptsSource(targ, source)) {
-			TOCEntry dragged = ((TOCEntryElement)source).getEntry();
+			TOCEntry dragged = ((TOCEntryElement) source).getEntry();
 			if (targ instanceof TOCEntryElement) {
-				TOCEntry over = ((TOCEntryElement)targ).getEntry();
+				TOCEntry over = ((TOCEntryElement) targ).getEntry();
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
 				MoveTOCEntry move = MoveTOCEntry.actionType.makeNewAction(over, v, editor);
 				move.doAction();
 				return move.hasActionExecutionSucceeded();
-			} else if (targ instanceof TOCRepositoryElement){
-				TOCRepository over = ((TOCRepositoryElement)targ).getRepository();
+			} else if (targ instanceof TOCRepositoryElement) {
+				TOCRepository over = ((TOCRepositoryElement) targ).getRepository();
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
 				MoveTOCEntry move = MoveTOCEntry.actionType.makeNewAction(over, v, editor);
@@ -86,15 +86,17 @@ public class TOCTreeDropTarget extends TreeDropTarget {
 				return move.hasActionExecutionSucceeded();
 			}
 		} else {
-			if (source==null || targ==null)
+			if (source == null || targ == null) {
 				return false;
+			}
 			if (source instanceof TOCEntryElement) {
-				TOCEntry dragged = ((TOCEntryElement)source).getEntry();
+				TOCEntry dragged = ((TOCEntryElement) source).getEntry();
 				if (targ instanceof TOCEntryElement) {
-					TOCEntry over = ((TOCEntryElement)targ).getEntry();
-					if (over==null || dragged == null)
+					TOCEntry over = ((TOCEntryElement) targ).getEntry();
+					if (over == null || dragged == null) {
 						return false;
-					if (over==dragged) {
+					}
+					if (over == dragged) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("cannot_drop_entry_within_itself"));
 						return false;
 					}
@@ -103,12 +105,12 @@ public class TOCTreeDropTarget extends TreeDropTarget {
 						return false;
 					}
 					if (!over.canHaveChildrenWithDepth(dragged.getDepth())) {
-						FlexoController.notify(FlexoLocalization.localizedForKey("maximum_toc_depth_is")+" "+TOCEntry.MAXIMUM_DEPTH);
+						FlexoController.notify(FlexoLocalization.localizedForKey("maximum_toc_depth_is") + " " + TOCEntry.MAXIMUM_DEPTH);
 						return false;
 					}
 				}
 			}
-			//FlexoController.notify(FlexoLocalization.localizedForKey("drop_cannot_be_performed"));
+			// FlexoController.notify(FlexoLocalization.localizedForKey("drop_cannot_be_performed"));
 		}
 		return false;
 	}

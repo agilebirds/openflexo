@@ -36,96 +36,86 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class AddLanguageAction extends FlexoUndoableAction<AddLanguageAction,DKVObject,DKVObject>
-{
+public class AddLanguageAction extends FlexoUndoableAction<AddLanguageAction, DKVObject, DKVObject> {
 
-    protected static final Logger logger = FlexoLogger.getLogger(AddLanguageAction.class.getPackage().getName());
+	protected static final Logger logger = FlexoLogger.getLogger(AddLanguageAction.class.getPackage().getName());
 
-    public static FlexoActionType<AddLanguageAction,DKVObject,DKVObject> actionType = new FlexoActionType<AddLanguageAction,DKVObject,DKVObject>("add_language", FlexoActionType.newMenu, FlexoActionType.defaultGroup,
-            FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddLanguageAction, DKVObject, DKVObject> actionType = new FlexoActionType<AddLanguageAction, DKVObject, DKVObject>(
+			"add_language", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddLanguageAction makeNewAction(DKVObject focusedObject, Vector<DKVObject> globalSelection, FlexoEditor editor)
-        {
-            return new AddLanguageAction(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddLanguageAction makeNewAction(DKVObject focusedObject, Vector<DKVObject> globalSelection, FlexoEditor editor) {
+			return new AddLanguageAction(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector globalSelection)
-        {
-            return object instanceof DKVModel.LanguageList || object instanceof DKVModel;
-        }
-        
-        private String[] persistentProperties = {"languageName"};
-        
-        @Override
-		protected String[] getPersistentProperties(){
-        	return persistentProperties;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
+			return object instanceof DKVModel.LanguageList || object instanceof DKVModel;
+		}
 
-    };
+		private String[] persistentProperties = { "languageName" };
 
-    private DKVModel _dkvModel;
-    private Language newLanguage;
-    private String _languageName;
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected AddLanguageAction(DKVObject focusedObject, Vector<DKVObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected String[] getPersistentProperties() {
+			return persistentProperties;
+		}
 
-    /**
-     * Overrides doAction
-     * 
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        newLanguage = getDkvModel().addLanguageNamed(_languageName);
-              if (logger.isLoggable(Level.INFO))
-            logger.info("Language added");
-        objectCreated("NEW_LANGUAGE", newLanguage);
-    }
+	};
 
-     public Language getNewLanguage()
-    {
-        return newLanguage;
-    }
+	private DKVModel _dkvModel;
+	private Language newLanguage;
+	private String _languageName;
 
-    public String getLanguageName() 
-    {
-        return _languageName;
-    }
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected AddLanguageAction(DKVObject focusedObject, Vector<DKVObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public void setLanguageName(String languageName) 
-    {
-        _languageName = languageName;
-    }
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		newLanguage = getDkvModel().addLanguageNamed(_languageName);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Language added");
+		}
+		objectCreated("NEW_LANGUAGE", newLanguage);
+	}
 
-    public DKVModel getDkvModel() 
-    {
-        return _dkvModel;
-    }
+	public Language getNewLanguage() {
+		return newLanguage;
+	}
 
-    public void setDkvModel(DKVModel dkvModel) 
-    {
-        _dkvModel = dkvModel;
-    }
+	public String getLanguageName() {
+		return _languageName;
+	}
+
+	public void setLanguageName(String languageName) {
+		_languageName = languageName;
+	}
+
+	public DKVModel getDkvModel() {
+		return _dkvModel;
+	}
+
+	public void setDkvModel(DKVModel dkvModel) {
+		_dkvModel = dkvModel;
+	}
 
 	@Override
 	protected void redoAction(Object context) throws FlexoException {

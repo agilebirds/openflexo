@@ -42,15 +42,13 @@ import org.openflexo.foundation.ie.palette.FlexoIEPalette.FlexoIEPaletteWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 
-public class IEImagePalettePanel extends IEPalettePanel implements FlexoObserver
-{
+public class IEImagePalettePanel extends IEPalettePanel implements FlexoObserver {
 
-	private static String ZERO_CHAR_STRING = "" + (char)0;
+	private static String ZERO_CHAR_STRING = "" + (char) 0;
 
-    public IEImagePalettePanel(IEPalette palette, FlexoIEPalette<? extends FlexoIEPaletteWidget> model, String keyName)
-    {
-        super(palette, model, keyName);
-        new DropTarget(this, DnDConstants.ACTION_COPY, new DropTargetListener() {
+	public IEImagePalettePanel(IEPalette palette, FlexoIEPalette<? extends FlexoIEPaletteWidget> model, String keyName) {
+		super(palette, model, keyName);
+		new DropTarget(this, DnDConstants.ACTION_COPY, new DropTargetListener() {
 
 			@Override
 			public void dropActionChanged(DropTargetDragEvent dtde) {
@@ -59,47 +57,47 @@ public class IEImagePalettePanel extends IEPalettePanel implements FlexoObserver
 
 			@Override
 			public void drop(DropTargetDropEvent dtde) {
-				try
-                {
-                    Transferable tr = dtde.getTransferable();
-                    dtde.acceptDrop(DnDConstants.ACTION_COPY);
-                    StringBuilder sb = new StringBuilder();
-                    if (tr.isDataFlavorSupported(java.awt.datatransfer.DataFlavor.javaFileListFlavor))
-                    {
-                        List<File> fileList = (List<File>) tr.getTransferData(java.awt.datatransfer.DataFlavor.javaFileListFlavor);
-                        Iterator<File> iterator = fileList.iterator();
-                        while (iterator.hasNext()) {
+				try {
+					Transferable tr = dtde.getTransferable();
+					dtde.acceptDrop(DnDConstants.ACTION_COPY);
+					StringBuilder sb = new StringBuilder();
+					if (tr.isDataFlavorSupported(java.awt.datatransfer.DataFlavor.javaFileListFlavor)) {
+						List<File> fileList = (List<File>) tr.getTransferData(java.awt.datatransfer.DataFlavor.javaFileListFlavor);
+						Iterator<File> iterator = fileList.iterator();
+						while (iterator.hasNext()) {
 							File file = iterator.next();
 							importImageFile(sb, file);
 						}
-                    } else {
-                        DataFlavor[] flavors = tr.getTransferDataFlavors();
-                        boolean handled = false;
-                        for (int i = 0; i < flavors.length; i++) {
-                            if (flavors[i].isRepresentationClassReader()) {
-                                Reader reader = flavors[i].getReaderForText(tr);
-                                BufferedReader br = new BufferedReader(reader);
-                                java.lang.String line = null;
-                                while ((line = br.readLine()) != null) {
-                                    try {
-                                        // kde seems to append a 0 char to the end of the reader
-                                        if(ZERO_CHAR_STRING.equals(line))
-                                        	continue;
-                                        File file = new File(new URI(line));
-                                        importImageFile(sb, file);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    dtde.getDropTargetContext().dropComplete(true);
-                    if (sb.length()>0)
-                    	FlexoController.notify(sb.toString());
-                } catch (Exception e) {
-                	e.printStackTrace();
-                }
+					} else {
+						DataFlavor[] flavors = tr.getTransferDataFlavors();
+						boolean handled = false;
+						for (int i = 0; i < flavors.length; i++) {
+							if (flavors[i].isRepresentationClassReader()) {
+								Reader reader = flavors[i].getReaderForText(tr);
+								BufferedReader br = new BufferedReader(reader);
+								java.lang.String line = null;
+								while ((line = br.readLine()) != null) {
+									try {
+										// kde seems to append a 0 char to the end of the reader
+										if (ZERO_CHAR_STRING.equals(line)) {
+											continue;
+										}
+										File file = new File(new URI(line));
+										importImageFile(sb, file);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							}
+						}
+					}
+					dtde.getDropTargetContext().dropComplete(true);
+					if (sb.length() > 0) {
+						FlexoController.notify(sb.toString());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			@Override
@@ -114,24 +112,26 @@ public class IEImagePalettePanel extends IEPalettePanel implements FlexoObserver
 
 			@Override
 			public void dragEnter(DropTargetDragEvent dtde) {
-				for(DataFlavor flavor:dtde.getCurrentDataFlavors()) {
-					if (flavor.isFlavorJavaFileListType()||flavor.isRepresentationClassReader()) {
+				for (DataFlavor flavor : dtde.getCurrentDataFlavors()) {
+					if (flavor.isFlavorJavaFileListType() || flavor.isRepresentationClassReader()) {
 						dtde.acceptDrag(DnDConstants.ACTION_COPY);
 						return;
 					}
 				}
 				dtde.rejectDrag();
 			}
-		},true,SystemFlavorMap.getDefaultFlavorMap());
-    }
+		}, true, SystemFlavorMap.getDefaultFlavorMap());
+	}
 
 	private void importImageFile(StringBuilder error, File file) {
 		if (ImportImage.isValidImageFile(file)) {
-			ImportImage importImage = ImportImage.actionType.makeNewAction(getModel().getProject(), null, _palette.getController().getEditor());
+			ImportImage importImage = ImportImage.actionType.makeNewAction(getModel().getProject(), null, _palette.getController()
+					.getEditor());
 			importImage.setFileToImport(file);
 			importImage.doAction();
 		} else {
-			error.append(FlexoLocalization.localizedForKey("file")+" "+file.getName()+" "+FlexoLocalization.localizedForKey("does_not_seem_to_be_an_image"));
+			error.append(FlexoLocalization.localizedForKey("file") + " " + file.getName() + " "
+					+ FlexoLocalization.localizedForKey("does_not_seem_to_be_an_image"));
 		}
 	}
 

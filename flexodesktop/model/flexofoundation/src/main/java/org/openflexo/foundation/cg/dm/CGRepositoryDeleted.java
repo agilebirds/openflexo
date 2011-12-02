@@ -21,11 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.GenerationRepository;
 
-
-public class CGRepositoryDeleted extends CGDataModification
-{
-    public CGRepositoryDeleted(GenerationRepository repository)
-    {
-        super(repository,null);
-    }
+public class CGRepositoryDeleted extends CGDataModification {
+	public CGRepositoryDeleted(GenerationRepository repository) {
+		super(repository, null);
+	}
 }

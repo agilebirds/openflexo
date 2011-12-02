@@ -42,25 +42,21 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.UtilsIconLibrary;
 
-
 public abstract class GCBrowserElement extends BrowserElement {
 
-    protected static final Logger logger = Logger.getLogger(GCBrowserElement.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(GCBrowserElement.class.getPackage().getName());
 
-	public GCBrowserElement(CGObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-	{
+	public GCBrowserElement(CGObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
 		super(object, elementType, browser, parent);
 	}
 
 	@Override
-    public CGObject getObject()
-	{
-		return (CGObject)super.getObject();
+	public CGObject getObject() {
+		return (CGObject) super.getObject();
 	}
 
 	@Override
-    public Icon getIcon()
-	{
+	public Icon getIcon() {
 		if (getObject() == null) {
 			return null;
 		}
@@ -77,9 +73,8 @@ public abstract class GCBrowserElement extends BrowserElement {
 		return returned;
 	}
 
-	protected Vector<IconMarker> getMarkers(){
+	protected Vector<IconMarker> getMarkers() {
 		Vector<IconMarker> markers = new Vector<IconMarker>();
-
 
 		if (getObject().needsModelReinjection()) {
 			markers.add(GeneratorIconLibrary.NEEDS_MODEL_REINJECTION);
@@ -87,26 +82,19 @@ public abstract class GCBrowserElement extends BrowserElement {
 		GenerationStatus status = getObject().getGenerationStatus();
 		if (status == GenerationStatus.GenerationAdded) {
 			markers.add(UtilsIconLibrary.LEFT_ADDITION);
-		}
-		else if (status == GenerationStatus.GenerationRemoved) {
+		} else if (status == GenerationStatus.GenerationRemoved) {
 			markers.add(UtilsIconLibrary.LEFT_REMOVAL);
-		}
-		else if (status == GenerationStatus.GenerationModified) {
+		} else if (status == GenerationStatus.GenerationModified) {
 			markers.add(UtilsIconLibrary.LEFT_MODIFICATION);
-		}
-		else if (status == GenerationStatus.OverrideScheduled) {
+		} else if (status == GenerationStatus.OverrideScheduled) {
 			markers.add(UtilsIconLibrary.LEFT_MODIFICATION);
-		}
-		else if (status == GenerationStatus.DiskModified) {
+		} else if (status == GenerationStatus.DiskModified) {
 			markers.add(UtilsIconLibrary.RIGHT_MODIFICATION);
-		}
-		else if (status == GenerationStatus.DiskRemoved) {
+		} else if (status == GenerationStatus.DiskRemoved) {
 			markers.add(UtilsIconLibrary.RIGHT_REMOVAL);
-		}
-		else if (status == GenerationStatus.ConflictingUnMerged) {
+		} else if (status == GenerationStatus.ConflictingUnMerged) {
 			markers.add(UtilsIconLibrary.CONFLICT);
-		}
-		else if (status == GenerationStatus.ConflictingMarkedAsMerged) {
+		} else if (status == GenerationStatus.ConflictingMarkedAsMerged) {
 			markers.add(UtilsIconLibrary.LEFT_MODIFICATION);
 		}
 
@@ -118,9 +106,8 @@ public abstract class GCBrowserElement extends BrowserElement {
 			markers.add(GeneratorIconLibrary.NEEDS_REGENERATE);
 		}
 
-		if ((getObject() instanceof CGFile)
-				&& (((CGFile)getObject()).getResource() != null)
-				&& (((CGFile)getObject()).getResource().getGenerator() != null)) {
+		if ((getObject() instanceof CGFile) && (((CGFile) getObject()).getResource() != null)
+				&& (((CGFile) getObject()).getResource().getGenerator() != null)) {
 			/*if (((CGFile)getObject()).getResource().getGenerator().needsGeneration())
 				markers.add(NEEDS_REGENERATE);*/
 			if (((CGFile) getObject()).getResource().getGenerator().hasFormattingException()) {
@@ -134,41 +121,40 @@ public abstract class GCBrowserElement extends BrowserElement {
 			if (getObject() instanceof CGFile) {
 				String ims = "";
 				for (IconMarker marker : markers) {
-					ims += " "+marker.getID();
+					ims += " " + marker.getID();
 				}
-				logger.fine("File "+((CGFile)getObject()).getFileName()+" status "+status+" ims="+ims);
+				logger.fine("File " + ((CGFile) getObject()).getFileName() + " status " + status + " ims=" + ims);
 			}
 		}
 		return markers;
 	}
-	public ImageIcon getBaseIcon()
-	{
+
+	public ImageIcon getBaseIcon() {
 		return getElementType().getIcon();
 	}
 
- 	@Override
-    public boolean isSelectable()
-	{
+	@Override
+	public boolean isSelectable() {
 		return isEnabled();
 	}
 
-	public boolean isEnabled()
-	{
+	public boolean isEnabled() {
 		return getObject().isEnabled();
 	}
 
-    /**
-     * Overrides update
-     * @see org.openflexo.components.browser.BrowserElement#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
-     */
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if ((dataModification instanceof GenerationStatusModification) || (dataModification instanceof CGFileWritenOnDisk)) {
-        	updateViewWhenPossible();
-            return;
-        }
-        super.update(observable, dataModification);
-    }
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if ((dataModification instanceof GenerationStatusModification) || (dataModification instanceof CGFileWritenOnDisk)) {
+			updateViewWhenPossible();
+			return;
+		}
+		super.update(observable, dataModification);
+	}
 
 }

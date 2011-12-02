@@ -57,163 +57,157 @@ import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class WKFValidationModel extends ValidationModel
-{
+public class WKFValidationModel extends ValidationModel {
 
-    public WKFValidationModel(FlexoProject project)
-    {
-        this(project,project.getTargetType());
-    }
+	public WKFValidationModel(FlexoProject project) {
+		this(project, project.getTargetType());
+	}
 
-    public WKFValidationModel(FlexoProject project, TargetType targetType)
-    {
-        super(project,targetType);
+	public WKFValidationModel(FlexoProject project, TargetType targetType) {
+		super(project, targetType);
 
-        registerRule(new FlexoWorkflow.WorkflowMustHaveARootProcess());
-        registerRule(new FlexoWorkflow.BusinessDataClassMustHaveAStatusColumn());
-        registerRule(new FlexoWorkflow.BusinessDataMustNotBeReadOnly());
+		registerRule(new FlexoWorkflow.WorkflowMustHaveARootProcess());
+		registerRule(new FlexoWorkflow.BusinessDataClassMustHaveAStatusColumn());
+		registerRule(new FlexoWorkflow.BusinessDataMustNotBeReadOnly());
 
-        registerRule(new WKFObject.WKFObjectMustReferToAProcess());
+		registerRule(new WKFObject.WKFObjectMustReferToAProcess());
 
-        registerRule(new FlexoProcess.FlexoProcessMustHaveADefaultStatus());
-        registerRule(new FlexoProcess.NonRootProcessShouldBeUsed());
-        registerRule(new FlexoProcess.ProcessHierarchyIsConsistent());
-        registerRule(new FlexoProcess.ProcessMustDefineBusinessDataClass());
-        registerRule(new FlexoProcess.BusinessDataClassMustHaveStatusProperty());
-        registerRule(new FlexoProcess.ImportedProcessShouldExistOnServer());
+		registerRule(new FlexoProcess.FlexoProcessMustHaveADefaultStatus());
+		registerRule(new FlexoProcess.NonRootProcessShouldBeUsed());
+		registerRule(new FlexoProcess.ProcessHierarchyIsConsistent());
+		registerRule(new FlexoProcess.ProcessMustDefineBusinessDataClass());
+		registerRule(new FlexoProcess.BusinessDataClassMustHaveStatusProperty());
+		registerRule(new FlexoProcess.ImportedProcessShouldExistOnServer());
 
-        registerRule(new Role.ImportedRoleShouldExistOnServer());
+		registerRule(new Role.ImportedRoleShouldExistOnServer());
 
-        registerRule(new StatusList.ProcessShouldHaveAtLeastAStatus());
-        registerRule(new StatusList.ProcessShouldHaveADefaultStatus());
+		registerRule(new StatusList.ProcessShouldHaveAtLeastAStatus());
+		registerRule(new StatusList.ProcessShouldHaveADefaultStatus());
 
-        //registerRule(new FlexoPetriGraph.PetriGraphMustHaveAtLeastOneBeginNode());
-        registerRule(new FlexoPetriGraph.ExecutionPetriGraphMustHaveExactelyOneBeginNode());
-        registerRule(new FlexoPetriGraph.ExecutionPetriGraphMustHaveExactelyOneEndNode());
+		// registerRule(new FlexoPetriGraph.PetriGraphMustHaveAtLeastOneBeginNode());
+		registerRule(new FlexoPetriGraph.ExecutionPetriGraphMustHaveExactelyOneBeginNode());
+		registerRule(new FlexoPetriGraph.ExecutionPetriGraphMustHaveExactelyOneEndNode());
 
-        // Scrum 1.3.2: request to remove this validation rule
-        //registerRule(new AbstractNode.NodeShouldHaveNonAmbigousName());
+		// Scrum 1.3.2: request to remove this validation rule
+		// registerRule(new AbstractNode.NodeShouldHaveNonAmbigousName());
 
-        registerRule(new AbstractNode.NodeCannotHaveMoreThanOneDefaultOutgoingTokenEdge());
-        registerRule(new AbstractNode.NodeWithConditionalEdgeOrDefaultEdgeMustHaveMoreThanOneEdge());
-        registerRule(new AbstractNode.NodeWithDefaultFlowMustHaveConditionOneOtherEdge());
+		registerRule(new AbstractNode.NodeCannotHaveMoreThanOneDefaultOutgoingTokenEdge());
+		registerRule(new AbstractNode.NodeWithConditionalEdgeOrDefaultEdgeMustHaveMoreThanOneEdge());
+		registerRule(new AbstractNode.NodeWithDefaultFlowMustHaveConditionOneOtherEdge());
 
-        registerRule(new PetriGraphNode.PetriGraphNodeShouldBeAccessible());
-        registerRule(new PetriGraphNode.PetriGraphNodeNameCannotBeEmpty());
-        registerRule(new FlexoNode.InteractiveNodeCannotBePutInsideExecutionPetriGraph());
-        registerRule(new FlexoNode.EndNodeCannotHaveMultipleEdges());
+		registerRule(new PetriGraphNode.PetriGraphNodeShouldBeAccessible());
+		registerRule(new PetriGraphNode.PetriGraphNodeNameCannotBeEmpty());
+		registerRule(new FlexoNode.InteractiveNodeCannotBePutInsideExecutionPetriGraph());
+		registerRule(new FlexoNode.EndNodeCannotHaveMultipleEdges());
 
+		registerRule(new AbstractActivityNode.ActivityMustHaveARole());
+		registerRule(new AbstractActivityNode.ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed());
 
-        registerRule(new AbstractActivityNode.ActivityMustHaveARole());
-        registerRule(new AbstractActivityNode.ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed());
+		registerRule(new SubProcessNode.SubProcessNodeMustReferToAProcess());
+		registerRule(new SubProcessNode.SubProcessReferenceMustBeValid());
 
-        registerRule(new SubProcessNode.SubProcessNodeMustReferToAProcess());
-        registerRule(new SubProcessNode.SubProcessReferenceMustBeValid());
+		registerRule(new OperationNode.OperationMustHaveAWOComponent());
+		registerRule(new OperationNode.OperationComponentActionsMustBeBoundToAnActionNode());
+		registerRule(new OperationNode.OperationShouldBeSynchronized());
+		registerRule(new OperationNode.MandatoryBindingsMustHaveAValue());
+		registerRule(new OperationNode.MandatoryBooleanBindingsMustHaveAValue());
+		registerRule(new OperationNode.OperationMustDefineABindingOfBusinessDataType());
+		registerRule(new OperationNode.OperationMustHaveATab());
+		registerRule(new ActionNode.OnlyOneActionNodeMustBeBoundToOperationComponentAction());
+		registerRule(new ActionNode.DisplayActionMustHaveADisplayProcess());
+		// registerRule(new ActionNode.FlexaActionMustBeBondToButton());
+		registerRule(new ActionNode.FlexoActionMustSendToken());
+		registerRule(new ActionNode.DisplayActionShouldHaveADisplayOperation());
+		registerRule(new ActionNode.DisplayActionShouldHaveASelectedTab());
+		registerRule(new ActionNode.ActionTypeMustMatchButtonType());
+		registerRule(new ActionNode.ActionNodeCanBeBoundToFlexoActionOrDisplayActionButton());
+		// registerRule(new ActionNode.WorkFlowBypassingActionsMustSpecifyTargetNode());
 
-        registerRule(new OperationNode.OperationMustHaveAWOComponent());
-        registerRule(new OperationNode.OperationComponentActionsMustBeBoundToAnActionNode());
-        registerRule(new OperationNode.OperationShouldBeSynchronized());
-        registerRule(new OperationNode.MandatoryBindingsMustHaveAValue());
-        registerRule(new OperationNode.MandatoryBooleanBindingsMustHaveAValue());
-        registerRule(new OperationNode.OperationMustDefineABindingOfBusinessDataType());
-        registerRule(new OperationNode.OperationMustHaveATab());
-        registerRule(new ActionNode.OnlyOneActionNodeMustBeBoundToOperationComponentAction());
-        registerRule(new ActionNode.DisplayActionMustHaveADisplayProcess());
-        //registerRule(new ActionNode.FlexaActionMustBeBondToButton());
-        registerRule(new ActionNode.FlexoActionMustSendToken());
-        registerRule(new ActionNode.DisplayActionShouldHaveADisplayOperation());
-        registerRule(new ActionNode.DisplayActionShouldHaveASelectedTab());
-        registerRule(new ActionNode.ActionTypeMustMatchButtonType());
-        registerRule(new ActionNode.ActionNodeCanBeBoundToFlexoActionOrDisplayActionButton());
-        //registerRule(new ActionNode.WorkFlowBypassingActionsMustSpecifyTargetNode());
+		registerRule(new OperatorNode.OperatorNodeShouldSendTokens());
+		registerRule(new IFOperator.CannotHaveMoreThanTwoOutgoingEdge());
+		registerRule(new IFOperator.MustHaveOnePositiveAndOneNegativeOutgoingFlow());
 
-        registerRule(new OperatorNode.OperatorNodeShouldSendTokens());
-        registerRule(new IFOperator.CannotHaveMoreThanTwoOutgoingEdge());
-        registerRule(new IFOperator.MustHaveOnePositiveAndOneNegativeOutgoingFlow());
+		registerRule(new EventNode.EndEventCannotHaveAStartingTokenFlow());
+		registerRule(new EventNode.StartEventCannotHaveIncomingTokenFlow());
+		registerRule(new EventNode.IntermediateEventCannotHaveMoreThanOneIncomingEdge());
+		registerRule(new EventNode.IntermediateEventCannotHaveMoreThanOneOutgoingEdge());
+		registerRule(new EventNode.NodeAfterEventBasedGatewayRules());
+		registerRule(new ExclusiveEventBasedOperator.NodeAfterEventBasedGatewayRules());
 
-        registerRule(new EventNode.EndEventCannotHaveAStartingTokenFlow());
-        registerRule(new EventNode.StartEventCannotHaveIncomingTokenFlow());
-        registerRule(new EventNode.IntermediateEventCannotHaveMoreThanOneIncomingEdge());
-        registerRule(new EventNode.IntermediateEventCannotHaveMoreThanOneOutgoingEdge());
-        registerRule(new EventNode.NodeAfterEventBasedGatewayRules());
-        registerRule(new ExclusiveEventBasedOperator.NodeAfterEventBasedGatewayRules());
+		registerRule(new FlexoPreCondition.PreConditionMustBeAttachedToANode());
+		registerRule(new FlexoPreCondition.PreConditionMustHaveIncomingEdges());
+		registerRule(new FlexoPreCondition.PreConditionMustBeLinkedToABeginNode());
 
-        registerRule(new FlexoPreCondition.PreConditionMustBeAttachedToANode());
-        registerRule(new FlexoPreCondition.PreConditionMustHaveIncomingEdges());
-        registerRule(new FlexoPreCondition.PreConditionMustBeLinkedToABeginNode());
+		registerRule(new FlexoPostCondition.PostConditionMustHaveAStartingObject());
+		registerRule(new FlexoPostCondition.PostConditionMustHaveAnEndingObject());
+		registerRule(new FlexoPostCondition.PostConditionStartingPointShouldBeExplicitelyDefined());
+		registerRule(new FlexoPostCondition.SinglePostConditionCannotBeConditionnal());
+		registerRule(new FlexoPostCondition.EdgesStartingFromEventBasedGatewayCannotBeConditionnal());
+		registerRule(new FlexoPostCondition.EdgesStartingFromEventBasedGatewayCannotBeDefaultFlow());
 
-        registerRule(new FlexoPostCondition.PostConditionMustHaveAStartingObject());
-        registerRule(new FlexoPostCondition.PostConditionMustHaveAnEndingObject());
-        registerRule(new FlexoPostCondition.PostConditionStartingPointShouldBeExplicitelyDefined());
-        registerRule(new FlexoPostCondition.SinglePostConditionCannotBeConditionnal());
-        registerRule(new FlexoPostCondition.EdgesStartingFromEventBasedGatewayCannotBeConditionnal());
-        registerRule(new FlexoPostCondition.EdgesStartingFromEventBasedGatewayCannotBeDefaultFlow());
+		// registerRule(new NextPageEdge.NextPageEdgeMustBeValid());
+		registerRule(new TokenEdge.TokenEdgeMustBeValid());
+		registerRule(new TokenEdge.TokenEdgeShouldHaveNonNullTokenIncrement());
+		/*        registerRule(new OperatorInEdge.OperatorInEdgeMustBeValid());
+		        registerRule(new OperatorOutEdge.OperatorOutEdgeMustBeValid());
+		        registerRule(new OperatorInterEdge.OperatorInterEdgeMustBeValid());*/
+		registerRule(new ExternalMessageEdge.ExternalMessageEdgeMustReferToAValidPortMapRegistery());
+		registerRule(new ExternalMessageInEdge.ExternalMessageInEdgeMustBeValid());
+		registerRule(new ExternalMessageOutEdge.ExternalMessageOutEdgeMustBeValid());
+		registerRule(new InternalMessageInEdge.InternalMessageInEdgeMustBeValid());
+		registerRule(new InternalMessageOutEdge.InternalMessageOutEdgeMustBeValid());
+		registerRule(new ForwardWSEdge.ForwardWSEdgeMustBeValid());
+		registerRule(new BackwardWSEdge.BackwardWSEdgeEdgeMustBeValid());
+		registerRule(new TransferWSEdge.TransferWSEdgeMustBeValid());
+		registerRule(new MessageEdge.MessageEdgeCannotBeLinkedWithGateway());
 
-        //registerRule(new NextPageEdge.NextPageEdgeMustBeValid());
-        registerRule(new TokenEdge.TokenEdgeMustBeValid());
-        registerRule(new TokenEdge.TokenEdgeShouldHaveNonNullTokenIncrement());
-/*        registerRule(new OperatorInEdge.OperatorInEdgeMustBeValid());
-        registerRule(new OperatorOutEdge.OperatorOutEdgeMustBeValid());
-        registerRule(new OperatorInterEdge.OperatorInterEdgeMustBeValid());*/
-        registerRule(new ExternalMessageEdge.ExternalMessageEdgeMustReferToAValidPortMapRegistery());
-        registerRule(new ExternalMessageInEdge.ExternalMessageInEdgeMustBeValid());
-        registerRule(new ExternalMessageOutEdge.ExternalMessageOutEdgeMustBeValid());
-        registerRule(new InternalMessageInEdge.InternalMessageInEdgeMustBeValid());
-        registerRule(new InternalMessageOutEdge.InternalMessageOutEdgeMustBeValid());
-        registerRule(new ForwardWSEdge.ForwardWSEdgeMustBeValid());
-        registerRule(new BackwardWSEdge.BackwardWSEdgeEdgeMustBeValid());
-        registerRule(new TransferWSEdge.TransferWSEdgeMustBeValid());
-        registerRule(new MessageEdge.MessageEdgeCannotBeLinkedWithGateway());
+		registerRule(new PortMapRegistery.PortMapRegisteryMustReferToServiceInterface());
+		registerRule(new FlexoPortMap.PortMapMustReferToAServiceOperation());
+		registerRule(new RequiredBindingValidationRule(FlexoPortMap.class, "accessedProcessInstance",
+				"accessedProcessInstanceBindingDefinition"));
+		registerRule(new RequiredBindingValidationRule(FlexoPortMap.class, "parentProcessInstance",
+				"parentProcessInstanceBindingDefinition"));
+		registerRule(new RequiredBindingValidationRule(FlexoPortMap.class, "returnedProcessInstance",
+				"returnedProcessInstanceBindingDefinition"));
+		registerRule(new MessageBindings.DefinedBindingsMustBeValid());
+		registerRule(new MessageBindings.MandatoryBindingsMustHaveAValue());
 
-        registerRule(new PortMapRegistery.PortMapRegisteryMustReferToServiceInterface());
-        registerRule(new FlexoPortMap.PortMapMustReferToAServiceOperation());
-        registerRule(new RequiredBindingValidationRule(FlexoPortMap.class, "accessedProcessInstance",
-                "accessedProcessInstanceBindingDefinition"));
-        registerRule(new RequiredBindingValidationRule(FlexoPortMap.class, "parentProcessInstance",
-                "parentProcessInstanceBindingDefinition"));
-        registerRule(new RequiredBindingValidationRule(FlexoPortMap.class, "returnedProcessInstance",
-                "returnedProcessInstanceBindingDefinition"));
-        registerRule(new MessageBindings.DefinedBindingsMustBeValid());
-        registerRule(new MessageBindings.MandatoryBindingsMustHaveAValue());
+		// registerRule(new NewPort.NewPortMustBeLinkedToABeginNode());
+		// registerRule(new DeletePort.DeletePortMustBeLinkedToAEndNode());
+		registerRule(new InPort.InPortMustBeLinkedToAtLeastAnActivityNode());
+		registerRule(new InOutPort.InOutPortMustBeLinkedToAtLeastAnActivityNode());
+		registerRule(new OutPort.OutPortMustBeLinkedToAtLeastAnActivityNode());
 
-        //registerRule(new NewPort.NewPortMustBeLinkedToABeginNode());
-        //registerRule(new DeletePort.DeletePortMustBeLinkedToAEndNode());
-        registerRule(new InPort.InPortMustBeLinkedToAtLeastAnActivityNode());
-        registerRule(new InOutPort.InOutPortMustBeLinkedToAtLeastAnActivityNode());
-        registerRule(new OutPort.OutPortMustBeLinkedToAtLeastAnActivityNode());
+		registerRule(new ComponentInstance.DefinedBindingsMustBeValid());
+		registerRule(new ComponentInstance.MandatoryBindingsMustHaveAValue());
 
-        registerRule(new ComponentInstance.DefinedBindingsMustBeValid());
-        registerRule(new ComponentInstance.MandatoryBindingsMustHaveAValue());
+		// Notify that the validation model is complete and that inheritance
+		// computation could be performed
+		update();
+	}
 
-        // Notify that the validation model is complete and that inheritance
-        // computation could be performed
-        update();
-    }
+	/**
+	 * Return a boolean indicating if validation of supplied object must be notified
+	 * 
+	 * @param next
+	 * @return a boolean
+	 */
+	@Override
+	protected boolean shouldNotifyValidation(Validable next) {
+		return ((next instanceof FlexoWorkflow) || (next instanceof FlexoProcess));
+	}
 
-    /**
-     * Return a boolean indicating if validation of supplied object must be
-     * notified
-     *
-     * @param next
-     * @return a boolean
-     */
-    @Override
-	protected boolean shouldNotifyValidation(Validable next)
-    {
-        return ((next instanceof FlexoWorkflow) || (next instanceof FlexoProcess));
-    }
-
-    /**
-     * Overrides fixAutomaticallyIfOneFixProposal
-     * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
-     */
-    @Override
-    public boolean fixAutomaticallyIfOneFixProposal()
-    {
-        return false;
-}
+	/**
+	 * Overrides fixAutomaticallyIfOneFixProposal
+	 * 
+	 * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
+	 */
+	@Override
+	public boolean fixAutomaticallyIfOneFixProposal() {
+		return false;
+	}
 }

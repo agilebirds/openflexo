@@ -29,63 +29,50 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.ModelReinjectableFile;
 import org.openflexo.foundation.dm.DMEntity;
-import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.file.AbstractCGFile;
 
+public class OpenDMEntity extends FlexoGUIAction<OpenDMEntity, CGFile, CGObject> {
 
-public class OpenDMEntity extends FlexoGUIAction<OpenDMEntity,CGFile,CGObject> 
-{
+	public static FlexoActionType<OpenDMEntity, CGFile, CGObject> actionType = new FlexoActionType<OpenDMEntity, CGFile, CGObject>(
+			"open_entity_in_dm", GCAction.MODEL_MENU, GCAction.MODEL_GROUP2, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<OpenDMEntity,CGFile,CGObject> actionType 
-    = new FlexoActionType<OpenDMEntity,CGFile,CGObject> ("open_entity_in_dm",
-    		GCAction.MODEL_MENU,GCAction.MODEL_GROUP2,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public OpenDMEntity makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new OpenDMEntity(focusedObject, globalSelection, editor);
+		}
 
-    	/**
-    	 * Factory method
-    	 */
-    	@Override
-		public OpenDMEntity makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-    	{
-    		return new OpenDMEntity(focusedObject, globalSelection,editor);
-    	}
+		@Override
+		protected boolean isVisibleForSelection(CGFile file, Vector<CGObject> globalSelection) {
+			return file instanceof AbstractCGFile;
+		}
 
-    	@Override
-		protected boolean isVisibleForSelection(CGFile file, Vector<CGObject> globalSelection) 
-    	{
-    		return file instanceof AbstractCGFile;
-    	}
+		@Override
+		protected boolean isEnabledForSelection(CGFile file, Vector<CGObject> globalSelection) {
+			return (file.getResource() != null && file instanceof ModelReinjectableFile && file.supportModelReinjection());
+		}
 
-    	@Override
-		protected boolean isEnabledForSelection(CGFile file, Vector<CGObject> globalSelection) 
-    	{
-    		return (file.getResource() != null
-    				&& file instanceof ModelReinjectableFile
-    				&& file.supportModelReinjection());
-    	}
+	};
 
-    };
+	static {
+		FlexoModelObject.addActionForClass(OpenDMEntity.actionType, CGFile.class);
+	}
 
-    static {
-        FlexoModelObject.addActionForClass (OpenDMEntity.actionType, CGFile.class);
-    }
+	OpenDMEntity(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    OpenDMEntity (CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-    	super(actionType, focusedObject, globalSelection,editor);
-    }
+	public OpenDMEntity(CGFile operationNode, FlexoEditor editor) {
+		super(actionType, operationNode, null, editor);
+	}
 
-    public OpenDMEntity (CGFile operationNode, FlexoEditor editor)
-    {
-    	super(actionType, operationNode, null,editor);
-    }
-    
-	public DMEntity getModelEntity()
-	{
+	public DMEntity getModelEntity() {
 		if (getFocusedObject() instanceof ModelReinjectableFile) {
-			return ((ModelReinjectableFile)getFocusedObject()).getModelEntity();
+			return ((ModelReinjectableFile) getFocusedObject()).getModelEntity();
 		}
 		return null;
 	}
-
 
 }

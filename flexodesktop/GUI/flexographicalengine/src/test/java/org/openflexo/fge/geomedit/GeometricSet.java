@@ -29,28 +29,26 @@ import java.util.logging.Logger;
 import javax.swing.tree.TreeNode;
 
 import org.openflexo.fge.geomedit.gr.GeometricDrawingGraphicalRepresentation;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLogger;
-
-public class GeometricSet implements XMLSerializable,Cloneable, TreeNode {
+public class GeometricSet implements XMLSerializable, Cloneable, TreeNode {
 
 	private static final Logger logger = FlexoLogger.getLogger(GeometricSet.class.getPackage().getName());
 
 	private static XMLMapping mapping;
-	
+
 	private static int totalOccurences = 0;
-	
+
 	private Vector<GeometricObject> childs;
 
-
 	private int index;
-	
+
 	static {
 		try {
 			mapping = new XMLMapping(new FileResource("Mappings/GeomEditMapping.xml"));
@@ -58,136 +56,123 @@ public class GeometricSet implements XMLSerializable,Cloneable, TreeNode {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public File file = null;
-	
+
 	private GeometricDrawing editedDrawing;
-	
+
 	// Called for NEW
-	public static GeometricSet makeNewDrawing()
-	{
+	public static GeometricSet makeNewDrawing() {
 		totalOccurences++;
 		GeometricSet returned = new GeometricSet();
 		returned.index = totalOccurences;
 		returned.editedDrawing.init();
 		return returned;
 	}
-	
-	private GeometricSet()
-	{
+
+	private GeometricSet() {
 		super();
 		editedDrawing = new GeometricDrawing(this);
 		childs = new Vector<GeometricObject>();
 	}
-	
+
 	// Called for LOAD
-	public GeometricSet(GeomEditBuilder builder)
-	{
+	public GeometricSet(GeomEditBuilder builder) {
 		this();
 		builder.drawing = editedDrawing;
 		initializeDeserialization();
 	}
-	
-	public String getTitle()
-	{
-		if (file != null) return file.getName();
-		else return FlexoLocalization.localizedForKey("untitled")+"-"+index;
+
+	public String getTitle() {
+		if (file != null) {
+			return file.getName();
+		} else {
+			return FlexoLocalization.localizedForKey("untitled") + "-" + index;
+		}
 	}
-	
-	public GeometricDrawingGraphicalRepresentation getGraphicalRepresentation()
-	{
+
+	public GeometricDrawingGraphicalRepresentation getGraphicalRepresentation() {
 		return editedDrawing.getDrawingGraphicalRepresentation();
 	}
 
-	public void setGraphicalRepresentation(GeometricDrawingGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(GeometricDrawingGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		editedDrawing.setDrawingGraphicalRepresentation(aGR);
 	}
 
-	public GeometricDrawing getEditedDrawing()
-	{
+	public GeometricDrawing getEditedDrawing() {
 		return editedDrawing;
 	}
-	
-	public void save()
-	{
-		System.out.println("Saving "+file);
-		
+
+	public void save() {
+		System.out.println("Saving " + file);
+
 		for (GeometricObject o : getChilds()) {
 			o.resetResultingGeometricObject();
 		}
-		
+
 		XMLCoder coder = new XMLCoder(mapping);
-		
+
 		try {
-			coder.encodeObject(this,new FileOutputStream(file));
-			logger.info("Succeeded to save: "+file);
-			System.out.println("> "+(new XMLCoder(mapping)).encodeObject(this));
+			coder.encodeObject(this, new FileOutputStream(file));
+			logger.info("Succeeded to save: " + file);
+			System.out.println("> " + (new XMLCoder(mapping)).encodeObject(this));
 		} catch (Exception e) {
-			logger.warning("Failed to save: "+file+" unexpected exception: "+e.getMessage());
+			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public static GeometricSet load(File file)
-	{
-		logger.info("Loading "+file);
-		
-		XMLDecoder decoder = new XMLDecoder(mapping,new GeomEditBuilder());
-		
+
+	public static GeometricSet load(File file) {
+		logger.info("Loading " + file);
+
+		XMLDecoder decoder = new XMLDecoder(mapping, new GeomEditBuilder());
+
 		try {
-			GeometricSet drawing = (GeometricSet)decoder.decodeObject(new FileInputStream(file));
+			GeometricSet drawing = (GeometricSet) decoder.decodeObject(new FileInputStream(file));
 			drawing.file = file;
 			drawing.editedDrawing.init();
-			logger.info("Succeeded to load: "+file);
+			logger.info("Succeeded to load: " + file);
 			return drawing;
 		} catch (Exception e) {
-			logger.warning("Failed to load: "+file+" unexpected exception: "+e.getMessage());
+			logger.warning("Failed to load: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	public static class GeomEditBuilder
-	{
+
+	public static class GeomEditBuilder {
 		public GeometricDrawing drawing;
 	}
-	
-	public Vector<GeometricObject> getChilds()
-	{
+
+	public Vector<GeometricObject> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(Vector<GeometricObject> someChilds)
-	{
+	public void setChilds(Vector<GeometricObject> someChilds) {
 		childs.addAll(someChilds);
 	}
 
-	public void addToChilds(GeometricObject aChild)
-	{
+	public void addToChilds(GeometricObject aChild) {
 		childs.add(aChild);
-		//System.out.println("Add "+aChild+" isDeserializing="+isDeserializing());
+		// System.out.println("Add "+aChild+" isDeserializing="+isDeserializing());
 		if (!isDeserializing()) {
 			editedDrawing.addDrawable(aChild, this);
 		}
 	}
 
-	public void removeFromChilds(GeometricObject aChild)
-	{
+	public void removeFromChilds(GeometricObject aChild) {
 		childs.remove(aChild);
 	}
-	
+
 	private boolean isDeserializing = false;
-	
-	public void initializeDeserialization()
-	{
+
+	public void initializeDeserialization() {
 		isDeserializing = true;
 	}
-	
-	public void finalizeDeserialization()
-	{
+
+	public void finalizeDeserialization() {
 		isDeserializing = false;
 		for (GeometricObject aChild : childs) {
 			editedDrawing.addDrawable(aChild, this);
@@ -199,19 +184,16 @@ public class GeometricSet implements XMLSerializable,Cloneable, TreeNode {
 			aChild.getConstruction().refresh();
 		}
 	}
-	
-	public boolean isDeserializing()
-	{
+
+	public boolean isDeserializing() {
 		return isDeserializing;
 	}
-	
+
 	@Override
-	public GeometricSet clone()
-	{
+	public GeometricSet clone() {
 		try {
-			return (GeometricSet)super.clone();
-		}
-		catch (CloneNotSupportedException e) {
+			return (GeometricSet) super.clone();
+		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 			// cannot happen since we are clonable
 			return null;
@@ -219,46 +201,38 @@ public class GeometricSet implements XMLSerializable,Cloneable, TreeNode {
 	}
 
 	@Override
-	public Enumeration children()
-	{
+	public Enumeration children() {
 		return childs.elements();
 	}
 
 	@Override
-	public boolean getAllowsChildren()
-	{
+	public boolean getAllowsChildren() {
 		return true;
 	}
 
 	@Override
-	public TreeNode getChildAt(int childIndex)
-	{
+	public TreeNode getChildAt(int childIndex) {
 		return childs.get(childIndex);
 	}
 
 	@Override
-	public int getChildCount()
-	{
+	public int getChildCount() {
 		return childs.size();
 	}
 
 	@Override
-	public int getIndex(TreeNode node)
-	{
+	public int getIndex(TreeNode node) {
 		return childs.indexOf(node);
 	}
 
 	@Override
-	public TreeNode getParent()
-	{
+	public TreeNode getParent() {
 		return null;
 	}
 
 	@Override
-	public boolean isLeaf()
-	{
+	public boolean isLeaf() {
 		return false;
 	}
-
 
 }

@@ -27,36 +27,37 @@ public class EntitySpecialization {
 	private DMEntity specializedEntity;
 	private DMEntity parentEntity;
 	private DMType specialization;
-	
-	public EntitySpecialization(DMEntity specializedEntity, DMType specialization)
-	{
+
+	public EntitySpecialization(DMEntity specializedEntity, DMType specialization) {
 		super();
 		this.specializedEntity = specializedEntity;
 		this.specialization = specialization;
 		this.parentEntity = specialization.getBaseEntity();
 	}
 
-	public DMEntity getParentEntity() 
-	{
+	public DMEntity getParentEntity() {
 		return parentEntity;
 	}
 
-	public DMEntity getSpecializedEntity() 
-	{
+	public DMEntity getSpecializedEntity() {
 		return specializedEntity;
 	}
 
-	public DMType getSpecialization()
-	{
+	public DMType getSpecialization() {
 		return specialization;
 	}
-	
-	public String getLabel()
-	{
+
+	public String getLabel() {
 		String returned = null;
-		if (getSpecialization().equals(getSpecializedEntity().getParentType())) returned = "extends";
-		if (getSpecializedEntity().getImplementedTypes().contains(getSpecialization())) returned = "implements";
-		if (getSpecialization().isGeneric()) returned += " "+getSpecialization().getSimplifiedStringRepresentation();
+		if (getSpecialization().equals(getSpecializedEntity().getParentType())) {
+			returned = "extends";
+		}
+		if (getSpecializedEntity().getImplementedTypes().contains(getSpecialization())) {
+			returned = "implements";
+		}
+		if (getSpecialization().isGeneric()) {
+			returned += " " + getSpecialization().getSimplifiedStringRepresentation();
+		}
 		return returned;
 	}
 }

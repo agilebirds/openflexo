@@ -22,44 +22,38 @@ package org.openflexo.xmlcode.examples.example4;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>Edge</code> is intented to represent an oriented edge object in
- * XML coding/decoding example.
+ * Class <code>Edge</code> is intented to represent an oriented edge object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Edge implements XMLSerializable
-{
+public class Edge implements XMLSerializable {
 
-    public Node originNode;
+	public Node originNode;
 
-    public Node destinationNode;
+	public Node destinationNode;
 
-    public Edge(GraphBuilder gb)
-    {
-        super();
-        gb.edges.add(this);
-    }
+	public Edge(GraphBuilder gb) {
+		super();
+		gb.edges.add(this);
+	}
 
-    public Edge(GraphBuilder gb, Node origin, Node destination)
-    {
-        super();
-        originNode = origin;
-        destinationNode = destination;
-        origin.edges.add(this);
-        gb.edges.add(this);
-    }
+	public Edge(GraphBuilder gb, Node origin, Node destination) {
+		super();
+		originNode = origin;
+		destinationNode = destination;
+		origin.edges.add(this);
+		gb.edges.add(this);
+	}
 
-    @Override
-	public String toString()
-    {
-        String returned = " [ Edge: ";
-        returned += (originNode == null ? null : originNode.toShortString()) + "-";
-        returned += (destinationNode == null ? null : destinationNode.toShortString()) + " ] ";
-        return returned;
-    }
+	@Override
+	public String toString() {
+		String returned = " [ Edge: ";
+		returned += (originNode == null ? null : originNode.toShortString()) + "-";
+		returned += (destinationNode == null ? null : destinationNode.toShortString()) + " ] ";
+		return returned;
+	}
 
-    public void finalizeEdgeSerialization()
-    {
-        System.out.println("finalizeEdgeSerialization");
-    }
+	public void finalizeEdgeSerialization() {
+		System.out.println("finalizeEdgeSerialization");
+	}
 }

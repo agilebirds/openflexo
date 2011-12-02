@@ -31,90 +31,93 @@ import org.openflexo.foundation.dm.DMRepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class DMRepositoryFolderTableModel extends AbstractModel<DMModel,DMRepositoryFolder>
-{
+public class DMRepositoryFolderTableModel extends AbstractModel<DMModel, DMRepositoryFolder> {
 
-    protected static final Logger logger = Logger.getLogger(DMRepositoryFolderTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DMRepositoryFolderTableModel.class.getPackage().getName());
 
-    public DMRepositoryFolderTableModel(DMModel dataModel, FlexoProject project)
-    {
-        super(dataModel, project);
-        addToColumns(new IconColumn<DMRepositoryFolder>("repository_folder_icon", 30) {
-            @Override
-			public Icon getIcon(DMRepositoryFolder folder)
-            {
-                return DMEIconLibrary.DM_REPOSITORY_FOLDER_ICON;
-           }
-        });
-         addToColumns(new StringColumn<DMRepositoryFolder>("name", 300) {
-            @Override
-			public String getValue(DMRepositoryFolder folder)
-            {
-                return folder.getLocalizedName();
-            }
-        });
-         addToColumns(new StringColumn<DMRepositoryFolder>("description", 570) {
-             @Override
-			public String getValue(DMRepositoryFolder folder)
-             {
-                 return folder.getLocalizedDescription();
-             }
-         });
-        setRowHeight(20);
-    }
+	public DMRepositoryFolderTableModel(DMModel dataModel, FlexoProject project) {
+		super(dataModel, project);
+		addToColumns(new IconColumn<DMRepositoryFolder>("repository_folder_icon", 30) {
+			@Override
+			public Icon getIcon(DMRepositoryFolder folder) {
+				return DMEIconLibrary.DM_REPOSITORY_FOLDER_ICON;
+			}
+		});
+		addToColumns(new StringColumn<DMRepositoryFolder>("name", 300) {
+			@Override
+			public String getValue(DMRepositoryFolder folder) {
+				return folder.getLocalizedName();
+			}
+		});
+		addToColumns(new StringColumn<DMRepositoryFolder>("description", 570) {
+			@Override
+			public String getValue(DMRepositoryFolder folder) {
+				return folder.getLocalizedDescription();
+			}
+		});
+		setRowHeight(20);
+	}
 
-    public DMModel getDMModel()
-    {
-        return getModel();
-    }
+	public DMModel getDMModel() {
+		return getModel();
+	}
 
-    @Override
-	public DMRepositoryFolder elementAt(int row)
-    {
-        if (row == 0)
-            return getDMModel().getInternalRepositoryFolder();
-        int nonEmptyFolders = 1;
-        if (getDMModel().getNonPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
-            if (row == nonEmptyFolders) return getDMModel().getNonPersistantDataRepositoryFolder();
-            else nonEmptyFolders++;
-        }
-        if (getDMModel().getPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
-            if (row == nonEmptyFolders) return getDMModel().getPersistantDataRepositoryFolder();
-            else nonEmptyFolders++;
-        }
-        if (getDMModel().getLibraryRepositoryFolder().getRepositoriesCount() > 0) {
-            if (row == nonEmptyFolders) return getDMModel().getLibraryRepositoryFolder();
-            else nonEmptyFolders++;
-        }
-        return null;
-    }
+	@Override
+	public DMRepositoryFolder elementAt(int row) {
+		if (row == 0) {
+			return getDMModel().getInternalRepositoryFolder();
+		}
+		int nonEmptyFolders = 1;
+		if (getDMModel().getNonPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
+			if (row == nonEmptyFolders) {
+				return getDMModel().getNonPersistantDataRepositoryFolder();
+			} else {
+				nonEmptyFolders++;
+			}
+		}
+		if (getDMModel().getPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
+			if (row == nonEmptyFolders) {
+				return getDMModel().getPersistantDataRepositoryFolder();
+			} else {
+				nonEmptyFolders++;
+			}
+		}
+		if (getDMModel().getLibraryRepositoryFolder().getRepositoriesCount() > 0) {
+			if (row == nonEmptyFolders) {
+				return getDMModel().getLibraryRepositoryFolder();
+			} else {
+				nonEmptyFolders++;
+			}
+		}
+		return null;
+	}
 
-    public DMRepositoryFolder repositoryFolderAt(int row)
-    {
-        return elementAt(row);
-    }
+	public DMRepositoryFolder repositoryFolderAt(int row) {
+		return elementAt(row);
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDMModel() != null) {
-            int returned = 1;
-            if (getDMModel().getNonPersistantDataRepositoryFolder().getRepositoriesCount() > 0) 
-                returned++;
-            if (getDMModel().getPersistantDataRepositoryFolder().getRepositoriesCount() > 0) 
-                returned++;
-           if (getDMModel().getLibraryRepositoryFolder().getRepositoriesCount() > 0) 
-               returned++;
-            return returned;
-        }
-        return 0;
-    }
+	@Override
+	public int getRowCount() {
+		if (getDMModel() != null) {
+			int returned = 1;
+			if (getDMModel().getNonPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
+				returned++;
+			}
+			if (getDMModel().getPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
+				returned++;
+			}
+			if (getDMModel().getLibraryRepositoryFolder().getRepositoriesCount() > 0) {
+				returned++;
+			}
+			return returned;
+		}
+		return 0;
+	}
 
 }

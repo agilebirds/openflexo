@@ -31,24 +31,26 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 
+public class ConvertIntoLocalProcess extends FlexoAction<ConvertIntoLocalProcess, FlexoProcess, FlexoProcess> {
 
-public class ConvertIntoLocalProcess extends FlexoAction<ConvertIntoLocalProcess,FlexoProcess,FlexoProcess> {
-
-	public static final FlexoActionType<ConvertIntoLocalProcess, FlexoProcess, FlexoProcess> actionType = new FlexoActionType<ConvertIntoLocalProcess, FlexoProcess, FlexoProcess>("convert_into_local_process") {
+	public static final FlexoActionType<ConvertIntoLocalProcess, FlexoProcess, FlexoProcess> actionType = new FlexoActionType<ConvertIntoLocalProcess, FlexoProcess, FlexoProcess>(
+			"convert_into_local_process") {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
-			return isVisibleForSelection(object, globalSelection) && object.getWorkflow().getLocalFlexoProcessWithName(object.getName())==null;
+			return isVisibleForSelection(object, globalSelection)
+					&& object.getWorkflow().getLocalFlexoProcessWithName(object.getName()) == null;
 		}
 
 		@Override
 		protected boolean isVisibleForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
-			return object!=null && object.isImported() && object.isTopLevelProcess() && object.isDeletedOnServer() && object.getProcessNode()!=null;
+			return object != null && object.isImported() && object.isTopLevelProcess() && object.isDeletedOnServer()
+					&& object.getProcessNode() != null;
 		}
 
 		@Override
 		public ConvertIntoLocalProcess makeNewAction(FlexoProcess focusedObject, Vector<FlexoProcess> globalSelection, FlexoEditor editor) {
-			return new ConvertIntoLocalProcess(focusedObject,globalSelection,editor);
+			return new ConvertIntoLocalProcess(focusedObject, globalSelection, editor);
 		}
 
 	};
@@ -57,8 +59,7 @@ public class ConvertIntoLocalProcess extends FlexoAction<ConvertIntoLocalProcess
 		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
 	}
 
-	public ConvertIntoLocalProcess(FlexoProcess focusedObject,
-			Vector<FlexoProcess> globalSelection, FlexoEditor editor) {
+	public ConvertIntoLocalProcess(FlexoProcess focusedObject, Vector<FlexoProcess> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -71,12 +72,12 @@ public class ConvertIntoLocalProcess extends FlexoAction<ConvertIntoLocalProcess
 			this.process = p;
 			this.uri = p.getURI();
 			this.subProcesses = new Vector<ProcessStructure>();
-			for (FlexoProcess sub: this.process.getSubProcesses()) {
+			for (FlexoProcess sub : this.process.getSubProcesses()) {
 				subProcesses.add(new ProcessStructure(sub));
 			}
 		}
 
-		public void convertIntoLocal(){
+		public void convertIntoLocal() {
 			for (ProcessStructure sub : subProcesses) {
 				sub.convertIntoLocal();
 			}
@@ -96,9 +97,9 @@ public class ConvertIntoLocalProcess extends FlexoAction<ConvertIntoLocalProcess
 		FlexoWorkflow workflow = node.getWorkflow();
 		ProcessStructure structure = new ProcessStructure(p);
 		if (node.getWorkflow().getImportedRootNodeProcesses().contains(node)) {
-			 workflow.removeFromImportedRootNodeProcesses(node);
-			 workflow.addToTopLevelNodeProcesses(node);
-			 structure.convertIntoLocal();
+			workflow.removeFromImportedRootNodeProcesses(node);
+			workflow.addToTopLevelNodeProcesses(node);
+			structure.convertIntoLocal();
 		}
 	}
 

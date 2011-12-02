@@ -33,188 +33,171 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 
-
 /**
  * Represents a implementation model resource
  * 
  * @author sguerin
  * 
  */
-public class ImplementationModelResource extends FlexoXMLStorageResource<ImplementationModel>
-{
+public class ImplementationModelResource extends FlexoXMLStorageResource<ImplementationModel> {
 	private static final Logger logger = Logger.getLogger(ImplementationModelResource.class.getPackage().getName());
-    
+
 	protected String name;
 
-    public ImplementationModelResource(FlexoProject aProject, String aName, GeneratedSourcesResource sgResource,
-            FlexoProjectFile imFile) throws InvalidFileNameException
-    {
-        this(aProject);
-        setName(aName);
-        setResourceFile(imFile);
-        addToSynchronizedResources(sgResource);
-     }
+	public ImplementationModelResource(FlexoProject aProject, String aName, GeneratedSourcesResource sgResource, FlexoProjectFile imFile)
+			throws InvalidFileNameException {
+		this(aProject);
+		setName(aName);
+		setResourceFile(imFile);
+		addToSynchronizedResources(sgResource);
+	}
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public ImplementationModelResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-    }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public ImplementationModelResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public ImplementationModelResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	public ImplementationModelResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-	public String getName()
-    {
-        return name;
-    }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-        name = aName;
-        setChanged();
-    }
-    
-    public void setResourceData(ImplementationModel implementationModel)
-    {
-    	_resourceData = implementationModel;
-    }
+	@Override
+	public void setName(String aName) {
+		name = aName;
+		setChanged();
+	}
 
-    public ImplementationModel getImplementationModel()
-    {
-        return getResourceData();
-    }
+	public void setResourceData(ImplementationModel implementationModel) {
+		_resourceData = implementationModel;
+	}
 
-    public ImplementationModel getImplementationModel(FlexoProgress progress)
-    {
-        return getResourceData(progress);
-    }
+	public ImplementationModel getImplementationModel() {
+		return getResourceData();
+	}
 
-    public final ImplementationModel createNewImplementationModel() 
-    {
-    	return getImplementationModelDefinition().createNewImplementationModel();
-    }
+	public ImplementationModel getImplementationModel(FlexoProgress progress) {
+		return getResourceData(progress);
+	}
 
-    private ImplementationModelDefinition _implementationModelDefinition;
+	public final ImplementationModel createNewImplementationModel() {
+		return getImplementationModelDefinition().createNewImplementationModel();
+	}
 
-    public ImplementationModelDefinition getImplementationModelDefinition()
-    {
-        if (_implementationModelDefinition == null) {
-        	_implementationModelDefinition = getProject().getGeneratedSources().getImplementationModelDefinitionNamed(getName());
-        }
+	private ImplementationModelDefinition _implementationModelDefinition;
 
-        return _implementationModelDefinition;
-    }
- 
-    @Override
-	public ImplementationModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException
-    {
-    	ImplementationModel implModel;
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Loading shema " + getName());
-        try {
-        	implModel = super.performLoadResourceData(progress, loadingHandler);
-        } catch (FlexoFileNotFoundException e) {
-            // OK, i create the resource by myself !
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Creating new implementation model " + getName());
-            implModel = createNewImplementationModel();
-            try {
-            	implModel.setFlexoResource(this);
+	public ImplementationModelDefinition getImplementationModelDefinition() {
+		if (_implementationModelDefinition == null) {
+			_implementationModelDefinition = getProject().getGeneratedSources().getImplementationModelDefinitionNamed(getName());
+		}
+
+		return _implementationModelDefinition;
+	}
+
+	@Override
+	public ImplementationModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
+			throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
+		ImplementationModel implModel;
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Loading shema " + getName());
+		}
+		try {
+			implModel = super.performLoadResourceData(progress, loadingHandler);
+		} catch (FlexoFileNotFoundException e) {
+			// OK, i create the resource by myself !
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Creating new implementation model " + getName());
+			}
+			implModel = createNewImplementationModel();
+			try {
+				implModel.setFlexoResource(this);
 			} catch (DuplicateResourceException e1) {
 				e1.printStackTrace();
 				logger.warning("DuplicateResourceException !!!");
 			}
-            _resourceData = implModel;
-        }
-        if (implModel != null) {
-        	implModel.setProject(getProject());
-        }
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Notify loading for implementation model " + getImplementationModelDefinition().getName());
-        getImplementationModelDefinition().notifyImplementationModelHasBeenLoaded();
-        
-        logger.info("OK, we loaded implementation model");
-        
-        return implModel;
-    }
+			_resourceData = implModel;
+		}
+		if (implModel != null) {
+			implModel.setProject(getProject());
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Notify loading for implementation model " + getImplementationModelDefinition().getName());
+		}
+		getImplementationModelDefinition().notifyImplementationModelHasBeenLoaded();
 
-    /**
-     * Returns a boolean indicating if this resource needs a builder to be
-     * loaded Returns true to indicate that process deserializing requires a
-     * FlexoProcessBuilder instance: in this case: YES !
-     * 
-     * @return boolean
-     */
-    @Override
-	public boolean hasBuilder()
-    {
-        return true;
-    }
+		logger.info("OK, we loaded implementation model");
 
-    @Override
-	public Class<ImplementationModel> getResourceDataClass()
-    {
-        return ImplementationModel.class;
-    }
+		return implModel;
+	}
 
-    /**
-     * Returns the required newly instancied builder if this resource needs a
-     * builder to be loaded
-     * 
-     * @return boolean
-     */
-    @Override
-	public Object instanciateNewBuilder()
-    {
-    	ImplementationModelBuilder builder = new ImplementationModelBuilder(getImplementationModelDefinition(), this);
+	/**
+	 * Returns a boolean indicating if this resource needs a builder to be loaded Returns true to indicate that process deserializing
+	 * requires a FlexoProcessBuilder instance: in this case: YES !
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean hasBuilder() {
+		return true;
+	}
+
+	@Override
+	public Class<ImplementationModel> getResourceDataClass() {
+		return ImplementationModel.class;
+	}
+
+	/**
+	 * Returns the required newly instancied builder if this resource needs a builder to be loaded
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public Object instanciateNewBuilder() {
+		ImplementationModelBuilder builder = new ImplementationModelBuilder(getImplementationModelDefinition(), this);
 		builder.implementationModel = _resourceData;
 		return builder;
 	}
 
-    @Override
-    protected boolean isDuplicateSerializationIdentifierRepairable() {
-    	return true;
-    }
-    
-    @Override
-	protected boolean repairDuplicateSerializationIdentifier() 
-    {
-		ValidationReport report = getProject().validate();
-		for (ValidationIssue issue: report.getValidationIssues())
-			if (issue instanceof DuplicateObjectIDIssue)
-				return true;
-		return false;
+	@Override
+	protected boolean isDuplicateSerializationIdentifierRepairable() {
+		return true;
 	}
-    
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToSynchronizedResources(getProject().getGeneratedSourcesResource());
-    }
 
 	@Override
-	public ResourceType getResourceType() 
-	{
+	protected boolean repairDuplicateSerializationIdentifier() {
+		ValidationReport report = getProject().validate();
+		for (ValidationIssue issue : report.getValidationIssues()) {
+			if (issue instanceof DuplicateObjectIDIssue) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToSynchronizedResources(getProject().getGeneratedSourcesResource());
+	}
+
+	@Override
+	public ResourceType getResourceType() {
 		return ResourceType.IMPLEMENTATION_MODEL;
 	}
 
-	public static String resourceIdentifierForName(String aModelName)
-	{
+	public static String resourceIdentifierForName(String aModelName) {
 		return ResourceType.IMPLEMENTATION_MODEL.getName() + "." + aModelName;
 	}
 

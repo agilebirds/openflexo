@@ -30,64 +30,62 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public class InnerBlocReusableWidget extends IEReusableWidget<ReusableComponentDefinition,ReusableComponentInstance> implements InnerBlocWidgetInterface
-{
+public class InnerBlocReusableWidget extends IEReusableWidget<ReusableComponentDefinition, ReusableComponentInstance> implements
+		InnerBlocWidgetInterface {
 
-	private static final Logger logger = FlexoLogger
-			.getLogger(InnerBlocReusableWidget.class.getPackage().getName());
-    public InnerBlocReusableWidget(FlexoComponentBuilder builder)
-    {
-        super(builder);
-        initializeDeserialization(builder);
-    }
+	private static final Logger logger = FlexoLogger.getLogger(InnerBlocReusableWidget.class.getPackage().getName());
 
-    public InnerBlocReusableWidget(IEWOComponent woComponent, ReusableComponentDefinition def, IEBlocWidget parent, FlexoProject prj)
-    {
-        super(woComponent, def, parent, prj);
-    }
+	public InnerBlocReusableWidget(FlexoComponentBuilder builder) {
+		super(builder);
+		initializeDeserialization(builder);
+	}
 
-    @Override
-    protected ReusableComponentInstance createComponentInstance(ReusableComponentDefinition componentDefinition, IEWOComponent woComponent) {
-    	return new ReusableComponentInstance(componentDefinition,woComponent);
-    }
-    
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return null;
-    }
+	public InnerBlocReusableWidget(IEWOComponent woComponent, ReusableComponentDefinition def, IEBlocWidget parent, FlexoProject prj) {
+		super(woComponent, def, parent, prj);
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return null;
-    }
+	@Override
+	protected ReusableComponentInstance createComponentInstance(ReusableComponentDefinition componentDefinition, IEWOComponent woComponent) {
+		return new ReusableComponentInstance(componentDefinition, woComponent);
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "inner_bloc_reusable";
-    }
-    
-    @Override
-	public Vector<IETextFieldWidget> getAllDateTextfields()
-    {
-        return getReusableComponentInstance().getWOComponent().getAllDateTextfields();
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return null;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return null;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "inner_bloc_reusable";
+	}
+
+	@Override
+	public Vector<IETextFieldWidget> getAllDateTextfields() {
+		return getReusableComponentInstance().getWOComponent().getAllDateTextfields();
+	}
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
-}
+		}
+	}
+
 	@Override
 	public boolean areComponentInstancesValid() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 		return true;
 	}
 }

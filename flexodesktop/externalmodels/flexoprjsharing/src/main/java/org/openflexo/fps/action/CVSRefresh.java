@@ -41,101 +41,89 @@ import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.FlexoAuthentificationException;
 import org.openflexo.localization.FlexoLocalization;
 
-public class CVSRefresh extends CVSAction<CVSRefresh,FPSObject> implements CVSExplorerListener
-{
+public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSExplorerListener {
 
-    private static final Logger logger = Logger.getLogger(CVSRefresh.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CVSRefresh.class.getPackage().getName());
 
-    public static FlexoActionType<CVSRefresh,FPSObject,FPSObject> actionType 
-    = new FlexoActionType<CVSRefresh,FPSObject,FPSObject> 
-    ("refresh",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<CVSRefresh, FPSObject, FPSObject> actionType = new FlexoActionType<CVSRefresh, FPSObject, FPSObject>(
+			"refresh", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CVSRefresh makeNewAction(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CVSRefresh(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CVSRefresh makeNewAction(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new CVSRefresh(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FPSObject object, Vector<FPSObject> globalSelection) 
-        {
-            return (object instanceof CVSRepositoryList) 
-            || (object instanceof CVSRepository)
-            || (object instanceof CVSModule);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
+			return (object instanceof CVSRepositoryList) || (object instanceof CVSRepository) || (object instanceof CVSModule);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FPSObject object, Vector<FPSObject> globalSelection) 
-        {
-            return isVisibleForSelection(object,globalSelection);
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (actionType, FPSObject.class);
-    }
- 
-     CVSRefresh (FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-    	super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
 
-     private Vector<CVSExplorer> explorers;
+	};
 
-     private boolean timeOutReceived =false;
-     private long lastReception;
-     private static final long TIME_OUT = CVSConstants.TIME_OUT; // 60 s
-     private int explorersToWait = 0;
-     private Vector<CVSExplorable> explorersToNotify = new Vector<CVSExplorable>();
-     private Vector<CVSExplorable> explorableFailed = new Vector<CVSExplorable>();
-     private HashMap<FlexoException, CVSExplorer> repositoryInformationRequired = new HashMap<FlexoException, CVSExplorer>();
-     
-    @Override
-	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException
-    {
-    	logger.info ("CVSRefresh");
-    	
-    	explorers = new Vector<CVSExplorer>();
-    	
-    	if (getFocusedObject() instanceof CVSRepositoryList) {
-    		for (CVSRepository rep : ((CVSRepositoryList)getFocusedObject()).getCVSRepositories()) {
-    			logger.info ("CVSRefresh for "+rep);
-    			explorers.add(rep.exploreRepository(this));
-    		}
-    	}
-    	else if (getFocusedObject() instanceof CVSRepository) {
-    		explorers.add(((CVSRepository)getFocusedObject()).exploreRepository(this));
-    	}
-    	else if (getFocusedObject() instanceof CVSModule) {
-    		explorers.add(((CVSModule)getFocusedObject()).exploreModule(this));
-    	}
-    	explorersToWait = explorers.size();
-    	waitResponses();
-    	if (explorersToWait > 0) {
-    		timeOutReceived = true;
-    		logger.warning("Exploration finished with time-out expired: still waiting for "+explorersToWait+" files");
-    	}
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, FPSObject.class);
+	}
 
-    private void waitResponses()
-    {
-    	setProgress(FlexoLocalization.localizedForKey("waiting_for_responses"));
-    	resetSecondaryProgress(explorersToWait);
-    	
-    	lastReception = System.currentTimeMillis();
-    	
-    	while (explorersToWait > 0 && System.currentTimeMillis() - lastReception < TIME_OUT) {
+	CVSRefresh(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	private Vector<CVSExplorer> explorers;
+
+	private boolean timeOutReceived = false;
+	private long lastReception;
+	private static final long TIME_OUT = CVSConstants.TIME_OUT; // 60 s
+	private int explorersToWait = 0;
+	private Vector<CVSExplorable> explorersToNotify = new Vector<CVSExplorable>();
+	private Vector<CVSExplorable> explorableFailed = new Vector<CVSExplorable>();
+	private HashMap<FlexoException, CVSExplorer> repositoryInformationRequired = new HashMap<FlexoException, CVSExplorer>();
+
+	@Override
+	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException {
+		logger.info("CVSRefresh");
+
+		explorers = new Vector<CVSExplorer>();
+
+		if (getFocusedObject() instanceof CVSRepositoryList) {
+			for (CVSRepository rep : ((CVSRepositoryList) getFocusedObject()).getCVSRepositories()) {
+				logger.info("CVSRefresh for " + rep);
+				explorers.add(rep.exploreRepository(this));
+			}
+		} else if (getFocusedObject() instanceof CVSRepository) {
+			explorers.add(((CVSRepository) getFocusedObject()).exploreRepository(this));
+		} else if (getFocusedObject() instanceof CVSModule) {
+			explorers.add(((CVSModule) getFocusedObject()).exploreModule(this));
+		}
+		explorersToWait = explorers.size();
+		waitResponses();
+		if (explorersToWait > 0) {
+			timeOutReceived = true;
+			logger.warning("Exploration finished with time-out expired: still waiting for " + explorersToWait + " files");
+		}
+	}
+
+	private void waitResponses() {
+		setProgress(FlexoLocalization.localizedForKey("waiting_for_responses"));
+		resetSecondaryProgress(explorersToWait);
+
+		lastReception = System.currentTimeMillis();
+
+		while (explorersToWait > 0 && System.currentTimeMillis() - lastReception < TIME_OUT) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			synchronized (this) {
-				while (repositoryInformationRequired.size()>0) {
+				while (repositoryInformationRequired.size() > 0) {
 					Iterator<FlexoException> i = repositoryInformationRequired.keySet().iterator();
 					while (i.hasNext()) {
 						FlexoException e = i.next();
@@ -150,23 +138,23 @@ public class CVSRefresh extends CVSAction<CVSRefresh,FPSObject> implements CVSEx
 				}
 			}
 		}
-    	
-     }
-    
+
+	}
+
 	@Override
-	public synchronized void exploringFailed(CVSExplorable explorable, CVSExplorer explorer, Exception exception)
-	{
+	public synchronized void exploringFailed(CVSExplorable explorable, CVSExplorer explorer, Exception exception) {
 		if (exception instanceof FlexoAuthentificationException || exception instanceof FlexoUnknownHostException) {
 			if (getExceptionHandler() != null) {
-				repositoryInformationRequired.put((FlexoException)exception, explorer); 
+				repositoryInformationRequired.put((FlexoException) exception, explorer);
 				return;
 			}
 		}
-		if (logger.isLoggable(Level.WARNING))
-			logger.warning("Failed to explorer "+explorable);
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Failed to explorer " + explorable);
+		}
 		explorersToWait--;
-    	explorersToNotify.add(explorable);
-    	lastReception = System.currentTimeMillis();
+		explorersToNotify.add(explorable);
+		lastReception = System.currentTimeMillis();
 		explorableFailed.add(explorable);
 	}
 
@@ -175,7 +163,7 @@ public class CVSRefresh extends CVSAction<CVSRefresh,FPSObject> implements CVSEx
 	 * @param exception
 	 */
 	private void handleException(CVSExplorer explorer, FlexoException exception) {
-		
+
 		if (getExceptionHandler().handleException(exception, this)) {
 			// Means that a new password was supplied
 			// So we try again
@@ -185,12 +173,11 @@ public class CVSRefresh extends CVSAction<CVSRefresh,FPSObject> implements CVSEx
 	}
 
 	@Override
-	public synchronized void exploringSucceeded(CVSExplorable explorable, CVSExplorer explorer) 
-	{
-		logger.info("Exploring "+explorable+" was successfull");
-    	explorersToWait--;
-    	explorersToNotify.add(explorable);
-    	lastReception = System.currentTimeMillis();
+	public synchronized void exploringSucceeded(CVSExplorable explorable, CVSExplorer explorer) {
+		logger.info("Exploring " + explorable + " was successfull");
+		explorersToWait--;
+		explorersToNotify.add(explorable);
+		lastReception = System.currentTimeMillis();
 	}
 
 	public boolean hasReceivedTimeout() {
@@ -201,4 +188,4 @@ public class CVSRefresh extends CVSAction<CVSRefresh,FPSObject> implements CVSEx
 		return explorableFailed;
 	}
 
- }
+}

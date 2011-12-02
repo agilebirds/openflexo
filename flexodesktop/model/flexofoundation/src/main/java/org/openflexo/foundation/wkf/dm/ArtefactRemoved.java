@@ -21,12 +21,10 @@ package org.openflexo.foundation.wkf.dm;
 
 import org.openflexo.foundation.wkf.WKFArtefact;
 
-public class ArtefactRemoved extends WKFDataModification
-{
+public class ArtefactRemoved extends WKFDataModification {
 
-     public ArtefactRemoved(WKFArtefact removedAnnotation)
-    {
-        super(removedAnnotation,null);
-     }
+	public ArtefactRemoved(WKFArtefact removedAnnotation) {
+		super(removedAnnotation, null);
+	}
 
 }

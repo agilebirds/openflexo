@@ -28,11 +28,9 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class ProjectResourcesReviewer extends AskForSaveResources
-{
+public class ProjectResourcesReviewer extends AskForSaveResources {
 
-    public ProjectResourcesReviewer(FlexoProject project)
-    {
-        super(FlexoLocalization.localizedForKey("save_project"), "save", "dont_save", project.getLoadedStorageResources());
-    }
+	public ProjectResourcesReviewer(FlexoProject project) {
+		super(FlexoLocalization.localizedForKey("save_project"), "save", "dont_save", project.getLoadedStorageResources());
+	}
 }

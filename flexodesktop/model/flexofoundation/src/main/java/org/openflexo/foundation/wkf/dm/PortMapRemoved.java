@@ -27,20 +27,17 @@ import org.openflexo.foundation.wkf.ws.FlexoPortMap;
  * @author sguerin
  * 
  */
-public class PortMapRemoved extends WKFDataModification
-{
+public class PortMapRemoved extends WKFDataModification {
 
-    protected FlexoPortMap _removedPortMap;
+	protected FlexoPortMap _removedPortMap;
 
-    public PortMapRemoved(FlexoPortMap removedPortMap)
-    {
-        super(removedPortMap, null);
-        _removedPortMap = removedPortMap;
-    }
+	public PortMapRemoved(FlexoPortMap removedPortMap) {
+		super(removedPortMap, null);
+		_removedPortMap = removedPortMap;
+	}
 
-    public FlexoPortMap getRemovedPortMap()
-    {
-        return _removedPortMap;
-    }
+	public FlexoPortMap getRemovedPortMap() {
+		return _removedPortMap;
+	}
 
 }

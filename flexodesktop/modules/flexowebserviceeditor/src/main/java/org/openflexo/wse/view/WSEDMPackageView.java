@@ -33,129 +33,116 @@ import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEDMEntityTableModel;
 import org.openflexo.wse.model.WSEDMPropertyTableModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WSEDMPackageView extends WSEView<DMPackage>
-{
+public class WSEDMPackageView extends WSEView<DMPackage> {
 
-    private static final Logger logger = Logger.getLogger(WSEDMPackageView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEDMPackageView.class.getPackage().getName());
 
-    private WSEDMEntityTableModel entityTableModel;
-    protected WSETabularView entityTable;
+	private WSEDMEntityTableModel entityTableModel;
+	protected WSETabularView entityTable;
 
-    private WSEDMPropertyTableModel propertyTableModel;
-    protected WSETabularView propertyTable;
+	private WSEDMPropertyTableModel propertyTableModel;
+	protected WSETabularView propertyTable;
 
+	public WSEDMPackageView(DMPackage aPackage, WSEController controller) {
+		super(aPackage, controller, "package_($localizedName)");
+		/* addAction(new TabularViewAction(CreateDMEntity.actionType) {
+		     protected Vector getGlobalSelection()
+		     {
+		         return getViewSelection();
+		     }
 
+		     protected FlexoModelObject getFocusedObject() 
+		     {
+		         return getDMPackage();
+		     }           
+		 });
+		 addAction(new TabularViewAction(CreateDMProperty.actionType) {
+		     protected Vector getGlobalSelection()
+		     {
+		         return getViewSelection();
+		     }
 
-    public WSEDMPackageView(DMPackage aPackage, WSEController controller)
-    {
-        super(aPackage, controller, "package_($localizedName)");
-       /* addAction(new TabularViewAction(CreateDMEntity.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		     protected FlexoModelObject getFocusedObject() 
+		     {
+		         return getSelectedDMEntity();
+		     }           
+		 });
+		 addAction(new TabularViewAction(CreateDMMethod.actionType) {
+		     protected Vector getGlobalSelection()
+		     {
+		         return getViewSelection();
+		     }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getDMPackage();
-            }           
-        });
-        addAction(new TabularViewAction(CreateDMProperty.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		     protected FlexoModelObject getFocusedObject() 
+		     {
+		         return getSelectedDMEntity();
+		     }           
+		 });
+		 addAction(new TabularViewAction(DMDelete.actionType) {
+		     protected Vector getGlobalSelection()
+		     {
+		          return getViewSelection();
+		     }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedDMEntity();
-            }           
-        });
-        addAction(new TabularViewAction(CreateDMMethod.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		     protected FlexoModelObject getFocusedObject() 
+		     {
+		         return null;
+		     }           
+		 });*/
+		finalizeBuilding();
+	}
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedDMEntity();
-            }           
-        });
-        addAction(new TabularViewAction(DMDelete.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+	@Override
+	protected JComponent buildContentPane() {
+		DMPackage aPackage = getDMPackage();
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });*/
-        finalizeBuilding();
-    }
+		entityTableModel = new WSEDMEntityTableModel(aPackage, getWSEController().getProject());
+		addToMasterTabularView(entityTable = new WSETabularView(getWSEController(), entityTableModel, 10));
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        DMPackage aPackage = getDMPackage();
+		propertyTableModel = new WSEDMPropertyTableModel(null, getWSEController().getProject());
+		addToSlaveTabularView(propertyTable = new WSETabularView(getWSEController(), propertyTableModel, 7), entityTable);
 
-        entityTableModel = new WSEDMEntityTableModel(aPackage, getWSEController().getProject());
-        addToMasterTabularView(entityTable = new WSETabularView(getWSEController(), entityTableModel, 10));
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, entityTable, propertyTable);
+	}
 
-        propertyTableModel = new WSEDMPropertyTableModel(null, getWSEController().getProject());
-        addToSlaveTabularView(propertyTable = new WSETabularView(getWSEController(), propertyTableModel, 7),entityTable);
+	public DMPackage getDMPackage() {
+		return getModelObject();
+	}
 
-      
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, entityTable, propertyTable);
-    }
+	public DMEntity getSelectedDMEntity() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEntity)) {
+			return (DMEntity) selection.firstElement();
+		}
+		if (getSelectedDMProperty() != null) {
+			return getSelectedDMProperty().getEntity();
+		}
 
-     public DMPackage getDMPackage()
-    {
-        return getModelObject();
-    }
+		return null;
+	}
 
-    public DMEntity getSelectedDMEntity()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMEntity)) {
-            return (DMEntity) selection.firstElement();
-        }
-        if (getSelectedDMProperty() != null) {
-            return getSelectedDMProperty().getEntity();
-        }
-  
-        return null;
-    }
+	public DMProperty getSelectedDMProperty() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
+			return (DMProperty) selection.firstElement();
+		}
+		return null;
+	}
 
-    public DMProperty getSelectedDMProperty()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
-            return (DMProperty) selection.firstElement();
-        }
-        return null;
-    }
+	public WSETabularView getEntityTable() {
+		return entityTable;
+	}
 
-  
-    public WSETabularView getEntityTable() 
-    {
-        return entityTable;
-    }
-
-    public WSETabularView getPropertyTable() 
-    {
-        return propertyTable;
-    }
+	public WSETabularView getPropertyTable() {
+		return propertyTable;
+	}
 
 }

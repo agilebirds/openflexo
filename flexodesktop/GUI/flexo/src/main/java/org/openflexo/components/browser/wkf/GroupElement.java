@@ -33,66 +33,61 @@ import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 
-
 /**
  * Browser element representing an Action Node
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class GroupElement extends BrowserElement implements ExpansionSynchronizedElement
-{
+public class GroupElement extends BrowserElement implements ExpansionSynchronizedElement {
 
-    public GroupElement(WKFGroup group, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(group, BrowserElementType.GROUP, browser, parent);
-    }
+	public GroupElement(WKFGroup group, ProjectBrowser browser, BrowserElement parent) {
+		super(group, BrowserElementType.GROUP, browser, parent);
+	}
 
 	@Override
 	public TreePath getTreePath() {
 		return super.getTreePath();
 	}
 
-    @Override
-	public String getName()
-    {
-        return getGroup().getGroupName();
-    }
+	@Override
+	public String getName() {
+		return getGroup().getGroupName();
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	for (AbstractNode node: getGroup().getNodes())
-    		addToChilds(node);
-    }
+	@Override
+	protected void buildChildrenVector() {
+		for (AbstractNode node : getGroup().getNodes()) {
+			addToChilds(node);
+		}
+	}
 
-    protected WKFGroup getGroup()
-    {
-        return (WKFGroup) getObject();
-    }
+	protected WKFGroup getGroup() {
+		return (WKFGroup) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-        getGroup().setGroupName(aName);
-    }
+	@Override
+	public void setName(String aName) {
+		getGroup().setGroupName(aName);
+	}
 
 	@Override
 	public void collapse() {
-		if (isExpanded())
+		if (isExpanded()) {
 			OpenGroup.actionType.makeNewAction(getGroup(), null, getProjectBrowser().getEditor()).doAction();
+		}
 	}
 
 	@Override
 	public void expand() {
-		if (!isExpanded())
+		if (!isExpanded()) {
 			OpenGroup.actionType.makeNewAction(getGroup(), null, getProjectBrowser().getEditor()).doAction();
+		}
 	}
 
 	@Override
@@ -103,33 +98,31 @@ public class GroupElement extends BrowserElement implements ExpansionSynchronize
 	@Override
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
-            return (getGroup().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
-        }
-        return false;
+			return (getGroup().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
+		}
+		return false;
 	}
 
 	@Override
 	public boolean requiresExpansionFor(BrowserElement next) {
 		if (next instanceof PreConditionElement) {
-			return ((PreConditionElement)next).getPreCondition().isContainedIn(getGroup());
+			return ((PreConditionElement) next).getPreCondition().isContainedIn(getGroup());
 		} else if (next instanceof PostConditionElement) {
-			FlexoPostCondition edge = ((PostConditionElement) next)
-					.getPostCondition();
-			if ((edge.getNextNode().isContainedIn(getGroup()))
-					&& (edge.getStartNode().isContainedIn(getGroup()))) {
+			FlexoPostCondition edge = ((PostConditionElement) next).getPostCondition();
+			if ((edge.getNextNode().isContainedIn(getGroup())) && (edge.getStartNode().isContainedIn(getGroup()))) {
 				return true;
 			}
 			return false;
 		} else if (next instanceof PortMapElement) {
-             return false;
-        } else if (next instanceof MessageElement) {
-             return false;
-        } else {
-             return true;
-        }
+			return false;
+		} else if (next instanceof MessageElement) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
-    @Override
+	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (_browser != null) {
 			if (dataModification instanceof ObjectVisibilityChanged) {

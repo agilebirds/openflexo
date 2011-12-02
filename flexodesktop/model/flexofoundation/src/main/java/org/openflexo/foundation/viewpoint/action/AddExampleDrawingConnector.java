@@ -30,46 +30,37 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 
+public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingConnector, ExampleDrawingShape, ExampleDrawingObject> {
 
-public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingConnector,ExampleDrawingShape,ExampleDrawingObject> 
-{
+	private static final Logger logger = Logger.getLogger(AddExampleDrawingConnector.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddExampleDrawingConnector.class.getPackage().getName());
-    
-    public static FlexoActionType<AddExampleDrawingConnector,ExampleDrawingShape,ExampleDrawingObject>  actionType 
-    = new FlexoActionType<AddExampleDrawingConnector,ExampleDrawingShape,ExampleDrawingObject> (
-    		"add_connector",
-    		FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddExampleDrawingConnector, ExampleDrawingShape, ExampleDrawingObject> actionType = new FlexoActionType<AddExampleDrawingConnector, ExampleDrawingShape, ExampleDrawingObject>(
+			"add_connector", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddExampleDrawingConnector makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddExampleDrawingConnector(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddExampleDrawingConnector makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection,
+				FlexoEditor editor) {
+			return new AddExampleDrawingConnector(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) 
-        {
-            return (shape != null);
-        }
-                
-    };
-    
+		@Override
+		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+			return (shape != null);
+		}
+
+	};
+
 	static {
-		FlexoModelObject.addActionForClass (AddExampleDrawingConnector.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass(AddExampleDrawingConnector.actionType, ExampleDrawingShape.class);
 	}
-
 
 	private ExampleDrawingShape _fromShape;
 	public ExampleDrawingShape toShape;
@@ -79,47 +70,44 @@ public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingCon
 
 	private ExampleDrawingConnector _newConnector;
 
-	AddExampleDrawingConnector (ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	AddExampleDrawingConnector(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-     @Override
-	protected void doAction(Object context)
-     {
-    	 logger.info ("Add connector");
-    	 if (getFocusedObject() != null 
-    			 && getFromShape() != null
-    			 && toShape != null)  {
-    		 ExampleDrawingObject parent = ExampleDrawingObject.getFirstCommonAncestor(getFromShape(), toShape);
-    		 logger.info("Parent="+parent);
-    		 if (parent == null) throw new IllegalArgumentException("No common ancestor");
-    		 _newConnector = new ExampleDrawingConnector(getFromShape(),toShape);
-    		 if (graphicalRepresentation != null) _newConnector.setGraphicalRepresentation(graphicalRepresentation);
-    		 _newConnector.setName(newConnectorName);
-    		 _newConnector.setDescription(annotation);
-    		 parent.addToChilds(_newConnector);
-    	 }
-    	 else {
-    		 logger.warning("Focused shape is null !");
-    	 }
-     }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Add connector");
+		if (getFocusedObject() != null && getFromShape() != null && toShape != null) {
+			ExampleDrawingObject parent = ExampleDrawingObject.getFirstCommonAncestor(getFromShape(), toShape);
+			logger.info("Parent=" + parent);
+			if (parent == null) {
+				throw new IllegalArgumentException("No common ancestor");
+			}
+			_newConnector = new ExampleDrawingConnector(getFromShape(), toShape);
+			if (graphicalRepresentation != null) {
+				_newConnector.setGraphicalRepresentation(graphicalRepresentation);
+			}
+			_newConnector.setName(newConnectorName);
+			_newConnector.setDescription(annotation);
+			parent.addToChilds(_newConnector);
+		} else {
+			logger.warning("Focused shape is null !");
+		}
+	}
 
-	public ExampleDrawingShape getFromShape() 
-	{
-		if (_fromShape == null) return getFocusedObject();
+	public ExampleDrawingShape getFromShape() {
+		if (_fromShape == null) {
+			return getFocusedObject();
+		}
 		return _fromShape;
 	}
 
-	public void setFromShape(ExampleDrawingShape fromShape)
-	{
+	public void setFromShape(ExampleDrawingShape fromShape) {
 		_fromShape = fromShape;
 	}
 
-	public ExampleDrawingConnector getNewConnector() 
-	{
+	public ExampleDrawingConnector getNewConnector() {
 		return _newConnector;
 	}
-	
 
 }

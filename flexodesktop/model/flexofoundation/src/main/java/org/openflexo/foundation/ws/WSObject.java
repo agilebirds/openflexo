@@ -32,258 +32,231 @@ import org.openflexo.foundation.rm.RMNotification;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.XMLMapping;
 
+public abstract class WSObject extends FlexoModelObject implements TreeNode {
 
-public abstract class WSObject extends FlexoModelObject implements TreeNode
-	{
+	private FlexoProject project;
 
-	    private FlexoProject project;
+	private FlexoWSLibrary wsLibrary;
 
-	    private FlexoWSLibrary wsLibrary;
+	private boolean isModified = false;
 
-	    private boolean isModified = false;
+	private String name;
 
-	    private String name;
+	/**
+	 * Should only be used by FlexoLibrary
+	 */
+	public WSObject(FlexoProject project) {
+		super(project);
+		this.project = project;
+	}
 
-	    /**
-	     * Should only be used by FlexoLibrary
-	     */
-	    public WSObject(FlexoProject project)
-	    {
-	        super(project);
-	        this.project = project;
-	    }
-
-	    /**
+	/**
 	     *
 	     */
-	    public WSObject(FlexoWSLibrary wsl)
-	    {
-	        super(wsl.getProject());
-	        this.wsLibrary = wsl;
-	        this.project = wsl.getProject();
-	    }
+	public WSObject(FlexoWSLibrary wsl) {
+		super(wsl.getProject());
+		this.wsLibrary = wsl;
+		this.project = wsl.getProject();
+	}
 
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector returned = super.getSpecificActionListForThatClass();
+		// returned.add(AddServiceOperation.actionType);
+		return returned;
+	}
 
-	    @Override
-        protected Vector getSpecificActionListForThatClass()
-	    {
-	         Vector returned = super.getSpecificActionListForThatClass();
-	         //returned.add(AddServiceOperation.actionType);
-	         return returned;
-	    }
-	    /**
-	     * Overrides getFlexoResource
-	     *
-	     * @see org.openflexo.foundation.rm.FlexoResourceData#getFlexoResource()
-	     */
-	    public FlexoResource getFlexoResource()
-	    {
-	        return wsLibrary.getFlexoResource();
-	    }
+	/**
+	 * Overrides getFlexoResource
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#getFlexoResource()
+	 */
+	public FlexoResource getFlexoResource() {
+		return wsLibrary.getFlexoResource();
+	}
 
-	    /**
-	     * Overrides getProject
-	     *
-	     * @see org.openflexo.foundation.rm.FlexoResourceData#getProject()
-	     */
-	    @Override
-        public FlexoProject getProject()
-	    {
-	        return project;
-	    }
+	/**
+	 * Overrides getProject
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#getProject()
+	 */
+	@Override
+	public FlexoProject getProject() {
+		return project;
+	}
 
-	    /**
-	     * Overrides setProject
-	     *
-	     * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-	     */
-	    public void setProject(FlexoProject aProject)
-	    {
-	        this.project = aProject;
-	    }
+	/**
+	 * Overrides setProject
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
+	 */
+	public void setProject(FlexoProject aProject) {
+		this.project = aProject;
+	}
 
-	    /**
-	     * Overrides setIsModified
-	     *
-	     * @see org.openflexo.foundation.rm.FlexoResourceData#setIsModified()
-	     */
-	    @Override
-        public void setIsModified()
-	    {
-	        isModified = true;
-	    }
+	/**
+	 * Overrides setIsModified
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#setIsModified()
+	 */
+	@Override
+	public void setIsModified() {
+		isModified = true;
+	}
 
-	    /**
-	     * Overrides clearIsModified
-	     *
-	     * @see org.openflexo.foundation.rm.FlexoResourceData#clearIsModified(boolean clearLastMemoryUpdate)
-	     */
-	    @Override
-        public void clearIsModified(boolean clearLastMemoryUpdate)
-	    {
-	        isModified = false;
-	    }
+	/**
+	 * Overrides clearIsModified
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#clearIsModified(boolean clearLastMemoryUpdate)
+	 */
+	@Override
+	public void clearIsModified(boolean clearLastMemoryUpdate) {
+		isModified = false;
+	}
 
-	    /**
-	     * Overrides isModified
-	     *
-	     * @see org.openflexo.foundation.rm.FlexoResourceData#isModified()
-	     */
-	    @Override
-        public boolean isModified()
-	    {
-	        return isModified;
-	    }
+	/**
+	 * Overrides isModified
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#isModified()
+	 */
+	@Override
+	public boolean isModified() {
+		return isModified;
+	}
 
-	    /**
-	     * Overrides notifyRM
-	     *
-	     * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
-	     */
-	    @Override
-        public void notifyRM(RMNotification notification) throws FlexoException
-	    {
-	        // TODO Auto-generated method stub
+	/**
+	 * Overrides notifyRM
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
+	 */
+	@Override
+	public void notifyRM(RMNotification notification) throws FlexoException {
+		// TODO Auto-generated method stub
 
-	    }
+	}
 
-	    /**
-	     * Overrides receiveRMNotification
-	     *
-	     * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
-	     */
-	    @Override
-        public void receiveRMNotification(RMNotification notification) throws FlexoException
-	    {
-	        // TODO Auto-generated method stub
+	/**
+	 * Overrides receiveRMNotification
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
+	 */
+	@Override
+	public void receiveRMNotification(RMNotification notification) throws FlexoException {
+		// TODO Auto-generated method stub
 
-	    }
+	}
 
-	    /**
-	     * Overrides getXMLMapping
-	     *
-	     * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
-	     */
-	    @Override
-        public XMLMapping getXMLMapping()
-	    {
-	        return getWSLibrary().getXMLMapping();
-	    }
+	/**
+	 * Overrides getXMLMapping
+	 * 
+	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
+	 */
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getWSLibrary().getXMLMapping();
+	}
 
-	    /**
-	     * Overrides getXMLResourceData
-	     *
-	     * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLResourceData()
-	     */
-	    @Override
-        public XMLStorageResourceData getXMLResourceData()
-	    {
-	        return wsLibrary;
-	    }
+	/**
+	 * Overrides getXMLResourceData
+	 * 
+	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLResourceData()
+	 */
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return wsLibrary;
+	}
 
-	    @Override
-		public String getName()
-	    {
-	        return name;
-	    }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-	    @Override
-		public void setName(String name) throws DuplicateWSObjectException
-	    {
+	@Override
+	public void setName(String name) throws DuplicateWSObjectException {
 
-	        String old = this.name;
-	        this.name = name;
-	        setChanged();
-	        //notifyObservers(new DKVDataModification(-1, "name", old, name));
-	    }
+		String old = this.name;
+		this.name = name;
+		setChanged();
+		// notifyObservers(new DKVDataModification(-1, "name", old, name));
+	}
 
+	public FlexoWSLibrary getWSLibrary() {
+		return wsLibrary;
+	}
 
-	    public FlexoWSLibrary getWSLibrary()
-	    {
-	        return wsLibrary;
-	    }
+	public void setWSLibrary(FlexoWSLibrary lib) {
+		wsLibrary = lib;
+	}
 
-	    public void setWSLibrary(FlexoWSLibrary lib){
-	    		wsLibrary = lib;
-	    }
+	public boolean isDeletable() {
+		return true;
+	}
 
+	@Override
+	public void delete() {
+		try {
+			setName(null);
+		} catch (DuplicateWSObjectException e) {
+			e.printStackTrace();
+		}
+		super.delete();
+		setDescription(null);
+		// What is the goal of this... Setting the project to null caused
+		// several null pointers exception
+		// setProject(null);
+		setWSLibrary(null);
+	}
 
-	    public boolean isDeletable(){
-	    		return true;
-	    }
+	// ==========================================================================
+	// ======================== TreeNode implementation
+	// =========================
+	// ==========================================================================
 
-	    @Override
-        public void delete(){
-	    		try{
-	    		setName(null);
-	    		}
-	    		catch(DuplicateWSObjectException e){e.printStackTrace();}
-	    		super.delete();
-	    		setDescription(null);
-	    		// What is the goal of this... Setting the project to null caused
-	    		// several null pointers exception
-	    		//setProject(null);
-	    		setWSLibrary(null);
-	    }
+	public abstract Vector getOrderedChildren();
 
-	    // ==========================================================================
-	    // ======================== TreeNode implementation
-	    // =========================
-	    // ==========================================================================
+	@Override
+	public abstract TreeNode getParent();
 
-	    public abstract Vector getOrderedChildren();
+	@Override
+	public abstract boolean getAllowsChildren();
 
-	    @Override
-		public abstract TreeNode getParent();
+	@Override
+	public int getIndex(TreeNode node) {
+		for (int i = 0; i < getChildCount(); i++) {
+			if (node == getChildAt(i)) {
+				return i;
+			}
+		}
+		return 0;
+	}
 
-	    @Override
-		public abstract boolean getAllowsChildren();
+	@Override
+	public boolean isLeaf() {
+		return getChildCount() == 0;
+	}
 
-	    @Override
-		public int getIndex(TreeNode node)
-	    {
-	        for (int i = 0; i < getChildCount(); i++) {
-	            if (node == getChildAt(i)) {
-	                return i;
-	            }
-	        }
-	        return 0;
-	    }
+	@Override
+	public TreeNode getChildAt(int childIndex) {
+		return (TreeNode) getOrderedChildren().get(childIndex);
+	}
 
-	    @Override
-		public boolean isLeaf()
-	    {
-	        return getChildCount() == 0;
-	    }
+	@Override
+	public int getChildCount() {
+		return getOrderedChildren().size();
+	}
 
-	    @Override
-		public TreeNode getChildAt(int childIndex)
-	    {
-	        return (TreeNode) getOrderedChildren().get(childIndex);
-	    }
+	@Override
+	public Enumeration children() {
+		return getOrderedChildren().elements();
+	}
 
-	    @Override
-		public int getChildCount()
-	    {
-	        return getOrderedChildren().size();
-	    }
+	@Override
+	public String toString() {
+		return getFullyQualifiedName();
+	}
 
-	    @Override
-		public Enumeration children()
-	    {
-	        return getOrderedChildren().elements();
-	    }
-
-	    @Override
-        public String toString()
-	    {
-	        return getFullyQualifiedName();
-	    }
-
-	    public String getLocalizedName()
-	    {
-	        return getName();
-	    }
-
+	public String getLocalizedName() {
+		return getName();
+	}
 
 }

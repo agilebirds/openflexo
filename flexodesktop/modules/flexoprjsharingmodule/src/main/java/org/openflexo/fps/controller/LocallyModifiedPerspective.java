@@ -9,41 +9,35 @@ import javax.swing.JPanel;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.icon.FPSIconLibrary;
 
-public class LocallyModifiedPerspective extends FPSPerspective
-{
+public class LocallyModifiedPerspective extends FPSPerspective {
 
 	/**
 	 * 
 	 */
 	private final FPSController fpsController;
-	
-	public LocallyModifiedPerspective(FPSController fpsController)
-	{
-		super(fpsController,"locally_modified_files");
+
+	public LocallyModifiedPerspective(FPSController fpsController) {
+		super(fpsController, "locally_modified_files");
 		this.fpsController = fpsController;
 	}
 
 	@Override
-	public ImageIcon getActiveIcon()
-	{
+	public ImageIcon getActiveIcon() {
 		return FPSIconLibrary.FPS_LMP_ACTIVE_ICON;
 	}
 
 	@Override
-	public ImageIcon getSelectedIcon()
-	{
+	public ImageIcon getSelectedIcon() {
 		return FPSIconLibrary.FPS_LMP_SELECTED_ICON;
 	}
 
 	@Override
-	public JPanel getFooter()
-	{
+	public JPanel getFooter() {
 		return this.fpsController._footer;
 	}
 
 	@Override
-	public void setFilters()
-	{
+	public void setFilters() {
 		this.fpsController.getSharedProjectBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
 		this.fpsController.getSharedProjectBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
 		this.fpsController.getSharedProjectBrowser().getLocallyModifiedFilter().setStatus(BrowserFilterStatus.SHOW);

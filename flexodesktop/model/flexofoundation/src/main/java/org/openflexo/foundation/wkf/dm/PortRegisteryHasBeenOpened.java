@@ -25,16 +25,14 @@ import org.openflexo.foundation.wkf.ws.PortRegistery;
  * @author gpolet
  * 
  */
-public class PortRegisteryHasBeenOpened extends WKFDataModification
-{
+public class PortRegisteryHasBeenOpened extends WKFDataModification {
 
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public PortRegisteryHasBeenOpened(PortRegistery newValue)
-    {
-        super("portRegistery", null, newValue);
-    }
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public PortRegisteryHasBeenOpened(PortRegistery newValue) {
+		super("portRegistery", null, newValue);
+	}
 
 }

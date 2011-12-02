@@ -23,40 +23,39 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.toolbox.ToolBox;
 
-
 public abstract class SendToken<E extends FlexoPostCondition> extends ControlGraphBuilder {
 
 	private E edge;
-	
+
 	/**
-	 * Returns control graph associated to a token sending in supplied TokenEdge 
+	 * Returns control graph associated to a token sending in supplied TokenEdge
 	 * 
-	 * @param edge the TokenEdge where we send a token
+	 * @param edge
+	 *            the TokenEdge where we send a token
 	 * @return the computed control graph
-	 * @throws NotSupportedException when an element contained in the model is not currently supported by execution model
-	 * @throws InvalidModelException when the model is not conform (validation should have failed) and thus workflow cannot be computed
+	 * @throws NotSupportedException
+	 *             when an element contained in the model is not currently supported by execution model
+	 * @throws InvalidModelException
+	 *             when the model is not conform (validation should have failed) and thus workflow cannot be computed
 	 */
-	public static ControlGraph sendToken (FlexoPostCondition<?, ?> edge,boolean interprocedural)  throws InvalidModelException,NotSupportedException
-	{
+	public static ControlGraph sendToken(FlexoPostCondition<?, ?> edge, boolean interprocedural) throws InvalidModelException,
+			NotSupportedException {
 		return (new SendTokenOnTokenEdge(edge)).makeControlGraph(interprocedural);
 	}
 
-	protected SendToken(E edge)
-	{
+	protected SendToken(E edge) {
 		super();
 		this.edge = edge;
 	}
-	
-	public E getEdge() 
-	{
+
+	public E getEdge() {
 		return edge;
 	}
 
 	@Override
-	protected String getProcedureName()
-	{
-		return "sendTokenTo"+ToolBox.getJavaName((getEdge() != null ? getEdge().getFullyQualifiedName()+"_"+getEdge().getFlexoID():"Null"));
+	protected String getProcedureName() {
+		return "sendTokenTo"
+				+ ToolBox.getJavaName((getEdge() != null ? getEdge().getFullyQualifiedName() + "_" + getEdge().getFlexoID() : "Null"));
 	}
-
 
 }

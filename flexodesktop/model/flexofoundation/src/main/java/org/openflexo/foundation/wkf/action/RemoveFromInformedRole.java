@@ -21,14 +21,13 @@ public class RemoveFromInformedRole extends RemoveFromXRole<RemoveFromInformedRo
 	private static final Logger logger = Logger.getLogger(RemoveFromInformedRole.class.getPackage().getName());
 
 	public static FlexoActionType<RemoveFromInformedRole, Role, AbstractActivityNode> actionType = new FlexoActionType<RemoveFromInformedRole, Role, AbstractActivityNode>(
-	"remove_from_informed_role") {
+			"remove_from_informed_role") {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public RemoveFromInformedRole makeNewAction(Role focusedObject, Vector<AbstractActivityNode> globalSelection,
-				FlexoEditor editor) {
+		public RemoveFromInformedRole makeNewAction(Role focusedObject, Vector<AbstractActivityNode> globalSelection, FlexoEditor editor) {
 			return new RemoveFromInformedRole(focusedObject, globalSelection, editor);
 		}
 

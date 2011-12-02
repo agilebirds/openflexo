@@ -19,7 +19,6 @@
  */
 package org.openflexo.components.browser.ontology;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -33,56 +32,51 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing the ontology library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyLibraryElement extends BrowserElement
-{
+public class OntologyLibraryElement extends BrowserElement {
 
-    protected OntologyLibraryElement(OntologyLibrary library, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(library, BrowserElementType.ONTOLOGY_LIBRARY, browser, parent);
-    }
+	protected OntologyLibraryElement(OntologyLibrary library, ProjectBrowser browser, BrowserElement parent) {
+		super(library, BrowserElementType.ONTOLOGY_LIBRARY, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy)
-    	{
-    		addToChilds(getOntologyLibrary().getRootClass());
-    		for (OntologyObjectProperty property : getOntologyLibrary().getRootObjectProperties()) {
-    			if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
-    				addToChilds(property);
-    		}
-    		for (OntologyDataProperty property : getOntologyLibrary().getRootDataProperties()) {
-    			if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
-    				addToChilds(property);
-    		}
-    	}
+	@Override
+	protected void buildChildrenVector() {
+		if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
+			addToChilds(getOntologyLibrary().getRootClass());
+			for (OntologyObjectProperty property : getOntologyLibrary().getRootObjectProperties()) {
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
+					addToChilds(property);
+				}
+			}
+			for (OntologyDataProperty property : getOntologyLibrary().getRootDataProperties()) {
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
+					addToChilds(property);
+				}
+			}
+		}
 
-    	if (getProjectBrowser().getOEViewMode() == OEViewMode.NoHierarchy
-    			|| getProjectBrowser().getOEViewMode() == OEViewMode.PartialHierarchy)
-    	{
-          	for (OntologyFolder subFolder : getOntologyLibrary().getRootFolder().getChildren()) {
-           		addToChilds(subFolder);
-           	}
-           	for (FlexoOntology ontology : getOntologyLibrary().getRootFolder().getOntologies()) {
-           		addToChilds(ontology);
-           	}
-      	}
+		if (getProjectBrowser().getOEViewMode() == OEViewMode.NoHierarchy
+				|| getProjectBrowser().getOEViewMode() == OEViewMode.PartialHierarchy) {
+			for (OntologyFolder subFolder : getOntologyLibrary().getRootFolder().getChildren()) {
+				addToChilds(subFolder);
+			}
+			for (FlexoOntology ontology : getOntologyLibrary().getRootFolder().getOntologies()) {
+				addToChilds(ontology);
+			}
+		}
 
-     }
+	}
 
-    @Override
-	public String getName()
-    {
-        return FlexoLocalization.localizedForKey("ontology_library");
-    }
+	@Override
+	public String getName() {
+		return FlexoLocalization.localizedForKey("ontology_library");
+	}
 
-    protected OntologyLibrary getOntologyLibrary()
-    {
-        return (OntologyLibrary) getObject();
-    }
+	protected OntologyLibrary getOntologyLibrary() {
+		return (OntologyLibrary) getObject();
+	}
 
 }

@@ -23,21 +23,18 @@ import org.openflexo.foundation.DataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVDataModification extends DataModification
-{
+public class DKVDataModification extends DataModification {
 
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public DKVDataModification(int modificationType, String propertyName, Object oldValue,
-            Object newValue)
-    {
-        super(modificationType, propertyName, oldValue, newValue);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public DKVDataModification(int modificationType, String propertyName, Object oldValue, Object newValue) {
+		super(modificationType, propertyName, oldValue, newValue);
+	}
 
 }

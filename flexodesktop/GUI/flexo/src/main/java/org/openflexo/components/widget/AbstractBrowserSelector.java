@@ -36,308 +36,280 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.swing.TextFieldCustomPopup;
 
-
 /**
  * Widget allowing to select a object while browsing in a project browser
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class AbstractBrowserSelector<T extends FlexoModelObject>
-extends TextFieldCustomPopup<T>
-implements AbstractSelectorPanelOwner<T>, FIBCustomComponent<T,TextFieldCustomPopup<T>>
-{
+public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extends TextFieldCustomPopup<T> implements
+		AbstractSelectorPanelOwner<T>, FIBCustomComponent<T, TextFieldCustomPopup<T>> {
 
-    static final Logger logger = Logger.getLogger(AbstractBrowserSelector.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(AbstractBrowserSelector.class.getPackage().getName());
 
-    FlexoProject _project;
-    FlexoModelObject _rootObject = null;
-    private T _revertValue;
-    Class<T> _selectableClass;
-    protected KeyAdapter completionListKeyAdapter;
+	FlexoProject _project;
+	FlexoModelObject _rootObject = null;
+	private T _revertValue;
+	Class<T> _selectableClass;
+	protected KeyAdapter completionListKeyAdapter;
 
-    protected AbstractSelectorPanel<T> _selectorPanel;
+	protected AbstractSelectorPanel<T> _selectorPanel;
 
-    private FlexoEditor _editor;
+	private FlexoEditor _editor;
 
-    private Integer defaultWidth = null;
-    private Integer defaultHeight = null;
+	private Integer defaultWidth = null;
+	private Integer defaultHeight = null;
 
-    public AbstractBrowserSelector(FlexoProject project, T editedObject, Class<T> selectableClass)
-    {
-    	this(project, editedObject, selectableClass, -1);
-    }
+	public AbstractBrowserSelector(FlexoProject project, T editedObject, Class<T> selectableClass) {
+		this(project, editedObject, selectableClass, -1);
+	}
 
-    public AbstractBrowserSelector(FlexoProject project, T editedObject, Class<T> selectableClass, int cols)
-    {
-        super(editedObject, cols);
-        _project = project;
-        _revertValue = editedObject;
-        _selectableClass = selectableClass;
-        setFocusable(true);
-        getTextField().setFocusable(true);
-        getTextField().setEditable(true);
-        getTextField().addMouseWheelListener(new BrowserSelectorMouseWheelListener());
-        completionListKeyAdapter = new KeyAdapter() {
-            @Override
-			public void keyPressed(KeyEvent e)
-            {
-            	//logger.info("Hop "+e);
-                 if (_selectorPanel != null) {
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        _selectorPanel.processEnterPressed();
-                        e.consume();
-                   }
-                    else if (e.getKeyCode() == KeyEvent.VK_TAB) {
-                        _selectorPanel.processTabPressed();
-                        e.consume();
-                    }
-                    else if (e.getKeyCode() == KeyEvent.VK_UP) {
-                        _selectorPanel.processUpPressed();
-                        e.consume();
-                    }
-                    else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                        _selectorPanel.processDownPressed();
-                        e.consume();
-                    }
-                }
-                else if ((!e.isActionKey())
-                        && (e.getKeyCode() != KeyEvent.VK_SHIFT)
-                        && (e.getKeyCode() != KeyEvent.VK_ENTER)
-                        && (e.getKeyCode() != KeyEvent.VK_TAB)) {
-                    getCustomPanel();
-                    _selectorPanel._completionListModel.textWasChanged();
-                }
-            }
-        };
-        getTextField().addKeyListener(completionListKeyAdapter);
-        _downButton.addMouseWheelListener(new BrowserSelectorMouseWheelListener());
-    }
+	public AbstractBrowserSelector(FlexoProject project, T editedObject, Class<T> selectableClass, int cols) {
+		super(editedObject, cols);
+		_project = project;
+		_revertValue = editedObject;
+		_selectableClass = selectableClass;
+		setFocusable(true);
+		getTextField().setFocusable(true);
+		getTextField().setEditable(true);
+		getTextField().addMouseWheelListener(new BrowserSelectorMouseWheelListener());
+		completionListKeyAdapter = new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// logger.info("Hop "+e);
+				if (_selectorPanel != null) {
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						_selectorPanel.processEnterPressed();
+						e.consume();
+					} else if (e.getKeyCode() == KeyEvent.VK_TAB) {
+						_selectorPanel.processTabPressed();
+						e.consume();
+					} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+						_selectorPanel.processUpPressed();
+						e.consume();
+					} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+						_selectorPanel.processDownPressed();
+						e.consume();
+					}
+				} else if ((!e.isActionKey()) && (e.getKeyCode() != KeyEvent.VK_SHIFT) && (e.getKeyCode() != KeyEvent.VK_ENTER)
+						&& (e.getKeyCode() != KeyEvent.VK_TAB)) {
+					getCustomPanel();
+					_selectorPanel._completionListModel.textWasChanged();
+				}
+			}
+		};
+		getTextField().addKeyListener(completionListKeyAdapter);
+		_downButton.addMouseWheelListener(new BrowserSelectorMouseWheelListener());
+	}
 
-    @Override
-	public Class<T> getRepresentedType()
-    {
-    	return _selectableClass;
-    }
+	@Override
+	public Class<T> getRepresentedType() {
+		return _selectableClass;
+	}
 
-    @Override
-	public TextFieldCustomPopup<T> getJComponent()
-    {
-    	return this;
-    }
+	@Override
+	public TextFieldCustomPopup<T> getJComponent() {
+		return this;
+	}
 
-    public void setText(String text)
-    {
-     	getTextField().setText(text);
-    	getCustomPanel();
-        _selectorPanel._completionListModel.textWasChanged();
-        SwingUtilities.invokeLater(new Runnable() {
+	public void setText(String text) {
+		getTextField().setText(text);
+		getCustomPanel();
+		_selectorPanel._completionListModel.textWasChanged();
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				_popup.requestFocus();
-		    	getTextField().requestFocus();
+				getTextField().requestFocus();
 			}
-        });
-     }
+		});
+	}
 
+	@Override
+	public void setRevertValue(T oldValue) {
+		_revertValue = oldValue;
+	}
 
-    @Override
-	public void setRevertValue(T oldValue)
-    {
-        _revertValue = oldValue;
-    }
+	@Override
+	public T getRevertValue() {
+		return _revertValue;
+	}
 
-    @Override
-	public T getRevertValue()
-    {
-        return _revertValue;
-    }
+	@Override
+	public FlexoProject getProject() {
+		return _project;
+	}
 
-    @Override
-	public FlexoProject getProject()
-    {
-        return _project;
-    }
+	public void setProject(FlexoProject project) {
+		_project = project;
+	}
 
-    public void setProject(FlexoProject project)
-    {
-        _project = project;
-    }
-
-    @Override
-	protected ResizablePanel createCustomPanel(T editedObject)
-    {
-        _selectorPanel = makeCustomPanel(editedObject);
-        _selectorPanel.setRootObject(_rootObject);
-        _selectorPanel.init();
-        return _selectorPanel;
-    }
-
-    @Override
-	public FlexoModelObject getRootObject()
-    {
-    	return _rootObject;
-    }
-
-    public void setRootObject(FlexoModelObject aRootObject)
-    {
-    	_rootObject = aRootObject;
-    	if (_selectorPanel != null) {
-    		_selectorPanel.setRootObject(_rootObject);
-    	}
-    }
-
-    protected abstract AbstractSelectorPanel<T> makeCustomPanel(T editedObject);
-
-    @Override
-	public void updateCustomPanel(T editedObject)
-    {
-        if (_selectorPanel != null) {
-            _selectorPanel.update();
-            _selectorPanel.hideCompletionList();
-        }
-    }
-
-    @Override
-	public abstract String renderedString(T editedObject);
-
-    public FlexoModelObject getSelectedObject()
-    {
-        if (_selectorPanel != null) {
-            return _selectorPanel.getSelectedObject();
-        }
-        return null;
-    }
-
-    @Override
-	public boolean isSelectable (FlexoModelObject object)
-    {
-        return _selectableClass.isAssignableFrom(object.getClass());
-    }
-
-    private class BrowserSelectorMouseWheelListener implements MouseWheelListener {
-
-        /**
-         *
-         */
-        protected BrowserSelectorMouseWheelListener()
-        {
-        }
-
-        @Override
-		public void mouseWheelMoved(MouseWheelEvent e)
-        {
-            if (_selectorPanel==null)
-                return;
-            if (e.getScrollType()==MouseWheelEvent.WHEEL_UNIT_SCROLL) {
-                if (_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar()!=null){
-                    _selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().setValue(_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().getValue()+e.getUnitsToScroll());
-                }
-            } else {
-                if (_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar()!=null){
-                    _selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().setValue(_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().getValue()+e.getWheelRotation()*_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().getBlockIncrement());
-                }
-            }
-        }
-
-    }
-
-    @Override
-	public void apply()
-    {
-       _revertValue = getEditedObject();
-        closePopup();
-        super.apply();
-     }
-
-    @Override
-	public void cancel()
-    {
-        setEditedObject(_revertValue);
-        closePopup();
-        super.cancel();
-    }
-
-    @Override
-	public void openPopup()
-    {
-        super.openPopup();
-        getTextField().requestFocus();
-    }
-
-    @Override
-	public void closePopup()
-    {
-        super.closePopup();
-        deletePopup();
-    }
-
-    @Override
-	protected void deletePopup()
-    {
-    	if (_selectorPanel!=null)
-    		_selectorPanel.delete();
-        _selectorPanel = null;
-        super.deletePopup();
-    }
-
-    @Override
-	protected void pointerLeavesPopup()
-    {
-        cancel();
-    }
-
-	public AbstractSelectorPanel<T> getSelectorPanel()
-	{
+	@Override
+	protected ResizablePanel createCustomPanel(T editedObject) {
+		_selectorPanel = makeCustomPanel(editedObject);
+		_selectorPanel.setRootObject(_rootObject);
+		_selectorPanel.init();
 		return _selectorPanel;
 	}
 
 	@Override
-	public FlexoEditor getEditor()
-	{
+	public FlexoModelObject getRootObject() {
+		return _rootObject;
+	}
+
+	public void setRootObject(FlexoModelObject aRootObject) {
+		_rootObject = aRootObject;
+		if (_selectorPanel != null) {
+			_selectorPanel.setRootObject(_rootObject);
+		}
+	}
+
+	protected abstract AbstractSelectorPanel<T> makeCustomPanel(T editedObject);
+
+	@Override
+	public void updateCustomPanel(T editedObject) {
+		if (_selectorPanel != null) {
+			_selectorPanel.update();
+			_selectorPanel.hideCompletionList();
+		}
+	}
+
+	@Override
+	public abstract String renderedString(T editedObject);
+
+	public FlexoModelObject getSelectedObject() {
+		if (_selectorPanel != null) {
+			return _selectorPanel.getSelectedObject();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean isSelectable(FlexoModelObject object) {
+		return _selectableClass.isAssignableFrom(object.getClass());
+	}
+
+	private class BrowserSelectorMouseWheelListener implements MouseWheelListener {
+
+		/**
+         *
+         */
+		protected BrowserSelectorMouseWheelListener() {
+		}
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			if (_selectorPanel == null) {
+				return;
+			}
+			if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+				if (_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar() != null) {
+					_selectorPanel._browserView
+							.getTreeScrollPane()
+							.getVerticalScrollBar()
+							.setValue(
+									_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().getValue()
+											+ e.getUnitsToScroll());
+				}
+			} else {
+				if (_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar() != null) {
+					_selectorPanel._browserView
+							.getTreeScrollPane()
+							.getVerticalScrollBar()
+							.setValue(
+									_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().getValue()
+											+ e.getWheelRotation()
+											* _selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar().getBlockIncrement());
+				}
+			}
+		}
+
+	}
+
+	@Override
+	public void apply() {
+		_revertValue = getEditedObject();
+		closePopup();
+		super.apply();
+	}
+
+	@Override
+	public void cancel() {
+		setEditedObject(_revertValue);
+		closePopup();
+		super.cancel();
+	}
+
+	@Override
+	public void openPopup() {
+		super.openPopup();
+		getTextField().requestFocus();
+	}
+
+	@Override
+	public void closePopup() {
+		super.closePopup();
+		deletePopup();
+	}
+
+	@Override
+	protected void deletePopup() {
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+		}
+		_selectorPanel = null;
+		super.deletePopup();
+	}
+
+	@Override
+	protected void pointerLeavesPopup() {
+		cancel();
+	}
+
+	public AbstractSelectorPanel<T> getSelectorPanel() {
+		return _selectorPanel;
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
 		return _editor;
 	}
 
 	/**
 	 * Sets an editor if you want FlexoAction available on browser
+	 * 
 	 * @param editor
 	 */
-	public void setEditor(FlexoEditor editor)
-	{
+	public void setEditor(FlexoEditor editor) {
 		_editor = editor;
 	}
 
 	@Override
-	public KeyAdapter getCompletionListKeyAdapter()
-	{
+	public KeyAdapter getCompletionListKeyAdapter() {
 		return completionListKeyAdapter;
 	}
 
-    @Override
-	public Integer getDefaultWidth()
-    {
-    	return defaultWidth;
-    }
+	@Override
+	public Integer getDefaultWidth() {
+		return defaultWidth;
+	}
 
-    @Override
-	public Integer getDefaultHeight()
-    {
-    	return defaultHeight;
-    }
+	@Override
+	public Integer getDefaultHeight() {
+		return defaultHeight;
+	}
 
-    public void setDefaultWidth(Integer defaultWidth)
-    {
-    	this.defaultWidth = defaultWidth;
-    }
+	public void setDefaultWidth(Integer defaultWidth) {
+		this.defaultWidth = defaultWidth;
+	}
 
-    public void setDefaultHeight(Integer defaultHeight)
-    {
-    	this.defaultHeight = defaultHeight;
-    }
+	public void setDefaultHeight(Integer defaultHeight) {
+		this.defaultHeight = defaultHeight;
+	}
 
-    @Override
-    public void init(FIBCustom component, FIBController controller) {
-    	// TODO Auto-generated method stub
+	@Override
+	public void init(FIBCustom component, FIBController controller) {
+		// TODO Auto-generated method stub
 
-    }
+	}
 }

@@ -24,64 +24,55 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.wkf.action.UngroupActivities;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.wkf.action.UngroupActivities;
-
 public class UngroupActivitiesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	UngroupActivitiesInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(UngroupActivities.actionType,actionInitializer);
+	UngroupActivitiesInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(UngroupActivities.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<UngroupActivities> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<UngroupActivities> getDefaultInitializer() {
 		return new FlexoActionInitializer<UngroupActivities>() {
 			@Override
-			public boolean run(ActionEvent e, UngroupActivities action)
-			{
-				return  FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_ungroup_those_activities"));
+			public boolean run(ActionEvent e, UngroupActivities action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_ungroup_those_activities"));
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<UngroupActivities> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<UngroupActivities> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UngroupActivities>() {
 			@Override
-			public boolean run(ActionEvent e, UngroupActivities action)
-			{
-				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject()!=null 
-						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
+			public boolean run(ActionEvent e, UngroupActivities action) {
+				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();
-                return true;
-          }
-        };
+				}
+				return true;
+			}
+		};
 	}
-     
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
-
-
 
 }

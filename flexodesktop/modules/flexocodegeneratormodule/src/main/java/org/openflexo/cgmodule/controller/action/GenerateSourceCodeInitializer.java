@@ -27,13 +27,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
-
 import org.openflexo.cgmodule.GeneratorPreferences;
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.cgmodule.view.GeneratorMainPane;
@@ -44,70 +37,72 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.GenerateSourceCode;
 import org.openflexo.generator.exception.GenerationException;
-
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class GenerateSourceCodeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	GenerateSourceCodeInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(GenerateSourceCode.actionType,actionInitializer);
+	GenerateSourceCodeInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(GenerateSourceCode.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
 	public GeneratorController getController() {
 		return (GeneratorController) super.getController();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<GenerateSourceCode> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<GenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action)
-			{
+			public boolean run(ActionEvent e, GenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
 				}
-                if (!action.getRepository().getDirectory().exists()) {
-                    if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory")+" "+action.getRepository().getDirectory().getAbsolutePath()+" "+FlexoLocalization.localizedForKey("does_not_exist")+"\n"+FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
-                        action.getRepository().getDirectory().mkdirs();
-                    } else {
-                        return false;
-                    }
-                }
+				if (!action.getRepository().getDirectory().exists()) {
+					if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + " "
+							+ action.getRepository().getDirectory().getAbsolutePath() + " "
+							+ FlexoLocalization.localizedForKey("does_not_exist") + "\n"
+							+ FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
+						action.getRepository().getDirectory().mkdirs();
+					} else {
+						return false;
+					}
+				}
 				action.setSaveBeforeGenerating(GeneratorPreferences.getSaveBeforeGenerating());
 				action.getProjectGenerator().startHandleLogs();
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().setHoldStructure();
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<GenerateSourceCode> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<GenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action)
-			{
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().update();
+			public boolean run(ActionEvent e, GenerateSourceCode action) {
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
 
-				if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles())
-					DismissUnchangedGeneratedFiles.actionType.makeNewAction(
-							action.getFocusedObject(), action.getGlobalSelection(), action.getEditor()).doAction();
+				if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles()) {
+					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
+							action.getEditor()).doAction();
+				}
 
 				return true;
 			}
@@ -115,13 +110,12 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<GenerateSourceCode> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<GenerateSourceCode> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<GenerateSourceCode>() {
 			@Override
 			public boolean handleException(FlexoException exception, GenerateSourceCode action) {
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().update();
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
 				if (exception instanceof GenerationException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("generation_failed") + ":\n"
@@ -134,21 +128,18 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.GENERATE_CODE_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.GENERATE_CODE_DISABLED_ICON;
 	}
+
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_G, FlexoCst.META_MASK);
 	}
 }

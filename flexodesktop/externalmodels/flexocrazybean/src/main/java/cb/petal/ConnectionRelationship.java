@@ -18,33 +18,34 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Connection_Relationship object
- *
+ * 
  * @version $Id: ConnectionRelationship.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ConnectionRelationship extends Relationship {
-  public ConnectionRelationship(PetalNode parent, Collection params) {
-    super(parent, "Connection_Relationship", params);
-  }
+	public ConnectionRelationship(PetalNode parent, Collection params) {
+		super(parent, "Connection_Relationship", params);
+	}
 
-  public ConnectionRelationship() {
-    super("Connection_Relationship");
-  }
+	public ConnectionRelationship() {
+		super("Connection_Relationship");
+	}
 
-  public boolean getSupplierIsDevice() {
-    return getPropertyAsBoolean("supplier_is_device");
-  }
+	public boolean getSupplierIsDevice() {
+		return getPropertyAsBoolean("supplier_is_device");
+	}
 
-  public void setSupplierIsDevice(boolean o) {
-    defineProperty("supplier_is_device", o);
-  }
+	public void setSupplierIsDevice(boolean o) {
+		defineProperty("supplier_is_device", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

@@ -21,7 +21,6 @@ package org.openflexo.dg.rm;
 
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.GenerationRepository;
@@ -32,64 +31,59 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ComponentLibraryLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoComponentLibrary>> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(ComponentLibraryLatexFileResource.class.getPackage().getName());
+public class ComponentLibraryLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoComponentLibrary>> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(ComponentLibraryLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public ComponentLibraryLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public ComponentLibraryLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public ComponentLibraryLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public ComponentLibraryLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-	public String getName()
-    {
-    	if (getCGFile()==null || getCGFile().getRepository()==null || getModel()==null)
-            return super.getName();
-    	if (super.getName()==null)
-    		setName(nameForRepositoryAndModel(getCGFile().getRepository(), getModel()));
-    	return nameForRepositoryAndModel(getCGFile().getRepository(), getModel());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getModel() == null) {
+			return super.getName();
+		}
+		if (super.getName() == null) {
+			setName(nameForRepositoryAndModel(getCGFile().getRepository(), getModel()));
+		}
+		return nameForRepositoryAndModel(getCGFile().getRepository(), getModel());
+	}
 
-    public static String nameForRepositoryAndModel(GenerationRepository repository, FlexoComponentLibrary model)
-    {
-    	return repository.getName()+".COMPONENT_LIBRARY_LATEX."+model.getName();
-    }
+	public static String nameForRepositoryAndModel(GenerationRepository repository, FlexoComponentLibrary model) {
+		return repository.getName() + ".COMPONENT_LIBRARY_LATEX." + model.getName();
+	}
 
-    public FlexoComponentLibrary getModel()
-    {
-    	if (getGenerator() != null)
-            return getGenerator().getObject();
-    	return null;
-    }
+	public FlexoComponentLibrary getModel() {
+		if (getGenerator() != null) {
+			return getGenerator().getObject();
+		}
+		return null;
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToDependantResources(getProject().getTOCResource());
-        addToDependantResources(getProject().getFlexoComponentLibraryResource());
-   }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getTOCResource());
+		addToDependantResources(getProject().getFlexoComponentLibraryResource());
+	}
 }

@@ -19,12 +19,20 @@
  */
 package org.openflexo.inspector;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.logging.Logger;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.viewpoint.inspector.EditionPatternPathElement;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -34,41 +42,63 @@ public class FIBInspectorController extends FlexoFIBController {
 	private static final Logger logger = FlexoLogger.getLogger(FIBInspectorController.class.getPackage().getName());
 
 	private InteractiveFlexoEditor editor;
-	
-	public FIBInspectorController(FIBComponent component) 
-	{
+
+	public FIBInspectorController(FIBComponent component) {
 		super(component);
 	}
-	
-	public boolean displayInspectorTabForContext(String context)
-	{
-		if (getEditor() != null 
-				&& getEditor().getActiveModule() != null 
-				&& getEditor().getActiveModule().getFlexoController() != null)
+
+	public boolean displayInspectorTabForContext(String context) {
+		if (getEditor() != null && getEditor().getActiveModule() != null && getEditor().getActiveModule().getFlexoController() != null) {
 			return getEditor().getActiveModule().getFlexoController().displayInspectorTabForContext(context);
+		}
 		logger.warning("No controller defined here !");
 		return false;
 	}
 
 	@Override
-	public InteractiveFlexoEditor getEditor()
-	{
+	public InteractiveFlexoEditor getEditor() {
 		return editor;
 	}
 
-	public void setEditor(InteractiveFlexoEditor editor)
-	{
+	public void setEditor(InteractiveFlexoEditor editor) {
 		this.editor = editor;
 	}
 
 	@Override
-	public Object getValue(BindingVariable variable) 
-	{
-		if (variable instanceof EditionPatternPathElement) {
+	public Object getValue(BindingVariable variable) {
+		if (variable instanceof EditionPatternInstancePathElement) {
 			if (getDataObject() instanceof FlexoModelObject) {
-				return ((FlexoModelObject)getDataObject()).getEditionPatternReferences().get(((EditionPatternPathElement) variable).getIndex()).getEditionPatternInstance();
+				return ((FlexoModelObject) getDataObject()).getEditionPatternReferences()
+						.get(((EditionPatternInstancePathElement) variable).getIndex()).getEditionPatternInstance();
 			}
 		}
 		return super.getValue(variable);
 	}
+
+	@Override
+	protected void openFIBEditor(FIBComponent component, final MouseEvent event) {
+		if (component instanceof FIBInspector) {
+			JPopupMenu popup = new JPopupMenu();
+			FIBInspector current = (FIBInspector) component;
+			while (current != null) {
+				File inspectorFile = new File(current.getDefinitionFile());
+				System.out.println("> " + inspectorFile);
+				if (inspectorFile.exists()) {
+					JMenuItem menuItem = new JMenuItem(inspectorFile.getName());
+					// We dont use existing inspector which is already aggregated !!!
+					final FIBInspector inspectorToOpen = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(inspectorFile, false);
+					menuItem.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							FIBInspectorController.super.openFIBEditor(inspectorToOpen, event);
+						}
+					});
+					popup.add(menuItem);
+				}
+				current = current.getSuperInspector();
+			}
+			popup.show(event.getComponent(), event.getX(), event.getY());
+		}
+	}
+
 }

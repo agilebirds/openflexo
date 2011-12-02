@@ -19,17 +19,14 @@
  */
 package org.openflexo.foundation.wkf.edge;
 
-
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public interface ContextualEdgeStarting
-{
+public interface ContextualEdgeStarting {
 
-     public void addToOutgoingPostConditions(FlexoPostCondition post, Object outputContext);
+	public void addToOutgoingPostConditions(FlexoPostCondition post, Object outputContext);
 
 }

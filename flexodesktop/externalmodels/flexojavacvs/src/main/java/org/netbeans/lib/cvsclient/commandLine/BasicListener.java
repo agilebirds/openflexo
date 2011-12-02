@@ -28,73 +28,74 @@ import org.netbeans.lib.cvsclient.event.FileInfoEvent;
 import org.netbeans.lib.cvsclient.event.MessageEvent;
 
 /**
- * A basic implementation of a CVS listener. Is really only interested in
- * message events. This listener is suitable for command line clients and
- * clients that don't "persist".
- * @author  Robert Greig
+ * A basic implementation of a CVS listener. Is really only interested in message events. This listener is suitable for command line clients
+ * and clients that don't "persist".
+ * 
+ * @author Robert Greig
  */
 public class BasicListener extends CVSAdapter {
-    private final StringBuffer taggedLine = new StringBuffer();
-    private PrintStream stdout;
-    private PrintStream stderr;
-    
-    public BasicListener() {
-        this(System.out, System.err);
-    }
-    
-    public BasicListener(PrintStream stdout, PrintStream stderr) {
-        this.stdout = stdout;
-        this.stderr = stderr;
-    }
+	private final StringBuffer taggedLine = new StringBuffer();
+	private PrintStream stdout;
+	private PrintStream stderr;
 
-    /**
-     * Called when the server wants to send a message to be displayed to
-     * the user. The message is only for information purposes and clients
-     * can choose to ignore these messages if they wish.
-     * @param e the event
-     */
-    @Override
+	public BasicListener() {
+		this(System.out, System.err);
+	}
+
+	public BasicListener(PrintStream stdout, PrintStream stderr) {
+		this.stdout = stdout;
+		this.stderr = stderr;
+	}
+
+	/**
+	 * Called when the server wants to send a message to be displayed to the user. The message is only for information purposes and clients
+	 * can choose to ignore these messages if they wish.
+	 * 
+	 * @param e
+	 *            the event
+	 */
+	@Override
 	public void messageSent(MessageEvent e) {
-        String line = e.getMessage();
-        if (e instanceof EnhancedMessageEvent) {
-            return ;
-        }
-        PrintStream stream = e.isError() ? stderr : stdout;
+		String line = e.getMessage();
+		if (e instanceof EnhancedMessageEvent) {
+			return;
+		}
+		PrintStream stream = e.isError() ? stderr : stdout;
 
-        if (e.isTagged()) {
-            String message = MessageEvent.parseTaggedMessage(taggedLine, e.getMessage());
-            if (message != null) {
-                stream.println(message);
-            }
-        }
-        else {
-            stream.println(line);
-        }
-    }
+		if (e.isTagged()) {
+			String message = MessageEvent.parseTaggedMessage(taggedLine, e.getMessage());
+			if (message != null) {
+				stream.println(message);
+			}
+		} else {
+			stream.println(line);
+		}
+	}
 
-    /**
-     * Called when the server wants to send a binary message to be displayed to
-     * the user. The message is only for information purposes and clients
-     * can choose to ignore these messages if they wish.
-     * @param e the event
-     */
-    @Override
+	/**
+	 * Called when the server wants to send a binary message to be displayed to the user. The message is only for information purposes and
+	 * clients can choose to ignore these messages if they wish.
+	 * 
+	 * @param e
+	 *            the event
+	 */
+	@Override
 	public void messageSent(BinaryMessageEvent e) {
-        byte[] bytes = e.getMessage();
-        int len = e.getMessageLength();
-        stdout.write(bytes, 0, len);
-    }
+		byte[] bytes = e.getMessage();
+		int len = e.getMessageLength();
+		stdout.write(bytes, 0, len);
+	}
 
-    /**
-     * Called when file status information has been received
-     */
-    @Override
+	/**
+	 * Called when file status information has been received
+	 */
+	@Override
 	public void fileInfoGenerated(FileInfoEvent e) {
-//      FileInfoContainer fileInfo = e.getInfoContainer();
-//        if (fileInfo.getClass().equals(StatusInformation.class)) {
-//          System.err.println("A file status event was received.");
-//          System.err.println("The status information object is: " +
-//                             fileInfo);
-//        }
-    }
+		// FileInfoContainer fileInfo = e.getInfoContainer();
+		// if (fileInfo.getClass().equals(StatusInformation.class)) {
+		// System.err.println("A file status event was received.");
+		// System.err.println("The status information object is: " +
+		// fileInfo);
+		// }
+	}
 }

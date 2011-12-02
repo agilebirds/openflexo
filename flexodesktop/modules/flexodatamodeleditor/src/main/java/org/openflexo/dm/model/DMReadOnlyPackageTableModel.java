@@ -21,58 +21,54 @@ package org.openflexo.dm.model;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
-
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DMReadOnlyPackageTableModel extends DMPackageTableModel
-{
+public class DMReadOnlyPackageTableModel extends DMPackageTableModel {
 
-    /**
-     * @param repository
-     * @param project
-     */
-    public DMReadOnlyPackageTableModel(DMRepository repository, FlexoProject project)
-    {
-        super(repository, project);
-        while (getColumnCount()>0)
-            removeFromColumns(columnAt(0));
-        addToColumns(new IconColumn<DMPackage>("package_icon", 30) {
-            @Override
-			public Icon getIcon(DMPackage aPackage)
-            {
-                return DMEIconLibrary.DM_PACKAGE_ICON;
-            }
-        });
-        addToColumns(new IconColumn<DMPackage>("read_only", 25) {
-            @Override
-			public Icon getIcon(DMPackage aPackage)
-            {
-                return (aPackage.getRepository()==null || aPackage.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
-            }
-            
-            @Override
-            public String getLocalizedTooltip(DMPackage aPackage) {
-            	return (aPackage.getRepository()==null || aPackage.getRepository().isReadOnly()? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only"));
-            }
-        });
-        addToColumns(new StringColumn<DMPackage>("name", 745) {
-            @Override
-			public String getValue(DMPackage aPackage)
-            {
-                return aPackage.getLocalizedName();
-            }
-        });
-    }
+	/**
+	 * @param repository
+	 * @param project
+	 */
+	public DMReadOnlyPackageTableModel(DMRepository repository, FlexoProject project) {
+		super(repository, project);
+		while (getColumnCount() > 0) {
+			removeFromColumns(columnAt(0));
+		}
+		addToColumns(new IconColumn<DMPackage>("package_icon", 30) {
+			@Override
+			public Icon getIcon(DMPackage aPackage) {
+				return DMEIconLibrary.DM_PACKAGE_ICON;
+			}
+		});
+		addToColumns(new IconColumn<DMPackage>("read_only", 25) {
+			@Override
+			public Icon getIcon(DMPackage aPackage) {
+				return (aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON
+						: DMEIconLibrary.MODIFIABLE_ICON);
+			}
+
+			@Override
+			public String getLocalizedTooltip(DMPackage aPackage) {
+				return (aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? FlexoLocalization
+						.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only"));
+			}
+		});
+		addToColumns(new StringColumn<DMPackage>("name", 745) {
+			@Override
+			public String getValue(DMPackage aPackage) {
+				return aPackage.getLocalizedName();
+			}
+		});
+	}
 
 }

@@ -31,123 +31,105 @@ import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.ModelReinjectableFile;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.ProjectGenerator;
-import org.openflexo.generator.action.MultipleFileGCAction;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.localization.FlexoLocalization;
 
-
-public class AcceptDiskUpdateAndReinjectInModel extends MultipleFileGCAction<AcceptDiskUpdateAndReinjectInModel>
-{
+public class AcceptDiskUpdateAndReinjectInModel extends MultipleFileGCAction<AcceptDiskUpdateAndReinjectInModel> {
 
 	private static final Logger logger = Logger.getLogger(AcceptDiskUpdateAndReinjectInModel.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<AcceptDiskUpdateAndReinjectInModel> actionType 
-	= new MultipleFileGCActionType<AcceptDiskUpdateAndReinjectInModel> ("accept_and_reinject",
-			ROUND_TRIP_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) 
-	{
+	public static final MultipleFileGCActionType<AcceptDiskUpdateAndReinjectInModel> actionType = new MultipleFileGCActionType<AcceptDiskUpdateAndReinjectInModel>(
+			"accept_and_reinject", ROUND_TRIP_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public AcceptDiskUpdateAndReinjectInModel makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AcceptDiskUpdateAndReinjectInModel(repository, globalSelection, editor);
-        }
-		
-        @Override
-		protected boolean accept (AbstractCGFile file)
-        {
-         	return (file.getResource() != null
-    				&& file.getGenerationStatus().isDiskModified()
-    				&& file instanceof ModelReinjectableFile
-    				&& ((ModelReinjectableFile)file).needsModelReinjection());
-      }
+		 * Factory method
+		 */
+		@Override
+		public AcceptDiskUpdateAndReinjectInModel makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new AcceptDiskUpdateAndReinjectInModel(repository, globalSelection, editor);
+		}
+
+		@Override
+		protected boolean accept(AbstractCGFile file) {
+			return (file.getResource() != null && file.getGenerationStatus().isDiskModified() && file instanceof ModelReinjectableFile && ((ModelReinjectableFile) file)
+					.needsModelReinjection());
+		}
 
 	};
-	
-    static {
-        FlexoModelObject.addActionForClass (AcceptDiskUpdateAndReinjectInModel.actionType, CGObject.class);
-    }
-    
-    AcceptDiskUpdateAndReinjectInModel (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException
-    {
-    	logger.info ("Accepting disk update and reinject in model");
-       	
-       	ProjectGenerator pg = (ProjectGenerator) getProjectGenerator();
-    	pg.setAction(this);
- 
-    	CGRepository repository = (CGRepository) getRepository();
-    	
-    	if (getSaveBeforeGenerating()) {
-    		repository.getProject().save();
-    	}
-    	
-    	makeFlexoProgress(FlexoLocalization.localizedForKey("accepting_and_reinjecting") +  " "
-    			+ getFilesToAccept().size() + " "
-    			+ FlexoLocalization.localizedForKey("files") +" "
-    			+ FlexoLocalization.localizedForKey("from") 
-    			+ repository.getDirectory().getAbsolutePath(), getFilesToAccept().size()+2);
+	static {
+		FlexoModelObject.addActionForClass(AcceptDiskUpdateAndReinjectInModel.actionType, CGObject.class);
+	}
 
-    	for (AbstractCGFile file : getFilesToAccept()) {
-    		setProgress(FlexoLocalization.localizedForKey("accepting_and_reinjecting") +  " " + file.getFileName());
-          	logger.info(FlexoLocalization.localizedForKey("accepting_and_reinjecting") +  " " + file.getFileName());
-          	file.acceptDiskVersion();
-    	}
-    	setProgress(FlexoLocalization.localizedForKey("save_rm"));
-    	repository.getProject().getFlexoRMResource().saveResourceData();
+	AcceptDiskUpdateAndReinjectInModel(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-     	hideFlexoProgress();
-    	
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+		logger.info("Accepting disk update and reinject in model");
+
+		ProjectGenerator pg = (ProjectGenerator) getProjectGenerator();
+		pg.setAction(this);
+
+		CGRepository repository = (CGRepository) getRepository();
+
+		if (getSaveBeforeGenerating()) {
+			repository.getProject().save();
+		}
+
+		makeFlexoProgress(FlexoLocalization.localizedForKey("accepting_and_reinjecting") + " " + getFilesToAccept().size() + " "
+				+ FlexoLocalization.localizedForKey("files") + " " + FlexoLocalization.localizedForKey("from")
+				+ repository.getDirectory().getAbsolutePath(), getFilesToAccept().size() + 2);
+
+		for (AbstractCGFile file : getFilesToAccept()) {
+			setProgress(FlexoLocalization.localizedForKey("accepting_and_reinjecting") + " " + file.getFileName());
+			logger.info(FlexoLocalization.localizedForKey("accepting_and_reinjecting") + " " + file.getFileName());
+			file.acceptDiskVersion();
+		}
+		setProgress(FlexoLocalization.localizedForKey("save_rm"));
+		repository.getProject().getFlexoRMResource().saveResourceData();
+
+		hideFlexoProgress();
+
 		// Refresh repository
-     	repository.refresh();
+		repository.refresh();
 
-     	// And now launch reinjection procedure
-     	ReinjectInModel reinjectInModelAction = ReinjectInModel.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(), this);
-     	reinjectInModelAction.setContext(this);
-     	reinjectInModelAction.setAskReinjectionContext(getAskReinjectionContext());
-     	reinjectInModelAction.setFilesToReinjectInModel(getFilesToAccept());
-     	reinjectInModelAction.doAction();
-    }
+		// And now launch reinjection procedure
+		ReinjectInModel reinjectInModelAction = ReinjectInModel.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(),
+				this);
+		reinjectInModelAction.setContext(this);
+		reinjectInModelAction.setAskReinjectionContext(getAskReinjectionContext());
+		reinjectInModelAction.setFilesToReinjectInModel(getFilesToAccept());
+		reinjectInModelAction.doAction();
+	}
 
-    private Vector<AbstractCGFile> _filesToAccept;
+	private Vector<AbstractCGFile> _filesToAccept;
 
-    public Vector<AbstractCGFile> getFilesToAccept()
-    {
-    	if (_filesToAccept == null) {
-    		_filesToAccept = getSelectedCGFilesOnWhyCurrentActionShouldApply();
-    	}
-    	return _filesToAccept;
-    }
+	public Vector<AbstractCGFile> getFilesToAccept() {
+		if (_filesToAccept == null) {
+			_filesToAccept = getSelectedCGFilesOnWhyCurrentActionShouldApply();
+		}
+		return _filesToAccept;
+	}
 
-    public void setFilesToAccept(Vector<AbstractCGFile> someFiles)
-    {
-    	_filesToAccept = someFiles;
-    }
+	public void setFilesToAccept(Vector<AbstractCGFile> someFiles) {
+		_filesToAccept = someFiles;
+	}
 
-    private boolean askReinjectionContext = true;
+	private boolean askReinjectionContext = true;
 
-    public boolean getAskReinjectionContext() 
-    {
-    	return askReinjectionContext;
-    }
+	public boolean getAskReinjectionContext() {
+		return askReinjectionContext;
+	}
 
-    public void setAskReinjectionContext(boolean askReinjectionContext) 
-    {
-    	this.askReinjectionContext = askReinjectionContext;
-    }
+	public void setAskReinjectionContext(boolean askReinjectionContext) {
+		this.askReinjectionContext = askReinjectionContext;
+	}
 
 	public boolean requiresThreadPool() {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-
 
 }

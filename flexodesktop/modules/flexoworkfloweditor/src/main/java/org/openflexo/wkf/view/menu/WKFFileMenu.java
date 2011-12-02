@@ -34,116 +34,101 @@ import javax.swing.AbstractAction;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.imported.action.ImportProcessesAction;
 import org.openflexo.foundation.imported.action.ImportRolesAction;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.view.print.PrintProcessAction;
-
 
 /**
  * 'File' menu for WKF Module
  * 
  * @author benoit
  */
-public class WKFFileMenu extends FileMenu
-{
+public class WKFFileMenu extends FileMenu {
 
-    private static final Logger logger = Logger.getLogger(WKFFileMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WKFFileMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-    protected WKFController _wkfController;
-    public ImportRoleItem importRoleItem;
-    public ImportProcessItem importProcessItem;
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	protected WKFController _wkfController;
+	public ImportRoleItem importRoleItem;
+	public ImportProcessItem importProcessItem;
 
-    public WKFFileMenu(WKFController controller)
-    {
-        super(controller);
-        _wkfController = controller;
-      }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public WKFController getWKFController()
-    {
-        return _wkfController;
-    }
+	public WKFFileMenu(WKFController controller) {
+		super(controller);
+		_wkfController = controller;
+	}
 
+	public WKFController getWKFController() {
+		return _wkfController;
+	}
 
-    @Override
-	public void addPrintItems()
-    {
-        add(new FlexoMenuItem(PrintProcessAction.actionType, getController()) {
-            @Override
-			public FlexoModelObject getFocusedObject() 
-            {
-                return _wkfController.getCurrentFlexoProcess();
-            }           
-            @Override
-			public Vector getGlobalSelection() 
-            {
-                return null;
-            }
-        });
-    }
-    
-    @Override
-    protected boolean addImportItems() {
-    	super.addImportItems();
-    	addToImportItems(importRoleItem = new ImportRoleItem());
-    	addToImportItems(importProcessItem = new ImportProcessItem());
-    	return true;
-    }
-    
-    public class ImportRoleItem extends FlexoMenuItem
-    {
-        public ImportRoleItem()
-        {
-            super(new ImportRoleAction(), "import_roles_from_ppm", null, getController(), true);
-        }
-    }
+	@Override
+	public void addPrintItems() {
+		add(new FlexoMenuItem(PrintProcessAction.actionType, IconLibrary.PRINT_ICON, getController()) {
+			@Override
+			public FlexoModelObject getFocusedObject() {
+				return _wkfController.getCurrentFlexoProcess();
+			}
 
-    public class ImportRoleAction extends AbstractAction
-    {
-        public ImportRoleAction()
-        {
-            super();
-        }
+			@Override
+			public Vector getGlobalSelection() {
+				return null;
+			}
+		});
+	}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-        	ImportRolesAction importRoles = ImportRolesAction.actionType.makeNewAction(null, null,getController().getEditor());
-        	importRoles.doAction();
-        }
-    }
-    
-    public class ImportProcessItem extends FlexoMenuItem
-    {
-        public ImportProcessItem()
-        {
-            super(new ImportProcessAction(), "import_processes_from_ppm", null, getController(), true);
-        }
-    }
+	@Override
+	protected boolean addImportItems() {
+		super.addImportItems();
+		addToImportItems(importRoleItem = new ImportRoleItem());
+		addToImportItems(importProcessItem = new ImportProcessItem());
+		return true;
+	}
 
-    public class ImportProcessAction extends AbstractAction
-    {
-        public ImportProcessAction()
-        {
-            super();
-        }
+	public class ImportRoleItem extends FlexoMenuItem {
+		public ImportRoleItem() {
+			super(new ImportRoleAction(), "import_roles_from_ppm", null, getController(), true);
+		}
+	}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-        	ImportProcessesAction importRoles = ImportProcessesAction.actionType.makeNewAction(null, null,getController().getEditor());
-        	importRoles.doAction();
-        }
-    }
- 
+	public class ImportRoleAction extends AbstractAction {
+		public ImportRoleAction() {
+			super();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			ImportRolesAction importRoles = ImportRolesAction.actionType.makeNewAction(null, null, getController().getEditor());
+			importRoles.doAction();
+		}
+	}
+
+	public class ImportProcessItem extends FlexoMenuItem {
+		public ImportProcessItem() {
+			super(new ImportProcessAction(), "import_processes_from_ppm", null, getController(), true);
+		}
+	}
+
+	public class ImportProcessAction extends AbstractAction {
+		public ImportProcessAction() {
+			super();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			ImportProcessesAction importRoles = ImportProcessesAction.actionType.makeNewAction(null, null, getController().getEditor());
+			importRoles.doAction();
+		}
+	}
+
 }

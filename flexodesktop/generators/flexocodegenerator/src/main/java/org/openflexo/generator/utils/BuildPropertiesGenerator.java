@@ -40,92 +40,83 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
+public class BuildPropertiesGenerator extends MetaFileGenerator {
+	private final Logger logger = FlexoLogger.getLogger(BuildPropertiesGenerator.class.getPackage().getName());
 
-public class BuildPropertiesGenerator extends MetaFileGenerator
-{
-    private final Logger logger = FlexoLogger.getLogger(BuildPropertiesGenerator.class.getPackage().getName());
+	private static final String FILE_NAME = "build.properties";
+	public static final String IDENTIFIER = "BUILD_PROPERTIES";
 
-    private static final String FILE_NAME = "build.properties";
-    public static final String IDENTIFIER = "BUILD_PROPERTIES";
-
-    public BuildPropertiesGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator, FileFormat.TEXT, ResourceType.ANT_FILE, FILE_NAME, IDENTIFIER);
-    }
+	public BuildPropertiesGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, FileFormat.TEXT, ResourceType.ANT_FILE, FILE_NAME, IDENTIFIER);
+	}
 
 	@Override
-    public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-    public void generate(boolean forceRegenerate)
-    {
-       	if (!forceRegenerate && !needsGeneration()) {
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
 		}
-    	try {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-    		if (logger.isLoggable(Level.INFO)) {
-				logger.info("Generating "+FILE_NAME);
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Generating " + FILE_NAME);
 			}
-    		VelocityContext velocityContext = defaultContext();
-    		String javaCode = merge("build.properties.vm", velocityContext);
-    		generatedCode = new GeneratedTextResource(FILE_NAME, javaCode);
-    		stopGeneration();
-      	} catch (GenerationException e) {
-    		setGenerationException(e);
+			VelocityContext velocityContext = defaultContext();
+			String javaCode = merge("build.properties.vm", velocityContext);
+			generatedCode = new GeneratedTextResource(FILE_NAME, javaCode);
+			stopGeneration();
+		} catch (GenerationException e) {
+			setGenerationException(e);
 		} catch (Exception e) {
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	}
-    }
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		}
+	}
 
-    /**
-     * Overrides defaultContext
-     * @see org.openflexo.generator.CGGenerator#defaultContext()
-     */
-    @Override
-    protected VelocityContext defaultContext()
-    {
-        VelocityContext vc = super.defaultContext();
-        vc.put("applicationConfFileName","Application.conf.PROD");
-        return vc;
-    }
+	/**
+	 * Overrides defaultContext
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#defaultContext()
+	 */
+	@Override
+	protected VelocityContext defaultContext() {
+		VelocityContext vc = super.defaultContext();
+		vc.put("applicationConfFileName", "Application.conf.PROD");
+		return vc;
+	}
 
-    public File getFile(){
-    	return new File(getProjectGenerator().getRootOutputDirectory(),FILE_NAME);
-    }
+	public File getFile() {
+		return new File(getProjectGenerator().getRootOutputDirectory(), FILE_NAME);
+	}
 
 	@Override
-    public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-	{
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		// PList file
-    	textResource = (BuildPropertiesResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
-    			GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
-        if (textResource == null) {
-            textResource = GeneratedFileResourceFactory.createBuildPropertiesFileResource(repository, this);
-            textResource.setGenerator(this);
-            logger.info("Created HELP resource " + textResource.getName());
-        } else {
-            textResource.setGenerator(this);
-            logger.info("Successfully retrieved HELP FILE resource " + textResource.getName());
-        }
-        ((BuildPropertiesResource)textResource).registerObserverWhenRequired();
-        resources.add(textResource);
-    }
+		textResource = (BuildPropertiesResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		if (textResource == null) {
+			textResource = GeneratedFileResourceFactory.createBuildPropertiesFileResource(repository, this);
+			textResource.setGenerator(this);
+			logger.info("Created HELP resource " + textResource.getName());
+		} else {
+			textResource.setGenerator(this);
+			logger.info("Successfully retrieved HELP FILE resource " + textResource.getName());
+		}
+		((BuildPropertiesResource) textResource).registerObserverWhenRequired();
+		resources.add(textResource);
+	}
 
-	
 	@Override
-	public String getRelativePath()
-	{
+	public String getRelativePath() {
 		return "";
 	}
 
 	@Override
-	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository)
-	{
+	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
 		return repository.getProjectSymbolicDirectory();
 	}
 

@@ -39,8 +39,8 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.utils.FlexoFileChooserUtils;
 
 public class TestFileChoosing {
 
@@ -48,6 +48,7 @@ public class TestFileChoosing {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+
 		final JFrame dialog = new JFrame();
 
 		JButton closeButton = new JButton("Close");
@@ -67,8 +68,8 @@ public class TestFileChoosing {
 				chooser.setCurrentDirectory(AdvancedPrefs.getLastVisitedDirectory());
 				chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_a_prj_directory"));
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				chooser.setFileFilter(FlexoProject.getFileFilter());
-				chooser.setFileView(FlexoProject.getFileView());
+				chooser.setFileFilter(FlexoFileChooserUtils.PROJECT_FILE_FILTER);
+				chooser.setFileView(FlexoFileChooserUtils.PROJECT_FILE_VIEW);
 				chooser.showOpenDialog(dialog);
 			}
 		});

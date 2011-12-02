@@ -21,37 +21,32 @@ package org.openflexo.fge.shapes;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
-public class Triangle extends Polygon {
+public class Triangle extends RegularPolygon {
 
 	// *******************************************************************************
-	// *                               Constructor                                   *
+	// * Constructor *
 	// *******************************************************************************
-	
-	public Triangle() 
-	{
+
+	public Triangle() {
 		this(null);
 	}
-	
-	public Triangle(ShapeGraphicalRepresentation aGraphicalRepresentation) 
-	{
-		super(aGraphicalRepresentation,3);
+
+	public Triangle(ShapeGraphicalRepresentation aGraphicalRepresentation) {
+		super(aGraphicalRepresentation, 3);
 	}
-	
+
 	@Override
-	public ShapeType getShapeType()
-	{
+	public ShapeType getShapeType() {
 		return ShapeType.TRIANGLE;
 	}
 
 	@Override
-	public int getNPoints()
-	{
+	public int getNPoints() {
 		return 3;
 	}
 
 	@Override
-	public void setNPoints(int pointsNb)
-	{
+	public void setNPoints(int pointsNb) {
 	}
-	
+
 }

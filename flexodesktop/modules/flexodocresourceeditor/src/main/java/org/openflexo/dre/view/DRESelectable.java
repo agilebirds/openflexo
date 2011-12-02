@@ -24,61 +24,55 @@ import org.openflexo.foundation.wkf.LevelledObject;
 import org.openflexo.selection.FocusableView;
 import org.openflexo.selection.SelectableView;
 
-
 /**
- * This interface defines behaviour of views representing Flexo objects able to
- * be selected, responding to focus
+ * This interface defines behaviour of views representing Flexo objects able to be selected, responding to focus
  * 
- * Note that this interface inherits from
- * {@link org.openflexo.selection.SelectableView}
+ * Note that this interface inherits from {@link org.openflexo.selection.SelectableView}
  * 
  * @author yourname
  */
-public interface DRESelectable extends SelectableView, FocusableView
-{
+public interface DRESelectable extends SelectableView, FocusableView {
 
-    /**
-     * Return boolean indicating if related object is selected
-     * 
-     * @return boolean
-     */
-    @Override
+	/**
+	 * Return boolean indicating if related object is selected
+	 * 
+	 * @return boolean
+	 */
+	@Override
 	public boolean isSelected();
 
-    /**
-     * Sets related object to be selected or not
-     */
-    @Override
+	/**
+	 * Sets related object to be selected or not
+	 */
+	@Override
 	public void setIsSelected(boolean b);
 
-    /**
-     * Sets related object to be focused or not
-     */
-    @Override
+	/**
+	 * Sets related object to be focused or not
+	 */
+	@Override
 	public void setIsFocused(boolean b);
 
-    /**
-     * Return boolean indicating if related object is focused
-     * 
-     * @return boolean
-     */
-    @Override
+	/**
+	 * Return boolean indicating if related object is focused
+	 * 
+	 * @return boolean
+	 */
+	@Override
 	public boolean isFocused();
 
-    /**
-     * Return selected object, instance of
-     * {@link org.openflexo.foundation.wkf.LevelledObject}
-     * 
-     * @return
-     */
-    public LevelledObject getSelectedObject();
+	/**
+	 * Return selected object, instance of {@link org.openflexo.foundation.wkf.LevelledObject}
+	 * 
+	 * @return
+	 */
+	public LevelledObject getSelectedObject();
 
-    /**
-     * Return selected object, instance of
-     * {@link org.openflexo.foundation.DeletableObject}
-     * 
-     * @return
-     */
-    public DeletableObject getDeletableObject();
+	/**
+	 * Return selected object, instance of {@link org.openflexo.foundation.DeletableObject}
+	 * 
+	 * @return
+	 */
+	public DeletableObject getDeletableObject();
 
 }

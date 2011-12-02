@@ -28,38 +28,32 @@ import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * Popup allowing to create a project database repository
  * 
  * @author sguerin
  * 
  */
-public class CreateProjectDatabaseRepositoryDialog extends AskNewRepositoryDialog
-{
+public class CreateProjectDatabaseRepositoryDialog extends AskNewRepositoryDialog {
 
-    public CreateProjectDatabaseRepositoryDialog(CreateProjectDatabaseRepository flexoAction, FlexoFrame owner)
-    {
-        super(flexoAction,owner);
-    }
-    
-    public static int displayDialog(CreateProjectDatabaseRepository flexoAction, FlexoProject project,
-    		FlexoFrame owner)
-    {
-        flexoAction.setProject(project);
-        CreateProjectDatabaseRepositoryDialog dialog = new CreateProjectDatabaseRepositoryDialog(flexoAction, owner);
-        return dialog.getStatus();
-    }
+	public CreateProjectDatabaseRepositoryDialog(CreateProjectDatabaseRepository flexoAction, FlexoFrame owner) {
+		super(flexoAction, owner);
+	}
 
-    @Override
-	protected void init()
-    {
-        choicePanel = new JPanel();
-        choicePanel.setLayout(new GridLayout(1, 2));
-        choicePanel.add(projectDatabaseRepositoryButton);
-        choicePanel.add(new JPanel());
-        projectDatabaseRepositoryButton.setSelected(true);
-        selectRepositoryType(CreateDMRepository.PROJECT_DATABASE_REPOSITORY);
-     }
+	public static int displayDialog(CreateProjectDatabaseRepository flexoAction, FlexoProject project, FlexoFrame owner) {
+		flexoAction.setProject(project);
+		CreateProjectDatabaseRepositoryDialog dialog = new CreateProjectDatabaseRepositoryDialog(flexoAction, owner);
+		return dialog.getStatus();
+	}
+
+	@Override
+	protected void init() {
+		choicePanel = new JPanel();
+		choicePanel.setLayout(new GridLayout(1, 2));
+		choicePanel.add(projectDatabaseRepositoryButton);
+		choicePanel.add(new JPanel());
+		projectDatabaseRepositoryButton.setSelected(true);
+		selectRepositoryType(CreateDMRepository.PROJECT_DATABASE_REPOSITORY);
+	}
 
 }

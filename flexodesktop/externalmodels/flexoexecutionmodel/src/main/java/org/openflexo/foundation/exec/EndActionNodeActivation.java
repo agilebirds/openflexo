@@ -25,38 +25,30 @@ import org.openflexo.foundation.exec.inst.DestroyRemainingTokensForOperation;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 
-
 public class EndActionNodeActivation extends NodeActivation<ActionNode> {
 
-	public EndActionNodeActivation(ActionNode node, FlexoPreCondition pre)
-	{
-		super(node,pre);
+	public EndActionNodeActivation(ActionNode node, FlexoPreCondition pre) {
+		super(node, pre);
 	}
-	
-	public EndActionNodeActivation(ActionNode node)
-	{
+
+	public EndActionNodeActivation(ActionNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException {
 		ControlGraph DESTROY_REMAINING_TOKEN = new DestroyRemainingTokensForOperation(getNode().getOperationNode());
 		ControlGraph DELETE_OPERATION_TASK = new DeleteOperationTask(getNode().getOperationNode());
-		
-		return makeSequentialControlGraph(
-				DESTROY_REMAINING_TOKEN,
-				DELETE_OPERATION_TASK);
+
+		return makeSequentialControlGraph(DESTROY_REMAINING_TOKEN, DELETE_OPERATION_TASK);
 	}
-	
+
 	/**
 	 * Override parent method: we don't try here to activate a node above
 	 */
 	@Override
-	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
-		return NodeDesactivation.desactivateNode(getNode(),interprocedural);
+	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException {
+		return NodeDesactivation.desactivateNode(getNode(), interprocedural);
 	}
-
 
 }

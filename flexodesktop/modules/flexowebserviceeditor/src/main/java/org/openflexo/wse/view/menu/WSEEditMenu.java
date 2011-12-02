@@ -30,41 +30,38 @@ import java.util.logging.Logger;
 import org.openflexo.view.menu.EditMenu;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * 'Edit' menu for this module
  * 
  * @author yourname
  */
-public class WSEEditMenu extends EditMenu
-{
+public class WSEEditMenu extends EditMenu {
 
-    private static final Logger logger = Logger.getLogger(WSEEditMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEEditMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-     protected WSEController _wseController;
+	protected WSEController _wseController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public WSEEditMenu(WSEController controller)
-    {
-        super(controller);
-        _wseController = controller;
-        addSeparator();
-        // Add actions here
-        //add(deleteItem = new FlexoMenuItem(WSEDelete.actionType, getController()));
-        //deleteItem.getInputMap().put(KeyStroke.getKeyStroke((char)FlexoCst.DELETE_KEY_CODE),"doClick");
-        //add(cutItem = new FlexoMenuItem(WSECut.actionType, getController()));
-        //add(copyItem = new FlexoMenuItem(WSECopy.actionType, getController()));
-        //add(pasteItem = new FlexoMenuItem(WSEPaste.actionType, getController()));
-        //add(selectAllItem = new FlexoMenuItem(WSESelectAll.actionType, getController()));
-    }
+	public WSEEditMenu(WSEController controller) {
+		super(controller);
+		_wseController = controller;
+		addSeparator();
+		// Add actions here
+		// add(deleteItem = new FlexoMenuItem(WSEDelete.actionType, getController()));
+		// deleteItem.getInputMap().put(KeyStroke.getKeyStroke((char)FlexoCst.DELETE_KEY_CODE),"doClick");
+		// add(cutItem = new FlexoMenuItem(WSECut.actionType, getController()));
+		// add(copyItem = new FlexoMenuItem(WSECopy.actionType, getController()));
+		// add(pasteItem = new FlexoMenuItem(WSEPaste.actionType, getController()));
+		// add(selectAllItem = new FlexoMenuItem(WSESelectAll.actionType, getController()));
+	}
 
 }

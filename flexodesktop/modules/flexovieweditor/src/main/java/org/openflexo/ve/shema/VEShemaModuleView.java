@@ -20,6 +20,7 @@
 package org.openflexo.ve.shema;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -30,68 +31,58 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.ve.controller.ShemaPerspective;
 import org.openflexo.view.ModuleView;
 
-
 public class VEShemaModuleView extends JPanel implements ModuleView<View> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEShemaModuleView.class.getPackage().getName());
 
 	private VEShemaController _controller;
-	
-	public VEShemaModuleView(VEShemaController controller)
-	{
+
+	public VEShemaModuleView(VEShemaController controller) {
 		super();
 		setLayout(new BorderLayout());
 		_controller = controller;
-		JPanel topPanel = new JPanel(new BorderLayout());
-		topPanel.add(_controller.getToolbox().getToolboxPanel(),BorderLayout.WEST);
-		add(topPanel,BorderLayout.NORTH);
-		add(new JScrollPane(_controller.getDrawingView()),BorderLayout.CENTER);
+		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		topPanel.add(_controller.getToolbox().getStyleToolBar());
+		add(topPanel, BorderLayout.NORTH);
+		add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
 		validate();
 	}
 
-	public VEShemaController getController() 
-	{
+	public VEShemaController getController() {
 		return _controller;
 	}
-	
+
 	@Override
-	public void deleteModuleView() 
-	{
+	public void deleteModuleView() {
 		getController().delete();
 	}
 
 	@Override
-	public ShemaPerspective getPerspective() 
-	{
+	public ShemaPerspective getPerspective() {
 		return getController().getOEController().SHEMA_PERSPECTIVE;
 	}
 
-	public FlexoProject getProject() 
-	{
+	public FlexoProject getProject() {
 		return getRepresentedObject().getProject();
 	}
 
 	@Override
-	public View getRepresentedObject() 
-	{
+	public View getRepresentedObject() {
 		return _controller.getShema();
 	}
 
 	@Override
-	public boolean isAutoscrolled()
-	{
+	public boolean isAutoscrolled() {
 		return true;
 	}
 
 	@Override
-	public void willHide() 
-	{
+	public void willHide() {
 	}
 
 	@Override
-	public void willShow() 
-	{
+	public void willShow() {
 		getPerspective().focusOnShema(getRepresentedObject());
 	}
 

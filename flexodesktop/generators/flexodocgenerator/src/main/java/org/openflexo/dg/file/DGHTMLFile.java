@@ -25,29 +25,24 @@ import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class DGHTMLFile extends AbstractCGFile {
 
-   public DGHTMLFile(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-     }
-    
-    public DGHTMLFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
+	public DGHTMLFile(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
+	}
 
-    public DGHTMLFile(DGRepository repository, HTMLFileResource resource)
-    {
-        super(repository,resource);
-    }
+	public DGHTMLFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public DGHTMLFile(DGRepository repository, HTMLFileResource resource) {
+		super(repository, resource);
+	}
 
 	@Override
-	public HTMLFileResource getResource() 
-	{
-		return (HTMLFileResource)super.getResource();
+	public HTMLFileResource getResource() {
+		return (HTMLFileResource) super.getResource();
 	}
 
 }

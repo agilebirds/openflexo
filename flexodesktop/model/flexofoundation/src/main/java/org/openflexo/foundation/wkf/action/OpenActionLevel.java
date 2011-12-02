@@ -32,93 +32,83 @@ import org.openflexo.foundation.wkf.node.NodeType;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.localization.FlexoLocalization;
 
-public class OpenActionLevel extends FlexoUndoableAction<OpenActionLevel,OperationNode,WKFObject> 
-{
+public class OpenActionLevel extends FlexoUndoableAction<OpenActionLevel, OperationNode, WKFObject> {
 
-    private static final Logger logger = Logger.getLogger(OpenActionLevel.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OpenActionLevel.class.getPackage().getName());
 
-    public static FlexoActionType<OpenActionLevel,OperationNode,WKFObject> actionType = new FlexoActionType<OpenActionLevel,OperationNode,WKFObject> ("open_action_level",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<OpenActionLevel, OperationNode, WKFObject> actionType = new FlexoActionType<OpenActionLevel, OperationNode, WKFObject>(
+			"open_action_level", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public OpenActionLevel makeNewAction(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new OpenActionLevel(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public OpenActionLevel makeNewAction(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new OpenActionLevel(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) 
-        {
-            return ((object != null) && object.mightHaveActionPetriGraph()
-                    && ((object).getNodeType() == NodeType.NORMAL));
-        }
+		@Override
+		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return ((object != null) && object.mightHaveActionPetriGraph() && ((object).getNodeType() == NodeType.NORMAL));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) 
-        {
-            return (object.getNodeType() == NodeType.NORMAL);
-        }
-                
-    };
-    
-    OpenActionLevel (OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return (object.getNodeType() == NodeType.NORMAL);
+		}
 
-    @Override
-	protected void doAction(Object context) 
-    {
-    	if (getFocusedObject().mightHaveActionPetriGraph()) {
-    		if (getFocusedObject().getActionPetriGraph() == null) {
-    			// We use here a null editor because this action is embedded 
-    			CreatePetriGraph.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this).doAction();
-    		}
-    		logger.info("OpenActionLevel");
-       		if (getFocusedObject().getActionPetriGraph() != null) {
-    			if (getFocusedObject().getActionPetriGraph().getIsVisible()) {
-    				getFocusedObject().getActionPetriGraph().setIsVisible(false);
-    				getFocusedObject().setChanged();
-     				getFocusedObject().notifyObservers(new PetriGraphHasBeenClosed(getFocusedObject().getActionPetriGraph()));
-    			} else {
-    				getFocusedObject().getActionPetriGraph().setIsVisible(true);
-    				getFocusedObject().setChanged();
-     				getFocusedObject().notifyObservers(new PetriGraphHasBeenOpened(getFocusedObject().getActionPetriGraph()));
-    				getFocusedObject().getActionPetriGraph().setChanged();
-     				getFocusedObject().getActionPetriGraph().notifyObservers(new PetriGraphHasBeenOpened(getFocusedObject().getActionPetriGraph()));
-    			}
-     		}
-    	}
-    }
+	};
 
-    @Override
-	public String getLocalizedName ()
-    {
-        if ((getFocusedObject()).getActionPetriGraph() != null) {
-            if ((getFocusedObject()).getActionPetriGraph().getIsVisible()) {
-                return FlexoLocalization.localizedForKey("close_action_level");
-            }
-            else {
-                return FlexoLocalization.localizedForKey("open_action_level");
-           }
-        }
-        return super.getLocalizedName();
-        
-    }
+	OpenActionLevel(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void undoAction(Object context) 
-    {
-        doAction(context);
-    }
+	@Override
+	protected void doAction(Object context) {
+		if (getFocusedObject().mightHaveActionPetriGraph()) {
+			if (getFocusedObject().getActionPetriGraph() == null) {
+				// We use here a null editor because this action is embedded
+				CreatePetriGraph.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this).doAction();
+			}
+			logger.info("OpenActionLevel");
+			if (getFocusedObject().getActionPetriGraph() != null) {
+				if (getFocusedObject().getActionPetriGraph().getIsVisible()) {
+					getFocusedObject().getActionPetriGraph().setIsVisible(false);
+					getFocusedObject().setChanged();
+					getFocusedObject().notifyObservers(new PetriGraphHasBeenClosed(getFocusedObject().getActionPetriGraph()));
+				} else {
+					getFocusedObject().getActionPetriGraph().setIsVisible(true);
+					getFocusedObject().setChanged();
+					getFocusedObject().notifyObservers(new PetriGraphHasBeenOpened(getFocusedObject().getActionPetriGraph()));
+					getFocusedObject().getActionPetriGraph().setChanged();
+					getFocusedObject().getActionPetriGraph().notifyObservers(
+							new PetriGraphHasBeenOpened(getFocusedObject().getActionPetriGraph()));
+				}
+			}
+		}
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        doAction(context);
-   }
+	@Override
+	public String getLocalizedName() {
+		if ((getFocusedObject()).getActionPetriGraph() != null) {
+			if ((getFocusedObject()).getActionPetriGraph().getIsVisible()) {
+				return FlexoLocalization.localizedForKey("close_action_level");
+			} else {
+				return FlexoLocalization.localizedForKey("open_action_level");
+			}
+		}
+		return super.getLocalizedName();
 
+	}
+
+	@Override
+	protected void undoAction(Object context) {
+		doAction(context);
+	}
+
+	@Override
+	protected void redoAction(Object context) {
+		doAction(context);
+	}
 
 }

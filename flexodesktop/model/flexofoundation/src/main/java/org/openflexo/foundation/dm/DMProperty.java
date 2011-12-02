@@ -20,7 +20,7 @@
 package org.openflexo.foundation.dm;
 
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -240,7 +240,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	@Override
 	public void setName(String newName) throws InvalidNameException, DuplicatePropertyNameException {
-		if ((name == null) || (!name.equals(newName))) {
+		if (name == null || !name.equals(newName)) {
 			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 				throw new InvalidNameException("'" + newName + "' is not a valid name for property.");
 			}
@@ -436,9 +436,10 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 */
 	@Override
 	public DMType getType() {
-		/*
-		 * if (_type==null && typeAsString!=null) { setType(getDMModel().getDmTypeConverter().convertFromString(typeAsString),false); typeAsString = null; }
-		 */
+		/*if (_type==null && typeAsString!=null) {
+			setType(getDMModel().getDmTypeConverter().convertFromString(typeAsString),false);
+			typeAsString = null;
+		}*/
 		return _type;
 	}
 
@@ -451,7 +452,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setType in " + name + " with " + type.getStringRepresentation());
 		}
-		if ((type == null && _type != null) || (type != null && !type.equals(_type))) {
+		if (type == null && _type != null || type != null && !type.equals(_type)) {
 			DMType oldType = _type;
 			if (oldType != null) {
 				oldType.removeFromTypedWithThisType(this);
@@ -460,9 +461,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			if (_type != null) {
 				_type.setOwner(this);
 				_type.addToTypedWithThisType(this);
-				/*
-				 * if (_type.getName() != null && (_type.getName().equals("Vector") || _type.getName().equals("NSArray"))) setCardinality(DMCardinality.VECTOR);
-				 */
+				/*if (_type.getName() != null && (_type.getName().equals("Vector") || _type.getName().equals("NSArray")))
+				    setCardinality(DMCardinality.VECTOR);*/
 			}
 			if (notify) {
 				updateCode();
@@ -500,10 +500,10 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public boolean overrides(DMProperty property) {
-		if ((property == null) || (property.getEntity() == null) || (property.getName() == null)) {
+		if (property == null || property.getEntity() == null || property.getName() == null) {
 			return false;
 		}
-		return (property.getEntity().isAncestorOf(getEntity()) && (property.getName().equals(getName())));
+		return property.getEntity().isAncestorOf(getEntity()) && property.getName().equals(getName());
 	}
 
 	public String getStringRepresentation() {
@@ -546,7 +546,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			}
 		}
 		// Type
-		if ((getType() == null) || (!getType().equals(property.getType()))) {
+		if (getType() == null || !getType().equals(property.getType())) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update type from " + getType() + " to " + property.getType());
 			}
@@ -557,7 +557,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			}
 		}
 		// Key-Type
-		if ((getKeyType() == null) || (!getKeyType().equals(property.getKeyType()))) {
+		if (getKeyType() == null || !getKeyType().equals(property.getKeyType())) {
 			if (property.getKeyType() != null) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update key type from " + getKeyType() + " to " + property.getKeyType());
@@ -609,14 +609,14 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 		// Descriptions
 		if (updateDescription) {
-			if ((getDescription() == null && property.getDescription() != null)
-					|| (getDescription() != null && !getDescription().equals(property.getDescription()))) {
+			if (getDescription() == null && property.getDescription() != null || getDescription() != null
+					&& !getDescription().equals(property.getDescription())) {
 				setDescription(property.getDescription());
 			}
 			for (String descriptionKey : property.getSpecificDescriptions().keySet()) {
 				String description = property.getSpecificDescriptionForKey(descriptionKey);
-				if ((description == null && getSpecificDescriptionForKey(descriptionKey) != null)
-						|| (description != null && !description.equals(getSpecificDescriptionForKey(descriptionKey)))) {
+				if (description == null && getSpecificDescriptionForKey(descriptionKey) != null || description != null
+						&& !description.equals(getSpecificDescriptionForKey(descriptionKey))) {
 					setSpecificDescriptionsForKey(description, descriptionKey);
 				}
 			}
@@ -675,15 +675,15 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 					logger.warning("Unexpected DuplicateMethodSignatureException");
 					e.printStackTrace();
 				}
-				if ((getSetterParamName() != null && property.getSetterParamName() == null)
-						|| (getSetterParamName() == null && property.getSetterParamName() != null)
-						|| (getSetterParamName() != null && !getSetterParamName().equals(property.getSetterParamName()))) {
+				if (getSetterParamName() != null && property.getSetterParamName() == null || getSetterParamName() == null
+						&& property.getSetterParamName() != null || getSetterParamName() != null
+						&& !getSetterParamName().equals(property.getSetterParamName())) {
 					setSetterParamName(property.getSetterParamName());
 				}
 			}
-			if ((getSetterParamName() != null && property.getSetterParamName() == null)
-					|| (getSetterParamName() == null && property.getSetterParamName() != null)
-					|| (getSetterParamName() != null && !getSetterParamName().equals(property.getSetterParamName()))) {
+			if (getSetterParamName() != null && property.getSetterParamName() == null || getSetterParamName() == null
+					&& property.getSetterParamName() != null || getSetterParamName() != null
+					&& !getSetterParamName().equals(property.getSetterParamName())) {
 				setSetterParamName(property.getSetterParamName());
 			}
 		}
@@ -703,10 +703,10 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 				logger.warning("Unexpected DuplicateMethodSignatureException");
 				e.printStackTrace();
 			}
-			if ((getAdditionAccessorParamName() != null && property.getAdditionAccessorParamName() == null)
-					|| (getAdditionAccessorParamName() == null && property.getAdditionAccessorParamName() != null)
-					|| (getAdditionAccessorParamName() != null && !getAdditionAccessorParamName().equals(
-							property.getAdditionAccessorParamName()))) {
+			if (getAdditionAccessorParamName() != null && property.getAdditionAccessorParamName() == null
+					|| getAdditionAccessorParamName() == null && property.getAdditionAccessorParamName() != null
+					|| getAdditionAccessorParamName() != null
+					&& !getAdditionAccessorParamName().equals(property.getAdditionAccessorParamName())) {
 				setAdditionAccessorParamName(property.getAdditionAccessorParamName());
 			}
 
@@ -724,17 +724,17 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 				logger.warning("Unexpected DuplicateMethodSignatureException");
 				e.printStackTrace();
 			}
-			if ((getRemovalAccessorParamName() != null && property.getRemovalAccessorParamName() == null)
-					|| (getRemovalAccessorParamName() == null && property.getRemovalAccessorParamName() != null)
-					|| (getRemovalAccessorParamName() != null && !getRemovalAccessorParamName().equals(
-							property.getRemovalAccessorParamName()))) {
+			if (getRemovalAccessorParamName() != null && property.getRemovalAccessorParamName() == null
+					|| getRemovalAccessorParamName() == null && property.getRemovalAccessorParamName() != null
+					|| getRemovalAccessorParamName() != null
+					&& !getRemovalAccessorParamName().equals(property.getRemovalAccessorParamName())) {
 				setRemovalAccessorParamName(property.getRemovalAccessorParamName());
 			}
 
 		}
-		if ((getRemovalAccessorParamName() != null && property.getRemovalAccessorParamName() == null)
-				|| (getRemovalAccessorParamName() == null && property.getRemovalAccessorParamName() != null)
-				|| (getRemovalAccessorParamName() != null && !getRemovalAccessorParamName().equals(property.getRemovalAccessorParamName()))) {
+		if (getRemovalAccessorParamName() != null && property.getRemovalAccessorParamName() == null
+				|| getRemovalAccessorParamName() == null && property.getRemovalAccessorParamName() != null
+				|| getRemovalAccessorParamName() != null && !getRemovalAccessorParamName().equals(property.getRemovalAccessorParamName())) {
 			setRemovalAccessorParamName(property.getRemovalAccessorParamName());
 		}
 
@@ -756,11 +756,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			return;
 		}
 
-		if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
+		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD) {
 			updateFieldCode();
 		}
 
@@ -770,7 +770,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			updateSetterCode();
 		}
 
-		if ((getCardinality() == DMCardinality.VECTOR) || (getCardinality() == DMCardinality.HASHTABLE)) {
+		if (getCardinality() == DMCardinality.VECTOR || getCardinality() == DMCardinality.HASHTABLE) {
 			updateAdditionCode();
 			updateRemovalCode();
 		}
@@ -797,9 +797,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	public void setIsUnderscoredAccessors(boolean underscoredAccessors) {
 		if (_underscoredAccessors != underscoredAccessors) {
 			_underscoredAccessors = underscoredAccessors;
-			if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
-					|| (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
-					|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
+			if (getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD
+					|| getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD
+					|| getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD) {
 				if (underscoredAccessors && getFieldName().indexOf("_") != 0) {
 					setFieldName("_" + getFieldName(), false);
 				} else if (!underscoredAccessors && getFieldName().indexOf("_") == 0) {
@@ -842,9 +842,10 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	// private String keyTypeAsString;
 
 	public DMType getKeyType() {
-		/*
-		 * if (_keyType==null && keyTypeAsString!=null){ setKeyType(getDMModel().getDmTypeConverter().convertFromString(keyTypeAsString), false); keyTypeAsString = null; }
-		 */
+		/*if (_keyType==null && keyTypeAsString!=null){
+			setKeyType(getDMModel().getDmTypeConverter().convertFromString(keyTypeAsString), false);
+			keyTypeAsString = null;
+		}*/
 		return _keyType;
 	}
 
@@ -853,7 +854,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public void setKeyType(DMType keyType, boolean notify) {
-		if ((keyType == null && _keyType != null) || (keyType != null && !keyType.equals(_keyType))) {
+		if (keyType == null && _keyType != null || keyType != null && !keyType.equals(_keyType)) {
 			DMType oldType = _keyType;
 			/*
 			 * if (oldType != null) { oldType.removeFromTypedWithThisType(this); }
@@ -900,38 +901,88 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		setKeyType(DMType.makeResolvedDMType(anEntity), true);
 	}
 
-	/*
-	 * public String getGetterCode() { return _getterCode; }
-	 * 
-	 * public void setGetterCode(String getterCode) { if (_getterCode == null) { if ((getGetterDefaultCode() != null) && (getGetterDefaultCode().equals(getterCode))) { return; } } else if
-	 * (_getterCode.equals(getterCode)) { return; } _getterCode = getterCode; if (getterCode.equals("")) _getterCode = null; setChanged(); }
-	 */
+	/* public String getGetterCode()
+	{
+	    return _getterCode;
+	}
 
-	/*
-	 * public String getSetterCode() { return _setterCode; }
-	 * 
-	 * public void setSetterCode(String setterCode) { if (_setterCode == null) { if ((getSetterDefaultCode() != null) && (getSetterDefaultCode().equals(setterCode))) { return; } } else if
-	 * (_setterCode.equals(setterCode)) { return; } _setterCode = setterCode; if (setterCode.equals("")) _setterCode = null; setChanged(); }
-	 */
+	public void setGetterCode(String getterCode)
+	{
+	    if (_getterCode == null) {
+	        if ((getGetterDefaultCode() != null) && (getGetterDefaultCode().equals(getterCode))) {
+	            return;
+	        }
+	    } else if (_getterCode.equals(getterCode)) {
+	        return;
+	    }
+	    _getterCode = getterCode;
+	    if (getterCode.equals(""))
+	        _getterCode = null;
+	    setChanged();
+	}*/
 
-	/*
-	 * public String getAdditionAccessorCode() { return _additionAccessorCode; }
-	 * 
-	 * public void setAdditionAccessorCode(String additionAccessorCode) { if (_additionAccessorCode == null) { if ((getAdditionAccessorDefaultCode() != null) &&
-	 * (getAdditionAccessorDefaultCode().equals(additionAccessorCode))) { return; } } else if (_additionAccessorCode.equals(additionAccessorCode)) { return; } _additionAccessorCode =
-	 * additionAccessorCode; if (additionAccessorCode.equals("")) _additionAccessorCode = null; setChanged(); }
-	 */
+	/*public String getSetterCode()
+	{
+	    return _setterCode;
+	}
 
-	/*
-	 * public String getRemovingAccessorCode() { return _removingAccessorCode; }
-	 * 
-	 * public void setRemovingAccessorCode(String removingAccessorCode) { if (_removingAccessorCode == null) { if ((getRemovingAccessorDefaultCode() != null) &&
-	 * (getRemovingAccessorDefaultCode().equals(removingAccessorCode))) { return; } } else if (_removingAccessorCode.equals(removingAccessorCode)) { return; } _removingAccessorCode =
-	 * removingAccessorCode; if (removingAccessorCode.equals("")) _removingAccessorCode = null; setChanged(); }
-	 */
+	public void setSetterCode(String setterCode)
+	{
+	    if (_setterCode == null) {
+	        if ((getSetterDefaultCode() != null) && (getSetterDefaultCode().equals(setterCode))) {
+	            return;
+	        }
+	    } else if (_setterCode.equals(setterCode)) {
+	        return;
+	    }
+	    _setterCode = setterCode;
+	    if (setterCode.equals(""))
+	        _setterCode = null;
+	    setChanged();
+	}*/
+
+	/*public String getAdditionAccessorCode()
+	{
+	    return _additionAccessorCode;
+	}
+
+	public void setAdditionAccessorCode(String additionAccessorCode)
+	{
+	    if (_additionAccessorCode == null) {
+	        if ((getAdditionAccessorDefaultCode() != null) && (getAdditionAccessorDefaultCode().equals(additionAccessorCode))) {
+	            return;
+	        }
+	    } else if (_additionAccessorCode.equals(additionAccessorCode)) {
+	        return;
+	    }
+	    _additionAccessorCode = additionAccessorCode;
+	    if (additionAccessorCode.equals(""))
+	        _additionAccessorCode = null;
+	    setChanged();
+	}*/
+
+	/*public String getRemovingAccessorCode()
+	{
+	    return _removingAccessorCode;
+	}
+
+	public void setRemovingAccessorCode(String removingAccessorCode)
+	{
+	    if (_removingAccessorCode == null) {
+	        if ((getRemovingAccessorDefaultCode() != null) && (getRemovingAccessorDefaultCode().equals(removingAccessorCode))) {
+	            return;
+	        }
+	    } else if (_removingAccessorCode.equals(removingAccessorCode)) {
+	        return;
+	    }
+	    _removingAccessorCode = removingAccessorCode;
+	    if (removingAccessorCode.equals(""))
+	        _removingAccessorCode = null;
+	    setChanged();
+	}*/
 
 	public boolean isBoolean() {
-		return (getType() != null && getType().isBoolean());
+		return getType() != null && getType().isBoolean();
 	}
 
 	public String getGetterName() {
@@ -965,23 +1016,21 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 	}
 
-	/*
-	 * private String _getterHeader;
-	 * 
-	 * private String _setterHeader;
-	 * 
-	 * private String _additionAccessorHeader;
-	 * 
-	 * private String _removingAccessorHeader;
-	 * 
-	 * private String _getterDefaultCode;
-	 * 
-	 * private String _setterDefaultCode;
-	 * 
-	 * private String _additionAccessorDefaultCode;
-	 * 
-	 * private String _removingAccessorDefaultCode;
-	 */
+	/*private String _getterHeader;
+
+	private String _setterHeader;
+
+	private String _additionAccessorHeader;
+
+	private String _removingAccessorHeader;
+
+	private String _getterDefaultCode;
+
+	private String _setterDefaultCode;
+
+	private String _additionAccessorDefaultCode;
+
+	private String _removingAccessorDefaultCode;*/
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
@@ -1080,8 +1129,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 				return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR
 						+ "return null;" + StringUtils.LINE_SEPARATOR + "}";
 			}
-		} else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)) {
+		} else if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) {
 			return " { " + StringUtils.LINE_SEPARATOR + "  return " + getFieldName() + ";" + StringUtils.LINE_SEPARATOR + "}";
 		}
 		return "???";
@@ -1102,7 +1151,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 		javadoc.append("  *" + StringUtils.LINE_SEPARATOR);
 
-		Hashtable<String, String> specificDescriptions = getSpecificDescriptions();
+		Map<String, String> specificDescriptions = getSpecificDescriptions();
 		if (specificDescriptions != null && specificDescriptions.size() > 0) {
 			for (String key : specificDescriptions.keySet()) {
 				String specificDescription = ToolBox.getJavaDocString(specificDescriptions.get(key));
@@ -1179,7 +1228,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 					jd.setComment(/* ToolBox.getJavaDocString(getDescription()) */getDescription());
 
-					Hashtable<String, String> specificDescriptions = getSpecificDescriptions();
+					Map<String, String> specificDescriptions = getSpecificDescriptions();
 					if (specificDescriptions != null && specificDescriptions.size() > 0) {
 						for (String key : specificDescriptions.keySet()) {
 							String specificDescription = ToolBox.getJavaDocString(specificDescriptions.get(key));
@@ -1228,8 +1277,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 
 		String newSetterParamName = setterParamName;
-		if ((oldSetterParamName != null && newSetterParamName == null) || (oldSetterParamName == null && newSetterParamName != null)
-				|| (oldSetterParamName != null && !oldSetterParamName.equals(newSetterParamName))) {
+		if (oldSetterParamName != null && newSetterParamName == null || oldSetterParamName == null && newSetterParamName != null
+				|| oldSetterParamName != null && !oldSetterParamName.equals(newSetterParamName)) {
 			updateCode();
 			setChanged();
 			notifyObservers(new DMAttributeDataModification("setterParamName", oldSetterParamName, newSetterParamName));
@@ -1265,8 +1314,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			}
 
 			return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR + "}";
-		} else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)) {
+		} else if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) {
 			return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + "=" + getNameAsMethodArgument() + ";"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		}
@@ -1328,9 +1377,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 
 		String newAdditionAccessorParamName = additionAccessorParamName;
-		if ((oldAdditionAccessorParamName != null && newAdditionAccessorParamName == null)
-				|| (oldAdditionAccessorParamName == null && newAdditionAccessorParamName != null)
-				|| (oldAdditionAccessorParamName != null && !oldAdditionAccessorParamName.equals(newAdditionAccessorParamName))) {
+		if (oldAdditionAccessorParamName != null && newAdditionAccessorParamName == null || oldAdditionAccessorParamName == null
+				&& newAdditionAccessorParamName != null || oldAdditionAccessorParamName != null
+				&& !oldAdditionAccessorParamName.equals(newAdditionAccessorParamName)) {
 			updateCode();
 			setChanged();
 			notifyObservers(new DMAttributeDataModification("additionAccessorParamName", oldAdditionAccessorParamName,
@@ -1339,7 +1388,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	protected String getAdditionAccessorHeader() {
-		if ((getCardinality() == DMCardinality.VECTOR) || (getCardinality() == DMCardinality.HASHTABLE)) {
+		if (getCardinality() == DMCardinality.VECTOR || getCardinality() == DMCardinality.HASHTABLE) {
 			StringBuffer methodHeader = new StringBuffer();
 			methodHeader.append(getAdditionAccessorModifier());
 			methodHeader.append("void ");
@@ -1361,7 +1410,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	protected String[] getAdditionAccessorSignatureCandidates() {
-		if ((getCardinality() == DMCardinality.VECTOR) || (getCardinality() == DMCardinality.HASHTABLE)) {
+		if (getCardinality() == DMCardinality.VECTOR || getCardinality() == DMCardinality.HASHTABLE) {
 			StringBuffer candidate1 = new StringBuffer();
 			candidate1.append(getAdditionAccessorName());
 			candidate1.append("(");
@@ -1383,8 +1432,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY) {
 			return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR + "}";
-		} else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)) {
+		} else if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) {
 			if (getCardinality() == DMCardinality.VECTOR) {
 				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".add(" + getNameAsMethodArgument() + ");"
 						+ StringUtils.LINE_SEPARATOR + "}";
@@ -1454,9 +1503,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 
 		String newRemovalAccessorParamName = removalAccessorParamName;
-		if ((oldRemovalAccessorParamName != null && newRemovalAccessorParamName == null)
-				|| (oldRemovalAccessorParamName == null && newRemovalAccessorParamName != null)
-				|| (oldRemovalAccessorParamName != null && !oldRemovalAccessorParamName.equals(newRemovalAccessorParamName))) {
+		if (oldRemovalAccessorParamName != null && newRemovalAccessorParamName == null || oldRemovalAccessorParamName == null
+				&& newRemovalAccessorParamName != null || oldRemovalAccessorParamName != null
+				&& !oldRemovalAccessorParamName.equals(newRemovalAccessorParamName)) {
 			updateCode();
 			setChanged();
 			notifyObservers(new DMAttributeDataModification("removalAccessorParamName", oldRemovalAccessorParamName,
@@ -1465,7 +1514,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	protected String getRemovalAccessorHeader() {
-		if ((getCardinality() == DMCardinality.VECTOR) || (getCardinality() == DMCardinality.HASHTABLE)) {
+		if (getCardinality() == DMCardinality.VECTOR || getCardinality() == DMCardinality.HASHTABLE) {
 			StringBuffer methodHeader = new StringBuffer();
 			methodHeader.append(getRemovingAccessorModifier());
 			methodHeader.append("void ");
@@ -1488,7 +1537,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	protected String[] getRemovalAccessorSignatureCandidates() {
-		if ((getCardinality() == DMCardinality.VECTOR) || (getCardinality() == DMCardinality.HASHTABLE)) {
+		if (getCardinality() == DMCardinality.VECTOR || getCardinality() == DMCardinality.HASHTABLE) {
 			StringBuffer candidate1 = new StringBuffer();
 			candidate1.append(getRemovingAccessorName());
 			candidate1.append("(");
@@ -1511,8 +1560,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY) {
 			return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR + "}";
-		} else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)) {
+		} else if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) {
 			if (getCardinality() == DMCardinality.VECTOR) {
 				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".remove(" + getNameAsMethodArgument() + ");"
 						+ StringUtils.LINE_SEPARATOR + "}";
@@ -1597,16 +1646,21 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	public String getAccessorTypeAsString() {
 		DMType resultingType = getResultingType();
-		return (resultingType != null ? resultingType.getSimplifiedStringRepresentation() : "Object" /* WARNING: undefined type ! */);
-		/*
-		 * if (getCardinality() == DMCardinality.SINGLE) { return (getType() != null ? getType().getStringRepresentation() : ""); } else if (getCardinality() == DMCardinality.VECTOR) { return
-		 * getType().getName().equals("NSArray")?"NSArray":"Vector"; } else if (getCardinality() == DMCardinality.HASHTABLE) { return "Hashtable"; } return "";
-		 */
+		return resultingType != null ? resultingType.getSimplifiedStringRepresentation() : "Object";
+		/*if (getCardinality() == DMCardinality.SINGLE) {
+		    return (getType() != null ? getType().getStringRepresentation() : "");
+		} else if (getCardinality() == DMCardinality.VECTOR) {
+		    return getType().getName().equals("NSArray")?"NSArray":"Vector";
+		} else if (getCardinality() == DMCardinality.HASHTABLE) {
+		    return "Hashtable";
+		}
+		return "";*/
 	}
 
-	/*
-	 * public String getAccessorsFooter() { return "}"; }
-	 */
+	/*public String getAccessorsFooter()
+	{
+	    return "}";
+	}*/
 
 	public String getQualifiedPropertyCode() {
 		StringBuffer answer = new StringBuffer();
@@ -1614,51 +1668,120 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			answer.append(getGetterCode());
 		}
 		// TODO complete this
-		/*
-		 * if (!getSetterCode().equals(FlexoLocalization.localizedForKey("not_relevant"))) { answer.append("\n"); answer.append(getSetterCode()); } if
-		 * (!getQualifiedAdditionAccessorCode().equals(FlexoLocalization.localizedForKey("not_relevant"))) { answer.append("\n"); answer.append(getQualifiedAdditionAccessorCode()); } if
-		 * (!getQualifiedRemovingAccessorCode().equals(FlexoLocalization.localizedForKey("not_relevant"))) { answer.append("\n"); answer.append(getQualifiedRemovingAccessorCode()); }
-		 */
+		/* if (!getSetterCode().equals(FlexoLocalization.localizedForKey("not_relevant"))) {
+		    answer.append("\n");
+		    answer.append(getSetterCode());
+		}
+		if (!getQualifiedAdditionAccessorCode().equals(FlexoLocalization.localizedForKey("not_relevant"))) {
+		    answer.append("\n");
+		    answer.append(getQualifiedAdditionAccessorCode());
+		}
+		if (!getQualifiedRemovingAccessorCode().equals(FlexoLocalization.localizedForKey("not_relevant"))) {
+		    answer.append("\n");
+		    answer.append(getQualifiedRemovingAccessorCode());
+		}*/
 		return answer.toString();
 	}
 
-	/*
-	 * public String getQualifiedGetterCode() { if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD) || (getImplementationType() ==
-	 * DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) { if (_getterCode != null) { return
-	 * getGetterHeader() + "\n" + _getterCode + "\n" + getAccessorsFooter(); } else { return getGetterHeader() + "\n" + getGetterDefaultCode() + "\n" + getAccessorsFooter(); } } else if
-	 * ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD) || (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)) { return
-	 * FlexoLocalization.localizedForKey("not_relevant"); } return ""; }
-	 * 
-	 * public void setQualifiedGetterCode(String qualifiedCode) { if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD) || (getImplementationType() ==
-	 * DMPropertyImplementationType.PROTECTED_FIELD)) return; setGetterCode(extractCore(qualifiedCode)); }
-	 * 
-	 * public String getQualifiedSetterCode() { if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD) || (getImplementationType() ==
-	 * DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) { if (_setterCode != null) { return
-	 * getSetterHeader() + "\n" + _setterCode + "\n" + getAccessorsFooter(); } else { return getSetterHeader() + "\n" + getSetterDefaultCode() + "\n" + getAccessorsFooter(); } } else if
-	 * ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD) || (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)) { return
-	 * FlexoLocalization.localizedForKey("not_relevant"); } return ""; }
-	 * 
-	 * public void setQualifiedSetterCode(String qualifiedCode) { if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD) || (getImplementationType() ==
-	 * DMPropertyImplementationType.PROTECTED_FIELD)) return; setSetterCode(extractCore(qualifiedCode)); }
-	 * 
-	 * public String getQualifiedAdditionAccessorCode() { if (getCardinality().isMultiple()) { if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD) ||
-	 * (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) { if
-	 * (_additionAccessorCode != null) { return getAdditionAccessorHeader() + "\n" + _additionAccessorCode + "\n" + getAccessorsFooter(); } else { return getAdditionAccessorHeader() + "\n" +
-	 * getAdditionAccessorDefaultCode() + "\n" + getAccessorsFooter(); } } } return FlexoLocalization.localizedForKey("not_relevant"); }
-	 * 
-	 * public void setQualifiedAdditionAccessorCode(String qualifiedCode) { if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD) || (getImplementationType() ==
-	 * DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) {
-	 * setAdditionAccessorCode(extractCore(qualifiedCode)); } }
-	 * 
-	 * public String getQualifiedRemovingAccessorCode() { if (getCardinality().isMultiple()) { if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD) ||
-	 * (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) { if
-	 * (_removingAccessorCode != null) { return getRemovingAccessorHeader() + "\n" + _removingAccessorCode + "\n" + getAccessorsFooter(); } else { return getRemovingAccessorHeader() + "\n" +
-	 * getRemovingAccessorDefaultCode() + "\n" + getAccessorsFooter(); } } } return FlexoLocalization.localizedForKey("not_relevant"); }
-	 * 
-	 * public void setQualifiedRemovingAccessorCode(String qualifiedCode) { if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD) || (getImplementationType() ==
-	 * DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) {
-	 * setRemovingAccessorCode(extractCore(qualifiedCode)); } }
-	 */
+	/* public String getQualifiedGetterCode()
+	{
+	    if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) {
+	        if (_getterCode != null) {
+	            return getGetterHeader() + "\n" + _getterCode + "\n" + getAccessorsFooter();
+	        } else {
+	            return getGetterHeader() + "\n" + getGetterDefaultCode() + "\n" + getAccessorsFooter();
+	        }
+	    } else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)) {
+	        return FlexoLocalization.localizedForKey("not_relevant");
+	    }
+	    return "";
+	}
+
+	public void setQualifiedGetterCode(String qualifiedCode)
+	{
+	    if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD))
+	        return;
+	    setGetterCode(extractCore(qualifiedCode));
+	}
+
+	public String getQualifiedSetterCode()
+	{
+	    if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) {
+	        if (_setterCode != null) {
+	            return getSetterHeader() + "\n" + _setterCode + "\n" + getAccessorsFooter();
+	        } else {
+	            return getSetterHeader() + "\n" + getSetterDefaultCode() + "\n" + getAccessorsFooter();
+	        }
+	    } else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)) {
+	        return FlexoLocalization.localizedForKey("not_relevant");
+	    }
+	    return "";
+	}
+
+	public void setQualifiedSetterCode(String qualifiedCode)
+	{
+	    if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD))
+	        return;
+	    setSetterCode(extractCore(qualifiedCode));
+	}
+
+	public String getQualifiedAdditionAccessorCode()
+	{
+	    if (getCardinality().isMultiple()) {
+	        if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
+	                || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
+	                || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) {
+	            if (_additionAccessorCode != null) {
+	                return getAdditionAccessorHeader() + "\n" + _additionAccessorCode + "\n" + getAccessorsFooter();
+	            } else {
+	                return getAdditionAccessorHeader() + "\n" + getAdditionAccessorDefaultCode() + "\n" + getAccessorsFooter();
+	            }
+	        }
+	    }
+	    return FlexoLocalization.localizedForKey("not_relevant");
+	}
+
+	public void setQualifiedAdditionAccessorCode(String qualifiedCode)
+	{
+	    if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) {
+	        setAdditionAccessorCode(extractCore(qualifiedCode));
+	    }
+	}
+
+	public String getQualifiedRemovingAccessorCode()
+	{
+	    if (getCardinality().isMultiple()) {
+	        if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
+	                || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
+	                || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) {
+	            if (_removingAccessorCode != null) {
+	                return getRemovingAccessorHeader() + "\n" + _removingAccessorCode + "\n" + getAccessorsFooter();
+	            } else {
+	                return getRemovingAccessorHeader() + "\n" + getRemovingAccessorDefaultCode() + "\n" + getAccessorsFooter();
+	            }
+	        }
+	    }
+	    return FlexoLocalization.localizedForKey("not_relevant");
+	}
+
+	public void setQualifiedRemovingAccessorCode(String qualifiedCode)
+	{
+	    if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
+	            || (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)) {
+	        setRemovingAccessorCode(extractCore(qualifiedCode));
+	    }
+	}*/
 
 	@Override
 	public Vector<DMTypeVariable> getTypeVariables() {
@@ -1748,7 +1871,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			IETextFieldWidget tf = null;
 			while (en.hasMoreElements()) {
 				tf = en.nextElement();
-				if (tf.getBindingValue() != null && (tf.getBindingValue()).isProperty(this)) {
+				if (tf.getBindingValue() != null && tf.getBindingValue().isProperty(this)) {
 					return true;
 				}
 			}
@@ -1763,7 +1886,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			IETextAreaWidget tf = null;
 			while (en.hasMoreElements()) {
 				tf = en.nextElement();
-				if (tf.getBindingValue() != null && (tf.getBindingValue()).isProperty(this)) {
+				if (tf.getBindingValue() != null && tf.getBindingValue().isProperty(this)) {
 					return true;
 				}
 			}
@@ -1939,11 +2062,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public String getFieldCode() {
-		if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
+		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD) {
 			return getFieldSourceCode().getCode();
 		}
 		return null;
@@ -2179,7 +2302,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public String getAdditionCode() {
-		if ((getCardinality() == DMCardinality.VECTOR) || (getCardinality() == DMCardinality.HASHTABLE)) {
+		if (getCardinality() == DMCardinality.VECTOR || getCardinality() == DMCardinality.HASHTABLE) {
 			return getAdditionSourceCode().getCode();
 		}
 		return null;
@@ -2262,7 +2385,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public String getRemovalCode() {
-		if ((getCardinality() == DMCardinality.VECTOR) || (getCardinality() == DMCardinality.HASHTABLE)) {
+		if (getCardinality() == DMCardinality.VECTOR || getCardinality() == DMCardinality.HASHTABLE) {
 			return getRemovalSourceCode().getCode();
 		}
 		return null;
@@ -2357,9 +2480,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		@Override
 		public ValidationIssue applyValidation(Validable object) {
 			DMProperty p = (DMProperty) object;
-			if (p.getType() == null
-					|| (p.getType().getKindOfType() == KindOfType.UNRESOLVED && (p.getType().getStringRepresentation() == null || p
-							.getType().getStringRepresentation().equals("null")))) {
+			if (p.getType() == null || p.getType().getKindOfType() == KindOfType.UNRESOLVED
+					&& (p.getType().getStringRepresentation() == null || p.getType().getStringRepresentation().equals("null"))) {
 				Vector<FixProposal> fixes = new Vector<FixProposal>();
 				fixes.add(new SetType(DMType.makeResolvedDMType(p.getDMModel().getDMEntity(String.class))));
 				fixes.add(new SetType(DMType.makeResolvedDMType(p.getDMModel().getDMEntity(Boolean.class))));

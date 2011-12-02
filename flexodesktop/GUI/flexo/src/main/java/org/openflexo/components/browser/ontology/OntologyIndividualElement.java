@@ -25,38 +25,32 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyStatement;
 
-
 /**
  * Browser element representing the calc library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyIndividualElement extends BrowserElement
-{
+public class OntologyIndividualElement extends BrowserElement {
 
-    protected OntologyIndividualElement(OntologyIndividual concept, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(concept, BrowserElementType.ONTOLOGY_INDIVIDUAL, browser, parent);
-    }
+	protected OntologyIndividualElement(OntologyIndividual concept, ProjectBrowser browser, BrowserElement parent) {
+		super(concept, BrowserElementType.ONTOLOGY_INDIVIDUAL, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	for (OntologyStatement s : getOntologyIndividual().getStatements()) {
-    		addToChilds(s);
-    	}
-     }
+	@Override
+	protected void buildChildrenVector() {
+		for (OntologyStatement s : getOntologyIndividual().getStatements()) {
+			addToChilds(s);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getOntologyIndividual().getName();
-    }
+	@Override
+	public String getName() {
+		return getOntologyIndividual().getName();
+	}
 
-    protected OntologyIndividual getOntologyIndividual()
-    {
-        return (OntologyIndividual) getObject();
-    }
+	protected OntologyIndividual getOntologyIndividual() {
+		return (OntologyIndividual) getObject();
+	}
 
 }

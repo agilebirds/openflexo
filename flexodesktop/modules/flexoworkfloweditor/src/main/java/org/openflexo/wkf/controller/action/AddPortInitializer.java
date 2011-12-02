@@ -22,10 +22,9 @@ package org.openflexo.wkf.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserActionSource;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,168 +44,116 @@ import org.openflexo.wkf.controller.WorkflowBrowser;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
-
-public class AddPortInitializer extends ActionInitializer { 
+public class AddPortInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddPortInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(AddPort.createPort,actionInitializer);
+	AddPortInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(AddPort.createPort, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<AddPort> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddPort> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddPort>() {
-            @Override
-			public boolean run(ActionEvent e, final AddPort action)
-            {
-            	if (!action.hasBeenLocated()) {
-            		WKFController controller = (WKFController)getController();
+			@Override
+			public boolean run(ActionEvent e, final AddPort action) {
+				if (!action.hasBeenLocated()) {
+					WKFController controller = (WKFController) getController();
 					FGEPoint lastClickedPoint = controller.getLastClickedPoint();
-            		if (lastClickedPoint != null) {
-            			if (controller.getCurrentPerspective()==controller.PROCESS_EDITOR_PERSPECTIVE)
-            				action.setGraphicalContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-            			else if (controller.getCurrentPerspective()==controller.SWIMMING_LANE_PERSPECTIVE)
-            				action.setGraphicalContext(SWLEditorConstants.SWIMMING_LANE_EDITOR);
-            			action.setLocation(lastClickedPoint.x,lastClickedPoint.y);
-            		}
-            	}
-            	
-            	if (!action.isNewPortNameInitialized() || action.getNewPortType() == null) {
-            		final TextFieldParameter newNodeNameParam = new TextFieldParameter(
-            				"newPortName", "new_port_name", action.getNewPortName()) {
-            			@Override
+					if (lastClickedPoint != null) {
+						if (controller.getCurrentPerspective() == controller.PROCESS_EDITOR_PERSPECTIVE) {
+							action.setGraphicalContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+						} else if (controller.getCurrentPerspective() == controller.SWIMMING_LANE_PERSPECTIVE) {
+							action.setGraphicalContext(SWLEditorConstants.SWIMMING_LANE_EDITOR);
+						}
+						action.setLocation(lastClickedPoint.x, lastClickedPoint.y);
+					}
+				}
+
+				if (!action.isNewPortNameInitialized() || action.getNewPortType() == null) {
+					final TextFieldParameter newNodeNameParam = new TextFieldParameter("newPortName", "new_port_name",
+							action.getNewPortName()) {
+						@Override
 						public void setValue(String aValue) {
-            				super.setValue(aValue);
-                   			action.setNewPortName(aValue);
-            			}
-            		};
-            		EnumDropDownParameter<AddPort.CreatedPortType> portTypeParam 
-            		= new EnumDropDownParameter<AddPort.CreatedPortType> (
-            				"portType",
-            				"port_type",
-            				action.getNewPortType(),
-            				AddPort.CreatedPortType.values()){
-                    			@Override
-								public void setValue(AddPort.CreatedPortType aValue) {
-                    				super.setValue(aValue);
-                           			action.setNewPortType(aValue);
-                           			newNodeNameParam.setValue(action.getNewPortName());
-                    			}
-                    		};
-            		portTypeParam.addParameter("showReset", "false");
-            		newNodeNameParam.setDepends("portType");
-            		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-            				getProject(), 
-            				null,
-            				action.getLocalizedName(),FlexoLocalization.localizedForKey("please_enter_name_for_newly_created_port"), portTypeParam, newNodeNameParam);
-            		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {   
-            			return true;
-            		}
-            		else {
-            			return false;
-            		}
-            	}
-            	return true;
-            }
-        };
+							super.setValue(aValue);
+							action.setNewPortName(aValue);
+						}
+					};
+					EnumDropDownParameter<AddPort.CreatedPortType> portTypeParam = new EnumDropDownParameter<AddPort.CreatedPortType>(
+							"portType", "port_type", action.getNewPortType(), AddPort.CreatedPortType.values()) {
+						@Override
+						public void setValue(AddPort.CreatedPortType aValue) {
+							super.setValue(aValue);
+							action.setNewPortType(aValue);
+							newNodeNameParam.setValue(action.getNewPortName());
+						}
+					};
+					portTypeParam.addParameter("showReset", "false");
+					newNodeNameParam.setDepends("portType");
+					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+							action.getLocalizedName(), FlexoLocalization.localizedForKey("please_enter_name_for_newly_created_port"),
+							portTypeParam, newNodeNameParam);
+					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<AddPort> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<AddPort> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddPort>() {
-            @Override
-			public boolean run(ActionEvent e, AddPort action)
-            {
-                FlexoPort newFlexoPort = action.getNewPort();
-                if(newFlexoPort==null)return false;
-                if (e != null && e.getSource() instanceof BrowserActionSource) {
-                    ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();
-                    if (browser instanceof WorkflowBrowser) {
-                        if (!browser.activateBrowsingFor(newFlexoPort)) {
-                            if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_desactivate_ports_filtering"))) {
-                                browser.getFilterForObject(newFlexoPort).setStatus(BrowserFilterStatus.SHOW);
-                                browser.update();
-                            }
-                        }
-                        //browser.focusOn(newFlexoPort);
-                    } else if (browser instanceof ProcessBrowser) {
-                        //browser.focusOn(newFlexoPort);
-                    }
-                }
-                if (e!=null)
-                	getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newFlexoPort);
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, AddPort action) {
+				FlexoPort newFlexoPort = action.getNewPort();
+				if (newFlexoPort == null) {
+					return false;
+				}
+				if (e != null && e.getSource() instanceof BrowserActionSource) {
+					ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();
+					if (browser instanceof WorkflowBrowser) {
+						if (!browser.activateBrowsingFor(newFlexoPort)) {
+							if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_desactivate_ports_filtering"))) {
+								browser.getFilterForObject(newFlexoPort).setStatus(BrowserFilterStatus.SHOW);
+								browser.update();
+							}
+						}
+						// browser.focusOn(newFlexoPort);
+					} else if (browser instanceof ProcessBrowser) {
+						// browser.focusOn(newFlexoPort);
+					}
+				}
+				if (e != null) {
+					getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newFlexoPort);
+				}
+				return true;
+			}
+		};
 	}
 
-  	@Override
-	public void init()
-	{
-		initActionType(AddPort.createPort,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(AddPort.createNewPort,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				WKFIconLibrary.SMALL_NEW_PORT_ICON, 
-				null);
-		initActionType(AddPort.createDeletePort,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				WKFIconLibrary.SMALL_DELETE_PORT_ICON, 
-				null);
-		initActionType(AddPort.createInPort,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(),
-				getVisibleCondition(),
-				null, 
-				WKFIconLibrary.SMALL_IN_PORT_LEFT_ICON, 
-				null);
-		initActionType(AddPort.createOutPort,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(),
-				getVisibleCondition(),
-				null, 
-				WKFIconLibrary.SMALL_OUT_PORT_LEFT_ICON, 
-				null);
-		initActionType(AddPort.createInOutPort,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				WKFIconLibrary.SMALL_IN_OUT_PORT_LEFT_ICON, 
-				null);
+	@Override
+	public void init() {
+		initActionType(AddPort.createPort, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(AddPort.createNewPort, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, WKFIconLibrary.SMALL_NEW_PORT_ICON, null);
+		initActionType(AddPort.createDeletePort, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, WKFIconLibrary.SMALL_DELETE_PORT_ICON, null);
+		initActionType(AddPort.createInPort, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, WKFIconLibrary.SMALL_IN_PORT_LEFT_ICON, null);
+		initActionType(AddPort.createOutPort, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, WKFIconLibrary.SMALL_OUT_PORT_LEFT_ICON, null);
+		initActionType(AddPort.createInOutPort, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, WKFIconLibrary.SMALL_IN_OUT_PORT_LEFT_ICON, null);
 	}
 
 }

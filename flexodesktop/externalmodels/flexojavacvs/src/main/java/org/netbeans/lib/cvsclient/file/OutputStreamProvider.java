@@ -25,9 +25,9 @@ import java.io.OutputStream;
 
 /**
  * Custom output stream factory.
- *
+ * 
  * @author Petr Kuzel
  */
 public interface OutputStreamProvider {
-    OutputStream createOutputStream() throws IOException;
+	OutputStream createOutputStream() throws IOException;
 }

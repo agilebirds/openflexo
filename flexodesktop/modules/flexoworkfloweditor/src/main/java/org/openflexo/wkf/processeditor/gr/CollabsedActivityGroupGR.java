@@ -35,17 +35,15 @@ import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
-
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.ActivityGroup;
@@ -66,14 +64,12 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 
 	protected TextStyle roleLabelTextStyle;
 
-	public CollabsedActivityGroupGR(ActivityGroup activityGroup, ProcessRepresentation aDrawing)
-	{
+	public CollabsedActivityGroupGR(ActivityGroup activityGroup, ProcessRepresentation aDrawing) {
 		super(activityGroup, ShapeType.RECTANGLE, aDrawing);
 
 		setLayer(ACTIVITY_LAYER);
-		addToMouseDragControls(new GroupExpander(),true);
+		addToMouseDragControls(new GroupExpander(), true);
 		updatePropertiesFromWKFPreferences();
-
 
 		setIsFloatingLabel(false);
 		setRelativeTextX(0.5); // Center label horizontally
@@ -95,83 +91,82 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
+			public void paintShape(FGEShapeGraphics g) {
 				FGERectangle expandingRect = getExpandingRect();
-				g.drawImage(WKFIconLibrary.EXPANDABLE_ICON.getImage(), new FGEPoint(expandingRect.x,expandingRect.y));
+				g.drawImage(WKFIconLibrary.EXPANDABLE_ICON.getImage(), new FGEPoint(expandingRect.x, expandingRect.y));
 			};
 		});
 
 	}
 
 	@Override
-	public boolean getIsVisible()
-	{
+	public boolean getIsVisible() {
 		return true;
 	}
 
-	protected FGERectangle getExpandingRect()
-	{
-		double r_width = WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()/getWidth();
-		double r_height = WKFIconLibrary.EXPANDABLE_ICON.getIconHeight()/getHeight();
-		double x = (1-r_width)/2;
-		double y = 1-r_height*1.2;
-		if (y < 0.3) y = 1-r_height*1.1;
-		if (y < 0) y = 0;
-		return new FGERectangle(x,y,r_width,r_height);
+	protected FGERectangle getExpandingRect() {
+		double r_width = WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() / getWidth();
+		double r_height = WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight();
+		double x = (1 - r_width) / 2;
+		double y = 1 - r_height * 1.2;
+		if (y < 0.3) {
+			y = 1 - r_height * 1.1;
+		}
+		if (y < 0) {
+			y = 0;
+		}
+		return new FGERectangle(x, y, r_width, r_height);
 	}
 
-	private void updateBackground()
-	{
-		background = BackgroundStyle.makeColorGradientBackground(getActivityGroup().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+	private void updateBackground() {
+		background = BackgroundStyle.makeColorGradientBackground(getActivityGroup().getColor(), Color.WHITE,
+				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		setBackground(background);
 	}
 
-	public ActivityGroup getActivityGroup()
-	{
+	public ActivityGroup getActivityGroup() {
 		return getDrawable();
 	}
 
 	@Override
-	public Rectangle getShape()
-	{
-		return (Rectangle)super.getShape();
+	public Rectangle getShape() {
+		return (Rectangle) super.getShape();
 	}
 
-
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK, getWorkflow()!=null?getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont():WKFPreferences.getActivityNodeFont().getFont()));
+		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+				getWorkflow() != null ? getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont() : WKFPreferences
+						.getActivityNodeFont().getFont()));
 	}
 
 	public class GroupExpander extends MouseDragControl {
 
-		public GroupExpander()
-		{
-			super("GroupExpander", MouseButton.LEFT,
-					new CustomDragControlAction() {
+		public GroupExpander() {
+			super("GroupExpander", MouseButton.LEFT, new CustomDragControlAction() {
 				@Override
-				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						MouseEvent event) {
 					logger.info("Expand group");
 					OpenGroup.actionType.makeNewAction(getActivityGroup(), null, getDrawing().getEditor()).doAction();
 					return true;
 				}
 
 				@Override
-				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event, boolean isSignificativeDrag) {
+				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						MouseEvent event, boolean isSignificativeDrag) {
 					// TODO Auto-generated method stub
 					return false;
 				}
 
 				@Override
-				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						MouseEvent event) {
 					// TODO Auto-generated method stub
 					return false;
 				}
-			},
-			false,false,false,false);
+			}, false, false, false, false);
 		}
 
 		@Override
@@ -181,12 +176,12 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 
 	}
 
-	protected boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-	{
-		ShapeView view = (ShapeView)controller.getDrawingView().viewForObject(graphicalRepresentation);
+	protected boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+			MouseEvent event) {
+		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
 		FGERectangle expandingRect = getExpandingRect();
 		java.awt.Rectangle scaledExpandingRect = convertNormalizedRectangleToViewCoordinates(expandingRect, controller.getScale());
-		Point clickLocation = SwingUtilities.convertPoint((Component)event.getSource(), event.getPoint(), view);
+		Point clickLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), view);
 		return scaledExpandingRect.contains(clickLocation);
 	}
 
@@ -195,82 +190,71 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 	private boolean isUpdatingPosition = false;
 
 	@Override
-	public double getX()
-	{
-		return getActivityGroup().getX(COLLABSED+BASIC_PROCESS_EDITOR);
+	public double getX() {
+		return getActivityGroup().getX(COLLABSED + BASIC_PROCESS_EDITOR);
 	}
 
 	@Override
-	public void setXNoNotification(double posX)
-	{
+	public void setXNoNotification(double posX) {
 		isUpdatingPosition = true;
-		getActivityGroup().setX(posX,COLLABSED+BASIC_PROCESS_EDITOR);
+		getActivityGroup().setX(posX, COLLABSED + BASIC_PROCESS_EDITOR);
 		isUpdatingPosition = false;
 	}
 
 	@Override
-	public double getY()
-	{
-		return getActivityGroup().getY(COLLABSED+BASIC_PROCESS_EDITOR);
+	public double getY() {
+		return getActivityGroup().getY(COLLABSED + BASIC_PROCESS_EDITOR);
 	}
 
 	@Override
-	public void setYNoNotification(double posY)
-	{
+	public void setYNoNotification(double posY) {
 		isUpdatingPosition = true;
-		getActivityGroup().setY(posY,COLLABSED+BASIC_PROCESS_EDITOR);
+		getActivityGroup().setY(posY, COLLABSED + BASIC_PROCESS_EDITOR);
 		isUpdatingPosition = false;
 	}
 
 	@Override
-	public double getWidth()
-	{
-		return getActivityGroup().getWidth(COLLABSED+BASIC_PROCESS_EDITOR);
+	public double getWidth() {
+		return getActivityGroup().getWidth(COLLABSED + BASIC_PROCESS_EDITOR);
 	}
 
 	@Override
-	public void setWidthNoNotification(double width)
-	{
-		getActivityGroup().setWidth(width,COLLABSED+BASIC_PROCESS_EDITOR);
+	public void setWidthNoNotification(double width) {
+		getActivityGroup().setWidth(width, COLLABSED + BASIC_PROCESS_EDITOR);
 	}
 
 	@Override
-	public double getHeight()
-	{
-		return getActivityGroup().getHeight(COLLABSED+BASIC_PROCESS_EDITOR);
+	public double getHeight() {
+		return getActivityGroup().getHeight(COLLABSED + BASIC_PROCESS_EDITOR);
 	}
 
 	@Override
-	public void setHeightNoNotification(double height)
-	{
-		getActivityGroup().setHeight(height,COLLABSED+BASIC_PROCESS_EDITOR);
+	public void setHeightNoNotification(double height) {
+		getActivityGroup().setHeight(height, COLLABSED + BASIC_PROCESS_EDITOR);
 	}
 
-
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		return getActivityGroup().getGroupName();
 	}
 
 	@Override
-	public void setTextNoNotification(String text)
-	{
+	public void setTextNoNotification(String text) {
 		getActivityGroup().setGroupName(text);
 	}
 
 	@Override
-	public void update (FlexoObservable observable, DataModification dataModification)
-	{
-		//logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
 		if (observable == getActivityGroup()) {
 			if (dataModification instanceof WKFAttributeDataModification) {
-				if (((WKFAttributeDataModification)dataModification).getAttributeName().equals("color")) {
+				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("color")) {
 					updateBackground();
 				}
 			} else if (dataModification instanceof ObjectVisibilityChanged) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Group visibility changed");
+				}
 				getDrawing().invalidateGraphicalObjectsHierarchy(getActivityGroup().getProcess());
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
@@ -278,16 +262,16 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 	}
 
 	@Override
-	public String getToolTipText()
-	{
-		if (getActivityGroup().getDescription() == null || getActivityGroup().getDescription().trim().equals(""))
-			return "<html><b>"+getActivityGroup().getGroupName()+"</b><br><i>"+FlexoLocalization.localizedForKey("no_description")+"</i></html>";
-		return "<html><b>"+getActivityGroup().getGroupName()+"</b><br><i>"+getActivityGroup().getDescription()+"</i></html>";
+	public String getToolTipText() {
+		if (getActivityGroup().getDescription() == null || getActivityGroup().getDescription().trim().equals("")) {
+			return "<html><b>" + getActivityGroup().getGroupName() + "</b><br><i>" + FlexoLocalization.localizedForKey("no_description")
+					+ "</i></html>";
+		}
+		return "<html><b>" + getActivityGroup().getGroupName() + "</b><br><i>" + getActivityGroup().getDescription() + "</i></html>";
 	}
 
 	@Override
-	protected boolean supportShadow()
-	{
+	protected boolean supportShadow() {
 		return true;
 	}
 

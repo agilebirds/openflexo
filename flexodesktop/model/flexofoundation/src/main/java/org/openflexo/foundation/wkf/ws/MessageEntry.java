@@ -59,8 +59,9 @@ public class MessageEntry extends BindingDefinition {
 
 	@Override
 	public String getFullyQualifiedName() {
-		if (getMessage() != null)
+		if (getMessage() != null) {
 			return getMessage().getFullyQualifiedName() + ".MESSAGE";
+		}
 		return null;
 	}
 
@@ -73,14 +74,16 @@ public class MessageEntry extends BindingDefinition {
 	}
 
 	public String getTypeClassName() {
-		if (getType() != null && getType().getBaseEntity() != null)
+		if (getType() != null && getType().getBaseEntity() != null) {
 			return getType().getBaseEntity().getFullyQualifiedName();
+		}
 		return null;
 	}
 
 	public void setTypeClassName(String className) {
-		if (className != null)
+		if (className != null) {
 			setType(DMType.makeResolvedDMType(getProject().getDataModel().getDMEntity(className)));
+		}
 		setChanged();
 	}
 

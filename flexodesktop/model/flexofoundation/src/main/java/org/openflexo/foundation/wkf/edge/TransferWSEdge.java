@@ -38,171 +38,156 @@ import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * Edge linking a WS OUT portmap to a WS IN portmap
  * 
  * @author sguerin
  * 
  */
-public final class TransferWSEdge extends MessageEdge<FlexoPortMap,FlexoPortMap> implements PortMapEntry, PortMapExit
-{
+public final class TransferWSEdge extends MessageEdge<FlexoPortMap, FlexoPortMap> implements PortMapEntry, PortMapExit {
 
-    private static final Logger logger = Logger.getLogger(TransferWSEdge.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TransferWSEdge.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public TransferWSEdge(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public TransferWSEdge(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public TransferWSEdge(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public TransferWSEdge(FlexoProcess process) {
+		super(process);
+	}
 
-    /**
-     * Constructor with start node, next port and process
-     */
-    public TransferWSEdge(FlexoPortMap startPortMap, FlexoPortMap nextPortMap, FlexoProcess process) throws InvalidEdgeException
-    {
-        this(process);
-        if (nextPortMap.getProcess() == process && startPortMap.getProcess() == process) {
-        	setStartNode(startPortMap);
-            setEndNode(nextPortMap);
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Inconsistent data while building TransferWSEdge !");
-            throw new InvalidEdgeException(this);
-        }
-        if (!isEdgeValid()) {
-        	resetStartAndEndNode();
-            throw new InvalidEdgeException(this);
-        }
-    }
+	/**
+	 * Constructor with start node, next port and process
+	 */
+	public TransferWSEdge(FlexoPortMap startPortMap, FlexoPortMap nextPortMap, FlexoProcess process) throws InvalidEdgeException {
+		this(process);
+		if (nextPortMap.getProcess() == process && startPortMap.getProcess() == process) {
+			setStartNode(startPortMap);
+			setEndNode(nextPortMap);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Inconsistent data while building TransferWSEdge !");
+			}
+			throw new InvalidEdgeException(this);
+		}
+		if (!isEdgeValid()) {
+			resetStartAndEndNode();
+			throw new InvalidEdgeException(this);
+		}
+	}
 
-    /**
-     * Constructor with start node, next port
-     */
-    public TransferWSEdge(FlexoPortMap startPortMap, FlexoPortMap nextPortMap) throws InvalidEdgeException
-    {
-        this(startPortMap, nextPortMap, startPortMap.getProcess());
-    }
+	/**
+	 * Constructor with start node, next port
+	 */
+	public TransferWSEdge(FlexoPortMap startPortMap, FlexoPortMap nextPortMap) throws InvalidEdgeException {
+		this(startPortMap, nextPortMap, startPortMap.getProcess());
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.WKF.TRANSFER_WS_EDGE_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WKF.TRANSFER_WS_EDGE_INSPECTOR;
+	}
 
-    public PortMapRegistery getStartPortMapRegistery()
-    {
-        if (getStartNode() != null) {
-            return getStartNode().getPortMapRegistery();
-        }
-        return null;
-    }
+	public PortMapRegistery getStartPortMapRegistery() {
+		if (getStartNode() != null) {
+			return getStartNode().getPortMapRegistery();
+		}
+		return null;
+	}
 
-    public PortMapRegistery getEndPortMapRegistery()
-    {
-    	if (getEndNode() != null) {
-    		return getEndNode().getPortMapRegistery();
-    	}
-    	return null;
-    }
-    
-    public Stroke getStroke()
-    {
-        return Constants.DASHED_STROKE;
+	public PortMapRegistery getEndPortMapRegistery() {
+		if (getEndNode() != null) {
+			return getEndNode().getPortMapRegistery();
+		}
+		return null;
+	}
 
-    }
-    
-     // ==========================================================================
-    // ============================= Validation
-    // =================================
-    // ==========================================================================
+	public Stroke getStroke() {
+		return Constants.DASHED_STROKE;
 
-    @Override
-	public boolean isEdgeValid()
-    {
-        // Such edges are valid if and only if they link a OUT portmap 
-        // to a IN portmap
+	}
 
-        if (getStartNode() == null
-                || !getStartNode().isOutputPort()
-                || getEndNode() == null
-                || !getEndNode().isInputPort()
-                || getStartPortMapRegistery() == null
-                || getEndPortMapRegistery() == null 
-                || getStartPortMapRegistery().getSubProcessNode() == null
-                || getEndPortMapRegistery().getSubProcessNode() == null)
-            return false;
-        FlexoPetriGraph startPG = getStartPortMapRegistery().getSubProcessNode().getParentPetriGraph();
-        FlexoPetriGraph endPG = getEndPortMapRegistery().getSubProcessNode().getParentPetriGraph();
-        return (startPG == endPG);
-    }
-    
-    public static class TransferWSEdgeMustBeValid extends ValidationRule<TransferWSEdgeMustBeValid,TransferWSEdge>
-    {
-        public TransferWSEdgeMustBeValid()
-        {
-            super(TransferWSEdge.class, "transfer_ws_edge_must_be_valid");
-        }
+	// ==========================================================================
+	// ============================= Validation
+	// =================================
+	// ==========================================================================
 
-        @Override
-		public ValidationIssue<TransferWSEdgeMustBeValid,TransferWSEdge> applyValidation(TransferWSEdge edge)
-        {
-            if (!edge.isEdgeValid()) {
-                ValidationError<TransferWSEdgeMustBeValid,TransferWSEdge> error = new ValidationError<TransferWSEdgeMustBeValid,TransferWSEdge>(this, edge, "transfer_ws_edge_is_not_valid");
-                error.addToFixProposals(new DeletionFixProposal<TransferWSEdgeMustBeValid,TransferWSEdge>("delete_this_message_edge"));
-                return error;
-            }
-            return null;
-        }
+	@Override
+	public boolean isEdgeValid() {
+		// Such edges are valid if and only if they link a OUT portmap
+		// to a IN portmap
 
-    }
+		if (getStartNode() == null || !getStartNode().isOutputPort() || getEndNode() == null || !getEndNode().isInputPort()
+				|| getStartPortMapRegistery() == null || getEndPortMapRegistery() == null
+				|| getStartPortMapRegistery().getSubProcessNode() == null || getEndPortMapRegistery().getSubProcessNode() == null) {
+			return false;
+		}
+		FlexoPetriGraph startPG = getStartPortMapRegistery().getSubProcessNode().getParentPetriGraph();
+		FlexoPetriGraph endPG = getEndPortMapRegistery().getSubProcessNode().getParentPetriGraph();
+		return (startPG == endPG);
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "transfer_ws_edge";
-    }
-    
-    @Override
-	public FlexoPort getFlexoPort()
-    {
-    	if (getInputServiceOperation() != null) return getInputServiceOperation().getPort();
-    	return null;
-    }
+	public static class TransferWSEdgeMustBeValid extends ValidationRule<TransferWSEdgeMustBeValid, TransferWSEdge> {
+		public TransferWSEdgeMustBeValid() {
+			super(TransferWSEdge.class, "transfer_ws_edge_must_be_valid");
+		}
 
-    public ServiceOperation getInputServiceOperation()
-    {
-    	if (getStartNode() != null) 
-    		return getStartNode().getOperation();
-    	return null;
-    }
+		@Override
+		public ValidationIssue<TransferWSEdgeMustBeValid, TransferWSEdge> applyValidation(TransferWSEdge edge) {
+			if (!edge.isEdgeValid()) {
+				ValidationError<TransferWSEdgeMustBeValid, TransferWSEdge> error = new ValidationError<TransferWSEdgeMustBeValid, TransferWSEdge>(
+						this, edge, "transfer_ws_edge_is_not_valid");
+				error.addToFixProposals(new DeletionFixProposal<TransferWSEdgeMustBeValid, TransferWSEdge>("delete_this_message_edge"));
+				return error;
+			}
+			return null;
+		}
 
-    public ServiceOperation getOutputServiceOperation()
-    {
-    	if (getEndNode() != null)
-    		return getEndNode().getOperation();
-    	return null;
-    }
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "transfer_ws_edge";
+	}
+
+	@Override
+	public FlexoPort getFlexoPort() {
+		if (getInputServiceOperation() != null) {
+			return getInputServiceOperation().getPort();
+		}
+		return null;
+	}
+
+	public ServiceOperation getInputServiceOperation() {
+		if (getStartNode() != null) {
+			return getStartNode().getOperation();
+		}
+		return null;
+	}
+
+	public ServiceOperation getOutputServiceOperation() {
+		if (getEndNode() != null) {
+			return getEndNode().getOperation();
+		}
+		return null;
+	}
 
 	@Override
 	public AbstractMessageDefinition getInputMessageDefinition() {
@@ -224,13 +209,13 @@ public final class TransferWSEdge extends MessageEdge<FlexoPortMap,FlexoPortMap>
 		return false;
 	}
 
-    @Override
-    public Class<FlexoPortMap> getStartNodeClass() {
-    	return FlexoPortMap.class;
-    }
-    
-    @Override
-    public Class<FlexoPortMap> getEndNodeClass() {
-    	return FlexoPortMap.class;
-    }
+	@Override
+	public Class<FlexoPortMap> getStartNodeClass() {
+		return FlexoPortMap.class;
+	}
+
+	@Override
+	public Class<FlexoPortMap> getEndNodeClass() {
+		return FlexoPortMap.class;
+	}
 }

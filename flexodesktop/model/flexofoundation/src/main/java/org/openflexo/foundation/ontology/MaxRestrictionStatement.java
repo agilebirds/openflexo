@@ -33,76 +33,78 @@ public class MaxRestrictionStatement extends ObjectRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(MaxRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
-	private OntologyObject object;
+	private OntologyObjectProperty property;
+	private OntologyClass object;
 	private int maxCardinality = 0;
-	
-	public MaxRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
-	{
-		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		
+
+	public MaxRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
+		super(subject, s, r);
+		property = (OntologyObjectProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
-		Property ON_CLASS = ResourceFactory.createProperty( OWL + "onClass" );
-		Property MAX_QUALIFIED_CARDINALITY = ResourceFactory.createProperty( OWL + "maxQualifiedCardinality" );
+		Property ON_CLASS = ResourceFactory.createProperty(OWL + "onClass");
+		Property MAX_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + "maxQualifiedCardinality");
 
 		Statement onClassStmt = r.getProperty(ON_CLASS);
-		
+
 		Statement maxCardinalityStmt = r.getProperty(MAX_QUALIFIED_CARDINALITY);
-		
+
 		RDFNode onClassStmtValue = onClassStmt.getObject();
 		RDFNode maxCardinalityStmtValue = maxCardinalityStmt.getObject();
-		
+
 		if (onClassStmtValue.isResource() && onClassStmtValue.canAs(OntClass.class)) {
-			object = getOntologyLibrary().getOntologyObject(((OntClass)onClassStmtValue.as(OntClass.class)).getURI());
+			object = (OntologyClass) getOntologyLibrary().getOntologyObject(((OntClass) onClassStmtValue.as(OntClass.class)).getURI());
 		}
-		
+
 		if (maxCardinalityStmtValue.isLiteral() && maxCardinalityStmtValue.canAs(Literal.class)) {
-			Literal literal = (Literal)maxCardinalityStmtValue.as(Literal.class);
+			Literal literal = (Literal) maxCardinalityStmtValue.as(Literal.class);
 			maxCardinality = literal.getInt();
 		}
-		
-		
-		//object = getOntologyLibrary().getOntologyObject(r.get().getURI());
-		//cardinality = r.getCardinality();
+
+		// object = getOntologyLibrary().getOntologyObject(r.get().getURI());
+		// cardinality = r.getCardinality();
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "max_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "MaxRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "MaxRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyObject getObject() 
-	{
+	public OntologyClass getObject() {
 		return object;
 	}
 
 	@Override
-	public OntologyProperty getProperty() 
-	{
+	public OntologyObjectProperty getProperty() {
 		return property;
 	}
 
-
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" max "+maxCardinality+" "+(getObject() != null ? getObject().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " max "
+				+ maxCardinality + " " + (getObject() != null ? getObject().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" max "+maxCardinality;
+		return property.getName() + " max " + maxCardinality;
 	}
 
+	@Override
+	public int getCardinality() {
+		return maxCardinality;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Max;
+	}
 
 }

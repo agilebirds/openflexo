@@ -35,140 +35,142 @@ import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.SharedProject;
 
+public abstract class CVSAction<A extends FlexoAction<?, T1, FPSObject>, T1 extends FPSObject> extends FlexoAction<A, T1, FPSObject> {
 
-public abstract class CVSAction<A extends FlexoAction<?,T1,FPSObject>,T1 extends FPSObject> extends FlexoAction<A,T1,FPSObject>
-{
+	private static final Logger logger = Logger.getLogger(CVSAction.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CVSAction.class.getPackage().getName());
+	public static final ActionGroup SYNCHRONIZE_GROUP = new ActionGroup("synchronize", 4);
+	public static final ActionGroup CVS_OPERATIONS_GROUP = new ActionGroup("cvs_operations", 5);
+	public static final ActionGroup CVS_OVERRIDE_OPERATIONS_GROUP = new ActionGroup("cvs_override_operations", 6);
+	public static final ActionGroup EDITION_GROUP = new ActionGroup("edition", 7);
+	public static final ActionGroup CVS_HISTORY_GROUP = new ActionGroup("cvs_history", 8);
 
-    public static final ActionGroup SYNCHRONIZE_GROUP = new ActionGroup("synchronize",4);
-    public static final ActionGroup CVS_OPERATIONS_GROUP = new ActionGroup("cvs_operations",5);
-    public static final ActionGroup CVS_OVERRIDE_OPERATIONS_GROUP = new ActionGroup("cvs_override_operations",6);
-    public static final ActionGroup EDITION_GROUP = new ActionGroup("edition",7);
-    public static final ActionGroup CVS_HISTORY_GROUP = new ActionGroup("cvs_history",8);
+	public SharedProject getSharedProject() {
+		return getSharedProject(getFocusedObject(), getGlobalSelection());
+	}
 
-    public SharedProject getSharedProject()
-    {
-    	return getSharedProject(getFocusedObject(),getGlobalSelection());
-    }
-
-    protected static SharedProject getSharedProject(FPSObject focusedObject, Vector<FPSObject> globalSelection)
-    {
-    	SharedProject returned = sharedProjectForObject(focusedObject);
-    	if (globalSelection != null) {
-    		Enumeration<FPSObject> en = globalSelection.elements();
-    		while ((returned == null) && (en.hasMoreElements())) {
-    			returned = sharedProjectForObject(en.nextElement());
-    		}
-    	}
-    	return returned;
-    }
-
-    public static SharedProject sharedProjectForObject(FPSObject obj)
-    {
-   		if (obj instanceof CVSAbstractFile) {
-			return ((CVSAbstractFile)obj).getSharedProject();
+	protected static SharedProject getSharedProject(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
+		SharedProject returned = sharedProjectForObject(focusedObject);
+		if (globalSelection != null) {
+			Enumeration<FPSObject> en = globalSelection.elements();
+			while ((returned == null) && (en.hasMoreElements())) {
+				returned = sharedProjectForObject(en.nextElement());
+			}
 		}
-   		return null;
-    }
-    
-    /**
-     * Purpose of this method is to compute a closed set embedding all selected objects, 
-     * including current focused object
-     * @return
-     */
-    protected static Vector<FPSObject> getSelectedTopLevelObjects(FPSObject focusedObject, Vector<FPSObject> globalSelection)
-    {
-    	//logger.info("getSelectedTopLevelObjects() with "+focusedObject+" and "+globalSelection);
-    	Vector<FPSObject> returned = new Vector<FPSObject>();
-    	if (focusedObject != null) {
-    		returned.add(focusedObject);
-    	}
-    	if (globalSelection != null) {
-    		for (FPSObject obj : globalSelection) {
-    			boolean alreadyContained = false;
-    			for (FPSObject temp : returned) {
-    				if (obj.isContainedIn(temp)) alreadyContained = true;
-    			}
-    			if (!alreadyContained) { 
-    				// Not already contained, add it
-    				// Before to do it, look if some other are to be removed
-    				Vector<FPSObject> removeThose = new Vector<FPSObject>();
-    				for (FPSObject temp : returned) {
-    					if (temp.isContainedIn(obj)) removeThose.add(temp);
-    				}
-    				returned.removeAll(removeThose);
-    				returned.add(obj);
-    			}
-    		}
-    	}
-    	//logger.info("getSelectedTopLevelObjects() return "+returned);
-    	return returned;
-    }
+		return returned;
+	}
 
-     /**
-     * Purpose of this method is to compute a closed set embedding all selected objects, 
-     * including current focused object
-     * @return
-     */
-    protected Vector<FPSObject> getSelectedTopLevelObjects()
-    {
-    	return getSelectedTopLevelObjects(getFocusedObject(),getGlobalSelection());
-    }
+	public static SharedProject sharedProjectForObject(FPSObject obj) {
+		if (obj instanceof CVSAbstractFile) {
+			return ((CVSAbstractFile) obj).getSharedProject();
+		}
+		return null;
+	}
 
-    protected CVSAction (FlexoActionType<A,T1,FPSObject> actionType, T1 focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType,focusedObject,globalSelection, editor);
-    }
+	/**
+	 * Purpose of this method is to compute a closed set embedding all selected objects, including current focused object
+	 * 
+	 * @return
+	 */
+	protected static Vector<FPSObject> getSelectedTopLevelObjects(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
+		// logger.info("getSelectedTopLevelObjects() with "+focusedObject+" and "+globalSelection);
+		Vector<FPSObject> returned = new Vector<FPSObject>();
+		if (focusedObject != null) {
+			returned.add(focusedObject);
+		}
+		if (globalSelection != null) {
+			for (FPSObject obj : globalSelection) {
+				boolean alreadyContained = false;
+				for (FPSObject temp : returned) {
+					if (obj.isContainedIn(temp)) {
+						alreadyContained = true;
+					}
+				}
+				if (!alreadyContained) {
+					// Not already contained, add it
+					// Before to do it, look if some other are to be removed
+					Vector<FPSObject> removeThose = new Vector<FPSObject>();
+					for (FPSObject temp : returned) {
+						if (temp.isContainedIn(obj)) {
+							removeThose.add(temp);
+						}
+					}
+					returned.removeAll(removeThose);
+					returned.add(obj);
+				}
+			}
+		}
+		// logger.info("getSelectedTopLevelObjects() return "+returned);
+		return returned;
+	}
 
-    protected Vector<CVSFile> getSelectedFiles()
-    {
-    	return getSelectedFiles(getSharedProject(),getSelectedTopLevelObjects());
-    }
+	/**
+	 * Purpose of this method is to compute a closed set embedding all selected objects, including current focused object
+	 * 
+	 * @return
+	 */
+	protected Vector<FPSObject> getSelectedTopLevelObjects() {
+		return getSelectedTopLevelObjects(getFocusedObject(), getGlobalSelection());
+	}
 
-    /**
-     * Return all AbstractCGFile concerned by current selection
-     * @return
-     */
-    protected static Vector<CVSFile> getSelectedCVSFiles(FPSObject focusedObject, Vector<FPSObject> globalSelection)
-    {
-    	return getSelectedFiles(getSharedProject(focusedObject, globalSelection),getSelectedTopLevelObjects(focusedObject, globalSelection));
-    }
+	protected CVSAction(FlexoActionType<A, T1, FPSObject> actionType, T1 focusedObject, Vector<FPSObject> globalSelection,
+			FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
+	protected Vector<CVSFile> getSelectedFiles() {
+		return getSelectedFiles(getSharedProject(), getSelectedTopLevelObjects());
+	}
 
-    /**
-     * Return all CVSFile concerned by current selection
-     * @return
-     */
-    protected static Vector<CVSFile> getSelectedFiles(SharedProject sharedProject, Vector<FPSObject> selectedTopLevelObject)
-    {
-    	//logger.info("getSelectedFiles() with "+sharedProject+" and "+selectedTopLevelObject);
-    	Vector<CVSFile> returned = new Vector<CVSFile>();
-       	if (sharedProject == null) return returned;
-           	for (CVSFile file : sharedProject.getAllCVSFiles()) {
-    		for (FPSObject obj : selectedTopLevelObject) {
-    			if (obj.contains(file)) {
-    				returned.add(file);
-    			}
-    		}
-    	}
-    	//logger.info("getSelectedFiles() return "+returned);
-    	return returned;
-    }
+	/**
+	 * Return all AbstractCGFile concerned by current selection
+	 * 
+	 * @return
+	 */
+	protected static Vector<CVSFile> getSelectedCVSFiles(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
+		return getSelectedFiles(getSharedProject(focusedObject, globalSelection),
+				getSelectedTopLevelObjects(focusedObject, globalSelection));
+	}
 
-    public static CVSRepositoryList getRepositoryList(FPSObject object){
-        if (object instanceof CVSRepositoryList)
-            return (CVSRepositoryList) object;
-        if (object instanceof CVSExplorable)
-            return ((CVSExplorable)object).getCVSRepository().getCVSRepositoryList();
-        return null;
-    }
-    
-    public CVSRepository getRepository(FPSObject object){
-        if (object instanceof CVSRepository)
-            return (CVSRepository) object;
-        if (object instanceof CVSExplorable)
-            return ((CVSExplorable)object).getCVSRepository();
-        return null;
-    }
+	/**
+	 * Return all CVSFile concerned by current selection
+	 * 
+	 * @return
+	 */
+	protected static Vector<CVSFile> getSelectedFiles(SharedProject sharedProject, Vector<FPSObject> selectedTopLevelObject) {
+		// logger.info("getSelectedFiles() with "+sharedProject+" and "+selectedTopLevelObject);
+		Vector<CVSFile> returned = new Vector<CVSFile>();
+		if (sharedProject == null) {
+			return returned;
+		}
+		for (CVSFile file : sharedProject.getAllCVSFiles()) {
+			for (FPSObject obj : selectedTopLevelObject) {
+				if (obj.contains(file)) {
+					returned.add(file);
+				}
+			}
+		}
+		// logger.info("getSelectedFiles() return "+returned);
+		return returned;
+	}
+
+	public static CVSRepositoryList getRepositoryList(FPSObject object) {
+		if (object instanceof CVSRepositoryList) {
+			return (CVSRepositoryList) object;
+		}
+		if (object instanceof CVSExplorable) {
+			return ((CVSExplorable) object).getCVSRepository().getCVSRepositoryList();
+		}
+		return null;
+	}
+
+	public CVSRepository getRepository(FPSObject object) {
+		if (object instanceof CVSRepository) {
+			return (CVSRepository) object;
+		}
+		if (object instanceof CVSExplorable) {
+			return ((CVSExplorable) object).getCVSRepository();
+		}
+		return null;
+	}
 }

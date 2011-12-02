@@ -31,40 +31,33 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.view.print.PrintProcessAction;
 
-
 public class PrintProcessInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	PrintProcessInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(PrintProcessAction.actionType,actionInitializer);
+	PrintProcessInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(PrintProcessAction.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	public void init()
-	{
-        PrintProcessAction.initWithController(getControllerActionInitializer().getWKFController());
-        getControllerActionInitializer().registerAction(PrintProcessAction.actionType,getShortcut());
+	public void init() {
+		PrintProcessAction.initWithController(getControllerActionInitializer().getWKFController());
+		getControllerActionInitializer().registerAction(PrintProcessAction.actionType, getShortcut());
 	}
-	
+
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.PRINT_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_P, FlexoCst.META_MASK);
 	}
-	
 
 }

@@ -30,115 +30,107 @@ import java.util.Properties;
 /**
  * @author gpolet Created on 28 sept. 2005
  */
-public class FlexoProperties extends Properties implements Comparator<Object>
-{
+public class FlexoProperties extends Properties implements Comparator<Object> {
 
-    private boolean isStoring = false;
+	private boolean isStoring = false;
 
-    /**
+	/**
      * 
      */
-    public FlexoProperties()
-    {
-        super();
-    }
+	public FlexoProperties() {
+		super();
+	}
 
-    public FlexoProperties(Hashtable<Object, Object> p) {
-    	super();// Ok, I don't know what Sun has done here but it seems that
-    			// Properties is the lamest class ever made 
-    			// (not typed although it can only take String as keys and values,
-    			// and some kind of crappy and totally incoherent way of dealing with some default values).
-    	putAll(p);// This call is a lot safer than passing the hashtable in the super().
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Properties#store(java.io.OutputStream, java.lang.String)
-     */
-    @Override
-	public synchronized void store(OutputStream out, String header) throws IOException
-    {
-        isStoring = true;
-        super.store(out, header);
-        isStoring = false;
-    }
+	public FlexoProperties(Hashtable<Object, Object> p) {
+		super();// Ok, I don't know what Sun has done here but it seems that
+				// Properties is the lamest class ever made
+				// (not typed although it can only take String as keys and values,
+				// and some kind of crappy and totally incoherent way of dealing with some default values).
+		putAll(p);// This call is a lot safer than passing the hashtable in the super().
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Properties#propertyNames()
-     */
-    @Override
-	public Enumeration<Object> keys()
-    {
-        if (isStoring) {
-            return sortedKeys();
-        } else
-            return super.keys();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Properties#store(java.io.OutputStream, java.lang.String)
+	 */
+	@Override
+	public synchronized void store(OutputStream out, String header) throws IOException {
+		isStoring = true;
+		super.store(out, header);
+		isStoring = false;
+	}
 
-    public Enumeration<Object> unsortedKeys() {
-    	return super.keys();
-    }
-    
-    public Enumeration<Object> sortedKeys()
-    {
-    	return new PropsEnum();
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-     */
-    @Override
-	public int compare(Object o1, Object o2)
-    {
-        return o1.toString().compareTo(o2.toString());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Properties#propertyNames()
+	 */
+	@Override
+	public Enumeration<Object> keys() {
+		if (isStoring) {
+			return sortedKeys();
+		} else {
+			return super.keys();
+		}
+	}
 
-    private class PropsEnum implements Enumeration<Object> {
-    	
-        private Object[] objects;
+	public Enumeration<Object> unsortedKeys() {
+		return super.keys();
+	}
 
-        private int index = 0;
+	public Enumeration<Object> sortedKeys() {
+		return new PropsEnum();
+	}
 
-        public PropsEnum() {
-        	index = 0;// Resets the enumeration
-            Enumeration en = unsortedKeys();
-            objects = new Object[size()];
-            int i = 0;
-            while (en.hasMoreElements()) {
-                objects[i++] = en.nextElement();
-            }
-            Arrays.sort(objects, FlexoProperties.this);
-        }
-        
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.util.Enumeration#hasMoreElements()
-         */
-        @Override
-		public boolean hasMoreElements()
-        {
-            return index < objects.length;
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	public int compare(Object o1, Object o2) {
+		return o1.toString().compareTo(o2.toString());
+	}
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.util.Enumeration#nextElement()
-         */
-        @Override
-		public Object nextElement()
-        {
-            return objects[index++];
-        }
+	private class PropsEnum implements Enumeration<Object> {
 
+		private Object[] objects;
 
-    }
+		private int index = 0;
+
+		public PropsEnum() {
+			index = 0;// Resets the enumeration
+			Enumeration en = unsortedKeys();
+			objects = new Object[size()];
+			int i = 0;
+			while (en.hasMoreElements()) {
+				objects[i++] = en.nextElement();
+			}
+			Arrays.sort(objects, FlexoProperties.this);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.Enumeration#hasMoreElements()
+		 */
+		@Override
+		public boolean hasMoreElements() {
+			return index < objects.length;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.Enumeration#nextElement()
+		 */
+		@Override
+		public Object nextElement() {
+			return objects[index++];
+		}
+
+	}
 
 	public boolean isStoring() {
 		return isStoring;
@@ -147,5 +139,5 @@ public class FlexoProperties extends Properties implements Comparator<Object>
 	public void setStoring(boolean isStoring) {
 		this.isStoring = isStoring;
 	}
-    
+
 }

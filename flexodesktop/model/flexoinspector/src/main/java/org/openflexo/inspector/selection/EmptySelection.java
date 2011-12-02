@@ -19,25 +19,20 @@
  */
 package org.openflexo.inspector.selection;
 
-
 /**
  * Used to "tell" the inspector that no object were selected
  * 
  * @author sguerin
  */
-public class EmptySelection extends InspectorSelection
-{
+public class EmptySelection extends InspectorSelection {
 
-    public EmptySelection ()
-    {
-        super();
-    }
-    
-    @Override
-	public String toString()
-    {
-    	return "EmptySelection";
-    }
+	public EmptySelection() {
+		super();
+	}
 
+	@Override
+	public String toString() {
+		return "EmptySelection";
+	}
 
 }

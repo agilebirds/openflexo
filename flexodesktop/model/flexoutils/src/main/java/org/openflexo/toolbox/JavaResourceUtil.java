@@ -45,8 +45,10 @@ public class JavaResourceUtil {
 	/**
 	 * Retrieve all resources with the specified suffix in the resources where the specified class belongs (from jar or folder).
 	 * 
-	 * @param clazz : the class belonging to the jar or to the folder denoting a project
-	 * @param suffix : the suffix resources must match. If null all resources will be retrieved
+	 * @param clazz
+	 *            : the class belonging to the jar or to the folder denoting a project
+	 * @param suffix
+	 *            : the suffix resources must match. If null all resources will be retrieved
 	 * @return the retrieved resource names.
 	 */
 	public static List<String> getMatchingResources(Class<?> clazz, String suffix) {
@@ -63,14 +65,16 @@ public class JavaResourceUtil {
 					return getMatchingResourcesFromJar(jarFile, suffix);
 				} finally {
 					try {
-						if (jarFile != null)
+						if (jarFile != null) {
 							jarFile.close();
+						}
 					} catch (IOException e) {
 						logger.log(Level.WARNING, "Cannot close jar file '" + jarFile.getName() + "' !", e);
 					}
 				}
-			} else
+			} else {
 				logger.log(Level.WARNING, "Cannot handle file type for loading resources !");
+			}
 
 		} catch (URISyntaxException e) {
 			logger.log(Level.SEVERE, "Cannot load files from jar !", e);
@@ -84,8 +88,10 @@ public class JavaResourceUtil {
 	/**
 	 * Retrieve all resources with the specified suffix in the jar.
 	 * 
-	 * @param jarFile : the jar in which search for resources must be performed
-	 * @param suffix : the suffix resources must match. If null all resources will be retrieved
+	 * @param jarFile
+	 *            : the jar in which search for resources must be performed
+	 * @param suffix
+	 *            : the suffix resources must match. If null all resources will be retrieved
 	 * @return the retrieved resource names.
 	 */
 	public static List<String> getMatchingResourcesFromJar(JarFile jarFile, String suffix) {
@@ -93,8 +99,9 @@ public class JavaResourceUtil {
 		Enumeration<JarEntry> entries = jarFile.entries(); // gives ALL entries in jar
 		while (entries.hasMoreElements()) {
 			JarEntry entry = entries.nextElement();
-			if (suffix == null || entry.getName().endsWith(suffix))
+			if (suffix == null || entry.getName().endsWith(suffix)) {
 				result.add("/" + entry.getName());
+			}
 		}
 
 		return result;
@@ -103,8 +110,10 @@ public class JavaResourceUtil {
 	/**
 	 * Retrieve all resources with the specified suffix in the project folder.
 	 * 
-	 * @param folder : the folder in which search for resources must be performed
-	 * @param suffix : the suffix resources must match. If null all resources will be retrieved
+	 * @param folder
+	 *            : the folder in which search for resources must be performed
+	 * @param suffix
+	 *            : the suffix resources must match. If null all resources will be retrieved
 	 * @return the retrieved resource names.
 	 */
 	public static List<String> getMatchingResourcesFromFolder(File folder, final String suffix) {
@@ -134,10 +143,11 @@ public class JavaResourceUtil {
 	public static Date getResourceLastModifiedDate(String resourcePath) {
 		try {
 			URL url = JavaResourceUtil.class.getResource(resourcePath);
-			
-			if(url == null)
+
+			if (url == null) {
 				return null;
-			
+			}
+
 			return new Date(url.openConnection().getLastModified());
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Cannot retrieve last modified date for resources '" + resourcePath + "' !");

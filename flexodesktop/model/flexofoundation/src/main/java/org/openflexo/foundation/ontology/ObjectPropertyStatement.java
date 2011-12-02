@@ -32,96 +32,82 @@ public class ObjectPropertyStatement extends PropertyStatement {
 	private OntologyObjectProperty property;
 	private OntologyObject statementObject;
 	private Literal literal;
-	
-	public ObjectPropertyStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public ObjectPropertyStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 		property = getOntologyLibrary().getObjectProperty(s.getPredicate().getURI());
 		if (s.getObject() instanceof Resource) {
-			statementObject = getOntologyLibrary().getOntologyObject(((Resource)s.getObject()).getURI());
+			statementObject = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
 			/*if (statementObject instanceof FlexoOntology) {
 				System.out.println("OK, i have my ontology with resource "+s.getObject().getClass().getName());
 				System.out.println("resource: "+s.getObject());
 				System.out.println("uri: "+((Resource)s.getObject()).getURI());
 			}*/
-		}
-		else if (s.getObject() instanceof Literal) {
-			literal = (Literal)s.getObject();
-		}
-		else {
+		} else if (s.getObject() instanceof Literal) {
+			literal = (Literal) s.getObject();
+		} else {
 			logger.warning("ObjectPropertyStatement: object is not a Resource nor a Litteral !");
-		}		
+		}
 	}
 
 	@Override
-	public OntologyObjectProperty getPredicate() 
-	{
-		return (OntologyObjectProperty)super.getPredicate();
+	public OntologyObjectProperty getPredicate() {
+		return (OntologyObjectProperty) super.getPredicate();
 	}
-	
+
 	@Override
-	public Literal getLiteral() 
-	{
+	public Literal getLiteral() {
 		return literal;
 	}
 
-
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "object_property_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "ObjectPropertyStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "ObjectPropertyStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyObjectProperty getProperty() 
-	{
+	public OntologyObjectProperty getProperty() {
 		return property;
 	}
 
-	public OntologyObject getStatementObject() 
-	{
+	public OntologyObject getStatementObject() {
 		return statementObject;
 	}
-	
+
 	/**
 	 * Creates a new Statement equals to this one with a new Object value
 	 * 
 	 * @param anObject
 	 */
-	public final void setStatementObject(OntologyObject anObject)
-	{
+	public final void setStatementObject(OntologyObject anObject) {
 		// Take care to this point: this object will disappear and be replaced by a new one
 		// during updateOntologyStatements() !!!!!
 
-		//logger.info("Change object from="+getStatementObject().getURI()+" to="+anObject.getURI());
+		// logger.info("Change object from="+getStatementObject().getURI()+" to="+anObject.getURI());
 		getSubject().removePropertyStatement(this);
 		getSubject().getOntResource().addProperty(getProperty().getOntProperty(), anObject.getResource());
 		getSubject().updateOntologyStatements();
 		statementObject = anObject;
 	}
-	
 
 	@Override
-	public String toString() 
-	{
+	public String toString() {
 		if (hasLitteralValue()) {
-			return (isAnnotationProperty() ? "(A) " : "")+getSubject().getName()+" "+getProperty().getName()+"=\""+getLiteral()+"\" language="+getLanguage();
-		}
-		else {
-			return (isAnnotationProperty() ? "(A) " : "")+getSubject().getName()+" "+getProperty().getName()+" "+(getStatementObject() != null ? getStatementObject().getName() : getStatementObject());
+			return (isAnnotationProperty() ? "(A) " : "") + getSubject().getName() + " " + getProperty().getName() + "=\"" + getLiteral()
+					+ "\" language=" + getLanguage();
+		} else {
+			return (isAnnotationProperty() ? "(A) " : "") + getSubject().getName() + " " + getProperty().getName() + " "
+					+ (getStatementObject() != null ? getStatementObject().getName() : getStatementObject());
 		}
 	}
 
 	@Override
-	public boolean isAnnotationProperty()
-	{
+	public boolean isAnnotationProperty() {
 		return getProperty().isAnnotationProperty();
 	}
 

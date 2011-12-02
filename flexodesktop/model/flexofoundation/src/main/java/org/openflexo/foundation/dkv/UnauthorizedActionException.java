@@ -19,18 +19,15 @@
  */
 package org.openflexo.foundation.dkv;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class UnauthorizedActionException extends RuntimeException
-{
-    /**
+public class UnauthorizedActionException extends RuntimeException {
+	/**
      * 
      */
-    public UnauthorizedActionException(String message)
-    {
-        super(message);
-    }
+	public UnauthorizedActionException(String message) {
+		super(message);
+	}
 }

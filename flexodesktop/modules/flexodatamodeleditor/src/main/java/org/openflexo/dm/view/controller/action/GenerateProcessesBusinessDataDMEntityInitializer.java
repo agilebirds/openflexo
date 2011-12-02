@@ -29,29 +29,23 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class GenerateProcessesBusinessDataDMEntityInitializer extends ActionInitializer
-{
+public class GenerateProcessesBusinessDataDMEntityInitializer extends ActionInitializer {
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	protected GenerateProcessesBusinessDataDMEntityInitializer(DMControllerActionInitializer actionInitializer)
-	{
+	protected GenerateProcessesBusinessDataDMEntityInitializer(DMControllerActionInitializer actionInitializer) {
 		super(GenerateProcessesBusinessDataDMEntity.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer()
-	{
+	protected DMControllerActionInitializer getControllerActionInitializer() {
 		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<GenerateProcessesBusinessDataDMEntity> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<GenerateProcessesBusinessDataDMEntity>()
-		{
+	protected FlexoActionFinalizer<GenerateProcessesBusinessDataDMEntity> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<GenerateProcessesBusinessDataDMEntity>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateProcessesBusinessDataDMEntity action)
-			{
+			public boolean run(ActionEvent e, GenerateProcessesBusinessDataDMEntity action) {
 				FlexoController.notify(FlexoLocalization.localizedForKey("generate_processes_business_data_succeed"));
 				return true;
 			}

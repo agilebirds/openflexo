@@ -27,8 +27,8 @@ import javax.swing.ImageIcon;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMTranstyper;
-import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMTranstyper.DMTranstyperEntry;
+import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMType.KindOfType;
 import org.openflexo.foundation.dm.eo.DMEOJoin;
 import org.openflexo.toolbox.ImageIconResource;
@@ -37,19 +37,17 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of DMModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class DMEIconLibrary extends IconLibrary {
 
-    static final Logger logger = Logger.getLogger(DMEIconLibrary.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(DMEIconLibrary.class.getPackage().getName());
 
-    // Module icons
-	public static final ImageIcon DM_ACTIVE_ICON = new ImageIconResource("Icons/DME/DM_A_Small.gif");
-	public static final ImageIcon DM_UNACTIVE_ICON = new ImageIconResource("Icons/DME/DM_NA_Small.gif");
-	public static final ImageIcon DM_SELECTED_ICON = new ImageIconResource("Icons/DME/DM_S_Small.gif");
-	public static final ImageIcon DM_BIG_ACTIVE_ICON = new ImageIconResource("Icons/DME/DM_A.gif");
-	public static final ImageIcon DM_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/DME/DM_NA.gif");
-	public static final ImageIcon DM_BIG_SELECTED_ICON = new ImageIconResource("Icons/DME/DM_S.gif");
+	// Module icons
+	public static final ImageIcon DME_SMALL_ICON = new ImageIconResource("Icons/DME/module-dme-16.png");
+	public static final ImageIcon DME_MEDIUM_ICON = new ImageIconResource("Icons/DME/module-dme-32.png");
+	public static final ImageIcon DME_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/DME/module-dme-hover-32.png");
+	public static final ImageIcon DME_BIG_ICON = new ImageIconResource("Icons/DME/module-dme-hover-64.png");
 
 	// Perspective icons
 	public static final ImageIcon DME_RP_ACTIVE_ICON = new ImageIconResource("Icons/DME/RepositoryPerspective_A.gif");
@@ -76,7 +74,7 @@ public class DMEIconLibrary extends IconLibrary {
 	public static final ImageIcon TO_MANY_ICON = new ImageIconResource("Icons/DME/Utils/toMany.gif");
 	public static final ImageIcon BINDABLE_ICON = new ImageIconResource("Icons/DME/Utils/Link.gif");
 	public static final ImageIcon NOT_BINDABLE_ICON = new ImageIconResource("Icons/DME/Utils/notLink.gif");
-	
+
 	// Model icons
 	public static final ImageIcon DM_MODEL_ICON = new ImageIconResource("Icons/Model/DM/Library_DM.gif");
 	public static final ImageIcon DM_FOLDER_ICON = new ImageIconResource("Icons/Model/DM/SmallRepositoryFolder.gif");
@@ -99,8 +97,10 @@ public class DMEIconLibrary extends IconLibrary {
 	public static final ImageIcon JDK_REPOSITORY_ICON = new ImageIconResource("Icons/Model/DM/SmallJDKRepository.gif");
 	public static final ImageIcon WO_REPOSITORY_ICON = new ImageIconResource("Icons/Model/DM/SmallWORepository.gif");
 	public static final ImageIcon COMPONENT_REPOSITORY_ICON = new ImageIconResource("Icons/Model/DM/SmallComponentRepository.gif");
-	public static final ImageIcon PROCESS_INSTANCE_REPOSITORY_ICON = new ImageIconResource("Icons/Model/DM/SmallProcessInstanceRepository.gif");
-	public static final ImageIcon PROCESS_BUSINESS_DATA_REPOSITORY_ICON = new ImageIconResource("Icons/Model/DM/SmallProcessBusinessDataRepository.gif");
+	public static final ImageIcon PROCESS_INSTANCE_REPOSITORY_ICON = new ImageIconResource(
+			"Icons/Model/DM/SmallProcessInstanceRepository.gif");
+	public static final ImageIcon PROCESS_BUSINESS_DATA_REPOSITORY_ICON = new ImageIconResource(
+			"Icons/Model/DM/SmallProcessBusinessDataRepository.gif");
 	public static final ImageIcon EXTERNAL_REPOSITORY_ICON = new ImageIconResource("Icons/Model/DM/SmallExternalRepository.gif");
 	public static final ImageIcon DM_TRANSTYPER_ICON = new ImageIconResource("Icons/Model/DM/Transtyper.gif");
 	public static final ImageIcon DM_TRANSTYPER_ENTRY_ICON = new ImageIconResource("Icons/Model/DM/Transtyper.gif");
@@ -108,11 +108,9 @@ public class DMEIconLibrary extends IconLibrary {
 	public static final ImageIcon EOENTITY_ICON = new ImageIconResource("Icons/Model/DM/EOEntity.png");
 	public static final ImageIcon EOMODEL_ICON = new ImageIconResource("Icons/Model/DM/EOModel.png");
 
-
-	public static ImageIcon getIconFor(DMObject object)
-	{
+	public static ImageIcon getIconFor(DMObject object) {
 		if (object instanceof DMEntity) {
-			DMEntity entity = (DMEntity)object;
+			DMEntity entity = (DMEntity) object;
 			if (entity.getIsNormalClass()) {
 				return DMEIconLibrary.DM_ENTITY_CLASS_ICON;
 			} else if (entity.getIsInterface()) {
@@ -121,23 +119,19 @@ public class DMEIconLibrary extends IconLibrary {
 				return DMEIconLibrary.DM_ENTITY_ENUMERATION_ICON;
 			}
 			return null;
-		}
-		else if (object instanceof DMEOJoin) {
-	        return (((DMEOJoin)object).isJoinValid() ? DMEIconLibrary.CONNECTED_ICON : DMEIconLibrary.DISCONNECTED_ICON);
-		}
-		else if (object instanceof DMTranstyper) {
+		} else if (object instanceof DMEOJoin) {
+			return (((DMEOJoin) object).isJoinValid() ? DMEIconLibrary.CONNECTED_ICON : DMEIconLibrary.DISCONNECTED_ICON);
+		} else if (object instanceof DMTranstyper) {
 			return DMEIconLibrary.DM_TRANSTYPER_ICON;
-		}
-		else if (object instanceof DMTranstyperEntry) {
+		} else if (object instanceof DMTranstyperEntry) {
 			return DMEIconLibrary.DM_TRANSTYPER_ENTRY_ICON;
 		}
 		return null;
 	}
 
-	public static Icon getIconForType(DMType type) 
-	{
+	public static Icon getIconForType(DMType type) {
 		if (type.getKindOfType() == KindOfType.UNRESOLVED) {
-			return CGIconLibrary.UNFIXABLE_ERROR_ICON;
+			return IconLibrary.UNFIXABLE_ERROR_ICON;
 		} else if ((type.getKindOfType() == KindOfType.RESOLVED) || (type.getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
 			if (type.getBaseEntity().getIsNormalClass()) {
 				return DMEIconLibrary.DM_ENTITY_CLASS_ICON;
@@ -166,6 +160,5 @@ public class DMEIconLibrary extends IconLibrary {
 			return null;
 		}
 	}
-
 
 }

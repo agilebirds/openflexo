@@ -301,9 +301,8 @@ public class BindingValue extends AbstractBinding {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Set binding variable to " + bindingVariable);
 		}
-		/*
-		 * if (bindingVariable != null) _isStaticValue = false;
-		 */
+		/*if (bindingVariable != null)
+		    _isStaticValue = false;*/
 		if (bindingVariable != _bindingVariable) {
 			BindingVariable oldBindingVariable = _bindingVariable;
 			if ((oldBindingVariable != null) && (oldBindingVariable.getType() != null)) {

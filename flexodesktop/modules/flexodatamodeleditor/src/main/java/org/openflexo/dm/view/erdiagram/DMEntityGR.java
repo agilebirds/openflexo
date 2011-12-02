@@ -43,7 +43,6 @@ import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implements GraphicalFlexoObserver, ERDiagramConstants {
 
 	@SuppressWarnings("unused")
@@ -52,139 +51,123 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 	private final ForegroundStyle foreground;
 	private final BackgroundStyle background;
 	private final BackgroundStyle headerBackground;
-	
 
-	public DMEntityGR(DMEntity aDMEntity, Drawing<?> aDrawing) 
-	{
+	public DMEntityGR(DMEntity aDMEntity, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aDMEntity, aDrawing);
-		//setText(getRole().getName());
+		// setText(getRole().getName());
 		setIsFloatingLabel(false);
 		getShape().setIsRounded(false);
 		setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 		updateStyles();
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(ENTITY_BORDER,ENTITY_BORDER,ENTITY_BORDER,ENTITY_BORDER));
-		
+		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER));
+
 		setWidth(getDefaultWidth());
-		
+
 		setTextStyle(TextStyle.makeTextStyle(Color.BLACK, ENTITY_FONT));
-		
+
 		addToMouseClickControls(new ERDiagramController.ShowContextualMenuControl());
-		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new ERDiagramController.ShowContextualMenuControl(true));
 		}
-		//addToMouseDragControls(new DrawRoleSpecializationControl());
-		
+		// addToMouseDragControls(new DrawRoleSpecializationControl());
+
 		aDMEntity.addObserver(this);
 
 		foreground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
 		background = BackgroundStyle.makeColoredBackground(Color.WHITE);
 		headerBackground = BackgroundStyle.makeColoredBackground(Color.LIGHT_GRAY);
-		
+
 		setDecorationPainter(new DecorationPainter() {
 			@Override
 			public void paintDecoration(org.openflexo.fge.graphics.FGEShapeDecorationGraphics g) {
 				double border = ENTITY_BORDER;
 				g.useBackgroundStyle(headerBackground);
-				g.fillRect(border,border,g.getWidth()-2*border-1,HEADER_HEIGHT);
+				g.fillRect(border, border, g.getWidth()/*-2*border*/- 1, HEADER_HEIGHT);
 				g.useForegroundStyle(foreground);
-				g.drawRect(border,border,g.getWidth()-2*border-1,HEADER_HEIGHT);
-				g.drawImage(DMEIconLibrary.getIconFor(getEntity()).getImage(),new FGEPoint(ENTITY_BORDER*2,ENTITY_BORDER*1.6));
+				g.drawRect(border, border, g.getWidth()/*-2*border*/- 1, HEADER_HEIGHT);
+				g.drawImage(DMEIconLibrary.getIconFor(getEntity()).getImage(), new FGEPoint(ENTITY_BORDER * 2, ENTITY_BORDER * 1.6));
 			};
-			
+
 			@Override
-			public boolean paintBeforeShape()
-			{
+			public boolean paintBeforeShape() {
 				return false;
 			}
 		});
 
 	}
-	
-	
-	private void updateStyles()
-	{
+
+	private void updateStyles() {
 		/*foreground = ForegroundStyle.makeStyle(getEntity().getColor());
 		foreground.setLineWidth(2);
 		background = BackgroundStyle.makeColorGradientBackground(getRole().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
 		setForeground(foreground);
 		setBackground(background);*/
 	}
-	
+
 	@Override
-	public ERDiagramRepresentation getDrawing() 
-	{
-		return (ERDiagramRepresentation)super.getDrawing();
+	public ERDiagramRepresentation getDrawing() {
+		return (ERDiagramRepresentation) super.getDrawing();
 	}
 
 	@Override
-	public double getRelativeTextX() 
-	{
+	public double getRelativeTextX() {
 		return 0.5;
 	}
-	
+
 	@Override
-	public double getRelativeTextY() 
-	{
-		return HEADER_HEIGHT/2/getHeight();
+	public double getRelativeTextY() {
+		return HEADER_HEIGHT / 2 / getHeight();
 		/*Dimension labelSize = getNormalizedLabelSize();
 		double absoluteCenterY = labelSize.height/2;
 		return absoluteCenterY/getHeight();*/
 	}
-	
 
 	private boolean isUpdatingPosition = false;
 
-	private String getContext()
-	{
-		return "diagram_"+getDrawing().getDiagram().getFlexoID();
+	private String getContext() {
+		return "diagram_" + getDrawing().getDiagram().getFlexoID();
 	}
-	
+
 	@Override
-	public double getX() 
-	{
+	public double getX() {
 		if (!getEntity().hasLocationForContext(getContext())) {
-			getEntity().getX(getContext(),getDefaultX());
+			getEntity().getX(getContext(), getDefaultX());
 		}
 		return getEntity().getX(getContext());
 	}
 
 	@Override
-	public void setXNoNotification(double posX) 
-	{
+	public void setXNoNotification(double posX) {
 		isUpdatingPosition = true;
-		getEntity().setX(posX,getContext());
+		getEntity().setX(posX, getContext());
 		isUpdatingPosition = false;
 	}
 
 	@Override
-	public double getY() 
-	{
+	public double getY() {
 		if (!getEntity().hasLocationForContext(getContext())) {
-			getEntity().getY(getContext(),getDefaultY());
+			getEntity().getY(getContext(), getDefaultY());
 		}
 		return getEntity().getY(getContext());
 	}
 
 	@Override
-	public void setYNoNotification(double posY)
-	{
+	public void setYNoNotification(double posY) {
 		isUpdatingPosition = true;
-		getEntity().setY(posY,getContext());
+		getEntity().setY(posY, getContext());
 		isUpdatingPosition = false;
 	}
 
 	// Override to implement defaut automatic layout
-	public double getDefaultX()
-	{
+	public double getDefaultX() {
 		return 0;
 	}
-	
+
 	// Override to implement defaut automatic layout
-	public double getDefaultY()
-	{
+	public double getDefaultY() {
 		return 0;
 	}
-	
+
 	/*@Override
 	public void setWidthNoNotification(double aValue) 
 	{
@@ -196,7 +179,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 			}
 		}
 	}*/
-	
+
 	/*@Override
 	public double getWidth() 
 	{
@@ -231,34 +214,29 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 	{
 		return getDefaultWidth();
 	}*/
-	
+
 	@Override
-	public double getHeight()
-	{
+	public double getHeight() {
 		return getDefaultHeight();
 	}
-	
+
 	// Override to implement defaut automatic layout
-	public double getDefaultWidth()
-	{
+	public double getDefaultWidth() {
 		return WIDTH;
 	}
-	
+
 	// Override to implement defaut automatic layout
-	public double getDefaultHeight()
-	{
-		return getEntity().getOrderedProperties().size()*PROPERTY_HEIGHT+HEADER_HEIGHT+2*PROPERTY_BORDER;
+	public double getDefaultHeight() {
+		return getEntity().getOrderedProperties().size() * PROPERTY_HEIGHT + HEADER_HEIGHT + 2 * PROPERTY_BORDER;
 	}
 
 	@Override
-	public String getText() 
-	{
+	public String getText() {
 		return getEntity().getLocalizedName();
 	}
-	
+
 	@Override
-	public void setTextNoNotification(String text) 
-	{
+	public void setTextNoNotification(String text) {
 		/*try {
 			getEntity().setName(text);
 		} catch (InvalidNameException e) {
@@ -266,46 +244,40 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 			e.printStackTrace();
 		}*/
 	}
-	
-	public DMEntity getEntity()
-	{
+
+	public DMEntity getEntity() {
 		return getDrawable();
 	}
-	
+
 	@Override
-	public Rectangle getShape()
-	{
-		return (Rectangle)super.getShape();
+	public Rectangle getShape() {
+		return (Rectangle) super.getShape();
 	}
-	
+
 	@Override
-	public void update (FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getEntity()) {
 			if (dataModification instanceof PropertyRegistered) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 				for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
 					if (gr instanceof DMPropertyGR) {
-						((DMPropertyGR)gr).notifyObjectMoved();
+						((DMPropertyGR) gr).notifyObjectMoved();
 					}
 				}
 				notifyObjectResized();
 				notifyShapeNeedsToBeRedrawn();
-			}
-			else if (dataModification instanceof PropertyUnregistered) {
+			} else if (dataModification instanceof PropertyUnregistered) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 				for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
 					if (gr instanceof DMPropertyGR) {
-						((DMPropertyGR)gr).notifyObjectMoved();
+						((DMPropertyGR) gr).notifyObjectMoved();
 					}
 				}
 				notifyObjectResized();
 				notifyShapeNeedsToBeRedrawn();
-			}
-			else if (dataModification instanceof DMAttributeDataModification) {
+			} else if (dataModification instanceof DMAttributeDataModification) {
 				notifyShapeNeedsToBeRedrawn();
-			}
-			else if (dataModification instanceof ObjectLocationChanged) {
+			} else if (dataModification instanceof ObjectLocationChanged) {
 				if (!isUpdatingPosition) {
 					notifyObjectMoved();
 				}
@@ -318,7 +290,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 		super.notifyObjectHasResized();
 		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof DMPropertyGR) {
-				((DMPropertyGR)gr).notifyObjectResized();
+				((DMPropertyGR) gr).notifyObjectResized();
 			}
 		}
 	}

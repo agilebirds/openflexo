@@ -26,32 +26,31 @@ import javax.swing.JPanel;
 
 import org.openflexo.xml.diff3.UnresolvedTextConflict;
 
-
 public class UnresolvedTextConflictView extends UnresolvedConflictView {
-	
+
 	private JPanel _choicePanel;
 	private JPanel _descriptionPanel;
-	
+
 	public UnresolvedTextConflictView(UnresolvedTextConflict model) {
 		super(model);
 	}
 
 	@Override
-	public UnresolvedTextConflict getModel(){
-		return (UnresolvedTextConflict)super.getModel();
+	public UnresolvedTextConflict getModel() {
+		return (UnresolvedTextConflict) super.getModel();
 	}
-	
+
 	@Override
 	public JPanel getChoicePane() {
 		refreshChoicePanel();
 		return _choicePanel;
 	}
-	
+
 	@Override
-	public void refreshChoicePanel(){
-		if(_choicePanel==null){
+	public void refreshChoicePanel() {
+		if (_choicePanel == null) {
 			_choicePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		}else{
+		} else {
 			_choicePanel.removeAll();
 			_choicePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		}
@@ -60,18 +59,18 @@ public class UnresolvedTextConflictView extends UnresolvedConflictView {
 		} else {
 			_choicePanel.setBackground(findBackgroundColor());
 			_choicePanel.add(new JLabel("You choose :"));
-			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction()))
+			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction())) {
 				_choicePanel.add(new JLabel("'" + truncated(getModel().getText2Value()) + "'"));
-			else
+			} else {
 				_choicePanel.add(new JLabel("'" + truncated(getModel().getText1Value()) + "'"));
+			}
 		}
 		_choicePanel.validate();
 	}
-	
-	
+
 	@Override
 	public JPanel getDescriptionPane() {
-		if(_descriptionPanel==null){
+		if (_descriptionPanel == null) {
 			_descriptionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 			_descriptionPanel.add(new JLabel(getModel().getParentMergedElementName()));
 		}

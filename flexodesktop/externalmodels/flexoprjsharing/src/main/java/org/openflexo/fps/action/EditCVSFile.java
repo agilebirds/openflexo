@@ -26,72 +26,60 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSFile;
-import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.CVSFile.FileContentEditor;
+import org.openflexo.fps.FPSObject;
 
+public class EditCVSFile extends CVSAction<EditCVSFile, CVSFile> {
 
-public class EditCVSFile extends CVSAction<EditCVSFile,CVSFile>
-{
+	private static final Logger logger = Logger.getLogger(EditCVSFile.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(EditCVSFile.class.getPackage().getName());
+	public static FlexoActionType<EditCVSFile, CVSFile, FPSObject> actionType = new FlexoActionType<EditCVSFile, CVSFile, FPSObject>(
+			"edit_file", EDITION_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<EditCVSFile,CVSFile,FPSObject> actionType 
-    = new FlexoActionType<EditCVSFile,CVSFile,FPSObject> (
-    		"edit_file",EDITION_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public EditCVSFile makeNewAction(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new EditCVSFile(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public EditCVSFile makeNewAction(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new EditCVSFile(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return (object != null && object.getSharedProject() != null);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) 
-        {
-            return (object != null && object.getSharedProject() != null);
-       }
+		@Override
+		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return ((object != null) && (object.hasVersionOnDisk()) && (!object.isEdited()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) 
-        {
-            return ((object != null) && (object.hasVersionOnDisk()) && (!object.isEdited()));
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (EditCVSFile.actionType, CVSFile.class);
-    }
-    
+	};
 
-    EditCVSFile (CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(EditCVSFile.actionType, CVSFile.class);
+	}
 
-    private FileContentEditor fileContentEditor;
-    
-    @Override
-	protected void doAction(Object context)
-    {
-    	logger.info ("Edit file "+getFocusedObject().getFileName());
-    	if ((getFocusedObject() != null) && (fileContentEditor != null)) {
-    		getFocusedObject().edit(fileContentEditor);
-     	}
-     }
+	EditCVSFile(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-	public FileContentEditor getFileContentEditor() 
-	{
+	private FileContentEditor fileContentEditor;
+
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Edit file " + getFocusedObject().getFileName());
+		if ((getFocusedObject() != null) && (fileContentEditor != null)) {
+			getFocusedObject().edit(fileContentEditor);
+		}
+	}
+
+	public FileContentEditor getFileContentEditor() {
 		return fileContentEditor;
 	}
 
-	public void setFileContentEditor (FileContentEditor fileContentEditor) 
-	{
+	public void setFileContentEditor(FileContentEditor fileContentEditor) {
 		this.fileContentEditor = fileContentEditor;
 	}
 
-	
 }

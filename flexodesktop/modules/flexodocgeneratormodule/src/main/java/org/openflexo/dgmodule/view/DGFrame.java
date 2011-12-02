@@ -27,31 +27,27 @@ import org.openflexo.dgmodule.menu.DGMenuBar;
 import org.openflexo.dgmodule.view.listener.DGKeyEventListener;
 import org.openflexo.doceditor.view.DEFrame;
 
-
 /**
  * Frame of DocGenerator Module
  * 
  * @author gpolet
  */
 
-public class DGFrame extends DEFrame
-{
+public class DGFrame extends DEFrame {
 
-    private static final Logger logger = Logger.getLogger(DGFrame.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DGFrame.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Static variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Static variables
+	// ==================================
+	// ==========================================================================
 
-    /**
-     * Constructor for GeneratorFrame
-     */
-    public DGFrame(String title, DGController controller, DGKeyEventListener generatorKeyEventListener,
-            DGMenuBar menuBar)
-    {
-        super(title, controller, generatorKeyEventListener, menuBar);
-        setSize(DGCst.DEFAULT_DG_WIDTH, DGCst.DEFAULT_DG_HEIGHT);
-    }
+	/**
+	 * Constructor for GeneratorFrame
+	 */
+	public DGFrame(String title, DGController controller, DGKeyEventListener generatorKeyEventListener, DGMenuBar menuBar) {
+		super(title, controller, generatorKeyEventListener, menuBar);
+		setSize(DGCst.DEFAULT_DG_WIDTH, DGCst.DEFAULT_DG_HEIGHT);
+	}
 
 }

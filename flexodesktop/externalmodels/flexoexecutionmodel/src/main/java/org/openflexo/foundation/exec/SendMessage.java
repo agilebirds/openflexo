@@ -25,51 +25,47 @@ import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class SendMessage extends ControlGraphBuilder {
 
 	private ExternalMessageInEdge messageEdge;
-	
-	public static ControlGraph sendMessage (ExternalMessageInEdge messageEdge,boolean interprocedural)  throws InvalidModelException,NotSupportedException
-	{
+
+	public static ControlGraph sendMessage(ExternalMessageInEdge messageEdge, boolean interprocedural) throws InvalidModelException,
+			NotSupportedException {
 		return (new SendMessage(messageEdge)).makeControlGraph(interprocedural);
 	}
 
-	protected SendMessage(ExternalMessageInEdge messageEdge)
-	{
+	protected SendMessage(ExternalMessageInEdge messageEdge) {
 		super();
 		this.messageEdge = messageEdge;
 	}
-	
+
 	@Override
-	protected ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException
-	{
+	protected ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		throw new NotSupportedException("SendMessage not supported yet");
 	}
 
-
 	@Override
-	protected String getProcedureName()
-	{
-		return "sendMessageTo"+ToolBox.getJavaName((getServiceOperation() != null?getServiceOperation().getFullyQualifiedName()+"_"+getServiceOperation().getFlexoID():"Null"));
+	protected String getProcedureName() {
+		return "sendMessageTo"
+				+ ToolBox.getJavaName((getServiceOperation() != null ? getServiceOperation().getFullyQualifiedName() + "_"
+						+ getServiceOperation().getFlexoID() : "Null"));
 	}
 
-	public ExternalMessageInEdge getMessageEdge() 
-	{
+	public ExternalMessageInEdge getMessageEdge() {
 		return messageEdge;
 	}
 
-	public FlexoPortMap getPortMap() 
-	{
-		if (getMessageEdge() != null)
+	public FlexoPortMap getPortMap() {
+		if (getMessageEdge() != null) {
 			return getMessageEdge().getEndNode();
+		}
 		return null;
 	}
 
-	public ServiceOperation getServiceOperation() 
-	{
-		if (getPortMap() != null) 
+	public ServiceOperation getServiceOperation() {
+		if (getPortMap() != null) {
 			return getPortMap().getOperation();
+		}
 		return null;
 	}
 

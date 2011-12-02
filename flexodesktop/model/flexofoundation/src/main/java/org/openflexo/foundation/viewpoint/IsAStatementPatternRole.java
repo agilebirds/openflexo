@@ -6,22 +6,18 @@ import org.openflexo.localization.FlexoLocalization;
 public class IsAStatementPatternRole extends StatementPatternRole {
 
 	@Override
-	public PatternRoleType getType()
-	{
+	public PatternRoleType getType() {
 		return PatternRoleType.IsAStatement;
 	}
 
 	@Override
-	public  String getPreciseType()
-	{
+	public String getPreciseType() {
 		return FlexoLocalization.localizedForKey("is_a_statement");
 	}
-	
+
 	@Override
-	public Class<IsAStatement> getAccessedClass()
-	{
+	public Class<IsAStatement> getAccessedClass() {
 		return IsAStatement.class;
 	}
-
 
 }

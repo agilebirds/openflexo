@@ -41,6 +41,4 @@ public class ProjectInitializerException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	
 }

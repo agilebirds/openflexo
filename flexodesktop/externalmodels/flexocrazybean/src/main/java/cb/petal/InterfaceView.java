@@ -18,27 +18,28 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents InterfaceView object
- *
+ * 
  * @version $Id: InterfaceView.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
-public class InterfaceView extends ClassView  {
-  static final long serialVersionUID = 2535811997000685425L;
+public class InterfaceView extends ClassView {
+	static final long serialVersionUID = 2535811997000685425L;
 
-  public InterfaceView(PetalNode parent, Collection params, int tag) {
-    super(parent, "InterfaceView", params, tag);
-  }
+	public InterfaceView(PetalNode parent, Collection params, int tag) {
+		super(parent, "InterfaceView", params, tag);
+	}
 
-  public InterfaceView() {
-    super("InterfaceView");
-  }
+	public InterfaceView() {
+		super("InterfaceView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

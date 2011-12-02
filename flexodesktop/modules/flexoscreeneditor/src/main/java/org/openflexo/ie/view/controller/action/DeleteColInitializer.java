@@ -37,24 +37,20 @@ public class DeleteColInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteColInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(DeleteCol.actionType,actionInitializer);
+	DeleteColInitializer(IEControllerActionInitializer actionInitializer) {
+		super(DeleteCol.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeleteCol> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeleteCol> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteCol>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteCol action)
-			{
+			public boolean run(ActionEvent e, DeleteCol action) {
 				IEHTMLTableWidget table = null;
 				if (action.getFocusedObject() instanceof IETDWidget) {
 					table = ((IETDWidget) action.getFocusedObject()).htmlTable();
@@ -64,28 +60,25 @@ public class DeleteColInitializer extends ActionInitializer {
 				if (table != null && table.getColCount() == 1) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("cannot_delete_last_col"));
 				}
-				
-				if (getModule().isActive() && table != null && table.getColCount() > 1){
+
+				if (getModule().isActive() && table != null && table.getColCount() > 1) {
 					return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
-				}else{
+				} else {
 					return false;
 				}
-				
+
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeleteCol> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DeleteCol> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteCol>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteCol action)
-			{
+			public boolean run(ActionEvent e, DeleteCol action) {
 				return true;
 			}
 		};
 	}
-
 
 }

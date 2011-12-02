@@ -44,222 +44,215 @@ import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.selection.MouseSelectionManager;
 import org.openflexo.selection.SelectionListener;
 
-
 /**
  * Selection manager dedicated to Interface Editor module
  * 
  * @author sguerin
  */
-public class IESelectionManager extends MouseSelectionManager
-{
+public class IESelectionManager extends MouseSelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(IESelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(IESelectionManager.class.getPackage().getName());
 
-    public IESelectionManager(IEController controller)
-    {
-        super(controller);
-        IEMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new IEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        _contextualMenuManager = new IEContextualMenuManager(this,controller.getEditor());
-   }
+	public IESelectionManager(IEController controller) {
+		super(controller);
+		IEMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new IEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		_contextualMenuManager = new IEContextualMenuManager(this, controller.getEditor());
+	}
 
-    @Override
+	@Override
 	public void addToSelectionListeners(SelectionListener listener) {
 		// TODO Auto-generated method stub
 		super.addToSelectionListeners(listener);
 	}
 
-	public IEController getIEController()
-    {
-        return (IEController) getController();
-    }
+	public IEController getIEController() {
+		return (IEController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in Interface Editor");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("'Select All' not implemented yet in Interface Editor");
+		}
+		return false;
+	}
 
-    @Override
-	public void processMouseClicked(JComponent clickedContainer, Point clickedPoint, int clickCount, boolean isShiftDown)
-    {
-        if (clickCount == 1) {
-            setLastClickedContainer(clickedContainer);
-            setLastClickedPoint(clickedPoint);
+	@Override
+	public void processMouseClicked(JComponent clickedContainer, Point clickedPoint, int clickCount, boolean isShiftDown) {
+		if (clickCount == 1) {
+			setLastClickedContainer(clickedContainer);
+			setLastClickedPoint(clickedPoint);
 
-            if (clickedContainer instanceof IEWidgetView) {
-                processSelection(((IEWidgetView) clickedContainer).getModel(), isShiftDown);
-            }
-            if (clickedContainer instanceof DropTabZone) {
-            	processSelection(((DropTabZone) clickedContainer).getIEModel(), isShiftDown);
-            }
-            if (clickedContainer instanceof ButtonPanel) {
-            	processSelection(((ButtonPanel) clickedContainer).getContainerModel(), isShiftDown);
-            }
-            	
-        } else if ((clickCount == 2) && (clickedContainer instanceof DoubleClickResponder)) {
-            ((DoubleClickResponder) clickedContainer).performDoubleClick(clickedContainer, clickedPoint, isShiftDown);
-        }
-    }
+			if (clickedContainer instanceof IEWidgetView) {
+				processSelection(((IEWidgetView) clickedContainer).getModel(), isShiftDown);
+			}
+			if (clickedContainer instanceof DropTabZone) {
+				processSelection(((DropTabZone) clickedContainer).getIEModel(), isShiftDown);
+			}
+			if (clickedContainer instanceof ButtonPanel) {
+				processSelection(((ButtonPanel) clickedContainer).getContainerModel(), isShiftDown);
+			}
 
-    private void processSelection(IEWidget w, boolean isShiftDown)
-    {
-        if (w.getIsRootOfPartialComponent()) {
-            if (w.getParent() instanceof IEWidget)
-                w = (IEWidget) w.getParent();
-            else 
-                return;
-        }
-        if(w instanceof IESequenceWidget && ((IESequenceWidget)w).isInTD()){
-        	w = (IETDWidget)((IESequenceWidget)w).getParent();
-        }else if(w instanceof IESequenceTR && ((IESequenceTR)w).isInHTMLTable()){
-        	w = (IEHTMLTableWidget)((IESequenceTR)w).getParent();
-        }
-        if (selectionContains(w)) {
-            if (isShiftDown) {
-                removeFromSelected(w);
-            }
-        } else {
-            if (isShiftDown) {
-                addToSelected(w);
-            } else {
-                resetSelection();
-                if (w != null)
-                    addToSelected(w);
-            }
-        }
-    }
+		} else if ((clickCount == 2) && (clickedContainer instanceof DoubleClickResponder)) {
+			((DoubleClickResponder) clickedContainer).performDoubleClick(clickedContainer, clickedPoint, isShiftDown);
+		}
+	}
 
-    @Override
-	public boolean performSelectionCut()
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("performSelectionCut in " + getClass().getName());
-        _clipboard.performSelectionCut(getSelection());
-        Enumeration<FlexoModelObject> en = getSelection().elements();
-        while (en.hasMoreElements()) {
-            FlexoModelObject o = en.nextElement();
-            if (o instanceof IETDWidget) {
-                IESequenceWidget seq = ((IETDWidget)o).getSequenceWidget();
-                seq.removeFromContainer();
-                continue;
-            }
-            if (o instanceof IEWidget)
-                ((IEWidget)o).removeFromContainer();
-        }
-        return true;
-    }
-    
-    @Override
-	public void processMouseEntered(MouseEvent e)
-    {
-        if (e.getSource() instanceof IEWidgetView) {
-            IEWidgetView p = (IEWidgetView) e.getSource();
-            if (!isCurrentlyFocused(p)) {
-                if (_focusedPanel != null) {
-                    removeFocus(_focusedPanel);
-                }
-                setIsFocused(p);
-            }
-       }
-    }
+	private void processSelection(IEWidget w, boolean isShiftDown) {
+		if (w.getIsRootOfPartialComponent()) {
+			if (w.getParent() instanceof IEWidget) {
+				w = (IEWidget) w.getParent();
+			} else {
+				return;
+			}
+		}
+		if (w instanceof IESequenceWidget && ((IESequenceWidget) w).isInTD()) {
+			w = (IETDWidget) ((IESequenceWidget) w).getParent();
+		} else if (w instanceof IESequenceTR && ((IESequenceTR) w).isInHTMLTable()) {
+			w = (IEHTMLTableWidget) ((IESequenceTR) w).getParent();
+		}
+		if (selectionContains(w)) {
+			if (isShiftDown) {
+				removeFromSelected(w);
+			}
+		} else {
+			if (isShiftDown) {
+				addToSelected(w);
+			} else {
+				resetSelection();
+				if (w != null) {
+					addToSelected(w);
+				}
+			}
+		}
+	}
 
-    @Override
-	public void processMouseExited(MouseEvent e)
-    {
-        if (e.getSource() instanceof IEWidgetView) {
-            IEWidgetView p = (IEWidgetView) e.getSource();
-            if (isCurrentlyFocused(p)) {
-                removeFocus(p);
-            }
-        }
-    }
+	@Override
+	public boolean performSelectionCut() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("performSelectionCut in " + getClass().getName());
+		}
+		_clipboard.performSelectionCut(getSelection());
+		Enumeration<FlexoModelObject> en = getSelection().elements();
+		while (en.hasMoreElements()) {
+			FlexoModelObject o = en.nextElement();
+			if (o instanceof IETDWidget) {
+				IESequenceWidget seq = ((IETDWidget) o).getSequenceWidget();
+				seq.removeFromContainer();
+				continue;
+			}
+			if (o instanceof IEWidget) {
+				((IEWidget) o).removeFromContainer();
+			}
+		}
+		return true;
+	}
 
+	@Override
+	public void processMouseEntered(MouseEvent e) {
+		if (e.getSource() instanceof IEWidgetView) {
+			IEWidgetView p = (IEWidgetView) e.getSource();
+			if (!isCurrentlyFocused(p)) {
+				if (_focusedPanel != null) {
+					removeFocus(_focusedPanel);
+				}
+				setIsFocused(p);
+			}
+		}
+	}
 
-    @Override
-	public void processMousePressed(MouseEvent e)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.finest("Bounds:" + ((JComponent) e.getSource()).getBounds());
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Class:" + e.getSource().getClass().getName());
-     }
+	@Override
+	public void processMouseExited(MouseEvent e) {
+		if (e.getSource() instanceof IEWidgetView) {
+			IEWidgetView p = (IEWidgetView) e.getSource();
+			if (isCurrentlyFocused(p)) {
+				removeFocus(p);
+			}
+		}
+	}
 
-    @Override
-	public void processMouseReleased(MouseEvent e)
-    {
-    }
+	@Override
+	public void processMousePressed(MouseEvent e) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.finest("Bounds:" + ((JComponent) e.getSource()).getBounds());
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Class:" + e.getSource().getClass().getName());
+		}
+	}
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoModelObject
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-    	if(getIEController().getCurrentEditedComponent()==null)return null;
-        return getIEController().getCurrentEditedComponent().getComponentDefinition();
-    }
-
-    @Override
-	public FlexoModelObject pasteContextForComponent(JComponent aComponent) 
-    {
-        if (aComponent instanceof IEWOComponentView) {
-            return ((IEWOComponentView)aComponent).getModel();
-        }
-        else if (aComponent instanceof IEWidgetView) {
-            return ((IEWidgetView)aComponent).getModel();
-        }
-        return null;
-    }
+	@Override
+	public void processMouseReleased(MouseEvent e) {
+	}
 
 	/**
-     * Add supplied object to current selection
-     * 
-     * @param object: the object to add to selection
-     */
-    @Override
-	protected void internallyAddToSelected(FlexoModelObject object, boolean isNewFocusedObject)
-    {
-    	if(object instanceof IEWidget && ((IEWidget)object).getWOComponent().getRootSequence()==object){
-    		object = ((IEWidget)object).getWOComponent();
-    	}
-        if (object instanceof ComponentDefinition) {
-            if (((ComponentDefinition)object).isLoaded()) {
-                internallyAddToSelected(((ComponentDefinition)object).getWOComponent(), isNewFocusedObject);
-                return;
-            }
-        }
-        super.internallyAddToSelected(object, isNewFocusedObject);
-    }
-    
-    /**
-     * Remove supplied object from current selection
-     * 
-     * @param object: the object to remove from selection
-     */
-    @Override
-	protected void internallyRemoveFromSelected(FlexoModelObject object)
-    {
-        if (object instanceof ComponentDefinition) {
-            if (((ComponentDefinition)object).isLoaded()) {
-                if (selectionContains(((ComponentDefinition)object).getWOComponent())) {
-                    super.internallyRemoveFromSelected(((ComponentDefinition)object).getWOComponent());
-                    return;
-                }
-            }       
-        }
-        if (object instanceof IEWOComponent) {
-            if (selectionContains(((IEWOComponent)object).getComponentDefinition())) {
-                super.internallyRemoveFromSelected(((IEWOComponent)object).getComponentDefinition());
-                return;
-            }
-        }
-        super.internallyRemoveFromSelected(object);        
-    }
-    
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoModelObject
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		if (getIEController().getCurrentEditedComponent() == null) {
+			return null;
+		}
+		return getIEController().getCurrentEditedComponent().getComponentDefinition();
+	}
+
+	@Override
+	public FlexoModelObject pasteContextForComponent(JComponent aComponent) {
+		if (aComponent instanceof IEWOComponentView) {
+			return ((IEWOComponentView) aComponent).getModel();
+		} else if (aComponent instanceof IEWidgetView) {
+			return ((IEWidgetView) aComponent).getModel();
+		}
+		return null;
+	}
+
+	/**
+	 * Add supplied object to current selection
+	 * 
+	 * @param object
+	 *            : the object to add to selection
+	 */
+	@Override
+	protected void internallyAddToSelected(FlexoModelObject object, boolean isNewFocusedObject) {
+		if (object instanceof IEWidget && ((IEWidget) object).getWOComponent().getRootSequence() == object) {
+			object = ((IEWidget) object).getWOComponent();
+		}
+		if (object instanceof ComponentDefinition) {
+			if (((ComponentDefinition) object).isLoaded()) {
+				internallyAddToSelected(((ComponentDefinition) object).getWOComponent(), isNewFocusedObject);
+				return;
+			}
+		}
+		super.internallyAddToSelected(object, isNewFocusedObject);
+	}
+
+	/**
+	 * Remove supplied object from current selection
+	 * 
+	 * @param object
+	 *            : the object to remove from selection
+	 */
+	@Override
+	protected void internallyRemoveFromSelected(FlexoModelObject object) {
+		if (object instanceof ComponentDefinition) {
+			if (((ComponentDefinition) object).isLoaded()) {
+				if (selectionContains(((ComponentDefinition) object).getWOComponent())) {
+					super.internallyRemoveFromSelected(((ComponentDefinition) object).getWOComponent());
+					return;
+				}
+			}
+		}
+		if (object instanceof IEWOComponent) {
+			if (selectionContains(((IEWOComponent) object).getComponentDefinition())) {
+				super.internallyRemoveFromSelected(((IEWOComponent) object).getComponentDefinition());
+				return;
+			}
+		}
+		super.internallyRemoveFromSelected(object);
+	}
 
 }

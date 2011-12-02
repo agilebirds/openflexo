@@ -26,12 +26,21 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.components.MultipleObjectSelectorPopup;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.ModelReinjectableFile;
+import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.javaparser.FJPDMSet;
 import org.openflexo.javaparser.FJPJavaClass;
+import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
 import org.openflexo.javaparser.FJPJavaSource;
 import org.openflexo.javaparser.FJPTypeResolver;
-import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sg.action.AcceptDiskUpdateAndReinjectInModel;
 import org.openflexo.sg.action.ReinjectInModel;
@@ -42,65 +51,40 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
-import org.openflexo.components.MultipleObjectSelectorPopup;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.cg.ModelReinjectableFile;
-import org.openflexo.foundation.dm.DMEntity;
-import org.openflexo.generator.file.AbstractCGFile;
-
-
 public class ReinjectInModelInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ReinjectInModelInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(ReinjectInModel.actionType,actionInitializer);
+	ReinjectInModelInitializer(SGControllerActionInitializer actionInitializer) {
+		super(ReinjectInModel.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ReinjectInModel> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ReinjectInModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<ReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectInModel action)
-			{
+			public boolean run(ActionEvent e, ReinjectInModel action) {
 				if (action.getFilesToReinjectInModel().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				}
-				else if ((action.getFilesToReinjectInModel().size() > 1 
-						|| (!(action.getFocusedObject() instanceof CGFile)))
-						&& (!(action.getContext() instanceof AcceptDiskUpdateAndReinjectInModel)))
-				{
-					SelectFilesPopup popup 
-					= new SelectFilesPopup(FlexoLocalization.localizedForKey("reinject_in_model"),
-							FlexoLocalization.localizedForKey("reinject_in_model_description"),
-							"reinject_in_model",
-							action.getFilesToReinjectInModel(),
-							action.getFocusedObject().getProject(),
-							getControllerActionInitializer().getSGController());
+				} else if ((action.getFilesToReinjectInModel().size() > 1 || (!(action.getFocusedObject() instanceof CGFile)))
+						&& (!(action.getContext() instanceof AcceptDiskUpdateAndReinjectInModel))) {
+					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("reinject_in_model"),
+							FlexoLocalization.localizedForKey("reinject_in_model_description"), "reinject_in_model",
+							action.getFilesToReinjectInModel(), action.getFocusedObject().getProject(), getControllerActionInitializer()
+									.getSGController());
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) 
-							&& (popup.getFileSet().getSelectedFiles().size() > 0)) {
+					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
 						action.setFilesToReinjectInModel(popup.getFileSet().getSelectedFiles());
-					}
-					else {
+					} else {
 						return false;
 					}
-				}
-				else {
+				} else {
 					// Continue without confirmation nor selection of files
 				}
 
@@ -108,7 +92,7 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 				for (AbstractCGFile f : action.getFilesToReinjectInModel()) {
 					if (f instanceof ModelReinjectableFile) {
 						if (f instanceof SGJavaFile) {
-							selectedJavaFiles.add((SGJavaFile)f);
+							selectedJavaFiles.add((SGJavaFile) f);
 						}
 					}
 				}
@@ -116,12 +100,12 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 				if (action.getAskReinjectionContext()) { // Interactive mode: ask context
 					ModelReinjectionPopup popup;
 					try {
-						popup = new ModelReinjectionPopup(
-								action.getLocalizedName(),
+						popup = new ModelReinjectionPopup(action.getLocalizedName(),
 								FlexoLocalization.localizedForKey("please_select_properties_and_methods_to_reinject_in_model"),
 								selectedJavaFiles, getProject(), getControllerActionInitializer().getSGController());
 						popup.setVisible(true);
-						if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
+						if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE)
+								&& (popup.getDMSet().getSelectedObjects().size() > 0)) {
 							action.setUpdatedSet(popup.getDMSet());
 							action.getProjectGenerator().startHandleLogs();
 							return true;
@@ -132,17 +116,17 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 						FlexoController.showError(e2.getLocalizedMessage());
 						return false;
 					}
-				}
-				else { // Non-interactive mode: build default context
-					// TODO build context in action, and use this in popup also
-					Hashtable<FJPJavaSource,DMEntity> entries = new Hashtable<FJPJavaSource,DMEntity>();
+				} else { // Non-interactive mode: build default context
+							// TODO build context in action, and use this in popup also
+					Hashtable<FJPJavaSource, DMEntity> entries = new Hashtable<FJPJavaSource, DMEntity>();
 					for (SGJavaFile javaFile : selectedJavaFiles) {
-						if (javaFile.getParsedJavaSource() != null)
-							entries.put(javaFile.getParsedJavaSource(),javaFile.getModelEntity());
+						if (javaFile.getParsedJavaSource() != null) {
+							entries.put(javaFile.getParsedJavaSource(), javaFile.getModelEntity());
+						}
 					}
-					FJPDMSet dmSet = new FJPDMSet(getProject(),"updated_classes",entries);
-					Hashtable<FJPJavaClass,Vector<String>> ignoredProperties = new Hashtable<FJPJavaClass,Vector<String>>();
-					Hashtable<FJPJavaClass,Vector<String>> ignoredMethods = new Hashtable<FJPJavaClass,Vector<String>>();
+					FJPDMSet dmSet = new FJPDMSet(getProject(), "updated_classes", entries);
+					Hashtable<FJPJavaClass, Vector<String>> ignoredProperties = new Hashtable<FJPJavaClass, Vector<String>>();
+					Hashtable<FJPJavaClass, Vector<String>> ignoredMethods = new Hashtable<FJPJavaClass, Vector<String>>();
 					for (SGJavaFile javaFile : selectedJavaFiles) {
 						if (javaFile.getParseException() != null) {
 							FlexoController.showError(javaFile.getParseException().getParseException().getLocalizedMessage());
@@ -164,12 +148,10 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ReinjectInModel> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ReinjectInModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectInModel action)
-			{
+			public boolean run(ActionEvent e, ReinjectInModel action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;
@@ -178,17 +160,16 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<ReinjectInModel> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<ReinjectInModel> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<ReinjectInModel>() {
 			@Override
 			public boolean handleException(FlexoException exception, ReinjectInModel action) {
 				getControllerActionInitializer().getSGController().disposeProgressWindow();
 				if (exception instanceof FJPTypeResolver.UnresolvedTypeException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("cannot_resolve") + " "
-							+ ((FJPTypeResolver.UnresolvedTypeException)exception).getUnresolvedType());
+							+ ((FJPTypeResolver.UnresolvedTypeException) exception).getUnresolvedType());
 					return true;
-				}                
+				}
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("file_reinjecting_failed") + ":\n"
 						+ exception.getLocalizedMessage());
@@ -197,16 +178,13 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.REINJECT_IN_MODEL_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.REINJECT_IN_MODEL_DISABLED_ICON;
 	}
 

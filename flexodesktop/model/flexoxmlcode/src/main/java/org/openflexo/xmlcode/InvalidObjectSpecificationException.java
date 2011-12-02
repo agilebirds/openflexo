@@ -22,39 +22,32 @@ package org.openflexo.xmlcode;
 
 /**
  * <p>
- * Exception thrown when trying to manipulate an object (coding, decoding)
- * invalid regarding an XML model.
+ * Exception thrown when trying to manipulate an object (coding, decoding) invalid regarding an XML model.
  * </p>
- * This exception is generally thrown when a field declared in model is missing,
- * or when a class doesn't exists. The 'message' (see {@link #getMessage()})
- * contains the error description.
+ * This exception is generally thrown when a field declared in model is missing, or when a class doesn't exists. The 'message' (see
+ * {@link #getMessage()}) contains the error description.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  * @see XMLCoder
  * @see XMLDecoder
  */
-public class InvalidObjectSpecificationException extends RuntimeException
-{
+public class InvalidObjectSpecificationException extends RuntimeException {
 
-    /**
-     * Creates a new <code>InvalidObjectSpecificationException</code>
-     * instance.
-     * 
-     */
-    public InvalidObjectSpecificationException()
-    {
-        super();
-    }
+	/**
+	 * Creates a new <code>InvalidObjectSpecificationException</code> instance.
+	 * 
+	 */
+	public InvalidObjectSpecificationException() {
+		super();
+	}
 
-    /**
-     * Creates a new <code>InvalidObjectSpecificationException</code> instance
-     * given a message <code>aMessage</code>
-     * 
-     * @param aMessage
-     *            a <code>String</code> value
-     */
-    public InvalidObjectSpecificationException(String aMessage)
-    {
-        super(aMessage);
-    }
+	/**
+	 * Creates a new <code>InvalidObjectSpecificationException</code> instance given a message <code>aMessage</code>
+	 * 
+	 * @param aMessage
+	 *            a <code>String</code> value
+	 */
+	public InvalidObjectSpecificationException(String aMessage) {
+		super(aMessage);
+	}
 }

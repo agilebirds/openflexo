@@ -21,11 +21,12 @@ package cb.petal;
 
 /**
  * Denote that a petal object has a SegLabel label
- *
+ * 
  * @version $Id: SegLabeled.java,v 1.2 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public interface SegLabeled {
-  public SegLabel getLabel();
-  public void setLabel(SegLabel o);
+	public SegLabel getLabel();
+
+	public void setLabel(SegLabel o);
 }

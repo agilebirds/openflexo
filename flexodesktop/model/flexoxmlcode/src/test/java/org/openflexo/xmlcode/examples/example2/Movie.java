@@ -25,46 +25,43 @@ import java.util.Vector;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * Class <code>Movie</code> is intented to represent a movie object in XML
- * coding/decoding example.
+ * Class <code>Movie</code> is intented to represent a movie object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Movie extends MultimediaArticle implements XMLSerializable
-{
+public class Movie extends MultimediaArticle implements XMLSerializable {
 
-    public String title;
+	public String title;
 
-    public String description;
+	public String description;
 
-    public Date dateReleased;
+	public Date dateReleased;
 
-    public Vector roles;
+	public Vector roles;
 
-    public String category;
+	public String category;
 
-    @Override
-	public String toString()
-    {
+	@Override
+	public String toString() {
 
-        String returnedString = "Movie (id=" + articleId + ", price=" + price + ", title=" + title + ", description=" + description + ", date=";
-        if (dateReleased != null) {
-            returnedString += dateReleased.toString();
-        } else {
-            returnedString += "null";
-        } // end of else
+		String returnedString = "Movie (id=" + articleId + ", price=" + price + ", title=" + title + ", description=" + description
+				+ ", date=";
+		if (dateReleased != null) {
+			returnedString += dateReleased.toString();
+		} else {
+			returnedString += "null";
+		} // end of else
 
-        returnedString += ", category=" + category + ") roles=(";
-        if (roles != null) {
-            for (int i = 0; i < roles.size(); i++) {
-                returnedString += " " + roles.elementAt(i).toString();
-            }
-        }
+		returnedString += ", category=" + category + ") roles=(";
+		if (roles != null) {
+			for (int i = 0; i < roles.size(); i++) {
+				returnedString += " " + roles.elementAt(i).toString();
+			}
+		}
 
-        returnedString += ")";
-        return returnedString;
-    }
+		returnedString += ")";
+		return returnedString;
+	}
 
 }

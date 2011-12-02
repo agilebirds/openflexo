@@ -23,23 +23,20 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.view.DrawingView;
 
-
 public class EditionPatterPreviewDrawingView extends DrawingView<EditionPatternPreviewRepresentation> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(EditionPatterPreviewDrawingView.class.getPackage().getName());
 
-	public EditionPatterPreviewDrawingView(EditionPatternPreviewRepresentation aDrawing,EditionPatternPreviewController controller)
-	{
-		super(aDrawing,controller);
+	public EditionPatterPreviewDrawingView(EditionPatternPreviewRepresentation aDrawing, EditionPatternPreviewController controller) {
+		super(aDrawing, controller);
 	}
 
 	@Override
-	public EditionPatternPreviewController getController() 
-	{
-		return (EditionPatternPreviewController)super.getController();
+	public EditionPatternPreviewController getController() {
+		return (EditionPatternPreviewController) super.getController();
 	}
-	
+
 	/*@Override
 	public Dimension getPreferredSize()
 	{

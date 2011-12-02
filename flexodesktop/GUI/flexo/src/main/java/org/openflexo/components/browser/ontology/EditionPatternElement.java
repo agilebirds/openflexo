@@ -24,35 +24,29 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 
-
 /**
  * Browser element representing pattern element
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class EditionPatternElement extends BrowserElement
-{
+public class EditionPatternElement extends BrowserElement {
 
-    protected EditionPatternElement(EditionPattern ep, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(ep, BrowserElementType.EDITION_PATTERN, browser, parent);
-    }
+	protected EditionPatternElement(EditionPattern ep, ProjectBrowser browser, BrowserElement parent) {
+		super(ep, BrowserElementType.EDITION_PATTERN, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    }
+	@Override
+	protected void buildChildrenVector() {
+	}
 
-    @Override
-	public String getName()
-    {
-        return getEditionPattern().getName();
-    }
+	@Override
+	public String getName() {
+		return getEditionPattern().getName();
+	}
 
-    protected EditionPattern getEditionPattern()
-    {
-        return (EditionPattern) getObject();
-    }
+	protected EditionPattern getEditionPattern() {
+		return (EditionPattern) getObject();
+	}
 
 }

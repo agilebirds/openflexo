@@ -39,105 +39,104 @@ import org.openflexo.localization.FlexoLocalization;
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class IEFileUploadWidgetView extends AbstractInnerTableWidgetView<IEFileUploadWidget>
-{
+public class IEFileUploadWidgetView extends AbstractInnerTableWidgetView<IEFileUploadWidget> {
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
-    private JTextField _jText;
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
+	private JTextField _jText;
 
-    private JButton _browseButton;
-    
-    private JPanel container;
+	private JButton _browseButton;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	private JPanel container;
 
-    public IEFileUploadWidgetView(IEController ieController, IEFileUploadWidget model, boolean addDnDSupport, IEWOComponentView view)
-    {
-        super(ieController, model, addDnDSupport,view);
-        // _model = model;
-        FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
-        // layout.setVgap(2);
-        setLayout(layout);
-        _jText = new JTextField("filename.txt");
-        _jText.setEnabled(false);
-        _jText.setFont(IECst.WOSTRING_FONT);
-        // _jLabel.setAlignmentY(0.5f);
-        TransparentMouseListener tml = new TransparentMouseListener(_jText, this);
-        _jText.addMouseListener(tml);
-        _jText.addMouseMotionListener(tml);
-        if (getFileUploadModel().getTooltip() != null) {
-            _jText.setToolTipText(getFileUploadModel().getTooltip());
-        }
-        _browseButton = new JButton();
-        _browseButton.setText(FlexoLocalization.localizedForKey("browse", _browseButton));
-        _browseButton.setEnabled(false);
-        _browseButton.setOpaque(false);
-        tml = new TransparentMouseListener(_browseButton, this);
-        _browseButton.addMouseListener(tml);
-        _browseButton.addMouseMotionListener(tml);
-        container = new JPanel(new FlowLayout(FlowLayout.CENTER,4,4));
-        container.add(_jText);
-        container.add(_browseButton);
-        container.setOpaque(false);
-        add(container);
-        _browseButton.setBackground(getBackgroundColor());
-        setBackground(getBackgroundColor());
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IEFileUploadWidget getFileUploadModel()
-    {
-        return getModel();
-    }
+	public IEFileUploadWidgetView(IEController ieController, IEFileUploadWidget model, boolean addDnDSupport, IEWOComponentView view) {
+		super(ieController, model, addDnDSupport, view);
+		// _model = model;
+		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
+		// layout.setVgap(2);
+		setLayout(layout);
+		_jText = new JTextField("filename.txt");
+		_jText.setEnabled(false);
+		_jText.setFont(IECst.WOSTRING_FONT);
+		// _jLabel.setAlignmentY(0.5f);
+		TransparentMouseListener tml = new TransparentMouseListener(_jText, this);
+		_jText.addMouseListener(tml);
+		_jText.addMouseMotionListener(tml);
+		if (getFileUploadModel().getTooltip() != null) {
+			_jText.setToolTipText(getFileUploadModel().getTooltip());
+		}
+		_browseButton = new JButton();
+		_browseButton.setText(FlexoLocalization.localizedForKey("browse", _browseButton));
+		_browseButton.setEnabled(false);
+		_browseButton.setOpaque(false);
+		tml = new TransparentMouseListener(_browseButton, this);
+		_browseButton.addMouseListener(tml);
+		_browseButton.addMouseMotionListener(tml);
+		container = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 4));
+		container.add(_jText);
+		container.add(_browseButton);
+		container.setOpaque(false);
+		add(container);
+		_browseButton.setBackground(getBackgroundColor());
+		setBackground(getBackgroundColor());
+	}
 
-    // ==========================================================================
-    // ============================= Observer
-    // ===================================
-    // ==========================================================================
+	public IEFileUploadWidget getFileUploadModel() {
+		return getModel();
+	}
 
-    /**
-     * Overrides getPreferredSize
-     * @see javax.swing.JComponent#getPreferredSize()
-     */
-    @Override
-    public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null)return storedSize;
-        }
-        Dimension d = super.getPreferredSize();
-        if (getHoldsNextComputedPreferredSize())
-            storePrefSize(d);
-        return d;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-     */
-    @Override
-	public void update(FlexoObservable arg0, DataModification modif)
-    {
-        if (modif.modificationType() == DataModification.ATTRIBUTE) {
-            if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-                getParent().doLayout();
-                ((JComponent) getParent()).repaint();
-            }
-        }
-        if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
-            delete();
-        } else
-            super.update(arg0, modif);
-    }
+	// ==========================================================================
+	// ============================= Observer
+	// ===================================
+	// ==========================================================================
+
+	/**
+	 * Overrides getPreferredSize
+	 * 
+	 * @see javax.swing.JComponent#getPreferredSize()
+	 */
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null) {
+				return storedSize;
+			}
+		}
+		Dimension d = super.getPreferredSize();
+		if (getHoldsNextComputedPreferredSize()) {
+			storePrefSize(d);
+		}
+		return d;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	@Override
+	public void update(FlexoObservable arg0, DataModification modif) {
+		if (modif.modificationType() == DataModification.ATTRIBUTE) {
+			if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
+				getParent().doLayout();
+				((JComponent) getParent()).repaint();
+			}
+		}
+		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
+			delete();
+		} else {
+			super.update(arg0, modif);
+		}
+	}
 
 }

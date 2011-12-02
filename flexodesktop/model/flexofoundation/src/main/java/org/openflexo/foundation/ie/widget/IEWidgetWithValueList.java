@@ -23,20 +23,20 @@ import java.util.List;
 
 import org.openflexo.foundation.wkf.FlexoProcess;
 
-
-public interface IEWidgetWithValueList
-{
+public interface IEWidgetWithValueList {
 	/**
 	 * Returns the value list to be used as samples for this widget.<br>
 	 * Works as getValueList(null);
+	 * 
 	 * @return the value list to be used as samples for this widget.
 	 */
 	public List<Object> getValueList();
-	
+
 	/**
 	 * Returns the value list to be used as samples for this widget with this specific process.
 	 * 
-	 * @param process: can be null
+	 * @param process
+	 *            : can be null
 	 * @return the value list to be used as samples for this widget with this specific process.
 	 */
 	public List<Object> getValueList(FlexoProcess process);

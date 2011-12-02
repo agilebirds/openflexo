@@ -39,94 +39,89 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class AddKeyAction extends FlexoUndoableAction<AddKeyAction,DKVObject,DKVObject>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(AddKeyAction.class.getPackage().getName());
+public class AddKeyAction extends FlexoUndoableAction<AddKeyAction, DKVObject, DKVObject> {
+	protected static final Logger logger = FlexoLogger.getLogger(AddKeyAction.class.getPackage().getName());
 
-    public static FlexoActionType<AddKeyAction,DKVObject,DKVObject> actionType = new FlexoActionType<AddKeyAction,DKVObject,DKVObject>("add_key", FlexoActionType.newMenu, FlexoActionType.defaultGroup,
-            FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddKeyAction, DKVObject, DKVObject> actionType = new FlexoActionType<AddKeyAction, DKVObject, DKVObject>(
+			"add_key", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddKeyAction makeNewAction(DKVObject focusedObject, Vector globalSelection, FlexoEditor editor)
-        {
-            return new AddKeyAction(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddKeyAction makeNewAction(DKVObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new AddKeyAction(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector globalSelection)
-        {
-            return object instanceof Domain || object instanceof Domain.KeyList;
-        }
-        
-        private String[] persistentProperties = {"keyName","keyDescription","domain","values"};
-        
-        @Override
-		protected String[] getPersistentProperties(){
-        	return persistentProperties;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
+			return object instanceof Domain || object instanceof Domain.KeyList;
+		}
 
-    };
+		private String[] persistentProperties = { "keyName", "keyDescription", "domain", "values" };
 
-    private Key newKey;
-    private Domain _domain;
-    private String _keyName;
-    private String _keyDescription;
-    private Hashtable<Language,String> _valuesForLanguage;
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    public AddKeyAction(DKVObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-        _valuesForLanguage = new Hashtable<Language,String>();
-    }
+		@Override
+		protected String[] getPersistentProperties() {
+			return persistentProperties;
+		}
 
-    public void setValueForLanguage (String value, Language language)
-    {
-        _valuesForLanguage.put(language, value);
-    }
-    
-    public Hashtable values(){
-    	return _valuesForLanguage;
-    }
-    
-    public void setValues(Hashtable t){
-    	_valuesForLanguage = t;
-    }
-    /**
-     * Overrides doAction
-     * 
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        newKey = getDomain().addKeyNamed(getKeyName());
-        Enumeration en = getDomain().getDkvModel().getLanguageList().getLanguages().elements();
-        Language lg = null;
-        while (en.hasMoreElements()) {
-            lg = (Language) en.nextElement();
-            getDomain().getValue(newKey, lg).setValue(_valuesForLanguage.get(lg));
-        }
-        newKey.setDescription(getKeyDescription());
-        objectCreated("NEW_KEY", newKey);
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Key added in DKV");
-    }
+	};
 
-    @Override
+	private Key newKey;
+	private Domain _domain;
+	private String _keyName;
+	private String _keyDescription;
+	private Hashtable<Language, String> _valuesForLanguage;
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	public AddKeyAction(DKVObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+		_valuesForLanguage = new Hashtable<Language, String>();
+	}
+
+	public void setValueForLanguage(String value, Language language) {
+		_valuesForLanguage.put(language, value);
+	}
+
+	public Hashtable values() {
+		return _valuesForLanguage;
+	}
+
+	public void setValues(Hashtable t) {
+		_valuesForLanguage = t;
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		newKey = getDomain().addKeyNamed(getKeyName());
+		Enumeration en = getDomain().getDkvModel().getLanguageList().getLanguages().elements();
+		Language lg = null;
+		while (en.hasMoreElements()) {
+			lg = (Language) en.nextElement();
+			getDomain().getValue(newKey, lg).setValue(_valuesForLanguage.get(lg));
+		}
+		newKey.setDescription(getKeyDescription());
+		objectCreated("NEW_KEY", newKey);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Key added in DKV");
+		}
+	}
+
+	@Override
 	protected void redoAction(Object context) throws FlexoException {
 		doAction(context);
 	}
@@ -135,42 +130,33 @@ public class AddKeyAction extends FlexoUndoableAction<AddKeyAction,DKVObject,DKV
 	protected void undoAction(Object context) throws FlexoException {
 		getNewKey().delete();
 	}
-	
-    public Key getNewKey()
-    {
-        return newKey;
-    }
 
-    public Domain getDomain() 
-    {
-        return _domain;
-    }
+	public Key getNewKey() {
+		return newKey;
+	}
 
-    public void setDomain(Domain domain) 
-    {
-        _domain = domain;
-    }
+	public Domain getDomain() {
+		return _domain;
+	}
 
-    public String getKeyDescription() 
-    {
-        return _keyDescription;
-    }
+	public void setDomain(Domain domain) {
+		_domain = domain;
+	}
 
-    public void setKeyDescription(String keyDescription) 
-    {
-        _keyDescription = keyDescription;
-    }
+	public String getKeyDescription() {
+		return _keyDescription;
+	}
 
-    public String getKeyName() 
-    {
-        return _keyName;
-    }
+	public void setKeyDescription(String keyDescription) {
+		_keyDescription = keyDescription;
+	}
 
-    public void setKeyName(String keyName) 
-    {
-        _keyName = keyName;
-    }
+	public String getKeyName() {
+		return _keyName;
+	}
 
-    
-	
+	public void setKeyName(String keyName) {
+		_keyName = keyName;
+	}
+
 }

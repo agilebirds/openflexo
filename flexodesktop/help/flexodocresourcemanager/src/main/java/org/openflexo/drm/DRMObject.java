@@ -30,178 +30,154 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 public abstract class DRMObject extends FlexoModelObject implements Validable {
 
-    protected DocResourceCenter _docResourceCenter;
-    
-    public DRMObject (DocResourceCenter docResourceCenter)
-    {
-        super();
-        _docResourceCenter = docResourceCenter;
-    }
-    
-    public DocResourceCenter getDocResourceCenter()
-    {
-        return _docResourceCenter;
-    }
-    
-    @Override
-	public FlexoProject getProject() 
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	protected DocResourceCenter _docResourceCenter;
 
-    @Override
+	public DRMObject(DocResourceCenter docResourceCenter) {
+		super();
+		_docResourceCenter = docResourceCenter;
+	}
+
+	public DocResourceCenter getDocResourceCenter() {
+		return _docResourceCenter;
+	}
+
+	@Override
+	public FlexoProject getProject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public String getFullyQualifiedName() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
+	@Override
 	public XMLMapping getXMLMapping() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-	public XMLStorageResourceData getXMLResourceData() 
-    {
-        return getDocResourceCenter();
-    }
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return getDocResourceCenter();
+	}
 
-    // ==========================================================================
-    // ========================= Validable interface
-    // ============================
-    // ==========================================================================
+	// ==========================================================================
+	// ========================= Validable interface
+	// ============================
+	// ==========================================================================
 
-    /**
-     * Return default validation model for this object
-     * 
-     * @return
-     */
-    @Override
-	public ValidationModel getDefaultValidationModel()
-    {
-        return DocResourceManager.instance().getDRMValidationModel();
-    }
+	/**
+	 * Return default validation model for this object
+	 * 
+	 * @return
+	 */
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		return DocResourceManager.instance().getDRMValidationModel();
+	}
 
-    /**
-     * Returns a flag indicating if this object is valid according to default
-     * validation model
-     * 
-     * @return boolean
-     */
-    @Override
-	public boolean isValid()
-    {
-        return isValid(getDefaultValidationModel());
-    }
+	/**
+	 * Returns a flag indicating if this object is valid according to default validation model
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isValid() {
+		return isValid(getDefaultValidationModel());
+	}
 
-    /**
-     * Returns a flag indicating if this object is valid according to specified
-     * validation model
-     * 
-     * @return boolean
-     */
-    @Override
-	public boolean isValid(ValidationModel validationModel)
-    {
-        return validationModel.isValid(this);
-    }
+	/**
+	 * Returns a flag indicating if this object is valid according to specified validation model
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isValid(ValidationModel validationModel) {
+		return validationModel.isValid(this);
+	}
 
-    /**
-     * Validates this object by building new ValidationReport object Default
-     * validation model is used to perform this validation.
-     */
-    @Override
-	public ValidationReport validate()
-    {
-        return validate(getDefaultValidationModel());
-    }
+	/**
+	 * Validates this object by building new ValidationReport object Default validation model is used to perform this validation.
+	 */
+	@Override
+	public ValidationReport validate() {
+		return validate(getDefaultValidationModel());
+	}
 
-    /**
-     * Validates this object by building new ValidationReport object Supplied
-     * validation model is used to perform this validation.
-     */
-    @Override
-	public ValidationReport validate(ValidationModel validationModel)
-    {
-        return validationModel.validate(this);
-    }
+	/**
+	 * Validates this object by building new ValidationReport object Supplied validation model is used to perform this validation.
+	 */
+	@Override
+	public ValidationReport validate(ValidationModel validationModel) {
+		return validationModel.validate(this);
+	}
 
-    /**
-     * Validates this object by appending eventual issues to supplied
-     * ValidationReport. Default validation model is used to perform this
-     * validation.
-     * 
-     * @param report,
-     *            a ValidationReport object on which found issues are appened
-     */
-    @Override
-	public void validate(ValidationReport report)
-    {
-        validate(report, getDefaultValidationModel());
-    }
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	@Override
+	public void validate(ValidationReport report) {
+		validate(report, getDefaultValidationModel());
+	}
 
-    /**
-     * Validates this object by appending eventual issues to supplied
-     * ValidationReport. Supplied validation model is used to perform this
-     * validation.
-     * 
-     * @param report,
-     *            a ValidationReport object on which found issues are appened
-     */
-    @Override
-	public void validate(ValidationReport report, ValidationModel validationModel)
-    {
-        validationModel.validate(this, report);
-    }
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	@Override
+	public void validate(ValidationReport report, ValidationModel validationModel) {
+		validationModel.validate(this, report);
+	}
 
-    /**
-     * Return a vector of all embedded objects on which the validation will be
-     * performed
-     * 
-     * @return a Vector of Validable objects
-     */
-    @Override
-	public Vector<Validable> getAllEmbeddedValidableObjects()
-    {
-        Vector<Validable> returned = new Vector<Validable>();
-        returned.add(this);
-        if (getEmbeddedValidableObjects() != null) {
-            for (Enumeration en=getEmbeddedValidableObjects().elements(); en.hasMoreElements();) {
-                DRMObject next = (DRMObject)en.nextElement();
-                returned.addAll(next.getAllEmbeddedValidableObjects());
-            }
-        }
-        return returned;
-    }
+	/**
+	 * Return a vector of all embedded objects on which the validation will be performed
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	@Override
+	public Vector<Validable> getAllEmbeddedValidableObjects() {
+		Vector<Validable> returned = new Vector<Validable>();
+		returned.add(this);
+		if (getEmbeddedValidableObjects() != null) {
+			for (Enumeration en = getEmbeddedValidableObjects().elements(); en.hasMoreElements();) {
+				DRMObject next = (DRMObject) en.nextElement();
+				returned.addAll(next.getAllEmbeddedValidableObjects());
+			}
+		}
+		return returned;
+	}
 
-    /**
-     * Return a vector of all embedded objects at this level
-     * does NOT include itself
-     * 
-     * @return a Vector of Validable objects
-     */
-    /**
-     * Return a vector of all embedded objects at this level
-     * does NOT include itself
-     * 
-     * @return a Vector of Validable objects
-     */
-    public Vector getEmbeddedValidableObjects()
-    {
-        return null;
-    }
+	/**
+	 * Return a vector of all embedded objects at this level does NOT include itself
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	/**
+	 * Return a vector of all embedded objects at this level does NOT include itself
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	public Vector getEmbeddedValidableObjects() {
+		return null;
+	}
 
-    @Override
-	public String getSerializationIdentifier()
-    {
-        return getIdentifier();
-    }
-    
-    public abstract String getIdentifier();
+	@Override
+	public String getSerializationIdentifier() {
+		return getIdentifier();
+	}
+
+	public abstract String getIdentifier();
 
 }

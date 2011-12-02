@@ -26,29 +26,39 @@ import javax.swing.JFileChooser;
 
 public class FIBFile extends FIBWidget {
 
-	public static enum  FileMode
-	{
-		OpenMode { @Override
-		public int getMode() { return JFileChooser.OPEN_DIALOG; } },
-		SaveMode { @Override
-		public int getMode() { return JFileChooser.SAVE_DIALOG; } };
+	public static enum FileMode {
+		OpenMode {
+			@Override
+			public int getMode() {
+				return JFileChooser.OPEN_DIALOG;
+			}
+		},
+		SaveMode {
+			@Override
+			public int getMode() {
+				return JFileChooser.SAVE_DIALOG;
+			}
+		};
 		public abstract int getMode();
 	}
-	
+
 	public FileMode mode;
 	public String filter;
 	public String title;
 	public boolean isDirectory = false;
 	public File defaultDirectory;
 	public Integer columns;
-	
- 	public FIBFile() 
-	{
+
+	public FIBFile() {
 	}
-	
+
 	@Override
-	public Type getDefaultDataClass() 
-	{
+	protected String getBaseName() {
+		return "FileSelector";
+	}
+
+	@Override
+	public Type getDefaultDataClass() {
 		return File.class;
 	}
 }

@@ -21,11 +21,9 @@ package org.openflexo.generator.exception;
 
 import org.openflexo.generator.AbstractProjectGenerator;
 
-
 public class UnsupportedPageParameterTypeException extends GenerationException {
 
-	public UnsupportedPageParameterTypeException(String s, AbstractProjectGenerator projectGenerator)
-	{
+	public UnsupportedPageParameterTypeException(String s, AbstractProjectGenerator projectGenerator) {
 		super(s);
 	}
 }

@@ -23,50 +23,47 @@ import java.io.IOException;
 
 import org.openflexo.toolbox.WinRegistryAccess.ConsoleReader;
 
-
 /**
  * @author gpolet
  * 
  */
-public class WindowsCommandRetriever
-{
-    /**
-     * 
-     * @param extension
-     *            the file extension (with or without the preceding '.')
-     * @return the command to execute for the specified <code>extension</code>
-     *         or null if there are no associated command
-     */
-    public static String commandForExtension(String extension)
-    {
-    	String regKey = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\"+extension;
-    	String mimeType = WinRegistryAccess.getRegistryValue(regKey, "ProgID", WinRegistryAccess.REG_SZ_TOKEN);
-    	if (mimeType==null) {
-	        StringBuilder sb = new StringBuilder("cmd /C assoc ");
-	        sb.append((extension.startsWith(".")?extension:("."+extension)));
-	        
-	        ConsoleReader reader;
-	        try {
-	            Process process = Runtime.getRuntime().exec(sb.toString());
-	            reader = new ConsoleReader(process.getInputStream());
-	            reader.start();
-	            process.waitFor();
-	            reader.join();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            return null;
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	            return null;
-	        }
-	        String result = reader.getResult();
-	        if (result.indexOf("=")>-1) {
-	            mimeType = result.substring(result.indexOf("=")+1).trim();
-	        }
-    	}
-    	if (mimeType==null)
-    		return null;
-        String path = "HKEY_CLASSES_ROOT\\"+mimeType+"\\shell\\open\\command";
-        return WinRegistryAccess.getRegistryValue(path, null, WinRegistryAccess.REG_SZ_TOKEN);
-    }
+public class WindowsCommandRetriever {
+	/**
+	 * 
+	 * @param extension
+	 *            the file extension (with or without the preceding '.')
+	 * @return the command to execute for the specified <code>extension</code> or null if there are no associated command
+	 */
+	public static String commandForExtension(String extension) {
+		String regKey = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\" + extension;
+		String mimeType = WinRegistryAccess.getRegistryValue(regKey, "ProgID", WinRegistryAccess.REG_SZ_TOKEN);
+		if (mimeType == null) {
+			StringBuilder sb = new StringBuilder("cmd /C assoc ");
+			sb.append((extension.startsWith(".") ? extension : ("." + extension)));
+
+			ConsoleReader reader;
+			try {
+				Process process = Runtime.getRuntime().exec(sb.toString());
+				reader = new ConsoleReader(process.getInputStream());
+				reader.start();
+				process.waitFor();
+				reader.join();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				return null;
+			}
+			String result = reader.getResult();
+			if (result.indexOf("=") > -1) {
+				mimeType = result.substring(result.indexOf("=") + 1).trim();
+			}
+		}
+		if (mimeType == null) {
+			return null;
+		}
+		String path = "HKEY_CLASSES_ROOT\\" + mimeType + "\\shell\\open\\command";
+		return WinRegistryAccess.getRegistryValue(path, null, WinRegistryAccess.REG_SZ_TOKEN);
+	}
 }

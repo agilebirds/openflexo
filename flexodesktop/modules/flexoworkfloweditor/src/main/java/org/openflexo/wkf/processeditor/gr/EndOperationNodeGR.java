@@ -30,7 +30,6 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
-
 public class EndOperationNodeGR extends AbstractOperationNodeGR {
 
 	private ForegroundStyle foreground;
@@ -39,9 +38,7 @@ public class EndOperationNodeGR extends AbstractOperationNodeGR {
 	private ForegroundStyle painterForeground;
 	private BackgroundStyle painterBackground;
 
-
-	public EndOperationNodeGR(OperationNode operationNode, ProcessRepresentation aDrawing, boolean isInPalet)
-	{
+	public EndOperationNodeGR(OperationNode operationNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operationNode, ShapeType.CIRCLE, aDrawing, isInPalet);
 
 		// Important: width is different from height here to avoid connector blinking when editing layout
@@ -64,8 +61,7 @@ public class EndOperationNodeGR extends AbstractOperationNodeGR {
 
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
+			public void paintShape(FGEShapeGraphics g) {
 				g.useBackgroundStyle(painterBackground);
 				g.fillCircle(0.2, 0.2, 0.6, 0.6);
 			}
@@ -76,8 +72,7 @@ public class EndOperationNodeGR extends AbstractOperationNodeGR {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultX()
-	{
+	public double _getDefaultX() {
 		return 300;
 	}
 
@@ -85,27 +80,24 @@ public class EndOperationNodeGR extends AbstractOperationNodeGR {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultY()
-	{
-		return (getOperationNode().getParentPetriGraph().getIndexForEndNode(getOperationNode()) * 50)+DEFAULT_BEGIN_Y_OFFSET;
+	public double _getDefaultY() {
+		return (getOperationNode().getParentPetriGraph().getIndexForEndNode(getOperationNode()) * 50) + DEFAULT_BEGIN_Y_OFFSET;
 	}
 
 	@Override
-	public double getDefaultLabelX() 
-	{
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+	public double getDefaultLabelX() {
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getX();
-		return getLeftBorder()+15;
+		}
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY() 
-	{
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+	public double getDefaultLabelY() {
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getY();
-		return getTopBorder()+40;
+		}
+		return getTopBorder() + 40;
 	}
-
-
 
 }

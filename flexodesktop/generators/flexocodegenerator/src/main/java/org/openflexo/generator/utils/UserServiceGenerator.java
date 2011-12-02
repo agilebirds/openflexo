@@ -27,39 +27,36 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class UserServiceGenerator extends JavaClassGenerator
-{
-    private static final String TEMPLATE_NAME = "UserServiceImplementation.java.vm";
+public class UserServiceGenerator extends JavaClassGenerator {
+	private static final String TEMPLATE_NAME = "UserServiceImplementation.java.vm";
 	private static final Logger logger = FlexoLogger.getLogger(WOApplicationGenerator.class.getPackage().getName());
 
-    /**
-     * @param projectGenerator
-     */
-    public UserServiceGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,projectGenerator.getPrefix()+"UserServiceImpl","");
-    }
+	/**
+	 * @param projectGenerator
+	 */
+	public UserServiceGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, projectGenerator.getPrefix() + "UserServiceImpl", "");
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	/**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-        
-    }
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
 
-    @Override
-    public String getTemplateName() {
-    	return TEMPLATE_NAME;
-    }
+	}
+
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 }

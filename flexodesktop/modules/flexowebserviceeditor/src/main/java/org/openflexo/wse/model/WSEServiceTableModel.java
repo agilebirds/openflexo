@@ -24,12 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wse.controller.WSEController;
-
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -39,6 +33,9 @@ import org.openflexo.foundation.ws.DuplicateWSObjectException;
 import org.openflexo.foundation.ws.ExternalWSService;
 import org.openflexo.foundation.ws.WSFolder;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * table model for a service.
@@ -46,116 +43,105 @@ import org.openflexo.foundation.ws.WSService;
  * @author dvanvyve
  * 
  */
-public class WSEServiceTableModel extends AbstractModel<WSFolder,WSService>
-{
+public class WSEServiceTableModel extends AbstractModel<WSFolder, WSService> {
 
-    protected static final Logger logger = Logger.getLogger(WSEServiceTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSEServiceTableModel.class.getPackage().getName());
 
-    public WSEServiceTableModel(WSFolder folder, FlexoProject project, boolean readOnly)
-    {
-        super(folder, project);
-        addToColumns(new IconColumn<WSService>("ws_service_icon", 30) {
-            @Override
-			public Icon getIcon(WSService object)
-            {
-                if(object instanceof ExternalWSService)
-            		return WSEIconLibrary.EXTERNAL_WS_SERVICE_ICON;
-                else return WSEIconLibrary.INTERNAL_WS_SERVICE_ICON;
-            }
-            
-            @Override
-			public String getLocalizedTooltip(WSService object) {
-            	if (object instanceof ExternalWSService)
-					return FlexoLocalization.localizedForKey("external_ws");
-				else
-					return FlexoLocalization.localizedForKey("internal_ws");
+	public WSEServiceTableModel(WSFolder folder, FlexoProject project, boolean readOnly) {
+		super(folder, project);
+		addToColumns(new IconColumn<WSService>("ws_service_icon", 30) {
+			@Override
+			public Icon getIcon(WSService object) {
+				if (object instanceof ExternalWSService) {
+					return WSEIconLibrary.EXTERNAL_WS_SERVICE_ICON;
+				} else {
+					return WSEIconLibrary.INTERNAL_WS_SERVICE_ICON;
+				}
 			}
-        });
 
-         if(readOnly){
-             addToColumns(new StringColumn<WSService>("name", 300) {
-                 @Override
-				public String getValue(WSService object)
-                 {
-                     return (object).getLocalizedName();
-                 }
-             });
-             addToColumns(new StringColumn<WSService>("description", 570) {
-             @Override
-			public String getValue(WSService object)
-             {
-                 return (object).getDescription();
-             }
-         });
-         
-         }
-         else {
-             addToColumns(new EditableStringColumn<WSService>("name", 300) {
-                 @Override
-				public String getValue(WSService object)
-                 {
-                     return (object).getLocalizedName();
-                 }
-                 @Override
-				public void setValue(WSService object, String aValue)
-                 {
-                     try {
-                         (object).setName(aValue);
-                     } catch (DuplicateWSObjectException e) {
-                         FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
-                     }
-                     selectObject(object);
-                 }
-             });
-             addToColumns(new EditableStringColumn<WSService>("description", 570) {
-                 @Override
-				public String getValue(WSService object)
-                 {
-                     return (object).getDescription();
-                 }
-                 @Override
-				public void setValue(WSService object, String aValue)
-                 {
-                     (object).setDescription(aValue);
-                 }
-             });
-         }
-        setRowHeight(20);
-    }
+			@Override
+			public String getLocalizedTooltip(WSService object) {
+				if (object instanceof ExternalWSService) {
+					return FlexoLocalization.localizedForKey("external_ws");
+				} else {
+					return FlexoLocalization.localizedForKey("internal_ws");
+				}
+			}
+		});
 
-    public WSFolder getWSFolder()
-    {
-        return getModel();
-    }
-    
-    public Vector getWSServices()
-    {	
-        return getWSFolder().getWSServices();
-    }
-    
-    
-    @Override
-	public WSService elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return (WSService) getWSServices().get(row);
-         } else {
-            return null;
-        }
-    }
+		if (readOnly) {
+			addToColumns(new StringColumn<WSService>("name", 300) {
+				@Override
+				public String getValue(WSService object) {
+					return (object).getLocalizedName();
+				}
+			});
+			addToColumns(new StringColumn<WSService>("description", 570) {
+				@Override
+				public String getValue(WSService object) {
+					return (object).getDescription();
+				}
+			});
 
-    public WSService serviceAt(int row)
-    {
-        return elementAt(row);
-    }
+		} else {
+			addToColumns(new EditableStringColumn<WSService>("name", 300) {
+				@Override
+				public String getValue(WSService object) {
+					return (object).getLocalizedName();
+				}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getWSFolder() != null) {
-            return getWSServices().size();
-        }
-        return 0;
-    }
+				@Override
+				public void setValue(WSService object, String aValue) {
+					try {
+						(object).setName(aValue);
+					} catch (DuplicateWSObjectException e) {
+						FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
+					}
+					selectObject(object);
+				}
+			});
+			addToColumns(new EditableStringColumn<WSService>("description", 570) {
+				@Override
+				public String getValue(WSService object) {
+					return (object).getDescription();
+				}
+
+				@Override
+				public void setValue(WSService object, String aValue) {
+					(object).setDescription(aValue);
+				}
+			});
+		}
+		setRowHeight(20);
+	}
+
+	public WSFolder getWSFolder() {
+		return getModel();
+	}
+
+	public Vector getWSServices() {
+		return getWSFolder().getWSServices();
+	}
+
+	@Override
+	public WSService elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return (WSService) getWSServices().get(row);
+		} else {
+			return null;
+		}
+	}
+
+	public WSService serviceAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getWSFolder() != null) {
+			return getWSServices().size();
+		}
+		return 0;
+	}
 
 }

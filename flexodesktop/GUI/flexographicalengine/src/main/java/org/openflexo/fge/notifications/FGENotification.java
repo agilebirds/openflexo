@@ -23,23 +23,21 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.inspector.InspectableModification;
 
-
-public class FGENotification implements InspectableModification
-{
+public class FGENotification implements InspectableModification {
 	public GRParameter parameter;
 	public Object oldValue;
 	public Object newValue;
-	
+
 	@Deprecated
 	private String parameterName;
-	
+
 	public FGENotification(GRParameter parameter, Object oldValue, Object newValue) {
 		super();
 		this.parameter = parameter;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
 	}
-		
+
 	@Deprecated
 	public FGENotification(String parameterName, Object oldValue, Object newValue) {
 		super();
@@ -48,41 +46,39 @@ public class FGENotification implements InspectableModification
 		this.oldValue = oldValue;
 		this.newValue = newValue;
 	}
-		
+
 	@Override
-	public String toString()
-	{
-		return "FGENotification of "+getClass().getSimpleName()+" "+getParameter()+" old: "+oldValue+" new: "+newValue;
+	public String toString() {
+		return "FGENotification of " + getClass().getSimpleName() + " " + getParameter() + " old: " + oldValue + " new: " + newValue;
 	}
-	
-	public GRParameter getParameter()
-	{
+
+	public GRParameter getParameter() {
 		return parameter;
 	}
-	
-    @Override
-	public String propertyName()
-    {
-    	if (parameter == null) return parameterName;
-    	return parameter.name();
-    }
 
-    @Override
-	public Object newValue()
-    {
-    	return newValue;
-    }
+	@Override
+	public String propertyName() {
+		if (parameter == null) {
+			return parameterName;
+		}
+		return parameter.name();
+	}
 
-    @Override
-	public boolean isReentrant() 
-    {
-    	return false;
-    }
+	@Override
+	public Object newValue() {
+		return newValue;
+	}
 
-    public boolean isModelNotification()
-    {
-    	if (parameter == null) return false;
-    	return !parameter.equals(GraphicalRepresentation.Parameters.isSelected)
-    			&& !parameter.equals(GraphicalRepresentation.Parameters.isFocused);
-    }
+	@Override
+	public boolean isReentrant() {
+		return false;
+	}
+
+	public boolean isModelNotification() {
+		if (parameter == null) {
+			return false;
+		}
+		return !parameter.equals(GraphicalRepresentation.Parameters.isSelected)
+				&& !parameter.equals(GraphicalRepresentation.Parameters.isFocused);
+	}
 }

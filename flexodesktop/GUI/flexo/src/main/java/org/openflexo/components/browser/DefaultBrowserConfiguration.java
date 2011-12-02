@@ -23,55 +23,46 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
-
-
 public class DefaultBrowserConfiguration implements BrowserConfiguration {
 
-	public static interface ObjectVisibilityDelegate
-	{
+	public static interface ObjectVisibilityDelegate {
 		public BrowserFilterStatus getVisibility(BrowserElementType elementType);
 	}
-	
+
 	private FlexoModelObject _rootObject;
 	private ObjectVisibilityDelegate _visibilityDelegate;
-	
-    public DefaultBrowserConfiguration(FlexoModelObject rootObject, ObjectVisibilityDelegate visibilityDelegate)
-    {
-    	_rootObject = rootObject;
-    	_visibilityDelegate = visibilityDelegate;
-    }
+
+	public DefaultBrowserConfiguration(FlexoModelObject rootObject, ObjectVisibilityDelegate visibilityDelegate) {
+		_rootObject = rootObject;
+		_visibilityDelegate = visibilityDelegate;
+	}
 
 	@Override
-	public void configure(ProjectBrowser browser)
-	{
+	public void configure(ProjectBrowser browser) {
 		for (BrowserElementType elementType : BrowserElementType.values()) {
-			browser.setFilterStatus(elementType,_visibilityDelegate.getVisibility(elementType));
+			browser.setFilterStatus(elementType, _visibilityDelegate.getVisibility(elementType));
 		}
 	}
 
 	@Override
-	public BrowserElementFactory getBrowserElementFactory()
-	{
-		 return DefaultBrowserElementFactory.DEFAULT_FACTORY; 
+	public BrowserElementFactory getBrowserElementFactory() {
+		return DefaultBrowserElementFactory.DEFAULT_FACTORY;
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject()
-	{
+	public FlexoModelObject getDefaultRootObject() {
 		return _rootObject;
 	}
 
-	public void setDefaultRootObject(FlexoModelObject rootObject) 
-	{
+	public void setDefaultRootObject(FlexoModelObject rootObject) {
 		_rootObject = rootObject;
 	}
-  
+
 	@Override
-	public FlexoProject getProject() 
-	{
-		if (_rootObject != null)
+	public FlexoProject getProject() {
+		if (_rootObject != null) {
 			return _rootObject.getProject();
+		}
 		return null;
 	}
 

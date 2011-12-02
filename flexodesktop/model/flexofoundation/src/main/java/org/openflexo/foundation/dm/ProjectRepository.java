@@ -23,87 +23,77 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
-
 /**
  * Represents a logical group of objects used but not stored in memory
  * 
  * @author sguerin
  * 
  */
-public class ProjectRepository extends DMRepository
-{
+public class ProjectRepository extends DMRepository {
 
-    private static final Logger logger = Logger.getLogger(ProjectRepository.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ProjectRepository.class.getPackage().getName());
 
-    public String packageName;
+	public String packageName;
 
-    // ==========================================================
-    // =================== Constructor ==========================
-    // ==========================================================
+	// ==========================================================
+	// =================== Constructor ==========================
+	// ==========================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ProjectRepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ProjectRepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    private ProjectRepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Default constructor
+	 */
+	private ProjectRepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getNonPersistantDataRepositoryFolder();
-    }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getNonPersistantDataRepositoryFolder();
+	}
 
-    /**
-     * @param dmModel
-     * @return
-     */
-    public static ProjectRepository createNewProjectRepository(String aName, DMModel dmModel)
-    {
-        ProjectRepository newProjectRepository = new ProjectRepository(dmModel);
-        newProjectRepository.setName(aName);
-        dmModel.addToProjectRepositories(newProjectRepository);
-        return newProjectRepository;
-    }
+	/**
+	 * @param dmModel
+	 * @return
+	 */
+	public static ProjectRepository createNewProjectRepository(String aName, DMModel dmModel) {
+		ProjectRepository newProjectRepository = new ProjectRepository(dmModel);
+		newProjectRepository.setName(aName);
+		dmModel.addToProjectRepositories(newProjectRepository);
+		return newProjectRepository;
+	}
 
-    @Override
-	public int getOrder()
-    {
-        return 4;
-    }
+	@Override
+	public int getOrder() {
+		return 4;
+	}
 
-    @Override
-	public boolean isReadOnly()
-    {
-        return false;
-    }
+	@Override
+	public boolean isReadOnly() {
+		return false;
+	}
 
-    @Override
-	public final void delete()
-    {
-        getDMModel().removeFromProjectRepositories(this);
-        super.delete();
-    }
+	@Override
+	public final void delete() {
+		getDMModel().removeFromProjectRepositories(this);
+		super.delete();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "project_repository";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "project_repository";
+	}
 
 }

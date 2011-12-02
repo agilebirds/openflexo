@@ -34,63 +34,54 @@ import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
-public class MarkAsUnmerged extends MultipleFileGCAction<MarkAsUnmerged>
-{
+public class MarkAsUnmerged extends MultipleFileGCAction<MarkAsUnmerged> {
 
 	private static final Logger logger = Logger.getLogger(MarkAsUnmerged.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<MarkAsUnmerged> actionType 
-	= new MultipleFileGCActionType<MarkAsUnmerged> ("mark_as_unmerged",
-			MERGE_MENU, MARK_GROUP1,FlexoActionType.NORMAL_ACTION_TYPE) 
-	{
+	public static final MultipleFileGCActionType<MarkAsUnmerged> actionType = new MultipleFileGCActionType<MarkAsUnmerged>(
+			"mark_as_unmerged", MERGE_MENU, MARK_GROUP1, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public MarkAsUnmerged makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new MarkAsUnmerged(repository, globalSelection, editor);
-        }
-		
-        @Override
-		protected boolean accept (AbstractCGFile file)
-        {
-        	return ((file.getResource() != null)
-        			&& file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged);
-         }
+		 * Factory method
+		 */
+		@Override
+		public MarkAsUnmerged makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new MarkAsUnmerged(repository, globalSelection, editor);
+		}
+
+		@Override
+		protected boolean accept(AbstractCGFile file) {
+			return ((file.getResource() != null) && file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged);
+		}
 
 	};
-	
-    static {
-        FlexoModelObject.addActionForClass (MarkAsUnmerged.actionType, CGObject.class);
-    }
-    
-    MarkAsUnmerged (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException
-    {
-    	logger.info ("Mark files as NOT merged");
-       	
-       	AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
-    	pg.setAction(this);
- 
-    	GenerationRepository repository = getRepository();
-    	
-      	Vector<AbstractCGFile> filesToWrite = getSelectedCGFilesOnWhyCurrentActionShouldApply();
-     	
-     	for (AbstractCGFile file : filesToWrite) {
-     		file.setMarkedAsMerged(false);
-     	}
+	static {
+		FlexoModelObject.addActionForClass(MarkAsUnmerged.actionType, CGObject.class);
+	}
+
+	MarkAsUnmerged(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+		logger.info("Mark files as NOT merged");
+
+		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
+		pg.setAction(this);
+
+		GenerationRepository repository = getRepository();
+
+		Vector<AbstractCGFile> filesToWrite = getSelectedCGFilesOnWhyCurrentActionShouldApply();
+
+		for (AbstractCGFile file : filesToWrite) {
+			file.setMarkedAsMerged(false);
+		}
 
 		// Refreshing repository
-     	repository.refresh();
+		repository.refresh();
 
-    }
+	}
 
 	public boolean requiresThreadPool() {
 		// TODO Auto-generated method stub

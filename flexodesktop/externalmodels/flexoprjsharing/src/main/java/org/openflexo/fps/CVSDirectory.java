@@ -27,114 +27,101 @@ import org.netbeans.lib.cvsclient.admin.Entry;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.rm.ResourceType;
 
+public class CVSDirectory extends CVSAbstractFile implements CVSContainer {
 
-public class CVSDirectory extends CVSAbstractFile implements CVSContainer
-{
-	
 	private static final Logger logger = Logger.getLogger(CVSFile.class.getPackage().getName());
 
 	private Entry _entry;
-	
-	public CVSDirectory (File localFile, Entry entry, SharedProject sharedProject)
-	{
-		this(localFile,sharedProject);
+
+	public CVSDirectory(File localFile, Entry entry, SharedProject sharedProject) {
+		this(localFile, sharedProject);
 		_entry = entry;
 	}
-	
-	public CVSDirectory (File localFile, SharedProject sharedProject)
-	{
-		super(localFile,sharedProject);
+
+	public CVSDirectory(File localFile, SharedProject sharedProject) {
+		super(localFile, sharedProject);
 		_directories = new Vector<CVSDirectory>();
 		_files = new Vector<CVSFile>();
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.FPS.CVS_DIRECTORY_INSPECTOR;
 	}
-	
+
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "cvs_directory";
 	}
-	
+
 	private Vector<CVSDirectory> _directories;
 
 	@Override
-	public Vector<CVSDirectory> getDirectories() 
-	{
+	public Vector<CVSDirectory> getDirectories() {
 		return _directories;
 	}
 
 	@Override
-	public void setDirectories(Vector<CVSDirectory> directories) 
-	{
+	public void setDirectories(Vector<CVSDirectory> directories) {
 		_directories = directories;
 	}
-	
+
 	@Override
-	public void addToDirectories(CVSDirectory aDirectory) 
-	{
+	public void addToDirectories(CVSDirectory aDirectory) {
 		_directories.add(aDirectory);
 		aDirectory.setContainer(this);
 	}
-	
+
 	@Override
-	public void removeFromDirectories(CVSDirectory aDirectory) 
-	{
+	public void removeFromDirectories(CVSDirectory aDirectory) {
 		_directories.remove(aDirectory);
 		aDirectory.setContainer(null);
 	}
-	
+
 	private Vector<CVSFile> _files;
 
 	@Override
-	public Vector<CVSFile> getFiles() 
-	{
+	public Vector<CVSFile> getFiles() {
 		return _files;
 	}
 
 	@Override
-	public void setFiles(Vector<CVSFile> files) 
-	{
+	public void setFiles(Vector<CVSFile> files) {
 		_files = files;
 	}
-	
+
 	@Override
-	public void addToFiles(CVSFile aFile) 
-	{
+	public void addToFiles(CVSFile aFile) {
 		_files.add(aFile);
 		aFile.setContainer(this);
 	}
-	
+
 	@Override
-	public void removeFromFiles(CVSFile aFile) 
-	{
+	public void removeFromFiles(CVSFile aFile) {
 		_files.remove(aFile);
 		aFile.setContainer(null);
 	}
-	
+
 	@Override
-	public boolean isRegistered(File aFile)
-	{
+	public boolean isRegistered(File aFile) {
 		for (CVSFile f : getFiles()) {
-			if (f.getFile().equals(aFile)) return true;
+			if (f.getFile().equals(aFile)) {
+				return true;
+			}
 		}
 		for (CVSDirectory d : getDirectories()) {
-			if (d.getFile().equals(aFile)) return true;
+			if (d.getFile().equals(aFile)) {
+				return true;
+			}
 		}
 		return false;
 	}
-	
-	public boolean existsOnCVSRepository()
-	{
+
+	public boolean existsOnCVSRepository() {
 		return (_entry != null);
 	}
-	
-	public void clear()
-	{
+
+	public void clear() {
 		// TODO remove properly (think about observers)
 		for (CVSDirectory d : getDirectories()) {
 			d.clear();
@@ -142,20 +129,24 @@ public class CVSDirectory extends CVSAbstractFile implements CVSContainer
 		_directories.clear();
 		_files.clear();
 	}
-	
+
 	private ResourceType _resourceType;
 	private boolean _triedToResolveResourceType = false;
-	
-	public ResourceType getResourceType()
-	{
+
+	public ResourceType getResourceType() {
 		if (!_triedToResolveResourceType) {
 			_triedToResolveResourceType = true;
-			if (getFileName().endsWith(".eomodeld")) _resourceType = ResourceType.EOMODEL;
-			if (getFileName().endsWith(".wo.LAST_ACCEPTED")) _resourceType = ResourceType.WO_FILE;
-			if (getFileName().endsWith(".wo.LAST_GENERATED")) _resourceType = ResourceType.WO_FILE;
+			if (getFileName().endsWith(".eomodeld")) {
+				_resourceType = ResourceType.EOMODEL;
+			}
+			if (getFileName().endsWith(".wo.LAST_ACCEPTED")) {
+				_resourceType = ResourceType.WO_FILE;
+			}
+			if (getFileName().endsWith(".wo.LAST_GENERATED")) {
+				_resourceType = ResourceType.WO_FILE;
+			}
 		}
 		return _resourceType;
 	}
-	
 
 }

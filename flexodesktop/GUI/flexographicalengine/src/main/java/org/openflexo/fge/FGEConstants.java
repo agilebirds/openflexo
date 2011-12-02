@@ -27,20 +27,20 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.Toolkit;
 
-
-
-
 public interface FGEConstants {
 
 	// GPO: this flag cannot be turned to false so far because there are many issues with the invalidation of the Graphical hierarchy
-	// Mainly: when initiating a view or when invalidating the gr hierarchy, all gr's are rebuilt which forces them to apply their constraints
-	// to avoid this, we should rework code to cache GR's (avoir rebuilding them) and don't apply constraints on creation of GR's, only on creation of model objects
+	// Mainly: when initiating a view or when invalidating the gr hierarchy, all gr's are rebuilt which forces them to apply their
+	// constraints
+	// to avoid this, we should rework code to cache GR's (avoir rebuilding them) and don't apply constraints on creation of GR's, only on
+	// creation of model objects
 	public static final boolean APPLY_CONSTRAINTS_IMMEDIATELY = true;
 	public static final boolean DEBUG = false;
 	public static final int CONTROL_POINT_SIZE = 2;
 	public static final int POINT_SIZE = 4;
 
-	public static final Cursor MOVE_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(FGEIconLibrary.CURSOR_MOVE_ICON.getImage(), new Point(16,16), "CustomMove");
+	public static final Cursor MOVE_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(FGEIconLibrary.CURSOR_MOVE_ICON.getImage(),
+			new Point(16, 16), "CustomMove");
 	public static final Integer INITIAL_LAYER = 32;
 	public static final Integer DEFAULT_CONNECTOR_LAYER = 64;
 	public static final Integer DEFAULT_SHAPE_LAYER = 1;
@@ -65,6 +65,8 @@ public interface FGEConstants {
 
 	public static final Font DEFAULT_SMALL_TEXT_FONT = new Font("Lucida Sans", Font.PLAIN, 9);
 
-	public static Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{3.0f, 3.0f}, 1);
+	public static final Color DEFAULT_BACKGROUND_COLOR = new Color(254, 247, 217);
+
+	public static Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[] { 3.0f, 3.0f }, 1);
 
 }

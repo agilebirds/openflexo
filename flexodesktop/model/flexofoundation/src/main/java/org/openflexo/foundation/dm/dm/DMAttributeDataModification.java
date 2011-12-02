@@ -25,17 +25,14 @@ package org.openflexo.foundation.dm.dm;
  * @author sguerin
  * 
  */
-public class DMAttributeDataModification extends DMDataModification
-{
+public class DMAttributeDataModification extends DMDataModification {
 
-    public DMAttributeDataModification(String attributeName, Object oldValue, Object newValue)
-    {
-        super(attributeName, oldValue, newValue);
-    }
+	public DMAttributeDataModification(String attributeName, Object oldValue, Object newValue) {
+		super(attributeName, oldValue, newValue);
+	}
 
-    public String getAttributeName()
-    {
-        return propertyName();
-    }
+	public String getAttributeName() {
+		return propertyName();
+	}
 
 }

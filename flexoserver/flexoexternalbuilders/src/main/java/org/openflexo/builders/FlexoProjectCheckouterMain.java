@@ -83,7 +83,7 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 						moduleName = moduleName.substring(1);
 					}
 					if (moduleName.endsWith("\"")) {
-						moduleName = moduleName.substring(0,moduleName.length()-1);
+						moduleName = moduleName.substring(0, moduleName.length() - 1);
 					}
 				} else if (args[i].startsWith(LOCAL_NAME_ARGUMENT_PREFIX)) {
 					localName = args[i].substring(LOCAL_NAME_ARGUMENT_PREFIX.length());
@@ -91,7 +91,7 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 						localName = localName.substring(1);
 					}
 					if (localName.endsWith("\"")) {
-						localName = localName.substring(0,localName.length()-1);
+						localName = localName.substring(0, localName.length() - 1);
 					}
 				}
 			}
@@ -116,21 +116,21 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 				}
 			}
 			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("Missing argument. Usage java " + FlexoProjectMergeMain.class.getName() + " "
-						+ RESOURCE_PATH_ARGUMENT_PREFIX + " " + CVS_REPOSITORY_FILE_ARGUMENT_PREFIX + " " + CHECKOUT_DIRECTORY_ARGUMENT_PREFIX
-						+ "\n" + (args.length > 0 ? sb.toString() : "No arguments !!!"));
+				logger.severe("Missing argument. Usage java " + FlexoProjectMergeMain.class.getName() + " " + RESOURCE_PATH_ARGUMENT_PREFIX
+						+ " " + CVS_REPOSITORY_FILE_ARGUMENT_PREFIX + " " + CHECKOUT_DIRECTORY_ARGUMENT_PREFIX + "\n"
+						+ (args.length > 0 ? sb.toString() : "No arguments !!!"));
 			}
-			if (moduleName==null) {
+			if (moduleName == null) {
 				throw new MissingArgumentException(MODULE_NAME_ARGUMENT_PREFIX);
 			} else {
 				throw new MissingArgumentException(CVS_REPOSITORY_FILE_ARGUMENT_PREFIX);
 			}
 		}
-		if (localName==null) {
+		if (localName == null) {
 			localName = moduleName;
 		}
-		if (localName.indexOf('/')>-1) {
-			localName = localName.substring(localName.lastIndexOf('/')+1);
+		if (localName.indexOf('/') > -1) {
+			localName = localName.substring(localName.lastIndexOf('/') + 1);
 		}
 	}
 
@@ -139,7 +139,7 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 		CVSFile.xmlDiff3MergeEnabled = true;
 		CVSModule module = cvsRepository.getModuleNamed(moduleName);
 		if (module == null) {
-			throw new NullPointerException("Module named " +  moduleName + " cannot be found");
+			throw new NullPointerException("Module named " + moduleName + " cannot be found");
 		}
 		exploreModules(module);
 		if (!checkoutDirectory.exists()) {
@@ -176,7 +176,7 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 
 	@Override
 	protected void cleanUp() {
-		if (getExitCode()!=0) {
+		if (getExitCode() != 0) {
 			reportMessage(cvsConsole.getLogs().toString());
 		}
 		super.cleanUp();

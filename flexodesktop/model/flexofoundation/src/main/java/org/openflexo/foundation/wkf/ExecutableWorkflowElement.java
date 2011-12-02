@@ -27,64 +27,55 @@ import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ProgrammingLanguage;
 
-
-
 /**
- * This interface is implemented by objects for which a control graph is available
- * in the context of workflow execution
+ * This interface is implemented by objects for which a control graph is available in the context of workflow execution
  * 
  * @author sylvain
- *
+ * 
  */
 public interface ExecutableWorkflowElement {
 
 	public String getExecutableElementName();
-	
+
 	public void setProgrammingLanguageForControlGraphComputation(ProgrammingLanguage language);
-	
+
 	public void setInterproceduralForControlGraphComputation(boolean interprocedural);
-	
-	public static abstract class ControlGraphFactory<E extends ExecutableWorkflowElement>
-	{
+
+	public static abstract class ControlGraphFactory<E extends ExecutableWorkflowElement> {
 		public static final ProgrammingLanguage DEFAULT_LANGUAGE = ProgrammingLanguage.JAVA;
 		public static final boolean DEFAULT_INTERPROCEDURAL = true;
-		
+
 		private String unlocalizedInfoLabel;
 
-		private Hashtable<E,WorkflowControlGraph<E>> storedControlGraphs;
+		private Hashtable<E, WorkflowControlGraph<E>> storedControlGraphs;
 
-		public ControlGraphFactory(String unlocalizedInfoLabel)
-		{
+		public ControlGraphFactory(String unlocalizedInfoLabel) {
 			this.unlocalizedInfoLabel = unlocalizedInfoLabel;
-			storedControlGraphs = new Hashtable<E,WorkflowControlGraph<E>>();
+			storedControlGraphs = new Hashtable<E, WorkflowControlGraph<E>>();
 		}
 
-		public WorkflowControlGraph<E> getControlGraph(E object)
-		{
+		public WorkflowControlGraph<E> getControlGraph(E object) {
 			if (storedControlGraphs.get(object) == null) {
-				storedControlGraphs.put(object,makeWorkflowControlGraph(object));
+				storedControlGraphs.put(object, makeWorkflowControlGraph(object));
 			}
 			return storedControlGraphs.get(object);
 		}
 
-		public WorkflowControlGraph<E> makeWorkflowControlGraph(E object)
-		{
-			return new WorkflowControlGraph<E>(object,this);
+		public WorkflowControlGraph<E> makeWorkflowControlGraph(E object) {
+			return new WorkflowControlGraph<E>(object, this);
 		}
 
-		public abstract AlgorithmicUnit computeAlgorithmicUnit(E object,boolean interprocedural);
+		public abstract AlgorithmicUnit computeAlgorithmicUnit(E object, boolean interprocedural);
 
-		public String getInfoLabel() 
-		{
+		public String getInfoLabel() {
 			return FlexoLocalization.localizedForKey(unlocalizedInfoLabel);
 		}
 
-		public abstract String prettyPrintedCode(AlgorithmicUnit algorithmicUnit,ProgrammingLanguage language);
+		public abstract String prettyPrintedCode(AlgorithmicUnit algorithmicUnit, ProgrammingLanguage language);
 	}
 
-	public static class WorkflowControlGraph<E extends ExecutableWorkflowElement> extends KVCObject
-	{
-		
+	public static class WorkflowControlGraph<E extends ExecutableWorkflowElement> extends KVCObject {
+
 		private static final Logger logger = Logger.getLogger(ExecutableWorkflowElement.WorkflowControlGraph.class.getPackage().getName());
 
 		private E object;
@@ -94,80 +85,68 @@ public interface ExecutableWorkflowElement {
 
 		private ProgrammingLanguage language = ControlGraphFactory.DEFAULT_LANGUAGE;
 		protected boolean interprocedural = ControlGraphFactory.DEFAULT_INTERPROCEDURAL;
-		
-		public WorkflowControlGraph(E object, ControlGraphFactory<E> factory)
-		{
+
+		public WorkflowControlGraph(E object, ControlGraphFactory<E> factory) {
 			this.object = object;
 			this.factory = factory;
 			refresh();
 		}
 
-		public void refresh()
-		{
+		public void refresh() {
 			refreshAlgorithmicUnit();
 		}
 
-		protected void refreshAlgorithmicUnit()
-		{
-			logger.info("Recomputing control flow graph for "+object+" interprocedural="+interprocedural);
-			algorithmicUnit = factory.computeAlgorithmicUnit(object,interprocedural);
+		protected void refreshAlgorithmicUnit() {
+			logger.info("Recomputing control flow graph for " + object + " interprocedural=" + interprocedural);
+			algorithmicUnit = factory.computeAlgorithmicUnit(object, interprocedural);
 			refreshPrettyPrintedCode();
 		}
 
-		protected void refreshPrettyPrintedCode()
-		{
-			logger.info("Pretty-printing code for "+object+" language="+language);
-			code = factory.prettyPrintedCode(algorithmicUnit,language);
-			//logger.info("Obtaining: "+code);
+		protected void refreshPrettyPrintedCode() {
+			logger.info("Pretty-printing code for " + object + " language=" + language);
+			code = factory.prettyPrintedCode(algorithmicUnit, language);
+			// logger.info("Obtaining: "+code);
 		}
 
-		public String getInfoLabel() 
-		{
+		public String getInfoLabel() {
 			return factory.getInfoLabel();
 		}
 
-		public String getFormattedCode()
-		{
+		public String getFormattedCode() {
 			return code;
 		}
 
-		public E getObject()
-		{
+		public E getObject() {
 			return object;
 		}
 
-		public ControlGraphFactory<E> getFactory() 
-		{
+		public ControlGraphFactory<E> getFactory() {
 			return factory;
 		}
 
-		public boolean isInterprocedural()
-		{
+		public boolean isInterprocedural() {
 			return interprocedural;
 		}
 
-		public void setInterprocedural(boolean interprocedural) 
-		{
+		public void setInterprocedural(boolean interprocedural) {
 			if (interprocedural != this.interprocedural) {
 				this.interprocedural = interprocedural;
 				refreshAlgorithmicUnit();
 			}
 		}
 
-		public ProgrammingLanguage getProgrammingLanguage() 
-		{
+		public ProgrammingLanguage getProgrammingLanguage() {
 			return language;
 		}
 
-		public void setProgrammingLanguage(ProgrammingLanguage language) 
-		{
+		public void setProgrammingLanguage(ProgrammingLanguage language) {
 			if (language != this.language) {
 				this.language = language;
 				refreshPrettyPrintedCode();
 			}
 		}
-		
-		public AlgorithmicUnit getAlgorithmicUnit(){
+
+		public AlgorithmicUnit getAlgorithmicUnit() {
 			return algorithmicUnit;
 		}
 	}

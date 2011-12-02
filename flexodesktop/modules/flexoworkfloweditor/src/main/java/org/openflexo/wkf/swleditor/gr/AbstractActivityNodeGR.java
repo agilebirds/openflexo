@@ -19,11 +19,9 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -47,25 +45,26 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 
 	private static final Logger logger = Logger.getLogger(AbstractActivityNodeGR.class.getPackage().getName());
 
-	private static final Color BG_COLOR = new Color(240,240,240);
+	private static final Color BG_COLOR = new Color(240, 240, 240);
 
-	public AbstractActivityNodeGR(O activity, ShapeType shapeType, SwimmingLaneRepresentation aDrawing,boolean isInPalet)
-	{
-		super(activity, shapeType, aDrawing,isInPalet);
-		setLayer(activity.isEmbedded()?EMBEDDED_ACTIVITY_LAYER:ACTIVITY_LAYER);
+	public AbstractActivityNodeGR(O activity, ShapeType shapeType, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
+		super(activity, shapeType, aDrawing, isInPalet);
+		setLayer(activity.isEmbedded() ? EMBEDDED_ACTIVITY_LAYER : ACTIVITY_LAYER);
 
-		if (!(activity instanceof SelfExecutableActivityNode))
-			addToMouseClickControls(new PetriGraphOpener(),true);
+		if (!(activity instanceof SelfExecutableActivityNode)) {
+			addToMouseClickControls(new PetriGraphOpener(), true);
+		}
 
 		updatePropertiesFromWKFPreferences();
 
 	}
 
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK, getWorkflow()!=null?getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont():WKFPreferences.getActivityNodeFont().getFont()));
+		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+				getWorkflow() != null ? getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont() : WKFPreferences
+						.getActivityNodeFont().getFont()));
 		setIsMultilineAllowed(true);
 		setAdjustMinimalWidthToLabelWidth(true);
 		setAdjustMinimalHeightToLabelHeight(true);
@@ -73,41 +72,36 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 	}
 
 	@Override
-	public Color getTextColor()
-	{
+	public Color getTextColor() {
 		return FGEUtils.chooseBestColor(getMainBgColor(), Color.BLACK, Color.WHITE);
 	}
 
 	@Override
-	public Color getMainBgColor()
-	{
+	public Color getMainBgColor() {
 		return BG_COLOR;
 	}
 
-
-	public O getAbstractActivityNode()
-	{
+	public O getAbstractActivityNode() {
 		return getDrawable();
 	}
 
-    public String getRoleLabel()
-    {
-        if (getAbstractActivityNode() == null) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("node is null in " + this);
-            return "";
-        }
-        Role role = getAbstractActivityNode().getRole();
-        if (role != null) {
-            return role.getName();
-        } else {
-            return FlexoLocalization.localizedForKey("no_role");
-        }
-    }
+	public String getRoleLabel() {
+		if (getAbstractActivityNode() == null) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("node is null in " + this);
+			}
+			return "";
+		}
+		Role role = getAbstractActivityNode().getRole();
+		if (role != null) {
+			return role.getName();
+		} else {
+			return FlexoLocalization.localizedForKey("no_role");
+		}
+	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof RoleChanged) {
 			resetLocationConstrainedArea();
 			getDrawing().requestRebuildCompleteHierarchy();
@@ -117,24 +111,20 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 
 	public class PetriGraphOpener extends MouseClickControl {
 
-		public PetriGraphOpener()
-		{
-			super("Opener", MouseButton.LEFT, 2,
-					new CustomClickControlAction() {
+		public PetriGraphOpener() {
+			super("Opener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, java.awt.event.MouseEvent event)
-				{
+				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						java.awt.event.MouseEvent event) {
 					logger.info("Opening Operation petri graph by double-clicking");
-                    OpenOperationLevel.actionType.makeNewAction(getAbstractActivityNode(),null,getDrawing().getEditor()).doAction();
-                    // Is now performed by receiving notification
-                    // getDrawing().updateGraphicalObjectsHierarchy();
+					OpenOperationLevel.actionType.makeNewAction(getAbstractActivityNode(), null, getDrawing().getEditor()).doAction();
+					// Is now performed by receiving notification
+					// getDrawing().updateGraphicalObjectsHierarchy();
 					return true;
 				}
-			},
-			false,false,false,false);
+			}, false, false, false, false);
 		}
 
 	}
-
 
 }

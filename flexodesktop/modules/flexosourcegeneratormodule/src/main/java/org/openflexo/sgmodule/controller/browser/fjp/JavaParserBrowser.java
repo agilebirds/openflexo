@@ -31,15 +31,13 @@ import org.openflexo.javaparser.FJPJavaElement;
 import org.openflexo.sg.file.SGJavaFile;
 import org.openflexo.sgmodule.controller.SGController;
 
-
 /**
  * Browser for Code Generator module
  * 
  * @author sguerin
  * 
  */
-public class JavaParserBrowser extends ConfigurableProjectBrowser implements FlexoObserver
-{
+public class JavaParserBrowser extends ConfigurableProjectBrowser implements FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(JavaParserBrowser.class.getPackage().getName());
 
@@ -53,28 +51,25 @@ public class JavaParserBrowser extends ConfigurableProjectBrowser implements Fle
 	// ================================
 	// ==========================================================================
 
-	public JavaParserBrowser(SGJavaFile javaFile, SGController controller)
-	{
-		super(makeDefaultBrowserConfiguration(javaFile),controller.getSelectionManager());
+	public JavaParserBrowser(SGJavaFile javaFile, SGController controller) {
+		super(makeDefaultBrowserConfiguration(javaFile), controller.getSelectionManager());
 		update();
 	}
 
 	@Override
-	public void update(FlexoObservable o, DataModification arg)
-	{
-		if (logger.isLoggable(Level.FINE))
+	public void update(FlexoObservable o, DataModification arg) {
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("JavaParserBrowser update");
+		}
 	}
 
-	public static BrowserConfiguration makeDefaultBrowserConfiguration(SGJavaFile javaFile)
-	{
+	public static BrowserConfiguration makeDefaultBrowserConfiguration(SGJavaFile javaFile) {
 		BrowserConfiguration returned = new JavaParserBrowserConfiguration(javaFile);
 		return returned;
 	}
 
 	@Override
-	public FJPJavaElement getRootObject() 
-	{
-		return (FJPJavaElement)super.getRootObject();
+	public FJPJavaElement getRootObject() {
+		return (FJPJavaElement) super.getRootObject();
 	}
 }

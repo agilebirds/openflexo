@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-
 import org.openflexo.components.AskParametersPanel;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -45,78 +44,64 @@ public class ShowReleaseHistoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ShowReleaseHistoryInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(ShowReleaseHistory.actionType,actionInitializer);
+	ShowReleaseHistoryInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(ShowReleaseHistory.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ShowReleaseHistory> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ShowReleaseHistory> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowReleaseHistory>() {
 			@Override
-			public boolean run(ActionEvent e, ShowReleaseHistory action)
-			{
+			public boolean run(ActionEvent e, ShowReleaseHistory action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ShowReleaseHistory> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ShowReleaseHistory> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowReleaseHistory>() {
 			@Override
-			public boolean run(ActionEvent e, ShowReleaseHistory action)
-			{
-				InfoLabelParameter infoLabel = new InfoLabelParameter("info","info",action.getLocalizedDescription(),false);
-				final PropertyListParameter<CGRelease> releasesParam 
-				= new PropertyListParameter<CGRelease>("releases",
-						"releases",
-						action.getFocusedObject().getReleases(),
-						20,10);
-				releasesParam.addIconColumn("icon", "",30,false);
-				releasesParam.addReadOnlyTextFieldColumn("versionIdentifier.versionAsString", "version",100,true);
-				releasesParam.addReadOnlyTextFieldColumn("name", "name",150,true);
-				releasesParam.addReadOnlyTextFieldColumn("date", "date",200,true);
-				releasesParam.addReadOnlyTextFieldColumn("userId", "user",100,true);
-				InfoLabelParameter descriptionLabel = new InfoLabelParameter("description","description","",false)
-				{
+			public boolean run(ActionEvent e, ShowReleaseHistory action) {
+				InfoLabelParameter infoLabel = new InfoLabelParameter("info", "info", action.getLocalizedDescription(), false);
+				final PropertyListParameter<CGRelease> releasesParam = new PropertyListParameter<CGRelease>("releases", "releases", action
+						.getFocusedObject().getReleases(), 20, 10);
+				releasesParam.addIconColumn("icon", "", 30, false);
+				releasesParam.addReadOnlyTextFieldColumn("versionIdentifier.versionAsString", "version", 100, true);
+				releasesParam.addReadOnlyTextFieldColumn("name", "name", 150, true);
+				releasesParam.addReadOnlyTextFieldColumn("date", "date", 200, true);
+				releasesParam.addReadOnlyTextFieldColumn("userId", "user", 100, true);
+				InfoLabelParameter descriptionLabel = new InfoLabelParameter("description", "description", "", false) {
 					@Override
-					public String getValue()
-					{
-						return (releasesParam.getSelectedObject()!=null?releasesParam.getSelectedObject().getDescription():FlexoLocalization.localizedForKey("no_selection"));
+					public String getValue() {
+						return (releasesParam.getSelectedObject() != null ? releasesParam.getSelectedObject().getDescription()
+								: FlexoLocalization.localizedForKey("no_selection"));
 					}
 				};
 				descriptionLabel.setDepends("releases");
 
-				AskParametersPanel panel = new AskParametersPanel(
-						getProject(), 
-						infoLabel,releasesParam,descriptionLabel);
+				AskParametersPanel panel = new AskParametersPanel(getProject(), infoLabel, releasesParam, descriptionLabel);
 
-				final FlexoDialog dialog = new FlexoDialog(
-						getControllerActionInitializer().getGeneratorController().getFlexoFrame(),
-						FlexoLocalization.localizedForKey("release_history_for")+" "
-						+action.getFocusedObject().getName(),false);
+				final FlexoDialog dialog = new FlexoDialog(getControllerActionInitializer().getGeneratorController().getFlexoFrame(),
+						FlexoLocalization.localizedForKey("release_history_for") + " " + action.getFocusedObject().getName(), false);
 				dialog.getContentPane().setLayout(new BorderLayout());
-				dialog.getContentPane().add(panel,BorderLayout.CENTER);
+				dialog.getContentPane().add(panel, BorderLayout.CENTER);
 				JPanel controlPanel = new JPanel(new FlowLayout());
 				JButton button = new JButton();
-				button.setText(FlexoLocalization.localizedForKey("close",button));
+				button.setText(FlexoLocalization.localizedForKey("close", button));
 				button.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						dialog.dispose();
-					}            		
+					}
 				});
 				controlPanel.add(button);
-				dialog.getContentPane().add(controlPanel,BorderLayout.SOUTH);
+				dialog.getContentPane().add(controlPanel, BorderLayout.SOUTH);
 				dialog.validate();
 				dialog.pack();
 				dialog.setVisible(true);

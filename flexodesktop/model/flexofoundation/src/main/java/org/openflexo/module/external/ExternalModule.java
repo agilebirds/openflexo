@@ -19,39 +19,29 @@
  */
 package org.openflexo.module.external;
 
-import org.openflexo.foundation.rm.SaveResourceException;
 
 /**
  * Common interface for all external-view modules
  * 
  * @author sguerin
  */
-public interface ExternalModule
-{
+public interface ExternalModule {
 
-    /**
-     * Focus on this module
-     */
-    public void focusOn();
+	/**
+	 * Focus on this module
+	 */
+	public void focusOn();
 
-    /**
-     * Focus off this module
-     */
-    public void focusOff();
+	/**
+	 * Focus off this module
+	 */
+	public void focusOff();
 
-    /**
-     * Close Module after asking confirmation Review unsaved and save Unload in
-     * module loader
-     * 
-     * @return
-     */
-    public boolean close();
-
-    /**
-     * Save all ressources for this Module
-     * 
-     * @throws SaveResourceException
-     */
-    public void save() throws SaveResourceException;
+	/**
+	 * Close Module after asking confirmation Review unsaved and save Unload in module loader
+	 * 
+	 * @return
+	 */
+	public boolean close();
 
 }

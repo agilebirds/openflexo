@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.jedit;
+
 /*
  * EiffelTokenMarker.java - Eiffel token marker
  * Copyright (C) 1999 Slava Pestov
@@ -32,20 +33,17 @@ import javax.swing.text.Segment;
 
 /**
  * Eiffel token Marker.
- *
+ * 
  * @author Artur Biesiadowski
  */
-public class EiffelTokenMarker extends TokenMarker
-{
+public class EiffelTokenMarker extends TokenMarker {
 
-	public EiffelTokenMarker()
-	{
+	public EiffelTokenMarker() {
 		this.keywords = getKeywords();
 	}
 
 	@Override
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
-	{
+	public byte markTokensImpl(byte token, Segment line, int lineIndex) {
 		char[] array = line.array;
 		int offset = line.offset;
 		lastOffset = offset;
@@ -53,66 +51,58 @@ public class EiffelTokenMarker extends TokenMarker
 		int length = line.count + offset;
 		boolean backslash = false;
 
-loop:		for(int i = offset; i < length; i++)
-		{
-			int i1 = (i+1);
+		loop: for (int i = offset; i < length; i++) {
+			int i1 = (i + 1);
 
 			char c = array[i];
-			if(c == '%')
-			{
+			if (c == '%') {
 				backslash = !backslash;
 				continue;
 			}
 
-			switch(token)
-			{
+			switch (token) {
 			case Token.NULL:
-				switch(c)
-				{
+				switch (c) {
 				case '"':
-					doKeyword(line,i,c);
-					if(backslash)
+					doKeyword(line, i, c);
+					if (backslash) {
 						backslash = false;
-					else
-					{
-						addToken(i - lastOffset,token);
+					} else {
+						addToken(i - lastOffset, token);
 						token = Token.LITERAL1;
 						lastOffset = lastKeyword = i;
 					}
 					break;
 				case '\'':
-					doKeyword(line,i,c);
-					if(backslash)
+					doKeyword(line, i, c);
+					if (backslash) {
 						backslash = false;
-					else
-					{
-						addToken(i - lastOffset,token);
+					} else {
+						addToken(i - lastOffset, token);
 						token = Token.LITERAL2;
 						lastOffset = lastKeyword = i;
 					}
 					break;
 				case ':':
-					if(lastKeyword == offset)
-					{
-						if(doKeyword(line,i,c))
+					if (lastKeyword == offset) {
+						if (doKeyword(line, i, c)) {
 							break;
+						}
 						backslash = false;
-						addToken(i1 - lastOffset,Token.LABEL);
+						addToken(i1 - lastOffset, Token.LABEL);
 						lastOffset = lastKeyword = i1;
-					}
-					else if(doKeyword(line,i,c))
+					} else if (doKeyword(line, i, c)) {
 						break;
+					}
 					break;
 				case '-':
 					backslash = false;
-					doKeyword(line,i,c);
-					if(length - i > 1)
-					{
-						switch(array[i1])
-						{
+					doKeyword(line, i, c);
+					if (length - i > 1) {
+						switch (array[i1]) {
 						case '-':
-							addToken(i - lastOffset,token);
-							addToken(length - i,Token.COMMENT1);
+							addToken(i - lastOffset, token);
+							addToken(length - i, Token.COMMENT1);
 							lastOffset = lastKeyword = length;
 							break loop;
 						}
@@ -120,9 +110,9 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				default:
 					backslash = false;
-					if(!Character.isLetterOrDigit(c)
-						&& c != '_')
-						doKeyword(line,i,c);
+					if (!Character.isLetterOrDigit(c) && c != '_') {
+						doKeyword(line, i, c);
+					}
 					break;
 				}
 				break;
@@ -130,57 +120,53 @@ loop:		for(int i = offset; i < length; i++)
 			case Token.COMMENT2:
 				throw new RuntimeException("Wrong eiffel parser state");
 			case Token.LITERAL1:
-				if(backslash)
+				if (backslash) {
 					backslash = false;
-				else if(c == '"')
-				{
-					addToken(i1 - lastOffset,token);
+				} else if (c == '"') {
+					addToken(i1 - lastOffset, token);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
 				break;
 			case Token.LITERAL2:
-				if(backslash)
+				if (backslash) {
 					backslash = false;
-				else if(c == '\'')
-				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+				} else if (c == '\'') {
+					addToken(i1 - lastOffset, Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
 				break;
 			default:
-				throw new InternalError("Invalid state: "
-					+ token);
+				throw new InternalError("Invalid state: " + token);
 			}
 		}
 
-		if(token == Token.NULL)
-			doKeyword(line,length,'\0');
+		if (token == Token.NULL) {
+			doKeyword(line, length, '\0');
+		}
 
-		switch(token)
-		{
+		switch (token) {
 		case Token.LITERAL1:
 		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.INVALID);
+			addToken(length - lastOffset, Token.INVALID);
 			token = Token.NULL;
 			break;
 		case Token.KEYWORD2:
-			addToken(length - lastOffset,token);
-			if(!backslash)
+			addToken(length - lastOffset, token);
+			if (!backslash) {
 				token = Token.NULL;
+			}
 		default:
-			addToken(length - lastOffset,token);
+			addToken(length - lastOffset, token);
 			break;
 		}
 
 		return token;
 	}
 
-	public static KeywordMap getKeywords()
-	{
-		if(eiffelKeywords == null)
-		{
+	public static KeywordMap getKeywords() {
+		if (eiffelKeywords == null) {
 			eiffelKeywords = new KeywordMap(true);
 			eiffelKeywords.add("alias", Token.KEYWORD1);
 			eiffelKeywords.add("all", Token.KEYWORD1);
@@ -192,7 +178,7 @@ loop:		for(int i = offset; i < length; i++)
 			eiffelKeywords.add("debug", Token.KEYWORD1);
 			eiffelKeywords.add("deferred", Token.KEYWORD1);
 			eiffelKeywords.add("do", Token.KEYWORD1);
-			eiffelKeywords.add("else",Token.KEYWORD1);
+			eiffelKeywords.add("else", Token.KEYWORD1);
 			eiffelKeywords.add("elseif", Token.KEYWORD1);
 			eiffelKeywords.add("end", Token.KEYWORD1);
 			eiffelKeywords.add("ensure", Token.KEYWORD1);
@@ -203,7 +189,7 @@ loop:		for(int i = offset; i < length; i++)
 			eiffelKeywords.add("from", Token.KEYWORD1);
 			eiffelKeywords.add("frozen", Token.KEYWORD1);
 			eiffelKeywords.add("if", Token.KEYWORD1);
-			eiffelKeywords.add("implies",Token.KEYWORD1);
+			eiffelKeywords.add("implies", Token.KEYWORD1);
 			eiffelKeywords.add("indexing", Token.KEYWORD1);
 			eiffelKeywords.add("infix", Token.KEYWORD1);
 			eiffelKeywords.add("inherit", Token.KEYWORD1);
@@ -215,7 +201,7 @@ loop:		for(int i = offset; i < length; i++)
 			eiffelKeywords.add("loop", Token.KEYWORD1);
 			eiffelKeywords.add("not", Token.KEYWORD1);
 			eiffelKeywords.add("obsolete", Token.KEYWORD1);
-			eiffelKeywords.add("old",Token.KEYWORD1);
+			eiffelKeywords.add("old", Token.KEYWORD1);
 			eiffelKeywords.add("once", Token.KEYWORD1);
 			eiffelKeywords.add("or", Token.KEYWORD1);
 			eiffelKeywords.add("prefix", Token.KEYWORD1);
@@ -226,21 +212,21 @@ loop:		for(int i = offset; i < length; i++)
 			eiffelKeywords.add("retry", Token.KEYWORD1);
 			eiffelKeywords.add("select", Token.KEYWORD1);
 			eiffelKeywords.add("separate", Token.KEYWORD1);
-			eiffelKeywords.add("then",Token.KEYWORD1);
+			eiffelKeywords.add("then", Token.KEYWORD1);
 			eiffelKeywords.add("undefine", Token.KEYWORD1);
 			eiffelKeywords.add("until", Token.KEYWORD1);
 			eiffelKeywords.add("variant", Token.KEYWORD1);
 			eiffelKeywords.add("when", Token.KEYWORD1);
 			eiffelKeywords.add("xor", Token.KEYWORD1);
 
-			eiffelKeywords.add("current",Token.LITERAL2);
-			eiffelKeywords.add("false",Token.LITERAL2);
-			eiffelKeywords.add("precursor",Token.LITERAL2);
-			eiffelKeywords.add("result",Token.LITERAL2);
-			eiffelKeywords.add("strip",Token.LITERAL2);
-			eiffelKeywords.add("true",Token.LITERAL2);
-			eiffelKeywords.add("unique",Token.LITERAL2);
-			eiffelKeywords.add("void",Token.LITERAL2);
+			eiffelKeywords.add("current", Token.LITERAL2);
+			eiffelKeywords.add("false", Token.LITERAL2);
+			eiffelKeywords.add("precursor", Token.LITERAL2);
+			eiffelKeywords.add("result", Token.LITERAL2);
+			eiffelKeywords.add("strip", Token.LITERAL2);
+			eiffelKeywords.add("true", Token.LITERAL2);
+			eiffelKeywords.add("unique", Token.LITERAL2);
+			eiffelKeywords.add("void", Token.LITERAL2);
 
 		}
 		return eiffelKeywords;
@@ -253,34 +239,31 @@ loop:		for(int i = offset; i < length; i++)
 	private int lastOffset;
 	private int lastKeyword;
 
-	private boolean doKeyword(Segment line, int i, char c)
-	{
-		int i1 = i+1;
+	private boolean doKeyword(Segment line, int i, char c) {
+		int i1 = i + 1;
 		boolean klassname = false;
 
 		int len = i - lastKeyword;
-		byte id = keywords.lookup(line,lastKeyword,len);
-		if ( id == Token.NULL )
-		{
+		byte id = keywords.lookup(line, lastKeyword, len);
+		if (id == Token.NULL) {
 			klassname = true;
-			for ( int at = lastKeyword; at < lastKeyword + len; at++ )
-			{
+			for (int at = lastKeyword; at < lastKeyword + len; at++) {
 				char ch = line.array[at];
-				if ( ch != '_' && !Character.isUpperCase(ch) )
-				{
+				if (ch != '_' && !Character.isUpperCase(ch)) {
 					klassname = false;
 					break;
 				}
 			}
-			if ( klassname )
+			if (klassname) {
 				id = Token.KEYWORD3;
+			}
 		}
 
-		if(id != Token.NULL)
-		{
-			if(lastKeyword != lastOffset)
-				addToken(lastKeyword - lastOffset,Token.NULL);
-			addToken(len,id);
+		if (id != Token.NULL) {
+			if (lastKeyword != lastOffset) {
+				addToken(lastKeyword - lastOffset, Token.NULL);
+			}
+			addToken(len, id);
 			lastOffset = i;
 		}
 		lastKeyword = i1;

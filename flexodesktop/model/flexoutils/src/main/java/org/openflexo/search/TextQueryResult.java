@@ -29,25 +29,26 @@ public class TextQueryResult {
 	public class Result {
 		public int startOffset;
 		public int endOffset;
-		
+
 		public Result(int startOffset, int endOffset) {
 			this.startOffset = startOffset;
 			this.endOffset = endOffset;
 		}
-		
+
 		public int getLength() {
-			return endOffset-startOffset;
+			return endOffset - startOffset;
 		}
+
 		@Override
 		public String toString() {
-			return "Start: "+startOffset+" End: "+endOffset;
+			return "Start: " + startOffset + " End: " + endOffset;
 		}
 	}
-	
+
 	public enum Direction {
 		FORWARD, BACKWARD
 	}
-	
+
 	public class ResultNavigator {
 		private int currentIndex = -1;
 		private Direction direction = Direction.FORWARD;
@@ -55,24 +56,27 @@ public class TextQueryResult {
 		private boolean limitToSelectedText = false;
 		private int selectionStart;
 		private int selectionEnd;
-		
+
 		public ResultNavigator() {
 		}
 
 		public Result getCurrentResult() {
 			Vector<Result> res = getFilteredResults();
-			if (currentIndex>-1 && currentIndex<res.size())
+			if (currentIndex > -1 && currentIndex < res.size()) {
 				return res.get(currentIndex);
-			else
+			} else {
 				return null;
+			}
 		}
-		
+
 		public void replaceBy(String replacement) {
-			if (document==null)
+			if (document == null) {
 				throw new IllegalStateException("No document provided! Cannot edit the text");
+			}
 			Result currentResult = getCurrentResult();
-			if (currentResult==null)
+			if (currentResult == null) {
 				throw new IllegalStateException("No text is selected!");
+			}
 			try {
 				document.remove(currentResult.startOffset, currentResult.getLength());
 				document.insertString(currentResult.startOffset, replacement, null);
@@ -80,38 +84,41 @@ public class TextQueryResult {
 				e.printStackTrace();
 			}
 		}
-		
+
 		public void replaceAllBy(String replacement) {
 			Vector<Result> results = getFilteredResults();
-			for (int i = results.size(); i > 0 ; i--) {
-				setCurrentIndex(i-1);
+			for (int i = results.size(); i > 0; i--) {
+				setCurrentIndex(i - 1);
 				replaceBy(replacement);
 			}
 		}
-		
+
 		public Result getNextResult() throws EndOfDocumentHasBeenReachedException, ResultNotFoundException {
-			
+
 			Vector<Result> filteredResults = getFilteredResults();
-			if (filteredResults.size()==0)
+			if (filteredResults.size() == 0) {
 				throw new ResultNotFoundException();
-			
+			}
+
 			switch (direction) {
 			case FORWARD:
-				if (currentIndex+1 == filteredResults.size()) {
+				if (currentIndex + 1 == filteredResults.size()) {
 					if (wrapSearch) {
 						currentIndex = 0;
-					} else
+					} else {
 						throw new EndOfDocumentHasBeenReachedException();
+					}
 				} else {
 					currentIndex++;
 				}
 				return filteredResults.get(currentIndex);
 			case BACKWARD:
-				if (currentIndex-1<0) {
+				if (currentIndex - 1 < 0) {
 					if (wrapSearch) {
-						currentIndex = filteredResults.size()-1;
-					} else
+						currentIndex = filteredResults.size() - 1;
+					} else {
 						throw new EndOfDocumentHasBeenReachedException();
+					}
 				} else {
 					currentIndex--;
 				}
@@ -121,13 +128,14 @@ public class TextQueryResult {
 			}
 			return null;
 		}
-		
+
 		private Vector<Result> getFilteredResults() {
 			if (limitToSelectedText) {
 				Vector<Result> r = new Vector<Result>();
 				for (Result result : getResults()) {
-					if (result.startOffset>=selectionStart && result.endOffset<=selectionEnd)
+					if (result.startOffset >= selectionStart && result.endOffset <= selectionEnd) {
 						r.add(result);
+					}
 				}
 				return r;
 			} else {
@@ -136,19 +144,20 @@ public class TextQueryResult {
 		}
 
 		public void setCurrentCaretPosition(int caretPosition) {
-			if (caretPosition<0 || caretPosition>=text.length())
+			if (caretPosition < 0 || caretPosition >= text.length()) {
 				return;
+			}
 			int index = 0;
 			for (Result res : getFilteredResults()) {
-				if (res.startOffset>=caretPosition) {
-					setCurrentIndex(index-1);
+				if (res.startOffset >= caretPosition) {
+					setCurrentIndex(index - 1);
 					return;
 				}
 				index++;
 			}
-			setCurrentIndex(index-1);
+			setCurrentIndex(index - 1);
 		}
-		
+
 		public int getCurrentIndex() {
 			return currentIndex;
 		}
@@ -178,8 +187,9 @@ public class TextQueryResult {
 		}
 
 		public void setLimitToSelectedText(boolean limitToSelectedText) {
-			if (this.limitToSelectedText!=limitToSelectedText)
+			if (this.limitToSelectedText != limitToSelectedText) {
 				currentIndex = -1;
+			}
 			this.limitToSelectedText = limitToSelectedText;
 		}
 
@@ -199,24 +209,26 @@ public class TextQueryResult {
 			this.selectionEnd = selectionEnd;
 		}
 	}
-	
+
 	private TextQuery query;
-	
+
 	private Vector<Result> results;
-	
+
 	String text;
-	
+
 	protected Document document;
-	
+
 	public TextQueryResult(TextQuery query) {
-		this.query = query; 
+		this.query = query;
 		this.results = new Vector<Result>();
 	}
+
 	public TextQueryResult(TextQuery query, String text) {
-		this.query = query; 
+		this.query = query;
 		this.text = text;
 		this.results = new Vector<Result>();
 	}
+
 	public TextQueryResult(TextQuery query, Document document) {
 		this.query = query;
 		this.document = document;
@@ -227,7 +239,7 @@ public class TextQueryResult {
 		}
 		this.results = new Vector<Result>();
 	}
-	
+
 	public void addToResults(Result res) {
 		results.add(res);
 	}
@@ -239,6 +251,5 @@ public class TextQueryResult {
 	public Vector<Result> getResults() {
 		return results;
 	}
-	
-	
+
 }

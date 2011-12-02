@@ -2,7 +2,7 @@
 <Panel layout="gridbag" border="empty" protectContent="false" name="main" dataClassName="org.openflexo.fib.controller.FIBController">
   <Label label="localized_editor" align="center" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=10;insetsBottom=10;weightY=0.0;weightX=1.0;fill=horizontal)" name="" readOnly="false" manageDynamicModel="false" />
   <Table iteratorClassName="org.openflexo.fib.model.FIBLocalizedDictionary$DynamicEntry" visibleRowCount="30" rowHeight="16" autoSelectFirstRow="false" data="data.localizer.dynamicEntries" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" font="Lucida Grande,0,11" readOnly="false" manageDynamicModel="true">
-    <LabelColumn name="label" data="iterator.key" title="Key" columnWidth="200" resizable="true" displayTitle="true" />
+    <TextFieldColumn name="label" data="iterator.key" title="Key" columnWidth="200" resizable="true" displayTitle="true" />
     <TextFieldColumn name="textfield" data="iterator.french" title="French" columnWidth="200" resizable="true" displayTitle="true" />
     <TextFieldColumn name="textfield" data="iterator.english" title="English" columnWidth="200" resizable="true" displayTitle="true" />
     <TextFieldColumn name="textfield" data="iterator.dutch" title="Dutch" columnWidth="200" resizable="true" displayTitle="true" />

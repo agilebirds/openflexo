@@ -28,30 +28,27 @@ import org.netbeans.lib.cvsclient.util.LoggedDataOutputStream;
 
 /**
  * This class modifies a connection by gzipping all client/server communication
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 public class GzipModifier extends Object implements ConnectionModifier {
-    /**
-     * Creates new GzipModifier
-     */
-    public GzipModifier() {
-    }
+	/**
+	 * Creates new GzipModifier
+	 */
+	public GzipModifier() {
+	}
 
-    @Override
-	public void modifyInputStream(LoggedDataInputStream ldis)
-            throws IOException {
-//        System.err.println("Setting the underlying stream for the IS");
-        GZIPInputStream gzis = new GZIPInputStream(ldis.
-                                                   getUnderlyingStream());
-//        System.err.println("Finished constructing the gzipinputstream");
-        ldis.setUnderlyingStream(gzis);
-    }
+	@Override
+	public void modifyInputStream(LoggedDataInputStream ldis) throws IOException {
+		// System.err.println("Setting the underlying stream for the IS");
+		GZIPInputStream gzis = new GZIPInputStream(ldis.getUnderlyingStream());
+		// System.err.println("Finished constructing the gzipinputstream");
+		ldis.setUnderlyingStream(gzis);
+	}
 
-    @Override
-	public void modifyOutputStream(LoggedDataOutputStream ldos)
-            throws IOException {
-//        System.err.println("Setting the underlying stream for the OS");
-        ldos.setUnderlyingStream(new GZIPOutputStream(ldos.
-                                                      getUnderlyingStream()));
-    }
+	@Override
+	public void modifyOutputStream(LoggedDataOutputStream ldos) throws IOException {
+		// System.err.println("Setting the underlying stream for the OS");
+		ldos.setUnderlyingStream(new GZIPOutputStream(ldos.getUnderlyingStream()));
+	}
 }

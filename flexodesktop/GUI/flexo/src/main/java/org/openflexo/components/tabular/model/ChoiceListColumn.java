@@ -20,7 +20,6 @@
 package org.openflexo.components.tabular.model;
 
 import java.awt.Component;
-import java.util.Enumeration;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
@@ -35,185 +34,163 @@ import javax.swing.table.TableCellRenderer;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.kvc.ChoiceList;
 
-
 /**
- * Represents a column where values can be viewed and edited as ChoiceList
- * instances
+ * Represents a column where values can be viewed and edited as ChoiceList instances
  * 
  * @author sguerin
  * 
  */
-public abstract class ChoiceListColumn<D extends FlexoModelObject> extends AbstractColumn<D,ChoiceList> implements EditableColumn<D,ChoiceList>
-{
+public abstract class ChoiceListColumn<D extends FlexoModelObject> extends AbstractColumn<D, ChoiceList> implements
+EditableColumn<D, ChoiceList> {
 
-    private ChoiceListCellRenderer _cellRenderer;
+	private ChoiceListCellRenderer _cellRenderer;
 
-    private ChoiceListCellEditor _cellEditor;
+	private ChoiceListCellEditor _cellEditor;
 
-    public ChoiceListColumn(String title, int defaultWidth)
-    {
-        super(title, defaultWidth, true);
-        _cellRenderer = new ChoiceListCellRenderer();
-        _cellEditor = new ChoiceListCellEditor(new JComboBox());
-    }
+	public ChoiceListColumn(String title, int defaultWidth) {
+		super(title, defaultWidth, true);
+		_cellRenderer = new ChoiceListCellRenderer();
+		_cellEditor = new ChoiceListCellEditor(new JComboBox());
+	}
 
-    @Override
-	public Class getValueClass()
-    {
-        return ChoiceList.class;
-    }
+	@Override
+	public Class getValueClass() {
+		return ChoiceList.class;
+	}
 
-    @Override
-	public ChoiceList getValueFor(D object)
-    {
-        return getValue(object);
-    }
+	@Override
+	public ChoiceList getValueFor(D object) {
+		return getValue(object);
+	}
 
-    public abstract ChoiceList getValue(D object);
+	public abstract ChoiceList getValue(D object);
 
-    @Override
-	public boolean isCellEditableFor(D object)
-    {
-        return true;
-    }
+	@Override
+	public boolean isCellEditableFor(D object) {
+		return true;
+	}
 
-    @Override
-	public void setValueFor(D object, ChoiceList value)
-    {
-        setValue(object, value);
-    }
+	@Override
+	public void setValueFor(D object, ChoiceList value) {
+		setValue(object, value);
+	}
 
-    public abstract void setValue(D object, ChoiceList aValue);
+	public abstract void setValue(D object, ChoiceList aValue);
 
-    /**
-     * @return
-     */
-    @Override
-	public TableCellRenderer getCellRenderer()
-    {
-        return _cellRenderer;
-    }
+	/**
+	 * @return
+	 */
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return _cellRenderer;
+	}
 
-    protected class ChoiceListCellRenderer extends TabularViewCellRenderer
-    {
-        /**
-         * 
-         * Returns the selector cell renderer.
-         * 
-         * @param table
-         *            the <code>JTable</code>
-         * @param value
-         *            the value to assign to the cell at
-         *            <code>[row, column]</code>
-         * @param isSelected
-         *            true if cell is selected
-         * @param hasFocus
-         *            true if cell has focus
-         * @param row
-         *            the row of the cell to render
-         * @param column
-         *            the column of the cell to render
-         * @return the default table cell renderer
-         */
-        @Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-        {
-            Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (returned instanceof JLabel) {
-                ((JLabel) returned).setText(renderChoiceListValue((ChoiceList) value));
-            }
-            return returned;
-        }
-    }
+	protected class ChoiceListCellRenderer extends TabularViewCellRenderer {
+		/**
+		 * 
+		 * Returns the selector cell renderer.
+		 * 
+		 * @param table
+		 *            the <code>JTable</code>
+		 * @param value
+		 *            the value to assign to the cell at <code>[row, column]</code>
+		 * @param isSelected
+		 *            true if cell is selected
+		 * @param hasFocus
+		 *            true if cell has focus
+		 * @param row
+		 *            the row of the cell to render
+		 * @param column
+		 *            the column of the cell to render
+		 * @return the default table cell renderer
+		 */
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			if (returned instanceof JLabel) {
+				((JLabel) returned).setText(renderChoiceListValue((ChoiceList) value));
+			}
+			return returned;
+		}
+	}
 
-    protected abstract String renderChoiceListValue(ChoiceList value);
+	protected abstract String renderChoiceListValue(ChoiceList value);
 
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    @Override
-	public boolean requireCellEditor()
-    {
-        return true;
-    }
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean requireCellEditor() {
+		return true;
+	}
 
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    @Override
-	public TableCellEditor getCellEditor()
-    {
-        return _cellEditor;
-    }
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	@Override
+	public TableCellEditor getCellEditor() {
+		return _cellEditor;
+	}
 
-    protected class ChoiceListCellEditor extends DefaultCellEditor
-    {
-        private ChoiceListComboBoxModel _comboBoxModel;
+	protected class ChoiceListCellEditor extends DefaultCellEditor {
+		private ChoiceListComboBoxModel _comboBoxModel;
 
-        private JComboBox comboBox;
+		private JComboBox comboBox;
 
-        public ChoiceListCellEditor(JComboBox aComboBox)
-        {
-            super(aComboBox);
-            comboBox = aComboBox;
-            comboBox.setRenderer(new DefaultListCellRenderer() {
-                @Override
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-                {
-                    Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                    if (returned instanceof JLabel) {
-                        ((JLabel) returned).setText(renderChoiceListValue((ChoiceList) value));
-                    }
-                    return returned;
-                }
-            });
-        }
+		public ChoiceListCellEditor(JComboBox aComboBox) {
+			super(aComboBox);
+			comboBox = aComboBox;
+			comboBox.setRenderer(new DefaultListCellRenderer() {
+				@Override
+				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+					Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+					if (returned instanceof JLabel) {
+						((JLabel) returned).setText(renderChoiceListValue((ChoiceList) value));
+					}
+					return returned;
+				}
+			});
+		}
 
-        @Override
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
-        {
-            Component returned = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-            comboBox.setModel(getComboBoxModel((ChoiceList) value));
-            return returned;
-        }
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+			Component returned = super.getTableCellEditorComponent(table, value, isSelected, row, column);
+			comboBox.setModel(getComboBoxModel((ChoiceList) value));
+			return returned;
+		}
 
-        private ChoiceListComboBoxModel getComboBoxModel(ChoiceList choiceList)
-        {
-            if (_comboBoxModel == null) {
-                _comboBoxModel = new ChoiceListComboBoxModel(choiceList);
-            }
-            _comboBoxModel.setChoiceList(choiceList);
-            return _comboBoxModel;
-        }
+		private ChoiceListComboBoxModel getComboBoxModel(ChoiceList choiceList) {
+			if (_comboBoxModel == null) {
+				_comboBoxModel = new ChoiceListComboBoxModel(choiceList);
+			}
+			_comboBoxModel.setChoiceList(choiceList);
+			return _comboBoxModel;
+		}
 
-        protected class ChoiceListComboBoxModel extends DefaultComboBoxModel
-        {
-            protected ChoiceListComboBoxModel(ChoiceList choiceList)
-            {
-                super();
-                setChoiceList(choiceList);
-            }
+		protected class ChoiceListComboBoxModel extends DefaultComboBoxModel {
+			protected ChoiceListComboBoxModel(ChoiceList choiceList) {
+				super();
+				setChoiceList(choiceList);
+			}
 
-            protected void setChoiceList(ChoiceList aChoiceList)
-            {
-                if (aChoiceList != null) {
-                    removeAllElements();
-                    for (Enumeration en = aChoiceList.getAvailableValues().elements(); en.hasMoreElements();) {
-                        addElement(en.nextElement());
-                    }
-                    setSelectedItem(aChoiceList);
-                }
-            }
-        }
-    }
+			protected void setChoiceList(ChoiceList aChoiceList) {
+				if (aChoiceList != null) {
+					removeAllElements();
+					for (Object obj : aChoiceList.getAvailableValues()) {
+						addElement(obj);
+					}
+					setSelectedItem(aChoiceList);
+				}
+			}
+		}
+	}
 
-    @Override
-	public String toString()
-    {
-        return "ChoiceListColumn " + "@" + Integer.toHexString(hashCode());
-    }
+	@Override
+	public String toString() {
+		return "ChoiceListColumn " + "@" + Integer.toHexString(hashCode());
+	}
 }

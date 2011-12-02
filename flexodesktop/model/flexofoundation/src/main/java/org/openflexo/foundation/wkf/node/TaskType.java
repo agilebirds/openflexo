@@ -21,12 +21,6 @@ package org.openflexo.foundation.wkf.node;
 
 public enum TaskType {
 
-	Service,
-	BusinessRule,
-	User,
-	Script,
-	Send,
-	Receive,
-	Manual
-	
+	Service, BusinessRule, User, Script, Send, Receive, Manual
+
 }

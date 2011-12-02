@@ -30,6 +30,8 @@ import org.openflexo.foundation.wkf.node.ANDOperator;
 import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.foundation.wkf.node.ComplexOperator;
 import org.openflexo.foundation.wkf.node.EventNode;
+import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
+import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.node.ExclusiveEventBasedOperator;
 import org.openflexo.foundation.wkf.node.IFOperator;
 import org.openflexo.foundation.wkf.node.InclusiveOperator;
@@ -42,15 +44,12 @@ import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode;
 import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
-import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
-import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.ws.DeletePort;
 import org.openflexo.foundation.wkf.ws.InOutPort;
 import org.openflexo.foundation.wkf.ws.InPort;
 import org.openflexo.foundation.wkf.ws.NewPort;
 import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
-import org.openflexo.wkf.processeditor.gr.ActionNodeGR;
 import org.openflexo.wkf.processeditor.gr.ActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.BeginActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.EndActivityNodeGR;
@@ -66,7 +65,6 @@ import org.openflexo.wkf.processeditor.gr.PortGR;
 import org.openflexo.wkf.processeditor.gr.SelfExecActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.SubProcessNodeGR;
 
-
 public class ActivityPalette extends AbstractWKFPalette {
 
 	private static final Logger logger = Logger.getLogger(ActivityPalette.class.getPackage().getName());
@@ -74,15 +72,17 @@ public class ActivityPalette extends AbstractWKFPalette {
 	private ContainerValidity DROP_ON_PROCESS_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(WKFObject container) {
-			return container instanceof FlexoProcess || container instanceof ActivityPetriGraph || container instanceof ActivityGroup || container instanceof WKFAnnotation;
+			return container instanceof FlexoProcess || container instanceof ActivityPetriGraph || container instanceof ActivityGroup
+					|| container instanceof WKFAnnotation;
 		}
 	};
 
 	private ContainerValidity DROP_ON_PROCESS_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP_FOR_INTERACTIVE_NODE = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(WKFObject container) {
-			return container instanceof FlexoProcess || container instanceof ActivityPetriGraph && !(((ActivityPetriGraph) container)
-					.getContainer() instanceof SelfExecutableNode) || container instanceof ActivityGroup || container instanceof WKFAnnotation;
+			return container instanceof FlexoProcess || container instanceof ActivityPetriGraph
+					&& !(((ActivityPetriGraph) container).getContainer() instanceof SelfExecutableNode)
+					|| container instanceof ActivityGroup || container instanceof WKFAnnotation;
 		}
 	};
 
@@ -414,9 +414,9 @@ public class ActivityPalette extends AbstractWKFPalette {
 		final DeletePort port = new DeletePort((FlexoProcess) null);
 		port.setName(portName);
 		port.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		port.setY(y, ActivityNodeGR.BASIC_PROCESS_EDITOR);
-		port.setLabelX(25, ActionNodeGR.BASIC_PROCESS_EDITOR);
-		port.setLabelY(65, ActionNodeGR.BASIC_PROCESS_EDITOR);
+		port.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		port.setLabelX(25, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		port.setLabelY(65, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
 	}
 

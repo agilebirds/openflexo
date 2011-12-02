@@ -37,10 +37,10 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.dkv.DKVModel;
+import org.openflexo.foundation.dkv.DKVModel.DomainList;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.Key;
-import org.openflexo.foundation.dkv.DKVModel.DomainList;
 import org.openflexo.foundation.dkv.action.AddDomainAction;
 import org.openflexo.foundation.dkv.action.AddKeyAction;
 import org.openflexo.foundation.dkv.action.AddLanguageAction;
@@ -55,248 +55,222 @@ import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVModelView extends CompoundTabularView<DKVModel> 
-implements SelectionSynchronizedModuleView<DKVModel>, GraphicalFlexoObserver
-{
+public class DKVModelView extends CompoundTabularView<DKVModel> implements SelectionSynchronizedModuleView<DKVModel>,
+		GraphicalFlexoObserver {
 
-    private static final Logger logger = Logger.getLogger(DKVModelView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DKVModelView.class.getPackage().getName());
 
-    private DKVDomainTableModel domainTableModel;
-    protected DKVTabularView domainTable;
+	private DKVDomainTableModel domainTableModel;
+	protected DKVTabularView domainTable;
 
-    private DKVKeyTableModel keyTableModel;
-    protected DKVTabularView keyTable;
+	private DKVKeyTableModel keyTableModel;
+	protected DKVTabularView keyTable;
 
-    public DKVModelView(DKVModel dkvModel, IEController controller)
-    {
-        super(dkvModel, controller, "dkv_model");
-        dkvModel.addObserver(this);
-        addAction(new TabularViewAction(AddLanguageAction.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getDKVModel();
-            }           
-        });
-        addAction(new TabularViewAction(AddDomainAction.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+	public DKVModelView(DKVModel dkvModel, IEController controller) {
+		super(dkvModel, controller, "dkv_model");
+		dkvModel.addObserver(this);
+		addAction(new TabularViewAction(AddLanguageAction.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getDKVModel();
-            }           
-        });
-        addAction(new TabularViewAction(AddKeyAction.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getDKVModel();
+			}
+		});
+		addAction(new TabularViewAction(AddDomainAction.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedDomain();
-            }           
-        });
-        addAction(new TabularViewAction(DKVDelete.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getDKVModel();
+			}
+		});
+		addAction(new TabularViewAction(AddKeyAction.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });
-        finalizeBuilding();
-    }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getSelectedDomain();
+			}
+		});
+		addAction(new TabularViewAction(DKVDelete.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-    public DKVModel getDKVModel()
-    {
-        return getModelObject();
-    }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return null;
+			}
+		});
+		finalizeBuilding();
+	}
 
-    public DomainList getDomainList()
-    {
-        return getDKVModel().getDomainList();
-    }
+	public DKVModel getDKVModel() {
+		return getModelObject();
+	}
 
+	public DomainList getDomainList() {
+		return getDKVModel().getDomainList();
+	}
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        domainTableModel = new DKVDomainTableModel(getDomainList(),getDomainList().getProject());
-        addToMasterTabularView(domainTable = new DKVTabularView(getIEController(), domainTableModel, 10));
-        keyTableModel = new DKVKeyTableModel(getDKVModel(), null,getDomainList().getProject());
-        addToSlaveTabularView(keyTable = new DKVTabularView(getIEController(), keyTableModel, 10),domainTable);
-         return new JSplitPane(JSplitPane.VERTICAL_SPLIT, domainTable, keyTable);
-    }
+	@Override
+	protected JComponent buildContentPane() {
+		domainTableModel = new DKVDomainTableModel(getDomainList(), getDomainList().getProject());
+		addToMasterTabularView(domainTable = new DKVTabularView(getIEController(), domainTableModel, 10));
+		keyTableModel = new DKVKeyTableModel(getDKVModel(), null, getDomainList().getProject());
+		addToSlaveTabularView(keyTable = new DKVTabularView(getIEController(), keyTableModel, 10), domainTable);
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, domainTable, keyTable);
+	}
 
-    public Domain getSelectedDomain()
-    {
-        IESelectionManager sm = getIEController().getIESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof Domain)) {
-            return (Domain) selection.firstElement();
-        }
-        if ((selection.size() == 1) && (selection.firstElement() instanceof Domain.KeyList)) {
-            return ((Domain.KeyList) selection.firstElement()).getDomain();
-        }
-        if (getSelectedKey() != null) {
-            return getSelectedKey().getDomain();
-        }
-        return null;
-    }
+	public Domain getSelectedDomain() {
+		IESelectionManager sm = getIEController().getIESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof Domain)) {
+			return (Domain) selection.firstElement();
+		}
+		if ((selection.size() == 1) && (selection.firstElement() instanceof Domain.KeyList)) {
+			return ((Domain.KeyList) selection.firstElement()).getDomain();
+		}
+		if (getSelectedKey() != null) {
+			return getSelectedKey().getDomain();
+		}
+		return null;
+	}
 
-    public Key getSelectedKey()
-    {
-        IESelectionManager sm = getIEController().getIESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof Key)) {
-            return (Key) selection.firstElement();
-        }
-        return null;
-    }
+	public Key getSelectedKey() {
+		IESelectionManager sm = getIEController().getIESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof Key)) {
+			return (Key) selection.firstElement();
+		}
+		return null;
+	}
 
-     public DKVTabularView getDomainTable() 
-    {
-        return domainTable;
-    }
+	public DKVTabularView getDomainTable() {
+		return domainTable;
+	}
 
-    public DKVTabularView getKeyTable() 
-    {
-        return keyTable;
-    }
+	public DKVTabularView getKeyTable() {
+		return keyTable;
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-    }
+	/**
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+	}
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-    }
-    
-    /**
-     * Returns flag indicating if this view is itself responsible for scroll management
-     * When not, Flexo will manage it's own scrollbar for you
-     * 
-     * @return
-     */
-    @Override
-	public boolean isAutoscrolled() 
-    {
-    	return false;
-    }
-   
-    
-    public IEController getIEController()
-    {
-        return (IEController)getController();
-    }
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+	}
 
-    public DKVTabularView findTabularViewContaining (DKVObject anObject)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("findTabularViewContaining() "+this+" obj: "+anObject);
-         if (anObject == null) return null;
-        for (Enumeration<TabularView> en=getMasterTabularViews().elements(); en.hasMoreElements();) {
-            DKVTabularView next = (DKVTabularView)en.nextElement();
-            if (next.getModel().indexOf(anObject) > -1) {
-                return next;
-            }
-            DKVObject parentObject = anObject.getParent();
-            if (next.getModel().indexOf(parentObject) > -1) {
-                if (next.getSelectedObjects().contains(parentObject)) {
-                    next.selectObject(parentObject);
-                }
-                for (Enumeration en2=next.getSlaveTabularViews().elements(); en2.hasMoreElements();) {
-                    DKVTabularView next2 = (DKVTabularView)en2.nextElement();
-                    if (next2.getModel().indexOf(anObject) > -1) {
-                        return next2;
-                    }
-                }
-             }
-         }
-        return null;
-    }
-    
-    public void tryToSelect(DKVObject anObject)
-    {
-        DKVTabularView tabView = findTabularViewContaining(anObject);
-        if (tabView != null) {
-            tabView.selectObject(anObject);
-        }
-    }
+	/**
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean isAutoscrolled() {
+		return false;
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (dataModification instanceof ObjectDeleted) {
-            if (dataModification.oldValue() == getModelObject()) {
-                deleteModuleView();
-             }
-        }
-        else if (dataModification instanceof LanguageAdded) {
-            keyTableModel.notifyLanguageAdded(((LanguageAdded)dataModification).getAddedLanguage());
-        }
-        else if (dataModification instanceof LanguageRemoved) {
-            keyTableModel.notifyLanguageRemoved(((LanguageRemoved)dataModification).getRemovedLanguage());
-        }
-    }
-    
-    @Override
-	public DKVModel getRepresentedObject()
-    {
-        return getModelObject();
-    }
-    
-    @Override
-	public void deleteModuleView()
-    {
-        logger.info("Removing view !");
-        getIEController().removeModuleView(this);   
-    }
+	public IEController getIEController() {
+		return (IEController) getController();
+	}
 
-    @Override
-	public FlexoPerspective<DKVModel> getPerspective()
-    {
-        return getIEController().DKV_EDITOR_PERSPECTIVE;
-    }
+	public DKVTabularView findTabularViewContaining(DKVObject anObject) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("findTabularViewContaining() " + this + " obj: " + anObject);
+		}
+		if (anObject == null) {
+			return null;
+		}
+		for (Enumeration<TabularView> en = getMasterTabularViews().elements(); en.hasMoreElements();) {
+			DKVTabularView next = (DKVTabularView) en.nextElement();
+			if (next.getModel().indexOf(anObject) > -1) {
+				return next;
+			}
+			DKVObject parentObject = anObject.getParent();
+			if (next.getModel().indexOf(parentObject) > -1) {
+				if (next.getSelectedObjects().contains(parentObject)) {
+					next.selectObject(parentObject);
+				}
+				for (Enumeration en2 = next.getSlaveTabularViews().elements(); en2.hasMoreElements();) {
+					DKVTabularView next2 = (DKVTabularView) en2.nextElement();
+					if (next2.getModel().indexOf(anObject) > -1) {
+						return next2;
+					}
+				}
+			}
+		}
+		return null;
+	}
 
-    @Override
-	public List<SelectionListener> getSelectionListeners(){
+	public void tryToSelect(DKVObject anObject) {
+		DKVTabularView tabView = findTabularViewContaining(anObject);
+		if (tabView != null) {
+			tabView.selectObject(anObject);
+		}
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ObjectDeleted) {
+			if (dataModification.oldValue() == getModelObject()) {
+				deleteModuleView();
+			}
+		} else if (dataModification instanceof LanguageAdded) {
+			keyTableModel.notifyLanguageAdded(((LanguageAdded) dataModification).getAddedLanguage());
+		} else if (dataModification instanceof LanguageRemoved) {
+			keyTableModel.notifyLanguageRemoved(((LanguageRemoved) dataModification).getRemovedLanguage());
+		}
+	}
+
+	@Override
+	public DKVModel getRepresentedObject() {
+		return getModelObject();
+	}
+
+	@Override
+	public void deleteModuleView() {
+		logger.info("Removing view !");
+		getIEController().removeModuleView(this);
+	}
+
+	@Override
+	public FlexoPerspective<DKVModel> getPerspective() {
+		return getIEController().DKV_EDITOR_PERSPECTIVE;
+	}
+
+	@Override
+	public List<SelectionListener> getSelectionListeners() {
 		Vector<SelectionListener> reply = new Vector<SelectionListener>();
 		reply.add(this);
 		return reply;
 	}
 
- }
+}

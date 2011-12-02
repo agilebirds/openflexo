@@ -21,35 +21,28 @@ package org.openflexo.foundation.ie.dm;
 
 /**
  * @author bmangez
- * @version $Id: SelectionForGeneration.java,v 1.1.4.2 2005/08/04 16:20:19
- *          sguerin Exp $ $Log: SelectionForGeneration.java,v $
- *          sguerin Exp $ Revision 1.1.4.3  2005/10/03 11:50:43  benoit
- *          sguerin Exp $ organize importformat codelogger test
- *          sguerin Exp $ Revision 1.1.4.2
- *          2005/08/04 16:20:19 sguerin Commit on 04/08/2005, Sylvain GUERIN,
- *          version 7.1.6.alpha Temporary commit, see next commit
+ * @version $Id: SelectionForGeneration.java,v 1.1.4.2 2005/08/04 16:20:19 sguerin Exp $ $Log: SelectionForGeneration.java,v $ sguerin Exp $
+ *          Revision 1.1.4.3 2005/10/03 11:50:43 benoit sguerin Exp $ organize import format code logger test sguerin Exp $ Revision 1.1.4.2
+ *          2005/08/04 16:20:19 sguerin Commit on 04/08/2005, Sylvain GUERIN, version 7.1.6.alpha Temporary commit, see next commit
  * 
- * Revision 1.1.4.1 2005/07/05 07:26:47 benoit *** empty log message ***
+ *          Revision 1.1.4.1 2005/07/05 07:26:47 benoit *** empty log message ***
  * 
- * Revision 1.1.2.1 2005/07/05 06:43:12 benoit *** empty log message ***
+ *          Revision 1.1.2.1 2005/07/05 06:43:12 benoit *** empty log message ***
  * 
  * 
- * <B>Class Description</B>
+ *          <B>Class Description</B>
  */
-public class SelectionForGeneration extends IEDataModification
-{
+public class SelectionForGeneration extends IEDataModification {
 
-    /**
+	/**
      * 
      */
-    public SelectionForGeneration(boolean b)
-    {
-        super(null, new Boolean(b));
-    }
+	public SelectionForGeneration(boolean b) {
+		super(null, new Boolean(b));
+	}
 
-    public boolean getSelectionValue()
-    {
-        return ((Boolean) newValue()).booleanValue();
-    }
+	public boolean getSelectionValue() {
+		return ((Boolean) newValue()).booleanValue();
+	}
 
 }

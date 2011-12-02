@@ -19,7 +19,6 @@
  */
 package org.openflexo.dg.test;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -66,16 +65,14 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-
-public class TestPDF extends DGTestCase
-{
+public class TestPDF extends DGTestCase {
 
 	/**
-	 * This class extends the DefaultFlexoEditor for testing purposes. So far the implementation is just a simple extension of the
-	 * default editor but it may be used later for additional purposes.
-	 *
+	 * This class extends the DefaultFlexoEditor for testing purposes. So far the implementation is just a simple extension of the default
+	 * editor but it may be used later for additional purposes.
+	 * 
 	 * @author gpolet
-	 *
+	 * 
 	 */
 	public static class FlexoPseudoInteractiveEditor extends InteractiveFlexoEditor implements ProjectGeneratorFactory {
 
@@ -109,30 +106,27 @@ public class TestPDF extends DGTestCase
 		}
 
 		@Override
-		public  FlexoActionEnableCondition getEnableConditionFor(
-				FlexoActionType actionType) {
+		public FlexoActionEnableCondition getEnableConditionFor(FlexoActionType actionType) {
 			return null;
 		}
 
 		@Override
-		public  FlexoActionInitializer getInitializerFor(FlexoActionType actionType) {
+		public FlexoActionInitializer getInitializerFor(FlexoActionType actionType) {
 			return null;
 		}
 
 		@Override
-		public  FlexoActionFinalizer getFinalizerFor(
-				FlexoActionType actionType) {
+		public FlexoActionFinalizer getFinalizerFor(FlexoActionType actionType) {
 			return null;
 		}
 
 		@Override
-		public  FlexoExceptionHandler getExceptionHandlerFor(
-				FlexoActionType actionType) {
+		public FlexoExceptionHandler getExceptionHandlerFor(FlexoActionType actionType) {
 			return null;
 		}
 
 		@Override
-		public boolean isTestEditor(){
+		public boolean isTestEditor() {
 			return true;
 		}
 
@@ -142,8 +136,7 @@ public class TestPDF extends DGTestCase
 		}
 	}
 
-	public TestPDF(String arg0)
-	{
+	public TestPDF(String arg0) {
 		super(arg0);
 	}
 
@@ -158,30 +151,30 @@ public class TestPDF extends DGTestCase
 
 	/**
 	 * Overrides setUp
+	 * 
 	 * @see DGTestCase#setUp()
 	 */
 	@Override
-	protected void setUp() throws Exception
-	{
+	protected void setUp() throws Exception {
 		FlexoApplication.initialize();
 		super.setUp();
 	}
 
 	/**
 	 * Overrides tearDown
+	 * 
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	@Override
-	protected void tearDown() throws Exception
-	{
-		SwingUtilities.invokeAndWait(new Runnable(){
+	protected void tearDown() throws Exception {
+		SwingUtilities.invokeAndWait(new Runnable() {
 			/**
 			 * Overrides run
+			 * 
 			 * @see java.lang.Runnable#run()
 			 */
 			@Override
-			public void run()
-			{
+			public void run() {
 				ModuleLoader.closeCurrentProject();
 				// FlexoSharedInspectorController.resetInstance();
 				System.gc();
@@ -189,41 +182,39 @@ public class TestPDF extends DGTestCase
 		});
 		super.tearDown();
 	}
+
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0BuildPDF()
-	{
-		pdfBuilder("FBVPDFTest","FBV.prj.zip","FBV.prj",DefaultDocType.Business.name());
-		pdfBuilder("FBVPDFTest","FBV.prj.zip","FBV.prj",DefaultDocType.Technical.name());
-		pdfBuilder("FBVPDFTest","FBV.prj.zip","FBV.prj",DefaultDocType.UserManual.name());
+	public void test0BuildPDF() {
+		pdfBuilder("FBVPDFTest", "FBV.prj.zip", "FBV.prj", DefaultDocType.Business.name());
+		pdfBuilder("FBVPDFTest", "FBV.prj.zip", "FBV.prj", DefaultDocType.Technical.name());
+		pdfBuilder("FBVPDFTest", "FBV.prj.zip", "FBV.prj", DefaultDocType.UserManual.name());
 	}
 
-	public void test1BuildPDF()
-	{
-		pdfBuilder("ClimactPDFTest","Climact.prj.zip","Climact.prj",DefaultDocType.Business.name());
-		pdfBuilder("ClimactPDFTest","Climact.prj.zip","Climact.prj",DefaultDocType.Technical.name());
-		pdfBuilder("ClimactPDFTest","Climact.prj.zip","Climact.prj",DefaultDocType.UserManual.name());
+	public void test1BuildPDF() {
+		pdfBuilder("ClimactPDFTest", "Climact.prj.zip", "Climact.prj", DefaultDocType.Business.name());
+		pdfBuilder("ClimactPDFTest", "Climact.prj.zip", "Climact.prj", DefaultDocType.Technical.name());
+		pdfBuilder("ClimactPDFTest", "Climact.prj.zip", "Climact.prj", DefaultDocType.UserManual.name());
 	}
 
-	public void test2BuildPDF()
-	{
-		pdfBuilder("HyperlinkPDFTest","HyperlinkTest.prj.zip","HyperlinkTest.prj",DefaultDocType.Business.name());
-		pdfBuilder("HyperlinkPDFTest","HyperlinkTest.prj.zip","HyperlinkTest.prj",DefaultDocType.Technical.name());
-		pdfBuilder("HyperlinkPDFTest","HyperlinkTest.prj.zip","HyperlinkTest.prj",DefaultDocType.UserManual.name());
+	public void test2BuildPDF() {
+		pdfBuilder("HyperlinkPDFTest", "HyperlinkTest.prj.zip", "HyperlinkTest.prj", DefaultDocType.Business.name());
+		pdfBuilder("HyperlinkPDFTest", "HyperlinkTest.prj.zip", "HyperlinkTest.prj", DefaultDocType.Technical.name());
+		pdfBuilder("HyperlinkPDFTest", "HyperlinkTest.prj.zip", "HyperlinkTest.prj", DefaultDocType.UserManual.name());
 	}
 
-	protected void pdfBuilder(final String name, final String zipName, final String prjName, final String docTypeString){
+	protected void pdfBuilder(final String name, final String zipName, final String prjName, final String docTypeString) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					/**
 					 * Overrides run
+					 * 
 					 * @see java.lang.Runnable#run()
 					 */
 					@Override
-					public void run()
-					{
+					public void run() {
 						pdfBuilder(name, zipName, prjName, docTypeString);
 					}
 				});
@@ -237,8 +228,7 @@ public class TestPDF extends DGTestCase
 			return;
 		}
 
-
-		log("Build PDF: "+name+" for target "+docTypeString);
+		log("Build PDF: " + name + " for target " + docTypeString);
 		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize();
 		File outputDir = null;
@@ -255,14 +245,13 @@ public class TestPDF extends DGTestCase
 		File unzipDir = null;
 		try {
 			File f = File.createTempFile("TestPDFUnzip_", null);
-			unzipDir = new File(f.getParentFile(), f.getName() + "Unzip"+name);
+			unzipDir = new File(f.getParentFile(), f.getName() + "Unzip" + name);
 			f.delete();
 		} catch (IOException e) {
 			e.printStackTrace();
-			unzipDir = new File(System.getProperty("java.io.tmpdir"), "TestPDFUnzip"+name);
+			unzipDir = new File(System.getProperty("java.io.tmpdir"), "TestPDFUnzip" + name);
 		}
 		unzipDir.mkdirs();
-
 
 		try {
 			ZipUtils.unzip(new FileResource(zipName), unzipDir);
@@ -274,7 +263,7 @@ public class TestPDF extends DGTestCase
 			fail();
 		}
 
-		File projectDirectory = new File(unzipDir,prjName);
+		File projectDirectory = new File(unzipDir, prjName);
 
 		try {
 			projectDirectory = FileUtils.copyDirToDir(projectDirectory, outputDir);
@@ -288,7 +277,7 @@ public class TestPDF extends DGTestCase
 		File pdfDir = new File(outputDir, "PDF");
 		FlexoEditor editor;
 		try {
-			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, INTERACTIVE_EDITOR_FACTORY,null);
+			editor = FlexoResourceManager.initializeExistingProject(projectDirectory, INTERACTIVE_EDITOR_FACTORY, null);
 		} catch (ProjectInitializerException e1) {
 			e1.printStackTrace();
 			fail("Could not initialize test project");
@@ -303,7 +292,7 @@ public class TestPDF extends DGTestCase
 				initModuleLoader(projectDirectory, editor.getProject());
 				editor.getProject().getGeneratedDoc().setFactory((FlexoPseudoInteractiveEditor) editor);
 				DocType docType = editor.getProject().getDocTypeNamed(docTypeString);
-				editor.getProject().computeDiff = false;
+				editor.getProject().setComputeDiff(false);
 				AddGeneratedCodeRepository add = AddGeneratedCodeRepository.actionType.makeNewAction(editor.getProject().getGeneratedDoc(),
 						null, editor);
 				add.setNewDocType(docType);
@@ -314,22 +303,21 @@ public class TestPDF extends DGTestCase
 				// the
 				// repository
 				((DGRepository) add.getNewGeneratedCodeRepository()).setPostBuildDirectory(pdfDir);
-				((DGRepository) add.getNewGeneratedCodeRepository()).setPostProductName(((DGRepository) add.getNewGeneratedCodeRepository())
-						.getName()
-						+ ".pdf");
+				((DGRepository) add.getNewGeneratedCodeRepository())
+						.setPostProductName(((DGRepository) add.getNewGeneratedCodeRepository()).getName() + ".pdf");
 				((DGRepository) add.getNewGeneratedCodeRepository()).setManageHistory(false);
 				if (!add.hasActionExecutionSucceeded()) {
 					fail("Add generated doc repository failed");
 				}
-				SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(add
-						.getNewGeneratedCodeRepository(), null, editor);
+				SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+						add.getNewGeneratedCodeRepository(), null, editor);
 				sync.setSaveBeforeGenerating(false);
 				sync.doAction();
 				if (!sync.hasActionExecutionSucceeded()) {
 					fail("Synchronize generated doc repository failed");
 				}
-				WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewAction(add
-						.getNewGeneratedCodeRepository(), null, editor);
+				WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewAction(
+						add.getNewGeneratedCodeRepository(), null, editor);
 				write.setSaveBeforeGenerating(false);
 				write.doAction();
 				if (!write.hasActionExecutionSucceeded()) {
@@ -348,7 +336,7 @@ public class TestPDF extends DGTestCase
 			}
 		} finally {
 			// The last test must call this to stop the RM checking
-			if (editor!=null) {
+			if (editor != null) {
 				editor.getProject().close();
 			}
 		}
@@ -359,23 +347,22 @@ public class TestPDF extends DGTestCase
 	 * @param projectDirectory
 	 * @param flexoProject
 	 */
-	private void initModuleLoader(File projectDirectory, FlexoProject project)
-	{
+	private void initModuleLoader(File projectDirectory, FlexoProject project) {
 		ModuleLoader.setAllowsDocSubmission(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Init Module loader...");
 		}
-		if (GeneralPreferences.getFavoriteModuleName()==null) {
+		if (GeneralPreferences.getFavoriteModuleName() == null) {
 			GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		}
 		ModuleLoader.fileNameToOpen = projectDirectory.getAbsolutePath();
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER"), false);
+		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
 		ModuleLoader.setProject(project);
-		if (ExternalModuleDelegater.getModuleLoader()==null) {
+		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");
-		} else if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance()==null) {
+		} else if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance() == null) {
 			fail("IE Module not on the classpath. Component screenshots cannot be generated");
-		} else if (ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance()==null) {
+		} else if (ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance() == null) {
 			fail("WKF Module not on the classpath. Process and activity screenshots cannot be generated");
 		}
 	}

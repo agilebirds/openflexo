@@ -26,13 +26,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -41,34 +34,36 @@ import org.openflexo.foundation.ie.operator.IEOperator;
 import org.openflexo.foundation.ie.widget.IESpanTDWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.ITableRow;
-
+import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class SuroundWithRepetitionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	SuroundWithRepetitionInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(SuroundWithRepetition.actionType,actionInitializer);
+	SuroundWithRepetitionInitializer(IEControllerActionInitializer actionInitializer) {
+		super(SuroundWithRepetition.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<SuroundWithRepetition> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<SuroundWithRepetition> getDefaultInitializer() {
 		return new FlexoActionInitializer<SuroundWithRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithRepetition action)
-			{
+			public boolean run(ActionEvent e, SuroundWithRepetition action) {
 				if (action.getFocusedObject() instanceof ITableRow) {
 					Vector<FlexoModelObject> v = (Vector<FlexoModelObject>) action.getGlobalSelection().clone();
-					if (!v.contains(action.getFocusedObject()))
+					if (!v.contains(action.getFocusedObject())) {
 						v.add(action.getFocusedObject());
+					}
 					if (action.getFocusedObject() instanceof IEOperator) {
 						v.remove(action.getFocusedObject());
 						v.add(((IEOperator) action.getFocusedObject()).getOperatedSequence());
@@ -108,8 +103,9 @@ public class SuroundWithRepetitionInitializer extends ActionInitializer {
 						en = v.elements();
 						while (en.hasMoreElements() && !ok) {
 							ITableRow tr = (ITableRow) en.nextElement();
-							if (tr.containsTD(s))
+							if (tr.containsTD(s)) {
 								ok = true;
+							}
 						}
 						if (!ok) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("one_of_the_cell_span_is_not_in_the_selection"));
@@ -125,24 +121,19 @@ public class SuroundWithRepetitionInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<SuroundWithRepetition> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<SuroundWithRepetition> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SuroundWithRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithRepetition action)
-			{
-				((IEController)getController()).getSelectionManager().setSelectedObject(action.getNewRepetition().getOperatedSequence());
+			public boolean run(ActionEvent e, SuroundWithRepetition action) {
+				((IEController) getController()).getSelectionManager().setSelectedObject(action.getNewRepetition().getOperatedSequence());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SEIconLibrary.REPETITION_ICON;
 	}
-
-
 
 }

@@ -22,106 +22,97 @@ package org.openflexo.view;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 
 public abstract class FlexoPerspective<O extends FlexoModelObject> {
 
-    private String _name;
-    
-    public FlexoPerspective(String name)
-    {
-        super();
-        _name = name;
-    }
-    
-    public boolean isAlwaysVisible() 
-    {
-    	return false;
-    }
-    
-    public String getName() 
-    {
-        return _name;
-    }
-    
-    public String getLocalizedName() 
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
-    
-    @Override
-	public String toString()
-    {
-        return getName();
-    }
-    
-    public abstract ImageIcon getActiveIcon();
-    
-    public abstract ImageIcon getSelectedIcon();
+	private String _name;
 
-    /**
-     * Return a flag indicating if perspective control left view.
-     * When set to true, use component supplied by #getLeftView()
-     * @return
-     * @see #getLeftView()
-     */
-    public boolean doesPerspectiveControlLeftView()
-    {
-    	return false;
-    }
-    
-    /**
-     * Return view to be used as left view controlled by this perspective
-     * Default is to return null. Override this method as required.
-     * @return
-     * @see #doesPerspectiveControlLeftView()
-     */
-    public JComponent getLeftView() {
-    	return null;
-    }
+	public FlexoPerspective(String name) {
+		super();
+		_name = name;
+	}
 
-    /**
-     * Return a flag indicating if perspective control right view.
-     * When set to true, use component supplied by #getRightView()
-     * @return
-     * @see #getRightView()
-     */
-    public boolean doesPerspectiveControlRightView()
-    {
-    	return false;
-    }
-    
-    /**
-     * Return view to be used as right view controlled by this perspective
-     * Default is to return null. Override this method as required.
-     * @return
-     * @see #doesPerspectiveControlRightView()
-     */
-    public JComponent getRightView() {
-    	return null;
-    }
+	public boolean isAlwaysVisible() {
+		return false;
+	}
 
-    // Override when required
-    public JComponent getHeader() {
-    	return null;
-    }
+	public String getName() {
+		return _name;
+	}
 
-    // Override when required
-    public JComponent getFooter() {
-    	return null;
-    }
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
 
-    public abstract ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
+	@Override
+	public String toString() {
+		return getName();
+	}
 
-    public abstract boolean hasModuleViewForObject(FlexoModelObject object);
+	public abstract ImageIcon getActiveIcon();
 
-    public abstract O getDefaultObject(FlexoModelObject proposedObject);
-	
-    public void notifyModuleViewDisplayed(ModuleView<?> moduleView)
-    {
-    	
-    }
+	public abstract ImageIcon getSelectedIcon();
+
+	/**
+	 * Return a flag indicating if perspective control left view. When set to true, use component supplied by #getLeftView()
+	 * 
+	 * @return
+	 * @see #getLeftView()
+	 */
+	public boolean doesPerspectiveControlLeftView() {
+		return false;
+	}
+
+	/**
+	 * Return view to be used as left view controlled by this perspective Default is to return null. Override this method as required.
+	 * 
+	 * @return
+	 * @see #doesPerspectiveControlLeftView()
+	 */
+	public JComponent getLeftView() {
+		return null;
+	}
+
+	/**
+	 * Return a flag indicating if perspective control right view. When set to true, use component supplied by #getRightView()
+	 * 
+	 * @return
+	 * @see #getRightView()
+	 */
+	public boolean doesPerspectiveControlRightView() {
+		return false;
+	}
+
+	/**
+	 * Return view to be used as right view controlled by this perspective Default is to return null. Override this method as required.
+	 * 
+	 * @return
+	 * @see #doesPerspectiveControlRightView()
+	 */
+	public JComponent getRightView() {
+		return null;
+	}
+
+	// Override when required
+	public JComponent getHeader() {
+		return null;
+	}
+
+	// Override when required
+	public JComponent getFooter() {
+		return null;
+	}
+
+	public abstract ModuleView<? extends O> createModuleViewForObject(O object, FlexoController controller);
+
+	public abstract boolean hasModuleViewForObject(FlexoModelObject object);
+
+	public abstract O getDefaultObject(FlexoModelObject proposedObject);
+
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+
+	}
 }

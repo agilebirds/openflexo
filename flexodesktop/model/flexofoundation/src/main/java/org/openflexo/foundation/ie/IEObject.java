@@ -53,178 +53,173 @@ import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
- * Superclass for all model classes. Holds all attributes for a model class.
- * Notify observers when some attribute change (i.e. when put is called), giving
- * the modified key as notification argument. TODO: currently implements
- * Serializable: don't know why: remove this interface ???
- *
+ * Superclass for all model classes. Holds all attributes for a model class. Notify observers when some attribute change (i.e. when put is
+ * called), giving the modified key as notification argument. TODO: currently implements Serializable: don't know why: remove this interface
+ * ???
+ * 
  * @author bmangez
- *
+ * 
  */
-public abstract class IEObject extends FlexoModelObject implements DataFlexoObserver, IObject
-{
+public abstract class IEObject extends FlexoModelObject implements DataFlexoObserver, IObject {
 
-    private static final Logger logger = Logger.getLogger(IEObject.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEObject.class.getPackage().getName());
 
-    protected static final Vector<IObject> EMPTY_IOBJECT_VECTOR = EmptyVector.EMPTY_VECTOR(IObject.class);
-    
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
-    /**
-     * This consrtuctor should never be called anywhre by anyone
-     */
-    public IEObject(FlexoProject project)
-    {
-        super(project);
-    }
+	protected static final Vector<IObject> EMPTY_IOBJECT_VECTOR = EmptyVector.EMPTY_VECTOR(IObject.class);
 
-    // ==========================================================================
-    // ========================= XML Serialization ============================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
+	/**
+	 * This consrtuctor should never be called anywhre by anyone
+	 */
+	public IEObject(FlexoProject project) {
+		super(project);
+	}
 
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getProject().getXmlMappings().getIEMapping();
-    }
+	// ==========================================================================
+	// ========================= XML Serialization ============================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Instance Methods
-    // ===========================
-    // ==========================================================================
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getProject().getXmlMappings().getIEMapping();
+	}
 
-    @Override
-	public void update(Observable observable, Object obj)
-    {
-        // Do nothing, since Observer interface is no more used
-        // See FlexoObserver
-    }
+	// ==========================================================================
+	// ============================= Instance Methods
+	// ===========================
+	// ==========================================================================
 
-    @Override
-	public void update(FlexoObservable observable, DataModification obj)
-    {
-        // Ignored at this level: implements it in sub-classes
-    }
+	@Override
+	public void update(Observable observable, Object obj) {
+		// Do nothing, since Observer interface is no more used
+		// See FlexoObserver
+	}
 
-    @Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-         Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-         returned.add(IECut.actionType);
-         returned.add(IECopy.actionType);
-         returned.add(IEPaste.actionType);
-         returned.add(IEDelete.actionType);
-         return returned;
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification obj) {
+		// Ignored at this level: implements it in sub-classes
+	}
 
-    // ==========================================================================
-    // ============================== KeyValueCoding
-    // ============================
-    // ==========================================================================
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(IECut.actionType);
+		returned.add(IECopy.actionType);
+		returned.add(IEPaste.actionType);
+		returned.add(IEDelete.actionType);
+		return returned;
+	}
 
-    protected void notifyModification(String key, Object oldValue, Object newValue)
-    {
-        notifyModification(key, oldValue, newValue, false);
-    }
+	// ==========================================================================
+	// ============================== KeyValueCoding
+	// ============================
+	// ==========================================================================
 
-    protected void notifyModification(String key, Object oldValue, Object newValue, boolean isReentrant)
-    {
-    	setChanged();
-    	int modifType = DataModification.ATTRIBUTE;
-    	DataModification dataModification = new DataModification(modifType, key, oldValue, newValue);
-    	if (isReentrant)
-    		dataModification.setReentrant(isReentrant);
+	protected void notifyModification(String key, Object oldValue, Object newValue) {
+		notifyModification(key, oldValue, newValue, false);
+	}
+
+	protected void notifyModification(String key, Object oldValue, Object newValue, boolean isReentrant) {
+		setChanged();
+		int modifType = DataModification.ATTRIBUTE;
+		DataModification dataModification = new DataModification(modifType, key, oldValue, newValue);
+		if (isReentrant) {
+			dataModification.setReentrant(isReentrant);
+		}
 		notifyObservers(dataModification);
-    }
-    
-    @Override
-    public Class getTypeForKey(String key)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("getTypeForKey for " + key);
-        try {
-            return super.getTypeForKey(key);
-        } catch (InvalidObjectSpecificationException e) {
-            if (logger.isLoggable(Level.FINE))
-                logger.finer("OK, lets use the dynamic attributes !");
-            return String.class;
-        }
-    }
+	}
 
-    @Override
-	public ValidationModel getDefaultValidationModel()
-    {
-        if (getProject() != null) {
-            return getProject().getIEValidationModel();
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Could not access to project !");
-        }
-        return null;
-    }
+	@Override
+	public Class getTypeForKey(String key) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.finer("getTypeForKey for " + key);
+		}
+		try {
+			return super.getTypeForKey(key);
+		} catch (InvalidObjectSpecificationException e) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.finer("OK, lets use the dynamic attributes !");
+			}
+			return String.class;
+		}
+	}
 
-    private void processToAdditionOfEmbedded(IEObject object, Collection<IObject> queue)
-    {
-        queue.add(object);
-        
-        if (object.getEmbeddedIEObjects() != null) {
-            Enumeration en = object.getEmbeddedIEObjects().elements();
-            Object candidate = null;
-            while (en.hasMoreElements()) {
-                candidate = en.nextElement();
-                if (candidate==null){
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Object of class "+object.getClass().getName()+" returned IEObjects null in its method getEmbeddedIEObjects");
-                    continue;
-                }
-                if (!queue.contains(candidate)) {
-                	if(candidate instanceof IObject){
-                		processToAdditionOfEmbedded((IEObject) candidate, queue);
-                	}else{
-                		if (logger.isLoggable(Level.SEVERE))
-                            logger.severe("Object of class "+object.getClass().getName()+" returned non IEObjects in its method getEmbeddedIEObjects");
-                	}
-                }
-            }
-        }
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		if (getProject() != null) {
+			return getProject().getIEValidationModel();
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not access to project !");
+			}
+		}
+		return null;
+	}
 
-    }
+	private void processToAdditionOfEmbedded(IEObject object, Collection<IObject> queue) {
+		queue.add(object);
 
-    public boolean checkWidgetDoesNotEmbedWOComponent(IEReusableComponent wo) {
-		Vector<IObject> v=getAllEmbeddedIEObjects();
-		for (IObject o:v){
-			if (o instanceof PartialComponentInstance){
-				if (((PartialComponentInstance)o).getComponentDefinition()==wo.getComponentDefinition())
+		if (object.getEmbeddedIEObjects() != null) {
+			Enumeration en = object.getEmbeddedIEObjects().elements();
+			Object candidate = null;
+			while (en.hasMoreElements()) {
+				candidate = en.nextElement();
+				if (candidate == null) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Object of class " + object.getClass().getName()
+								+ " returned IEObjects null in its method getEmbeddedIEObjects");
+					}
+					continue;
+				}
+				if (!queue.contains(candidate)) {
+					if (candidate instanceof IObject) {
+						processToAdditionOfEmbedded((IEObject) candidate, queue);
+					} else {
+						if (logger.isLoggable(Level.SEVERE)) {
+							logger.severe("Object of class " + object.getClass().getName()
+									+ " returned non IEObjects in its method getEmbeddedIEObjects");
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+	public boolean checkWidgetDoesNotEmbedWOComponent(IEReusableComponent wo) {
+		Vector<IObject> v = getAllEmbeddedIEObjects();
+		for (IObject o : v) {
+			if (o instanceof PartialComponentInstance) {
+				if (((PartialComponentInstance) o).getComponentDefinition() == wo.getComponentDefinition()) {
 					return true;
-				else {
-					boolean res =((PartialComponentInstance)o).getComponentDefinition().getWOComponent().checkWidgetDoesNotEmbedWOComponent(wo);
-					if (res)
+				} else {
+					boolean res = ((PartialComponentInstance) o).getComponentDefinition().getWOComponent()
+							.checkWidgetDoesNotEmbedWOComponent(wo);
+					if (res) {
 						return true;
+					}
 				}
 			}
 		}
 		return false;
 	}
-    
-    public abstract IEObject getParent();
-    
-    /**
-     * Return a Vector of all embedded IEObjects: recursive method (Note must
-     * include itself in this vector)
-     *
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getAllEmbeddedIEObjects()
-    {
-    	return getAllEmbeddedIEObjects(false);
-    }
 
-    /**
+	public abstract IEObject getParent();
+
+	/**
+	 * Return a Vector of all embedded IEObjects: recursive method (Note must include itself in this vector)
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getAllEmbeddedIEObjects() {
+		return getAllEmbeddedIEObjects(false);
+	}
+
+	/**
 	 * Return a Vector of all embedded IEObjects: recursive method (Note must include itself in this vector)
 	 * 
 	 * @param maintainNaturalOrder
@@ -232,235 +227,217 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 	 *            directly the performance.
 	 * @return a Vector of IEObject instances
 	 */
-    public Vector<IObject> getAllEmbeddedIEObjects(boolean maintainNaturalOrder) {
-        Collection<IObject> returned;
-        if (maintainNaturalOrder)
-        	returned = new Vector<IObject>();
-        else
-        	returned = new HashSet<IObject>();
-        processToAdditionOfEmbedded(this, returned);
-        return new Vector<IObject>(returned);
-    }
-    
-    /**
-     * Return a Vector of all embedded IEWidget matching the classe specified: recursive method (Note must include itself in this vector)
-     * 
-     * @param classeToMatch
-     * @return a Vector of all embedded IEWidget matching the classe specified: recursive method (Note must include itself in this vector)
-     */
-    public Vector<IEWidget> getAllEmbeddedIEWidgets(Class<? extends IEWidget> classeToMatch){
-    	Vector<IEWidget> reply = new Vector<IEWidget>();
-    	Enumeration en = getAllEmbeddedIEObjects(true).elements();
-    	while(en.hasMoreElements()){
-    		IEObject widget = (IEObject)en.nextElement();
-    		if(classeToMatch.isAssignableFrom(widget.getClass()))
-    			reply.add((IEWidget) widget);
-    	}
-    	return reply;
-    }
-      
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     *
-     * @return a Vector of IEObject instances
-     */
-    @Override
+	public Vector<IObject> getAllEmbeddedIEObjects(boolean maintainNaturalOrder) {
+		Collection<IObject> returned;
+		if (maintainNaturalOrder) {
+			returned = new Vector<IObject>();
+		} else {
+			returned = new HashSet<IObject>();
+		}
+		processToAdditionOfEmbedded(this, returned);
+		return new Vector<IObject>(returned);
+	}
+
+	/**
+	 * Return a Vector of all embedded IEWidget matching the classe specified: recursive method (Note must include itself in this vector)
+	 * 
+	 * @param classeToMatch
+	 * @return a Vector of all embedded IEWidget matching the classe specified: recursive method (Note must include itself in this vector)
+	 */
+	public Vector<IEWidget> getAllEmbeddedIEWidgets(Class<? extends IEWidget> classeToMatch) {
+		Vector<IEWidget> reply = new Vector<IEWidget>();
+		Enumeration en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IEObject widget = (IEObject) en.nextElement();
+			if (classeToMatch.isAssignableFrom(widget.getClass())) {
+				reply.add((IEWidget) widget);
+			}
+		}
+		return reply;
+	}
+
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
 	public abstract Vector<IObject> getEmbeddedIEObjects();
 
-    @Override
-	public Vector<Validable> getAllEmbeddedValidableObjects()
-    {
-        return new Vector<Validable>(getAllEmbeddedIEObjects());
-    }
+	@Override
+	public Vector<Validable> getAllEmbeddedValidableObjects() {
+		return new Vector<Validable>(getAllEmbeddedIEObjects());
+	}
 
-    /**
-     * Returns all the strings ({@link IEStringWidget}) of this object.
-     * You should not use directly this method but instead implement a cache
-     * mechanism and use the benefits of the methods notifyWidgetAdded and
-     * notifyWidgetRemoved. This method is intended to be used to preserve the
-     * order of this object when presenting this to a user.
-     *
-     * @return all the strings contained in this component.
-     */
-    public Vector<IEStringWidget> getStrings()
-    {
-        Vector<IEStringWidget> v = new Vector<IEStringWidget>();
-        Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
-        while (en.hasMoreElements()) {
-            IObject o = en.nextElement();
-            if (o instanceof IEStringWidget)
-                v.add((IEStringWidget) o);
-        }
-        return v;
-    }
+	/**
+	 * Returns all the strings ({@link IEStringWidget}) of this object. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this object when presenting this to a user.
+	 * 
+	 * @return all the strings contained in this component.
+	 */
+	public Vector<IEStringWidget> getStrings() {
+		Vector<IEStringWidget> v = new Vector<IEStringWidget>();
+		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IObject o = en.nextElement();
+			if (o instanceof IEStringWidget) {
+				v.add((IEStringWidget) o);
+			}
+		}
+		return v;
+	}
 
-    /**
-     * Returns all the textfields ({@link IETextFieldWidget}) of this object.
-     * You should not use directly this method but instead implement a cache
-     * mechanism and use the benefits of the methods notifyWidgetAdded and
-     * notifyWidgetRemoved. This method is intended to be used to preserve the
-     * order of this object when presenting this to a user.
-     *
-     * @return all the textfields contained in this component.
-     */
-    public Vector<IETextFieldWidget> getTextfields()
-    {
-        Vector<IETextFieldWidget> v = new Vector<IETextFieldWidget>();
-        Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
-        while (en.hasMoreElements()) {
-            IObject o = en.nextElement();
-            if (o instanceof IETextFieldWidget)
-                v.add((IETextFieldWidget) o);
-        }
-        return v;
-    }
+	/**
+	 * Returns all the textfields ({@link IETextFieldWidget}) of this object. You should not use directly this method but instead implement
+	 * a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used
+	 * to preserve the order of this object when presenting this to a user.
+	 * 
+	 * @return all the textfields contained in this component.
+	 */
+	public Vector<IETextFieldWidget> getTextfields() {
+		Vector<IETextFieldWidget> v = new Vector<IETextFieldWidget>();
+		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IObject o = en.nextElement();
+			if (o instanceof IETextFieldWidget) {
+				v.add((IETextFieldWidget) o);
+			}
+		}
+		return v;
+	}
 
-    /**
-     * Returns all the textareas ({@link IETextAreaWidget}) of this object.
-     * You should not use directly this method but instead implement a cache
-     * mechanism and use the benefits of the methods notifyWidgetAdded and
-     * notifyWidgetRemoved. This method is intended to be used to preserve the
-     * order of this object when presenting this to a user.
-     *
-     * @return all the textareas contained in this component.
-     */
-    public Vector<IETextAreaWidget> getTextareas()
-    {
-        Vector<IETextAreaWidget> v = new Vector<IETextAreaWidget>();
-        Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
-        while (en.hasMoreElements()) {
-            IObject o = en.nextElement();
-            if (o instanceof IETextAreaWidget)
-                v.add((IETextAreaWidget) o);
-        }
-        return v;
-    }
+	/**
+	 * Returns all the textareas ({@link IETextAreaWidget}) of this object. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this object when presenting this to a user.
+	 * 
+	 * @return all the textareas contained in this component.
+	 */
+	public Vector<IETextAreaWidget> getTextareas() {
+		Vector<IETextAreaWidget> v = new Vector<IETextAreaWidget>();
+		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IObject o = en.nextElement();
+			if (o instanceof IETextAreaWidget) {
+				v.add((IETextAreaWidget) o);
+			}
+		}
+		return v;
+	}
 
-    /**
-     * Returns all the dropdowns ({@link IEDropDownWidget}) of this object.
-     * You should not use directly this method but instead implement a cache
-     * mechanism and use the benefits of the methods notifyWidgetAdded and
-     * notifyWidgetRemoved. This method is intended to be used to preserve the
-     * order of this object when presenting this to a user.
-     *
-     * @return all the dropdowns contained in this component.
-     */
-    public Vector<IEDropDownWidget> getDropdowns()
-    {
-        Vector<IEDropDownWidget> v = new Vector<IEDropDownWidget>();
-        Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
-        while (en.hasMoreElements()) {
-            IObject o = en.nextElement();
-            if (o instanceof IEDropDownWidget)
-                v.add((IEDropDownWidget) o);
-        }
-        return v;
-    }
+	/**
+	 * Returns all the dropdowns ({@link IEDropDownWidget}) of this object. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this object when presenting this to a user.
+	 * 
+	 * @return all the dropdowns contained in this component.
+	 */
+	public Vector<IEDropDownWidget> getDropdowns() {
+		Vector<IEDropDownWidget> v = new Vector<IEDropDownWidget>();
+		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IObject o = en.nextElement();
+			if (o instanceof IEDropDownWidget) {
+				v.add((IEDropDownWidget) o);
+			}
+		}
+		return v;
+	}
 
-    /**
-     * Returns all the browsers ({@link IEBrowserWidget}) of this object.
-     * You should not use directly this method but instead implement a cache
-     * mechanism and use the benefits of the methods notifyWidgetAdded and
-     * notifyWidgetRemoved. This method is intended to be used to preserve the
-     * order of this object when presenting this to a user.
-     *
-     * @return all the browsers contained in this component.
-     */
-    public Vector<IEBrowserWidget> getBrowsers()
-    {
-        Vector<IEBrowserWidget> v = new Vector<IEBrowserWidget>();
-        Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
-        while (en.hasMoreElements()) {
-            IObject o = en.nextElement();
-            if (o instanceof IEBrowserWidget)
-                v.add((IEBrowserWidget) o);
-        }
-        return v;
-    }
+	/**
+	 * Returns all the browsers ({@link IEBrowserWidget}) of this object. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this object when presenting this to a user.
+	 * 
+	 * @return all the browsers contained in this component.
+	 */
+	public Vector<IEBrowserWidget> getBrowsers() {
+		Vector<IEBrowserWidget> v = new Vector<IEBrowserWidget>();
+		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IObject o = en.nextElement();
+			if (o instanceof IEBrowserWidget) {
+				v.add((IEBrowserWidget) o);
+			}
+		}
+		return v;
+	}
 
-    /**
-     * Returns all the checkboxes ({@link IECheckBoxWidget}) of this object.
-     * You should not use directly this method but instead implement a cache
-     * mechanism and use the benefits of the methods notifyWidgetAdded and
-     * notifyWidgetRemoved. This method is intended to be used to preserve the
-     * order of this object when presenting this to a user.
-     *
-     * @return all the checkboxes contained in this component.
-     */
-    public Vector<IECheckBoxWidget> getCheckboxes()
-    {
-        Vector<IECheckBoxWidget> v = new Vector<IECheckBoxWidget>();
-        Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
-        while (en.hasMoreElements()) {
-            IObject o = en.nextElement();
-            if (o instanceof IECheckBoxWidget)
-                v.add((IECheckBoxWidget) o);
-        }
-        return v;
-    }
+	/**
+	 * Returns all the checkboxes ({@link IECheckBoxWidget}) of this object. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this object when presenting this to a user.
+	 * 
+	 * @return all the checkboxes contained in this component.
+	 */
+	public Vector<IECheckBoxWidget> getCheckboxes() {
+		Vector<IECheckBoxWidget> v = new Vector<IECheckBoxWidget>();
+		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IObject o = en.nextElement();
+			if (o instanceof IECheckBoxWidget) {
+				v.add((IECheckBoxWidget) o);
+			}
+		}
+		return v;
+	}
 
-    /**
-     * Returns all the radio buttons ({@link IERadioButtonWidget}) of this object.
-     * You should not use directly this method but instead implement a cache
-     * mechanism and use the benefits of the methods notifyWidgetAdded and
-     * notifyWidgetRemoved. This method is intended to be used to preserve the
-     * order of this object when presenting this to a user.
-     *
-     * @return all the radio buttons contained in this component.
-     */
-    public Vector<IERadioButtonWidget> getRadios()
-    {
-        Vector<IERadioButtonWidget> v = new Vector<IERadioButtonWidget>();
-        Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
-        while (en.hasMoreElements()) {
-            IObject o = en.nextElement();
-            if (o instanceof IERadioButtonWidget)
-                v.add((IERadioButtonWidget) o);
-        }
-        return v;
-    }
+	/**
+	 * Returns all the radio buttons ({@link IERadioButtonWidget}) of this object. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this object when presenting this to a user.
+	 * 
+	 * @return all the radio buttons contained in this component.
+	 */
+	public Vector<IERadioButtonWidget> getRadios() {
+		Vector<IERadioButtonWidget> v = new Vector<IERadioButtonWidget>();
+		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IObject o = en.nextElement();
+			if (o instanceof IERadioButtonWidget) {
+				v.add((IERadioButtonWidget) o);
+			}
+		}
+		return v;
+	}
 
-    /**
-     * Returns all the buttons ({@link IEButtonWidget}) of this object.
-     * You should not use directly this method but instead implement a cache
-     * mechanism and use the benefits of the methods notifyWidgetAdded and
-     * notifyWidgetRemoved. This method is intended to be used to preserve the
-     * order of this object when presenting this to a user.
-     *
-     * @return all the buttons contained in this component.
-     */
-    public Vector<IEButtonWidget> getIEButtons()
-    {
-        Vector<IEButtonWidget> v = new Vector<IEButtonWidget>();
-        Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
-        while (en.hasMoreElements()) {
-            IObject o = en.nextElement();
-            if (o.getClass()==IEButtonWidget.class)
-                v.add((IEButtonWidget) o);
-        }
-        return v;
-    }
+	/**
+	 * Returns all the buttons ({@link IEButtonWidget}) of this object. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this object when presenting this to a user.
+	 * 
+	 * @return all the buttons contained in this component.
+	 */
+	public Vector<IEButtonWidget> getIEButtons() {
+		Vector<IEButtonWidget> v = new Vector<IEButtonWidget>();
+		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IObject o = en.nextElement();
+			if (o.getClass() == IEButtonWidget.class) {
+				v.add((IEButtonWidget) o);
+			}
+		}
+		return v;
+	}
 
-    /**
-     * Returns all the hyperlinks ({@link IEHyperlinkWidget}) of this object.
-     * You should not use directly this method but instead implement a cache
-     * mechanism and use the benefits of the methods notifyWidgetAdded and
-     * notifyWidgetRemoved. This method is intended to be used to preserve the
-     * order of this object when presenting this to a user.
-     *
-     * @return all the hyperlinks contained in this component.
-     */
-    public Vector<IEHyperlinkWidget> getHyperlinks()
-    {
-        Vector<IEHyperlinkWidget> v = new Vector<IEHyperlinkWidget>();
-        Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
-        while (en.hasMoreElements()) {
-            IObject o = en.nextElement();
-            if (o instanceof IEHyperlinkWidget)
-                v.add((IEHyperlinkWidget) o);
-        }
-        return v;
-    }
+	/**
+	 * Returns all the hyperlinks ({@link IEHyperlinkWidget}) of this object. You should not use directly this method but instead implement
+	 * a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used
+	 * to preserve the order of this object when presenting this to a user.
+	 * 
+	 * @return all the hyperlinks contained in this component.
+	 */
+	public Vector<IEHyperlinkWidget> getHyperlinks() {
+		Vector<IEHyperlinkWidget> v = new Vector<IEHyperlinkWidget>();
+		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
+		while (en.hasMoreElements()) {
+			IObject o = en.nextElement();
+			if (o instanceof IEHyperlinkWidget) {
+				v.add((IEHyperlinkWidget) o);
+			}
+		}
+		return v;
+	}
 
 }

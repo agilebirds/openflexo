@@ -35,236 +35,215 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.generator.Generator;
 
-
 /**
  * This class is used to create the samples for each processes. <br>
  * We do not use directly the method from FlexoProcess because it doesn't creates Ids and relationship with parent process. <br>
  * Additionally the format is transformed to easily change it to CSV file.
+ * 
  * @author nid
- *
+ * 
  */
-public class PrototypeProcessBusinessDataSamplesCreator
-{
+public class PrototypeProcessBusinessDataSamplesCreator {
 	public static final String PROCESSINSTANCE_ID_KEY = "__ID__";
-	
+
 	Map<String, List<List<String>>> businessDataSamples = new HashMap<String, List<List<String>>>();
-	
-	public PrototypeProcessBusinessDataSamplesCreator(FlexoProject project)
-	{
+
+	public PrototypeProcessBusinessDataSamplesCreator(FlexoProject project) {
 		Map<String, List<FlexoProcess>> processesWithParentForBusinessDataKey = new HashMap<String, List<FlexoProcess>>();
-		Map<String, Map<String, List<Object>>> samplesMapForBusinessData = new HashMap<String, Map<String,List<Object>>>();
-		//1 Get all samples from all processes and merge same used business data in one map
-		for (FlexoProcess process :  project.getAllLocalFlexoProcesses())
-		{
+		Map<String, Map<String, List<Object>>> samplesMapForBusinessData = new HashMap<String, Map<String, List<Object>>>();
+		// 1 Get all samples from all processes and merge same used business data in one map
+		for (FlexoProcess process : project.getAllLocalFlexoProcesses()) {
 			String businessDataKey = process.getBusinessDataDictionaryKey();
-			
-			if(process.getParentProcess() != null)
-			{
+
+			if (process.getParentProcess() != null) {
 				List<FlexoProcess> processes = processesWithParentForBusinessDataKey.get(businessDataKey);
-				if(processes == null)
-				{
+				if (processes == null) {
 					processes = new ArrayList<FlexoProcess>();
 					processesWithParentForBusinessDataKey.put(businessDataKey, processes);
 				}
 				processes.add(process);
 			}
-			
+
 			Map<String, List<Object>> results = samplesMapForBusinessData.get(businessDataKey);
-			if(results == null)
-			{
+			if (results == null) {
 				results = new HashMap<String, List<Object>>();
 				samplesMapForBusinessData.put(businessDataKey, results);
 			}
-			
+
 			Map<String, List<Object>> samples = process.getProcessInstanceDictionaryPrototypeSamples();
-			
+
 			int maxRows = getMaxNumberOfSamples(results);
 			int maxRowsSamples = getMaxNumberOfSamples(samples);
-			if(maxRows < maxRowsSamples)
+			if (maxRows < maxRowsSamples) {
 				maxRows = maxRowsSamples;
-			
+			}
+
 			mergeMaps(results, samples);
-			
+
 			GregorianCalendar creationDate = new GregorianCalendar(2001, 1, 1, 10, 0);
 			GregorianCalendar updateDate = new GregorianCalendar(2001, 1, 1, 10, 0);
-			for(Map.Entry<String, List<Object>> entry : results.entrySet())
-			{
+			for (Map.Entry<String, List<Object>> entry : results.entrySet()) {
 				int index = 0;
-				while(entry.getValue().size() != maxRows)
-				{
-					if(entry.getValue().size() > maxRows)
+				while (entry.getValue().size() != maxRows) {
+					if (entry.getValue().size() > maxRows) {
 						entry.getValue().remove(entry.getValue().size() - 1);
-					else
-					{
-						if(entry.getKey().equals(FlexoProcess.PROCESSINSTANCE_CREATIONDATE_KEY))
-						{
+					} else {
+						if (entry.getKey().equals(FlexoProcess.PROCESSINSTANCE_CREATIONDATE_KEY)) {
 							entry.getValue().add(creationDate.getTime());
 							creationDate.add(Calendar.MONTH, 4);
 							creationDate.add(Calendar.DAY_OF_MONTH, 6);
 							creationDate.add(Calendar.HOUR_OF_DAY, 1);
-						}
-						else if(entry.getKey().equals(FlexoProcess.PROCESSINSTANCE_LASTUPDATEDATE_KEY))
-						{
+						} else if (entry.getKey().equals(FlexoProcess.PROCESSINSTANCE_LASTUPDATEDATE_KEY)) {
 							entry.getValue().add(updateDate.getTime());
 							updateDate.add(Calendar.MONTH, 4);
 							updateDate.add(Calendar.DAY_OF_MONTH, 6);
 							updateDate.add(Calendar.HOUR_OF_DAY, 1);
-						}
-						else
-						{
-							if(entry.getValue().size() == 0)
+						} else {
+							if (entry.getValue().size() == 0) {
 								entry.getValue().add(null);
-							else
-							{
+							} else {
 								entry.getValue().add(entry.getValue().get(index));
-								index ++;
+								index++;
 							}
 						}
 					}
 				}
 			}
 		}
-		
-		//2. Transform the samplesMapForBusinessData into Map<String, List<List<String>>>
-		for(Map.Entry<String, Map<String, List<Object>>> entryBusinessData : samplesMapForBusinessData.entrySet())
-		{
-			List<List<String>> results = new ArrayList<List<String>>(); 
+
+		// 2. Transform the samplesMapForBusinessData into Map<String, List<List<String>>>
+		for (Map.Entry<String, Map<String, List<Object>>> entryBusinessData : samplesMapForBusinessData.entrySet()) {
+			List<List<String>> results = new ArrayList<List<String>>();
 			businessDataSamples.put(entryBusinessData.getKey(), results);
 
-			//1st line contains keys
+			// 1st line contains keys
 			List<String> keys = new ArrayList<String>(entryBusinessData.getValue().keySet());
 			Collections.sort(keys, String.CASE_INSENSITIVE_ORDER);
 
 			results.add(new ArrayList<String>(keys));
 			results.get(0).add(0, PROCESSINSTANCE_ID_KEY);
-			
-			for(String key : keys)
-			{
+
+			for (String key : keys) {
 				int i = 1;
-				for(Object value : entryBusinessData.getValue().get(key))
-				{
-					if(results.size() <= i)
-					{
+				for (Object value : entryBusinessData.getValue().get(key)) {
+					if (results.size() <= i) {
 						results.add(new ArrayList<String>());
-						results.get(i).add(String.valueOf(i-1));
+						results.get(i).add(String.valueOf(i - 1));
 					}
-					
-					if(value instanceof Date)
+
+					if (value instanceof Date) {
 						results.get(i).add(Generator.getDateFormat("dd/MM/yyyy HH:mm").format(value));
-					else if(value != null)
+					} else if (value != null) {
 						results.get(i).add(value.toString());
-					else
+					} else {
 						results.get(i).add(null);
-					
+					}
+
 					i++;
 				}
 			}
 		}
-		
-		//3. Create relationship with parent process if any and create also missing parent/child instances (depending if it is a single sub process or a multiple).
-		for(String businessDataKey : processesWithParentForBusinessDataKey.keySet())
-		{
+
+		// 3. Create relationship with parent process if any and create also missing parent/child instances (depending if it is a single sub
+		// process or a multiple).
+		for (String businessDataKey : processesWithParentForBusinessDataKey.keySet()) {
 			List<FlexoProcess> processesWithParent = processesWithParentForBusinessDataKey.get(businessDataKey);
-			Collections.sort(processesWithParent, new Comparator<FlexoProcess>()
-			{ //Starts with single parent process with max rows 
-				@Override
-				public int compare(FlexoProcess o1, FlexoProcess o2)
-				{
-					boolean o1IsSingleSubProcess = o1.isSingleSubProcess();
-					boolean o2IsSingleSubProcess = o2.isSingleSubProcess();
-					
-					if(o1IsSingleSubProcess && !o2IsSingleSubProcess)
-						return -1;
-					if(!o1IsSingleSubProcess && o2IsSingleSubProcess)
-						return 1;
-					
-					return businessDataSamples.get(o2.getParentProcess().getBusinessDataDictionaryKey()).size() - businessDataSamples.get(o1.getParentProcess().getBusinessDataDictionaryKey()).size();
-				}
-			});
-			
-			for(FlexoProcess process : processesWithParent)
-			{
-				//Specify the parent process id (split evenly among parent instances if it is a multiple process, or one by parent if it is single)
+			Collections.sort(processesWithParent, new Comparator<FlexoProcess>() { // Starts with single parent process with max rows
+						@Override
+						public int compare(FlexoProcess o1, FlexoProcess o2) {
+							boolean o1IsSingleSubProcess = o1.isSingleSubProcess();
+							boolean o2IsSingleSubProcess = o2.isSingleSubProcess();
+
+							if (o1IsSingleSubProcess && !o2IsSingleSubProcess) {
+								return -1;
+							}
+							if (!o1IsSingleSubProcess && o2IsSingleSubProcess) {
+								return 1;
+							}
+
+							return businessDataSamples.get(o2.getParentProcess().getBusinessDataDictionaryKey()).size()
+									- businessDataSamples.get(o1.getParentProcess().getBusinessDataDictionaryKey()).size();
+						}
+					});
+
+			for (FlexoProcess process : processesWithParent) {
+				// Specify the parent process id (split evenly among parent instances if it is a multiple process, or one by parent if it is
+				// single)
 				List<String> keyLine = businessDataSamples.get(process.getBusinessDataDictionaryKey()).get(0);
-				if(!keyLine.contains(AutoGeneratedProcessBusinessDataDMEntity.getParentProcessBusinessDataIdKey(process.getParentProcess())))
-				{
+				if (!keyLine
+						.contains(AutoGeneratedProcessBusinessDataDMEntity.getParentProcessBusinessDataIdKey(process.getParentProcess()))) {
 					keyLine.add(1, AutoGeneratedProcessBusinessDataDMEntity.getParentProcessBusinessDataIdKey(process.getParentProcess()));
-					
-					if(process.isSingleSubProcess())
-					{
-						for(int i=1; i<businessDataSamples.get(businessDataKey).size(); i++)
-						{
-							businessDataSamples.get(businessDataKey).get(i).add(1, String.valueOf(i-1));
-							
-							if(businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey()).size() < i)
-							{
-								List<String> lastElement = businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey()).get(businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey()).size() - 1);
+
+					if (process.isSingleSubProcess()) {
+						for (int i = 1; i < businessDataSamples.get(businessDataKey).size(); i++) {
+							businessDataSamples.get(businessDataKey).get(i).add(1, String.valueOf(i - 1));
+
+							if (businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey()).size() < i) {
+								List<String> lastElement = businessDataSamples.get(
+										process.getParentProcess().getBusinessDataDictionaryKey()).get(
+										businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey()).size() - 1);
 								lastElement = new ArrayList<String>(lastElement);
-								lastElement.set(0, String.valueOf(i-1));
+								lastElement.set(0, String.valueOf(i - 1));
 								businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey()).add(lastElement);
 							}
 						}
-						
-						//If some parent does not have children, create one
-						while(businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey()).size() > businessDataSamples.get(businessDataKey).size())
-						{
-							List<String> lastElement = businessDataSamples.get(businessDataKey).get(businessDataSamples.get(businessDataKey).size() - 1);
+
+						// If some parent does not have children, create one
+						while (businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey()).size() > businessDataSamples
+								.get(businessDataKey).size()) {
+							List<String> lastElement = businessDataSamples.get(businessDataKey).get(
+									businessDataSamples.get(businessDataKey).size() - 1);
 							lastElement = new ArrayList<String>(lastElement);
 							lastElement.set(0, String.valueOf(Integer.parseInt(lastElement.get(0)) + 1));
 							lastElement.set(1, String.valueOf(Integer.parseInt(lastElement.get(1)) + 1));
 							businessDataSamples.get(businessDataKey).add(lastElement);
 						}
-					}
-					else
-					{
-						int numberOfParentInstance = businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey()).size() - 1;
-						
+					} else {
+						int numberOfParentInstance = businessDataSamples.get(process.getParentProcess().getBusinessDataDictionaryKey())
+								.size() - 1;
+
 						int parentId = 0;
-						for(int i=1; i<businessDataSamples.get(businessDataKey).size(); i++)
-						{
+						for (int i = 1; i < businessDataSamples.get(businessDataKey).size(); i++) {
 							businessDataSamples.get(businessDataKey).get(i).add(1, String.valueOf(parentId));
-							
+
 							parentId++;
-							if(parentId >= numberOfParentInstance)
+							if (parentId >= numberOfParentInstance) {
 								parentId = 0;
+							}
 						}
-						
+
 					}
 				}
 			}
 		}
 	}
-	
-	private int getMaxNumberOfSamples(Map<String, List<Object>> map)
-	{
+
+	private int getMaxNumberOfSamples(Map<String, List<Object>> map) {
 		int max = 1;
-		for(List list : map.values())
-		{
-			if(list.size() > max)
+		for (List list : map.values()) {
+			if (list.size() > max) {
 				max = list.size();
+			}
 		}
-		
+
 		return max;
 	}
-	
-	private void mergeMaps(Map<String, List<Object>> results, Map<String, List<Object>> samples)
-	{
-		for(Map.Entry<String, List<Object>> sampleEntry : samples.entrySet())
-		{
-			if(results.get(sampleEntry.getKey()) == null)
+
+	private void mergeMaps(Map<String, List<Object>> results, Map<String, List<Object>> samples) {
+		for (Map.Entry<String, List<Object>> sampleEntry : samples.entrySet()) {
+			if (results.get(sampleEntry.getKey()) == null) {
 				results.put(sampleEntry.getKey(), sampleEntry.getValue());
-			else
+			} else {
 				results.get(sampleEntry.getKey()).addAll(sampleEntry.getValue());
+			}
 		}
 	}
-	
-	public Set<String> getAllBusinessDataKeys()
-	{
+
+	public Set<String> getAllBusinessDataKeys() {
 		return businessDataSamples.keySet();
 	}
-	
-	public List<List<String>> getProcessSamples(String businessDataKey)
-	{
+
+	public List<List<String>> getProcessSamples(String businessDataKey) {
 		return businessDataSamples.get(businessDataKey);
 	}
 }

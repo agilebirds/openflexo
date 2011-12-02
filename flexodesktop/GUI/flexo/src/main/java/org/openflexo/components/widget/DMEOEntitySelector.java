@@ -20,61 +20,58 @@
 package org.openflexo.components.widget;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DMEOEntitySelector<T extends DMEOEntity> extends DMEntitySelector<T>
-{
+public class DMEOEntitySelector<T extends DMEOEntity> extends DMEntitySelector<T> {
 
-    /**
-     * @param project
-     * @param entity
-     */
-    public DMEOEntitySelector(FlexoProject project, T entity, Class<T> entityClass)
-    {
-        super(project, entity, entityClass);
-    }
+	/**
+	 * @param project
+	 * @param entity
+	 */
+	public DMEOEntitySelector(FlexoProject project, T entity, Class<T> entityClass) {
+		super(project, entity, entityClass);
+	}
 
-    /**
-     * Overrides makeCustomPanel
-     * @see org.openflexo.components.widget.DMEntitySelector#makeCustomPanel(org.openflexo.foundation.dm.DMEntity)
-     */
-    @Override
-    protected AbstractSelectorPanel<T> makeCustomPanel(T editedObject)
-    {
-        AbstractSelectorPanel<T> sel = new DMEntitySelectorPanel() {
-            /**
-             * Overrides createBrowser
-             * @see org.openflexo.components.widget.DMEntitySelector.DMEntitySelectorPanel#createBrowser(org.openflexo.foundation.rm.FlexoProject)
-             */
-            @Override
-            protected ProjectBrowser createBrowser(FlexoProject project)
-            {
-                return new DataModelBrowser(){
-                    /**
-                     * Overrides configure
-                     * @see org.openflexo.components.widget.DMEntitySelector.DataModelBrowser#configure()
-                     */
-                    @Override
-                    public void configure()
-                    {
-                        super.configure();
-                        setFilterStatus(BrowserElementType.DM_PACKAGE, BrowserFilterStatus.HIDE);
-                        setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
-                        setFilterStatus(BrowserElementType.DM_REPOSITORY, BrowserFilterStatus.HIDE);
-                        setFilterStatus(BrowserElementType.DM_REPOSITORY_FOLDER, BrowserFilterStatus.HIDE,true);
-                    }
-                };
-            }
+	/**
+	 * Overrides makeCustomPanel
+	 * 
+	 * @see org.openflexo.components.widget.DMEntitySelector#makeCustomPanel(org.openflexo.foundation.dm.DMEntity)
+	 */
+	@Override
+	protected AbstractSelectorPanel<T> makeCustomPanel(T editedObject) {
+		AbstractSelectorPanel<T> sel = new DMEntitySelectorPanel() {
+			/**
+			 * Overrides createBrowser
+			 * 
+			 * @see org.openflexo.components.widget.DMEntitySelector.DMEntitySelectorPanel#createBrowser(org.openflexo.foundation.rm.FlexoProject)
+			 */
+			@Override
+			protected ProjectBrowser createBrowser(FlexoProject project) {
+				return new DataModelBrowser() {
+					/**
+					 * Overrides configure
+					 * 
+					 * @see org.openflexo.components.widget.DMEntitySelector.DataModelBrowser#configure()
+					 */
+					@Override
+					public void configure() {
+						super.configure();
+						setFilterStatus(BrowserElementType.DM_PACKAGE, BrowserFilterStatus.HIDE);
+						setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
+						setFilterStatus(BrowserElementType.DM_REPOSITORY, BrowserFilterStatus.HIDE);
+						setFilterStatus(BrowserElementType.DM_REPOSITORY_FOLDER, BrowserFilterStatus.HIDE, true);
+					}
+				};
+			}
 
-        };
-        return sel;
-    }
+		};
+		return sel;
+	}
 }

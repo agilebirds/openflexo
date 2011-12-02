@@ -29,86 +29,78 @@ import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public final class ActivityGroup extends WKFGroup implements InspectableObject
-{
+public final class ActivityGroup extends WKFGroup implements InspectableObject {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ActivityGroup.class.getPackage().getName());
 
-    // ==========================================================
-    // ======================= Constructor ======================
-    // ==========================================================
+	// ==========================================================
+	// ======================= Constructor ======================
+	// ==========================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ActivityGroup(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ActivityGroup(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ActivityGroup(FlexoProcess process)
-    {
-        super(process);
-        setIsVisible(true);
-    }
+	/**
+	 * Default constructor
+	 */
+	public ActivityGroup(FlexoProcess process) {
+		super(process);
+		setIsVisible(true);
+	}
 
-    /**
-     * Dynamic constructor
-     */
-    public ActivityGroup(FlexoProcess process, Vector<PetriGraphNode> nodes)
-    {
-        this(process);
-        for (PetriGraphNode n : nodes) addToNodes(n);
-    }
+	/**
+	 * Dynamic constructor
+	 */
+	public ActivityGroup(FlexoProcess process, Vector<PetriGraphNode> nodes) {
+		this(process);
+		for (PetriGraphNode n : nodes) {
+			addToNodes(n);
+		}
+	}
 
-    /**
-     * Return all activities for this group
-     * 
-     * @return a Vector of ActivityNode
-     */
-    public Vector<ActivityNode> getAllActivityNodes()
-    {
-        // TODO: optimize me later !!!
-        Vector<ActivityNode> returned = new Vector<ActivityNode>();
-        Enumeration<PetriGraphNode> en = getNodes().elements();
-        while (en.hasMoreElements()) {
-        	PetriGraphNode current = en.nextElement();
-            if (current instanceof ActivityNode) {
-                returned.add((ActivityNode)current);
-            }
-        }
-        return returned;
-    }
-    
-    @Override
-    public String getClassNameKey() 
-    {
-    	return "activity_group";
-    }
-    
-    @Override
-    public String getFullyQualifiedName() 
-    {
-    	return getProcess().getFullyQualifiedName()+".GROUP."+getGroupName();
-    }
+	/**
+	 * Return all activities for this group
+	 * 
+	 * @return a Vector of ActivityNode
+	 */
+	public Vector<ActivityNode> getAllActivityNodes() {
+		// TODO: optimize me later !!!
+		Vector<ActivityNode> returned = new Vector<ActivityNode>();
+		Enumeration<PetriGraphNode> en = getNodes().elements();
+		while (en.hasMoreElements()) {
+			PetriGraphNode current = en.nextElement();
+			if (current instanceof ActivityNode) {
+				returned.add((ActivityNode) current);
+			}
+		}
+		return returned;
+	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getClassNameKey() {
+		return "activity_group";
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getProcess().getFullyQualifiedName() + ".GROUP." + getGroupName();
+	}
+
+	@Override
+	public String getInspectorName() {
 		return Inspectors.WKF.ACTIVITY_GROUP_INSPECTOR;
 	}
- 
-	
+
 }

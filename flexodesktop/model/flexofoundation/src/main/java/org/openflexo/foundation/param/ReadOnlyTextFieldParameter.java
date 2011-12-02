@@ -24,26 +24,22 @@ import org.openflexo.inspector.widget.ReadOnlyWidget;
 
 public class ReadOnlyTextFieldParameter extends ParameterDefinition<String> {
 
-    public ReadOnlyTextFieldParameter(String name, String label, String defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-    public ReadOnlyTextFieldParameter(String name, String label, String defaultValue, int cols)
-    {
-        this(name,label,defaultValue);
-        setColumns(cols);
-   }
-    
-    public void setColumns(int cols)
-    {
-    	addParameter(ReadOnlyWidget.COLUMNS_PARAM,""+cols);
-    }
+	public ReadOnlyTextFieldParameter(String name, String label, String defaultValue) {
+		super(name, label, defaultValue);
+	}
 
-  @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.READ_ONLY_TEXT_FIELD;
-    }
+	public ReadOnlyTextFieldParameter(String name, String label, String defaultValue, int cols) {
+		this(name, label, defaultValue);
+		setColumns(cols);
+	}
+
+	public void setColumns(int cols) {
+		addParameter(ReadOnlyWidget.COLUMNS_PARAM, "" + cols);
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.READ_ONLY_TEXT_FIELD;
+	}
 
 }

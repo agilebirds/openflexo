@@ -23,50 +23,44 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 
-
-
 public class ViewShape extends ViewElement {
 
-    private static final Logger logger = Logger.getLogger(ViewShape.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ViewShape.class.getPackage().getName());
 
-    //private String multilineText;
-    private Vector<ViewConnector> incomingConnectors;
-    private Vector<ViewConnector> outgoingConnectors;
-    
-    //private EditionPatternInstance editionPatternInstance; 
-    
+	// private String multilineText;
+	private Vector<ViewConnector> incomingConnectors;
+	private Vector<ViewConnector> outgoingConnectors;
+
+	// private EditionPatternInstance editionPatternInstance;
+
 	/**
-     * Constructor invoked during deserialization
-     * 
-     * @param componentDefinition
-     */
-    public ViewShape(VEShemaBuilder builder)
-    {
-    	this(builder.shema);
-        initializeDeserialization(builder);
-    }
+	 * Constructor invoked during deserialization
+	 * 
+	 * @param componentDefinition
+	 */
+	public ViewShape(VEShemaBuilder builder) {
+		this(builder.shema);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor for OEShema
-     * 
-     * @param shemaDefinition
-     */
-    public ViewShape(View shema)
-    {
-        super(shema);
-        incomingConnectors = new Vector<ViewConnector>();
-        outgoingConnectors = new Vector<ViewConnector>();
-   }
+	/**
+	 * Default constructor for OEShema
+	 * 
+	 * @param shemaDefinition
+	 */
+	public ViewShape(View shema) {
+		super(shema);
+		incomingConnectors = new Vector<ViewConnector>();
+		outgoingConnectors = new Vector<ViewConnector>();
+	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
@@ -80,32 +74,27 @@ public class ViewShape extends ViewElement {
 		deleteObservers();
 	}
 
-
-
 	@Override
-	public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "oe_shape";
 	}
 
 	@Override
-	public String getFullyQualifiedName() 
-	{
-		return getShema().getFullyQualifiedName()+"."+getName();
+	public String getFullyQualifiedName() {
+		return getShema().getFullyQualifiedName() + "." + getName();
 	}
 
-    @Override
-	public String getInspectorName() 
-    {
-    	return Inspectors.VE.OE_SHAPE_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.VE.OE_SHAPE_INSPECTOR;
+	}
 
-    /*@Override
-    public AddShemaElementAction getEditionAction() 
-    {
-    	return getAddShapeAction();
-    }
-    
+	/*@Override
+	public AddShemaElementAction getEditionAction() 
+	{
+		return getAddShapeAction();
+	}
+	
 	public AddShape getAddShapeAction()
 	{
 		if (getEditionPattern() != null && getPatternRole() != null)
@@ -123,49 +112,40 @@ public class ViewShape extends ViewElement {
 		this.multilineText = multilineText;
 	}*/
 
-	public Vector<ViewConnector> getIncomingConnectors() 
-	{
+	public Vector<ViewConnector> getIncomingConnectors() {
 		return incomingConnectors;
 	}
 
-	public void setIncomingConnectors(Vector<ViewConnector> incomingConnectors) 
-	{
+	public void setIncomingConnectors(Vector<ViewConnector> incomingConnectors) {
 		this.incomingConnectors = incomingConnectors;
 	}
 
-	public void addToIncomingConnectors(ViewConnector connector) 
-	{
+	public void addToIncomingConnectors(ViewConnector connector) {
 		incomingConnectors.add(connector);
 	}
 
-	public void removeFromIncomingConnectors(ViewConnector connector) 
-	{
+	public void removeFromIncomingConnectors(ViewConnector connector) {
 		incomingConnectors.remove(connector);
 	}
 
-	public Vector<ViewConnector> getOutgoingConnectors() 
-	{
+	public Vector<ViewConnector> getOutgoingConnectors() {
 		return outgoingConnectors;
 	}
 
-	public void setOutgoingConnectors(Vector<ViewConnector> outgoingConnectors) 
-	{
+	public void setOutgoingConnectors(Vector<ViewConnector> outgoingConnectors) {
 		this.outgoingConnectors = outgoingConnectors;
 	}
-    
-	public void addToOutgoingConnectors(ViewConnector connector) 
-	{
+
+	public void addToOutgoingConnectors(ViewConnector connector) {
 		outgoingConnectors.add(connector);
 	}
 
-	public void removeFromOutgoingConnectors(ViewConnector connector) 
-	{
+	public void removeFromOutgoingConnectors(ViewConnector connector) {
 		outgoingConnectors.remove(connector);
 	}
-	
+
 	@Override
-	public boolean isContainedIn(ViewObject o)
-	{
+	public boolean isContainedIn(ViewObject o) {
 		if (o == this) {
 			return true;
 		}
@@ -177,22 +157,16 @@ public class ViewShape extends ViewElement {
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String getDisplayableDescription()
-	{
-		return "Shape"+(getLinkedConcept() != null ? " representing "+getLinkedConcept().getDisplayableDescription() : "");
+	public String getDisplayableDescription() {
+		return "Shape" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
 	}
 
 	private Vector<LinkScheme> availableLinkSchemeFromThisShape = null;
-	
-	public Vector<LinkScheme> getAvailableLinkSchemeFromThisShape()
-	{
-		if (getLinkedConcept() == null) {
-			return null;
-		}
 
-		if (!(getLinkedConcept() instanceof OntologyObject)) {
+	public Vector<LinkScheme> getAvailableLinkSchemeFromThisShape() {
+		if (getEditionPattern() == null) {
 			return null;
 		}
 
@@ -203,12 +177,12 @@ public class ViewShape extends ViewElement {
 				return null;
 			}
 			calc.loadWhenUnloaded();
-		
+
 			availableLinkSchemeFromThisShape = new Vector<LinkScheme>();
 
 			for (EditionPattern ep : calc.getEditionPatterns()) {
 				for (LinkScheme ls : ep.getLinkSchemes()) {
-					if (ls.getFromTargetClass().isSuperConceptOf((OntologyObject)getLinkedConcept())) {
+					if (ls.getFromTargetEditionPattern() == getEditionPattern()) {
 						// This candidate is acceptable
 						availableLinkSchemeFromThisShape.add(ls);
 					}
@@ -218,6 +192,5 @@ public class ViewShape extends ViewElement {
 
 		return availableLinkSchemeFromThisShape;
 	}
-
 
 }

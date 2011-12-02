@@ -12,7 +12,7 @@ import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateImplementationController extends HibernateFibController<HibernateImplementation> {

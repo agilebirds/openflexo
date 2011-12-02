@@ -19,6 +19,7 @@
  */
 package org.openflexo.localization;
 
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,143 +36,136 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.toolbox.FlexoProperties;
-
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 public class LocalizedDelegateImplementation extends Observable implements LocalizedDelegate {
 
 	private static final Logger logger = Logger.getLogger(LocalizedDelegateImplementation.class.getPackage().getName());
 
 	private File _localizedDirectory;
-	private Hashtable<Language,Properties> _localizedDictionaries;
+	private Hashtable<Language, Properties> _localizedDictionaries;
 
-	public LocalizedDelegateImplementation(File localizedDirectory) 
-	{
+	public LocalizedDelegateImplementation(File localizedDirectory) {
 		_localizedDirectory = localizedDirectory;
 		loadLocalizedDictionaries();
 	}
 
-	private Properties getDictionary(Language language)
-    {
+	private Properties getDictionary(Language language) {
 		Properties dict = _localizedDictionaries.get(language);
 		if (dict == null) {
 			dict = createNewDictionary(language);
 		}
 		return dict;
-    }
+	}
 
-	private Properties createNewDictionary(Language language)
-    {
+	private Properties createNewDictionary(Language language) {
 		Properties newDict = new Properties();
-		_localizedDictionaries.put(language,newDict);
+		_localizedDictionaries.put(language, newDict);
 		saveDictionary(language, newDict);
 		return newDict;
-    }
+	}
 
-    private File getDictionaryFileForLanguage(Language language)
-    {
-        return new File(_localizedDirectory, language.getName() + ".dict");
-    }
+	private File getDictionaryFileForLanguage(Language language) {
+		return new File(_localizedDirectory, language.getName() + ".dict");
+	}
 
-    private void saveDictionary(Language language, Properties dict)
-    {
-        File dictFile = getDictionaryFileForLanguage(language);
-        try {
-            if (!dictFile.exists()) {
-                dictFile.createNewFile();
-            }
-            dict.store(new FileOutputStream(dictFile), language.getName());
-            logger.info("Saved "+dictFile.getAbsolutePath());
-        } catch (IOException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Unable to save file " + dictFile.getAbsolutePath() + " " + e.getClass().getName());
-            //e.printStackTrace();
-        }
-    }
+	private void saveDictionary(Language language, Properties dict) {
+		File dictFile = getDictionaryFileForLanguage(language);
+		try {
+			if (!dictFile.exists()) {
+				dictFile.createNewFile();
+			}
+			dict.store(new FileOutputStream(dictFile), language.getName());
+			logger.info("Saved " + dictFile.getAbsolutePath());
+		} catch (IOException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Unable to save file " + dictFile.getAbsolutePath() + " " + e.getClass().getName());
+				// e.printStackTrace();
+			}
+		}
+	}
 
-    private Properties loadDictionary(Language language)
-    {
-        File dictFile = getDictionaryFileForLanguage(language);
-        Properties loadedDict = new FlexoProperties();
-        try {
-            loadedDict.load(new FileInputStream(dictFile));
-        } catch (IOException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Unable to load file " + dictFile.getName());
-        }
-        return loadedDict;
-    }
+	private Properties loadDictionary(Language language) {
+		File dictFile = getDictionaryFileForLanguage(language);
+		Properties loadedDict = new FlexoProperties();
+		try {
+			loadedDict.load(new FileInputStream(dictFile));
+		} catch (IOException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Unable to load file " + dictFile.getName());
+			}
+		}
+		return loadedDict;
+	}
 
-    private void loadLocalizedDictionaries()
-    {
-        _localizedDictionaries = new Hashtable<Language,Properties>();
+	private void loadLocalizedDictionaries() {
+		_localizedDictionaries = new Hashtable<Language, Properties>();
 
-        for (Language language : Language.availableValues()) {
-             File dictFile = getDictionaryFileForLanguage(language);
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Checking dictionary for language " + language.getName());
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Looking for file " + dictFile.getAbsolutePath());
-            if (!dictFile.exists()) {
-                createNewDictionary(language);
-            } else {
-                Properties loadedDict = loadDictionary(language);
-                _localizedDictionaries.put(language, loadedDict);
-            }
-        }
-    }
+		for (Language language : Language.availableValues()) {
+			File dictFile = getDictionaryFileForLanguage(language);
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Checking dictionary for language " + language.getName());
+			}
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Looking for file " + dictFile.getAbsolutePath());
+			}
+			if (!dictFile.exists()) {
+				createNewDictionary(language);
+			} else {
+				Properties loadedDict = loadDictionary(language);
+				_localizedDictionaries.put(language, loadedDict);
+			}
+		}
+	}
 
-    private void addEntryInDictionary(Language language, String key, String value, boolean required)
-    {
-        Properties dict = getDictionary(language);
-        if (((!required) && (dict.getProperty(key) == null)) || required) {
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Adding entry '" + key + "' in " + language + " dictionary, file "+getDictionaryFileForLanguage(language).getAbsolutePath());
-            dict.setProperty(key, value);
-            //saveDictionary(language, dict);
-         }
-    }
+	private void addEntryInDictionary(Language language, String key, String value, boolean required) {
+		Properties dict = getDictionary(language);
+		if (((!required) && (dict.getProperty(key) == null)) || required) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Adding entry '" + key + "' in " + language + " dictionary, file "
+						+ getDictionaryFileForLanguage(language).getAbsolutePath());
+			}
+			dict.setProperty(key, value);
+			// saveDictionary(language, dict);
+		}
+	}
 
-    public void addEntry(String key)
-    {
-        // Add in all dictionaries, when required
-        for (Language language : Language.availableValues()) {
-            addEntryInDictionary(language, key, key, false);
-        }
-        entries = null;
-        setChanged();
-        notifyObservers();
-    }
+	public void addEntry(String key) {
+		// Add in all dictionaries, when required
+		for (Language language : Language.availableValues()) {
+			addEntryInDictionary(language, key, key, false);
+		}
+		entries = null;
+		setChanged();
+		notifyObservers();
+	}
 
-    public void removeEntry(String key)
-    {
-        // Remove from all dictionaries
-        for (Language language : Language.availableValues()) {
-            Properties dict = getDictionary(language);
-            dict.remove(key);
-            //saveDictionary(language, dict);
-        }
-        entries = null;
-        setChanged();
-        notifyObservers();
-    }
+	public void removeEntry(String key) {
+		// Remove from all dictionaries
+		for (Language language : Language.availableValues()) {
+			Properties dict = getDictionary(language);
+			dict.remove(key);
+			// saveDictionary(language, dict);
+		}
+		entries = null;
+		setChanged();
+		notifyObservers();
+	}
 
-    public void saveAllDictionaries()
-    {
-        for (Language language : Language.availableValues()) {
-            Properties dict = getDictionary(language);
-            saveDictionary(language, dict);
-        }
-    }
+	public void saveAllDictionaries() {
+		for (Language language : Language.availableValues()) {
+			Properties dict = getDictionary(language);
+			saveDictionary(language, dict);
+		}
+	}
 
 	@Override
-	public boolean handleNewEntry(String key, Language language)
-	{
+	public boolean handleNewEntry(String key, Language language) {
 		return true;
 	}
 
 	@Override
-	public String localizedForKeyAndLanguage(String key, Language language)
-	{
+	public String localizedForKeyAndLanguage(String key, Language language) {
 		if (_localizedDictionaries == null) {
 			loadLocalizedDictionaries();
 		}
@@ -181,60 +175,70 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 
 		if (localized == null) {
 			addEntry(key);
+			save();
 			return currentLanguageDict.getProperty(key);
-		} else
+		} else {
 			return localized;
+		}
 	}
-	
-	public void setLocalizedForKeyAndLanguage(String key, String value, Language language)
-	{
+
+	public void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
 		if (_localizedDictionaries == null) {
 			loadLocalizedDictionaries();
 		}
 		Properties currentLanguageDict = getDictionary(language);
 		currentLanguageDict.setProperty(key, value);
-		//saveDictionary(language, currentLanguageDict);
+		// saveDictionary(language, currentLanguageDict);
 	}
 
-	public class Entry
-	{
+	public class Entry implements HasPropertyChangeSupport {
 		public String key;
-		
-		public Entry(String aKey)
-		{
+		private PropertyChangeSupport pcSupport;
+
+		public Entry(String aKey) {
 			key = aKey;
+			pcSupport = new PropertyChangeSupport(this);
 		}
-		
-		public String getEnglish()
-		{
+
+		@Override
+		public PropertyChangeSupport getPropertyChangeSupport() {
+			return pcSupport;
+		}
+
+		public String getEnglish() {
 			return localizedForKeyAndLanguage(key, Language.ENGLISH);
 		}
-		public void setEnglish(String value)
-		{
+
+		public void setEnglish(String value) {
+			String oldValue = getEnglish();
 			setLocalizedForKeyAndLanguage(key, value, Language.ENGLISH);
+			pcSupport.firePropertyChange("english", oldValue, value);
 		}
-		public String getFrench()
-		{
+
+		public String getFrench() {
 			return localizedForKeyAndLanguage(key, Language.FRENCH);
 		}
-		public void setFrench(String value)
-		{
+
+		public void setFrench(String value) {
+			String oldValue = getFrench();
 			setLocalizedForKeyAndLanguage(key, value, Language.FRENCH);
+			pcSupport.firePropertyChange("french", oldValue, value);
 		}
-		public String getDutch()
-		{
+
+		public String getDutch() {
 			return localizedForKeyAndLanguage(key, Language.DUTCH);
 		}
-		public void setDutch(String value)
-		{
+
+		public void setDutch(String value) {
+			String oldValue = getDutch();
 			setLocalizedForKeyAndLanguage(key, value, Language.DUTCH);
+			pcSupport.firePropertyChange("dutch", oldValue, value);
 		}
 	}
 
 	private Vector<Entry> entries;
-	
-	public Vector<Entry> getEntries()
-	{
+
+	public Vector<Entry> getEntries() {
 		if (entries == null) {
 			if (_localizedDictionaries == null) {
 				loadLocalizedDictionaries();
@@ -243,49 +247,54 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 			if (_localizedDictionaries.size() > 0) {
 				Enumeration en = _localizedDictionaries.values().iterator().next().propertyNames();
 				while (en.hasMoreElements()) {
-					entries.add(new Entry((String)en.nextElement()));
+					entries.add(new Entry((String) en.nextElement()));
 				}
 			}
-			Collections.sort(entries,new Comparator<Entry>() {
+			Collections.sort(entries, new Comparator<Entry>() {
 				@Override
-				public int compare(Entry o1, Entry o2)
-				{
-					return Collator.getInstance().compare(o1.key,o2.key);
+				public int compare(Entry o1, Entry o2) {
+					return Collator.getInstance().compare(o1.key, o2.key);
 				}
 			});
 		}
 		return entries;
 	}
-	
-	private Entry getEntry(String key)
-	{
-		if (key==null) return null;
+
+	private Entry getEntry(String key) {
+		if (key == null) {
+			return null;
+		}
 		for (Entry entry : getEntries()) {
-			if (key.equals(entry.key)) return entry;
+			if (key.equals(entry.key)) {
+				return entry;
+			}
 		}
 		return null;
 	}
-	
-	public void save()
-	{
+
+	public void save() {
 		saveAllDictionaries();
 	}
-	
-	public void refresh()
-	{
+
+	public void refresh() {
 		entries = null;
 		setChanged();
 		notifyObservers();
 	}
 
-	public Entry addEntry()
-	{
+	public Entry addEntry() {
 		addEntry("key");
 		return getEntry("key");
 	}
-	
-	public void deleteEntry(Entry entry)
-	{
+
+	public void deleteEntry(Entry entry) {
 		removeEntry(entry.key);
+	}
+
+	public void searchTranslation(Entry entry) {
+		String englishTranslation = entry.key.toString();
+		englishTranslation = englishTranslation.replace("_", " ");
+		englishTranslation = englishTranslation.substring(0, 1).toUpperCase() + englishTranslation.substring(1);
+		entry.setEnglish(englishTranslation);
 	}
 }

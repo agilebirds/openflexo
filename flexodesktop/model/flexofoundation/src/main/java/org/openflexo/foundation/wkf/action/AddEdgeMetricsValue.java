@@ -29,43 +29,42 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 
+public class AddEdgeMetricsValue extends AddMetricsValue<AddEdgeMetricsValue, FlexoPostCondition<?, ?>> {
 
-public class AddEdgeMetricsValue extends AddMetricsValue<AddEdgeMetricsValue,FlexoPostCondition<?,?>>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AddEdgeMetricsValue.class.getPackage().getName());
-    
-    public static FlexoActionType<AddEdgeMetricsValue, FlexoPostCondition<?,?>, WKFObject> actionType = new FlexoActionType<AddEdgeMetricsValue, FlexoPostCondition<?,?>, WKFObject>("add_metrics_value",FlexoActionType.ADD_ACTION_TYPE) {
+
+	public static FlexoActionType<AddEdgeMetricsValue, FlexoPostCondition<?, ?>, WKFObject> actionType = new FlexoActionType<AddEdgeMetricsValue, FlexoPostCondition<?, ?>, WKFObject>(
+			"add_metrics_value", FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoPostCondition<?,?> object, Vector<WKFObject> globalSelection) {
-			return object!=null;
+		protected boolean isEnabledForSelection(FlexoPostCondition<?, ?> object, Vector<WKFObject> globalSelection) {
+			return object != null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoPostCondition<?,?> object, Vector<WKFObject> globalSelection) {
+		protected boolean isVisibleForSelection(FlexoPostCondition<?, ?> object, Vector<WKFObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public AddEdgeMetricsValue makeNewAction(FlexoPostCondition<?,?> focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
-			return new AddEdgeMetricsValue(focusedObject,globalSelection,editor);
+		public AddEdgeMetricsValue makeNewAction(FlexoPostCondition<?, ?> focusedObject, Vector<WKFObject> globalSelection,
+				FlexoEditor editor) {
+			return new AddEdgeMetricsValue(focusedObject, globalSelection, editor);
 		}
-    	
-    };
-    
-    static {
-    	FlexoModelObject.addActionForClass(actionType, FlexoPostCondition.class);
-    }
-    
-    AddEdgeMetricsValue (FlexoPostCondition<?, ?> focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-    protected void doAction(Object context) throws FlexoException {
-    	getFocusedObject().addToMetricsValues(createMetricsValue());
-    }
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoPostCondition.class);
+	}
+
+	AddEdgeMetricsValue(FlexoPostCondition<?, ?> focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		getFocusedObject().addToMetricsValues(createMetricsValue());
+	}
 }

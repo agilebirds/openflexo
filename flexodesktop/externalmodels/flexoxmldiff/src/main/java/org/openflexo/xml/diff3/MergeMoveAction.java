@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.xml.diff3;
+
 import org.jdom.Content;
 import org.jdom.Element;
 
@@ -25,9 +26,9 @@ public class MergeMoveAction extends MergeAction {
 
 	private Element _parent;
 	private Content _contentToInsert;
-	
-	public MergeMoveAction(int actionIndex,MergeActionType actionType, Element parent, Content elementToInsert) {
-		super(actionIndex,actionType);
+
+	public MergeMoveAction(int actionIndex, MergeActionType actionType, Element parent, Content elementToInsert) {
+		super(actionIndex, actionType);
 		_parent = parent;
 		_contentToInsert = elementToInsert;
 	}
@@ -36,6 +37,7 @@ public class MergeMoveAction extends MergeAction {
 	public void execute() {
 		_parent.addContent(_contentToInsert);
 	}
+
 	@Override
 	public void undo() {
 		_parent.removeContent(_contentToInsert);
@@ -43,7 +45,7 @@ public class MergeMoveAction extends MergeAction {
 
 	@Override
 	public String getLabel() {
-		return "Insert "+_contentToInsert.getValue()+" under "+_parent.getName();
+		return "Insert " + _contentToInsert.getValue() + " under " + _parent.getName();
 	}
 
 }

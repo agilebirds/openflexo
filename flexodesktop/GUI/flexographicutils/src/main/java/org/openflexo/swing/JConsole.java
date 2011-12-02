@@ -34,130 +34,120 @@ import org.openflexo.jedit.TextAreaDefaults;
 import org.openflexo.jedit.TextAreaPainter;
 import org.openflexo.toolbox.FontCst;
 
+public class JConsole extends JEditTextArea {
+	static final Logger logger = Logger.getLogger(JConsole.class.getPackage().getName());
 
-public class JConsole extends JEditTextArea
-{
-    static final Logger logger = Logger.getLogger(JConsole.class.getPackage().getName());
-    
-    private boolean refreshOnlyInSwingEventDispatchingThread=true;
+	private boolean refreshOnlyInSwingEventDispatchingThread = true;
 
-    public JConsole()
-    {
-        super();
-        setTokenMarker(null);
-        painter.setEOLMarkersPainted(false);
-        painter.setInvalidLinesPainted(false);
-        setFont(FontCst.CODE_FONT);
-        setEditable(false);
-    }
+	public JConsole() {
+		super();
+		setTokenMarker(null);
+		painter.setEOLMarkersPainted(false);
+		painter.setInvalidLinesPainted(false);
+		setFont(FontCst.CODE_FONT);
+		setEditable(false);
+	}
 
-    public void clear()
-    {
-        setText("");
-        colors.clear();
-        refresh();
-    }
+	public void clear() {
+		setText("");
+		colors.clear();
+		refresh();
+	}
 
-    Vector<Color> colors = new Vector<Color>();
+	Vector<Color> colors = new Vector<Color>();
 
-    public void log(String log, Color color)
-    {
-        int i = 0;
-        int nextNL = 0;
-        int nlCount = 0;
-        while (nextNL > -1) {
-            nextNL = log.indexOf("\n", i);
-            if (nextNL > -1) {
-                nlCount++;
-                i = nextNL + 1;
-            }
-        }
-        try {
-            document.insertString(document.getLength(), log, null);
-        } catch (BadLocationException e) {
-            logger.warning("BadLocationException");
-        }
-        if (!log.endsWith("\n")) {
-            try {
-                document.insertString(document.getLength(), "\n", null);
-            } catch (BadLocationException e) {
-                logger.warning("BadLocationException");
-            }
-            nlCount++;
-        }
-        for (int j = 0; j < nlCount; j++)
-            colors.add(color);
-        if (colors.size() % paintOccurences == 0)
-            refresh();
-    }
+	public void log(String log, Color color) {
+		int i = 0;
+		int nextNL = 0;
+		int nlCount = 0;
+		while (nextNL > -1) {
+			nextNL = log.indexOf("\n", i);
+			if (nextNL > -1) {
+				nlCount++;
+				i = nextNL + 1;
+			}
+		}
+		try {
+			document.insertString(document.getLength(), log, null);
+		} catch (BadLocationException e) {
+			logger.warning("BadLocationException");
+		}
+		if (!log.endsWith("\n")) {
+			try {
+				document.insertString(document.getLength(), "\n", null);
+			} catch (BadLocationException e) {
+				logger.warning("BadLocationException");
+			}
+			nlCount++;
+		}
+		for (int j = 0; j < nlCount; j++) {
+			colors.add(color);
+		}
+		if (colors.size() % paintOccurences == 0) {
+			refresh();
+		}
+	}
 
-    void refresh()
-    {
-        if (!SwingUtilities.isEventDispatchThread() && getRefreshOnlyInSwingEventDispatchingThread()) {
-            SwingUtilities.invokeLater(new Runnable() {
-                /**
-                 * Overrides run
-                 * 
-                 * @see java.lang.Runnable#run()
-                 */
-                @Override
-				public void run()
-                {
-                    JConsole.this.refresh();
-                }
-            });
-            return;
-        }
-        setCaretPosition(getDocument().getLength());
-        paintImmediately(getVisibleRect());
-    }
+	void refresh() {
+		if (!SwingUtilities.isEventDispatchThread() && getRefreshOnlyInSwingEventDispatchingThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				/**
+				 * Overrides run
+				 * 
+				 * @see java.lang.Runnable#run()
+				 */
+				@Override
+				public void run() {
+					JConsole.this.refresh();
+				}
+			});
+			return;
+		}
+		setCaretPosition(getDocument().getLength());
+		paintImmediately(getVisibleRect());
+	}
 
-    private int paintOccurences = 10;
+	private int paintOccurences = 10;
 
-    @Override
-	protected TextAreaPainter initTextAreaPainter(JEditTextArea textArea, TextAreaDefaults defaults)
-    {
-        return new JConsoleTextAreaPainter(this, defaults);
-    }
+	@Override
+	protected TextAreaPainter initTextAreaPainter(JEditTextArea textArea, TextAreaDefaults defaults) {
+		return new JConsoleTextAreaPainter(this, defaults);
+	}
 
-    public class JConsoleTextAreaPainter extends TextAreaPainter
-    {
-        public JConsoleTextAreaPainter(JEditTextArea textArea, TextAreaDefaults defaults)
-        {
-            super(textArea, defaults);
-        }
+	public class JConsoleTextAreaPainter extends TextAreaPainter {
+		public JConsoleTextAreaPainter(JEditTextArea textArea, TextAreaDefaults defaults) {
+			super(textArea, defaults);
+		}
 
-        @Override
-		protected void paintPlainLine(Graphics gfx, int line, Font defaultFont, Color defaultColor, int x, int y)
-        {
-            if (line < colors.size())
-                defaultColor = colors.elementAt(line);
+		@Override
+		protected void paintPlainLine(Graphics gfx, int line, Font defaultFont, Color defaultColor, int x, int y) {
+			if (line < colors.size()) {
+				defaultColor = colors.elementAt(line);
+			}
 
-            paintHighlight(gfx, line, y);
-            textArea.getLineText(line, currentLine);
+			paintHighlight(gfx, line, y);
+			textArea.getLineText(line, currentLine);
 
-            gfx.setFont(defaultFont);
-            gfx.setColor(defaultColor);
+			gfx.setFont(defaultFont);
+			gfx.setColor(defaultColor);
 
-            y += fm.getHeight();
-            x = Utilities.drawTabbedText(currentLine, x, y, gfx, this, 0);
+			y += fm.getHeight();
+			x = Utilities.drawTabbedText(currentLine, x, y, gfx, this, 0);
 
-            if (eolMarkers) {
-                gfx.setColor(eolMarkerColor);
-                gfx.drawString(".", x, y);
-            }
-        }
+			if (eolMarkers) {
+				gfx.setColor(eolMarkerColor);
+				gfx.drawString(".", x, y);
+			}
+		}
 
-    }
+	}
 
-    public boolean getRefreshOnlyInSwingEventDispatchingThread()
-    {
-        return refreshOnlyInSwingEventDispatchingThread;
-    }
+	public boolean getRefreshOnlyInSwingEventDispatchingThread() {
+		return refreshOnlyInSwingEventDispatchingThread;
+	}
 
-    public void setRefreshOnlyInSwingEventDispatchingThread(boolean refreshOnlyInSwingEventDispatchingThread)
-    {
-        this.refreshOnlyInSwingEventDispatchingThread = refreshOnlyInSwingEventDispatchingThread;
-    }
+	public void setRefreshOnlyInSwingEventDispatchingThread(boolean refreshOnlyInSwingEventDispatchingThread) {
+		this.refreshOnlyInSwingEventDispatchingThread = refreshOnlyInSwingEventDispatchingThread;
+	}
 
 }

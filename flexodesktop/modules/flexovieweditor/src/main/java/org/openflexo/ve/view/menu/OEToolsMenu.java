@@ -30,38 +30,34 @@ import java.util.logging.Logger;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.menu.ToolsMenu;
 
-
 /**
  * 'Tools' menu for this Module
  * 
  * @author yourname
  */
-public class OEToolsMenu extends ToolsMenu
-{
+public class OEToolsMenu extends ToolsMenu {
 
-    private static final Logger logger = Logger.getLogger(OEToolsMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OEToolsMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected OEController _xxxController;
+	protected OEController _xxxController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public OEToolsMenu(OEController controller)
-    {
-        super(controller);
-        _xxxController = controller;
-        // Put your actions here
-    }
+	public OEToolsMenu(OEController controller) {
+		super(controller);
+		_xxxController = controller;
+		// Put your actions here
+	}
 
-    public OEController getXXXController()
-    {
-        return _xxxController;
-    }
+	public OEController getXXXController() {
+		return _xxxController;
+	}
 }

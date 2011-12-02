@@ -36,102 +36,91 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSuccessfully;
 
+public class SetAndOpenOperationComponent extends FlexoAction<SetAndOpenOperationComponent, OperationNode, WKFObject> {
 
-public class SetAndOpenOperationComponent extends FlexoAction<SetAndOpenOperationComponent,OperationNode,WKFObject> 
-{
+	private static final Logger logger = Logger.getLogger(SetAndOpenOperationComponent.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(SetAndOpenOperationComponent.class.getPackage().getName());
+	public static FlexoActionType<SetAndOpenOperationComponent, OperationNode, WKFObject> actionType = new FlexoActionType<SetAndOpenOperationComponent, OperationNode, WKFObject>(
+			"set_operation_component", FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<SetAndOpenOperationComponent,OperationNode,WKFObject> actionType = new FlexoActionType<SetAndOpenOperationComponent,OperationNode,WKFObject> ("set_operation_component",FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public SetAndOpenOperationComponent makeNewAction(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new SetAndOpenOperationComponent(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public SetAndOpenOperationComponent makeNewAction(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new SetAndOpenOperationComponent(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return ((object != null) && !(object instanceof SelfExecutableNode) && ((object).getNodeType() == NodeType.NORMAL) && ((object)
+					.getComponentInstance() == null));
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) 
-        {
-            return ((object != null) && !(object instanceof SelfExecutableNode)
-                    && ((object).getNodeType() == NodeType.NORMAL)
-                    && ((object).getComponentInstance() == null));
-         }
+		@Override
+		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return ((object.getNodeType() == NodeType.NORMAL) && (object.getComponentInstance() == null));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) 
-        {
-            return ((object.getNodeType() == NodeType.NORMAL)
-                    && (object.getComponentInstance() == null));
-        }
-                
-    };
-    
-    SetAndOpenOperationComponent (OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    private String _newComponentName;
-    
-    private boolean hasCreatedComponent = false;
-    
-    @Override
-	protected void doAction(Object context) throws OperationAssociatedWithComponentSuccessfully, DuplicateResourceException, InvalidParametersException 
-    {
-        if (getFocusedObject().getNodeType() != NodeType.NORMAL) {
-        	throw new InvalidParametersException("Cannot associate operation to non-normal operation nodes");
-        }
-        ComponentDefinition foundComponent = getFocusedObject().getProject().getFlexoComponentLibrary().getComponentNamed(getNewComponentName());
-        OperationComponentDefinition newComponent = null;
-        if (foundComponent instanceof OperationComponentDefinition) {
-            newComponent = (OperationComponentDefinition) foundComponent;
-        } else if (foundComponent != null) {
-        	throw new InvalidParametersException("Cannot associate component to operation nodes: this is not an operation component");
-        }
-        else {
-           	// We use here a null editor because this action is embedded 
-    		AddComponent addComponent = AddComponent.actionType.makeNewEmbeddedAction(getFocusedObject().getProject().getFlexoComponentLibrary(), null, this);
-    		addComponent.setNewComponentName(getNewComponentName());
-    		addComponent.setComponentType(AddComponent.ComponentType.OPERATION_COMPONENT);
-    		addComponent.doAction();
-    		if(addComponent.hasActionExecutionSucceeded()) {
-    			newComponent = (OperationComponentDefinition)addComponent.getNewComponent();
-    			hasCreatedComponent = true;
-    		}
-    		else {
-    			logger.info("exception: "+addComponent.getThrownException());
-    	       	throw new InvalidParametersException("Cannot create component");
-    		}
-        }
-        logger.info("setOperationComponent with "+newComponent.getName());
-        getFocusedObject().setOperationComponent(newComponent);
-    }
+	SetAndOpenOperationComponent(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public String getNewComponentName() 
-    {
-        return _newComponentName;
-    }
+	private String _newComponentName;
 
-    public void setNewComponentName(String newComponentName) 
-    {
-        _newComponentName = newComponentName;
-    }
+	private boolean hasCreatedComponent = false;
 
-    // Ceci est rendu necessaire a cause du OperationAssociatedWithComponentSucessfully, qu'on va
-    // Virer par la suite quand on aura implemente proprement tout ca.
-    @Override
-	public boolean hasActionExecutionSucceeded ()
-    {
-    	return true;
-    }
+	@Override
+	protected void doAction(Object context) throws OperationAssociatedWithComponentSuccessfully, DuplicateResourceException,
+			InvalidParametersException {
+		if (getFocusedObject().getNodeType() != NodeType.NORMAL) {
+			throw new InvalidParametersException("Cannot associate operation to non-normal operation nodes");
+		}
+		ComponentDefinition foundComponent = getFocusedObject().getProject().getFlexoComponentLibrary()
+				.getComponentNamed(getNewComponentName());
+		OperationComponentDefinition newComponent = null;
+		if (foundComponent instanceof OperationComponentDefinition) {
+			newComponent = (OperationComponentDefinition) foundComponent;
+		} else if (foundComponent != null) {
+			throw new InvalidParametersException("Cannot associate component to operation nodes: this is not an operation component");
+		} else {
+			// We use here a null editor because this action is embedded
+			AddComponent addComponent = AddComponent.actionType.makeNewEmbeddedAction(getFocusedObject().getProject()
+					.getFlexoComponentLibrary(), null, this);
+			addComponent.setNewComponentName(getNewComponentName());
+			addComponent.setComponentType(AddComponent.ComponentType.OPERATION_COMPONENT);
+			addComponent.doAction();
+			if (addComponent.hasActionExecutionSucceeded()) {
+				newComponent = (OperationComponentDefinition) addComponent.getNewComponent();
+				hasCreatedComponent = true;
+			} else {
+				logger.info("exception: " + addComponent.getThrownException());
+				throw new InvalidParametersException("Cannot create component");
+			}
+		}
+		logger.info("setOperationComponent with " + newComponent.getName());
+		getFocusedObject().setOperationComponent(newComponent);
+	}
+
+	public String getNewComponentName() {
+		return _newComponentName;
+	}
+
+	public void setNewComponentName(String newComponentName) {
+		_newComponentName = newComponentName;
+	}
+
+	// Ceci est rendu necessaire a cause du OperationAssociatedWithComponentSucessfully, qu'on va
+	// Virer par la suite quand on aura implemente proprement tout ca.
+	@Override
+	public boolean hasActionExecutionSucceeded() {
+		return true;
+	}
 
 	public boolean hasCreatedComponent() {
 		return hasCreatedComponent;
 	}
-    
 
 }

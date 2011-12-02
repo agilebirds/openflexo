@@ -70,24 +70,24 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
+
 /*
 =======
 >>>>>>> 1.2
 
  */
-public class BPELWriter
-{
+public class BPELWriter {
 	private FlexoProcess process;
-	private BPELExportedPartnerLink exp=null;
-	private BPELPartnerLinkSet pLinks=null;
+	private BPELExportedPartnerLink exp = null;
+	private BPELPartnerLinkSet pLinks = null;
 
 	public BPELWriter() {
 
 	}
 
 	public BPELWriter(FlexoProcess p) {
-		System.out.println("Instanciating BPELWriter for process : "+p.getName());
-		process=p;
+		System.out.println("Instanciating BPELWriter for process : " + p.getName());
+		process = p;
 		BPELPrettyPrinter.getInstance(this);
 	}
 
@@ -99,118 +99,110 @@ public class BPELWriter
 		return exp;
 	}
 
-	public String getStringPartnerLinkTypeDefinition(String pLinkName) throws BPELModelException{
-		BPELPartnerLink pLink=pLinks.getPartnerLink(pLinkName);
+	public String getStringPartnerLinkTypeDefinition(String pLinkName) throws BPELModelException {
+		BPELPartnerLink pLink = pLinks.getPartnerLink(pLinkName);
 		return getStringPartnerLinkTypeDefinition(pLink);
 	}
-
 
 	public String getStringPartnerLinkTypeDefinition(BPELPartnerLinkInterface pLink) throws BPELModelException {
 		String toReturn;
 
-		TPartnerLinkType pLinkType=pLink.getTPartnerLinkType();
+		TPartnerLinkType pLinkType = pLink.getTPartnerLinkType();
 		/* Serialisation */
 		try {
-			JAXBElement<TPartnerLinkType> el=new JAXBElement<TPartnerLinkType>(new QName(BPELConstants.NAMESPACE_PLINKTYPE,"partnerLinkType"),TPartnerLinkType.class,pLinkType);
+			JAXBElement<TPartnerLinkType> el = new JAXBElement<TPartnerLinkType>(new QName(BPELConstants.NAMESPACE_PLINKTYPE,
+					"partnerLinkType"), TPartnerLinkType.class, pLinkType);
 
-			BPELNamespacePrefixMapper mapper=new BPELNamespacePrefixMapper();
-			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_PLINKTYPE,"plink");
-			toReturn=getXml(el,mapper, true);
-		}
-		catch (Exception e) {
+			BPELNamespacePrefixMapper mapper = new BPELNamespacePrefixMapper();
+			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_PLINKTYPE, "plink");
+			toReturn = getXml(el, mapper, true);
+		} catch (Exception e) {
 			e.printStackTrace();
-			toReturn=null;
+			toReturn = null;
 		}
 		return toReturn;
 
 	}
 
-	public Node getPartnerLinkTypeDefinition(String pLinkName) throws BPELModelException{
-		BPELPartnerLink pLink=pLinks.getPartnerLink(pLinkName);
+	public Node getPartnerLinkTypeDefinition(String pLinkName) throws BPELModelException {
+		BPELPartnerLink pLink = pLinks.getPartnerLink(pLinkName);
 		return getPartnerLinkTypeDefinition(pLink);
 	}
 
 	public Node getPartnerLinkTypeDefinition(BPELPartnerLinkInterface pLink) throws BPELModelException {
 		Node toReturn;
 
-		TPartnerLinkType pLinkType=pLink.getTPartnerLinkType();
+		TPartnerLinkType pLinkType = pLink.getTPartnerLinkType();
 		/* Serialisation */
 		try {
-			JAXBElement<TPartnerLinkType> el=new JAXBElement<TPartnerLinkType>(new QName(BPELConstants.NAMESPACE_PLINKTYPE,"partnerLinkType"),TPartnerLinkType.class,pLinkType);
+			JAXBElement<TPartnerLinkType> el = new JAXBElement<TPartnerLinkType>(new QName(BPELConstants.NAMESPACE_PLINKTYPE,
+					"partnerLinkType"), TPartnerLinkType.class, pLinkType);
 
-			BPELNamespacePrefixMapper mapper=new BPELNamespacePrefixMapper();
-			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_PLINKTYPE,"plink");
-			toReturn=getNode(el,mapper);
-		}
-		catch (Exception e) {
+			BPELNamespacePrefixMapper mapper = new BPELNamespacePrefixMapper();
+			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_PLINKTYPE, "plink");
+			toReturn = getNode(el, mapper);
+		} catch (Exception e) {
 			e.printStackTrace();
-			toReturn=null;
+			toReturn = null;
 		}
 		return toReturn;
 	}
 
-
 	public String write() throws BPELModelException {
 
-		AbstractInPort portIN=null;
-		OutputPort portOUT=null;
-		if (process.getPortRegistery().getInOutPorts().size()==1) {
-			portIN=(AbstractInPort) process.getPortRegistery().getInOutPorts().get(0);
-			portOUT=((OutputPort)process.getPortRegistery().getInOutPorts().get(0));
-		}
-		else if(process.getPortRegistery().getNewPorts().size()==1 && process.getPortRegistery().getOutPorts().size()==1) {
-			portIN=(AbstractInPort) process.getPortRegistery().getNewPorts().get(0);
-			portOUT=(OutputPort) process.getPortRegistery().getOutPorts().get(0);
-		}
-		else if(process.getPortRegistery().getInPorts().size()==1 && process.getPortRegistery().getOutPorts().size()==1) {
-			portIN=(AbstractInPort) process.getPortRegistery().getInPorts().get(0);
-			portOUT=(OutputPort) process.getPortRegistery().getOutPorts().get(0);
-		}
-		else {
+		AbstractInPort portIN = null;
+		OutputPort portOUT = null;
+		if (process.getPortRegistery().getInOutPorts().size() == 1) {
+			portIN = (AbstractInPort) process.getPortRegistery().getInOutPorts().get(0);
+			portOUT = ((OutputPort) process.getPortRegistery().getInOutPorts().get(0));
+		} else if (process.getPortRegistery().getNewPorts().size() == 1 && process.getPortRegistery().getOutPorts().size() == 1) {
+			portIN = (AbstractInPort) process.getPortRegistery().getNewPorts().get(0);
+			portOUT = (OutputPort) process.getPortRegistery().getOutPorts().get(0);
+		} else if (process.getPortRegistery().getInPorts().size() == 1 && process.getPortRegistery().getOutPorts().size() == 1) {
+			portIN = (AbstractInPort) process.getPortRegistery().getInPorts().get(0);
+			portOUT = (OutputPort) process.getPortRegistery().getOutPorts().get(0);
+		} else {
 			throw new BPELModelException("There must be one and only one IN/OUT port defined for a FlexoProcess");
 		}
 
+		String toReturn = new String();
+		TProcess tp = new TProcess();
 
-		String toReturn=new String();
-		TProcess tp=new TProcess();
-
-		BPELControlGraphBuilder builder=new BPELControlGraphBuilder(portIN,portOUT);
+		BPELControlGraphBuilder builder = new BPELControlGraphBuilder(portIN, portOUT);
 		tp.setName(process.getName());
 		tp.setTargetNamespace(BPELConstants.THIS_NAMESPACE);
 
 		// build the structure of the partnerLinks;
-		exp=new BPELExportedPartnerLink(process,portIN,portOUT);
+		exp = new BPELExportedPartnerLink(process, portIN, portOUT);
 
-		pLinks=new BPELPartnerLinkSet();
+		pLinks = new BPELPartnerLinkSet();
 
-		System.out.println("Assinging plinks in "+this.toString());
+		System.out.println("Assinging plinks in " + this.toString());
 
-		Vector<FlexoProcess> importedProcesses=process.getProject().getAllLocalFlexoProcesses();
+		Vector<FlexoProcess> importedProcesses = process.getProject().getAllLocalFlexoProcesses();
 		try {
-			for (int i=0;i<importedProcesses.size();i++) {
-				FlexoProcess currentPro=importedProcesses.elementAt(i);
+			for (int i = 0; i < importedProcesses.size(); i++) {
+				FlexoProcess currentPro = importedProcesses.elementAt(i);
 				if (!currentPro.getIsWebService()) {
 					continue;
 				}
 				pLinks.addPartnerLink(currentPro);
 			}
 
-
-			Vector<SubProcessNode> invokedWebServices=process.getAllSubProcessNodes();
-			for (int i=0;i<invokedWebServices.size();i++) {
-				SubProcessNode currentSubProcess=invokedWebServices.get(i);
+			Vector<SubProcessNode> invokedWebServices = process.getAllSubProcessNodes();
+			for (int i = 0; i < invokedWebServices.size(); i++) {
+				SubProcessNode currentSubProcess = invokedWebServices.get(i);
 
 				// we only have to import the WebServices SubProcess
-				if (currentSubProcess==null || ! currentSubProcess.getIsWebService()) {
+				if (currentSubProcess == null || !currentSubProcess.getIsWebService()) {
 					continue;
 				}
 
-				//BPELPartnerLink plink=new BPELPartnerLink((ServiceInterface)currentSubProcess.getServiceInterfaces().get(0));
-				System.out.println("* * * : Adding : "+currentSubProcess.getName());
+				// BPELPartnerLink plink=new BPELPartnerLink((ServiceInterface)currentSubProcess.getServiceInterfaces().get(0));
+				System.out.println("* * * : Adding : " + currentSubProcess.getName());
 				pLinks.addPartnerLink(currentSubProcess);
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		tp.getImport().addAll(pLinks.getTImports());
@@ -223,62 +215,58 @@ public class BPELWriter
 		tp.getVariables().getVariable().addAll(exp.getVariables());
 
 		try {
-			ControlGraph g=builder.makeControlGraph(false);
-			tp.setSequence((TSequence)getBPELObject(g));
-		}
-		catch (InvalidModelException e) {
+			ControlGraph g = builder.makeControlGraph(false);
+			tp.setSequence((TSequence) getBPELObject(g));
+		} catch (InvalidModelException e) {
+			throw new BPELModelException(e.getMessage());
+		} catch (NotSupportedException e) {
 			throw new BPELModelException(e.getMessage());
 		}
-		catch (NotSupportedException e) {
-			throw new BPELModelException(e.getMessage());
-		}
-
 
 		/* Serialisation */
 		try {
-			JAXBElement<TProcess> el=new JAXBElement<TProcess>(new QName(BPELConstants.NAMESPACE_BPEL,"process"),TProcess.class,tp);
-			BPELNamespacePrefixMapper mapper=BPELNamespacePrefixMapperFactory.getInstance();
-			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_BPEL,"");
-			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_WSDL,"wsdl");
-			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_PLINKTYPE,"plink");
-			toReturn=getXml(el,mapper);
-		}
-		catch (Exception e) {
+			JAXBElement<TProcess> el = new JAXBElement<TProcess>(new QName(BPELConstants.NAMESPACE_BPEL, "process"), TProcess.class, tp);
+			BPELNamespacePrefixMapper mapper = BPELNamespacePrefixMapperFactory.getInstance();
+			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_BPEL, "");
+			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_WSDL, "wsdl");
+			mapper.addNamespaceAndPrefix(BPELConstants.NAMESPACE_PLINKTYPE, "plink");
+			toReturn = getXml(el, mapper);
+		} catch (Exception e) {
 			e.printStackTrace();
-			toReturn="An error occured while serializing BPEL source; See java stack for more trace.";
+			toReturn = "An error occured while serializing BPEL source; See java stack for more trace.";
 		}
 		return toReturn;
 	}
 
 	private Object getBPELObject(ControlGraph g) throws BPELInvalidModelException {
-		if (g==null) {
+		if (g == null) {
 			return new TEmpty();
 		}
 		if (g instanceof BPELWSAPI) {
-			TSequence tSeq=new TSequence();
+			TSequence tSeq = new TSequence();
 
-			TReceive rec=exp.getReceive();
+			TReceive rec = exp.getReceive();
 			tSeq.getActivity().add(rec);
 
 			// the elements starting from a BPELWSAPI are in a sequence...
 			// but we've already created a sequence with the receive and reply
 			// we therefore do not recreate one, and just copy the elments.
-			TSequence receivedSeq=(TSequence)getBPELObject(((BPELWSAPI)g).getControlGraph());
-			for (Object o:receivedSeq.getActivity()) {
-				if (o!=null) {
+			TSequence receivedSeq = (TSequence) getBPELObject(((BPELWSAPI) g).getControlGraph());
+			for (Object o : receivedSeq.getActivity()) {
+				if (o != null) {
 					tSeq.getActivity().add(o);
 				}
 			}
-			TReply rep=exp.getReply();
+			TReply rep = exp.getReply();
 			tSeq.getActivity().add(rep);
 			return tSeq;
 		}
 
 		if (g instanceof Sequence) {
-			TSequence tSeq=new TSequence();
-			Sequence seq=((Sequence)g);
-			for (ControlGraph currentGraph:seq.getStatements()) {
-				if (currentGraph!=null) {
+			TSequence tSeq = new TSequence();
+			Sequence seq = ((Sequence) g);
+			for (ControlGraph currentGraph : seq.getStatements()) {
+				if (currentGraph != null) {
 					tSeq.getActivity().add(getBPELObject(currentGraph));
 				}
 			}
@@ -286,10 +274,10 @@ public class BPELWriter
 		}
 
 		if (g instanceof Flow) {
-			TFlow tFlow=new TFlow();
-			Flow flow=((Flow)g);
-			for (ControlGraph currentGraph:flow.getStatements()) {
-				if (currentGraph!=null) {
+			TFlow tFlow = new TFlow();
+			Flow flow = ((Flow) g);
+			for (ControlGraph currentGraph : flow.getStatements()) {
+				if (currentGraph != null) {
 					tFlow.getActivity().add(getBPELObject(currentGraph));
 				}
 			}
@@ -297,23 +285,22 @@ public class BPELWriter
 		}
 
 		if (g instanceof Conditional) {
-			Conditional cond=((Conditional)g);
-			TIf tIf=new TIf();
-			TBooleanExpr tEx=new TBooleanExpr();
+			Conditional cond = ((Conditional) g);
+			TIf tIf = new TIf();
+			TBooleanExpr tEx = new TBooleanExpr();
 			tIf.setCondition(tEx);
 			if (cond.getCondition() != null) {
-				String sEx=BPELPrettyPrinter.getInstance().getStringRepresentation(cond.getCondition());
+				String sEx = BPELPrettyPrinter.getInstance().getStringRepresentation(cond.getCondition());
 				tEx.getContent().add(sEx);
-			}
-			else {
-				TDocumentation doc=new TDocumentation();
+			} else {
+				TDocumentation doc = new TDocumentation();
 				doc.getContent().add("the condition has to be manually specified here.");
 				tIf.getDocumentation().add(doc);
 				// should warn that no condition has been specified.
 			}
-			tIf.setSequence((TSequence)getBPELObject(cond.getThenStatement()));
+			tIf.setSequence((TSequence) getBPELObject(cond.getThenStatement()));
 			tIf.setElse(new TActivityContainer());
-			tIf.getElse().setSequence((TSequence)getBPELObject(cond.getElseStatement()));
+			tIf.getElse().setSequence((TSequence) getBPELObject(cond.getElseStatement()));
 			return tIf;
 		}
 
@@ -322,12 +309,12 @@ public class BPELWriter
 		}
 
 		if (g instanceof BPELWSInvocation) {
-			BPELWSInvocation inv=((BPELWSInvocation)g);
-			BPELPartnerLinkInvocation invoc=pLinks.findInvocation(inv.getSubProcessNode());
-			if (invoc==null) {
-				System.out.println("INVOC IS NULL : "+inv.getSubProcessNode().getName());
-				TInvoke toReturn=new TInvoke();
-				TDocumentation tDoc=new TDocumentation();
+			BPELWSInvocation inv = ((BPELWSInvocation) g);
+			BPELPartnerLinkInvocation invoc = pLinks.findInvocation(inv.getSubProcessNode());
+			if (invoc == null) {
+				System.out.println("INVOC IS NULL : " + inv.getSubProcessNode().getName());
+				TInvoke toReturn = new TInvoke();
+				TDocumentation tDoc = new TDocumentation();
 				tDoc.getContent().add("This invoke Activity should be manually created.");
 				toReturn.getDocumentation().add(tDoc);
 				return toReturn;
@@ -337,9 +324,9 @@ public class BPELWriter
 		}
 
 		if (g instanceof Assignment) {
-			Assignment ass=((Assignment)g);
+			Assignment ass = ((Assignment) g);
 
-			String variableName=ass.getReceiver().getName();
+			String variableName = ass.getReceiver().getName();
 			/*
 			if (ass.getAssignmentValue() instanceof BinaryOperatorExpression) {
 				assignedValue=((BinaryOperatorExpression)ass.getAssignmentValue()).getRightArgument().toString();
@@ -348,31 +335,28 @@ public class BPELWriter
 				System.out.println("Right value is not a variable : "+ass.getAssignmentValue().getClass().getName());
 			}
 			 */
-			TAssign tAss=new TAssign();
-			TCopy tCopy=new TCopy();
+			TAssign tAss = new TAssign();
+			TCopy tCopy = new TCopy();
 			tAss.getCopyOrExtensionAssignOperation().add(tCopy);
-			TFrom tFrom=new TFrom();
-			TTo tTo=new TTo();
+			TFrom tFrom = new TFrom();
+			TTo tTo = new TTo();
 			tCopy.setFrom(tFrom);
 			tCopy.setTo(tTo);
-
 
 			// tTo.getContent().add(getBPELMessagePartFromFlexoVariable(variableName)[0]);
 			tTo.getContent().add(variableName);
 
-
 			System.out.println("- - - - - - Getting expression for variable ");
-			String value=BPELPrettyPrinter.getInstance().getStringRepresentation(ass.getAssignmentValue());
+			String value = BPELPrettyPrinter.getInstance().getStringRepresentation(ass.getAssignmentValue());
 
-			if (value.indexOf("$")==-1) {
-				TLiteral tLit=new TLiteral();
+			if (value.indexOf("$") == -1) {
+				TLiteral tLit = new TLiteral();
 				tLit.getContent().add(value);
 				tFrom.getContent().add((new ObjectFactory()).createLiteral(tLit));
-			}
-			else {
-				//String value=BPELPrettyPrinter.getInstance().getStringRepresentation(ass.getAssignmentValue());
+			} else {
+				// String value=BPELPrettyPrinter.getInstance().getStringRepresentation(ass.getAssignmentValue());
 				tFrom.getContent().add(value);
-				//String value=((Variable)((BinaryOperatorExpression)ass.getAssignmentValue;tFrom.getContent().add(value);
+				// String value=((Variable)((BinaryOperatorExpression)ass.getAssignmentValue;tFrom.getContent().add(value);
 			}
 			/*
 			if (getBPELMessagePartFromFlexoVariable(assignedValue) != null) {
@@ -388,87 +372,80 @@ public class BPELWriter
 			return tAss;
 		}
 
-		throw new BPELInvalidModelException("The Antar model could not be translated into BPEL : class "+g.getClass().getName()+ " is unknown");
+		throw new BPELInvalidModelException("The Antar model could not be translated into BPEL : class " + g.getClass().getName()
+				+ " is unknown");
 	}
 
-
 	public String[] getBPELMessagePartFromFlexoVariable(String v) {
-		String[] toReturn=null;
+		String[] toReturn = null;
 
 		// first check in the exported PLink.
 		if (exp != null) {
-			toReturn=exp.getPartNameForFlexoVariable(v);
+			toReturn = exp.getPartNameForFlexoVariable(v);
 			if (toReturn != null) {
 				return toReturn;
 			}
 		}
 
-
-		System.out.println("plinks is null... writer id : "+this.toString());
+		System.out.println("plinks is null... writer id : " + this.toString());
 		// then check in every other paartner link def.
-		if (pLinks==null) {
+		if (pLinks == null) {
 			return null;
 		}
 		System.out.println(" * * * Checking in plinks");
-		toReturn=pLinks.getBPELMessagePartFromFlexoVariable(v);
+		toReturn = pLinks.getBPELMessagePartFromFlexoVariable(v);
 
 		return toReturn;
 	}
 
-
 	private String getXml(JAXBElement el, NamespacePrefixMapper mapper) throws Exception {
-		return getXml(el,mapper,false);
+		return getXml(el, mapper, false);
 	}
 
+	private String getXml(JAXBElement el, NamespacePrefixMapper mapper, boolean fragment) throws Exception {
+		JAXBContext jContext = JAXBContext
+				.newInstance("org.oasis_open.docs.wsbpel._2_0.process.executable:org.oasis_open.docs.wsbpel._2_0.plnktype");
+		Marshaller myM = jContext.createMarshaller();
 
-	private  String getXml(JAXBElement el, NamespacePrefixMapper mapper, boolean fragment) throws Exception {
-		JAXBContext jContext=JAXBContext.newInstance("org.oasis_open.docs.wsbpel._2_0.process.executable:org.oasis_open.docs.wsbpel._2_0.plnktype");
-		Marshaller myM=jContext.createMarshaller();
-
-		if (mapper!=null) {
-			myM.setProperty("com.sun.xml.bind.namespacePrefixMapper",mapper);
+		if (mapper != null) {
+			myM.setProperty("com.sun.xml.bind.namespacePrefixMapper", mapper);
 		}
 
-		myM.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,new Boolean(true));
+		myM.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
 
 		if (fragment) {
-			myM.setProperty(Marshaller.JAXB_FRAGMENT,new Boolean(true));
+			myM.setProperty(Marshaller.JAXB_FRAGMENT, new Boolean(true));
 		}
 
-
-		String output=new String();
-		StringWriter sw=new StringWriter();
-
+		String output = new String();
+		StringWriter sw = new StringWriter();
 
 		myM.marshal(el, sw);
 
-		output=sw.getBuffer().toString();
+		output = sw.getBuffer().toString();
 		return output;
 	}
 
-	private  Node getNode(JAXBElement el, NamespacePrefixMapper mapper) throws Exception {
-		JAXBContext jContext=JAXBContext.newInstance("org.oasis_open.docs.wsbpel._2_0.process.executable:org.oasis_open.docs.wsbpel._2_0.plnktype");
-		Marshaller myM=jContext.createMarshaller();
+	private Node getNode(JAXBElement el, NamespacePrefixMapper mapper) throws Exception {
+		JAXBContext jContext = JAXBContext
+				.newInstance("org.oasis_open.docs.wsbpel._2_0.process.executable:org.oasis_open.docs.wsbpel._2_0.plnktype");
+		Marshaller myM = jContext.createMarshaller();
 
-		if (mapper!=null) {
-			myM.setProperty("com.sun.xml.bind.namespacePrefixMapper",mapper);
+		if (mapper != null) {
+			myM.setProperty("com.sun.xml.bind.namespacePrefixMapper", mapper);
 		}
 
-		myM.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,new Boolean(true));
+		myM.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
 
-		DocumentBuilder builder=DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document doc=builder.newDocument();
+		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		Document doc = builder.newDocument();
 
-		if (mapper==null) {
-			myM.setProperty(Marshaller.JAXB_FRAGMENT,new Boolean(true));
+		if (mapper == null) {
+			myM.setProperty(Marshaller.JAXB_FRAGMENT, new Boolean(true));
 		}
 
 		myM.marshal(el, doc);
 		return doc.getFirstChild();
 	}
-
-
-
-
 
 }

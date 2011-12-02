@@ -22,82 +22,72 @@ package org.openflexo.foundation.bindings;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 public class FloatStaticBinding extends StaticBinding<Double> {
 
 	private double value;
-	
-	public FloatStaticBinding()
-	{
+
+	public FloatStaticBinding() {
 		super();
 	}
-	
-	public FloatStaticBinding(double aValue)
-	{
+
+	public FloatStaticBinding(double aValue) {
 		super();
 		value = aValue;
 	}
-	
-   public FloatStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, double aValue)
-    {
-    	super(bindingDefinition,owner);
+
+	public FloatStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, double aValue) {
+		super(bindingDefinition, owner);
 		value = aValue;
-   }
+	}
 
 	@Override
-	public EvaluationType getEvaluationType() 
-	{
+	public EvaluationType getEvaluationType() {
 		return EvaluationType.ARITHMETIC_FLOAT;
 	}
 
 	@Override
-	public String getStringRepresentation() 
-	{
+	public String getStringRepresentation() {
 		return Double.toString(value);
 	}
-	
+
 	@Override
 	public String getWodStringRepresentation() {
 		return getStringRepresentation();
 	}
 
 	@Override
-	public Double getValue() 
-	{
+	public Double getValue() {
 		return value;
 	}
 
 	@Override
-	public void setValue(Double aValue) 
-	{
+	public void setValue(Double aValue) {
 		value = aValue;
 	}
 
 	@Override
-	protected boolean _areTypesMatching()
-	{
-		if (getBindingDefinition().getType() == null) return true;
+	protected boolean _areTypesMatching() {
+		if (getBindingDefinition().getType() == null) {
+			return true;
+		}
 
-		if (getBindingDefinition().getType().isDouble()
-				|| getBindingDefinition().getType().isFloat()) return true;
+		if (getBindingDefinition().getType().isDouble() || getBindingDefinition().getType().isFloat()) {
+			return true;
+		}
 
 		return super._areTypesMatching();
 	}
 
-
 	@Override
-	public Class<Double> getStaticBindingClass()
-	{
+	public Class<Double> getStaticBindingClass() {
 		return Double.class;
 	}
 
 	@Override
-	public FloatStaticBinding clone()
-	{
+	public FloatStaticBinding clone() {
 		FloatStaticBinding returned = new FloatStaticBinding();
 		returned.setsWith(this);
 		return returned;
 	}
-
 
 }

@@ -21,7 +21,6 @@ package org.openflexo.foundation.cg.templates;
 
 import java.util.Vector;
 
-
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.localization.FlexoLocalization;
@@ -32,46 +31,39 @@ public class ApplicationCGTemplateRepository extends CGTemplateRepository {
 
 	private static final FileResource flexoTemplatesDirectory = new FileResource(FileCst.GENERATOR_TEMPLATES_REL_PATH);
 
-	public ApplicationCGTemplateRepository(CGCodeTemplates templates, Vector<TargetType> availableTargets)
-	{
-		super(flexoTemplatesDirectory,templates, availableTargets);
+	public ApplicationCGTemplateRepository(CGCodeTemplates templates, Vector<TargetType> availableTargets) {
+		super(flexoTemplatesDirectory, templates, availableTargets);
 	}
-	
+
 	@Override
-	public String getFullyQualifiedName() 
-	{
+	public String getFullyQualifiedName() {
 		return "APPLICATION_TEMPLATES";
 	}
 
-	public FileResource getFlexoTemplatesDirectory() 
-	{
+	public FileResource getFlexoTemplatesDirectory() {
 		return flexoTemplatesDirectory;
 	}
 
 	@Override
-	public boolean readOnly()
-	{
+	public boolean readOnly() {
 		return true;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.CG.CG_APPLICATION_TEMPLATE_REPOSITORY;
 	}
 
 	@Override
-	public String getHelpText()
-	{
+	public String getHelpText() {
 		return FlexoLocalization.localizedForKey("contains_default_templates_used_for_code_generation");
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return FlexoLocalization.localizedForKey("application_templates");
 	}
-	
+
 	@Override
 	public boolean isApplicationRepository() {
 		return true;

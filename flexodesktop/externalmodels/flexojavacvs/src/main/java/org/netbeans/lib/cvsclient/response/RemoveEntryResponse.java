@@ -25,46 +25,44 @@ import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
  * Tells the client to remove an entry from the Entries file
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 class RemoveEntryResponse implements Response {
 
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            final String localPath = dis.readLine();
-            //System.err.println("LocalPath is: " + localPath);
-            final String repositoryPath = dis.readLine();
-            //System.err.println("Repository path is: " + repositoryPath);
-            
-            String filePath = services.convertPathname(localPath, repositoryPath);
-            File toRemove = new File(filePath);
-            if (services.getGlobalOptions().isExcluded(toRemove)) {
-                return;
-            }            
-            
-            services.removeEntry(toRemove);
-        }
-        catch (Exception e) {
-            throw new ResponseException(e);
-        }
-    }
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			final String localPath = dis.readLine();
+			// System.err.println("LocalPath is: " + localPath);
+			final String repositoryPath = dis.readLine();
+			// System.err.println("Repository path is: " + repositoryPath);
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+			String filePath = services.convertPathname(localPath, repositoryPath);
+			File toRemove = new File(filePath);
+			if (services.getGlobalOptions().isExcluded(toRemove)) {
+				return;
+			}
+
+			services.removeEntry(toRemove);
+		} catch (Exception e) {
+			throw new ResponseException(e);
+		}
+	}
+
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

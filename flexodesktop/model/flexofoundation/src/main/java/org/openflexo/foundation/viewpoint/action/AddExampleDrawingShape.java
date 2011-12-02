@@ -32,49 +32,38 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 
-
-public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape,ExampleDrawingObject,ExampleDrawingObject> 
-{
+public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, ExampleDrawingObject, ExampleDrawingObject> {
 
 	private static final Logger logger = Logger.getLogger(AddExampleDrawingShape.class.getPackage().getName());
 
-	public static FlexoActionType<AddExampleDrawingShape,ExampleDrawingObject,ExampleDrawingObject> actionType 
-	= new FlexoActionType<AddExampleDrawingShape,ExampleDrawingObject,ExampleDrawingObject> (
-			"add_new_shape",
-			FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddExampleDrawingShape, ExampleDrawingObject, ExampleDrawingObject> actionType = new FlexoActionType<AddExampleDrawingShape, ExampleDrawingObject, ExampleDrawingObject>(
+			"add_new_shape", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddExampleDrawingShape makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
-		{
+		public AddExampleDrawingShape makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection,
+				FlexoEditor editor) {
 			return new AddExampleDrawingShape(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) 
-		{
-			return (object instanceof ExampleDrawingShema 
-					|| object instanceof ExampleDrawingShape);
+		protected boolean isEnabledForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
+			return (object instanceof ExampleDrawingShema || object instanceof ExampleDrawingShape);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddExampleDrawingShape.actionType, ExampleDrawingShema.class);
-		FlexoModelObject.addActionForClass (AddExampleDrawingShape.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass(AddExampleDrawingShape.actionType, ExampleDrawingShema.class);
+		FlexoModelObject.addActionForClass(AddExampleDrawingShape.actionType, ExampleDrawingShape.class);
 	}
-
-
 
 	private ExampleDrawingShape _newShape;
 	public String newShapeName;
@@ -82,15 +71,13 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape,E
 	public Object graphicalRepresentation;
 	public boolean nameSetToNull = false;
 
-	AddExampleDrawingShape (ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
-	{
+	AddExampleDrawingShape(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws NotImplementedException,InvalidParametersException
-	{
-		logger.info ("Add shape");  	
+	protected void doAction(Object context) throws NotImplementedException, InvalidParametersException {
+		logger.info("Add shape");
 
 		if (getParent() == null) {
 			throw new InvalidParametersException("folder is undefined");
@@ -100,33 +87,32 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape,E
 		}
 
 		_newShape = new ExampleDrawingShape();
-		if (graphicalRepresentation != null) _newShape.setGraphicalRepresentation(graphicalRepresentation);
+		if (graphicalRepresentation != null) {
+			_newShape.setGraphicalRepresentation(graphicalRepresentation);
+		}
 
 		_newShape.setName(newShapeName);
-		getParent().addToChilds(_newShape);   
+		getParent().addToChilds(_newShape);
 
-		logger.info("Added shape "+_newShape+" under "+getParent());
+		logger.info("Added shape " + _newShape + " under " + getParent());
 	}
 
-	public ExampleDrawingShape getNewShape() 
-	{
+	public ExampleDrawingShape getNewShape() {
 		return _newShape;
 	}
 
-	public ExampleDrawingObject getParent()
-	{
+	public ExampleDrawingObject getParent() {
 		if (_parent == null) {
 			if (getFocusedObject() instanceof ExampleDrawingShape) {
 				_parent = getFocusedObject();
 			} else if (getFocusedObject() instanceof ExampleDrawingShema) {
 				_parent = getFocusedObject();
-			} 
+			}
 		}
 		return _parent;
 	}
 
-	public void setParent(ExampleDrawingObject parent) 
-	{
+	public void setParent(ExampleDrawingObject parent) {
 		_parent = parent;
 	}
 

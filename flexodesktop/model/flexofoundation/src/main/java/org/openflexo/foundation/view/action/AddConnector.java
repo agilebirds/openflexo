@@ -27,49 +27,39 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 
+public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObject> {
 
-public class AddConnector extends FlexoAction<AddConnector,ViewShape,ViewObject> 
-{
+	private static final Logger logger = Logger.getLogger(AddConnector.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddConnector.class.getPackage().getName());
-    
-    public static FlexoActionType<AddConnector,ViewShape,ViewObject>  actionType 
-    = new FlexoActionType<AddConnector,ViewShape,ViewObject> (
-    		"add_connector",
-    		FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddConnector, ViewShape, ViewObject> actionType = new FlexoActionType<AddConnector, ViewShape, ViewObject>(
+			"add_connector", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddConnector makeNewAction(ViewShape focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddConnector(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddConnector makeNewAction(ViewShape focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+			return new AddConnector(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ViewShape shape, Vector<ViewObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(ViewShape shape, Vector<ViewObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ViewShape shape, Vector<ViewObject> globalSelection) 
-        {
-            return (shape != null);
-        }
-                
-    };
-    
+		@Override
+		protected boolean isEnabledForSelection(ViewShape shape, Vector<ViewObject> globalSelection) {
+			return (shape != null);
+		}
+
+	};
+
 	static {
-		FlexoModelObject.addActionForClass (AddConnector.actionType, ViewShape.class);
+		FlexoModelObject.addActionForClass(AddConnector.actionType, ViewShape.class);
 	}
-
 
 	private ViewShape _fromShape;
 	private ViewShape _toShape;
@@ -78,75 +68,64 @@ public class AddConnector extends FlexoAction<AddConnector,ViewShape,ViewObject>
 
 	private boolean automaticallyCreateConnector = false;
 
-	AddConnector (ViewShape focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	AddConnector(ViewShape focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-     @Override
-	protected void doAction(Object context)
-     {
-    	 logger.info ("Add connector");
-    	 if (getFocusedObject() != null 
-    			 && getFromShape() != null
-    			 && getToShape() != null)  {
-    		 ViewObject parent = ViewObject.getFirstCommonAncestor(getFromShape(), getToShape());
-    		 logger.info("Parent="+parent);
-    		 if (parent == null) throw new IllegalArgumentException("No common ancestor");
-    		 _newConnector = new ViewConnector(getFromShape().getShema(),getFromShape(),getToShape());
-    		 _newConnector.setDescription(annotation);
-    		 parent.addToChilds(_newConnector);
-    	 }
-    	 else {
-    		 logger.warning("Focused role is null !");
-    	 }
-     }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Add connector");
+		if (getFocusedObject() != null && getFromShape() != null && getToShape() != null) {
+			ViewObject parent = ViewObject.getFirstCommonAncestor(getFromShape(), getToShape());
+			logger.info("Parent=" + parent);
+			if (parent == null) {
+				throw new IllegalArgumentException("No common ancestor");
+			}
+			_newConnector = new ViewConnector(getFromShape().getShema(), getFromShape(), getToShape());
+			_newConnector.setDescription(annotation);
+			parent.addToChilds(_newConnector);
+		} else {
+			logger.warning("Focused role is null !");
+		}
+	}
 
-    public ViewShape getToShape() 
-    {
-        return _toShape;
-    }
+	public ViewShape getToShape() {
+		return _toShape;
+	}
 
-    public void setToShape(ViewShape aShape) 
-    {
-    	_toShape = aShape;
-    }
+	public void setToShape(ViewShape aShape) {
+		_toShape = aShape;
+	}
 
-	public ViewShape getFromShape() 
-	{
-		if (_fromShape == null) return getFocusedObject();
+	public ViewShape getFromShape() {
+		if (_fromShape == null) {
+			return getFocusedObject();
+		}
 		return _fromShape;
 	}
 
-	public void setFromShape(ViewShape fromShape)
-	{
+	public void setFromShape(ViewShape fromShape) {
 		_fromShape = fromShape;
 	}
 
-	public ViewConnector getConnector() 
-	{
+	public ViewConnector getConnector() {
 		return _newConnector;
 	}
-	
-	public boolean getAutomaticallyCreateConnector() 
-	{
+
+	public boolean getAutomaticallyCreateConnector() {
 		return automaticallyCreateConnector;
 	}
 
-	public void setAutomaticallyCreateConnector(boolean automaticallyCreateConnector)
-	{
+	public void setAutomaticallyCreateConnector(boolean automaticallyCreateConnector) {
 		this.automaticallyCreateConnector = automaticallyCreateConnector;
 	}
 
-	public String getAnnotation()
-	{
+	public String getAnnotation() {
 		return annotation;
 	}
-	
-	public void setAnnotation(String annotation)
-	{
+
+	public void setAnnotation(String annotation) {
 		this.annotation = annotation;
 	}
-
 
 }

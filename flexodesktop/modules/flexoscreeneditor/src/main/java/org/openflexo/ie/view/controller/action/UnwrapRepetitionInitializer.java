@@ -28,45 +28,37 @@ import org.openflexo.foundation.ie.action.UnwrapRepetition;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class UnwrapRepetitionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	UnwrapRepetitionInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(UnwrapRepetition.actionType,actionInitializer);
+	UnwrapRepetitionInitializer(IEControllerActionInitializer actionInitializer) {
+		super(UnwrapRepetition.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<UnwrapRepetition> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<UnwrapRepetition> getDefaultInitializer() {
 		return new FlexoActionInitializer<UnwrapRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, UnwrapRepetition action)
-			{
+			public boolean run(ActionEvent e, UnwrapRepetition action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<UnwrapRepetition> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<UnwrapRepetition> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UnwrapRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, UnwrapRepetition action)
-			{
+			public boolean run(ActionEvent e, UnwrapRepetition action) {
 				return true;
 			}
 		};
 	}
-
 
 }

@@ -31,77 +31,68 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public abstract class ValidationRule<R extends ValidationRule<R,V>, V extends Validable> extends FlexoObject
-{
+public abstract class ValidationRule<R extends ValidationRule<R, V>, V extends Validable> extends FlexoObject {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationRule.class.getPackage().getName());
 
-    protected String _ruleName;
+	protected String _ruleName;
 
-    private boolean isEnabled = true;
-    
-    private String _ruleDescription;
+	private boolean isEnabled = true;
 
-    private Class<? super V> _objectType;
+	private String _ruleDescription;
 
-    private String _typeName;
+	private Class<? super V> _objectType;
 
-    public ValidationRule(Class<? super V> objectType, String ruleName)
-    {
-        super();
-        _ruleName = ruleName;
-        _ruleDescription = ruleName + "_description";
-        getLocalizedName();
-        getLocalizedDescription();
-        _objectType = objectType;
-    }
+	private String _typeName;
 
-    public abstract ValidationIssue<R,V> applyValidation(final V object);
+	public ValidationRule(Class<? super V> objectType, String ruleName) {
+		super();
+		_ruleName = ruleName;
+		_ruleDescription = ruleName + "_description";
+		getLocalizedName();
+		getLocalizedDescription();
+		_objectType = objectType;
+	}
 
-    public Class<? super V> getObjectType()
-    {
-        return _objectType;
-    }
+	public abstract ValidationIssue<R, V> applyValidation(final V object);
 
-    public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(_ruleName);
-    }
+	public Class<? super V> getObjectType() {
+		return _objectType;
+	}
 
-    public String getLocalizedDescription()
-    {
-        return FlexoLocalization.localizedForKey(_ruleDescription);
-    }
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(_ruleName);
+	}
 
-    public String getNameKey()
-    {
-        return _ruleName;
-    }
+	public String getLocalizedDescription() {
+		return FlexoLocalization.localizedForKey(_ruleDescription);
+	}
 
-    public String getDescriptionKey()
-    {
-        return _ruleDescription;
-    }
+	public String getNameKey() {
+		return _ruleName;
+	}
 
-    public String getTypeName()
-    {
-        if (_typeName == null) {
-            _typeName = _objectType.getSimpleName();
-        }
-        return _typeName;
-    }
+	public String getDescriptionKey() {
+		return _ruleDescription;
+	}
 
-    public boolean isValidForTarget(TargetType targetType)
-    {
-        return true;
-    }
-    
-    public boolean getIsEnabled(){
-    	return isEnabled;
-    }
-    
-    public void setIsEnabled(boolean v){
-    	isEnabled = v;
-    }
+	public String getTypeName() {
+		if (_typeName == null) {
+			_typeName = _objectType.getSimpleName();
+		}
+		return _typeName;
+	}
+
+	public boolean isValidForTarget(TargetType targetType) {
+		return true;
+	}
+
+	public boolean getIsEnabled() {
+		return isEnabled;
+	}
+
+	public void setIsEnabled(boolean v) {
+		isEnabled = v;
+	}
 }

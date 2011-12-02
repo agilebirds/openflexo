@@ -30,47 +30,40 @@ import org.openflexo.foundation.dm.action.ShowTypeHierarchyAction;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class ShowTypeHierarchyInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ShowTypeHierarchyInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(ShowTypeHierarchyAction.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<ShowTypeHierarchyAction> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<ShowTypeHierarchyAction>() {
-            @Override
-			public boolean run(ActionEvent e, ShowTypeHierarchyAction action)
-            {
-                return true;
-           }
-        };
+	ShowTypeHierarchyInitializer(DMControllerActionInitializer actionInitializer) {
+		super(ShowTypeHierarchyAction.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<ShowTypeHierarchyAction> getDefaultFinalizer() 
-	{
+	@Override
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<ShowTypeHierarchyAction> getDefaultInitializer() {
+		return new FlexoActionInitializer<ShowTypeHierarchyAction>() {
+			@Override
+			public boolean run(ActionEvent e, ShowTypeHierarchyAction action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<ShowTypeHierarchyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowTypeHierarchyAction>() {
-            @Override
-			public boolean run(ActionEvent e, ShowTypeHierarchyAction action)
-            {
-                DMEntity focusedEntity = (DMEntity) action.getFocusedObject();
-                TypeHierarchyPopup popup = new TypeHierarchyPopup(focusedEntity, getControllerActionInitializer().getDMController());
-                return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, ShowTypeHierarchyAction action) {
+				DMEntity focusedEntity = (DMEntity) action.getFocusedObject();
+				TypeHierarchyPopup popup = new TypeHierarchyPopup(focusedEntity, getControllerActionInitializer().getDMController());
+				return true;
+			}
+		};
 	}
 
 }

@@ -23,21 +23,19 @@ import org.openflexo.foundation.dkv.dm.DKVDataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DomainDeleted extends DKVDataModification
-{
+public class DomainDeleted extends DKVDataModification {
 
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public DomainDeleted(Domain oldValue)
-    {
-        super(-1, "domain", oldValue, null);
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public DomainDeleted(Domain oldValue) {
+		super(-1, "domain", oldValue, null);
+		// TODO Auto-generated constructor stub
+	}
 
 }

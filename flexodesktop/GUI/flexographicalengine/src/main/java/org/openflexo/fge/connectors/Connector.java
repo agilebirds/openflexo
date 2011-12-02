@@ -32,9 +32,9 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
@@ -42,7 +42,6 @@ import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.XMLSerializable;
-
 
 public abstract class Connector extends KVCObject implements XMLSerializable, Cloneable {
 
@@ -147,8 +146,11 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	public static enum ConnectorType {
 		LINE,
 		// RECT_LINE,
-		RECT_POLYLIN, CURVE, CURVED_POLYLIN, CUSTOM;
-		
+		RECT_POLYLIN,
+		CURVE,
+		CURVED_POLYLIN,
+		CUSTOM;
+
 		public ImageIcon getIcon() {
 			if (this == RECT_POLYLIN) {
 				return org.openflexo.fge.FGEIconLibrary.RECT_POLYLIN_CONNECTOR_ICON;
@@ -195,7 +197,8 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 			// logger.info("Layout has changed because start shape dimension change");
 			return true;
 		}
-		if ((startShapeLocation == null) || ((startShapeLocation != null) && !startShapeLocation.equals(getStartObject().getLocationInDrawing()))) {
+		if ((startShapeLocation == null)
+				|| ((startShapeLocation != null) && !startShapeLocation.equals(getStartObject().getLocationInDrawing()))) {
 			// logger.info("Layout has changed because start shape location change");
 			return true;
 		}
@@ -211,8 +214,8 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 			// logger.info("Layout has changed because end shape location change");
 			return true;
 		}
-		if ((knownConnectorUsedBounds == null) || ((knownConnectorUsedBounds != null)
-				&& !knownConnectorUsedBounds.equals(getConnectorUsedBounds()))) {
+		if ((knownConnectorUsedBounds == null)
+				|| ((knownConnectorUsedBounds != null) && !knownConnectorUsedBounds.equals(getConnectorUsedBounds()))) {
 			// logger.info("Layout has changed because knownConnectorUsedBounds change");
 			return true;
 		}

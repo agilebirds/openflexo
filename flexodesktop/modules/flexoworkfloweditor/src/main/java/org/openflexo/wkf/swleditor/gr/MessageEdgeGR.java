@@ -28,40 +28,36 @@ import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
-public class MessageEdgeGR extends EdgeGR<MessageEdge<?,?>> {
+public class MessageEdgeGR extends EdgeGR<MessageEdge<?, ?>> {
 
 	public MessageEdgeGR(MessageEdge<?, ?> edge, SwimmingLaneRepresentation aDrawing) {
 		super(edge, edge.getStartNode(), edge.getEndNode(), aDrawing);
 	}
 
-	public MessageEdge<?,?> getMessageEdge()
-	{
+	public MessageEdge<?, ?> getMessageEdge() {
 		return getDrawable();
 	}
 
 	@Override
-	public String toString() 
-	{
-		return "MessageEdgeGR of "+getMessageEdge();
+	public String toString() {
+		return "MessageEdgeGR of " + getMessageEdge();
 	}
 
 	@Override
-	public void refreshConnector() 
-	{
+	public void refreshConnector() {
 		if (!isConnectorConsistent()) {
-			// Dont' go further for connector that are inconsistent (this may happen 
+			// Dont' go further for connector that are inconsistent (this may happen
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
 		if (getConnector() instanceof RectPolylinConnector) {
 			if (getStartObject() instanceof PortmapGR) {
 				startOrientationFixed = true;
-				newStartOrientation = ((PortmapGR)getStartObject()).getOrientation();
+				newStartOrientation = ((PortmapGR) getStartObject()).getOrientation();
 			}
 			if (getEndObject() instanceof PortmapGR) {
 				endOrientationFixed = true;
-				newEndOrientation = ((PortmapGR)getEndObject()).getOrientation();
+				newEndOrientation = ((PortmapGR) getEndObject()).getOrientation();
 			}
 			/*
 			if (getStartObject() instanceof PortmapGR && getEndObject() instanceof PortmapGR) {
@@ -107,18 +103,14 @@ public class MessageEdgeGR extends EdgeGR<MessageEdge<?,?>> {
 	}
 
 	@Override
-	public void updatePropertiesFromWKFPreferences() 
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		if (getStartObject() instanceof PortmapGR 
-				|| getEndObject() instanceof PortmapGR
-				|| getStartObject() instanceof PortGR
+		if (getStartObject() instanceof PortmapGR || getEndObject() instanceof PortmapGR || getStartObject() instanceof PortGR
 				|| getEndObject() instanceof PortGR) {
-			setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY,1.6f,DashStyle.MEDIUM_DASHES));
+			setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f, DashStyle.MEDIUM_DASHES));
 			setMiddleSymbol(MiddleSymbolType.PLAIN_ARROW);
-		}
-		else {
-			setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY,1.6f));
+		} else {
+			setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
 			setMiddleSymbol(MiddleSymbolType.FILLED_ARROW);
 		}
 	}

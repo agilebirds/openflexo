@@ -46,7 +46,6 @@ import org.openflexo.swing.merge.MergePanelElements.ComparePanel;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
 public class DGMergeEditor extends JLayeredPane {
 
 	private static final Logger logger = Logger.getLogger(MergeDocDisplayer.class.getPackage().getName());
@@ -56,18 +55,16 @@ public class DGMergeEditor extends JLayeredPane {
 	private MergePanelElements.FilterChangeList changesList;
 	private ComparePanel comparePanel;
 	private JPanel controlPanel;
-	
-	public DGMergeEditor(Merge merge, TokenMarkerStyle style, String leftLabel, String rightLabel, String mergeLabel, String noChangeLabel)
-	{
+
+	public DGMergeEditor(Merge merge, TokenMarkerStyle style, String leftLabel, String rightLabel, String mergeLabel, String noChangeLabel) {
 		super();
 		_report = merge;
-		
+
 		setLayout(new BorderLayout());
-		
-		mergePanelElements = new MergePanelElements(merge,style,noChangeLabel) {
+
+		mergePanelElements = new MergePanelElements(merge, style, noChangeLabel) {
 			@Override
-			protected String localizedForKey(String key)
-			{
+			protected String localizedForKey(String key) {
 				return FlexoLocalization.localizedForKey(key);
 			}
 		};
@@ -77,29 +74,28 @@ public class DGMergeEditor extends JLayeredPane {
 		JScrollPane mergeTextArea = mergePanelElements.getMergePanel();
 
 		JPanel northPanel = new JPanel(new BorderLayout());
-		
+
 		JPanel northEastPanel = new JPanel(new BorderLayout());
-		
-		northEastPanel.add(mergeTextArea,BorderLayout.CENTER);
+
+		northEastPanel.add(mergeTextArea, BorderLayout.CENTER);
 		if (mergeLabel != null) {
-			northEastPanel.add(new JLabel(mergeLabel,SwingConstants.CENTER),BorderLayout.NORTH);
+			northEastPanel.add(new JLabel(mergeLabel, SwingConstants.CENTER), BorderLayout.NORTH);
 		}
-		northPanel.add(changesList,BorderLayout.WEST);
-		northPanel.add(northEastPanel,BorderLayout.CENTER);
-		
+		northPanel.add(changesList, BorderLayout.WEST);
+		northPanel.add(northEastPanel, BorderLayout.CENTER);
+
 		JPanel southPanel = new JPanel(new BorderLayout());
-		southPanel.add(comparePanel,BorderLayout.CENTER);
+		southPanel.add(comparePanel, BorderLayout.CENTER);
 		if ((leftLabel != null) || (rightLabel != null)) {
-			JPanel labelPanels = new JPanel(new GridLayout(1,2));
-			JLabel _leftLabel = new JLabel (leftLabel,SwingConstants.CENTER);
-			JLabel _rightLabel = new JLabel (rightLabel,SwingConstants.CENTER);
+			JPanel labelPanels = new JPanel(new GridLayout(1, 2));
+			JLabel _leftLabel = new JLabel(leftLabel, SwingConstants.CENTER);
+			JLabel _rightLabel = new JLabel(rightLabel, SwingConstants.CENTER);
 			labelPanels.add(_leftLabel);
 			labelPanels.add(_rightLabel);
-			southPanel.add(labelPanels,BorderLayout.NORTH);
+			southPanel.add(labelPanels, BorderLayout.NORTH);
 		}
 
-		
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,northPanel,southPanel);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, northPanel, southPanel);
 		Dimension dim = northPanel.getPreferredSize();
 		dim.height = 300;
 		northPanel.setPreferredSize(dim);
@@ -108,11 +104,11 @@ public class DGMergeEditor extends JLayeredPane {
 		southPanel.setPreferredSize(dim2);
 		splitPane.setDividerLocation(0.5);
 		splitPane.setResizeWeight(0.5);
-		
-		add(splitPane,BorderLayout.CENTER);
-		
+
+		add(splitPane, BorderLayout.CENTER);
+
 		controlPanel = mergePanelElements.getControlPanel();
-		add(controlPanel,BorderLayout.SOUTH);
+		add(controlPanel, BorderLayout.SOUTH);
 
 		/*JButton showOriginalButton = new JButton("Show original");
 		showOriginalButton.addActionListener(new ActionListener() {
@@ -150,8 +146,7 @@ public class DGMergeEditor extends JLayeredPane {
 		controlPanel.add(showLeftButton);
 		controlPanel.add(showRightButton);
 		controlPanel.add(showNewMergeButton);*/
-		
-		
+
 		/*JButton markAsMergedButton = new JButton();
 		markAsMergedButton.setText(FlexoLocalization.localizedForKey("mark_as_merged",markAsMergedButton));
 		markAsMergedButton.addActionListener(new ActionListener() {
@@ -161,10 +156,9 @@ public class DGMergeEditor extends JLayeredPane {
 		});
 		
 		controlPanel.add(markAsMergedButton);*/
-		
-		
+
 		validate();
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -176,54 +170,50 @@ public class DGMergeEditor extends JLayeredPane {
 				if (_report.getChanges().size() > 0) {
 					mergePanelElements.selectChange(_report.getChanges().firstElement());
 				}
-				//}
-			}			
+				// }
+			}
 		});
 	}
-	
+
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) 
-	{
+	public static void main(String[] args) {
 		File original = new FileResource("TestMerge/TestMerge2-original.java");
 		File left = new FileResource("TestMerge/TestMerge2-left.java");
 		File right = new FileResource("TestMerge/TestMerge2-right.java");
 
 		Merge merge = null;
 		try {
-			merge = new Merge(new DiffSource(original),new DiffSource(left),new DiffSource(right), DefaultMergedDocumentType.JAVA);
+			merge = new Merge(new DiffSource(original), new DiffSource(left), new DiffSource(right), DefaultMergedDocumentType.JAVA);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		final JDialog dialog = new JDialog((Frame)null,true);
+
+		final JDialog dialog = new JDialog((Frame) null, true);
 
 		JPanel panel = new JPanel(new BorderLayout());
-		DGMergeEditor editor = new DGMergeEditor(merge,TokenMarkerStyle.Java,"left","right","merge","no changes");
-		panel.add(editor,BorderLayout.CENTER);
+		DGMergeEditor editor = new DGMergeEditor(merge, TokenMarkerStyle.Java, "left", "right", "merge", "no changes");
+		panel.add(editor, BorderLayout.CENTER);
 		editor.setEditable(true);
-		
-		dialog.setPreferredSize(new Dimension(1000,800));
+
+		dialog.setPreferredSize(new Dimension(1000, 800));
 		dialog.getContentPane().add(panel);
 		dialog.pack();
 		dialog.setVisible(true);
 	}
 
-	public boolean isEditable() 
-	{
+	public boolean isEditable() {
 		return mergePanelElements.isEditable();
 	}
 
-	public void setEditable(boolean editable)
-	{
+	public void setEditable(boolean editable) {
 		mergePanelElements.setEditable(editable);
 		revalidate();
 		repaint();
 	}
 
-	public void addToFocusListener(FocusListener aFocusListener) 
-	{
+	public void addToFocusListener(FocusListener aFocusListener) {
 		mergePanelElements.getLeftTextArea().addFocusListener(aFocusListener);
 		mergePanelElements.getRightTextArea().addFocusListener(aFocusListener);
 		mergePanelElements.getMergeTextArea().addFocusListener(aFocusListener);

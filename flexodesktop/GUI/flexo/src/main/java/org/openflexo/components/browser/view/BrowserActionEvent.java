@@ -26,42 +26,36 @@ import javax.swing.JFrame;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.foundation.FlexoObservable;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class BrowserActionEvent extends AWTEvent
-{
+public class BrowserActionEvent extends AWTEvent {
 
-    private static int id = AWTEvent.RESERVED_ID_MAX + 1;
+	private static int id = AWTEvent.RESERVED_ID_MAX + 1;
 
-    private BrowserElement _element;
+	private BrowserElement _element;
 
-    private JFrame _frame;
+	private JFrame _frame;
 
-    public BrowserActionEvent(BrowserElement element, JFrame frame)
-    {
-        super(element, id++);
-        _element = element;
-        _frame = frame;
-    }
+	public BrowserActionEvent(BrowserElement element, JFrame frame) {
+		super(element, id++);
+		_element = element;
+		_frame = frame;
+	}
 
-    public BrowserElement getBrowserElement()
-    {
-        return _element;
-    }
+	public BrowserElement getBrowserElement() {
+		return _element;
+	}
 
-    public FlexoObservable getObject()
-    {
-        return _element.getObject();
-    }
+	public FlexoObservable getObject() {
+		return _element.getObject();
+	}
 
-    public JFrame getFrame()
-    {
-        return _frame;
-    }
+	public JFrame getFrame() {
+		return _frame;
+	}
 
 }

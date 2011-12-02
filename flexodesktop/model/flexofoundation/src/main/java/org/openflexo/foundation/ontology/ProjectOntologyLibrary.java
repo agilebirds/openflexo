@@ -25,32 +25,28 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.dm.OntologyImported;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public class ProjectOntologyLibrary extends OntologyLibrary {
 
 	private FlexoProject project;
-	
-	public ProjectOntologyLibrary(FlexoResourceCenter resourceCenter, FlexoProject project)
-	{
+
+	public ProjectOntologyLibrary(FlexoResourceCenter resourceCenter, FlexoProject project) {
 		super(resourceCenter, resourceCenter.retrieveBaseOntologyLibrary());
 		this.project = project;
 	}
-	
+
 	@Override
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return project;
 	}
-	
-	public ProjectOntology _loadProjectOntology(String ontologyUri, File projectOntologyFile)
-	{
-		ProjectOntology projectOntology = new ProjectOntology(ontologyUri,projectOntologyFile,this);
-		ontologies.put(ontologyUri,projectOntology);
+
+	public ProjectOntology _loadProjectOntology(String ontologyUri, File projectOntologyFile) {
+		ProjectOntology projectOntology = new ProjectOntology(ontologyUri, projectOntologyFile, this);
+		ontologies.put(ontologyUri, projectOntology);
 		setChanged();
 		notifyObservers(new OntologyImported(projectOntology));
 		return projectOntology;
 	}
-	
+
 	/**
 	 * Return true if URI is valid regarding its unicity (no one other object has same URI)
 	 * 
@@ -58,12 +54,11 @@ public class ProjectOntologyLibrary extends OntologyLibrary {
 	 * @return
 	 */
 	@Override
-	public boolean testValidURI(String ontologyURI, String conceptURI)
-	{
+	public boolean testValidURI(String ontologyURI, String conceptURI) {
 		getProject().getProjectOntology().loadWhenUnloaded();
 		return super.testValidURI(ontologyURI, conceptURI);
 	}
-	
+
 	/**
 	 * Return true if URI is valid regarding its unicity (no one other object has same URI)
 	 * 
@@ -71,11 +66,9 @@ public class ProjectOntologyLibrary extends OntologyLibrary {
 	 * @return
 	 */
 	@Override
-	public boolean isDuplicatedURI(String ontologyURI, String conceptURI)
-	{
+	public boolean isDuplicatedURI(String ontologyURI, String conceptURI) {
 		getProject().getProjectOntology().loadWhenUnloaded();
 		return super.isDuplicatedURI(ontologyURI, conceptURI);
 	}
-	
 
 }

@@ -29,120 +29,109 @@ import java.util.logging.Logger;
  * @author sguerin
  * 
  */
-public abstract class ParametersContainerModelObject extends ModelObject
-{
+public abstract class ParametersContainerModelObject extends ModelObject {
 
-    private static final Logger logger = Logger.getLogger(ParametersContainerModelObject.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ParametersContainerModelObject.class.getPackage().getName());
 
-    public Hashtable<String,ParamModel> parameters;
+	public Hashtable<String, ParamModel> parameters;
 
-    public ParametersContainerModelObject()
-    {
-        parameters = new Hashtable<String, ParamModel>();
-    }
-
-    public ParamModel valueForParameter(String name)
-    {
-    	return parameters.get(name);
-    }
-
-    public String getValueForParameter(String name)
-    {
-        if (hasValueForParameter(name)) {
-            ParamModel param = parameters.get(name);
-            return param.value;
-        } else {
-            return null;
-        }
-    }
-
-    public boolean getBooleanValueForParameter(String name)
-    {
-        String stringValue = getValueForParameter(name);
-        if (stringValue != null) {
-            return ((stringValue.equalsIgnoreCase("true")) || (stringValue.equalsIgnoreCase("yes")));
-        }
-        return false;
-    }
-
-    public int getIntValueForParameter(String name)
-    {
-        String stringValue = getValueForParameter(name);
-        if (stringValue != null) {
-            try {
-                return Integer.parseInt(stringValue);
-            } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Invalid number representation !");
-            }
-        }
-        return 0;
-    }
-
-    public float getFloatValueForParameter(String name)
-    {
-        String stringValue = getValueForParameter(name);
-        if (stringValue != null) {
-            try {
-                return Float.parseFloat(stringValue);
-            } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Invalid number representation !");
-            }
-        }
-        return 0;
-    }
-
-    public double getDoubleValueForParameter(String name)
-    {
-        String stringValue = getValueForParameter(name);
-        if (stringValue != null) {
-            try {
-                return Double.parseDouble(stringValue);
-            } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Invalid number representation !");
-            }
-        }
-        return 0;
-    }
-
-   public boolean hasValueForParameter(String name)
-    {
-        return (parameters.get(name) != null);
-    }
-
-    public void setBooleanValueForParameter(String name, boolean aBoolean) 
-    {
-        ParamModel param = new ParamModel();
-        param.name = name;
-        param.value = ""+aBoolean;
-        parameters.put(name,param);
+	public ParametersContainerModelObject() {
+		parameters = new Hashtable<String, ParamModel>();
 	}
 
-    public void setIntValueForParameter(String name, int anInt) 
-    {
-        ParamModel param = new ParamModel();
-        param.name = name;
-        param.value = ""+anInt;
-        parameters.put(name,param);
+	public ParamModel valueForParameter(String name) {
+		return parameters.get(name);
 	}
 
-    public void setDoubleValueForParameter(String name, double aDouble) 
-    {
-        ParamModel param = new ParamModel();
-        param.name = name;
-        param.value = ""+aDouble;
-        parameters.put(name,param);
+	public String getValueForParameter(String name) {
+		if (hasValueForParameter(name)) {
+			ParamModel param = parameters.get(name);
+			return param.value;
+		} else {
+			return null;
+		}
 	}
 
-    public void setValueForParameter(String name, String value) 
-    {
-        ParamModel param = new ParamModel();
-        param.name = name;
-        param.value = value;
-        parameters.put(name,param);
+	public boolean getBooleanValueForParameter(String name) {
+		String stringValue = getValueForParameter(name);
+		if (stringValue != null) {
+			return ((stringValue.equalsIgnoreCase("true")) || (stringValue.equalsIgnoreCase("yes")));
+		}
+		return false;
 	}
 
+	public int getIntValueForParameter(String name) {
+		String stringValue = getValueForParameter(name);
+		if (stringValue != null) {
+			try {
+				return Integer.parseInt(stringValue);
+			} catch (Exception e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Invalid number representation !");
+				}
+			}
+		}
+		return 0;
+	}
+
+	public float getFloatValueForParameter(String name) {
+		String stringValue = getValueForParameter(name);
+		if (stringValue != null) {
+			try {
+				return Float.parseFloat(stringValue);
+			} catch (Exception e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Invalid number representation !");
+				}
+			}
+		}
+		return 0;
+	}
+
+	public double getDoubleValueForParameter(String name) {
+		String stringValue = getValueForParameter(name);
+		if (stringValue != null) {
+			try {
+				return Double.parseDouble(stringValue);
+			} catch (Exception e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Invalid number representation !");
+				}
+			}
+		}
+		return 0;
+	}
+
+	public boolean hasValueForParameter(String name) {
+		return (parameters.get(name) != null);
+	}
+
+	public void setBooleanValueForParameter(String name, boolean aBoolean) {
+		ParamModel param = new ParamModel();
+		param.name = name;
+		param.value = "" + aBoolean;
+		parameters.put(name, param);
+	}
+
+	public void setIntValueForParameter(String name, int anInt) {
+		ParamModel param = new ParamModel();
+		param.name = name;
+		param.value = "" + anInt;
+		parameters.put(name, param);
+	}
+
+	public void setDoubleValueForParameter(String name, double aDouble) {
+		ParamModel param = new ParamModel();
+		param.name = name;
+		param.value = "" + aDouble;
+		parameters.put(name, param);
+	}
+
+	public void setValueForParameter(String name, String value) {
+		ParamModel param = new ParamModel();
+		param.name = name;
+		param.value = value;
+		parameters.put(name, param);
+	}
 
 }

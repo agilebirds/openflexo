@@ -19,10 +19,6 @@
  */
 package org.openflexo.jedit;
 
-
-
-
-
 public class TestJEdit {
 
 	/*
@@ -68,6 +64,5 @@ public class TestJEdit {
 			e1.printStackTrace();
 		}
 	}*/
-
 
 }

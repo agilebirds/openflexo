@@ -33,93 +33,85 @@ import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 
-public class FIBTabPanelView extends FIBContainerView<FIBTabPanel,JTabbedPane> {
+public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> {
 
 	private static final Logger logger = Logger.getLogger(FIBTabPanelView.class.getPackage().getName());
 
 	private JTabbedPane tabbedPane;
-	
-	public FIBTabPanelView(FIBTabPanel model, FIBController controller)
-	{
-		super(model,controller);
+
+	public FIBTabPanelView(FIBTabPanel model, FIBController controller) {
+		super(model, controller);
 	}
 
 	@Override
-	public void delete() 
-	{
+	public void delete() {
 		super.delete();
 	}
 
-
 	@Override
-	protected JTabbedPane createJComponent() 
-	{
+	protected JTabbedPane createJComponent() {
 		tabbedPane = new JTabbedPane()/* {
-			@Override
-			public Component add(String title, Component component) {
-				logger.info("Add "+component);
-				return super.add(title, component);
-			}
+										@Override
+										public Component add(String title, Component component) {
+										logger.info("Add "+component);
+										return super.add(title, component);
+										}
 
-			@Override
-			public Component add(Component component) {
-				logger.info("Add "+component);
-				return super.add(component);
-			}
-			
-			@Override
-			public void add(Component component, Object constraints) {
-				logger.info("Add "+component);
-				super.add(component, constraints);
-			}
-			
-			@Override
-			public void add(Component component, Object constraints, int index) {
-				logger.info("Add "+component);
-				super.add(component, constraints, index);
-			}
-			
-		}*/;
+										@Override
+										public Component add(Component component) {
+										logger.info("Add "+component);
+										return super.add(component);
+										}
+										
+										@Override
+										public void add(Component component, Object constraints) {
+										logger.info("Add "+component);
+										super.add(component, constraints);
+										}
+										
+										@Override
+										public void add(Component component, Object constraints, int index) {
+										logger.info("Add "+component);
+										super.add(component, constraints, index);
+										}
+										
+										}*/;
 		return tabbedPane;
 	}
-	
 
 	@Override
-	public JTabbedPane getJComponent() 
-	{
+	public JTabbedPane getJComponent() {
 		return tabbedPane;
 	}
-   
+
 	@Override
-	protected void retrieveContainedJComponentsAndConstraints()
-	{
+	protected void retrieveContainedJComponentsAndConstraints() {
 		Vector<FIBTab> allTabs = new Vector<FIBTab>();
 		for (FIBComponent subComponent : getComponent().getSubComponents()) {
-			if (subComponent instanceof FIBTab) allTabs.add((FIBTab)subComponent);
+			if (subComponent instanceof FIBTab) {
+				allTabs.add((FIBTab) subComponent);
+			}
 		}
-		
-		Collections.sort(allTabs,new Comparator<FIBTab>() {
+
+		Collections.sort(allTabs, new Comparator<FIBTab>() {
 			@Override
 			public int compare(FIBTab o1, FIBTab o2) {
-				return o1.getIndex()-o2.getIndex();
+				return o1.getIndex() - o2.getIndex();
 			}
 		});
 
 		for (FIBTab tab : allTabs) {
 			FIBView subView = getController().buildView(tab);
 			if (subView != null) {
-				registerViewForComponent(subView,tab);
-				registerComponentWithConstraints(
-						subView.getResultingJComponent(),
-						getLocalized(tab.getTitle()));
+				registerViewForComponent(subView, tab);
+				registerComponentWithConstraints(subView.getResultingJComponent(), getLocalized(tab.getTitle()));
 			}
 		}
 
 	}
 
 	@Override
-	public synchronized void updateLayout()
-	{
+	public synchronized void updateLayout() {
 		int index = tabbedPane.getSelectedIndex();
 		for (FIBView v : getSubViews()) {
 			v.delete();
@@ -131,16 +123,14 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel,JTabbedPane> {
 	}
 
 	@Override
-	public void updateLanguage()
-	{
+	public void updateLanguage() {
 		super.updateLanguage();
 		int index = 0;
 		for (FIBView v : subViews) {
 			if (v.getComponent() instanceof FIBTab) {
-				tabbedPane.setTitleAt(index, getLocalized(((FIBTab)v.getComponent()).getTitle()));
-			}
-			else {
-				logger.warning("Unexpected component found in TabPanel: "+v.getComponent());
+				tabbedPane.setTitleAt(index, getLocalized(((FIBTab) v.getComponent()).getTitle()));
+			} else {
+				logger.warning("Unexpected component found in TabPanel: " + v.getComponent());
 			}
 			index++;
 		}

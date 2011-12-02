@@ -32,7 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-
 import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.dm.view.TypeHierarchyPanel;
@@ -42,83 +41,79 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoDialog;
 
 /**
- * Popup allowing to choose some objects of a given type from
- * Flexo model objects hierarchy
+ * Popup allowing to choose some objects of a given type from Flexo model objects hierarchy
  * 
  * @author sguerin
  * 
  */
-public class TypeHierarchyPopup extends FlexoDialog
-{
+public class TypeHierarchyPopup extends FlexoDialog {
 
-     private JTextArea _descriptionTA;
+	private JTextArea _descriptionTA;
 
-    protected TypeHierarchyPanel hierarchyPanel;
-    
-    public TypeHierarchyPopup(final DMEntity entity, DMController controller)
-    {
-        super(controller.getFlexoFrame());
- 
-        String title = FlexoLocalization.localizedForKey("type_hierarchy_for")+" "+entity.getName();
-        String description = FlexoLocalization.localizedForKey("type_hierarchy_description");
-        setTitle(title);
-        getContentPane().setLayout(new BorderLayout());
-        
-        setBackground(ColorCst.GUI_BACK_COLOR);
- 
-        JPanel topPanel = new JPanel();
- 
-        _descriptionTA = new JTextArea(3, 40);
-        _descriptionTA.setLineWrap(true);
-        _descriptionTA.setWrapStyleWord(true);
-        _descriptionTA.setFont(FlexoCst.MEDIUM_FONT);
-        _descriptionTA.setEditable(false);
-        _descriptionTA.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-        _descriptionTA.setText(description);
-        
-        JLabel titleLabel = new JLabel(title);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-       
-        topPanel.setLayout(new BorderLayout());
-        topPanel.add(titleLabel, BorderLayout.NORTH);
-        topPanel.add(_descriptionTA, BorderLayout.CENTER);
+	protected TypeHierarchyPanel hierarchyPanel;
 
-        hierarchyPanel = new TypeHierarchyPanel(entity,controller);
-        hierarchyPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+	public TypeHierarchyPopup(final DMEntity entity, DMController controller) {
+		super(controller.getFlexoFrame());
 
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+		String title = FlexoLocalization.localizedForKey("type_hierarchy_for") + " " + entity.getName();
+		String description = FlexoLocalization.localizedForKey("type_hierarchy_description");
+		setTitle(title);
+		getContentPane().setLayout(new BorderLayout());
 
-        JButton closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
- 
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                dispose();
-            }
-        });
-        controlPanel.add(closeButton);
-        closeButton.setSelected(true);
+		setBackground(ColorCst.GUI_BACK_COLOR);
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
+		JPanel topPanel = new JPanel();
 
-        contentPanel.add(topPanel, BorderLayout.NORTH);
-        contentPanel.add(hierarchyPanel, BorderLayout.CENTER);
-        contentPanel.add(controlPanel, BorderLayout.SOUTH);
+		_descriptionTA = new JTextArea(3, 40);
+		_descriptionTA.setLineWrap(true);
+		_descriptionTA.setWrapStyleWord(true);
+		_descriptionTA.setFont(FlexoCst.MEDIUM_FONT);
+		_descriptionTA.setEditable(false);
+		_descriptionTA.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+		_descriptionTA.setText(description);
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
+		JLabel titleLabel = new JLabel(title);
+		titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        setModal(false);
-        validate();
-        getRootPane().setDefaultButton(closeButton);
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
+		topPanel.setLayout(new BorderLayout());
+		topPanel.add(titleLabel, BorderLayout.NORTH);
+		topPanel.add(_descriptionTA, BorderLayout.CENTER);
 
-        setVisible(true);
-        
-    }
+		hierarchyPanel = new TypeHierarchyPanel(entity, controller);
+		hierarchyPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
+
+		JButton closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
+
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		controlPanel.add(closeButton);
+		closeButton.setSelected(true);
+
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout(new BorderLayout());
+
+		contentPanel.add(topPanel, BorderLayout.NORTH);
+		contentPanel.add(hierarchyPanel, BorderLayout.CENTER);
+		contentPanel.add(controlPanel, BorderLayout.SOUTH);
+
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+
+		setModal(false);
+		validate();
+		getRootPane().setDefaultButton(closeButton);
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
+
+		setVisible(true);
+
+	}
 
 }

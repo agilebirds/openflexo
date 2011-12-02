@@ -23,6 +23,6 @@ import java.awt.event.ActionEvent;
 
 public abstract class FlexoActionInitializer<A extends FlexoAction> extends FlexoActionRunnable<A> {
 
-    @Override
-	public abstract boolean run (ActionEvent event, A action);
+	@Override
+	public abstract boolean run(ActionEvent event, A action);
 }

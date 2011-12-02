@@ -40,68 +40,55 @@ import java.util.StringTokenizer;
  * 
  * @author sguerin
  */
-public class StringEncoder
-{
+public class StringEncoder {
 
 	private static final StringEncoder defaultInstance = new StringEncoder();
 
-	public static String encodeBoolean(boolean aBoolean)
-	{
+	public static String encodeBoolean(boolean aBoolean) {
 		return aBoolean ? "true" : "false";
 	}
 
-	public static String encodeByte(byte aByte)
-	{
+	public static String encodeByte(byte aByte) {
 		return "" + aByte;
 	}
 
-	public static String encodeCharacter(char aChar)
-	{
+	public static String encodeCharacter(char aChar) {
 		return "" + aChar;
 	}
 
-	public static String encodeDouble(double aDouble)
-	{
+	public static String encodeDouble(double aDouble) {
 		return "" + aDouble;
 	}
 
-	public static String encodeFloat(float aFloat)
-	{
+	public static String encodeFloat(float aFloat) {
 		return "" + aFloat;
 	}
 
-	public static String encodeInteger(int anInt)
-	{
+	public static String encodeInteger(int anInt) {
 		return "" + anInt;
 	}
 
-	public static String encodeLong(long aLong)
-	{
+	public static String encodeLong(long aLong) {
 		return "" + aLong;
 	}
 
-	public static String encodeShort(short aShort)
-	{
+	public static String encodeShort(short aShort) {
 		return "" + aShort;
 	}
 
-	public static boolean decodeAsBoolean(String value)
-	{
+	public static boolean decodeAsBoolean(String value) {
 		return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("yes");
 	}
 
-	public static byte decodeAsByte(String value)
-	{
+	public static byte decodeAsByte(String value) {
 		return Byte.parseByte(value);
 	}
 
-	public static char decodeAsCharacter(String value)
-	{
+	public static char decodeAsCharacter(String value) {
 		return value.charAt(0);
 	}
 
-	public static double decodeAsDouble(String value)
-	{
+	public static double decodeAsDouble(String value) {
 		try {
 			return Double.parseDouble(value);
 		} catch (NumberFormatException e) {
@@ -109,13 +96,11 @@ public class StringEncoder
 		}
 	}
 
-	public static float decodeAsFloat(String value)
-	{
+	public static float decodeAsFloat(String value) {
 		return Float.parseFloat(value);
 	}
 
-	public static int decodeAsInteger(String value)
-	{
+	public static int decodeAsInteger(String value) {
 		if (value == null) {
 			return -1;
 		}
@@ -126,13 +111,11 @@ public class StringEncoder
 		}
 	}
 
-	public static long decodeAsLong(String value)
-	{
+	public static long decodeAsLong(String value) {
 		return Long.parseLong(value);
 	}
 
-	public static short decodeAsShort(String value)
-	{
+	public static short decodeAsShort(String value) {
 		return Short.parseShort(value);
 	}
 
@@ -144,8 +127,7 @@ public class StringEncoder
 	 * @deprecated use the non static method {@link #_decodeObject(String, Class)}
 	 */
 	@Deprecated
-	public static <T> T decodeObject(String value, Class<T> objectType)
-	{
+	public static <T> T decodeObject(String value, Class<T> objectType) {
 		return defaultInstance._decodeObject(value, objectType);
 	}
 
@@ -156,8 +138,7 @@ public class StringEncoder
 	 * @deprecated use the non static method {@link #_encodeObject(Object)}
 	 */
 	@Deprecated
-	public static <T> String encodeObject(T object)
-	{
+	public static <T> String encodeObject(T object) {
 		return defaultInstance._encodeObject(object);
 	}
 
@@ -168,8 +149,7 @@ public class StringEncoder
 	 * @deprecated use the non static method {@link #_converterForClass(Class)}
 	 */
 	@Deprecated
-	public static <T> Converter<T> converterForClass(Class<T> objectType)
-	{
+	public static <T> Converter<T> converterForClass(Class<T> objectType) {
 		return defaultInstance._converterForClass(objectType);
 	}
 
@@ -180,20 +160,17 @@ public class StringEncoder
 	 * @deprecated use the non static method {@link #_isConvertable(Class)}
 	 */
 	@Deprecated
-	public static <T> boolean isConvertable(Class<T> objectType)
-	{
+	public static <T> boolean isConvertable(Class<T> objectType) {
 		return defaultInstance._isConvertable(objectType);
 	}
 
 	/**
-	 * Sets date format, under the form
-	 * <code>"yyyy.MM.dd G 'at' HH:mm:ss a zzz"</code>
+	 * Sets date format, under the form <code>"yyyy.MM.dd G 'at' HH:mm:ss a zzz"</code>
 	 * 
 	 * @deprecated use the non static method {@link #_setDateFormat(String)}
 	 */
 	@Deprecated
-	public static void setDateFormat(String aFormat)
-	{
+	public static void setDateFormat(String aFormat) {
 		defaultInstance._setDateFormat(aFormat);
 	}
 
@@ -203,18 +180,17 @@ public class StringEncoder
 	 * @deprecated use the non static method {@link #_getDateFormat()}
 	 */
 	@Deprecated
-	public static String getDateFormat()
-	{
+	public static String getDateFormat() {
 		return defaultInstance._getDateFormat();
 	}
 
 	/**
 	 * Return a string representation of a date, according to valid date format
+	 * 
 	 * @deprecated use the non-static method {@link #_getDateRepresentation(Date)}
 	 */
 	@Deprecated
-	public static String getDateRepresentation(Date aDate)
-	{
+	public static String getDateRepresentation(Date aDate) {
 		return defaultInstance._getDateRepresentation(aDate);
 	}
 
@@ -225,43 +201,36 @@ public class StringEncoder
 	 * @deprecated use the non-static method {@link #_addConverter(org.openflexo.xmlcode.StringEncoder.Converter)}
 	 */
 	@Deprecated
-	public static <T> Converter<T> addConverter(Converter<T> converter)
-	{
+	public static <T> Converter<T> addConverter(Converter<T> converter) {
 		return defaultInstance._addConverter(converter);
 	}
 
 	/**
 	 * @param converter
 	 */
-	public static <T> void removeConverter(Converter<T> converter)
-	{
+	public static <T> void removeConverter(Converter<T> converter) {
 		defaultInstance._removeConverter(converter);
 	}
 
-	public static void initialize()
-	{
+	public static void initialize() {
 		defaultInstance._initialize();
 	}
 
 	/**
-	 * Abstract class defining a converter to and from a String for a given
-	 * class
+	 * Abstract class defining a converter to and from a String for a given class
 	 * 
 	 * @author sguerin
 	 */
-	public static abstract class Converter<T>
-	{
+	public static abstract class Converter<T> {
 
 		protected Class<T> converterClass;
 
-		public Converter(Class<T> aClass)
-		{
+		public Converter(Class<T> aClass) {
 			super();
 			converterClass = aClass;
 		}
 
-		public Class<T> getConverterClass()
-		{
+		public Class<T> getConverterClass() {
 			return converterClass;
 		}
 
@@ -274,18 +243,18 @@ public class StringEncoder
 	public static class EnumerationConverter<T> extends Converter<T> {
 		private String _stringRepresationMethodName;
 
-		public EnumerationConverter(Class<T> enumeration, String stringRepresentationMethodName){
+		public EnumerationConverter(Class<T> enumeration, String stringRepresentationMethodName) {
 			super(enumeration);
 			_stringRepresationMethodName = stringRepresentationMethodName;
 		}
 
 		@Override
-		public T convertFromString(String value){
-			if(value==null) {
+		public T convertFromString(String value) {
+			if (value == null) {
 				return null;
 			}
-			for (int i=0; i<converterClass.getEnumConstants().length ; i++) {
-				if(value.equals(convertToString(converterClass.getEnumConstants()[i]))) {
+			for (int i = 0; i < converterClass.getEnumConstants().length; i++) {
+				if (value.equals(convertToString(converterClass.getEnumConstants()[i]))) {
 					return converterClass.getEnumConstants()[i];
 				}
 			}
@@ -293,17 +262,18 @@ public class StringEncoder
 		}
 
 		@Override
-		public String convertToString(T value){
-			if(value==null) {
+		public String convertToString(T value) {
+			if (value == null) {
 				return null;
 			}
-			try{
-				Method m = value.getClass().getDeclaredMethod(_stringRepresationMethodName, (Class[])null);
-				return (String)m.invoke(value, (Object[])null);
-			}catch (NoSuchMethodException e) {
-				System.err.println(_stringRepresationMethodName+" doesn't exist on enum :"+value.getClass().getName());
-			}catch(InvocationTargetException e){
-				System.err.println("Invocation of "+_stringRepresationMethodName+" on enum :"+value.getClass().getName()+" caused the following error : "+e.getMessage());
+			try {
+				Method m = value.getClass().getDeclaredMethod(_stringRepresationMethodName, (Class[]) null);
+				return (String) m.invoke(value, (Object[]) null);
+			} catch (NoSuchMethodException e) {
+				System.err.println(_stringRepresationMethodName + " doesn't exist on enum :" + value.getClass().getName());
+			} catch (InvocationTargetException e) {
+				System.err.println("Invocation of " + _stringRepresationMethodName + " on enum :" + value.getClass().getName()
+						+ " caused the following error : " + e.getMessage());
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
@@ -321,23 +291,19 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class BooleanConverter extends Converter<Boolean>
-	{
+	public static class BooleanConverter extends Converter<Boolean> {
 
-		protected BooleanConverter()
-		{
+		protected BooleanConverter() {
 			super(Boolean.class);
 		}
 
 		@Override
-		public Boolean convertFromString(String value)
-		{
+		public Boolean convertFromString(String value) {
 			return new Boolean(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("yes"));
 		}
 
 		@Override
-		public String convertToString(Boolean value)
-		{
+		public String convertToString(Boolean value) {
 			return value.toString();
 		}
 
@@ -348,41 +314,34 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class NumberConverter extends Converter<Number>
-	{
+	public static class NumberConverter extends Converter<Number> {
 
-		protected NumberConverter()
-		{
+		protected NumberConverter() {
 			super(Number.class);
 		}
 
 		@Override
-		public Number convertFromString(String value)
-		{
+		public Number convertFromString(String value) {
 			try {
 				Number returned = Integer.parseInt(value);
-				//System.out.println("Build a integer: "+value);
+				// System.out.println("Build a integer: "+value);
 				return returned;
-			}
-			catch (NumberFormatException e1) {
+			} catch (NumberFormatException e1) {
 				try {
 					Number returned = Long.parseLong(value);
-					//System.out.println("Build a long: "+value);
+					// System.out.println("Build a long: "+value);
 					return returned;
-				}
-				catch (NumberFormatException e2) {
+				} catch (NumberFormatException e2) {
 					try {
 						Number returned = Float.parseFloat(value);
-						//System.out.println("Build a float: "+value);
+						// System.out.println("Build a float: "+value);
 						return returned;
-					}
-					catch (NumberFormatException e3) {
+					} catch (NumberFormatException e3) {
 						try {
 							Number returned = Double.parseDouble(value);
-							//System.out.println("Build a double: "+value);
+							// System.out.println("Build a double: "+value);
 							return returned;
-						}
-						catch (NumberFormatException e4) {
+						} catch (NumberFormatException e4) {
 						}
 					}
 				}
@@ -392,8 +351,7 @@ public class StringEncoder
 		}
 
 		@Override
-		public String convertToString(Number value)
-		{
+		public String convertToString(Number value) {
 			return value.toString();
 		}
 
@@ -404,23 +362,19 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class IntegerConverter extends Converter<Integer>
-	{
+	public static class IntegerConverter extends Converter<Integer> {
 
-		protected IntegerConverter()
-		{
+		protected IntegerConverter() {
 			super(Integer.class);
 		}
 
 		@Override
-		public Integer convertFromString(String value)
-		{
+		public Integer convertFromString(String value) {
 			return new Integer(value);
 		}
 
 		@Override
-		public String convertToString(Integer value)
-		{
+		public String convertToString(Integer value) {
 			return value.toString();
 		}
 
@@ -431,23 +385,19 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class ShortConverter extends Converter<Short>
-	{
+	public static class ShortConverter extends Converter<Short> {
 
-		protected ShortConverter()
-		{
+		protected ShortConverter() {
 			super(Short.class);
 		}
 
 		@Override
-		public Short convertFromString(String value)
-		{
+		public Short convertFromString(String value) {
 			return new Short(value);
 		}
 
 		@Override
-		public String convertToString(Short value)
-		{
+		public String convertToString(Short value) {
 			return value.toString();
 		}
 
@@ -458,23 +408,19 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class LongConverter extends Converter<Long>
-	{
+	public static class LongConverter extends Converter<Long> {
 
-		protected LongConverter()
-		{
+		protected LongConverter() {
 			super(Long.class);
 		}
 
 		@Override
-		public Long convertFromString(String value)
-		{
+		public Long convertFromString(String value) {
 			return new Long(value);
 		}
 
 		@Override
-		public String convertToString(Long value)
-		{
+		public String convertToString(Long value) {
 			return value.toString();
 		}
 
@@ -485,23 +431,19 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class FloatConverter extends Converter<Float>
-	{
+	public static class FloatConverter extends Converter<Float> {
 
-		protected FloatConverter()
-		{
+		protected FloatConverter() {
 			super(Float.class);
 		}
 
 		@Override
-		public Float convertFromString(String value)
-		{
+		public Float convertFromString(String value) {
 			return new Float(value);
 		}
 
 		@Override
-		public String convertToString(Float value)
-		{
+		public String convertToString(Float value) {
 			return value.toString();
 		}
 
@@ -512,23 +454,19 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class DoubleConverter extends Converter<Double>
-	{
+	public static class DoubleConverter extends Converter<Double> {
 
-		protected DoubleConverter()
-		{
+		protected DoubleConverter() {
 			super(Double.class);
 		}
 
 		@Override
-		public Double convertFromString(String value)
-		{
+		public Double convertFromString(String value) {
 			return new Double(value);
 		}
 
 		@Override
-		public String convertToString(Double value)
-		{
+		public String convertToString(Double value) {
 			return value.toString();
 		}
 
@@ -539,23 +477,19 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class StringConverter extends Converter<String>
-	{
+	public static class StringConverter extends Converter<String> {
 
-		protected StringConverter()
-		{
+		protected StringConverter() {
 			super(String.class);
 		}
 
 		@Override
-		public String convertFromString(String value)
-		{
+		public String convertFromString(String value) {
 			return value;
 		}
 
 		@Override
-		public String convertToString(String value)
-		{
+		public String convertToString(String value) {
 			return value;
 		}
 
@@ -566,24 +500,20 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class DateConverter extends Converter<Date>
-	{
+	public static class DateConverter extends Converter<Date> {
 
 		/** Specify date format */
 		protected String _dateFormat = new SimpleDateFormat().toPattern();
 
-		public DateConverter()
-		{
+		public DateConverter() {
 			super(Date.class);
 		}
 
 		@Override
-		public Date convertFromString(String value)
-		{
+		public Date convertFromString(String value) {
 			try {
 				return tryToConvertFromString(value);
-			}
-			catch (ParseException e) {
+			} catch (ParseException e) {
 				SimpleDateFormat formatter = new SimpleDateFormat(_dateFormat);
 				Date currentTime = new Date();
 				String dateString = formatter.format(currentTime);
@@ -592,8 +522,7 @@ public class StringEncoder
 			}
 		}
 
-		public Date tryToConvertFromString(String value) throws ParseException
-		{
+		public Date tryToConvertFromString(String value) throws ParseException {
 			Date returned = null;
 			StringTokenizer st = new StringTokenizer(value, ",");
 			String dateFormat = _dateFormat;
@@ -607,20 +536,18 @@ public class StringEncoder
 			if (dateAsString != null) {
 				try {
 					returned = new SimpleDateFormat(dateFormat).parse(dateAsString);
-				}
-				catch (IllegalArgumentException e) {
-					throw new ParseException("While parsing supposed date format: "+e.getMessage(),0);
+				} catch (IllegalArgumentException e) {
+					throw new ParseException("While parsing supposed date format: " + e.getMessage(), 0);
 				}
 			}
 			if (returned == null) {
-				throw new ParseException("Cannot parse as a date "+value,0);
+				throw new ParseException("Cannot parse as a date " + value, 0);
 			}
 			return returned;
 		}
 
 		@Override
-		public String convertToString(Date date)
-		{
+		public String convertToString(Date date) {
 			if (date != null) {
 				return _dateFormat + "," + new SimpleDateFormat(_dateFormat).format(date);
 			} else {
@@ -629,11 +556,9 @@ public class StringEncoder
 		}
 
 		/**
-		 * Return a string representation of a date, according to valid date
-		 * format
+		 * Return a string representation of a date, according to valid date format
 		 */
-		public String getDateRepresentation(Date date)
-		{
+		public String getDateRepresentation(Date date) {
 			if (date != null) {
 				return new SimpleDateFormat(_dateFormat).format(date);
 			} else {
@@ -648,17 +573,14 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class URLConverter extends Converter<URL>
-	{
+	public static class URLConverter extends Converter<URL> {
 
-		protected URLConverter()
-		{
+		protected URLConverter() {
 			super(URL.class);
 		}
 
 		@Override
-		public URL convertFromString(String value)
-		{
+		public URL convertFromString(String value) {
 			try {
 				return new URL(value);
 			} catch (MalformedURLException e) {
@@ -668,8 +590,7 @@ public class StringEncoder
 		}
 
 		@Override
-		public String convertToString(URL anURL)
-		{
+		public String convertToString(URL anURL) {
 			if (anURL != null) {
 				return anURL.toExternalForm();
 			} else {
@@ -684,23 +605,19 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class FileConverter extends Converter<File>
-	{
+	public static class FileConverter extends Converter<File> {
 
-		protected FileConverter()
-		{
+		protected FileConverter() {
 			super(File.class);
 		}
 
 		@Override
-		public File convertFromString(String value)
-		{
+		public File convertFromString(String value) {
 			return new File(value);
 		}
 
 		@Override
-		public String convertToString(File aFile)
-		{
+		public String convertToString(File aFile) {
 			if (aFile != null) {
 				return aFile.getAbsolutePath();
 			} else {
@@ -715,29 +632,42 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class ClassConverter extends Converter<Class>
-	{
+	public static class ClassConverter extends Converter<Class> {
 
-		protected ClassConverter()
-		{
+		protected ClassConverter() {
 			super(Class.class);
 		}
 
 		@Override
-		public Class convertFromString(String value)
-		{
+		public Class convertFromString(String value) {
 			if (value == null || value.isEmpty()) {
 				return null;
 			}
 			try {
-				if (value.equals("boolean")) return Boolean.TYPE;
-				if (value.equals("int")) return Integer.TYPE;
-				if (value.equals("short")) return Short.TYPE;
-				if (value.equals("long")) return Long.TYPE;
-				if (value.equals("float")) return Float.TYPE;
-				if (value.equals("double")) return Double.TYPE;
-				if (value.equals("byte")) return Byte.TYPE;
-				if (value.equals("char")) return Character.TYPE;
+				if (value.equals("boolean")) {
+					return Boolean.TYPE;
+				}
+				if (value.equals("int")) {
+					return Integer.TYPE;
+				}
+				if (value.equals("short")) {
+					return Short.TYPE;
+				}
+				if (value.equals("long")) {
+					return Long.TYPE;
+				}
+				if (value.equals("float")) {
+					return Float.TYPE;
+				}
+				if (value.equals("double")) {
+					return Double.TYPE;
+				}
+				if (value.equals("byte")) {
+					return Byte.TYPE;
+				}
+				if (value.equals("char")) {
+					return Character.TYPE;
+				}
 				return Class.forName(value);
 			} catch (ClassNotFoundException e) {
 				// Warns about the exception
@@ -746,8 +676,7 @@ public class StringEncoder
 		}
 
 		@Override
-		public String convertToString(Class aClass)
-		{
+		public String convertToString(Class aClass) {
 			if (aClass != null) {
 				return aClass.getName();
 			} else {
@@ -762,17 +691,14 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class PointConverter extends Converter<Point>
-	{
+	public static class PointConverter extends Converter<Point> {
 
-		protected PointConverter()
-		{
+		protected PointConverter() {
 			super(Point.class);
 		}
 
 		@Override
-		public Point convertFromString(String value)
-		{
+		public Point convertFromString(String value) {
 			try {
 				Point returned = new Point();
 				StringTokenizer st = new StringTokenizer(value, ",");
@@ -791,8 +717,7 @@ public class StringEncoder
 		}
 
 		@Override
-		public String convertToString(Point aPoint)
-		{
+		public String convertToString(Point aPoint) {
 			if (aPoint != null) {
 				return aPoint.x + "," + aPoint.y;
 			} else {
@@ -854,43 +779,34 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class ColorConverter extends Converter<Color>
-	{
+	public static class ColorConverter extends Converter<Color> {
 
-		protected ColorConverter()
-		{
+		protected ColorConverter() {
 			super(Color.class);
 		}
 
 		@Override
-		public Color convertFromString(String value)
-		{
-			return new Color(redFromString(value),greenFromString(value),blueFromString(value));
+		public Color convertFromString(String value) {
+			return new Color(redFromString(value), greenFromString(value), blueFromString(value));
 		}
 
 		@Override
-		public String convertToString(Color aColor)
-		{
+		public String convertToString(Color aColor) {
 			return aColor.getRed() + "," + aColor.getGreen() + "," + aColor.getBlue();
 
 		}
 
-		private static int redFromString(String s)
-		{
+		private static int redFromString(String s) {
 			return Integer.parseInt(s.substring(0, s.indexOf(",")));
 		}
 
-		private static int greenFromString(String s)
-		{
+		private static int greenFromString(String s) {
 			return Integer.parseInt(s.substring(s.indexOf(",") + 1, s.lastIndexOf(",")));
 		}
 
-		private static int blueFromString(String s)
-		{
+		private static int blueFromString(String s) {
 			return Integer.parseInt(s.substring(s.lastIndexOf(",") + 1));
 		}
-
-
 
 	}
 
@@ -899,42 +815,33 @@ public class StringEncoder
 	 * 
 	 * @author sguerin
 	 */
-	public static class FontConverter extends Converter<Font>
-	{
+	public static class FontConverter extends Converter<Font> {
 
-		protected FontConverter()
-		{
+		protected FontConverter() {
 			super(Font.class);
 		}
 
 		@Override
-		public Font convertFromString(String value)
-		{
+		public Font convertFromString(String value) {
 			return new Font(nameFromString(value), styleFromString(value), sizeFromString(value));
 		}
 
 		@Override
-		public String convertToString(Font aFont)
-		{
+		public String convertToString(Font aFont) {
 			return aFont.getName() + "," + aFont.getStyle() + "," + aFont.getSize();
 		}
 
-		private static String nameFromString(String s)
-		{
+		private static String nameFromString(String s) {
 			return s.substring(0, s.indexOf(","));
 		}
 
-		private static int styleFromString(String s)
-		{
+		private static int styleFromString(String s) {
 			return Integer.parseInt(s.substring(s.indexOf(",") + 1, s.lastIndexOf(",")));
 		}
 
-		private static int sizeFromString(String s)
-		{
+		private static int sizeFromString(String s) {
 			return Integer.parseInt(s.substring(s.lastIndexOf(",") + 1));
 		}
-
-
 
 	}
 
@@ -942,14 +849,12 @@ public class StringEncoder
 	 * Hereunder are all the non-static elements of this class. Only those should be used.
 	 */
 
-
-	private Hashtable<Class,Converter> converters = new Hashtable<Class,Converter>();
+	private Hashtable<Class, Converter> converters = new Hashtable<Class, Converter>();
 
 	private boolean isInitialized = false;
 
 	@SuppressWarnings("unchecked")
-	public <T> T _decodeObject(String value, Class<T> objectType)
-	{
+	public <T> T _decodeObject(String value, Class<T> objectType) {
 		if (!isInitialized) {
 			_initialize();
 		}
@@ -959,12 +864,11 @@ public class StringEncoder
 		Converter<T> converter = _converterForClass(objectType);
 		if (converter != null) {
 			return converter.convertFromString(value);
-		} else if (objectType.isEnum()){
+		} else if (objectType.isEnum()) {
 			try {
-				return (T) Enum.valueOf((Class)objectType, value);
-			}
-			catch (IllegalArgumentException e) {
-				System.err.println("Could not decode "+value+" as a "+objectType);
+				return (T) Enum.valueOf((Class) objectType, value);
+			} catch (IllegalArgumentException e) {
+				System.err.println("Could not decode " + value + " as a " + objectType);
 				return null;
 			}
 		} else {
@@ -972,8 +876,7 @@ public class StringEncoder
 		}
 	}
 
-	public <T> String _encodeObject(T object)
-	{
+	public <T> String _encodeObject(T object) {
 		if (!isInitialized) {
 			_initialize();
 		}
@@ -992,14 +895,13 @@ public class StringEncoder
 					return converter.convertToString(object);
 				}
 			} else if (object instanceof Enum) {
-				return ((Enum)object).name();
+				return ((Enum) object).name();
 			}
 			throw new InvalidDataException("Supplied value has no converter for type " + object.getClass().getName());
 		}
 	}
 
-	public <T> Converter<T> _converterForClass(Class<T> objectType)
-	{
+	public <T> Converter<T> _converterForClass(Class<T> objectType) {
 		if (!isInitialized) {
 			_initialize();
 		}
@@ -1023,31 +925,26 @@ public class StringEncoder
 		return returned;
 	}
 
-	public <T> boolean _isConvertable(Class<T> objectType)
-	{
+	public <T> boolean _isConvertable(Class<T> objectType) {
 		if (!isInitialized) {
 			_initialize();
 		}
 		return _converterForClass(objectType) != null;
 	}
 
-	public <T> boolean _isEncodable(Class<T> objectType)
-	{
-		return _isConvertable(objectType)|| objectType.isEnum();
+	public <T> boolean _isEncodable(Class<T> objectType) {
+		return _isConvertable(objectType) || objectType.isEnum();
 	}
 
 	/**
-	 * Sets date format, under the form
-	 * <code>"yyyy.MM.dd G 'at' HH:mm:ss a zzz"</code>
+	 * Sets date format, under the form <code>"yyyy.MM.dd G 'at' HH:mm:ss a zzz"</code>
 	 */
-	public void _setDateFormat(String aFormat)
-	{
+	public void _setDateFormat(String aFormat) {
 		DateConverter dc = (DateConverter) _converterForClass(Date.class);
 		dc._dateFormat = aFormat;
 	}
 
-	public String _getDateFormat()
-	{
+	public String _getDateFormat() {
 		DateConverter dc = (DateConverter) _converterForClass(Date.class);
 		return dc._dateFormat;
 	}
@@ -1055,14 +952,12 @@ public class StringEncoder
 	/**
 	 * Return a string representation of a date, according to valid date format
 	 */
-	public String _getDateRepresentation(Date aDate)
-	{
+	public String _getDateRepresentation(Date aDate) {
 		DateConverter dc = (DateConverter) _converterForClass(Date.class);
 		return dc.getDateRepresentation(aDate);
 	}
 
-	public <T> Converter<T> _addConverter(Converter<T> converter)
-	{
+	public <T> Converter<T> _addConverter(Converter<T> converter) {
 		converters.put(converter.getConverterClass(), converter);
 		return converter;
 	}
@@ -1070,13 +965,11 @@ public class StringEncoder
 	/**
 	 * @param converter
 	 */
-	public void _removeConverter(Converter converter)
-	{
+	public void _removeConverter(Converter converter) {
 		converters.remove(converter.getConverterClass());
 	}
 
-	public void _initialize()
-	{
+	public void _initialize() {
 		if (!isInitialized) {
 			_addConverter(new BooleanConverter());
 			_addConverter(new IntegerConverter());
@@ -1098,10 +991,8 @@ public class StringEncoder
 		}
 	}
 
-	public static StringEncoder getDefaultInstance()
-	{
+	public static StringEncoder getDefaultInstance() {
 		return defaultInstance;
 	}
-
 
 }

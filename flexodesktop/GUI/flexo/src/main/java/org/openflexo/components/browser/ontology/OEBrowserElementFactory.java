@@ -32,104 +32,77 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 
+public class OEBrowserElementFactory implements BrowserElementFactory {
+	@Override
+	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
 
-public class OEBrowserElementFactory implements BrowserElementFactory
-{
-    @Override
-	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-    {
+		if (object instanceof OntologyLibrary) {
+			return new OntologyLibraryElement((OntologyLibrary) object, browser, parent);
+		} else if (object instanceof OntologyFolder) {
+			return new OntologyFolderElement((OntologyFolder) object, browser, parent);
+		} else if (object instanceof ProjectOntology) {
+			return new ProjectOntologyElement((ProjectOntology) object, browser, parent);
+		} else if (object instanceof ImportedOntology) {
+			return new ImportedOntologyElement((ImportedOntology) object, browser, parent);
+		} else if (object instanceof OntologyClass) {
+			return new OntologyClassElement((OntologyClass) object, browser, parent);
+		} else if (object instanceof OntologyIndividual) {
+			return new OntologyIndividualElement((OntologyIndividual) object, browser, parent);
+		} else if (object instanceof OntologyDataProperty) {
+			return new OntologyDataPropertyElement((OntologyDataProperty) object, browser, parent);
+		} else if (object instanceof OntologyObjectProperty) {
+			return new OntologyObjectPropertyElement((OntologyObjectProperty) object, browser, parent);
+		} else if (object instanceof OntologyStatement) {
+			return new OntologyStatementElement((OntologyStatement) object, browser, parent);
+		} else if (object instanceof ViewPointLibrary) {
+			return new CalcLibraryElement((ViewPointLibrary) object, browser, parent);
+		} else if (object instanceof ViewPointFolder) {
+			return new CalcFolderElement((ViewPointFolder) object, browser, parent);
+		} else if (object instanceof ViewPoint) {
+			return new OntologyCalcElement((ViewPoint) object, browser, parent);
+		} else if (object instanceof EditionPattern) {
+			return new EditionPatternElement((EditionPattern) object, browser, parent);
+		} else if (object instanceof ViewPointPalette) {
+			return new CalcPaletteBrowserElement((ViewPointPalette) object, browser, parent);
+		} else if (object instanceof ViewPointPaletteElement) {
+			return new CalcPaletteElementBrowserElement((ViewPointPaletteElement) object, browser, parent);
+		} else if (object instanceof ExampleDrawingShema) {
+			return new CalcDrawingShemaBrowserElement((ExampleDrawingShema) object, browser, parent);
+		} else if (object instanceof ExampleDrawingShape) {
+			return new CalcDrawingShapeBrowserElement((ExampleDrawingShape) object, browser, parent);
+		} else if (object instanceof ExampleDrawingConnector) {
+			return new CalcDrawingConnectorBrowserElement((ExampleDrawingConnector) object, browser, parent);
+		} else if (object instanceof ViewLibrary) {
+			return new ShemaLibraryElement((ViewLibrary) object, browser, parent);
+		} else if (object instanceof ViewFolder) {
+			return new ShemaFolderElement((ViewFolder) object, browser, parent);
+		} else if (object instanceof ViewDefinition) {
+			return new ShemaDefinitionElement((ViewDefinition) object, browser, parent);
+		} else if (object instanceof View) {
+			return new OEShemaElement((View) object, browser, parent);
+		} else if (object instanceof ViewShape) {
+			return new OEShapeElement((ViewShape) object, browser, parent);
+		} else if (object instanceof ViewConnector) {
+			return new OEConnectorElement((ViewConnector) object, browser, parent);
+		}
 
-        if (object instanceof OntologyLibrary) {
-        	return new OntologyLibraryElement((OntologyLibrary) object, browser,parent);
-        }
-        else if (object instanceof OntologyFolder) {
-        	return new OntologyFolderElement((OntologyFolder) object, browser,parent);
-        }
-       else if (object instanceof ProjectOntology) {
-        	return new ProjectOntologyElement((ProjectOntology) object, browser,parent);
-        }
-        else if (object instanceof ImportedOntology) {
-        	return new ImportedOntologyElement((ImportedOntology) object, browser,parent);
-        }
-        else if (object instanceof OntologyClass) {
-        	return new OntologyClassElement((OntologyClass) object, browser,parent);
-        }
-        else if (object instanceof OntologyIndividual) {
-        	return new OntologyIndividualElement((OntologyIndividual) object, browser,parent);
-        }
-        else if (object instanceof OntologyDataProperty) {
-        	return new OntologyDataPropertyElement((OntologyDataProperty) object, browser,parent);
-        }
-        else if (object instanceof OntologyObjectProperty) {
-        	return new OntologyObjectPropertyElement((OntologyObjectProperty) object, browser,parent);
-        }
-        else if (object instanceof OntologyStatement) {
-        	return new OntologyStatementElement((OntologyStatement) object, browser,parent);
-        }
-        else if (object instanceof ViewPointLibrary) {
-        	return new CalcLibraryElement((ViewPointLibrary) object, browser,parent);
-        }
-        else if (object instanceof ViewPointFolder) {
-        	return new CalcFolderElement((ViewPointFolder) object, browser,parent);
-        }
-        else if (object instanceof ViewPoint) {
-        	return new OntologyCalcElement((ViewPoint) object, browser,parent);
-        }
-        else if (object instanceof EditionPattern) {
-        	return new EditionPatternElement((EditionPattern) object, browser,parent);
-        }
-        else if (object instanceof ViewPointPalette) {
-        	return new CalcPaletteBrowserElement((ViewPointPalette) object, browser,parent);
-        }
-        else if (object instanceof ViewPointPaletteElement) {
-        	return new CalcPaletteElementBrowserElement((ViewPointPaletteElement) object, browser,parent);
-        }
-        else if (object instanceof ExampleDrawingShema) {
-        	return new CalcDrawingShemaBrowserElement((ExampleDrawingShema) object, browser,parent);
-        }
-        else if (object instanceof ExampleDrawingShape) {
-        	return new CalcDrawingShapeBrowserElement((ExampleDrawingShape) object, browser,parent);
-        }
-        else if (object instanceof ExampleDrawingConnector) {
-        	return new CalcDrawingConnectorBrowserElement((ExampleDrawingConnector) object, browser,parent);
-        }
-       else if (object instanceof ViewLibrary) {
-        	return new ShemaLibraryElement((ViewLibrary) object, browser,parent);
-        }
-        else if (object instanceof ViewFolder) {
-        	return new ShemaFolderElement((ViewFolder) object, browser,parent);
-        }
-        else if (object instanceof ViewDefinition) {
-        	return new ShemaDefinitionElement((ViewDefinition) object, browser,parent);
-        }
-        else if (object instanceof View) {
-        	return new OEShemaElement((View) object, browser,parent);
-        }
-        else if (object instanceof ViewShape) {
-        	return new OEShapeElement((ViewShape) object, browser,parent);
-        }
-        else if (object instanceof ViewConnector) {
-        	return new OEConnectorElement((ViewConnector) object, browser,parent);
-        }
-
-        return null;
-    }
-
+		return null;
+	}
 
 }

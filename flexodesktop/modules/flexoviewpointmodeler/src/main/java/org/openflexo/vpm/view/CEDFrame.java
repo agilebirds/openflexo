@@ -38,83 +38,74 @@ import org.openflexo.vpm.controller.CEDController;
 import org.openflexo.vpm.controller.CEDKeyEventListener;
 import org.openflexo.vpm.view.menu.CEDMenuBar;
 
-
 /**
  * The main window of this module
  * 
  * @author yourname
  */
-public class CEDFrame extends FlexoFrame
-{
+public class CEDFrame extends FlexoFrame {
 
-    private static final Logger logger = Logger.getLogger(CEDFrame.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CEDFrame.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance variables
+	// =========================
+	// ==========================================================================
 
-    protected CEDController _cedController;
+	protected CEDController _cedController;
 
-    protected CEDMenuBar _cedMenuBar;
+	protected CEDMenuBar _cedMenuBar;
 
-    protected CEDKeyEventListener _cedKeyEventListener;
+	protected CEDKeyEventListener _cedKeyEventListener;
 
+	// ================================================
+	// ================ Constructor ===================
+	// ================================================
 
-    // ================================================
-    // ================ Constructor ===================
-    // ================================================
+	/**
+	 * Constructor for XXXFrame
+	 */
+	public CEDFrame(String title, CEDController controller, CEDKeyEventListener cedKeyEventListener, CEDMenuBar menuBar)
+			throws HeadlessException {
+		super(title, controller, cedKeyEventListener, menuBar);
+		_cedController = controller;
+		_cedMenuBar = menuBar;
+		_cedKeyEventListener = cedKeyEventListener;
+		setSize(CEDCst.DEFAULT_MAINFRAME_WIDTH, CEDCst.DEFAULT_MAINFRAME_HEIGHT);
+		updateTitle();
+		getContentPane().setLayout(new BorderLayout());
+		// You may observe here some model objects
+	}
 
-    /**
-     * Constructor for XXXFrame
-     */
-    public CEDFrame(String title, CEDController controller, CEDKeyEventListener cedKeyEventListener, CEDMenuBar menuBar) throws HeadlessException
-    {
-        super(title, controller, cedKeyEventListener, menuBar);
-        _cedController = controller;
-        _cedMenuBar = menuBar;
-        _cedKeyEventListener = cedKeyEventListener;
-        setSize(CEDCst.DEFAULT_MAINFRAME_WIDTH, CEDCst.DEFAULT_MAINFRAME_HEIGHT);
-        updateTitle();
-        getContentPane().setLayout(new BorderLayout());
-        // You may observe here some model objects
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		super.update(observable, dataModification);
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-       super.update(observable,dataModification);
-    }
+	@Override
+	public String getName() {
+		return CEDCst.CED_MODULE_NAME;
+	}
 
-    @Override
-	public String getName()
-    {
-        return CEDCst.CED_MODULE_NAME;
-    }
+	/**
+	 * @return Returns the controller.
+	 */
+	public CEDController getCEDController() {
+		return _cedController;
+	}
 
-    /**
-     * @return Returns the controller.
-     */
-    public CEDController getCEDController()
-    {
-        return _cedController;
-    }
-
-    @Override
-	public void updateTitle()
-    {
-    	String projectTitle = "";
-    	if (getController().getCurrentModuleView() != null && getModule()!=null) {
-			setTitle(getModule().getName() + " : " + getViewTitle()
-    				+ projectTitle);
-    	} else {
-    		if (getModule()==null)
-    			setTitle(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + projectTitle);
-    		else
-    			setTitle(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + " - " + getModule().getName() + projectTitle);
-    	}
-    }
-
-
+	@Override
+	public void updateTitle() {
+		String projectTitle = "";
+		if (getController().getCurrentModuleView() != null && getModule() != null) {
+			setTitle(getModule().getName() + " : " + getViewTitle() + projectTitle);
+		} else {
+			if (getModule() == null) {
+				setTitle(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + projectTitle);
+			} else {
+				setTitle(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + " - " + getModule().getName() + projectTitle);
+			}
+		}
+	}
 
 }

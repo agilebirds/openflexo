@@ -28,13 +28,12 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.bindings.AbstractBinding;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.StaticBinding;
 import org.openflexo.foundation.bindings.StringStaticBinding;
 import org.openflexo.foundation.bindings.WidgetBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.ComponentInstanceOwner;

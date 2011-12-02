@@ -25,20 +25,17 @@ package org.openflexo.foundation.wkf.dm;
  * @author sguerin
  * 
  */
-public class ObjectVisibilityChanged extends WKFDataModification
-{
+public class ObjectVisibilityChanged extends WKFDataModification {
 
-    private boolean _newVisibility;
+	private boolean _newVisibility;
 
-    public ObjectVisibilityChanged(boolean visibility)
-    {
-        super("isVisible", new Boolean(!visibility), new Boolean(visibility));
-        _newVisibility = visibility;
-    }
+	public ObjectVisibilityChanged(boolean visibility) {
+		super("isVisible", new Boolean(!visibility), new Boolean(visibility));
+		_newVisibility = visibility;
+	}
 
-    public boolean isVisible()
-    {
-        return _newVisibility;
-    }
+	public boolean isVisible() {
+		return _newVisibility;
+	}
 
 }

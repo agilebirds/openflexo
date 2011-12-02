@@ -24,37 +24,31 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEFileUploadWidget;
 
+public class IEFileUploadElement extends IEElement {
 
-public class IEFileUploadElement extends IEElement
-{
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEFileUploadElement(IEFileUploadWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.FILEUPLOAD, browser, parent);
+	}
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEFileUploadElement(IEFileUploadWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.FILEUPLOAD, browser,parent);
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	public String getName() {
+		if (getFileUpload().getName() == null) {
+			return "FileUpload";
+		}
+		return getFileUpload().getName();
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getFileUpload().getName() == null) {
-            return "FileUpload";
-        }
-        return getFileUpload().getName();
-    }
-
-    protected IEFileUploadWidget getFileUpload()
-    {
-        return (IEFileUploadWidget) getObject();
-    }
+	protected IEFileUploadWidget getFileUpload() {
+		return (IEFileUploadWidget) getObject();
+	}
 
 }

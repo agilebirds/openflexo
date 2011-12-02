@@ -26,7 +26,7 @@ import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibi
 
 /**
  * @author nid
- *
+ * 
  */
 public class SpringTechnologyDefinition extends TechnologyModuleDefinition {
 
@@ -34,7 +34,8 @@ public class SpringTechnologyDefinition extends TechnologyModuleDefinition {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
+	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel)
+			throws TechnologyModuleCompatibilityCheckException {
 		return new SpringImplementation(implementationModel);
 	}
 }

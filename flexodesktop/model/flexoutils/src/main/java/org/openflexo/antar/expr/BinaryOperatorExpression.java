@@ -23,15 +23,13 @@ import java.util.Vector;
 
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 
-
 public class BinaryOperatorExpression extends Expression {
 
 	private BinaryOperator operator;
 	private Expression leftArgument;
 	private Expression rightArgument;
 
-	public BinaryOperatorExpression(BinaryOperator operator, Expression leftArgument, Expression rightArgument)
-	{
+	public BinaryOperatorExpression(BinaryOperator operator, Expression leftArgument, Expression rightArgument) {
 		super();
 		this.operator = operator;
 		this.leftArgument = leftArgument;
@@ -39,8 +37,7 @@ public class BinaryOperatorExpression extends Expression {
 	}
 
 	@Override
-	public int getDepth()
-	{
+	public int getDepth() {
 		if (leftArgument == this) {
 			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
 			System.exit(-1);
@@ -49,13 +46,13 @@ public class BinaryOperatorExpression extends Expression {
 			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
 			System.exit(-1);
 		}
-		return Math.max(leftArgument.getDepth(), rightArgument.getDepth())+1;
+		return Math.max(leftArgument.getDepth(), rightArgument.getDepth()) + 1;
 	}
 
-	public int getPriority() 
-	{
-		if (operator != null)
+	public int getPriority() {
+		if (operator != null) {
 			return operator.getPriority();
+		}
 		return -1;
 	}
 
@@ -90,34 +87,34 @@ public class BinaryOperatorExpression extends Expression {
 			System.exit(-1);
 		}
 	}
-	
-	@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException 
-	{
-		_checkSemanticallyAcceptable();
-		//System.out.println("left="+leftArgument+" of "+leftArgument.getClass().getSimpleName()+" as "+leftArgument.evaluate(context)+" of "+leftArgument.evaluate(context).getClass().getSimpleName());
-		//System.out.println("right="+rightArgument+" of "+rightArgument.getClass().getSimpleName()+" as "+rightArgument.evaluate(context)+" of "+rightArgument.evaluate(context).getClass().getSimpleName());
 
-		Expression evaluatedLeftArgument = leftArgument.evaluate(context);;
+	@Override
+	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
+		_checkSemanticallyAcceptable();
+		// System.out.println("left="+leftArgument+" of "+leftArgument.getClass().getSimpleName()+" as "+leftArgument.evaluate(context)+" of "+leftArgument.evaluate(context).getClass().getSimpleName());
+		// System.out.println("right="+rightArgument+" of "+rightArgument.getClass().getSimpleName()+" as "+rightArgument.evaluate(context)+" of "+rightArgument.evaluate(context).getClass().getSimpleName());
+
+		Expression evaluatedLeftArgument = leftArgument.evaluate(context);
+		;
 
 		// special case for AND operator, lazy evaluation
 		if (operator == BooleanBinaryOperator.AND && evaluatedLeftArgument == BooleanConstant.FALSE) {
 			return BooleanConstant.FALSE; // No need to analyze further
 		}
-		
+
 		Expression evaluatedRightArgument = rightArgument.evaluate(context);
-		
+
 		if (evaluatedLeftArgument instanceof Constant && evaluatedRightArgument instanceof Constant) {
-			Constant returned = operator.evaluate((Constant)evaluatedLeftArgument,(Constant)evaluatedRightArgument);
+			Constant returned = operator.evaluate((Constant) evaluatedLeftArgument, (Constant) evaluatedRightArgument);
 			return returned;
 		}
 		if (evaluatedLeftArgument instanceof Constant) {
-			return operator.evaluate((Constant)evaluatedLeftArgument,evaluatedRightArgument);
+			return operator.evaluate((Constant) evaluatedLeftArgument, evaluatedRightArgument);
 		}
 		if (evaluatedRightArgument instanceof Constant) {
-			return operator.evaluate(evaluatedLeftArgument,(Constant)evaluatedRightArgument);
+			return operator.evaluate(evaluatedLeftArgument, (Constant) evaluatedRightArgument);
 		}
-		return new BinaryOperatorExpression(operator,evaluatedLeftArgument,evaluatedRightArgument);
+		return new BinaryOperatorExpression(operator, evaluatedLeftArgument, evaluatedRightArgument);
 	}
 
 	@Override
@@ -126,8 +123,7 @@ public class BinaryOperatorExpression extends Expression {
 	}
 
 	@Override
-	protected Vector<Expression> getChilds()
-	{
+	protected Vector<Expression> getChilds() {
 		Vector<Expression> returned = new Vector<Expression>();
 		returned.add(getLeftArgument());
 		returned.add(getRightArgument());

@@ -20,14 +20,13 @@
 package cb.petal;
 
 /**
- * Denote that a petal object may have an attribute "stereotype", e.g. classes,
- * methods, ...
- *
+ * Denote that a petal object may have an attribute "stereotype", e.g. classes, methods, ...
+ * 
  * @version $Id: StereoTyped.java,v 1.2 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public interface StereoTyped {
-  public String getStereotype();
+	public String getStereotype();
 
-  public void setStereotype(String c);
+	public void setStereotype(String c);
 }

@@ -71,10 +71,9 @@ import org.openflexo.ie.view.widget.DropTableZone;
 import org.openflexo.ie.view.widget.IEBlocWidgetView;
 import org.openflexo.ie.view.widget.IESequenceWidgetWidgetView;
 
-
 /**
  * IEDTListener a listener that tracks the state of the operation
- *
+ * 
  * @see java.awt.dnd.DropTargetListener
  * @see java.awt.dnd.DropTarget
  */
@@ -82,122 +81,119 @@ public class IEDTListener implements DropTargetListener {
 
 	private static final boolean USE_FLEXO_ACTION = true;
 
-	private static final Logger logger = Logger.getLogger(IEDTListener.class
-			.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEDTListener.class.getPackage().getName());
 
-	public static boolean isValidDropTargetContainer(IEWidget container,
-			IEWidget widget) {
-		if (widget == null)
+	public static boolean isValidDropTargetContainer(IEWidget container, IEWidget widget) {
+		if (widget == null) {
 			return false;
+		}
 		// All the following are not movable
-		if (widget instanceof IETRWidget || widget instanceof IESequenceTR || widget instanceof IETDWidget || widget instanceof IESequenceTD || widget instanceof IESequenceButton)
+		if (widget instanceof IETRWidget || widget instanceof IESequenceTR || widget instanceof IETDWidget
+				|| widget instanceof IESequenceTD || widget instanceof IESequenceButton) {
 			return false;
+		}
 		boolean ok = isValidTargetClassForDropTargetContainer(container, widget.getClass(), widget.isTopComponent());
 		if (ok) {
 			ok = !widget.isParentOf(container);
 		}
 		if (ok) {
 			if (/*container.getWOComponent()!=widget.getWOComponent() && */container.getWOComponent() instanceof IEReusableComponent) {
-				ok&=!widget.checkWidgetDoesNotEmbedWOComponent((IEReusableComponent) container.getWOComponent());
+				ok &= !widget.checkWidgetDoesNotEmbedWOComponent((IEReusableComponent) container.getWOComponent());
 			}
 		}
 		return ok;
 	}
-	
-	public static boolean isValidTargetClassForDropTargetContainer(
-			IEWidget container, Class cls, boolean isTopComponent) {
-		if (cls == IETRWidget.class || cls == IESequenceTR.class || cls == IETDWidget.class || cls == IESequenceTD.class || cls == IESequenceButton.class)
+
+	public static boolean isValidTargetClassForDropTargetContainer(IEWidget container, Class cls, boolean isTopComponent) {
+		if (cls == IETRWidget.class || cls == IESequenceTR.class || cls == IETDWidget.class || cls == IESequenceTD.class
+				|| cls == IESequenceButton.class) {
 			return false;
-		if(cls == IESequenceTab.class && (container.getWOComponent() instanceof IETabComponent))
+		}
+		if (cls == IESequenceTab.class && (container.getWOComponent() instanceof IETabComponent)) {
 			return false;
-		if (container instanceof IESequenceWidget && ((IESequenceWidget)container).isTopComponent()) {
-			return cls == IEBlocWidget.class
-					|| cls == IESequenceTab.class
-					|| cls == IEHTMLTableWidget.class
+		}
+		if (container instanceof IESequenceWidget && ((IESequenceWidget) container).isTopComponent()) {
+			return cls == IEBlocWidget.class || cls == IESequenceTab.class || cls == IEHTMLTableWidget.class
 					|| (cls == TopComponentReusableWidget.class && !container.getWOComponent().hasTabContainer())
-					|| cls == IESequenceTR.class
-					|| (cls == IESequenceWidget.class && isTopComponent);
+					|| cls == IESequenceTR.class || (cls == IESequenceWidget.class && isTopComponent);
 		}
 
 		else if (container instanceof IESequenceWidget || container instanceof IETDWidget) {
 			return true;
 		}
 		if (container instanceof IESequenceButton || container instanceof IEBlocWidget || container instanceof IESequenceTab) {
-			if (cls.equals(IEButtonWidget.class) || cls.equals(IEHyperlinkWidget.class) || cls.equals(IECustomButtonWidget.class))
+			if (cls.equals(IEButtonWidget.class) || cls.equals(IEHyperlinkWidget.class) || cls.equals(IECustomButtonWidget.class)) {
 				return true;
+			}
 		}
-		if (container instanceof IESequenceTab && ((IESequenceTab)container).isRoot()) {
+		if (container instanceof IESequenceTab && ((IESequenceTab) container).isRoot()) {
 			return cls.equals(IETabWidget.class);
 		}
 
-		
 		if (container instanceof IEBlocWidget) {
-			return (cls.equals(IEHTMLTableWidget.class) || cls
-					.equals(InnerBlocReusableWidget.class))
+			return (cls.equals(IEHTMLTableWidget.class) || cls.equals(InnerBlocReusableWidget.class))
 					&& (((IEBlocWidget) container).getContent() == null);
 		}
 		return false;
 
 	}
-	
 
-	
-/*	public static boolean isValidDropTargetContainer(IEContainer container,
-			IEWidget widget) {
-		if (widget == null)
-			return false;
-		boolean ok = isValidTargetClassForDropTargetContainer(container, widget.getClass(), widget.isTopComponent());
-		if (ok) {
-			if (container.getContainerModel() instanceof IEWidget) {
-				ok = !widget.isParentOf((IEWidget) container
-						.getContainerModel());
+	/*	public static boolean isValidDropTargetContainer(IEContainer container,
+				IEWidget widget) {
+			if (widget == null)
+				return false;
+			boolean ok = isValidTargetClassForDropTargetContainer(container, widget.getClass(), widget.isTopComponent());
+			if (ok) {
+				if (container.getContainerModel() instanceof IEWidget) {
+					ok = !widget.isParentOf((IEWidget) container
+							.getContainerModel());
+				}
 			}
-		}
-		if (ok) {
-			if (/*container.getWOComponent()!=widget.getWOComponent() && *//*container.getWOComponent() instanceof IEReusableComponent) {
-				ok&=!widget.checkWidgetDoesNotEmbedWOComponent((IEReusableComponent) container.getWOComponent());
-			}
-		}
-		return ok;
-	}
-	
-	public static boolean isValidTargetClassForDropTargetContainer(
-			IEContainer container, Class cls, boolean isTopComponent) {
-		if(cls.equals(IESequenceTab.class) && (container.getWOComponent() instanceof IETabComponent))
-			return false;
-		if (container instanceof DropZoneTopComponent) {
-			return cls.equals(IEBlocWidget.class)
-					|| (cls.equals(IESequenceTab.class))
-					|| cls.equals(IEHTMLTableWidget.class)
-					|| (cls.equals(TopComponentReusableWidget.class) && !((DropZoneTopComponent) container)
-							.getModel().getComponentDefinition()
-							.getWOComponent().hasTabContainer())
-					|| cls.equals(IESequenceTR.class)
-					|| (cls.equals(IESequenceWidget.class) && isTopComponent);
-		}
+			if (ok) {
+				if (/*container.getWOComponent()!=widget.getWOComponent() && *//*container.getWOComponent() instanceof IEReusableComponent) {
+																		ok&=!widget.checkWidgetDoesNotEmbedWOComponent((IEReusableComponent) container.getWOComponent());
+																		}
+																		}
+																		return ok;
+																		}
+																		
+																		public static boolean isValidTargetClassForDropTargetContainer(
+																		IEContainer container, Class cls, boolean isTopComponent) {
+																		if(cls.equals(IESequenceTab.class) && (container.getWOComponent() instanceof IETabComponent))
+																		return false;
+																		if (container instanceof DropZoneTopComponent) {
+																		return cls.equals(IEBlocWidget.class)
+																		|| (cls.equals(IESequenceTab.class))
+																		|| cls.equals(IEHTMLTableWidget.class)
+																		|| (cls.equals(TopComponentReusableWidget.class) && !((DropZoneTopComponent) container)
+																		.getModel().getComponentDefinition()
+																		.getWOComponent().hasTabContainer())
+																		|| cls.equals(IESequenceTR.class)
+																		|| (cls.equals(IESequenceWidget.class) && isTopComponent);
+																		}
 
-		else if (container instanceof IESequenceWidgetWidgetView) {
-			return true;
-		}
+																		else if (container instanceof IESequenceWidgetWidgetView) {
+																		return true;
+																		}
 
-		else if (container instanceof DropTabZone) {
-			return cls.equals(IETabWidget.class);
-		}
+																		else if (container instanceof DropTabZone) {
+																		return cls.equals(IETabWidget.class);
+																		}
 
-		else if (container instanceof DropTableZone) {
-			return (cls.equals(IEHTMLTableWidget.class) || cls
-					.equals(InnerBlocReusableWidget.class))
-					&& (((DropTableZone) container).getBlocModel().getContent() == null);
-		}
-		else if (container instanceof ButtonPanel || container instanceof IEBlocWidgetView) {
-			return (cls.equals(IEButtonWidget.class) || cls
-					.equals(IEHyperlinkWidget.class) || cls.equals(IECustomButtonWidget.class));
-		}
+																		else if (container instanceof DropTableZone) {
+																		return (cls.equals(IEHTMLTableWidget.class) || cls
+																		.equals(InnerBlocReusableWidget.class))
+																		&& (((DropTableZone) container).getBlocModel().getContent() == null);
+																		}
+																		else if (container instanceof ButtonPanel || container instanceof IEBlocWidgetView) {
+																		return (cls.equals(IEButtonWidget.class) || cls
+																		.equals(IEHyperlinkWidget.class) || cls.equals(IECustomButtonWidget.class));
+																		}
 
-		return false;
+																		return false;
 
-	}
-	*/
+																		}
+																		*/
 	private int acceptableActions = DnDConstants.ACTION_COPY_OR_MOVE;
 
 	private IEContainer _dropContainer;
@@ -206,8 +202,7 @@ public class IEDTListener implements DropTargetListener {
 
 	private IEController _ieController;
 
-	public IEDTListener(IEController ieController, IEContainer flexoDropPanel,
-			IEObject model) {
+	public IEDTListener(IEController ieController, IEContainer flexoDropPanel, IEObject model) {
 		super();
 		_ieController = ieController;
 		_dropContainer = flexoDropPanel;
@@ -216,7 +211,7 @@ public class IEDTListener implements DropTargetListener {
 
 	/**
 	 * Called by isDragOk Checks to see if the flavor drag flavor is acceptable
-	 *
+	 * 
 	 * @param e
 	 *            the DropTargetDragEvent object
 	 * @return whether the flavor is acceptable
@@ -234,7 +229,7 @@ public class IEDTListener implements DropTargetListener {
 
 	/**
 	 * Called by dragEnter and dragOver Checks the flavors and operations
-	 *
+	 * 
 	 * @param e
 	 *            the event object
 	 * @return whether the flavor and operation is ok
@@ -242,15 +237,15 @@ public class IEDTListener implements DropTargetListener {
 	private boolean isDragOk(DropTargetDragEvent e) {
 		int da = e.getDropAction();
 		// we're saying that these actions are necessary
-		if ((da & acceptableActions) == 0)
+		if ((da & acceptableActions) == 0) {
 			return false;
+		}
 		return true;
 	}
 
 	/**
-	 * start "drag under" feedback on component invoke acceptDrag or rejectDrag
-	 * based on isDragOk
-	 *
+	 * start "drag under" feedback on component invoke acceptDrag or rejectDrag based on isDragOk
+	 * 
 	 * @param e
 	 */
 	@Override
@@ -260,9 +255,8 @@ public class IEDTListener implements DropTargetListener {
 	}
 
 	/**
-	 * continue "drag under" feedback on component invoke acceptDrag or
-	 * rejectDrag based on isDragOk
-	 *
+	 * continue "drag under" feedback on component invoke acceptDrag or rejectDrag based on isDragOk
+	 * 
 	 * @param e
 	 */
 	@Override
@@ -289,12 +283,10 @@ public class IEDTListener implements DropTargetListener {
 	}
 
 	/**
-	 * perform action from getSourceActions on the transferrable invoke
-	 * acceptDrop or rejectDrop invoke dropComplete if its a local (same JVM)
-	 * transfer, use StringTransferable.localStringFlavor find a match for the
-	 * flavor check the operation get the transferable according to the chosen
-	 * flavor do the transfer
-	 *
+	 * perform action from getSourceActions on the transferrable invoke acceptDrop or rejectDrop invoke dropComplete if its a local (same
+	 * JVM) transfer, use StringTransferable.localStringFlavor find a match for the flavor check the operation get the transferable
+	 * according to the chosen flavor do the transfer
+	 * 
 	 * @param e
 	 */
 	@Override
@@ -314,69 +306,64 @@ public class IEDTListener implements DropTargetListener {
 		}
 
 		try {
-			if (data == null)
+			if (data == null) {
 				throw new NullPointerException();
+			}
 		} catch (Throwable t) {
 			t.printStackTrace();
 			IEController.isDropSuccessFull = false;
 			e.dropComplete(false);
 			return;
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Drop with data :" + data.getClass());
+		}
 		if (data instanceof TransferedWidget) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("DATA instance of TransferedWidget");
+			}
 
 			try {
 				Point position = e.getLocation();
 				if (position.x < 0 || position.y < 0) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Invalid position");
+					}
 					IEController.isDropSuccessFull = false;
 					e.rejectDrop();
 					return;
 				}
-				IEDSWidget droppedWidget = ((TransferedWidget) data)
-						.getWidget();
+				IEDSWidget droppedWidget = ((TransferedWidget) data).getWidget();
 				IEWidget newWidget = null;
 				newWidget = droppedWidget.getWidget(_dropContainer.getWOComponent().getComponentDefinition());
 				Class targetClass = droppedWidget.getTargetClassModel();
 				if (targetClass.equals(IEReusableWidget.class)) {
 
 				} else if (!/*isValidTargetClassForDropTargetContainer(
-						_dropContainer, droppedWidget.getTargetClassModel())*/isValidDropTargetContainer(_dropContainer.getContainerModel(), newWidget)) {
+							_dropContainer, droppedWidget.getTargetClassModel())*/isValidDropTargetContainer(
+						_dropContainer.getContainerModel(), newWidget)) {
 					IEController.isDropSuccessFull = false;
 					e.rejectDrop();
-					if (logger.isLoggable(Level.INFO))
-						logger
-								.info("Invalid target class:"
-										+ droppedWidget.getTargetClassModel()
-										+ " for container:"
-										+ _dropContainer.getClass());
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Invalid target class:" + droppedWidget.getTargetClassModel() + " for container:"
+								+ _dropContainer.getClass());
+					}
 					return;
 				}
 
-				DropIEElement dropAction = DropIEElement.actionType
-						.makeNewAction(_dropContainerModel, null, _ieController.getEditor());
+				DropIEElement dropAction = DropIEElement.actionType.makeNewAction(_dropContainerModel, null, _ieController.getEditor());
 				dropAction.setDroppedWidget(newWidget);
 
 				if (_dropContainer instanceof DropZoneTopComponent) {
-					dropAction
-							.setIndex(((DropZoneTopComponent) _dropContainer)
-									.findInsertionIndex(position.x,position.y));
+					dropAction.setIndex(((DropZoneTopComponent) _dropContainer).findInsertionIndex(position.x, position.y));
 				}
 
 				if (_dropContainer instanceof ButtonPanel) {
-					dropAction.setIndex(((ButtonPanel) _dropContainer)
-							.findInsertionIndex(position.x));
+					dropAction.setIndex(((ButtonPanel) _dropContainer).findInsertionIndex(position.x));
 				}
 
 				if (_dropContainer instanceof IESequenceWidgetWidgetView) {
-					dropAction
-							.setIndex(((IESequenceWidgetWidgetView) _dropContainer)
-									.findInsertionIndex(position.x,
-											position.y));
+					dropAction.setIndex(((IESequenceWidgetWidgetView) _dropContainer).findInsertionIndex(position.x, position.y));
 				}
 
 				dropAction.doAction();
@@ -386,8 +373,7 @@ public class IEDTListener implements DropTargetListener {
 					e.acceptDrop(acceptableActions);
 					((JComponent) _dropContainer).repaint();
 					_ieController.getIESelectionManager().resetSelection();
-					_ieController.getIESelectionManager().addToSelected(
-							newWidget);
+					_ieController.getIESelectionManager().addToSelected(newWidget);
 				}
 
 				else {
@@ -396,8 +382,9 @@ public class IEDTListener implements DropTargetListener {
 					return;
 				}
 			} catch (Exception ex) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("This should never happen! Invalid XML in node in Palete");
+				}
 				ex.printStackTrace();
 			}
 		} else if (data instanceof MovedWidget) {
@@ -423,29 +410,29 @@ public class IEDTListener implements DropTargetListener {
 					return;
 				}
 				e.acceptDrop(acceptableActions);
-                if (movedWidget != null) {
-                    if (USE_FLEXO_ACTION) {
-                        MoveIEElement moveAction = MoveIEElement.actionType.makeNewAction(_dropContainerModel, null, _ieController
-                                .getEditor());
-                        moveAction.setMovedWidget(movedWidget);
+				if (movedWidget != null) {
+					if (USE_FLEXO_ACTION) {
+						MoveIEElement moveAction = MoveIEElement.actionType.makeNewAction(_dropContainerModel, null,
+								_ieController.getEditor());
+						moveAction.setMovedWidget(movedWidget);
 
-                        if (_dropContainer instanceof DropZoneTopComponent) {
-                            moveAction.setIndex(((DropZoneTopComponent) _dropContainer).findInsertionIndex(position.x,position.y));
-                        }
+						if (_dropContainer instanceof DropZoneTopComponent) {
+							moveAction.setIndex(((DropZoneTopComponent) _dropContainer).findInsertionIndex(position.x, position.y));
+						}
 
-                        if (_dropContainer instanceof ButtonPanel) {
-                            moveAction.setIndex(((ButtonPanel) _dropContainer).findInsertionIndex(position.x));
-                        }
+						if (_dropContainer instanceof ButtonPanel) {
+							moveAction.setIndex(((ButtonPanel) _dropContainer).findInsertionIndex(position.x));
+						}
 
-                        if (_dropContainer instanceof IESequenceWidgetWidgetView) {
-                            moveAction.setIndex(((IESequenceWidgetWidgetView) _dropContainer).findInsertionIndex(position.x, position.y));
-                        }
+						if (_dropContainer instanceof IESequenceWidgetWidgetView) {
+							moveAction.setIndex(((IESequenceWidgetWidgetView) _dropContainer).findInsertionIndex(position.x, position.y));
+						}
 
-                        moveAction.doAction();
-                    } else {
-                        movedWidget.removeFromContainer();
-				        insertView(movedWidget, _dropContainer, position);
-				    }
+						moveAction.doAction();
+					} else {
+						movedWidget.removeFromContainer();
+						insertView(movedWidget, _dropContainer, position);
+					}
 					IEController.isDropSuccessFull = true;
 					e.dropComplete(true);
 					/*
@@ -455,8 +442,7 @@ public class IEDTListener implements DropTargetListener {
 					 * _dropContainer).findViewForModel(movedWidget); }
 					 */
 					_ieController.getIESelectionManager().resetSelection();
-					_ieController.getIESelectionManager().addToSelected(
-							movedWidget);
+					_ieController.getIESelectionManager().addToSelected(movedWidget);
 				}
 
 			} catch (Exception ex) {
@@ -464,17 +450,14 @@ public class IEDTListener implements DropTargetListener {
 			}
 		} else if (data instanceof BrowserElement) {
 			if (data instanceof ReusableComponentDefinitionElement) {
-				ReusableComponentDefinition partialComponent = ((ReusableComponentDefinitionElement) data)
-						.getComponentDefinition();
-				DropPartialComponent dropAction = DropPartialComponent.actionType
-						.makeNewAction(_dropContainerModel, null, _ieController.getEditor());
+				ReusableComponentDefinition partialComponent = ((ReusableComponentDefinitionElement) data).getComponentDefinition();
+				DropPartialComponent dropAction = DropPartialComponent.actionType.makeNewAction(_dropContainerModel, null,
+						_ieController.getEditor());
 				dropAction.setPartialComponent(partialComponent);
 
 				if (_dropContainer instanceof DropZoneTopComponent) {
 					Point position = e.getLocation();
-					dropAction
-							.setIndex(((DropZoneTopComponent) _dropContainer)
-									.findInsertionIndex(position.x,position.y));
+					dropAction.setIndex(((DropZoneTopComponent) _dropContainer).findInsertionIndex(position.x, position.y));
 				}
 
 				dropAction.doAction();
@@ -484,8 +467,7 @@ public class IEDTListener implements DropTargetListener {
 					e.acceptDrop(acceptableActions);
 					((JComponent) _dropContainer).repaint();
 					_ieController.getIESelectionManager().resetSelection();
-					_ieController.getIESelectionManager().addToSelected(
-							dropAction.getDroppedWidget());
+					_ieController.getIESelectionManager().addToSelected(dropAction.getDroppedWidget());
 				}
 
 				else {
@@ -512,8 +494,7 @@ public class IEDTListener implements DropTargetListener {
 	 * @return
 	 */
 	@Deprecated
-    public IEWidget createModelFromDroppedWidget(IEDSWidget droppedWidget,
-			IEObject parent) {
+	public IEWidget createModelFromDroppedWidget(IEDSWidget droppedWidget, IEObject parent) {
 		droppedWidget.setProject(_ieController.getProject());
 		IEWidget returned = droppedWidget.getPaletteWidget();
 		droppedWidget.setProject(null);
@@ -523,14 +504,14 @@ public class IEDTListener implements DropTargetListener {
 			returned.setWOComponent(((IEWidget) parent).getWOComponent());
 		}
 		returned.setParent(parent);
-		if (logger.isLoggable(Level.FINE))
-			logger.finest("returned.setParent(an instance of "
-					+ parent.getClass() + ")");
+		if (logger.isLoggable(Level.FINE)) {
+			logger.finest("returned.setParent(an instance of " + parent.getClass() + ")");
+		}
 		return returned;
 	}
 
 	/**
-	 *
+	 * 
 	 * @deprecated DO IT WITH FLEXO ACTION
 	 * @param movedWidget
 	 * @param parent
@@ -538,18 +519,17 @@ public class IEDTListener implements DropTargetListener {
 	 * @return
 	 */
 	@Deprecated
-    public static IEWidget createModelFromMovedWidget(IEWidget movedWidget,
-			IEObject parent, boolean copyFlexoID) {
+	public static IEWidget createModelFromMovedWidget(IEWidget movedWidget, IEObject parent, boolean copyFlexoID) {
 		IEWOComponent component = movedWidget.getWOComponent();
 		if (component == null) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Could not clone widget because it has no WOComponent");
+			}
 			return null;
 		}
 		try {
 			component.initializeSerialization();
-			IEWidget returned = (IEWidget) movedWidget
-					.cloneUsingXMLMapping(null,!copyFlexoID, component.getXMLMapping());
+			IEWidget returned = (IEWidget) movedWidget.cloneUsingXMLMapping(null, !copyFlexoID, component.getXMLMapping());
 			returned.setParent(parent);
 			if (parent instanceof IEWOComponent) {
 				returned.setWOComponent((IEWOComponent) parent);
@@ -568,29 +548,28 @@ public class IEDTListener implements DropTargetListener {
 	}
 
 	/**
-	 *
+	 * 
 	 * @deprecated DO IT WITH FLEXO ACTION
 	 * @param model
 	 * @param container
 	 * @param position
 	 */
 	@Deprecated
-    public static void insertView(IEWidget model, IEContainer container,
-			Point position) {
-		if (model instanceof ITableRow || model instanceof ITableData || model == null)
+	public static void insertView(IEWidget model, IEContainer container, Point position) {
+		if (model instanceof ITableRow || model instanceof ITableData || model == null) {
 			return;
-		if (container instanceof DropTableZone
-				&& model instanceof IEHTMLTableWidget) {
+		}
+		if (container instanceof DropTableZone && model instanceof IEHTMLTableWidget) {
 			((DropTableZone) container).add((IEHTMLTableWidget) model);
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("insert HTMLTable in DropTableZone");
+			}
 			container.validate();
 		}
 
 		if (container instanceof ButtonPanel && model instanceof IEHyperlinkWidget) {
 			int i = ((ButtonPanel) container).findInsertionIndex(position.x);
-			((ButtonPanel) container).getButtonedWidgetModel()
-					.insertButtonAtIndex((IEHyperlinkWidget) model, i);
+			((ButtonPanel) container).getButtonedWidgetModel().insertButtonAtIndex((IEHyperlinkWidget) model, i);
 			container.validate();
 
 		}
@@ -598,42 +577,35 @@ public class IEDTListener implements DropTargetListener {
 			((IEBlocWidgetView) container).getModel().insertButtonAtIndex((IEHyperlinkWidget) model, Integer.MAX_VALUE);
 			// We use Max value to insert at the end of the sequence
 			container.validate();
-			
+
 		}
 		if (container instanceof DropTabZone && model instanceof IETabWidget) {
-			((DropTabZone) container).getTabModel().addToInnerWidgets(
-					(IETabWidget) model);
+			((DropTabZone) container).getTabModel().addToInnerWidgets((IETabWidget) model);
 			container.validate();
 
 		}
 		if (container instanceof IESequenceWidgetWidgetView) {
-			int i = ((IESequenceWidgetWidgetView) container)
-					.findInsertionIndex(position.x, position.y);
+			int i = ((IESequenceWidgetWidgetView) container).findInsertionIndex(position.x, position.y);
 			if (model instanceof IETDWidget) {
 				IESequenceWidget seq = ((IETDWidget) model).getSequenceWidget();
-				for (int j = seq.size()-1; j >-1 ; j--) {
+				for (int j = seq.size() - 1; j > -1; j--) {
 					model = seq.get(j);
 					model.setIndex(i);
-					((IESequenceWidgetWidgetView) container).getSequenceModel()
-							.insertElementAt(model, i);
+					((IESequenceWidgetWidgetView) container).getSequenceModel().insertElementAt(model, i);
 				}
-			} else if (model instanceof IESequenceWidget
-					&& ((IESequenceWidget) model).getOperator() == null) {
+			} else if (model instanceof IESequenceWidget && ((IESequenceWidget) model).getOperator() == null) {
 				IESequenceWidget seq = (IESequenceWidget) model;
-				for (int j = seq.size()-1; j >-1 ; j--) {
+				for (int j = seq.size() - 1; j > -1; j--) {
 					model = seq.get(j);
 					model.setIndex(i);
-					((IESequenceWidgetWidgetView) container).getSequenceModel()
-							.insertElementAt(model, i);
+					((IESequenceWidgetWidgetView) container).getSequenceModel().insertElementAt(model, i);
 				}
 			} else {
 				model.setIndex(i);
-				((IESequenceWidgetWidgetView) container).getSequenceModel()
-						.insertElementAt(model, i);
+				((IESequenceWidgetWidgetView) container).getSequenceModel().insertElementAt(model, i);
 			}
 			container.validate();
 		}
 	}
-
 
 }

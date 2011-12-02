@@ -25,8 +25,8 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.ie.IEObject;
@@ -36,163 +36,146 @@ import org.openflexo.foundation.ie.util.DropDownType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
+public class IEBrowserWidget extends IEAbstractListWidget implements ListModel {
 
-public class IEBrowserWidget extends IEAbstractListWidget implements ListModel
-{
-
-    /**
+	/**
      * 
      */
-    public static final String BROWSER_WIDGET = "browser_widget";
+	public static final String BROWSER_WIDGET = "browser_widget";
 
-    private Vector<ListDataListener> _listDataListener;
-    
-    private int visibleRows=5;
+	private Vector<ListDataListener> _listDataListener;
+
+	private int visibleRows = 5;
 
 	private WidgetBindingDefinition _bindingSelectionDefinition = null;
 
-	
-    public IEBrowserWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	public IEBrowserWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public IEBrowserWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-        _listDataListener = new Vector<ListDataListener>();
-    }
+	public IEBrowserWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+		_listDataListener = new Vector<ListDataListener>();
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return "Browser.inspector";
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return "Browser.inspector";
+	}
 
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        return new Vector<IObject>();
-    }
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		return new Vector<IObject>();
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Browser-" + getName();
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "Browser-" + getName();
+	}
 
-    @Override
-	public void addListDataListener(ListDataListener l)
-    {
-        if (!_listDataListener.contains(l))
-            _listDataListener.add(l);
-    }
+	@Override
+	public void addListDataListener(ListDataListener l) {
+		if (!_listDataListener.contains(l)) {
+			_listDataListener.add(l);
+		}
+	}
 
-    @Override
-	public Object getElementAt(int index)
-    {
-        try {
-            return getValueList().get(index);
-        } catch (RuntimeException e) {
-            return null;
-        }
-    }
+	@Override
+	public Object getElementAt(int index) {
+		try {
+			return getValueList().get(index);
+		} catch (RuntimeException e) {
+			return null;
+		}
+	}
 
-    @Override
-	public void setContentType(DMType contentType) 
-    {
-    	_bindingSelectionDefinition = null;
-    	super.setContentType(contentType);
-    }
+	@Override
+	public void setContentType(DMType contentType) {
+		_bindingSelectionDefinition = null;
+		super.setContentType(contentType);
+	}
 
-    @Override
-	public WidgetBindingDefinition getBindingSelectionDefinition()
-    {
-    	if (_bindingSelectionDefinition == null) {
-    		_bindingSelectionDefinition = new WidgetBindingDefinition("bindingSelection",DMType.makeListDMType(getContentType(), getProject()),this,BindingDefinitionType.GET_SET,true);
-    		if (getBindingSelection()!=null)
-    			getBindingSelection().setBindingDefinition(_bindingSelectionDefinition);
-    	}
-    	return _bindingSelectionDefinition;
-    }
+	@Override
+	public WidgetBindingDefinition getBindingSelectionDefinition() {
+		if (_bindingSelectionDefinition == null) {
+			_bindingSelectionDefinition = new WidgetBindingDefinition("bindingSelection", DMType.makeListDMType(getContentType(),
+					getProject()), this, BindingDefinitionType.GET_SET, true);
+			if (getBindingSelection() != null) {
+				getBindingSelection().setBindingDefinition(_bindingSelectionDefinition);
+			}
+		}
+		return _bindingSelectionDefinition;
+	}
 
+	@Override
+	public int getSize() {
+		return getValueList().size();
+	}
 
+	@Override
+	public void removeListDataListener(ListDataListener l) {
+		_listDataListener.remove(l);
+	}
 
-    @Override
-	public int getSize()
-    {
-        return getValueList().size();
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return BROWSER_WIDGET;
+	}
 
-    @Override
-	public void removeListDataListener(ListDataListener l)
-    {
-        _listDataListener.remove(l);
-    }
+	/**
+	 * Overrides setExampleList
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEAbstractListWidget#setExampleList(java.lang.String)
+	 */
+	@Override
+	public void setExampleList(String list) {
+		super.setExampleList(list);
+		notifyListDataListeners();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return BROWSER_WIDGET;
-    }
+	/**
+	 * Overrides setDomain
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEAbstractListWidget#setDomain(org.openflexo.foundation.dkv.Domain)
+	 */
+	@Override
+	public void setDomain(Domain domain) {
+		super.setDomain(domain);
+		notifyListDataListeners();
+	}
 
-    /**
-     * Overrides setExampleList
-     * @see org.openflexo.foundation.ie.widget.IEAbstractListWidget#setExampleList(java.lang.String)
-     */
-    @Override
-    public void setExampleList(String list)
-    {
-        super.setExampleList(list);
-        notifyListDataListeners();
-    }
+	/**
+	 * Overrides setDropdownType
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEAbstractListWidget#setDropdownType(org.openflexo.foundation.ie.util.DropDownType)
+	 */
+	@Override
+	public void setDropdownType(DropDownType type) {
+		super.setDropdownType(type);
+		notifyListDataListeners();
+	}
 
-    /**
-     * Overrides setDomain
-     * @see org.openflexo.foundation.ie.widget.IEAbstractListWidget#setDomain(org.openflexo.foundation.dkv.Domain)
-     */
-    @Override
-    public void setDomain(Domain domain)
-    {
-        super.setDomain(domain);
-        notifyListDataListeners();
-    }
-    
-    /**
-     * Overrides setDropdownType
-     * @see org.openflexo.foundation.ie.widget.IEAbstractListWidget#setDropdownType(org.openflexo.foundation.ie.util.DropDownType)
-     */
-    @Override
-    public void setDropdownType(DropDownType type)
-    {
-        super.setDropdownType(type);
-        notifyListDataListeners();
-    }
-    
-    private void notifyListDataListeners()
-    {
-        for (ListDataListener listener : _listDataListener) {
-            listener.contentsChanged(new ListDataEvent(this,ListDataEvent.CONTENTS_CHANGED,0,getValueList().size()));
-        }
-    }
+	private void notifyListDataListeners() {
+		for (ListDataListener listener : _listDataListener) {
+			listener.contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, getValueList().size()));
+		}
+	}
 
-    public int getVisibleRows()
-    {
-        return visibleRows;
-    }
+	public int getVisibleRows() {
+		return visibleRows;
+	}
 
-    public void setVisibleRows(int visibleRows)
-    {
-        int old = this.visibleRows;
-        this.visibleRows = visibleRows;
-        setChanged();
-        notifyModification("visibleRows", old, visibleRows);
-    }
-    
+	public void setVisibleRows(int visibleRows) {
+		int old = this.visibleRows;
+		this.visibleRows = visibleRows;
+		setChanged();
+		notifyModification("visibleRows", old, visibleRows);
+	}
+
 }

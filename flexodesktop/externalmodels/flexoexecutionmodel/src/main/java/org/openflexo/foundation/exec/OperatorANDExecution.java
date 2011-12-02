@@ -32,8 +32,6 @@ import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Variable;
-
-
 import org.openflexo.foundation.exec.expr.HasWaitingTokensOnOperator;
 import org.openflexo.foundation.exec.inst.DestroyRemainingTokensForOperator;
 import org.openflexo.foundation.exec.inst.StoreTokenOnOperator;
@@ -51,57 +49,50 @@ public class OperatorANDExecution extends OperatorNodeExecution {
 	private static final Logger logger = FlexoLogger.getLogger(OperatorANDExecution.class.getPackage().getName());
 
 	private FlexoPostCondition<?, ?> edge;
-	
-	protected OperatorANDExecution(ANDOperator operatorNode, FlexoPostCondition<?, ?> edge)
-	{
+
+	protected OperatorANDExecution(ANDOperator operatorNode, FlexoPostCondition<?, ?> edge) {
 		super(operatorNode);
 		this.edge = edge;
 		if (edge == null && operatorNode.getIncomingPostConditions().size() == 1) {
 			// No need to make it ambigous, consider the only one incoming edge
-			this.edge =operatorNode.getIncomingPostConditions().firstElement();
+			this.edge = operatorNode.getIncomingPostConditions().firstElement();
 		}
 	}
-	
 
 	@Override
-	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException
-	{
+	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		if (!interprocedural) {
-			if (getEdge() == null)
-				throw new InvalidModelException("Operator AND named "+getOperatorNode().getName()+" execution called from a null edge");
+			if (getEdge() == null) {
+				throw new InvalidModelException("Operator AND named " + getOperatorNode().getName() + " execution called from a null edge");
+			}
 			return makeControlGraph(getEdge(), interprocedural);
 		}
 
 		Conditional iterateOnEntries = null;
-		
+
 		Conditional conditional = null;
 		for (FlexoPostCondition<?, ?> edge : getOperatorNode().getIncomingPostConditions()) {
-			Expression condition = new BinaryOperatorExpression(
-					BooleanBinaryOperator.EQUALS,
-					getEdgeVariable(),
+			Expression condition = new BinaryOperatorExpression(BooleanBinaryOperator.EQUALS, getEdgeVariable(),
 					new Constant.IntegerConstant(edge.getFlexoID()));
-			Conditional currentConditional = new Conditional(
-					condition,
-					makeControlGraph(edge,interprocedural),
-					"Operator was called from edge "+edge.getDerivedNameFromStartingObject());
+			Conditional currentConditional = new Conditional(condition, makeControlGraph(edge, interprocedural),
+					"Operator was called from edge " + edge.getDerivedNameFromStartingObject());
 			if (conditional != null) {
 				conditional.setElseStatement(currentConditional);
-			}
-			else {
+			} else {
 				iterateOnEntries = currentConditional;
 			}
 			conditional = currentConditional;
 		}
-		
+
 		return iterateOnEntries;
 	}
 
-	protected final ControlGraph makeControlGraph(FlexoPostCondition<?, ?> entry, boolean interprocedural) throws InvalidModelException,NotSupportedException
-	{
+	protected final ControlGraph makeControlGraph(FlexoPostCondition<?, ?> entry, boolean interprocedural) throws InvalidModelException,
+			NotSupportedException {
 		Expression condition = null;
-		
+
 		if (entry == null) {
-			throw new InvalidModelException("Operator AND named "+getOperatorNode().getName()+" execution called from a null edge");
+			throw new InvalidModelException("Operator AND named " + getOperatorNode().getName() + " execution called from a null edge");
 		}
 
 		for (FlexoPostCondition<?, ?> tempEntry : getOperatorNode().getIncomingPostConditions()) {
@@ -109,20 +100,19 @@ public class OperatorANDExecution extends OperatorNodeExecution {
 				Expression currentCondition = new HasWaitingTokensOnOperator(getOperatorNode(), tempEntry);
 				if (condition == null) {
 					condition = currentCondition;
-				}
-				else {
-					condition = new BinaryOperatorExpression(BooleanBinaryOperator.AND,condition,currentCondition);
+				} else {
+					condition = new BinaryOperatorExpression(BooleanBinaryOperator.AND, condition, currentCondition);
 				}
 			}
 		}
-		
+
 		ControlGraph DELETE_TOKENS = new DestroyRemainingTokensForOperator(getOperatorNode());
 		ControlGraph SEND_TOKENS_TO_OUTPUTS = null;
-		
+
 		Vector<ControlGraph> sendTokensStatements = new Vector<ControlGraph>();
 
 		for (FlexoPostCondition edge : getOperatorNode().getOutgoingPostConditions()) {
-			sendTokensStatements.add(SendToken.sendToken(edge,interprocedural));
+			sendTokensStatements.add(SendToken.sendToken(edge, interprocedural));
 		}
 
 		ControlGraph SEND_TOKENS = makeFlowControlGraph(sendTokensStatements);
@@ -131,72 +121,64 @@ public class OperatorANDExecution extends OperatorNodeExecution {
 
 		for (FlexoPostCondition edge : getOperatorNode().getOutgoingPostConditions()) {
 			if (edge instanceof ExternalMessageInEdge) {
-				sendMessagesStatements.add(SendMessage.sendMessage((ExternalMessageInEdge)edge,interprocedural));
+				sendMessagesStatements.add(SendMessage.sendMessage((ExternalMessageInEdge) edge, interprocedural));
 			}
 		}
 
 		ControlGraph SEND_MESSAGES = makeFlowControlGraph(sendMessagesStatements);
 
-		SEND_TOKENS_TO_OUTPUTS = makeSequentialControlGraph(
-				SEND_MESSAGES,
-				SEND_TOKENS);
-		
-		if (SEND_TOKENS_TO_OUTPUTS instanceof Nop && !SEND_TOKENS_TO_OUTPUTS.hasComment()) SEND_TOKENS_TO_OUTPUTS.setInlineComment("nothing to do");
+		SEND_TOKENS_TO_OUTPUTS = makeSequentialControlGraph(SEND_MESSAGES, SEND_TOKENS);
 
-		ControlGraph OPERATOR_AND_TRIGGER = makeSequentialControlGraph(new Nop("Operator AND triggers"),DELETE_TOKENS,SEND_TOKENS_TO_OUTPUTS);
-		
+		if (SEND_TOKENS_TO_OUTPUTS instanceof Nop && !SEND_TOKENS_TO_OUTPUTS.hasComment()) {
+			SEND_TOKENS_TO_OUTPUTS.setInlineComment("nothing to do");
+		}
+
+		ControlGraph OPERATOR_AND_TRIGGER = makeSequentialControlGraph(new Nop("Operator AND triggers"), DELETE_TOKENS,
+				SEND_TOKENS_TO_OUTPUTS);
+
 		if (condition == null) {
 			return OPERATOR_AND_TRIGGER;
+		} else {
+			return new Conditional(condition, OPERATOR_AND_TRIGGER, new StoreTokenOnOperator(getOperatorNode(), entry));
 		}
-		
-		else return new Conditional(
-				condition,
-				OPERATOR_AND_TRIGGER,
-				new StoreTokenOnOperator(getOperatorNode(),entry));
-		
+
 	}
-	
+
 	/**
 	 * Overrides parent's method by providing precondition identifier as argument
 	 */
 	@Override
-	protected Procedure makeProcedure() throws InvalidModelException,NotSupportedException
-	{
-		return new Procedure(
-				getProcedureName(),
-				makeControlGraph(true),
-				getProcedureComment(),
-				new Procedure.ProcedureParameter(getEdgeVariable(),new Type("int")));
+	protected Procedure makeProcedure() throws InvalidModelException, NotSupportedException {
+		return new Procedure(getProcedureName(), makeControlGraph(true), getProcedureComment(), new Procedure.ProcedureParameter(
+				getEdgeVariable(), new Type("int")));
 	}
 
-
 	@Override
-	protected String getProcedureComment()
-	{
+	protected String getProcedureComment() {
 		StringBuffer returned = new StringBuffer();
-		returned.append(FlexoLocalization.localizedForKeyWithParams("this_method_represents_code_to_be_executed_when_operator_($0)_is_executed",getOperatorNode().getName()));
+		returned.append(FlexoLocalization.localizedForKeyWithParams(
+				"this_method_represents_code_to_be_executed_when_operator_($0)_is_executed", getOperatorNode().getName()));
 		returned.append(StringUtils.LINE_SEPARATOR);
 		returned.append(StringUtils.LINE_SEPARATOR);
-		returned.append("@param "+getEdgeVariable().getName()+" ");
-		returned.append(FlexoLocalization.localizedForKey("identifier_of_edge_which_activates_this_node"));	
+		returned.append("@param " + getEdgeVariable().getName() + " ");
+		returned.append(FlexoLocalization.localizedForKey("identifier_of_edge_which_activates_this_node"));
 		return returned.toString();
 	}
 
 	private Variable edgeVariable = null;
-	
-	private Variable getEdgeVariable()
-	{
-		if (edgeVariable == null) edgeVariable = new Variable("edgeId");
+
+	private Variable getEdgeVariable() {
+		if (edgeVariable == null) {
+			edgeVariable = new Variable("edgeId");
+		}
 		return edgeVariable;
 	}
-	
-	public FlexoPostCondition<?, ?> getEdge() 
-	{
+
+	public FlexoPostCondition<?, ?> getEdge() {
 		return edge;
 	}
 
-	public AbstractNode getEdgeOrigin() 
-	{
+	public AbstractNode getEdgeOrigin() {
 		if (getEdge() != null) {
 			return getEdge().getStartNode();
 		}
@@ -204,10 +186,8 @@ public class OperatorANDExecution extends OperatorNodeExecution {
 	}
 
 	@Override
-	public ANDOperator getOperatorNode() 
-	{
-		return (ANDOperator)super.getOperatorNode();
+	public ANDOperator getOperatorNode() {
+		return (ANDOperator) super.getOperatorNode();
 	}
-
 
 }

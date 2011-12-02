@@ -30,29 +30,24 @@ import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class AddConnectorInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddConnectorInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(AddConnector.actionType,actionInitializer);
+	AddConnectorInitializer(OEControllerActionInitializer actionInitializer) {
+		super(AddConnector.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddConnector> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddConnector> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddConnector>() {
 			@Override
-			public boolean run(ActionEvent e, AddConnector action)
-			{
+			public boolean run(ActionEvent e, AddConnector action) {
 				if (action.getAutomaticallyCreateConnector()) {
 					return true;
 				}
@@ -83,19 +78,16 @@ public class AddConnectorInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddParentRole> getDefaultFinalizer() 
 	{
 		return new FlexoActionFinalizer<AddParentRole>() {
-            public boolean run(ActionEvent e, AddParentRole action)
-            {
-                return true;
-          }
-        };
+	        public boolean run(ActionEvent e, AddParentRole action)
+	        {
+	            return true;
+	      }
+	    };
 	}*/
-	
+
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return VEIconLibrary.CONNECTOR_ICON;
 	}
-
-
 
 }

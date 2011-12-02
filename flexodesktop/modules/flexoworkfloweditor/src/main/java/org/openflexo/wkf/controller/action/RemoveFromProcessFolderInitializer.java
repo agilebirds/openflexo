@@ -30,55 +30,47 @@ import org.openflexo.foundation.wkf.action.RemoveFromProcessFolder;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RemoveFromProcessFolderInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveFromProcessFolderInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(RemoveFromProcessFolder.actionType,actionInitializer);
+	RemoveFromProcessFolderInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(RemoveFromProcessFolder.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RemoveFromProcessFolder> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<RemoveFromProcessFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveFromProcessFolder>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveFromProcessFolder action)
-            {
-                return true;
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<RemoveFromProcessFolder> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<RemoveFromProcessFolder>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveFromProcessFolder action)
-            {
+			@Override
+			public boolean run(ActionEvent e, RemoveFromProcessFolder action) {
 				return true;
-          }
-        };
+			}
+		};
 	}
 
-     @Override
- 	protected FlexoExceptionHandler<RemoveFromProcessFolder> getDefaultExceptionHandler()
- 	{
- 		return new FlexoExceptionHandler<RemoveFromProcessFolder>() {
- 			@Override
-			public boolean handleException(FlexoException exception, RemoveFromProcessFolder action) {
-                return false;
+	@Override
+	protected FlexoActionFinalizer<RemoveFromProcessFolder> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<RemoveFromProcessFolder>() {
+			@Override
+			public boolean run(ActionEvent e, RemoveFromProcessFolder action) {
+				return true;
 			}
-        };
- 	}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<RemoveFromProcessFolder> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<RemoveFromProcessFolder>() {
+			@Override
+			public boolean handleException(FlexoException exception, RemoveFromProcessFolder action) {
+				return false;
+			}
+		};
+	}
 
 }

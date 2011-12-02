@@ -27,27 +27,26 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of DREModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class DREIconLibrary extends IconLibrary {
 
 	// Module icons
-	public static final ImageIcon DRE_ACTIVE_ICON = new ImageIconResource("Icons/DRE/DRC_A_Small.gif");
-	public static final ImageIcon DRE_UNACTIVE_ICON = new ImageIconResource("Icons/DRE/DRC_NA_Small.gif");
-	public static final ImageIcon DRE_SELECTED_ICON = new ImageIconResource("Icons/DRE/DRC_S_Small.gif");
-	public static final ImageIcon DRE_BIG_ACTIVE_ICON = new ImageIconResource("Icons/DRE/DRC_A.gif");
-	public static final ImageIcon DRE_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/DRE/DRC_NA.gif");
-	public static final ImageIcon DRE_BIG_SELECTED_ICON = new ImageIconResource("Icons/DRE/DRC_S.gif");
+	public static final ImageIcon DRE_SMALL_ICON = new ImageIconResource("Icons/DRE/DRC_A_Small.gif");
+	public static final ImageIcon DRE_MEDIUM_ICON = new ImageIconResource("Icons/DRE/DRC_A.gif");
+	public static final ImageIcon DRE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/DRE/DRC_S.gif");
+	public static final ImageIcon DRE_BIG_ICON = new ImageIconResource("Icons/DRE/DRC_A.gif");
 
 	// Perspective icons
 	public static final ImageIcon DRE_DRE_ACTIVE_ICON = new ImageIconResource("Icons/DRE/DREPerspective_A.gif");
 	public static final ImageIcon DRE_DRE_SELECTED_ICON = new ImageIconResource("Icons/DRE/DREPerspective_S.gif");
-	
+
 	// Editor icons
 	public static final ImageIcon DOC_FOLDER_ICON = new ImageIconResource("Icons/DRE/Folder.gif");
 	public static final ImageIcon DOC_ITEM_ICON = new ImageIconResource("Icons/DRE/DocItem.gif");
 	public static final ImageIcon UNDOCUMENTED_DOC_ITEM_ICON = new ImageIconResource("Icons/DRE/UndocumentedDocItem.gif");
 	public static final ImageIcon APPROVING_PENDING_DOC_ITEM_ICON = new ImageIconResource("Icons/DRE/ApprovingPendingDocItem.gif");
-	public static final ImageIcon AVAILABLE_NEW_VERSION_PENDING_DOC_ITEM_ICON = new ImageIconResource("Icons/DRE/AvailableNewVersionPendingDocItem.gif");
+	public static final ImageIcon AVAILABLE_NEW_VERSION_PENDING_DOC_ITEM_ICON = new ImageIconResource(
+			"Icons/DRE/AvailableNewVersionPendingDocItem.gif");
 
 }

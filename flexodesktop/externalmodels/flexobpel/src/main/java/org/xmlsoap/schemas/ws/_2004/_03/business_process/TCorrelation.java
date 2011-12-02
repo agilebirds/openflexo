@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,11 +31,12 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tCorrelation complex type.
+ * <p>
+ * Java class for tCorrelation complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tCorrelation">
@@ -53,68 +53,58 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCorrelation")
-@XmlSeeAlso({
-    TCorrelationWithPattern.class
-})
-public class TCorrelation
-    extends TExtensibleElements
-{
+@XmlSeeAlso({ TCorrelationWithPattern.class })
+public class TCorrelation extends TExtensibleElements {
 
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String set;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected TInitiate initiate;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String set;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected TInitiate initiate;
 
-    /**
-     * Gets the value of the set property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSet() {
-        return set;
-    }
+	/**
+	 * Gets the value of the set property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getSet() {
+		return set;
+	}
 
-    /**
-     * Sets the value of the set property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSet(String value) {
-        this.set = value;
-    }
+	/**
+	 * Sets the value of the set property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setSet(String value) {
+		this.set = value;
+	}
 
-    /**
-     * Gets the value of the initiate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TInitiate }
-     *     
-     */
-    public TInitiate getInitiate() {
-        if (initiate == null) {
-            return TInitiate.NO;
-        } else {
-            return initiate;
-        }
-    }
+	/**
+	 * Gets the value of the initiate property.
+	 * 
+	 * @return possible object is {@link TInitiate }
+	 * 
+	 */
+	public TInitiate getInitiate() {
+		if (initiate == null) {
+			return TInitiate.NO;
+		} else {
+			return initiate;
+		}
+	}
 
-    /**
-     * Sets the value of the initiate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TInitiate }
-     *     
-     */
-    public void setInitiate(TInitiate value) {
-        this.initiate = value;
-    }
+	/**
+	 * Sets the value of the initiate property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TInitiate }
+	 * 
+	 */
+	public void setInitiate(TInitiate value) {
+		this.initiate = value;
+	}
 
 }

@@ -21,7 +21,6 @@ package org.openflexo.vpm.palette;
 
 import javax.swing.JTabbedPane;
 
-
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
@@ -33,10 +32,9 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 	private CEDController _controller;
 	private PalettePalette _commonPalette;
 	private CalcPaletteModuleView _moduleView;
-		
-	public CalcPaletteController(CEDController controller, ViewPointPalette palette, boolean readOnly)
-	{
-		super(new CalcPaletteRepresentation(palette,readOnly),controller.getSelectionManager());
+
+	public CalcPaletteController(CEDController controller, ViewPointPalette palette, boolean readOnly) {
+		super(new CalcPaletteRepresentation(palette, readOnly), controller.getSelectionManager());
 		_controller = controller;
 
 		if (!readOnly) {
@@ -48,54 +46,49 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 	}
 
 	@Override
-	public void delete() 
-	{
+	public void delete() {
 		getDrawing().delete();
-		if (_controller!=null) {
-			if (getDrawingView()!=null && _moduleView != null)
+		if (_controller != null) {
+			if (getDrawingView() != null && _moduleView != null) {
 				_controller.removeModuleView(_moduleView);
+			}
 			_controller.VIEW_POINT_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
 	}
-	
+
 	@Override
-	public DrawingView<CalcPaletteRepresentation> makeDrawingView(CalcPaletteRepresentation drawing) 
-	{
-		return new DrawingView<CalcPaletteRepresentation>(drawing,this);
+	public DrawingView<CalcPaletteRepresentation> makeDrawingView(CalcPaletteRepresentation drawing) {
+		return new DrawingView<CalcPaletteRepresentation>(drawing, this);
 	}
 
-	public CEDController getCEDController() 
-	{
+	public CEDController getCEDController() {
 		return _controller;
 	}
-	
-	public CalcPaletteModuleView getModuleView()
-	{
+
+	public CalcPaletteModuleView getModuleView() {
 		if (_moduleView == null) {
 			_moduleView = new CalcPaletteModuleView(this);
 		}
 		return _moduleView;
 	}
-	
-	public PalettePalette getCommonPalette()
-	{
+
+	public PalettePalette getCommonPalette() {
 		return _commonPalette;
 	}
-	
+
 	private JTabbedPane paletteView;
-	
-	public JTabbedPane getPaletteView()
-	{
+
+	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane();
-			paletteView.add(FlexoLocalization.localizedForKey("Common",getCommonPalette().getPaletteView()),getCommonPalette().getPaletteView());			
+			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
+					.getPaletteView());
 		}
 		return paletteView;
 	}
 
-	public ViewPointPalette getCalcPalette()
-	{
+	public ViewPointPalette getCalcPalette() {
 		return getDrawing().getModel();
 	}
 

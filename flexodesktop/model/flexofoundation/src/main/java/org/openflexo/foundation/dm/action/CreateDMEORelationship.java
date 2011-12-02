@@ -34,163 +34,144 @@ import org.openflexo.foundation.dm.eo.DMEORelationship;
 import org.openflexo.foundation.dm.eo.FlattenRelationshipDefinition;
 import org.openflexo.foundation.dm.eo.model.InvalidJoinException;
 
+public class CreateDMEORelationship extends FlexoAction<CreateDMEORelationship, DMEOEntity, DMObject> {
 
-public class CreateDMEORelationship extends FlexoAction<CreateDMEORelationship,DMEOEntity,DMObject> 
-{
+	private static final Logger logger = Logger.getLogger(CreateDMEORelationship.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDMEORelationship.class.getPackage().getName());
+	public static FlexoActionType<CreateDMEORelationship, DMEOEntity, DMObject> actionType = new FlexoActionType<CreateDMEORelationship, DMEOEntity, DMObject>(
+			"add_eo_relationship", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<CreateDMEORelationship,DMEOEntity,DMObject> actionType 
-    = new FlexoActionType<CreateDMEORelationship,DMEOEntity,DMObject> (
-    		"add_eo_relationship",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.defaultGroup,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateDMEORelationship makeNewAction(DMEOEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new CreateDMEORelationship(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateDMEORelationship makeNewAction(DMEOEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMEORelationship(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+			return ((object != null) && (!(object).getIsReadOnly()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) 
-        {
-            return ((object != null) 
-                    && (!(object).getIsReadOnly()));
-        }
-                
-    };
-    
-    private String _newRelationshipName;
-    private boolean _isFlattenRelationShip;
-    private DMEOEntity _destinationEntity;
-    private boolean _isMultipleRelation;
-    private Vector<DMEOJoin> _joins;
-    private FlattenRelationshipDefinition _flattenRelationshipDefinition;
-    
-    private DMEORelationship _newEORelationship;
-    
-    CreateDMEORelationship (DMEOEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) throws FlexoException 
-    {
-         if (getEntity() != null) {
-        	if (isFlattenRelationShip()) {
-        		logger.info ("Create flatten DMEORelationship with "+getFlattenRelationshipDefinition().getStringRepresentation());
-           		_newEORelationship = DMEORelationship.createsNewFlattenDMEORelationship(
-        				getEntity().getDMModel(), 
-        				getEntity(), 
-        				getNewRelationshipName(), 
-        				getFlattenRelationshipDefinition().getStringRepresentation(), false, // Is
-                                                                                                // read
-                                                                                                // only
-                                                                                                // =
-                                                                                                // false
-                        true, // Is settable = true
-                        DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
-                getEntity().registerProperty(_newEORelationship);
-            } else {
-                logger.info("Create normal DMEORelationship");
-                _newEORelationship = DMEORelationship.createsNewDMEORelationship(getEntity().getDMModel(), getEntity(),
-                        getNewRelationshipName(), false, // Is read only = false
-                        true, // Is settable = true
-                        DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
-                FlexoException exception = null;
-                if (getJoins() == null || getJoins().size() == 0) {
-                        _newEORelationship.setDestinationEntity(getDestinationEntity(), true);
-                } else {
-                    _newEORelationship.setDestinationEntity(getDestinationEntity(), false);
-                    for (DMEOJoin join : getJoins()) {
-                        try {
-                            join.setDMEORelationship(_newEORelationship);
-                            _newEORelationship.addToDMEOJoins(join);
-                        } catch (InvalidJoinException e) {
-                            throw new FlexoException(e.getMessage(), e);
-                        }
+	private String _newRelationshipName;
+	private boolean _isFlattenRelationShip;
+	private DMEOEntity _destinationEntity;
+	private boolean _isMultipleRelation;
+	private Vector<DMEOJoin> _joins;
+	private FlattenRelationshipDefinition _flattenRelationshipDefinition;
 
-                    }
-                }
-                _newEORelationship.setIsToMany(isMultipleRelation());
-        		getEntity().registerProperty(_newEORelationship);
-        	}
-         }
-    }
+	private DMEORelationship _newEORelationship;
 
-   public String getNewRelationshipName()
-   {
-	   if (_newRelationshipName == null) {
-           _newRelationshipName = getEntity().getDMModel().getNextDefautRelationshipName(getEntity());
-	   }
-       return _newRelationshipName;
-   }
-   
-   public DMEOEntity getEntity()
-   {
-       return getFocusedObject();
-   }
+	CreateDMEORelationship(DMEOEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public DMEORelationship getNewEORelationship()
-   {
-       return _newEORelationship;
-   }
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		if (getEntity() != null) {
+			if (isFlattenRelationShip()) {
+				logger.info("Create flatten DMEORelationship with " + getFlattenRelationshipDefinition().getStringRepresentation());
+				_newEORelationship = DMEORelationship.createsNewFlattenDMEORelationship(getEntity().getDMModel(), getEntity(),
+						getNewRelationshipName(), getFlattenRelationshipDefinition().getStringRepresentation(), false, // Is
+																														// read
+																														// only
+																														// =
+																														// false
+						true, // Is settable = true
+						DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+				getEntity().registerProperty(_newEORelationship);
+			} else {
+				logger.info("Create normal DMEORelationship");
+				_newEORelationship = DMEORelationship.createsNewDMEORelationship(getEntity().getDMModel(), getEntity(),
+						getNewRelationshipName(), false, // Is read only = false
+						true, // Is settable = true
+						DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+				FlexoException exception = null;
+				if (getJoins() == null || getJoins().size() == 0) {
+					_newEORelationship.setDestinationEntity(getDestinationEntity(), true);
+				} else {
+					_newEORelationship.setDestinationEntity(getDestinationEntity(), false);
+					for (DMEOJoin join : getJoins()) {
+						try {
+							join.setDMEORelationship(_newEORelationship);
+							_newEORelationship.addToDMEOJoins(join);
+						} catch (InvalidJoinException e) {
+							throw new FlexoException(e.getMessage(), e);
+						}
 
-   public void setNewRelationshipName(String newRelationshipName) {
-	   _newRelationshipName = newRelationshipName;
-   }
+					}
+				}
+				_newEORelationship.setIsToMany(isMultipleRelation());
+				getEntity().registerProperty(_newEORelationship);
+			}
+		}
+	}
 
-   public DMEOEntity getDestinationEntity() {
-	   return _destinationEntity;
-   }
+	public String getNewRelationshipName() {
+		if (_newRelationshipName == null) {
+			_newRelationshipName = getEntity().getDMModel().getNextDefautRelationshipName(getEntity());
+		}
+		return _newRelationshipName;
+	}
 
-   public void setDestinationEntity(DMEOEntity destinationEntity) {
-	   _destinationEntity = destinationEntity;
-   }
+	public DMEOEntity getEntity() {
+		return getFocusedObject();
+	}
 
-   public FlattenRelationshipDefinition getFlattenRelationshipDefinition() {
-	   return _flattenRelationshipDefinition;
-   }
+	public DMEORelationship getNewEORelationship() {
+		return _newEORelationship;
+	}
 
-   public void setFlattenRelationshipDefinition(
-		   FlattenRelationshipDefinition flattenRelationshipDefinition) {
-	   _flattenRelationshipDefinition = flattenRelationshipDefinition;
-   }
+	public void setNewRelationshipName(String newRelationshipName) {
+		_newRelationshipName = newRelationshipName;
+	}
 
-   public boolean isFlattenRelationShip() {
-	   return _isFlattenRelationShip;
-   }
+	public DMEOEntity getDestinationEntity() {
+		return _destinationEntity;
+	}
 
-   public void setFlattenRelationShip(boolean isFlattenRelationShip) {
-	   _isFlattenRelationShip = isFlattenRelationShip;
-   }
+	public void setDestinationEntity(DMEOEntity destinationEntity) {
+		_destinationEntity = destinationEntity;
+	}
 
-   public Vector<DMEOJoin> getJoins() {
-	   return _joins;
-   }
+	public FlattenRelationshipDefinition getFlattenRelationshipDefinition() {
+		return _flattenRelationshipDefinition;
+	}
 
-   public void setJoins(Vector<DMEOJoin> joins) {
-	   _joins = joins;
-   }
+	public void setFlattenRelationshipDefinition(FlattenRelationshipDefinition flattenRelationshipDefinition) {
+		_flattenRelationshipDefinition = flattenRelationshipDefinition;
+	}
 
-   public boolean isMultipleRelation() {
-	   return _isMultipleRelation;
-   }
+	public boolean isFlattenRelationShip() {
+		return _isFlattenRelationShip;
+	}
 
-   public void setMultipleRelation(boolean isMultipleRelation) {
-	   _isMultipleRelation = isMultipleRelation;
-   }
+	public void setFlattenRelationShip(boolean isFlattenRelationShip) {
+		_isFlattenRelationShip = isFlattenRelationShip;
+	}
+
+	public Vector<DMEOJoin> getJoins() {
+		return _joins;
+	}
+
+	public void setJoins(Vector<DMEOJoin> joins) {
+		_joins = joins;
+	}
+
+	public boolean isMultipleRelation() {
+		return _isMultipleRelation;
+	}
+
+	public void setMultipleRelation(boolean isMultipleRelation) {
+		_isMultipleRelation = isMultipleRelation;
+	}
 
 }

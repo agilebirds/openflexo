@@ -36,145 +36,131 @@ import org.openflexo.foundation.wkf.ws.AbstractMessageDefinition;
 import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.foundation.wkf.ws.MessageBindings;
 
-
 /**
- * Abstract edge used to link FlexoNode with ports or portmaps and carrying a
- * message
+ * Abstract edge used to link FlexoNode with ports or portmaps and carrying a message
  * 
  * @author sguerin
  * 
  */
-public abstract class MessageEdge<S extends AbstractNode, E extends AbstractNode> extends FlexoPostCondition<S,E> implements Bindable
-{
+public abstract class MessageEdge<S extends AbstractNode, E extends AbstractNode> extends FlexoPostCondition<S, E> implements Bindable {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(MessageEdge.class.getPackage().getName());
 
-    private MessageBindings _inputMessage = null;
+	private MessageBindings _inputMessage = null;
 
-    private MessageBindings _outputMessage = null;
+	private MessageBindings _outputMessage = null;
 
-    /**
-     * Default constructor
-     */
-    public MessageEdge(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public MessageEdge(FlexoProcess process) {
+		super(process);
+	}
 
-    @Override
-	public FlexoLevel getLevel()
-    {
-        return FlexoLevel.ACTIVITY;
-    }
+	@Override
+	public FlexoLevel getLevel() {
+		return FlexoLevel.ACTIVITY;
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.WKF.MESSAGE_EDGE_INSPECTOR;
-    }
-    
-    public abstract FlexoPort getFlexoPort();
-    
-    public MessageBindings getInputMessage()
-    {
-        if (getInputMessageDefinition() != null && isInputPort() && (_inputMessage == null)) {
-            _inputMessage = new MessageBindings(this, getInputMessageDefinition());
-        }
-        return _inputMessage;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WKF.MESSAGE_EDGE_INSPECTOR;
+	}
 
-    public void setInputMessage(MessageBindings messageBindings)
-    {
-        messageBindings.setMessageDefinition(getInputMessageDefinition());
-        messageBindings.setMessageEdge(this);
-        _inputMessage = messageBindings;
-    }
+	public abstract FlexoPort getFlexoPort();
 
-    public MessageBindings getOutputMessage()
-    {
-        if (getOutputMessageDefinition() != null && isOutputPort() && (_outputMessage == null)) {
-            _outputMessage = new MessageBindings(this, getOutputMessageDefinition());
-        }
-        return _outputMessage;
-    }
+	public MessageBindings getInputMessage() {
+		if (getInputMessageDefinition() != null && isInputPort() && (_inputMessage == null)) {
+			_inputMessage = new MessageBindings(this, getInputMessageDefinition());
+		}
+		return _inputMessage;
+	}
 
-    public void setOutputMessage(MessageBindings messageBindings)
-    {
-        messageBindings.setMessageDefinition(getOutputMessageDefinition());
-        messageBindings.setMessageEdge(this);
-        _outputMessage = messageBindings;
-    }
+	public void setInputMessage(MessageBindings messageBindings) {
+		messageBindings.setMessageDefinition(getInputMessageDefinition());
+		messageBindings.setMessageEdge(this);
+		_inputMessage = messageBindings;
+	}
 
-    public boolean getHasInputMessage()
-    {
-        return getInputMessageDefinition() != null;
-    }
+	public MessageBindings getOutputMessage() {
+		if (getOutputMessageDefinition() != null && isOutputPort() && (_outputMessage == null)) {
+			_outputMessage = new MessageBindings(this, getOutputMessageDefinition());
+		}
+		return _outputMessage;
+	}
 
-    public void setHasInputMessage()
-    {
-        // Read-only property
-    }
+	public void setOutputMessage(MessageBindings messageBindings) {
+		messageBindings.setMessageDefinition(getOutputMessageDefinition());
+		messageBindings.setMessageEdge(this);
+		_outputMessage = messageBindings;
+	}
 
-    public boolean getHasOutputMessage()
-    {
-        return getOutputMessageDefinition() != null;
-    }
+	public boolean getHasInputMessage() {
+		return getInputMessageDefinition() != null;
+	}
 
-    public void setHasOutputMessage()
-    {
-        // Read-only property
-    }
+	public void setHasInputMessage() {
+		// Read-only property
+	}
 
-    public abstract boolean isInputPort();
+	public boolean getHasOutputMessage() {
+		return getOutputMessageDefinition() != null;
+	}
 
-    public abstract boolean isOutputPort();
+	public void setHasOutputMessage() {
+		// Read-only property
+	}
 
-    public abstract AbstractMessageDefinition getInputMessageDefinition();
+	public abstract boolean isInputPort();
 
-    public abstract AbstractMessageDefinition getOutputMessageDefinition();
-  
-    public void lookupMessageDefinition()
-    {
-       	if (_inputMessage != null)
-            _inputMessage.setMessageDefinition(getInputMessageDefinition());
-        if (_outputMessage != null)
-            _outputMessage.setMessageDefinition(getOutputMessageDefinition());
+	public abstract boolean isOutputPort();
 
-    }
- 
-    /**
-     * Return a Vector of all embedded WKFObjects
-     * 
-     * @return a Vector of WKFObject instances
-     */
-    @Override
-	public Vector<WKFObject> getAllEmbeddedWKFObjects()
-    {
-        Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
-         if (getInputMessage() != null)
-            returned.add(getInputMessage());
-        if (getOutputMessage() != null)
-            returned.add(getOutputMessage());
-        return returned;
-    }
+	public abstract AbstractMessageDefinition getInputMessageDefinition();
 
- 
-    public static class MessageEdgeCannotBeLinkedWithGateway extends
-	ValidationRule<MessageEdgeCannotBeLinkedWithGateway,MessageEdge<AbstractNode,AbstractNode>> {
+	public abstract AbstractMessageDefinition getOutputMessageDefinition();
+
+	public void lookupMessageDefinition() {
+		if (_inputMessage != null) {
+			_inputMessage.setMessageDefinition(getInputMessageDefinition());
+		}
+		if (_outputMessage != null) {
+			_outputMessage.setMessageDefinition(getOutputMessageDefinition());
+		}
+
+	}
+
+	/**
+	 * Return a Vector of all embedded WKFObjects
+	 * 
+	 * @return a Vector of WKFObject instances
+	 */
+	@Override
+	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
+		Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
+		if (getInputMessage() != null) {
+			returned.add(getInputMessage());
+		}
+		if (getOutputMessage() != null) {
+			returned.add(getOutputMessage());
+		}
+		return returned;
+	}
+
+	public static class MessageEdgeCannotBeLinkedWithGateway extends
+			ValidationRule<MessageEdgeCannotBeLinkedWithGateway, MessageEdge<AbstractNode, AbstractNode>> {
 		public MessageEdgeCannotBeLinkedWithGateway() {
-			super(MessageEdge.class,
-					"MessageEdgeCannotBeLinkedWithGateway");
+			super(MessageEdge.class, "MessageEdgeCannotBeLinkedWithGateway");
 		}
 
 		@Override
-		public ValidationIssue<MessageEdgeCannotBeLinkedWithGateway,MessageEdge<AbstractNode,AbstractNode>> applyValidation(MessageEdge<AbstractNode,AbstractNode> post) {
+		public ValidationIssue<MessageEdgeCannotBeLinkedWithGateway, MessageEdge<AbstractNode, AbstractNode>> applyValidation(
+				MessageEdge<AbstractNode, AbstractNode> post) {
 			if (post.getStartNode() instanceof OperatorNode || post.getEndNode() instanceof OperatorNode) {
-				return new ValidationWarning<MessageEdgeCannotBeLinkedWithGateway,MessageEdge<AbstractNode,AbstractNode>>(
-						this, post,
-				"MessageEdgeCannotBeLinkedWithGateway");
+				return new ValidationWarning<MessageEdgeCannotBeLinkedWithGateway, MessageEdge<AbstractNode, AbstractNode>>(this, post,
+						"MessageEdgeCannotBeLinkedWithGateway");
 			}
 			return null;
 		}
 	}
- }
+}

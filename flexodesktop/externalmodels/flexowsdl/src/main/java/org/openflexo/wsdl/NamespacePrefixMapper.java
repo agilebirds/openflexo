@@ -22,26 +22,26 @@ package org.openflexo.wsdl;
 import java.util.Hashtable;
 
 public class NamespacePrefixMapper {
-	private Hashtable<String,String> nameToPrefix=new Hashtable<String,String>();
-	private int currentNS=0;
-	
+	private Hashtable<String, String> nameToPrefix = new Hashtable<String, String>();
+	private int currentNS = 0;
+
 	public String getPrefixForNamespace(String namespace) {
 		if (nameToPrefix.containsKey(namespace)) {
 			return nameToPrefix.get(namespace);
+		} else {
+			return null;
 		}
-		else return null;
 	}
-	
+
 	public void registerPrefixForNamespace(String namespace, String prefix) {
 		nameToPrefix.put(namespace, prefix);
 	}
-	
+
 	public void registerNamespace(String namespace) {
-		if (! nameToPrefix.containsKey(namespace)) {
-			System.out.println("registering namespace : "+namespace);
-			registerPrefixForNamespace(namespace,"ns"+currentNS++);
+		if (!nameToPrefix.containsKey(namespace)) {
+			System.out.println("registering namespace : " + namespace);
+			registerPrefixForNamespace(namespace, "ns" + currentNS++);
 		}
 	}
-	
-	
+
 }

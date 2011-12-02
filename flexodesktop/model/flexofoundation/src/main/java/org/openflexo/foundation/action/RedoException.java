@@ -24,16 +24,14 @@ import org.openflexo.foundation.FlexoException;
 public class RedoException extends FlexoException {
 
 	private FlexoException _cause;
-	
-	public RedoException(FlexoException cause)
-	{
-		super("undo_exception","undo_failed_because_unexpected_exception_has_raised");
+
+	public RedoException(FlexoException cause) {
+		super("undo_exception", "undo_failed_because_unexpected_exception_has_raised");
 		_cause = cause;
 	}
-	
+
 	@Override
-	public FlexoException getCause()
-	{
+	public FlexoException getCause() {
 		return _cause;
 	}
 

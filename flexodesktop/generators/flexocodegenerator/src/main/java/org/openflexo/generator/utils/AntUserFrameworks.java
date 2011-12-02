@@ -33,75 +33,72 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
-
 public class AntUserFrameworks extends MetaFileGenerator {
 
-	private static final Logger logger = FlexoLogger
-			.getLogger(AntUserFrameworks.class.getPackage().getName());
-	
-	private static final String FILE_NAME="ant.frameworks.user.home.manual";
-    
-    private static final String IDENTIFIER = "WO_PROJECT_ANT_FRAMEWORKS_USER";
-	
+	private static final Logger logger = FlexoLogger.getLogger(AntUserFrameworks.class.getPackage().getName());
+
+	private static final String FILE_NAME = "ant.frameworks.user.home.manual";
+
+	private static final String IDENTIFIER = "WO_PROJECT_ANT_FRAMEWORKS_USER";
+
 	public AntUserFrameworks(ProjectGenerator projectGenerator) {
 		super(projectGenerator, FileFormat.XML, ResourceType.TEXT_FILE, FILE_NAME, IDENTIFIER);
 	}
- 
 
-    /**
-     * Overrides generate
-     * @see org.openflexo.generator.CGGenerator#generate(boolean)
-     */
-    @Override
-    public void generate(boolean forceRegenerate)
-    {
-        if (logger.isLoggable(Level.INFO)) {
-			logger.info("Generating "+FILE_NAME);
+	/**
+	 * Overrides generate
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#generate(boolean)
+	 */
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Generating " + FILE_NAME);
 		}
-        if (!forceRegenerate && !needsGeneration()) {
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
 		}
-        try {
-        	refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-            String generated = merge("AntUserFrameworks.vm", defaultContext());
-            generatedCode = new GeneratedTextResource(FILE_NAME, generated);
-            stopGeneration();
-        } catch (GenerationException e) {
-            setGenerationException(e);
-        } catch (Exception e) {
-            setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-        }
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			String generated = merge("AntUserFrameworks.vm", defaultContext());
+			generatedCode = new GeneratedTextResource(FILE_NAME, generated);
+			stopGeneration();
+		} catch (GenerationException e) {
+			setGenerationException(e);
+		} catch (Exception e) {
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		}
 
-    }
+	}
 
-    /**
-     * Overrides getGeneratorLogger
-     * @see org.openflexo.generator.CGGenerator#getGeneratorLogger()
-     */
-    @Override
-    public Logger getGeneratorLogger()
-    {
-        return logger;
-    }
+	/**
+	 * Overrides getGeneratorLogger
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#getGeneratorLogger()
+	 */
+	@Override
+	public Logger getGeneratorLogger() {
+		return logger;
+	}
 
-    /**
-     * Overrides getRelativePath
-     * @see org.openflexo.generator.FlexoTextResourceGenerator#getRelativePath()
-     */
-    @Override
-	public String getRelativePath()
-    {
-        return ResourceGenerator.WO_PROJECT_RELATIVE_PATH;
-    }
+	/**
+	 * Overrides getRelativePath
+	 * 
+	 * @see org.openflexo.generator.FlexoTextResourceGenerator#getRelativePath()
+	 */
+	@Override
+	public String getRelativePath() {
+		return ResourceGenerator.WO_PROJECT_RELATIVE_PATH;
+	}
 
-    /**
-     * Overrides getSymbolicDirectory
-     * @see org.openflexo.generator.FlexoTextResourceGenerator#getSymbolicDirectory(org.openflexo.foundation.cg.CGRepository)
-     */
-    @Override
-	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository)
-    {
-        return repository.getProjectSymbolicDirectory();
-    }
+	/**
+	 * Overrides getSymbolicDirectory
+	 * 
+	 * @see org.openflexo.generator.FlexoTextResourceGenerator#getSymbolicDirectory(org.openflexo.foundation.cg.CGRepository)
+	 */
+	@Override
+	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
+		return repository.getProjectSymbolicDirectory();
+	}
 }

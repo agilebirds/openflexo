@@ -33,43 +33,31 @@ import org.openflexo.foundation.ws.WSPortTypeFolder;
 import org.openflexo.foundation.ws.WSRepository;
 import org.openflexo.foundation.ws.WSRepositoryFolder;
 
+public class WSBrowserElementFactory implements BrowserElementFactory {
+	@Override
+	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
 
-public class WSBrowserElementFactory implements BrowserElementFactory
-{
-    @Override
-	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-    {
+		if (object instanceof FlexoWSLibrary) {
+			return new WSLibraryElement((FlexoWSLibrary) object, browser, parent);
+		} else if (object instanceof ExternalWSFolder) {
+			return new ExternalWSFolderElement((ExternalWSFolder) object, browser, parent);
+		} else if (object instanceof InternalWSFolder) {
+			return new InternalWSFolderElement((InternalWSFolder) object, browser, parent);
+		} else if (object instanceof ExternalWSService) {
+			return new ExternalWSServiceElement((ExternalWSService) object, browser, parent);
+		} else if (object instanceof InternalWSService) {
+			return new InternalWSServiceElement((InternalWSService) object, browser, parent);
+		} else if (object instanceof WSPortTypeFolder) {
+			return new WSPortTypeFolderElement((WSPortTypeFolder) object, browser, parent);
+		} else if (object instanceof WSRepositoryFolder) {
+			return new WSRepositoryFolderElement((WSRepositoryFolder) object, browser, parent);
+		} else if (object instanceof WSPortType) {
+			return new WSPortTypeElement((WSPortType) object, browser, parent);
+		} else if (object instanceof WSRepository) {
+			return new WSRepositoryElement((WSRepository) object, browser, parent);
+		}
 
-        if (object instanceof FlexoWSLibrary) {
-        	return new WSLibraryElement((FlexoWSLibrary) object, browser,parent);
-        }
-        else if (object instanceof ExternalWSFolder) {
-        	return new ExternalWSFolderElement((ExternalWSFolder) object, browser,parent);
-        }
-        else if (object instanceof InternalWSFolder) {
-        	return new InternalWSFolderElement((InternalWSFolder) object, browser,parent);
-        }
-        else if (object instanceof ExternalWSService) {
-        	return new ExternalWSServiceElement((ExternalWSService) object, browser,parent);
-        }
-        else if (object instanceof InternalWSService) {
-        	return new InternalWSServiceElement((InternalWSService) object, browser,parent);
-        }
-        else if (object instanceof WSPortTypeFolder) {
-        	return new WSPortTypeFolderElement((WSPortTypeFolder) object, browser,parent);
-        }
-        else if (object instanceof WSRepositoryFolder) {
-        	return new WSRepositoryFolderElement((WSRepositoryFolder) object, browser,parent);
-        }
-        else if (object instanceof WSPortType) {
-        	return new WSPortTypeElement((WSPortType) object, browser,parent);
-        }
-        else if (object instanceof WSRepository) {
-        	return new WSRepositoryElement((WSRepository) object, browser,parent);
-        }
-
-        return null;
-    }
-
+		return null;
+	}
 
 }

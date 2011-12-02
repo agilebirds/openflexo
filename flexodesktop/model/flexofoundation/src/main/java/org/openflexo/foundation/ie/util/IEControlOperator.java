@@ -30,272 +30,237 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
  * @author gpolet
  * 
  */
-public abstract class IEControlOperator extends FlexoObject implements StringConvertable,
-        ChoiceList
-{
+public abstract class IEControlOperator extends FlexoObject implements StringConvertable, ChoiceList {
 
-    private static final Logger logger = Logger.getLogger(IEControlOperator.class.getPackage()
-            .getName());
+	private static final Logger logger = Logger.getLogger(IEControlOperator.class.getPackage().getName());
 
-    public static final IEControlOperator SMALLER = new SmallerOperator();
+	public static final IEControlOperator SMALLER = new SmallerOperator();
 
-    public static final IEControlOperator GREATER = new GreaterOperator();
+	public static final IEControlOperator GREATER = new GreaterOperator();
 
-    public static final IEControlOperator GREATER_OR_EQUAL = new GreaterOrEqualOperator();
+	public static final IEControlOperator GREATER_OR_EQUAL = new GreaterOrEqualOperator();
 
-    public static final IEControlOperator SMALLER_OR_EQUAL = new SmallerOrEqualOperator();
+	public static final IEControlOperator SMALLER_OR_EQUAL = new SmallerOrEqualOperator();
 
-    public static final IEControlOperator EQUAL = new EqualOperator();
+	public static final IEControlOperator EQUAL = new EqualOperator();
 
-    public static final IEControlOperator DIFFERENT = new DifferentOperator();
-    
-    public static final IEControlOperator CASEINSENSITIVELIKE = new CaseInsensitiveLikeOperator();
-    
-    public static final IEControlOperator LIKE = new LikeOperator();
+	public static final IEControlOperator DIFFERENT = new DifferentOperator();
 
-    private static final Vector<IEControlOperator> availableValues;
+	public static final IEControlOperator CASEINSENSITIVELIKE = new CaseInsensitiveLikeOperator();
 
-    static {
-        availableValues = new Vector<IEControlOperator>();
-        availableValues.add(SMALLER);
-        availableValues.add(SMALLER_OR_EQUAL);
-        availableValues.add(GREATER);
-        availableValues.add(GREATER_OR_EQUAL);
-        availableValues.add(EQUAL);
-        availableValues.add(DIFFERENT);
-        availableValues.add(CASEINSENSITIVELIKE);
-        availableValues.add(LIKE);
-    }
+	public static final IEControlOperator LIKE = new LikeOperator();
 
-    public static final StringEncoder.Converter<IEControlOperator> controlOperatorConverter = new Converter<IEControlOperator>(
-            IEControlOperator.class) {
+	private static final Vector<IEControlOperator> availableValues;
 
-        @Override
-		public IEControlOperator convertFromString(String value)
-        {
-            return get(value);
-        }
+	static {
+		availableValues = new Vector<IEControlOperator>();
+		availableValues.add(SMALLER);
+		availableValues.add(SMALLER_OR_EQUAL);
+		availableValues.add(GREATER);
+		availableValues.add(GREATER_OR_EQUAL);
+		availableValues.add(EQUAL);
+		availableValues.add(DIFFERENT);
+		availableValues.add(CASEINSENSITIVELIKE);
+		availableValues.add(LIKE);
+	}
 
-        @Override
-		public String convertToString(IEControlOperator value)
-        {
-            return value.getName();
-        }
+	public static final StringEncoder.Converter<IEControlOperator> controlOperatorConverter = new Converter<IEControlOperator>(
+			IEControlOperator.class) {
 
-    };
+		@Override
+		public IEControlOperator convertFromString(String value) {
+			return get(value);
+		}
 
-    public static IEControlOperator get(String name)
-    {
-        if (name == null)
-            return null;
-        Enumeration en = availableValues.elements();
-        while (en.hasMoreElements()) {
-            IEControlOperator op = (IEControlOperator) en.nextElement();
-            if (name.equals(op.getName()))
-                return op;
-        }
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find an IEControlOperator named: " + name);
-        return null;
-    }
+		@Override
+		public String convertToString(IEControlOperator value) {
+			return value.getName();
+		}
 
-    public String getName(){return getSign();}
+	};
 
-    public abstract String getSign();
-    @Override
-	public String toString(){
-    	return getSign();
-    }
-    public static class SmallerOperator extends IEControlOperator
-    {
-        protected SmallerOperator()
-        {
-        }
+	public static IEControlOperator get(String name) {
+		if (name == null) {
+			return null;
+		}
+		Enumeration en = availableValues.elements();
+		while (en.hasMoreElements()) {
+			IEControlOperator op = (IEControlOperator) en.nextElement();
+			if (name.equals(op.getName())) {
+				return op;
+			}
+		}
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Could not find an IEControlOperator named: " + name);
+		}
+		return null;
+	}
 
-        @Override
-		public String getName()
-        {
-            return "Smaller";
-        }
+	public String getName() {
+		return getSign();
+	}
 
-        @Override
-		public String getSign()
-        {
-            return "<";
-        }
+	public abstract String getSign();
 
-    }
+	@Override
+	public String toString() {
+		return getSign();
+	}
 
-    public static class SmallerOrEqualOperator extends IEControlOperator
-    {
-        protected SmallerOrEqualOperator()
-        {
-        }
+	public static class SmallerOperator extends IEControlOperator {
+		protected SmallerOperator() {
+		}
 
-        @Override
-		public String getName()
-        {
-            return "Smaller Or Equal";
-        }
+		@Override
+		public String getName() {
+			return "Smaller";
+		}
 
-        @Override
-		public String getSign()
-        {
-            return "<=";
-        }
+		@Override
+		public String getSign() {
+			return "<";
+		}
 
-    }
+	}
 
-    public static class GreaterOperator extends IEControlOperator
-    {
-        protected GreaterOperator()
-        {
-        }
+	public static class SmallerOrEqualOperator extends IEControlOperator {
+		protected SmallerOrEqualOperator() {
+		}
 
-        @Override
-		public String getName()
-        {
-            return "Greater";
-        }
+		@Override
+		public String getName() {
+			return "Smaller Or Equal";
+		}
 
-        @Override
-		public String getSign()
-        {
-            return ">";
-        }
+		@Override
+		public String getSign() {
+			return "<=";
+		}
 
-    }
+	}
 
-    public static class GreaterOrEqualOperator extends IEControlOperator
-    {
-        protected GreaterOrEqualOperator()
-        {
-        }
+	public static class GreaterOperator extends IEControlOperator {
+		protected GreaterOperator() {
+		}
 
-        @Override
-		public String getName()
-        {
-            return "Greater Or Equal";
-        }
+		@Override
+		public String getName() {
+			return "Greater";
+		}
 
-        @Override
-		public String getSign()
-        {
-            return ">=";
-        }
+		@Override
+		public String getSign() {
+			return ">";
+		}
 
-    }
+	}
 
-    public static class EqualOperator extends IEControlOperator
-    {
-        protected EqualOperator()
-        {
-        }
+	public static class GreaterOrEqualOperator extends IEControlOperator {
+		protected GreaterOrEqualOperator() {
+		}
 
-        @Override
-		public String getName()
-        {
-            return "Equal";
-        }
+		@Override
+		public String getName() {
+			return "Greater Or Equal";
+		}
 
-        @Override
-		public String getSign()
-        {
-            return "=";
-        }
+		@Override
+		public String getSign() {
+			return ">=";
+		}
 
-    }
+	}
 
-    public static class DifferentOperator extends IEControlOperator
-    {
-        protected DifferentOperator()
-        {
-        }
+	public static class EqualOperator extends IEControlOperator {
+		protected EqualOperator() {
+		}
 
-        @Override
-		public String getName()
-        {
-            return "Different";
-        }
+		@Override
+		public String getName() {
+			return "Equal";
+		}
 
-        @Override
-		public String getSign()
-        {
-            return "!=";
-        }
+		@Override
+		public String getSign() {
+			return "=";
+		}
 
-    }
+	}
 
-    
-    public static class CaseInsensitiveLikeOperator extends IEControlOperator
-    {
-        protected CaseInsensitiveLikeOperator()
-        {
-        }
+	public static class DifferentOperator extends IEControlOperator {
+		protected DifferentOperator() {
+		}
 
-        @Override
-		public String getName()
-        {
-            return "caseinsensitivelike";
-        }
+		@Override
+		public String getName() {
+			return "Different";
+		}
 
-        @Override
-		public String getSign()
-        {
-            return "caseinsensitivelike";
-        }
+		@Override
+		public String getSign() {
+			return "!=";
+		}
 
-    }
-    
-    public static class LikeOperator extends IEControlOperator
-    {
-        protected LikeOperator()
-        {
-        }
+	}
 
-        @Override
-		public String getName()
-        {
-            return "like";
-        }
+	public static class CaseInsensitiveLikeOperator extends IEControlOperator {
+		protected CaseInsensitiveLikeOperator() {
+		}
 
-        @Override
-		public String getSign()
-        {
-            return "like";
-        }
+		@Override
+		public String getName() {
+			return "caseinsensitivelike";
+		}
 
-    }
-    /**
-     * Overrides getConverter
-     * 
-     * @see org.openflexo.xmlcode.StringConvertable#getConverter()
-     */
-    @Override
-	public Converter getConverter()
-    {
-        return controlOperatorConverter;
-    }
+		@Override
+		public String getSign() {
+			return "caseinsensitivelike";
+		}
 
-    /**
-     * Overrides getAvailableValues
-     * 
-     * @see org.openflexo.kvc.ChoiceList#getAvailableValues()
-     */
-    @Override
-	public Vector getAvailableValues()
-    {
-        return availableValues;
-    }
+	}
 
-    public static Vector availableValues()
-    {
-        return SMALLER.getAvailableValues();
-    }
+	public static class LikeOperator extends IEControlOperator {
+		protected LikeOperator() {
+		}
+
+		@Override
+		public String getName() {
+			return "like";
+		}
+
+		@Override
+		public String getSign() {
+			return "like";
+		}
+
+	}
+
+	/**
+	 * Overrides getConverter
+	 * 
+	 * @see org.openflexo.xmlcode.StringConvertable#getConverter()
+	 */
+	@Override
+	public Converter getConverter() {
+		return controlOperatorConverter;
+	}
+
+	/**
+	 * Overrides getAvailableValues
+	 * 
+	 * @see org.openflexo.kvc.ChoiceList#getAvailableValues()
+	 */
+	@Override
+	public Vector getAvailableValues() {
+		return availableValues;
+	}
+
+	public static Vector availableValues() {
+		return SMALLER.getAvailableValues();
+	}
 
 }

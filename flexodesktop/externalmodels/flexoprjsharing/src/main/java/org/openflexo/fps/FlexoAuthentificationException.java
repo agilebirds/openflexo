@@ -21,19 +21,16 @@ package org.openflexo.fps;
 
 import org.openflexo.foundation.FlexoException;
 
-public class FlexoAuthentificationException extends FlexoException 
-{
+public class FlexoAuthentificationException extends FlexoException {
 	private CVSRepository _repository;
-	
-	public FlexoAuthentificationException(CVSRepository repository)
-	{
+
+	public FlexoAuthentificationException(CVSRepository repository) {
 		super();
 		_repository = repository;
 	}
 
-	public CVSRepository getRepository()
-	{
+	public CVSRepository getRepository() {
 		return _repository;
 	}
-	
+
 }

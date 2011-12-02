@@ -40,169 +40,172 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
 import org.openflexo.toolbox.FileUtils;
 
+public class MonitoringComponentDefinition extends PartialComponentDefinition implements Serializable {
+	private static final Logger logger = Logger.getLogger(MonitoringComponentDefinition.class.getPackage().getName());
 
-public class MonitoringComponentDefinition extends PartialComponentDefinition implements Serializable
-{
-    private static final Logger logger = Logger.getLogger(MonitoringComponentDefinition.class.getPackage().getName());
+	/**
+	 * Constructor used during deserialization
+	 * 
+	 * @throws DuplicateResourceException
+	 */
+	private FlexoProcess _process;
+	private FlexoModelObjectReference<FlexoProcess> processReference;
 
-    /**
-     * Constructor used during deserialization
-     * 
-     * @throws DuplicateResourceException
-     */
-    private FlexoProcess _process;
-    private FlexoModelObjectReference<FlexoProcess> processReference;
-    
-    public MonitoringComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException
-    {
-        this(null, builder.componentLibrary, null, builder.getProject(), null);
-        initializeDeserialization(builder);
-    }
+	public MonitoringComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException {
+		this(null, builder.componentLibrary, null, builder.getProject(), null);
+		initializeDeserialization(builder);
+	}
 
-    public MonitoringComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder, FlexoProject project, FlexoProcess p) throws DuplicateResourceException
-    {
-        super(aComponentName, componentLibrary, aFolder, project);
-        _process = p;
-    }
+	public MonitoringComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject project, FlexoProcess p) throws DuplicateResourceException {
+		super(aComponentName, componentLibrary, aFolder, project);
+		_process = p;
+	}
 
-    public FlexoModelObjectReference<FlexoProcess> getProcessReference(){
-    	if (getProcess()!=null)
-    		return processReference = new FlexoModelObjectReference<FlexoProcess>(getProject(),getProcess());
-    	if (logger.isLoggable(Level.SEVERE))
+	public FlexoModelObjectReference<FlexoProcess> getProcessReference() {
+		if (getProcess() != null) {
+			return processReference = new FlexoModelObjectReference<FlexoProcess>(getProject(), getProcess());
+		}
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("MonitoringComponent has no process!");
-    	return processReference;
-    }
-    
-    public void setProcessReference(FlexoModelObjectReference<FlexoProcess> ref){
-    	this.processReference = ref;
-    }
-    
-    public FlexoProcess getProcess(){
-    	if(_process==null && processReference!=null) { 
-    		_process = processReference.getObject(true);
-    		if (_process!=null)
-    			_process.addObserver(this);
-    	}
-    	return _process;
-    }
-    
-    public void setProcess(FlexoProcess process){
-    	_process = process;
-    	processReference = null;
-    }
-    
-    @Override
-    public IEMonitoringComponent createNewComponent() {
-    	return new IEMonitoringComponent(this,getProject());
-    }
+		}
+		return processReference;
+	}
 
-    @Override
-	public FlexoComponentResource getComponentResource(boolean createIfNotExists)
-    {
-        if (getProject() != null && createIfNotExists) {
-            FlexoComponentResource returned = getProject().getFlexoMonitoringScreenResource(getName());
-            if (returned == null) {
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Creating new monitoring component resource !");
-                // FlexoProcessResource processRes =
-                // getProject().getFlexoProcessResource(getProcess().getName());
-                File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(), this), _componentName
-                        + ".woxml");
-                FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                FlexoMonitoringScreenResource compRes=null;
-                try {
-                    compRes = new FlexoMonitoringScreenResource(getProject(), _componentName, getProject()
-                            .getFlexoComponentLibraryResource(), resourceComponentFile);
-                } catch (InvalidFileNameException e1) {
-                    boolean ok = false;
-                    for (int i = 0; i < 100 && !ok; i++) {
-                        try {
-                            componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(), this), FileUtils.getValidFileName(_componentName)+i
-                                    + ".woxml");
-                            resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                            compRes = new FlexoMonitoringScreenResource(getProject(), _componentName, getProject()
-                                    .getFlexoComponentLibraryResource(), resourceComponentFile);
-                            ok = true;
-                        } catch (InvalidFileNameException e) {
-                            
-                        }
-                    }
-                    if (!ok) {
-                        componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(), this), FileUtils.getValidFileName(_componentName)+getFlexoID()
-                                + ".woxml");
-                        resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                        try {
-                            compRes = new FlexoMonitoringScreenResource(getProject(), _componentName, getProject()
-                                    .getFlexoComponentLibraryResource(), resourceComponentFile);
-                        } catch (InvalidFileNameException e) {
-                            if (logger.isLoggable(Level.SEVERE))
-                                logger.severe("This should really not happen.");
-                            return null;
-                        }
-                    }
-                }
-                if (compRes==null)
-                    return null;
-                compRes.setResourceData(createNewComponent());
-                try {
-                    compRes.getResourceData().setFlexoResource(compRes);
-                    getProject().registerResource(compRes);
-                } catch (DuplicateResourceException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                    return null;
-                }
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Registered component " + _componentName + " file: " + componentFile);
-                returned = compRes;
-            }
-            return returned;
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getProject()==null for a ScreenComponentDefinition !");
-        }
-        return null;
-    }
+	public void setProcessReference(FlexoModelObjectReference<FlexoProcess> ref) {
+		this.processReference = ref;
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return "ScreenComponentDefinition.inspector";
-    }
-    
-    @Override
-	public IEMonitoringComponent getWOComponent()
-    {
-        return (IEMonitoringComponent)super.getWOComponent();
-    }
-    
-    @Override
-	public final void delete()
-    {
-        super.delete();
-        deleteObservers();
-    }
+	public FlexoProcess getProcess() {
+		if (_process == null && processReference != null) {
+			_process = processReference.getObject(true);
+			if (_process != null) {
+				_process.addObserver(this);
+			}
+		}
+		return _process;
+	}
 
-    @Override
-	public void update(FlexoObservable o, DataModification arg)
-    {
-    	if (o==_process && arg instanceof ObjectDeleted) {
-    		if (logger.isLoggable(Level.INFO))
-				logger.info("Monitoring screen '"+getName()+"' received delete notification from process "+o);
-    		delete();
-    	}
-    }
+	public void setProcess(FlexoProcess process) {
+		_process = process;
+		processReference = null;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "screen_component_definition";
-    }
-    
+	@Override
+	public IEMonitoringComponent createNewComponent() {
+		return new IEMonitoringComponent(this, getProject());
+	}
+
+	@Override
+	public FlexoComponentResource getComponentResource(boolean createIfNotExists) {
+		if (getProject() != null && createIfNotExists) {
+			FlexoComponentResource returned = getProject().getFlexoMonitoringScreenResource(getName());
+			if (returned == null) {
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Creating new monitoring component resource !");
+				}
+				// FlexoProcessResource processRes =
+				// getProject().getFlexoProcessResource(getProcess().getName());
+				File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
+						this), _componentName + ".woxml");
+				FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+				FlexoMonitoringScreenResource compRes = null;
+				try {
+					compRes = new FlexoMonitoringScreenResource(getProject(), _componentName, getProject()
+							.getFlexoComponentLibraryResource(), resourceComponentFile);
+				} catch (InvalidFileNameException e1) {
+					boolean ok = false;
+					for (int i = 0; i < 100 && !ok; i++) {
+						try {
+							componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject()
+									.getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + i + ".woxml");
+							resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+							compRes = new FlexoMonitoringScreenResource(getProject(), _componentName, getProject()
+									.getFlexoComponentLibraryResource(), resourceComponentFile);
+							ok = true;
+						} catch (InvalidFileNameException e) {
+
+						}
+					}
+					if (!ok) {
+						componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(
+								getProject().getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + getFlexoID()
+								+ ".woxml");
+						resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+						try {
+							compRes = new FlexoMonitoringScreenResource(getProject(), _componentName, getProject()
+									.getFlexoComponentLibraryResource(), resourceComponentFile);
+						} catch (InvalidFileNameException e) {
+							if (logger.isLoggable(Level.SEVERE)) {
+								logger.severe("This should really not happen.");
+							}
+							return null;
+						}
+					}
+				}
+				if (compRes == null) {
+					return null;
+				}
+				compRes.setResourceData(createNewComponent());
+				try {
+					compRes.getResourceData().setFlexoResource(compRes);
+					getProject().registerResource(compRes);
+				} catch (DuplicateResourceException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
+					e.printStackTrace();
+					return null;
+				}
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Registered component " + _componentName + " file: " + componentFile);
+				}
+				returned = compRes;
+			}
+			return returned;
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("getProject()==null for a ScreenComponentDefinition !");
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String getInspectorName() {
+		return "ScreenComponentDefinition.inspector";
+	}
+
+	@Override
+	public IEMonitoringComponent getWOComponent() {
+		return (IEMonitoringComponent) super.getWOComponent();
+	}
+
+	@Override
+	public final void delete() {
+		super.delete();
+		deleteObservers();
+	}
+
+	@Override
+	public void update(FlexoObservable o, DataModification arg) {
+		if (o == _process && arg instanceof ObjectDeleted) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Monitoring screen '" + getName() + "' received delete notification from process " + o);
+			}
+			delete();
+		}
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "screen_component_definition";
+	}
+
 }

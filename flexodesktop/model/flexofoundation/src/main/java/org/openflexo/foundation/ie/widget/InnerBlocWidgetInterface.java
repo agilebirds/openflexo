@@ -24,31 +24,28 @@ import java.util.Vector;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * Implemented by all classes representing widgets that can be the content of a
- * bloc
+ * Implemented by all classes representing widgets that can be the content of a bloc
  * 
  * @author sguerin
  */
 
-public interface InnerBlocWidgetInterface extends XMLSerializable, IWidget
-{
+public interface InnerBlocWidgetInterface extends XMLSerializable, IWidget {
 
-    @Override
+	@Override
 	public void delete();
 
-    @Override
+	@Override
 	public IEObject getParent();
 
-    @Override
+	@Override
 	public void setParent(IEObject parent);
 
 	public Vector<IETextFieldWidget> getAllDateTextfields();
-	
+
 	@Override
 	public Vector<IEHyperlinkWidget> getAllButtonInterface();
-    
-    public void notifyDisplayNeedsRefresh();
+
+	public void notifyDisplayNeedsRefresh();
 
 }

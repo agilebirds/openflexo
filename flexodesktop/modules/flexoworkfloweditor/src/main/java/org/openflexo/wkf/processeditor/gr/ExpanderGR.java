@@ -30,11 +30,11 @@ import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.cp.ConnectorControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -45,7 +45,6 @@ import org.openflexo.foundation.wkf.OperationPetriGraph;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
-
 
 public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepresentation<ExpanderGR.Expander<O>> implements
 		ProcessEditorConstants {

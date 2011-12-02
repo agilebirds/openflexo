@@ -32,60 +32,52 @@ import org.openflexo.foundation.rm.RMNotification;
  * @author sguerin
  * 
  */
-public class ComponentNameChanged extends IEDataModification implements RMNotification
-{
+public class ComponentNameChanged extends IEDataModification implements RMNotification {
 
-    public ComponentDefinition component;
+	public ComponentDefinition component;
 
-    public ComponentNameChanged(ComponentDefinition component, String oldName, String newName)
-    {
-        super(oldName, newName);
-        this.component = component;
-    }
+	public ComponentNameChanged(ComponentDefinition component, String oldName, String newName) {
+		super(oldName, newName);
+		this.component = component;
+	}
 
-    public ComponentNameChanged(String propertyName, ComponentDefinition component, String oldName, String newName)
-    {
-        super(propertyName, oldName, newName);
-        this.component = component;
-    }
+	public ComponentNameChanged(String propertyName, ComponentDefinition component, String oldName, String newName) {
+		super(propertyName, oldName, newName);
+		this.component = component;
+	}
 
-    @Override
-	public boolean forceUpdateWhenUnload()
-    {
-        return true;
-    }
+	@Override
+	public boolean forceUpdateWhenUnload() {
+		return true;
+	}
 
-    @Override
-	public boolean isDeepNotification()
-    {
-        return true;
-    }
+	@Override
+	public boolean isDeepNotification() {
+		return true;
+	}
 
-    @Override
-	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-//    		return true;
-        if ((originResource == component.getComponentLibrary().getFlexoResource()) 
-        			&& ((targetResource instanceof FlexoComponentResource) || ((targetResource instanceof FlexoProcessResource))|| ((targetResource instanceof FlexoNavigationMenuResource)))){
-          return true;
-        } else {
-           return false;
-        }
-    }
+	@Override
+	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
+		// return true;
+		if ((originResource == component.getComponentLibrary().getFlexoResource())
+				&& ((targetResource instanceof FlexoComponentResource) || ((targetResource instanceof FlexoProcessResource)) || ((targetResource instanceof FlexoNavigationMenuResource)))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-        if (originResource == component.getComponentResource()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource) {
+		if (originResource == component.getComponentResource()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-	public String toString()
-    {
-        return "ComponentNameChanged " + oldValue() + "/" + newValue();
-    }
+	@Override
+	public String toString() {
+		return "ComponentNameChanged " + oldValue() + "/" + newValue();
+	}
 }

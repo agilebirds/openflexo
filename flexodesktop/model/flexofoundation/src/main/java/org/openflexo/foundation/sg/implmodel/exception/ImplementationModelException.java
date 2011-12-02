@@ -23,7 +23,7 @@ import org.openflexo.foundation.FlexoException;
 
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 public class ImplementationModelException extends FlexoException {
 

@@ -26,15 +26,13 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
  * 
  * @author sguerin
  */
-public class ComponentLoaded extends IEDataModification
-{
+public class ComponentLoaded extends IEDataModification {
 
-    public ComponentDefinition loadedComponent;
+	public ComponentDefinition loadedComponent;
 
-    public ComponentLoaded(ComponentDefinition component)
-    {
-        super(component, null);
-        loadedComponent = component;
-    }
+	public ComponentLoaded(ComponentDefinition component) {
+		super(component, null);
+		loadedComponent = component;
+	}
 
 }

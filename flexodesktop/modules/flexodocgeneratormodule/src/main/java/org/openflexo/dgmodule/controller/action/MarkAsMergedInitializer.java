@@ -31,57 +31,47 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MarkAsMergedInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MarkAsMergedInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(MarkAsMerged.actionType,actionInitializer);
+	MarkAsMergedInitializer(DGControllerActionInitializer actionInitializer) {
+		super(MarkAsMerged.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<MarkAsMerged> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MarkAsMerged> getDefaultInitializer() {
 		return new FlexoActionInitializer<MarkAsMerged>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsMerged action)
-			{
+			public boolean run(ActionEvent e, MarkAsMerged action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MarkAsMerged> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MarkAsMerged> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MarkAsMerged>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsMerged action)
-			{
+			public boolean run(ActionEvent e, MarkAsMerged action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.MARK_AS_MERGED_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.MARK_AS_MERGED_DISABLED_ICON;
 	}
-
 
 }

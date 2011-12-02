@@ -38,7 +38,6 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEGraphics;
 
-
 public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.Double implements FGEGeometricObject<L> {
 
 	@SuppressWarnings("unused")

@@ -38,16 +38,16 @@ public interface ProcessEditorConstants {
 	public static final Color PORT_REGISTRY_PG_COLOR = new Color(123, 125, 181);
 
 	public static final Color ACTIVITY_PG_COLOR = Color.ORANGE;
-	public static final Color ACTIVITY_PG_BACK_COLOR = new Color(255,255,204);
+	public static final Color ACTIVITY_PG_BACK_COLOR = new Color(255, 255, 204);
 
 	public static final Color OPERATION_PG_COLOR = new Color(107, 162, 132);
-	public static final Color OPERATION_PG_BACK_COLOR = new Color(218,232,225);
+	public static final Color OPERATION_PG_BACK_COLOR = new Color(218, 232, 225);
 
 	public static final Color ACTION_PG_COLOR = new Color(206, 125, 123);
 	public static final Color ACTION_PG_BACK_COLOR = new Color(242, 219, 219);
 
-	//public static final Color ACTIVITY_GROUP_COLOR = new Color(157, 162, 132);
-	//public static final Color ACTIVITY_GROUP_BACK_COLOR = new Color(238,242,225);
+	// public static final Color ACTIVITY_GROUP_COLOR = new Color(157, 162, 132);
+	// public static final Color ACTIVITY_GROUP_BACK_COLOR = new Color(238,242,225);
 
 	// Note: you need at least 3 layers between the layer of a node and a petri graph layer that is on top of it.
 	// Let's say your node is on layer 1, then a pre-condition will be on layer 2 and an incoming edge will be on layer 3, therefore you
@@ -73,11 +73,11 @@ public interface ProcessEditorConstants {
 	public static final int REQUIRED_SPACE_ON_RIGHT_FOR_PALETTE = 25; // Think of palette
 	public static final int REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX = 30; // Think of closing box
 
-	public static final int REQUIRED_SPACE_ON_RIGHT = 10; 
-	public static final int REQUIRED_SPACE_ON_TOP = 10; 
-	public static final int REQUIRED_SPACE_ON_LEFT = 10; 
+	public static final int REQUIRED_SPACE_ON_RIGHT = 10;
+	public static final int REQUIRED_SPACE_ON_TOP = 10;
+	public static final int REQUIRED_SPACE_ON_LEFT = 10;
 	public static final int REQUIRED_SPACE_ON_BOTTOM = 20;
-	
+
 	public static final int PORTMAP_REGISTERY_WIDTH = 30;
 	public static final int PORTMAP_MARGIN = 3;
 

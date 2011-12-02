@@ -19,27 +19,23 @@
  */
 package org.openflexo.kvc;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
- * Interface implemented by classes taking their values in a set of possible
- * values
+ * Interface implemented by classes taking their values in a set of possible values
  * 
- * NOTE: All classes inplementing this interface MUST define a static method
- * called public static Vector availableValues();
+ * NOTE: All classes inplementing this interface MUST define a static method called public static Vector availableValues();
  * 
  * @author sguerin
  * 
  */
-public interface ChoiceList
-{
+public interface ChoiceList {
 
-    /**
-     * Return a Vector of possible values (which must be of the same type as the
-     * one declared as class implemented this interface)
-     * 
-     * @return a Vector of ChoiceList
-     */
-    public Vector getAvailableValues();
+	/**
+	 * Return a Vector of possible values (which must be of the same type as the one declared as class implemented this interface)
+	 * 
+	 * @return a Vector of ChoiceList
+	 */
+	public List<?> getAvailableValues();
 
 }

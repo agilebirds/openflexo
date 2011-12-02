@@ -22,7 +22,6 @@ package org.openflexo.dre.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.action.CreateDocItemFolder;
@@ -40,57 +39,54 @@ public class CreateDocItemFolderInitializer extends ActionInitializer {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDocItemFolderInitializer(DREControllerActionInitializer actionInitializer)
-	{
-		super(CreateDocItemFolder.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DREControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DREControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<CreateDocItemFolder> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<CreateDocItemFolder>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDocItemFolder action)
-            {
-                DocItemFolder parentDocItemFolder = action.getParentDocItemFolder();
-                ParameterDefinition[] parameters = new ParameterDefinition[2];
-                parameters[0] = new TextFieldParameter("newItemFolderIdentifier", "identifier", parentDocItemFolder.getNextDefautItemFolderName());
-                parameters[1] = new TextAreaParameter("description", "description", "");
-                parameters[1].addParameter("columns", "20");
-                AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
-                        null, FlexoLocalization.localizedForKey("create_new_doc_item"), FlexoLocalization.localizedForKey("enter_parameters_for_the_new_doc_item"), parameters);
-                if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                    String newItemFolderIdentifier = (String) dialog.parameterValueWithName("newItemFolderIdentifier");
-                    if (newItemFolderIdentifier == null)
-                        return false;
-                    action.setNewItemFolderIdentifier(newItemFolderIdentifier);
-                    action.setNewItemFolderDescription((String) dialog.parameterValueWithName("description"));
-                    return true;
-                } else {
-                    return false;
-                }
-           }
-        };
+	CreateDocItemFolderInitializer(DREControllerActionInitializer actionInitializer) {
+		super(CreateDocItemFolder.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<CreateDocItemFolder> getDefaultFinalizer() 
-	{
+	@Override
+	protected DREControllerActionInitializer getControllerActionInitializer() {
+		return (DREControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<CreateDocItemFolder> getDefaultInitializer() {
+		return new FlexoActionInitializer<CreateDocItemFolder>() {
+			@Override
+			public boolean run(ActionEvent e, CreateDocItemFolder action) {
+				DocItemFolder parentDocItemFolder = action.getParentDocItemFolder();
+				ParameterDefinition[] parameters = new ParameterDefinition[2];
+				parameters[0] = new TextFieldParameter("newItemFolderIdentifier", "identifier",
+						parentDocItemFolder.getNextDefautItemFolderName());
+				parameters[1] = new TextAreaParameter("description", "description", "");
+				parameters[1].addParameter("columns", "20");
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+						FlexoLocalization.localizedForKey("create_new_doc_item"),
+						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_doc_item"), parameters);
+				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+					String newItemFolderIdentifier = (String) dialog.parameterValueWithName("newItemFolderIdentifier");
+					if (newItemFolderIdentifier == null) {
+						return false;
+					}
+					action.setNewItemFolderIdentifier(newItemFolderIdentifier);
+					action.setNewItemFolderDescription((String) dialog.parameterValueWithName("description"));
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<CreateDocItemFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDocItemFolder>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDocItemFolder action)
-            {
-                DocItemFolder newDocItemFolder = action.getNewDocItemFolder();
-                getControllerActionInitializer().getDREController().getDREBrowser().focusOn(newDocItemFolder);
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDocItemFolder action) {
+				DocItemFolder newDocItemFolder = action.getNewDocItemFolder();
+				getControllerActionInitializer().getDREController().getDREBrowser().focusOn(newDocItemFolder);
+				return true;
+			}
+		};
 	}
 
 }

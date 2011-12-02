@@ -40,7 +40,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
@@ -77,33 +76,31 @@ import org.openflexo.inspector.selection.MultipleSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.logging.FlexoLogger;
 
-public class GeomEditController extends DrawingController<GeometricDrawing> implements TreeSelectionListener
-{
+public class GeomEditController extends DrawingController<GeometricDrawing> implements TreeSelectionListener {
 	private static final Logger logger = FlexoLogger.getLogger(GeomEditController.class.getPackage().getName());
 
 	private JPopupMenu contextualMenu;
 	private GraphicalRepresentation<?> contextualMenuInvoker;
 	private Point contextualMenuClickedPoint;
-	
+
 	private GeometricObject copiedShape;
-	
+
 	private Edition currentEdition = null;
-	
+
 	private DefaultTreeModel treeModel;
-	
+
 	private JTree tree;
 	private JPanel controlPanel;
 	private JPanel availableMethodsPanel;
 	private JLabel editionLabel;
 	private JButton cancelButton;
 	private JLabel positionLabel;
-	
+
 	private String NO_EDITION_STRING = "No edition";
-	
-	public GeomEditController(final GeometricDrawing aDrawing)
-	{
+
+	public GeomEditController(final GeometricDrawing aDrawing) {
 		super(aDrawing);
-		
+
 		// !!!!! TAKE CARE !!!!!
 		// When i tried to activate painting cache,
 		// application was stuck in a call to fillRect() in SunGraphics2D while obtaining cache (print)
@@ -112,62 +109,61 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		// I was disgusted and stopped further investigation, but i strongly recommand not to use cache
 		// in the context of GeomEdit application
 		getPaintManager().disablePaintingCache();
-		
+
 		treeModel = new DefaultTreeModel(aDrawing.getModel());
 		tree = new JTree(treeModel);
 		tree.setCellRenderer(new DefaultTreeCellRenderer() {
 			@Override
-			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
-			{
-				JLabel returned = (JLabel)super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-				if (value instanceof GeometricSet) returned.setText(((GeometricSet)value).getTitle());
-				else if (value instanceof GeometricObject) returned.setText(((GeometricObject)value).name);
+			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf,
+					int row, boolean hasFocus) {
+				JLabel returned = (JLabel) super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+				if (value instanceof GeometricSet) {
+					returned.setText(((GeometricSet) value).getTitle());
+				} else if (value instanceof GeometricObject) {
+					returned.setText(((GeometricObject) value).name);
+				}
 				return returned;
 			}
 		});
 		tree.addTreeSelectionListener(this);
-		
+
 		controlPanel = new JPanel(new BorderLayout());
-		availableMethodsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,5,0));
-		controlPanel.add(availableMethodsPanel,BorderLayout.WEST);
+		availableMethodsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		controlPanel.add(availableMethodsPanel, BorderLayout.WEST);
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				resetCurrentInput();
 			}
 		});
-		controlPanel.add(cancelButton,BorderLayout.EAST);
-		
-		controlPanel.add(availableMethodsPanel,BorderLayout.WEST);
-		
+		controlPanel.add(cancelButton, BorderLayout.EAST);
+
+		controlPanel.add(availableMethodsPanel, BorderLayout.WEST);
+
 		editionLabel = new JLabel(NO_EDITION_STRING);
-		
+
 		positionLabel = new JLabel("                       ");
-		
+
 		resetCurrentInput();
-		
+
 		contextualMenu = new JPopupMenu();
-		
+
 		JMenu createPointItem = new JMenu("Create point");
-		
+
 		JMenuItem createExplicitPoint = new JMenuItem("As explicit position");
 		createExplicitPoint.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreatePoint(GeomEditController.this));
 			}
 		});
 		createPointItem.add(createExplicitPoint);
 
-		
 		JMenuItem createPointAsMiddleFromPointsItem = new JMenuItem("As middle of two other points");
 		createPointAsMiddleFromPointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreatePointMiddleOfPoints(GeomEditController.this));
 			}
 		});
@@ -176,52 +172,47 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		JMenuItem createPointSymetricOfPointItem = new JMenuItem("Symetric to an other point");
 		createPointSymetricOfPointItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreatePointSymetricOfPoint(GeomEditController.this));
 			}
 		});
 		createPointItem.add(createPointSymetricOfPointItem);
 
-		contextualMenu.add(createPointItem);				
+		contextualMenu.add(createPointItem);
 
 		JMenu createLineItem = new JMenu("Create line");
-		
+
 		JMenuItem createLineFromPointsItem = new JMenuItem("From points");
 		createLineFromPointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateLineFromPoints(GeomEditController.this));
 			}
 		});
 		createLineItem.add(createLineFromPointsItem);
-		
+
 		JMenuItem createHorizontalLineWithPointItem = new JMenuItem("Horizontal crossing point");
 		createHorizontalLineWithPointItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateHorizontalLineWithPoint(GeomEditController.this));
 			}
 		});
 		createLineItem.add(createHorizontalLineWithPointItem);
-		
+
 		JMenuItem createVerticalLineWithPointItem = new JMenuItem("Vertical crossing point");
 		createVerticalLineWithPointItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateVerticalLineWithPoint(GeomEditController.this));
 			}
 		});
 		createLineItem.add(createVerticalLineWithPointItem);
-		
+
 		JMenuItem createParallelLineWithPointItem = new JMenuItem("Parallel crossing point");
 		createParallelLineWithPointItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateParallelLineWithPoint(GeomEditController.this));
 			}
 		});
@@ -230,8 +221,7 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		JMenuItem createOrthogonalLineWithPointItem = new JMenuItem("Orthogonal crossing point");
 		createOrthogonalLineWithPointItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateOrthogonalLineWithPoint(GeomEditController.this));
 			}
 		});
@@ -240,8 +230,7 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		JMenuItem createRotatedLineWithPointItem = new JMenuItem("Rotated line crossing point");
 		createRotatedLineWithPointItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateRotatedLineWithPoint(GeomEditController.this));
 			}
 		});
@@ -250,362 +239,324 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		JMenuItem createTangentLineWithCircleAndPointItem = new JMenuItem("Tangent to a circle and crossing point");
 		createTangentLineWithCircleAndPointItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateTangentLineWithCircleAndPoint(GeomEditController.this));
 			}
 		});
 		createLineItem.add(createTangentLineWithCircleAndPointItem);
 
-		
-		contextualMenu.add(createLineItem);				
+		contextualMenu.add(createLineItem);
 
 		JMenu createHalfLineItem = new JMenu("Create half-line");
-		
+
 		JMenuItem createHalfLineFromPointsItem = new JMenuItem("From points");
 		createHalfLineFromPointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateHalfLineFromPoints(GeomEditController.this));
 			}
 		});
 		createHalfLineItem.add(createHalfLineFromPointsItem);
-		
-		contextualMenu.add(createHalfLineItem);				
+
+		contextualMenu.add(createHalfLineItem);
 
 		JMenu createSegmentItem = new JMenu("Create segment");
-		
+
 		JMenuItem createSegmentFromPointsItem = new JMenuItem("From points");
 		createSegmentFromPointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateSegmentFromPoints(GeomEditController.this));
 			}
 		});
 		createSegmentItem.add(createSegmentFromPointsItem);
-		
-		contextualMenu.add(createSegmentItem);				
+
+		contextualMenu.add(createSegmentItem);
 
 		JMenu createRectangleItem = new JMenu("Create rectangle");
 		JMenuItem createRectangleFromPointsItem = new JMenuItem("From points");
 		createRectangleFromPointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateRectangleFromPoints(GeomEditController.this));
 			}
 		});
 		createRectangleItem.add(createRectangleFromPointsItem);
 
-		contextualMenu.add(createRectangleItem);	
-		
+		contextualMenu.add(createRectangleItem);
+
 		JMenu createRoundRectangleItem = new JMenu("Create rounded rectangle");
 		JMenuItem createRoundRectangleFromPointsItem = new JMenuItem("From points");
 		createRoundRectangleFromPointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateRoundRectangleFromPoints(GeomEditController.this));
 			}
 		});
 		createRoundRectangleItem.add(createRoundRectangleFromPointsItem);
 
-		contextualMenu.add(createRoundRectangleItem);	
-		
+		contextualMenu.add(createRoundRectangleItem);
+
 		JMenu createCircleItem = new JMenu("Create circle");
-		
+
 		JMenuItem createCircleWithCenterAndPointItem = new JMenuItem("From center and point");
 		createCircleWithCenterAndPointItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateCircleWithCenterAndPoint(GeomEditController.this));
 			}
 		});
 		createCircleItem.add(createCircleWithCenterAndPointItem);
-		
-		contextualMenu.add(createCircleItem);				
 
-	    JMenu createPolygonItem = new JMenu("Create polygon");
-		
+		contextualMenu.add(createCircleItem);
+
+		JMenu createPolygonItem = new JMenu("Create polygon");
+
 		JMenuItem createPolygonWithNPointsItem = new JMenuItem("From points");
 		createPolygonWithNPointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreatePolygonWithNPoints(GeomEditController.this));
 			}
 		});
 		createPolygonItem.add(createPolygonWithNPointsItem);
-		
-		contextualMenu.add(createPolygonItem);				
 
-	    JMenu createPolylinItem = new JMenu("Create polylin");
-		
+		contextualMenu.add(createPolygonItem);
+
+		JMenu createPolylinItem = new JMenu("Create polylin");
+
 		JMenuItem createRectPolylinWithStartAndEndAreaItem = new JMenuItem("From start and end area");
 		createRectPolylinWithStartAndEndAreaItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateRectPolylinWithStartAndEndArea(GeomEditController.this));
 			}
 		});
 		createPolylinItem.add(createRectPolylinWithStartAndEndAreaItem);
-		
+
 		JMenuItem createPolylinFromNPointsItem = new JMenuItem("From points");
 		createPolylinFromNPointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreatePolylinWithNPoints(GeomEditController.this));
 			}
 		});
 		createPolylinItem.add(createPolylinFromNPointsItem);
-		
-		contextualMenu.add(createPolylinItem);				
 
-	    JMenu createCurveItem = new JMenu("Create curve");
-		
+		contextualMenu.add(createPolylinItem);
+
+		JMenu createCurveItem = new JMenu("Create curve");
+
 		JMenuItem createQuadCurveWith3PointsItem = new JMenuItem("Quadradic curve with 3 points");
 		createQuadCurveWith3PointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateQuadCurveFromThreePoints(GeomEditController.this));
 			}
 		});
 		createCurveItem.add(createQuadCurveWith3PointsItem);
-		
+
 		JMenuItem createCubicCurveWith4PointsItem = new JMenuItem("Cubic curve with 4 points");
 		createCubicCurveWith4PointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateCubicCurveFromFourPoints(GeomEditController.this));
 			}
 		});
 		createCurveItem.add(createCubicCurveWith4PointsItem);
-		
+
 		JMenuItem createCurveWithNPointsItem = new JMenuItem("Complex curve crossing n points");
 		createCurveWithNPointsItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateCurveWithNPoints(GeomEditController.this));
 			}
 		});
 		createCurveItem.add(createCurveWithNPointsItem);
-		
-		contextualMenu.add(createCurveItem);				
 
-	    JMenu createHalfPlaneItem = new JMenu("Create half-plane");
-		
+		contextualMenu.add(createCurveItem);
+
+		JMenu createHalfPlaneItem = new JMenu("Create half-plane");
+
 		JMenuItem createHalfPlaneWithLineAndPointItem = new JMenuItem("From line and point");
 		createHalfPlaneWithLineAndPointItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateHalfPlaneWithLineAndPoint(GeomEditController.this));
 			}
 		});
 		createHalfPlaneItem.add(createHalfPlaneWithLineAndPointItem);
-		
-		contextualMenu.add(createHalfPlaneItem);				
 
-	    JMenu createBandItem = new JMenu("Create band");
-		
+		contextualMenu.add(createHalfPlaneItem);
+
+		JMenu createBandItem = new JMenu("Create band");
+
 		JMenuItem createBandFromLinesItem = new JMenuItem("From lines");
 		createBandFromLinesItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateBandFromLines(GeomEditController.this));
 			}
 		});
 		createBandItem.add(createBandFromLinesItem);
-		
-		contextualMenu.add(createBandItem);				
 
-	    JMenu createHalfBandItem = new JMenu("Create half band");
-		
+		contextualMenu.add(createBandItem);
+
+		JMenu createHalfBandItem = new JMenu("Create half band");
+
 		JMenuItem createHalfBandFromLinesItem = new JMenuItem("From lines");
 		createHalfBandFromLinesItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateHalfBandWithLines(GeomEditController.this));
 			}
 		});
 		createHalfBandItem.add(createHalfBandFromLinesItem);
-		
-		contextualMenu.add(createHalfBandItem);				
+
+		contextualMenu.add(createHalfBandItem);
 
 		contextualMenu.addSeparator();
 
 		JMenuItem createIntersectionItem = new JMenuItem("Create intersection");
 		createIntersectionItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setCurrentEdition(new CreateIntersection(GeomEditController.this));
 			}
 		});
-		contextualMenu.add(createIntersectionItem);				
-		
+		contextualMenu.add(createIntersectionItem);
+
 		contextualMenu.addSeparator();
 		JMenuItem copyItem = new JMenuItem("Copy");
 		copyItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				copy();
 			}
 		});
-		contextualMenu.add(copyItem);				
+		contextualMenu.add(copyItem);
 		JMenuItem pasteItem = new JMenuItem("Paste");
 		pasteItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				paste();
 			}
 		});
-		contextualMenu.add(pasteItem);				
+		contextualMenu.add(pasteItem);
 		JMenuItem cutItem = new JMenuItem("Cut");
 		cutItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				cut();
 			}
 		});
-		contextualMenu.add(cutItem);				
+		contextualMenu.add(cutItem);
 	}
-	
-	public void showContextualMenu(GraphicalRepresentation gr, Point p)
-	{
+
+	public void showContextualMenu(GraphicalRepresentation gr, Point p) {
 		contextualMenuInvoker = gr;
 		contextualMenuClickedPoint = p;
 		contextualMenu.show(/*(Component)view*/getDrawingView(), p.x, p.y);
 	}
-	
+
 	@Override
-	public void addToSelectedObjects(GraphicalRepresentation anObject)
-	{
+	public void addToSelectedObjects(GraphicalRepresentation anObject) {
 		super.addToSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
 			notifyObservers(new UniqueSelection(getSelectedObjects().firstElement(), null));
-		}
-		else {
+		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
 		}
 		tree.removeTreeSelectionListener(this);
-		Object[] path = { getDrawing().getModel(), anObject.getDrawable()};
+		Object[] path = { getDrawing().getModel(), anObject.getDrawable() };
 		tree.addSelectionPath(new TreePath(path));
 		tree.addTreeSelectionListener(this);
 	}
-	
+
 	@Override
-	public void removeFromSelectedObjects(GraphicalRepresentation anObject)
-	{
+	public void removeFromSelectedObjects(GraphicalRepresentation anObject) {
 		super.removeFromSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
 			notifyObservers(new UniqueSelection(getSelectedObjects().firstElement(), null));
-		}
-		else {
+		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
 		}
 		tree.removeTreeSelectionListener(this);
-		Object[] path = { getDrawing().getModel(), anObject.getDrawable()};
+		Object[] path = { getDrawing().getModel(), anObject.getDrawable() };
 		tree.removeSelectionPath(new TreePath(path));
 		tree.addTreeSelectionListener(this);
 	}
-	
+
 	@Override
-	public void clearSelection()
-	{
+	public void clearSelection() {
 		super.clearSelection();
 		notifyObservers(new EmptySelection());
 		tree.removeTreeSelectionListener(this);
 		tree.clearSelection();
 		tree.addTreeSelectionListener(this);
 	}
+
 	@Override
-	public void selectDrawing()
-	{
+	public void selectDrawing() {
 		super.selectDrawing();
 		setChanged();
 		notifyObservers(new UniqueSelection(getDrawingGraphicalRepresentation(), null));
 	}
-	
-	@Override
-	public DrawingView<GeometricDrawing> makeDrawingView(GeometricDrawing drawing)
-	{
-		return new GeometricDrawingView(drawing,this);
-	}
 
 	@Override
-	public GeometricDrawingView getDrawingView()
-	{
-		return (GeometricDrawingView)super.getDrawingView();
-	}
-	
-	public void copy()
-	{
-	/*	if (contextualMenuInvoker instanceof GeometricObjectGraphicalRepresentation) {
-			copiedShape = (GeometricObject)(((GeometricObjectGraphicalRepresentation)getFocusedObjects().firstElement()).getDrawable().clone());
-			System.out.println("Copied: "+copiedShape);
-		}*/
+	public DrawingView<GeometricDrawing> makeDrawingView(GeometricDrawing drawing) {
+		return new GeometricDrawingView(drawing, this);
 	}
 
-	public void paste()
-	{
-		System.out.println("Paste in "+contextualMenuInvoker.getDrawable());
+	@Override
+	public GeometricDrawingView getDrawingView() {
+		return (GeometricDrawingView) super.getDrawingView();
 	}
 
-	public void cut()
-	{
-		
+	public void copy() {
+		/*	if (contextualMenuInvoker instanceof GeometricObjectGraphicalRepresentation) {
+				copiedShape = (GeometricObject)(((GeometricObjectGraphicalRepresentation)getFocusedObjects().firstElement()).getDrawable().clone());
+				System.out.println("Copied: "+copiedShape);
+			}*/
 	}
 
-	public Edition getCurrentEdition()
-	{
+	public void paste() {
+		System.out.println("Paste in " + contextualMenuInvoker.getDrawable());
+	}
+
+	public void cut() {
+
+	}
+
+	public Edition getCurrentEdition() {
 		return currentEdition;
 	}
 
-	public void setCurrentEdition(Edition anEdition)
-	{
+	public void setCurrentEdition(Edition anEdition) {
 		currentEdition = anEdition;
 		if (anEdition != null) {
 			updateCurrentInput();
-		}
-		else {
+		} else {
 			editionLabel.setText(NO_EDITION_STRING);
 			editionLabel.revalidate();
 			editionLabel.repaint();
 			resetCurrentInput();
 		}
 	}
-	
+
 	private EditionInput currentInput;
 
-	public void updateCurrentInput()
-	{
+	public void updateCurrentInput() {
 		cancelButton.setEnabled(true);
-		//controlPanel.setVisible(true);
+		// controlPanel.setVisible(true);
 		currentInput = currentEdition.inputs.get(currentEdition.currentStep);
-		currentInput.updateControlPanel(controlPanel,availableMethodsPanel);
-		editionLabel.setText(
-				currentEdition.getLabel()+", "
-				+currentInput.getInputLabel()+", "
-				+currentInput.getActiveMethodLabel()
-				+(currentInput.endOnRightClick()?" (right-click to finish)":""));
+		currentInput.updateControlPanel(controlPanel, availableMethodsPanel);
+		editionLabel.setText(currentEdition.getLabel() + ", " + currentInput.getInputLabel() + ", " + currentInput.getActiveMethodLabel()
+				+ (currentInput.endOnRightClick() ? " (right-click to finish)" : ""));
 		editionLabel.revalidate();
 		editionLabel.repaint();
 		if (contextualMenu.isShowing()) {
@@ -614,15 +565,14 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		getDrawingView().enableEditionInputMethod(currentInput.getDerivedActiveMethod());
 	}
 
-	private void resetCurrentInput()
-	{
+	private void resetCurrentInput() {
 		if (currentInput != null) {
 			currentInput.resetControlPanel(controlPanel);
 		}
 		availableMethodsPanel.removeAll();
 		availableMethodsPanel.revalidate();
 		availableMethodsPanel.repaint();
-		//controlPanel.setVisible(false);
+		// controlPanel.setVisible(false);
 		cancelButton.setEnabled(false);
 		editionLabel.setText(NO_EDITION_STRING);
 		editionLabel.revalidate();
@@ -634,94 +584,82 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		getDrawingView().repaint();
 	}
 
-	public void currentInputGiven()
-	{
+	public void currentInputGiven() {
 		if (currentEdition.next()) {
 			// Done
 			resetCurrentInput();
-		}
-		else {
+		} else {
 			// Switch to next input
 			updateCurrentInput();
 		}
 	}
-	
-	public JPanel getControlPanel()
-	{
+
+	public JPanel getControlPanel() {
 		return controlPanel;
 	}
 
-	public JLabel getEditionLabel()
-	{
+	public JLabel getEditionLabel() {
 		return editionLabel;
 	}
 
-	public JLabel getPositionLabel()
-	{
+	public JLabel getPositionLabel() {
 		return positionLabel;
 	}
 
-	public JTree getTree()
-	{
+	public JTree getTree() {
 		return tree;
 	}
 
-	public void notifiedObjectAdded()
-	{
+	public void notifiedObjectAdded() {
 		treeModel.reload();
 	}
 
-	public void notifiedObjectRemoved()
-	{
+	public void notifiedObjectRemoved() {
 		treeModel.reload();
 	}
 
 	@Override
-	public void valueChanged(TreeSelectionEvent e)
-	{
+	public void valueChanged(TreeSelectionEvent e) {
 		for (TreePath path : e.getPaths()) {
 			GraphicalRepresentation gr = null;
 			if (path.getLastPathComponent() instanceof GeometricSet) {
-				gr = ((GeometricSet)path.getLastPathComponent()).getGraphicalRepresentation();
+				gr = ((GeometricSet) path.getLastPathComponent()).getGraphicalRepresentation();
 			}
 			if (path.getLastPathComponent() instanceof GeometricObject) {
-				gr = ((GeometricObject)path.getLastPathComponent()).getGraphicalRepresentation();
+				gr = ((GeometricObject) path.getLastPathComponent()).getGraphicalRepresentation();
 			}
-			if (gr != null){
+			if (gr != null) {
 				if (e.isAddedPath(path)) {
 					addToSelectedObjects(gr);
-				}
-				else {
+				} else {
 					removeFromSelectedObjects(gr);
 				}
 			}
 		}
 	}
-	
+
 	/**
-	 * Implements strategy to preferencially choose a control point or an other
-	 * during focus retrieving strategy
+	 * Implements strategy to preferencially choose a control point or an other during focus retrieving strategy
+	 * 
 	 * @param cp1
 	 * @param cp2
 	 * @return
 	 */
 	@Override
-	public ControlArea<?> preferredFocusedControlArea(ControlArea<?> cp1, ControlArea<?> cp2)
-	{
+	public ControlArea<?> preferredFocusedControlArea(ControlArea<?> cp1, ControlArea<?> cp2) {
 		if (cp1 instanceof DraggableControlPoint && !(cp2 instanceof DraggableControlPoint)) {
 			return cp1;
 		}
 		if (cp2 instanceof DraggableControlPoint && !(cp1 instanceof DraggableControlPoint)) {
-			return cp2;		
+			return cp2;
 		}
-		if (cp1.isDraggable()  && !cp2.isDraggable()) {
+		if (cp1.isDraggable() && !cp2.isDraggable()) {
 			return cp1;
 		}
-		if (cp2.isDraggable()  && !cp1.isDraggable()) {
+		if (cp2.isDraggable() && !cp1.isDraggable()) {
 			return cp2;
 		}
 		return super.preferredFocusedControlArea(cp1, cp2);
 	}
-
 
 }

@@ -24,12 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wse.controller.WSEController;
-
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -41,6 +35,9 @@ import org.openflexo.foundation.ws.DuplicateWSObjectException;
 import org.openflexo.foundation.ws.WSPortType;
 import org.openflexo.foundation.ws.WSPortTypeFolder;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Please comment this class
@@ -48,119 +45,104 @@ import org.openflexo.foundation.ws.WSService;
  * @author dvanvyve
  * 
  */
-public class WSEPortTypeTableModel extends AbstractModel<WSService,ServiceInterface>
-{
+public class WSEPortTypeTableModel extends AbstractModel<WSService, ServiceInterface> {
 
-    protected static final Logger logger = Logger.getLogger(WSEPortTypeTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSEPortTypeTableModel.class.getPackage().getName());
 
-    public WSEPortTypeTableModel(WSService model, FlexoProject project, boolean readOnly)
-    {
-        super(model, project);
-        addToColumns(new IconColumn<ServiceInterface>("portType_icon", 30) {
-            @Override
-			public Icon getIcon(ServiceInterface object)
-            {
-                return WSEIconLibrary.WS_PORTTYPE_ICON;
-            }
-        });
-        if(readOnly){
-        addToColumns(new StringColumn<ServiceInterface>("name", 190) {
-            @Override
-			public String getValue(ServiceInterface object)
-            {
-                return (object).getName();
-            }
-        });
-        addToColumns(new StringColumn<ServiceInterface>("description", 365) {
-            @Override
-			public String getValue(ServiceInterface object)
-            {
-                return (object).getDescription();
-            }
-/*
-            public void setValue(FlexoModelObject object, String aValue)
-            {
-                ((FlexoProcess) object).setDescription(aValue);
-            }*/
-        });
-        }
-        else{
-        	  addToColumns(new EditableStringColumn<ServiceInterface>("name", 190) {
-                  @Override
-				public String getValue(ServiceInterface object)
-                  {
-                      return (object).getName();
-                  }
-                  @Override
-				public void setValue(ServiceInterface object, String aValue)
-                  {
-                      try {
-                          (object).setName(aValue);
-                      } catch (DuplicateWKFObjectException e) {
-                          FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
-                      }
-                      catch (DuplicateWSObjectException e) {
-                          FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
-                      }
-                      //selectObject(object);
-                  }
-              });
-              addToColumns(new EditableStringColumn<ServiceInterface>("description", 365) {
-                  @Override
-				public String getValue(ServiceInterface object)
-                  {
-                      return (object).getDescription();
-                  }
-                  @Override
-				public void setValue(ServiceInterface object, String aValue)
-                  {
-                      (object).setDescription(aValue);
-                  }
-              });
-        }
-        setRowHeight(20);
-    }
+	public WSEPortTypeTableModel(WSService model, FlexoProject project, boolean readOnly) {
+		super(model, project);
+		addToColumns(new IconColumn<ServiceInterface>("portType_icon", 30) {
+			@Override
+			public Icon getIcon(ServiceInterface object) {
+				return WSEIconLibrary.WS_PORTTYPE_ICON;
+			}
+		});
+		if (readOnly) {
+			addToColumns(new StringColumn<ServiceInterface>("name", 190) {
+				@Override
+				public String getValue(ServiceInterface object) {
+					return (object).getName();
+				}
+			});
+			addToColumns(new StringColumn<ServiceInterface>("description", 365) {
+				@Override
+				public String getValue(ServiceInterface object) {
+					return (object).getDescription();
+				}
+				/*
+				            public void setValue(FlexoModelObject object, String aValue)
+				            {
+				                ((FlexoProcess) object).setDescription(aValue);
+				            }*/
+			});
+		} else {
+			addToColumns(new EditableStringColumn<ServiceInterface>("name", 190) {
+				@Override
+				public String getValue(ServiceInterface object) {
+					return (object).getName();
+				}
 
-    public WSService getWSService(){
-    		return getModel();
-    }
-    
-    public WSPortTypeFolder getWSPortTypeFolder(){
-      		if(getWSService()!=null) return getWSService().getWSPortTypeFolder();
-      		return null;
-    }
-    public Vector getWSPortTypes()
-    {	
-        return getWSPortTypeFolder().getWSPortTypes();
-    }
-    
-    
-    @Override
-	public ServiceInterface elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return ((WSPortType) getWSPortTypes().get(row)).getServiceInterface();
-         } else {
-            return null;
-        }
-    }
+				@Override
+				public void setValue(ServiceInterface object, String aValue) {
+					try {
+						(object).setName(aValue);
+					} catch (DuplicateWKFObjectException e) {
+						FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
+					} catch (DuplicateWSObjectException e) {
+						FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
+					}
+					// selectObject(object);
+				}
+			});
+			addToColumns(new EditableStringColumn<ServiceInterface>("description", 365) {
+				@Override
+				public String getValue(ServiceInterface object) {
+					return (object).getDescription();
+				}
 
-    public ServiceInterface processAt(int row)
-    {
-        return elementAt(row);
-    }
+				@Override
+				public void setValue(ServiceInterface object, String aValue) {
+					(object).setDescription(aValue);
+				}
+			});
+		}
+		setRowHeight(20);
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getWSPortTypeFolder() != null) {
-            return getWSPortTypes().size();
-        }
-        return 0;
-    }
+	public WSService getWSService() {
+		return getModel();
+	}
 
-   
+	public WSPortTypeFolder getWSPortTypeFolder() {
+		if (getWSService() != null) {
+			return getWSService().getWSPortTypeFolder();
+		}
+		return null;
+	}
 
-   
+	public Vector getWSPortTypes() {
+		return getWSPortTypeFolder().getWSPortTypes();
+	}
+
+	@Override
+	public ServiceInterface elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return ((WSPortType) getWSPortTypes().get(row)).getServiceInterface();
+		} else {
+			return null;
+		}
+	}
+
+	public ServiceInterface processAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getWSPortTypeFolder() != null) {
+			return getWSPortTypes().size();
+		}
+		return 0;
+	}
 
 }

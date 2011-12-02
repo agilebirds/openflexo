@@ -33,58 +33,51 @@ import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
-public class CancelOverrideWithVersion extends MultipleFileGCAction<CancelOverrideWithVersion>
-{
+public class CancelOverrideWithVersion extends MultipleFileGCAction<CancelOverrideWithVersion> {
 
 	private static final Logger logger = Logger.getLogger(CancelOverrideWithVersion.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<CancelOverrideWithVersion> actionType 
-	= new MultipleFileGCActionType<CancelOverrideWithVersion> ("cancel_overriding",
-			MERGE_MENU, OVERRIDE_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) 
-	{
+	public static final MultipleFileGCActionType<CancelOverrideWithVersion> actionType = new MultipleFileGCActionType<CancelOverrideWithVersion>(
+			"cancel_overriding", MERGE_MENU, OVERRIDE_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public CancelOverrideWithVersion makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CancelOverrideWithVersion(repository, globalSelection, editor);
-        }
-		
-        @Override
-		protected boolean accept (AbstractCGFile file)
-        {
-        	return (file.isOverrideScheduled());
-        }
+		 * Factory method
+		 */
+		@Override
+		public CancelOverrideWithVersion makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new CancelOverrideWithVersion(repository, globalSelection, editor);
+		}
+
+		@Override
+		protected boolean accept(AbstractCGFile file) {
+			return (file.isOverrideScheduled());
+		}
 
 	};
-	
-	CancelOverrideWithVersion (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException
-    {
-    	logger.info ("Cancel overriding");
-       	
-       	AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
-    	pg.setAction(this);
- 
-    	GenerationRepository repository = getRepository();
-    	
-      	for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
-      		file.cancelOverriding();
-      	}
+	CancelOverrideWithVersion(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+		logger.info("Cancel overriding");
+
+		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
+		pg.setAction(this);
+
+		GenerationRepository repository = getRepository();
+
+		for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
+			file.cancelOverriding();
+		}
 		repository.getProject().getFlexoRMResource().saveResourceData();
-		     	 
-		// Refreshing repository
-		if (repository instanceof CGRepository)
-     		((CGRepository)repository).clearAllJavaParsingData();
 
-    }
+		// Refreshing repository
+		if (repository instanceof CGRepository) {
+			((CGRepository) repository).clearAllJavaParsingData();
+		}
+
+	}
 
 	public boolean requiresThreadPool() {
 		// TODO Auto-generated method stub

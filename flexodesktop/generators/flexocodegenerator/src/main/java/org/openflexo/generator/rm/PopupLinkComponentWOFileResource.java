@@ -30,46 +30,42 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author sylvain
- *
+ * 
  */
-public class PopupLinkComponentWOFileResource extends ComponentWOFileResource<PopupLinkComponentGenerator> implements PopupComponentFileResource
-{
-    protected static final Logger logger = FlexoLogger.getLogger(PopupLinkComponentWOFileResource.class.getPackage().getName());
+public class PopupLinkComponentWOFileResource extends ComponentWOFileResource<PopupLinkComponentGenerator> implements
+		PopupComponentFileResource {
+	protected static final Logger logger = FlexoLogger.getLogger(PopupLinkComponentWOFileResource.class.getPackage().getName());
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getComponentDefinition());
-    		getComponentDefinition().addObserver(this);
-    	}
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());
+			}
+			getComponentDefinition().addObserver(this);
+		}
+	}
 
-    /**
-     * @param builder
-     */
-    public PopupLinkComponentWOFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public PopupLinkComponentWOFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public PopupLinkComponentWOFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public PopupLinkComponentWOFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
 	@Override
-	public PopupComponentDefinition getComponentDefinition()
-	{
+	public PopupComponentDefinition getComponentDefinition() {
 		if (getGenerator() != null) {
 			return getGenerator().getComponentDefinition();
 		}
 		return null;
 	}
-
 
 }

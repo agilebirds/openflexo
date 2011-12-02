@@ -25,17 +25,13 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.JavaFile;
 import org.openflexo.generator.FlexoResourceGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 
+public class EOEntityJavaFile extends JavaFile implements GenerationAvailableFile {
 
-public class EOEntityJavaFile extends JavaFile implements GenerationAvailableFile
-{
+	protected static final Logger logger = FlexoLogger.getLogger(EOEntityJavaFile.class.getPackage().getName());
 
-    protected static final Logger logger = FlexoLogger.getLogger(EOEntityJavaFile.class.getPackage().getName());
-
-    public EOEntityJavaFile(File f, EOEntityJavaFileResource resource)
-	{
+	public EOEntityJavaFile(File f, EOEntityJavaFileResource resource) {
 		super(f);
 		try {
 			setFlexoResource(resource);
@@ -43,23 +39,20 @@ public class EOEntityJavaFile extends JavaFile implements GenerationAvailableFil
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
+	}
 
-	public EOEntityJavaFile()
-	{
+	public EOEntityJavaFile() {
 		super();
-    }
-
-    @Override
-	public EOEntityJavaFileResource getFlexoResource()
-    {
-        return (EOEntityJavaFileResource)super.getFlexoResource();
-    }
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
+	public EOEntityJavaFileResource getFlexoResource() {
+		return (EOEntityJavaFileResource) super.getFlexoResource();
+	}
+
+	@Override
+	public FlexoResourceGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
-	
+
 }

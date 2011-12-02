@@ -19,36 +19,30 @@
  */
 package org.openflexo.components.browser.ie;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ComponentLibraryElement extends IEElement
-{
+public class ComponentLibraryElement extends IEElement {
 
-    public ComponentLibraryElement(FlexoComponentLibrary compLibrary, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(compLibrary, BrowserElementType.COMPONENT_LIBRARY, browser,parent);
-    }
+	public ComponentLibraryElement(FlexoComponentLibrary compLibrary, ProjectBrowser browser, BrowserElement parent) {
+		super(compLibrary, BrowserElementType.COMPONENT_LIBRARY, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        addToChilds(getComponentLibrary().getRootFolder());
-    }
+	@Override
+	protected void buildChildrenVector() {
+		addToChilds(getComponentLibrary().getRootFolder());
+	}
 
-    @Override
-	public String getName()
-    {
-        return FlexoLocalization.localizedForKey("component_library");
-    }
+	@Override
+	public String getName() {
+		return FlexoLocalization.localizedForKey("component_library");
+	}
 
-    protected FlexoComponentLibrary getComponentLibrary()
-    {
-        return (FlexoComponentLibrary) getObject();
-    }
+	protected FlexoComponentLibrary getComponentLibrary() {
+		return (FlexoComponentLibrary) getObject();
+	}
 
 }

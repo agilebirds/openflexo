@@ -21,17 +21,14 @@ package org.openflexo.fge.notifications;
 
 import org.openflexo.fge.GraphicalRepresentation.Parameters;
 
-
 public class LabelWillEdit extends FGENotification {
 
-	public LabelWillEdit()
-	{
-		super(Parameters.text,null,null);
+	public LabelWillEdit() {
+		super(Parameters.text, null, null);
 	}
 
 	@Override
-	public boolean isModelNotification()
-	{
+	public boolean isModelNotification() {
 		return false;
 	}
 

@@ -28,40 +28,35 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.operator.RepetitionOperator;
 import org.openflexo.foundation.ie.widget.IESequence;
 
+public class IERepetitionElement extends IEElement {
 
-public class IERepetitionElement extends IEElement
-{
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IERepetitionElement(RepetitionOperator op, ProjectBrowser browser, BrowserElement parent) {
+		super(op, BrowserElementType.REPETITION, browser, parent);
+	}
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IERepetitionElement(RepetitionOperator op, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(op, BrowserElementType.REPETITION, browser,parent);
-    }
+	@Override
+	protected void buildChildrenVector() {
+		for (Enumeration e = getRepetition().getOperatedSequence().elements(); e.hasMoreElements();) {
+			FlexoModelObject child = (FlexoModelObject) e.nextElement();
+			if (child instanceof IESequence) {
+				addToChilds(((IESequence) child).getOperator());
+			} else {
+				addToChilds(child);
+			}
+		}
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        for (Enumeration e = getRepetition().getOperatedSequence().elements(); e.hasMoreElements();) {
-            FlexoModelObject child = (FlexoModelObject) e.nextElement();
-            if (child instanceof IESequence) {
-                addToChilds(((IESequence) child).getOperator());
-            } else
-                addToChilds(child);
-        }
-    }
+	@Override
+	public String getName() {
+		return "Repetition";
+	}
 
-    @Override
-	public String getName()
-    {
-        return "Repetition";
-    }
-
-    protected RepetitionOperator getRepetition()
-    {
-        return (RepetitionOperator) getObject();
-    }
+	protected RepetitionOperator getRepetition() {
+		return (RepetitionOperator) getObject();
+	}
 
 }

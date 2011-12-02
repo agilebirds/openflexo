@@ -23,19 +23,16 @@ import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.wkf.controller.WKFController;
 
-
 public class WKFTabularBrowserView extends TabularBrowserView {
 
-    public WKFTabularBrowserView(WKFController controller, TabularBrowserModel model, int visibleRowCount)
-    {
-        this(controller, model);
-        setVisibleRowCount(visibleRowCount);
-    }
+	public WKFTabularBrowserView(WKFController controller, TabularBrowserModel model, int visibleRowCount) {
+		this(controller, model);
+		setVisibleRowCount(visibleRowCount);
+	}
 
-    public WKFTabularBrowserView(WKFController controller, TabularBrowserModel model)
-    {
-        super(controller,model,controller.getEditor());
-        setSynchronizeWithSelectionManager(true);
-    }
-    
+	public WKFTabularBrowserView(WKFController controller, TabularBrowserModel model) {
+		super(controller, model, controller.getEditor());
+		setSynchronizeWithSelectionManager(true);
+	}
+
 }

@@ -21,7 +21,6 @@ package org.openflexo.foundation.exec;
 
 import java.util.logging.Logger;
 
-
 import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.node.SWITCHOperator;
@@ -32,25 +31,20 @@ public class OperatorSWITCHExecution extends OperatorNodeExecution {
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(OperatorSWITCHExecution.class.getPackage().getName());
 
-	protected OperatorSWITCHExecution(SWITCHOperator operatorNode)
-	{
+	protected OperatorSWITCHExecution(SWITCHOperator operatorNode) {
 		super(operatorNode);
 	}
-	
 
 	@Override
-	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException
-	{
+	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		Nop returned = new Nop();
 		returned.setInlineComment("Manage SWITCH");
 		return returned;
 	}
 
 	@Override
-	public SWITCHOperator getOperatorNode() 
-	{
-		return (SWITCHOperator)super.getOperatorNode();
+	public SWITCHOperator getOperatorNode() {
+		return (SWITCHOperator) super.getOperatorNode();
 	}
-
 
 }

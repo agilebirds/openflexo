@@ -24,41 +24,35 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.DMPackage;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMPackageElement extends DMElement
-{
+public class DMPackageElement extends DMElement {
 
-    public DMPackageElement(DMPackage aPackage, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(aPackage, BrowserElementType.DM_PACKAGE, browser,parent);
-    }
+	public DMPackageElement(DMPackage aPackage, ProjectBrowser browser, BrowserElement parent) {
+		super(aPackage, BrowserElementType.DM_PACKAGE, browser, parent);
+	}
 
-    protected DMPackage getDMPackage()
-    {
-        return (DMPackage) getObject();
-    }
+	protected DMPackage getDMPackage() {
+		return (DMPackage) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return false;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return false;
+	}
 
-    @Override
-	public String getName()
-    {
-        return getDMPackage().getLocalizedName();
-        /*if (getDMPackage().getName().indexOf(".") < 0) {
-            return getDMPackage().getLocalizedName();
-            return FlexoLocalization.localizedForKey(getDMPackage().getName());
-        }
-        return super.getName();*/
-    }
+	@Override
+	public String getName() {
+		return getDMPackage().getLocalizedName();
+		/*if (getDMPackage().getName().indexOf(".") < 0) {
+		    return getDMPackage().getLocalizedName();
+		    return FlexoLocalization.localizedForKey(getDMPackage().getName());
+		}
+		return super.getName();*/
+	}
 
 }

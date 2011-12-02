@@ -19,65 +19,35 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.PatternRole.PatternRoleType;
-
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddShema extends EditionAction<ShemaPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddShema.class.getPackage().getName());
-	
-	private String shemaName;
-	private String shapePatternRole;
-	
+
+	private ShapePatternRole shapePatternRole;
+
 	public AddShema() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddShema;
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_SHEMA_INSPECTOR;
 	}
 
-	public String _getShemaName()
-	{
-		return shemaName;
-	}
-	
-	public void _setShemaName(String aShemaName)
-	{
-		shemaName = aShemaName;
-	}
-	
-	private Vector<String> availableShemaNameValues = null;
-	
-	public Vector<String> getAvailableShemaNameValues()
-	{
-		if (availableShemaNameValues == null) {
-			availableShemaNameValues = new Vector<String>();
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				availableShemaNameValues.add(pr.getPatternRoleName());
-			}
-			for (EditionPatternParameter p : getScheme().getParameters()) {
-				availableShemaNameValues.add(p.getName());
-			}
-		}
-		return availableShemaNameValues;
-	}
-
-	public String getShemaName(EditionSchemeAction action)
-	{
-		return generateStringFromIdentifier(_getShemaName(),action);
+	public String getShemaName(EditionSchemeAction action) {
+		return (String) getShemaName().getBindingValue(action);
 	}
 
 	@Override
@@ -90,16 +60,14 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 			return null;
 		}
 	}
-	
+
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
 	public void setPatternRole(ShemaPatternRole patternRole) {
 		super.setPatternRole(patternRole);
 	}
-	
 
-	
 	/*@Override
 	protected void updatePatternRoleType()
 	{
@@ -108,39 +76,34 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 		}
 	}*/
 
-	public String _getShapePatternRole()
-	{
-		if ((shapePatternRole == null) && (getAvailableShapePatternRoleValues().size() > 0)) {
-			shapePatternRole = getAvailableShapePatternRoleValues().firstElement();
-		}
+	public ShapePatternRole getShapePatternRole() {
 		return shapePatternRole;
 	}
 
-	public void _setShapePatternRole(String shapePatternRole)
-	{
+	public void setShapePatternRole(ShapePatternRole shapePatternRole) {
 		this.shapePatternRole = shapePatternRole;
 	}
 
-	private Vector<String> availableShapePatternRoleValues = null;
-	
-	public Vector<String> getAvailableShapePatternRoleValues()
-	{
-		if (availableShapePatternRoleValues == null) {
-			availableShapePatternRoleValues = new Vector<String>();
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				if (pr.getType() == PatternRoleType.Shape) {
-					availableShapePatternRoleValues.add(pr.getPatternRoleName());
-				}
-			}
+	private ViewPointDataBinding shemaName;
+
+	private BindingDefinition SHEMA_NAME = new BindingDefinition("shemaName", String.class, BindingDefinitionType.GET, false);
+
+	public BindingDefinition getShemaNameBindingDefinition() {
+		return SHEMA_NAME;
+	}
+
+	public ViewPointDataBinding getShemaName() {
+		if (shemaName == null) {
+			shemaName = new ViewPointDataBinding(this, EditionActionBindingAttribute.shemaName, getShemaNameBindingDefinition());
 		}
-		return availableShapePatternRoleValues;
+		return shemaName;
 	}
 
-
-	public ShapePatternRole retrieveShapePatternRole()
-	{
-		return (ShapePatternRole)getEditionPattern().getPatternRole(_getShapePatternRole());
+	public void setShemaName(ViewPointDataBinding shemaName) {
+		shemaName.setOwner(this);
+		shemaName.setBindingAttribute(EditionActionBindingAttribute.shemaName);
+		shemaName.setBindingDefinition(getShemaNameBindingDefinition());
+		this.shemaName = shemaName;
 	}
-
 
 }

@@ -36,48 +36,43 @@ import org.apache.cayenne.wocompat.PropertyListSerialization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class FlexoPropertyListSerialization extends PropertyListSerialization
-{
-    
-    public static String getPListRepresentation(Object o)
-    {
-        try {
-            StringWriter sw = new StringWriter();
-            BufferedWriter out = new BufferedWriter(sw);
-            try {
-                writeObject("", out, o);
-                out.flush();
-                return sw.toString();
-            } finally {
-                out.close();
-            }
-        } catch (IOException ioex) {
-            throw new CayenneRuntimeException("Error saving plist.", ioex);
-        }
-    }
-    
-    /**
-     * Saves property list to file.
-     */
-    public static void propertyListToFile(File f, Object plist) {
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(f));
-            try {
-                writeObject("", out, plist);
-            }
-            finally {
-                out.close();
-            }
-        }
-        catch (IOException ioex) {
-            throw new CayenneRuntimeException("Error saving plist.", ioex);
-        }
-    }
+public class FlexoPropertyListSerialization extends PropertyListSerialization {
 
-    
-    protected static void writeObject(String offset, Writer out, Object plist) throws IOException {
+	public static String getPListRepresentation(Object o) {
+		try {
+			StringWriter sw = new StringWriter();
+			BufferedWriter out = new BufferedWriter(sw);
+			try {
+				writeObject("", out, o);
+				out.flush();
+				return sw.toString();
+			} finally {
+				out.close();
+			}
+		} catch (IOException ioex) {
+			throw new CayenneRuntimeException("Error saving plist.", ioex);
+		}
+	}
+
+	/**
+	 * Saves property list to file.
+	 */
+	public static void propertyListToFile(File f, Object plist) {
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter(f));
+			try {
+				writeObject("", out, plist);
+			} finally {
+				out.close();
+			}
+		} catch (IOException ioex) {
+			throw new CayenneRuntimeException("Error saving plist.", ioex);
+		}
+	}
+
+	protected static void writeObject(String offset, Writer out, Object plist) throws IOException {
 		if (plist == null) {
 			return;
 		}
@@ -96,21 +91,20 @@ public class FlexoPropertyListSerialization extends PropertyListSerialization
 			out.write("(\n");
 
 			String childOffset = offset + "   ";
-			
+
 			Iterator it = null;
-			if(list.iterator().next() instanceof Comparable){
+			if (list.iterator().next() instanceof Comparable) {
 				Vector sortedEntries = new Vector();
 				Object[] entries = list.toArray();
 				Arrays.sort(entries);
-				for(int ind=0;ind<entries.length;ind++){
+				for (int ind = 0; ind < entries.length; ind++) {
 					sortedEntries.add(entries[ind]);
 				}
 				it = sortedEntries.iterator();
-			}else{
+			} else {
 				it = list.iterator();
 			}
-			
-			
+
 			boolean appended = false;
 			while (it.hasNext()) {
 				// Java collections can contain nulls, skip them
@@ -144,21 +138,21 @@ public class FlexoPropertyListSerialization extends PropertyListSerialization
 			String childOffset = offset + "    ";
 
 			Iterator it = null;
-			
-			if(map.keySet().iterator().next() instanceof Comparable){
+
+			if (map.keySet().iterator().next() instanceof Comparable) {
 				Vector sortedEntries = new Vector();
 				Object[] entries = map.keySet().toArray();
 				Arrays.sort(entries);
-				for(int ind=0;ind<entries.length;ind++){
+				for (int ind = 0; ind < entries.length; ind++) {
 					sortedEntries.add(entries[ind]);
 				}
 				it = sortedEntries.iterator();
-			}else{
+			} else {
 				it = map.keySet().iterator();
 			}
 			while (it.hasNext()) {
 				// Java collections can contain nulls, skip them
-				
+
 				Object key = it.next();
 				if (key == null) {
 					continue;

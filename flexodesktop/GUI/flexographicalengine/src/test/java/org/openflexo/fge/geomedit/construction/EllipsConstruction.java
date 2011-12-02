@@ -24,22 +24,19 @@ import org.openflexo.fge.geom.FGEEllips;
 public abstract class EllipsConstruction<E extends FGEEllips> extends GeometricConstruction<E> {
 
 	private boolean isFilled;
-	
-	public final FGEEllips getEllips()
-	{
+
+	public final FGEEllips getEllips() {
 		return getData();
 	}
 
 	@Override
 	protected abstract E computeData();
 
-	public boolean getIsFilled()
-	{
+	public boolean getIsFilled() {
 		return isFilled;
 	}
 
-	public void setIsFilled(boolean isFilled)
-	{
+	public void setIsFilled(boolean isFilled) {
 		this.isFilled = isFilled;
 		setModified();
 	}

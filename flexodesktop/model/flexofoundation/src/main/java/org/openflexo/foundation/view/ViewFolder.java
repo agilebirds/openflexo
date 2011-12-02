@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
-
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
@@ -60,8 +59,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 	public static final FolderComparator COMPARATOR = new FolderComparator();
 
-	protected static final Logger logger = Logger
-			.getLogger(ViewFolder.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(ViewFolder.class.getPackage().getName());
 
 	// ==========================================================================
 	// ============================= Instance variables
@@ -84,31 +82,25 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	// ================================
 	// ==========================================================================
 
-	public ViewFolder(ViewLibrary componentLibrary) 
-	{
+	public ViewFolder(ViewLibrary componentLibrary) {
 		super(componentLibrary);
 		_subFolders = new Vector<ViewFolder>();
 		_shemas = new Vector<ViewDefinition>();
 	}
 
 	@Override
-	public void finalizeDeserialization(Object builder) 
-	{
+	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
-		if (getShemas().size() > 0
-				&& !getShemas().firstElement().isIndexed()) {
-			ViewDefinition[] cd = new ViewDefinition[getShemas()
-					.size()];
+		if (getShemas().size() > 0 && !getShemas().firstElement().isIndexed()) {
+			ViewDefinition[] cd = new ViewDefinition[getShemas().size()];
 			cd = getShemas().toArray(cd);
 			Arrays.sort(cd, ViewDefinition.COMPARATOR);
 			for (int i = 0; i < cd.length; i++) {
 				cd[i].setIndexValue(i + 1);
 			}
 		}
-		if (getSubFolders().size() > 0
-				&& !getSubFolders().firstElement().isIndexed()) {
-			ViewFolder[] folder = new ViewFolder[getSubFolders()
-					.size()];
+		if (getSubFolders().size() > 0 && !getSubFolders().firstElement().isIndexed()) {
+			ViewFolder[] folder = new ViewFolder[getSubFolders().size()];
 			folder = getSubFolders().toArray(folder);
 			Arrays.sort(folder, ViewFolder.COMPARATOR);
 			for (int i = 0; i < folder.length; i++) {
@@ -118,71 +110,62 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	}
 
 	@Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super
-				.getSpecificActionListForThatClass();
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
 		returned.add(AddComponent.actionType);
 		returned.add(AddComponentFolder.actionType);
 		return returned;
 	}
 
-	private static Vector<ViewFolder> getAllSubFoldersForFolder(
-			ViewFolder folder) {
+	private static Vector<ViewFolder> getAllSubFoldersForFolder(ViewFolder folder) {
 		Vector<ViewFolder> v = new Vector<ViewFolder>();
 		if (folder != null) {
 			v.add(folder);
 			Enumeration en = folder.getSubFolders().elements();
 			while (en.hasMoreElements()) {
-				ViewFolder f = (ViewFolder) en
-						.nextElement();
+				ViewFolder f = (ViewFolder) en.nextElement();
 				v.addAll(getAllSubFoldersForFolder(f));
 			}
 		}
 		return v;
 	}
 
-	public ViewFolder(String folderName,
-			ViewLibrary componentLibrary) 
-	{
+	public ViewFolder(String folderName, ViewLibrary componentLibrary) {
 		this(componentLibrary);
 		_name = folderName;
 	}
 
-	public ViewFolder(VEShemaLibraryBuilder builder)
-	{
+	public ViewFolder(VEShemaLibraryBuilder builder) {
 		this(builder.shemaLibrary);
 		initializeDeserialization(builder);
 	}
 
 	/**
 	 * Creates and returns a newly created root process
-	 *
+	 * 
 	 * @return a newly created workflow
 	 */
-	public static ViewFolder createNewRootFolder(
-			ViewLibrary library) {
+	public static ViewFolder createNewRootFolder(ViewLibrary library) {
 		if (!library.hasRootFolder()) {
-			return createNewFolder(library, null, library.getProject()
-					.getProject().getProjectName());
+			return createNewFolder(library, null, library.getProject().getProject().getProjectName());
 
 		} else {
-			if (logger.isLoggable(Level.WARNING))
-				logger
-						.warning("Cannot create root folder: a root folder is already declared");
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Cannot create root folder: a root folder is already declared");
+			}
 			return null;
 		}
 	}
 
-	public boolean containsShemas() 
-	{
-		if (getShemas().size() > 0)
+	public boolean containsShemas() {
+		if (getShemas().size() > 0) {
 			return true;
+		}
 		if (getSubFolders().size() > 0) {
 			boolean answer = false;
 			Enumeration en = getSubFolders().elements();
 			while (en.hasMoreElements() && !answer) {
-				answer = ((ViewFolder) en.nextElement())
-						.containsShemas();
+				answer = ((ViewFolder) en.nextElement()).containsShemas();
 			}
 			return answer;
 		}
@@ -191,22 +174,19 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 	/**
 	 * Creates and returns a newly created folder
-	 *
+	 * 
 	 * @return a newly created folder
 	 * @throws DuplicateResourceException
 	 */
-	public static ViewFolder createNewFolder(
-			ViewLibrary library, ViewFolder parentFolder,
-			String folderName) 
-	{
-		ViewFolder newFolder = new ViewFolder(folderName,
-				library);
+	public static ViewFolder createNewFolder(ViewLibrary library, ViewFolder parentFolder, String folderName) {
+		ViewFolder newFolder = new ViewFolder(folderName, library);
 		newFolder.setFatherFolder(parentFolder);
 		if (parentFolder != null) {
 			parentFolder.addToSubFolders(newFolder);
 		} else {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("NEW ROOT FOLDER");
+			}
 			library.setRootFolder(newFolder);
 		}
 		/*library.notifyObservers(new DataModification(
@@ -220,28 +200,26 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		return newFolder;
 	}
 
-	public Vector<ViewFolder> getAllSubFolders()
-	{
+	public Vector<ViewFolder> getAllSubFolders() {
 		Vector<ViewFolder> v = new Vector<ViewFolder>();
 		v.addAll(getAllSubFoldersForFolder(this));
 		v.remove(this);
 		return v;
 	}
 
-	public ViewFolder getShemaFolderWithName(String folderName) 
-	{
+	public ViewFolder getShemaFolderWithName(String folderName) {
 		for (ViewFolder folder : getAllSubFolders()) {
 			if (folder.getName().equals(folderName)) {
 				return folder;
 			}
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Could not find folder named " + folderName);
+		}
 		return null;
 	}
 
-	public Vector<FlexoModelObject> getAllChilds() 
-	{
+	public Vector<FlexoModelObject> getAllChilds() {
 		Vector<FlexoModelObject> answer = new Vector<FlexoModelObject>();
 		answer.addAll(getSubFolders());
 		answer.addAll(getShemas());
@@ -250,46 +228,45 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 	/**
 	 * Overrides delete
+	 * 
 	 * @see org.openflexo.foundation.FlexoModelObject#delete()
 	 */
 	@Override
-	public void delete()
-	{
-	    getFatherFolder().removeFromSubFolders(this);
-	    super.delete();
-	    deleteObservers();
+	public void delete() {
+		getFatherFolder().removeFromSubFolders(this);
+		super.delete();
+		deleteObservers();
 	}
 
-	public boolean delete(ViewDefinition def) 
-	{
+	public boolean delete(ViewDefinition def) {
 		if (getShemas().contains(def)) {
 			removeFromShemas(def);
-			//getComponentLibrary().notifyTreeStructureChanged();
+			// getComponentLibrary().notifyTreeStructureChanged();
 			return true;
 		} else {
 
 			Enumeration en = getSubFolders().elements();
 			while (en.hasMoreElements()) {
-				boolean isDeleted = ((ViewFolder) en.nextElement())
-						.delete(def);
-				if (isDeleted)
+				boolean isDeleted = ((ViewFolder) en.nextElement()).delete(def);
+				if (isDeleted) {
 					return true;
+				}
 			}
 			return false;
 		}
 	}
 
-	public boolean isValidForANewShemaName(String value) 
-	{
-		if (value == null)
+	public boolean isValidForANewShemaName(String value) {
+		if (value == null) {
 			return false;
+		}
 		return getShemaNamed(value) == null;
 	}
 
-	public ViewDefinition getShemaNamed(String value) 
-	{
-		if (value == null)
+	public ViewDefinition getShemaNamed(String value) {
+		if (value == null) {
 			return null;
+		}
 
 		String searchedName = value;
 
@@ -304,48 +281,40 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		ViewDefinition cur = null;
 		en = getSubFolders().elements();
 		while (en.hasMoreElements() && cur == null) {
-			cur = ((ViewFolder) en.nextElement())
-					.getShemaNamed(searchedName);
+			cur = ((ViewFolder) en.nextElement()).getShemaNamed(searchedName);
 		}
 
-		if (cur != null
-				&& cur.getName().toLowerCase().equals(
-						searchedName.toLowerCase()))
+		if (cur != null && cur.getName().toLowerCase().equals(searchedName.toLowerCase())) {
 			return cur;
+		}
 		return null;
 	}
 
 	/**
-	 * Returns reference to the main object in which this XML-serializable
-	 * object is contained relating to storing scheme: here it's the component
-	 * library
-	 *
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * component library
+	 * 
 	 * @return the component library object
 	 */
 	@Override
-    public XMLStorageResourceData getXMLResourceData() 
-	{
+	public XMLStorageResourceData getXMLResourceData() {
 		return getShemaLibrary();
 	}
 
 	@Override
-    public FlexoProject getProject() 
-	{
+	public FlexoProject getProject() {
 		return getShemaLibrary().getProject();
 	}
 
-	public Vector<ViewDefinition> getShemas() 
-	{
+	public Vector<ViewDefinition> getShemas() {
 		return _shemas;
 	}
 
-	public void setShemas(Vector<ViewDefinition> value) 
-	{
+	public void setShemas(Vector<ViewDefinition> value) {
 		_shemas = value;
 	}
 
-	public Vector<ViewDefinition> getAllShemas()
-	{
+	public Vector<ViewDefinition> getAllShemas() {
 		Vector<ViewDefinition> v = new Vector<ViewDefinition>();
 		Enumeration<ViewFolder> en = getSortedSubFolders();
 		while (en.hasMoreElements()) {
@@ -353,26 +322,25 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			v.addAll(f.getAllShemas());
 		}
 		Enumeration<ViewDefinition> en1 = getSortedShemas();
-		while(en1.hasMoreElements())
+		while (en1.hasMoreElements()) {
 			v.add(en1.nextElement());
+		}
 		return v;
 	}
 
-	public Enumeration<ViewDefinition> getSortedShemas() 
-	{
+	public Enumeration<ViewDefinition> getSortedShemas() {
 		disableObserving();
 		ViewDefinition[] o = FlexoIndexManager.sortArray(getShemas().toArray(new ViewDefinition[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
 	}
 
-	public void addToShemas(ViewDefinition shema) 
-	{
+	public void addToShemas(ViewDefinition shema) {
 		if ((shema.getFolder() != null) && (shema.getFolder() != this)) {
-			if (logger.isLoggable(Level.WARNING))
-				logger.warning("UNEXPECTEDELY Move shema " + shema
-						+ " from folder " + shema.getFolder().getName()
-						+ " to folder " + getName());
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("UNEXPECTEDELY Move shema " + shema + " from folder " + shema.getFolder().getName() + " to folder "
+						+ getName());
+			}
 			shema.getFolder().removeFromShemas(shema);
 		}
 		_shemas.add(shema);
@@ -382,7 +350,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			for (Enumeration<ViewDefinition> en = getSortedShemas(); en.hasMoreElements(); i++) {
 				ViewDefinition sd1 = en.nextElement();
 				if (ViewDefinition.COMPARATOR.compare(sd1, shema) > 0) {
-					shema.setIndex(i+1);
+					shema.setIndex(i + 1);
 					break;
 				}
 			}
@@ -392,8 +360,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		notifyObservers(new ShemaInserted(shema, this));
 	}
 
-	public void removeFromShemas(ViewDefinition sub)
-	{
+	public void removeFromShemas(ViewDefinition sub) {
 		_shemas.remove(sub);
 		sub.setFolder(null);
 		FlexoIndexManager.reIndexObjectOfArray(getShemas().toArray(new ViewDefinition[0]));
@@ -401,45 +368,41 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		notifyObservers(new ShemaDeleted(sub));
 	}
 
-	public Enumeration<ViewFolder> getSortedSubFolders()
-	{
+	public Enumeration<ViewFolder> getSortedSubFolders() {
 		disableObserving();
 		ViewFolder[] o = FlexoIndexManager.sortArray(getSubFolders().toArray(new ViewFolder[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
 	}
 
-	public Vector<ViewFolder> getSubFolders() 
-	{
+	public Vector<ViewFolder> getSubFolders() {
 		return _subFolders;
 	}
 
-	public void setSubFolders(Vector<ViewFolder> value) 
-	{
+	public void setSubFolders(Vector<ViewFolder> value) {
 		_subFolders = value;
 		setChanged();
 	}
 
-	public void addToSubFolders(ViewFolder sub) 
-	{
+	public void addToSubFolders(ViewFolder sub) {
 		if (!_subFolders.contains(sub)) {
 			_subFolders.add(sub);
 			sub.setFatherFolder(this);
 			if (!isDeserializing()) {
 				if (getSubFolders().size() > 0) {
 					int i = 0;
-					for (Enumeration<ViewFolder> en = getSortedSubFolders(); en.hasMoreElements()&& i<getSubFolders().size(); i++ ) {
+					for (Enumeration<ViewFolder> en = getSortedSubFolders(); en.hasMoreElements() && i < getSubFolders().size(); i++) {
 						ViewFolder f = getSubFolders().get(i);
 						if (ViewFolder.COMPARATOR.compare(f, sub) > 0) {
-							sub.setIndex(i+1);
+							sub.setIndex(i + 1);
 							break;
 						}
 					}
-                    // We don't care if no index has been set, it will then keep its current one which is the last one.
-				} else
+					// We don't care if no index has been set, it will then keep its current one which is the last one.
+				} else {
 					sub.setIndex(1);
-				FlexoIndexManager.reIndexObjectOfArray(getSubFolders()
-						.toArray(new ViewFolder[0]));
+				}
+				FlexoIndexManager.reIndexObjectOfArray(getSubFolders().toArray(new ViewFolder[0]));
 			}
 			sub.setShemaLibrary(getShemaLibrary());
 			setChanged();
@@ -447,8 +410,7 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		}
 	}
 
-	public void removeFromSubFolders(ViewFolder sub) 
-	{
+	public void removeFromSubFolders(ViewFolder sub) {
 		_subFolders.remove(sub);
 		FlexoIndexManager.reIndexObjectOfArray(getSubFolders().toArray(new ViewFolder[0]));
 		setChanged();
@@ -456,19 +418,16 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	}
 
 	@Override
-	public String getName() 
-	{
+	public String getName() {
 		return _name;
 	}
 
 	@Override
-	public void setName(String name) throws DuplicateFolderNameException,InvalidNameException
-	{
-		if (getFatherFolder() != null
-				&& getFatherFolder().getFolderNamed(name) != null)
+	public void setName(String name) throws DuplicateFolderNameException, InvalidNameException {
+		if (getFatherFolder() != null && getFatherFolder().getFolderNamed(name) != null) {
 			throw new DuplicateFolderNameException(this, name);
-		if (!isDeserializing()
-				&& !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
+		}
+		if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
 			throw new InvalidNameException(name);
 		}
 		String old = _name;
@@ -477,57 +436,48 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		notifyObservers(new OEDataModification("name", old, name));
 	}
 
-	public ViewFolder getFatherFolder() 
-	{
+	public ViewFolder getFatherFolder() {
 		return _fatherFolder;
 	}
 
-	public void setFatherFolder(ViewFolder folder)
-	{
+	public void setFatherFolder(ViewFolder folder) {
 		_fatherFolder = folder;
 	}
 
-	public void setParent(ViewFolder folder)
-	{
+	public void setParent(ViewFolder folder) {
 		setFatherFolder(folder);
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VE.OE_SHEMA_FOLDER_INSPECTOR;
 	}
 
 	@Override
-    public String getFullyQualifiedName() 
-	{
+	public String getFullyQualifiedName() {
 		return "Folder:" + getName();
 	}
 
 	/**
-	 * Search in the direct sub-folders of this folder for a folder named
-	 * <code>name</code> (case insensitive).
-	 *
-	 * @param name -
-	 *            the name of the direct sub-folder to find
-	 * @return the direct sub-folder named <code>name</code> or null if it
-	 *         cannot be found.
+	 * Search in the direct sub-folders of this folder for a folder named <code>name</code> (case insensitive).
+	 * 
+	 * @param name
+	 *            - the name of the direct sub-folder to find
+	 * @return the direct sub-folder named <code>name</code> or null if it cannot be found.
 	 */
-	public ViewFolder getFolderNamed(String name) 
-	{
+	public ViewFolder getFolderNamed(String name) {
 		name = name.toLowerCase();
 		Enumeration<ViewFolder> en = getSubFolders().elements();
 		while (en.hasMoreElements()) {
-			ViewFolder folder = en
-					.nextElement();
-			if (folder.getName().toLowerCase().equals(name))
+			ViewFolder folder = en.nextElement();
+			if (folder.getName().toLowerCase().equals(name)) {
 				return folder;
+			}
 		}
 		return null;
 	}
 
-	public boolean isFatherOf(ViewFolder folder) 
-	{
+	public boolean isFatherOf(ViewFolder folder) {
 		ViewFolder f = folder.getFatherFolder();
 		while (f != null) {
 			if (f.equals(this)) {
@@ -538,37 +488,32 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		return false;
 	}
 
-	public static class FolderComparator implements
-			Comparator<ViewFolder> 
-	{
+	public static class FolderComparator implements Comparator<ViewFolder> {
 		protected FolderComparator() {
 		}
 
 		/**
 		 * Overrides compare
-		 *
+		 * 
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
 		@Override
 		public int compare(ViewFolder o1, ViewFolder o2) {
-			return (o1).getName().compareTo(
-					(o2).getName());
+			return (o1).getName().compareTo((o2).getName());
 		}
 	}
 
-	public boolean isRootFolder()
-	{
+	public boolean isRootFolder() {
 		return getFatherFolder() == null;
 	}
 
 	/**
 	 * Overrides getClassNameKey
-	 *
+	 * 
 	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
 	 */
 	@Override
-    public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "shema_folder";
 	}
 
@@ -578,10 +523,11 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 	@Override
 	public int getIndex() {
-	    if (isBeingCloned())
-            return -1;
+		if (isBeingCloned()) {
+			return -1;
+		}
 		if (index == -1 && getCollection() != null) {
-			index = getCollection().length ;
+			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
 		return index;
@@ -594,9 +540,9 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			return;
 		}
 		FlexoIndexManager.switchIndexForKey(this.index, index, this);
-		if (getIndex()!=index) {
+		if (getIndex() != index) {
 			setChanged();
-			AttributeDataModification dm = new AttributeDataModification("index",null,getIndex());
+			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
 			dm.setReentrant(true);
 			notifyObservers(dm);
 		}
@@ -609,8 +555,9 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 	@Override
 	public void setIndexValue(int index) {
-        if (this.index==index)
-            return;
+		if (this.index == index) {
+			return;
+		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
@@ -623,52 +570,48 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 
 	/**
 	 * Overrides getCollection
-	 *
+	 * 
 	 * @see org.openflexo.foundation.utils.Sortable#getCollection()
 	 */
 	@Override
-	public ViewFolder[] getCollection() 
-	{
-		if (getFatherFolder() == null)
-			return new ViewFolder[]{this};
+	public ViewFolder[] getCollection() {
+		if (getFatherFolder() == null) {
+			return new ViewFolder[] { this };
+		}
 		return getFatherFolder().getSubFolders().toArray(new ViewFolder[0]);
 	}
 
-	public static class DuplicateFolderNameException extends FlexoException
-	{
+	public static class DuplicateFolderNameException extends FlexoException {
 
-	    private ViewFolder folder;
-	    private String name;
-	    
-	    /**
-	     * @param folder
-	     * @param name
-	     */
-	    public DuplicateFolderNameException(ViewFolder folder, String name)
-	    {
-	        this.folder =folder;
-	        this.name = name;
-	    }
+		private ViewFolder folder;
+		private String name;
 
-	    public ViewFolder getFolder()
-	    {
-	        return folder;
-	    }
+		/**
+		 * @param folder
+		 * @param name
+		 */
+		public DuplicateFolderNameException(ViewFolder folder, String name) {
+			this.folder = folder;
+			this.name = name;
+		}
 
-	    public String getName()
-	    {
-	        return name;
-	    }
+		public ViewFolder getFolder() {
+			return folder;
+		}
 
-	    /**
-	     * Overrides getLocalizedMessage
-	     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-	     */
-	    @Override
-	    public String getLocalizedMessage()
-	    {
-	        return FlexoLocalization.localizedForKey("duplicate_folder_name");
-	    }
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * Overrides getLocalizedMessage
+		 * 
+		 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+		 */
+		@Override
+		public String getLocalizedMessage() {
+			return FlexoLocalization.localizedForKey("duplicate_folder_name");
+		}
 	}
 
 }

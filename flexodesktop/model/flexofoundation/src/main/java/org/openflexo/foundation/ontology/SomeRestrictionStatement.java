@@ -28,49 +28,55 @@ public class SomeRestrictionStatement extends ObjectRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(SomeRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
-	private OntologyObject object;
-	
-	public SomeRestrictionStatement(OntologyObject subject, Statement s, SomeValuesFromRestriction r)
-	{
-		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		object = getOntologyLibrary().getOntologyObject(r.getSomeValuesFrom().getURI());
+	private OntologyObjectProperty property;
+	private OntologyClass object;
+
+	public SomeRestrictionStatement(OntologyObject subject, Statement s, SomeValuesFromRestriction r) {
+		super(subject, s, r);
+		property = (OntologyObjectProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		object = (OntologyClass) getOntologyLibrary().getOntologyObject(r.getSomeValuesFrom().getURI());
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "some_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "SomeRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "SomeRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyObject getObject() 
-	{
+	public OntologyClass getObject() {
 		return object;
 	}
 
 	@Override
-	public OntologyProperty getProperty() 
-	{
+	public OntologyObjectProperty getProperty() {
 		return property;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" some "+(getObject() != null ? getObject().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " some "
+				+ (getObject() != null ? getObject().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" some";
+		return property.getName() + " some";
 	}
+
+	@Override
+	public int getCardinality() {
+		return -1;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Some;
+	}
+
 }

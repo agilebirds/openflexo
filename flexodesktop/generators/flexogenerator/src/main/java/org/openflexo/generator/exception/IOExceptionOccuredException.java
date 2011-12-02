@@ -24,11 +24,9 @@ import java.io.IOException;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 
-
-public class IOExceptionOccuredException extends GenerationException
-{
- 	public IOExceptionOccuredException(IOException targetException,  AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-	{
-		super("I/O exception","io_exception",targetException.getMessage(),targetException);
+public class IOExceptionOccuredException extends GenerationException {
+	public IOExceptionOccuredException(IOException targetException,
+			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super("I/O exception", "io_exception", targetException.getMessage(), targetException);
 	}
 }

@@ -1,0 +1,18 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
+	   name="Inspector" 
+	   layout="border" 
+	   dataClassName="org.openflexo.fib.model.FIBRadioButtonList">
+	<Parameter name="title" value="RadioButtons"/>
+
+		<TabPanel name="Tab" constraints="border(location=center)">
+
+			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+			
+				<Label label="columns" constraints="twocols(location=left)"/>
+				<Number numberType="IntegerType"  data="data.columns" constraints="twocols(location=right)"/>
+				
+			</Tab>
+						
+		</TabPanel>
+
+</Panel>

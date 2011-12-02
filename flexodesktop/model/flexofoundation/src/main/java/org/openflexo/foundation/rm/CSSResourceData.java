@@ -19,38 +19,32 @@
  */
 package org.openflexo.foundation.rm;
 
-public class CSSResourceData implements ImportedResourceData
-{
+public class CSSResourceData implements ImportedResourceData {
 	private FlexoProject _project;
 	private FlexoCSSResource _cssResource;
 
-	public CSSResourceData(FlexoProject aProject, FlexoCSSResource resource)
-	{
+	public CSSResourceData(FlexoProject aProject, FlexoCSSResource resource) {
 		_project = aProject;
 		_cssResource = resource;
 	}
 
 	@Override
-	public FlexoImportedResource getFlexoResource()
-	{
+	public FlexoImportedResource getFlexoResource() {
 		return _cssResource;
 	}
 
 	@Override
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return _project;
 	}
 
 	@Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException
-	{
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
 		_cssResource = (FlexoCSSResource) resource;
 	}
 
 	@Override
-	public void setProject(FlexoProject project)
-	{
+	public void setProject(FlexoProject project) {
 		this._project = project;
 	}
 

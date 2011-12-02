@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
@@ -35,54 +35,43 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 
-
 public class CreateOntologyCalcInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateOntologyCalcInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(CreateViewPoint.actionType,actionInitializer);
+	CreateOntologyCalcInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(CreateViewPoint.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateViewPoint> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateViewPoint> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateViewPoint>() {
 			@Override
-			public boolean run(ActionEvent e, CreateViewPoint action)
-			{
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						CEDCst.CREATE_VIEW_POINT_DIALOG_FIB,
-						action, null, true);
+			public boolean run(ActionEvent e, CreateViewPoint action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_VIEW_POINT_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
 	}
-	
 
 	@Override
-	protected FlexoActionFinalizer<CreateViewPoint> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<CreateViewPoint> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateViewPoint>() {
 			@Override
-			public boolean run(ActionEvent e, CreateViewPoint action)
-			{
-				((CEDController)getController()).getSelectionManager().setSelectedObject(action.getNewCalc());
+			public boolean run(ActionEvent e, CreateViewPoint action) {
+				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewCalc());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return VPMIconLibrary.CALC_ICON;
 	}
 

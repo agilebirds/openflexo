@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -39,93 +40,82 @@ import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.foundation.viewpoint.AddConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.LabelRepresentation;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.LinkScheme;
-import org.openflexo.foundation.viewpoint.LabelRepresentation.LabelRepresentationType;
 import org.openflexo.foundation.viewpoint.action.AddExampleDrawingConnector;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DrawEdgeControl extends MouseDragControl {
+
+	private static final Logger logger = Logger.getLogger(DrawEdgeControl.class.getPackage().getName());
 
 	protected Point currentDraggingLocationInDrawingView = null;
 	protected boolean drawEdge = false;
 	protected CalcDrawingShapeGR fromShape = null;
 	protected CalcDrawingShapeGR toShape = null;
 
-	public DrawEdgeControl()
-	{
-		super("Draw edge", MouseButton.LEFT,false,true,false,false); // CTRL DRAG
+	public DrawEdgeControl() {
+		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
 		action = new DrawEdgeAction();
 	}
 
-	protected class DrawEdgeAction extends CustomDragControlAction
-	{
+	protected class DrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-		{
+		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event) {
 			if (graphicalRepresentation instanceof CalcDrawingShapeGR) {
 				drawEdge = true;
-				fromShape = (CalcDrawingShapeGR)graphicalRepresentation;
-				((CalcDrawingShemaView)controller.getDrawingView()).setDrawEdgeAction(this);
+				fromShape = (CalcDrawingShapeGR) graphicalRepresentation;
+				((CalcDrawingShemaView) controller.getDrawingView()).setDrawEdgeAction(this);
 				return true;
-			} 
+			}
 			return false;
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, final DrawingController<?> controller, MouseEvent event, boolean isSignificativeDrag)
-		{
+		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, final DrawingController<?> controller,
+				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge && toShape != null) {
 
 				if (fromShape.getDrawable().getCalc() != null) {
 					Vector<LinkScheme> availableConnectors = fromShape.getDrawable().getCalc().getAllConnectors();
 
-					if (availableConnectors.size()>0) {
+					if (availableConnectors.size() > 0) {
 						JPopupMenu popup = new JPopupMenu();
 						for (final LinkScheme linkScheme : availableConnectors) {
-							JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(linkScheme.getLabel()!=null?linkScheme.getLabel():linkScheme.getName()));
+							JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(linkScheme.getLabel() != null ? linkScheme
+									.getLabel() : linkScheme.getName()));
 							menuItem.addActionListener(new ActionListener() {
 								@Override
-								public void actionPerformed(ActionEvent e)
-								{	
+								public void actionPerformed(ActionEvent e) {
 									for (EditionAction a : linkScheme.getActions()) {
 										if (a instanceof AddConnector) {
-											ConnectorPatternRole patternRole = ((AddConnector)a).getPatternRole();
-											LabelRepresentation labelRepresentation = patternRole.getLabelRepresentation();
-											String text = "";
-											if (labelRepresentation.getType() == LabelRepresentationType.StaticValue) {
-												text = labelRepresentation.getText();
-											}
-											else {
-												text = patternRole.getEditionPattern().getName();
-											}
-											performAddConnector(controller, 
-													(ConnectorGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation(),
-													text);
+											ConnectorPatternRole patternRole = ((AddConnector) a).getPatternRole();
+											logger.warning("Implement this !!!");
+											String text = (String) patternRole.getLabel().getBindingValue(null);
+											performAddConnector(controller,
+													(ConnectorGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation(), text);
 											return;
 										}
 									}
 									performAddDefaultConnector(controller);
 								}
 							});
-							popup.add(menuItem);					
+							popup.add(menuItem);
 						}
 						JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey("graphical_connector_only"));
 						menuItem.addActionListener(new ActionListener() {
 							@Override
-							public void actionPerformed(ActionEvent e)
-							{	
+							public void actionPerformed(ActionEvent e) {
 								performAddDefaultConnector(controller);
 							}
 						});
-						popup.add(menuItem);					
+						popup.add(menuItem);
 						popup.show(event.getComponent(), event.getX(), event.getY());
 						return false;
-					}
-					else {
+					} else {
 						performAddDefaultConnector(controller);
 					}
 				}
@@ -133,15 +123,15 @@ public class DrawEdgeControl extends MouseDragControl {
 				drawEdge = false;
 				fromShape = null;
 				toShape = null;
-				((CalcDrawingShemaView)controller.getDrawingView()).setDrawEdgeAction(null);
+				((CalcDrawingShemaView) controller.getDrawingView()).setDrawEdgeAction(null);
 
 			}
 			return false;
 		}
 
-		private void performAddDefaultConnector(DrawingController<?> controller)
-		{
-			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,((CalcDrawingShemaController)controller).getCEDController().getEditor());
+		private void performAddDefaultConnector(DrawingController<?> controller) {
+			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
+					((CalcDrawingShemaController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 
 			ConnectorGraphicalRepresentation<?> connectorGR = new ConnectorGraphicalRepresentation<ExampleDrawingConnector>();
@@ -149,8 +139,8 @@ public class DrawEdgeControl extends MouseDragControl {
 			connectorGR.setIsSelectable(true);
 			connectorGR.setIsFocusable(true);
 			connectorGR.setIsReadOnly(false);
-			connectorGR.setForeground(((CalcDrawingShemaController)controller).getToolbox().currentForegroundStyle);
-			connectorGR.setTextStyle(((CalcDrawingShemaController)controller).getToolbox().currentTextStyle);
+			connectorGR.setForeground(((CalcDrawingShemaController) controller).getCurrentForegroundStyle());
+			connectorGR.setTextStyle(((CalcDrawingShemaController) controller).getCurrentTextStyle());
 
 			action.graphicalRepresentation = connectorGR;
 
@@ -159,13 +149,13 @@ public class DrawEdgeControl extends MouseDragControl {
 			drawEdge = false;
 			fromShape = null;
 			toShape = null;
-			((CalcDrawingShemaView)controller.getDrawingView()).setDrawEdgeAction(null);
+			((CalcDrawingShemaView) controller.getDrawingView()).setDrawEdgeAction(null);
 
 		}
 
-		private void performAddConnector(DrawingController<?> controller,ConnectorGraphicalRepresentation<?> connectorGR, String text)
-		{
-			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,((CalcDrawingShemaController)controller).getCEDController().getEditor());
+		private void performAddConnector(DrawingController<?> controller, ConnectorGraphicalRepresentation<?> connectorGR, String text) {
+			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
+					((CalcDrawingShemaController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 			action.graphicalRepresentation = connectorGR;
 			action.newConnectorName = text;
@@ -174,32 +164,29 @@ public class DrawEdgeControl extends MouseDragControl {
 			drawEdge = false;
 			fromShape = null;
 			toShape = null;
-			((CalcDrawingShemaView)controller.getDrawingView()).setDrawEdgeAction(null);
+			((CalcDrawingShemaView) controller.getDrawingView()).setDrawEdgeAction(null);
 
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-		{
+		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event) {
 			if (drawEdge) {
 				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof CalcDrawingShapeGR 
-						&& gr != fromShape 
-						&& !(fromShape.getAncestors().contains(gr.getDrawable()))) {
-					toShape = (CalcDrawingShapeGR)gr;
-				}
-				else {
+				if (gr instanceof CalcDrawingShapeGR && gr != fromShape && !(fromShape.getAncestors().contains(gr.getDrawable()))) {
+					toShape = (CalcDrawingShapeGR) gr;
+				} else {
 					toShape = null;
 				}
-				currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component)event.getSource(),event.getPoint(),controller.getDrawingView());
+				currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+						controller.getDrawingView());
 				controller.getDrawingView().repaint();
 				return true;
 			}
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController controller)
-		{
+		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());
@@ -208,8 +195,7 @@ public class DrawEdgeControl extends MouseDragControl {
 					to = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 							toShape.getShape().getShape().getCenter(), toShape, controller.getScale());
 					g.setColor(Color.BLUE);
-				}
-				else {
+				} else {
 					g.setColor(Color.RED);
 				}
 				g.drawLine(from.x, from.y, to.x, to.y);

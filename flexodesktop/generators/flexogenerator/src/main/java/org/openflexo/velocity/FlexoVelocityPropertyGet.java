@@ -23,13 +23,11 @@ import java.lang.reflect.Field;
 
 import org.apache.velocity.util.introspection.VelPropertyGet;
 
-
 public class FlexoVelocityPropertyGet implements VelPropertyGet {
-	
+
 	private Field objField;
-	
-	public FlexoVelocityPropertyGet(Class objClass, String identifier) throws SecurityException, NoSuchFieldException
-	{
+
+	public FlexoVelocityPropertyGet(Class objClass, String identifier) throws SecurityException, NoSuchFieldException {
 		objField = objClass.getField(identifier);
 	}
 

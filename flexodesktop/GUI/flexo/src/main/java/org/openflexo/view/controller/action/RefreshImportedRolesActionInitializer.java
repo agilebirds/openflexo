@@ -38,29 +38,23 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
-
-public class RefreshImportedRolesActionInitializer extends ActionInitializer
-{
+public class RefreshImportedRolesActionInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RefreshImportedProcessesActionInitializer.class.getPackage().getName());
 
-	public RefreshImportedRolesActionInitializer(ControllerActionInitializer actionInitializer)
-	{
+	public RefreshImportedRolesActionInitializer(ControllerActionInitializer actionInitializer) {
 		super(RefreshImportedRoleAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionInitializer<RefreshImportedRoleAction> getDefaultInitializer()
-	{
-		return new FlexoActionInitializer<RefreshImportedRoleAction>()
-		{
+	protected FlexoActionInitializer<RefreshImportedRoleAction> getDefaultInitializer() {
+		return new FlexoActionInitializer<RefreshImportedRoleAction>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshImportedRoleAction action)
-			{
-				
+			public boolean run(ActionEvent e, RefreshImportedRoleAction action) {
+
 				PPMWebServiceClient client = getController().getWSClient();
-				if(client!=null){
+				if (client != null) {
 					action.setWebService(client.getWebService_PortType());
 					action.setLogin(client.getLogin());
 					action.setMd5Password(client.getEncriptedPWD());
@@ -75,15 +69,12 @@ public class RefreshImportedRolesActionInitializer extends ActionInitializer
 	protected FlexoExceptionHandler<RefreshImportedProcessAction> getDefaultExceptionHandler() {
 		return new FlexoWSExceptionHandler<RefreshImportedProcessAction>(getController());
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<RefreshImportedRoleAction> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<RefreshImportedRoleAction>()
-		{
+	protected FlexoActionFinalizer<RefreshImportedRoleAction> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<RefreshImportedRoleAction>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshImportedRoleAction action)
-			{
+			public boolean run(ActionEvent e, RefreshImportedRoleAction action) {
 				if (!action.isAutomaticAction()) {
 					FlexoController.notify(action.getReport());
 				}
@@ -93,9 +84,8 @@ public class RefreshImportedRolesActionInitializer extends ActionInitializer
 	}
 
 	@Override
-	protected Icon getEnabledIcon()
-	{
-		return IconFactory.getImageIcon(WKFIconLibrary.ROLE_ICON, new IconMarker[]{IconLibrary.IMPORT});
+	protected Icon getEnabledIcon() {
+		return IconFactory.getImageIcon(WKFIconLibrary.ROLE_ICON, new IconMarker[] { IconLibrary.IMPORT });
 	}
 
 }

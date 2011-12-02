@@ -20,6 +20,7 @@
 package org.openflexo.swing;
 
 import java.io.File;
+import java.net.MalformedURLException;
 
 import javax.swing.JRadioButton;
 
@@ -29,30 +30,33 @@ import javax.swing.JRadioButton;
  * @author sguerin
  * 
  */
-public class JRadioButtonWithIcon extends JRadioButton
-{
+public class JRadioButtonWithIcon extends JRadioButton {
 
-    public JRadioButtonWithIcon(String text, File iconFile, boolean selected)
-    {
-        super();
-        // Define an HTML fragment with an icon on the left and text on the
-        // right.
-        // The elements are embedded in a 3-column table.
-        String label = "<html><table cellpadding=0><tr><td><img src=\"file:"
-        // The location of the icon
-                + iconFile.getAbsolutePath() + "\"></td><td width="
+	public JRadioButtonWithIcon(String text, File iconFile, boolean selected) {
+		super();
+		// Define an HTML fragment with an icon on the left and text on the
+		// right.
+		// The elements are embedded in a 3-column table.
+		String label = null;
+		try {
+			label = "<html><table cellpadding=0><tr><td><img src=\""
+			// The location of the icon
+					+ iconFile.toURI().toURL() + "\"></td><td width="
 
-                // The gap, in pixels, between icon and text
-                + 3 + "><td>"
+					// The gap, in pixels, between icon and text
+					+ 3 + "><td>"
 
-                // Retrieve the current label text
-                + text + "</td></tr></table></html>";
-        setText(label);
-        setSelected(selected);
-    }
+					// Retrieve the current label text
+					+ text + "</td></tr></table></html>";
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setText(label);
+		setSelected(selected);
+	}
 
-    public JRadioButtonWithIcon(String text, File iconFile)
-    {
-        this(text, iconFile, false);
-    }
+	public JRadioButtonWithIcon(String text, File iconFile) {
+		this(text, iconFile, false);
+	}
 }

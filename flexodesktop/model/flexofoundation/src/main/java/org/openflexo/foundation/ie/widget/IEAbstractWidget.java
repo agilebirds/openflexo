@@ -24,44 +24,39 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.rm.FlexoProject;
 
 /**
- * Abstract class defining the common behaviour of a widget. Subclassed in
- * IEDSWidget (a widget in the palette) and IEWidget (a widget embedded in a
- * WOComponent)
+ * Abstract class defining the common behaviour of a widget. Subclassed in IEDSWidget (a widget in the palette) and IEWidget (a widget
+ * embedded in a WOComponent)
  * 
  * @author bmangez
  */
-public abstract class IEAbstractWidget extends IEObject
-{
+public abstract class IEAbstractWidget extends IEObject {
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    protected String _name;
+	protected String _name;
 
-    public IEAbstractWidget(FlexoProject project)
-    {
-        super(project);
-    }
+	public IEAbstractWidget(FlexoProject project) {
+		super(project);
+	}
 
-    // ==========================================================================
-    // ============================= Accessors
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Accessors
+	// ==================================
+	// ==========================================================================
 
-    @Override
-	public String getName()
-    {
-        return _name;
-    }
+	@Override
+	public String getName() {
+		return _name;
+	}
 
-    @Override
-	public void setName(String name)
-    {
-        _name = name;
-        setChanged();
-        notifyObservers(new IEDataModification("name",null,name));
-    }
+	@Override
+	public void setName(String name) {
+		_name = name;
+		setChanged();
+		notifyObservers(new IEDataModification("name", null, name));
+	}
 
 }

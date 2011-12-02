@@ -42,12 +42,12 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.AdditionalBindingDefinition;
 import org.openflexo.foundation.bindings.Bindable;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.BindingValue;
+import org.openflexo.foundation.bindings.BindingValue.BindingPathElement;
 import org.openflexo.foundation.bindings.BindingVariable;
 import org.openflexo.foundation.bindings.WidgetBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.bindings.BindingValue.BindingPathElement;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dm.ComponentDMEntity;
@@ -88,7 +88,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.DateUtils;
 import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.toolbox.ToolBox;
-
 
 public abstract class IEWidget extends IEAbstractWidget implements InspectableObject, DeletableObject, /* Serializable, */Validable,
 		Bindable, Indexable, IWidget {
@@ -859,10 +858,10 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 				return null;
 			}
 		} /*
-		 * else { if (!(getParent() instanceof IESequenceTopComponent)) if (logger.isLoggable(Level.WARNING))
-		 * logger.warning("widgets located within a " + getParent().getClass().getName() + " are not capable to find their label"); return
-		 * null; }
-		 */
+			* else { if (!(getParent() instanceof IESequenceTopComponent)) if (logger.isLoggable(Level.WARNING))
+			* logger.warning("widgets located within a " + getParent().getClass().getName() + " are not capable to find their label"); return
+			* null; }
+			*/
 		return null;
 	}
 

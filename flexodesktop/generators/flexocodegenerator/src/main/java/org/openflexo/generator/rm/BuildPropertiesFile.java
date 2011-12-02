@@ -24,8 +24,6 @@ import java.io.File;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.FlexoResourceGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFile;
-
 
 public class BuildPropertiesFile extends TextFile implements GenerationAvailableFile {
 
@@ -43,14 +41,12 @@ public class BuildPropertiesFile extends TextFile implements GenerationAvailable
 	}
 
 	@Override
-	public BuildPropertiesResource getFlexoResource()
-    {
-        return (BuildPropertiesResource)super.getFlexoResource();
-    }
+	public BuildPropertiesResource getFlexoResource() {
+		return (BuildPropertiesResource) super.getFlexoResource();
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
+	public FlexoResourceGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
 }

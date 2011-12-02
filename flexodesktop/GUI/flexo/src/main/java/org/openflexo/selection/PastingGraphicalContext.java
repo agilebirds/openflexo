@@ -26,7 +26,7 @@ import javax.swing.JComponent;
 
 public class PastingGraphicalContext {
 
-    public JComponent targetContainer;
-    public Point pastingLocation;
-    public Point2D precisePastingLocation;
+	public JComponent targetContainer;
+	public Point pastingLocation;
+	public Point2D precisePastingLocation;
 }

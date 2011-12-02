@@ -23,78 +23,75 @@ import java.awt.Rectangle;
 
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class RectangleConverter extends Converter<Rectangle>
-{
+public class RectangleConverter extends Converter<Rectangle> {
 
-    public static final RectangleConverter instance = new RectangleConverter();
-    
-    /**
-     * @param aClass
-     */
-    private RectangleConverter()
-    {
-        super(Rectangle.class);
-    }
+	public static final RectangleConverter instance = new RectangleConverter();
 
-    /**
-     * Overrides convertFromString
-     * @see org.openflexo.xmlcode.StringEncoder.Converter#convertFromString(java.lang.String)
-     */
-    @Override
-    public Rectangle convertFromString(String value)
-    {
-        if (value==null)
-            return null;
-        Rectangle r = new Rectangle();
-        int i = value.indexOf("x=");
-        if (i>-1 && value.indexOf(',',i)>-1) {
-            try {
-                r.x = Integer.parseInt(value.substring(i+2, value.indexOf(',',i)));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        i = value.indexOf("y=");
-        if (i>-1 && value.indexOf(',',i)>-1) {
-            try {
-                r.y = Integer.parseInt(value.substring(i+2, value.indexOf(',',i)));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        i = value.indexOf("width=");
-        if (i>-1 && value.indexOf(',',i)>-1) {
-            try {
-                r.width = Integer.parseInt(value.substring(i+6, value.indexOf(',',i)));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        i = value.indexOf("height=");
-        if (i>-1 && value.indexOf(']',i)>-1) {
-            try {
-                r.height = Integer.parseInt(value.substring(i+7, value.indexOf(']',i)));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        return r;
-    }
+	/**
+	 * @param aClass
+	 */
+	private RectangleConverter() {
+		super(Rectangle.class);
+	}
 
-    /**
-     * Overrides convertToString
-     * @see org.openflexo.xmlcode.StringEncoder.Converter#convertToString(java.lang.Object)
-     */
-    @Override
-    public String convertToString(Rectangle r)
-    {
-        return "[x="+r.x+",y="+r.y+",width="+r.width+",height="+r.height+"]";
-    }
+	/**
+	 * Overrides convertFromString
+	 * 
+	 * @see org.openflexo.xmlcode.StringEncoder.Converter#convertFromString(java.lang.String)
+	 */
+	@Override
+	public Rectangle convertFromString(String value) {
+		if (value == null) {
+			return null;
+		}
+		Rectangle r = new Rectangle();
+		int i = value.indexOf("x=");
+		if (i > -1 && value.indexOf(',', i) > -1) {
+			try {
+				r.x = Integer.parseInt(value.substring(i + 2, value.indexOf(',', i)));
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		i = value.indexOf("y=");
+		if (i > -1 && value.indexOf(',', i) > -1) {
+			try {
+				r.y = Integer.parseInt(value.substring(i + 2, value.indexOf(',', i)));
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		i = value.indexOf("width=");
+		if (i > -1 && value.indexOf(',', i) > -1) {
+			try {
+				r.width = Integer.parseInt(value.substring(i + 6, value.indexOf(',', i)));
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		i = value.indexOf("height=");
+		if (i > -1 && value.indexOf(']', i) > -1) {
+			try {
+				r.height = Integer.parseInt(value.substring(i + 7, value.indexOf(']', i)));
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		return r;
+	}
+
+	/**
+	 * Overrides convertToString
+	 * 
+	 * @see org.openflexo.xmlcode.StringEncoder.Converter#convertToString(java.lang.Object)
+	 */
+	@Override
+	public String convertToString(Rectangle r) {
+		return "[x=" + r.x + ",y=" + r.y + ",width=" + r.width + ",height=" + r.height + "]";
+	}
 
 }

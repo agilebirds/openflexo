@@ -24,32 +24,32 @@ import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public abstract class FlexoBuilder<R extends FlexoXMLStorageResource>
-{
-    private FlexoProject project;
-    
-    public R resource;
-    
-    public boolean isCloner=false;
-    
-    public FlexoBuilder(R resource) {
-        this.resource = resource;
-    }
-    
-    public FlexoProject getProject()
-    {
-    	if (resource!=null)
-    		return resource.getProject();
-        return project;
-    }
+public abstract class FlexoBuilder<R extends FlexoXMLStorageResource> {
+	private FlexoProject project;
+
+	public R resource;
+
+	public boolean isCloner = false;
+
+	public FlexoBuilder(R resource) {
+		this.resource = resource;
+	}
+
+	public FlexoProject getProject() {
+		if (resource != null) {
+			return resource.getProject();
+		}
+		return project;
+	}
 
 	/**
-	 * @param project the project to set
+	 * @param project
+	 *            the project to set
 	 */
 	public void setProject(FlexoProject project) {
 		this.project = project;
 	}
-    
+
 }

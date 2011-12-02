@@ -37,146 +37,138 @@ import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.xml.sax.SAXException;
 
-
 public class DocSubmissionReport extends DRMObject {
 
-    private static final Logger logger = Logger.getLogger(DocSubmissionReport.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DocSubmissionReport.class.getPackage().getName());
 
-   private Vector<DocItemAction> _submissionActions;
+	private Vector<DocItemAction> _submissionActions;
 
-    public DocSubmissionReport(DocResourceCenter docResourceCenter)
-    {
-        super(docResourceCenter);
-        _submissionActions = new Vector<DocItemAction>();
-    }
+	public DocSubmissionReport(DocResourceCenter docResourceCenter) {
+		super(docResourceCenter);
+		_submissionActions = new Vector<DocItemAction>();
+	}
 
-    public DocSubmissionReport(DRMBuilder builder)
-    {
-        this(builder.docResourceCenter);
-        initializeDeserialization(builder);
-   }
+	public DocSubmissionReport(DRMBuilder builder) {
+		this(builder.docResourceCenter);
+		initializeDeserialization(builder);
+	}
 
-    public Vector getSubmissionActions()
-    {
-        return _submissionActions;
-    }
+	public Vector getSubmissionActions() {
+		return _submissionActions;
+	}
 
-    public void setSubmissionActions(Vector<DocItemAction> submissionActions)
-    {
-        _submissionActions = submissionActions;
-    }
+	public void setSubmissionActions(Vector<DocItemAction> submissionActions) {
+		_submissionActions = submissionActions;
+	}
 
-    public void addToSubmissionActions(DocItemAction action)
-    {
-        _submissionActions.add(action);
-    }
+	public void addToSubmissionActions(DocItemAction action) {
+		_submissionActions.add(action);
+	}
 
-    public void removeFromSubmissionActions(DocItemAction action)
-    {
-        _submissionActions.remove(action);
-    }
+	public void removeFromSubmissionActions(DocItemAction action) {
+		_submissionActions.remove(action);
+	}
 
-    public int size()
-    {
-        return _submissionActions.size();
-    }
+	public int size() {
+		return _submissionActions.size();
+	}
 
-    private static XMLMapping _dsrMapping;
+	private static XMLMapping _dsrMapping;
 
-    public static XMLMapping getDSRMapping()
-     {
-         if (_dsrMapping == null) {
-             StringEncoder.getDefaultInstance()._addConverter(DocItemVersion.Version.converter);
-             File dsrModelFile;
-             dsrModelFile = new FileResource("Models/DSRModel.xml");
-             if (!dsrModelFile.exists()) {
-                 if (logger.isLoggable(Level.WARNING))
-                     logger.warning("File " + dsrModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
-                 return null;
-             } else {
-                 try {
-                     _dsrMapping = new XMLMapping(dsrModelFile);
-                 } catch (InvalidModelException e) {
-                     // Warns about the exception
-                     if (logger.isLoggable(Level.WARNING))
-                         logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                     e.printStackTrace();
-                 } catch (IOException e) {
-                     // Warns about the exception
-                     if (logger.isLoggable(Level.WARNING))
-                         logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                     e.printStackTrace();
-                 } catch (SAXException e) {
-                     // Warns about the exception
-                     if (logger.isLoggable(Level.WARNING))
-                         logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                     e.printStackTrace();
-                 } catch (ParserConfigurationException e) {
-                     // Warns about the exception
-                     if (logger.isLoggable(Level.WARNING))
-                         logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                     e.printStackTrace();
-                 }
-             }
-         }
-         return _dsrMapping;
-     }
+	public static XMLMapping getDSRMapping() {
+		if (_dsrMapping == null) {
+			StringEncoder.getDefaultInstance()._addConverter(DocItemVersion.Version.converter);
+			File dsrModelFile;
+			dsrModelFile = new FileResource("Models/DSRModel.xml");
+			if (!dsrModelFile.exists()) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("File " + dsrModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				}
+				return null;
+			} else {
+				try {
+					_dsrMapping = new XMLMapping(dsrModelFile);
+				} catch (InvalidModelException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
+					e.printStackTrace();
+				} catch (IOException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
+					e.printStackTrace();
+				} catch (SAXException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
+					e.printStackTrace();
+				} catch (ParserConfigurationException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
+					e.printStackTrace();
+				}
+			}
+		}
+		return _dsrMapping;
+	}
 
-    public static DocSubmissionReport load(DocResourceCenter drc, File docSubmissionReportFile)
-    {
-        DocSubmissionReport report = null;
-        StringEncoder.getDefaultInstance()._addConverter(ActionType.actionTypeConverter);
-        try {
-            FileInputStream in = new FileInputStream(docSubmissionReportFile);
-            report = (DocSubmissionReport) XMLDecoder.decodeObjectWithMapping(in, getDSRMapping(),new DRMBuilder(drc));
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return report;
-    }
+	public static DocSubmissionReport load(DocResourceCenter drc, File docSubmissionReportFile) {
+		DocSubmissionReport report = null;
+		StringEncoder.getDefaultInstance()._addConverter(ActionType.actionTypeConverter);
+		try {
+			FileInputStream in = new FileInputStream(docSubmissionReportFile);
+			report = (DocSubmissionReport) XMLDecoder.decodeObjectWithMapping(in, getDSRMapping(), new DRMBuilder(drc));
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return report;
+	}
 
-    public boolean save(File docSubmissionReportFile)
-    {
-    	FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(docSubmissionReportFile);
-            XMLCoder.encodeObjectWithMapping(this, getDSRMapping(), out);
-            out.flush();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-        	if (out!=null)
+	public boolean save(File docSubmissionReportFile) {
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(docSubmissionReportFile);
+			XMLCoder.encodeObjectWithMapping(this, getDSRMapping(), out);
+			out.flush();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-        }
-    }
+			}
+		}
+	}
 
-    public void clear()
-    {
-        getSubmissionActions().clear();
-    }
+	public void clear() {
+		getSubmissionActions().clear();
+	}
 
-    @Override
-    public String getClassNameKey()
-    {
-        return "doc_submission_report";
-    }
+	@Override
+	public String getClassNameKey() {
+		return "doc_submission_report";
+	}
 
-
-    /**
-     * Overrides getIdentifier
-     * @see org.openflexo.drm.DRMObject#getIdentifier()
-     */
-    @Override
-    public String getIdentifier()
-    {
-        return "DocSubmissionReport";
-    }
+	/**
+	 * Overrides getIdentifier
+	 * 
+	 * @see org.openflexo.drm.DRMObject#getIdentifier()
+	 */
+	@Override
+	public String getIdentifier() {
+		return "DocSubmissionReport";
+	}
 
 }

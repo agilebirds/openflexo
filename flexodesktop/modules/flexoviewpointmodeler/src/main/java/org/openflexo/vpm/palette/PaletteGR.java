@@ -30,36 +30,29 @@ import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 
-
 public class PaletteGR extends DrawingGraphicalRepresentation<ViewPointPalette> implements GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PaletteGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public PaletteGR()
-	{
+	public PaletteGR() {
 		this(null);
 	}
 
-	public PaletteGR(CalcPaletteRepresentation aDrawing) 
-	{
+	public PaletteGR(CalcPaletteRepresentation aDrawing) {
 		super(aDrawing);
 
-		if (aDrawing != null 
-				&& aDrawing.getPalette() != null 
-				&& aDrawing.getPalette().getGraphicalRepresentation() != null) {
-			
-			setsWith((GraphicalRepresentation<?>)aDrawing.getPalette().getGraphicalRepresentation());
+		if (aDrawing != null && aDrawing.getPalette() != null && aDrawing.getPalette().getGraphicalRepresentation() != null) {
+
+			setsWith((GraphicalRepresentation<?>) aDrawing.getPalette().getGraphicalRepresentation());
 		}
 
 		addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl());
 
-		if (aDrawing != null 
-				&& aDrawing.getPalette() != null) { 	
+		if (aDrawing != null && aDrawing.getPalette() != null) {
 			aDrawing.getPalette().setGraphicalRepresentation(this);
 			aDrawing.getPalette().addObserver(this);
 		}
@@ -67,39 +60,33 @@ public class PaletteGR extends DrawingGraphicalRepresentation<ViewPointPalette> 
 	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		logger.info("Delete paletteGR");
-		if (getPalette() != null) getPalette().deleteObserver(this);
+		if (getPalette() != null) {
+			getPalette().deleteObserver(this);
+		}
 		super.delete();
 	}
 
 	@Override
-	public CalcPaletteRepresentation getDrawing() 
-	{
-		return (CalcPaletteRepresentation)super.getDrawing();
+	public CalcPaletteRepresentation getDrawing() {
+		return (CalcPaletteRepresentation) super.getDrawing();
 	}
-	
-	public ViewPointPalette getPalette()
-	{
+
+	public ViewPointPalette getPalette() {
 		return getDrawing().getPalette();
 	}
 
-
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getPalette()) {
-			//logger.info("Notified "+dataModification);
+			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof CalcPaletteElementInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof CalcPaletteElementRemoved) {
+			} else if (dataModification instanceof CalcPaletteElementRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
 		}
 	}
-	
-	
 
 }

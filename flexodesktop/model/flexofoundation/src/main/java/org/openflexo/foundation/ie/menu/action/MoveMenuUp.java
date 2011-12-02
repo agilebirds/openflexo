@@ -33,78 +33,69 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class MoveMenuUp extends FlexoAction
-{
+public class MoveMenuUp extends FlexoAction {
 
-    protected static final Logger logger = FlexoLogger.getLogger(MoveMenuUp.class.getPackage().getName());
-    
-     public static FlexoActionType actionType = new FlexoActionType ("move_up",FlexoActionType.defaultGroup) {
+	protected static final Logger logger = FlexoLogger.getLogger(MoveMenuUp.class.getPackage().getName());
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new MoveMenuUp(focusedObject, globalSelection,editor);
-        }
+	public static FlexoActionType actionType = new FlexoActionType("move_up", FlexoActionType.defaultGroup) {
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new MoveMenuUp(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return (object != null) && 
-            (object instanceof FlexoItemMenu) &&
-            (((FlexoItemMenu)object).getFather()!=null) &&
-            ((((FlexoItemMenu)object).getFather()).getSubItems().indexOf(object)>0);
-        }
-                
-    };
-    
-    private FlexoItemMenu itemMenu; 
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected MoveMenuUp(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-    /**
-     * Overrides doAction
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        FlexoItemMenu item = getItemMenu();
-        if ((item.getFather() == null) || (item.getFather().getSubItems().indexOf(item) == 0)) {
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return (object != null) && (object instanceof FlexoItemMenu) && (((FlexoItemMenu) object).getFather() != null)
+					&& ((((FlexoItemMenu) object).getFather()).getSubItems().indexOf(object) > 0);
+		}
+
+	};
+
+	private FlexoItemMenu itemMenu;
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected MoveMenuUp(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		FlexoItemMenu item = getItemMenu();
+		if ((item.getFather() == null) || (item.getFather().getSubItems().indexOf(item) == 0)) {
 			return;
 		}
-        item.getFather().switchItems(item.getFather().getSubItems().get(item.getFather().getSubItems().indexOf(item) - 1), item);
-        if (logger.isLoggable(Level.INFO)) {
-			logger.info("Move menu "+item.getMenuLabel()+" up");
+		item.getFather().switchItems(item.getFather().getSubItems().get(item.getFather().getSubItems().indexOf(item) - 1), item);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Move menu " + item.getMenuLabel() + " up");
 		}
-    }
+	}
 
-    public FlexoItemMenu getItemMenu()
-    {
-        return itemMenu;
-    }
+	public FlexoItemMenu getItemMenu() {
+		return itemMenu;
+	}
 
-    public void setItemMenu(FlexoItemMenu itemMenu)
-    {
-        this.itemMenu = itemMenu;
-    }
+	public void setItemMenu(FlexoItemMenu itemMenu) {
+		this.itemMenu = itemMenu;
+	}
 
 }

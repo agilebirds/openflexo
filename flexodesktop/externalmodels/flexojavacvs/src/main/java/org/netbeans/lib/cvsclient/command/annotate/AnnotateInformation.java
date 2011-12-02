@@ -33,157 +33,155 @@ import java.util.List;
 import org.netbeans.lib.cvsclient.command.FileInfoContainer;
 
 /**
- * Describes annotate information for  a file. This is the result of doing a
- * cvs annotate command. The fields in instances of this object are populated
- * by response handlers.
- * @author  Milos Kleint
+ * Describes annotate information for a file. This is the result of doing a cvs annotate command. The fields in instances of this object are
+ * populated by response handlers.
+ * 
+ * @author Milos Kleint
  */
 public class AnnotateInformation extends FileInfoContainer {
-    /**
-     * The file, associated with thiz.
-     */
-    private File file;
+	/**
+	 * The file, associated with thiz.
+	 */
+	private File file;
 
-    /**
-     * List of lines stored here.
-     */
-    private List linesList;
+	/**
+	 * List of lines stored here.
+	 */
+	private List linesList;
 
-    private Iterator iterator;
+	private Iterator iterator;
 
-    private File tempFile;
-    
-    private File tempDir;
+	private File tempFile;
 
-    private BufferedOutputStream tempOutStream;
+	private File tempDir;
 
-    public AnnotateInformation() {
-        this.tempDir = null;
-    }
+	private BufferedOutputStream tempOutStream;
 
-    public AnnotateInformation(File tempDir) {
-        this.tempDir = tempDir;
-    }
+	public AnnotateInformation() {
+		this.tempDir = null;
+	}
 
-    /**
-     * Getter for property file.
-     * @return Value of property file.
-     */
-    @Override
+	public AnnotateInformation(File tempDir) {
+		this.tempDir = tempDir;
+	}
+
+	/**
+	 * Getter for property file.
+	 * 
+	 * @return Value of property file.
+	 */
+	@Override
 	public File getFile() {
-        return file;
-    }
+		return file;
+	}
 
-    /**
-     * Setter for property file.
-     * @param file New value of property file.
-     */
-    public void setFile(File file) {
-        this.file = file;
-    }
+	/**
+	 * Setter for property file.
+	 * 
+	 * @param file
+	 *            New value of property file.
+	 */
+	public void setFile(File file) {
+		this.file = file;
+	}
 
-    /**
-     * Return a string representation of this object. Useful for debugging.
-     */
-    @Override
+	/**
+	 * Return a string representation of this object. Useful for debugging.
+	 */
+	@Override
 	public String toString() {
-        StringBuffer buf = new StringBuffer(30);
-        buf.append("\nFile: " + ((file != null)?file.getAbsolutePath():"null")); //NOI18N
-        return buf.toString();
-    }
+		StringBuffer buf = new StringBuffer(30);
+		buf.append("\nFile: " + ((file != null) ? file.getAbsolutePath() : "null")); // NOI18N
+		return buf.toString();
+	}
 
-    public AnnotateLine createAnnotateLine() {
-        return new AnnotateLine();
-    }
+	public AnnotateLine createAnnotateLine() {
+		return new AnnotateLine();
+	}
 
-    public void addLine(AnnotateLine line) {
-        linesList.add(line);
-    }
+	public void addLine(AnnotateLine line) {
+		linesList.add(line);
+	}
 
-    public AnnotateLine getFirstLine() {
-        if (linesList == null) {
-            linesList = createLinesList();
-        }
-        iterator = linesList.iterator();
-        return getNextLine();
-    }
+	public AnnotateLine getFirstLine() {
+		if (linesList == null) {
+			linesList = createLinesList();
+		}
+		iterator = linesList.iterator();
+		return getNextLine();
+	}
 
-    public AnnotateLine getNextLine() {
-        if (iterator == null) {
-            return null;
-        }
-        if (!iterator.hasNext()) {
-            return null;
-        }
-        return (AnnotateLine)iterator.next();
-    }
+	public AnnotateLine getNextLine() {
+		if (iterator == null) {
+			return null;
+		}
+		if (!iterator.hasNext()) {
+			return null;
+		}
+		return (AnnotateLine) iterator.next();
+	}
 
-    /**
-     * Adds the specified line to the temporary file.
-     */
-    protected void addToTempFile(String line) throws IOException {
-        if (tempOutStream == null) {
-            try {
-                tempFile = File.createTempFile("ann", ".cvs", tempDir); //NOI18N
-                tempFile.deleteOnExit();
-                tempOutStream = new BufferedOutputStream(
-                        new FileOutputStream(tempFile));
-            }
-            catch (IOException ex) {
-                // TODO
-            }
-        }
-        tempOutStream.write(line.getBytes());
-        tempOutStream.write('\n');
-    }
+	/**
+	 * Adds the specified line to the temporary file.
+	 */
+	protected void addToTempFile(String line) throws IOException {
+		if (tempOutStream == null) {
+			try {
+				tempFile = File.createTempFile("ann", ".cvs", tempDir); // NOI18N
+				tempFile.deleteOnExit();
+				tempOutStream = new BufferedOutputStream(new FileOutputStream(tempFile));
+			} catch (IOException ex) {
+				// TODO
+			}
+		}
+		tempOutStream.write(line.getBytes());
+		tempOutStream.write('\n');
+	}
 
-    protected void closeTempFile() throws IOException {
-        if (tempOutStream == null) {
-            return;
-        }
-        try {
-            tempOutStream.flush();
-        } finally {
-            tempOutStream.close();
-        }
-    }
+	protected void closeTempFile() throws IOException {
+		if (tempOutStream == null) {
+			return;
+		}
+		try {
+			tempOutStream.flush();
+		} finally {
+			tempOutStream.close();
+		}
+	}
 
-    public File getTempFile() {
-        return tempFile;
-    }
+	public File getTempFile() {
+		return tempFile;
+	}
 
-    private List createLinesList() {
-        List toReturn = new LinkedList();
-        BufferedReader reader = null;
-        if (tempFile == null) {
-            return toReturn;
-        }
-        try {
-            reader = new BufferedReader(new FileReader(tempFile));
-            String line = reader.readLine();
-            int lineNum = 1;
-            while (line != null) {
-                AnnotateLine annLine = AnnotateBuilder.processLine(line);
-                if (annLine != null) {
-                    annLine.setLineNum(lineNum);
-                    toReturn.add(annLine);
-                    lineNum++;
-                }
-                line = reader.readLine();
-            }
-        }
-        catch (IOException exc) {
-        }
-        finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            }
-            catch (IOException ex2) {
-            }
-        }
-        return toReturn;
-    }
+	private List createLinesList() {
+		List toReturn = new LinkedList();
+		BufferedReader reader = null;
+		if (tempFile == null) {
+			return toReturn;
+		}
+		try {
+			reader = new BufferedReader(new FileReader(tempFile));
+			String line = reader.readLine();
+			int lineNum = 1;
+			while (line != null) {
+				AnnotateLine annLine = AnnotateBuilder.processLine(line);
+				if (annLine != null) {
+					annLine.setLineNum(lineNum);
+					toReturn.add(annLine);
+					lineNum++;
+				}
+				line = reader.readLine();
+			}
+		} catch (IOException exc) {
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (IOException ex2) {
+			}
+		}
+		return toReturn;
+	}
 
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="box" boxLayoutAxis="Y_AXIS" titleFont="Lucida Grande,0,13" darkLevel="0">
+  <Panel layout="twocols" border="rounded3d" borderTop="20" borderBottom="10" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=north)">
+    <Label label="label" localize="true" name="Label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <Label label="label" localize="true" name="Label" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <TextField validateOnReturn="true" columns="7" passwd="false" text="TextField" data="TextField.data" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" readOnly="true" localize="true" />
+    <TextField validateOnReturn="true" columns="7" passwd="false" text="TextField" data="this.should.fail" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true" />
+    <Label label="label" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <TextField validateOnReturn="true" columns="7" passwd="false" text="TextField" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="this.should.fail.too" name="TextField" localize="true" manageDynamicModel="true" />
+    <Label label="label" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <TextField validateOnReturn="true" columns="7" passwd="false" text="TextField" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextField" localize="true" manageDynamicModel="true" />
+  </Panel>
+  <Panel layout="grid" hGap="5" vGap="5" cols="3" rows="1" border="rounded3d" borderTop="10" borderBottom="20" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=center)">
+    <RadioButtonList localize="true" name="PaletteRadioButtonList" constraints="grid(x=0;y=0)" staticList="Item-1 ,Item-2 ,Item-3 " iteratorClassName="java.lang.String" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </RadioButtonList>
+    <DropDown localize="true" name="dropdown" constraints="grid(x=1;y=0)" staticList="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </DropDown>
+    <List visibleRowCount="3" rowHeight="20" createNewRowOnClick="false" boundToSelectionManager="false" selectionMode="MultipleIntervalSelection" layoutOrientation="vertical" localize="true" name="list" constraints="grid(x=2;y=0)" staticList="Item-1 ,Item-2 ,Item-3 " iteratorClassName="java.lang.String" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </List>
+  </Panel>
+  <LocalizedDictionary />
+</Panel>
+

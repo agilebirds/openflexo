@@ -25,11 +25,10 @@ import org.openflexo.xml.diff3.UnresolvedAttributesConflict;
 
 public class AveragePosition extends MergeAttributeRule {
 
-	public AveragePosition(UnresolvedAttributesConflict conflict){
+	public AveragePosition(UnresolvedAttributesConflict conflict) {
 		super(conflict);
 	}
-	
-	
+
 	@Override
 	public boolean canBeApplyed() {
 		return "posiX".equals(_conflict.attributeName()) || "posiY".equals(_conflict.attributeName());
@@ -37,11 +36,12 @@ public class AveragePosition extends MergeAttributeRule {
 
 	@Override
 	public MergeAttributeAction getAction() {
-		if(_action==null){
+		if (_action == null) {
 			int v1 = Integer.valueOf(_conflict.value1());
 			int v2 = Integer.valueOf(_conflict.value2());
-			Integer average = new Integer((v1+v2)/2);
-			_action = new MergeAttributeAction(_conflict.getConflictIndex(),MergeActionType.UPDATE,_conflict.attributeName(),average.toString(),_conflict.getMergedElement());
+			Integer average = new Integer((v1 + v2) / 2);
+			_action = new MergeAttributeAction(_conflict.getConflictIndex(), MergeActionType.UPDATE, _conflict.attributeName(),
+					average.toString(), _conflict.getMergedElement());
 		}
 		return _action;
 	}

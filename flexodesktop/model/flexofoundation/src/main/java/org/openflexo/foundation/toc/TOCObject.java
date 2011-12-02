@@ -21,36 +21,34 @@ package org.openflexo.foundation.toc;
 
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class TOCObject extends FlexoModelObject {
 
-	protected static final Logger logger = FlexoLogger.getLogger(TOCObject.class
-			.getPackage().getName());
-	
+	protected static final Logger logger = FlexoLogger.getLogger(TOCObject.class.getPackage().getName());
+
 	private TOCData data = null;
-	
+
 	public TOCObject(TOCData data) {
-		super(data!=null?data.getProject():null);
+		super(data != null ? data.getProject() : null);
 		this.data = data;
 	}
-	
+
 	public TOCObject(FlexoProject project) {
 		super(project);
 	}
-	
+
 	public TOCData getData() {
 		return data;
 	}
-	
+
 	@Override
 	public FlexoProject getProject() {
-		return getData()==null?null:getData().getProject();
+		return getData() == null ? null : getData().getProject();
 	}
 
 	@Override

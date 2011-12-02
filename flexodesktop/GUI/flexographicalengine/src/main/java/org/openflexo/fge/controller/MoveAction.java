@@ -42,9 +42,7 @@ import org.openflexo.fge.view.FGEView;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.toolbox.ToolBox;
 
-
-public class MoveAction extends MouseDragControlAction
-{
+public class MoveAction extends MouseDragControlAction {
 	private static final Logger logger = Logger.getLogger(MoveAction.class.getPackage().getName());
 
 	private MoveInfo currentMove = null;
@@ -53,38 +51,34 @@ public class MoveAction extends MouseDragControlAction
 	private static Image DROP_OK_IMAGE = FIBIconLibrary.DROP_OK_CURSOR.getImage();
 	private static Image DROP_KO_IMAGE = FIBIconLibrary.DROP_KO_CURSOR.getImage();
 
-	public static Cursor dropOK = ToolBox.getPLATFORM()==ToolBox.MACOS?Toolkit.getDefaultToolkit().createCustomCursor(DROP_OK_IMAGE, new Point(16, 16), "Drop OK"):DragSource.DefaultMoveDrop;
-	public static Cursor dropKO = ToolBox.getPLATFORM()==ToolBox.MACOS?Toolkit.getDefaultToolkit().createCustomCursor(DROP_KO_IMAGE, new Point(16, 16), "Drop KO"):DragSource.DefaultMoveNoDrop;
+	public static Cursor dropOK = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(DROP_OK_IMAGE,
+			new Point(16, 16), "Drop OK") : DragSource.DefaultMoveDrop;
+	public static Cursor dropKO = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(DROP_KO_IMAGE,
+			new Point(16, 16), "Drop KO") : DragSource.DefaultMoveNoDrop;
 
 	Point initialClickOffset;
-	
+
 	@Override
-	public MouseDragControlActionType getActionType()
-	{
+	public MouseDragControlActionType getActionType() {
 		return MouseDragControlActionType.MOVE;
 	}
 
 	@Override
-	public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-	{
+	public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse DRAGGED on MOVE MouseDragControlAction");
 		}
 		if (currentMove != null) {
-			Point newPointLocation = SwingUtilities.convertPoint(
-					(Component)event.getSource(), 
-					event.getPoint(), 
+			Point newPointLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 					controller.getDrawingView());
 
-			if ((graphicalRepresentation instanceof ShapeGraphicalRepresentation) 
-					&& ((ShapeGraphicalRepresentation)graphicalRepresentation).isAllowedToBeDraggedOutsideParentContainer()
-					&& currentMove.isDnDPattern(newPointLocation, event)
-					&& (currentDND == null)) {
+			if ((graphicalRepresentation instanceof ShapeGraphicalRepresentation)
+					&& ((ShapeGraphicalRepresentation) graphicalRepresentation).isAllowedToBeDraggedOutsideParentContainer()
+					&& currentMove.isDnDPattern(newPointLocation, event) && (currentDND == null)) {
 				currentMove.stopDragging();
 				currentMove = null;
-				currentDND = new DNDInfo(this, (ShapeGraphicalRepresentation)graphicalRepresentation,controller,event);
-			}
-			else {
+				currentDND = new DNDInfo(this, (ShapeGraphicalRepresentation) graphicalRepresentation, controller, event);
+			} else {
 				currentMove.moveTo(newPointLocation);
 			}
 			return true;
@@ -93,18 +87,16 @@ public class MoveAction extends MouseDragControlAction
 	}
 
 	@Override
-	public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-	{
+	public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse PRESSED on MOVE MouseDragControlAction");
 		}
-		if ((graphicalRepresentation instanceof ShapeGraphicalRepresentation)
-				&& !graphicalRepresentation.getIsReadOnly()
-				&& (((ShapeGraphicalRepresentation<?>)graphicalRepresentation).getLocationConstraints() != LocationConstraints.UNMOVABLE)) {
+		if ((graphicalRepresentation instanceof ShapeGraphicalRepresentation) && !graphicalRepresentation.getIsReadOnly()
+				&& (((ShapeGraphicalRepresentation<?>) graphicalRepresentation).getLocationConstraints() != LocationConstraints.UNMOVABLE)) {
 			FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
-			initialClickOffset = SwingUtilities.convertPoint(event.getComponent(),event.getPoint(),(Component) view);
+			initialClickOffset = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), (Component) view);
 			// Let's go for a move
-			currentMove = new MoveInfo((ShapeGraphicalRepresentation<?>)graphicalRepresentation,event,view,controller);
+			currentMove = new MoveInfo((ShapeGraphicalRepresentation<?>) graphicalRepresentation, event, view, controller);
 			controller.notifyWillMove(currentMove);
 			return true;
 		}
@@ -112,8 +104,8 @@ public class MoveAction extends MouseDragControlAction
 	}
 
 	@Override
-	public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event, boolean isSignificativeDrag)
-	{
+	public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+			MouseEvent event, boolean isSignificativeDrag) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse RELEASED on MOVE MouseDragControlAction");
 		}
@@ -124,42 +116,36 @@ public class MoveAction extends MouseDragControlAction
 			controller.notifyHasMoved(currentMove);
 			currentMove = null;
 			return true;
-		}		
+		}
 		return false;
 	}
 
-	public static class ShapeGraphicalRepresentationTransferable implements Transferable
-	{
+	public static class ShapeGraphicalRepresentationTransferable implements Transferable {
 
 		private static DataFlavor _defaultFlavor;
 
 		private final TransferedShapeGraphicalRepresentation _transferedData;
 
-		public ShapeGraphicalRepresentationTransferable(ShapeGraphicalRepresentation element, Point dragOrigin)
-		{
+		public ShapeGraphicalRepresentationTransferable(ShapeGraphicalRepresentation element, Point dragOrigin) {
 			_transferedData = new TransferedShapeGraphicalRepresentation(element, dragOrigin);
 		}
 
 		@Override
-		public DataFlavor[] getTransferDataFlavors()
-		{
+		public DataFlavor[] getTransferDataFlavors() {
 			return new DataFlavor[] { defaultFlavor() };
 		}
 
 		@Override
-		public boolean isDataFlavorSupported(DataFlavor flavor)
-		{
+		public boolean isDataFlavorSupported(DataFlavor flavor) {
 			return true;
 		}
 
 		@Override
-		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
-		{
+		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
 			return _transferedData;
 		}
 
-		public static DataFlavor defaultFlavor()
-		{
+		public static DataFlavor defaultFlavor() {
 			if (_defaultFlavor == null) {
 				_defaultFlavor = new DataFlavor(ShapeGraphicalRepresentationTransferable.class, "ShapeGraphicalRepresentation");
 			}
@@ -168,27 +154,23 @@ public class MoveAction extends MouseDragControlAction
 
 	}
 
-	public static class TransferedShapeGraphicalRepresentation 
-	{
+	public static class TransferedShapeGraphicalRepresentation {
 		private final Point _offset;
 
 		private final ShapeGraphicalRepresentation _transfered;
 
-		public TransferedShapeGraphicalRepresentation(ShapeGraphicalRepresentation element, Point dragOffset)
-		{
+		public TransferedShapeGraphicalRepresentation(ShapeGraphicalRepresentation element, Point dragOffset) {
 			super();
 			_transfered = element;
 			_offset = dragOffset;
 		}
 
-		public Point getOffset()
-		{
+		public Point getOffset() {
 			return _offset;
 		}
 
-		public ShapeGraphicalRepresentation getTransferedElement()
-		{
-			return _transfered;   
+		public ShapeGraphicalRepresentation getTransferedElement() {
+			return _transfered;
 		}
 
 	}

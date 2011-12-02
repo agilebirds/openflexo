@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.AbstractFilter;
+import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.gen.FlexoProcessImageBuilder;
 import org.openflexo.foundation.rm.FlexoProject.FlexoIDMustBeUnique.DuplicateObjectIDIssue;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -43,9 +44,9 @@ import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.EventNode;
+import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
-import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.foundation.xml.XMLUtils;
@@ -54,94 +55,85 @@ import org.openflexo.xmlcode.ModelEntity;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * Represents a process resource
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> implements Serializable
-{
+public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> implements Serializable {
 
-	protected static final Logger logger = Logger.getLogger(FlexoProcessResource.class.getPackage()
-			.getName());
+	protected static final Logger logger = Logger.getLogger(FlexoProcessResource.class.getPackage().getName());
 
 	protected String name;
 
 	/**
-	 * Constructor used for XML Serialization: never try to instanciate resource
-	 * from this constructor
-	 *
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
 	 * @param builder
 	 */
-	public FlexoProcessResource(FlexoProjectBuilder builder)
-	{
+	public FlexoProcessResource(FlexoProjectBuilder builder) {
 		this(builder.project);
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoProcessResource(FlexoProject aProject)
-	{
+	public FlexoProcessResource(FlexoProject aProject) {
 		super(aProject);
 	}
 
-	public FlexoProcessResource(FlexoProject aProject, String aName,
-			FlexoWorkflowResource workflowResource, FlexoProjectFile processFile) throws InvalidFileNameException
-			{
+	public FlexoProcessResource(FlexoProject aProject, String aName, FlexoWorkflowResource workflowResource, FlexoProjectFile processFile)
+			throws InvalidFileNameException {
 		this(aProject);
 		name = aName;
 		setResourceFile(processFile);
 		addToSynchronizedResources(workflowResource);
 		addToDependantResources(aProject.getFlexoDMResource());
-		//addToDependantResources(aProject.getFlexoComponentLibraryResource());
-			}
+		// addToDependantResources(aProject.getFlexoComponentLibraryResource());
+	}
 
-	public FlexoProcessResource(FlexoProject aProject, FlexoProcess aProcess,
-			FlexoWorkflowResource workflowResource, FlexoProjectFile processFile) throws InvalidFileNameException
-			{
+	public FlexoProcessResource(FlexoProject aProject, FlexoProcess aProcess, FlexoWorkflowResource workflowResource,
+			FlexoProjectFile processFile) throws InvalidFileNameException {
 		this(aProject, aProcess.getName(), workflowResource, processFile);
 		_resourceData = aProcess;
 		aProcess.setFlexoResource(this);
-			}
+	}
 
 	@Override
-	public ResourceType getResourceType()
-	{
+	public ResourceType getResourceType() {
 		return ResourceType.PROCESS;
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	public void setName(String aName)
-	{
+	public void setName(String aName) {
+		String old = name;
 		name = aName;
 		setChanged();
+		notifyObservers(new NameChanged(old, name));
 	}
 
 	@Override
-	public Class getResourceDataClass()
-	{
+	public Class getResourceDataClass() {
 		return FlexoProcess.class;
 	}
 
 	@Override
 	public FlexoProcess performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
-	throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException
-	{
-		if (logger.isLoggable(Level.INFO))
-		logger.info("Loading process " + getName() + " file="+getFileName()+" ID="+getResourceIdentifier());
+			throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Loading process " + getName() + " file=" + getFileName() + " ID=" + getResourceIdentifier());
+		}
 		FlexoProcess process;
 		try {
 			process = super.performLoadResourceData(progress, loadingHandler);
 		} catch (FlexoFileNotFoundException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("File " + getFile().getName() + " NOT found, removing resource !");
+			}
 			delete();
 			return null;
 		}
@@ -149,33 +141,29 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 		return process;
 	}
 
-	public FlexoProcess getFlexoProcess()
-	{
+	public FlexoProcess getFlexoProcess() {
 		return getResourceData();
 	}
 
 	/**
-	 * Returns a boolean indicating if this resource needs a builder to be
-	 * loaded Returns true to indicate that process deserializing requires a
-	 * FlexoProcessBuilder instance
-	 *
+	 * Returns a boolean indicating if this resource needs a builder to be loaded Returns true to indicate that process deserializing
+	 * requires a FlexoProcessBuilder instance
+	 * 
 	 * @return boolean
 	 */
 	@Override
-	public boolean hasBuilder()
-	{
+	public boolean hasBuilder() {
 		return true;
 	}
 
 	/**
 	 * Overrides saveResourceData
-	 *
+	 * 
 	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#saveResourceData()
 	 */
 	@Override
-	protected void saveResourceData(boolean clearIsModified) throws SaveXMLResourceException, SaveResourcePermissionDeniedException
-	{
-		StringEncoder encoder = getProject()!=null?getProject().getStringEncoder():StringEncoder.getDefaultInstance();
+	protected void saveResourceData(boolean clearIsModified) throws SaveXMLResourceException, SaveResourcePermissionDeniedException {
+		StringEncoder encoder = getProject() != null ? getProject().getStringEncoder() : StringEncoder.getDefaultInstance();
 		String s = encoder._getDateFormat();
 		try {
 			encoder._setDateFormat("HH:mm:ss dd/MM/yyyy SSS");
@@ -185,40 +173,39 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 		} catch (SaveResourcePermissionDeniedException e) {
 			throw e;
 		} finally {
-			if (s!=null)
+			if (s != null) {
 				encoder._setDateFormat(s);
+			}
 		}
-		
-		try{
+
+		try {
 			FlexoProcessImageBuilder.writeSnapshot(getFlexoProcess());
-		}catch(Exception e){
-			logger.warning("Save image snapshot for process "+getFlexoProcess().getName()+e.getMessage());
+		} catch (Exception e) {
+			logger.warning("Save image snapshot for process " + getFlexoProcess().getName() + e.getMessage());
 		}
-		
+
 	}
 
-
 	/*protected StorageResourceData tryToLoadResourceDataWithVersion(FlexoVersion version) throws XMLOperationException, JDOMException
-    {
-        FlexoProcessNode processNode = getProject().getFlexoWorkflow()._getFlexoProcessNodeWithName(getName());
-        if (processNode == null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("Could not find process node associated with process " + getName());
-                delete();
-                return null;
-            }
-        }
-        return super.tryToLoadResourceDataWithVersion(version);
-   }*/
+	{
+	    FlexoProcessNode processNode = getProject().getFlexoWorkflow()._getFlexoProcessNodeWithName(getName());
+	    if (processNode == null) {
+	        if (logger.isLoggable(Level.WARNING)) {
+	            logger.warning("Could not find process node associated with process " + getName());
+	            delete();
+	            return null;
+	        }
+	    }
+	    return super.tryToLoadResourceDataWithVersion(version);
+	}*/
 
 	/**
 	 * Returns the required newly instancied FlexoProcessBuilder
-	 *
+	 * 
 	 * @return boolean
 	 */
 	@Override
-	public Object instanciateNewBuilder()
-	{
+	public Object instanciateNewBuilder() {
 		FlexoProcessBuilder returned = new FlexoProcessBuilder(this);
 		returned.defaultProcessName = getName();
 		returned.setProject(getProject());
@@ -230,8 +217,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 	 * Rebuild resource dependancies for this resource
 	 */
 	@Override
-	public void rebuildDependancies()
-	{
+	public void rebuildDependancies() {
 		super.rebuildDependancies();
 
 		addToSynchronizedResources(getProject().getFlexoWorkflowResource());
@@ -242,48 +228,44 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 		 * depend on the component library. Typically, this means that when a component is
 		 * deleted, if the process does not use that component, the component has no interest in
 		 * the notification of the component deletion. */
-		//addToDependantResources(getProject().getFlexoComponentLibraryResource());
+		// addToDependantResources(getProject().getFlexoComponentLibraryResource());
 
 		if (getFlexoProcess() != null) {
 
 			for (Enumeration en = getFlexoProcess().getAllSubProcessNodes().elements(); en.hasMoreElements();) {
 				SubProcessNode node = (SubProcessNode) en.nextElement();
-				if (node.getSubProcess() != null && node.getSubProcess()!=getFlexoProcess()) {
-					if (logger.isLoggable(Level.INFO))
-						logger.info("Found dependancy between " + this + " and "+ node.getSubProcess().getFlexoResource());
+				if (node.getSubProcess() != null && node.getSubProcess() != getFlexoProcess()) {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Found dependancy between " + this + " and " + node.getSubProcess().getFlexoResource());
+					}
 					addToDependantResources(node.getSubProcess().getFlexoResource());
 				}
 			}
 
 			for (Enumeration en = getFlexoProcess().getAllEmbeddedOperationNodes().elements(); en.hasMoreElements();) {
 				OperationNode node = (OperationNode) en.nextElement();
-				if (node.getComponentInstance() != null
-						&& node.getComponentInstance().getComponentDefinition() != null) {
-					if (logger.isLoggable(Level.INFO))
-						logger.info("Found dependancy between "
-								+ this
-								+ " and "
-								+ node.getComponentInstance().getComponentDefinition()
-								.getComponentResource());
+				if (node.getComponentInstance() != null && node.getComponentInstance().getComponentDefinition() != null) {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Found dependancy between " + this + " and "
+								+ node.getComponentInstance().getComponentDefinition().getComponentResource());
+					}
 					node.getComponentInstance().rebuildDependancies();
-					if (node.getTabOperationComponentInstance()!=null && node.getTabOperationComponentInstance().getComponentDefinition()!=null) {
-						if (logger.isLoggable(Level.INFO))
-							logger.info("Found dependancy between "
-									+ this
-									+ " and "
-									+ node.getTabOperationComponentInstance().getComponentDefinition()
-									.getComponentResource());
+					if (node.getTabOperationComponentInstance() != null
+							&& node.getTabOperationComponentInstance().getComponentDefinition() != null) {
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("Found dependancy between " + this + " and "
+									+ node.getTabOperationComponentInstance().getComponentDefinition().getComponentResource());
+						}
 						node.getTabOperationComponentInstance().rebuildDependancies();
 					}
 				}
-				for(ActionNode action: node.getAllActionNodes()) {
-					if (action.getTabActionComponentInstance()!=null && action.getTabActionComponentInstance().getComponentDefinition()!=null) {
-						if (logger.isLoggable(Level.INFO))
-							logger.info("Found dependancy between "
-									+ this
-									+ " and "
-									+ action.getTabActionComponentInstance().getComponentDefinition()
-									.getComponentResource());
+				for (ActionNode action : node.getAllActionNodes()) {
+					if (action.getTabActionComponentInstance() != null
+							&& action.getTabActionComponentInstance().getComponentDefinition() != null) {
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("Found dependancy between " + this + " and "
+									+ action.getTabActionComponentInstance().getComponentDefinition().getComponentResource());
+						}
 						action.getTabActionComponentInstance().rebuildDependancies();
 					}
 
@@ -295,31 +277,32 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource,
-	 * asserting that this resource is contained in this resource's dependant resources
-	 *
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
 	 * @param resource
 	 * @param dependancyScheme
 	 * @return
 	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof FlexoDMResource) {
-			FlexoDMResource dmRes = (FlexoDMResource)resource;
+			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (isLoaded() && dmRes.isLoaded() && getFlexoProcess().getProcessDMEntity() != null) {
 				if (!requestDate.before(getFlexoProcess().getProcessDMEntity().getLastUpdate())) {
 					if (logger.isLoggable(Level.FINE)) {
-						logger.info("OPTIMIST DEPENDANCY CHECKING for PROCESS "+getFlexoProcess().getName());
-						logger.info("entityLastUpdate["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getFlexoProcess().getProcessDMEntity().getLastUpdate())+"]"
-								+" < requestDate["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(requestDate)+"]");
+						logger.info("OPTIMIST DEPENDANCY CHECKING for PROCESS " + getFlexoProcess().getName());
+						logger.info("entityLastUpdate["
+								+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getFlexoProcess().getProcessDMEntity().getLastUpdate())
+								+ "]" + " < requestDate[" + new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(requestDate) + "]");
 					}
 					return false;
 				}
 				if (logger.isLoggable(Level.FINE)) {
-					logger.info("FAILED / OPTIMIST DEPENDANCY CHECKING for PROCESS "+getFlexoProcess().getName());
-					logger.info("entityLastUpdate["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getFlexoProcess().getProcessDMEntity().getLastUpdate())+"]"
-							+" > requestDate["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(requestDate)+"]");
+					logger.info("FAILED / OPTIMIST DEPENDANCY CHECKING for PROCESS " + getFlexoProcess().getName());
+					logger.info("entityLastUpdate["
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getFlexoProcess().getProcessDMEntity().getLastUpdate())
+							+ "]" + " > requestDate[" + new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(requestDate) + "]");
 				}
 			}
 		}
@@ -327,768 +310,765 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 	}
 
 	/**
-	 * Manually converts resource file from version v1 to version v2. This
-	 * method implements conversion from v0.1 to v1.0 This method implements
-	 * conversion from 2.0 to v2.1
-	 *
+	 * Manually converts resource file from version v1 to version v2. This method implements conversion from v0.1 to v1.0 This method
+	 * implements conversion from 2.0 to v2.1
+	 * 
 	 * @param v1
 	 * @param v2
 	 * @return boolean indicating if conversion was sucessfull
 	 */
 	@Override
-	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion v1,
-			FlexoVersion v2)
-	{
+	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion v1, FlexoVersion v2) {
 		/*if (v1.equals(new FlexoVersion("0.1"))
-                && v2.equals(new FlexoVersion("1.0"))) {
-            ProcessConverter1 converter = new ProcessConverter1();
-            return converter.conversionWasSucessfull;
-        } else if (v1.equals(new FlexoVersion("2.0"))
-                && v2.equals(new FlexoVersion("2.1"))) {
-            ProcessConverter2 converter = new ProcessConverter2();
-            return converter.conversionWasSucessfull;
-        } else if (v2.equals(new FlexoVersion("3.4"))) {
-        	ProcessConverter3 converter = new ProcessConverter3();
-        	return converter.conversionWasSucessfull;
-        } else*/ if (v1.equals(new FlexoVersion("4.0")) && v2.equals("5.0")) {
-        	ProcessConverter5 converter = new ProcessConverter5();
-        	return converter.conversionWasSucessfull;
-        } else if (v1.equals(new FlexoVersion("5.0")) && v2.equals("6.0")) {
-        	ProcessConverter6 converter = new ProcessConverter6();
-        	return converter.conversionWasSucessfull;
-        } else {
-        	return super.convertResourceFileFromVersionToVersion(v1, v2);
-        }
+		        && v2.equals(new FlexoVersion("1.0"))) {
+		    ProcessConverter1 converter = new ProcessConverter1();
+		    return converter.conversionWasSucessfull;
+		} else if (v1.equals(new FlexoVersion("2.0"))
+		        && v2.equals(new FlexoVersion("2.1"))) {
+		    ProcessConverter2 converter = new ProcessConverter2();
+		    return converter.conversionWasSucessfull;
+		} else if (v2.equals(new FlexoVersion("3.4"))) {
+			ProcessConverter3 converter = new ProcessConverter3();
+			return converter.conversionWasSucessfull;
+		} else*/if (v1.equals(new FlexoVersion("4.0")) && v2.equals("5.0")) {
+			ProcessConverter5 converter = new ProcessConverter5();
+			return converter.conversionWasSucessfull;
+		} else if (v1.equals(new FlexoVersion("5.0")) && v2.equals("6.0")) {
+			ProcessConverter6 converter = new ProcessConverter6();
+			return converter.conversionWasSucessfull;
+		} else {
+			return super.convertResourceFileFromVersionToVersion(v1, v2);
+		}
 	}
 
 	/*protected class ProcessConverter1
-    {
+	{
 
-        protected boolean conversionWasSucessfull = false;
+	    protected boolean conversionWasSucessfull = false;
 
-        protected Document document;
+	    protected Document document;
 
-        protected Element processElement;
+	    protected Element processElement;
 
-        private Element lastOperationComponentDefinition;
+	    private Element lastOperationComponentDefinition;
 
-        private Element popupListElement;
+	    private Element popupListElement;
 
-        protected ProcessConverter1()
-        {
-            super();
-            // roles = new Hashtable();
-            // pendingRoles = new Hashtable();
-            try {
-                document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
-                convert();
-                conversionWasSucessfull = save();
-            } catch (Exception e) {
-                // Warns about the exception
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName()
-                            + ". See console for details.");
-                e.printStackTrace();
-            }
-        }
+	    protected ProcessConverter1()
+	    {
+	        super();
+	        // roles = new Hashtable();
+	        // pendingRoles = new Hashtable();
+	        try {
+	            document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+	            convert();
+	            conversionWasSucessfull = save();
+	        } catch (Exception e) {
+	            // Warns about the exception
+	            if (logger.isLoggable(Level.WARNING))
+	                logger.warning("Exception raised: " + e.getClass().getName()
+	                        + ". See console for details.");
+	            e.printStackTrace();
+	        }
+	    }
 
-        private void convert()
-        {
-            renameRootElement();
-            restructurePetriGraphs(processElement);
-            restructureProperties(processElement);
-        }
+	    private void convert()
+	    {
+	        renameRootElement();
+	        restructurePetriGraphs(processElement);
+	        restructureProperties(processElement);
+	    }
 
-        private void renameRootElement()
-        {
-            processElement = document.getRootElement();
-            processElement.setName("FlexoProcess");
-            // processElement.setAttribute("name","unnamed");
-            Element processPropertiesElement = new Element("ProcessProperties");
-            processElement.addContent(processPropertiesElement);
-            popupListElement = new Element("PopupComponentList");
-            processElement.addContent(popupListElement);
-        }
+	    private void renameRootElement()
+	    {
+	        processElement = document.getRootElement();
+	        processElement.setName("FlexoProcess");
+	        // processElement.setAttribute("name","unnamed");
+	        Element processPropertiesElement = new Element("ProcessProperties");
+	        processElement.addContent(processPropertiesElement);
+	        popupListElement = new Element("PopupComponentList");
+	        processElement.addContent(popupListElement);
+	    }
 
-        private void restructurePetriGraphs(Element element)
-        {
-            List activityPetriGraphs = element.getChildren("dwgraph");
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("restructurePetriGraphs() for " + element + " with "
-                        + activityPetriGraphs.size() + " graph");
-            if (activityPetriGraphs.size() == 1) {
-                restructurePetriGraph((Element) activityPetriGraphs.get(0), element);
-            }
-        }
+	    private void restructurePetriGraphs(Element element)
+	    {
+	        List activityPetriGraphs = element.getChildren("dwgraph");
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("restructurePetriGraphs() for " + element + " with "
+	                    + activityPetriGraphs.size() + " graph");
+	        if (activityPetriGraphs.size() == 1) {
+	            restructurePetriGraph((Element) activityPetriGraphs.get(0), element);
+	        }
+	    }
 
-        private void restructurePetriGraph(Element pgElement, Element parentElement)
-        {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("restructurePetriGraph() for " + pgElement);
-            try {
-                Attribute level = pgElement.getAttribute("level");
-                int lev;
-                lev = level.getIntValue();
-                if (lev == 0) {
-                    pgElement.setName("ActivityPetriGraph");
-                } else if (lev == 1) {
-                    pgElement.setName("OperationPetriGraph");
-                } else if (lev == 2) {
-                    pgElement.setName("ActionPetriGraph");
-                }
-                pgElement.removeAttribute(level);
+	    private void restructurePetriGraph(Element pgElement, Element parentElement)
+	    {
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("restructurePetriGraph() for " + pgElement);
+	        try {
+	            Attribute level = pgElement.getAttribute("level");
+	            int lev;
+	            lev = level.getIntValue();
+	            if (lev == 0) {
+	                pgElement.setName("ActivityPetriGraph");
+	            } else if (lev == 1) {
+	                pgElement.setName("OperationPetriGraph");
+	            } else if (lev == 2) {
+	                pgElement.setName("ActionPetriGraph");
+	            }
+	            pgElement.removeAttribute(level);
 
-                Vector newAttributes = new Vector();
+	            Vector newAttributes = new Vector();
 
-                List attrList = ((Element) pgElement.clone()).getAttributes();
-                for (int i = 0; i < attrList.size(); i++) {
-                    Attribute attr = (Attribute) attrList.get(i);
-                    if ((attr.getName().equals("superClassGenSubPath"))
-                            || (attr.getName().equals("pageGenSubPath"))
-                            || (attr.getName().equals("operationGenSubPath"))
-                            || (attr.getName().equals("tabGenSubPath"))
-                            || (attr.getName().equals("popupGenSubPath"))
-                            || (attr.getName().equals("componentPrefix"))) {
-                        Attribute keptAttribute = new Attribute(attr.getName(), attr.getValue());
-                        newAttributes.add(keptAttribute);
-                    }
-                    if (attr.getName().equals("cssSheet")) {
-                        Attribute keptAttribute = new Attribute(attr.getName(), "???");
-                        if (attr.getValue().equals("FlexoMasterStyle.css")) {
-                            keptAttribute.setValue(FlexoCSS.FLEXO.getName());
-                        } else if (attr.getValue().equals("ContentoMasterStyle.css")) {
-                            keptAttribute.setValue(FlexoCSS.CONTENTO.getName());
-                        } else if (attr.getValue().equals("OmniscioMasterStyle.css")) {
-                            keptAttribute.setValue(FlexoCSS.OMNISCIO.getName());
-                        } else if (attr.getValue().equals("Electrabel.css")) {
-                            keptAttribute.setValue(FlexoCSS.CONTENTO.getName());
-                        }
-                        newAttributes.add(keptAttribute);
-                    }
-                    if (!((attr.getName().equals("width")) || (attr.getName().equals("height"))
-                            || (attr.getName().equals("posiX")) || (attr.getName().equals("posiY"))
-                            || (attr.getName().equals("nColumn"))
-                            || (attr.getName().equals("textColor")) || (attr.getName()
-                            .equals("backColor")))) {
-                        pgElement.removeAttribute(pgElement.getAttribute(attr.getName()));
-                    }
-                }
-                if (parentElement != null) {
-                    for (int i = 0; i < newAttributes.size(); i++) {
-                        parentElement.setAttribute((Attribute) newAttributes.get(i));
-                    }
-                }
+	            List attrList = ((Element) pgElement.clone()).getAttributes();
+	            for (int i = 0; i < attrList.size(); i++) {
+	                Attribute attr = (Attribute) attrList.get(i);
+	                if ((attr.getName().equals("superClassGenSubPath"))
+	                        || (attr.getName().equals("pageGenSubPath"))
+	                        || (attr.getName().equals("operationGenSubPath"))
+	                        || (attr.getName().equals("tabGenSubPath"))
+	                        || (attr.getName().equals("popupGenSubPath"))
+	                        || (attr.getName().equals("componentPrefix"))) {
+	                    Attribute keptAttribute = new Attribute(attr.getName(), attr.getValue());
+	                    newAttributes.add(keptAttribute);
+	                }
+	                if (attr.getName().equals("cssSheet")) {
+	                    Attribute keptAttribute = new Attribute(attr.getName(), "???");
+	                    if (attr.getValue().equals("FlexoMasterStyle.css")) {
+	                        keptAttribute.setValue(FlexoCSS.FLEXO.getName());
+	                    } else if (attr.getValue().equals("ContentoMasterStyle.css")) {
+	                        keptAttribute.setValue(FlexoCSS.CONTENTO.getName());
+	                    } else if (attr.getValue().equals("OmniscioMasterStyle.css")) {
+	                        keptAttribute.setValue(FlexoCSS.OMNISCIO.getName());
+	                    } else if (attr.getValue().equals("Electrabel.css")) {
+	                        keptAttribute.setValue(FlexoCSS.CONTENTO.getName());
+	                    }
+	                    newAttributes.add(keptAttribute);
+	                }
+	                if (!((attr.getName().equals("width")) || (attr.getName().equals("height"))
+	                        || (attr.getName().equals("posiX")) || (attr.getName().equals("posiY"))
+	                        || (attr.getName().equals("nColumn"))
+	                        || (attr.getName().equals("textColor")) || (attr.getName()
+	                        .equals("backColor")))) {
+	                    pgElement.removeAttribute(pgElement.getAttribute(attr.getName()));
+	                }
+	            }
+	            if (parentElement != null) {
+	                for (int i = 0; i < newAttributes.size(); i++) {
+	                    parentElement.setAttribute((Attribute) newAttributes.get(i));
+	                }
+	            }
 
-                restructurePetriNodes(pgElement);
+	            restructurePetriNodes(pgElement);
 
-            } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName()
-                            + ". See console for details.");
-                e.printStackTrace();
-            }
-        }
+	        } catch (Exception e) {
+	            if (logger.isLoggable(Level.WARNING))
+	                logger.warning("Exception raised: " + e.getClass().getName()
+	                        + ". See console for details.");
+	            e.printStackTrace();
+	        }
+	    }
 
-        private void restructurePetriNodes(Element pgElement)
-        {
-            Vector newNodes = new Vector();
-            List allNodes = pgElement.getChildren("flexonode");
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("restructurePetriNodes() for " + pgElement + " with " + allNodes.size()
-                        + " nodes");
-            for (int i = 0; i < allNodes.size(); i++) {
-                Element oldNodeElement = (Element) allNodes.get(i);
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Go for node " + oldNodeElement + "with index " + i
-                            + " activityPetriNodes.size()=" + allNodes.size());
-                Element newNodeElement = restructurePetriNode(oldNodeElement);
-                newNodes.add(newNodeElement);
-            }
-            pgElement.removeChildren("flexonode");
-            for (int i = 0; i < newNodes.size(); i++) {
-                pgElement.addContent((Element) newNodes.elementAt(i));
-            }
-        }
+	    private void restructurePetriNodes(Element pgElement)
+	    {
+	        Vector newNodes = new Vector();
+	        List allNodes = pgElement.getChildren("flexonode");
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("restructurePetriNodes() for " + pgElement + " with " + allNodes.size()
+	                    + " nodes");
+	        for (int i = 0; i < allNodes.size(); i++) {
+	            Element oldNodeElement = (Element) allNodes.get(i);
+	            if (logger.isLoggable(Level.FINE))
+	                logger.fine("Go for node " + oldNodeElement + "with index " + i
+	                        + " activityPetriNodes.size()=" + allNodes.size());
+	            Element newNodeElement = restructurePetriNode(oldNodeElement);
+	            newNodes.add(newNodeElement);
+	        }
+	        pgElement.removeChildren("flexonode");
+	        for (int i = 0; i < newNodes.size(); i++) {
+	            pgElement.addContent((Element) newNodes.elementAt(i));
+	        }
+	    }
 
-        private Element restructurePetriNode(Element nodeElement)
-        {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("restructurePetriNode() for " + nodeElement);
-            Element returnedElement = (Element) nodeElement.clone();
-            try {
-                Attribute level = returnedElement.getAttribute("level");
-                int lev;
-                lev = level.getIntValue();
-                if (lev == 0) {
-                    returnedElement.setName("ActivityNode");
-                } else if (lev == 1) {
-                    returnedElement.setName("OperationNode");
-                } else if (lev == 2) {
-                    returnedElement.setName("ActionNode");
-                }
-                returnedElement.removeAttribute(level);
-                Attribute nameAttribute = returnedElement.getAttribute("name");
-                if (nameAttribute != null) {
-                    nameAttribute.setName("nodeName");
-                }
-                Attribute descriptionAttribute = returnedElement.getAttribute("nodeDesc");
-                if (descriptionAttribute != null) {
-                    descriptionAttribute.setName("description");
-                }
-                Attribute typeAttribute = returnedElement.getAttribute("activityType");
-                if (typeAttribute != null) {
-                    typeAttribute.setName("nodeType");
-                    if (typeAttribute.getValue().equals("normalActivity")) {
-                        typeAttribute.setValue(NodeType.NORMAL.getName());
-                    } else if (typeAttribute.getValue().equals("beginningActivity")) {
-                        typeAttribute.setValue(NodeType.BEGIN.getName());
-                    } else if (typeAttribute.getValue().equals("pseudoBeginningActivity")) {
-                        typeAttribute.setValue(NodeType.PSEUDO_BEGIN.getName());
-                    } else if (typeAttribute.getValue().equals("endingActivity")) {
-                        typeAttribute.setValue(NodeType.END.getName());
-                    } else if (typeAttribute.getValue().equals("pseudoEndingActivity")) {
-                        typeAttribute.setValue(NodeType.PSEUDO_END.getName());
-                    } else if (typeAttribute.getValue().equals("interOperation")) {
-                        typeAttribute.setValue(NodeType.INTER.getName());
-                    }
-                }
-                Attribute roleAttribute = returnedElement.getAttribute("role");
-                if (roleAttribute != null) {
-                    roleAttribute.setName("role");
-                }
-                Attribute isWaitingAttribute = returnedElement.getAttribute("iswaiting");
-                if (isWaitingAttribute != null) {
-                    isWaitingAttribute.setName("isWaiting");
-                }
-                Attribute isSAAttribute = returnedElement.getAttribute("selfactivated");
-                if (isSAAttribute != null) {
-                    isSAAttribute.setName("isSelfActivated");
-                }
-                Attribute actionTypeAttribute = returnedElement.getAttribute("actionType");
-                if (actionTypeAttribute != null) {
-                    actionTypeAttribute.setName("actionType");
-                    if (lev != 2) {
-                        returnedElement.removeAttribute(actionTypeAttribute);
-                    } else {
-                        if (actionTypeAttribute.getValue().equals("Default")) {
-                            actionTypeAttribute.setValue(ActionType.DEFAULT.getName());
-                        } else if (actionTypeAttribute.getValue().equals("CreateSubProcess")) {
-                            actionTypeAttribute.setValue(ActionType.CREATE_SUB_PROCESS.getName());
-                        } else if (actionTypeAttribute.getValue().equals("ExecuteSubProcessNode")) {
-                            actionTypeAttribute.setValue(ActionType.EXECUTE_SUB_PROCESS.getName());
-                        } else if (actionTypeAttribute.getValue().equals("selfActivated")) {
-                            actionTypeAttribute.setValue(ActionType.SELF_ACTIVATED.getName());
-                        }
+	    private Element restructurePetriNode(Element nodeElement)
+	    {
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("restructurePetriNode() for " + nodeElement);
+	        Element returnedElement = (Element) nodeElement.clone();
+	        try {
+	            Attribute level = returnedElement.getAttribute("level");
+	            int lev;
+	            lev = level.getIntValue();
+	            if (lev == 0) {
+	                returnedElement.setName("ActivityNode");
+	            } else if (lev == 1) {
+	                returnedElement.setName("OperationNode");
+	            } else if (lev == 2) {
+	                returnedElement.setName("ActionNode");
+	            }
+	            returnedElement.removeAttribute(level);
+	            Attribute nameAttribute = returnedElement.getAttribute("name");
+	            if (nameAttribute != null) {
+	                nameAttribute.setName("nodeName");
+	            }
+	            Attribute descriptionAttribute = returnedElement.getAttribute("nodeDesc");
+	            if (descriptionAttribute != null) {
+	                descriptionAttribute.setName("description");
+	            }
+	            Attribute typeAttribute = returnedElement.getAttribute("activityType");
+	            if (typeAttribute != null) {
+	                typeAttribute.setName("nodeType");
+	                if (typeAttribute.getValue().equals("normalActivity")) {
+	                    typeAttribute.setValue(NodeType.NORMAL.getName());
+	                } else if (typeAttribute.getValue().equals("beginningActivity")) {
+	                    typeAttribute.setValue(NodeType.BEGIN.getName());
+	                } else if (typeAttribute.getValue().equals("pseudoBeginningActivity")) {
+	                    typeAttribute.setValue(NodeType.PSEUDO_BEGIN.getName());
+	                } else if (typeAttribute.getValue().equals("endingActivity")) {
+	                    typeAttribute.setValue(NodeType.END.getName());
+	                } else if (typeAttribute.getValue().equals("pseudoEndingActivity")) {
+	                    typeAttribute.setValue(NodeType.PSEUDO_END.getName());
+	                } else if (typeAttribute.getValue().equals("interOperation")) {
+	                    typeAttribute.setValue(NodeType.INTER.getName());
+	                }
+	            }
+	            Attribute roleAttribute = returnedElement.getAttribute("role");
+	            if (roleAttribute != null) {
+	                roleAttribute.setName("role");
+	            }
+	            Attribute isWaitingAttribute = returnedElement.getAttribute("iswaiting");
+	            if (isWaitingAttribute != null) {
+	                isWaitingAttribute.setName("isWaiting");
+	            }
+	            Attribute isSAAttribute = returnedElement.getAttribute("selfactivated");
+	            if (isSAAttribute != null) {
+	                isSAAttribute.setName("isSelfActivated");
+	            }
+	            Attribute actionTypeAttribute = returnedElement.getAttribute("actionType");
+	            if (actionTypeAttribute != null) {
+	                actionTypeAttribute.setName("actionType");
+	                if (lev != 2) {
+	                    returnedElement.removeAttribute(actionTypeAttribute);
+	                } else {
+	                    if (actionTypeAttribute.getValue().equals("Default")) {
+	                        actionTypeAttribute.setValue(ActionType.DEFAULT.getName());
+	                    } else if (actionTypeAttribute.getValue().equals("CreateSubProcess")) {
+	                        actionTypeAttribute.setValue(ActionType.CREATE_SUB_PROCESS.getName());
+	                    } else if (actionTypeAttribute.getValue().equals("ExecuteSubProcessNode")) {
+	                        actionTypeAttribute.setValue(ActionType.EXECUTE_SUB_PROCESS.getName());
+	                    } else if (actionTypeAttribute.getValue().equals("selfActivated")) {
+	                        actionTypeAttribute.setValue(ActionType.SELF_ACTIVATED.getName());
+	                    }
 
-                    }
-                }
-                Attribute woCompAttribute = returnedElement.getAttribute("woComponentName");
-                if (woCompAttribute != null) {
-                    woCompAttribute.setName("WOComponentName");
-                    if (lev == 1) {
-                        Element operationComponentDefinition = new Element(
-                                "OperationComponentDefinition");
-                        operationComponentDefinition.setAttribute(new Attribute("name",
-                                woCompAttribute.getValue()));
-                        returnedElement.addContent(operationComponentDefinition);
-                        lastOperationComponentDefinition = operationComponentDefinition;
-                        if (logger.isLoggable(Level.FINE))
-                            logger.fine("Found operation component definition "
-                                    + woCompAttribute.getValue());
-                    } else if (lev == 2) {
-                        Attribute isThumbnailAttribute = returnedElement
-                                .getAttribute("isThumbnail");
-                        if ((isThumbnailAttribute != null)
-                                && (isThumbnailAttribute.getValue().equalsIgnoreCase("true"))) {
-                            Element thumbnailComponentDefinition = new Element(
-                                    "ThumbnailComponentDefinition");
-                            thumbnailComponentDefinition.setAttribute(new Attribute("name",
-                                    woCompAttribute.getValue()));
-                            lastOperationComponentDefinition
-                                    .addContent(thumbnailComponentDefinition);
-                            if (logger.isLoggable(Level.FINE))
-                                logger.fine("Found thumbnail component definition "
-                                        + woCompAttribute.getValue());
-                        } else {
-                            Element popupComponentDefinition = new Element(
-                                    "PopupComponentDefinition");
-                            popupComponentDefinition.setAttribute(new Attribute("name",
-                                    woCompAttribute.getValue()));
-                            popupListElement.addContent(popupComponentDefinition);
-                            if (logger.isLoggable(Level.FINE))
-                                logger.fine("Found popup component definition "
-                                        + woCompAttribute.getValue());
-                        }
-                    }
-                }
-                Attribute classNameAttribute = returnedElement.getAttribute("className");
-                if (classNameAttribute != null) {
-                    returnedElement.removeAttribute(classNameAttribute);
-                }
-                Attribute classnameAttribute = returnedElement.getAttribute("classname");
-                if (classnameAttribute != null) {
-                    returnedElement.removeAttribute(classnameAttribute);
-                }
-                Element nodeProperties = new Element("NodeProperties");
-                List attrList = ((Element) returnedElement.clone()).getAttributes();
-                for (int i = 0; i < attrList.size(); i++) {
-                    Attribute attr = (Attribute) attrList.get(i);
-                    if ((!attr.getName().equals("nodeName"))
-                            && (!attr.getName().equals("description"))
-                            && (!attr.getName().equals("nodeType"))
-                            && (!attr.getName().equals("role"))
-                            && (!attr.getName().equals("actionType"))
-                            // && ((!attr.getName().equals("WOComponentName") &&
-                            // (lev == 1)))
-                            && (!attr.getName().equals("className"))
-                            && (!attr.getName().equals("isWaiting"))
-                            && (!attr.getName().equals("isSelfActivated"))
-                            && (!attr.getName().equals("classname"))) {
-                        Class type;
-                        if (!((attr.getName().equals("width")) || (attr.getName().equals("height"))
-                                || (attr.getName().equals("posiX"))
-                                || (attr.getName().equals("posiY"))
-                                || (attr.getName().equals("textColor")) || (attr.getName()
-                                .equals("backColor")))) {
-                            if (attr.getName().equals("iswaiting")) {
-                                type = Boolean.class;
-                            } else {
-                                type = String.class;
-                            }
-                            Element newElement = new Element(attr.getName());
-                            newElement.setAttribute(new Attribute("className", type.getName()));
-                            newElement.addContent(new Text(attr.getValue()));
-                            returnedElement.removeAttribute(returnedElement.getAttribute(attr
-                                    .getName()));
-                            nodeProperties.addContent(newElement);
-                        }
-                    }
-                }
-                returnedElement.addContent(nodeProperties);
+	                }
+	            }
+	            Attribute woCompAttribute = returnedElement.getAttribute("woComponentName");
+	            if (woCompAttribute != null) {
+	                woCompAttribute.setName("WOComponentName");
+	                if (lev == 1) {
+	                    Element operationComponentDefinition = new Element(
+	                            "OperationComponentDefinition");
+	                    operationComponentDefinition.setAttribute(new Attribute("name",
+	                            woCompAttribute.getValue()));
+	                    returnedElement.addContent(operationComponentDefinition);
+	                    lastOperationComponentDefinition = operationComponentDefinition;
+	                    if (logger.isLoggable(Level.FINE))
+	                        logger.fine("Found operation component definition "
+	                                + woCompAttribute.getValue());
+	                } else if (lev == 2) {
+	                    Attribute isThumbnailAttribute = returnedElement
+	                            .getAttribute("isThumbnail");
+	                    if ((isThumbnailAttribute != null)
+	                            && (isThumbnailAttribute.getValue().equalsIgnoreCase("true"))) {
+	                        Element thumbnailComponentDefinition = new Element(
+	                                "ThumbnailComponentDefinition");
+	                        thumbnailComponentDefinition.setAttribute(new Attribute("name",
+	                                woCompAttribute.getValue()));
+	                        lastOperationComponentDefinition
+	                                .addContent(thumbnailComponentDefinition);
+	                        if (logger.isLoggable(Level.FINE))
+	                            logger.fine("Found thumbnail component definition "
+	                                    + woCompAttribute.getValue());
+	                    } else {
+	                        Element popupComponentDefinition = new Element(
+	                                "PopupComponentDefinition");
+	                        popupComponentDefinition.setAttribute(new Attribute("name",
+	                                woCompAttribute.getValue()));
+	                        popupListElement.addContent(popupComponentDefinition);
+	                        if (logger.isLoggable(Level.FINE))
+	                            logger.fine("Found popup component definition "
+	                                    + woCompAttribute.getValue());
+	                    }
+	                }
+	            }
+	            Attribute classNameAttribute = returnedElement.getAttribute("className");
+	            if (classNameAttribute != null) {
+	                returnedElement.removeAttribute(classNameAttribute);
+	            }
+	            Attribute classnameAttribute = returnedElement.getAttribute("classname");
+	            if (classnameAttribute != null) {
+	                returnedElement.removeAttribute(classnameAttribute);
+	            }
+	            Element nodeProperties = new Element("NodeProperties");
+	            List attrList = ((Element) returnedElement.clone()).getAttributes();
+	            for (int i = 0; i < attrList.size(); i++) {
+	                Attribute attr = (Attribute) attrList.get(i);
+	                if ((!attr.getName().equals("nodeName"))
+	                        && (!attr.getName().equals("description"))
+	                        && (!attr.getName().equals("nodeType"))
+	                        && (!attr.getName().equals("role"))
+	                        && (!attr.getName().equals("actionType"))
+	                        // && ((!attr.getName().equals("WOComponentName") &&
+	                        // (lev == 1)))
+	                        && (!attr.getName().equals("className"))
+	                        && (!attr.getName().equals("isWaiting"))
+	                        && (!attr.getName().equals("isSelfActivated"))
+	                        && (!attr.getName().equals("classname"))) {
+	                    Class type;
+	                    if (!((attr.getName().equals("width")) || (attr.getName().equals("height"))
+	                            || (attr.getName().equals("posiX"))
+	                            || (attr.getName().equals("posiY"))
+	                            || (attr.getName().equals("textColor")) || (attr.getName()
+	                            .equals("backColor")))) {
+	                        if (attr.getName().equals("iswaiting")) {
+	                            type = Boolean.class;
+	                        } else {
+	                            type = String.class;
+	                        }
+	                        Element newElement = new Element(attr.getName());
+	                        newElement.setAttribute(new Attribute("className", type.getName()));
+	                        newElement.addContent(new Text(attr.getValue()));
+	                        returnedElement.removeAttribute(returnedElement.getAttribute(attr
+	                                .getName()));
+	                        nodeProperties.addContent(newElement);
+	                    }
+	                }
+	            }
+	            returnedElement.addContent(nodeProperties);
 
-                List petriGraphs = returnedElement.getChildren("dwgraph");
-                if (petriGraphs.size() == 1) {
-                    restructurePetriGraph((Element) petriGraphs.get(0), null);
-                }
+	            List petriGraphs = returnedElement.getChildren("dwgraph");
+	            if (petriGraphs.size() == 1) {
+	                restructurePetriGraph((Element) petriGraphs.get(0), null);
+	            }
 
-                restructurePreConditions(returnedElement);
-                restructurePostConditions(returnedElement);
+	            restructurePreConditions(returnedElement);
+	            restructurePostConditions(returnedElement);
 
-                return returnedElement;
+	            return returnedElement;
 
-            } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName()
-                            + ". See console for details.");
-                e.printStackTrace();
-                return null;
-            }
-        }
+	        } catch (Exception e) {
+	            if (logger.isLoggable(Level.WARNING))
+	                logger.warning("Exception raised: " + e.getClass().getName()
+	                        + ". See console for details.");
+	            e.printStackTrace();
+	            return null;
+	        }
+	    }
 
-        private void restructurePreConditions(Element nodeElement)
-        {
-            Vector newPreConditions = new Vector();
-            List allPreConditions = nodeElement.getChildren("dwprecondition");
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("restructurePreConditions() for " + nodeElement + " with "
-                        + allPreConditions.size() + " preconditions");
-            for (int i = 0; i < allPreConditions.size(); i++) {
-                Element oldPreConditionElement = (Element) allPreConditions.get(i);
-                Element newPreConditionElement = restructurePreCondition(oldPreConditionElement);
-                newPreConditions.add(newPreConditionElement);
-            }
-            nodeElement.removeChildren("dwprecondition");
-            for (int i = 0; i < newPreConditions.size(); i++) {
-                nodeElement.addContent((Element) newPreConditions.elementAt(i));
-            }
-        }
+	    private void restructurePreConditions(Element nodeElement)
+	    {
+	        Vector newPreConditions = new Vector();
+	        List allPreConditions = nodeElement.getChildren("dwprecondition");
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("restructurePreConditions() for " + nodeElement + " with "
+	                    + allPreConditions.size() + " preconditions");
+	        for (int i = 0; i < allPreConditions.size(); i++) {
+	            Element oldPreConditionElement = (Element) allPreConditions.get(i);
+	            Element newPreConditionElement = restructurePreCondition(oldPreConditionElement);
+	            newPreConditions.add(newPreConditionElement);
+	        }
+	        nodeElement.removeChildren("dwprecondition");
+	        for (int i = 0; i < newPreConditions.size(); i++) {
+	            nodeElement.addContent((Element) newPreConditions.elementAt(i));
+	        }
+	    }
 
-        private Element restructurePreCondition(Element preConditionElement)
-        {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("restructurePreCondition() for " + preConditionElement);
-            Element returnedElement = (Element) preConditionElement.clone();
-            try {
-                returnedElement.setName("FlexoPreCondition");
-                Attribute idAttr = returnedElement.getAttribute("ID");
-                idAttr.setName("preConditionId");
-                Attribute classNameAttribute = returnedElement.getAttribute("className");
-                if (classNameAttribute != null) {
-                    returnedElement.removeAttribute(classNameAttribute);
-                }
-                Element preConditionProperties = new Element("PreConditionProperties");
-                List attrList = ((Element) returnedElement.clone()).getAttributes();
-                for (int i = 0; i < attrList.size(); i++) {
-                    Attribute attr = (Attribute) attrList.get(i);
-                    if (!attr.getName().equals("preConditionId")) {
-                        if (!((attr.getName().equals("width")) || (attr.getName().equals("height"))
-                                || (attr.getName().equals("posiX"))
-                                || (attr.getName().equals("posiY"))
-                                || (attr.getName().equals("textColor"))
-                                || (attr.getName().equals("fixedLocation"))
-                                || (attr.getName().equals("initTokenNbr")) || (attr.getName()
-                                .equals("backColor")))) {
-                            Class type = String.class;
-                            Element newElement = new Element(attr.getName());
-                            newElement.setAttribute(new Attribute("className", type.getName()));
-                            newElement.addContent(new Text(attr.getValue()));
-                            returnedElement.removeAttribute(returnedElement.getAttribute(attr
-                                    .getName()));
-                            preConditionProperties.addContent(newElement);
-                        }
-                    }
-                }
-                returnedElement.addContent(preConditionProperties);
+	    private Element restructurePreCondition(Element preConditionElement)
+	    {
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("restructurePreCondition() for " + preConditionElement);
+	        Element returnedElement = (Element) preConditionElement.clone();
+	        try {
+	            returnedElement.setName("FlexoPreCondition");
+	            Attribute idAttr = returnedElement.getAttribute("ID");
+	            idAttr.setName("preConditionId");
+	            Attribute classNameAttribute = returnedElement.getAttribute("className");
+	            if (classNameAttribute != null) {
+	                returnedElement.removeAttribute(classNameAttribute);
+	            }
+	            Element preConditionProperties = new Element("PreConditionProperties");
+	            List attrList = ((Element) returnedElement.clone()).getAttributes();
+	            for (int i = 0; i < attrList.size(); i++) {
+	                Attribute attr = (Attribute) attrList.get(i);
+	                if (!attr.getName().equals("preConditionId")) {
+	                    if (!((attr.getName().equals("width")) || (attr.getName().equals("height"))
+	                            || (attr.getName().equals("posiX"))
+	                            || (attr.getName().equals("posiY"))
+	                            || (attr.getName().equals("textColor"))
+	                            || (attr.getName().equals("fixedLocation"))
+	                            || (attr.getName().equals("initTokenNbr")) || (attr.getName()
+	                            .equals("backColor")))) {
+	                        Class type = String.class;
+	                        Element newElement = new Element(attr.getName());
+	                        newElement.setAttribute(new Attribute("className", type.getName()));
+	                        newElement.addContent(new Text(attr.getValue()));
+	                        returnedElement.removeAttribute(returnedElement.getAttribute(attr
+	                                .getName()));
+	                        preConditionProperties.addContent(newElement);
+	                    }
+	                }
+	            }
+	            returnedElement.addContent(preConditionProperties);
 
-                return returnedElement;
+	            return returnedElement;
 
-            } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName()
-                            + ". See console for details.");
-                e.printStackTrace();
-                return null;
-            }
-        }
+	        } catch (Exception e) {
+	            if (logger.isLoggable(Level.WARNING))
+	                logger.warning("Exception raised: " + e.getClass().getName()
+	                        + ". See console for details.");
+	            e.printStackTrace();
+	            return null;
+	        }
+	    }
 
-        private void restructurePostConditions(Element nodeElement)
-        {
-            Vector newPostConditions = new Vector();
-            List allPostConditions = nodeElement.getChildren("dwpostcondition");
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("restructurePostConditions() for " + nodeElement + " with "
-                        + allPostConditions.size() + " postconditions");
-            for (int i = 0; i < allPostConditions.size(); i++) {
-                Element oldPostConditionElement = (Element) allPostConditions.get(i);
-                Element newPostConditionElement = restructurePostCondition(oldPostConditionElement);
-                newPostConditions.add(newPostConditionElement);
-            }
-            nodeElement.removeChildren("dwpostcondition");
-            for (int i = 0; i < newPostConditions.size(); i++) {
-                nodeElement.addContent((Element) newPostConditions.elementAt(i));
-            }
-        }
+	    private void restructurePostConditions(Element nodeElement)
+	    {
+	        Vector newPostConditions = new Vector();
+	        List allPostConditions = nodeElement.getChildren("dwpostcondition");
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("restructurePostConditions() for " + nodeElement + " with "
+	                    + allPostConditions.size() + " postconditions");
+	        for (int i = 0; i < allPostConditions.size(); i++) {
+	            Element oldPostConditionElement = (Element) allPostConditions.get(i);
+	            Element newPostConditionElement = restructurePostCondition(oldPostConditionElement);
+	            newPostConditions.add(newPostConditionElement);
+	        }
+	        nodeElement.removeChildren("dwpostcondition");
+	        for (int i = 0; i < newPostConditions.size(); i++) {
+	            nodeElement.addContent((Element) newPostConditions.elementAt(i));
+	        }
+	    }
 
-        private Element restructurePostCondition(Element postConditionElement)
-        {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("restructurePostCondition() for " + postConditionElement);
-            Element returnedElement = (Element) postConditionElement.clone();
-            try {
-                returnedElement.setName("FlexoPostCondition");
-                Attribute idAttr = returnedElement.getAttribute("nextPreconditionID");
-                idAttr.setName("nextPreconditionId");
-                Attribute classNameAttribute = returnedElement.getAttribute("className");
-                if (classNameAttribute != null) {
-                    returnedElement.removeAttribute(classNameAttribute);
-                }
-                Attribute postConditionType = returnedElement.getAttribute("postConditionType");
-                if (postConditionType.getValue().equals("Token")) {
-                    postConditionType.setValue(PostConditionType.TOKEN.getName());
-                } else if (postConditionType.getValue().equals("NextOperation")) {
-                    postConditionType.setValue(PostConditionType.NEXT_OPERATION.getName());
-                } else if (postConditionType.getValue().equals("NewInstance")) {
-                    postConditionType.setValue(PostConditionType.NEW_INSTANCE.getName());
-                }
+	    private Element restructurePostCondition(Element postConditionElement)
+	    {
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("restructurePostCondition() for " + postConditionElement);
+	        Element returnedElement = (Element) postConditionElement.clone();
+	        try {
+	            returnedElement.setName("FlexoPostCondition");
+	            Attribute idAttr = returnedElement.getAttribute("nextPreconditionID");
+	            idAttr.setName("nextPreconditionId");
+	            Attribute classNameAttribute = returnedElement.getAttribute("className");
+	            if (classNameAttribute != null) {
+	                returnedElement.removeAttribute(classNameAttribute);
+	            }
+	            Attribute postConditionType = returnedElement.getAttribute("postConditionType");
+	            if (postConditionType.getValue().equals("Token")) {
+	                postConditionType.setValue(PostConditionType.TOKEN.getName());
+	            } else if (postConditionType.getValue().equals("NextOperation")) {
+	                postConditionType.setValue(PostConditionType.NEXT_OPERATION.getName());
+	            } else if (postConditionType.getValue().equals("NewInstance")) {
+	                postConditionType.setValue(PostConditionType.NEW_INSTANCE.getName());
+	            }
 
-                Element postConditionProperties = new Element("PostConditionProperties");
-                List attrList = ((Element) returnedElement.clone()).getAttributes();
-                for (int i = 0; i < attrList.size(); i++) {
-                    Attribute attr = (Attribute) attrList.get(i);
-                    if (!attr.getName().equals("nextPreconditionId")) {
-                        if (!((attr.getName().equals("width")) || (attr.getName().equals("height"))
-                                || (attr.getName().equals("posiX"))
-                                || (attr.getName().equals("posiY"))
-                                || (attr.getName().equals("textColor"))
-                                || (attr.getName().equals("delay"))
-                                || (attr.getName().equals("tokenIncrem"))
-                                || (attr.getName().equals("postConditionType")) || (attr.getName()
-                                .equals("backColor")))) {
-                            Class type = String.class;
-                            Element newElement = new Element(attr.getName());
-                            newElement.setAttribute(new Attribute("className", type.getName()));
-                            newElement.addContent(new Text(attr.getValue()));
-                            returnedElement.removeAttribute(returnedElement.getAttribute(attr
-                                    .getName()));
-                            postConditionProperties.addContent(newElement);
-                        }
-                    }
-                }
-                returnedElement.addContent(postConditionProperties);
+	            Element postConditionProperties = new Element("PostConditionProperties");
+	            List attrList = ((Element) returnedElement.clone()).getAttributes();
+	            for (int i = 0; i < attrList.size(); i++) {
+	                Attribute attr = (Attribute) attrList.get(i);
+	                if (!attr.getName().equals("nextPreconditionId")) {
+	                    if (!((attr.getName().equals("width")) || (attr.getName().equals("height"))
+	                            || (attr.getName().equals("posiX"))
+	                            || (attr.getName().equals("posiY"))
+	                            || (attr.getName().equals("textColor"))
+	                            || (attr.getName().equals("delay"))
+	                            || (attr.getName().equals("tokenIncrem"))
+	                            || (attr.getName().equals("postConditionType")) || (attr.getName()
+	                            .equals("backColor")))) {
+	                        Class type = String.class;
+	                        Element newElement = new Element(attr.getName());
+	                        newElement.setAttribute(new Attribute("className", type.getName()));
+	                        newElement.addContent(new Text(attr.getValue()));
+	                        returnedElement.removeAttribute(returnedElement.getAttribute(attr
+	                                .getName()));
+	                        postConditionProperties.addContent(newElement);
+	                    }
+	                }
+	            }
+	            returnedElement.addContent(postConditionProperties);
 
-                return returnedElement;
+	            return returnedElement;
 
-            } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName()
-                            + ". See console for details.");
-                e.printStackTrace();
-                return null;
-            }
-        }
+	        } catch (Exception e) {
+	            if (logger.isLoggable(Level.WARNING))
+	                logger.warning("Exception raised: " + e.getClass().getName()
+	                        + ". See console for details.");
+	            e.printStackTrace();
+	            return null;
+	        }
+	    }
 
-        private void restructureProperties(Element aProcessElement)
-        {
-            Vector newNodes = new Vector();
-            List allProperties = aProcessElement.getChildren("property");
-            for (int i = 0; i < allProperties.size(); i++) {
-                Element oldNodeElement = (Element) allProperties.get(i);
-                Element newNodeElement = restructureProperty(oldNodeElement);
-                newNodes.add(newNodeElement);
-            }
-            aProcessElement.removeChildren("property");
-            for (int i = 0; i < newNodes.size(); i++) {
-                aProcessElement.addContent((Element) newNodes.elementAt(i));
-            }
-        }
+	    private void restructureProperties(Element aProcessElement)
+	    {
+	        Vector newNodes = new Vector();
+	        List allProperties = aProcessElement.getChildren("property");
+	        for (int i = 0; i < allProperties.size(); i++) {
+	            Element oldNodeElement = (Element) allProperties.get(i);
+	            Element newNodeElement = restructureProperty(oldNodeElement);
+	            newNodes.add(newNodeElement);
+	        }
+	        aProcessElement.removeChildren("property");
+	        for (int i = 0; i < newNodes.size(); i++) {
+	            aProcessElement.addContent((Element) newNodes.elementAt(i));
+	        }
+	    }
 
-        private Element restructureProperty(Element propertyElement)
-        {
-            boolean statusConversionIsDone = false;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("restructureProperty() for " + propertyElement);
-            Element returnedElement = (Element) propertyElement.clone();
-            try {
-                returnedElement.setName("FlexoProcessPropertyList");
-                Element xmltagElement = (Element) returnedElement.getChildren("xmltagname").get(0);
-                String xmlTag = xmltagElement.getValue();
-                if (xmlTag.equals("role")) {
-                    Element rolesElement = new Element("RoleList");
-                    Element listElement = (Element) returnedElement.getChildren("roles").get(0);
-                    List elements = listElement.getChildren();
-                    for (int i = 0; i < elements.size(); i++) {
-                        Element next = (Element) elements.get(i);
-                        next.setName("Role");
-                        rolesElement.addContent((Element) next.clone());
-                    }
-                    return rolesElement;
-                } else if (xmlTag.equals("deadline")) {
-                    Element dlElement = new Element("DeadLineList");
-                    Element listElement = (Element) returnedElement.getChildren("deadlines").get(0);
-                    List elements = listElement.getChildren();
-                    for (int i = 0; i < elements.size(); i++) {
-                        Element next = (Element) elements.get(i);
-                        next.setName("DeadLine");
-                        dlElement.addContent((Element) next.clone());
-                    }
-                    return dlElement;
-                } else if (xmlTag.equals("dwstatus")) {
-                    Element statusElement = new Element("StatusList");
-                    Element listElement = (Element) returnedElement.getChildren("dwstatuss").get(0);
-                    List elements = listElement.getChildren();
-                    for (int i = 0; i < elements.size(); i++) {
-                        Element next = (Element) elements.get(i);
-                        next.setName("Status");
-                        statusElement.addContent((Element) next.clone());
-                    }
-                    statusConversionIsDone = true;
-                    return statusElement;
-                } else if ((xmlTag.equals("status") && !statusConversionIsDone)) {
-                    Element statusElement = new Element("StatusList");
-                    Element listElement = (Element) returnedElement.getChildren("statuss").get(0);
-                    List elements = listElement.getChildren();
-                    for (int i = 0; i < elements.size(); i++) {
-                        Element next = (Element) elements.get(i);
-                        next.setName("Status");
-                        statusElement.addContent((Element) next.clone());
-                    }
-                    return statusElement;
-                } else {
-                    Element defaultElement = (Element) returnedElement.getChildren(
-                            "default" + xmlTag + "s").get(0);
-                    defaultElement.setName("DefaultPropertyListElement");
-                    Element listElement = (Element) returnedElement.getChildren(xmlTag + "s")
-                            .get(0);
-                    List elements = listElement.getChildren();
-                    for (int i = 0; i < elements.size(); i++) {
-                        Element next = (Element) elements.get(i);
-                        Element newElement = new Element("PropertyListElement");
-                        Element propsElement = new Element("Properties");
-                        for (int j = 0; j < next.getChildren().size(); j++) {
-                            propsElement.addContent((Element) ((Element) next.getChildren().get(j))
-                                    .clone());
-                        }
-                        newElement.addContent(propsElement);
-                        returnedElement.addContent(newElement);
-                    }
-                    returnedElement.removeChildren(xmlTag + "s");
-                }
-                return returnedElement;
+	    private Element restructureProperty(Element propertyElement)
+	    {
+	        boolean statusConversionIsDone = false;
+	        if (logger.isLoggable(Level.FINE))
+	            logger.fine("restructureProperty() for " + propertyElement);
+	        Element returnedElement = (Element) propertyElement.clone();
+	        try {
+	            returnedElement.setName("FlexoProcessPropertyList");
+	            Element xmltagElement = (Element) returnedElement.getChildren("xmltagname").get(0);
+	            String xmlTag = xmltagElement.getValue();
+	            if (xmlTag.equals("role")) {
+	                Element rolesElement = new Element("RoleList");
+	                Element listElement = (Element) returnedElement.getChildren("roles").get(0);
+	                List elements = listElement.getChildren();
+	                for (int i = 0; i < elements.size(); i++) {
+	                    Element next = (Element) elements.get(i);
+	                    next.setName("Role");
+	                    rolesElement.addContent((Element) next.clone());
+	                }
+	                return rolesElement;
+	            } else if (xmlTag.equals("deadline")) {
+	                Element dlElement = new Element("DeadLineList");
+	                Element listElement = (Element) returnedElement.getChildren("deadlines").get(0);
+	                List elements = listElement.getChildren();
+	                for (int i = 0; i < elements.size(); i++) {
+	                    Element next = (Element) elements.get(i);
+	                    next.setName("DeadLine");
+	                    dlElement.addContent((Element) next.clone());
+	                }
+	                return dlElement;
+	            } else if (xmlTag.equals("dwstatus")) {
+	                Element statusElement = new Element("StatusList");
+	                Element listElement = (Element) returnedElement.getChildren("dwstatuss").get(0);
+	                List elements = listElement.getChildren();
+	                for (int i = 0; i < elements.size(); i++) {
+	                    Element next = (Element) elements.get(i);
+	                    next.setName("Status");
+	                    statusElement.addContent((Element) next.clone());
+	                }
+	                statusConversionIsDone = true;
+	                return statusElement;
+	            } else if ((xmlTag.equals("status") && !statusConversionIsDone)) {
+	                Element statusElement = new Element("StatusList");
+	                Element listElement = (Element) returnedElement.getChildren("statuss").get(0);
+	                List elements = listElement.getChildren();
+	                for (int i = 0; i < elements.size(); i++) {
+	                    Element next = (Element) elements.get(i);
+	                    next.setName("Status");
+	                    statusElement.addContent((Element) next.clone());
+	                }
+	                return statusElement;
+	            } else {
+	                Element defaultElement = (Element) returnedElement.getChildren(
+	                        "default" + xmlTag + "s").get(0);
+	                defaultElement.setName("DefaultPropertyListElement");
+	                Element listElement = (Element) returnedElement.getChildren(xmlTag + "s")
+	                        .get(0);
+	                List elements = listElement.getChildren();
+	                for (int i = 0; i < elements.size(); i++) {
+	                    Element next = (Element) elements.get(i);
+	                    Element newElement = new Element("PropertyListElement");
+	                    Element propsElement = new Element("Properties");
+	                    for (int j = 0; j < next.getChildren().size(); j++) {
+	                        propsElement.addContent((Element) ((Element) next.getChildren().get(j))
+	                                .clone());
+	                    }
+	                    newElement.addContent(propsElement);
+	                    returnedElement.addContent(newElement);
+	                }
+	                returnedElement.removeChildren(xmlTag + "s");
+	            }
+	            return returnedElement;
 
-            } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName()
-                            + ". See console for details.");
-                e.printStackTrace();
-                return null;
-            }
-        }
+	        } catch (Exception e) {
+	            if (logger.isLoggable(Level.WARNING))
+	                logger.warning("Exception raised: " + e.getClass().getName()
+	                        + ". See console for details.");
+	            e.printStackTrace();
+	            return null;
+	        }
+	    }
 
-        private boolean save()
-        {
-            FileWritingLock lock = willWriteOnDisk();
-            boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
-            hasWrittenOnDisk(lock);
-            return returned;
-       }
-    }*/
+	    private boolean save()
+	    {
+	        FileWritingLock lock = willWriteOnDisk();
+	        boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+	        hasWrittenOnDisk(lock);
+	        return returned;
+	   }
+	}*/
 
 	/*protected class ProcessConverter2
-    {
+	{
 
-        protected boolean conversionWasSucessfull = false;
+	    protected boolean conversionWasSucessfull = false;
 
-        protected Document document;
+	    protected Document document;
 
-        protected Element processElement;
+	    protected Element processElement;
 
-        protected ProcessConverter2()
-        {
-            super();
-            // roles = new Hashtable();
-            // pendingRoles = new Hashtable();
-            try {
-                document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
-                FlexoComponentFolder processFolder = convert();
-                conversionWasSucessfull = save();
-                processFolder.setComponentPrefix(getFlexoProcess().getComponentPrefix());
-            } catch (Exception e) {
-                // Warns about the exception
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName()
-                            + ". See console for details.");
-                e.printStackTrace();
-            }
-        }
+	    protected ProcessConverter2()
+	    {
+	        super();
+	        // roles = new Hashtable();
+	        // pendingRoles = new Hashtable();
+	        try {
+	            document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+	            FlexoComponentFolder processFolder = convert();
+	            conversionWasSucessfull = save();
+	            processFolder.setComponentPrefix(getFlexoProcess().getComponentPrefix());
+	        } catch (Exception e) {
+	            // Warns about the exception
+	            if (logger.isLoggable(Level.WARNING))
+	                logger.warning("Exception raised: " + e.getClass().getName()
+	                        + ". See console for details.");
+	            e.printStackTrace();
+	        }
+	    }
 
-        private FlexoComponentFolder convert() throws DuplicateResourceException
-        {
-            FlexoComponentFolder processFolder = new FlexoComponentFolder(getName(), getProject()
-                    .getFlexoComponentLibrary());
+	    private FlexoComponentFolder convert() throws DuplicateResourceException
+	    {
+	        FlexoComponentFolder processFolder = new FlexoComponentFolder(getName(), getProject()
+	                .getFlexoComponentLibrary());
 
-            getProject().getFlexoComponentLibrary().getRootFolder().addToSubFolders(processFolder);
-            processThumbnail(processFolder);
-            processPopup(processFolder);
-            processOperationComponent(processFolder);
-            processFolder.setGenerationRelativePath("src/" + getName());
-            return processFolder;
-        }
+	        getProject().getFlexoComponentLibrary().getRootFolder().addToSubFolders(processFolder);
+	        processThumbnail(processFolder);
+	        processPopup(processFolder);
+	        processOperationComponent(processFolder);
+	        processFolder.setGenerationRelativePath("src/" + getName());
+	        return processFolder;
+	    }
 
-        private void processOperationComponent(FlexoComponentFolder defaultFolder)
-        {
-            Iterator tableElementIterator = document.getDescendants(new ElementFilter(
-                    "OperationComponentDefinition"));
-            while (tableElementIterator.hasNext()) {
-                Element nextElement = (Element) tableElementIterator.next();
-                String thumbnailWOName = nextElement.getAttributeValue("name");
-                if (thumbnailWOName != null) {
-                    ComponentDefinition def = null;
-                    try {
-                        def = new OperationComponentDefinition(thumbnailWOName, defaultFolder
-                                .getComponentLibrary(), defaultFolder, getProject());
+	    private void processOperationComponent(FlexoComponentFolder defaultFolder)
+	    {
+	        Iterator tableElementIterator = document.getDescendants(new ElementFilter(
+	                "OperationComponentDefinition"));
+	        while (tableElementIterator.hasNext()) {
+	            Element nextElement = (Element) tableElementIterator.next();
+	            String thumbnailWOName = nextElement.getAttributeValue("name");
+	            if (thumbnailWOName != null) {
+	                ComponentDefinition def = null;
+	                try {
+	                    def = new OperationComponentDefinition(thumbnailWOName, defaultFolder
+	                            .getComponentLibrary(), defaultFolder, getProject());
 
-                    } catch (DuplicateResourceException e) {
-                        if (logger.isLoggable(Level.INFO))
-                            logger.info("Operation : " + thumbnailWOName
-                                    + " is used more than once");
-                    }
-                    if (def != null) {
-                        FlexoComponentFolder.convertComponent(def);
-                    } else {
-                        FlexoResource res = getProject().resourceForKey(
-                                FlexoOperationComponentResource
-                                        .resourceIdentifierForName(thumbnailWOName));
-                        FlexoComponentFolder.convertComponent(res);
-                    }
-                }
-            }
-            tableElementIterator = document.getDescendants(new ElementFilter(
-                    "OperationComponentDefinition"));
-            while (tableElementIterator.hasNext()) {
-                Element nextElement = (Element) tableElementIterator.next();
-                nextElement.setAttribute("componentName", nextElement.getAttributeValue("name"));
-                nextElement.setName("OperationComponentInstance");
-            }
-        }
+	                } catch (DuplicateResourceException e) {
+	                    if (logger.isLoggable(Level.INFO))
+	                        logger.info("Operation : " + thumbnailWOName
+	                                + " is used more than once");
+	                }
+	                if (def != null) {
+	                    FlexoComponentFolder.convertComponent(def);
+	                } else {
+	                    FlexoResource res = getProject().resourceForKey(
+	                            FlexoOperationComponentResource
+	                                    .resourceIdentifierForName(thumbnailWOName));
+	                    FlexoComponentFolder.convertComponent(res);
+	                }
+	            }
+	        }
+	        tableElementIterator = document.getDescendants(new ElementFilter(
+	                "OperationComponentDefinition"));
+	        while (tableElementIterator.hasNext()) {
+	            Element nextElement = (Element) tableElementIterator.next();
+	            nextElement.setAttribute("componentName", nextElement.getAttributeValue("name"));
+	            nextElement.setName("OperationComponentInstance");
+	        }
+	    }
 
-        private void processThumbnail(FlexoComponentFolder defaultFolder)
-        {
-            Iterator tableElementIterator = document.getDescendants(new ElementFilter(
-                    "ThumbnailComponentDefinition"));
-            while (tableElementIterator.hasNext()) {
-                Element nextElement = (Element) tableElementIterator.next();
-                String thumbnailWOName = nextElement.getAttributeValue("name");
-                if (thumbnailWOName != null) {
-                    ComponentDefinition def = null;
-                    try {
-                        def = new TabComponentDefinition(thumbnailWOName, defaultFolder
-                                .getComponentLibrary(), defaultFolder, getProject());
+	    private void processThumbnail(FlexoComponentFolder defaultFolder)
+	    {
+	        Iterator tableElementIterator = document.getDescendants(new ElementFilter(
+	                "ThumbnailComponentDefinition"));
+	        while (tableElementIterator.hasNext()) {
+	            Element nextElement = (Element) tableElementIterator.next();
+	            String thumbnailWOName = nextElement.getAttributeValue("name");
+	            if (thumbnailWOName != null) {
+	                ComponentDefinition def = null;
+	                try {
+	                    def = new TabComponentDefinition(thumbnailWOName, defaultFolder
+	                            .getComponentLibrary(), defaultFolder, getProject());
 
-                    } catch (DuplicateResourceException e) {
-                        // TODO Auto-generated catch block
-                        // e.printStackTrace();
-                    }
-                    if (def != null) {
-                        FlexoComponentFolder.convertComponent(def);
-                    } else {
-                        FlexoResource res = getProject().resourceForKey(
-                                FlexoThumbnailComponentResource
-                                        .resourceIdentifierForName(thumbnailWOName));
-                        FlexoComponentFolder.convertComponent(res);
-                    }
-                }
-            }
-            Vector elementToClear = new Vector();
-            tableElementIterator = document.getDescendants(new ElementFilter(
-                    "OperationComponentDefinition"));
-            while (tableElementIterator.hasNext()) {
-                elementToClear.add((Element) tableElementIterator.next());
-                // nextElement.getChildren().clear();
-            }
-            Enumeration en = elementToClear.elements();
-            while (en.hasMoreElements()) {
-                ((Element) en.nextElement()).getChildren().clear();
-            }
-        }
+	                } catch (DuplicateResourceException e) {
+	                    // TODO Auto-generated catch block
+	                    // e.printStackTrace();
+	                }
+	                if (def != null) {
+	                    FlexoComponentFolder.convertComponent(def);
+	                } else {
+	                    FlexoResource res = getProject().resourceForKey(
+	                            FlexoThumbnailComponentResource
+	                                    .resourceIdentifierForName(thumbnailWOName));
+	                    FlexoComponentFolder.convertComponent(res);
+	                }
+	            }
+	        }
+	        Vector elementToClear = new Vector();
+	        tableElementIterator = document.getDescendants(new ElementFilter(
+	                "OperationComponentDefinition"));
+	        while (tableElementIterator.hasNext()) {
+	            elementToClear.add((Element) tableElementIterator.next());
+	            // nextElement.getChildren().clear();
+	        }
+	        Enumeration en = elementToClear.elements();
+	        while (en.hasMoreElements()) {
+	            ((Element) en.nextElement()).getChildren().clear();
+	        }
+	    }
 
-        private void processPopup(FlexoComponentFolder defaultFolder)
-        {
-            Iterator tableElementIterator = document.getDescendants(new ElementFilter(
-                    "PopupComponentDefinition"));
-            while (tableElementIterator.hasNext()) {
-                Element nextElement = (Element) tableElementIterator.next();
-                String thumbnailWOName = nextElement.getAttributeValue("name");
-                if (thumbnailWOName != null) {
-                    ComponentDefinition def = null;
-                    try {
-                        def = new PopupComponentDefinition(thumbnailWOName, defaultFolder
-                                .getComponentLibrary(), defaultFolder, getProject());
+	    private void processPopup(FlexoComponentFolder defaultFolder)
+	    {
+	        Iterator tableElementIterator = document.getDescendants(new ElementFilter(
+	                "PopupComponentDefinition"));
+	        while (tableElementIterator.hasNext()) {
+	            Element nextElement = (Element) tableElementIterator.next();
+	            String thumbnailWOName = nextElement.getAttributeValue("name");
+	            if (thumbnailWOName != null) {
+	                ComponentDefinition def = null;
+	                try {
+	                    def = new PopupComponentDefinition(thumbnailWOName, defaultFolder
+	                            .getComponentLibrary(), defaultFolder, getProject());
 
-                    } catch (DuplicateResourceException e) {
-                        // TODO Auto-generated catch block
-                        // e.printStackTrace();
-                    }
-                    if (def != null) {
-                        FlexoComponentFolder.convertComponent(def);
-                    } else {
-                        FlexoResource res = getProject().resourceForKey(
-                                FlexoPopupComponentResource
-                                        .resourceIdentifierForName(thumbnailWOName));
-                        FlexoComponentFolder.convertComponent(res);
-                    }
-                }
-            }
-            document.getRootElement().removeChild("PopupComponentList");
-        }
+	                } catch (DuplicateResourceException e) {
+	                    // TODO Auto-generated catch block
+	                    // e.printStackTrace();
+	                }
+	                if (def != null) {
+	                    FlexoComponentFolder.convertComponent(def);
+	                } else {
+	                    FlexoResource res = getProject().resourceForKey(
+	                            FlexoPopupComponentResource
+	                                    .resourceIdentifierForName(thumbnailWOName));
+	                    FlexoComponentFolder.convertComponent(res);
+	                }
+	            }
+	        }
+	        document.getRootElement().removeChild("PopupComponentList");
+	    }
 
-        private boolean save()
-        {
-            FileWritingLock lock = willWriteOnDisk();
-            boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
-            hasWrittenOnDisk(lock);
-            return returned;
-        }
-    }*/
+	    private boolean save()
+	    {
+	        FileWritingLock lock = willWriteOnDisk();
+	        boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+	        hasWrittenOnDisk(lock);
+	        return returned;
+	    }
+	}*/
 
 	/*protected class ProcessConverter3
 	{
@@ -1653,9 +1633,8 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			return returned;
 		}
 	}
-*/
-	protected class ProcessConverter5
-	{
+	 */
+	protected class ProcessConverter5 {
 
 		protected boolean conversionWasSucessfull = false;
 
@@ -1663,8 +1642,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 
 		protected Element processElement;
 
-		protected ProcessConverter5()
-		{
+		protected ProcessConverter5() {
 			super();
 			// roles = new Hashtable();
 			// pendingRoles = new Hashtable();
@@ -1674,9 +1652,9 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				conversionWasSucessfull = save();
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
-					logger.warning("Exception raised: " + e.getClass().getName()
-							+ ". See console for details.");
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -1689,23 +1667,22 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			Iterator nextElementIterator = document.getDescendants(new AbstractFilter() {
 				@Override
 				public boolean matches(Object obj) {
-					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
-			            return el.getName().startsWith("Next");
-			        } else
-			        {
-			            return false;
-			        }
+					if (obj instanceof Element) {
+						Element el = (Element) obj;
+						return el.getName().startsWith("Next");
+					} else {
+						return false;
+					}
 				}
 			});
 			while (nextElementIterator.hasNext()) {
 				Element elem = (Element) nextElementIterator.next();
-				elem.setName("End"+elem.getName().substring("Next".length()));
+				elem.setName("End" + elem.getName().substring("Next".length()));
 				count++;
 			}
-			if (logger.isLoggable(Level.INFO))
-				logger.info("Converted "+count+" ending elements");
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Converted " + count + " ending elements");
+			}
 
 			count = 0;
 			// 2. Convert all precondition attached to an EventNode and move all the incoming edges to the incoming edges of the event.
@@ -1719,17 +1696,18 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			Iterator elementIterator = document.getDescendants(new AbstractFilter() {
 				@Override
 				public boolean matches(Object obj) {
-					return obj instanceof Element && (((Element)obj).getAttribute("id")!=null||((Element)obj).getAttribute("idref")!=null);
+					return obj instanceof Element
+							&& (((Element) obj).getAttribute("id") != null || ((Element) obj).getAttribute("idref") != null);
 				}
 			});
 			while (elementIterator.hasNext()) {
 				Element elem = (Element) elementIterator.next();
-				if (elem.getAttribute("id")!=null) {
+				if (elem.getAttribute("id") != null) {
 					elementsWithID.put(elem.getAttributeValue("id"), elem);
 				} else {
 					String idRef = elem.getAttributeValue("idref");
 					Vector<Element> v;
-					if (elementsWithIDRef.get(idRef)!=null) {
+					if (elementsWithIDRef.get(idRef) != null) {
 						v = elementsWithIDRef.get(idRef);
 					} else {
 						elementsWithIDRef.put(idRef, v = new Vector<Element>());
@@ -1737,98 +1715,98 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 					v.add(elem);
 				}
 			}
-			swapUnalignedPreconditions(elementsWithID,elementsWithIDRef);
+			swapUnalignedPreconditions(elementsWithID, elementsWithIDRef);
 
 			Enumeration<String> ids = elementsWithID.keys();
-			while(ids.hasMoreElements()) {
+			while (ids.hasMoreElements()) {
 				String key = ids.nextElement();
 				Element elem = elementsWithID.get(key);
 				if (elem.getName().equals("FlexoPreCondition")) {
 					for (String string : eventXMLTags) {
-						if (elem.getParentElement()==null) {
-							if (logger.isLoggable(Level.SEVERE))
-								logger.severe("Found pre condition "+elem+" "+key+" without parent");
+						if (elem.getParentElement() == null) {
+							if (logger.isLoggable(Level.SEVERE)) {
+								logger.severe("Found pre condition " + elem + " " + key + " without parent");
+							}
 							break;
 						}
 						if (elem.getParentElement().getName().equals(string)) {
-							handlePreConditionAttachedToEvent(elem, elementsWithID,elementsWithIDRef);
+							handlePreConditionAttachedToEvent(elem, elementsWithID, elementsWithIDRef);
 							count++;
 							break;
 						}
 					}
 				}
 			}
-			if (logger.isLoggable(Level.INFO))
-				logger.info("Converted "+count+" pre-conditions attached to an event");
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Converted " + count + " pre-conditions attached to an event");
+			}
 
 			count = 0;
 			// 3. Convert all external edges
 			Iterator externalEdgesIterator = document.getDescendants(new AbstractFilter() {
 				@Override
 				public boolean matches(Object obj) {
-					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
+					if (obj instanceof Element) {
+						Element el = (Element) obj;
 
-			            return el.getName().endsWith("ExternalFlexoNodeMessageInEdge") || el.getName().endsWith("ExternalOperatorMessageInEdge")
-			            		||el.getName().endsWith("ExternalFlexoNodeMessageOutEdge") || el.getName().endsWith("ExternalOperatorMessageOutEdge");
+						return el.getName().endsWith("ExternalFlexoNodeMessageInEdge")
+								|| el.getName().endsWith("ExternalOperatorMessageInEdge")
+								|| el.getName().endsWith("ExternalFlexoNodeMessageOutEdge")
+								|| el.getName().endsWith("ExternalOperatorMessageOutEdge");
 
-			        } else
-			        {
-			            return false;
-			        }
+					} else {
+						return false;
+					}
 				}
 			});
 			while (externalEdgesIterator.hasNext()) {
 				Element edge = (Element) externalEdgesIterator.next();
-				String suffix = edge.getName().endsWith("InEdge")?"ExternalMessageInEdge":"ExternalMessageOutEdge";
-				edge.setName(edge.getName().substring(0,edge.getName().lastIndexOf("External"))+suffix);
+				String suffix = edge.getName().endsWith("InEdge") ? "ExternalMessageInEdge" : "ExternalMessageOutEdge";
+				edge.setName(edge.getName().substring(0, edge.getName().lastIndexOf("External")) + suffix);
 				count++;
 			}
-			if (logger.isLoggable(Level.INFO))
-				logger.info("Converted "+count+" external message edges");
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Converted " + count + " external message edges");
+			}
 
 			count = 0;
 			// 4. Convert all operator edges
 			Iterator operatorEdgesIterator = document.getDescendants(new AbstractFilter() {
 				@Override
 				public boolean matches(Object obj) {
-					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
+					if (obj instanceof Element) {
+						Element el = (Element) obj;
 
-			            return el.getName().endsWith("OperatorInEdge") || el.getName().endsWith("OperatorOutEdge")
-			            		|| el.getName().endsWith("OperatorInterEdge");
+						return el.getName().endsWith("OperatorInEdge") || el.getName().endsWith("OperatorOutEdge")
+								|| el.getName().endsWith("OperatorInterEdge");
 
-			        } else
-			        {
-			            return false;
-			        }
+					} else {
+						return false;
+					}
 				}
 			});
 			while (operatorEdgesIterator.hasNext()) {
 				Element edge = (Element) operatorEdgesIterator.next();
-				edge.setName(edge.getName().substring(0,edge.getName().lastIndexOf("Operator"))+"TokenEdge");
+				edge.setName(edge.getName().substring(0, edge.getName().lastIndexOf("Operator")) + "TokenEdge");
 				count++;
 			}
-			if (logger.isLoggable(Level.INFO))
-				logger.info("Converted "+count+" operator edges");
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Converted " + count + " operator edges");
+			}
 
 			// 5. Convert all pre-conditions wrongly attached
 			count = 0;
 			Iterator preConditionsIterator = document.getDescendants(new AbstractFilter() {
 				@Override
 				public boolean matches(Object obj) {
-					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
+					if (obj instanceof Element) {
+						Element el = (Element) obj;
 
-			            return el.getName().endsWith("FlexoPreCondition");
+						return el.getName().endsWith("FlexoPreCondition");
 
-			        } else
-			        {
-			            return false;
-			        }
+					} else {
+						return false;
+					}
 				}
 			});
 			while (preConditionsIterator.hasNext()) {
@@ -1836,37 +1814,40 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				Iterator attached = pre.getDescendants(new AbstractFilter() {
 					@Override
 					public boolean matches(Object obj) {
-						return obj instanceof Element && ((Element)obj).getName().startsWith("AttachedBegin");
+						return obj instanceof Element && ((Element) obj).getName().startsWith("AttachedBegin");
 					}
 				});
 				while (attached.hasNext()) {
 					Element attachedBeginNode = (Element) attached.next();
-					if (attachedBeginNode.getAttributeValue("idref")!=null) {
+					if (attachedBeginNode.getAttributeValue("idref") != null) {
 						Element e = elementsWithID.get(attachedBeginNode.getAttributeValue("idref"));
-						if (processMapping.entityWithXMLTag(e.getName())!=processMapping.entityWithXMLTag(attachedBeginNode.getName())) {
+						if (processMapping.entityWithXMLTag(e.getName()) != processMapping.entityWithXMLTag(attachedBeginNode.getName())) {
 							attachedBeginNode.setName(processMapping.entityWithXMLTag(e.getName()).getXmlTags("AttachedBegin")[0]);
 							count++;
 						}
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Pre condition is attached to a node that is not serialized somewhere else!");
+						}
 					}
 				}
 			}
-			if (logger.isLoggable(Level.INFO))
-				logger.info("Converted "+count+" attached begin nodes");
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Converted " + count + " attached begin nodes");
+			}
 		}
 
 		private void swapUnalignedPreconditions(Hashtable<String, Element> elementsWithID,
 				Hashtable<String, Vector<Element>> elementsWithIDRef) {
 			Enumeration<String> idRefs = elementsWithIDRef.keys();
-			while(idRefs.hasMoreElements()) {
+			while (idRefs.hasMoreElements()) {
 				String key = idRefs.nextElement();
 				Vector<Element> v = elementsWithIDRef.get(key);
 				for (Element element : v) {
 					if (element.getName().equals("FlexoPreCondition")) {
-						if (logger.isLoggable(Level.INFO))
-							logger.info("Found unaligned precondition with id "+idRefs);
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("Found unaligned precondition with id " + idRefs);
+						}
 						// Unaligned precondition (all refs are supposed to start with Next...)
 						Element orig = elementsWithID.get(key);
 						Element origFather = orig.getParentElement();
@@ -1882,20 +1863,19 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			}
 		}
 
-		private void handlePreConditionAttachedToEvent(Element pre, Hashtable<String, Element> preAndEdgesWithID, Hashtable<String, Vector<Element>> preAndEdgesWithIDRef) {
+		private void handlePreConditionAttachedToEvent(Element pre, Hashtable<String, Element> preAndEdgesWithID,
+				Hashtable<String, Vector<Element>> preAndEdgesWithIDRef) {
 			Element event = pre.getParentElement();
 			Iterator incomingEdgesIterator = pre.getDescendants(new AbstractFilter() {
 				@Override
 				public boolean matches(Object obj) {
-					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
+					if (obj instanceof Element) {
+						Element el = (Element) obj;
 
-			            return el.getName().startsWith("Incoming");
-			        } else
-			        {
-			            return false;
-			        }
+						return el.getName().startsWith("Incoming");
+					} else {
+						return false;
+					}
 				}
 			});
 			Vector<Element> incomingEdges = new Vector<Element>();
@@ -1905,13 +1885,14 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			}
 			for (Element edge : incomingEdges) {
 				Element serializingEdgeElement = null;
-				if (edge.getAttributeValue("id")!=null) {
+				if (edge.getAttributeValue("id") != null) {
 					serializingEdgeElement = edge;
 				} else {
 					serializingEdgeElement = preAndEdgesWithID.get(edge.getAttributeValue("idref"));
-					if (serializingEdgeElement==null) {
-						if (logger.isLoggable(Level.SEVERE))
-							logger.severe("Could not find serializing edge element with id "+edge.getAttributeValue("idref"));
+					if (serializingEdgeElement == null) {
+						if (logger.isLoggable(Level.SEVERE)) {
+							logger.severe("Could not find serializing edge element with id " + edge.getAttributeValue("idref"));
+						}
 						continue;
 					}
 				}
@@ -1921,25 +1902,26 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				Element refToPreCondition = serializingEdgeElement.getChild("EndFlexoPreCondition");
 				success = serializingEdgeElement.removeContent(refToPreCondition);
 
-				if(!success)
-					if (logger.isLoggable(Level.WARNING))
-						logger.warning("Could not remove "+refToPreCondition+" from its edge");
+				if (!success) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not remove " + refToPreCondition + " from its edge");
+					}
+				}
 				// 2. We move the edge to the event.
 				pre.removeContent(edge);
 				event.addContent(edge);
 
 				// 3. We add the event as the end of the edge
-				Element refToEvent = new Element("End"+event.getName());
+				Element refToEvent = new Element("End" + event.getName());
 				refToEvent.setAttribute("idref", event.getAttributeValue("id"));
 				serializingEdgeElement.addContent(refToEvent);
 
 			}
-			//  We remove the pre condition from its father
+			// We remove the pre condition from its father
 			event.removeContent(pre);
 		}
 
-		private boolean save()
-		{
+		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
 			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
@@ -1955,17 +1937,15 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 	@Override
 	protected boolean repairDuplicateSerializationIdentifier() {
 		ValidationReport report = getProject().validate();
-		for (ValidationIssue issue: report.getValidationIssues())
-			if (issue instanceof DuplicateObjectIDIssue)
+		for (ValidationIssue issue : report.getValidationIssues()) {
+			if (issue instanceof DuplicateObjectIDIssue) {
 				return true;
+			}
+		}
 		return false;
 	}
 
-
-
-
-	protected class ProcessConverter6
-	{
+	protected class ProcessConverter6 {
 
 		protected boolean conversionWasSucessfull = false;
 
@@ -1973,8 +1953,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 
 		protected Element processElement;
 
-		protected ProcessConverter6()
-		{
+		protected ProcessConverter6() {
 			super();
 			// roles = new Hashtable();
 			// pendingRoles = new Hashtable();
@@ -1984,16 +1963,16 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				conversionWasSucessfull = save();
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
-					logger.warning("Exception raised: " + e.getClass().getName()
-							+ ". See console for details.");
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
 
 		private void convert() throws DuplicateResourceException {
-			//TODO
-			//pour chaque sous-type de event node :
+			// TODO
+			// pour chaque sous-type de event node :
 			// transformer l'Element specifique en un élément "EventNode"
 			// positionner correctement l'attribut eventType (Start, Intermediate, End)
 			// positionner correctement le trigger (en fonction du sous-type)
@@ -2100,23 +2079,25 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			}
 		}
 
-		private class ElementNameFilter extends AbstractFilter{
+		private class ElementNameFilter extends AbstractFilter {
 			private final String elname;
-			public ElementNameFilter(String elementName){
+
+			public ElementNameFilter(String elementName) {
 				super();
 				elname = elementName;
 			}
+
 			@Override
 			public boolean matches(Object obj) {
-				if(obj instanceof Element)			        {
-		            return ((Element)obj).getName().equals(elname);
-		        } else {
-		            return false;
-		        }
+				if (obj instanceof Element) {
+					return ((Element) obj).getName().equals(elname);
+				} else {
+					return false;
+				}
 			}
 		}
-		private boolean save()
-		{
+
+		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
 			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);

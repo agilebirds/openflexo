@@ -32,99 +32,91 @@ import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.swing.FontSelector;
 import org.openflexo.swing.FontSelector.FontSelectionModel;
 
-public class FIBFontWidget extends FIBWidgetView<FIBFont,FontSelector,Font> implements FontSelectionModel
-{
+public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> implements FontSelectionModel {
 
-    private static final Logger logger = Logger.getLogger(FIBFontWidget.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FIBFontWidget.class.getPackage().getName());
 
-    protected FontSelector _selector;
+	protected FontSelector _selector;
 	private final Vector<ChangeListener> _listeners;
-	
-    public FIBFontWidget(FIBFont model, FIBController controller)
-    {
-        super(model,controller);
-        
-        _listeners = new Vector<ChangeListener>();
-        
-        _selector = new FontSelector(this);
-        if (isReadOnly()) {
-        	_selector.getDownButton().setEnabled(false);
-        }
-        	        
-       getJComponent().addFocusListener(this);
 
-       setFont(new Font("SansSerif",Font.PLAIN,11));
-       
-        updateFont();
-    }
+	public FIBFontWidget(FIBFont model, FIBController controller) {
+		super(model, controller);
 
-    @Override
-	public synchronized boolean updateWidgetFromModel()
-    {
-    	//if (notEquals(getValue(),getSelectedFont())) {
-    		widgetUpdating = true;
-    		setFont(getValue());
-    		widgetUpdating = false;
-    		return true;
-    	//}
-    	//return false;
-    }
+		_listeners = new Vector<ChangeListener>();
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized boolean updateModelFromWidget()
-    {
-    	if (notEquals(getValue(),getSelectedFont())) {
-    		if (isReadOnly())
-    			return false;
-    		setValue(_selector.getEditedObject());
-    		return true;
-    	}
-    	return false;
-    }
+		_selector = new FontSelector(this);
+		if (isReadOnly()) {
+			_selector.getDownButton().setEnabled(false);
+		}
 
-    @Override
-	public FontSelector getJComponent()
-    {
-        return _selector;
-    }
+		getJComponent().addFocusListener(this);
+
+		setFont(new Font("SansSerif", Font.PLAIN, 11));
+
+		updateFont();
+	}
 
 	@Override
-	public FontSelector getDynamicJComponent()
-	{
+	public synchronized boolean updateWidgetFromModel() {
+		// if (notEquals(getValue(),getSelectedFont())) {
+		widgetUpdating = true;
+		setFont(getValue());
+		widgetUpdating = false;
+		return true;
+		// }
+		// return false;
+	}
+
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized boolean updateModelFromWidget() {
+		if (notEquals(getValue(), getSelectedFont())) {
+			if (isReadOnly()) {
+				return false;
+			}
+			setValue(_selector.getEditedObject());
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public FontSelector getJComponent() {
 		return _selector;
 	}
 
-    protected void setFont(Font aFont)
-    {
-    	_selector.setEditedObject(aFont);
-    }
+	@Override
+	public FontSelector getDynamicJComponent() {
+		return _selector;
+	}
+
+	protected void setFont(Font aFont) {
+		_selector.setEditedObject(aFont);
+	}
 
 	@Override
-	public Font getSelectedFont()
-	{
+	public Font getSelectedFont() {
 		return getValue();
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener listener)
-	{
+	public void addChangeListener(ChangeListener listener) {
 		_listeners.add(listener);
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener listener)
-	{
+	public void removeChangeListener(ChangeListener listener) {
 		_listeners.remove(listener);
 	}
 
 	@Override
-	public void setSelectedFont(Font font)
-	{
+	public void setSelectedFont(Font font) {
 		setValue(font);
-		for (ChangeListener l : _listeners) l.stateChanged(new ChangeEvent(this));
+		for (ChangeListener l : _listeners) {
+			l.stateChanged(new ChangeEvent(this));
+		}
 	}
 
 }

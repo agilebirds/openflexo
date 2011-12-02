@@ -28,13 +28,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
-
 import org.openflexo.cgmodule.GeneratorPreferences;
 import org.openflexo.cgmodule.view.GeneratorMainPane;
 import org.openflexo.foundation.FlexoException;
@@ -44,54 +37,53 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.ForceRegenerateSourceCode;
 import org.openflexo.generator.exception.GenerationException;
-
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ForceRegenerateSourceCodeInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(ForceRegenerateSourceCode.actionType,actionInitializer);
+	ForceRegenerateSourceCodeInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(ForceRegenerateSourceCode.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ForceRegenerateSourceCode> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ForceRegenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<ForceRegenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ForceRegenerateSourceCode action)
-			{
+			public boolean run(ActionEvent e, ForceRegenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
 				}
 				action.setSaveBeforeGenerating(GeneratorPreferences.getSaveBeforeGenerating());
 				action.getProjectGenerator().startHandleLogs();
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().setHoldStructure();
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ForceRegenerateSourceCode> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ForceRegenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ForceRegenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ForceRegenerateSourceCode action)
-			{
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().update();
-				if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles())
-					DismissUnchangedGeneratedFiles.actionType.makeNewAction(
-							action.getFocusedObject(), action.getGlobalSelection(), action.getEditor()).doAction();
+			public boolean run(ActionEvent e, ForceRegenerateSourceCode action) {
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
+				if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles()) {
+					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
+							action.getEditor()).doAction();
+				}
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
@@ -101,13 +93,12 @@ public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<ForceRegenerateSourceCode> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<ForceRegenerateSourceCode> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<ForceRegenerateSourceCode>() {
 			@Override
 			public boolean handleException(FlexoException exception, ForceRegenerateSourceCode action) {
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane)getController().getMainPane()).getBrowserView().getBrowser().update();
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
+				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
 				if (exception instanceof GenerationException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("generation_failed") + ":\n"
@@ -120,22 +111,18 @@ public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.FORCE_REGENERATE_CODE_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.FORCE_REGENERATE_CODE_DISABLED_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_G, FlexoCst.META_MASK | InputEvent.SHIFT_DOWN_MASK);
 	}
 }

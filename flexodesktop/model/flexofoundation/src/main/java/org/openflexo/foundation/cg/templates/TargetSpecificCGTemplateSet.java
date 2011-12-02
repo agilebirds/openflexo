@@ -24,42 +24,36 @@ import java.io.File;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TargetType;
 
-
 public class TargetSpecificCGTemplateSet extends CGDirectoryTemplateSet {
-	
+
 	private TargetType _targetType;
 
-	public TargetSpecificCGTemplateSet(File directory,CGTemplateRepository repository, TargetType targetType,boolean recursive)
-	{
-		super(directory,repository,recursive);
+	public TargetSpecificCGTemplateSet(File directory, CGTemplateRepository repository, TargetType targetType, boolean recursive) {
+		super(directory, repository, recursive);
 		_targetType = targetType;
 		update();
 	}
-	
+
 	@Override
-	public String getFullyQualifiedName() 
-	{
-		return getRepository().getFullyQualifiedName()+"."+_targetType.getTemplateFolderName();
+	public String getFullyQualifiedName() {
+		return getRepository().getFullyQualifiedName() + "." + _targetType.getTemplateFolderName();
 	}
 
-	public TargetType getTargetType() 
-	{
+	public TargetType getTargetType() {
 		return _targetType;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.GENERATORS.CG_TARGET_SPECIFIC_TEMPLATE_SET;
 	}
 
 	@Override
-	public String getName()
-	{
-		if (getTargetType() != null)
+	public String getName() {
+		if (getTargetType() != null) {
 			return getTargetType().getLocalizedName();
+		}
 		return "<No target>";
 	}
-
 
 }

@@ -24,7 +24,6 @@ import java.util.Vector;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public class CGTemplateFolder extends CGTemplateObject {
 	private CGTemplateSet templateSet;
 	private String folderName;
@@ -43,8 +42,9 @@ public class CGTemplateFolder extends CGTemplateObject {
 
 	public CGTemplateFolder getFolder(String name) {
 		for (CGTemplateFolder dir : dirs) {
-			if (name.equals(dir.getName()))
+			if (name.equals(dir.getName())) {
 				return dir;
+			}
 		}
 		return null;
 	}

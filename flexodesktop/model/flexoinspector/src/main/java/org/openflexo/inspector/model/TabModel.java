@@ -36,9 +36,7 @@ import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class TabModel extends Observable implements XMLSerializable
-{
+public class TabModel extends Observable implements XMLSerializable {
 
 	private static final Logger logger = Logger.getLogger(TabModel.class.getPackage().getName());
 
@@ -48,9 +46,9 @@ public class TabModel extends Observable implements XMLSerializable
 
 	public LayoutModel layoutModel;
 
-	private Hashtable<String,PropertyModel> properties;
+	private Hashtable<String, PropertyModel> properties;
 
-	private Hashtable<String,GroupModel> groups;
+	private Hashtable<String, GroupModel> groups;
 
 	public Vector hiddenProperties;
 
@@ -60,18 +58,16 @@ public class TabModel extends Observable implements XMLSerializable
 
 	public String visibilityContext;
 
-	public TabModel()
-	{
+	public TabModel() {
 		super();
-		properties = new Hashtable<String,PropertyModel>();
+		properties = new Hashtable<String, PropertyModel>();
 		hiddenProperties = new Vector();
 		hiddenGroups = new Vector<HiddenGroupModel>();
 		groups = new Hashtable<String, GroupModel>();
 
 	}
 
-	public void finalizeTabModelDecoding()
-	{
+	public void finalizeTabModelDecoding() {
 		for (Enumeration<PropertyModel> e = properties.elements(); e.hasMoreElements();) {
 			PropertyModel next = e.nextElement();
 			next.setTabModel(this);
@@ -83,11 +79,10 @@ public class TabModel extends Observable implements XMLSerializable
 
 	}
 
-	private TabModel copy(AbstractController c)
-	{
+	private TabModel copy(AbstractController c) {
 		try {
-			if (encodedModel==null) {
-				encodedModel = XMLCoder.encodeObjectWithMapping(this, InspectorMapping.getInstance(),StringEncoder.getDefaultInstance());
+			if (encodedModel == null) {
+				encodedModel = XMLCoder.encodeObjectWithMapping(this, InspectorMapping.getInstance(), StringEncoder.getDefaultInstance());
 			}
 			TabModel returned = (TabModel) XMLDecoder.decodeObjectWithMapping(encodedModel, InspectorMapping.getInstance(), c);
 			returned._inspectorModel = _inspectorModel;
@@ -101,8 +96,7 @@ public class TabModel extends Observable implements XMLSerializable
 		return null;
 	}
 
-	public static TabModel createMergedModel(Vector<TabModel> tabs, AbstractController c)
-	{
+	public static TabModel createMergedModel(Vector<TabModel> tabs, AbstractController c) {
 		if (tabs.size() == 0) {
 			return null;
 		}
@@ -114,17 +108,16 @@ public class TabModel extends Observable implements XMLSerializable
 		return answer;
 	}
 
-	private static TabModel performMerge(TabModel lower, TabModel upper)
-	{
+	private static TabModel performMerge(TabModel lower, TabModel upper) {
 		Iterator upperIterator = upper.properties.values().iterator();
 		while (upperIterator.hasNext()) {
 			PropertyModel propModel = (PropertyModel) upperIterator.next();
-			lower.setPropertyForKey(propModel,propModel.name);
+			lower.setPropertyForKey(propModel, propModel.name);
 		}
 		Iterator upperIterator2 = upper.groups.values().iterator();
 		while (upperIterator2.hasNext()) {
 			GroupModel lineModel = (GroupModel) upperIterator2.next();
-			lower.setGroupForKey(lineModel,lineModel.name);
+			lower.setGroupForKey(lineModel, lineModel.name);
 		}
 
 		upperIterator = upper.hiddenProperties.iterator();
@@ -140,12 +133,12 @@ public class TabModel extends Observable implements XMLSerializable
 		if (upper.visibilityContext != null) {
 			if (lower.visibilityContext != null) {
 				String merge = lower.visibilityContext;
-				StringTokenizer st1 = new StringTokenizer(upper.visibilityContext,",");
+				StringTokenizer st1 = new StringTokenizer(upper.visibilityContext, ",");
 				while (st1.hasMoreTokens()) {
 					String token = st1.nextToken();
-					StringTokenizer st2 = new StringTokenizer(lower.visibilityContext,",");
+					StringTokenizer st2 = new StringTokenizer(lower.visibilityContext, ",");
 					boolean found = false;
-					while(st2.hasMoreTokens() && !found) {
+					while (st2.hasMoreTokens() && !found) {
 						found = st2.nextToken().indexOf(token) >= 0;
 					}
 					if (!found) {
@@ -160,8 +153,7 @@ public class TabModel extends Observable implements XMLSerializable
 		return lower;
 	}
 
-	public String getWidgetTypeForProperty(String propName)
-	{
+	public String getWidgetTypeForProperty(String propName) {
 		Iterator it = properties.values().iterator();
 		PropertyModel prop = null;
 		while (it.hasNext()) {
@@ -174,7 +166,7 @@ public class TabModel extends Observable implements XMLSerializable
 		while (i.hasNext()) {
 			GroupModel line = (GroupModel) i.next();
 			String type = line.getWidgetTypeForProperty(propName);
-			if (type!=null) {
+			if (type != null) {
 				return type;
 			}
 		}
@@ -184,13 +176,11 @@ public class TabModel extends Observable implements XMLSerializable
 	/**
 	 * @param model
 	 */
-	public void setInspectorModel(InspectorModel model)
-	{
+	public void setInspectorModel(InspectorModel model) {
 		_inspectorModel = model;
 	}
 
-	public InspectorModel getInspectorModel()
-	{
+	public InspectorModel getInspectorModel() {
 		return _inspectorModel;
 	}
 
@@ -202,8 +192,7 @@ public class TabModel extends Observable implements XMLSerializable
 	 * @param depends
 	 * @return
 	 */
-	public PropertyModel getPropertyNamed(String depends)
-	{
+	public PropertyModel getPropertyNamed(String depends) {
 		for (Enumeration e = properties.elements(); e.hasMoreElements();) {
 			PropertyModel next = (PropertyModel) e.nextElement();
 			if (next.name.equals(depends)) {
@@ -213,36 +202,32 @@ public class TabModel extends Observable implements XMLSerializable
 		for (Enumeration e = groups.elements(); e.hasMoreElements();) {
 			GroupModel next = (GroupModel) e.nextElement();
 			PropertyModel p = next.getPropertyNamed(depends);
-			if (p!=null) {
+			if (p != null) {
 				return p;
 			}
 		}
 		return null;
 	}
 
-	public Hashtable<String,PropertyModel> getProperties()
-	{
+	public Hashtable<String, PropertyModel> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(Hashtable<String,PropertyModel> prop)
-	{
+	public void setProperties(Hashtable<String, PropertyModel> prop) {
 		orderedProperties = null;
 		this.properties = prop;
 	}
 
-	public void setPropertyForKey(PropertyModel propertyModel, String key)
-	{
+	public void setPropertyForKey(PropertyModel propertyModel, String key) {
 		orderedProperties = null;
-		properties.put(key,propertyModel);
+		properties.put(key, propertyModel);
 		propertyModel.setTabModel(this);
 	}
 
-	public void removePropertyWithKey(String key)
-	{
+	public void removePropertyWithKey(String key) {
 		orderedProperties = null;
 		Object o = properties.remove(key);
-		if (o==null) {
+		if (o == null) {
 			Enumeration en = groups.elements();
 			while (en.hasMoreElements()) {
 				GroupModel line = (GroupModel) en.nextElement();
@@ -257,8 +242,7 @@ public class TabModel extends Observable implements XMLSerializable
 	 * @param depends
 	 * @return
 	 */
-	 public GroupModel getLineNamed(String depends)
-	{
+	public GroupModel getLineNamed(String depends) {
 		for (Enumeration e = groups.elements(); e.hasMoreElements();) {
 			GroupModel next = (GroupModel) e.nextElement();
 			if (next.name.equals(depends)) {
@@ -268,42 +252,36 @@ public class TabModel extends Observable implements XMLSerializable
 		return null;
 	}
 
-	 public Hashtable<String,GroupModel> getGroups() {
-		 return groups;
-	 }
+	public Hashtable<String, GroupModel> getGroups() {
+		return groups;
+	}
 
-	 public void setGroups(Hashtable<String,GroupModel> lines) {
-		 this.groups = lines;
-	 }
+	public void setGroups(Hashtable<String, GroupModel> lines) {
+		this.groups = lines;
+	}
 
-	 public void setGroupForKey(GroupModel lineModel, String key)
-	 {
-		 groups.put(key,lineModel);
-		 lineModel.setTabModel(this);
-	 }
+	public void setGroupForKey(GroupModel lineModel, String key) {
+		groups.put(key, lineModel);
+		lineModel.setTabModel(this);
+	}
 
-	 public void removeGroupWithKey(String key)
-	 {
-		 groups.remove(key);
-	 }
+	public void removeGroupWithKey(String key) {
+		groups.remove(key);
+	}
 
-	 private Vector<PropertyModel> orderedProperties = null;
+	private Vector<PropertyModel> orderedProperties = null;
 
-	 public Vector<PropertyModel> getOrderedProperties()
-	 {
-		 if (orderedProperties == null) {
-			 orderedProperties = new Vector<PropertyModel>(properties.values());
-			 Collections.sort(orderedProperties,new Comparator<PropertyModel>() {
-				 @Override
-				 public int compare(PropertyModel o1, PropertyModel o2)
-				 {
-					 return o1.constraint-o2.constraint;
-				 }
-			 });
-		 }
-		 return orderedProperties;
-	 }
+	public Vector<PropertyModel> getOrderedProperties() {
+		if (orderedProperties == null) {
+			orderedProperties = new Vector<PropertyModel>(properties.values());
+			Collections.sort(orderedProperties, new Comparator<PropertyModel>() {
+				@Override
+				public int compare(PropertyModel o1, PropertyModel o2) {
+					return o1.constraint - o2.constraint;
+				}
+			});
+		}
+		return orderedProperties;
+	}
 
 }
-
-

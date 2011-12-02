@@ -21,7 +21,6 @@ package org.openflexo.foundation.cg.utils;
 
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -68,12 +67,13 @@ public class DocConstants {
 
 			@Override
 			public String getDefaultContent(String docTypeName) {
-				if (DefaultDocType.Business.name().equals(docTypeName))
+				if (DefaultDocType.Business.name().equals(docTypeName)) {
 					return PURPOSE_BUSINESS_CONTENT;
-				else if (DefaultDocType.Technical.name().equals(docTypeName))
+				} else if (DefaultDocType.Technical.name().equals(docTypeName)) {
 					return PURPOSE_TECHNICAL_CONTENT;
-				else
+				} else {
 					return PURPOSE_DEFAULT_CONTENT;
+				}
 			}
 		},
 		OBJECTIVES {
@@ -165,25 +165,25 @@ public class DocConstants {
 				return "Project context";
 			}
 		},
-		SIPOC_LEVEL2{
+		SIPOC_LEVEL2 {
 			@Override
 			public boolean getIsReadOnly() {
 				return true;
 			}
 		},
-		SIPOC_LEVEL3{
+		SIPOC_LEVEL3 {
 			@Override
 			public boolean getIsReadOnly() {
 				return true;
 			}
 		},
-		ER_DIAGRAM{
+		ER_DIAGRAM {
 			@Override
 			public boolean getIsReadOnly() {
 				return true;
 			}
 		},
-		RACI{
+		RACI {
 			@Override
 			public boolean getIsReadOnly() {
 				return true;
@@ -212,13 +212,9 @@ public class DocConstants {
 	}
 
 	public static enum ProcessDocSectionSubType {
-		Doc,
-		OperationTable,
-		RaciMatrix,
-		SIPOCLevel2,
-		SIPOCLevel3
+		Doc, OperationTable, RaciMatrix, SIPOCLevel2, SIPOCLevel3
 	}
-	
+
 	public static final String PURPOSE_BUSINESS_CONTENT = "The purpose of this <I>Business Requirement Specification</I> is to model and document the functional behaviors of the underlying process."
 			+ StringUtils.LINE_SEPARATOR
 			+ StringUtils.LINE_SEPARATOR

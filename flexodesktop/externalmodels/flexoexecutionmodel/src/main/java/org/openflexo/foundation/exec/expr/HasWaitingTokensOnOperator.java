@@ -24,19 +24,17 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.OperatorNode;
 
-
-
 public class HasWaitingTokensOnOperator extends FlexoBuiltInExpression {
 
 	private OperatorNode operator;
 	private FlexoPostCondition<?, ?> entry;
-	
+
 	public HasWaitingTokensOnOperator(OperatorNode operator, FlexoPostCondition<?, ?> entry) {
 		super();
 		this.operator = operator;
 		this.entry = entry;
 	}
-	
+
 	public FlexoPostCondition<?, ?> getEntry() {
 		return entry;
 	}
@@ -54,20 +52,17 @@ public class HasWaitingTokensOnOperator extends FlexoBuiltInExpression {
 	}
 
 	@Override
-	public String toString()
-	{
-		return "<HasWaitingTokensOnOperator("+getOperatorNode().getName()+","+getEntry().getDerivedNameFromStartingObject()+")>";
+	public String toString() {
+		return "<HasWaitingTokensOnOperator(" + getOperatorNode().getName() + "," + getEntry().getDerivedNameFromStartingObject() + ")>";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "(hasWaitingTokensOnOperator("+getOperatorNode().getFlexoID()+","+getEntry().getFlexoID()+"))";
+	public String getJavaStringRepresentation() {
+		return "(hasWaitingTokensOnOperator(" + getOperatorNode().getFlexoID() + "," + getEntry().getFlexoID() + "))";
 	}
 
 	@Override
-	public EvaluationType getEvaluationType() throws TypeMismatchException 
-	{
+	public EvaluationType getEvaluationType() throws TypeMismatchException {
 		return EvaluationType.BOOLEAN;
 	}
 }

@@ -45,22 +45,25 @@ import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
-
 public class TestPopup {
 
-    protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
+	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
 		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
 			return new FlexoTestEditor(project);
 		}
-    };
+	};
 
-    static FlexoEditor editor;
-    static FlexoProject prj ;
+	static FlexoEditor editor;
+	static FlexoProject prj;
 
-	static {
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
 		try {
-			editor = FlexoResourceManager.initializeExistingProject(new File("/Users/sylvain/Documents/TestsFlexo/TestBindingSelector.prj"), EDITOR_FACTORY,null);
+			editor = FlexoResourceManager.initializeExistingProject(
+					new File("/Users/sylvain/Documents/TestsFlexo/TestBindingSelector.prj"), EDITOR_FACTORY, null);
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,12 +72,6 @@ public class TestPopup {
 			e.printStackTrace();
 		}
 		prj = editor.getProject();
-	}
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
 		final JFrame frame = new JFrame();
 		JPanel panel = new JPanel(new BorderLayout());
 		frame.setContentPane(panel);
@@ -86,21 +83,20 @@ public class TestPopup {
 				frame.toFront();
 			}
 		});
-		panel.add(button,BorderLayout.SOUTH);
+		panel.add(button, BorderLayout.SOUTH);
 		frame.pack();
 		frame.setVisible(true);
 	}
 
-	protected static void showDialog(JFrame frame)
-	{
-		final JDialog dialog = new JDialog(frame,true);
+	protected static void showDialog(JFrame frame) {
+		final JDialog dialog = new JDialog(frame, true);
 		JPanel panel = new JPanel(new BorderLayout());
-		//panel.add(new JLabel("south"),BorderLayout.SOUTH);
-		//panel.add(new JTextArea("un texte",10,30),BorderLayout.CENTER);
-		//panel.add(new DateSelector(new Date()),BorderLayout.NORTH);
-		panel.add(new DMEntitySelector<DMEntity>(prj,null,DMEntity.class),BorderLayout.SOUTH);
-		panel.add(new JTextArea("un texte",10,30),BorderLayout.CENTER);
-		panel.add(new DMTypeSelector(prj, null, true),BorderLayout.NORTH);
+		// panel.add(new JLabel("south"),BorderLayout.SOUTH);
+		// panel.add(new JTextArea("un texte",10,30),BorderLayout.CENTER);
+		// panel.add(new DateSelector(new Date()),BorderLayout.NORTH);
+		panel.add(new DMEntitySelector<DMEntity>(prj, null, DMEntity.class), BorderLayout.SOUTH);
+		panel.add(new JTextArea("un texte", 10, 30), BorderLayout.CENTER);
+		panel.add(new DMTypeSelector(prj, null, true), BorderLayout.NORTH);
 		dialog.setContentPane(panel);
 		/*JButton button = new JButton("popup");
 		button.addActionListener(new ActionListener() {
@@ -113,14 +109,12 @@ public class TestPopup {
 		dialog.setVisible(true);
 	}
 
-	protected static void showPopup(JDialog dialog)
-	{
+	protected static void showPopup(JDialog dialog) {
 		System.out.println("coucou le popup");
 
-
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(new JLabel("north"),BorderLayout.NORTH);
-		panel.add(new JLabel("center"),BorderLayout.CENTER);
+		panel.add(new JLabel("north"), BorderLayout.NORTH);
+		panel.add(new JLabel("center"), BorderLayout.CENTER);
 
 		JButton quitButton = new JButton("quit");
 		quitButton.addActionListener(new ActionListener() {
@@ -129,13 +123,13 @@ public class TestPopup {
 				System.exit(0);
 			}
 		});
-		panel.add(quitButton,BorderLayout.SOUTH);
+		panel.add(quitButton, BorderLayout.SOUTH);
 
 		JPopupMenu popup = new JPopupMenu();
 		popup.insert(panel, 0);
 		popup.setInvoker(dialog);
 
-		Point position = new Point(100,100);
+		Point position = new Point(100, 100);
 		popup.show(dialog, position.x, position.y);
 
 	}

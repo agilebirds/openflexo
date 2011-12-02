@@ -29,30 +29,24 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
+public class JTextFieldRegExp extends JTextField implements DocumentListener {
 
-public class JTextFieldRegExp extends JTextField implements DocumentListener{
-
-	
-	
-	
-	
-	
 	private int errorLevel;
 	public static final int ERROR_FREE = 0;
 	public static final int WARNING = 1;
 	public static final int REG_EXP_ERROR = 2;
-	
+
 	public static final Color DEFAULT_BORDER = Color.WHITE;
-	public static final Color WARNING_BORDER = new Color(255,204,0);
-	public static final Color ERROR_BORDER = new Color(255,99,99);
-	
-	//private JTextField _textField;
+	public static final Color WARNING_BORDER = new Color(255, 204, 0);
+	public static final Color ERROR_BORDER = new Color(255, 99, 99);
+
+	// private JTextField _textField;
 	private Vector<Pattern> warningRegExp;
 	private Vector<String> warningMessages;
 	private Vector<Pattern> errorRegExp;
 	private Vector<String> errorMessages;
-	
-	private void init(){
+
+	private void init() {
 		warningRegExp = new Vector<Pattern>();
 		warningMessages = new Vector<String>();
 		errorRegExp = new Vector<Pattern>();
@@ -60,7 +54,7 @@ public class JTextFieldRegExp extends JTextField implements DocumentListener{
 		errorLevel = ERROR_FREE;
 		getDocument().addDocumentListener(this);
 	}
-	
+
 	public JTextFieldRegExp() {
 		super();
 		init();
@@ -85,56 +79,64 @@ public class JTextFieldRegExp extends JTextField implements DocumentListener{
 		super(arg0);
 		init();
 	}
-	
-	
-	
-	public void addToWarnings(String regExp,String message){
+
+	public void addToWarnings(String regExp, String message) {
 		warningRegExp.add(Pattern.compile(regExp));
 		warningMessages.add(message);
 	}
-	public void addToErrors(String regExp,String message){
+
+	public void addToErrors(String regExp, String message) {
 		errorRegExp.add(Pattern.compile(regExp));
 		errorMessages.add(message);
 	}
 
-	protected void doTheCheck(){
+	protected void doTheCheck() {
 		String m = validateText();
-		if(m==null){
+		if (m == null) {
 			setBackground(DEFAULT_BORDER);
 			setToolTipText(null);
 			return;
 		}
 		setToolTipText(m);
-		setBackground(errorLevel==REG_EXP_ERROR?ERROR_BORDER:WARNING_BORDER);
+		setBackground(errorLevel == REG_EXP_ERROR ? ERROR_BORDER : WARNING_BORDER);
 	}
-	private String validateText(){
+
+	private String validateText() {
 		errorLevel = ERROR_FREE;
 		String err = validateError();
-		if(err==null){
+		if (err == null) {
 			err = validateWarning();
-			if(err!=null)errorLevel = WARNING;
+			if (err != null) {
+				errorLevel = WARNING;
+			}
 			return err;
+		} else {
+			errorLevel = REG_EXP_ERROR;
 		}
-		else errorLevel = REG_EXP_ERROR;
 		return err;
 	}
-	
-	private String validateWarning(){
+
+	private String validateWarning() {
 		return validate(warningRegExp, warningMessages);
 	}
-	private String validateError(){
+
+	private String validateError() {
 		return validate(errorRegExp, errorMessages);
 	}
-	public boolean hasError(){
-		return validateError()!=null;
+
+	public boolean hasError() {
+		return validateError() != null;
 	}
-	private String validate(Vector patterns, Vector messages){
+
+	private String validate(Vector patterns, Vector messages) {
 		Enumeration en = patterns.elements();
 		Pattern p = null;
 		int i = 0;
-		while(en.hasMoreElements()){
-			p = (Pattern)en.nextElement();
-			if(!p.matcher(getText()).matches())return messages.get(i).toString();
+		while (en.hasMoreElements()) {
+			p = (Pattern) en.nextElement();
+			if (!p.matcher(getText()).matches()) {
+				return messages.get(i).toString();
+			}
 			i++;
 		}
 		return null;
@@ -143,20 +145,19 @@ public class JTextFieldRegExp extends JTextField implements DocumentListener{
 	@Override
 	public void changedUpdate(DocumentEvent arg0) {
 		doTheCheck();
-		
+
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent arg0) {
 		doTheCheck();
-		
+
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent arg0) {
 		doTheCheck();
-		
+
 	}
-	
-	
+
 }

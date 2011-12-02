@@ -27,50 +27,47 @@ import org.openflexo.localization.FlexoLocalization;
  * @author gpolet
  * 
  */
-public class InvalidFileNameException extends FlexoException
-{
+public class InvalidFileNameException extends FlexoException {
 
-    private String relativePath;
+	private String relativePath;
 
-    private FlexoProjectFile file;
+	private FlexoProjectFile file;
 
-    /**
-     * @param relativePath
-     */
-    public InvalidFileNameException(String relativePath)
-    {
-        this.relativePath = relativePath;
-    }
+	/**
+	 * @param relativePath
+	 */
+	public InvalidFileNameException(String relativePath) {
+		this.relativePath = relativePath;
+	}
 
-    public InvalidFileNameException(FlexoProjectFile file)
-    {
-        this.file = file;
-        if (file != null)
-            this.relativePath = file.getRelativePath();
-    }
+	public InvalidFileNameException(FlexoProjectFile file) {
+		this.file = file;
+		if (file != null) {
+			this.relativePath = file.getRelativePath();
+		}
+	}
 
-    public String getRelativePath()
-    {
-        return relativePath;
-    }
+	public String getRelativePath() {
+		return relativePath;
+	}
 
-    public FlexoProjectFile getFile()
-    {
-        return file;
-    }
+	public FlexoProjectFile getFile() {
+		return file;
+	}
 
-    @Override
-    public String getMessage() {
-    	return getLocalizedMessage();
-    }
-    
-    /**
-     * Overrides getLocalizedMessage
-     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-     */
-    @Override
-    public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("invalid_file_name")+" "+getRelativePath()!=null?getRelativePath():" null relative path";
-    }
+	@Override
+	public String getMessage() {
+		return getLocalizedMessage();
+	}
+
+	/**
+	 * Overrides getLocalizedMessage
+	 * 
+	 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+	 */
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("invalid_file_name") + " " + getRelativePath() != null ? getRelativePath()
+				: " null relative path";
+	}
 }

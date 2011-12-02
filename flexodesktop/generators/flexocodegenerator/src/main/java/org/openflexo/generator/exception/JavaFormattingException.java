@@ -20,22 +20,16 @@
 package org.openflexo.generator.exception;
 
 import org.openflexo.generator.CGGenerator;
-import org.openflexo.generator.exception.GenerationException;
 
-
-
-public class JavaFormattingException extends GenerationException
-{
+public class JavaFormattingException extends GenerationException {
 	private CGGenerator _generator;
-	
- 	public JavaFormattingException(CGGenerator generator, String fullclassname)
-	{
-		super("Failed running java formatting on class : "+fullclassname, (String)null,"See log in console", (Throwable)null);
+
+	public JavaFormattingException(CGGenerator generator, String fullclassname) {
+		super("Failed running java formatting on class : " + fullclassname, (String) null, "See log in console", (Throwable) null);
 		_generator = generator;
 	}
 
-	public CGGenerator getGenerator()
-	{
+	public CGGenerator getGenerator() {
 		return _generator;
 	}
 }

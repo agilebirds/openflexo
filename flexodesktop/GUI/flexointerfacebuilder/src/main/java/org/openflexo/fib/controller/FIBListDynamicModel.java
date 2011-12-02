@@ -21,14 +21,10 @@ package org.openflexo.fib.controller;
 
 import java.util.List;
 
-
-public class FIBListDynamicModel<T,O> extends FIBComponentDynamicModel<T>
-{
-	public O selected;
+public class FIBListDynamicModel<T, O> extends FIBMultipleValuesDynamicModel<T, O> {
 	public List<O> selection;
-	
-	public FIBListDynamicModel(T data)
-	{
+
+	public FIBListDynamicModel(T data) {
 		super(data);
 	}
 }

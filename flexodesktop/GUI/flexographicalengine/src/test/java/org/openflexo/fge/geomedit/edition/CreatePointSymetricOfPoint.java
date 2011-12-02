@@ -25,38 +25,31 @@ import org.openflexo.fge.geomedit.Point;
 import org.openflexo.fge.geomedit.construction.SymetricPointConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreatePointSymetricOfPoint extends Edition {
-	
+
 	public CreatePointSymetricOfPoint(GeomEditController controller) {
-		super("Create point as symetric of an other point",controller);
-		inputs.add(new ObtainPoint("Select origin point",controller));
-		inputs.add(new ObtainPoint("Select pivot point",controller));
+		super("Create point as symetric of an other point", controller);
+		inputs.add(new ObtainPoint("Select origin point", controller));
+		inputs.add(new ObtainPoint("Select pivot point", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainPoint p1 = (ObtainPoint)inputs.get(0);
-		ObtainPoint p2 = (ObtainPoint)inputs.get(1);
-		
-		addObject (new Point(
-				getController().getDrawing().getModel(),
-				new SymetricPointConstruction(p1.getConstruction(),p2.getConstruction())));
+	public void performEdition() {
+		ObtainPoint p1 = (ObtainPoint) inputs.get(0);
+		ObtainPoint p2 = (ObtainPoint) inputs.get(1);
+
+		addObject(new Point(getController().getDrawing().getModel(), new SymetricPointConstruction(p1.getConstruction(),
+				p2.getConstruction())));
 
 	}
-	
+
 	/*public void addObject(GeometricObject object)
 	{
 		getController().getDrawing().getModel().addToChilds(object);
 	}*/
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		// Nothing to draw
 	}
 }
-
-

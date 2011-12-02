@@ -33,139 +33,130 @@ import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.xml.sax.SAXException;
 
-
 /**
- * Flexo logging manager: manages logs for the application above
- * java.util.logging Also read and parse logs of an expired session of Flexo
- *
+ * Flexo logging manager: manages logs for the application above java.util.logging Also read and parse logs of an expired session of Flexo
+ * 
  * @author sguerin
  */
-public class FlexoLoggingManager
-{
+public class FlexoLoggingManager {
 
-    private static XMLMapping _loggingMapping = null;
+	private static XMLMapping _loggingMapping = null;
 
-    private static boolean _isInitialized = false;
+	private static boolean _isInitialized = false;
 
-    private static boolean _isLoggingWindowShowed = false;
+	private static boolean _isLoggingWindowShowed = false;
 
-    public static LogRecords logRecords = null;
+	public static LogRecords logRecords = null;
 
-    private static FlexoLoggingViewerWindow viewer = null;
+	private static FlexoLoggingViewerWindow viewer = null;
 
-    private static FlexoLoggingHandler _flexoLoggingHandler;
+	private static FlexoLoggingHandler _flexoLoggingHandler;
 
-    public static void forceInitialize(){
-    	try{
-    		initialize();
-    	}catch (Exception e) {
+	public static void forceInitialize() {
+		try {
+			initialize();
+		} catch (Exception e) {
 			e.printStackTrace();
 			_isInitialized = true;
-	        _isLoggingWindowShowed = false;
-	        logRecords = new LogRecords();
-	        viewer = null;
+			_isLoggingWindowShowed = false;
+			logRecords = new LogRecords();
+			viewer = null;
 		}
-    }
-    public static void initialize() throws SecurityException, IOException
-    {
-        File f = new File(System.getProperty("user.home"),"Library/Logs/Flexo/");
-        if (!f.exists())
-            f.mkdirs();
-        _isLoggingWindowShowed = false;
-        logRecords = new LogRecords();
-        viewer = null;
-        LogManager.getLogManager().readConfiguration();
-        _isInitialized = true;
-    }
+	}
 
-    public static boolean isInitialized()
-    {
-        return _isInitialized;
-    }
+	public static void initialize() throws SecurityException, IOException {
+		File f = new File(System.getProperty("user.home"), "Library/Logs/Flexo/");
+		if (!f.exists()) {
+			f.mkdirs();
+		}
+		_isLoggingWindowShowed = false;
+		logRecords = new LogRecords();
+		viewer = null;
+		LogManager.getLogManager().readConfiguration();
+		_isInitialized = true;
+	}
 
-    public static boolean isLoggingWindowShowed()
-    {
-        return _isLoggingWindowShowed;
-    }
+	public static boolean isInitialized() {
+		return _isInitialized;
+	}
 
-    public static void unhandledException(Exception e)
-    {
-        FlexoLoggingHandler flexoLoggingHandler = getFlexoLoggingHandler();
-        if (flexoLoggingHandler != null) {
-            flexoLoggingHandler.publishUnhandledException(new java.util.logging.LogRecord(java.util.logging.Level.WARNING, "Unhandled exception occured: "
-                    + e.getClass().getName()), e);
-        } else {
-            Logger.global.warning("Unexpected exception occured: " + e.getClass().getName());
-        }
-    }
+	public static boolean isLoggingWindowShowed() {
+		return _isLoggingWindowShowed;
+	}
 
-    public static void setFlexoLoggingHandler(FlexoLoggingHandler handler)
-    {
-        _flexoLoggingHandler = handler;
-    }
+	public static void unhandledException(Exception e) {
+		FlexoLoggingHandler flexoLoggingHandler = getFlexoLoggingHandler();
+		if (flexoLoggingHandler != null) {
+			flexoLoggingHandler.publishUnhandledException(new java.util.logging.LogRecord(java.util.logging.Level.WARNING,
+					"Unhandled exception occured: " + e.getClass().getName()), e);
+		} else {
+			Logger.global.warning("Unexpected exception occured: " + e.getClass().getName());
+		}
+	}
 
-    public static FlexoLoggingHandler getFlexoLoggingHandler()
-    {
-        return _flexoLoggingHandler;
-    }
+	public static void setFlexoLoggingHandler(FlexoLoggingHandler handler) {
+		_flexoLoggingHandler = handler;
+	}
 
-    public static XMLMapping getLoggingMapping()
-    {
-        if (_loggingMapping == null) {
-            File loggingModelFile;
-            loggingModelFile = new FileResource("Models/LoggingModel.xml");
-            if (!loggingModelFile.exists()) {
-                System.err.println("File " + loggingModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
-                return null;
-            } else {
-                try {
-                    _loggingMapping = new XMLMapping(loggingModelFile);
-                } catch (IOException e) {
-                    System.out.println(e.toString());
-                } catch (SAXException e) {
-                    System.out.println(e.toString());
-                    e.printStackTrace();
-                } catch (ParserConfigurationException e) {
-                    System.out.println(e.toString());
-                }
-            }
-        }
-        return _loggingMapping;
-    }
+	public static FlexoLoggingHandler getFlexoLoggingHandler() {
+		return _flexoLoggingHandler;
+	}
 
-    public static void showLoggingViewer()
-    {
-        viewer = new FlexoLoggingViewerWindow(logRecords);
-        _isLoggingWindowShowed = true;
-        viewer.setVisible(true);
-    }
+	public static XMLMapping getLoggingMapping() {
+		if (_loggingMapping == null) {
+			File loggingModelFile;
+			loggingModelFile = new FileResource("Models/LoggingModel.xml");
+			if (!loggingModelFile.exists()) {
+				System.err.println("File " + loggingModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				return null;
+			} else {
+				try {
+					_loggingMapping = new XMLMapping(loggingModelFile);
+				} catch (IOException e) {
+					System.out.println(e.toString());
+				} catch (SAXException e) {
+					System.out.println(e.toString());
+					e.printStackTrace();
+				} catch (ParserConfigurationException e) {
+					System.out.println(e.toString());
+				}
+			}
+		}
+		return _loggingMapping;
+	}
 
-    public static String logsReport()
-    {
-        try {
-            return XMLCoder.encodeObjectWithMapping(logRecords, getLoggingMapping(),StringEncoder.getDefaultInstance());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "No report available";
-        }
-    }
+	public static void showLoggingViewer() {
+		viewer = new FlexoLoggingViewerWindow(logRecords);
+		_isLoggingWindowShowed = true;
+		viewer.setVisible(true);
+	}
 
-    private static boolean _keepLogTrace;
+	public static String logsReport() {
+		try {
+			return XMLCoder.encodeObjectWithMapping(logRecords, getLoggingMapping(), StringEncoder.getDefaultInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "No report available";
+		}
+	}
 
-    public static boolean getKeepLogTrace(){
-    	return _keepLogTrace;
-    }
+	private static boolean _keepLogTrace;
+
+	public static boolean getKeepLogTrace() {
+		return _keepLogTrace;
+	}
+
 	public static void setKeepLogTrace(boolean logTrace) {
 		_keepLogTrace = logTrace;
 	}
-
 
 	private static int _logCount;
 
 	public static void setLogCount(Integer logCount) {
 		_logCount = logCount;
 	}
-	public static int getLogCount(){
+
+	public static int getLogCount() {
 		return _logCount;
 	}
 

@@ -19,83 +19,36 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
-	private String container;
-	
 	public AddShape() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddShape;
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_SHAPE_INSPECTOR;
 	}
 
-	public String getContainer() 
-	{
-		return container;
+	public ViewObject getContainer(EditionSchemeAction action) {
+		return (ViewObject) getContainer().getBindingValue(action);
 	}
 
-	public void setContainer(String container) 
-	{
-		this.container = container;
-	}
-
-	private Vector<String> availableContainerValues = null;
-	
-	public Vector<String> getAvailableContainerValues()
-	{
-		if (availableContainerValues == null) {
-			availableContainerValues = new Vector<String>();
-			switch (getScheme().getEditionSchemeType()) {
-			case DropScheme:
-				availableContainerValues.add(CONTAINER);
-				availableContainerValues.add(CONTAINER_OF_CONTAINER);
-				break;
-			case LinkScheme:
-				availableContainerValues.add(FROM_TARGET);
-				availableContainerValues.add(TO_TARGET);
-				break;
-			default:
-				break;
-			}
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				availableContainerValues.add(pr.getPatternRoleName());
-			}
-			for (EditionPatternParameter p : getScheme().getParameters()) {
-				availableContainerValues.add(p.getName());
-			}
-		}
-		return availableContainerValues;
-	}
-
-	
-	public ViewObject getContainer(EditionSchemeAction action)
-	{
-		if (action instanceof DropSchemeAction && getContainer() == null) {
-			return ((DropSchemeAction)action).getParent();
-		}
-		return retrieveOEShemaObject(getContainer(), action);
-	}
-	
 	@Override
 	public ShapePatternRole getPatternRole() {
 		try {
@@ -106,15 +59,34 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 			return null;
 		}
 	}
-	
+
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(ShapePatternRole patternRole) 
-	{
+	public void setPatternRole(ShapePatternRole patternRole) {
 		super.setPatternRole(patternRole);
 	}
-	
 
+	private ViewPointDataBinding container;
+
+	private BindingDefinition CONTAINER = new BindingDefinition("container", ViewObject.class, BindingDefinitionType.GET, false);
+
+	public BindingDefinition getContainerBindingDefinition() {
+		return CONTAINER;
+	}
+
+	public ViewPointDataBinding getContainer() {
+		if (container == null) {
+			container = new ViewPointDataBinding(this, EditionActionBindingAttribute.container, getContainerBindingDefinition());
+		}
+		return container;
+	}
+
+	public void setContainer(ViewPointDataBinding container) {
+		container.setOwner(this);
+		container.setBindingAttribute(EditionActionBindingAttribute.container);
+		container.setBindingDefinition(getContainerBindingDefinition());
+		this.container = container;
+	}
 
 }

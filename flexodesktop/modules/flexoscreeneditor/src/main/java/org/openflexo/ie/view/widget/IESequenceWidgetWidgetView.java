@@ -57,246 +57,246 @@ import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.IEDTListener;
 
+public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> implements IEContainer {
 
-public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> implements IEContainer
-{
+	private static final Logger logger = Logger.getLogger(IESequenceWidgetWidgetView.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(IESequenceWidgetWidgetView.class.getPackage().getName());
+	public static final int LAYOUT_GAP = 2;
 
-    public static final int LAYOUT_GAP = 2;
+	/**
+	 * @param model
+	 */
+	public IESequenceWidgetWidgetView(IEController ieController, IESequenceWidget model, boolean addDnDSupport,
+			IEWOComponentView componentView) {
+		super(ieController, model, addDnDSupport, componentView);
+		setOpaque(false);
+		setLayout(new IETDFlowLayout(getAlignement(), getHorizontalGap(), getVerticalGap(), SwingConstants.TOP));
+		Enumeration en = model.elements();
+		IEWidget widget = null;
+		while (en.hasMoreElements()) {
+			widget = (IEWidget) en.nextElement();
+			add(_componentView.getViewForWidget(widget, true));
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Sequence Widget Widget View Bounds:" + getBounds());
+		}
+		this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, new IEDTListener(ieController, this, getModel())));
+		if (getModel().getOperator() != null) {
+			setBorder(IEViewUtils.getBorderForOperator(getModel().getOperator()));
+		}
+		validate();
+	}
 
-    /**
-     * @param model
-     */
-    public IESequenceWidgetWidgetView(IEController ieController, IESequenceWidget model, boolean addDnDSupport,
-            IEWOComponentView componentView)
-    {
-        super(ieController, model, addDnDSupport, componentView);
-        setOpaque(false);
-        setLayout(new IETDFlowLayout(getAlignement(), getHorizontalGap(), getVerticalGap(), SwingConstants.TOP));
-        Enumeration en = model.elements();
-        IEWidget widget = null;
-        while (en.hasMoreElements()) {
-            widget = (IEWidget) en.nextElement();
-            add(_componentView.getViewForWidget(widget, true));
-        }
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Sequence Widget Widget View Bounds:" + getBounds());
-        this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, new IEDTListener(ieController, this, getModel())));
-        if (getModel().getOperator() != null)
-            setBorder(IEViewUtils.getBorderForOperator(getModel().getOperator()));
-        validate();
-    }
+	public int getHorizontalGap() {
+		return LAYOUT_GAP;
+	}
 
-    public int getHorizontalGap() {
-    	return LAYOUT_GAP;
-    }
-    
-    public int getVerticalGap() {
-    	return LAYOUT_GAP;
-    }
-    
-    /**
-     * @return the FlowLayout alignement for this view. Default value is
-     *         FlowLayout.LEFT
-     * @see FlowLayout
-     */
-    protected int getAlignement()
-    {
-        return FlowLayout.LEFT;
-    }
+	public int getVerticalGap() {
+		return LAYOUT_GAP;
+	}
 
-    /**
-     * Overrides propagateResize
-     * 
-     * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
-     */
-    @Override
-    public void propagateResize()
-    {
-        Component[] c = getComponents();
-        for (int i = 0; i < c.length; i++) {
-            if (c[i] instanceof Layoutable)
-                ((Layoutable) c[i]).propagateResize();
-        }
-        invalidate();
-        doLayout();
-        repaint();
-    }
+	/**
+	 * @return the FlowLayout alignement for this view. Default value is FlowLayout.LEFT
+	 * @see FlowLayout
+	 */
+	protected int getAlignement() {
+		return FlowLayout.LEFT;
+	}
 
-    public int getAvailableWidth()
-    {
-        Dimension d = getMaximumSize();
-        Insets i = getInsets();
-        int retval = d.width - 2 * getHorizontalGap() - i.left - i.right;
-        if (getModel().isSubsequence())
-            retval -= 2 * getHorizontalGap() * getModel().getSequenceDepth();
-        return retval;
-    }
-    
-    /**
-     * Overrides getMaximumSize
-     * 
-     * @see javax.swing.JComponent#getMaximumSize()
-     */
-    @Override
-    public Dimension getMaximumSize()
-    {
-    	Container p = getParent();
-        if (p instanceof IESequenceWidgetWidgetView) {
-            Dimension d = ((IESequenceWidgetWidgetView) p).getMaximumSize();
-            if (d.width == 0)
-                return d;
-            d.height -= 2 * getVerticalGap();
-            d.width -= 2 * getHorizontalGap();
-            return d;
-        } else if (p instanceof IEWOComponentView) {
-    		Dimension d = ((IEWOComponentView) p).getMaximumSize();
-    		int subsequenceCount = getModel().getSequenceDepth();
-    		d.width = ((IEWOComponentView) p).getMaxWidth()-(subsequenceCount*getHorizontalGap()*2);
-    		return d;
-        } else if (p instanceof ButtonPanel) {
-            return p.getMaximumSize();
-        } else
-            return getSize();
-    }
+	/**
+	 * Overrides propagateResize
+	 * 
+	 * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
+	 */
+	@Override
+	public void propagateResize() {
+		Component[] c = getComponents();
+		for (int i = 0; i < c.length; i++) {
+			if (c[i] instanceof Layoutable) {
+				((Layoutable) c[i]).propagateResize();
+			}
+		}
+		invalidate();
+		doLayout();
+		repaint();
+	}
 
-    @Override
-	public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null)
-            	return storedSize;
-        }
-        Dimension d = super.getPreferredSize();
-        if (d.height < IETDWidget.MIN_HEIGHT)
-            d.height = IETDWidget.MIN_HEIGHT;
-        if (d.width < IETDWidget.MIN_WIDTH)
-            d.width = IETDWidget.MIN_WIDTH;
-        if (getHoldsNextComputedPreferredSize())
-            storePrefSize(d);
-        return d;
-    }
+	public int getAvailableWidth() {
+		Dimension d = getMaximumSize();
+		Insets i = getInsets();
+		int retval = d.width - 2 * getHorizontalGap() - i.left - i.right;
+		if (getModel().isSubsequence()) {
+			retval -= 2 * getHorizontalGap() * getModel().getSequenceDepth();
+		}
+		return retval;
+	}
 
-    public int getChildCount()
-    {
-        return getSequenceModel().length();
-    }
+	/**
+	 * Overrides getMaximumSize
+	 * 
+	 * @see javax.swing.JComponent#getMaximumSize()
+	 */
+	@Override
+	public Dimension getMaximumSize() {
+		Container p = getParent();
+		if (p instanceof IESequenceWidgetWidgetView) {
+			Dimension d = ((IESequenceWidgetWidgetView) p).getMaximumSize();
+			if (d.width == 0) {
+				return d;
+			}
+			d.height -= 2 * getVerticalGap();
+			d.width -= 2 * getHorizontalGap();
+			return d;
+		} else if (p instanceof IEWOComponentView) {
+			Dimension d = ((IEWOComponentView) p).getMaximumSize();
+			int subsequenceCount = getModel().getSequenceDepth();
+			d.width = ((IEWOComponentView) p).getMaxWidth() - (subsequenceCount * getHorizontalGap() * 2);
+			return d;
+		} else if (p instanceof ButtonPanel) {
+			return p.getMaximumSize();
+		} else {
+			return getSize();
+		}
+	}
 
-    public IEHTMLTableConstraints getConstraints()
-    {
-        return getSequenceModel().td().getConstraints();
-    }
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null) {
+				return storedSize;
+			}
+		}
+		Dimension d = super.getPreferredSize();
+		if (d.height < IETDWidget.MIN_HEIGHT) {
+			d.height = IETDWidget.MIN_HEIGHT;
+		}
+		if (d.width < IETDWidget.MIN_WIDTH) {
+			d.width = IETDWidget.MIN_WIDTH;
+		}
+		if (getHoldsNextComputedPreferredSize()) {
+			storePrefSize(d);
+		}
+		return d;
+	}
 
-    protected Component findView(IEWidget w)
-    {
-        for (int i = 0; i < getComponentCount(); i++) {
-            if (((IEWidgetView) getComponent(i)).getModel().equals(w))
-                return getComponent(i);
-        }
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("cannot find a view for widget : " + w);
-        return null;
-    }
+	public int getChildCount() {
+		return getSequenceModel().length();
+	}
 
-    /**
-     * Overrides setDefaultBorder
-     * 
-     * @see org.openflexo.ie.view.widget.IEWidgetView#setDefaultBorder()
-     */
-    @Override
-    public void setDefaultBorder()
-    {
-        if (getModel().getOperator() != null)
-            setBorder(IEViewUtils.getBorderForOperator(getModel().getOperator()));
-        else
-        	setBorder(EMPTY_BORDER_1);
-    }
+	public IEHTMLTableConstraints getConstraints() {
+		return getSequenceModel().td().getConstraints();
+	}
 
-    protected void handleWidgetInserted(IEWidget widget) {
-    	add(_componentView.getViewForWidget(widget, true), widget.getIndex());
-        validate();
-        doLayout();
-        repaint();
-    }
-    
-    protected void handleWidgetRemoved(IEWidget widget) {
-        if (widget instanceof IEHTMLTableWidget)
-            widget = ((IEHTMLTableWidget) widget).getSequenceTR();
-        Component v = findView(widget);
-        if (v != null) {
-            remove(v);
-            validate();
-            doLayout();
-            repaint();
-        }
+	protected Component findView(IEWidget w) {
+		for (int i = 0; i < getComponentCount(); i++) {
+			if (((IEWidgetView) getComponent(i)).getModel().equals(w)) {
+				return getComponent(i);
+			}
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("cannot find a view for widget : " + w);
+		}
+		return null;
+	}
 
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-     */
-    @Override
-	public void update(FlexoObservable arg0, DataModification modif)
-    {
-        if (modif instanceof DisplayNeedUpdate || modif instanceof ConstraintUpdated || modif instanceof ColSpanDecrease
-                || modif instanceof RowSpanDecrease || modif instanceof ColSpanIncrease || modif instanceof RowSpanIncrease) {
-            if (getParent() != null) {
-                doLayout();
-                repaint();
-            }
-        } else if (modif instanceof WidgetAddedToSequence && arg0 == getModel()) {
-            handleWidgetInserted((IEWidget) modif.newValue());
-        } else if (modif instanceof WidgetRemovedFromSequence && arg0 == getModel()) {
-            handleWidgetRemoved((IEWidget) modif.oldValue());
-        } else if (modif instanceof OperatorChanged && arg0 == getModel()) {
-            if (getModel().getOperator() != null)
-                setBorder(IEViewUtils.getBorderForOperator(getModel().getOperator()));
-        } else if (modif instanceof DisplayNeedsRefresh && arg0 == getModel()) {
-            revalidate();
-            doLayout();
-            repaint();
-        } else
-        	super.update(arg0, modif);
-    }
+	/**
+	 * Overrides setDefaultBorder
+	 * 
+	 * @see org.openflexo.ie.view.widget.IEWidgetView#setDefaultBorder()
+	 */
+	@Override
+	public void setDefaultBorder() {
+		if (getModel().getOperator() != null) {
+			setBorder(IEViewUtils.getBorderForOperator(getModel().getOperator()));
+		} else {
+			setBorder(EMPTY_BORDER_1);
+		}
+	}
 
-    public IESequenceWidget getSequenceModel()
-    {
-        return getModel();
-    }
+	protected void handleWidgetInserted(IEWidget widget) {
+		add(_componentView.getViewForWidget(widget, true), widget.getIndex());
+		validate();
+		doLayout();
+		repaint();
+	}
 
-    @Override
-	public Color getBackground()
-    {
-    	if (getSequenceModel()!=null)
-    		return getSequenceModel().getBackground();
-    	else
-    		return super.getBackground();
-    }
+	protected void handleWidgetRemoved(IEWidget widget) {
+		if (widget instanceof IEHTMLTableWidget) {
+			widget = ((IEHTMLTableWidget) widget).getSequenceTR();
+		}
+		Component v = findView(widget);
+		if (v != null) {
+			remove(v);
+			validate();
+			doLayout();
+			repaint();
+		}
 
-    public int findInsertionIndex(int dropX, int dropY)
-    {
-        int i = 0;
-        for (i = 0; i < getComponentCount(); i++) {
-            if (dropX < getComponent(i).getX() + getComponent(i).getWidth() / 2
-                    && dropY < getComponent(i).getY() + getComponent(i).getHeight())
-                return i;
-            else if (dropY < getComponent(i).getY())
-                return i;
-        }
-        return i;
-    }
+	}
 
-    public int getContentLength()
-    {
-        int r = 0;
-        for (int i = 0; i < getComponentCount(); i++) {
-            r = r + getComponent(i).getPreferredSize().width;
-        }
-        return r;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	@Override
+	public void update(FlexoObservable arg0, DataModification modif) {
+		if (modif instanceof DisplayNeedUpdate || modif instanceof ConstraintUpdated || modif instanceof ColSpanDecrease
+				|| modif instanceof RowSpanDecrease || modif instanceof ColSpanIncrease || modif instanceof RowSpanIncrease) {
+			if (getParent() != null) {
+				doLayout();
+				repaint();
+			}
+		} else if (modif instanceof WidgetAddedToSequence && arg0 == getModel()) {
+			handleWidgetInserted((IEWidget) modif.newValue());
+		} else if (modif instanceof WidgetRemovedFromSequence && arg0 == getModel()) {
+			handleWidgetRemoved((IEWidget) modif.oldValue());
+		} else if (modif instanceof OperatorChanged && arg0 == getModel()) {
+			if (getModel().getOperator() != null) {
+				setBorder(IEViewUtils.getBorderForOperator(getModel().getOperator()));
+			}
+		} else if (modif instanceof DisplayNeedsRefresh && arg0 == getModel()) {
+			revalidate();
+			doLayout();
+			repaint();
+		} else {
+			super.update(arg0, modif);
+		}
+	}
+
+	public IESequenceWidget getSequenceModel() {
+		return getModel();
+	}
+
+	@Override
+	public Color getBackground() {
+		if (getSequenceModel() != null) {
+			return getSequenceModel().getBackground();
+		} else {
+			return super.getBackground();
+		}
+	}
+
+	public int findInsertionIndex(int dropX, int dropY) {
+		int i = 0;
+		for (i = 0; i < getComponentCount(); i++) {
+			if (dropX < getComponent(i).getX() + getComponent(i).getWidth() / 2
+					&& dropY < getComponent(i).getY() + getComponent(i).getHeight()) {
+				return i;
+			} else if (dropY < getComponent(i).getY()) {
+				return i;
+			}
+		}
+		return i;
+	}
+
+	public int getContentLength() {
+		int r = 0;
+		for (int i = 0; i < getComponentCount(); i++) {
+			r = r + getComponent(i).getPreferredSize().width;
+		}
+		return r;
+	}
 
 }

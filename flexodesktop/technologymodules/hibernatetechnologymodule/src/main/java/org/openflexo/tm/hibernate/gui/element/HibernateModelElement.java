@@ -28,7 +28,6 @@ import org.openflexo.tm.hibernate.gui.HibernateIconLibrary;
 import org.openflexo.tm.hibernate.impl.HibernateEntity;
 import org.openflexo.tm.hibernate.impl.HibernateModel;
 
-
 public class HibernateModelElement extends TechnologyModuleBrowserElement<HibernateModel> {
 
 	public HibernateModelElement(HibernateModel model, ProjectBrowser browser, BrowserElement parent) {

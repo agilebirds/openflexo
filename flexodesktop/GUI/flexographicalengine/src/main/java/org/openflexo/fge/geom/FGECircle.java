@@ -23,79 +23,70 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.area.FGEUnionArea;
 
-
 public class FGECircle extends FGEEllips {
 
 	private static final Logger logger = Logger.getLogger(FGECircle.class.getPackage().getName());
 
-	public FGECircle()
-	{
+	public FGECircle() {
 		this(Filling.NOT_FILLED);
 	}
-	
-	public FGECircle(Filling filling)
-	{
+
+	public FGECircle(Filling filling) {
 		super(filling);
 	}
 
-	public FGECircle(FGEPoint center, double radius, Filling filling) 
-	{
-		super(center,new FGEDimension(radius*2,radius*2),filling);
+	public FGECircle(FGEPoint center, double radius, Filling filling) {
+		super(center, new FGEDimension(radius * 2, radius * 2), filling);
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof FGECircle) {
-			FGECircle p = (FGECircle)obj;
+			FGECircle p = (FGECircle) obj;
 			if (getIsFilled() != p.getIsFilled()) {
 				return false;
 			}
-		    return ((Math.abs(getRadius()-p.getRadius()) <= EPSILON) &&
-				    getCenter().equals(p.getCenter()));
+			return ((Math.abs(getRadius() - p.getRadius()) <= EPSILON) && getCenter().equals(p.getCenter()));
 		}
 		return super.equals(obj);
 	}
 
 	/**
 	 * Return union of two points defining tangent to supplied circle and crossing supplied point
+	 * 
 	 * @param cicle
 	 * @param p
 	 * @return
 	 */
-	public static FGEUnionArea getTangentsPointsToCircle(FGECircle circle, FGEPoint p) throws PointInsideCircleException
-	{
-		FGELine l = new FGELine(p,circle.getCenter());
-		double asin = circle.getWidth()/2/FGESegment.getLength(p, circle.getCenter());
-		if (asin >= 1 || asin <= -1) throw new PointInsideCircleException();
+	public static FGEUnionArea getTangentsPointsToCircle(FGECircle circle, FGEPoint p) throws PointInsideCircleException {
+		FGELine l = new FGELine(p, circle.getCenter());
+		double asin = circle.getWidth() / 2 / FGESegment.getLength(p, circle.getCenter());
+		if (asin >= 1 || asin <= -1) {
+			throw new PointInsideCircleException();
+		}
 		double angle = Math.toDegrees(Math.asin(asin));
 		FGELine tan1 = l.getRotatedLine(angle, p);
 		FGELine tan2 = l.getRotatedLine(-angle, p);
 		FGEPoint p1 = tan1.getProjection(circle.getCenter());
 		FGEPoint p2 = tan2.getProjection(circle.getCenter());
-		return new FGEUnionArea(p1,p2);
-	}
-	
-	public double getRadius()
-	{
-		return getWidth()/2;
+		return new FGEUnionArea(p1, p2);
 	}
 
-	public void setRadius(double radius)
-	{
+	public double getRadius() {
+		return getWidth() / 2;
+	}
+
+	public void setRadius(double radius) {
 		FGEPoint center = getCenter();
-		x = center.x-radius;
-		y = center.y-radius;
-		width = radius*2;
-		height = radius*2;
+		x = center.x - radius;
+		y = center.y - radius;
+		width = radius * 2;
+		height = radius * 2;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "FGECircle: ("+x+","+y+","+width+","+height+" type="+getFGEArcType()+")";
+	public String toString() {
+		return "FGECircle: (" + x + "," + y + "," + width + "," + height + " type=" + getFGEArcType() + ")";
 	}
-
-
 
 }

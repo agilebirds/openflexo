@@ -24,16 +24,14 @@ import org.openflexo.foundation.cg.generator.IFlexoComponentResourceGenerator;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 
-
 public interface FlexoComponentResourceGenerator extends IFlexoComponentResourceGenerator {
 
-    @Override
+	@Override
 	public GeneratedComponent getGeneratedCode();
 
-    @Override
+	@Override
 	public ComponentDefinition getComponentDefinition();
-   
-    public DMEntity getEntity();
-    
+
+	public DMEntity getEntity();
 
 }

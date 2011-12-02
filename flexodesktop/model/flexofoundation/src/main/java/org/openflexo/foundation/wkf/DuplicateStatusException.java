@@ -27,26 +27,22 @@ import org.openflexo.foundation.FlexoException;
  * @author sguerin
  * 
  */
-public class DuplicateStatusException extends FlexoException
-{
+public class DuplicateStatusException extends FlexoException {
 
-    private String name;
+	private String name;
 
-    public DuplicateStatusException(Status aStatus, String aName)
-    {
-        super(null);
-        name = aName;
-    }
+	public DuplicateStatusException(Status aStatus, String aName) {
+		super(null);
+		name = aName;
+	}
 
-    public DuplicateStatusException(Status aStatus, String aName, String localizationKey)
-    {
-        super(null,localizationKey);
-        name = aName;
-    }
+	public DuplicateStatusException(Status aStatus, String aName, String localizationKey) {
+		super(null, localizationKey);
+		name = aName;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "DuplicateStatusException: a status with that name (" + name + ") already registered.";
-    }
+	@Override
+	public String getMessage() {
+		return "DuplicateStatusException: a status with that name (" + name + ") already registered.";
+	}
 }

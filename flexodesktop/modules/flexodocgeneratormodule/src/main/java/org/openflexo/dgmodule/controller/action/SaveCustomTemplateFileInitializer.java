@@ -32,61 +32,51 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class SaveCustomTemplateFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	SaveCustomTemplateFileInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(SaveCustomTemplateFile.actionType,actionInitializer);
+	SaveCustomTemplateFileInitializer(DGControllerActionInitializer actionInitializer) {
+		super(SaveCustomTemplateFile.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<SaveCustomTemplateFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<SaveCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<SaveCustomTemplateFile>() {
-            @Override
-			public boolean run(ActionEvent e, SaveCustomTemplateFile action)
-            {
-                return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, SaveCustomTemplateFile action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<SaveCustomTemplateFile> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<SaveCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SaveCustomTemplateFile>() {
-            @Override
-			public boolean run(ActionEvent e, SaveCustomTemplateFile action)
-            {
-               	if ((action.getInvoker() == null) 
-            			|| !(action.getInvoker() instanceof DGTemplateFileModuleView)
-            			|| !(((DGTemplateFileModuleView)action.getInvoker()).isOpenedInSeparateWindow())) {
-            		getControllerActionInitializer().getDGController().selectAndFocusObject(action.getFocusedObject());
-            	}
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, SaveCustomTemplateFile action) {
+				if ((action.getInvoker() == null) || !(action.getInvoker() instanceof DGTemplateFileModuleView)
+						|| !(((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+					getControllerActionInitializer().getDGController().selectAndFocusObject(action.getFocusedObject());
+				}
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.SAVE_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return IconLibrary.SAVE_DISABLED_ICON;
 	}
- 
+
 }

@@ -18,6 +18,7 @@
  *
  */
 package cb.parser;
+
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
@@ -39,251 +40,264 @@ import cb.petal.Tuple;
 import cb.petal.Value;
 
 /**
- * Print petal file exactly like Rose would with some limitations concerning
- * indendattion, i.e., if you don't mind white space, input and output files are
- * identical.
- *
+ * Print petal file exactly like Rose would with some limitations concerning indendattion, i.e., if you don't mind white space, input and
+ * output files are identical.
+ * 
  * @version $Id: PrintVisitor.java,v 1.3 2011/09/12 11:47:21 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class PrintVisitor extends DescendingVisitor {
-  private PrintStream out;
-  private int level = 0;
-  private int column = 0, row = 1;
-  private Stack align_stack = new Stack();
+	private PrintStream out;
+	private int level = 0;
+	private int column = 0, row = 1;
+	private Stack align_stack = new Stack();
 
-  public PrintVisitor(PrintStream out) {
-    this.out = out;
-  }
+	public PrintVisitor(PrintStream out) {
+		this.out = out;
+	}
 
-  @Override
-public void visit(PetalFile obj) {
-    println();
-    obj.getPetal().accept(this);
-    println();
-    println();
-    obj.getDesign().accept(this);
-    println();
-  }
+	@Override
+	public void visit(PetalFile obj) {
+		println();
+		obj.getPetal().accept(this);
+		println();
+		println();
+		obj.getDesign().accept(this);
+		println();
+	}
 
-  @Override
-public void visitObject(PetalObject obj) {
-    StringBuffer buf = new StringBuffer("(object " + obj.getName());
+	@Override
+	public void visitObject(PetalObject obj) {
+		StringBuffer buf = new StringBuffer("(object " + obj.getName());
 
-    for(Iterator i = obj.getParameterList().iterator(); i.hasNext(); )
-      buf.append(" \"" + i.next() + "\"");
+		for (Iterator i = obj.getParameterList().iterator(); i.hasNext();) {
+			buf.append(" \"" + i.next() + "\"");
+		}
 
-    if(obj instanceof Tagged) {
-      int label = ((Tagged)obj).getTag();
-      
-      if(label > 0)
-	buf.append(" @" + label);
-    }
+		if (obj instanceof Tagged) {
+			int label = ((Tagged) obj).getTag();
 
-    print(buf);
+			if (label > 0) {
+				buf.append(" @" + label);
+			}
+		}
 
-    if(obj.getNames().size() > 0)
-      println();
+		print(buf);
 
-    level++;
-    setAlignment(obj.getLongestName().length());
+		if (obj.getNames().size() > 0) {
+			println();
+		}
 
-    for(Iterator i = obj.getNames().iterator(), j = obj.getPropertyList().iterator();
-	i.hasNext(); )
-    {
-      indent();
-      print(i.next());
-      align();
+		level++;
+		setAlignment(obj.getLongestName().length());
 
-      ((PetalNode)j.next()).accept(this);
+		for (Iterator i = obj.getNames().iterator(), j = obj.getPropertyList().iterator(); i.hasNext();) {
+			indent();
+			print(i.next());
+			align();
 
-      if(i.hasNext())
-	println();
-    }
+			((PetalNode) j.next()).accept(this);
 
-    print(")");
+			if (i.hasNext()) {
+				println();
+			}
+		}
 
-    level--;
-    restoreAlignment();
-  }
+		print(")");
 
-  /* Property names are aligned to a 4 column boundary
-   * Property values are aligned to a 8 column boundary
-   * 8 spaces are replaced by one tab.
-   */
+		level--;
+		restoreAlignment();
+	}
 
-  private int align_at=-1;
+	/* Property names are aligned to a 4 column boundary
+	 * Property values are aligned to a 8 column boundary
+	 * 8 spaces are replaced by one tab.
+	 */
 
-  private void setAlignment(int max) {
-    align_stack.push(new Integer(align_at));
+	private int align_at = -1;
 
-    int indent = level * 4;
-    int min_dist; // min distance between first char of name and first char of property
+	private void setAlignment(int max) {
+		align_stack.push(new Integer(align_at));
 
-    if(indent % 8 == 0) // name aligned on 8
-      min_dist = 16;
-    else                // name aligned on 4
-      min_dist = 12;
+		int indent = level * 4;
+		int min_dist; // min distance between first char of name and first char of property
 
-    align_at = indent + min_dist;
-  }
+		if (indent % 8 == 0) {
+			min_dist = 16;
+		} else {
+			// name aligned on 4
+			min_dist = 12;
+		}
 
-  private void restoreAlignment() {
-    Integer i = (Integer) align_stack.pop();
-    align_at = i.intValue();
-  }
+		align_at = indent + min_dist;
+	}
 
-  /** Insert spaces up to next 8 column boundary
-   */
-  private void align() {
-    int fill;
+	private void restoreAlignment() {
+		Integer i = (Integer) align_stack.pop();
+		align_at = i.intValue();
+	}
 
-    if(column < align_at) {
-      fill = align_at - column;
-      //System.err.println("< : " + align_at + ":" + column + ":" + fill);
-    }  else {
-      fill = 8 - (column % 8);
-      //System.err.println(">= : " + align_at + ":" + column + ":" + fill);
-    }
+	/**
+	 * Insert spaces up to next 8 column boundary
+	 */
+	private void align() {
+		int fill;
 
-    int spaces = 4 - (fill % 4);
-    for(int i=0; i < spaces; i++)
-      out.print(' ');
-    
-    column += spaces;
-    fill   -= spaces;
+		if (column < align_at) {
+			fill = align_at - column;
+			// System.err.println("< : " + align_at + ":" + column + ":" + fill);
+		} else {
+			fill = 8 - (column % 8);
+			// System.err.println(">= : " + align_at + ":" + column + ":" + fill);
+		}
 
-    if(fill > 0) {
-      int tabs   = fill / 8;
+		int spaces = 4 - (fill % 4);
+		for (int i = 0; i < spaces; i++) {
+			out.print(' ');
+		}
 
-      if(fill % 8 > 0)
-	tabs++;
-    
-      for(int i=0; i < tabs; i++)
-      out.print('\t');
-    }
+		column += spaces;
+		fill -= spaces;
 
-    //for(int i=0; i < fill; i++)
-    //out.print(' ');
+		if (fill > 0) {
+			int tabs = fill / 8;
 
-    column += fill;
-  }
+			if (fill % 8 > 0) {
+				tabs++;
+			}
 
-  /** Initial indentation of line depend on current nesting level to 4 column boundary.
-   */
-  private void indent() {
-    int tabs   = level / 2; // 4 spaces (INDENT) == 1 tab
-    int spaces = level % 2;
+			for (int i = 0; i < tabs; i++) {
+				out.print('\t');
+			}
+		}
 
-    for(int i=0; i < tabs; i++)
-      out.print('\t');
+		// for(int i=0; i < fill; i++)
+		// out.print(' ');
 
-    for(int i=0; i < spaces; i++)
-      out.print("    ");
+		column += fill;
+	}
 
-    column += level * 4;
-  }
+	/**
+	 * Initial indentation of line depend on current nesting level to 4 column boundary.
+	 */
+	private void indent() {
+		int tabs = level / 2; // 4 spaces (INDENT) == 1 tab
+		int spaces = level % 2;
 
-  private void println() {
-    out.print("\r\n");
-    row++;
-    column = 0;
-  }
+		for (int i = 0; i < tabs; i++) {
+			out.print('\t');
+		}
 
-  private void print(java.lang.Object o) {
-    String s = o.toString();
-    column += s.length();
+		for (int i = 0; i < spaces; i++) {
+			out.print("    ");
+		}
 
-    out.print(s);
-  }
+		column += level * 4;
+	}
 
-  @Override
-public void visit(StringLiteral obj) {
-    if(obj.isMultiLine()) {
-      println();
+	private void println() {
+		out.print("\r\n");
+		row++;
+		column = 0;
+	}
 
-      Collection c = obj.getLines();
+	private void print(java.lang.Object o) {
+		String s = o.toString();
+		column += s.length();
 
-      for(Iterator i = c.iterator(); i.hasNext(); ) {
-	print("|" + i.next());
-	println();
-      }
+		out.print(s);
+	}
 
-      indent();
-    } else
-      print(obj);
-  }
+	@Override
+	public void visit(StringLiteral obj) {
+		if (obj.isMultiLine()) {
+			println();
 
-  @Override
-public void visit(BooleanLiteral obj) {
-    print(obj);
-  }
+			Collection c = obj.getLines();
 
-  @Override
-public void visit(FloatLiteral obj) {
-    print(obj);
-  }
+			for (Iterator i = c.iterator(); i.hasNext();) {
+				print("|" + i.next());
+				println();
+			}
 
-  @Override
-public void visit(IntegerLiteral obj) {
-    print(obj);
-  }
+			indent();
+		} else {
+			print(obj);
+		}
+	}
 
-  @Override
-public void visit(Tag ref) {
-    print(ref);
-  }
+	@Override
+	public void visit(BooleanLiteral obj) {
+		print(obj);
+	}
 
-  @Override
-public void visit(Location loc) {
-    print(loc);
-  }
+	@Override
+	public void visit(FloatLiteral obj) {
+		print(obj);
+	}
 
-  @Override
-public void visit(List list) {
-    print("(list ");
+	@Override
+	public void visit(IntegerLiteral obj) {
+		print(obj);
+	}
 
-    if(list.getName() != null)
-      print(list.getName());
+	@Override
+	public void visit(Tag ref) {
+		print(ref);
+	}
 
-    java.util.List c = list.getElements();
+	@Override
+	public void visit(Location loc) {
+		print(loc);
+	}
 
-    if(c.size() > 0) {
-      level++;
+	@Override
+	public void visit(List list) {
+		print("(list ");
 
-      for(Iterator i = c.iterator(); i.hasNext(); ) {
-	println();
-	indent();
-	((PetalNode)i.next()).accept(this);
-      }
+		if (list.getName() != null) {
+			print(list.getName());
+		}
 
-      level--;
-    }
+		java.util.List c = list.getElements();
 
-    print(")");
-  }
+		if (c.size() > 0) {
+			level++;
 
-  @Override
-public void visit(Value value) {
-    print("(value " + value.getValueName());
+			for (Iterator i = c.iterator(); i.hasNext();) {
+				println();
+				indent();
+				((PetalNode) i.next()).accept(this);
+			}
 
-    StringLiteral val = value.getValue();
+			level--;
+		}
 
-    if(val.isMultiLine()) {
-      val.accept(this);
-      
-      print(")");
-    } else
-      print(" " + val + ")");
-  }
+		print(")");
+	}
 
-  @Override
-public void visit(Tuple tuple) {
-    print(tuple);
-  }
+	@Override
+	public void visit(Value value) {
+		print("(value " + value.getValueName());
 
-  public static void main(String[] args) {
-    PetalFile tree = PetalParser.parse(args);
-    tree.accept(new PrintVisitor(System.out));
-  }
+		StringLiteral val = value.getValue();
+
+		if (val.isMultiLine()) {
+			val.accept(this);
+
+			print(")");
+		} else {
+			print(" " + val + ")");
+		}
+	}
+
+	@Override
+	public void visit(Tuple tuple) {
+		print(tuple);
+	}
+
+	public static void main(String[] args) {
+		PetalFile tree = PetalParser.parse(args);
+		tree.accept(new PrintVisitor(System.out));
+	}
 }

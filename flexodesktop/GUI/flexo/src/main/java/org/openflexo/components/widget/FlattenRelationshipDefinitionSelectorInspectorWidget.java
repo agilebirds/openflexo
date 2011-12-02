@@ -45,227 +45,227 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class FlattenRelationshipDefinitionSelectorInspectorWidget extends CustomInspectorWidget<FlattenRelationshipDefinition>
-{
+public class FlattenRelationshipDefinitionSelectorInspectorWidget extends CustomInspectorWidget<FlattenRelationshipDefinition> {
 
-    static final Logger logger = Logger.getLogger(FlattenRelationshipDefinitionSelectorInspectorWidget.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FlattenRelationshipDefinitionSelectorInspectorWidget.class.getPackage().getName());
 
-    protected FlattenRelationshipDefinitionSelector _selector;
-    
-    private boolean isUpdatingModel = false;
+	protected FlattenRelationshipDefinitionSelector _selector;
 
-    public FlattenRelationshipDefinitionSelectorInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new FlattenRelationshipDefinitionSelector(null,null) {
-            @Override
-			public void apply()
-            {
-            	isUpdatingModel = true;
-                super.apply();
-                updateModelFromWidget();
-            }
+	private boolean isUpdatingModel = false;
 
-            @Override
-			public void cancel()
-            {
-                super.cancel();
-                updateModelFromWidget();
-            }
+	public FlattenRelationshipDefinitionSelectorInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new FlattenRelationshipDefinitionSelector(null, null) {
+			@Override
+			public void apply() {
+				isUpdatingModel = true;
+				super.apply();
+				updateModelFromWidget();
+			}
 
-            public BindingVariable createsNewEntry(String name, DMEntity type, DMPropertyImplementationType implementationType, DMEntity selectedEntityInPanel)
-            {
-            	if(getEditedObject()!=null && getEditedObject().getAccessedType()!=null && !getEditedObject().getAccessedType().getBaseEntity().getIsReadOnly()){
-            		BindingVariable returned = performCreatesEntry(name, DMType.makeResolvedDMType(type), implementationType,getEditedObject().getAccessedType().getBaseEntity(),getEditedObject());
-            		getTextField().setText(getEditedObject().getStringRepresentation());
-            		return returned;
-            	}else{
-            		return performCreatesEntry(name, DMType.makeResolvedDMType(type), implementationType,null,null);
-            	}
-                
-            }
+			@Override
+			public void cancel() {
+				super.cancel();
+				updateModelFromWidget();
+			}
 
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-                _selector.getTextField().requestFocus();
-                _selector.getTextField().selectAll();
-            }
+			public BindingVariable createsNewEntry(String name, DMEntity type, DMPropertyImplementationType implementationType,
+					DMEntity selectedEntityInPanel) {
+				if (getEditedObject() != null && getEditedObject().getAccessedType() != null
+						&& !getEditedObject().getAccessedType().getBaseEntity().getIsReadOnly()) {
+					BindingVariable returned = performCreatesEntry(name, DMType.makeResolvedDMType(type), implementationType,
+							getEditedObject().getAccessedType().getBaseEntity(), getEditedObject());
+					getTextField().setText(getEditedObject().getStringRepresentation());
+					return returned;
+				} else {
+					return performCreatesEntry(name, DMType.makeResolvedDMType(type), implementationType, null, null);
+				}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
+			}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return FlattenRelationshipDefinition.class;
-    }
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Focus gained in " + getClass().getName());
+				}
+				super.focusGained(arg0);
+				_selector.getTextField().requestFocus();
+				_selector.getTextField().selectAll();
+			}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-    	if (isUpdatingModel)
-    		return;
-        if (!_selector.getIsUpdatingModel()) {
-            _selector.setEditedObject(getObjectValue());
-            _selector.setRevertValue(getObjectValue());
-        }
-        /*BindingValue currentValue = (BindingValue)getObjectValue();
-        if (currentValue != null) {
-            currentValue.setBindingDefinition(_selector.getBindingDefinition());
-         }*/
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Focus lost in " + getClass().getName());
+				}
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    }
+	@Override
+	public Class getDefaultType() {
+		return FlattenRelationshipDefinition.class;
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-    	isUpdatingModel = true;
-    	try {
-    		setObjectValue(_selector.getEditedObject());
-    	} finally { isUpdatingModel = false;}
-    	super.updateModelFromWidget();
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		if (isUpdatingModel) {
+			return;
+		}
+		if (!_selector.getIsUpdatingModel()) {
+			_selector.setEditedObject(getObjectValue());
+			_selector.setRevertValue(getObjectValue());
+		}
+		/*BindingValue currentValue = (BindingValue)getObjectValue();
+		if (currentValue != null) {
+		    currentValue.setBindingDefinition(_selector.getBindingDefinition());
+		 }*/
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
+	}
 
-    @Override
-	protected void performModelUpdating(InspectableObject value)
-    {
-    	super.performModelUpdating(value);
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		isUpdatingModel = true;
+		try {
+			setObjectValue(_selector.getEditedObject());
+		} finally {
+			isUpdatingModel = false;
+		}
+		super.updateModelFromWidget();
+	}
 
-    	_selector.setEditedObject(getObjectValue());
-    	_selector.setRevertValue(getObjectValue());
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
 
-    	if (hasValueForParameter("source_entity")) {
-    		DMEOEntity sourceEntity = (DMEOEntity) getDynamicValueForParameter("source_entity", value);
-    		_selector.setSourceEntity(sourceEntity);
-    	}
-    	_selector.setAllowsEntryCreation(false);
+	@Override
+	protected void performModelUpdating(InspectableObject value) {
+		super.performModelUpdating(value);
 
-    }
+		_selector.setEditedObject(getObjectValue());
+		_selector.setRevertValue(getObjectValue());
 
-    private Method _createsEntryMethod;
+		if (hasValueForParameter("source_entity")) {
+			DMEOEntity sourceEntity = (DMEOEntity) getDynamicValueForParameter("source_entity", value);
+			_selector.setSourceEntity(sourceEntity);
+		}
+		_selector.setAllowsEntryCreation(false);
 
-    private Method getCreatesEntryMethod()
-    {
-        if (_createsEntryMethod == null) {
-            String methodName = PropertyModel.getLastAccessor(getValueForParameter("creates_entry"));
-            if (getModel() != null) {
-                Class targetClass = PropertyModel.getTargetObject(getModel(), getValueForParameter("creates_entry")).getClass();
-                Class[] methodClassParams = new Class[3];
-                methodClassParams[0] = String.class;
-                methodClassParams[1] = DMEntity.class;
-                methodClassParams[2] = DMPropertyImplementationType.class;
-                try {
-                    _createsEntryMethod = targetClass.getMethod(methodName, methodClassParams);
-                } catch (SecurityException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("SecurityException raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("NoSuchMethodException raised: unable to find method " + methodName + " for class " + targetClass);
-                    e.printStackTrace();
-                }
-            }
-        }
-        return _createsEntryMethod;
-    }
+	}
 
-    
-    
-    
-    BindingVariable performCreatesEntry(String name, DMType type, DMPropertyImplementationType implementationType, DMEntity newEntryEntity, AbstractBinding editedObject)
-    {
-    	if (editedObject instanceof FlattenRelationshipDefinition) {
-    		FlattenRelationshipDefinition definition = (FlattenRelationshipDefinition)editedObject;
-        if (getCreatesEntryMethod() != null) {
-            Object[] params = new Object[3];
-            params[0] = name;
-            params[1] = type;
-            params[2] = implementationType;
-            //DMEntity whishedEntity = getEditedValue().getAccessedType();
-            //System.err.println("whishedEntity:"+whishedEntity.getName());
-            try {
-            	if(newEntryEntity==null){
-            		Object targetObject = PropertyModel.getTargetObject(getModel(), getValueForParameter("creates_entry"));
-            		if (logger.isLoggable(Level.INFO))
-            			logger.info("invoking " + getCreatesEntryMethod() + " on object" + targetObject);
-            		return (BindingVariable) getCreatesEntryMethod().invoke(targetObject, params);
-            	}else{
-            		DMProperty newProperty = newEntryEntity.createDMProperty(name, type, implementationType);
-            		if(editedObject.getBindingDefinition() instanceof WidgetBindingDefinition && newProperty.getEntity() instanceof ComponentDMEntity){
-            			((ComponentDMEntity)newProperty.getEntity()).setBindable(newProperty, false);
-            		}
-            		if(newProperty!=null) definition.addBindingPathElement(newProperty);
-            		return definition.getBindingVariable();
-            	}
-            } catch (IllegalArgumentException e) {
-                // Warns about the exception
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                // Warns about the exception
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                // Warns about the exception
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                e.printStackTrace();
-            }
-        }
-    	}
-        return null;
-    }
+	private Method _createsEntryMethod;
 
-    public Color getColorForObject(BindingValue value) 
-    {
-        return (value.isBindingValid()?Color.BLACK:Color.RED);
-    }
+	private Method getCreatesEntryMethod() {
+		if (_createsEntryMethod == null) {
+			String methodName = PropertyModel.getLastAccessor(getValueForParameter("creates_entry"));
+			if (getModel() != null) {
+				Class targetClass = PropertyModel.getTargetObject(getModel(), getValueForParameter("creates_entry")).getClass();
+				Class[] methodClassParams = new Class[3];
+				methodClassParams[0] = String.class;
+				methodClassParams[1] = DMEntity.class;
+				methodClassParams[2] = DMPropertyImplementationType.class;
+				try {
+					_createsEntryMethod = targetClass.getMethod(methodName, methodClassParams);
+				} catch (SecurityException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("SecurityException raised: " + e.getClass().getName() + ". See console for details.");
+					}
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("NoSuchMethodException raised: unable to find method " + methodName + " for class " + targetClass);
+					}
+					e.printStackTrace();
+				}
+			}
+		}
+		return _createsEntryMethod;
+	}
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	BindingVariable performCreatesEntry(String name, DMType type, DMPropertyImplementationType implementationType, DMEntity newEntryEntity,
+			AbstractBinding editedObject) {
+		if (editedObject instanceof FlattenRelationshipDefinition) {
+			FlattenRelationshipDefinition definition = (FlattenRelationshipDefinition) editedObject;
+			if (getCreatesEntryMethod() != null) {
+				Object[] params = new Object[3];
+				params[0] = name;
+				params[1] = type;
+				params[2] = implementationType;
+				// DMEntity whishedEntity = getEditedValue().getAccessedType();
+				// System.err.println("whishedEntity:"+whishedEntity.getName());
+				try {
+					if (newEntryEntity == null) {
+						Object targetObject = PropertyModel.getTargetObject(getModel(), getValueForParameter("creates_entry"));
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("invoking " + getCreatesEntryMethod() + " on object" + targetObject);
+						}
+						return (BindingVariable) getCreatesEntryMethod().invoke(targetObject, params);
+					} else {
+						DMProperty newProperty = newEntryEntity.createDMProperty(name, type, implementationType);
+						if (editedObject.getBindingDefinition() instanceof WidgetBindingDefinition
+								&& newProperty.getEntity() instanceof ComponentDMEntity) {
+							((ComponentDMEntity) newProperty.getEntity()).setBindable(newProperty, false);
+						}
+						if (newProperty != null) {
+							definition.addBindingPathElement(newProperty);
+						}
+						return definition.getBindingVariable();
+					}
+				} catch (IllegalArgumentException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
 
+	public Color getColorForObject(BindingValue value) {
+		return (value.isBindingValid() ? Color.BLACK : Color.RED);
+	}
+
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
+
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
 
 }

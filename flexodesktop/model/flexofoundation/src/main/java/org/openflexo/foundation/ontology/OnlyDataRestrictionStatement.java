@@ -28,51 +28,56 @@ public class OnlyDataRestrictionStatement extends DataRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(OnlyDataRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
-	private DataType dataRange = DataType.Unknown;
-	
-	public OnlyDataRestrictionStatement(OntologyObject subject, Statement s, AllValuesFromRestriction r)
-	{
-		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		dataRange = getDataType(r.getAllValuesFrom().getURI());
-	
+	private OntologyDataProperty property;
+	private OntologicDataType dataRange;
+
+	public OnlyDataRestrictionStatement(OntologyObject subject, Statement s, AllValuesFromRestriction r) {
+		super(subject, s, r);
+		property = (OntologyDataProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		dataRange = OntologicDataType.fromURI(r.getAllValuesFrom().getURI());
+
 	}
 
 	@Override
-	public DataType getDataRange()
-	{
+	public OntologicDataType getDataRange() {
 		return dataRange;
 	}
-	
+
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "only_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "OnlyRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "OnlyRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyProperty getProperty() 
-	{
+	public OntologyDataProperty getProperty() {
 		return property;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" only "+getDataRange();
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " only "
+				+ getDataRange();
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" only";
+		return property.getName() + " only";
+	}
+
+	@Override
+	public int getCardinality() {
+		return -1;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Only;
 	}
 
 }

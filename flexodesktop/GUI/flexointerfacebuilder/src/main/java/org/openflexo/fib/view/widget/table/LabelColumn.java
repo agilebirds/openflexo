@@ -28,19 +28,15 @@ import org.openflexo.fib.model.FIBLabelColumn;
  * @author sguerin
  * 
  */
-public class LabelColumn extends StringColumn
-{
+public class LabelColumn extends StringColumn {
 
-    public LabelColumn(FIBLabelColumn columnModel, FIBTableModel tableModel, FIBController controller)
-    {
-    	super(columnModel,tableModel,controller);
-    }
+	public LabelColumn(FIBLabelColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+		super(columnModel, tableModel, controller);
+	}
 
-     @Override
-	public String toString()
-    {
-        return "LabelColumn " + "@" + Integer.toHexString(hashCode());
-    }
+	@Override
+	public String toString() {
+		return "LabelColumn " + "@" + Integer.toHexString(hashCode());
+	}
 
- 
 }

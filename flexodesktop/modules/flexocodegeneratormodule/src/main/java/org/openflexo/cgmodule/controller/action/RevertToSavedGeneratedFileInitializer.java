@@ -31,41 +31,34 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RevertToSavedGeneratedFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RevertToSavedGeneratedFileInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(RevertToSavedGeneratedFile.actionType,actionInitializer);
+	RevertToSavedGeneratedFileInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(RevertToSavedGeneratedFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RevertToSavedGeneratedFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RevertToSavedGeneratedFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<RevertToSavedGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, RevertToSavedGeneratedFile action)
-			{
+			public boolean run(ActionEvent e, RevertToSavedGeneratedFile action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RevertToSavedGeneratedFile> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RevertToSavedGeneratedFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RevertToSavedGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, RevertToSavedGeneratedFile action)
-			{
+			public boolean run(ActionEvent e, RevertToSavedGeneratedFile action) {
 				getControllerActionInitializer().getGeneratorController().selectAndFocusObject(action.getFocusedObject());
 				return true;
 			}
@@ -73,14 +66,12 @@ public class RevertToSavedGeneratedFileInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.CANCEL_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.CANCEL_DISABLED_ICON;
 	}
 

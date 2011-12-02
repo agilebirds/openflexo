@@ -25,5 +25,5 @@ public interface OperationComponentFileResource extends ComponentFileResource {
 
 	@Override
 	public ComponentDefinition getComponentDefinition();
-	
+
 }

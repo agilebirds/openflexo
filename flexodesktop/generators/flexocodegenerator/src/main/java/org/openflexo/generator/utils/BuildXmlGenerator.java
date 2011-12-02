@@ -35,61 +35,54 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
+public class BuildXmlGenerator extends MetaFileGenerator {
+	private final Logger logger = FlexoLogger.getLogger(BuildXmlGenerator.class.getPackage().getName());
 
-public class BuildXmlGenerator extends MetaFileGenerator
-{
-    private final Logger logger = FlexoLogger.getLogger(BuildXmlGenerator.class.getPackage().getName());
+	private static final String FILE_NAME = "build.xml";
+	private static final String IDENTIFIER = "BUILD_XML";
 
-    private static final String FILE_NAME = "build.xml";
-    private static final String IDENTIFIER = "BUILD_XML";
-
-    public BuildXmlGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator, FileFormat.XML, ResourceType.ANT_FILE, FILE_NAME, IDENTIFIER);
-    }
+	public BuildXmlGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, FileFormat.XML, ResourceType.ANT_FILE, FILE_NAME, IDENTIFIER);
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public void generate(boolean forceRegenerate)
-    {
-       	if (!forceRegenerate && !needsGeneration()) {
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
 		}
-    	try {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-    		if (logger.isLoggable(Level.INFO)) {
-				logger.info("Generating "+FILE_NAME);
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Generating " + FILE_NAME);
 			}
-    		VelocityContext velocityContext = defaultContext();
-    		String javaCode = merge("build.xml.vm", velocityContext);
-    		generatedCode = new GeneratedTextResource(FILE_NAME, javaCode);
-    		stopGeneration();
-     	} catch (GenerationException e) {
-    		setGenerationException(e);
+			VelocityContext velocityContext = defaultContext();
+			String javaCode = merge("build.xml.vm", velocityContext);
+			generatedCode = new GeneratedTextResource(FILE_NAME, javaCode);
+			stopGeneration();
+		} catch (GenerationException e) {
+			setGenerationException(e);
 		} catch (Exception e) {
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	}
-    }
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		}
+	}
 
-    public File getFile(){
-    	return new File(getProjectGenerator().getRootOutputDirectory(),FILE_NAME);
-    }
+	public File getFile() {
+		return new File(getProjectGenerator().getRootOutputDirectory(), FILE_NAME);
+	}
 
 	@Override
-	public String getRelativePath() 
-	{
+	public String getRelativePath() {
 		return "";
 	}
 
 	@Override
-	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) 
-	{
+	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
 		return repository.getProjectSymbolicDirectory();
 	}
 

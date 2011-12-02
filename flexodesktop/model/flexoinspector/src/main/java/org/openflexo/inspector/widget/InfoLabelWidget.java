@@ -32,137 +32,126 @@ import org.openflexo.localization.FlexoLocalization;
 /**
  * @author gpolet Created on 5 oct. 2005
  */
-public class InfoLabelWidget extends DenaliWidget
-{
+public class InfoLabelWidget extends DenaliWidget {
 
 	public static final String ROWS = "rows";
 	public static final String COLUMNS = "columns";
 
-    private JTextArea infoLabel;
-    private static final int DEFAULT_ROWS = 3;
-    private int rows;
-    private static final int DEFAULT_COLUMNS = 40;
-    private int columns;
+	private JTextArea infoLabel;
+	private static final int DEFAULT_ROWS = 3;
+	private int rows;
+	private static final int DEFAULT_COLUMNS = 40;
+	private int columns;
 
-    /**
-     * @param model
-     */
-    public InfoLabelWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        infoLabel = initInfoLabel();
+	/**
+	 * @param model
+	 */
+	public InfoLabelWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		infoLabel = initInfoLabel();
 
-        if (model.hasValueForParameter(ROWS)) {
-        	rows = model.getIntValueForParameter(ROWS);
-       }
-        else {
-        	rows = DEFAULT_ROWS;
-        }
-        if (model.hasValueForParameter(COLUMNS)) {
-        	columns = model.getIntValueForParameter(COLUMNS);
-       }
-        else {
-        	columns = DEFAULT_COLUMNS;
-        }
-        infoLabel.setColumns(columns);
-        infoLabel.setRows(rows);
-    }
+		if (model.hasValueForParameter(ROWS)) {
+			rows = model.getIntValueForParameter(ROWS);
+		} else {
+			rows = DEFAULT_ROWS;
+		}
+		if (model.hasValueForParameter(COLUMNS)) {
+			columns = model.getIntValueForParameter(COLUMNS);
+		} else {
+			columns = DEFAULT_COLUMNS;
+		}
+		infoLabel.setColumns(columns);
+		infoLabel.setRows(rows);
+	}
 
-    @Override
-	public boolean defaultDisplayLabel()
-    {
-    	return false;
-    }
+	@Override
+	public boolean defaultDisplayLabel() {
+		return false;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.openflexo.inspector.widget.DenaliWidget#updateWidgetFromModel()
-     */
-    @Override
-	public void updateWidgetFromModel()
-    {
-        widgetUpdating = true;
-        infoLabel.setText(getStringValue());
-        widgetUpdating = false;
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openflexo.inspector.widget.DenaliWidget#updateWidgetFromModel()
+	 */
+	@Override
+	public void updateWidgetFromModel() {
+		widgetUpdating = true;
+		infoLabel.setText(getStringValue());
+		widgetUpdating = false;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.openflexo.inspector.widget.DenaliWidget#updateModelFromWidget()
-     */
-    @Override
-	public void updateModelFromWidget()
-    {
-        // Empty block on purpose since this is read-only <-- Look at this
-        // Master comment!
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openflexo.inspector.widget.DenaliWidget#updateModelFromWidget()
+	 */
+	@Override
+	public void updateModelFromWidget() {
+		// Empty block on purpose since this is read-only <-- Look at this
+		// Master comment!
+	}
 
-    public JTextArea initInfoLabel()
-    {
-        if (infoLabel == null) {
-            infoLabel = new JTextArea(rows, columns);
-            infoLabel.setLineWrap(true);
-            infoLabel.setWrapStyleWord(true);
-            infoLabel.setFont(DEFAULT_MEDIUM_FONT);
-            infoLabel.setEditable(false);
-            infoLabel.setBorder(BorderFactory.createEmptyBorder(10, 50, 20, 50));
-        //	infoLabel = new JLabel(_propertyModel.label + " : ", SwingConstants.LEFT);
-        	//String textLabel = "balbalbalblbaalblb";
-        //	infoLabel.setText(textLabel);
-        	//infoLabel.setText(FlexoLocalization.localizedForKey(_propertyModel.label, " : ", _label));
-        //	infoLabel.setBackground(Color.WHITE);
-        	//infoLabel.setFont(DEFAULT_LABEL_FONT);
-        	//if (_propertyModel.help != null && !_propertyModel.help.equals(""))
-         //       infoLabel.setToolTipText(_propertyModel.help);
-        }
-        return infoLabel;
-    }
+	public JTextArea initInfoLabel() {
+		if (infoLabel == null) {
+			infoLabel = new JTextArea(rows, columns);
+			infoLabel.setLineWrap(true);
+			infoLabel.setWrapStyleWord(true);
+			infoLabel.setFont(DEFAULT_MEDIUM_FONT);
+			infoLabel.setEditable(false);
+			infoLabel.setBorder(BorderFactory.createEmptyBorder(10, 50, 20, 50));
+			// infoLabel = new JLabel(_propertyModel.label + " : ", SwingConstants.LEFT);
+			// String textLabel = "balbalbalblbaalblb";
+			// infoLabel.setText(textLabel);
+			// infoLabel.setText(FlexoLocalization.localizedForKey(_propertyModel.label, " : ", _label));
+			// infoLabel.setBackground(Color.WHITE);
+			// infoLabel.setFont(DEFAULT_LABEL_FONT);
+			// if (_propertyModel.help != null && !_propertyModel.help.equals(""))
+			// infoLabel.setToolTipText(_propertyModel.help);
+		}
+		return infoLabel;
+	}
 
-    @Override
-	public JLabel getLabel()
-    {
-        if (_label == null) {
-            _label = new JLabel("",SwingConstants.CENTER);
-            if (_propertyModel.label!=null && _propertyModel.label.trim().length()>0)
-                _label.setText(FlexoLocalization.localizedForKey(_propertyModel.label, _label));
-            //_label.setBackground(InspectorCst.BACK_COLOR);
-            _label.setFont(DEFAULT_LABEL_FONT);
-            _label.setBorder(BorderFactory.createEmptyBorder(20, 50, 10, 50));
-            if (_propertyModel.help != null && _propertyModel.help.trim().length()>0)
-                _label.setToolTipText(_propertyModel.help);
-        }
-        return _label;
-    }
+	@Override
+	public JLabel getLabel() {
+		if (_label == null) {
+			_label = new JLabel("", SwingConstants.CENTER);
+			if (_propertyModel.label != null && _propertyModel.label.trim().length() > 0) {
+				_label.setText(FlexoLocalization.localizedForKey(_propertyModel.label, _label));
+			}
+			// _label.setBackground(InspectorCst.BACK_COLOR);
+			_label.setFont(DEFAULT_LABEL_FONT);
+			_label.setBorder(BorderFactory.createEmptyBorder(20, 50, 10, 50));
+			if (_propertyModel.help != null && _propertyModel.help.trim().length() > 0) {
+				_label.setToolTipText(_propertyModel.help);
+			}
+		}
+		return _label;
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return infoLabel;
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return infoLabel;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.openflexo.inspector.widget.DenaliWidget#getDefaultType()
-     */
-    @Override
-	public Class getDefaultType()
-    {
-        return String.class;
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openflexo.inspector.widget.DenaliWidget#getDefaultType()
+	 */
+	@Override
+	public Class getDefaultType() {
+		return String.class;
+	}
 
-    @Override
-	public WidgetLayout getDefaultWidgetLayout()
-    {
-    	return WidgetLayout.LABEL_ABOVE_WIDGET_LAYOUT;
-    }
+	@Override
+	public WidgetLayout getDefaultWidgetLayout() {
+		return WidgetLayout.LABEL_ABOVE_WIDGET_LAYOUT;
+	}
 
-    @Override
-	public boolean defaultShouldExpandVertically()
-    {
-    	return true;
-    }
+	@Override
+	public boolean defaultShouldExpandVertically() {
+		return true;
+	}
 
 }

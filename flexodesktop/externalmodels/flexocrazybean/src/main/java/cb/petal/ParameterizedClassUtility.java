@@ -18,21 +18,22 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Parameterized_Class_Utility object
- *
+ * 
  * @version $Id: ParameterizedClassUtility.java,v 1.2 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ParameterizedClassUtility extends ParameterizedClass {
-  public ParameterizedClassUtility(PetalNode parent, Collection params) {
-    super(parent, params);
-    setName("Parameterized_Class_Utility");
-  }
+	public ParameterizedClassUtility(PetalNode parent, Collection params) {
+		super(parent, params);
+		setName("Parameterized_Class_Utility");
+	}
 
-  public ParameterizedClassUtility() {
-    setName("Parameterized_Class_Utility");
-  }
+	public ParameterizedClassUtility() {
+		setName("Parameterized_Class_Utility");
+	}
 }

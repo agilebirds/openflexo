@@ -24,129 +24,114 @@ import java.util.Vector;
 
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class PropertyListModel extends PropertyModel
-{
+public class PropertyListModel extends PropertyModel {
 
-    public static final int DEFAULT_VISIBLE_ROW_COUNT = 10;
+	public static final int DEFAULT_VISIBLE_ROW_COUNT = 10;
 
-    public static final String VISIBLE_ROW_COUNT = "visible_row_count";
-    public static final String ROW_HEIGHT = "row_height";
+	public static final String VISIBLE_ROW_COUNT = "visible_row_count";
+	public static final String ROW_HEIGHT = "row_height";
 
-    private Vector<PropertyListColumn> _columns;
-    private Vector<PropertyListAction> _actions;
-    public boolean createNewRowOnClick = true;
+	private Vector<PropertyListColumn> _columns;
+	private Vector<PropertyListAction> _actions;
+	public boolean createNewRowOnClick = true;
 
-    public PropertyListModel()
-    {
-        super();
-        _columns = new Vector<PropertyListColumn>();
-        _actions = new Vector<PropertyListAction>();
-    }
+	public PropertyListModel() {
+		super();
+		_columns = new Vector<PropertyListColumn>();
+		_actions = new Vector<PropertyListAction>();
+	}
 
-    /*public PropertyListModel()
-    {
-        this(null);
-    }*/
-
-    /*public void finalizePropertyListModelDecoding(AbstractController c)
-    {
-
-    }*/
-
-    public Vector<PropertyListAction> getActions()
-    {
-        return _actions;
-    }
-
-    public void setActions(Vector<PropertyListAction> actions)
-    {
-        _actions = actions;
-    }
-
-    public void addToActions(PropertyListAction action)
-    {
-        action.setPropertyListModel(this);
-        _actions.add(action);
-    }
-
-    public void removeFromActions(PropertyListAction action)
-    {
-        action.setPropertyListModel(null);
-        _actions.remove(action);
-    }
-
-    public Vector<PropertyListColumn> getColumns()
-    {
-        return _columns;
-    }
-
-    public void setColumns(Vector<PropertyListColumn> columns)
-    {
-        _columns = columns;
-    }
-
-    public void addToColumns(PropertyListColumn column)
-    {
-        column.setPropertyListModel(this);
-        _columns.add(column);
-    }
-
-    public void removeFromColumns(PropertyListColumn column)
-    {
-        column.setPropertyListModel(null);
-        _columns.remove(column);
-    }
-
-     public int getVisibleRowCount()
-    {
-        if (hasValueForParameter(VISIBLE_ROW_COUNT)) {
-            return getIntValueForParameter(VISIBLE_ROW_COUNT);
-        }
-        return DEFAULT_VISIBLE_ROW_COUNT;
-    }
-
-    public int getRowHeight()
-    {
-        if (hasValueForParameter(ROW_HEIGHT)) {
-            return getIntValueForParameter(ROW_HEIGHT);
-        }
-        return -1;
-    }
-
-    public PropertyListColumn getPropertyListColumnWithTitle(String title){
-    	PropertyListColumn reply = null;
-    	Enumeration<PropertyListColumn> en = _columns.elements();
-    	while (en.hasMoreElements()) {
-			reply = en.nextElement();
-			if(reply.name!=null && reply.name.equals(title))return reply;
-		}
-    	return null;
-    }
-
-    private InspectableObject _selectedObject;
-
-    public InspectableObject getSelectedObject()
-    {
-    	return _selectedObject;
-    }
-
-	public void setSelectedObject(InspectableObject selectedObject)
+	/*public PropertyListModel()
 	{
+	    this(null);
+	}*/
+
+	/*public void finalizePropertyListModelDecoding(AbstractController c)
+	{
+
+	}*/
+
+	public Vector<PropertyListAction> getActions() {
+		return _actions;
+	}
+
+	public void setActions(Vector<PropertyListAction> actions) {
+		_actions = actions;
+	}
+
+	public void addToActions(PropertyListAction action) {
+		action.setPropertyListModel(this);
+		_actions.add(action);
+	}
+
+	public void removeFromActions(PropertyListAction action) {
+		action.setPropertyListModel(null);
+		_actions.remove(action);
+	}
+
+	public Vector<PropertyListColumn> getColumns() {
+		return _columns;
+	}
+
+	public void setColumns(Vector<PropertyListColumn> columns) {
+		_columns = columns;
+	}
+
+	public void addToColumns(PropertyListColumn column) {
+		column.setPropertyListModel(this);
+		_columns.add(column);
+	}
+
+	public void removeFromColumns(PropertyListColumn column) {
+		column.setPropertyListModel(null);
+		_columns.remove(column);
+	}
+
+	public int getVisibleRowCount() {
+		if (hasValueForParameter(VISIBLE_ROW_COUNT)) {
+			return getIntValueForParameter(VISIBLE_ROW_COUNT);
+		}
+		return DEFAULT_VISIBLE_ROW_COUNT;
+	}
+
+	public int getRowHeight() {
+		if (hasValueForParameter(ROW_HEIGHT)) {
+			return getIntValueForParameter(ROW_HEIGHT);
+		}
+		return -1;
+	}
+
+	public PropertyListColumn getPropertyListColumnWithTitle(String title) {
+		PropertyListColumn reply = null;
+		Enumeration<PropertyListColumn> en = _columns.elements();
+		while (en.hasMoreElements()) {
+			reply = en.nextElement();
+			if (reply.name != null && reply.name.equals(title)) {
+				return reply;
+			}
+		}
+		return null;
+	}
+
+	private InspectableObject _selectedObject;
+
+	public InspectableObject getSelectedObject() {
+		return _selectedObject;
+	}
+
+	public void setSelectedObject(InspectableObject selectedObject) {
 		_selectedObject = selectedObject;
 	}
-	
+
 	// Might be overriden if we want to inspect a derived object
-    public InspectableObject getDerivedModel(InspectableObject baseModel) 
-    {
-    	return baseModel;
-    }
-    
+	public InspectableObject getDerivedModel(InspectableObject baseModel) {
+		return baseModel;
+	}
 
 }

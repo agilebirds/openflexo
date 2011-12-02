@@ -50,15 +50,14 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.openflexo.swing.JTextFieldRegExp;
-import org.openflexo.view.FlexoDialog;
-
+import org.openflexo.foundation.dkv.DKVModel.LanguageList;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dkv.Language;
-import org.openflexo.foundation.dkv.DKVModel.LanguageList;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.JTextFieldRegExp;
+import org.openflexo.view.FlexoDialog;
 
 public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 
@@ -86,8 +85,7 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 		return returned;
 	}
 
-	public AskNewKeyDialog(Frame owner, FlexoComponentLibrary lib,
-			Key lastCreatedKey) {
+	public AskNewKeyDialog(Frame owner, FlexoComponentLibrary lib, Key lastCreatedKey) {
 		super(owner);
 		newKeyTextField = IERegExp.getMaxLength10ValidationTextField(10);
 		newKeyDescriptionTextArea = new JTextArea();
@@ -107,26 +105,22 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == KeyEvent.VK_TAB) {
-					if (newKeyDescriptionTextArea
-							.getText()!=null && newKeyDescriptionTextArea
-							.getText().length()>0)
-					newKeyDescriptionTextArea.setText(newKeyDescriptionTextArea
-							.getText().substring(
-									0,
-									newKeyDescriptionTextArea.getText()
-											.length() - 1));
-					if (e.getModifiers()==InputEvent.SHIFT_DOWN_MASK || e.getModifiers()==InputEvent.SHIFT_MASK)
+					if (newKeyDescriptionTextArea.getText() != null && newKeyDescriptionTextArea.getText().length() > 0) {
+						newKeyDescriptionTextArea.setText(newKeyDescriptionTextArea.getText().substring(0,
+								newKeyDescriptionTextArea.getText().length() - 1));
+					}
+					if (e.getModifiers() == InputEvent.SHIFT_DOWN_MASK || e.getModifiers() == InputEvent.SHIFT_MASK) {
 						newKeyTextField.requestFocus();
-					else
+					} else {
 						valueTextFieldList.get(0).requestFocus();
+					}
 					e.consume();
 				}
 
 			}
 		});
 		valueTextFieldList = new Vector<KeyValueJTextField>();
-		LanguageList languageList = lib.getProject().getDKVModel()
-				.getLanguageList();
+		LanguageList languageList = lib.getProject().getDKVModel().getLanguageList();
 		Enumeration<Language> en = languageList.getLanguages().elements();
 		while (en.hasMoreElements()) {
 			Language l = en.nextElement();
@@ -134,35 +128,35 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 		}
 		returned = CANCEL;
 
-		newKeyTextField.getDocument().addDocumentListener(
-				new DocumentListener() {
-					@Override
-					public void changedUpdate(DocumentEvent e) {
-						checkValidity();
-						propagateRemoveInKey();
-					}
+		newKeyTextField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				checkValidity();
+				propagateRemoveInKey();
+			}
 
-					@Override
-					public void insertUpdate(DocumentEvent e) {
-						checkValidity();
-						propagateInsertInKey();
-					}
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkValidity();
+				propagateInsertInKey();
+			}
 
-					@Override
-					public void removeUpdate(DocumentEvent e) {
-						checkValidity();
-						propagateRemoveInKey();
-					}
-					private void checkValidity(){
-						if(newKeyTextField.hasError()){
-							confirmButton.setEnabled(false);
-							confirmRedoButton.setEnabled(false);
-						}else{
-							confirmButton.setEnabled(true);
-							confirmRedoButton.setEnabled(true);
-						}
-					}
-				});
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkValidity();
+				propagateRemoveInKey();
+			}
+
+			private void checkValidity() {
+				if (newKeyTextField.hasError()) {
+					confirmButton.setEnabled(false);
+					confirmRedoButton.setEnabled(false);
+				} else {
+					confirmButton.setEnabled(true);
+					confirmRedoButton.setEnabled(true);
+				}
+			}
+		});
 		// setFocusTraversalPolicy(new MyFocusTraversalPolicy(newKeyTextField));
 
 		setTitle(FlexoLocalization.localizedForKey("define_a_new_key"));
@@ -178,8 +172,7 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 			c.gridy = row;
 			c.gridwidth = 2;
 			c.anchor = GridBagConstraints.CENTER;
-			JLabel infoLabel = new JLabel(lastCreatedKey.getName()
-					+ " was succesfully created.");
+			JLabel infoLabel = new JLabel(lastCreatedKey.getName() + " was succesfully created.");
 			contentPanel.add(infoLabel, c);
 			c.gridwidth = 1;
 			row++;
@@ -240,10 +233,8 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
 
-		confirmButton = new JButton(FlexoLocalization
-				.localizedForKey("validate"));
-		confirmRedoButton = new JButton(FlexoLocalization
-				.localizedForKey("validate_and_redo"));
+		confirmButton = new JButton(FlexoLocalization.localizedForKey("validate"));
+		confirmRedoButton = new JButton(FlexoLocalization.localizedForKey("validate_and_redo"));
 		cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
 
 		getRootPane().setDefaultButton(cancelButton);
@@ -285,8 +276,7 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 		validate();
 		pack();
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((dim.width - getSize().width) / 2,
-				(dim.height - getSize().height) / 2);
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
 		confirmButton.setEnabled(false);
 		confirmRedoButton.setEnabled(false);
 		newKeyTextField.grabFocus();
@@ -294,8 +284,7 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 	}
 
 	public void propagateRemoveInKey() {
-		if (newKeyTextField.getText() != null
-				&& !newKeyTextField.getText().equals("")) {
+		if (newKeyTextField.getText() != null && !newKeyTextField.getText().equals("")) {
 			getRootPane().setDefaultButton(confirmRedoButton);
 		} else {
 			getRootPane().setDefaultButton(cancelButton);
@@ -305,8 +294,9 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 			KeyValueJTextField tf = en.nextElement();
 			String valueText = tf.getText();
 			if (tf.getText() == null || tf.getText().trim().length() == 0
-					|| (newKeyTextField.getText().equals(valueText.substring(0, valueText.length()-1))))
+					|| (newKeyTextField.getText().equals(valueText.substring(0, valueText.length() - 1)))) {
 				tf.setText(newKeyTextField.getText());
+			}
 		}
 	}
 
@@ -316,12 +306,10 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 		Enumeration<KeyValueJTextField> en = valueTextFieldList.elements();
 		while (en.hasMoreElements()) {
 			KeyValueJTextField tf = en.nextElement();
-			if (tf.getText() == null
-					|| tf.getText().trim().length() == 0
-					|| tf.getText().equals(
-							newKeyTextField.getText().substring(0,
-									newKeyTextField.getText().length() - 1)))
+			if (tf.getText() == null || tf.getText().trim().length() == 0
+					|| tf.getText().equals(newKeyTextField.getText().substring(0, newKeyTextField.getText().length() - 1))) {
 				tf.setText(newKeyTextField.getText());
+			}
 		}
 
 	}
@@ -342,8 +330,9 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 		KeyValueJTextField tf = null;
 		while (en.hasMoreElements()) {
 			tf = en.nextElement();
-			if (tf.getLanguage()==l)
+			if (tf.getLanguage() == l) {
 				return tf.getText();
+			}
 		}
 		return null;
 	}
@@ -373,8 +362,7 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 
 	}
 
-	private static class KeyValueJTextField extends JTextField implements
-			FocusListener {
+	private static class KeyValueJTextField extends JTextField implements FocusListener {
 
 		@Override
 		public void focusGained(FocusEvent e) {

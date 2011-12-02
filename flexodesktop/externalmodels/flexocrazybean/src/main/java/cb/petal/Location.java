@@ -21,43 +21,54 @@ package cb.petal;
 
 /**
  * Tuple of integer values like (1520, 96). Usually used to define coordinates.
- *
+ * 
  * @version $Id: Location.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Location extends Literal {
-  static final long serialVersionUID=7569774575687169931L;
+	static final long serialVersionUID = 7569774575687169931L;
 
-  private int value1, value2;
+	private int value1, value2;
 
-  public Location(int first, int second) {
-    super("<location>");
-    value1 = first;
-    value2 = second;
-  }
+	public Location(int first, int second) {
+		super("<location>");
+		value1 = first;
+		value2 = second;
+	}
 
-  public int getFirstValue() { return value1; }
-  public void setFirstValue(int v) { value1 = v; }
+	public int getFirstValue() {
+		return value1;
+	}
 
-  public int getSecondValue() { return value2; }
-  public void setSecondValue(int v) { value2 = v; }
+	public void setFirstValue(int v) {
+		value1 = v;
+	}
 
-  @Override
-public String toString() { return "(" + value1 + ", " + value2 + ")"; }
+	public int getSecondValue() {
+		return value2;
+	}
 
-  @Override
-public java.lang.Object getLiteralValue() {
-    return toString();
-  }
+	public void setSecondValue(int v) {
+		value2 = v;
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public String toString() {
+		return "(" + value1 + ", " + value2 + ")";
+	}
 
-  @Override
-public boolean equals(java.lang.Object o) {
-    return (o instanceof Location) && (((Location)o).value1 == this.value1)
-      && (((Location)o).value2 == this.value2);
-  }
+	@Override
+	public java.lang.Object getLiteralValue() {
+		return toString();
+	}
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
+
+	@Override
+	public boolean equals(java.lang.Object o) {
+		return (o instanceof Location) && (((Location) o).value1 == this.value1) && (((Location) o).value2 == this.value2);
+	}
 }

@@ -28,21 +28,18 @@ import org.openflexo.foundation.wkf.node.OperationNode;
  * @author sguerin
  * 
  */
-public class TabOperationComponentHasBeenSet extends WKFDataModification
-{
+public class TabOperationComponentHasBeenSet extends WKFDataModification {
 
-    public OperationNode node;
+	public OperationNode node;
 
-    public TabOperationComponentHasBeenSet(ComponentDefinition component, OperationNode node)
-    {
-        super(null, component);
-        this.node = node;
-    }
+	public TabOperationComponentHasBeenSet(ComponentDefinition component, OperationNode node) {
+		super(null, component);
+		this.node = node;
+	}
 
-    public TabOperationComponentHasBeenSet(String propertyName, ComponentDefinition component, OperationNode node)
-    {
-        super(propertyName, component, null);
-        this.node = node;
-    }
+	public TabOperationComponentHasBeenSet(String propertyName, ComponentDefinition component, OperationNode node) {
+		super(propertyName, component, null);
+		this.node = node;
+	}
 
 }

@@ -17,18 +17,12 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-	package org.openflexo.ve.controller.action;
+package org.openflexo.ve.controller.action;
 
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
-
-import org.openflexo.icon.OntologyIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -40,42 +34,39 @@ import org.openflexo.foundation.param.OntologyObjectParameter;
 import org.openflexo.foundation.param.OntologyPropertyParameter;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
 
 public class AddAnnotationStatementInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddAnnotationStatementInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(AddAnnotationStatement.actionType,actionInitializer);
+	AddAnnotationStatementInitializer(OEControllerActionInitializer actionInitializer) {
+		super(AddAnnotationStatement.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<AddAnnotationStatement> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddAnnotationStatement> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddAnnotationStatement>() {
-            @Override
-			public boolean run(ActionEvent e, final AddAnnotationStatement action)
-            {
-               	TextFieldParameter nameParam = new TextFieldParameter("test","name","coucou");
-            	OntologyObjectParameter ooParam = new OntologyObjectParameter("on","on",action.getFocusedObject());
-            	OntologyClassParameter classParam = new OntologyClassParameter("class","class",null);
-            	OntologyPropertyParameter propParam = new OntologyPropertyParameter("property","property",null);
-            	AnnotationPropertyParameter annotationParam = new AnnotationPropertyParameter("annotation","annotation",null);
-            	
-            	AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-		     			getProject(), 
-						null, 
-						action.getLocalizedName(),
-		     			FlexoLocalization.localizedForKey("please_enter_parameters_for_new_transtyper"),
-		     			new AskParametersDialog.ValidationCondition() {
+			@Override
+			public boolean run(ActionEvent e, final AddAnnotationStatement action) {
+				TextFieldParameter nameParam = new TextFieldParameter("test", "name", "coucou");
+				OntologyObjectParameter ooParam = new OntologyObjectParameter("on", "on", action.getFocusedObject());
+				OntologyClassParameter classParam = new OntologyClassParameter("class", "class", null);
+				OntologyPropertyParameter propParam = new OntologyPropertyParameter("property", "property", null);
+				AnnotationPropertyParameter annotationParam = new AnnotationPropertyParameter("annotation", "annotation", null);
+
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, action.getLocalizedName(),
+						FlexoLocalization.localizedForKey("please_enter_parameters_for_new_transtyper"),
+						new AskParametersDialog.ValidationCondition() {
 							@Override
 							public boolean isValid(ParametersModel model) {
 								/*if (entriesParameters.getValue().size() == 0) {
@@ -92,47 +83,38 @@ public class AddAnnotationStatementInitializer extends ActionInitializer {
 									return true;
 								}*/
 								return true;
-							}     				
-		     			},
-		     			nameParam,
-		     			ooParam,
-		     			classParam,
-		     			propParam,
-		     			annotationParam);
-		     	
+							}
+						}, nameParam, ooParam, classParam, propParam, annotationParam);
 
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					/*action.setNewTranstyperName(nameParam.getValue());
 					action.setNewTranstyperType(typeParam.getValue());
 					action.setEntries(entriesParameters.getValue());
 					action.setIsMappingDefined(transtyperTypeChoiceParam.getValue().equals(DEFINE_MAPPING));*/
-	            	return true;
+					return true;
 				}
-				
+
 				// Cancelled
-            	return false;
-            	
-             }
-         };
+				return false;
+
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<AddAnnotationStatement> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<AddAnnotationStatement>() {
-            @Override
-			public boolean run(ActionEvent e, AddAnnotationStatement action)
-            {
-            	//((OEController)getController()).getSelectionManager().setSelectedObject(action.getNewStatement());
-                 return true;
-           }
-        };
-	}
-     
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<AddAnnotationStatement> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<AddAnnotationStatement>() {
+			@Override
+			public boolean run(ActionEvent e, AddAnnotationStatement action) {
+				// ((OEController)getController()).getSelectionManager().setSelectedObject(action.getNewStatement());
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
 	}
- 
+
 }

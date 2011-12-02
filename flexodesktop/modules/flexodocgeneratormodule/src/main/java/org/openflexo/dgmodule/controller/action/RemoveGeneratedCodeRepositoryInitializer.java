@@ -22,7 +22,6 @@ package org.openflexo.dgmodule.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
 import org.openflexo.foundation.FlexoException;
@@ -41,34 +40,28 @@ public class RemoveGeneratedCodeRepositoryInitializer extends ActionInitializer 
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveGeneratedCodeRepositoryInitializer(DEControllerActionInitializer actionInitializer)
-	{
-		super(RemoveGeneratedCodeRepository.actionType,actionInitializer);
+	RemoveGeneratedCodeRepositoryInitializer(DEControllerActionInitializer actionInitializer) {
+		super(RemoveGeneratedCodeRepository.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DEControllerActionInitializer)super.getControllerActionInitializer();
+	protected DEControllerActionInitializer getControllerActionInitializer() {
+		return (DEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RemoveGeneratedCodeRepository> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveGeneratedCodeRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action)
-			{
-				CheckboxParameter deleteFiles = new CheckboxParameter("deleteFiles","also_delete_files_on_disk",false);
-				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-						getProject(), 
-						null,
-						action.getLocalizedName(), FlexoLocalization.localizedForKey("would_you_really_like_to_remove_this_generated_documentation_repository"), deleteFiles);
+			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action) {
+				CheckboxParameter deleteFiles = new CheckboxParameter("deleteFiles", "also_delete_files_on_disk", false);
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, action.getLocalizedName(),
+						FlexoLocalization.localizedForKey("would_you_really_like_to_remove_this_generated_documentation_repository"),
+						deleteFiles);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					action.setDeleteFiles(deleteFiles.getValue());
 					return true;
-				}
-				else {
+				} else {
 					return false;
 				}
 			}
@@ -76,17 +69,15 @@ public class RemoveGeneratedCodeRepositoryInitializer extends ActionInitializer 
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RemoveGeneratedCodeRepository> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RemoveGeneratedCodeRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action)
-			{
+			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action) {
 				return true;
 			}
 		};
 	}
-	
+
 	@Override
 	protected FlexoExceptionHandler<RemoveGeneratedCodeRepository> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<RemoveGeneratedCodeRepository>() {
@@ -94,12 +85,12 @@ public class RemoveGeneratedCodeRepositoryInitializer extends ActionInitializer 
 			@Override
 			public boolean handleException(FlexoException exception, RemoveGeneratedCodeRepository action) {
 				if (exception instanceof RepositoryCannotBeDeletedException) {
-					FlexoController.notify(((RepositoryCannotBeDeletedException)exception).getLocalizedMessage());
+					FlexoController.notify(((RepositoryCannotBeDeletedException) exception).getLocalizedMessage());
 					return true;
 				}
 				return false;
 			}
-			
+
 		};
 	}
 

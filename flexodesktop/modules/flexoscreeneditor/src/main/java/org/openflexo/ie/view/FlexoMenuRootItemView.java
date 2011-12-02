@@ -54,112 +54,103 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.VerticalLayout;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
  * @author gpolet Created on 8 sept. 2005
  */
-public class FlexoMenuRootItemView extends FlexoMenuItemView
-{
+public class FlexoMenuRootItemView extends FlexoMenuItemView {
 
-    protected static final Logger logger = Logger.getLogger(FlexoMenuRootItemView.class.getPackage().getName());
-    /**
-     * @param model
-     */
-    public FlexoMenuRootItemView(FlexoItemMenu model, IEController ctrl)
-    {
-        super(model,ctrl);
-        add(new GlobalMenuConfigurationPanel());
-    }
+	protected static final Logger logger = Logger.getLogger(FlexoMenuRootItemView.class.getPackage().getName());
 
-    private class GlobalMenuConfigurationPanel extends JPanel
-    {
+	/**
+	 * @param model
+	 */
+	public FlexoMenuRootItemView(FlexoItemMenu model, IEController ctrl) {
+		super(model, ctrl);
+		add(new GlobalMenuConfigurationPanel());
+	}
 
-        JCheckBox useDefaultImage;
+	private class GlobalMenuConfigurationPanel extends JPanel {
 
-        JFileChooser imageFileChooser;
+		JCheckBox useDefaultImage;
 
-        ImageFileSelector choose;
+		JFileChooser imageFileChooser;
 
-        JTable table;
+		ImageFileSelector choose;
 
-        JScrollPane scrollPane;
+		JTable table;
 
-        JButton addButton;
+		JScrollPane scrollPane;
 
-        JButton removeButton;
+		JButton addButton;
 
-        JLabel image;
+		JButton removeButton;
 
-        JComboBox profilePageList;
+		JLabel image;
 
-        /**
+		JComboBox profilePageList;
+
+		/**
          *
          */
-        public GlobalMenuConfigurationPanel()
-        {
-            super(new VerticalLayout());
-            initUI();
-            add(useDefaultImage);
+		public GlobalMenuConfigurationPanel() {
+			super(new VerticalLayout());
+			initUI();
+			add(useDefaultImage);
 
-            JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            panel.add(choose);
-            panel.add(image);
-            add(panel);
+			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			panel.add(choose);
+			panel.add(image);
+			add(panel);
 
-            /*add(scrollPane);
+			/*add(scrollPane);
 
-            panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            panel.add(addButton);
-            panel.add(removeButton);
-            add(panel);*/
-            TitledBorder b = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder());
-            b.setTitle(FlexoLocalization.localizedForKey("global_menu",b));
-            setBorder(b);
-        }
+			panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			panel.add(addButton);
+			panel.add(removeButton);
+			add(panel);*/
+			TitledBorder b = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder());
+			b.setTitle(FlexoLocalization.localizedForKey("global_menu", b));
+			setBorder(b);
+		}
 
-        private void initUI()
-        {
-        	image = new JLabel();
-            ImageFile logo = updateLogo();
-            useDefaultImage = new JCheckBox();
-            useDefaultImage.setText(FlexoLocalization.localizedForKey("use_default_image", useDefaultImage));
-            updateCheckbox();
-            useDefaultImage.addActionListener(new ActionListener() {
-                @Override
-				public void actionPerformed(ActionEvent e)
-                {
-                    _model.getNavigationMenu().setUseDefaultImage(useDefaultImage.isSelected());
-                    choose.setEnabled(!useDefaultImage.isSelected());
+		private void initUI() {
+			image = new JLabel();
+			ImageFile logo = updateLogo();
+			useDefaultImage = new JCheckBox();
+			useDefaultImage.setText(FlexoLocalization.localizedForKey("use_default_image", useDefaultImage));
+			updateCheckbox();
+			useDefaultImage.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					_model.getNavigationMenu().setUseDefaultImage(useDefaultImage.isSelected());
+					choose.setEnabled(!useDefaultImage.isSelected());
 
-                }
-            });
-            TableModel dataModel = new AbstractTableModel() {
-                @Override
-				public int getColumnCount()
-                {
-                    return 2;
-                }
+				}
+			});
+			TableModel dataModel = new AbstractTableModel() {
+				@Override
+				public int getColumnCount() {
+					return 2;
+				}
 
-                @Override
-				public int getRowCount()
-                {
-                    String s = _model.getNavigationMenu().getButtons();
-                    if (s == null) {
+				@Override
+				public int getRowCount() {
+					String s = _model.getNavigationMenu().getButtons();
+					if (s == null) {
 						return 0;
 					}
-                    return s.split(";").length;
-                }
+					return s.split(";").length;
+				}
 
-                @Override
-				public Object getValueAt(int rowIndex, int columnIndex)
-                {
-                    if (columnIndex > 1) {
-                        if (logger.isLoggable(Level.WARNING)) {
+				@Override
+				public Object getValueAt(int rowIndex, int columnIndex) {
+					if (columnIndex > 1) {
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Attempt to obtain an object of a column that does not exist: " + columnIndex);
 						}
-                        return null;
-                    }
-                    if (rowIndex < getRowCount()) {
+						return null;
+					}
+					if (rowIndex < getRowCount()) {
 						if (columnIndex == 0) {
 							return _model.getNavigationMenu().getButtons().split(";")[rowIndex];
 						} else if (_model.getNavigationMenu().getActions() != null) {
@@ -168,134 +159,136 @@ public class FlexoMenuRootItemView extends FlexoMenuItemView
 							return null;
 						}
 					} else {
-                        if (logger.isLoggable(Level.WARNING)) {
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Attemp to obtain an object of row that does not exist: " + rowIndex);
 						}
-                        return null;
-                    }
-                }
+						return null;
+					}
+				}
 
-            };
-            table = new JTable(dataModel);
+			};
+			table = new JTable(dataModel);
 
-            scrollPane = new JScrollPane(table);
-            choose = new ImageFileSelector(_model.getProject(),new ImageFileSelector.ImageImporter() {
+			scrollPane = new JScrollPane(table);
+			choose = new ImageFileSelector(_model.getProject(), new ImageFileSelector.ImageImporter() {
 
 				@Override
 				public void importImage(ActionEvent e) {
-					ImportImage importImage = ImportImage.actionType.makeNewAction(_model.getProject(), null,FlexoMenuRootItemView.this.controller.getEditor());
-                	try {
+					ImportImage importImage = ImportImage.actionType.makeNewAction(_model.getProject(), null,
+							FlexoMenuRootItemView.this.controller.getEditor());
+					try {
 						importImage.doAction(e);
 					} catch (FlexoException e1) {
 						e1.printStackTrace();
 					}
 				}
 
-            },logo,true) {
-            	@Override
-            	public void apply() {
-            		_model.getNavigationMenu().setLogo(getEditedObject());
-            		super.apply();
-            		// TODO: refactor the whole view to use observers (mainly in super-class)
-            		updateLogo();
-            		updateChooserPreferredSize();
-            	}
-            };
-            choose.setEnabled(!_model.getNavigationMenu().getUseDefaultImage());
-            updateChooserPreferredSize();
-            addButton = new JButton("+");
-            addButton.setToolTipText(FlexoLocalization.localizedForKey("add_a_button"));
-            addButton.addActionListener(new ActionListener() {
-                @Override
-				public void actionPerformed(ActionEvent e)
-                {
+			}, logo, true) {
+				@Override
+				public void apply() {
+					_model.getNavigationMenu().setLogo(getEditedObject());
+					super.apply();
+					// TODO: refactor the whole view to use observers (mainly in super-class)
+					updateLogo();
+					updateChooserPreferredSize();
+				}
+			};
+			choose.setEnabled(!_model.getNavigationMenu().getUseDefaultImage());
+			updateChooserPreferredSize();
+			addButton = new JButton("+");
+			addButton.setToolTipText(FlexoLocalization.localizedForKey("add_a_button"));
+			addButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 
-                    String s = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_new_button_name"));
-                    if ((s == null) || s.trim().equals("")) {
+					String s = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_new_button_name"));
+					if ((s == null) || s.trim().equals("")) {
 						return;
 					} else {
-                        Object[] possibilities = new String[FlexoMenuRootItemView.this._model.getProject().getFlexoComponentLibrary().getOperationsComponentList().size()];
-                        Enumeration en = FlexoMenuRootItemView.this._model.getProject().getFlexoComponentLibrary().getOperationsComponentList().elements();
-                        int i=0;
-                        while (en.hasMoreElements()) {
-                            OperationComponentDefinition element = (OperationComponentDefinition) en.nextElement();
-                            possibilities[i++]= element.getComponentName();
-                        }
+						Object[] possibilities = new String[FlexoMenuRootItemView.this._model.getProject().getFlexoComponentLibrary()
+								.getOperationsComponentList().size()];
+						Enumeration en = FlexoMenuRootItemView.this._model.getProject().getFlexoComponentLibrary()
+								.getOperationsComponentList().elements();
+						int i = 0;
+						while (en.hasMoreElements()) {
+							OperationComponentDefinition element = (OperationComponentDefinition) en.nextElement();
+							possibilities[i++] = element.getComponentName();
+						}
 
-                        String da = (String) JOptionPane.showInputDialog(GlobalMenuConfigurationPanel.this, FlexoLocalization
-                                .localizedForKey("choose_a_direct_action"), FlexoLocalization.localizedForKey("choose_a_direct_action"),
-                                JOptionPane.PLAIN_MESSAGE, null, possibilities, null);
-                        if (da == null) {
+						String da = (String) JOptionPane.showInputDialog(GlobalMenuConfigurationPanel.this,
+								FlexoLocalization.localizedForKey("choose_a_direct_action"),
+								FlexoLocalization.localizedForKey("choose_a_direct_action"), JOptionPane.PLAIN_MESSAGE, null,
+								possibilities, null);
+						if (da == null) {
 							da = " ";
 						}
-                        String b = _model.getNavigationMenu().getButtons();
-                        if ((b == null) || b.trim().equals("")) {
+						String b = _model.getNavigationMenu().getButtons();
+						if ((b == null) || b.trim().equals("")) {
 							b = s;
 						} else {
 							b += ";" + s;
 						}
-                        _model.getNavigationMenu().setButtons(b);
-                        b = _model.getNavigationMenu().getActions();
-                        if ((b == null) || b.trim().equals("")) {
+						_model.getNavigationMenu().setButtons(b);
+						b = _model.getNavigationMenu().getActions();
+						if ((b == null) || b.trim().equals("")) {
 							b = da;
 						} else {
 							b += ";" + da;
 						}
-                        _model.getNavigationMenu().setActions(b);
-                        table.revalidate();
-                        table.repaint();
-                    }
-                }
-            });
+						_model.getNavigationMenu().setActions(b);
+						table.revalidate();
+						table.repaint();
+					}
+				}
+			});
 
-            removeButton = new JButton("-");
-            removeButton.setToolTipText(FlexoLocalization.localizedForKey("remove_a_button"));
-            removeButton.addActionListener(new ActionListener() {
-                @Override
-				public void actionPerformed(ActionEvent e)
-                {
-                    if (_model.getNavigationMenu().getButtons() == null) {
+			removeButton = new JButton("-");
+			removeButton.setToolTipText(FlexoLocalization.localizedForKey("remove_a_button"));
+			removeButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (_model.getNavigationMenu().getButtons() == null) {
 						return;
 					}
-                    int[] rows = table.getSelectedRows();
-                    String[] s = _model.getNavigationMenu().getButtons().split(";");
-                    StringBuffer sb = new StringBuffer();
-                    for (int i = 0; i < s.length; i++) {
-                        int j;
-                        for (j = 0; j < rows.length; j++) {
-                            if (rows[j] == i) {
+					int[] rows = table.getSelectedRows();
+					String[] s = _model.getNavigationMenu().getButtons().split(";");
+					StringBuffer sb = new StringBuffer();
+					for (int i = 0; i < s.length; i++) {
+						int j;
+						for (j = 0; j < rows.length; j++) {
+							if (rows[j] == i) {
 								break;
 							}
-                        }
-                        if (j == rows.length) {
-                            sb.append(s[i]);
-                            if (i + 1 != s.length) {
+						}
+						if (j == rows.length) {
+							sb.append(s[i]);
+							if (i + 1 != s.length) {
 								sb.append(';');
 							}
-                        }
-                    }
-                    _model.getNavigationMenu().setButtons(sb.toString());
-                    s = _model.getNavigationMenu().getActions().split(";");
-                    sb = new StringBuffer();
-                    for (int i = 0; i < s.length; i++) {
-                        int j;
-                        for (j = 0; j < rows.length; j++) {
-                            if (rows[j] == i) {
+						}
+					}
+					_model.getNavigationMenu().setButtons(sb.toString());
+					s = _model.getNavigationMenu().getActions().split(";");
+					sb = new StringBuffer();
+					for (int i = 0; i < s.length; i++) {
+						int j;
+						for (j = 0; j < rows.length; j++) {
+							if (rows[j] == i) {
 								break;
 							}
-                        }
-                        if (j == rows.length) {
-                            sb.append(s[i]);
-                            if (i + 1 != s.length) {
+						}
+						if (j == rows.length) {
+							sb.append(s[i]);
+							if (i + 1 != s.length) {
 								sb.append(';');
 							}
-                        }
-                    }
-                    _model.getNavigationMenu().setActions(sb.toString());
-                    table.repaint();
-                }
-            });
-        }
+						}
+					}
+					_model.getNavigationMenu().setActions(sb.toString());
+					table.repaint();
+				}
+			});
+		}
 
 		/**
 		 *
@@ -309,12 +302,12 @@ public class FlexoMenuRootItemView extends FlexoMenuItemView
 		 */
 		protected ImageFile updateLogo() {
 			ImageFile logo = _model.getNavigationMenu().getLogo();
-            if ((logo == null)||(logo.getImageFile()==null)) {
+			if ((logo == null) || (logo.getImageFile() == null)) {
 				image.setIcon(SEIconLibrary.NO_IMAGE);
 			} else {
-                ImageIcon icon = new ImageIcon(logo.getImageFile().getAbsolutePath());
-                image.setIcon(icon);
-            }
+				ImageIcon icon = new ImageIcon(logo.getImageFile().getAbsolutePath());
+				image.setIcon(icon);
+			}
 			return logo;
 		}
 
@@ -322,14 +315,13 @@ public class FlexoMenuRootItemView extends FlexoMenuItemView
 		 *
 		 */
 		protected void updateChooserPreferredSize() {
-			if (choose.getEditedObject()==null) {
-				choose.getTextField().setPreferredSize(new Dimension(100,20));
+			if (choose.getEditedObject() == null) {
+				choose.getTextField().setPreferredSize(new Dimension(100, 20));
 			} else {
 				choose.getTextField().setPreferredSize(null);
 			}
 		}
 
-    }
-
+	}
 
 }

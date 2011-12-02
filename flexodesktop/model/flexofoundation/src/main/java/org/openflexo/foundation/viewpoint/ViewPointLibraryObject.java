@@ -24,19 +24,19 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 public abstract class ViewPointLibraryObject extends TemporaryFlexoModelObject implements InspectableObject {
 
 	public abstract ViewPointLibrary getViewPointLibrary();
-	
-	public OntologyLibrary getOntologyLibrary()
-	{
-		return getViewPointLibrary().getOntologyLibrary();
+
+	public OntologyLibrary getOntologyLibrary() {
+		if (getViewPointLibrary() != null) {
+			return getViewPointLibrary().getOntologyLibrary();
+		}
+		return null;
 	}
-	
+
 	@Override
-	public XMLMapping getXMLMapping()
-	{
+	public XMLMapping getXMLMapping() {
 		if (getViewPointLibrary() != null) {
 			return getViewPointLibrary().get_VIEW_POINT_MODEL();
 		}

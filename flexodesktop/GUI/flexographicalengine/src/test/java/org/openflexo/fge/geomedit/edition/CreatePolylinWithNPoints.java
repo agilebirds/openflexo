@@ -30,74 +30,63 @@ import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.PolylinWithNPointsConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreatePolylinWithNPoints extends Edition {
-	
+
 	public CreatePolylinWithNPoints(GeomEditController controller) {
-		super("Create polylin from a list of points",controller);
-		appendNewPointEdition(controller,1);
+		super("Create polylin from a list of points", controller);
+		appendNewPointEdition(controller, 1);
 	}
-	
-	private void appendNewPointEdition(final GeomEditController controller, int index)
-	{
-		ObtainPoint newObtainPoint = new ObtainPoint("Select point "+index,controller,true) {
+
+	private void appendNewPointEdition(final GeomEditController controller, int index) {
+		ObtainPoint newObtainPoint = new ObtainPoint("Select point " + index, controller, true) {
 			@Override
-			public void done()
-			{
-				appendNewPointEdition(controller,currentStep+2);
+			public void done() {
+				appendNewPointEdition(controller, currentStep + 2);
 				super.done();
 			}
-			
+
 			@Override
-			public void endEdition()
-			{
+			public void endEdition() {
 				System.out.println("End edition called");
 				super.done();
 			}
-		};		
+		};
 		inputs.add(newObtainPoint);
 	}
-	
-	
+
 	@Override
-	public void performEdition()
-	{
+	public void performEdition() {
 		Vector<PointConstruction> pc = new Vector<PointConstruction>();
 		for (EditionInput o : inputs) {
-			PointConstruction pp = ((ObtainPoint)o).getConstruction();
-			if (pp != null) pc.add(pp);
+			PointConstruction pp = ((ObtainPoint) o).getConstruction();
+			if (pp != null) {
+				pc.add(pp);
+			}
 		}
-		addObject (new Polylin(
-				getController().getDrawing().getModel(),
-				new PolylinWithNPointsConstruction(pc)));
+		addObject(new Polylin(getController().getDrawing().getModel(), new PolylinWithNPointsConstruction(pc)));
 	}
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		}
 		if (currentStep == 1) {
-			FGEPoint p1 = ((ObtainPoint)inputs.get(0)).getInputData();
+			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGESegment(p1,lastMouseLocation)).paint(graphics);
-		}
-		else {
+			(new FGESegment(p1, lastMouseLocation)).paint(graphics);
+		} else {
 			Vector<FGEPoint> pts = new Vector<FGEPoint>();
 			graphics.setDefaultForeground(focusedForegroundStyle);
-			for (int i=0; i<currentStep; i++) {
-				FGEPoint p = ((ObtainPoint)inputs.get(i)).getInputData();
+			for (int i = 0; i < currentStep; i++) {
+				FGEPoint p = ((ObtainPoint) inputs.get(i)).getInputData();
 				p.paint(graphics);
 				pts.add(p);
 			}
 			pts.add(lastMouseLocation);
 			(new FGEPolylin(pts)).paint(graphics);
-			
+
 		}
 	}
 }
-
-

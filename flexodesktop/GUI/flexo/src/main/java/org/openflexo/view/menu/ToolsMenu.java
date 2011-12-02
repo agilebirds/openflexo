@@ -94,17 +94,22 @@ public class ToolsMenu extends FlexoMenu {
 	public ToolsMenu(FlexoController controller) {
 		super("tools", controller);
 		addSpecificItems();
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease())
+		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
 			add(loggingItem = new LoggingItem());
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease())
+		}
+		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
 			add(localizedEditorItem = new LocalizedEditorItem());
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease())
+		}
+		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
 			add(rmItem = new ResourceManagerItem());
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease())
+		}
+		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
 			addSeparator();
+		}
 		add(submitBug = new SubmitBugItem());
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease())
+		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
 			add(brEditor = new BREditorItem());
+		}
 		if ((ModuleLoader.allowsDocSubmission()) && (!ModuleLoader.isAvailable(Module.DRE_MODULE))) {
 			addSeparator();
 			add(saveDocSubmissions = new SaveDocSubmissionItem());
@@ -115,8 +120,9 @@ public class ToolsMenu extends FlexoMenu {
 		}
 		add(timeTraveler = new TimeTraveler());
 		addSeparator();
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease())
+		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
 			add(logConfig = new LogConfiguratorItem());
+		}
 	}
 
 	public void addSpecificItems() {
@@ -216,14 +222,16 @@ public class ToolsMenu extends FlexoMenu {
 	public class ResourceManagerAction extends AbstractAction {
 		public ResourceManagerAction() {
 			super();
-			if (getController().getProject() == null)
+			if (getController().getProject() == null) {
 				setEnabled(false);
+			}
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (getController().getProject() == null)
+			if (getController().getProject() == null) {
 				return;
+			}
 			ModuleLoader.getRMWindow(getController().getProject()).show();
 		}
 
@@ -348,25 +356,29 @@ public class ToolsMenu extends FlexoMenu {
 	public class RepairProjectAction extends AbstractAction implements GraphicalFlexoObserver {
 		public RepairProjectAction() {
 			super();
-			if (getController().getProject() == null)
+			if (getController().getProject() == null) {
 				setEnabled(false);
+			}
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Validation of project in progress...");
+			}
 
-			if (getController().getProject() == null)
+			if (getController().getProject() == null) {
 				return;
+			}
 
 			ValidationModel validationModel = getController().getProject().getProjectValidationModel();
 			validationModel.addObserver(this);
 			ValidationReport report = getController().getProject().validate(validationModel);
 			validationModel.deleteObserver(this);
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Validation of project terminated");
+			}
 
 			getRepairProjectWindow(report).setVisible(true);
 		}
@@ -376,12 +388,12 @@ public class ToolsMenu extends FlexoMenu {
 			if (dataModification instanceof ValidationNotification) {
 				if (dataModification instanceof ValidationInitNotification) {
 					ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
-					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("validating") + " " + initNotification
-							.getRootObject().getFullyQualifiedName(), initNotification.getNbOfObjectToValidate());
+					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("validating") + " "
+							+ initNotification.getRootObject().getFullyQualifiedName(), initNotification.getNbOfObjectToValidate());
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
-					ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("validating") + " " + progressNotification
-							.getValidatedObject().getFullyQualifiedName());
+					ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("validating") + " "
+							+ progressNotification.getValidatedObject().getFullyQualifiedName());
 				} else if (dataModification instanceof ValidationSecondaryInitNotification) {
 					ValidationSecondaryInitNotification initNotification = (ValidationSecondaryInitNotification) dataModification;
 					ProgressWindow.resetSecondaryProgressInstance(initNotification.getNbOfRulesToApply());
@@ -419,17 +431,18 @@ public class ToolsMenu extends FlexoMenu {
 	public class TimeTravelAction extends AbstractAction {
 		public TimeTravelAction() {
 			super();
-			if (getController().getProject() == null)
+			if (getController().getProject() == null) {
 				setEnabled(false);
+			}
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (ModuleLoader.isTimeTravelingAvailable())
+			if (ModuleLoader.isTimeTravelingAvailable()) {
 				ModuleLoader.showTimeTravelerDialog();
-			else {
-				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". " + FlexoLocalization
-						.localizedForKey("would_you_like_to_activate_it_now?"))) {
+			} else {
+				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". "
+						+ FlexoLocalization.localizedForKey("would_you_like_to_activate_it_now?"))) {
 					GeneralPreferences.setAutoSaveEnabled(true);
 					FlexoPreferences.savePreferences(true);
 					ModuleLoader.showTimeTravelerDialog();

@@ -21,6 +21,6 @@ package org.openflexo.foundation.dm;
 
 public interface DMMember {
 
-	   public DMEntity getEntity();
-	   
+	public DMEntity getEntity();
+
 }

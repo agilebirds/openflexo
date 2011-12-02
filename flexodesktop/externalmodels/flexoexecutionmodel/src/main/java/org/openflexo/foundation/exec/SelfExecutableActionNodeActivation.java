@@ -26,51 +26,42 @@ import org.openflexo.foundation.bindings.BindingAssignment;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.SelfExecutableActionNode;
 
-
 public class SelfExecutableActionNodeActivation extends NodeActivation<SelfExecutableActionNode> {
 
-	public SelfExecutableActionNodeActivation(SelfExecutableActionNode node, FlexoPreCondition pre)
-	{
-		super(node,pre);
+	public SelfExecutableActionNodeActivation(SelfExecutableActionNode node, FlexoPreCondition pre) {
+		super(node, pre);
 	}
-	
-	public SelfExecutableActionNodeActivation(SelfExecutableActionNode node)
-	{
+
+	public SelfExecutableActionNodeActivation(SelfExecutableActionNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException {
 		ControlGraph EXECUTE_PRIMITIVE = null;
 		ControlGraph EXECUTE_ASSIGNMENTS = null;
-		
+
 		if (getNode().getExecutionPrimitive() != null) {
 			EXECUTE_PRIMITIVE = makeControlGraphForExecutionPrimitive(getNode().getExecutionPrimitive());
-			EXECUTE_PRIMITIVE.setHeaderComment("Call execution primitive for node "+getNode().getName());
+			EXECUTE_PRIMITIVE.setHeaderComment("Call execution primitive for node " + getNode().getName());
 		}
-				
+
 		if (getNode().getAssignments().size() > 0) {
 			Vector<ControlGraph> allAssignments = new Vector<ControlGraph>();
-			for (BindingAssignment assignment : getNode().getAssignments())
+			for (BindingAssignment assignment : getNode().getAssignments()) {
 				allAssignments.add(makeControlGraphForAssignment(assignment));
+			}
 			EXECUTE_ASSIGNMENTS = makeSequentialControlGraph(allAssignments);
-			EXECUTE_ASSIGNMENTS.setHeaderComment("Perform assignments declared for execution of node "+getNode().getName());
-		}	
+			EXECUTE_ASSIGNMENTS.setHeaderComment("Perform assignments declared for execution of node " + getNode().getName());
+		}
 
-		return makeSequentialControlGraph(
-				EXECUTE_PRIMITIVE,
-				EXECUTE_ASSIGNMENTS);
+		return makeSequentialControlGraph(EXECUTE_PRIMITIVE, EXECUTE_ASSIGNMENTS);
 	}
-	
+
 	@Override
-	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
-		return makeSequentialControlGraph(
-				super.makeControlGraphCommonPostlude(interprocedural),
-				NodeDesactivation.desactivateNode(getNode(),interprocedural));
+	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException {
+		return makeSequentialControlGraph(super.makeControlGraphCommonPostlude(interprocedural),
+				NodeDesactivation.desactivateNode(getNode(), interprocedural));
 	}
-
-
 
 }

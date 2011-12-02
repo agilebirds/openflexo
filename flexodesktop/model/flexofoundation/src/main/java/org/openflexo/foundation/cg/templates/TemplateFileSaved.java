@@ -19,11 +19,8 @@
  */
 package org.openflexo.foundation.cg.templates;
 
-
-public class TemplateFileSaved extends TemplateFileNotification
-{
-	public TemplateFileSaved(CGTemplateFile file)
-    {
-        super(file);
-    }
+public class TemplateFileSaved extends TemplateFileNotification {
+	public TemplateFileSaved(CGTemplateFile file) {
+		super(file);
+	}
 }

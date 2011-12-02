@@ -29,37 +29,34 @@ import org.openflexo.fge.geom.FGEPoint;
 
 public class FGESymbolGraphics extends FGEGraphics {
 
-    private static final Logger logger = Logger.getLogger(FGESymbolGraphics.class.getPackage().getName());
-   
-	public FGESymbolGraphics(ConnectorGraphicalRepresentation<?> aGraphicalRepresentation)
-	{
+	private static final Logger logger = Logger.getLogger(FGESymbolGraphics.class.getPackage().getName());
+
+	public FGESymbolGraphics(ConnectorGraphicalRepresentation<?> aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 	}
-	
-	//sometimes this method throw a class cast exception with a TokenEdgeGR instead of a
-	//ShapeGraphicalRepresentation.
-	//don't know the source cause, but commenting this code seems to be a workaround.
-	
-	//The real solution could be to use Generic Typing to find the root cause of this issue
-	//... but it's a lot of complex work.
-	
-//	public ShapeGraphicalRepresentation getGraphicalRepresentation() 
-//	{
-//		return (ShapeGraphicalRepresentation)super.getGraphicalRepresentation();
-//	}
-	
+
+	// sometimes this method throw a class cast exception with a TokenEdgeGR instead of a
+	// ShapeGraphicalRepresentation.
+	// don't know the source cause, but commenting this code seems to be a workaround.
+
+	// The real solution could be to use Generic Typing to find the root cause of this issue
+	// ... but it's a lot of complex work.
+
+	// public ShapeGraphicalRepresentation getGraphicalRepresentation()
+	// {
+	// return (ShapeGraphicalRepresentation)super.getGraphicalRepresentation();
+	// }
+
 	// Symbol graphics doesn't used normalized coordinates system
 	@Override
-	public Point convertNormalizedPointToViewCoordinates(double x, double y)
-	{
-		return new Point((int)x,(int)y);
+	public Point convertNormalizedPointToViewCoordinates(double x, double y) {
+		return new Point((int) x, (int) y);
 	}
 
 	// Symbol graphics doesn't used normalized coordinates system
 	@Override
-	public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y)
-	{
-		return new FGEPoint(x,y);
+	public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y) {
+		return new FGEPoint(x, y);
 	}
 
 }

@@ -22,9 +22,10 @@ package org.openflexo.foundation.dm.javaparser;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMProperty;
 
-public interface JavaFieldParser
-{
+public interface JavaFieldParser {
 	public ParsedJavadoc parseJavadocForField(String fieldCode, DMModel dataModel) throws JavaParseException;
+
 	public ParsedJavaField parseField(String fieldCode, DMModel dataModel) throws JavaParseException;
+
 	public void updatePropertyFromJavaField(DMProperty property, ParsedJavaField javaField);
 }

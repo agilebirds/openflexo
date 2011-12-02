@@ -31,81 +31,71 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class MoveMenuDown extends FlexoAction
-{
+public class MoveMenuDown extends FlexoAction {
 
-    protected static final Logger logger = FlexoLogger.getLogger(MoveMenuDown.class.getPackage().getName());
-    
-    public static FlexoActionType actionType = new FlexoActionType ("move_down",FlexoActionType.defaultGroup) {
+	protected static final Logger logger = FlexoLogger.getLogger(MoveMenuDown.class.getPackage().getName());
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new MoveMenuDown(focusedObject, globalSelection,editor);
-        }
+	public static FlexoActionType actionType = new FlexoActionType("move_down", FlexoActionType.defaultGroup) {
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
-
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-        	return (object != null) && 
-            (object instanceof FlexoItemMenu) &&
-            (((FlexoItemMenu)object).getFather()!=null) &&
-            !((((FlexoItemMenu)object).getFather()).getSubItems().lastElement().equals(object));
-        }
-                
-    };
-    
-    private FlexoItemMenu itemMenu; 
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected MoveMenuDown(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-
-    /**
-     * Overrides doAction
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        FlexoItemMenu item = getItemMenu();
-//        if (item.getFather() == null || item.getFather().getSubItems().indexOf(item) == item.getFather().getSubItems().size() - 1){
-//        	return;
-//        }
-        item.getFather().switchItems(item, item.getFather().getSubItems().get(item.getFather().getSubItems().indexOf(item) + 1));
-        if (logger.isLoggable(Level.INFO)) {
-			logger.info("Move menu "+item.getMenuLabel()+" down");
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new MoveMenuDown(focusedObject, globalSelection, editor);
 		}
-    }
 
-    public FlexoItemMenu getItemMenu()
-    {
-        return itemMenu;
-    }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-    public void setItemMenu(FlexoItemMenu itemMenu)
-    {
-        this.itemMenu = itemMenu;
-    }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return (object != null) && (object instanceof FlexoItemMenu) && (((FlexoItemMenu) object).getFather() != null)
+					&& !((((FlexoItemMenu) object).getFather()).getSubItems().lastElement().equals(object));
+		}
+
+	};
+
+	private FlexoItemMenu itemMenu;
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected MoveMenuDown(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		FlexoItemMenu item = getItemMenu();
+		// if (item.getFather() == null || item.getFather().getSubItems().indexOf(item) == item.getFather().getSubItems().size() - 1){
+		// return;
+		// }
+		item.getFather().switchItems(item, item.getFather().getSubItems().get(item.getFather().getSubItems().indexOf(item) + 1));
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Move menu " + item.getMenuLabel() + " down");
+		}
+	}
+
+	public FlexoItemMenu getItemMenu() {
+		return itemMenu;
+	}
+
+	public void setItemMenu(FlexoItemMenu itemMenu) {
+		this.itemMenu = itemMenu;
+	}
 
 }

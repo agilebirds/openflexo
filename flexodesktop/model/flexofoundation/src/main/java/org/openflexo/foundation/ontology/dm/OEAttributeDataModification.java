@@ -25,22 +25,18 @@ package org.openflexo.foundation.ontology.dm;
  * @author sguerin
  * 
  */
-public class OEAttributeDataModification extends OEDataModification
-{
+public class OEAttributeDataModification extends OEDataModification {
 
-    public OEAttributeDataModification(String attributeName, Object oldValue, Object newValue)
-    {
-        super(attributeName, oldValue, newValue);
-    }
+	public OEAttributeDataModification(String attributeName, Object oldValue, Object newValue) {
+		super(attributeName, oldValue, newValue);
+	}
 
-    public String getAttributeName()
-    {
-        return propertyName();
-    }
+	public String getAttributeName() {
+		return propertyName();
+	}
 
-    @Override
-	public String toString()
-    {
-        return "OEDataModification: ["+getAttributeName()+"] old:"+oldValue()+" new:"+newValue();
-    }
+	@Override
+	public String toString() {
+		return "OEDataModification: [" + getAttributeName() + "] old:" + oldValue() + " new:" + newValue();
+	}
 }

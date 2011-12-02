@@ -29,24 +29,23 @@ import org.openflexo.foundation.view.ViewDefinition;
  * @author sguerin
  * 
  */
-public class VEShemaBuilder extends FlexoBuilder<FlexoOEShemaResource>
-{
+public class VEShemaBuilder extends FlexoBuilder<FlexoOEShemaResource> {
 
-    public View shema = null;
-    
-    public ViewDefinition shemaDefinition;
-    
-    /**
-     * Use this constructor to build an Operation Component
-     * 
-     * @param componentDefinition
-     */
-    public VEShemaBuilder(ViewDefinition def, FlexoOEShemaResource resource)
-    {
-        super(resource);
-        this.shemaDefinition = def;
-        if (shemaDefinition.isLoaded())
-        	shema = shemaDefinition.getShema();
-    }
+	public View shema = null;
+
+	public ViewDefinition shemaDefinition;
+
+	/**
+	 * Use this constructor to build an Operation Component
+	 * 
+	 * @param componentDefinition
+	 */
+	public VEShemaBuilder(ViewDefinition def, FlexoOEShemaResource resource) {
+		super(resource);
+		this.shemaDefinition = def;
+		if (shemaDefinition.isLoaded()) {
+			shema = shemaDefinition.getShema();
+		}
+	}
 
 }

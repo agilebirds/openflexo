@@ -28,42 +28,36 @@ import org.openflexo.foundation.cg.version.action.ShowFileHistory;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class ShowFileHistoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ShowFileHistoryInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(ShowFileHistory.actionType,actionInitializer);
+	ShowFileHistoryInitializer(DGControllerActionInitializer actionInitializer) {
+		super(ShowFileHistory.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ShowFileHistory> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ShowFileHistory> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowFileHistory>() {
 			@Override
-			public boolean run(ActionEvent e, ShowFileHistory action)
-			{
+			public boolean run(ActionEvent e, ShowFileHistory action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ShowFileHistory> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ShowFileHistory> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowFileHistory>() {
 			@Override
-			public boolean run(ActionEvent e, ShowFileHistory action)
-			{
-				getControllerActionInitializer().getDGController().switchToPerspective(getControllerActionInitializer().getDGController().VERSIONNING_PERSPECTIVE);
+			public boolean run(ActionEvent e, ShowFileHistory action) {
+				getControllerActionInitializer().getDGController().switchToPerspective(
+						getControllerActionInitializer().getDGController().VERSIONNING_PERSPECTIVE);
 				getControllerActionInitializer().getDGController().selectAndFocusObject(action.getFocusedObject());
 				return true;
 			}

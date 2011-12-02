@@ -26,10 +26,9 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMMethod;
+import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
-import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
-
 
 public class DuplicateDMMethod extends FlexoAction<DuplicateDMMethod, DMMethod, DMObject> {
 

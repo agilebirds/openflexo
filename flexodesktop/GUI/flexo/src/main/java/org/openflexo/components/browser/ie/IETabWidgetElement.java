@@ -28,84 +28,77 @@ import org.openflexo.foundation.ie.widget.IESequenceWidget;
 import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class IETabWidgetElement extends BrowserElement
-{
+public class IETabWidgetElement extends BrowserElement {
 
-    private IETabWidget widget;
-    private IESequenceWidget observerdRootSequenceTab;
+	private IETabWidget widget;
+	private IESequenceWidget observerdRootSequenceTab;
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IETabWidgetElement(IETabWidget tab_widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(tab_widget, BrowserElementType.TAB_WIDGET, browser, parent);
-        observerdRootSequenceTab = ((IETabWidget)getObject()).getTabComponent().getRootSequence();
-        observerdRootSequenceTab.addObserver(this);
-        this.widget = tab_widget;
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IETabWidgetElement(IETabWidget tab_widget, ProjectBrowser browser, BrowserElement parent) {
+		super(tab_widget, BrowserElementType.TAB_WIDGET, browser, parent);
+		observerdRootSequenceTab = ((IETabWidget) getObject()).getTabComponent().getRootSequence();
+		observerdRootSequenceTab.addObserver(this);
+		this.widget = tab_widget;
+	}
 
-    @Override
-    public void delete() {
-    	if (observerdRootSequenceTab!=null)
-    		observerdRootSequenceTab.deleteObserver(this);
-    	super.delete();
-    	observerdRootSequenceTab = null;
-    }
+	@Override
+	public void delete() {
+		if (observerdRootSequenceTab != null) {
+			observerdRootSequenceTab.deleteObserver(this);
+		}
+		super.delete();
+		observerdRootSequenceTab = null;
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getTabWidget().getTitle() == null) {
-            return "Tab";
-        }
-        return getTabWidget().getTitle();
-    }
+	@Override
+	public String getName() {
+		if (getTabWidget().getTitle() == null) {
+			return "Tab";
+		}
+		return getTabWidget().getTitle();
+	}
 
-    protected IETabWidget getTabWidget()
-    {
-        return widget;
-    }
+	protected IETabWidget getTabWidget() {
+		return widget;
+	}
 
-    /**
-     * Overrides isNameEditable
-     *
-     * @see org.openflexo.components.browser.BrowserElement#isNameEditable()
-     */
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	/**
+	 * Overrides isNameEditable
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#isNameEditable()
+	 */
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    /**
-     * Overrides setName
-     *
-     * @see org.openflexo.components.browser.BrowserElement#setName(java.lang.String)
-     */
-    @Override
-	public void setName(String aName)
-    {
-        getTabWidget().setTitle(aName);
-    }
+	/**
+	 * Overrides setName
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String aName) {
+		getTabWidget().setTitle(aName);
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-    protected void buildChildrenVector()
-    {
-        Iterator<IEWidget> i = ((IETabWidget)getObject()).getTabComponent().getRootSequence().iterator();
-        while (i.hasNext()) {
-        	IEWidget element = i.next();
-            addToChilds(element);
-        }
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		Iterator<IEWidget> i = ((IETabWidget) getObject()).getTabComponent().getRootSequence().iterator();
+		while (i.hasNext()) {
+			IEWidget element = i.next();
+			addToChilds(element);
+		}
+	}
 }

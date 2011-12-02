@@ -29,42 +29,36 @@ public class TypeStatement extends OntologyStatement {
 	private static final Logger logger = Logger.getLogger(TypeStatement.class.getPackage().getName());
 
 	public static final String TYPE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-	
+
 	private OntologyObject type;
-	
-	public TypeStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public TypeStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			type = getOntologyLibrary().getOntologyObject(((Resource)s.getObject()).getURI());
-		}
-		else {
+			type = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+		} else {
 			logger.warning("TypeStatement: object is not a Resource !");
 		}
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "type_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "TypeStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "TypeStatement: " + getStatement();
 	}
 
-
-	public OntologyObject getType() 
-	{
+	public OntologyObject getType() {
 		return type;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" is a "+(getType() != null ? getType().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " is a "
+				+ (getType() != null ? getType().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 }

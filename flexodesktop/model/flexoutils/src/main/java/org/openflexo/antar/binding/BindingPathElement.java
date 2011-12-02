@@ -24,58 +24,60 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 
 /**
- * This interface is implemented by all classes modelizing an element 
- * of a formal binding path, whichever type it is.
+ * This interface is implemented by all classes modelizing an element of a formal binding path, whichever type it is.
  * 
  * @author sylvain
- *
+ * 
  */
-public interface BindingPathElement<E,T> extends Typed
-{
-    public Class<? extends E> getDeclaringClass();
+public interface BindingPathElement<T> extends Typed {
+	public Class<?> getDeclaringClass();
 
-    @Override
+	@Override
 	public Type getType();
 
-   // public void addObserver(Observer o);
+	// public void addObserver(Observer o);
 
-   // public void deleteObserver(Observer o);
+	// public void deleteObserver(Observer o);
 
-    public String getSerializationRepresentation();
+	public String getSerializationRepresentation();
 
-    public boolean isBindingValid();
-    
-    public String getLabel();
-    
-    public String getTooltipText(Type resultingType);
+	public boolean isBindingValid();
 
-    /**
-     * Return a flag indicating if this path element is settable or not
-     * (settable indicates that a new value can be set)
-     * 
-     * @return
-     */
+	public String getLabel();
+
+	public String getTooltipText(Type resultingType);
+
+	/**
+	 * Return a flag indicating if this path element is settable or not (settable indicates that a new value can be set)
+	 * 
+	 * @return
+	 */
 	public boolean isSettable();
-	
+
 	/**
 	 * Evaluate and return value for related path element, given a binding evaluation context
 	 * 
-    * @param target: adress object as target of parent path: the object on which setting will be performed
-     * @param context: binding evaluation context
+	 * @param target
+	 *            : adress object as target of parent path: the object on which setting will be performed
+	 * @param context
+	 *            : binding evaluation context
 	 * @return accessed value
 	 */
-    public T getBindingValue(E target, BindingEvaluationContext context);
-    
-    /**
-     * Sets a new value for related path element, given a binding evaluation context
-     * If binding declared as NOT settable, this method will do nothing.
-     * 
-     * @param value: the new value
-     * @param target: adress object as target of parent path: the object on which setting will be performed
-     * @param context: binding evaluation context
-     */
-    public void setBindingValue(T value, E target, BindingEvaluationContext context);
-    
+	public T getBindingValue(Object target, BindingEvaluationContext context);
+
+	/**
+	 * Sets a new value for related path element, given a binding evaluation context If binding declared as NOT settable, this method will
+	 * do nothing.
+	 * 
+	 * @param value
+	 *            : the new value
+	 * @param target
+	 *            : adress object as target of parent path: the object on which setting will be performed
+	 * @param context
+	 *            : binding evaluation context
+	 */
+	public void setBindingValue(T value, Object target, BindingEvaluationContext context);
+
 	/*public BindingPathElement getBindingPathElement(String propertyName);
 
 	public List<? extends BindingPathElement> getAccessibleBindingPathElements();

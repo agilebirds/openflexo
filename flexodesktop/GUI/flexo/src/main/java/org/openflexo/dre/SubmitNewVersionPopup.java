@@ -31,9 +31,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemVersion;
 import org.openflexo.drm.Language;
@@ -42,102 +40,95 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoDialog;
 
 /**
- * Popup allowing to choose some objects of a given type from
- * Flexo model objects hierarchy
+ * Popup allowing to choose some objects of a given type from Flexo model objects hierarchy
  * 
  * @author sguerin
  * 
  */
-public class SubmitNewVersionPopup extends FlexoDialog
-{
+public class SubmitNewVersionPopup extends FlexoDialog {
 
-    DocItemVersion _versionToSubmit = null;
+	DocItemVersion _versionToSubmit = null;
 
-    protected SubmitNewVersionView _view;
-    protected JButton hideShowDetailsButton;
-    
-    public SubmitNewVersionPopup(final DocItem docItem, Language language, Frame owner, FlexoEditor editor)
-    {
-        super(owner);
- 
-        String title = FlexoLocalization.localizedForKey("submit_documentation_for")+" "+docItem.getIdentifier();
-        setTitle(title);
-        getContentPane().setLayout(new BorderLayout());
-        
-        setBackground(ColorCst.GUI_BACK_COLOR);
- 
-        _view = new SubmitNewVersionView(docItem,language,editor);
-        _view.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+	protected SubmitNewVersionView _view;
+	protected JButton hideShowDetailsButton;
 
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+	public SubmitNewVersionPopup(final DocItem docItem, Language language, Frame owner, FlexoEditor editor) {
+		super(owner);
 
+		String title = FlexoLocalization.localizedForKey("submit_documentation_for") + " " + docItem.getIdentifier();
+		setTitle(title);
+		getContentPane().setLayout(new BorderLayout());
 
-        JButton applyButton = new JButton(FlexoLocalization.localizedForKey("submit_documentation"));
-        applyButton.addActionListener(new ActionListener() {
-           @Override
-		public void actionPerformed(ActionEvent e) {
-               _versionToSubmit = _view.getDocResourceManager().getEditedVersion(docItem);
-               _view.getDocResourceManager().stopEditVersion(_view.getDocResourceManager().getEditedVersion(docItem));
-              dispose();
-           }
-        });
-        controlPanel.add(applyButton);
-        applyButton.setSelected(true);
+		setBackground(ColorCst.GUI_BACK_COLOR);
 
-        JButton cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel_submission"));
-        cancelButton.addActionListener(new ActionListener() {
-           @Override
-		public void actionPerformed(ActionEvent e) {
-               _view.getDocResourceManager().stopEditVersion(_view.getDocResourceManager().getEditedVersion(docItem));
-               dispose();
-           }
-        });
-        controlPanel.add(cancelButton);
- 
-        hideShowDetailsButton = new JButton(FlexoLocalization.localizedForKey("show_details"));
-        hideShowDetailsButton.addActionListener(new ActionListener() {
-           @Override
-		public void actionPerformed(ActionEvent e) {
-               if (_view.showDetails) {
-                   _view.hideDetails();
-                   hideShowDetailsButton.setText(FlexoLocalization.localizedForKey("show_details",hideShowDetailsButton));
-               }
-               else {
-                   setSize(1000,900);
-                   Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                   setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
-                  _view.showDetails();
-                   hideShowDetailsButton.setText(FlexoLocalization.localizedForKey("hide_details",hideShowDetailsButton));
-                   pack();
-                   repaint();
-               }
-            }
-        });
-        controlPanel.add(hideShowDetailsButton);
- 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
+		_view = new SubmitNewVersionView(docItem, language, editor);
+		_view.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        contentPanel.add(_view, BorderLayout.CENTER);
-        contentPanel.add(controlPanel, BorderLayout.SOUTH);
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
+		JButton applyButton = new JButton(FlexoLocalization.localizedForKey("submit_documentation"));
+		applyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_versionToSubmit = _view.getDocResourceManager().getEditedVersion(docItem);
+				_view.getDocResourceManager().stopEditVersion(_view.getDocResourceManager().getEditedVersion(docItem));
+				dispose();
+			}
+		});
+		controlPanel.add(applyButton);
+		applyButton.setSelected(true);
 
-        setModal(true);
-        validate();
-        
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
+		JButton cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel_submission"));
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_view.getDocResourceManager().stopEditVersion(_view.getDocResourceManager().getEditedVersion(docItem));
+				dispose();
+			}
+		});
+		controlPanel.add(cancelButton);
 
-        show();
-    }
-    
-    public DocItemVersion getVersionToSubmit() 
-    {
-        return _versionToSubmit;
-    }
+		hideShowDetailsButton = new JButton(FlexoLocalization.localizedForKey("show_details"));
+		hideShowDetailsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (_view.showDetails) {
+					_view.hideDetails();
+					hideShowDetailsButton.setText(FlexoLocalization.localizedForKey("show_details", hideShowDetailsButton));
+				} else {
+					setSize(1000, 900);
+					Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+					setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
+					_view.showDetails();
+					hideShowDetailsButton.setText(FlexoLocalization.localizedForKey("hide_details", hideShowDetailsButton));
+					pack();
+					repaint();
+				}
+			}
+		});
+		controlPanel.add(hideShowDetailsButton);
 
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout(new BorderLayout());
+
+		contentPanel.add(_view, BorderLayout.CENTER);
+		contentPanel.add(controlPanel, BorderLayout.SOUTH);
+
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+
+		setModal(true);
+		validate();
+
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
+
+		show();
+	}
+
+	public DocItemVersion getVersionToSubmit() {
+		return _versionToSubmit;
+	}
 
 }

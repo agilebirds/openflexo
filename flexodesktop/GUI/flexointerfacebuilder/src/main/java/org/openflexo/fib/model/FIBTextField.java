@@ -23,19 +23,22 @@ import java.lang.reflect.Type;
 
 public class FIBTextField extends FIBWidget {
 
-	//TODO: handle font
-    public boolean validateOnReturn = false;
-    public Integer columns;
-    public boolean passwd = false;
-    public String text = null;
- 
-    public FIBTextField()
-    {
+	// TODO: handle font
+	public boolean validateOnReturn = false;
+	public Integer columns;
+	public boolean passwd = false;
+	public String text = null;
+
+	public FIBTextField() {
 	}
-    
+
 	@Override
-	public Type getDefaultDataClass() 
-	{
+	protected String getBaseName() {
+		return "TextField";
+	}
+
+	@Override
+	public Type getDefaultDataClass() {
 		return String.class;
 	}
 

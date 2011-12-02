@@ -27,13 +27,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
-
 import org.openflexo.dm.view.DMEORepositoryView;
 import org.openflexo.dm.view.DMEORepositoryView.OpenEOModelComponent;
 import org.openflexo.foundation.FlexoException;
@@ -45,93 +38,92 @@ import org.openflexo.foundation.dm.eo.EOAccessException;
 import org.openflexo.foundation.dm.eo.EOModelAlreadyRegisteredException;
 import org.openflexo.foundation.dm.eo.InvalidEOModelFileException;
 import org.openflexo.foundation.dm.eo.UnresovedEntitiesException;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class ImportDMEOModelInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ImportDMEOModelInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(ImportDMEOModel.actionType,actionInitializer);
+	ImportDMEOModelInitializer(DMControllerActionInitializer actionInitializer) {
+		super(ImportDMEOModel.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<ImportDMEOModel> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ImportDMEOModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportDMEOModel>() {
-            @Override
-			public boolean run(ActionEvent e, ImportDMEOModel action)
-            {
-                File newEOModelFile = OpenEOModelComponent.getEOModelDirectory();
-                if (newEOModelFile != null) {
-                    if (logger.isLoggable(Level.INFO))
-                        logger.info("Imports EOModel: " + newEOModelFile.getAbsolutePath());
-                    action.setEOModelFile(newEOModelFile);
-                    return true;
-                }
-                return false;
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<ImportDMEOModel> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<ImportDMEOModel>() {
-            @Override
-			public boolean run(ActionEvent e, ImportDMEOModel action)
-            {
-                if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for ImportDMEOModel in DMEORepository");
-                    DMEORepositoryView repView = (DMEORepositoryView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    repView.getEoModelTable().selectObject(action.getNewDMEOModel());
-                }
-                return true;
-          }
-        };
-	}
-
-     @Override
- 	protected FlexoExceptionHandler<ImportDMEOModel> getDefaultExceptionHandler() 
- 	{
- 		return new FlexoExceptionHandler<ImportDMEOModel>() {
- 			@Override
-			public boolean handleException(FlexoException exception, ImportDMEOModel action) {
-                if (exception instanceof InvalidEOModelFileException) {
-                    FlexoController.showError(FlexoLocalization.localizedForKey("invalid_eo_model_file"));
-                    return true;
-                } else if (exception instanceof EOAccessException) {
-                    FlexoController.showError(exception.getMessage());
-                    return true;
-                } else if (exception instanceof EOModelAlreadyRegisteredException) {
-                    FlexoController.notify(FlexoLocalization.localizedForKey("eo_model_already_registered"));
-                    return true;
-                } else if (exception instanceof UnresovedEntitiesException) {
-                    StringBuilder sb = new StringBuilder();
-                    Iterator<String> i = ((UnresovedEntitiesException)exception).getMissingEntities().iterator();
-                    while (i.hasNext()) {
-                         sb.append("\n* ").append(i.next());
-                    }
-                    FlexoController.notify(FlexoLocalization.localizedForKey("the_following_entities_could_not_be_found:")+sb.toString());
-                    return true;
-                }
-                return false;
+			@Override
+			public boolean run(ActionEvent e, ImportDMEOModel action) {
+				File newEOModelFile = OpenEOModelComponent.getEOModelDirectory();
+				if (newEOModelFile != null) {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Imports EOModel: " + newEOModelFile.getAbsolutePath());
+					}
+					action.setEOModelFile(newEOModelFile);
+					return true;
+				}
+				return false;
 			}
-        };
- 	}
+		};
+	}
 
-  	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected FlexoActionFinalizer<ImportDMEOModel> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<ImportDMEOModel>() {
+			@Override
+			public boolean run(ActionEvent e, ImportDMEOModel action) {
+				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Finalizer for ImportDMEOModel in DMEORepository");
+					}
+					DMEORepositoryView repView = (DMEORepositoryView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					repView.getEoModelTable().selectObject(action.getNewDMEOModel());
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<ImportDMEOModel> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<ImportDMEOModel>() {
+			@Override
+			public boolean handleException(FlexoException exception, ImportDMEOModel action) {
+				if (exception instanceof InvalidEOModelFileException) {
+					FlexoController.showError(FlexoLocalization.localizedForKey("invalid_eo_model_file"));
+					return true;
+				} else if (exception instanceof EOAccessException) {
+					FlexoController.showError(exception.getMessage());
+					return true;
+				} else if (exception instanceof EOModelAlreadyRegisteredException) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("eo_model_already_registered"));
+					return true;
+				} else if (exception instanceof UnresovedEntitiesException) {
+					StringBuilder sb = new StringBuilder();
+					Iterator<String> i = ((UnresovedEntitiesException) exception).getMissingEntities().iterator();
+					while (i.hasNext()) {
+						sb.append("\n* ").append(i.next());
+					}
+					FlexoController.notify(FlexoLocalization.localizedForKey("the_following_entities_could_not_be_found:") + sb.toString());
+					return true;
+				}
+				return false;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.DM_EOMODEL_ICON;
 	}
- 
 
 }

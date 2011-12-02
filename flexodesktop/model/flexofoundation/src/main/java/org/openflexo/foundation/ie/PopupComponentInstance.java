@@ -27,77 +27,68 @@ import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class PopupComponentInstance extends ComponentInstance implements Serializable
-{
+public class PopupComponentInstance extends ComponentInstance implements Serializable {
 
-    public PopupComponentInstance(PopupComponentDefinition component, IEWOComponent container)
-    {
-        super(component, container);
-    }
+	public PopupComponentInstance(PopupComponentDefinition component, IEWOComponent container) {
+		super(component, container);
+	}
 
-    /**
-     * 
-     * @param component
-     * @param menu
-     * @deprecated Menu items should never reference directly a component
-     */
-    @Deprecated
-    public PopupComponentInstance(PopupComponentDefinition component, FlexoNavigationMenu menu)
-    {
-        super(component, menu);
-    }
+	/**
+	 * 
+	 * @param component
+	 * @param menu
+	 * @deprecated Menu items should never reference directly a component
+	 */
+	@Deprecated
+	public PopupComponentInstance(PopupComponentDefinition component, FlexoNavigationMenu menu) {
+		super(component, menu);
+	}
 
-    public PopupComponentInstance(FlexoComponentBuilder builder)
-    {
-        super(builder);
-    }
+	public PopupComponentInstance(FlexoComponentBuilder builder) {
+		super(builder);
+	}
 
-    public PopupComponentInstance(FlexoNavigationMenuBuilder builder)
-    {
-        super(builder);
-    }
+	public PopupComponentInstance(FlexoNavigationMenuBuilder builder) {
+		super(builder);
+	}
 
-    public PopupComponentDefinition getPopupComponentDefinition()
-    {
-        return (PopupComponentDefinition)getComponentDefinition();
-    }
+	public PopupComponentDefinition getPopupComponentDefinition() {
+		return (PopupComponentDefinition) getComponentDefinition();
+	}
 
-    /*
-     * public void update(FlexoObservable o, DataModification arg) { if(arg
-     * instanceof ComponentNameChanged){ _componentName =
-     * (String)((ComponentNameChanged)arg).newValue(); }
-     *  }
-     */
+	/*
+	 * public void update(FlexoObservable o, DataModification arg) { if(arg
+	 * instanceof ComponentNameChanged){ _componentName =
+	 * (String)((ComponentNameChanged)arg).newValue(); }
+	 *  }
+	 */
 
-    @Override
-    public String getFullyQualifiedName()
-    {
-        return "POPUP_COMPONENT_INSTANCE." + getComponentDefinition().getName();
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "POPUP_COMPONENT_INSTANCE." + getComponentDefinition().getName();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "popup_component_instance";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "popup_component_instance";
+	}
 
-    public String getParentName(){
-    	if(getXMLResourceData() instanceof IEWOComponent){
-    		return ((IEWOComponent)getXMLResourceData()).getName();
-    	} else if(getXMLResourceData() instanceof FlexoNavigationMenu){
-    		return "Menu";
-    	}
-    	return "Unknown !!!";
-    }
+	public String getParentName() {
+		if (getXMLResourceData() instanceof IEWOComponent) {
+			return ((IEWOComponent) getXMLResourceData()).getName();
+		} else if (getXMLResourceData() instanceof FlexoNavigationMenu) {
+			return "Menu";
+		}
+		return "Unknown !!!";
+	}
 
 	public String getContextIdentifier() {
 		return getParentName();

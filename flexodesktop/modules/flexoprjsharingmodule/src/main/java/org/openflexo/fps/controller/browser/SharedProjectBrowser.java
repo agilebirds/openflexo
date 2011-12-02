@@ -31,15 +31,13 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.fps.SharedProject;
 import org.openflexo.fps.controller.FPSController;
 
-
 /**
  * Browser for Code Generator module
  * 
  * @author sguerin
  * 
  */
-public class SharedProjectBrowser extends FPSBrowser implements FlexoObserver
-{
+public class SharedProjectBrowser extends FPSBrowser implements FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(SharedProjectBrowser.class.getPackage().getName());
 
@@ -53,30 +51,28 @@ public class SharedProjectBrowser extends FPSBrowser implements FlexoObserver
 	// ================================
 	// ==========================================================================
 
-	public SharedProjectBrowser(FPSController controller)
-	{
-		super(makeDefaultBrowserConfiguration(controller.getSharedProject()),controller);
+	public SharedProjectBrowser(FPSController controller) {
+		super(makeDefaultBrowserConfiguration(controller.getSharedProject()), controller);
 		update();
 	}
 
 	@Override
-	public void update(FlexoObservable o, DataModification arg)
-	{
-		if (logger.isLoggable(Level.FINE))
+	public void update(FlexoObservable o, DataModification arg) {
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CVSRepositoriesBrowser update");
+		}
 	}
 
-	public static BrowserConfiguration makeDefaultBrowserConfiguration(SharedProject project)
-	{
+	public static BrowserConfiguration makeDefaultBrowserConfiguration(SharedProject project) {
 		BrowserConfiguration returned = new SharedProjectBrowserConfiguration(project);
 		return returned;
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject() 
-	{
-		if (getController() != null)
+	public FlexoModelObject getDefaultRootObject() {
+		if (getController() != null) {
 			return getController().getSharedProject();
+		}
 		return null;
 	}
 
@@ -91,8 +87,7 @@ public class SharedProjectBrowser extends FPSBrowser implements FlexoObserver
 		return allFilesAndDirectoryFilter;
 	}
 
-	public void setAllFilesAndDirectoryFilter(
-			CustomBrowserFilter allFilesAndDirectoryFilter) {
+	public void setAllFilesAndDirectoryFilter(CustomBrowserFilter allFilesAndDirectoryFilter) {
 		this.allFilesAndDirectoryFilter = allFilesAndDirectoryFilter;
 	}
 

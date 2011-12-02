@@ -22,11 +22,10 @@ package org.openflexo.ie.view.controller;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-
 
 /**
  * Browser for WKF module
@@ -34,65 +33,57 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
  * @author sguerin
  * 
  */
-public class ComponentBrowser extends ProjectBrowser
-{
+public class ComponentBrowser extends ProjectBrowser {
 
-    protected static final Logger logger = Logger.getLogger(ComponentBrowser.class
-            .getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(ComponentBrowser.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    protected IEController _controller;
+	protected IEController _controller;
 
-    protected ComponentDefinition _currentComponent;
+	protected ComponentDefinition _currentComponent;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public ComponentBrowser(IEController controller)
-    {
-        super(controller.getEditor(), controller.getIESelectionManager());
-        _controller = controller;
-        update();
-    }
+	public ComponentBrowser(IEController controller) {
+		super(controller.getEditor(), controller.getIESelectionManager());
+		_controller = controller;
+		update();
+	}
 
-    @Override
-	public void configure()
-    {
-        setFilterStatus(BrowserElementType.REUSABLE_COMPONENT, BrowserFilterStatus.SHOW);
-        setFilterStatus(BrowserElementType.COMPONENT_FOLDER, BrowserFilterStatus.SHOW);
-        setFilterStatus(BrowserElementType.TAB_COMPONENT, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-        setFilterStatus(BrowserElementType.BLOC, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN,true);
-        setFilterStatus(BrowserElementType.LABEL, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-        setFilterStatus(BrowserElementType.STRING, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-        setFilterStatus(BrowserElementType.HYPERLINK, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-        setFilterStatus(BrowserElementType.DROPDOWN, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-        setFilterStatus(BrowserElementType.BUTTON, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-        setFilterStatus(BrowserElementType.TEXTFIELD, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-        setFilterStatus(BrowserElementType.TEXTAREA, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-    }
+	@Override
+	public void configure() {
+		setFilterStatus(BrowserElementType.REUSABLE_COMPONENT, BrowserFilterStatus.SHOW);
+		setFilterStatus(BrowserElementType.COMPONENT_FOLDER, BrowserFilterStatus.SHOW);
+		setFilterStatus(BrowserElementType.TAB_COMPONENT, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		setFilterStatus(BrowserElementType.BLOC, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN, true);
+		setFilterStatus(BrowserElementType.LABEL, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		setFilterStatus(BrowserElementType.STRING, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		setFilterStatus(BrowserElementType.HYPERLINK, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		setFilterStatus(BrowserElementType.DROPDOWN, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		setFilterStatus(BrowserElementType.BUTTON, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		setFilterStatus(BrowserElementType.TEXTFIELD, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		setFilterStatus(BrowserElementType.TEXTAREA, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+	}
 
-     @Override
-	public FlexoModelObject getDefaultRootObject()
-    {
-        return _currentComponent;
-    }
+	@Override
+	public FlexoModelObject getDefaultRootObject() {
+		return _currentComponent;
+	}
 
-    public ComponentDefinition getCurrentComponent()
-    {
-        return _currentComponent;
-    }
+	public ComponentDefinition getCurrentComponent() {
+		return _currentComponent;
+	}
 
-    public void setCurrentComponent(ComponentDefinition component)
-    {
-        _currentComponent = component;
-        update();
-    }
-
+	public void setCurrentComponent(ComponentDefinition component) {
+		_currentComponent = component;
+		update();
+	}
 
 }

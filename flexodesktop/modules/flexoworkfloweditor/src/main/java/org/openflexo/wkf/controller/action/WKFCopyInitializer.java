@@ -34,59 +34,49 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class WKFCopyInitializer extends ActionInitializer {
 
-    private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	WKFCopyInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(WKFCopy.actionType,actionInitializer);
+	WKFCopyInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(WKFCopy.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<WKFCopy> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<WKFCopy> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFCopy>() {
-            @Override
-			public boolean run(ActionEvent e, WKFCopy action)
-            {
-                logger.info("Copy in WKF");
-                return getModule().isActive();
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<WKFCopy> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<WKFCopy>() {
-            @Override
-			public boolean run(ActionEvent e, WKFCopy action)
-            {
-            	getControllerActionInitializer().getWKFSelectionManager().performSelectionCopy();
-                return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, WKFCopy action) {
+				logger.info("Copy in WKF");
+				return getModule().isActive();
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<WKFCopy> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<WKFCopy>() {
+			@Override
+			public boolean run(ActionEvent e, WKFCopy action) {
+				getControllerActionInitializer().getWKFSelectionManager().performSelectionCopy();
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.COPY_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_C, FlexoCst.META_MASK);
 	}
 
-	
 }

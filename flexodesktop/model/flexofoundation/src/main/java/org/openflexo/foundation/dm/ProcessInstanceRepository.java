@@ -31,155 +31,141 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Represents a logical group of objects representing WO components
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ProcessInstanceRepository extends DMRepository
-{
+public class ProcessInstanceRepository extends DMRepository {
 
-    private static final Logger logger = Logger.getLogger(ProcessInstanceRepository.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ProcessInstanceRepository.class.getPackage().getName());
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ProcessInstanceRepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ProcessInstanceRepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    private ProcessInstanceRepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Default constructor
+	 */
+	private ProcessInstanceRepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getInternalRepositoryFolder();
-    }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getInternalRepositoryFolder();
+	}
 
-   @Override
-public int getOrder()
-    {
-        return 12;
-    }
+	@Override
+	public int getOrder() {
+		return 12;
+	}
 
-    @Override
-	public String getName()
-    {
-        return "process_instance_repository";
-    }
+	@Override
+	public String getName() {
+		return "process_instance_repository";
+	}
 
-    @Override
-	public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
 
-    @Override
-	public void setName(String name)
-    {
-        // Not allowed
-    }
+	@Override
+	public void setName(String name) {
+		// Not allowed
+	}
 
-    /**
-     * Overrides getInspectorName
-     * @see org.openflexo.foundation.dm.DMRepository#getInspectorName()
-     */
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.DM.DM_RO_REPOSITORY_INSPECTOR;
-    }
+	/**
+	 * Overrides getInspectorName
+	 * 
+	 * @see org.openflexo.foundation.dm.DMRepository#getInspectorName()
+	 */
+	@Override
+	public String getInspectorName() {
+		return Inspectors.DM.DM_RO_REPOSITORY_INSPECTOR;
+	}
 
-    /**
-     * @param dmModel
-     * @return
-     */
-    public static ProcessInstanceRepository createNewProcessInstanceRepository(DMModel dmModel)
-    {
-        ProcessInstanceRepository newProcessInstanceRepository = new ProcessInstanceRepository(dmModel);
-        dmModel.setProcessInstanceRepository(newProcessInstanceRepository);
-        return newProcessInstanceRepository;
-    }
+	/**
+	 * @param dmModel
+	 * @return
+	 */
+	public static ProcessInstanceRepository createNewProcessInstanceRepository(DMModel dmModel) {
+		ProcessInstanceRepository newProcessInstanceRepository = new ProcessInstanceRepository(dmModel);
+		dmModel.setProcessInstanceRepository(newProcessInstanceRepository);
+		return newProcessInstanceRepository;
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getDMModel().getFullyQualifiedName() + ".PROCESSES";
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return getDMModel().getFullyQualifiedName() + ".PROCESSES";
+	}
 
-    @Override
-	public boolean isReadOnly()
-    {
-        return false;
-    }
+	@Override
+	public boolean isReadOnly() {
+		return false;
+	}
 
-    @Override
-	public boolean isDeletable()
-    {
-        return false;
-    }
+	@Override
+	public boolean isDeletable() {
+		return false;
+	}
 
-   public DMPackage getDefaultProcessInstancePackage()
-    {
-        return getDefaultPackage();
-    }
+	public DMPackage getDefaultProcessInstancePackage() {
+		return getDefaultPackage();
+	}
 
-    public ProcessDMEntity getProcessDMEntity(FlexoProcess process)
-    {
-        for (Enumeration en = getPackages().elements(); en.hasMoreElements();) {
-            DMPackage next = (DMPackage) en.nextElement();
-            DMEntity found = getDMEntity(next.getName(), process.getProcessInstanceEntityName());
-            if (found != null) {
-            	logger.info("Found process instance entity for process "+process.getName());
-                ProcessDMEntity returned = (ProcessDMEntity) found;
-                returned.setProcess(process);
-                returned.createParentProcessPropertyIfRequired();
-                // Check that name matches
-                if (!returned.getName().equals(process.getProcessInstanceEntityName())) {
-                	try {
+	public ProcessDMEntity getProcessDMEntity(FlexoProcess process) {
+		for (Enumeration en = getPackages().elements(); en.hasMoreElements();) {
+			DMPackage next = (DMPackage) en.nextElement();
+			DMEntity found = getDMEntity(next.getName(), process.getProcessInstanceEntityName());
+			if (found != null) {
+				logger.info("Found process instance entity for process " + process.getName());
+				ProcessDMEntity returned = (ProcessDMEntity) found;
+				returned.setProcess(process);
+				returned.createParentProcessPropertyIfRequired();
+				// Check that name matches
+				if (!returned.getName().equals(process.getProcessInstanceEntityName())) {
+					try {
 						returned.setName(process.getProcessInstanceEntityName());
 					} catch (InvalidNameException e) {
 						e.printStackTrace();
 					}
-                }
-                // Check that class name matches
-               if (!returned.getEntityClassName().equals(process.getProcessInstanceEntityName())) {
-                	try {
+				}
+				// Check that class name matches
+				if (!returned.getEntityClassName().equals(process.getProcessInstanceEntityName())) {
+					try {
 						returned.setEntityClassName(process.getProcessInstanceEntityName());
 					} catch (DuplicateClassNameException e) {
 						e.printStackTrace();
 					} catch (InvalidNameException e) {
 						e.printStackTrace();
 					}
-                }
-                DMType processInstanceType = DMType.makeResolvedDMType(getDMModel().getExecutionModelRepository().getProcessInstanceEntity());
-                if (returned.getParentType() == null
-                		|| !returned.getParentType().equals(processInstanceType)) {
-                	returned.setParentType(processInstanceType, true);
-                }
-                return returned;
-            }
-            else {
-               	logger.info("NOT Found process instance entity for process "+process.getName());
-            }
-        }
-        return null;
-    }
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return getName();
-    }
+				}
+				DMType processInstanceType = DMType.makeResolvedDMType(getDMModel().getExecutionModelRepository()
+						.getProcessInstanceEntity());
+				if (returned.getParentType() == null || !returned.getParentType().equals(processInstanceType)) {
+					returned.setParentType(processInstanceType, true);
+				}
+				return returned;
+			} else {
+				logger.info("NOT Found process instance entity for process " + process.getName());
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
 
 }

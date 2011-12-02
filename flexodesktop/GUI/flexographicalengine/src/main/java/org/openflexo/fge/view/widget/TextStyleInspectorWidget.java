@@ -31,94 +31,86 @@ import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.CustomWidget;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 
-
 @Deprecated
-public class TextStyleInspectorWidget extends CustomWidget<TextStyle>
-{
+public class TextStyleInspectorWidget extends CustomWidget<TextStyle> {
 
-    static final Logger logger = Logger.getLogger(TextStyleInspectorWidget.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(TextStyleInspectorWidget.class.getPackage().getName());
 
-    FIBTextStyleSelector _selector;
+	FIBTextStyleSelector _selector;
 
-    public TextStyleInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new FIBTextStyleSelector(null) {
-            @Override
-			public void setEditedObject(TextStyle aTextStyle)
-            {
-                super.setEditedObject(aTextStyle);
-                updateModelFromWidget();
-            }
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-           }
+	public TextStyleInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new FIBTextStyleSelector(null) {
+			@Override
+			public void setEditedObject(TextStyle aTextStyle) {
+				super.setEditedObject(aTextStyle);
+				updateModelFromWidget();
+			}
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Focus gained in " + getClass().getName());
+				}
+				super.focusGained(arg0);
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Focus lost in " + getClass().getName());
+				}
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-    	widgetUpdating = true;
-       _selector.setEditedObject(getObjectValue());
-        _selector.setRevertValue(getObjectValue());
-    	widgetUpdating = false;
-   }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		widgetUpdating = true;
+		_selector.setEditedObject(getObjectValue());
+		_selector.setRevertValue(getObjectValue());
+		widgetUpdating = false;
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-    	modelUpdating = true;
-        setObjectValue(_selector.getEditedObject());
-    	modelUpdating = false;
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		modelUpdating = true;
+		setObjectValue(_selector.getEditedObject());
+		modelUpdating = false;
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return TextStyle.class;
-    }
+	@Override
+	public Class getDefaultType() {
+		return TextStyle.class;
+	}
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
 
-    @Override
-	public boolean defaultShouldExpandHorizontally()
-    {
-    	return false;
-    }
- 
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
+
+	@Override
+	public boolean defaultShouldExpandHorizontally() {
+		return false;
+	}
 
 }

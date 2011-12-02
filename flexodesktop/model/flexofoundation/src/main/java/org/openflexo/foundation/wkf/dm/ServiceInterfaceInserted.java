@@ -27,17 +27,14 @@ import org.openflexo.foundation.wkf.ws.ServiceInterface;
  * @author dvanvyve
  * 
  */
-public class ServiceInterfaceInserted extends WKFDataModification
-{
+public class ServiceInterfaceInserted extends WKFDataModification {
 
-    public ServiceInterfaceInserted(ServiceInterface insertedInterface)
-    {
-        super(null, insertedInterface);
-    }
+	public ServiceInterfaceInserted(ServiceInterface insertedInterface) {
+		super(null, insertedInterface);
+	}
 
-    public ServiceInterface getInsertedServiceInterface()
-    {
-        return (ServiceInterface) newValue();
-    }
-    
+	public ServiceInterface getInsertedServiceInterface() {
+		return (ServiceInterface) newValue();
+	}
+
 }

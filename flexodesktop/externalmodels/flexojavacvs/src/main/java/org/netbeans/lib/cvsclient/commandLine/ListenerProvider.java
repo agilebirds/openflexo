@@ -25,14 +25,14 @@ import java.io.PrintStream;
 import org.netbeans.lib.cvsclient.event.CVSListener;
 
 /**
- * for commands created in commandLine.command, that don't want to have the BasicListener
- * attached to the created command, but rather a custom one.
- * @author  milos
+ * for commands created in commandLine.command, that don't want to have the BasicListener attached to the created command, but rather a
+ * custom one.
+ * 
+ * @author milos
  */
-public interface ListenerProvider
-{
-    /**
+public interface ListenerProvider {
+	/**
      *
      */
-    CVSListener createCVSListener(PrintStream stdout, PrintStream stderr);
+	CVSListener createCVSListener(PrintStream stdout, PrintStream stderr);
 }

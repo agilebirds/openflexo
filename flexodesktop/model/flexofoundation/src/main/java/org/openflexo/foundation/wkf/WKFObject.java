@@ -56,429 +56,395 @@ import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
- * A WKFObject instance represents an object (model in MVC paradigm) of a
- * process (or be the process itself). This is the root class for all objects of
- * WKF model.<br>
+ * A WKFObject instance represents an object (model in MVC paradigm) of a process (or be the process itself). This is the root class for all
+ * objects of WKF model.<br>
  * This class implements:
  * <ul>
- * <li> a levelled observer/observable scheme</li>
- * <li> link to parent process </li>
- * <li> a method allowing to retrieve all embedded WKFObject</li>
- * <li> methods used to perform validation </li>
+ * <li>a levelled observer/observable scheme</li>
+ * <li>link to parent process</li>
+ * <li>a method allowing to retrieve all embedded WKFObject</li>
+ * <li>methods used to perform validation</li>
  * </ul>
- *
+ * 
  * @author benoit, sylvain
  */
-public abstract class WKFObject extends RepresentableFlexoModelObject implements Validable, Serializable
-{
+public abstract class WKFObject extends RepresentableFlexoModelObject implements Validable, Serializable {
 
-    private static final Logger logger = Logger.getLogger(WKFObject.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WKFObject.class.getPackage().getName());
 
-    private FlexoProcess _process;
+	private FlexoProcess _process;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Should only be used by FlexoProcess
-     */
-    public WKFObject(FlexoProject project)
-    {
-        super(project);
-    }
+	/**
+	 * Should only be used by FlexoProcess
+	 */
+	public WKFObject(FlexoProject project) {
+		super(project);
+	}
 
-    /**
-     * Default constructor
-     */
-    public WKFObject(FlexoProcess process)
-    {
-        super(process!=null?process.getProject():null);
-       setProcess(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public WKFObject(FlexoProcess process) {
+		super(process != null ? process.getProject() : null);
+		setProcess(process);
+	}
 
-    // ==========================================================================
-    // ============================= ACCESSORS ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= ACCESSORS ================================
+	// ==========================================================================
 
-    /**
-     * Returns reference to the main object in which this XML-serializable
-     * object is contained relating to storing scheme: here it's the process
-     * itself
-     *
-     * @return the process this object is relating to
-     */
-    @Override
-    public XMLStorageResourceData getXMLResourceData()
-    {
-        return getProcess();
-    }
-    
-    public FlexoWorkflow getWorkflow() {
-    	if (getProject()!=null)
-    		return getProject().getFlexoWorkflow();
-    	else if (getProcess()!=null && getProcess()!=this)
-    		return getProcess().getWorkflow();
-    	return null;
-    }
+	/**
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * process itself
+	 * 
+	 * @return the process this object is relating to
+	 */
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return getProcess();
+	}
 
-    public FlexoProcess getProcess()
-    {
-        return _process;
-    }
+	public FlexoWorkflow getWorkflow() {
+		if (getProject() != null) {
+			return getProject().getFlexoWorkflow();
+		} else if (getProcess() != null && getProcess() != this) {
+			return getProcess().getWorkflow();
+		}
+		return null;
+	}
 
-    public void setProcess(FlexoProcess p)
-    {
-        _process = p;
-    }
+	public FlexoProcess getProcess() {
+		return _process;
+	}
 
-    @Override
-    public FlexoProject getProject()
-    {
-        if (getProcess() != null) {
-            return getProcess().getProject();
-        }
-        return null;
-    }
+	public void setProcess(FlexoProcess p) {
+		_process = p;
+	}
 
-    /**
-     * Return a Vector of all embedded WKFObjects (Note must include itself in
-     * this vector)
-     *
-     * @return a Vector of WKFObject instances
-     */
-    public abstract Vector<? extends WKFObject> getAllEmbeddedWKFObjects();
-    
-    public Vector<WKFObject> getAllRecursivelyEmbeddedWKFObjects()
-    {
-    	HashSet<WKFObject> returned = new HashSet<WKFObject>();
-    	processToAdditionOfEmbedded(this,returned);
-    	return new Vector<WKFObject>(returned);
-    }
+	@Override
+	public FlexoProject getProject() {
+		if (getProcess() != null) {
+			return getProcess().getProject();
+		}
+		return null;
+	}
 
-    private void processToAdditionOfEmbedded(WKFObject object, Collection<WKFObject> queue)
-    {
-        if (!queue.contains(object)) {
-            queue.add(object);
-        }
-        if (object.getAllEmbeddedWKFObjects() != null) {
-            Enumeration en = object.getAllEmbeddedWKFObjects().elements();
-            Object candidate = null;
-            while (en.hasMoreElements()) {
-                candidate = en.nextElement();
-                if (candidate==null){
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Object of class "+object.getClass().getName()+" returned IEObjects null in its method getEmbeddedIEObjects");
-                    continue;
-                }
-                if (!queue.contains(candidate)) {
-            		queue.add((WKFObject) candidate);
-            		processToAdditionOfEmbedded((WKFObject) candidate, queue);
-                }
-            }
-        }
+	/**
+	 * Return a Vector of all embedded WKFObjects (Note must include itself in this vector)
+	 * 
+	 * @return a Vector of WKFObject instances
+	 */
+	public abstract Vector<? extends WKFObject> getAllEmbeddedWKFObjects();
 
-    }
-    // ==========================================================================
-    // ========================= XML Serialization ============================
-    // ==========================================================================
+	public Vector<WKFObject> getAllRecursivelyEmbeddedWKFObjects() {
+		HashSet<WKFObject> returned = new HashSet<WKFObject>();
+		processToAdditionOfEmbedded(this, returned);
+		return new Vector<WKFObject>(returned);
+	}
 
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        if (getProcess()!=null)
-            return getProcess().getXMLMapping();
-        else if (getProject()!=null)
-            return getProject().getXmlMappings().getWKFMapping();
-        else
-            return new FlexoXMLMappings().getWKFMapping();
-    }
+	private void processToAdditionOfEmbedded(WKFObject object, Collection<WKFObject> queue) {
+		if (!queue.contains(object)) {
+			queue.add(object);
+		}
+		if (object.getAllEmbeddedWKFObjects() != null) {
+			Enumeration en = object.getAllEmbeddedWKFObjects().elements();
+			Object candidate = null;
+			while (en.hasMoreElements()) {
+				candidate = en.nextElement();
+				if (candidate == null) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Object of class " + object.getClass().getName()
+								+ " returned IEObjects null in its method getEmbeddedIEObjects");
+					}
+					continue;
+				}
+				if (!queue.contains(candidate)) {
+					queue.add((WKFObject) candidate);
+					processToAdditionOfEmbedded((WKFObject) candidate, queue);
+				}
+			}
+		}
 
-    // ==========================================================================
-    // ============================== KeyValueCoding
-    // ============================
-    // ==========================================================================
+	}
 
-    @Override
-    public Object objectForKey(String key)
-    {
-        return super.objectForKey(key);
-    }
+	// ==========================================================================
+	// ========================= XML Serialization ============================
+	// ==========================================================================
 
-    /**
-     * Overrides the default KV-coding implementation by sending notifications
-     * about modified attribute
-     *
-     * Overrides
-     *
-     * @see org.openflexo.kvc.KeyValueCoding#setObjectForKey(java.lang.Object,
-     *      java.lang.String)
-     * @see org.openflexo.kvc.KeyValueCoding#setObjectForKey(java.lang.Object,
-     *      java.lang.String)
-     */
-    @Override
-    public void setObjectForKey(Object object, String key)
-    {
-        Object oldValue = objectForKey(key);
-        super.setObjectForKey(object, key);
-        if (((oldValue != null) && (!oldValue.equals(object)))
-                || ((oldValue == null) && (object != null))) {
-            //logger.info("Obj: "+getClass().getName()+" property: "+key+" was "+oldValue+" is now "+object);
-            notifyModification(key, oldValue, object);
-        }
-    }
+	@Override
+	public XMLMapping getXMLMapping() {
+		if (getProcess() != null) {
+			return getProcess().getXMLMapping();
+		} else if (getProject() != null) {
+			return getProject().getXmlMappings().getWKFMapping();
+		} else {
+			return new FlexoXMLMappings().getWKFMapping();
+		}
+	}
 
-    @Override
-	public Class getTypeForKey(String key)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("getTypeForKey for " + key);
-        try {
-            return super.getTypeForKey(key);
-        } catch (InvalidObjectSpecificationException e) {
-            if (logger.isLoggable(Level.FINE))
-                logger.finer("OK, let the inspector to determine type of dynamic atttribute !");
-            return null;
-        }
-    }
+	// ==========================================================================
+	// ============================== KeyValueCoding
+	// ============================
+	// ==========================================================================
 
-    protected void notifyModification(String key, Object oldValue, Object newValue)
-    {
-        setChanged();
-        notifyObservers(new AttributeDataModification(key, oldValue, newValue));
+	@Override
+	public Object objectForKey(String key) {
+		return super.objectForKey(key);
+	}
 
-    }
+	/**
+	 * Overrides the default KV-coding implementation by sending notifications about modified attribute
+	 * 
+	 * Overrides
+	 * 
+	 * @see org.openflexo.kvc.KeyValueCoding#setObjectForKey(java.lang.Object, java.lang.String)
+	 * @see org.openflexo.kvc.KeyValueCoding#setObjectForKey(java.lang.Object, java.lang.String)
+	 */
+	@Override
+	public void setObjectForKey(Object object, String key) {
+		Object oldValue = objectForKey(key);
+		super.setObjectForKey(object, key);
+		if (((oldValue != null) && (!oldValue.equals(object))) || ((oldValue == null) && (object != null))) {
+			// logger.info("Obj: "+getClass().getName()+" property: "+key+" was "+oldValue+" is now "+object);
+			notifyModification(key, oldValue, object);
+		}
+	}
 
-    @Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-         Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-         returned.add(WKFCut.actionType);
-         returned.add(WKFCopy.actionType);
-         returned.add(WKFPaste.actionType);
-         returned.add(WKFDelete.actionType);
-         returned.add(WKFSelectAll.actionType);
-         return returned;
-    }
+	@Override
+	public Class getTypeForKey(String key) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.finer("getTypeForKey for " + key);
+		}
+		try {
+			return super.getTypeForKey(key);
+		} catch (InvalidObjectSpecificationException e) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.finer("OK, let the inspector to determine type of dynamic atttribute !");
+			}
+			return null;
+		}
+	}
 
+	protected void notifyModification(String key, Object oldValue, Object newValue) {
+		setChanged();
+		notifyObservers(new AttributeDataModification(key, oldValue, newValue));
 
-    // ===================================================================
-    // =========================== FlexoObserver =========================
-    // ===================================================================
+	}
 
-    @Override
-    public void delete()
-    {
-        super.delete();
-    }
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(WKFCut.actionType);
+		returned.add(WKFCopy.actionType);
+		returned.add(WKFPaste.actionType);
+		returned.add(WKFDelete.actionType);
+		returned.add(WKFSelectAll.actionType);
+		return returned;
+	}
 
-    // ==========================================================================
-    // ========================== Embedding implementation  =====================
-    // ==========================================================================
+	// ===================================================================
+	// =========================== FlexoObserver =========================
+	// ===================================================================
 
-    // TODO: we really need to rewrite all this contains/isContained implementation, since it's really
-    // not well organized, and has a lot of inconsistency. One of the both method shoud be final, and all cases
-    // handled in the other one
+	@Override
+	public void delete() {
+		super.delete();
+	}
 
-    public boolean isContainedIn(WKFObject obj)
-    {
-        //logger.warning ("Contains not IMPLEMENTED for "+getClass().getName()+" and "+obj.getClass().getName()+": default implementation returns true only if supplied object is the owner process: override in sub-classes !");
-        return (obj == getProcess());
-    }
+	// ==========================================================================
+	// ========================== Embedding implementation =====================
+	// ==========================================================================
 
-    public boolean contains(WKFObject obj)
-    {
-        return obj.isContainedIn(this);
-   }
+	// TODO: we really need to rewrite all this contains/isContained implementation, since it's really
+	// not well organized, and has a lot of inconsistency. One of the both method shoud be final, and all cases
+	// handled in the other one
 
+	public boolean isContainedIn(WKFObject obj) {
+		// logger.warning
+		// ("Contains not IMPLEMENTED for "+getClass().getName()+" and "+obj.getClass().getName()+": default implementation returns true only if supplied object is the owner process: override in sub-classes !");
+		return (obj == getProcess());
+	}
 
-    /**
-     * Purpose of this method is to compute a closed set embedding all supplied object
-     * using isContainedIn() / contains() methods
-     * @return
-     */
-    public static <T extends WKFObject> Vector<T> buildEnclosingSetOfObjects(Vector<T> someObjects)
-    {
-    	Vector<T> returned = new Vector<T>();
-     	if (someObjects != null) {
-    		for (T obj : someObjects) {
-    			boolean alreadyContained = false;
-    			for (T temp : returned) {
-    				if (obj.isContainedIn(temp)) alreadyContained = true;
-    			}
-    			if (!alreadyContained) {
-    				// Not already contained, add it
-    				// Before to do it, look if some other are to be removed
-    				Vector<T> removeThose = new Vector<T>();
-    				for (T temp : returned) {
-    					if (temp.isContainedIn(obj)) removeThose.add(temp);
-    				}
-    				returned.removeAll(removeThose);
-    				returned.add(obj);
-    			}
-    		}
-    	}
-    	return returned;
-    }
+	public boolean contains(WKFObject obj) {
+		return obj.isContainedIn(this);
+	}
 
-    // ==========================================================================
-    // ========================== Observable implementation  =====================
-    // ==========================================================================
+	/**
+	 * Purpose of this method is to compute a closed set embedding all supplied object using isContainedIn() / contains() methods
+	 * 
+	 * @return
+	 */
+	public static <T extends WKFObject> Vector<T> buildEnclosingSetOfObjects(Vector<T> someObjects) {
+		Vector<T> returned = new Vector<T>();
+		if (someObjects != null) {
+			for (T obj : someObjects) {
+				boolean alreadyContained = false;
+				for (T temp : returned) {
+					if (obj.isContainedIn(temp)) {
+						alreadyContained = true;
+					}
+				}
+				if (!alreadyContained) {
+					// Not already contained, add it
+					// Before to do it, look if some other are to be removed
+					Vector<T> removeThose = new Vector<T>();
+					for (T temp : returned) {
+						if (temp.isContainedIn(obj)) {
+							removeThose.add(temp);
+						}
+					}
+					returned.removeAll(removeThose);
+					returned.add(obj);
+				}
+			}
+		}
+		return returned;
+	}
 
-    public void notifyAttributeModification(String attributeName, Object oldValue, Object newValue)
-    {
-        setChanged();
-        notifyObservers(new WKFAttributeDataModification(attributeName, oldValue, newValue));
-    }
+	// ==========================================================================
+	// ========================== Observable implementation =====================
+	// ==========================================================================
 
-    public void forwardNotification(DataModification dataModification)
-    {
-        setChanged();
-        notifyObservers(dataModification);
-    }
+	public void notifyAttributeModification(String attributeName, Object oldValue, Object newValue) {
+		setChanged();
+		notifyObservers(new WKFAttributeDataModification(attributeName, oldValue, newValue));
+	}
 
-    // ==========================================================================
-    // ========================= Validable interface
-    // ============================
-    // ==========================================================================
+	public void forwardNotification(DataModification dataModification) {
+		setChanged();
+		notifyObservers(dataModification);
+	}
 
-    /**
-     * Return default validation model for this object
-     *
-     * @return
-     */
-    @Override
-	public ValidationModel getDefaultValidationModel()
-    {
-        if (getProcess() != null) {
-            if (getProcess().getProject() != null) {
-                return getProcess().getProject().getWKFValidationModel();
-            } else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Could not access to project !");
-            }
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Could not access to process !");
-        }
-        return null;
-    }
+	// ==========================================================================
+	// ========================= Validable interface
+	// ============================
+	// ==========================================================================
 
-    /**
-     * Returns a flag indicating if this object is valid according to default
-     * validation model
-     *
-     * @return boolean
-     */
-    @Override
-	public boolean isValid()
-    {
-        return isValid(getDefaultValidationModel());
-    }
+	/**
+	 * Return default validation model for this object
+	 * 
+	 * @return
+	 */
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		if (getProcess() != null) {
+			if (getProcess().getProject() != null) {
+				return getProcess().getProject().getWKFValidationModel();
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not access to project !");
+				}
+			}
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not access to process !");
+			}
+		}
+		return null;
+	}
 
-    /**
-     * Returns a flag indicating if this object is valid according to specified
-     * validation model
-     *
-     * @return boolean
-     */
-    @Override
-	public boolean isValid(ValidationModel validationModel)
-    {
-        return validationModel.isValid(this);
-    }
+	/**
+	 * Returns a flag indicating if this object is valid according to default validation model
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isValid() {
+		return isValid(getDefaultValidationModel());
+	}
 
-    /**
-     * Validates this object by building new ValidationReport object Default
-     * validation model is used to perform this validation.
-     */
-    @Override
-	public ValidationReport validate()
-    {
-        return validate(getDefaultValidationModel());
-    }
+	/**
+	 * Returns a flag indicating if this object is valid according to specified validation model
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isValid(ValidationModel validationModel) {
+		return validationModel.isValid(this);
+	}
 
-    /**
-     * Validates this object by building new ValidationReport object Supplied
-     * validation model is used to perform this validation.
-     */
-    @Override
-	public ValidationReport validate(ValidationModel validationModel)
-    {
-        return validationModel.validate(this);
-    }
+	/**
+	 * Validates this object by building new ValidationReport object Default validation model is used to perform this validation.
+	 */
+	@Override
+	public ValidationReport validate() {
+		return validate(getDefaultValidationModel());
+	}
 
-    /**
-     * Validates this object by appending eventual issues to supplied
-     * ValidationReport. Default validation model is used to perform this
-     * validation.
-     *
-     * @param report,
-     *            a ValidationReport object on which found issues are appened
-     */
-    @Override
-	public void validate(ValidationReport report)
-    {
-        validate(report, getDefaultValidationModel());
-    }
+	/**
+	 * Validates this object by building new ValidationReport object Supplied validation model is used to perform this validation.
+	 */
+	@Override
+	public ValidationReport validate(ValidationModel validationModel) {
+		return validationModel.validate(this);
+	}
 
-    /**
-     * Validates this object by appending eventual issues to supplied
-     * ValidationReport. Supplied validation model is used to perform this
-     * validation.
-     *
-     * @param report,
-     *            a ValidationReport object on which found issues are appened
-     */
-    @Override
-	public void validate(ValidationReport report, ValidationModel validationModel)
-    {
-        validationModel.validate(this, report);
-    }
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	@Override
+	public void validate(ValidationReport report) {
+		validate(report, getDefaultValidationModel());
+	}
 
-    /**
-     * Return a vector of all embedded objects on which the validation will be
-     * performed
-     *
-     * @return a Vector of Validable objects
-     */
-    @Override
-	public Vector<Validable> getAllEmbeddedValidableObjects()
-    {
-        return new Vector<Validable>(getAllEmbeddedWKFObjects());
-    }
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	@Override
+	public void validate(ValidationReport report, ValidationModel validationModel) {
+		validationModel.validate(this, report);
+	}
 
-    /**
-     * Returns a vector of all objects that will be deleted if you call delete on this object. If no other object are deleted, then the method should return EMPTY_VECTOR
-     * @return
-     */
-    public abstract Vector<? extends WKFObject> getAllEmbeddedDeleted();
-    
-    
-    // ==========================================================================
-    // ============================= Validation
-    // =================================
-    // ==========================================================================
+	/**
+	 * Return a vector of all embedded objects on which the validation will be performed
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	@Override
+	public Vector<Validable> getAllEmbeddedValidableObjects() {
+		return new Vector<Validable>(getAllEmbeddedWKFObjects());
+	}
 
-    public static class WKFObjectMustReferToAProcess extends ValidationRule
-    {
-        public WKFObjectMustReferToAProcess()
-        {
-            super(WKFObject.class, "object_must_refer_to_a_process");
-        }
+	/**
+	 * Returns a vector of all objects that will be deleted if you call delete on this object. If no other object are deleted, then the
+	 * method should return EMPTY_VECTOR
+	 * 
+	 * @return
+	 */
+	public abstract Vector<? extends WKFObject> getAllEmbeddedDeleted();
 
-        @Override
-        public ValidationIssue applyValidation(final Validable object)
-        {
-            final WKFObject wkfObject = (WKFObject) object;
-            if (wkfObject.getProcess() == null) {
-                return new ValidationError(this, object, "internal_consistency_error_object_does_not_refer_to_a_process");
-            }
-            return null;
-        }
-    }
+	// ==========================================================================
+	// ============================= Validation
+	// =================================
+	// ==========================================================================
+
+	public static class WKFObjectMustReferToAProcess extends ValidationRule {
+		public WKFObjectMustReferToAProcess() {
+			super(WKFObject.class, "object_must_refer_to_a_process");
+		}
+
+		@Override
+		public ValidationIssue applyValidation(final Validable object) {
+			final WKFObject wkfObject = (WKFObject) object;
+			if (wkfObject.getProcess() == null) {
+				return new ValidationError(this, object, "internal_consistency_error_object_does_not_refer_to_a_process");
+			}
+			return null;
+		}
+	}
 
 }

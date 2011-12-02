@@ -36,181 +36,158 @@ import org.openflexo.foundation.xml.FlexoWSLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.logging.FlexoLogger;
 
-public class ExternalWSService extends WSService implements FlexoObserver, InspectableObject
-	{
+public class ExternalWSService extends WSService implements FlexoObserver, InspectableObject {
 
+	private static final Logger logger = FlexoLogger.getLogger(ExternalWSService.class.getPackage().getName());
 
-	
-	 private static final Logger logger = FlexoLogger.getLogger(ExternalWSService.class.getPackage()
-	            .getName());
+	public ExternalWSService(FlexoWSLibraryBuilder builder) {
+		this(builder.wsLibrary);
+		initializeDeserialization(builder);
+	}
 
-
-	    
-	    
-
-	    public ExternalWSService(FlexoWSLibraryBuilder builder) {
-	        this(builder.wsLibrary);
-	        initializeDeserialization(builder);
-	    }
-	    
-	
-
-	    /**
+	/**
 	     * 
 	     */
-	    public ExternalWSService(FlexoWSLibrary wsLib)
-	    {
-	        super(wsLib);
-	        
-	    }
+	public ExternalWSService(FlexoWSLibrary wsLib) {
+		super(wsLib);
 
+	}
 
-	   
-	    
-	    /**
-	     * Overrides getFullyQualifiedName
-	     * 
-	     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-	     */
-	    @Override
-		public String getFullyQualifiedName()
-	    {
-	        return "EXT_WSSERVICE_"+getName();//+"_"+getProject().getProjectName();
-	    }
- 
-	
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "EXT_WSSERVICE_" + getName();// +"_"+getProject().getProjectName();
+	}
 
-	    public static Logger getLogger()
-	    {
-	        return logger;
-	    }
+	public static Logger getLogger() {
+		return logger;
+	}
 
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector returned = super.getSpecificActionListForThatClass();
+		returned.add(CreateNewWebService.actionType);
+		return returned;
+	}
 
-	    
-	    @Override
-		protected Vector getSpecificActionListForThatClass()
-	    {
-	         Vector returned = super.getSpecificActionListForThatClass();
-	         returned.add(CreateNewWebService.actionType);
-	         return returned;
-	    }
-	    
-	    /**
-	     * Overrides update
-	     * 
-	     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-	     *      org.openflexo.foundation.DataModification)
-	     */
-	    @Override
-		public void update(FlexoObservable observable, DataModification dataModification)
-	    {
-	    	//fucking things to do.
-	    	/*
-	        if (dataModification instanceof LanguageRemoved) {
-	            Language lg = (Language) ((LanguageRemoved) dataModification).oldValue();
-	            Enumeration en = getKeys().elements();
-	            while (en.hasMoreElements()) {
-	                Key key = (Key) en.nextElement();
-	                values.remove(lg.getName() + "." + key.getName());
-	            }
-	            getValueList().setChanged();
-	            getValueList().notifyObservers(dataModification);
-	        } else if (dataModification instanceof LanguageAdded) {
-	            Language lg = (Language) ((LanguageAdded) dataModification).newValue();
-	            Enumeration en = keys.elements();
-	            while (en.hasMoreElements()) {
-	                Key key = (Key) en.nextElement();
-	                Value v = new Value(getDkvModel(), key, lg);
-	                values.put(v.getFullyQualifiedName(), v);
-	            }
-	            getValueList().setChanged();
-	            getValueList().notifyObservers(dataModification);
-	        } else if (dataModification instanceof DKVDataModification && ((DKVDataModification)dataModification).propertyName().equals("value")) {
-	            setChanged();
-	            notifyObservers(dataModification);
-	        }
-	        */
-	    }
-	    
-	    /**
-	     * Overrides getInspectorName
-	     * 
-	     * @see org.openflexo.inspector.InspectableObject#getInspectorName()
-	     */
-	    @Override
-		public String getInspectorName()
-	    {
-	        return Inspectors.WSE.WSEXTERNALSERVICE_INSPECTOR;
-	    }
-	    
-	    @Override
-		public void delete(){
-	    		if (logger.isLoggable(Level.FINE)) logger.fine("delete: externalWSGroup "+getName());
-	        Vector processesToDelete = new Vector();
-	        processesToDelete.addAll(getWSPortTypes());
-	        for (Enumeration en = processesToDelete.elements(); en.hasMoreElements();) {
-	            WSPortType next = (WSPortType) en.nextElement();
-	    		
-	    			//Delete only deletes WSObjects by default.
-	    			//It is the responsibility of the WSService to decide if it should delete also the
-	    			//real FlexoProcess.
-	            
-	            // in some case, the FlexoProcess might have been deleted.
-	            // so we check if it is not the case.
-	            if(next.getFlexoProcess()!=null) next.getFlexoProcess().delete();
-	            next.delete();
-	        }
-	        
-	        Vector repositoriesToDelete = new Vector();
-	        repositoriesToDelete.addAll(getWSRepositories());
-	        for (Enumeration en = repositoriesToDelete.elements(); en.hasMoreElements();) {
-	        	
-	            WSRepository next = (WSRepository) en.nextElement();    
-	            //Delete only deletes WSObjects by default.
-	    			//It is the responsibility of the WSService to decide if it should delete also the
-	    			//real DataRepository.
-	    			next.getWSDLRepository().delete();
-	            
-	 
-	        }
-	        
-	        //FileUtils.recursiveDeleteFile(getWSDLFile().getFile());
-	        
-	        
-	        getWSLibrary().removeFromExternalWSServices(this);
-	        super.delete();
-	        setChanged();
-	        notifyObservers(new ExternalWSServiceRemoved(this));
-	        deleteObservers();
-	    }
-	    
-	       // ==========================================================================
-        // ======================== TreeNode implementation
-        // =========================
-        // ==========================================================================
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// fucking things to do.
+		/*
+		if (dataModification instanceof LanguageRemoved) {
+		    Language lg = (Language) ((LanguageRemoved) dataModification).oldValue();
+		    Enumeration en = getKeys().elements();
+		    while (en.hasMoreElements()) {
+		        Key key = (Key) en.nextElement();
+		        values.remove(lg.getName() + "." + key.getName());
+		    }
+		    getValueList().setChanged();
+		    getValueList().notifyObservers(dataModification);
+		} else if (dataModification instanceof LanguageAdded) {
+		    Language lg = (Language) ((LanguageAdded) dataModification).newValue();
+		    Enumeration en = keys.elements();
+		    while (en.hasMoreElements()) {
+		        Key key = (Key) en.nextElement();
+		        Value v = new Value(getDkvModel(), key, lg);
+		        values.put(v.getFullyQualifiedName(), v);
+		    }
+		    getValueList().setChanged();
+		    getValueList().notifyObservers(dataModification);
+		} else if (dataModification instanceof DKVDataModification && ((DKVDataModification)dataModification).propertyName().equals("value")) {
+		    setChanged();
+		    notifyObservers(dataModification);
+		}
+		*/
+	}
 
-        @Override
-		public TreeNode getParent()
-        {
-            return getWSLibrary().getExternalWSFolder();
-        }
+	/**
+	 * Overrides getInspectorName
+	 * 
+	 * @see org.openflexo.inspector.InspectableObject#getInspectorName()
+	 */
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WSE.WSEXTERNALSERVICE_INSPECTOR;
+	}
 
-        @Override
-		public boolean getAllowsChildren()
-        {
-            return true;
-        }
-        
-        @Override
-		public Vector getOrderedChildren(){
-        		Vector a = new Vector();
-        		a.add(getWSPortTypeFolder());
-        		a.add(getWSRepositoryFolder());
-        		return a;
-        }
-        
-        @Override
-		public String getClassNameKey() {
-        	return "external_ws_service";
-        }
+	@Override
+	public void delete() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("delete: externalWSGroup " + getName());
+		}
+		Vector processesToDelete = new Vector();
+		processesToDelete.addAll(getWSPortTypes());
+		for (Enumeration en = processesToDelete.elements(); en.hasMoreElements();) {
+			WSPortType next = (WSPortType) en.nextElement();
+
+			// Delete only deletes WSObjects by default.
+			// It is the responsibility of the WSService to decide if it should delete also the
+			// real FlexoProcess.
+
+			// in some case, the FlexoProcess might have been deleted.
+			// so we check if it is not the case.
+			if (next.getFlexoProcess() != null) {
+				next.getFlexoProcess().delete();
+			}
+			next.delete();
+		}
+
+		Vector repositoriesToDelete = new Vector();
+		repositoriesToDelete.addAll(getWSRepositories());
+		for (Enumeration en = repositoriesToDelete.elements(); en.hasMoreElements();) {
+
+			WSRepository next = (WSRepository) en.nextElement();
+			// Delete only deletes WSObjects by default.
+			// It is the responsibility of the WSService to decide if it should delete also the
+			// real DataRepository.
+			next.getWSDLRepository().delete();
+
+		}
+
+		// FileUtils.recursiveDeleteFile(getWSDLFile().getFile());
+
+		getWSLibrary().removeFromExternalWSServices(this);
+		super.delete();
+		setChanged();
+		notifyObservers(new ExternalWSServiceRemoved(this));
+		deleteObservers();
+	}
+
+	// ==========================================================================
+	// ======================== TreeNode implementation
+	// =========================
+	// ==========================================================================
+
+	@Override
+	public TreeNode getParent() {
+		return getWSLibrary().getExternalWSFolder();
+	}
+
+	@Override
+	public boolean getAllowsChildren() {
+		return true;
+	}
+
+	@Override
+	public Vector getOrderedChildren() {
+		Vector a = new Vector();
+		a.add(getWSPortTypeFolder());
+		a.add(getWSRepositoryFolder());
+		return a;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "external_ws_service";
+	}
 }

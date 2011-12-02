@@ -26,46 +26,41 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.fps.FPSCst;
 import org.openflexo.fps.controller.FPSController;
 
-
 /**
  * Represents the view for the browser of this module
  * 
  * @author yourname
  * 
  */
-public class CVSRepositoryBrowserView extends BrowserView
-{
+public class CVSRepositoryBrowserView extends BrowserView {
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    protected FPSController _controller;
+	protected FPSController _controller;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public CVSRepositoryBrowserView(FPSController controller)
-    {
-        super(controller.getCVSRepositoriesBrowser(), controller.getKeyEventListener(), controller.getEditor());
-        _controller = controller;
-        setMinimumSize(new Dimension(FPSCst.MINIMUM_BROWSER_VIEW_WIDTH, FPSCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-        setPreferredSize(new Dimension(FPSCst.PREFERRED_BROWSER_VIEW_WIDTH, FPSCst.PREFERRED_BROWSER_VIEW_HEIGHT));
-    }
+	public CVSRepositoryBrowserView(FPSController controller) {
+		super(controller.getCVSRepositoriesBrowser(), controller.getKeyEventListener(), controller.getEditor());
+		_controller = controller;
+		setMinimumSize(new Dimension(FPSCst.MINIMUM_BROWSER_VIEW_WIDTH, FPSCst.MINIMUM_BROWSER_VIEW_HEIGHT));
+		setPreferredSize(new Dimension(FPSCst.PREFERRED_BROWSER_VIEW_WIDTH, FPSCst.PREFERRED_BROWSER_VIEW_HEIGHT));
+	}
 
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-    }
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+	}
 
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-        // Try to display object in view
-        _controller.selectAndFocusObject(object);
-    }
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		// Try to display object in view
+		_controller.selectAndFocusObject(object);
+	}
 
 }

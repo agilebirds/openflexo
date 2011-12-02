@@ -19,49 +19,43 @@
  */
 package org.openflexo.components.browser.ontology;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing the calc library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class CalcLibraryElement extends BrowserElement
-{
+public class CalcLibraryElement extends BrowserElement {
 
-    protected CalcLibraryElement(ViewPointLibrary library, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(library, BrowserElementType.CALC_LIBRARY, browser, parent);
-    }
+	protected CalcLibraryElement(ViewPointLibrary library, ProjectBrowser browser, BrowserElement parent) {
+		super(library, BrowserElementType.CALC_LIBRARY, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-      	for (ViewPointFolder subFolder : getCalcLibrary().getRootFolder().getChildren()) {
-       		addToChilds(subFolder);
-       	}
-       	for (ViewPoint calc : getCalcLibrary().getRootFolder().getViewPoints()) {
-       		addToChilds(calc);
-       	}
-    }
+	@Override
+	protected void buildChildrenVector() {
+		for (ViewPointFolder subFolder : getCalcLibrary().getRootFolder().getChildren()) {
+			addToChilds(subFolder);
+		}
+		for (ViewPoint calc : getCalcLibrary().getRootFolder().getViewPoints()) {
+			addToChilds(calc);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return FlexoLocalization.localizedForKey("view_point_library");
-    }
+	@Override
+	public String getName() {
+		return FlexoLocalization.localizedForKey("view_point_library");
+	}
 
-    protected ViewPointLibrary getCalcLibrary()
-    {
-        return (ViewPointLibrary) getObject();
-    }
+	protected ViewPointLibrary getCalcLibrary() {
+		return (ViewPointLibrary) getObject();
+	}
 
 }

@@ -24,5 +24,6 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 public interface ITableRowView {
 
 	public int getIndex();
+
 	public IEWidget getModel();
 }

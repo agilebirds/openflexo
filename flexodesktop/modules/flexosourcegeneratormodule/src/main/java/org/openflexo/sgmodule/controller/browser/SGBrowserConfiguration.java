@@ -25,9 +25,9 @@ import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.BrowserElementType;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFolder;
@@ -47,13 +47,12 @@ import org.openflexo.foundation.sg.SGTemplates;
 import org.openflexo.foundation.sg.SourceRepository;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.sgmodule.SGModule;
 import org.openflexo.sgmodule.TechnologyModuleGUIFactory;
-
 
 class SGBrowserConfiguration implements BrowserConfiguration {
 
@@ -137,7 +136,7 @@ class SGBrowserConfiguration implements BrowserConfiguration {
 		});
 		browser.addToCustomFilters(browser.getNeedsGenerationFilter());
 
-		browser.setGenerationErrorFilter(new CGFileFilter("generation_errors", CGIconLibrary.UNFIXABLE_ERROR_ICON) {
+		browser.setGenerationErrorFilter(new CGFileFilter("generation_errors", IconLibrary.UNFIXABLE_ERROR_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.getGenerationStatus() == GenerationStatus.GenerationError;
@@ -177,7 +176,7 @@ class SGBrowserConfiguration implements BrowserConfiguration {
 		});
 		browser.addToCustomFilters(browser.getNeedsReinjectingFilter());
 
-		browser.setOtherFilesFilter(new CGFileFilter("other_files", CGIconLibrary.UNFIXABLE_WARNING_ICON) {
+		browser.setOtherFilesFilter(new CGFileFilter("other_files", IconLibrary.UNFIXABLE_WARNING_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.getGenerationStatus().isAbnormal();
@@ -235,11 +234,12 @@ class SGBrowserConfiguration implements BrowserConfiguration {
 			} else if (object instanceof ImplementationModel) {
 				return new ImplementationModelElement((ImplementationModel) object, browser, parent);
 			} else if (object instanceof TechnologyModelObject) {
-				
-				TechnologyModuleGUIFactory technologyModuleGUIFactory = SGModule.getTechnologyModuleGUIFactory((((TechnologyModelObject) object).getTechnologyModuleImplementation()).getClass());
-				if (technologyModuleGUIFactory != null)
-				{
-					TechnologyModuleBrowserElement<?> element = technologyModuleGUIFactory.createBrowserElement((TechnologyModelObject) object, browser, parent);
+
+				TechnologyModuleGUIFactory technologyModuleGUIFactory = SGModule
+						.getTechnologyModuleGUIFactory((((TechnologyModelObject) object).getTechnologyModuleImplementation()).getClass());
+				if (technologyModuleGUIFactory != null) {
+					TechnologyModuleBrowserElement<?> element = technologyModuleGUIFactory.createBrowserElement(
+							(TechnologyModelObject) object, browser, parent);
 					if (element != null) {
 						return element;
 					}

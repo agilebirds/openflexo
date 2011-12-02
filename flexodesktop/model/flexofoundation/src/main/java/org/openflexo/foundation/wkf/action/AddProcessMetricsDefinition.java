@@ -28,43 +28,36 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
 
-
 public class AddProcessMetricsDefinition extends AddMetricsDefinition {
 
-	public static FlexoActionType<AddMetricsDefinition,FlexoWorkflow,WorkflowModelObject>  actionType 
-    = new FlexoActionType<AddMetricsDefinition,FlexoWorkflow,WorkflowModelObject> (
-    		"add_process_metrics_definition",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.newMenuGroup1,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> actionType = new FlexoActionType<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject>(
+			"add_process_metrics_definition", FlexoActionType.newMenu, FlexoActionType.newMenuGroup1, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddMetricsDefinition makeNewAction(FlexoWorkflow focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddProcessMetricsDefinition(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddMetricsDefinition makeNewAction(FlexoWorkflow focusedObject, Vector<WorkflowModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new AddProcessMetricsDefinition(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoWorkflow object, Vector<WorkflowModelObject> globalSelection) 
-        {
-            return false;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoWorkflow object, Vector<WorkflowModelObject> globalSelection) {
+			return false;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoWorkflow object, Vector<WorkflowModelObject> globalSelection) 
-        {
-            return object!=null;
-        }
-                
-    };
-	
-    static {
-    	FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
-    }
-    
+		@Override
+		protected boolean isEnabledForSelection(FlexoWorkflow object, Vector<WorkflowModelObject> globalSelection) {
+			return object != null;
+		}
+
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
+	}
+
 	protected AddProcessMetricsDefinition(FlexoWorkflow focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

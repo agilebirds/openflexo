@@ -22,7 +22,6 @@ package org.openflexo.foundation.exec;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.antar.Conditional;
 import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
@@ -37,62 +36,56 @@ public class OperatorIFExecution extends OperatorNodeExecution {
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(OperatorIFExecution.class.getPackage().getName());
 
-	protected OperatorIFExecution(IFOperator operatorNode)
-	{
+	protected OperatorIFExecution(IFOperator operatorNode) {
 		super(operatorNode);
 	}
-	
 
 	@Override
-	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException
-	{
-		if (getOperatorNode().getConditionPrimitive() == null) 
-			throw new InvalidModelException("Operator IF "+getOperatorNode().getName()+" doesn't define any condition primitive");
-		
+	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
+		if (getOperatorNode().getConditionPrimitive() == null) {
+			throw new InvalidModelException("Operator IF " + getOperatorNode().getName() + " doesn't define any condition primitive");
+		}
+
 		Expression condition = makeCondition(getOperatorNode().getConditionPrimitive());
 
 		Vector<ControlGraph> trueEdgeStatements = new Vector<ControlGraph>();
 		Vector<ControlGraph> falseEdgeStatements = new Vector<ControlGraph>();
-		
+
 		for (FlexoPostCondition<?, ?> edge : getOperatorNode().getOutgoingPostConditions()) {
 			if (edge instanceof ExternalMessageInEdge) {
 				if (edge.isPositiveEvaluation()) {
-					trueEdgeStatements.add(SendMessage.sendMessage((ExternalMessageInEdge)edge,interprocedural));
-				}
-				else {
-					falseEdgeStatements.add(SendMessage.sendMessage((ExternalMessageInEdge)edge,interprocedural));
+					trueEdgeStatements.add(SendMessage.sendMessage((ExternalMessageInEdge) edge, interprocedural));
+				} else {
+					falseEdgeStatements.add(SendMessage.sendMessage((ExternalMessageInEdge) edge, interprocedural));
 				}
 			}
 		}
-		
+
 		for (FlexoPostCondition<?, ?> edge : getOperatorNode().getOutgoingPostConditions()) {
 			if (edge.isPositiveEvaluation()) {
-				trueEdgeStatements.add(SendToken.sendToken(edge,interprocedural));
-			}
-			else {
-				falseEdgeStatements.add(SendToken.sendToken(edge,interprocedural));
+				trueEdgeStatements.add(SendToken.sendToken(edge, interprocedural));
+			} else {
+				falseEdgeStatements.add(SendToken.sendToken(edge, interprocedural));
 			}
 		}
-		
+
 		ControlGraph trueStatement = makeSequentialControlGraph(trueEdgeStatements);
-		if (trueStatement instanceof Nop && !trueStatement.hasComment()) trueStatement.setInlineComment("nothing to do when condition is true");
-		
+		if (trueStatement instanceof Nop && !trueStatement.hasComment()) {
+			trueStatement.setInlineComment("nothing to do when condition is true");
+		}
+
 		ControlGraph falseStatement = makeSequentialControlGraph(falseEdgeStatements);
-		if (falseStatement instanceof Nop && !trueStatement.hasComment()) falseStatement.setInlineComment("nothing to do when condition is false");
-		
-		return new Conditional(
-				condition,
-				trueStatement,
-				falseStatement,
-				"Evaluate operator IF named "+getOperatorNode().getName());
+		if (falseStatement instanceof Nop && !trueStatement.hasComment()) {
+			falseStatement.setInlineComment("nothing to do when condition is false");
+		}
+
+		return new Conditional(condition, trueStatement, falseStatement, "Evaluate operator IF named " + getOperatorNode().getName());
 
 	}
 
 	@Override
-	public IFOperator getOperatorNode() 
-	{
-		return (IFOperator)super.getOperatorNode();
+	public IFOperator getOperatorNode() {
+		return (IFOperator) super.getOperatorNode();
 	}
-
 
 }

@@ -27,71 +27,61 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
- * Represents a WOComponent (reusable component generally embedded in a
- * IEOperationComponent or a IEMonitoring Screen) representing a perspective to
- * monitor a FlexoProcess
+ * Represents a WOComponent (reusable component generally embedded in a IEOperationComponent or a IEMonitoring Screen) representing a
+ * perspective to monitor a FlexoProcess
  * 
  * @author sguerin
  * 
  */
-public final class IEMonitoringComponent extends IEPartialComponent
-{
+public final class IEMonitoringComponent extends IEPartialComponent {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(IEMonitoringComponent.class.getPackage().getName());
 
-    protected FlexoProcess monitoredProcess;
+	protected FlexoProcess monitoredProcess;
 
-    public IEMonitoringComponent(FlexoComponentBuilder builder)
-    {
-        super(builder);
-        initializeDeserialization(builder);
-    }
+	public IEMonitoringComponent(FlexoComponentBuilder builder) {
+		super(builder);
+		initializeDeserialization(builder);
+	}
 
-    public IEMonitoringComponent(MonitoringComponentDefinition def, FlexoProject project)
-    {
-        super(def, project);
-    }
-    
-    public FlexoProcess getMonitoredProcess()
-    {
-        return ((MonitoringComponentDefinition)getComponentDefinition()).getProcess();
-    }
+	public IEMonitoringComponent(MonitoringComponentDefinition def, FlexoProject project) {
+		super(def, project);
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return "MonitoringComponent.inspector";
-    }
+	public FlexoProcess getMonitoredProcess() {
+		return ((MonitoringComponentDefinition) getComponentDefinition()).getProcess();
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        return EMPTY_IOBJECT_VECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return "MonitoringComponent.inspector";
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Monitoring:" + getName();
-    }
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		return EMPTY_IOBJECT_VECTOR;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "monitoring_component";
-    }
-    
+	@Override
+	public String getFullyQualifiedName() {
+		return "Monitoring:" + getName();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "monitoring_component";
+	}
+
 }

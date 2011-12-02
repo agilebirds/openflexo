@@ -23,31 +23,27 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
- * Thrown to notify that this method signature is already registered 
+ * Thrown to notify that this method signature is already registered
  * 
  * @author sguerin
  * 
  */
-public class DuplicateMethodSignatureException extends FlexoException
-{
+public class DuplicateMethodSignatureException extends FlexoException {
 
-    private String signature;
+	private String signature;
 
-    public DuplicateMethodSignatureException(String aSignature)
-    {
-        super();
-        signature = aSignature;
-    }
+	public DuplicateMethodSignatureException(String aSignature) {
+		super();
+		signature = aSignature;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "Duplicate class name: " + signature;
-    }
+	@Override
+	public String getMessage() {
+		return "Duplicate class name: " + signature;
+	}
 
-    @Override
-	public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("duplicate_method_signature") + " : " + signature;
-    }
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("duplicate_method_signature") + " : " + signature;
+	}
 }

@@ -25,9 +25,7 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
 import org.openflexo.foundation.xml.FlexoWSLibraryBuilder;
 
-
-public class FlexoWSLibraryResource extends FlexoXMLStorageResource<FlexoWSLibrary>
- {
+public class FlexoWSLibraryResource extends FlexoXMLStorageResource<FlexoWSLibrary> {
 	protected static final Logger logger = Logger.getLogger(FlexoWSLibraryResource.class.getPackage().getName());
 
 	/**
@@ -44,7 +42,7 @@ public class FlexoWSLibraryResource extends FlexoXMLStorageResource<FlexoWSLibra
 
 	/**
 	 * @param aProject
-	 * @throws InvalidFileNameException 
+	 * @throws InvalidFileNameException
 	 */
 	public FlexoWSLibraryResource(FlexoProject aProject, FlexoWSLibrary wsLib, FlexoProjectFile wsFile) throws InvalidFileNameException {
 		this(aProject);

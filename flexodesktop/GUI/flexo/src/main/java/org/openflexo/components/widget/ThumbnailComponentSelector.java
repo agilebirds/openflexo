@@ -27,45 +27,43 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
+
 /**
- * Widget allowing to select a ThumbnailComponent while browing the component
- * library
+ * Widget allowing to select a ThumbnailComponent while browing the component library
  * 
  * @author sguerin
  * 
  */
-public class ThumbnailComponentSelector extends AbstractComponentSelector<TabComponentDefinition>
-{
+public class ThumbnailComponentSelector extends AbstractComponentSelector<TabComponentDefinition> {
 
-    public ThumbnailComponentSelector(FlexoProject project, TabComponentDefinition thumbnailComponent)
-    {
-        super(project, thumbnailComponent, TabComponentDefinition.class);
-    }
+	public ThumbnailComponentSelector(FlexoProject project, TabComponentDefinition thumbnailComponent) {
+		super(project, thumbnailComponent, TabComponentDefinition.class);
+	}
 
-    public ThumbnailComponentSelector(FlexoProject project, TabComponentDefinition thumbnailComponent, int cols)
-    {
-        super(project, thumbnailComponent, TabComponentDefinition.class, cols);
-    }
+	public ThumbnailComponentSelector(FlexoProject project, TabComponentDefinition thumbnailComponent, int cols) {
+		super(project, thumbnailComponent, TabComponentDefinition.class, cols);
+	}
 
-    @Override
-	public void newComponent()
-    {
-        FlexoComponentFolder folder = null;
-        if (getSelectedObject() instanceof FlexoComponentFolder) {
-            folder = (FlexoComponentFolder) getSelectedObject();
-        } else if (getSelectedObject() instanceof ComponentDefinition) {
-            folder = ((ComponentDefinition) getSelectedObject()).getFolder();
-        } else {
-            folder = getComponentLibrary().getRootFolder();
-        }
-        String newComponentName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("enter_a_component_name"),IERegExp.JAVA_CLASS_NAME_PATTERN,FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
-        try {
-            TabComponentDefinition newComponent = new TabComponentDefinition(newComponentName, getComponentLibrary(), folder, getProject());
-            setEditedObject(newComponent);
-        } catch (DuplicateResourceException e) {
-            // Warns about the exception
-            FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_component_with_this_name_already_exists"));
-        }
+	@Override
+	public void newComponent() {
+		FlexoComponentFolder folder = null;
+		if (getSelectedObject() instanceof FlexoComponentFolder) {
+			folder = (FlexoComponentFolder) getSelectedObject();
+		} else if (getSelectedObject() instanceof ComponentDefinition) {
+			folder = ((ComponentDefinition) getSelectedObject()).getFolder();
+		} else {
+			folder = getComponentLibrary().getRootFolder();
+		}
+		String newComponentName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("enter_a_component_name"),
+				IERegExp.JAVA_CLASS_NAME_PATTERN,
+				FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
+		try {
+			TabComponentDefinition newComponent = new TabComponentDefinition(newComponentName, getComponentLibrary(), folder, getProject());
+			setEditedObject(newComponent);
+		} catch (DuplicateResourceException e) {
+			// Warns about the exception
+			FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_component_with_this_name_already_exists"));
+		}
 
-    }
+	}
 }

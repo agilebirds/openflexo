@@ -24,82 +24,72 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 
-
 public class FIBButton extends FIBWidget {
 
 	public static BindingDefinition ACTION = new BindingDefinition("action", Void.class, BindingDefinitionType.EXECUTE, false);
 
-	public static enum ButtonType
-	{
-		Trigger,
-		Toggle
+	public static enum ButtonType {
+		Trigger, Toggle
 	}
 
-	public static enum Parameters implements FIBModelAttribute
-	{
-		action,
-		buttonType,
-		label
+	public static enum Parameters implements FIBModelAttribute {
+		action, buttonType, label
 	}
 
 	private DataBinding action;
 	private ButtonType buttonType = ButtonType.Trigger;
 	private String label;
-	
- 	public FIBButton() 
-	{
+
+	public FIBButton() {
 	}
-	
+
 	@Override
-	public String getIdentifier()
-	{
+	protected String getBaseName() {
+		return "Button";
+	}
+
+	@Override
+	public String getIdentifier() {
 		return getLabel();
 	}
 
 	@Override
-	public Type getDefaultDataClass() 
-	{
+	public Type getDefaultDataClass() {
 		return String.class;
 	}
-	
-	public DataBinding getAction() 
-	{
-		if (action == null) action = new DataBinding(this,Parameters.action,ACTION);
+
+	public DataBinding getAction() {
+		if (action == null) {
+			action = new DataBinding(this, Parameters.action, ACTION);
+		}
 		return action;
 	}
 
-	public void setAction(DataBinding action) 
-	{
+	public void setAction(DataBinding action) {
 		action.setOwner(this);
 		action.setBindingAttribute(Parameters.action);
 		action.setBindingDefinition(ACTION);
 		this.action = action;
 	}
 
-	public ButtonType getButtonType()
-	{
+	public ButtonType getButtonType() {
 		return buttonType;
 	}
 
-	public void setButtonType(ButtonType buttonType)
-	{
-		FIBAttributeNotification<ButtonType> notification = requireChange(
-				Parameters.buttonType, buttonType);
+	public void setButtonType(ButtonType buttonType) {
+		FIBAttributeNotification<ButtonType> notification = requireChange(Parameters.buttonType, buttonType);
 		if (notification != null) {
 			this.buttonType = buttonType;
 			hasChanged(notification);
 		}
 	}
 
-	public String getLabel()
-	{
+	public String getLabel() {
 		return label;
 	}
 
-	public void setLabel(String label)
-	{
-		FIBAttributeNotification<String> notification = requireChange(
-				Parameters.label, label);
+	public void setLabel(String label) {
+		FIBAttributeNotification<String> notification = requireChange(Parameters.label, label);
 		if (notification != null) {
 			this.label = label;
 			hasChanged(notification);

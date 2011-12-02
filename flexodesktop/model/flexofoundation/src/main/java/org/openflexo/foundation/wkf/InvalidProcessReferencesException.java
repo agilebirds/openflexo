@@ -23,21 +23,18 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.validation.ValidationReport;
 
 /**
- * Thown after trying to move a process. Contains a validation report where
- * all inconsistency are pointed
+ * Thown after trying to move a process. Contains a validation report where all inconsistency are pointed
  * 
  * @author sguerin
  * 
  */
-public class InvalidProcessReferencesException extends FlexoException
-{
-    public FlexoProcess movedProcess;
-    public ValidationReport report;
+public class InvalidProcessReferencesException extends FlexoException {
+	public FlexoProcess movedProcess;
+	public ValidationReport report;
 
-    public InvalidProcessReferencesException(FlexoProcess movedProcess, ValidationReport report) 
-    {
-        this.movedProcess = movedProcess;
-        this.report = report;
-    }
+	public InvalidProcessReferencesException(FlexoProcess movedProcess, ValidationReport report) {
+		this.movedProcess = movedProcess;
+		this.report = report;
+	}
 
 }

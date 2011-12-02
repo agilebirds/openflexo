@@ -33,144 +33,136 @@ import cb.petal.StringLiteral;
 
 /**
  * Generate class derived from petal object for given type.
- *
+ * 
  * @version $Id: ObjectGenerator.java,v 1.3 2011/09/12 11:47:29 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ObjectGenerator extends DescendingVisitor {
-  private String ident;
-  private boolean first = false;
-  private HashSet found = new HashSet();
+	private String ident;
+	private boolean first = false;
+	private HashSet found = new HashSet();
 
-  private ObjectGenerator(String id) {
-    this.ident = id;
-  }
-
-  @Override
-public void visitObject(PetalObject obj) {
-    if(obj.getName().equals(ident)) {
-      if(!first) {
-	String class_name = Constants.makeName(obj.getName());
-
-	System.out.println("package cb.petal;\nimport java.util.Collection;\n\n" +
-			   "/**\n * Represents " + obj.getName() + " object\n" + " *\n" +
-			   " * @version $Id: ObjectGenerator.java,v 1.3 2011/09/12 11:47:29 gpolet Exp $\n" +
-			   " * @author  <A HREF=\"http://www.berlin.de/~markus.dahm/\">" +
-			   "M. Dahm</A>\n */");
-
-	System.out.println("public class " + class_name + " extends PetalObject {");
-	System.out.println("  public " + class_name +
-			   "(PetalObject parent, Collection params) {");
-	System.out.println("    super(parent, \"" + ident + "\", params);");
-	System.out.println("  }\n");
-
-
-	System.out.println("  public " + class_name + "() {");
-	System.out.println("    super(\"" + ident + "\");");
-	System.out.println("  }\n");
-
-	int k = 0;
-	for(Iterator i = obj.getParameterList().iterator(); i.hasNext(); k++) {
-	  System.out.println("  public void setViewParameter(String o) {");
-	  System.out.println("    params.set(" + k + ", o);\n  }\n");
-	  
-	  System.out.println("  public String getViewParameter() {");
-	  System.out.println("    return (String)params.get(" + k + ");\n  }\n");
-	  i.next();
+	private ObjectGenerator(String id) {
+		this.ident = id;
 	}
 
-	// for DefaultVisitor and Visitor
-	System.err.println("  public void visit(" + class_name + " obj) { visitObject(obj); }");
-      }
+	@Override
+	public void visitObject(PetalObject obj) {
+		if (obj.getName().equals(ident)) {
+			if (!first) {
+				String class_name = Constants.makeName(obj.getName());
 
-      for(Iterator i = obj.getNames().iterator(), j = obj.getPropertyList().iterator();
-	  i.hasNext(); ) {
-	String    name = (String)i.next();
-	PetalNode node = (PetalNode)j.next();
-	String    type = getShortType(node);
+				System.out.println("package cb.petal;\nimport java.util.Collection;\n\n" + "/**\n * Represents " + obj.getName()
+						+ " object\n" + " *\n" + " * @version $Id: ObjectGenerator.java,v 1.3 2011/09/12 11:47:29 gpolet Exp $\n"
+						+ " * @author  <A HREF=\"http://www.berlin.de/~markus.dahm/\">" + "M. Dahm</A>\n */");
 
+				System.out.println("public class " + class_name + " extends PetalObject {");
+				System.out.println("  public " + class_name + "(PetalObject parent, Collection params) {");
+				System.out.println("    super(parent, \"" + ident + "\", params);");
+				System.out.println("  }\n");
 
-	if(!found.contains(name) && (type != null) && !name.equals("quid") && !name.equals("quidu")) {
-	  String type2  = getLongType(type);
-	  String method = Constants.makeName(name);
-	  boolean prim = true;
+				System.out.println("  public " + class_name + "() {");
+				System.out.println("    super(\"" + ident + "\");");
+				System.out.println("  }\n");
 
-	  if(name.equals("name"))
-	    method = obj.getName() + "Name";
+				int k = 0;
+				for (Iterator i = obj.getParameterList().iterator(); i.hasNext(); k++) {
+					System.out.println("  public void setViewParameter(String o) {");
+					System.out.println("    params.set(" + k + ", o);\n  }\n");
 
-	  if(name.equals("value"))
-	    type = type2 = "PetalNode";
+					System.out.println("  public String getViewParameter() {");
+					System.out.println("    return (String)params.get(" + k + ");\n  }\n");
+					i.next();
+				}
 
-	  try { // Hack warning
-	    java.lang.Class cl = java.lang.Class.forName("java.lang." + type2);
-	  } catch(ClassNotFoundException e) {
-	    prim = false;
-	  }
+				// for DefaultVisitor and Visitor
+				System.err.println("  public void visit(" + class_name + " obj) { visitObject(obj); }");
+			}
 
-	  if(prim) {
-	    System.out.println("  public " + type + " get" + method + "() {\n" +
-			       "    return getPropertyAs" + type2 +
-			       "(\"" + name + "\");\n" +
-			       "  }\n");
+			for (Iterator i = obj.getNames().iterator(), j = obj.getPropertyList().iterator(); i.hasNext();) {
+				String name = (String) i.next();
+				PetalNode node = (PetalNode) j.next();
+				String type = getShortType(node);
 
-	    System.out.println("  public void set" + method + "(" + type + " o) {\n" +
-			       "    defineProperty(\"" + name + "\", o);\n" +
-			       "  }\n");
-	  } else {
-	    System.out.println("  public " + type + " get" + method + "() {\n" +
-			       "    return (" + type +
-			       ")getProperty(\"" + name + "\");\n  }\n");
+				if (!found.contains(name) && (type != null) && !name.equals("quid") && !name.equals("quidu")) {
+					String type2 = getLongType(type);
+					String method = Constants.makeName(name);
+					boolean prim = true;
 
-	    System.out.println("  public void set" + method + "(" + type + " o) {\n" +
-			       "    defineProperty(\"" + name + "\", o);\n" +
-			       "  }\n");
-	  }
+					if (name.equals("name")) {
+						method = obj.getName() + "Name";
+					}
+
+					if (name.equals("value")) {
+						type = type2 = "PetalNode";
+					}
+
+					try { // Hack warning
+						java.lang.Class cl = java.lang.Class.forName("java.lang." + type2);
+					} catch (ClassNotFoundException e) {
+						prim = false;
+					}
+
+					if (prim) {
+						System.out.println("  public " + type + " get" + method + "() {\n" + "    return getPropertyAs" + type2 + "(\""
+								+ name + "\");\n" + "  }\n");
+
+						System.out.println("  public void set" + method + "(" + type + " o) {\n" + "    defineProperty(\"" + name
+								+ "\", o);\n" + "  }\n");
+					} else {
+						System.out.println("  public " + type + " get" + method + "() {\n" + "    return (" + type + ")getProperty(\""
+								+ name + "\");\n  }\n");
+
+						System.out.println("  public void set" + method + "(" + type + " o) {\n" + "    defineProperty(\"" + name
+								+ "\", o);\n" + "  }\n");
+					}
+				}
+
+				found.add(name);
+			}
+
+			first = true;
+		}// else
+			// System.err.println("Unknown object type " + obj.getName());
+
+		super.visitObject(obj);
 	}
 
-	found.add(name);
-      }
+	private static String getShortType(PetalNode node) {
+		if (node instanceof StringLiteral) {
+			return "String";
+		} else if (node instanceof IntegerLiteral) {
+			return "int";
+		} else if (node instanceof BooleanLiteral) {
+			return "boolean";
+		} else if (node instanceof FloatLiteral) {
+			return "double";
+		} else {
+			String name = node.getClass().getName();
+			int index = name.lastIndexOf('.');
 
-      first = true;
-    }// else
-    // System.err.println("Unknown object type " + obj.getName());
+			return name.substring(index + 1);
+		}
+	}
 
-    super.visitObject(obj);
-  }
+	private static String getLongType(String type) {
+		if (type.equals("double")) {
+			return "Float";
+		} else if (type.equals("int")) {
+			return "Integer";
+		} else if (type.equals("boolean")) {
+			return "Boolean";
+		} else {
+			return type;
+		}
+	}
 
-  private static String getShortType(PetalNode node) {
-    if(node instanceof StringLiteral)
-      return "String";
-    else if(node instanceof IntegerLiteral)
-      return "int";
-    else if(node instanceof BooleanLiteral)
-      return "boolean";
-    else if(node instanceof FloatLiteral)
-      return "double";
-    else {
-      String name = node.getClass().getName();
-      int index = name.lastIndexOf('.');
+	public static void main(String[] args) {
+		PetalFile tree = cb.parser.PetalParser.parse(args);
 
-      return name.substring(index + 1);
-    }
-  }
+		tree.accept(new ObjectGenerator(args[1]));
 
-  private static String getLongType(String type) {
-    if(type.equals("double"))
-      return "Float";
-    else if(type.equals("int"))
-      return "Integer";
-    else if(type.equals("boolean"))
-      return "Boolean";
-    else 
-      return type;
-  }
-
-  public static void main(String[] args) {
-    PetalFile tree = cb.parser.PetalParser.parse(args);
-
-    tree.accept(new ObjectGenerator(args[1]));
-
-    System.out.println("  public void accept(Visitor v) {\n    v.visit(this);\n  }");
-    System.out.println("}");
-  }
+		System.out.println("  public void accept(Visitor v) {\n    v.visit(this);\n  }");
+		System.out.println("}");
+	}
 }

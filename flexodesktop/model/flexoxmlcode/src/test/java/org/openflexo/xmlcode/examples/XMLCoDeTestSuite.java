@@ -20,6 +20,9 @@
 
 package org.openflexo.xmlcode.examples;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.openflexo.xmlcode.TestParameteredKVCoding;
 import org.openflexo.xmlcode.examples.example1.Example1Test;
 import org.openflexo.xmlcode.examples.example2.Example2Test;
@@ -27,23 +30,20 @@ import org.openflexo.xmlcode.examples.example3.Example3Test;
 import org.openflexo.xmlcode.examples.example4.Example4Test;
 import org.openflexo.xmlcode.examples.example5.Example5Test;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 public class XMLCoDeTestSuite {
 
-    public static Test suite() {
-        TestSuite suite = new TestSuite("Tests for XMLCoDe library");
-        
-        //$JUnit-BEGIN$
-        suite.addTestSuite(Example1Test.class);
-        suite.addTestSuite(Example2Test.class);
-        suite.addTestSuite(Example3Test.class);
-        suite.addTestSuite(Example4Test.class);
-        suite.addTestSuite(Example5Test.class);
-        suite.addTestSuite(TestParameteredKVCoding.class);
-         //$JUnit-END$
-        return suite;
-    }
+	public static Test suite() {
+		TestSuite suite = new TestSuite("Tests for XMLCoDe library");
+
+		// $JUnit-BEGIN$
+		suite.addTestSuite(Example1Test.class);
+		suite.addTestSuite(Example2Test.class);
+		suite.addTestSuite(Example3Test.class);
+		suite.addTestSuite(Example4Test.class);
+		suite.addTestSuite(Example5Test.class);
+		suite.addTestSuite(TestParameteredKVCoding.class);
+		// $JUnit-END$
+		return suite;
+	}
 
 }

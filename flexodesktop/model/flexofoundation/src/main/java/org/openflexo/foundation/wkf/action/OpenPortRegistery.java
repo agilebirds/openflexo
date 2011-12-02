@@ -31,85 +31,73 @@ import org.openflexo.foundation.wkf.dm.PortRegisteryHasBeenClosed;
 import org.openflexo.foundation.wkf.dm.PortRegisteryHasBeenOpened;
 import org.openflexo.localization.FlexoLocalization;
 
-public class OpenPortRegistery extends FlexoUndoableAction<OpenPortRegistery,FlexoProcess,WKFObject> 
-{
+public class OpenPortRegistery extends FlexoUndoableAction<OpenPortRegistery, FlexoProcess, WKFObject> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OpenPortRegistery.class.getPackage().getName());
 
-    public static FlexoActionType<OpenPortRegistery,FlexoProcess,WKFObject> actionType 
-    = new FlexoActionType<OpenPortRegistery,FlexoProcess,WKFObject> 
-    ("open_port_registery",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<OpenPortRegistery, FlexoProcess, WKFObject> actionType = new FlexoActionType<OpenPortRegistery, FlexoProcess, WKFObject>(
+			"open_port_registery", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public OpenPortRegistery makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new OpenPortRegistery(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public OpenPortRegistery makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new OpenPortRegistery(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) 
-        {
-            return object!=null && !object.isImported();
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return object != null && !object.isImported();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) 
-        {
-            return isVisibleForSelection(object, globalSelection);
-        }
-                
-    };
-    
-    OpenPortRegistery (FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
 
-    @Override
-	protected void doAction(Object context) 
-    {
-   		//getFocusedObject().getPortRegistery().setIsVisible(!getFocusedObject().getPortRegistery().getIsVisible());
-    	if (getFocusedObject().getPortRegistery().getIsVisible()) {
-    		getFocusedObject().getPortRegistery().setIsVisible(false);
-    		getFocusedObject().setChanged();
-    		getFocusedObject().notifyObservers(new PortRegisteryHasBeenClosed(getFocusedObject().getPortRegistery()));
-    	}
-    	else {
-    		getFocusedObject().getPortRegistery().setIsVisible(true);
-    		getFocusedObject().setChanged();
-    		getFocusedObject().notifyObservers(new PortRegisteryHasBeenOpened(getFocusedObject().getPortRegistery()));
-    	}	
-    }
+	};
 
-    @Override
-	public String getLocalizedName ()
-    {
-        if ((getFocusedObject()).getPortRegistery() != null) {
-            if ((getFocusedObject()).getPortRegistery().getIsVisible()) {
-                return FlexoLocalization.localizedForKey("close_port_registery");
-            }
-            else {
-                return FlexoLocalization.localizedForKey("open_port_registery");
-           }
-        }
-        return super.getLocalizedName();
-        
-    }
+	OpenPortRegistery(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void undoAction(Object context) 
-    {
-        doAction(context);
-    }
+	@Override
+	protected void doAction(Object context) {
+		// getFocusedObject().getPortRegistery().setIsVisible(!getFocusedObject().getPortRegistery().getIsVisible());
+		if (getFocusedObject().getPortRegistery().getIsVisible()) {
+			getFocusedObject().getPortRegistery().setIsVisible(false);
+			getFocusedObject().setChanged();
+			getFocusedObject().notifyObservers(new PortRegisteryHasBeenClosed(getFocusedObject().getPortRegistery()));
+		} else {
+			getFocusedObject().getPortRegistery().setIsVisible(true);
+			getFocusedObject().setChanged();
+			getFocusedObject().notifyObservers(new PortRegisteryHasBeenOpened(getFocusedObject().getPortRegistery()));
+		}
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        doAction(context);
-   }
+	@Override
+	public String getLocalizedName() {
+		if ((getFocusedObject()).getPortRegistery() != null) {
+			if ((getFocusedObject()).getPortRegistery().getIsVisible()) {
+				return FlexoLocalization.localizedForKey("close_port_registery");
+			} else {
+				return FlexoLocalization.localizedForKey("open_port_registery");
+			}
+		}
+		return super.getLocalizedName();
+
+	}
+
+	@Override
+	protected void undoAction(Object context) {
+		doAction(context);
+	}
+
+	@Override
+	protected void redoAction(Object context) {
+		doAction(context);
+	}
 
 }

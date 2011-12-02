@@ -49,105 +49,95 @@ import org.openflexo.foundation.ie.widget.InnerTableReusableWidget;
 import org.openflexo.foundation.ie.widget.TopComponentReusableWidget;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoComponentResource;
+import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 
+public class MakePartialComponent extends FlexoAction<MakePartialComponent, IEWidget, IEWidget> {
 
-public class MakePartialComponent extends FlexoAction<MakePartialComponent,IEWidget,IEWidget> 
-{
+	private static final Logger logger = Logger.getLogger(MakePartialComponent.class.getPackage().getName());
+	private IEReusableWidget reusableWidget;
+	public static FlexoActionType<MakePartialComponent, IEWidget, IEWidget> actionType = new FlexoActionType<MakePartialComponent, IEWidget, IEWidget>(
+			"make_partial_component", FlexoActionType.defaultGroup) {
 
-    private static final Logger logger = Logger.getLogger(MakePartialComponent.class.getPackage().getName());
-    private IEReusableWidget reusableWidget;
-    public static FlexoActionType<MakePartialComponent,IEWidget,IEWidget> actionType = new FlexoActionType<MakePartialComponent,IEWidget,IEWidget> ("make_partial_component",FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public MakePartialComponent makeNewAction(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
+			return new MakePartialComponent(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public MakePartialComponent makeNewAction(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) 
-        {
-            return new MakePartialComponent(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+			return !(object instanceof IETabWidget);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) 
-        {
-            return !(object instanceof IETabWidget);
-        }
+		@Override
+		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+			return !(object instanceof IEReusableWidget);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) 
-        {
-            return !(object instanceof IEReusableWidget);
-        }
-                
-    };
-    
-    private String _newComponentName;
-    private FlexoComponentFolder _newComponentFolder;
-    private FlexoComponentResource _newComponentResource;
-    
-    MakePartialComponent (IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    public FlexoComponentFolder getNewComponentFolder() 
-    {
-    	if (_newComponentFolder == null) {
-    		_newComponentFolder = getFocusedObject().getProject().getFlexoComponentLibrary().getRootFolder().getFolderTyped(FolderType.PARTIAL_COMPONENT_FOLDER);
-    	}
-        return _newComponentFolder;
-    }
+	private String _newComponentName;
+	private FlexoComponentFolder _newComponentFolder;
+	private FlexoComponentResource _newComponentResource;
 
-    public void setNewComponentFolder(FlexoComponentFolder newComponentFolder) 
-    {
-        _newComponentFolder = newComponentFolder;
-    }
+	MakePartialComponent(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public String getNewComponentName() 
-    {
-        return _newComponentName;
-    }
+	public FlexoComponentFolder getNewComponentFolder() {
+		if (_newComponentFolder == null) {
+			_newComponentFolder = getFocusedObject().getProject().getFlexoComponentLibrary().getRootFolder()
+					.getFolderTyped(FolderType.PARTIAL_COMPONENT_FOLDER);
+		}
+		return _newComponentFolder;
+	}
 
-    public void setNewComponentName(String newComponentName)
-    {
-        _newComponentName = newComponentName;
-    }
-    
-    public FlexoComponentResource getNewComponentResource() 
-    {
-        return _newComponentResource;
-    }
+	public void setNewComponentFolder(FlexoComponentFolder newComponentFolder) {
+		_newComponentFolder = newComponentFolder;
+	}
 
-    @Override
-	protected void doAction(Object context) 
-    {
-        if (getFocusedObject() != null) {
-            IEWidget widget = getFocusedObject();
-            if(logger.isLoggable(Level.FINE)) {
-				logger.fine ("Make partial component from "+widget);
+	public String getNewComponentName() {
+		return _newComponentName;
+	}
+
+	public void setNewComponentName(String newComponentName) {
+		_newComponentName = newComponentName;
+	}
+
+	public FlexoComponentResource getNewComponentResource() {
+		return _newComponentResource;
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		if (getFocusedObject() != null) {
+			IEWidget widget = getFocusedObject();
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Make partial component from " + widget);
 			}
-            try {
-				_newComponentResource = makeItPartial(widget,getNewComponentName(), getNewComponentFolder());
+			try {
+				_newComponentResource = makeItPartial(widget, getNewComponentName(), getNewComponentFolder());
 			} catch (DuplicateResourceException e) {
 				e.printStackTrace();
 			}
-        }
-        else {
-        	if(logger.isLoggable(Level.WARNING)) {
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No widget defined !");
 			}
-        }
-    }
+		}
+	}
 
-    public IEReusableComponent getComponent(){
-    	return comp;
-    }
-    private IEReusableComponent comp;
-    
-    private FlexoComponentResource makeItPartial(IEWidget widget, String newPartialComponentName, FlexoComponentFolder folder)
+	public IEReusableComponent getComponent() {
+		return comp;
+	}
+
+	private IEReusableComponent comp;
+
+	private FlexoComponentResource makeItPartial(IEWidget widget, String newPartialComponentName, FlexoComponentFolder folder)
 			throws DuplicateResourceException {
 		IEWOComponent woComponent = widget.getWOComponent();
 		IEObject parent = widget.getParent();
@@ -175,7 +165,8 @@ public class MakePartialComponent extends FlexoAction<MakePartialComponent,IEWid
 			}
 		});
 		// first create the component definition in the library
-		ReusableComponentDefinition compDef = new ReusableComponentDefinition(newPartialComponentName, folder.getComponentLibrary(), folder, widget.getProject());
+		ReusableComponentDefinition compDef = new ReusableComponentDefinition(newPartialComponentName, folder.getComponentLibrary(),
+				folder, widget.getProject());
 		FlexoComponentResource compRes = compDef.getComponentResource();// Creates the resource
 		comp = new IEReusableComponent(compDef, widget.getProject());
 		for (IEWidget w : widgets) {
@@ -208,8 +199,7 @@ public class MakePartialComponent extends FlexoAction<MakePartialComponent,IEWid
 		} else if ((widget instanceof AbstractInnerTableWidget) && (parent instanceof IEWidget)) {
 			reusableWidget = new InnerTableReusableWidget(woComponent, compDef, (IEWidget) parent, widget.getProject());
 		} else if (widget.isTopComponent() && (parent instanceof IESequenceWidget)) {
-			reusableWidget = new TopComponentReusableWidget(woComponent, compDef, (IESequenceWidget) parent, widget
-					.getProject());
+			reusableWidget = new TopComponentReusableWidget(woComponent, compDef, (IESequenceWidget) parent, widget.getProject());
 		} else if ((widget instanceof IESequenceTR) && (parent instanceof IESequenceTR)) {
 			reusableWidget = new ITableRowReusableWidget(woComponent, compDef, parent, widget.getProject());
 		}

@@ -18,43 +18,44 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents action object
- *
+ * 
  * @version $Id: Action.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Action extends QuidObject implements Named {
-  public Action(PetalNode parent, Collection params) {
-    super(parent, "action", params);
-  }
+	public Action(PetalNode parent, Collection params) {
+		super(parent, "action", params);
+	}
 
-  public Action() {
-    super("action");
-  }
+	public Action() {
+		super("action");
+	}
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  public ActionTime getActionTime() {
-    return (ActionTime)getProperty("ActionTime");
-  }
+	public ActionTime getActionTime() {
+		return (ActionTime) getProperty("ActionTime");
+	}
 
-  public void setActionTime(ActionTime o) {
-    defineProperty("ActionTime", o);
-  }
+	public void setActionTime(ActionTime o) {
+		defineProperty("ActionTime", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

@@ -28,53 +28,50 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.widget.IESpanTDWidget;
 import org.openflexo.foundation.ie.widget.IETRWidget;
 
-
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class IETRElement extends IEElement
-{
+public class IETRElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IETRElement(IETRWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.TR, browser,parent);
-        widget.getSequenceTD().addObserver(this);
-    }
-    /**
-     * Overrides delete
-     * @see org.openflexo.components.browser.BrowserElement#delete()
-     */
-    @Override
-    public void delete()
-    {
-        getTR().getSequenceTD().deleteObserver(this);
-        super.delete();
-    }
-    @Override
-	protected void buildChildrenVector()
-    {
-        for (Enumeration e = getTR().colsEnumeration(); e.hasMoreElements();) {
-            FlexoModelObject o = (FlexoModelObject) e.nextElement();
-            if (o instanceof IESpanTDWidget) // Span TD's are virtual TD's
-                continue;
-            else
-                addToChilds(o);
-        }
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IETRElement(IETRWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.TR, browser, parent);
+		widget.getSequenceTD().addObserver(this);
+	}
 
-    @Override
-	public String getName()
-    {
-        return "Row" +(getTR().getRowIndex()+1);
-    }
+	/**
+	 * Overrides delete
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#delete()
+	 */
+	@Override
+	public void delete() {
+		getTR().getSequenceTD().deleteObserver(this);
+		super.delete();
+	}
 
-    protected IETRWidget getTR()
-    {
-        return (IETRWidget) getObject();
-    }
+	@Override
+	protected void buildChildrenVector() {
+		for (Enumeration e = getTR().colsEnumeration(); e.hasMoreElements();) {
+			FlexoModelObject o = (FlexoModelObject) e.nextElement();
+			if (o instanceof IESpanTDWidget) {
+				continue;
+			} else {
+				addToChilds(o);
+			}
+		}
+	}
+
+	@Override
+	public String getName() {
+		return "Row" + (getTR().getRowIndex() + 1);
+	}
+
+	protected IETRWidget getTR() {
+		return (IETRWidget) getObject();
+	}
 
 }

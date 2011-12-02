@@ -24,35 +24,28 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 
-
-public class OntologyBrowser extends OEBrowser
-{
+public class OntologyBrowser extends OEBrowser {
 	private FlexoOntology representedOntology = null;
-	
-	public OntologyBrowser(OEController controller)
-	{
+
+	public OntologyBrowser(OEController controller) {
 		super(controller);
 	}
 
-	public FlexoOntology getRepresentedOntology() 
-	{
+	public FlexoOntology getRepresentedOntology() {
 		return representedOntology;
 	}
 
-	public void setRepresentedOntology(FlexoOntology representedOntology) 
-	{
+	public void setRepresentedOntology(FlexoOntology representedOntology) {
 		this.representedOntology = representedOntology;
 	}
 
-    @Override
-	public FlexoModelObject getDefaultRootObject()
-    {
-    	return representedOntology;
-    }
-    
 	@Override
-	public void configure()
-	{
+	public FlexoModelObject getDefaultRootObject() {
+		return representedOntology;
+	}
+
+	@Override
+	public void configure() {
 		super.configure();
 		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
@@ -89,6 +82,5 @@ public class OntologyBrowser extends OEBrowser
 		setRootObject(project.getOntologyLibrary().getRootClass());
 		setOEViewMode(OEViewMode.FullHierarchy);
 	}*/
-	
 
 }

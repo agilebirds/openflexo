@@ -28,35 +28,30 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 
-
 /**
  * Browser element representing a PortMap Registery of a SubProcessNode
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class PortMapRegisteryElement extends BrowserElement
-{
+public class PortMapRegisteryElement extends BrowserElement {
 
-    public PortMapRegisteryElement(PortMapRegistery portMapRegistery, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(portMapRegistery, BrowserElementType.PORTMAP_REGISTERY, browser, parent);
-    }
+	public PortMapRegisteryElement(PortMapRegistery portMapRegistery, ProjectBrowser browser, BrowserElement parent) {
+		super(portMapRegistery, BrowserElementType.PORTMAP_REGISTERY, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // Adding portmaps
-        Vector portMaps = getPortMapRegistery().getPortMaps();
-        for (Enumeration e = portMaps.elements(); e.hasMoreElements();) {
-            addToChilds((FlexoPortMap) e.nextElement());
-        }
+	@Override
+	protected void buildChildrenVector() {
+		// Adding portmaps
+		Vector portMaps = getPortMapRegistery().getPortMaps();
+		for (Enumeration e = portMaps.elements(); e.hasMoreElements();) {
+			addToChilds((FlexoPortMap) e.nextElement());
+		}
 
-    }
+	}
 
-    protected PortMapRegistery getPortMapRegistery()
-    {
-        return (PortMapRegistery) getObject();
-    }
+	protected PortMapRegistery getPortMapRegistery() {
+		return (PortMapRegistery) getObject();
+	}
 
 }

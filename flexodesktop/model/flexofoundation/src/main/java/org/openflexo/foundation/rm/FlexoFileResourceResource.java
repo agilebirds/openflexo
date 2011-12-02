@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
@@ -31,25 +30,26 @@ import org.openflexo.toolbox.FileUtils;
 public class FlexoFileResourceResource extends FlexoMemoryResource {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoFileResourceResource.class.getPackage().getName());
-	
+
 	private FileResource resource;
-	
+
 	public static FlexoFileResourceResource getResource(FileResource resource, FlexoProject project) {
 		FlexoFileResourceResource r = (FlexoFileResourceResource) project.resourceForKey(ResourceType.FILE_RESOURCE, resource.getName());
-		if (r==null) {
-			r = new FlexoFileResourceResource(project,resource);
+		if (r == null) {
+			r = new FlexoFileResourceResource(project, resource);
 			try {
 				project.registerResource(r);
 			} catch (DuplicateResourceException e) {
-				if (logger.isLoggable(Level.SEVERE))
-					logger.log(Level.SEVERE,"This should not happen",e);
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.log(Level.SEVERE, "This should not happen", e);
+				}
 				e.printStackTrace();
 				r = (FlexoFileResourceResource) project.resourceForKey(r.getResourceIdentifier());
 			}
 		}
 		return r;
 	}
-	
+
 	private FlexoFileResourceResource(FlexoProject project, FileResource resource) {
 		super(project);
 		this.resource = resource;
@@ -59,12 +59,12 @@ public class FlexoFileResourceResource extends FlexoMemoryResource {
 	public synchronized Date getLastUpdate() {
 		return FileUtils.getDiskLastModifiedDate(resource);
 	}
-	
+
 	@Override
 	public String getName() {
 		return resource.getName();
 	}
-	
+
 	@Override
 	public ResourceType getResourceType() {
 		return ResourceType.FILE_RESOURCE;

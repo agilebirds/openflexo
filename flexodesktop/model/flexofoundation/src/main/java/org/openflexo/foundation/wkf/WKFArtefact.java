@@ -31,7 +31,6 @@ import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.node.WKFNode;
 
-
 public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 	public static final String TEXT_ALIGNMENT = "textAlignment";
 
@@ -42,22 +41,20 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 	private Vector<MetricsValue> metricsValues;
 
 	public static FlexoActionizer<AddArtefactMetricsValue, WKFArtefact, WKFObject> addMetricsActionizer;
-	public static FlexoActionizer<DeleteMetricsValue,MetricsValue,MetricsValue> deleteMetricsActionizer;
+	public static FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue> deleteMetricsActionizer;
 
 	public WKFArtefact(FlexoProcess process) {
 		super(process);
 		metricsValues = new Vector<MetricsValue>();
 	}
 
-    public FlexoPetriGraph getParentPetriGraph()
-    {
-        return _petriGraph;
-    }
+	public FlexoPetriGraph getParentPetriGraph() {
+		return _petriGraph;
+	}
 
-    public final void setParentPetriGraph(FlexoPetriGraph pg)
-    {
-    	_petriGraph = pg;
-    }
+	public final void setParentPetriGraph(FlexoPetriGraph pg) {
+		_petriGraph = pg;
+	}
 
 	@Override
 	public void updateMetricsValues() {
@@ -76,11 +73,11 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 
 	@Override
 	public void addToMetricsValues(MetricsValue value) {
-		if (value.getMetricsDefinition()!=null) {
+		if (value.getMetricsDefinition() != null) {
 			metricsValues.add(value);
 			value.setOwner(this);
 			setChanged();
-			notifyObservers(new MetricsValueAdded(value,"metricsValues"));
+			notifyObservers(new MetricsValueAdded(value, "metricsValues"));
 		}
 	}
 
@@ -89,27 +86,29 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 		metricsValues.remove(value);
 		value.setOwner(null);
 		setChanged();
-		notifyObservers(new MetricsValueRemoved(value,"metricsValues"));
+		notifyObservers(new MetricsValueRemoved(value, "metricsValues"));
 	}
 
 	public void addMetrics() {
-		if (addMetricsActionizer!=null)
+		if (addMetricsActionizer != null) {
 			addMetricsActionizer.run(this, null);
+		}
 	}
 
 	public void deleteMetrics(MetricsValue value) {
-		if (deleteMetricsActionizer!=null)
+		if (deleteMetricsActionizer != null) {
 			deleteMetricsActionizer.run(value, null);
+		}
 	}
 
-    /**
+	/**
 	 * Recursive method to determine if the current node is embedded in the Petri graph <code>petriGraph</code>
 	 */
 	public boolean isEmbeddedInPetriGraph(FlexoPetriGraph petriGraph) {
-		if (getParentPetriGraph()==petriGraph)
+		if (getParentPetriGraph() == petriGraph) {
 			return true;
-		else if (getParentPetriGraph()!=null && getParentPetriGraph().getContainer() instanceof PetriGraphNode) {
-			return ((PetriGraphNode)getParentPetriGraph().getContainer()).isEmbeddedInPetriGraph(petriGraph);
+		} else if (getParentPetriGraph() != null && getParentPetriGraph().getContainer() instanceof PetriGraphNode) {
+			return ((PetriGraphNode) getParentPetriGraph().getContainer()).isEmbeddedInPetriGraph(petriGraph);
 		}
 		return false;
 	}
@@ -124,8 +123,7 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 	}
 
 	@Override
-	public final void delete()
-	{
+	public final void delete() {
 		if (getParentPetriGraph() != null) {
 			getParentPetriGraph().removeFromArtefacts(this);
 		}
@@ -134,88 +132,79 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 	}
 
 	@Override
-	public Vector<? extends WKFObject> getAllEmbeddedDeleted()
-	{
+	public Vector<? extends WKFObject> getAllEmbeddedDeleted() {
 		return getAllEmbeddedWKFObjects();
 	}
 
 	@Override
-	public Vector<WKFObject> getAllEmbeddedWKFObjects()
-	{
+	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
 		Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
 		returned.add(this);
 		return returned;
 	}
 
 	public FlexoLevel getLevel() {
-		if (getParentPetriGraph()!=null)
+		if (getParentPetriGraph() != null) {
 			return getParentPetriGraph().getLevel();
+		}
 		return null;
 	}
 
-	public String getText()
-	{
+	public String getText() {
 		return text;
 	}
 
-	public void setText(String text)
-	{
+	public void setText(String text) {
 		if (requireChange(getText(), text)) {
 			String oldText = getText();
 			this.text = text;
 			setChanged();
-			notifyObservers(new WKFAttributeDataModification("text",oldText,text));
+			notifyObservers(new WKFAttributeDataModification("text", oldText, text));
 		}
 	}
 
-	public FlexoColor getTextColor()
-	{
-		return getTextColor(DEFAULT,FlexoColor.BLACK_COLOR);
+	public FlexoColor getTextColor() {
+		return getTextColor(DEFAULT, FlexoColor.BLACK_COLOR);
 	}
 
-	public void setTextColor(FlexoColor aColor)
-	{
+	public void setTextColor(FlexoColor aColor) {
 		if (requireChange(getTextColor(), aColor)) {
 			FlexoColor oldColor = getTextColor();
 			setTextColor(aColor, DEFAULT);
 			setChanged();
-			notifyObservers(new WKFAttributeDataModification(TEXT_COLOR,oldColor,aColor));
+			notifyObservers(new WKFAttributeDataModification(TEXT_COLOR, oldColor, aColor));
 		}
 	}
 
-	public FlexoFont getTextFont()
-	{
+	public FlexoFont getTextFont() {
 		return getTextFont(DEFAULT);
 	}
 
-	public void setTextFont(FlexoFont aFont)
-	{
+	public void setTextFont(FlexoFont aFont) {
 		if (requireChange(getTextFont(), aFont)) {
 			FlexoFont oldFont = getTextFont();
 			setTextFont(aFont, DEFAULT);
 			setChanged();
-			notifyObservers(new WKFAttributeDataModification(TEXT_FONT,oldFont,aFont));
+			notifyObservers(new WKFAttributeDataModification(TEXT_FONT, oldFont, aFont));
 		}
 	}
 
-	public Object getTextAlignment()
-	{
-		return _graphicalPropertyForKey(TEXT_ALIGNMENT+"_"+DEFAULT);
+	public Object getTextAlignment() {
+		return _graphicalPropertyForKey(TEXT_ALIGNMENT + "_" + DEFAULT);
 	}
 
-	public void setTextAlignment(Object textAlign)
-	{
+	public void setTextAlignment(Object textAlign) {
 		if (requireChange(getTextAlignment(), textAlign)) {
 			Object oldTextAlignment = getTextAlignment();
-			_setGraphicalPropertyForKey(textAlign, TEXT_ALIGNMENT+"_"+DEFAULT);
+			_setGraphicalPropertyForKey(textAlign, TEXT_ALIGNMENT + "_" + DEFAULT);
 			setChanged();
-			notifyObservers(new WKFAttributeDataModification(TEXT_ALIGNMENT,oldTextAlignment,textAlign));
+			notifyObservers(new WKFAttributeDataModification(TEXT_ALIGNMENT, oldTextAlignment, textAlign));
 		}
 	}
 
 	@Override
 	public boolean isNodeValid() {
-		return getProcess()!=null && getParentPetriGraph()!=null;
+		return getProcess() != null && getParentPetriGraph() != null;
 	}
 
 }

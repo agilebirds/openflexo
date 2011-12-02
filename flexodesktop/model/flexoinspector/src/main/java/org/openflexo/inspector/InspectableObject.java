@@ -24,30 +24,27 @@ import java.util.Vector;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.kvc.KeyValueCoding;
 
-
 /**
  * Interface implemented by inspectable objects
  * 
  * @author bmangez
  */
-public interface InspectableObject extends KeyValueCoding
-{
+public interface InspectableObject extends KeyValueCoding {
 
-    public void deleteInspectorObserver(InspectorObserver obs);
+	public void deleteInspectorObserver(InspectorObserver obs);
 
-    public void addInspectorObserver(InspectorObserver obs);
+	public void addInspectorObserver(InspectorObserver obs);
 
-    /**
-     * Return String uniquely identifying inspector template which must be
-     * applied when trying to inspect this object
-     * 
-     * @return a String value
-     */
-    public String getInspectorName();
+	/**
+	 * Return String uniquely identifying inspector template which must be applied when trying to inspect this object
+	 * 
+	 * @return a String value
+	 */
+	public String getInspectorName();
 
-    public String getInspectorTitle();
+	public String getInspectorTitle();
 
 	public boolean isDeleted();
-	
+
 	public Vector<TabModel> inspectionExtraTabs();
 }

@@ -19,66 +19,61 @@
  */
 package org.openflexo.fge.geom;
 
-
 public class FGERegularPolygon extends FGEPolygon {
 
 	private int npoints;
 	private double startAngle = 90; // in degree
-	
-	public double x,y;
-	public double width,height;
-	
-	
+
+	public double x, y;
+	public double width, height;
+
 	// *******************************************************************************
-	// *                               Constructor                                   *
+	// * Constructor *
 	// *******************************************************************************
-	
-	public FGERegularPolygon(double aX, double aY, double aWidth, double aHeight,Filling filling,int pointsNb) 
-	{
+
+	public FGERegularPolygon(double aX, double aY, double aWidth, double aHeight, Filling filling, int pointsNb) {
 		super(filling);
-	    this.x = aX;
-	    this.y = aY;
-	    this.width = aWidth;
-	    this.height = aHeight;
-		if (pointsNb < 3) throw new IllegalArgumentException("Cannot build regular polygon with less then 3 points ("+pointsNb+")");
+		this.x = aX;
+		this.y = aY;
+		this.width = aWidth;
+		this.height = aHeight;
+		if (pointsNb < 3) {
+			throw new IllegalArgumentException("Cannot build regular polygon with less then 3 points (" + pointsNb + ")");
+		}
 		npoints = pointsNb;
 		updatePoints();
 	}
-	
-	public FGERegularPolygon(double aX, double aY, double aWidth, double aHeight,Filling filling,int pointsNb,double startAngle) 
-	{
+
+	public FGERegularPolygon(double aX, double aY, double aWidth, double aHeight, Filling filling, int pointsNb, double startAngle) {
 		this(aX, aY, aWidth, aHeight, filling, pointsNb);
 		setStartAngle(startAngle);
 	}
-	
-	private void updatePoints()
-	{
+
+	private void updatePoints() {
 		clearPoints();
-		for (int i=0; i<npoints; i++) {
-			double angle = i*2*Math.PI/npoints-startAngle*Math.PI/180;
-			addToPoints(new FGEPoint(Math.cos(angle)*width/2+x+width/2,Math.sin(angle)*height/2+y+height/2));
+		for (int i = 0; i < npoints; i++) {
+			double angle = i * 2 * Math.PI / npoints - startAngle * Math.PI / 180;
+			addToPoints(new FGEPoint(Math.cos(angle) * width / 2 + x + width / 2, Math.sin(angle) * height / 2 + y + height / 2));
 		}
 	}
-	
-	public int getNPoints()
-	{
+
+	public int getNPoints() {
 		return npoints;
 	}
 
-	public void setNPoints(int pointsNb)
-	{
-		if (pointsNb < 3) pointsNb=3;
+	public void setNPoints(int pointsNb) {
+		if (pointsNb < 3) {
+			pointsNb = 3;
+		}
 		npoints = pointsNb;
 		updatePoints();
 	}
 
-	public double getStartAngle()
-	{
+	public double getStartAngle() {
 		return startAngle;
 	}
 
-	public void setStartAngle(double anAngle)
-	{
+	public void setStartAngle(double anAngle) {
 		startAngle = anAngle;
 		updatePoints();
 	}

@@ -34,103 +34,81 @@ import org.openflexo.javaparser.FJPJavaMethod;
 import org.openflexo.javaparser.FJPJavaParseException;
 import org.openflexo.javaparser.FJPJavaSource;
 import org.openflexo.javaparser.FJPJavaSource.FJPImportDeclarations;
-import org.openflexo.javaparser.FJPJavaSource.FJPPackageDeclaration;
 import org.openflexo.javaparser.FJPJavaSource.FJPImportDeclarations.FJPImportDeclaration;
+import org.openflexo.javaparser.FJPJavaSource.FJPPackageDeclaration;
 import org.openflexo.sg.file.SGJavaFile;
 
-
-public class JavaParserBrowserConfiguration implements BrowserConfiguration
-{
+public class JavaParserBrowserConfiguration implements BrowserConfiguration {
 	private SGJavaFile _javaFile;
 	private JavaParserBrowserConfigurationElementFactory _factory;
-	
-	protected JavaParserBrowserConfiguration(SGJavaFile javaFile)
-	{
+
+	protected JavaParserBrowserConfiguration(SGJavaFile javaFile) {
 		super();
 		_javaFile = javaFile;
 		_factory = new JavaParserBrowserConfigurationElementFactory();
 	}
 
 	@Override
-	public FlexoProject getProject() 
-	{
-		if (_javaFile != null)
+	public FlexoProject getProject() {
+		if (_javaFile != null) {
 			return _javaFile.getProject();
+		}
 		return null;
 	}
-	
-    @Override
-	public void configure(final ProjectBrowser aBrowser) 
-	{
-    	SwingUtilities.invokeLater(new Runnable() {
+
+	@Override
+	public void configure(final ProjectBrowser aBrowser) {
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-					if (_javaFile.getParsedJavaSource() != null
-							&& _javaFile.getParsedJavaSource().getClasses().length > 0)
-						aBrowser.expand(_javaFile.getParsedJavaSource().getClasses()[0],true);
-			}    		
-    	});
- 	}
+				if (_javaFile.getParsedJavaSource() != null && _javaFile.getParsedJavaSource().getClasses().length > 0) {
+					aBrowser.expand(_javaFile.getParsedJavaSource().getClasses()[0], true);
+				}
+			}
+		});
+	}
 
 	@Override
-	public FJPJavaElement getDefaultRootObject()
-	{
-		if (_javaFile.getParsedJavaSource() != null)
+	public FJPJavaElement getDefaultRootObject() {
+		if (_javaFile.getParsedJavaSource() != null) {
 			return _javaFile.getParsedJavaSource();
-		else return _javaFile.getParseException();
+		} else {
+			return _javaFile.getParseException();
+		}
 	}
 
 	@Override
-	public BrowserElementFactory getBrowserElementFactory()
-	{
-		return _factory; 
+	public BrowserElementFactory getBrowserElementFactory() {
+		return _factory;
 	}
 
-	class JavaParserBrowserConfigurationElementFactory implements BrowserElementFactory
-	{
+	class JavaParserBrowserConfigurationElementFactory implements BrowserElementFactory {
 
 		JavaParserBrowserConfigurationElementFactory() {
 			super();
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-		{
+		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof FJPJavaSource) {
-				return new JavaSourceElement((FJPJavaSource)object,(JavaParserBrowser)browser,parent);
-			}
-			else if (object instanceof FJPPackageDeclaration) {
-				return new PackageDeclarationElement((FJPPackageDeclaration)object,(JavaParserBrowser)browser,parent);
-			}
-			else if (object instanceof FJPImportDeclarations) {
-				return new ImportDeclarationsElement((FJPImportDeclarations)object,(JavaParserBrowser)browser,parent);
-			}
-			else if (object instanceof FJPImportDeclaration) {
-				return new ImportDeclarationElement((FJPImportDeclaration)object,(JavaParserBrowser)browser,parent);
-			}
-			else if (object instanceof FJPJavaClass) {
-				return new JavaClassElement((FJPJavaClass)object,(JavaParserBrowser)browser,parent);
-			}
-			else if (object instanceof FJPJavaMethod) {
-				return new JavaMethodElement((FJPJavaMethod)object,(JavaParserBrowser)browser,parent);
-			}
-			else if (object instanceof FJPJavaField) {
-				return new JavaFieldElement((FJPJavaField)object,(JavaParserBrowser)browser,parent);
-			}
-			else if (object instanceof FJPJavaParseException) {
-				return new JavaParseExceptionElement((FJPJavaParseException)object,(JavaParserBrowser)browser,parent);
+				return new JavaSourceElement((FJPJavaSource) object, (JavaParserBrowser) browser, parent);
+			} else if (object instanceof FJPPackageDeclaration) {
+				return new PackageDeclarationElement((FJPPackageDeclaration) object, (JavaParserBrowser) browser, parent);
+			} else if (object instanceof FJPImportDeclarations) {
+				return new ImportDeclarationsElement((FJPImportDeclarations) object, (JavaParserBrowser) browser, parent);
+			} else if (object instanceof FJPImportDeclaration) {
+				return new ImportDeclarationElement((FJPImportDeclaration) object, (JavaParserBrowser) browser, parent);
+			} else if (object instanceof FJPJavaClass) {
+				return new JavaClassElement((FJPJavaClass) object, (JavaParserBrowser) browser, parent);
+			} else if (object instanceof FJPJavaMethod) {
+				return new JavaMethodElement((FJPJavaMethod) object, (JavaParserBrowser) browser, parent);
+			} else if (object instanceof FJPJavaField) {
+				return new JavaFieldElement((FJPJavaField) object, (JavaParserBrowser) browser, parent);
+			} else if (object instanceof FJPJavaParseException) {
+				return new JavaParseExceptionElement((FJPJavaParseException) object, (JavaParserBrowser) browser, parent);
 			}
 			return null;
 		}
 
-		
-
-		
-
-		
-
-		
-
-		
 	}
 }

@@ -23,62 +23,54 @@ import java.util.Vector;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class OO3Enum implements XMLSerializable
-{
-    public Vector<OO3EnumElement> enumElements;
+public class OO3Enum implements XMLSerializable {
+	public Vector<OO3EnumElement> enumElements;
 
-    public String defaultValue;
+	public String defaultValue;
 
-    public OO3Enum()
-    {
-        super();
-        enumElements = new Vector<OO3EnumElement>();
-        defaultValue = null;
-    }
+	public OO3Enum() {
+		super();
+		enumElements = new Vector<OO3EnumElement>();
+		defaultValue = null;
+	}
 
-    public void addElement(String value, String name)
-    {
-        OO3EnumElement newOO3EnumElement = new OO3EnumElement(value, name);
-        enumElements.add(newOO3EnumElement);
-        if (defaultValue == null) {
-            defaultValue = value;
-        }
-    }
+	public void addElement(String value, String name) {
+		OO3EnumElement newOO3EnumElement = new OO3EnumElement(value, name);
+		enumElements.add(newOO3EnumElement);
+		if (defaultValue == null) {
+			defaultValue = value;
+		}
+	}
 
-    public static class OO3EnumElement implements XMLSerializable
-    {
-        public String value;
+	public static class OO3EnumElement implements XMLSerializable {
+		public String value;
 
-        public String name;
+		public String name;
 
-        public OO3EnumElement()
-        {
-            super();
-        }
+		public OO3EnumElement() {
+			super();
+		}
 
-        public OO3EnumElement(String v, String n)
-        {
-            this();
-            this.value = v;
-            this.name = n;
-        }
-    }
+		public OO3EnumElement(String v, String n) {
+			this();
+			this.value = v;
+			this.name = n;
+		}
+	}
 
-    public static OO3Enum getUnderlineEnum()
-    {
-        OO3Enum returned = new OO3Enum();
-        returned.addElement("0", "none");
-        returned.addElement("1", "single");
-        returned.addElement("2", "thick");
-        returned.addElement("3", "double");
-        return returned;
-    }
+	public static OO3Enum getUnderlineEnum() {
+		OO3Enum returned = new OO3Enum();
+		returned.addElement("0", "none");
+		returned.addElement("1", "single");
+		returned.addElement("2", "thick");
+		returned.addElement("3", "double");
+		return returned;
+	}
 
 }

@@ -27,6 +27,13 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
+import org.openflexo.generator.action.GenerateSourceCode;
+import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.SGPreferences;
@@ -35,54 +42,43 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
-import org.openflexo.generator.action.GenerateSourceCode;
-import org.openflexo.generator.exception.GenerationException;
-
-
 public class GenerateSourceCodeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	GenerateSourceCodeInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(GenerateSourceCode.actionType,actionInitializer);
+	GenerateSourceCodeInitializer(SGControllerActionInitializer actionInitializer) {
+		super(GenerateSourceCode.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
 	public SGController getController() {
 		return (SGController) super.getController();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<GenerateSourceCode> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<GenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action)
-			{
+			public boolean run(ActionEvent e, GenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
 				}
-                if (!action.getRepository().getDirectory().exists()) {
-                    if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory")+" "+action.getRepository().getDirectory().getAbsolutePath()+" "+FlexoLocalization.localizedForKey("does_not_exist")+"\n"+FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
-                        action.getRepository().getDirectory().mkdirs();
-                    } else {
-                        return false;
-                    }
-                }
+				if (!action.getRepository().getDirectory().exists()) {
+					if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + " "
+							+ action.getRepository().getDirectory().getAbsolutePath() + " "
+							+ FlexoLocalization.localizedForKey("does_not_exist") + "\n"
+							+ FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
+						action.getRepository().getDirectory().mkdirs();
+					} else {
+						return false;
+					}
+				}
 				action.setSaveBeforeGenerating(SGPreferences.getSaveBeforeGenerating());
 				action.getProjectGenerator().startHandleLogs();
 				(getController()).getBrowser().setHoldStructure();
@@ -92,21 +88,20 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<GenerateSourceCode> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<GenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action)
-			{
+			public boolean run(ActionEvent e, GenerateSourceCode action) {
 				(getController()).getBrowser().resetHoldStructure();
 				(getController()).getBrowser().update();
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				getControllerActionInitializer().getSGController().disposeProgressWindow();
 
-				if (SGPreferences.getAutomaticallyDismissUnchangedFiles())
-					DismissUnchangedGeneratedFiles.actionType.makeNewAction(
-							action.getFocusedObject(), action.getGlobalSelection(), action.getEditor()).doAction();
+				if (SGPreferences.getAutomaticallyDismissUnchangedFiles()) {
+					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
+							action.getEditor()).doAction();
+				}
 
 				return true;
 			}
@@ -114,8 +109,7 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<GenerateSourceCode> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<GenerateSourceCode> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<GenerateSourceCode>() {
 			@Override
 			public boolean handleException(FlexoException exception, GenerateSourceCode action) {
@@ -133,21 +127,18 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.GENERATE_CODE_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.GENERATE_CODE_DISABLED_ICON;
 	}
+
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_G, FlexoCst.META_MASK);
 	}
 }

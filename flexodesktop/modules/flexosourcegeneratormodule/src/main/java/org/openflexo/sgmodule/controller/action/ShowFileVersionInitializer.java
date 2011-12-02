@@ -22,7 +22,6 @@ package org.openflexo.sgmodule.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -32,127 +31,69 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class ShowFileVersionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ShowFileVersionInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(null,actionInitializer);
+	ShowFileVersionInitializer(SGControllerActionInitializer actionInitializer) {
+		super(null, actionInitializer);
 	}
-	
+
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<ShowFileVersion> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ShowFileVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowFileVersion>() {
-            @Override
-			public boolean run(ActionEvent e, ShowFileVersion action)
-            {
-               	if (action.getActionType() == ShowFileVersion.showHistoryVersion) {
-            		CGFileVersionParameter versionParameter 
-            		= new CGFileVersionParameter("version","version",action.getFocusedObject(),null);
-                     AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog( getProject(), null, 
-                            FlexoLocalization
-							                .localizedForKey("show_history_version"), FlexoLocalization
-                            .localizedForKey("choose_version_to_show"), versionParameter);
-                     if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                    	 action.setVersionId(versionParameter.getValue().getVersionId());
-                    	 return true;
-                     }
-                     return false;
-            	}
-            	return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, ShowFileVersion action) {
+				if (action.getActionType() == ShowFileVersion.showHistoryVersion) {
+					CGFileVersionParameter versionParameter = new CGFileVersionParameter("version", "version", action.getFocusedObject(),
+							null);
+					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+							FlexoLocalization.localizedForKey("show_history_version"),
+							FlexoLocalization.localizedForKey("choose_version_to_show"), versionParameter);
+					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+						action.setVersionId(versionParameter.getValue().getVersionId());
+						return true;
+					}
+					return false;
+				}
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<ShowFileVersion> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<ShowFileVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowFileVersion>() {
-            @Override
-			public boolean run(ActionEvent e, ShowFileVersion action)
-            {
-               	getControllerActionInitializer().getSGController().getPopupShowingFileVersion(action.getFocusedObject(),action.getSource())
-            	.setVisible(true);
-            	return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, ShowFileVersion action) {
+				getControllerActionInitializer().getSGController()
+						.getPopupShowingFileVersion(action.getFocusedObject(), action.getSource()).setVisible(true);
+				return true;
+			}
+		};
 	}
 
-  	@Override
-	public void init()
-	{
-		initActionType(ShowFileVersion.showPureGeneration,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(ShowFileVersion.showGeneratedMerge,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(ShowFileVersion.showContentOnDisk,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(ShowFileVersion.showResultFileMerge,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(ShowFileVersion.showLastGenerated,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(ShowFileVersion.showLastAccepted,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(ShowFileVersion.showHistoryVersion,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
+	@Override
+	public void init() {
+		initActionType(ShowFileVersion.showPureGeneration, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(ShowFileVersion.showGeneratedMerge, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(ShowFileVersion.showContentOnDisk, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(ShowFileVersion.showResultFileMerge, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(ShowFileVersion.showLastGenerated, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(ShowFileVersion.showLastAccepted, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(ShowFileVersion.showHistoryVersion, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), null, null, null);
 	}
 
- }
+}

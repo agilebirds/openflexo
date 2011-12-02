@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.wkf.edge;
 
-
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -27,13 +26,14 @@ import org.openflexo.foundation.wkf.dm.AssociationRemoved;
 import org.openflexo.foundation.wkf.node.WKFNode;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-public class WKFAssociation extends WKFEdge<WKFNode,WKFNode> implements DeletableObject {	
+public class WKFAssociation extends WKFEdge<WKFNode, WKFNode> implements DeletableObject {
+
 	public enum Arrow {
 		NONE, START_TO_END, END_TO_START, BOTH;
 	}
-	
+
 	private Arrow arrow = Arrow.START_TO_END;
-	
+
 	public WKFAssociation(FlexoProcessBuilder builder) {
 		super(builder.process);
 		initializeDeserialization(builder);
@@ -42,13 +42,13 @@ public class WKFAssociation extends WKFEdge<WKFNode,WKFNode> implements Deletabl
 	private WKFAssociation(FlexoProcess process) {
 		super(process);
 	}
-	
+
 	public WKFAssociation(WKFNode startNode, WKFNode endNode) {
 		this(startNode.getProcess());
 		setStartNode(startNode);
 		setEndNode(endNode);
 	}
-	
+
 	@Override
 	public final void delete() {
 		super.delete();
@@ -71,23 +71,23 @@ public class WKFAssociation extends WKFEdge<WKFNode,WKFNode> implements Deletabl
 	public void removeIncomingEdgeFromEndNode(WKFNode endNode) {
 		endNode.removeFromIncomingAssociations(this);
 	}
-	
+
 	@Override
 	public void removeOutgoingEdgeFromStartNode(WKFNode startNode) {
 		startNode.removeFromOutgoingAssociations(this);
 	}
-	
+
 	public Arrow getArrow() {
 		return arrow;
 	}
-	
+
 	public void setArrow(Arrow arrow) {
 		Arrow old = this.arrow;
 		this.arrow = arrow;
 		setChanged();
 		notifyAttributeModification("arrow", old, arrow);
 	}
-	
+
 	@Override
 	public Class<WKFNode> getEndNodeClass() {
 		return WKFNode.class;
@@ -102,7 +102,7 @@ public class WKFAssociation extends WKFEdge<WKFNode,WKFNode> implements Deletabl
 	public String getInspectorName() {
 		return Inspectors.WKF.ASSOCIATION_INSPECTOR;
 	}
-	
+
 	@Override
 	public String getClassNameKey() {
 		return "association";

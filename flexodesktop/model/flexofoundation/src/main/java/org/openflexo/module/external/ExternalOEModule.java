@@ -23,21 +23,17 @@ import javax.swing.JComponent;
 
 import org.openflexo.foundation.view.View;
 
-
-
-
 /**
- * External view of the module.
- * Declare here all features that you want to be available from outside
- * of this module.
- * Put here as less methods as possible.
+ * External view of the module. Declare here all features that you want to be available from outside of this module. Put here as less
+ * methods as possible.
  * 
  * @author yourname
  */
-public interface ExternalOEModule extends ExternalModule
-{
-    public JComponent createScreenshotForShema(View shema);
-     public float getScreenshotQuality();
-    public void finalizeScreenshotGeneration();
+public interface ExternalOEModule extends ExternalModule {
+	public JComponent createScreenshotForShema(View shema);
+
+	public float getScreenshotQuality();
+
+	public void finalizeScreenshotGeneration();
 
 }

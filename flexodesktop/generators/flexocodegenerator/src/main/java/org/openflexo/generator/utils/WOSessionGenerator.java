@@ -26,43 +26,40 @@ import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-public class WOSessionGenerator extends JavaClassGenerator
-{
+public class WOSessionGenerator extends JavaClassGenerator {
 
-    private static final String TEMPLATE_NAME = "Session.java.vm";
+	private static final String TEMPLATE_NAME = "Session.java.vm";
 
 	private static final Logger logger = FlexoLogger.getLogger(WOSessionGenerator.class.getPackage().getName());
 
-    public WOSessionGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,projectGenerator.getProject().getDataModel().getWORepository().getCustomSessionEntity());
-    }
+	public WOSessionGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, projectGenerator.getProject().getDataModel().getWORepository().getCustomSessionEntity());
+	}
 
-    @Override
-	public Logger getGeneratorLogger()
-	{
+	@Override
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-    protected VelocityContext defaultContext() {
-    	VelocityContext vc = super.defaultContext();
+	@Override
+	protected VelocityContext defaultContext() {
+		VelocityContext vc = super.defaultContext();
 		vc.put("entity", getEntity());
 		return vc;
-    }
-    
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-        
-    }
-    
-    @Override
-    public String getTemplateName() {
-    	return TEMPLATE_NAME;
-    }
+	}
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
+
+	}
+
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 }

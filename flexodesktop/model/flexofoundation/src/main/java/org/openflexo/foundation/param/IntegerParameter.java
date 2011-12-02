@@ -23,32 +23,27 @@ import org.openflexo.inspector.widget.DenaliWidget;
 
 public class IntegerParameter extends ParameterDefinition<Integer> {
 
-    public IntegerParameter(String name, String label, int defaultValue)
-    {
-        super(name,label,new Integer(defaultValue));
-        setIntegerValue(defaultValue);
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.INTEGER;
-    }
+	public IntegerParameter(String name, String label, int defaultValue) {
+		super(name, label, new Integer(defaultValue));
+		setIntegerValue(defaultValue);
+	}
 
-   @Override
-public int getIntegerValue()
-   {
-       if (getValue() !=null) {
-           return (getValue()).intValue();
-       }
-       return super.getIntegerValue();
-   }
-   
-   @Override
-public void setIntegerValue(int anInteger)
-   {
-       setValue(new Integer(anInteger));
-   }
-   
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.INTEGER;
+	}
+
+	@Override
+	public int getIntegerValue() {
+		if (getValue() != null) {
+			return (getValue()).intValue();
+		}
+		return super.getIntegerValue();
+	}
+
+	@Override
+	public void setIntegerValue(int anInteger) {
+		setValue(new Integer(anInteger));
+	}
 
 }

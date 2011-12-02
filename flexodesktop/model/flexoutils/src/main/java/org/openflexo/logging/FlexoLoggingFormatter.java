@@ -27,45 +27,45 @@ import java.util.logging.LogRecord;
 
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * Utility class used to format logs of Flexo
  * 
  * @author sguerin
  */
-public class FlexoLoggingFormatter extends Formatter
-{
+public class FlexoLoggingFormatter extends Formatter {
 
 	private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss,SSS");
-	
-	public static boolean logDate = true;
-	
-    @Override
-	public String format(LogRecord log)
-    {
-    	StringBuffer sb = new StringBuffer();
-    	sb.append(formatString((logDate?30:10), log.getLevel().toString()+(logDate?" "+dateFormat.format(new Date(log.getMillis())):"")));
-    	sb.append(formatString(100, log.getMessage()));
-    	sb.append(formatString(50, "[" + log.getSourceClassName() + "." + log.getSourceMethodName() + "]"));
-    	sb.append("\n");
-    	if (log.getThrown()!=null)
-    		sb.append(ToolBox.stackTraceAsAString(log.getThrown()));
-    	return  sb.toString();
-    }
 
-    public static String formatString(int cols, String aString)
-    {
-        char[] blank;
-        if (aString==null) aString="null";
-        if (cols > aString.length()) {
-            blank = new char[cols - aString.length()];
-            for (int i = 0; i < cols - aString.length(); i++) {
-                blank[i] = ' ';
-            }
-            return aString + new String(blank);
-        } else {
-            return aString;
-        }
-    }
+	public static boolean logDate = true;
+
+	@Override
+	public String format(LogRecord log) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(formatString((logDate ? 30 : 10),
+				log.getLevel().toString() + (logDate ? " " + dateFormat.format(new Date(log.getMillis())) : "")));
+		sb.append(formatString(100, log.getMessage()));
+		sb.append(formatString(50, "[" + log.getSourceClassName() + "." + log.getSourceMethodName() + "]"));
+		sb.append("\n");
+		if (log.getThrown() != null) {
+			sb.append(ToolBox.stackTraceAsAString(log.getThrown()));
+		}
+		return sb.toString();
+	}
+
+	public static String formatString(int cols, String aString) {
+		char[] blank;
+		if (aString == null) {
+			aString = "null";
+		}
+		if (cols > aString.length()) {
+			blank = new char[cols - aString.length()];
+			for (int i = 0; i < cols - aString.length(); i++) {
+				blank[i] = ' ';
+			}
+			return aString + new String(blank);
+		} else {
+			return aString;
+		}
+	}
 
 }

@@ -32,46 +32,40 @@ import java.io.Serializable;
 
 import org.openflexo.components.browser.BrowserElement;
 
-
 /**
  * TODO : Description for this file
  * 
  * @author benoit
  */
-public class ElementMovable implements Transferable, Serializable
-{
+public class ElementMovable implements Transferable, Serializable {
 
-    public static final DataFlavor TREE_PATH_FLAVOR = new DataFlavor(BrowserElement.class, "BrowserElement");
+	public static final DataFlavor TREE_PATH_FLAVOR = new DataFlavor(BrowserElement.class, "BrowserElement");
 
-    DataFlavor flavors[] = { TREE_PATH_FLAVOR };
+	DataFlavor flavors[] = { TREE_PATH_FLAVOR };
 
-    BrowserElement path;
+	BrowserElement path;
 
-    public ElementMovable(BrowserElement tp)
-    {
-        path = tp;
-    }
+	public ElementMovable(BrowserElement tp) {
+		path = tp;
+	}
 
-    @Override
-	public synchronized DataFlavor[] getTransferDataFlavors()
-    {
-        return flavors;
-    }
+	@Override
+	public synchronized DataFlavor[] getTransferDataFlavors() {
+		return flavors;
+	}
 
-    @Override
-	public boolean isDataFlavorSupported(DataFlavor flavor)
-    {
-        return (flavor.getRepresentationClass() == BrowserElement.class);
-    }
+	@Override
+	public boolean isDataFlavorSupported(DataFlavor flavor) {
+		return (flavor.getRepresentationClass() == BrowserElement.class);
+	}
 
-    @Override
-	public synchronized Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException
-    {
-        if (isDataFlavorSupported(flavor)) {
-            return path;
-        } else {
-            throw new UnsupportedFlavorException(flavor);
-        }
-    }
+	@Override
+	public synchronized Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+		if (isDataFlavorSupported(flavor)) {
+			return path;
+		} else {
+			throw new UnsupportedFlavorException(flavor);
+		}
+	}
 
 }

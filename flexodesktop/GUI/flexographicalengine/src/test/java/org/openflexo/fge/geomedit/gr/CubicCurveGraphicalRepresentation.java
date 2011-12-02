@@ -34,32 +34,27 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGECubicCurve,CubicCurve> implements XMLSerializable 
-{
+public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGECubicCurve, CubicCurve> implements
+		XMLSerializable {
 	// Called for LOAD
-	public CubicCurveGraphicalRepresentation(GeomEditBuilder builder)
-	{
-		this(null,builder.drawing);
+	public CubicCurveGraphicalRepresentation(GeomEditBuilder builder) {
+		this(null, builder.drawing);
 		initializeDeserialization();
 	}
-	
-	public CubicCurveGraphicalRepresentation(CubicCurve curve, GeometricDrawing aDrawing)
-	{
+
+	public CubicCurveGraphicalRepresentation(CubicCurve curve, GeometricDrawing aDrawing) {
 		super(curve, aDrawing);
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingController controller)
-	{
+	public void paint(Graphics g, DrawingController controller) {
 		// TODO: un petit @brutal pour avancer, il faudrait faire les choses plus proprement
 		rebuildControlPoints();
 		super.paint(g, controller);
 	}
 
 	@Override
-	public void paintGeometricObject(FGEGeometricGraphics graphics)
-	{
+	public void paintGeometricObject(FGEGeometricGraphics graphics) {
 		getGeometricObject().paint(graphics);
 
 		if (getIsSelected() || getIsFocused()) {
@@ -69,15 +64,14 @@ public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalR
 			FGEPoint cp1 = getGeometricObject().getCtrlP1();
 			FGEPoint cp2 = getGeometricObject().getCtrlP2();
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY,0.5f,DashStyle.PLAIN_STROKE));
+			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 0.5f, DashStyle.PLAIN_STROKE));
 
-			FGESegment line1 = new FGESegment(p1,cp1);
-			FGESegment line2 = new FGESegment(p2,cp2);
+			FGESegment line1 = new FGESegment(p1, cp1);
+			FGESegment line2 = new FGESegment(p2, cp2);
 			line1.paint(graphics);
 			line2.paint(graphics);
 
 		}
 	}
-
 
 }

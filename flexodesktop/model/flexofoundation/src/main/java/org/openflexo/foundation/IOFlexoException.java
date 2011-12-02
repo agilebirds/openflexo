@@ -21,26 +21,21 @@ package org.openflexo.foundation;
 
 import java.io.IOException;
 
-public class IOFlexoException extends FlexoException
-{
+public class IOFlexoException extends FlexoException {
 	private IOException _targetException;
-	
- 	public IOFlexoException(IOException targetException)
-	{
-		super("I/O exception","io_exception");
+
+	public IOFlexoException(IOException targetException) {
+		super("I/O exception", "io_exception");
 		_targetException = targetException;
 	}
 
-	public IOException getTargetException() 
-	{
+	public IOException getTargetException() {
 		return _targetException;
 	}
-	
+
 	@Override
-	public Throwable getCause()
-	{
+	public Throwable getCause() {
 		return getTargetException();
 	}
-	
 
 }

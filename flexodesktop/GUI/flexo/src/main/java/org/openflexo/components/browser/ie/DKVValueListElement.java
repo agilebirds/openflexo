@@ -22,40 +22,36 @@ package org.openflexo.components.browser.ie;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.dkv.Value;
 import org.openflexo.foundation.dkv.Domain.ValueList;
-
+import org.openflexo.foundation.dkv.Value;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVValueListElement extends BrowserElement
-{
+public class DKVValueListElement extends BrowserElement {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public DKVValueListElement(ValueList object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.DKV_VALUE_LIST, browser, parent);
-    }
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public DKVValueListElement(ValueList object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.DKV_VALUE_LIST, browser, parent);
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        ValueList vl = (ValueList) getObject();
-        Object[] o = vl.getValues();
-        for (int j = 0; j < o.length; j++) {
-            addToChilds((Value) o[j]);
-        }
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		ValueList vl = (ValueList) getObject();
+		Object[] o = vl.getValues();
+		for (int j = 0; j < o.length; j++) {
+			addToChilds((Value) o[j]);
+		}
+	}
 
 }

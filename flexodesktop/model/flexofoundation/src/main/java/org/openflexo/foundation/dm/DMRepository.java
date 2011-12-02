@@ -201,7 +201,9 @@ public abstract class DMRepository extends DMObject {
 
 	public DMPackage getDefaultPackage() {
 		/*
-		 * DMPackage defaultPackage = (DMPackage)packages.get("default"); if (defaultPackage == null) { defaultPackage = new DMPackage(getDMModel(),this,"default_package");
+		 * DMPackage defaultPackage = (DMPackage)packages.get("default"); if
+		 * (defaultPackage == null) { defaultPackage = new
+		 * DMPackage(getDMModel(),this,"default_package");
 		 * packages.put("default",defaultPackage); } return defaultPackage;
 		 */
 		return packageWithName(DMPackage.DEFAULT_PACKAGE_NAME);

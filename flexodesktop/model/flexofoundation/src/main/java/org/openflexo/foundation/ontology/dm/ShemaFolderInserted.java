@@ -24,17 +24,15 @@ import org.openflexo.foundation.view.ViewFolder;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ShemaFolderInserted extends IEDataModification
-{
+public class ShemaFolderInserted extends IEDataModification {
 
-    /**
-     * @param sub
-     */
-    public ShemaFolderInserted(ViewFolder sub)
-    {
-        super(null, sub);
-    }
+	/**
+	 * @param sub
+	 */
+	public ShemaFolderInserted(ViewFolder sub) {
+		super(null, sub);
+	}
 
 }

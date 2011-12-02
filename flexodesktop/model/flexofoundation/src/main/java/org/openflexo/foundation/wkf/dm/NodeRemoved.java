@@ -27,20 +27,17 @@ import org.openflexo.foundation.wkf.node.AbstractNode;
  * @author sguerin
  * 
  */
-public class NodeRemoved extends WKFDataModification
-{
+public class NodeRemoved extends WKFDataModification {
 
-    protected AbstractNode _removedNode;
+	protected AbstractNode _removedNode;
 
-    public NodeRemoved(AbstractNode removedNode)
-    {
-        super(removedNode, null);
-        _removedNode = removedNode;
-    }
+	public NodeRemoved(AbstractNode removedNode) {
+		super(removedNode, null);
+		_removedNode = removedNode;
+	}
 
-    public AbstractNode getRemovedNode()
-    {
-        return _removedNode;
-    }
+	public AbstractNode getRemovedNode() {
+		return _removedNode;
+	}
 
 }

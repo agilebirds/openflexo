@@ -24,7 +24,6 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -32,51 +31,42 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette,ViewPoint,ViewPointObject> 
-{
+public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette, ViewPoint, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateViewPointPalette.class.getPackage().getName());
 
-	public static FlexoActionType<CreateViewPointPalette,ViewPoint,ViewPointObject> actionType 
-	= new FlexoActionType<CreateViewPointPalette,ViewPoint,ViewPointObject> (
-			"create_new_palette",
-			FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateViewPointPalette, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateViewPointPalette, ViewPoint, ViewPointObject>(
+			"create_new_palette", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateViewPointPalette makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
-		{
+		public CreateViewPointPalette makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new CreateViewPointPalette(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
-		{
+		protected boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (CreateViewPointPalette.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(CreateViewPointPalette.actionType, ViewPoint.class);
 	}
-
 
 	public String newPaletteName;
 	public String description;
@@ -84,59 +74,51 @@ public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette,V
 
 	private ViewPointPalette _newPalette;
 
-	CreateViewPointPalette (ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
-	{
+	CreateViewPointPalette(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException,NotImplementedException,InvalidParameterException
-	{
-		logger.info ("Add calc palette");  	
+	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+		logger.info("Add calc palette");
 
-		_newPalette = ViewPointPalette.newCalcPalette(
-				getFocusedObject(), 
-				new File(getFocusedObject().getViewPointDirectory(),newPaletteName+".palette"),
-				graphicalRepresentation);
+		_newPalette = ViewPointPalette.newCalcPalette(getFocusedObject(), new File(getFocusedObject().getViewPointDirectory(),
+				newPaletteName + ".palette"), graphicalRepresentation);
 		_newPalette.setDescription(description);
 		getFocusedObject().addToCalcPalettes(_newPalette);
 		_newPalette.save();
-		
+
 	}
 
-	public FlexoProject getProject()
-	{
-		if (getFocusedObject() != null) return getFocusedObject().getProject();
+	public FlexoProject getProject() {
+		if (getFocusedObject() != null) {
+			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 
-	public ViewPointPalette getNewPalette() 
-	{
+	public ViewPointPalette getNewPalette() {
 		return _newPalette;
 	}
 
 	private String nameValidityMessage = EMPTY_NAME;
-	
+
 	private static final String NAME_IS_VALID = FlexoLocalization.localizedForKey("name_is_valid");
 	private static final String DUPLICATED_NAME = FlexoLocalization.localizedForKey("this_name_is_already_used_please_choose_an_other_one");
 	private static final String EMPTY_NAME = FlexoLocalization.localizedForKey("empty_name");
-	
-	public String getNameValidityMessage()
-	{
+
+	public String getNameValidityMessage() {
 		return nameValidityMessage;
 	}
-	
-	public boolean isNameValid()
-	{
+
+	public boolean isNameValid() {
 		if (StringUtils.isEmpty(newPaletteName)) {
 			nameValidityMessage = EMPTY_NAME;
 			return false;
-		}
-		else if (getFocusedObject().getPalette(newPaletteName) != null) {
+		} else if (getFocusedObject().getPalette(newPaletteName) != null) {
 			nameValidityMessage = DUPLICATED_NAME;
 			return false;
-		}
-		else {
+		} else {
 			nameValidityMessage = NAME_IS_VALID;
 			return true;
 		}

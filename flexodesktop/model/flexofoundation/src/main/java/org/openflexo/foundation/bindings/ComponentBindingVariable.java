@@ -29,49 +29,47 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class ComponentBindingVariable extends BindingVariable
-{
+public class ComponentBindingVariable extends BindingVariable {
 
-    private BindingDefinition _bindingDefinition;
+	private BindingDefinition _bindingDefinition;
 
-    public ComponentBindingVariable(Bindable container, DMModel dataModel, BindingDefinition bindingDefinition)
-    {
-        super(container, dataModel,FlexoLocalization.localizedForKey("access_to_the_current_component"));
-        _bindingDefinition = bindingDefinition;
-    }
+	public ComponentBindingVariable(Bindable container, DMModel dataModel, BindingDefinition bindingDefinition) {
+		super(container, dataModel, FlexoLocalization.localizedForKey("access_to_the_current_component"));
+		_bindingDefinition = bindingDefinition;
+	}
 
-    @Override
-	public DMType getType()
-    {
-        if (_bindingDefinition == null)
-            return null;
-        return _bindingDefinition.getType();
-    }
+	@Override
+	public DMType getType() {
+		if (_bindingDefinition == null) {
+			return null;
+		}
+		return _bindingDefinition.getType();
+	}
 
-    @Override
-	public void setType(DMType type)
-    {
-        if (_bindingDefinition == null)
-            return;
-        _bindingDefinition.setType(type);
-        setChanged();
-    }
+	@Override
+	public void setType(DMType type) {
+		if (_bindingDefinition == null) {
+			return;
+		}
+		_bindingDefinition.setType(type);
+		setChanged();
+	}
 
-    @Override
-	public String getVariableName()
-    {
-        if (_bindingDefinition == null)
-            return null;
-        return _bindingDefinition.getVariableName();
-    }
+	@Override
+	public String getVariableName() {
+		if (_bindingDefinition == null) {
+			return null;
+		}
+		return _bindingDefinition.getVariableName();
+	}
 
-    @Override
-	public void setVariableName(String variableName)
-    {
-        if (_bindingDefinition == null)
-            return;
-        _bindingDefinition.setVariableName(variableName);
-        setChanged();
-    }
+	@Override
+	public void setVariableName(String variableName) {
+		if (_bindingDefinition == null) {
+			return;
+		}
+		_bindingDefinition.setVariableName(variableName);
+		setChanged();
+	}
 
 }

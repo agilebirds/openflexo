@@ -39,35 +39,32 @@ import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class ExternalProcessViewWindow extends FlexoRelativeWindow
-{
+public class ExternalProcessViewWindow extends FlexoRelativeWindow {
 
-    private static final Logger logger = Logger.getLogger(ExternalProcessViewWindow.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExternalProcessViewWindow.class.getPackage().getName());
 
-    private ProcessEditorController _processEditorController;
+	private ProcessEditorController _processEditorController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public ExternalProcessViewWindow(WKFController controller, FlexoProcess process)
-    {
-        super(controller.getMainFrame());
-        getContentPane().setLayout(new BorderLayout());
-               
-        _processEditorController = new ProcessEditorController(process,controller.getEditor(),null);
-        
-        JPanel mainView;
+	public ExternalProcessViewWindow(WKFController controller, FlexoProcess process) {
+		super(controller.getMainFrame());
+		getContentPane().setLayout(new BorderLayout());
+
+		_processEditorController = new ProcessEditorController(process, controller.getEditor(), null);
+
+		JPanel mainView;
 		JPanel topPanel = new JPanel(new BorderLayout());
-		topPanel.add(_processEditorController.getScalePanel(),BorderLayout.WEST);
+		topPanel.add(_processEditorController.getScalePanel(), BorderLayout.WEST);
 		JPanel controlPanel = new JPanel(new FlowLayout());
 		JButton closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
 		closeButton.addActionListener(new ActionListener() {
@@ -77,71 +74,67 @@ public class ExternalProcessViewWindow extends FlexoRelativeWindow
 			}
 		});
 		controlPanel.add(closeButton);
-		topPanel.add(controlPanel,BorderLayout.EAST);
+		topPanel.add(controlPanel, BorderLayout.EAST);
 		mainView = new JPanel(new BorderLayout());
-		mainView.add(topPanel,BorderLayout.NORTH);
-		mainView.add(new JScrollPane(_processEditorController.getDrawingView()),BorderLayout.CENTER);
-		mainView.setPreferredSize(new Dimension(500,500));
+		mainView.add(topPanel, BorderLayout.NORTH);
+		mainView.add(new JScrollPane(_processEditorController.getDrawingView()), BorderLayout.CENTER);
+		mainView.setPreferredSize(new Dimension(500, 500));
 		_processEditorController.setScale(0.5);
-        
-         getContentPane().add(mainView, BorderLayout.CENTER);
 
-        setTitle(process.getName());
-        setSize(WKFCst.DEFAULT_EXTERNAL_VIEW_WIDTH, WKFCst.DEFAULT_EXTERNAL_VIEW_HEIGHT);
-        setLocation(100, 100);
+		getContentPane().add(mainView, BorderLayout.CENTER);
 
-        addWindowListener(new WindowAdapter() {
-            @Override
-			public void windowClosing(WindowEvent event)
-            {
-                closeWindow();
-            }
-        });
+		setTitle(process.getName());
+		setSize(WKFCst.DEFAULT_EXTERNAL_VIEW_WIDTH, WKFCst.DEFAULT_EXTERNAL_VIEW_HEIGHT);
+		setLocation(100, 100);
 
-        validate();
-        pack();
-    }
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent event) {
+				closeWindow();
+			}
+		});
 
-    /**
-     * Implements
-     * 
-     * @see org.openflexo.view.FlexoRelativeWindow#getName()
-     */
-    @Override
-	public String getName()
-    {
-        if (getFlexoProcess() != null) {
-            return getFlexoProcess().getName();
-        } else {
-            return FlexoLocalization.localizedForKey("unnamed");
-        }
-    }
+		validate();
+		pack();
+	}
 
-    @Override
-	public String getLocalizedName()
-    {
-        if (getFlexoProcess() != null) {
-            return getFlexoProcess().getName();
-        } else {
-            return FlexoLocalization.localizedForKey(getName());
-        }
-    }
+	/**
+	 * Implements
+	 * 
+	 * @see org.openflexo.view.FlexoRelativeWindow#getName()
+	 */
+	@Override
+	public String getName() {
+		if (getFlexoProcess() != null) {
+			return getFlexoProcess().getName();
+		} else {
+			return FlexoLocalization.localizedForKey("unnamed");
+		}
+	}
 
-    public FlexoProcess getFlexoProcess()
-    {
-    	if (_processEditorController != null && _processEditorController.getDrawing() != null)
-    		return _processEditorController.getDrawing().getFlexoProcess();
-    	return null;
-    }
+	@Override
+	public String getLocalizedName() {
+		if (getFlexoProcess() != null) {
+			return getFlexoProcess().getName();
+		} else {
+			return FlexoLocalization.localizedForKey(getName());
+		}
+	}
 
+	public FlexoProcess getFlexoProcess() {
+		if (_processEditorController != null && _processEditorController.getDrawing() != null) {
+			return _processEditorController.getDrawing().getFlexoProcess();
+		}
+		return null;
+	}
 
-    public void closeWindow()
-    {
-    	logger.info("Closing ExternalProcessViewWindow");
-    	if (_processEditorController != null)
-    		_processEditorController.delete();
-    	_processEditorController = null;
-    	dispose();
-    }
+	public void closeWindow() {
+		logger.info("Closing ExternalProcessViewWindow");
+		if (_processEditorController != null) {
+			_processEditorController.delete();
+		}
+		_processEditorController = null;
+		dispose();
+	}
 
- }
+}

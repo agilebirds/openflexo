@@ -39,49 +39,45 @@ import org.openflexo.foundation.dm.action.DMSelectAll;
 import org.openflexo.view.menu.EditMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 
-
 /**
  * Menu edit for DM module
  * 
  * @author sylvain
  */
-public class DMEditMenu extends EditMenu
-{
+public class DMEditMenu extends EditMenu {
 
-    protected static final Logger logger = Logger.getLogger(DMEditMenu.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DMEditMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-    protected DMController _controller;
+	protected DMController _controller;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public DMEditMenu(DMController controller)
-    {
-        super(controller);
-        _controller = controller;
-        add(cutItem = new FlexoMenuItem(DMCut.actionType, getController()));
-        add(copyItem = new FlexoMenuItem(DMCopy.actionType, getController()));
-        add(pasteItem = new FlexoMenuItem(DMPaste.actionType, getController()));
-        add(deleteItem = new FlexoMenuItem(DMDelete.actionType, getController()));
-        deleteItem.getInputMap().put(KeyStroke.getKeyStroke((char)FlexoCst.DELETE_KEY_CODE),"doClick");
-        add(selectAllItem = new FlexoMenuItem(DMSelectAll.actionType, getController()));
-     }
+	public DMEditMenu(DMController controller) {
+		super(controller);
+		_controller = controller;
+		add(cutItem = new FlexoMenuItem(DMCut.actionType, getController()));
+		add(copyItem = new FlexoMenuItem(DMCopy.actionType, getController()));
+		add(pasteItem = new FlexoMenuItem(DMPaste.actionType, getController()));
+		add(deleteItem = new FlexoMenuItem(DMDelete.actionType, getController()));
+		deleteItem.getInputMap().put(KeyStroke.getKeyStroke((char) FlexoCst.DELETE_KEY_CODE), "doClick");
+		add(selectAllItem = new FlexoMenuItem(DMSelectAll.actionType, getController()));
+	}
 
-    // ==========================================================================
-    // ============================= Accessors
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Accessors
+	// ==================================
+	// ==========================================================================
 
-    public DMController getDMController()
-    {
-        return _controller;
-    }
+	public DMController getDMController() {
+		return _controller;
+	}
 
 }

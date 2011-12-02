@@ -24,82 +24,79 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.GenericArrayTypeImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-
 
 public class FIBDropDownColumn extends FIBTableColumn {
 
 	private static final Logger logger = Logger.getLogger(FIBMultipleValues.class.getPackage().getName());
 
-	public static enum Parameters implements FIBModelAttribute
-	{
-		staticList,
-		list,
-		array
+	public static enum Parameters implements FIBModelAttribute {
+		staticList, list, array
 	}
 
-	public static BindingDefinition LIST = new BindingDefinition("list", new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(Object.class)) , BindingDefinitionType.GET, false);
-	public static BindingDefinition ARRAY = new BindingDefinition("array", new GenericArrayTypeImpl(new WilcardTypeImpl(Object.class)), BindingDefinitionType.GET, false);
+	public static BindingDefinition LIST = new BindingDefinition("list", new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(
+			Object.class)), BindingDefinitionType.GET, false);
+	public static BindingDefinition ARRAY = new BindingDefinition("array", new GenericArrayTypeImpl(new WilcardTypeImpl(Object.class)),
+			BindingDefinitionType.GET, false);
 
 	public String staticList;
-	
+
 	private DataBinding list;
 	private DataBinding array;
 
-    public FIBDropDownColumn()
-    {
-	}  
+	public FIBDropDownColumn() {
+	}
 
-	public DataBinding getList() 
-	{
-		if (list == null) list = new DataBinding(this,Parameters.list,LIST);
+	public DataBinding getList() {
+		if (list == null) {
+			list = new DataBinding(this, Parameters.list, LIST);
+		}
 		return list;
 	}
 
-	public void setList(DataBinding list) 
-	{
+	public void setList(DataBinding list) {
 		list.setOwner(this);
 		list.setBindingAttribute(Parameters.list);
 		list.setBindingDefinition(LIST);
 		this.list = list;
 	}
-	
-	public DataBinding getArray() 
-	{
-		if (array == null) array = new DataBinding(this,Parameters.array,ARRAY);
+
+	public DataBinding getArray() {
+		if (array == null) {
+			array = new DataBinding(this, Parameters.array, ARRAY);
+		}
 		return array;
 	}
 
-	public void setArray(DataBinding array) 
-	{
+	public void setArray(DataBinding array) {
 		array.setOwner(this);
 		array.setBindingAttribute(Parameters.array);
 		array.setBindingDefinition(ARRAY);
 		this.array = array;
 	}
-	
+
 	@Override
-	public void finalizeTableDeserialization() 
-	{
+	public void finalizeTableDeserialization() {
 		super.finalizeTableDeserialization();
-		if (list != null) list.finalizeDeserialization();
-		if (array != null) array.finalizeDeserialization();
+		if (list != null) {
+			list.finalizeDeserialization();
+		}
+		if (array != null) {
+			array.finalizeDeserialization();
+		}
 	}
 
 	@Override
-	public Type getDefaultDataClass()
-	{
+	public Type getDefaultDataClass() {
 		return Object.class;
 	}
 
 	@Override
-	public ColumnType getColumnType()
-	{
+	public ColumnType getColumnType() {
 		return ColumnType.DropDown;
 	}
-
 
 }

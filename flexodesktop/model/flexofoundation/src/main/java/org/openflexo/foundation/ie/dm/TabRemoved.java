@@ -24,15 +24,12 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class TabRemoved extends IEDataModification
-{
+public class TabRemoved extends IEDataModification {
 
-    public TabRemoved(IETabWidget removedTab)
-    {
-        super(removedTab, null);
-    }
+	public TabRemoved(IETabWidget removedTab) {
+		super(removedTab, null);
+	}
 
 }

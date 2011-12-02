@@ -34,33 +34,28 @@ import org.openflexo.ie.view.widget.IETabWidgetView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MoveTabRightInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MoveTabRightInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(MoveTabRight.actionType,actionInitializer);
+	MoveTabRightInitializer(IEControllerActionInitializer actionInitializer) {
+		super(MoveTabRight.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<MoveTabRight> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MoveTabRight> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveTabRight>() {
 			@Override
-			public boolean run(ActionEvent e, MoveTabRight action)
-			{
+			public boolean run(ActionEvent e, MoveTabRight action) {
 				IETabWidget tab = null;
-				if (action.getFocusedObject() instanceof IETabWidget)
+				if (action.getFocusedObject() instanceof IETabWidget) {
 					tab = ((IETabWidget) action.getFocusedObject());
-				else if (action.getInvoker() instanceof DropTabZone) {
+				} else if (action.getInvoker() instanceof DropTabZone) {
 					DropTabZone invoker = (DropTabZone) action.getInvoker();
 					if (invoker.getSelectedComponent() != null) {
 						if (invoker.getSelectedComponent() instanceof IETabWidgetView) {
@@ -78,22 +73,18 @@ public class MoveTabRightInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MoveTabRight> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MoveTabRight> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveTabRight>() {
 			@Override
-			public boolean run(ActionEvent e, MoveTabRight action)
-			{
+			public boolean run(ActionEvent e, MoveTabRight action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.MOVE_RIGHT_ICON;
 	}
-
 
 }

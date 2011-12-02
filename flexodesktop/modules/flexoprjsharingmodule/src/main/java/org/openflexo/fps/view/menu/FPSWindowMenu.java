@@ -31,52 +31,45 @@ import org.openflexo.fps.controller.FPSController;
 import org.openflexo.module.Module;
 import org.openflexo.view.menu.WindowMenu;
 
-
 /**
  * 'Window' menu for this Module
  * 
  * @author yourname
  */
-public class FPSWindowMenu extends WindowMenu
-{
+public class FPSWindowMenu extends WindowMenu {
 
-    private static final Logger logger = Logger.getLogger(FPSWindowMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FPSWindowMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected FPSController _fpsController;
+	protected FPSController _fpsController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public FPSWindowMenu(FPSController controller)
-    {
-        super(controller,Module.FPS_MODULE);
-        _fpsController = controller;
-        // Put your actions here
-    }
+	public FPSWindowMenu(FPSController controller) {
+		super(controller, Module.FPS_MODULE);
+		_fpsController = controller;
+		// Put your actions here
+	}
 
-    public FPSController getFPSController()
-    {
-        return _fpsController;
-    }
-    
-    @Override
-	public String getHidePaletteString()
-    {
-    	return "hide_cvs_console";
-    }
-    
-    @Override
-	public String getShowPaletteString()
-    {
-    	return "show_cvs_console";
-    }
-    
+	public FPSController getFPSController() {
+		return _fpsController;
+	}
+
+	@Override
+	public String getHidePaletteString() {
+		return "hide_cvs_console";
+	}
+
+	@Override
+	public String getShowPaletteString() {
+		return "show_cvs_console";
+	}
 
 }

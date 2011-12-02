@@ -19,40 +19,40 @@
  */
 package org.openflexo.foundation.wkf.node;
 
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLSerializable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
+import org.openflexo.xmlcode.XMLSerializable;
 
-import org.openflexo.localization.FlexoLocalization;
+public enum LoopType implements XMLSerializable, StringConvertable {
 
-public enum LoopType implements XMLSerializable,StringConvertable {
-	
-	WHILE("WHILE","while"),
-	UNTIL("UNTIL","until"),
-	FOR_INCREMENT("FOR_INCREMENT","for_increment"),
-	FOR_COLLECTION("FOR_COLLECTION","for_collection");
+	WHILE("WHILE", "while"), UNTIL("UNTIL", "until"), FOR_INCREMENT("FOR_INCREMENT", "for_increment"), FOR_COLLECTION(
+			"FOR_COLLECTION",
+			"for_collection");
 
 	private final String name;
 	private final String localizedKey;
 
-	public String getName(){
+	public String getName() {
 		return name;
 	}
-	public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(localizedKey);
-    }
-	LoopType(String _name, String _locKey){
+
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(localizedKey);
+	}
+
+	LoopType(String _name, String _locKey) {
 		this.name = _name;
 		this.localizedKey = _locKey;
 	}
-	
+
 	@Override
 	public Converter<LoopType> getConverter() {
 		return loopTypeConverter;
 	}
-	
-	public static final StringEncoder.EnumerationConverter<LoopType> loopTypeConverter = new StringEncoder.EnumerationConverter<LoopType>(LoopType.class,"getName");
+
+	public static final StringEncoder.EnumerationConverter<LoopType> loopTypeConverter = new StringEncoder.EnumerationConverter<LoopType>(
+			LoopType.class, "getName");
 
 }

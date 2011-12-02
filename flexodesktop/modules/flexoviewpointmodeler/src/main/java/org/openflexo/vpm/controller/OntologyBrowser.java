@@ -24,38 +24,31 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
 
-
-public class OntologyBrowser extends CEDBrowser
-{
+public class OntologyBrowser extends CEDBrowser {
 	private FlexoOntology representedOntology = null;
-	
-	public OntologyBrowser(CEDController controller)
-	{
+
+	public OntologyBrowser(CEDController controller) {
 		super(controller);
 	}
 
-	public FlexoOntology getRepresentedOntology() 
-	{
+	public FlexoOntology getRepresentedOntology() {
 		return representedOntology;
 	}
 
-	public void setRepresentedOntology(FlexoOntology representedOntology) 
-	{
+	public void setRepresentedOntology(FlexoOntology representedOntology) {
 		this.representedOntology = representedOntology;
 	}
 
-    @Override
-	public FlexoModelObject getDefaultRootObject()
-    {
-    	return representedOntology;
-    }
-    
 	@Override
-	public void configure()
-	{
+	public FlexoModelObject getDefaultRootObject() {
+		return representedOntology;
+	}
+
+	@Override
+	public void configure() {
 		super.configure();
-		//setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
-		//setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
+		// setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
+		// setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 		setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);

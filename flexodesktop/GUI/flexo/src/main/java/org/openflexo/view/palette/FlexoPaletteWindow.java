@@ -25,39 +25,32 @@ import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.view.controller.FlexoController;
 
-
-
-
 /**
- * Abstract definition of a palette that will be used in a particular module
- * Contains dragging components and supports drag operations
+ * Abstract definition of a palette that will be used in a particular module Contains dragging components and supports drag operations
  * 
  * @author sguerin
  */
-public abstract class FlexoPaletteWindow extends FlexoRelativeWindow
-{
-    
-    private FlexoPalette palette;
-    
-    protected FlexoPaletteWindow(FlexoFrame frame)
-    {
-        super(frame);
-        setFocusableWindowState(false);
-        palette = buildNewPalette(frame.getController());
-        getContentPane().add(palette,BorderLayout.CENTER);
-    }
-    
-    @Override
-    public void dispose() {
-    	super.dispose();
-    	palette = null;
-    }
-    
-    public FlexoPalette getPalette() 
-    {
-        return palette;
-    }
+public abstract class FlexoPaletteWindow extends FlexoRelativeWindow {
 
-    public abstract FlexoPalette buildNewPalette(FlexoController controller);
+	private FlexoPalette palette;
+
+	protected FlexoPaletteWindow(FlexoFrame frame) {
+		super(frame);
+		setFocusableWindowState(false);
+		palette = buildNewPalette(frame.getController());
+		getContentPane().add(palette, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		palette = null;
+	}
+
+	public FlexoPalette getPalette() {
+		return palette;
+	}
+
+	public abstract FlexoPalette buildNewPalette(FlexoController controller);
 
 }

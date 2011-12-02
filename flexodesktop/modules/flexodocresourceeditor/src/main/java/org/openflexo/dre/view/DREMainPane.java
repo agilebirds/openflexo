@@ -31,36 +31,30 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * Represents the main pane for this module
  * 
  * @author yourname
  */
-public class DREMainPane extends FlexoMainPane implements GraphicalFlexoObserver
-{
+public class DREMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-    public DREMainPane(ModuleView moduleView, DREFrame mainFrame, DREController controller)
-    {
-        super(moduleView,mainFrame,controller);
-        setLeftView(new DREBrowserView(controller));
-    }
+	public DREMainPane(ModuleView moduleView, DREFrame mainFrame, DREController controller) {
+		super(moduleView, mainFrame, controller);
+		setLeftView(new DREBrowserView(controller));
+	}
 
-    public void showBrowser()
-    {
-        showLeftView();
-    }
+	public void showBrowser() {
+		showLeftView();
+	}
 
-    public void hideBrowser()
-    {
-      hideLeftView();
-    }
+	public void hideBrowser() {
+		hideLeftView();
+	}
 
-    @Override
-	protected  FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-        // Implements it if required
-        return null;
-    }
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		// Implements it if required
+		return null;
+	}
 
 }

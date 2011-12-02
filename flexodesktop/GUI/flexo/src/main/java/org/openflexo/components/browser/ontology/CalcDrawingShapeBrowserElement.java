@@ -19,8 +19,6 @@
  */
 package org.openflexo.components.browser.ontology;
 
-
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -31,36 +29,33 @@ import org.openflexo.toolbox.StringUtils;
 
 /**
  * Browser element representing the calc palette element
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class CalcDrawingShapeBrowserElement extends BrowserElement
-{
+public class CalcDrawingShapeBrowserElement extends BrowserElement {
 
-    protected CalcDrawingShapeBrowserElement(ExampleDrawingShape shape, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(shape, BrowserElementType.ONTOLOGY_CALC_DRAWING_SHAPE, browser, parent);
-    }
+	protected CalcDrawingShapeBrowserElement(ExampleDrawingShape shape, ProjectBrowser browser, BrowserElement parent) {
+		super(shape, BrowserElementType.ONTOLOGY_CALC_DRAWING_SHAPE, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	for (ExampleDrawingObject element : getShape().getChilds()) {
-    		addToChilds(element);
-    	}
-    }
+	@Override
+	protected void buildChildrenVector() {
+		for (ExampleDrawingObject element : getShape().getChilds()) {
+			addToChilds(element);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-    	if (StringUtils.isEmpty(getShape().getName())) return "<"+FlexoLocalization.localizedForKey("unnamed")+">";
-        return getShape().getName();
-    }
+	@Override
+	public String getName() {
+		if (StringUtils.isEmpty(getShape().getName())) {
+			return "<" + FlexoLocalization.localizedForKey("unnamed") + ">";
+		}
+		return getShape().getName();
+	}
 
-    protected ExampleDrawingShape getShape()
-    {
-        return (ExampleDrawingShape) getObject();
-    }
+	protected ExampleDrawingShape getShape() {
+		return (ExampleDrawingShape) getObject();
+	}
 
 }

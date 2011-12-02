@@ -30,84 +30,79 @@ public class EmptyPanel<O extends FlexoModelObject> extends JPanel implements Mo
 	private FlexoController controller;
 	private FlexoPerspective perspective;
 	private O representedObject;
-	private String title="";
+	private String title = "";
 
-     /**
+	/**
      * 
      */
-    public EmptyPanel(FlexoController controller, FlexoPerspective perspective, O representedObject)
-    {
-    	this.controller = controller;
-       	this.perspective = perspective;
-       	this.representedObject=representedObject;
-    }
-    
-    @Override
-	public O getRepresentedObject()
-    {
-        return representedObject;
-    }
+	public EmptyPanel(FlexoController controller, FlexoPerspective perspective, O representedObject) {
+		this.controller = controller;
+		this.perspective = perspective;
+		this.representedObject = representedObject;
+	}
 
-    @Override
-	public void deleteModuleView() 
-    {
-    	if (controller!=null)
-    		controller.removeModuleView(this);
-    }
+	@Override
+	public O getRepresentedObject() {
+		return representedObject;
+	}
 
-    @Override
-	public FlexoPerspective getPerspective()
-    {
-        return perspective;
-    }
+	@Override
+	public void deleteModuleView() {
+		if (controller != null) {
+			controller.removeModuleView(this);
+		}
+	}
 
-    public FlexoController getController() {
-        return controller;
-    }
+	@Override
+	public FlexoPerspective getPerspective() {
+		return perspective;
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	public FlexoController getController() {
+		return controller;
+	}
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
-    
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
 	@Override
-	public boolean isAutoscrolled() 
-	{
+	public boolean isAutoscrolled() {
 		return true;
 	}
 
-	public String getTitle() 
-	{
-		if (title==null)
+	public String getTitle() {
+		if (title == null) {
 			return FlexoLocalization.localizedForKey(getRepresentedObject().getClassNameKey());
+		}
 		return title;
 	}
 
-	public void setTitle(String title)
-	{
+	public void setTitle(String title) {
 		this.title = title;
 	}
 

@@ -26,7 +26,6 @@ import org.openflexo.ve.controller.OEController;
 import org.openflexo.ve.controller.OESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 /**
  * 
  * Action initializing for this module
@@ -35,54 +34,48 @@ import org.openflexo.view.controller.ControllerActionInitializer;
  */
 public class OEControllerActionInitializer extends ControllerActionInitializer {
 
-    private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    private OEController _oeController;
-    
-    public OEControllerActionInitializer(OEController controller)
-    {
-        super(controller);
-        _oeController = controller;
-    }
-    
-    protected OEController getOEController()
-    {
-        return _oeController;
-    }
-    
-    protected OESelectionManager getOESelectionManager()
-    {
-        return getOEController().getOESelectionManager();
-    }
-    
+	private OEController _oeController;
 
-    
-    @Override
-	public void initializeActions()
-    {
-        super.initializeActions();
-        
-        (new OESetPropertyInitializer(this)).init();
+	public OEControllerActionInitializer(OEController controller) {
+		super(controller);
+		_oeController = controller;
+	}
 
-        // Shema library perspective
-        (new AddViewInitializer(this)).init();
-        (new AddViewFolderInitializer(this)).init();
- 
-        // Shema perspective
-        (new AddShapeInitializer(this)).init();
-        (new AddConnectorInitializer(this)).init();
-        (new DeleteViewElementsInitializer(this)).init();
-        (new DropSchemeActionInitializer(this)).init();
-        (new LinkSchemeActionInitializer(this)).init();
-        (new ActionSchemeActionInitializer(this)).initForClass(ActionSchemeActionType.class);
+	protected OEController getOEController() {
+		return _oeController;
+	}
 
-        // Ontology perspective
-        (new CreateOntologyClassInitializer(this)).init();
-        (new CreateOntologyIndividualInitializer(this)).init();
-        (new CreateObjectPropertyInitializer(this)).init();
-        (new CreateDataPropertyInitializer(this)).init();
-        (new DeleteOntologyObjectsInitializer(this)).init();
-        (new AddAnnotationStatementInitializer(this)).init();        
-    }
-  
+	protected OESelectionManager getOESelectionManager() {
+		return getOEController().getOESelectionManager();
+	}
+
+	@Override
+	public void initializeActions() {
+		super.initializeActions();
+
+		(new OESetPropertyInitializer(this)).init();
+
+		// Shema library perspective
+		(new AddViewInitializer(this)).init();
+		(new AddViewFolderInitializer(this)).init();
+
+		// Shema perspective
+		(new AddShapeInitializer(this)).init();
+		(new AddConnectorInitializer(this)).init();
+		(new DeleteViewElementsInitializer(this)).init();
+		(new DropSchemeActionInitializer(this)).init();
+		(new LinkSchemeActionInitializer(this)).init();
+		(new ActionSchemeActionInitializer(this)).initForClass(ActionSchemeActionType.class);
+
+		// Ontology perspective
+		(new CreateOntologyClassInitializer(this)).init();
+		(new CreateOntologyIndividualInitializer(this)).init();
+		(new CreateObjectPropertyInitializer(this)).init();
+		(new CreateDataPropertyInitializer(this)).init();
+		(new DeleteOntologyObjectsInitializer(this)).init();
+		(new AddAnnotationStatementInitializer(this)).init();
+	}
+
 }

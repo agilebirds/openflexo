@@ -24,17 +24,14 @@ package org.openflexo.foundation.rm;
  * 
  * @author sguerin
  */
-public class ResourceAdded extends RMDataModification
-{
+public class ResourceAdded extends RMDataModification {
 
-    public ResourceAdded(FlexoResource newResource)
-    {
-        super(null, newResource);
-    }
+	public ResourceAdded(FlexoResource<? extends FlexoResourceData> newResource) {
+		super(null, newResource);
+	}
 
-    public FlexoResource getAddedResource()
-    {
-        return (FlexoResource) newValue();
-    }
+	public FlexoResource<? extends FlexoResourceData> getAddedResource() {
+		return (FlexoResource<? extends FlexoResourceData>) newValue();
+	}
 
 }

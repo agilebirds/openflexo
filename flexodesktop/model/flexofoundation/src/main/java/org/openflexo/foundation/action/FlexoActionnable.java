@@ -19,9 +19,8 @@
  */
 package org.openflexo.foundation.action;
 
-public interface FlexoActionnable 
-{
-    public int getActionCount();
-    
-    public FlexoActionType getActionTypeAt(int index);
+public interface FlexoActionnable {
+	public int getActionCount();
+
+	public FlexoActionType getActionTypeAt(int index);
 }

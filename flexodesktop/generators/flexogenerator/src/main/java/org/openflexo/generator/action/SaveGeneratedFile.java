@@ -30,56 +30,47 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.file.AbstractCGFile;
 
+public class SaveGeneratedFile extends GCAction<SaveGeneratedFile, CGFile> {
 
-public class SaveGeneratedFile extends GCAction<SaveGeneratedFile,CGFile>
-{
+	private static final Logger logger = Logger.getLogger(SaveGeneratedFile.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(SaveGeneratedFile.class.getPackage().getName());
+	public static FlexoActionType<SaveGeneratedFile, CGFile, CGObject> actionType = new FlexoActionType<SaveGeneratedFile, CGFile, CGObject>(
+			"save_file", EDITION_MENU, FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<SaveGeneratedFile,CGFile,CGObject> actionType 
-    = new FlexoActionType<SaveGeneratedFile,CGFile,CGObject> (
-    		"save_file",EDITION_MENU,FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public SaveGeneratedFile makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new SaveGeneratedFile(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public SaveGeneratedFile makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new SaveGeneratedFile(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return (object instanceof AbstractCGFile);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return (object instanceof AbstractCGFile);
-        }
+		@Override
+		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return ((object != null) && (object.hasVersionOnDisk()) && (object.isEdited()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return ((object != null) && (object.hasVersionOnDisk()) && (object.isEdited()));
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (SaveGeneratedFile.actionType, CGFile.class);
-    }
-    
+	};
 
-    SaveGeneratedFile (CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(SaveGeneratedFile.actionType, CGFile.class);
+	}
 
-    @Override
-	protected void doAction(Object context) throws SaveResourceException
-    {
-    	logger.info ("Save edited file "+getFocusedObject().getFileName());
-    	if (getFocusedObject() != null) {
-    		getFocusedObject().save();
-     	}
-     }
-	
+	SaveGeneratedFile(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws SaveResourceException {
+		logger.info("Save edited file " + getFocusedObject().getFileName());
+		if (getFocusedObject() != null) {
+			getFocusedObject().save();
+		}
+	}
+
 }

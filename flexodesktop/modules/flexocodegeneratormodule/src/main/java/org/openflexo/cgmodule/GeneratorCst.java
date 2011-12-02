@@ -26,21 +26,20 @@ import java.awt.Font;
  * 
  * @author sguerin
  */
-public class GeneratorCst
-{
+public class GeneratorCst {
 
-    public static final int DEFAULT_GENERATOR_WIDTH = 850;
+	public static final int DEFAULT_GENERATOR_WIDTH = 850;
 
-    public static final int DEFAULT_GENERATOR_HEIGHT = 700;
+	public static final int DEFAULT_GENERATOR_HEIGHT = 700;
 
-    public static final String CONFIRM_POPUP_VALUE = "CONFIRM_POPUP";
-    
-    public static final Font HEADER_FONT = new Font("Verdana", Font.BOLD, 14);
-    public static final Font SUB_TITLE_FONT = new Font("Verdana", Font.ITALIC, 10);
+	public static final String CONFIRM_POPUP_VALUE = "CONFIRM_POPUP";
 
-    public static final int MINIMUM_BROWSER_VIEW_WIDTH = 240;
-    public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 0;
-    public static final int PREFERRED_BROWSER_VIEW_WIDTH = 240;
-    public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 240;
+	public static final Font HEADER_FONT = new Font("Verdana", Font.BOLD, 14);
+	public static final Font SUB_TITLE_FONT = new Font("Verdana", Font.ITALIC, 10);
+
+	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 240;
+	public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 0;
+	public static final int PREFERRED_BROWSER_VIEW_WIDTH = 240;
+	public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 240;
 
 }

@@ -29,73 +29,63 @@ import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 
+public class RevertRepositoryToVersion extends AbstractGCAction<RevertRepositoryToVersion, GenerationRepository> {
 
-public class RevertRepositoryToVersion extends AbstractGCAction<RevertRepositoryToVersion,GenerationRepository>
-{
+	private static final Logger logger = Logger.getLogger(RevertRepositoryToVersion.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RevertRepositoryToVersion.class.getPackage().getName());
+	public static FlexoActionType<RevertRepositoryToVersion, GenerationRepository, CGObject> actionType = new FlexoActionType<RevertRepositoryToVersion, GenerationRepository, CGObject>(
+			"revert_all_repository_to_version", versionningMenu, versionningActionsGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<RevertRepositoryToVersion,GenerationRepository,CGObject> actionType 
-    = new FlexoActionType<RevertRepositoryToVersion,GenerationRepository,CGObject> (
-    		"revert_all_repository_to_version",
-    		versionningMenu,
-    		versionningActionsGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RevertRepositoryToVersion makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection,
+				FlexoEditor editor) {
+			return new RevertRepositoryToVersion(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RevertRepositoryToVersion makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RevertRepositoryToVersion(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			return (object != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) 
-        {
-            return (object != null);
-        }
-                
-    };
-    
-    RevertRepositoryToVersion (GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-    
-    @Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException
-    {
-        logger.info ("Revert all repository to version");
- 
-    /*	makeFlexoProgress(FlexoLocalization.localizedForKey("release_as") +  " "
-    			+ getVersionIdentifier().versionAsString(), getFocusedObject().getFiles().size()+1);
+	};
 
-        _newCGRelease = new CGRelease(getFocusedObject());
-        _newCGRelease.setName(getName());
-        _newCGRelease.setDescription(getDescription());
-        _newCGRelease.setDate(getDate());
-        _newCGRelease.setUserId(getUserId());
-        _newCGRelease.setVersionIdentifier(getVersionIdentifier());
-        getFocusedObject().addToReleases(_newCGRelease);
-        
-        for (CGFile file : getFocusedObject().getFiles()) {
-    		setProgress(FlexoLocalization.localizedForKey("release") +  " " + file.getFileName());
-        	file.releaseAs(_newCGRelease);
-        }
-        
-    	// Refreshing repository
-        getFocusedObject().refresh();
+	RevertRepositoryToVersion(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    	hideFlexoProgress();
-*/
-    }
+	@Override
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException {
+		logger.info("Revert all repository to version");
+
+		/*	makeFlexoProgress(FlexoLocalization.localizedForKey("release_as") +  " "
+					+ getVersionIdentifier().versionAsString(), getFocusedObject().getFiles().size()+1);
+
+		    _newCGRelease = new CGRelease(getFocusedObject());
+		    _newCGRelease.setName(getName());
+		    _newCGRelease.setDescription(getDescription());
+		    _newCGRelease.setDate(getDate());
+		    _newCGRelease.setUserId(getUserId());
+		    _newCGRelease.setVersionIdentifier(getVersionIdentifier());
+		    getFocusedObject().addToReleases(_newCGRelease);
+		    
+		    for (CGFile file : getFocusedObject().getFiles()) {
+				setProgress(FlexoLocalization.localizedForKey("release") +  " " + file.getFileName());
+		    	file.releaseAs(_newCGRelease);
+		    }
+		    
+			// Refreshing repository
+		    getFocusedObject().refresh();
+
+			hideFlexoProgress();
+		*/
+	}
 
 }

@@ -29,87 +29,73 @@ import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.doceditor.menu.DEFileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 
-
 /**
  * @author gpolet
  */
-public class DGFileMenu extends DEFileMenu
-{
+public class DGFileMenu extends DEFileMenu {
 
-    static final Logger logger = Logger.getLogger(DGFileMenu.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(DGFileMenu.class.getPackage().getName());
 
-    public GenerateFilesItem generateFilesItem;
+	public GenerateFilesItem generateFilesItem;
 
-    public RefreshItem refreshItem;
+	public RefreshItem refreshItem;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public DGFileMenu(DGController controller)
-    {
-        super(controller);
-     }
+	public DGFileMenu(DGController controller) {
+		super(controller);
+	}
 
-    @Override
-	public DGController getGeneratorController()
-    {
-        return (DGController) _controller;
-    }
+	@Override
+	public DGController getGeneratorController() {
+		return (DGController) _controller;
+	}
 
-    @Override
-	public void addSpecificItems()
-    {
-        add(generateFilesItem = new GenerateFilesItem());
-        add(refreshItem = new RefreshItem());
-        addSeparator();
-   }
+	@Override
+	public void addSpecificItems() {
+		add(generateFilesItem = new GenerateFilesItem());
+		add(refreshItem = new RefreshItem());
+		addSeparator();
+	}
 
-    public class GenerateFilesItem extends FlexoMenuItem
-    {
-        public GenerateFilesItem()
-        {
-            super(new GenerateFilesAction(), "generate_files", null, getGeneratorController(), true);
-        }
+	public class GenerateFilesItem extends FlexoMenuItem {
+		public GenerateFilesItem() {
+			super(new GenerateFilesAction(), "generate_files", null, getGeneratorController(), true);
+		}
 
-    }
+	}
 
-    public class GenerateFilesAction extends AbstractAction
-    {
-        public GenerateFilesAction()
-        {
-            super();
-        }
+	public class GenerateFilesAction extends AbstractAction {
+		public GenerateFilesAction() {
+			super();
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-        	logger.warning("Not implemented yet");
-        }
-    }
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			logger.warning("Not implemented yet");
+		}
+	}
 
-    public class RefreshItem extends FlexoMenuItem
-    {
-        public RefreshItem()
-        {
-            super(new RefreshAction(), "refresh", null, getGeneratorController(), true);
-        }
-    }
+	public class RefreshItem extends FlexoMenuItem {
+		public RefreshItem() {
+			super(new RefreshAction(), "refresh", null, getGeneratorController(), true);
+		}
+	}
 
-    public class RefreshAction extends AbstractAction
-    {
-        public RefreshAction()
-        {
-            super();
-        }
+	public class RefreshAction extends AbstractAction {
+		public RefreshAction() {
+			super();
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Refresh not implemented");
-            // getGeneratorController().rebuildGeneratorWindow();
-        }
-    }
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Refresh not implemented");
+				// getGeneratorController().rebuildGeneratorWindow();
+			}
+		}
+	}
 }

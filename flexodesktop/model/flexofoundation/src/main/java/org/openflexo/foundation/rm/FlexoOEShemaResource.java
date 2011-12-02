@@ -33,187 +33,169 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 
-
 /**
  * Represents a shema resource
  * 
  * @author sguerin
  * 
  */
-public class FlexoOEShemaResource extends FlexoXMLStorageResource<View>
-{
-
-	
+public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 
 	private static final Logger logger = Logger.getLogger(FlexoOEShemaResource.class.getPackage().getName());
-    
+
 	protected String name;
 
-    public FlexoOEShemaResource(FlexoProject aProject, String aName, FlexoOEShemaLibraryResource slResource,
-            FlexoProjectFile componentFile) throws InvalidFileNameException
-    {
-        this(aProject);
-        setName(aName);
-        setResourceFile(componentFile);
-        addToSynchronizedResources(slResource);
-     }
+	public FlexoOEShemaResource(FlexoProject aProject, String aName, FlexoOEShemaLibraryResource slResource, FlexoProjectFile componentFile)
+			throws InvalidFileNameException {
+		this(aProject);
+		setName(aName);
+		setResourceFile(componentFile);
+		addToSynchronizedResources(slResource);
+	}
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public FlexoOEShemaResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-    }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public FlexoOEShemaResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public FlexoOEShemaResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	public FlexoOEShemaResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-	public String getName()
-    {
-        return name;
-    }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-        name = aName;
-        setChanged();
-    }
-    
-    public void setResourceData(View shema)
-    {
-    	_resourceData = shema;
-    }
+	@Override
+	public void setName(String aName) {
+		name = aName;
+		setChanged();
+	}
 
-    public View getShema()
-    {
-        return getResourceData();
-    }
+	public void setResourceData(View shema) {
+		_resourceData = shema;
+	}
 
-    public View getShema(FlexoProgress progress)
-    {
-        return getResourceData(progress);
-    }
+	public View getShema() {
+		return getResourceData();
+	}
 
-    public final View createNewShema() 
-    {
-    	return getShemaDefinition().createNewShema();
-    }
+	public View getShema(FlexoProgress progress) {
+		return getResourceData(progress);
+	}
 
-    private ViewDefinition _shemaDefinition;
+	public final View createNewShema() {
+		return getShemaDefinition().createNewShema();
+	}
 
-    public ViewDefinition getShemaDefinition()
-    {
-        if (_shemaDefinition == null) {
-        	_shemaDefinition = getProject().getShemaLibrary().getShemaNamed(getName());
-        }
+	private ViewDefinition _shemaDefinition;
 
-        return _shemaDefinition;
-    }
- 
-    @Override
-	public View performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException
-    {
-    	View shema;
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Loading shema " + getName());
-        try {
-            shema = super.performLoadResourceData(progress, loadingHandler);
-        } catch (FlexoFileNotFoundException e) {
-            // OK, i create the resource by myself !
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Creating new component " + getName());
-            shema = createNewShema();
-            try {
+	public ViewDefinition getShemaDefinition() {
+		if (_shemaDefinition == null) {
+			_shemaDefinition = getProject().getShemaLibrary().getShemaNamed(getName());
+		}
+
+		return _shemaDefinition;
+	}
+
+	@Override
+	public View performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException,
+			FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
+		View shema;
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Loading shema " + getName());
+		}
+		try {
+			shema = super.performLoadResourceData(progress, loadingHandler);
+		} catch (FlexoFileNotFoundException e) {
+			// OK, i create the resource by myself !
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Creating new component " + getName());
+			}
+			shema = createNewShema();
+			try {
 				shema.setFlexoResource(this);
 			} catch (DuplicateResourceException e1) {
 				e1.printStackTrace();
 				logger.warning("DuplicateResourceException !!!");
 			}
-            _resourceData = shema;
-        }
-        if (shema != null) {
-            shema.setProject(getProject());
-        }
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Notify loading for shema " + getShemaDefinition().getName());
-        getShemaDefinition().notifyShemaHasBeenLoaded();
-        
-        logger.info("OK, on a charge le shema");
-        
-        return shema;
-    }
+			_resourceData = shema;
+		}
+		if (shema != null) {
+			shema.setProject(getProject());
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Notify loading for shema " + getShemaDefinition().getName());
+		}
+		getShemaDefinition().notifyShemaHasBeenLoaded();
 
-    /**
-     * Returns a boolean indicating if this resource needs a builder to be
-     * loaded Returns true to indicate that process deserializing requires a
-     * FlexoProcessBuilder instance: in this case: YES !
-     * 
-     * @return boolean
-     */
-    @Override
-	public boolean hasBuilder()
-    {
-        return true;
-    }
+		logger.info("OK, on a charge le shema");
 
-    @Override
-	public Class getResourceDataClass()
-    {
-        return View.class;
-    }
+		return shema;
+	}
 
-    /**
-     * Returns the required newly instancied builder if this resource needs a
-     * builder to be loaded
-     * 
-     * @return boolean
-     */
-    @Override
-	public Object instanciateNewBuilder()
-    {
+	/**
+	 * Returns a boolean indicating if this resource needs a builder to be loaded Returns true to indicate that process deserializing
+	 * requires a FlexoProcessBuilder instance: in this case: YES !
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean hasBuilder() {
+		return true;
+	}
+
+	@Override
+	public Class getResourceDataClass() {
+		return View.class;
+	}
+
+	/**
+	 * Returns the required newly instancied builder if this resource needs a builder to be loaded
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public Object instanciateNewBuilder() {
 		VEShemaBuilder builder = new VEShemaBuilder(getShemaDefinition(), this);
 		builder.shema = _resourceData;
 		return builder;
 	}
 
-    @Override
-    protected boolean isDuplicateSerializationIdentifierRepairable() {
-    	return true;
-    }
-    
-    @Override
-	protected boolean repairDuplicateSerializationIdentifier() {
-		ValidationReport report = getProject().validate();
-		for (ValidationIssue issue: report.getValidationIssues())
-			if (issue instanceof DuplicateObjectIDIssue)
-				return true;
-		return false;
+	@Override
+	protected boolean isDuplicateSerializationIdentifierRepairable() {
+		return true;
 	}
-    
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToSynchronizedResources(getProject().getFlexoShemaLibraryResource());
-    }
 
 	@Override
-	public ResourceType getResourceType() 
-	{
-		return ResourceType.OE_SHEMA;
+	protected boolean repairDuplicateSerializationIdentifier() {
+		ValidationReport report = getProject().validate();
+		for (ValidationIssue issue : report.getValidationIssues()) {
+			if (issue instanceof DuplicateObjectIDIssue) {
+				return true;
+			}
+		}
+		return false;
 	}
 
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToSynchronizedResources(getProject().getFlexoShemaLibraryResource());
+	}
+
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.OE_SHEMA;
+	}
 
 }

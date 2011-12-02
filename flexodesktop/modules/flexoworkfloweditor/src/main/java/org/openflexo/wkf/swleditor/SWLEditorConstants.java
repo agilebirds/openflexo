@@ -41,10 +41,10 @@ public interface SWLEditorConstants {
 	public static final Color PORT_REGISTRY_PG_COLOR = new Color(123, 125, 181);
 
 	public static final Color ACTIVITY_PG_COLOR = Color.ORANGE;
-	public static final Color ACTIVITY_PG_BACK_COLOR = new Color(255,255,204);
+	public static final Color ACTIVITY_PG_BACK_COLOR = new Color(255, 255, 204);
 
 	public static final Color OPERATION_PG_COLOR = new Color(107, 162, 132);
-	public static final Color OPERATION_PG_BACK_COLOR = new Color(218,232,225);
+	public static final Color OPERATION_PG_BACK_COLOR = new Color(218, 232, 225);
 
 	public static final Color ACTION_PG_COLOR = new Color(206, 125, 123);
 	public static final Color ACTION_PG_BACK_COLOR = new Color(242, 219, 219);
@@ -63,7 +63,6 @@ public interface SWLEditorConstants {
 	public static final int ACTION_PG_LAYER = 21;
 	public static final int ACTION_LAYER = 24;
 
-
 	public static final int SELECTION_LAYER = 30;
 
 	public static final double NODE_MINIMAL_WIDTH = 60;
@@ -74,14 +73,14 @@ public interface SWLEditorConstants {
 	public static final int REQUIRED_SPACE_ON_RIGHT_FOR_PALETTE = 25; // Think of palette
 	public static final int REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX = 30; // Think of closing box
 
-	public static final int REQUIRED_SPACE_ON_RIGHT = 10; 
-	public static final int REQUIRED_SPACE_ON_TOP = 10; 
-	public static final int REQUIRED_SPACE_ON_LEFT = 10; 
+	public static final int REQUIRED_SPACE_ON_RIGHT = 10;
+	public static final int REQUIRED_SPACE_ON_TOP = 10;
+	public static final int REQUIRED_SPACE_ON_LEFT = 10;
 	public static final int REQUIRED_SPACE_ON_BOTTOM = 20;
-	
+
 	public static final int PORTMAP_REGISTERY_WIDTH = 30;
 	public static final int PORTMAP_MARGIN = 3;
-	
+
 	public static final String SWIMMING_LANE_INDEX_KEY = "swl_index";
 
 	public static final String SWIMMING_LANE_NB_KEY = "swl_nb";
@@ -89,7 +88,5 @@ public interface SWLEditorConstants {
 	public static final String SWIMMING_LANE_HEIGHT_KEY = "swl_height";
 
 	public static final String SWL_AUTO_LAYOUT_PERFORMED_KEY = "swl-auto-layout-performed";
-
-
 
 }

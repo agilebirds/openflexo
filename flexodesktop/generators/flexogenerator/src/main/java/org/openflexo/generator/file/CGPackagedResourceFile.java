@@ -37,24 +37,20 @@ import org.openflexo.generator.rm.FlexoCopyOfFileResource;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.toolbox.FileUtils;
 
-
 public class CGPackagedResourceFile extends AbstractCGFile implements GenerationAvailableFile, GeneratedResourceData {
 
-	public CGPackagedResourceFile(GeneratedCodeBuilder builder)
-    {
-        super(builder.generatedCode);
-     }
-    
-    public CGPackagedResourceFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
+	public CGPackagedResourceFile(GeneratedCodeBuilder builder) {
+		super(builder.generatedCode);
+	}
 
-    public CGPackagedResourceFile(GenerationRepository repository, CGRepositoryFileResource resource)
-    {
-        super(repository.getGeneratedCode());
-        setResource(resource);
-    }
+	public CGPackagedResourceFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public CGPackagedResourceFile(GenerationRepository repository, CGRepositoryFileResource resource) {
+		super(repository.getGeneratedCode());
+		setResource(resource);
+	}
 
 	@Override
 	public void generate() throws FlexoException {
@@ -81,10 +77,9 @@ public class CGPackagedResourceFile extends AbstractCGFile implements Generation
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
 		super.setResource((CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>) resource);
 	}
-	
+
 	@Override
-	public boolean hasGenerationErrors()
-	{
+	public boolean hasGenerationErrors() {
 		return false;
 	}
 

@@ -25,33 +25,28 @@ import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class EditionPatternView extends FIBModuleView<EditionPattern>
-{
+public class EditionPatternView extends FIBModuleView<EditionPattern> {
 
-    public EditionPatternView(EditionPattern editionPattern, CEDController controller)
-    {
-        super(editionPattern,controller,CEDCst.EDITION_PATTERN_VIEW_FIB);
-        
+	public EditionPatternView(EditionPattern editionPattern, CEDController controller) {
+		super(editionPattern, controller, CEDCst.EDITION_PATTERN_VIEW_FIB);
+
 		controller.manageResource(editionPattern.getCalc());
-		
-    }
 
-    @Override
-    public CEDController getFlexoController()
-    {
-    	return (CEDController)super.getFlexoController();
-    }
-    
-     @Override
-	public ViewPointPerspective getPerspective() 
-    {
-    	return getFlexoController().VIEW_POINT_PERSPECTIVE;
-    }
+	}
+
+	@Override
+	public CEDController getFlexoController() {
+		return (CEDController) super.getFlexoController();
+	}
+
+	@Override
+	public ViewPointPerspective getPerspective() {
+		return getFlexoController().VIEW_POINT_PERSPECTIVE;
+	}
 }

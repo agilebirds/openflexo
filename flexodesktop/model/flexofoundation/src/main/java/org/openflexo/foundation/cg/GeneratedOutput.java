@@ -22,8 +22,6 @@ package org.openflexo.foundation.cg;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.dm.CGRepositoryCreated;
@@ -37,212 +35,205 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * GeneratedCode represents the structure of all the generated code
- *
+ * 
  * @author sylvain
  */
 
-public abstract class GeneratedOutput extends CGObject implements XMLStorageResourceData
-{
+public abstract class GeneratedOutput extends CGObject implements XMLStorageResourceData {
 
 	public static interface GeneratorFactory {
 
 	}
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GeneratedOutput.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance variables
+	// =========================
+	// ==========================================================================
 
-    private FlexoProject _project;
-    protected FlexoGeneratedOutputResource _resource;
+	private FlexoProject _project;
+	protected FlexoGeneratedOutputResource _resource;
 
-    private Vector<GenerationRepository> _generatedRepositories;
+	private Vector<GenerationRepository> _generatedRepositories;
 
-    private GeneratorFactory factory;
+	private GeneratorFactory factory;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Create a new FlexoComponentLibrary.
-     */
-    public GeneratedOutput(FlexoProject project)
-    {
-    	super(project);
-    	setGeneratedCode(this);
-    	_project = project;
-    	_generatedRepositories = new Vector<GenerationRepository>();
-    }
-
-    @Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-        Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-        returned.add(AddGeneratedCodeRepository.actionType);
-         return returned;
-    }
+	/**
+	 * Create a new FlexoComponentLibrary.
+	 */
+	public GeneratedOutput(FlexoProject project) {
+		super(project);
+		setGeneratedCode(this);
+		_project = project;
+		_generatedRepositories = new Vector<GenerationRepository>();
+	}
 
 	@Override
-    public boolean isEnabled()
-	{
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(AddGeneratedCodeRepository.actionType);
+		return returned;
+	}
+
+	@Override
+	public boolean isEnabled() {
 		return true;
 	}
 
-    @Override
-	public FlexoXMLStorageResource getFlexoResource()
-    {
-        return _resource;
-    }
+	@Override
+	public FlexoXMLStorageResource getFlexoResource() {
+		return _resource;
+	}
 
-    @Override
-	public FlexoXMLStorageResource getFlexoXMLFileResource()
-    {
-        return _resource;
-    }
+	@Override
+	public FlexoXMLStorageResource getFlexoXMLFileResource() {
+		return _resource;
+	}
 
-    /**
-     * Overrides getXMLMapping
-     * @see org.openflexo.foundation.cg.CGObject#getXMLMapping()
-     */
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getProject().getXmlMappings().getGeneratedCodeMapping();
-    }
+	/**
+	 * Overrides getXMLMapping
+	 * 
+	 * @see org.openflexo.foundation.cg.CGObject#getXMLMapping()
+	 */
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getProject().getXmlMappings().getGeneratedCodeMapping();
+	}
 
-    //public abstract GenerationRepository getOrCreateDefaultRepository ();
+	// public abstract GenerationRepository getOrCreateDefaultRepository ();
 
-    public abstract String getDefaultRepositoryName();
+	public abstract String getDefaultRepositoryName();
 
-    @Override
-	public void setFlexoResource(FlexoResource resource)
-    {
-        _resource = (FlexoGeneratedOutputResource) resource;
-    }
+	@Override
+	public void setFlexoResource(FlexoResource resource) {
+		_resource = (FlexoGeneratedOutputResource) resource;
+	}
 
-    @Override
-    public FlexoProject getProject()
-    {
-        return _project;
-    }
+	@Override
+	public FlexoProject getProject() {
+		return _project;
+	}
 
-     /**
-     * Save this object using ResourceManager scheme
-     *
-     * Overrides
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#save()
-     * @see org.openflexo.foundation.rm.FlexoResourceData#save()
-     */
-    @Override
-	public void save() throws SaveResourceException
-    {
-        _resource.saveResourceData();
+	/**
+	 * Save this object using ResourceManager scheme
+	 * 
+	 * Overrides
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
+	 */
+	@Override
+	public void save() throws SaveResourceException {
+		_resource.saveResourceData();
 
-    }
+	}
 
-    public Vector<GenerationRepository> getGeneratedRepositories()
-    {
-    	return _generatedRepositories;
-    }
+	public Vector<GenerationRepository> getGeneratedRepositories() {
+		return _generatedRepositories;
+	}
 
-    public void setGeneratedRepositories(Vector<GenerationRepository> generatedCodeRepositories)
-    {
-    	_generatedRepositories = generatedCodeRepositories;
-    }
+	public void setGeneratedRepositories(Vector<GenerationRepository> generatedCodeRepositories) {
+		_generatedRepositories = generatedCodeRepositories;
+	}
 
-    public void addToGeneratedRepositories(GenerationRepository generatedCodeRepository)
-    {
-    	_generatedRepositories.add(generatedCodeRepository);
-    	generatedCodeRepository.setGeneratedCode(this);
-    	setChanged();
-    	notifyObservers(new CGRepositoryCreated(generatedCodeRepository));
-    }
+	public void addToGeneratedRepositories(GenerationRepository generatedCodeRepository) {
+		_generatedRepositories.add(generatedCodeRepository);
+		generatedCodeRepository.setGeneratedCode(this);
+		setChanged();
+		notifyObservers(new CGRepositoryCreated(generatedCodeRepository));
+	}
 
-    public void removeFromGeneratedRepositories(GenerationRepository generatedCodeRepository)
-    {
-    	_generatedRepositories.remove(generatedCodeRepository);
-       	generatedCodeRepository.setGeneratedCode(null);
-       	setChanged();
-    	notifyObservers(new CGRepositoryDeleted(generatedCodeRepository));
-  }
+	public void removeFromGeneratedRepositories(GenerationRepository generatedCodeRepository) {
+		_generatedRepositories.remove(generatedCodeRepository);
+		generatedCodeRepository.setGeneratedCode(null);
+		setChanged();
+		notifyObservers(new CGRepositoryDeleted(generatedCodeRepository));
+	}
 
-    public GenerationRepository getRepositoryNamed(String name)
-    {
-    	for (GenerationRepository repository : getGeneratedRepositories()) {
-    		if (repository.getName().equals(name)) return repository;
-    	}
-    	return null;
-    }
+	public GenerationRepository getRepositoryNamed(String name) {
+		for (GenerationRepository repository : getGeneratedRepositories()) {
+			if (repository.getName().equals(name)) {
+				return repository;
+			}
+		}
+		return null;
+	}
 
-    /**
-     * @param selectedDMPackage
-     * @return
-     */
-    public String getNextGeneratedCodeRepositoryName()
-    {
-        String baseName = FlexoLocalization.localizedForKey(getDefaultRepositoryName());
-        String testMe = baseName;
-        int test = 0;
-        while (getRepositoryNamed(testMe) != null) {
-            test++;
-            testMe = baseName + test;
-        }
-        return testMe;
-    }
+	/**
+	 * @param selectedDMPackage
+	 * @return
+	 */
+	public String getNextGeneratedCodeRepositoryName() {
+		String baseName = FlexoLocalization.localizedForKey(getDefaultRepositoryName());
+		String testMe = baseName;
+		int test = 0;
+		while (getRepositoryNamed(testMe) != null) {
+			test++;
+			testMe = baseName + test;
+		}
+		return testMe;
+	}
 
 	// ==========================================================================
-    // ========================== Embedding implementation  =====================
-    // ==========================================================================
-
-    @Override
-    public boolean isContainedIn(CGObject obj)
-    {
-    	return (obj == this);
-    }
+	// ========================== Embedding implementation =====================
+	// ==========================================================================
 
 	@Override
-    public boolean hasGenerationErrors()
-	{
+	public boolean isContainedIn(CGObject obj) {
+		return (obj == this);
+	}
+
+	@Override
+	public boolean hasGenerationErrors() {
 		for (GenerationRepository repository : _generatedRepositories) {
-			if (repository.hasGenerationErrors()) return true;
+			if (repository.hasGenerationErrors()) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
-    public boolean needsRegeneration()
-	{
+	public boolean needsRegeneration() {
 		for (GenerationRepository repository : _generatedRepositories) {
-			if (repository.needsRegeneration()) return true;
+			if (repository.needsRegeneration()) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
-    public boolean needsModelReinjection()
-	{
+	public boolean needsModelReinjection() {
 		for (GenerationRepository repository : _generatedRepositories) {
-			if (repository.needsModelReinjection()) return true;
+			if (repository.needsModelReinjection()) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
-    public GenerationStatus getGenerationStatus()
-	{
+	public GenerationStatus getGenerationStatus() {
 		GenerationStatus generationStatus = GenerationStatus.UpToDate;
 		for (GenerationRepository repository : _generatedRepositories) {
-			if (repository.getGenerationStatus() == GenerationStatus.GenerationModified) return GenerationStatus.GenerationModified;
-			if (repository.getGenerationStatus() != GenerationStatus.UpToDate) generationStatus=GenerationStatus.Unknown;
+			if (repository.getGenerationStatus() == GenerationStatus.GenerationModified) {
+				return GenerationStatus.GenerationModified;
+			}
+			if (repository.getGenerationStatus() != GenerationStatus.UpToDate) {
+				generationStatus = GenerationStatus.Unknown;
+			}
 		}
 		return generationStatus;
 	}

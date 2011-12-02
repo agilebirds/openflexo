@@ -21,62 +21,57 @@ package org.openflexo.fge.cp;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 
-
 public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends ControlPoint {
 
+	private static final Logger logger = Logger.getLogger(GeometryAdjustingControlPoint.class.getPackage().getName());
+
 	private String name;
-	
-	public GeometryAdjustingControlPoint(GeometricGraphicalRepresentation<?> gr, String aName, FGEPoint pt)
-	{
-		super(gr,pt);
+
+	public GeometryAdjustingControlPoint(GeometricGraphicalRepresentation<?> gr, String aName, FGEPoint pt) {
+		super(gr, pt);
 		name = aName;
 	}
 
 	@Override
-	public GeometricGraphicalRepresentation<?> getGraphicalRepresentation()
-	{
-		return (GeometricGraphicalRepresentation<?>)super.getGraphicalRepresentation();
+	public GeometricGraphicalRepresentation<?> getGraphicalRepresentation() {
+		return (GeometricGraphicalRepresentation<?>) super.getGraphicalRepresentation();
 	}
 
 	@Override
-	public Cursor getDraggingCursor()
-	{
+	public Cursor getDraggingCursor() {
 		return Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
 	}
 
-
 	@Override
-	public boolean isDraggable()
-	{
+	public boolean isDraggable() {
 		return true;
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint)
-	{
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 	}
 
 	@Override
-	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) 
-	{
+	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event) {
 		return true;
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller)
-	{
+	public void stopDragging(DrawingController<?> controller) {
 	}
-	
+
 	public abstract void update(O geometricObject);
 
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
+
 }

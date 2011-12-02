@@ -28,22 +28,18 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.area.FGEArea;
 
-
-public class AdjustableEndControlPoint extends RectPolylinAdjustableControlPoint
-{
+public class AdjustableEndControlPoint extends RectPolylinAdjustableControlPoint {
 	static final Logger logger = Logger.getLogger(AdjustableEndControlPoint.class.getPackage().getName());
 
 	private FGEArea draggingAuthorizedArea;
 
-	public AdjustableEndControlPoint(FGEPoint point, RectPolylinConnector connector)
-	{
-		super(point,connector);
+	public AdjustableEndControlPoint(FGEPoint point, RectPolylinConnector connector) {
+		super(point, connector);
 	}
 
-	private FGEArea retrieveDraggingAuthorizedArea()
-	{
+	private FGEArea retrieveDraggingAuthorizedArea() {
 		return getConnector().retrieveAllowedEndArea(false);
-		
+
 		/*FGEShape<?> shape = getConnector().getEndObject().getShape().getOutline();
 		FGEShape<?> endArea = (FGEShape<?>) shape.transform(GraphicalRepresentation.convertNormalizedCoordinatesAT(getConnector().getEndObject(), getGraphicalRepresentation()));
 		//endArea.setIsFilled(false);
@@ -63,29 +59,28 @@ public class AdjustableEndControlPoint extends RectPolylinAdjustableControlPoint
 	}
 
 	@Override
-	public FGEArea getDraggingAuthorizedArea()
-	{
+	public FGEArea getDraggingAuthorizedArea() {
 		return draggingAuthorizedArea;
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint)
-	{
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		draggingAuthorizedArea = retrieveDraggingAuthorizedArea();
-		logger.info("draggingAuthorizedArea="+draggingAuthorizedArea);
+		logger.info("draggingAuthorizedArea=" + draggingAuthorizedArea);
 	}
 
 	@Override
-	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-	{
+	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event) {
 		FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 		if (pt == null) {
-			logger.warning("Cannot nearest point for point "+newRelativePoint+" and area "+getDraggingAuthorizedArea());
+			logger.warning("Cannot nearest point for point " + newRelativePoint + " and area " + getDraggingAuthorizedArea());
 			return false;
 		}
 		setPoint(pt);
-		FGEPoint ptRelativeToEndObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), pt, getConnector().getEndObject());
+		FGEPoint ptRelativeToEndObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), pt, getConnector()
+				.getEndObject());
 		getConnector().setFixedEndLocation(ptRelativeToEndObject);
 		switch (getConnector().getAdjustability()) {
 		case AUTO_LAYOUT:
@@ -95,14 +90,12 @@ public class AdjustableEndControlPoint extends RectPolylinAdjustableControlPoint
 			// Nothing special to do
 			break;
 		case FULLY_ADJUSTABLE:
-			if (initialPolylin.getSegmentNb() == 1 
-					&& getConnector()._updateAsFullyAdjustableForUniqueSegment(pt)
-					 && !getConnector().getIsStartingLocationFixed()) {
+			if (initialPolylin.getSegmentNb() == 1 && getConnector()._updateAsFullyAdjustableForUniqueSegment(pt)
+					&& !getConnector().getIsStartingLocationFixed()) {
 				// OK this is still a unique segment, nice !
-			}
-			else {
+			} else {
 				FGERectPolylin newPolylin = initialPolylin.clone();
-				newPolylin.updatePointAt(newPolylin.getPointsNb()-1, pt);
+				newPolylin.updatePointAt(newPolylin.getPointsNb() - 1, pt);
 				getConnector().updateWithNewPolylin(newPolylin, true);
 			}
 			break;
@@ -111,9 +104,8 @@ public class AdjustableEndControlPoint extends RectPolylinAdjustableControlPoint
 		}
 		getConnector()._connectorChanged(true);
 		getGraphicalRepresentation().notifyConnectorChanged();
-		
+
 		return true;
 	}
-	
 
 }

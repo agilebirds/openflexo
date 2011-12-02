@@ -20,29 +20,26 @@
 package org.openflexo.inspector;
 
 /**
- * Implemented by all classes able to handle exception raised by the inspector
- * in the context of an exception raised during object inspection (due to the
- * fact that dynamic invokation is performed)
+ * Implemented by all classes able to handle exception raised by the inspector in the context of an exception raised during object
+ * inspection (due to the fact that dynamic invokation is performed)
  * 
  * @author sguerin
  * 
  */
-public interface InspectorExceptionHandler
-{
+public interface InspectorExceptionHandler {
 
-    /**
-     * Tries to handle an exception raised during object inspection
-     * 
-     * @param inspectable
-     *            the object on which exception was raised
-     * @param propertyName
-     *            the concerned property name
-     * @param value
-     *            the value that raised an exception
-     * @param exception
-     *            the exception that was raised
-     * @return a boolean indicating if this handler has handled this exception,
-     *         or not
-     */
-    public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception);
+	/**
+	 * Tries to handle an exception raised during object inspection
+	 * 
+	 * @param inspectable
+	 *            the object on which exception was raised
+	 * @param propertyName
+	 *            the concerned property name
+	 * @param value
+	 *            the value that raised an exception
+	 * @param exception
+	 *            the exception that was raised
+	 * @return a boolean indicating if this handler has handled this exception, or not
+	 */
+	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception);
 }

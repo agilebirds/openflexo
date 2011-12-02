@@ -24,25 +24,24 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.logging.FlexoLogger;
 
-
 public abstract class AddConcept<R extends OntologicObjectPatternRole> extends EditionAction<R> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
 	public AddConcept() {
 	}
-	
+
 	public abstract OntologyClass getOntologyClass();
-	
+
 	public abstract void setOntologyClass(OntologyClass ontologyClass);
-	
+
 	/*public OntologyObject getOntologyObject(FlexoProject project)
 	{
 		getCalc().loadWhenUnloaded();
 		if (StringUtils.isEmpty(getConceptURI())) return null;
 		return project.getOntologyLibrary().getOntologyObject(getConceptURI());
 	}*/
-	
+
 	@Override
 	public R getPatternRole() {
 		try {
@@ -53,15 +52,12 @@ public abstract class AddConcept<R extends OntologicObjectPatternRole> extends E
 			return null;
 		}
 	}
-	
+
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(R patternRole) 
-	{
+	public void setPatternRole(R patternRole) {
 		super.setPatternRole(patternRole);
 	}
-	
 
-	
 }

@@ -32,26 +32,22 @@ public class Flow extends ControlGraph {
 	private static final Logger logger = FlexoLogger.getLogger(Sequence.class.getPackage().getName());
 
 	private Vector<ControlGraph> statements;
-	
-	public Flow()
-	{
+
+	public Flow() {
 		super();
 		statements = new Vector<ControlGraph>();
 	}
 
-	public Flow(Vector<ControlGraph> statements)
-	{
+	public Flow(Vector<ControlGraph> statements) {
 		this();
 		this.statements.addAll(statements);
 	}
 
-	public Vector<ControlGraph> getStatements()
-	{
+	public Vector<ControlGraph> getStatements() {
 		return statements;
 	}
 
-	public void setStatements(Vector<ControlGraph> statements)
-	{
+	public void setStatements(Vector<ControlGraph> statements) {
 		this.statements = statements;
 	}
 
@@ -102,28 +98,25 @@ public class Flow extends ControlGraph {
 	public int size() {
 		return statements.size();
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("FLOW{");
 		for (ControlGraph statement : statements) {
-			sb.append(statement+" // \n");
+			sb.append(statement + " // \n");
 		}
 		sb.append("}");
 		return sb.toString();
 	}
-	
+
 	@Override
-	public final ControlGraph normalize()
-	{
+	public final ControlGraph normalize() {
 		return clone();
 	}
 
 	@Override
-	public Flow clone()
-	{
+	public Flow clone() {
 		Flow returned = new Flow(getStatements());
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
@@ -133,6 +126,5 @@ public class Flow extends ControlGraph {
 	public boolean addAll(Collection<? extends ControlGraph> c) {
 		return statements.addAll(c);
 	}
-
 
 }

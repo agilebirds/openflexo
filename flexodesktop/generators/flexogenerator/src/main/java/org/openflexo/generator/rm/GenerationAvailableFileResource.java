@@ -29,21 +29,20 @@ import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.GenerationAvailableFileResourceInterface;
 import org.openflexo.toolbox.FileFormat;
 
-
 public interface GenerationAvailableFileResource extends GenerationAvailableFileResourceInterface {
 
 	public File getFile();
-	
-	public CGFile getCGFile(); 
 
-    public GenerationAvailableFile getGeneratedResourceData();
+	public CGFile getCGFile();
+
+	public GenerationAvailableFile getGeneratedResourceData();
 
 	public abstract IFlexoResourceGenerator getGenerator();
 
 	public boolean isCodeGenerationAvailable();
 
 	public IGenerationException getGenerationException();
-	
+
 	public Date getLastUpdate();
 
 	public Date getDiskLastModifiedDate();

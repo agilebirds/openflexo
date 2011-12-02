@@ -28,26 +28,22 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class DuplicateClassNameException extends FlexoException
-{
+public class DuplicateClassNameException extends FlexoException {
 
-    private String className;
+	private String className;
 
-    public DuplicateClassNameException(String aFullyQualifiedClassName)
-    {
-        super();
-        className = aFullyQualifiedClassName;
-    }
+	public DuplicateClassNameException(String aFullyQualifiedClassName) {
+		super();
+		className = aFullyQualifiedClassName;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "Duplicate class name: " + className;
-    }
+	@Override
+	public String getMessage() {
+		return "Duplicate class name: " + className;
+	}
 
-    @Override
-	public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("duplicate_class_name") + " : " + className;
-    }
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("duplicate_class_name") + " : " + className;
+	}
 }

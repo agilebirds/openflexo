@@ -23,26 +23,22 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 
 /**
- * Notify that a new ComponentDefinition has been inserted in a
- * ComponentLibrary's folder
+ * Notify that a new ComponentDefinition has been inserted in a ComponentLibrary's folder
  * 
  * @author sguerin
  * 
  */
-public class ComponentInserted extends IEDataModification
-{
+public class ComponentInserted extends IEDataModification {
 
-    private FlexoComponentFolder _folder;
+	private FlexoComponentFolder _folder;
 
-    public ComponentInserted(ComponentDefinition component, FlexoComponentFolder folder)
-    {
-        super(null, component);
-        _folder = folder;
-    }
+	public ComponentInserted(ComponentDefinition component, FlexoComponentFolder folder) {
+		super(null, component);
+		_folder = folder;
+	}
 
-    public FlexoComponentFolder getFlexoComponentFolder()
-    {
-        return _folder;
-    }
+	public FlexoComponentFolder getFlexoComponentFolder() {
+		return _folder;
+	}
 
 }

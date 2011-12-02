@@ -28,101 +28,97 @@ import java.util.ResourceBundle;
 import org.netbeans.lib.cvsclient.util.BundleUtilities;
 
 /**
- * This exception is thrown when an error occurs while executing a command.
- * It is nearly always a container for another exception.
- * @author  Robert Greig
+ * This exception is thrown when an error occurs while executing a command. It is nearly always a container for another exception.
+ * 
+ * @author Robert Greig
  */
 public class CommandException extends Exception {
-    private Exception underlyingException;
-    private String localizedMessage;
-    private String message;
+	private Exception underlyingException;
+	private String localizedMessage;
+	private String message;
 
-    public CommandException(Exception underlyingException, String localizedMessage) {
-        this.underlyingException = underlyingException;
-        this.localizedMessage = localizedMessage;
-    }
+	public CommandException(Exception underlyingException, String localizedMessage) {
+		this.underlyingException = underlyingException;
+		this.localizedMessage = localizedMessage;
+	}
 
-    public CommandException(String message, String localizedMessage) {
-        super(message);
-        this.message = message;
-        this.localizedMessage = localizedMessage;
-    }
+	public CommandException(String message, String localizedMessage) {
+		super(message);
+		this.message = message;
+		this.localizedMessage = localizedMessage;
+	}
 
-    public Exception getUnderlyingException() {
-        return underlyingException;
-    }
+	public Exception getUnderlyingException() {
+		return underlyingException;
+	}
 
-    @Override
+	@Override
 	public void printStackTrace() {
-        if (underlyingException != null) {
-            underlyingException.printStackTrace();
-        }
-        else {
-            super.printStackTrace();
-        }
-    }
+		if (underlyingException != null) {
+			underlyingException.printStackTrace();
+		} else {
+			super.printStackTrace();
+		}
+	}
 
-    @Override
+	@Override
 	public void printStackTrace(PrintStream stream) {
-        if (underlyingException != null) {
-            underlyingException.printStackTrace(stream);
-        }
-        else {
-            super.printStackTrace(stream);
-        }
-    }
+		if (underlyingException != null) {
+			underlyingException.printStackTrace(stream);
+		} else {
+			super.printStackTrace(stream);
+		}
+	}
 
-    @Override
+	@Override
 	public void printStackTrace(PrintWriter writer) {
-        if (underlyingException != null) {
-            underlyingException.printStackTrace(writer);
-        }
-        else {
-            super.printStackTrace(writer);
-        }
-    }
+		if (underlyingException != null) {
+			underlyingException.printStackTrace(writer);
+		} else {
+			super.printStackTrace(writer);
+		}
+	}
 
-    @Override
+	@Override
 	public String getLocalizedMessage() {
-        if (localizedMessage == null) {
-            return message;
-        }
-        return localizedMessage;
-    }
+		if (localizedMessage == null) {
+			return message;
+		}
+		return localizedMessage;
+	}
 
-    @Override
+	@Override
 	public String getMessage() {
-        if (message == null) {
-            return localizedMessage;
-        }
-        return message;
-    }
+		if (message == null) {
+			return localizedMessage;
+		}
+		return message;
+	}
 
-    protected static String getBundleString(String key) {
-        String value = null;
-        try {
-            ResourceBundle bundle = BundleUtilities.getResourceBundle(CommandException.class, "Bundle"); // NOI18N
-            if (bundle != null) {
-                value = bundle.getString(key);
-            }
-        }
-        catch (MissingResourceException exc) {
-        }
-        return value;
-    }
+	protected static String getBundleString(String key) {
+		String value = null;
+		try {
+			ResourceBundle bundle = BundleUtilities.getResourceBundle(CommandException.class, "Bundle"); // NOI18N
+			if (bundle != null) {
+				value = bundle.getString(key);
+			}
+		} catch (MissingResourceException exc) {
+		}
+		return value;
+	}
 
-    public static String getLocalMessage(String key) {
-        return getLocalMessage(key, null);
-    }
+	public static String getLocalMessage(String key) {
+		return getLocalMessage(key, null);
+	}
 
-    public static String getLocalMessage(String key, Object[] arguments) {
-        String locMessage = CommandException.getBundleString(key);
-        if (locMessage == null) {
-            return null;
-        }
-        if (arguments != null) {
-            locMessage = MessageFormat.format(locMessage, arguments);
-        }
-        return locMessage;
-    }
+	public static String getLocalMessage(String key, Object[] arguments) {
+		String locMessage = CommandException.getBundleString(key);
+		if (locMessage == null) {
+			return null;
+		}
+		if (arguments != null) {
+			locMessage = MessageFormat.format(locMessage, arguments);
+		}
+		return locMessage;
+	}
 }

@@ -26,37 +26,29 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 
-
 public class ConnectorAdjustingControlPoint extends ControlPoint {
 
-	public ConnectorAdjustingControlPoint(ConnectorGraphicalRepresentation<?> gr, FGEPoint pt)
-	{
-		super(gr,pt);
-	}
-
-
-	@Override
-	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation()
-	{
-		return (ConnectorGraphicalRepresentation<?>)super.getGraphicalRepresentation();
+	public ConnectorAdjustingControlPoint(ConnectorGraphicalRepresentation<?> gr, FGEPoint pt) {
+		super(gr, pt);
 	}
 
 	@Override
-	public Cursor getDraggingCursor()
-	{
+	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
+		return (ConnectorGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+	}
+
+	@Override
+	public Cursor getDraggingCursor() {
 		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 	}
 
-
 	@Override
-	public boolean isDraggable()
-	{
+	public boolean isDraggable() {
 		return true;
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint)
-	{
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
 			controller.getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
@@ -65,14 +57,13 @@ public class ConnectorAdjustingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) 
-	{
+	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event) {
 		return true;
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller)
-	{
+	public void stopDragging(DrawingController controller) {
 		super.stopDragging(controller);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
 			controller.getPaintManager().resetTemporaryObjects();

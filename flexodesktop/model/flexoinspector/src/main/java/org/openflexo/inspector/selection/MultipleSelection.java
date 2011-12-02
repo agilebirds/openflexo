@@ -19,24 +19,20 @@
  */
 package org.openflexo.inspector.selection;
 
-
 /**
  * Used to tell to the inspector that more than one object were selected
  * 
  * @author sguerin
  */
-public class MultipleSelection extends InspectorSelection
-{
+public class MultipleSelection extends InspectorSelection {
 
-    public MultipleSelection ()
-    {
-        super();
-    }
-    
-    @Override
-	public String toString()
-    {
-    	return "MultipleSelection";
-    }
+	public MultipleSelection() {
+		super();
+	}
+
+	@Override
+	public String toString() {
+		return "MultipleSelection";
+	}
 
 }

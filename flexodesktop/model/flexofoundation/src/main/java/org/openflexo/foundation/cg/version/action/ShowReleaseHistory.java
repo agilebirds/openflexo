@@ -30,51 +30,41 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 
+public class ShowReleaseHistory extends FlexoGUIAction<ShowReleaseHistory, GenerationRepository, CGObject> {
 
-public class ShowReleaseHistory extends FlexoGUIAction<ShowReleaseHistory,GenerationRepository,CGObject>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShowReleaseHistory.class.getPackage().getName());
 
-    public static FlexoActionType<ShowReleaseHistory,GenerationRepository,CGObject> actionType
-    = new FlexoActionType<ShowReleaseHistory,GenerationRepository,CGObject> (
-    		"show_release_history",
-    		AbstractGCAction.versionningMenu,
-    		AbstractGCAction.versionningShowGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<ShowReleaseHistory, GenerationRepository, CGObject> actionType = new FlexoActionType<ShowReleaseHistory, GenerationRepository, CGObject>(
+			"show_release_history", AbstractGCAction.versionningMenu, AbstractGCAction.versionningShowGroup,
+			FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ShowReleaseHistory makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ShowReleaseHistory(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ShowReleaseHistory makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new ShowReleaseHistory(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) 
-        {
-            return (object != null);
-       }
+		@Override
+		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			return (object != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) 
-        {
-            return ((object != null) && (object.getManageHistory()));
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (ShowReleaseHistory.actionType, GenerationRepository.class);
-    }
-    
+		@Override
+		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			return ((object != null) && (object.getManageHistory()));
+		}
 
-    ShowReleaseHistory (GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(ShowReleaseHistory.actionType, GenerationRepository.class);
+	}
+
+	ShowReleaseHistory(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 }

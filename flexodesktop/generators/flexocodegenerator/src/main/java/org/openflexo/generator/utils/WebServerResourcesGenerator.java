@@ -20,6 +20,7 @@
 package org.openflexo.generator.utils;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,86 +39,77 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.FileResource;
 
-
-public class WebServerResourcesGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
-{
+public class WebServerResourcesGenerator extends MetaGenerator<FlexoModelObject, CGRepository> {
 	private static final Logger logger = Logger.getLogger(WebServerResourcesGenerator.class.getPackage().getName());
-	
+
 	protected Hashtable<FileResource, PackagedResourceToCopyGenerator<CGRepository>> packagedResourceToCopyGenerator;
-	
-    public WebServerResourcesGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,null);
-        _generators = new Hashtable<FlexoWebServerFileResource,ResourceToCopyGenerator>();
-        packagedResourceToCopyGenerator = new Hashtable<FileResource, PackagedResourceToCopyGenerator<CGRepository>>();
-    }
-    
-    @Override
-    public ProjectGenerator getProjectGenerator() {
-    	return (ProjectGenerator) super.getProjectGenerator();
-    }
-    
+
+	public WebServerResourcesGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null);
+		_generators = new Hashtable<FlexoWebServerFileResource, ResourceToCopyGenerator>();
+		packagedResourceToCopyGenerator = new Hashtable<FileResource, PackagedResourceToCopyGenerator<CGRepository>>();
+	}
+
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public ProjectGenerator getProjectGenerator() {
+		return (ProjectGenerator) super.getProjectGenerator();
+	}
+
+	@Override
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public void generate(boolean forceRegenerate) throws GenerationException
-    {
-    	if (logger.isLoggable(Level.FINE)) {
+	@Override
+	public void generate(boolean forceRegenerate) throws GenerationException {
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called WebServerResourcesGenerator.generate(forceRegenerate)");
 		}
-    	resetSecondaryProgressWindow(_generators.values().size());
-    	startGeneration();
-    	for (ResourceToCopyGenerator generator : _generators.values()) {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+generator.getIdentifier(),false);
-    		generator.generate(forceRegenerate);
-    	}
-    	stopGeneration();
-    }
-    
+		resetSecondaryProgressWindow(_generators.values().size());
+		startGeneration();
+		for (ResourceToCopyGenerator generator : _generators.values()) {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + generator.getIdentifier(), false);
+			generator.generate(forceRegenerate);
+		}
+		stopGeneration();
+	}
+
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
-		Hashtable<FlexoWebServerFileResource,ResourceToCopyGenerator> generators = new Hashtable<FlexoWebServerFileResource, ResourceToCopyGenerator>();
-		Vector<FlexoWebServerFileResource> allWebResources = getProject().getResourcesOfClass(FlexoWebServerFileResource.class);
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		Hashtable<FlexoWebServerFileResource, ResourceToCopyGenerator> generators = new Hashtable<FlexoWebServerFileResource, ResourceToCopyGenerator>();
+		List<FlexoWebServerFileResource> allWebResources = getProject().getResourcesOfClass(FlexoWebServerFileResource.class);
 		resetSecondaryProgressWindow(allWebResources.size());
 		for (FlexoWebServerFileResource wsRes : allWebResources) {
 			ResourceToCopyGenerator generator = getGenerator(wsRes);
-			if((wsRes.getFile()==null) || !wsRes.getFile().exists()) {
+			if (wsRes.getFile() == null || !wsRes.getFile().exists()) {
 				continue;
 			}
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+wsRes.getName(),false);
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + wsRes.getName(), false);
 			if (generator != null) {
 				generators.put(wsRes, generator);
-				generator.buildResourcesAndSetGenerators(repository,resources);
+				generator.buildResourcesAndSetGenerators(repository, resources);
 			} else {
-                if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not instanciate WebResourceGenerator for "+wsRes);
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not instanciate WebResourceGenerator for " + wsRes);
 				}
 			}
 		}
-		for(GraphType type:GraphType.values()) {
+		for (GraphType type : GraphType.values()) {
 			PackagedResourceToCopyGenerator<CGRepository> generator = getFileResourceGenerator(type.getFileResource());
 			generator.buildResourcesAndSetGenerators(getRepository(), resources);
 		}
-		
+
 		_generators.clear();// Frees memory!
 		_generators = generators;
 	}
 
-	private Hashtable<FlexoWebServerFileResource,ResourceToCopyGenerator> _generators;
-	
-	
-	
-    public PackagedResourceToCopyGenerator<CGRepository> getFileResourceGenerator(FileResource r)
-    {
-    	PackagedResourceToCopyGenerator<CGRepository> returned = packagedResourceToCopyGenerator.get(r);
-        if (returned==null) {
-        	FileFormat format;
-        	if (r.getName().endsWith(".png")) {
+	private Hashtable<FlexoWebServerFileResource, ResourceToCopyGenerator> _generators;
+
+	public PackagedResourceToCopyGenerator<CGRepository> getFileResourceGenerator(FileResource r) {
+		PackagedResourceToCopyGenerator<CGRepository> returned = packagedResourceToCopyGenerator.get(r);
+		if (returned == null) {
+			FileFormat format;
+			if (r.getName().endsWith(".png")) {
 				format = FileFormat.PNG;
 			} else if (r.getName().endsWith(".jpg")) {
 				format = FileFormat.JPG;
@@ -128,16 +120,17 @@ public class WebServerResourcesGenerator extends MetaGenerator<FlexoModelObject,
 			} else {
 				format = FileFormat.UNKNOWN_BINARY_FILE;
 			}
-        	packagedResourceToCopyGenerator.put(r,returned = new PackagedResourceToCopyGenerator<CGRepository>(getProjectGenerator(),format,ResourceType.COPIED_FILE,r,getRepository().getWebResourcesSymbolicDirectory(),""));
-        }
-        return returned;
-    }
+			packagedResourceToCopyGenerator.put(r, returned = new PackagedResourceToCopyGenerator<CGRepository>(getProjectGenerator(),
+					format, ResourceType.COPIED_FILE, r, getRepository().getWebResourcesSymbolicDirectory(), ""));
+		}
+		return returned;
+	}
 
-	protected ResourceToCopyGenerator getGenerator(FlexoWebServerFileResource wsRes)
-	{
+	protected ResourceToCopyGenerator getGenerator(FlexoWebServerFileResource wsRes) {
 		ResourceToCopyGenerator returned = _generators.get(wsRes);
 		if (returned == null) {
-			_generators.put(wsRes,returned=new ResourceToCopyGenerator(getProjectGenerator(),wsRes,projectGenerator.getRepository().getWebResourcesSymbolicDirectory()));
+			_generators.put(wsRes, returned = new ResourceToCopyGenerator(getProjectGenerator(), wsRes, projectGenerator.getRepository()
+					.getWebResourcesSymbolicDirectory()));
 		}
 		return returned;
 	}

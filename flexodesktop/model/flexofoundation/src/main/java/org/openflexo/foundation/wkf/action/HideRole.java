@@ -27,10 +27,10 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.wkf.Role;
 
-
 public class HideRole extends FlexoGUIAction<HideRole, Role, Role> {
 
-	public static final FlexoActionType<HideRole, Role, Role> actionType = new FlexoActionType<HideRole, Role, Role>("hide_role",FlexoActionType.defaultGroup) {
+	public static final FlexoActionType<HideRole, Role, Role> actionType = new FlexoActionType<HideRole, Role, Role>("hide_role",
+			FlexoActionType.defaultGroup) {
 
 		@Override
 		protected boolean isEnabledForSelection(Role object, Vector<Role> globalSelection) {
@@ -44,22 +44,21 @@ public class HideRole extends FlexoGUIAction<HideRole, Role, Role> {
 
 		@Override
 		public HideRole makeNewAction(Role focusedObject, Vector<Role> globalSelection, FlexoEditor editor) {
-			return new HideRole(focusedObject,globalSelection,editor);
+			return new HideRole(focusedObject, globalSelection, editor);
 		}
-		
+
 	};
 
 	static {
 		FlexoModelObject.addActionForClass(actionType, Role.class);
 	}
-	
-	protected HideRole(Role focusedObject, Vector<Role> globalSelection,
-			FlexoEditor editor) {
+
+	protected HideRole(Role focusedObject, Vector<Role> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	public Role getRole() {
 		return getFocusedObject();
 	}
-	
+
 }

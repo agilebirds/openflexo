@@ -34,7 +34,6 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 import org.xml.sax.SAXException;
 
-
 /**
  * This class contains the parsing result of the main.xml file from a technology module (main.xml is generated from main.xml.vm)
  * 
@@ -56,7 +55,8 @@ public class GenerationDefinition implements XMLSerializable {
 	 */
 	public static GenerationDefinition retrieveGenerationDefinition(String generationResult) {
 		try {
-			GenerationDefinition returned = (GenerationDefinition) XMLDecoder.decodeObjectWithMapping(generationResult, get_GENERATION_MODEL());
+			GenerationDefinition returned = (GenerationDefinition) XMLDecoder.decodeObjectWithMapping(generationResult,
+					get_GENERATION_MODEL());
 			return returned;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,23 +78,27 @@ public class GenerationDefinition implements XMLSerializable {
 				GENERATION_MODEL = new XMLMapping(generationModelFile);
 			} catch (InvalidModelException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (IOException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (SAXException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (ParserConfigurationException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}

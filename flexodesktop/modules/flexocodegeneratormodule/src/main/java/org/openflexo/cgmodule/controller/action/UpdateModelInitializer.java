@@ -25,15 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.javaparser.FJPTypeResolver;
-import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
-
 import org.openflexo.cgmodule.view.popups.ModelReinjectionPopup;
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.foundation.FlexoException;
@@ -43,42 +34,43 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.ModelReinjectableFile;
 import org.openflexo.generator.action.UpdateModel;
 import org.openflexo.generator.cg.CGJavaFile;
-
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
+import org.openflexo.javaparser.FJPTypeResolver;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class UpdateModelInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	UpdateModelInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(UpdateModel.actionType,actionInitializer);
+	UpdateModelInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(UpdateModel.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<UpdateModel> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<UpdateModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<UpdateModel>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateModel action)
-			{
+			public boolean run(ActionEvent e, UpdateModel action) {
 				Vector<CGJavaFile> selectedJavaFiles = new Vector<CGJavaFile>();
 				for (ModelReinjectableFile f : action.getFilesToUpdate()) {
 					if (f instanceof CGJavaFile) {
-						selectedJavaFiles.add((CGJavaFile)f);
+						selectedJavaFiles.add((CGJavaFile) f);
 					}
 				}
 				ModelReinjectionPopup popup;
 				try {
-					popup = new ModelReinjectionPopup(
-							action.getLocalizedName(),
-							FlexoLocalization.localizedForKey("please_select_properties_and_methods_to_update"),
-							selectedJavaFiles, getProject(), getControllerActionInitializer().getGeneratorController());
+					popup = new ModelReinjectionPopup(action.getLocalizedName(),
+							FlexoLocalization.localizedForKey("please_select_properties_and_methods_to_update"), selectedJavaFiles,
+							getProject(), getControllerActionInitializer().getGeneratorController());
 					popup.setVisible(true);
 					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
 						action.setUpdatedSet(popup.getDMSet());
@@ -96,12 +88,10 @@ public class UpdateModelInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<UpdateModel> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<UpdateModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UpdateModel>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateModel action)
-			{
+			public boolean run(ActionEvent e, UpdateModel action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;
@@ -110,17 +100,16 @@ public class UpdateModelInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<UpdateModel> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<UpdateModel> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<UpdateModel>() {
 			@Override
 			public boolean handleException(FlexoException exception, UpdateModel action) {
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
 				if (exception instanceof FJPTypeResolver.UnresolvedTypeException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("cannot_resolve") + " "
-							+ ((FJPTypeResolver.UnresolvedTypeException)exception).getUnresolvedType());
+							+ ((FJPTypeResolver.UnresolvedTypeException) exception).getUnresolvedType());
 					return true;
-				}                
+				}
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("file_updating_failed") + ":\n"
 						+ exception.getLocalizedMessage());
@@ -129,16 +118,13 @@ public class UpdateModelInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.UPDATE_MODEL_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.UPDATE_MODEL_DISABLED_ICON;
 	}
 

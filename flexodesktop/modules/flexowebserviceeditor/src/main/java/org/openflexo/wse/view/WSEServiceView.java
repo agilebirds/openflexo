@@ -36,88 +36,81 @@ import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEPortTypeTableModel;
 import org.openflexo.wse.model.WSERepositoryTableModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WSEServiceView extends WSEView<WSService>
-{
+public class WSEServiceView extends WSEView<WSService> {
 
-    private static final Logger logger = Logger.getLogger(WSEServiceView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEServiceView.class.getPackage().getName());
 
-    private WSEPortTypeTableModel portTypeTableModel;
-    protected WSETabularView portTypeTable;
+	private WSEPortTypeTableModel portTypeTableModel;
+	protected WSETabularView portTypeTable;
 
-    private WSERepositoryTableModel repositoryTableModel;
-    protected WSETabularView repositoryTable;
+	private WSERepositoryTableModel repositoryTableModel;
+	protected WSETabularView repositoryTable;
 
-    public WSEServiceView(WSService group, WSEController controller)
-    {
-        super(group, controller, "ws_service_($name)");
-        
-         finalizeBuilding();
-    }
+	public WSEServiceView(WSService group, WSEController controller) {
+		super(group, controller, "ws_service_($name)");
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        
-    	WSService service = getWSService();
-        boolean readOnly=false;
- 		if(service!=null && service instanceof ExternalWSService) readOnly=true;
-        portTypeTableModel = new WSEPortTypeTableModel(getWSService(), getWSEController().getProject(), readOnly);
-        addToMasterTabularView(portTypeTable = new WSETabularView(getWSEController(), portTypeTableModel, 10));
+		finalizeBuilding();
+	}
 
-        repositoryTableModel = new WSERepositoryTableModel(getWSService(), getWSEController().getProject());
-        addToMasterTabularView(repositoryTable = new WSETabularView(getWSEController(), repositoryTableModel, 10));
+	@Override
+	protected JComponent buildContentPane() {
 
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, portTypeTable, repositoryTable);
-    }
+		WSService service = getWSService();
+		boolean readOnly = false;
+		if (service != null && service instanceof ExternalWSService) {
+			readOnly = true;
+		}
+		portTypeTableModel = new WSEPortTypeTableModel(getWSService(), getWSEController().getProject(), readOnly);
+		addToMasterTabularView(portTypeTable = new WSETabularView(getWSEController(), portTypeTableModel, 10));
 
-    public WSService getWSService()
-    {
-        return getModelObject();
-    }
-    
-    public WSPortTypeFolder getWSPortTypeFolder(){
-    		return getWSService().getWSPortTypeFolder();
-    }
-    
-    public WSRepositoryFolder getWSRepositoryFolder(){
-    		return getWSService().getWSRepositoryFolder();
-    }
+		repositoryTableModel = new WSERepositoryTableModel(getWSService(), getWSEController().getProject());
+		addToMasterTabularView(repositoryTable = new WSETabularView(getWSEController(), repositoryTableModel, 10));
 
-    public ServiceInterface getSelectedServiceInterface()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
-            return (ServiceInterface) selection.firstElement();
-        }
-        return null;
-    }
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, portTypeTable, repositoryTable);
+	}
 
-    public WSDLRepository getSelectedWSDLRepository()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof WSDLRepository)) {
-            return (WSDLRepository) selection.firstElement();
-        }
-        return null;
-    }
+	public WSService getWSService() {
+		return getModelObject();
+	}
 
-    public WSETabularView getPortTypeTable() 
-    {
-        return portTypeTable;
-    }
+	public WSPortTypeFolder getWSPortTypeFolder() {
+		return getWSService().getWSPortTypeFolder();
+	}
 
-    public WSETabularView getRepositoryTable() 
-    {
-        return repositoryTable;
-    }
+	public WSRepositoryFolder getWSRepositoryFolder() {
+		return getWSService().getWSRepositoryFolder();
+	}
 
- }
+	public ServiceInterface getSelectedServiceInterface() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
+			return (ServiceInterface) selection.firstElement();
+		}
+		return null;
+	}
+
+	public WSDLRepository getSelectedWSDLRepository() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof WSDLRepository)) {
+			return (WSDLRepository) selection.firstElement();
+		}
+		return null;
+	}
+
+	public WSETabularView getPortTypeTable() {
+		return portTypeTable;
+	}
+
+	public WSETabularView getRepositoryTable() {
+		return repositoryTable;
+	}
+
+}

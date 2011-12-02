@@ -20,11 +20,16 @@
 package org.openflexo.wysiwyg;
 
 /**
- * <p>Interface for IE widgets that need to get and set their HTML content from/to the FlexoWysiwyg component.</p>
- * <p>Known implementations :</p> 
+ * <p>
+ * Interface for IE widgets that need to get and set their HTML content from/to the FlexoWysiwyg component.
+ * </p>
+ * <p>
+ * Known implementations :
+ * </p>
  * <ul>
- * 	<li><code>IEWysiwygWidgetView</code></li>
+ * <li><code>IEWysiwygWidgetView</code></li>
  * </ul>
+ * 
  * @see IEWysiwygWidgetView
  */
 public interface EditableHtmlWidget {

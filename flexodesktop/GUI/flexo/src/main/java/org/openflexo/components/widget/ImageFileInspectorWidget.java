@@ -33,125 +33,116 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class ImageFileInspectorWidget extends CustomInspectorWidget<ImageFile>
-{
+public class ImageFileInspectorWidget extends CustomInspectorWidget<ImageFile> {
 
-    protected static final Logger logger = Logger.getLogger(ImageFileInspectorWidget.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(ImageFileInspectorWidget.class.getPackage().getName());
 
-    protected ImageFileSelector _selector;
-    
-    private FlexoProject project;
+	protected ImageFileSelector _selector;
 
-    public ImageFileInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new ImageFileSelector(null, new ImageFileSelector.ImageImporter() {
-        	@Override
+	private FlexoProject project;
+
+	public ImageFileInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new ImageFileSelector(null, new ImageFileSelector.ImageImporter() {
+			@Override
 			public void importImage(ActionEvent e) {
-        		if (getController()!=null && getController().getDelegate()!=null && getProject()!=null)
-        			getController().getDelegate().performAction(e,"import_image", getProject());
-        	}
-        },null, model.getBooleanValueForParameter("importedOnly")) {
-            @Override
-			public void apply()
-            {
-                super.apply();
-                updateModelFromWidget();
-            }
+				if (getController() != null && getController().getDelegate() != null && getProject() != null) {
+					getController().getDelegate().performAction(e, "import_image", getProject());
+				}
+			}
+		}, null, model.getBooleanValueForParameter("importedOnly")) {
+			@Override
+			public void apply() {
+				super.apply();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void cancel()
-            {
-                super.cancel();
-                updateModelFromWidget();
-            }
-            
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-                _selector.getTextField().requestFocus();
-                _selector.getTextField().selectAll();
-            }
+			@Override
+			public void cancel() {
+				super.cancel();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Focus gained in " + getClass().getName());
+				}
+				super.focusGained(arg0);
+				_selector.getTextField().requestFocus();
+				_selector.getTextField().selectAll();
+			}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return ImageFile.class;
-    }
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Focus lost in " + getClass().getName());
+				}
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        _selector.setEditedObject(getObjectValue());
-        _selector.setRevertValue(getObjectValue());
-    }
+	@Override
+	public Class getDefaultType() {
+		return ImageFile.class;
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-        setObjectValue(_selector.getEditedObject());
-    	super.updateModelFromWidget();
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		_selector.setEditedObject(getObjectValue());
+		_selector.setRevertValue(getObjectValue());
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		setObjectValue(_selector.getEditedObject());
+		super.updateModelFromWidget();
+	}
 
-    public FlexoProject getProject() {
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
+
+	public FlexoProject getProject() {
 		return project;
 	}
-    
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        super.setProject(aProject);
-        this.project = aProject;
-        _selector.setProject(aProject);
-    }
 
-    @Override
-	protected void performModelUpdating(InspectableObject value)
-    {
-    }
+	@Override
+	public void setProject(FlexoProject aProject) {
+		super.setProject(aProject);
+		this.project = aProject;
+		_selector.setProject(aProject);
+	}
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	protected void performModelUpdating(InspectableObject value) {
+	}
 
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
 
- }
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
+
+}

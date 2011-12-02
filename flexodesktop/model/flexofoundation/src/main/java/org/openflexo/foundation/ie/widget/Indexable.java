@@ -22,11 +22,10 @@ package org.openflexo.foundation.ie.widget;
 /**
  * @author bmangez
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public interface Indexable
-{
+public interface Indexable {
 	public void setIndex(int i);
-    public int getIndex();
+
+	public int getIndex();
 }

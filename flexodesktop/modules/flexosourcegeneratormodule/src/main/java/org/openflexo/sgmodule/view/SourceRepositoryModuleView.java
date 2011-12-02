@@ -122,24 +122,44 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 		repository.addObserver(this);
 		this.controller = ctrl;
 
-		/*
-		 * JPanel firstPanel = new JPanel(new FlowLayout()); chooseFileButton = new GeneratorButton(new ImageIconResource("Resources/backup.gif"));
-		 * chooseFileButton.setText(sourceRepository.getDirectory()!=null?sourceRepository.getDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
-		 * chooseFileButton.setPreferredSize(new Dimension(400,80)); chooseFileButton.addActionListener(new ActionListener() {
-		 * 
-		 * public void actionPerformed(ActionEvent e) { FlexoFileChooser fileChooser = new FlexoFileChooser(SwingUtilities.getWindowAncestor(chooseFileButton));
-		 * fileChooser.setCurrentDirectory(sourceRepository.getDirectory()); fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG); fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		 * controller.dismountWindowsOnTop(null); int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select")); if(returnVal == JFileChooser.APPROVE_OPTION) {
-		 * sourceRepository.setDirectory(fileChooser.getSelectedFile()); } controller.remountWindowsOnTop(); } }); firstPanel.add(chooseFileButton); generateButton = new GeneratorButton(new
-		 * ImageIconResource("Resources/wolips.gif")); generateButton.setText(FlexoLocalization.localizedForKey("generateButton", generateButton)); generateButton.addActionListener(new
-		 * ActionListener() { public void actionPerformed(ActionEvent e){ if (SynchronizeRepositoryCodeGeneration.actionType.isEnabled(sourceRepository, null,controller.getEditor())) {
-		 * SynchronizeRepositoryCodeGeneration action = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(sourceRepository, null,controller.getEditor()); action.doAction(); } else
-		 * warButton.setEnabled(false); } }); firstPanel.add(generateButton);
-		 * 
-		 * chooseFileButton.setEnabled(repository.isEnabled());
-		 * 
-		 * generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(repository,null,controller.getEditor()));
-		 */
+		/* JPanel firstPanel = new JPanel(new FlowLayout());
+		 chooseFileButton = new GeneratorButton(new ImageIconResource("Resources/backup.gif"));
+		 chooseFileButton.setText(sourceRepository.getDirectory()!=null?sourceRepository.getDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
+		 chooseFileButton.setPreferredSize(new Dimension(400,80));
+		 chooseFileButton.addActionListener(new ActionListener() {
+
+		     public void actionPerformed(ActionEvent e)
+		     {
+		         FlexoFileChooser fileChooser = new FlexoFileChooser(SwingUtilities.getWindowAncestor(chooseFileButton));
+		         fileChooser.setCurrentDirectory(sourceRepository.getDirectory());
+		         fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
+		         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		         controller.dismountWindowsOnTop(null);
+		         int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
+		         if(returnVal == JFileChooser.APPROVE_OPTION) {
+		         	sourceRepository.setDirectory(fileChooser.getSelectedFile());
+		         }
+		         controller.remountWindowsOnTop();
+		     }
+		 });
+		 firstPanel.add(chooseFileButton);
+		 generateButton = new GeneratorButton(new ImageIconResource("Resources/wolips.gif"));
+		 generateButton.setText(FlexoLocalization.localizedForKey("generateButton", generateButton));
+		 generateButton.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e){
+		         if (SynchronizeRepositoryCodeGeneration.actionType.isEnabled(sourceRepository, null,controller.getEditor())) {
+		             SynchronizeRepositoryCodeGeneration action = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(sourceRepository, null,controller.getEditor());
+		             action.doAction();
+		         } else
+		             warButton.setEnabled(false);
+		 	}
+		 });
+		 firstPanel.add(generateButton);
+		  
+		 chooseFileButton.setEnabled(repository.isEnabled());
+		 
+		 generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(repository,null,controller.getEditor()));
+		*/
 
 		console = new JConsole();
 		if (controller.getProjectGenerator(sourceRepository) != null) {
@@ -193,9 +213,11 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 			}
 		}
 
-		/*
-		 * public void setEnabled(boolean aBoolean) { super.setEnabled(aBoolean); setForeground(aBoolean?Color.BLACK:Color.GRAY); }
-		 */
+		/*public void setEnabled(boolean aBoolean)
+		{
+			super.setEnabled(aBoolean);
+			setForeground(aBoolean?Color.BLACK:Color.GRAY);
+		}*/
 	}
 
 	/**
@@ -210,11 +232,11 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == sourceRepository /* || observable == sourceRepository.getReaderRepository() */) {
+		if (observable == sourceRepository /*|| observable == sourceRepository.getReaderRepository()*/) {
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("warDirectory")) {
 				// chooseWarLocationButton.setText(sourceRepository.getWarDirectory()!=null?sourceRepository.getWarDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
 			} else if (dataModification.propertyName() != null && dataModification.propertyName().equals("directory")) {
-				// chooseFileButton.setText(sourceRepository.getDirectory()!=null?sourceRepository.getDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
+				// chooseFileButton.setText(sourceRepository.getDirectory() != null ? sourceRepository.getDirectory().getAbsolutePath() : FlexoLocalization.localizedForKey("undefined"));
 			} else if (dataModification instanceof LogAdded) {
 				// console.setText(controller.getProjectGenerator(codeRepository).getLogs().toString());
 			} else if (dataModification instanceof CGRepositoryConnected) {
@@ -350,9 +372,9 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 				}
 			});
 
-			/*
-			 * icon = new JLabel(IconLibrary.BIG_SOURCE_REPOSITORY_ICON); icon.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); add(icon,BorderLayout.WEST);
-			 */
+			/*icon = new JLabel(IconLibrary.BIG_SOURCE_REPOSITORY_ICON);
+			icon.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+			add(icon,BorderLayout.WEST);*/
 			add(chooseFileButton, BorderLayout.WEST);
 			title = new JLabel(FlexoLocalization.localizedForKey("source_repository") + " " + getRepresentedObject().getName(),
 					SwingConstants.LEFT);

@@ -21,41 +21,48 @@ package cb.petal;
 
 /**
  * Boolean literal which may obviously either be true or false.
- *
+ * 
  * @version $Id: BooleanLiteral.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class BooleanLiteral extends Literal {
-  private boolean value;
-  static final long serialVersionUID=-6022972681974975784L;
+	private boolean value;
+	static final long serialVersionUID = -6022972681974975784L;
 
-  public BooleanLiteral(boolean value) {
-    super("<boolean>");
-    this.value = value;
-  }
+	public BooleanLiteral(boolean value) {
+		super("<boolean>");
+		this.value = value;
+	}
 
-  public boolean getValue()          { return value; }
+	public boolean getValue() {
+		return value;
+	}
 
-  public void setValue(boolean v)          { value = v; }
+	public void setValue(boolean v) {
+		value = v;
+	}
 
-  @Override
-public String toString() { return ("" + value).toUpperCase(); }
+	@Override
+	public String toString() {
+		return ("" + value).toUpperCase();
+	}
 
-  @Override
-public java.lang.Object getLiteralValue() {
-    if(value)
-      return Boolean.TRUE;
-    else
-      return Boolean.FALSE;
-  }
-  
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public java.lang.Object getLiteralValue() {
+		if (value) {
+			return Boolean.TRUE;
+		} else {
+			return Boolean.FALSE;
+		}
+	}
 
-  @Override
-public boolean equals(java.lang.Object o) {
-    return (o instanceof BooleanLiteral) && (((BooleanLiteral)o).value == this.value);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
+
+	@Override
+	public boolean equals(java.lang.Object o) {
+		return (o instanceof BooleanLiteral) && (((BooleanLiteral) o).value == this.value);
+	}
 }

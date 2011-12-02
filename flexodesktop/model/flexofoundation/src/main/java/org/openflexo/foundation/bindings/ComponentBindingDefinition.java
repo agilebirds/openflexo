@@ -31,181 +31,169 @@ import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DuplicatePropertyNameException;
 import org.openflexo.toolbox.ReservedKeyword;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ComponentBindingDefinition extends BindingDefinition
-{
+public class ComponentBindingDefinition extends BindingDefinition {
 
-    private ComponentDMEntity _componentDMEntity;
+	private ComponentDMEntity _componentDMEntity;
 
-    private DMProperty _property;
+	private DMProperty _property;
 
-    public ComponentBindingDefinition(ComponentDMEntity componentDMEntity, DMProperty property)
-    {
-        super(componentDMEntity);
-        _componentDMEntity = componentDMEntity;
-        _property = property;
-    }
+	public ComponentBindingDefinition(ComponentDMEntity componentDMEntity, DMProperty property) {
+		super(componentDMEntity);
+		_componentDMEntity = componentDMEntity;
+		_property = property;
+	}
 
-    /**
-     * Overrides equals
-     * @see org.openflexo.foundation.bindings.BindingDefinition#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object object)
-    {
-        if (object instanceof ComponentBindingDefinition) {
-            ComponentBindingDefinition bd = (ComponentBindingDefinition)object;
-            if (_property == null) {
-                if (bd._property != null) return false;
-             }
-            else {
-                if (!_property.equals(bd._property)) return false;
-            }
-            if (_componentDMEntity == null) {
-                if (bd._componentDMEntity != null) return false;
-             }
-            else {
-                if (!_componentDMEntity.equals(bd._componentDMEntity)) return false;
-            }
-            return ((getOwner() == bd.getOwner())
-                    && (getType() == bd.getType())
-                    && (getIsMandatory() == bd.getIsMandatory()));
-       }
-        else {
-            return super.equals(object);
-        }
-    }
+	/**
+	 * Overrides equals
+	 * 
+	 * @see org.openflexo.foundation.bindings.BindingDefinition#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object object) {
+		if (object instanceof ComponentBindingDefinition) {
+			ComponentBindingDefinition bd = (ComponentBindingDefinition) object;
+			if (_property == null) {
+				if (bd._property != null) {
+					return false;
+				}
+			} else {
+				if (!_property.equals(bd._property)) {
+					return false;
+				}
+			}
+			if (_componentDMEntity == null) {
+				if (bd._componentDMEntity != null) {
+					return false;
+				}
+			} else {
+				if (!_componentDMEntity.equals(bd._componentDMEntity)) {
+					return false;
+				}
+			}
+			return ((getOwner() == bd.getOwner()) && (getType() == bd.getType()) && (getIsMandatory() == bd.getIsMandatory()));
+		} else {
+			return super.equals(object);
+		}
+	}
 
-    public ComponentDMEntity getComponentDMEntity()
-    {
-        return _componentDMEntity;
-    }
+	public ComponentDMEntity getComponentDMEntity() {
+		return _componentDMEntity;
+	}
 
-    public boolean getIsBindable()
-    {
-        if (_property != null) {
-            return _componentDMEntity.isBindable(_property);
-        }
-        return false;
-    }
+	public boolean getIsBindable() {
+		if (_property != null) {
+			return _componentDMEntity.isBindable(_property);
+		}
+		return false;
+	}
 
-    public void setIsBindable(boolean bindable)
-    {
-        if (_property != null) {
-            _componentDMEntity.setBindable(_property, bindable);
-        }
-    }
+	public void setIsBindable(boolean bindable) {
+		if (_property != null) {
+			_componentDMEntity.setBindable(_property, bindable);
+		}
+	}
 
-    @Override
-	public boolean getIsMandatory()
-    {
-        if (_property != null) {
-            return _componentDMEntity.isMandatory(_property);
-        }
-        return false;
-    }
+	@Override
+	public boolean getIsMandatory() {
+		if (_property != null) {
+			return _componentDMEntity.isMandatory(_property);
+		}
+		return false;
+	}
 
-    @Override
-	public void setIsMandatory(boolean mandatory)
-    {
-        if (_property != null) {
-            _componentDMEntity.setMandatory(_property, mandatory);
-        }
-    }
+	@Override
+	public void setIsMandatory(boolean mandatory) {
+		if (_property != null) {
+			_componentDMEntity.setMandatory(_property, mandatory);
+		}
+	}
 
-    public boolean isSettable()
-    {
-    	return getIsSettable();
-    }
+	public boolean isSettable() {
+		return getIsSettable();
+	}
 
-    @Override
-	public boolean getIsSettable()
-    {
-        if (_property != null) {
-            return _componentDMEntity.isSettable(_property);
-        }
-        return false;
-    }
+	@Override
+	public boolean getIsSettable() {
+		if (_property != null) {
+			return _componentDMEntity.isSettable(_property);
+		}
+		return false;
+	}
 
-    @Override
-	public void setIsSettable(boolean settable)
-    {
-        if (_property != null) {
-            _componentDMEntity.setSettable(_property, settable);
-        }
-    }
+	@Override
+	public void setIsSettable(boolean settable) {
+		if (_property != null) {
+			_componentDMEntity.setSettable(_property, settable);
+		}
+	}
 
-    @Override
-	public DMType getType()
-    {
-        if (_property != null) {
-            return _property.getType();
-        } else {
-            return super.getType();
-        }
-    }
+	@Override
+	public DMType getType() {
+		if (_property != null) {
+			return _property.getType();
+		} else {
+			return super.getType();
+		}
+	}
 
-    @Override
-	public void setType(DMType type)
-    {
-        if (_property != null) {
-            _property.setType(type);
-        } else {
-            super.setType(type);
-        }
-    }
+	@Override
+	public void setType(DMType type) {
+		if (_property != null) {
+			_property.setType(type);
+		} else {
+			super.setType(type);
+		}
+	}
 
-    @Override
-	public String getVariableName()
-    {
-        if (_property != null) {
-            return _property.getName();
-        } else {
-            return super.getVariableName();
-        }
-    }
+	@Override
+	public String getVariableName() {
+		if (_property != null) {
+			return _property.getName();
+		} else {
+			return super.getVariableName();
+		}
+	}
 
-    @Override
-	public void setVariableName(String variableName)
-    {
-        if (_property != null) {
-            try {
-            	if(ReservedKeyword.contains(variableName))throw new InvalidNameException(variableName+" is a reserved keyword.");
+	@Override
+	public void setVariableName(String variableName) {
+		if (_property != null) {
+			try {
+				if (ReservedKeyword.contains(variableName)) {
+					throw new InvalidNameException(variableName + " is a reserved keyword.");
+				}
 				_property.setName(variableName);
 			} catch (InvalidNameException e) {
 				setChanged();
 				notifyObserversAsReentrantModification(new DataModification(-1, "variableName", null, _property.getName()));
-				new FlexoException(e.getMessage(),e);
+				new FlexoException(e.getMessage(), e);
 			} catch (DuplicatePropertyNameException e) {
-				if(logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning(e.getMessage());
+				}
 				setChanged();
 				notifyObserversAsReentrantModification(new DataModification(-1, "variableName", null, _property.getName()));
 			}
-        } else {
-            super.setVariableName(variableName);
-        }
-    }
+		} else {
+			super.setVariableName(variableName);
+		}
+	}
 
-    public DMProperty getProperty()
-    {
-        return _property;
-    }
+	public DMProperty getProperty() {
+		return _property;
+	}
 
-    public void setProperty(DMProperty property)
-    {
-        _property = property;
-    }
+	public void setProperty(DMProperty property) {
+		_property = property;
+	}
 
-    @Override
-	public String toString()
-    {
-        return "ComponentBindingDefinition:"+getVariableName()+":"+getType()+"/"+hashCode();
-    }
+	@Override
+	public String toString() {
+		return "ComponentBindingDefinition:" + getVariableName() + ":" + getType() + "/" + hashCode();
+	}
 }

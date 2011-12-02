@@ -23,20 +23,21 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.generator.GeneratedCodeResult;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
 
-public abstract class FlexoResourceGenerator<T extends FlexoModelObject, CR extends GeneratedCodeResult> extends CGGenerator<T> implements IFlexoResourceGenerator {
+public abstract class FlexoResourceGenerator<T extends FlexoModelObject, CR extends GeneratedCodeResult> extends CGGenerator<T> implements
+		IFlexoResourceGenerator {
 
 	protected CR generatedCode;
-	
+
 	public FlexoResourceGenerator(ProjectGenerator projectGenerator) {
 		super(projectGenerator);
 	}
+
 	public FlexoResourceGenerator(ProjectGenerator projectGenerator, T object) {
 		super(projectGenerator, object);
 	}
 
-    @Override
-	public CR getGeneratedCode()
-    {
-        return generatedCode;
-    }
+	@Override
+	public CR getGeneratedCode() {
+		return generatedCode;
+	}
 }

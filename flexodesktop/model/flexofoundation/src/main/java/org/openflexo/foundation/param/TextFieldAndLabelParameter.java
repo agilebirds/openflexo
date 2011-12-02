@@ -24,39 +24,33 @@ import org.openflexo.inspector.widget.TextFieldAndLabelWidget;
 
 public abstract class TextFieldAndLabelParameter extends ParameterDefinition<String> {
 
-    public TextFieldAndLabelParameter(String name, String label, String defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-    public TextFieldAndLabelParameter(String name, String label, String defaultValue, int cols)
-    {
-        this(name,label,defaultValue);
-        setColumns(cols);
-        addParameter(TextFieldAndLabelWidget.ADDITIONAL_LABEL,"params."+name+".additionalLabel");
-    }
-    
-    public void setValidateOnReturn(boolean validateOnReturn)
-    {
-    	addParameter(TextFieldAndLabelWidget.VALIDATE_ON_RETURN,""+validateOnReturn);
-    }
-    
-    public void setIsPassword(boolean isPassword)
-    {
-    	addParameter(TextFieldAndLabelWidget.PASSWORD_PARAM,""+isPassword);
-    }
-    
-    public void setColumns(int cols)
-    {
-    	addParameter(TextFieldAndLabelWidget.COLUMNS_PARAM,""+cols);
-    }
+	public TextFieldAndLabelParameter(String name, String label, String defaultValue) {
+		super(name, label, defaultValue);
+	}
 
-    public abstract String getAdditionalLabel();
+	public TextFieldAndLabelParameter(String name, String label, String defaultValue, int cols) {
+		this(name, label, defaultValue);
+		setColumns(cols);
+		addParameter(TextFieldAndLabelWidget.ADDITIONAL_LABEL, "params." + name + ".additionalLabel");
+	}
 
-    @Override
-	public String getWidgetName() 
-    {
-    	return DenaliWidget.TEXT_FIELD_AND_LABEL;
-    }
+	public void setValidateOnReturn(boolean validateOnReturn) {
+		addParameter(TextFieldAndLabelWidget.VALIDATE_ON_RETURN, "" + validateOnReturn);
+	}
+
+	public void setIsPassword(boolean isPassword) {
+		addParameter(TextFieldAndLabelWidget.PASSWORD_PARAM, "" + isPassword);
+	}
+
+	public void setColumns(int cols) {
+		addParameter(TextFieldAndLabelWidget.COLUMNS_PARAM, "" + cols);
+	}
+
+	public abstract String getAdditionalLabel();
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.TEXT_FIELD_AND_LABEL;
+	}
 
 }

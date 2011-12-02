@@ -28,22 +28,22 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.rm.ComponentJavaFileResource;
 
-
 public class ReusableComponentGenerator extends ComponentGenerator {
 
-	public ReusableComponentGenerator(ProjectGenerator projectGenerator, ComponentDefinition componentDefinition, String componentGeneratedName) {
+	public ReusableComponentGenerator(ProjectGenerator projectGenerator, ComponentDefinition componentDefinition,
+			String componentGeneratedName) {
 		super(projectGenerator, componentDefinition, componentGeneratedName);
 	}
 
 	@Override
 	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("NOT IMPLEMENTED");
+		}
 	}
 
-    public ComponentJavaFileResource getComponentJavaFileResource()
-    {
-    	return null;
-    }
+	public ComponentJavaFileResource getComponentJavaFileResource() {
+		return null;
+	}
 
 }

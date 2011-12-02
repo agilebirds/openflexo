@@ -25,39 +25,52 @@ import cb.petal.Parameter;
 
 /**
  * Simple representation of a method parameter.
- *
+ * 
  * @version $Id: ParameterImpl.java,v 1.3 2011/09/12 11:47:23 gpolet Exp $
  * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ParameterImpl extends NodeImpl implements cb.generator.Parameter {
-  private   String  type;
-  protected cb.petal.Parameter parameter;
+	private String type;
+	protected cb.petal.Parameter parameter;
 
-  public ParameterImpl() {  }
+	public ParameterImpl() {
+	}
 
-  public void               setParameter(cb.petal.Parameter p) { parameter = p; }
-  public cb.petal.Parameter getParameter()                     { return parameter; }
+	public void setParameter(cb.petal.Parameter p) {
+		parameter = p;
+	}
 
-  @Override
-public void   setType(String p) { type = p; }
-  @Override
-public String getType() { return type; }
+	public cb.petal.Parameter getParameter() {
+		return parameter;
+	}
 
-  /** Default implementation prints Java code
-   */
-  @Override
-public void dump(PrintWriter stream) {
-    print(stream, "", getAccess(), " ");
-    stream.print(getType() + " " + getName());
-  }
+	@Override
+	public void setType(String p) {
+		type = p;
+	}
 
-  @Override
-public boolean equals(Object o) {
-    if(o instanceof Parameter) {
-      Parameter p = (Parameter)o;
+	@Override
+	public String getType() {
+		return type;
+	}
 
-      return getType().equals(p.getType()) && getName().equals(p.getName());
-    } else
-      return false;
-  }
+	/**
+	 * Default implementation prints Java code
+	 */
+	@Override
+	public void dump(PrintWriter stream) {
+		print(stream, "", getAccess(), " ");
+		stream.print(getType() + " " + getName());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Parameter) {
+			Parameter p = (Parameter) o;
+
+			return getType().equals(p.getType()) && getName().equals(p.getName());
+		} else {
+			return false;
+		}
+	}
 }

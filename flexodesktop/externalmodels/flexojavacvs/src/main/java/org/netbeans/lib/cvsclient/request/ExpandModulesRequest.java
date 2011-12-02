@@ -21,39 +21,36 @@
 package org.netbeans.lib.cvsclient.request;
 
 /**
- * Sends the expand-modules request. This request expands the modules which
- * have been specified in previous argument requests. The server can assume
- * this is a checkout or export.<br>
- * Expand is not the best word for what this request does. It does not
- * expand a module in any meaningful way. What it does is ask the server
- * to tell you which working directories the server needs to know about in
- * order to handle a checkout of a specific module. This is important where
- * you have aliased modules. If you alias module foo as bar, then you need
- * to know when you do a checkout of foo that bar on disk is an existing
- * checkout of the module.
- * @author  Robert Greig
+ * Sends the expand-modules request. This request expands the modules which have been specified in previous argument requests. The server
+ * can assume this is a checkout or export.<br>
+ * Expand is not the best word for what this request does. It does not expand a module in any meaningful way. What it does is ask the server
+ * to tell you which working directories the server needs to know about in order to handle a checkout of a specific module. This is
+ * important where you have aliased modules. If you alias module foo as bar, then you need to know when you do a checkout of foo that bar on
+ * disk is an existing checkout of the module.
+ * 
+ * @author Robert Greig
  * @see org.netbeans.lib.cvsclient.response.ModuleExpansionResponse
  */
 public class ExpandModulesRequest extends Request {
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     * @throws UnconfiguredRequestException if the request has not been
-     * properly configured
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 * @throws UnconfiguredRequestException
+	 *             if the request has not been properly configured
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        return "expand-modules \n"; //NOI18N
-    }
+		return "expand-modules \n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return true;
-    }
+		return true;
+	}
 }
-

@@ -25,7 +25,7 @@ public class UnaryOperatorExpression extends Expression {
 
 	private UnaryOperator operator;
 	private Expression argument;
-	
+
 	public UnaryOperatorExpression(UnaryOperator operator, Expression argument) {
 		super();
 		this.operator = operator;
@@ -33,15 +33,14 @@ public class UnaryOperatorExpression extends Expression {
 	}
 
 	@Override
-	public int getDepth()
-	{
-		return argument.getDepth()+1;
+	public int getDepth() {
+		return argument.getDepth() + 1;
 	}
 
-	public int getPriority() 
-	{
-		if (operator != null)
+	public int getPriority() {
+		if (operator != null) {
 			return operator.getPriority();
+		}
 		return -1;
 	}
 
@@ -60,18 +59,17 @@ public class UnaryOperatorExpression extends Expression {
 	public void setOperator(UnaryOperator operator) {
 		this.operator = operator;
 	}
-	
+
 	@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException 
-	{
+	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 		_checkSemanticallyAcceptable();
 		Expression evaluatedArgument = argument.evaluate(context);
 		if (evaluatedArgument instanceof Constant) {
-			Constant returned = operator.evaluate((Constant)evaluatedArgument);
-			//if (context != null) return context.getConstantFactory().makeConstant(returned.getParsingValue());
+			Constant returned = operator.evaluate((Constant) evaluatedArgument);
+			// if (context != null) return context.getConstantFactory().makeConstant(returned.getParsingValue());
 			return returned;
 		}
-		return new UnaryOperatorExpression(operator,evaluatedArgument);
+		return new UnaryOperatorExpression(operator, evaluatedArgument);
 	}
 
 	@Override
@@ -80,12 +78,10 @@ public class UnaryOperatorExpression extends Expression {
 	}
 
 	@Override
-	protected Vector<Expression> getChilds()
-	{
+	protected Vector<Expression> getChilds() {
 		Vector<Expression> returned = new Vector<Expression>();
 		returned.add(getArgument());
 		return returned;
 	}
-
 
 }

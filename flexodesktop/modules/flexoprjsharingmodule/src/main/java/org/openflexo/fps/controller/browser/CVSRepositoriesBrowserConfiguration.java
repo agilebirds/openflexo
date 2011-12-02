@@ -33,75 +33,60 @@ import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.fps.SharedProject;
 
-
-class CVSRepositoriesBrowserConfiguration implements BrowserConfiguration
-{
+class CVSRepositoriesBrowserConfiguration implements BrowserConfiguration {
 	private CVSRepositoryList _repositories;
 	private CVSRepositoriesBrowserConfigurationElementFactory _factory;
 
-	protected CVSRepositoriesBrowserConfiguration(CVSRepositoryList repositories)
-	{
+	protected CVSRepositoriesBrowserConfiguration(CVSRepositoryList repositories) {
 		super();
 		_repositories = repositories;
 		_factory = new CVSRepositoriesBrowserConfigurationElementFactory();
 	}
 
 	@Override
-	public FlexoProject getProject() 
-	{
+	public FlexoProject getProject() {
 		return null;
 	}
-	
-    @Override
-	public void configure(ProjectBrowser aBrowser) 
-	{
- 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject()
-	{
+	public void configure(ProjectBrowser aBrowser) {
+	}
+
+	@Override
+	public FlexoModelObject getDefaultRootObject() {
 		return _repositories;
 	}
 
 	@Override
-	public BrowserElementFactory getBrowserElementFactory()
-	{
-		return _factory; 
+	public BrowserElementFactory getBrowserElementFactory() {
+		return _factory;
 	}
 
-	class CVSRepositoriesBrowserConfigurationElementFactory implements BrowserElementFactory
-	{
+	class CVSRepositoriesBrowserConfigurationElementFactory implements BrowserElementFactory {
 
 		CVSRepositoriesBrowserConfigurationElementFactory() {
 			super();
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-		{
+		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof CVSRepositoryList) {
-				return new CVSRepositoryListElement((CVSRepositoryList)object,browser,parent);
-			}
-			else if (object instanceof CVSRepository) {
-				return new CVSRepositoryElement((CVSRepository)object,browser,parent);
-			}
-			else if (object instanceof CVSModule) {
-				return new CVSModuleElement((CVSModule)object,browser,parent);
-			}
-			else if (object instanceof CVSExplorer) {
-				return new CVSExplorerElement((CVSExplorer)object,browser,parent);
-			}
-			else if (object instanceof SharedProject) {
-				return new SharedProjectElement((SharedProject)object,browser,parent);
-			}
-			else if (object instanceof CVSDirectory) {
-				return new CVSDirectoryElement((CVSDirectory)object,browser,parent);
-			}
-			else if (object instanceof CVSFile) {
-				return new CVSFileElement((CVSFile)object,browser,parent);
+				return new CVSRepositoryListElement((CVSRepositoryList) object, browser, parent);
+			} else if (object instanceof CVSRepository) {
+				return new CVSRepositoryElement((CVSRepository) object, browser, parent);
+			} else if (object instanceof CVSModule) {
+				return new CVSModuleElement((CVSModule) object, browser, parent);
+			} else if (object instanceof CVSExplorer) {
+				return new CVSExplorerElement((CVSExplorer) object, browser, parent);
+			} else if (object instanceof SharedProject) {
+				return new SharedProjectElement((SharedProject) object, browser, parent);
+			} else if (object instanceof CVSDirectory) {
+				return new CVSDirectoryElement((CVSDirectory) object, browser, parent);
+			} else if (object instanceof CVSFile) {
+				return new CVSFileElement((CVSFile) object, browser, parent);
 			}
 			return null;
 		}
-		
+
 	}
 }

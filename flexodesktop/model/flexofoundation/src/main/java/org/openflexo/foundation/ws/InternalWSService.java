@@ -36,146 +36,127 @@ import org.openflexo.foundation.xml.FlexoWSLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.logging.FlexoLogger;
 
-public class InternalWSService extends WSService implements FlexoObserver, InspectableObject
-	{
+public class InternalWSService extends WSService implements FlexoObserver, InspectableObject {
 
+	private static final Logger logger = FlexoLogger.getLogger(InternalWSService.class.getPackage().getName());
 
-	
-	    private static final Logger logger = FlexoLogger.getLogger(InternalWSService.class.getPackage()
-	            .getName());
+	public InternalWSService(FlexoWSLibraryBuilder builder) {
+		this(builder.wsLibrary);
+		initializeDeserialization(builder);
+	}
 
-	    public InternalWSService(FlexoWSLibraryBuilder builder) {
-	        this(builder.wsLibrary);
-	        initializeDeserialization(builder);
-	    }
-
-	    /**
+	/**
 	     * 
 	     */
-	    public InternalWSService(FlexoWSLibrary wsLib)
-	    {
-	        super(wsLib);
-	        
-	    }
+	public InternalWSService(FlexoWSLibrary wsLib) {
+		super(wsLib);
 
-	    /**
-	     * Overrides getFullyQualifiedName
-	     * 
-	     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-	     */
-	    @Override
-		public String getFullyQualifiedName()
-	    {
-	        return "INT_WSSERVICE_"+getName();//+"_"+getProject().getProjectName();
-	    }
+	}
 
-	 
-	    
-	    @Override
-		protected Vector getSpecificActionListForThatClass()
-	    {
-	         Vector returned = super.getSpecificActionListForThatClass();
-	         returned.add(CreateNewWebService.actionType);
-	         return returned;
-	    }
-	
-	    
-	
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "INT_WSSERVICE_" + getName();// +"_"+getProject().getProjectName();
+	}
 
-	    public static Logger getLogger()
-	    {
-	        return logger;
-	    }
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector returned = super.getSpecificActionListForThatClass();
+		returned.add(CreateNewWebService.actionType);
+		return returned;
+	}
 
+	public static Logger getLogger() {
+		return logger;
+	}
 
-	    
-	 
-	    
-	    /**
-	     * Overrides update
-	     * 
-	     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-	     *      org.openflexo.foundation.DataModification)
-	     */
-	    @Override
-		public void update(FlexoObservable observable, DataModification dataModification)
-	    {
-	    	//fucking things to do.
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// fucking things to do.
 
-	    }
-	    
-	    /**
-	     * Overrides getInspectorName
-	     * 
-	     * @see org.openflexo.inspector.InspectableObject#getInspectorName()
-	     */
-	    @Override
-		public String getInspectorName()
-	    {
-	        return Inspectors.WSE.WSINTERNALSERVICE_INSPECTOR;
-	    }
-	    
-	    @Override
-		public void delete(){
-    		if (logger.isLoggable(Level.FINE)) logger.fine("delete: internalWSGroup "+getName());
-	        Vector processesToDelete = new Vector();
-	        processesToDelete.addAll(getWSPortTypes());
-	        for (Enumeration en = processesToDelete.elements(); en.hasMoreElements();) {
-	            WSPortType next = (WSPortType) en.nextElement();
-	    			//Delete only deletes WSObjects by default.
-	    			//It is the responsibility of the WSService to decide if it should delete also the
-	    			//real FlexoProcess.
-	            // getFlexoProcess().delete();
-	            next.delete();
-	        }
-	        
-	        Vector repositoriesToDelete = new Vector();
-	        repositoriesToDelete.addAll(getWSRepositories());
-	        for (Enumeration en = repositoriesToDelete.elements(); en.hasMoreElements();) {
-	            WSRepository next = (WSRepository) en.nextElement();
-	            //Delete only deletes WSObjects by default.
-	    			//It is the responsibility of the WSService to decide if it should delete also the
-	    			//real DataRepository.
-	    			//next.getWSDLRepository().delete();
-	            next.delete();
-	        }
-	        
-	        //FileUtils.recursiveDeleteFile(getWSDLFile().getFile());
-	        
-	        getWSLibrary().removeFromInternalWSServices(this);
-	        super.delete();
-	        setChanged();
-	        notifyObservers(new InternalWSServiceRemoved(this));
-	        deleteObservers();
-	    }
-	    
-	    // ==========================================================================
-        // ======================== TreeNode implementation
-        // =========================
-        // ==========================================================================
+	}
 
-        @Override
-		public TreeNode getParent()
-        {
-            return getWSLibrary().getInternalWSFolder();
-        }
+	/**
+	 * Overrides getInspectorName
+	 * 
+	 * @see org.openflexo.inspector.InspectableObject#getInspectorName()
+	 */
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WSE.WSINTERNALSERVICE_INSPECTOR;
+	}
 
-        @Override
-		public boolean getAllowsChildren()
-        {
-            return true;
-        }
-        
-        @Override
-		public Vector getOrderedChildren(){
-        		Vector a = new Vector();
-        		a.add(getWSPortTypeFolder());
-        		a.add(getWSRepositoryFolder());
-        		return a;
-        }
-	 
-        @Override
-		public String getClassNameKey() {
-        		return "internal_ws_service";
-        }
+	@Override
+	public void delete() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("delete: internalWSGroup " + getName());
+		}
+		Vector processesToDelete = new Vector();
+		processesToDelete.addAll(getWSPortTypes());
+		for (Enumeration en = processesToDelete.elements(); en.hasMoreElements();) {
+			WSPortType next = (WSPortType) en.nextElement();
+			// Delete only deletes WSObjects by default.
+			// It is the responsibility of the WSService to decide if it should delete also the
+			// real FlexoProcess.
+			// getFlexoProcess().delete();
+			next.delete();
+		}
+
+		Vector repositoriesToDelete = new Vector();
+		repositoriesToDelete.addAll(getWSRepositories());
+		for (Enumeration en = repositoriesToDelete.elements(); en.hasMoreElements();) {
+			WSRepository next = (WSRepository) en.nextElement();
+			// Delete only deletes WSObjects by default.
+			// It is the responsibility of the WSService to decide if it should delete also the
+			// real DataRepository.
+			// next.getWSDLRepository().delete();
+			next.delete();
+		}
+
+		// FileUtils.recursiveDeleteFile(getWSDLFile().getFile());
+
+		getWSLibrary().removeFromInternalWSServices(this);
+		super.delete();
+		setChanged();
+		notifyObservers(new InternalWSServiceRemoved(this));
+		deleteObservers();
+	}
+
+	// ==========================================================================
+	// ======================== TreeNode implementation
+	// =========================
+	// ==========================================================================
+
+	@Override
+	public TreeNode getParent() {
+		return getWSLibrary().getInternalWSFolder();
+	}
+
+	@Override
+	public boolean getAllowsChildren() {
+		return true;
+	}
+
+	@Override
+	public Vector getOrderedChildren() {
+		Vector a = new Vector();
+		a.add(getWSPortTypeFolder());
+		a.add(getWSRepositoryFolder());
+		return a;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "internal_ws_service";
+	}
 }

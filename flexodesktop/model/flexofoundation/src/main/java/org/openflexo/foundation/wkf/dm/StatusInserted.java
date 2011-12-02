@@ -28,15 +28,13 @@ import org.openflexo.foundation.wkf.Status;
  * @author sguerin
  * 
  */
-public class StatusInserted extends WKFDataModification
-{
+public class StatusInserted extends WKFDataModification {
 
-    public FlexoProcess parentProcess;
+	public FlexoProcess parentProcess;
 
-    public StatusInserted(Status insertedStatus, FlexoProcess parentProcess)
-    {
-        super(null, insertedStatus);
-        this.parentProcess = parentProcess;
-    }
+	public StatusInserted(Status insertedStatus, FlexoProcess parentProcess) {
+		super(null, insertedStatus);
+		this.parentProcess = parentProcess;
+	}
 
 }

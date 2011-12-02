@@ -29,68 +29,64 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.version.AbstractCGFileVersion;
 
-
 public class FileHistoryBrowserView extends TabularBrowserView {
 
 	private CGFile _cgFile;
-	
-    public FileHistoryBrowserView(GeneratorController controller, CGFile cgFile, int visibleRowCount)
-    {
-        super(controller, makeTabularBrowserModel(cgFile),visibleRowCount,controller.getEditor());
-        _cgFile = cgFile;
-        setVisibleRowCount(visibleRowCount);
-        setSynchronizeWithSelectionManager(true);
-   }
 
-    private static TabularBrowserModel makeTabularBrowserModel(CGFile cgFile)
-    {
-    	TabularBrowserModel model = new TabularBrowserModel(
-    			GeneratorBrowser.makeBrowserConfigurationForFileHistory(cgFile),
-    			" ",300);
-        model.addToColumns(new StringColumn<CGObject>("kind", 150) {
-            @Override
-			public String getValue(CGObject object)
-           {
-            	if (object instanceof AbstractCGFileVersion)
-            		return ((AbstractCGFileVersion)object).getVersionId().typeAsString();
-            	return "";
-           }
-        });
-        model.addToColumns(new StringColumn<CGObject>("date", 200) {
-        	@Override
-			public String getValue(CGObject object)
-        	{
-        		if (object instanceof AbstractCGFileVersion)
-        			return ((AbstractCGFileVersion)object).getDateAsString();
-        		return "";
-        	}
-        });
-        model.addToColumns(new StringColumn<CGObject>("user", 80) {
-        	@Override
-			public String getValue(CGObject object)
-        	{
-        		if (object instanceof AbstractCGFileVersion)
-        			return ((AbstractCGFileVersion)object).getUserId();
-        		return "";
-        	}
-        });
-        model.addToColumns(new StringColumn<CGObject>("description", 400) {
-            @Override
-			public String getValue(CGObject object)
-           {
-        	   return object.getDescription();
-           }
-       });
-        return model;
-    }
-   
-    @Override
-	public boolean mayRepresents (FlexoModelObject anObject)
-    {
-        if (anObject instanceof CGFile) return (anObject == _cgFile);
-        if (anObject instanceof AbstractCGFileVersion) return (((AbstractCGFileVersion)anObject).getCGFile() == _cgFile);
-        return false;
-    }
-    
+	public FileHistoryBrowserView(GeneratorController controller, CGFile cgFile, int visibleRowCount) {
+		super(controller, makeTabularBrowserModel(cgFile), visibleRowCount, controller.getEditor());
+		_cgFile = cgFile;
+		setVisibleRowCount(visibleRowCount);
+		setSynchronizeWithSelectionManager(true);
+	}
+
+	private static TabularBrowserModel makeTabularBrowserModel(CGFile cgFile) {
+		TabularBrowserModel model = new TabularBrowserModel(GeneratorBrowser.makeBrowserConfigurationForFileHistory(cgFile), " ", 300);
+		model.addToColumns(new StringColumn<CGObject>("kind", 150) {
+			@Override
+			public String getValue(CGObject object) {
+				if (object instanceof AbstractCGFileVersion) {
+					return ((AbstractCGFileVersion) object).getVersionId().typeAsString();
+				}
+				return "";
+			}
+		});
+		model.addToColumns(new StringColumn<CGObject>("date", 200) {
+			@Override
+			public String getValue(CGObject object) {
+				if (object instanceof AbstractCGFileVersion) {
+					return ((AbstractCGFileVersion) object).getDateAsString();
+				}
+				return "";
+			}
+		});
+		model.addToColumns(new StringColumn<CGObject>("user", 80) {
+			@Override
+			public String getValue(CGObject object) {
+				if (object instanceof AbstractCGFileVersion) {
+					return ((AbstractCGFileVersion) object).getUserId();
+				}
+				return "";
+			}
+		});
+		model.addToColumns(new StringColumn<CGObject>("description", 400) {
+			@Override
+			public String getValue(CGObject object) {
+				return object.getDescription();
+			}
+		});
+		return model;
+	}
+
+	@Override
+	public boolean mayRepresents(FlexoModelObject anObject) {
+		if (anObject instanceof CGFile) {
+			return (anObject == _cgFile);
+		}
+		if (anObject instanceof AbstractCGFileVersion) {
+			return (((AbstractCGFileVersion) anObject).getCGFile() == _cgFile);
+		}
+		return false;
+	}
 
 }

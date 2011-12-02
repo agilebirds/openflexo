@@ -24,33 +24,30 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoObject;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class ContextPreferences extends FlexoObject
-{
+public abstract class ContextPreferences extends FlexoObject {
 
-    private static FlexoPreferences preferences;
+	private static FlexoPreferences preferences;
 
-    private static final Vector<Class> registeredCP = new Vector<Class>();
+	private static final Vector<Class> registeredCP = new Vector<Class>();
 
-    protected static FlexoPreferences preferences(Class contextPreferenceClass)
-    {
-        if (preferences == null) {
-            preferences = FlexoPreferences.instance();
-        }
-        if (!registeredCP.contains(contextPreferenceClass)) {
-            registeredCP.add(contextPreferenceClass);
-            preferences.register(contextPreferenceClass);
-        }
-        return preferences;
-    }
+	protected static FlexoPreferences preferences(Class contextPreferenceClass) {
+		if (preferences == null) {
+			preferences = FlexoPreferences.instance();
+		}
+		if (!registeredCP.contains(contextPreferenceClass)) {
+			registeredCP.add(contextPreferenceClass);
+			preferences.register(contextPreferenceClass);
+		}
+		return preferences;
+	}
 
-    public abstract String getName();
+	public abstract String getName();
 
-    public abstract File getInspectorFile();
+	public abstract File getInspectorFile();
 }

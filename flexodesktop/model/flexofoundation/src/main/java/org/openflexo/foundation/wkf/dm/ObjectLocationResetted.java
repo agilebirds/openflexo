@@ -19,19 +19,16 @@
  */
 package org.openflexo.foundation.wkf.dm;
 
-
 /**
  * Notification fired when object location must be resetted
  * 
  * @author sguerin
  * 
  */
-public class ObjectLocationResetted extends WKFDataModification
-{
+public class ObjectLocationResetted extends WKFDataModification {
 
-     public ObjectLocationResetted()
-    {
-        super(null,null);
-    }
+	public ObjectLocationResetted() {
+		super(null, null);
+	}
 
- }
+}

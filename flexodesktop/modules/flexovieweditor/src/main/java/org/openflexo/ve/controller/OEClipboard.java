@@ -33,90 +33,80 @@ import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * XXXClipboard is intented to be the object working with the
- * XXXSelectionManager and storing copied, cutted and pasted objects. Handled
- * objects are instances implementing
- * {@link org.openflexo.selection.SelectableView}.
+ * XXXClipboard is intented to be the object working with the XXXSelectionManager and storing copied, cutted and pasted objects. Handled
+ * objects are instances implementing {@link org.openflexo.selection.SelectableView}.
  * 
  * @author yourname
  */
-public class OEClipboard extends FlexoClipboard
-{
+public class OEClipboard extends FlexoClipboard {
 
-    private static final Logger logger = Logger.getLogger(OEClipboard.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OEClipboard.class.getPackage().getName());
 
-    protected OESelectionManager _xxxSelectionManager;
+	protected OESelectionManager _xxxSelectionManager;
 
-    public OEClipboard(OESelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem)
-    {
-        super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
-        _xxxSelectionManager = aSelectionManager;
-        resetClipboard();
-    }
+	public OEClipboard(OESelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem) {
+		super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
+		_xxxSelectionManager = aSelectionManager;
+		resetClipboard();
+	}
 
-    public OESelectionManager getSelectionManager()
-    {
-        return _xxxSelectionManager;
-    }
+	public OESelectionManager getSelectionManager() {
+		return _xxxSelectionManager;
+	}
 
-    public OEController getXXXController()
-    {
-        return getSelectionManager().getXXXController();
-    }
+	public OEController getXXXController() {
+		return getSelectionManager().getXXXController();
+	}
 
-    @Override
-	public boolean performSelectionPaste()
-    {
-        if (_isPasteEnabled) {
-                 return super.performSelectionPaste();
-        } else {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Sorry, PASTE disabled");
-            return false;
-        }
-    }
+	@Override
+	public boolean performSelectionPaste() {
+		if (_isPasteEnabled) {
+			return super.performSelectionPaste();
+		} else {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Sorry, PASTE disabled");
+			}
+			return false;
+		}
+	}
 
+	@Override
+	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
+		JComponent targetContainer = graphicalContext.targetContainer;
+		if (isTargetValidForPasting(targetContainer)) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Paste is legal");
+				// Handle paste here
+			}
+		} else {
+			FlexoController.notify(FlexoLocalization.localizedForKey("cannot_paste_at_this_place_wrong_level"));
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Paste is NOT legal");
+			}
+		}
+	}
 
-    @Override
-	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext)
-     {
-        JComponent targetContainer = graphicalContext.targetContainer;
-        if (isTargetValidForPasting(targetContainer)) {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Paste is legal");
-            // Handle paste here
-        } else {
-            FlexoController.notify(FlexoLocalization.localizedForKey("cannot_paste_at_this_place_wrong_level"));
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Paste is NOT legal");
-        }
-    }
+	@Override
+	protected boolean isCurrentSelectionValidForCopy(Vector currentlySelectedObjects) {
+		return (getSelectionManager().getSelectionSize() > 0);
+	}
 
-    @Override
-	protected boolean isCurrentSelectionValidForCopy(Vector currentlySelectedObjects)
-    {
-        return (getSelectionManager().getSelectionSize() > 0);
-    }
+	protected void resetClipboard() {
+	}
 
-    protected void resetClipboard()
-    {
-    }
+	/**
+	 * Selection procedure for copy
+	 */
+	@Override
+	protected boolean performCopyOfSelection(Vector currentlySelectedObjects) {
+		resetClipboard();
+		// Put some code here
+		// _clipboardData = ....
+		return true;
+	}
 
-    /**
-     * Selection procedure for copy
-     */
-    @Override
-	protected boolean performCopyOfSelection(Vector currentlySelectedObjects)
-    {
-        resetClipboard();
-        // Put some code here
-        //_clipboardData = ....
-          return true;
-    }
-
-    protected boolean isTargetValidForPasting(JComponent targetContainer)
-    {
-        // Put some code here
-       return false;
-    }
+	protected boolean isTargetValidForPasting(JComponent targetContainer) {
+		// Put some code here
+		return false;
+	}
 }

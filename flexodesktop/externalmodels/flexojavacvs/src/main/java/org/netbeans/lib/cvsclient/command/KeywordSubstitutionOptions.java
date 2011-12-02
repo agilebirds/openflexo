@@ -20,47 +20,47 @@
 package org.netbeans.lib.cvsclient.command;
 
 /**
- * @author  Thomas Singer
+ * @author Thomas Singer
  */
 public final class KeywordSubstitutionOptions {
 
-    public static final KeywordSubstitutionOptions DEFAULT = new KeywordSubstitutionOptions("kv"); //NOI18N
-    public static final KeywordSubstitutionOptions DEFAULT_LOCKER = new KeywordSubstitutionOptions("kvl"); //NOI18N
-    public static final KeywordSubstitutionOptions ONLY_KEYWORDS = new KeywordSubstitutionOptions("k"); //NOI18N
-    public static final KeywordSubstitutionOptions ONLY_VALUES = new KeywordSubstitutionOptions("v"); //NOI18N
-    public static final KeywordSubstitutionOptions OLD_VALUES = new KeywordSubstitutionOptions("o"); //NOI18N
-    public static final KeywordSubstitutionOptions BINARY = new KeywordSubstitutionOptions("b"); //NOI18N
+	public static final KeywordSubstitutionOptions DEFAULT = new KeywordSubstitutionOptions("kv"); // NOI18N
+	public static final KeywordSubstitutionOptions DEFAULT_LOCKER = new KeywordSubstitutionOptions("kvl"); // NOI18N
+	public static final KeywordSubstitutionOptions ONLY_KEYWORDS = new KeywordSubstitutionOptions("k"); // NOI18N
+	public static final KeywordSubstitutionOptions ONLY_VALUES = new KeywordSubstitutionOptions("v"); // NOI18N
+	public static final KeywordSubstitutionOptions OLD_VALUES = new KeywordSubstitutionOptions("o"); // NOI18N
+	public static final KeywordSubstitutionOptions BINARY = new KeywordSubstitutionOptions("b"); // NOI18N
 
-    public static KeywordSubstitutionOptions findKeywordSubstOption(String keyword) {
-        if (BINARY.toString().equals(keyword)) {
-            return BINARY;
-        }
-        if (DEFAULT.toString().equals(keyword)) {
-            return DEFAULT;
-        }
-        if (DEFAULT_LOCKER.toString().equals(keyword)) {
-            return DEFAULT_LOCKER;
-        }
-        if (OLD_VALUES.toString().equals(keyword)) {
-            return OLD_VALUES;
-        }
-        if (ONLY_KEYWORDS.toString().equals(keyword)) {
-            return ONLY_KEYWORDS;
-        }
-        if (ONLY_VALUES.toString().equals(keyword)) {
-            return ONLY_VALUES;
-        }
-        return null;
-    }
+	public static KeywordSubstitutionOptions findKeywordSubstOption(String keyword) {
+		if (BINARY.toString().equals(keyword)) {
+			return BINARY;
+		}
+		if (DEFAULT.toString().equals(keyword)) {
+			return DEFAULT;
+		}
+		if (DEFAULT_LOCKER.toString().equals(keyword)) {
+			return DEFAULT_LOCKER;
+		}
+		if (OLD_VALUES.toString().equals(keyword)) {
+			return OLD_VALUES;
+		}
+		if (ONLY_KEYWORDS.toString().equals(keyword)) {
+			return ONLY_KEYWORDS;
+		}
+		if (ONLY_VALUES.toString().equals(keyword)) {
+			return ONLY_VALUES;
+		}
+		return null;
+	}
 
-    private String value;
+	private String value;
 
-    private KeywordSubstitutionOptions(String value) {
-        this.value = value;
-    }
+	private KeywordSubstitutionOptions(String value) {
+		this.value = value;
+	}
 
-    @Override
+	@Override
 	public String toString() {
-        return value;
-    }
+		return value;
+	}
 }

@@ -24,11 +24,9 @@ import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
+public abstract class WKFObjectGR<O extends WKFObject> extends SWLObjectGR<O> {
 
-public abstract class WKFObjectGR<O extends WKFObject> extends SWLObjectGR<O>{
-
-	public WKFObjectGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing)
-	{
+	public WKFObjectGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing) {
 		super(object, shapeType, aDrawing);
 	}
 
@@ -44,10 +42,11 @@ public abstract class WKFObjectGR<O extends WKFObject> extends SWLObjectGR<O>{
 
 	@Override
 	public final boolean getIsVisible() {
-		if(getDrawing()!=null)
+		if (getDrawing() != null) {
 			return getDrawing().isVisible(getModel());
-		else
+		} else {
 			return true;
+		}
 	}
 
 }

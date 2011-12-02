@@ -28,69 +28,62 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 public abstract class ImplModelObject extends FlexoModelObject implements InspectableObject {
 
 	private ImplementationModel implementationModel;
 	private String name;
-    
-     // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
 
-    /**
-     * Never use this constructor except for ComponentLibrary
-     */
-    public ImplModelObject(FlexoProject project)
-    {
-        super(project);
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Default constructor
-     */
-	public ImplModelObject(ImplementationModel implementationModel)
-    {
+	/**
+	 * Never use this constructor except for ComponentLibrary
+	 */
+	public ImplModelObject(FlexoProject project) {
+		super(project);
+	}
+
+	/**
+	 * Default constructor
+	 */
+	public ImplModelObject(ImplementationModel implementationModel) {
 		this(implementationModel.getProject());
 		setImplementationModel(implementationModel);
-    }
+	}
 
-	public ImplementationModel getImplementationModel()
-    {
+	public ImplementationModel getImplementationModel() {
 		return implementationModel;
-    }
+	}
 
 	public void setImplementationModel(ImplementationModel implementationModel) {
 		this.implementationModel = implementationModel;
 	}
 
 	/**
-	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the implementation model
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * implementation model
 	 * 
 	 * @return the component library
 	 */
-    @Override
-    public ImplementationModel getXMLResourceData()
-    {
-        return getImplementationModel();
-    }
-
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getImplementationModel().getXMLMapping();
-    }
+	@Override
+	public ImplementationModel getXMLResourceData() {
+		return getImplementationModel();
+	}
 
 	@Override
-	public String getName() 
-	{
+	public XMLMapping getXMLMapping() {
+		return getImplementationModel().getXMLMapping();
+	}
+
+	@Override
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException
-	{
+	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
 		if (requireChange(this.name, name)) {
 			String oldName = this.name;
 			this.name = name;

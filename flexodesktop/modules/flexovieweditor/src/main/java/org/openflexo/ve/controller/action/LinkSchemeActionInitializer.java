@@ -24,6 +24,12 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.controller.OEController;
@@ -31,58 +37,42 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.view.action.LinkSchemeAction;
-
-
 public class LinkSchemeActionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	LinkSchemeActionInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(LinkSchemeAction.actionType,actionInitializer);
+	LinkSchemeActionInitializer(OEControllerActionInitializer actionInitializer) {
+		super(LinkSchemeAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<LinkSchemeAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<LinkSchemeAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<LinkSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, LinkSchemeAction action)
-			{
-				logger.info("On est la action.escapeParameterRetrievingWhenValid="+action.escapeParameterRetrievingWhenValid);
-				return ParametersRetriever.retrieveParameters(action,action.escapeParameterRetrievingWhenValid);
+			public boolean run(ActionEvent e, LinkSchemeAction action) {
+				return ParametersRetriever.retrieveParameters(action, action.escapeParameterRetrievingWhenValid);
 			}
 		};
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<LinkSchemeAction> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<LinkSchemeAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<LinkSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, LinkSchemeAction action)
-			{
-				((OEController)getController()).getSelectionManager().setSelectedObject(action.getNewConnector());
+			public boolean run(ActionEvent e, LinkSchemeAction action) {
+				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewConnector());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<LinkSchemeAction> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<LinkSchemeAction> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<LinkSchemeAction>() {
 			@Override
 			public boolean handleException(FlexoException exception, LinkSchemeAction action) {
@@ -95,12 +85,9 @@ public class LinkSchemeActionInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return VEIconLibrary.SHAPE_ICON;
 	}
-
 
 }

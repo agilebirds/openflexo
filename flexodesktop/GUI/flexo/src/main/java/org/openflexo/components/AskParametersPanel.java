@@ -34,87 +34,76 @@ import org.openflexo.inspector.TabModelView;
 import org.openflexo.inspector.widget.DenaliWidget;
 import org.openflexo.view.controller.AskParametersController;
 
-
 /**
  * Dialog allowing to automatically ask and edit parameters
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class AskParametersPanel extends JPanel
-{
+public class AskParametersPanel extends JPanel {
 
 	static final Logger logger = Logger.getLogger(AskParametersPanel.class.getPackage().getName());
 
 	private ParametersModel _parametersModel;
-     private TabModelView paramsPanel;
+	private TabModelView paramsPanel;
 
-    public AskParametersPanel(FlexoProject project, ParameterDefinition... parameters)
-    {
-        super();
-        setLayout(new BorderLayout());
-        _parametersModel = new ParametersModel(project,parameters);
-        paramsPanel = new TabModelView(_parametersModel.getTabModel(),null,AskParametersController.instance());
-        paramsPanel.performObserverSwitch(_parametersModel);
-        paramsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        paramsPanel.valueChange(_parametersModel);
-        add(paramsPanel,BorderLayout.CENTER);
-        SwingUtilities.invokeLater(new Runnable() {
-        	@Override
+	public AskParametersPanel(FlexoProject project, ParameterDefinition... parameters) {
+		super();
+		setLayout(new BorderLayout());
+		_parametersModel = new ParametersModel(project, parameters);
+		paramsPanel = new TabModelView(_parametersModel.getTabModel(), null, AskParametersController.instance());
+		paramsPanel.performObserverSwitch(_parametersModel);
+		paramsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		paramsPanel.valueChange(_parametersModel);
+		add(paramsPanel, BorderLayout.CENTER);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
-        		paramsPanel.requestFocusInFirstWidget();
-        	}
-        });
-   }
+				paramsPanel.requestFocusInFirstWidget();
+			}
+		});
+	}
 
-    public DenaliWidget getInspectorWidgetForParameter (ParameterDefinition parameterDefinition)
-    {
-    	return paramsPanel.getInspectorWidgetFor(parameterDefinition.getName());
-    }
+	public DenaliWidget getInspectorWidgetForParameter(ParameterDefinition parameterDefinition) {
+		return paramsPanel.getInspectorWidgetFor(parameterDefinition.getName());
+	}
 
-    public void update()
-    {
-        paramsPanel.valueChange(_parametersModel);
-        paramsPanel.performObserverSwitch(_parametersModel);
-    }
+	public void update() {
+		paramsPanel.valueChange(_parametersModel);
+		paramsPanel.performObserverSwitch(_parametersModel);
+	}
 
-    @Override
-	public void setBackground(Color aColor)
-    {
-        super.setBackground(aColor);
-        if (paramsPanel != null)
-            paramsPanel.setBackground(aColor);
-    }
+	@Override
+	public void setBackground(Color aColor) {
+		super.setBackground(aColor);
+		if (paramsPanel != null) {
+			paramsPanel.setBackground(aColor);
+		}
+	}
 
-    public Object parameterValueWithName(String paramName)
-    {
-        return _parametersModel.objectForKey(paramName);
-    }
+	public Object parameterValueWithName(String paramName) {
+		return _parametersModel.objectForKey(paramName);
+	}
 
-    public void setParameterValueWithName(Object value, String paramName)
-    {
-        _parametersModel.setObjectForKey(value,paramName);
-    }
+	public void setParameterValueWithName(Object value, String paramName) {
+		_parametersModel.setObjectForKey(value, paramName);
+	}
 
-    public boolean booleanParameterValueWithName(String paramName)
-    {
-        return _parametersModel.booleanValueForKey(paramName);
-    }
+	public boolean booleanParameterValueWithName(String paramName) {
+		return _parametersModel.booleanValueForKey(paramName);
+	}
 
-    public void setBooleanParameterValueWithName(boolean value, String paramName)
-    {
-        _parametersModel.setBooleanValueForKey(value,paramName);
-    }
+	public void setBooleanParameterValueWithName(boolean value, String paramName) {
+		_parametersModel.setBooleanValueForKey(value, paramName);
+	}
 
-    public int integerParameterValueWithName(String paramName)
-    {
-        return _parametersModel.integerValueForKey(paramName);
-    }
+	public int integerParameterValueWithName(String paramName) {
+		return _parametersModel.integerValueForKey(paramName);
+	}
 
-    public void setIntegerParameterValueWithName(int value, String paramName)
-    {
-        _parametersModel.setIntegerValueForKey(value,paramName);
-    }
+	public void setIntegerParameterValueWithName(int value, String paramName) {
+		_parametersModel.setIntegerValueForKey(value, paramName);
+	}
 
 	public ParametersModel getParametersModel() {
 		return _parametersModel;

@@ -22,15 +22,15 @@ package org.netbeans.lib.cvsclient.command.add;
 import org.netbeans.lib.cvsclient.command.DefaultFileInfoContainer;
 
 /**
- * Describes add information for a file. This is the result of doing a
- * cvs add command. The fields in instances of this object are populated
+ * Describes add information for a file. This is the result of doing a cvs add command. The fields in instances of this object are populated
  * by response handlers.
- * @author  Thomas Singer
+ * 
+ * @author Thomas Singer
  */
 public class AddInformation extends DefaultFileInfoContainer {
-    public static final String FILE_ADDED = "A"; //NOI18N
-    public static final String FILE_RESURRECTED = "U"; //NOI18N
+	public static final String FILE_ADDED = "A"; // NOI18N
+	public static final String FILE_RESURRECTED = "U"; // NOI18N
 
-    public AddInformation() {
-    }
+	public AddInformation() {
+	}
 }

@@ -20,6 +20,7 @@
 package org.openflexo.foundation;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.foundation.rm.FlexoProject;
@@ -30,129 +31,119 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.StringRepresentable;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * Represents type of generation target (Business Technical, UserManual)
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DocType extends TargetType implements ChoiceList, Serializable, StringRepresentable
-{
-	
-	public static enum DefaultDocType
-	{
+public class DocType extends TargetType implements ChoiceList, Serializable, StringRepresentable {
+
+	public static enum DefaultDocType {
 		Business, Technical, UserManual, Objectives;
-		
-		public static boolean isDefaultDocType(String docType, boolean ignoreCase)
-		{
-			for(DefaultDocType defaultDocType : values())
-			{
-				if(defaultDocType.name().equals(docType) || (ignoreCase && defaultDocType.name().equalsIgnoreCase(docType)))
+
+		public static boolean isDefaultDocType(String docType, boolean ignoreCase) {
+			for (DefaultDocType defaultDocType : values()) {
+				if (defaultDocType.name().equals(docType) || ignoreCase && defaultDocType.name().equalsIgnoreCase(docType)) {
 					return true;
+				}
 			}
 			return false;
 		}
 	}
 
-    private String name;
+	private String name;
 
-    private FlexoProject project;
-    
-    private Vector<Format> availableFormats;
+	private FlexoProject project;
 
-    public DocType(String name, FlexoProject project)
-    {
-        this(project);
-        availableFormats = new Vector<Format>();
-        availableFormats.add(Format.HTML);
-        availableFormats.add(Format.LATEX);
-        availableFormats.add(Format.DOCX);
-        name = FileUtils.getValidFileName(name).replace(',', ' '); // Target name are used to build directory structure
-        this.name = name;
-    }
+	private Vector<Format> availableFormats;
 
-    /**
-     * @param project
-     */
-    public DocType(FlexoProject project)
-    {
-        super(project);
-        this.project = project;
-    }
+	public DocType(String name, FlexoProject project) {
+		this(project);
+		availableFormats = new Vector<Format>();
+		availableFormats.add(Format.HTML);
+		availableFormats.add(Format.LATEX);
+		availableFormats.add(Format.DOCX);
+		name = FileUtils.getValidFileName(name).replace(',', ' '); // Target name are used to build directory structure
+		this.name = name;
+	}
 
-    public DocType(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-    }
+	/**
+	 * @param project
+	 */
+	public DocType(FlexoProject project) {
+		super(project);
+		this.project = project;
+	}
 
-    @Override
-    public String getName()
-    {
-        return name;
-    }
+	public DocType(FlexoProjectBuilder builder) {
+		this(builder.project);
+	}
 
-    @Override
-	public void setName(String name)
-    {
-        this.name = name;
-    }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public String getTemplateFolderName()
-    {
-        return getName();
-    }
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * Overrides getFullyQualifiedName
-     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-     */
-    @Override
-    public String getFullyQualifiedName()
-    {
-        return "DOC_TYPE."+getName();
-    }
+	@Override
+	public String getTemplateFolderName() {
+		return getName();
+	}
 
-    /**
-     * Overrides getProject
-     * @see org.openflexo.foundation.FlexoModelObject#getProject()
-     */
-    @Override
-    public FlexoProject getProject()
-    {
-        return project;
-    }
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "DOC_TYPE." + getName();
+	}
 
-    /**
-     * Overrides getXMLMapping
-     * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
-     */
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getProject().getXmlMappings().getRMMapping();
-    }
+	/**
+	 * Overrides getProject
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getProject()
+	 */
+	@Override
+	public FlexoProject getProject() {
+		return project;
+	}
 
-    /**
-     * Overrides getXMLResourceData
-     * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLResourceData()
-     */
-    @Override
-    public XMLStorageResourceData getXMLResourceData()
-    {
-        return project;
-    }
+	/**
+	 * Overrides getXMLMapping
+	 * 
+	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
+	 */
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getProject().getXmlMappings().getRMMapping();
+	}
 
-    /**
-     * Overrides getAvailableValues
-     * @see org.openflexo.kvc.ChoiceList#getAvailableValues()
-     */
-    @Override
-	public Vector<DocType> getAvailableValues()
-    {
-        return getProject().getDocTypes();
-    }
+	/**
+	 * Overrides getXMLResourceData
+	 * 
+	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLResourceData()
+	 */
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return project;
+	}
+
+	/**
+	 * Overrides getAvailableValues
+	 * 
+	 * @see org.openflexo.kvc.ChoiceList#getAvailableValues()
+	 */
+	@Override
+	public List<DocType> getAvailableValues() {
+		return getProject().getDocTypes();
+	}
 
 	@Override
 	public Vector<Format> getAvailableFormats() {

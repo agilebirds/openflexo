@@ -24,23 +24,22 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class ProcessOrProcessFolderParameter extends ParameterDefinition<FlexoModelObject> {
 
 	private ProcessOrProcessFolderSelectingConditional _processSelectingConditional;
 
 	public ProcessOrProcessFolderParameter(String name, String label) {
-		this(name, label, (FlexoModelObject)null);
+		this(name, label, (FlexoModelObject) null);
 	}
-	
+
 	public ProcessOrProcessFolderParameter(String name, String label, FlexoProcess defaultValue) {
-		this(name, label, (FlexoModelObject)defaultValue);
+		this(name, label, (FlexoModelObject) defaultValue);
 	}
-	
+
 	public ProcessOrProcessFolderParameter(String name, String label, ProcessFolder defaultValue) {
-		this(name, label, (FlexoModelObject)defaultValue);
+		this(name, label, (FlexoModelObject) defaultValue);
 	}
-	
+
 	private ProcessOrProcessFolderParameter(String name, String label, FlexoModelObject defaultValue) {
 		super(name, label, defaultValue);
 		addParameter("className", "org.openflexo.components.widget.ProcessOrProcessFolderInspectorWidget");
@@ -53,21 +52,21 @@ public class ProcessOrProcessFolderParameter extends ParameterDefinition<FlexoMo
 	}
 
 	public boolean isAcceptableProcessOrProcessFolder(FlexoModelObject aProcess) {
-		
-		if(aProcess instanceof FlexoProcess)
-		{
-			if (_processSelectingConditional != null)
-				return _processSelectingConditional.isSelectable((FlexoProcess)aProcess);
+
+		if (aProcess instanceof FlexoProcess) {
+			if (_processSelectingConditional != null) {
+				return _processSelectingConditional.isSelectable((FlexoProcess) aProcess);
+			}
 			return true;
 		}
-		
-		if(aProcess instanceof ProcessFolder)
-		{
-			if (_processSelectingConditional != null)
-				return _processSelectingConditional.isSelectable((ProcessFolder)aProcess);
+
+		if (aProcess instanceof ProcessFolder) {
+			if (_processSelectingConditional != null) {
+				return _processSelectingConditional.isSelectable((ProcessFolder) aProcess);
+			}
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -78,6 +77,7 @@ public class ProcessOrProcessFolderParameter extends ParameterDefinition<FlexoMo
 
 	public abstract static class ProcessOrProcessFolderSelectingConditional {
 		public abstract boolean isSelectable(FlexoProcess process);
+
 		public abstract boolean isSelectable(ProcessFolder processFolder);
 	}
 

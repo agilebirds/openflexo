@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-
 import java.awt.Color;
 import java.util.logging.Logger;
 
@@ -28,8 +27,8 @@ import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
+import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;
@@ -38,7 +37,6 @@ import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutableActivityNode> {
 
 	private static final Logger logger = Logger.getLogger(SelfExecActivityNodeGR.class.getPackage().getName());
@@ -46,14 +44,13 @@ public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutabl
 	private final ForegroundStyle foreground;
 	private final BackgroundImage background;
 
-	public SelfExecActivityNodeGR(SelfExecutableActivityNode activityNode, SwimmingLaneRepresentation aDrawing,boolean isInPalet)
-	{
-		super(activityNode, ShapeType.CIRCLE, aDrawing,isInPalet);
+	public SelfExecActivityNodeGR(SelfExecutableActivityNode activityNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
+		super(activityNode, ShapeType.CIRCLE, aDrawing, isInPalet);
 
 		setWidth(30);
 		setHeight(30);
 
-		//setText(getActivityNode().getName());
+		// setText(getActivityNode().getName());
 		setIsFloatingLabel(true);
 
 		foreground = ForegroundStyle.makeStyle(Color.BLACK);
@@ -71,52 +68,45 @@ public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutabl
 		setBackground(background);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 
-		addToMouseClickControls(new ExecutionPetriGraphOpener(),true);
+		addToMouseClickControls(new ExecutionPetriGraphOpener(), true);
 	}
 
-	public SelfExecutableActivityNode getActivityNode()
-	{
+	public SelfExecutableActivityNode getActivityNode() {
 		return getDrawable();
 	}
 
 	@Override
-	public Circle getShape()
-	{
-		return (Circle)super.getShape();
+	public Circle getShape() {
+		return (Circle) super.getShape();
 	}
 
 	public class ExecutionPetriGraphOpener extends MouseClickControl {
 
-		public ExecutionPetriGraphOpener()
-		{
-			super("ExecutionPetriGraphOpener", MouseButton.LEFT, 2,
-					new CustomClickControlAction() {
+		public ExecutionPetriGraphOpener() {
+			super("ExecutionPetriGraphOpener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, java.awt.event.MouseEvent event)
-				{
+				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						java.awt.event.MouseEvent event) {
 					logger.info("Opening Execution petri graph by double-clicking");
-					OpenExecutionPetriGraph.actionType.makeNewAction(getAbstractActivityNode(),null,getDrawing().getEditor()).doAction();
+					OpenExecutionPetriGraph.actionType.makeNewAction(getAbstractActivityNode(), null, getDrawing().getEditor()).doAction();
 					getDrawing().updateGraphicalObjectsHierarchy();
 					return true;
 				}
-			},
-			false,false,false,false);
+			}, false, false, false, false);
 		}
 
 	}
 
 	@Override
-	public double getDefaultLabelX()
-	{
+	public double getDefaultLabelX() {
 		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getX();
 		}
-		return getLeftBorder()+15;
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY()
-	{
+	public double getDefaultLabelY() {
 		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getY();
 		}

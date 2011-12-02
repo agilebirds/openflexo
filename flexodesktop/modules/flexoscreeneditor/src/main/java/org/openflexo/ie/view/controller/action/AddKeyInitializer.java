@@ -25,13 +25,6 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.ie.view.popups.AskNewKeyDialog;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dkv.Domain;
@@ -40,46 +33,49 @@ import org.openflexo.foundation.dkv.EmptyStringException;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dkv.Language;
 import org.openflexo.foundation.dkv.action.AddKeyAction;
-
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.ie.view.popups.AskNewKeyDialog;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddKeyInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddKeyInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(AddKeyAction.actionType,actionInitializer);
+	AddKeyInitializer(IEControllerActionInitializer actionInitializer) {
+		super(AddKeyAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddKeyAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddKeyAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddKeyAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddKeyAction action)
-			{
+			public boolean run(ActionEvent e, AddKeyAction action) {
 				Domain d = null;
-				if (action.getFocusedObject() instanceof Domain)
+				if (action.getFocusedObject() instanceof Domain) {
 					d = ((Domain) action.getFocusedObject());
-				else if (action.getFocusedObject() instanceof Domain.KeyList)
+				} else if (action.getFocusedObject() instanceof Domain.KeyList) {
 					d = ((Domain.KeyList) action.getFocusedObject()).getDomain();
-				else
+				} else {
 					return false;
+				}
 				boolean ok = false;
 				while (!ok) {
-					AskNewKeyDialog newKeyDialog = new AskNewKeyDialog(getControllerActionInitializer().getIEController().getFlexoFrame(), getControllerActionInitializer().getIEController().getProject()
-							.getFlexoComponentLibrary(), lastCreatedKey);
+					AskNewKeyDialog newKeyDialog = new AskNewKeyDialog(getControllerActionInitializer().getIEController().getFlexoFrame(),
+							getControllerActionInitializer().getIEController().getProject().getFlexoComponentLibrary(), lastCreatedKey);
 					if (newKeyDialog.getStatus() == AskNewKeyDialog.VALIDATE
 							|| newKeyDialog.getStatus() == AskNewKeyDialog.VALIDATE_AND_REDO) {
 						String name = newKeyDialog.getNewKey();
-						if (name == null)
+						if (name == null) {
 							return false;
+						}
 						if (name.trim().length() == 0) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("name_of_key_cannot_be_empty"));
 							continue;
@@ -133,12 +129,10 @@ public class AddKeyInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddKeyAction> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddKeyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddKeyAction>() {
 			@Override
-			public boolean run(ActionEvent e, final AddKeyAction action)
-			{
+			public boolean run(ActionEvent e, final AddKeyAction action) {
 				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewKey());
 				// getController().setCurrentEditedObjectAsModuleView(((AddKeyAction)
 				// action).getNewKey());
@@ -148,8 +142,7 @@ public class AddKeyInitializer extends ActionInitializer {
 					lastCreatedKey = (action).getNewKey();
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
-						public void run()
-						{
+						public void run() {
 							AddKeyAction.actionType.makeNewAction((action).getDomain(), null, action.getEditor()).doAction();
 						}
 					});
@@ -160,12 +153,10 @@ public class AddKeyInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.KEY_ICON;
 	}
 
 	Key lastCreatedKey = null;
-
 
 }

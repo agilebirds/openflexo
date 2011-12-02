@@ -58,9 +58,8 @@ public class ArtefactPalette extends AbstractWKFPalette {
 
 	private WKFPaletteElement stockArtefact;
 
-	public ArtefactPalette()
-	{
-		super(300,130,"artefact");
+	public ArtefactPalette() {
+		super(300, 130, "artefact");
 
 		dataFile = makeDataFileElement(40, 15);
 		dataSource = makeDataSourceElement(120, 15);
@@ -70,85 +69,68 @@ public class ArtefactPalette extends AbstractWKFPalette {
 		makePalettePanel();
 	}
 
-	private WKFPaletteElement makeAnnotationElement(int x, int y)
-	{
-		WKFAnnotation annotation = new WKFAnnotation((FlexoProcess)null);
+	private WKFPaletteElement makeAnnotationElement(int x, int y) {
+		WKFAnnotation annotation = new WKFAnnotation((FlexoProcess) null);
 		annotation.setText(FlexoLocalization.localizedForKey("process_annotation"));
-		annotation.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		annotation.setIsAnnotation();
-		annotation.setTextFont(new FlexoFont("Lucida Sans",Font.ITALIC, 10));
+		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.ITALIC, 10));
 		annotation.setIsRounded(false);
-		return makePaletteElement(
-				annotation,
-				new AnnotationGR(annotation,null),
-				DROP_ON_PETRI_GRAPH);
+		return makePaletteElement(annotation, new AnnotationGR(annotation, null), DROP_ON_PETRI_GRAPH);
 	}
 
-	private WKFPaletteElement makeBoundingBoxElement(int x, int y, int width, int height)
-	{
-		final WKFAnnotation annotation = new WKFAnnotation((FlexoProcess)null);
+	private WKFPaletteElement makeBoundingBoxElement(int x, int y, int width, int height) {
+		final WKFAnnotation annotation = new WKFAnnotation((FlexoProcess) null);
 		annotation.setText(FlexoLocalization.localizedForKey("bounding_box"));
-		annotation.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setWidth(width,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setHeight(height,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setWidth(width, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setHeight(height, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		annotation.setIsBoundingBox();
 		annotation.setIsRounded(true);
-		annotation.setTextFont(new FlexoFont("Lucida Sans",Font.ITALIC, 9));
+		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.ITALIC, 9));
 		/*annotation.setIsSolidBackground(false);
 		annotation.setIsFloatingLabel(true);*/
 		annotation.setLabelX(60, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		annotation.setLabelY(10, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		//annotation.setTextFont(new FlexoFont("SansSerif",Font.PLAIN, 9), ActivityNodeGR.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(
-				annotation,
-				new AnnotationGR(annotation,null),
-				DROP_ON_PETRI_GRAPH);
+		// annotation.setTextFont(new FlexoFont("SansSerif",Font.PLAIN, 9), ActivityNodeGR.SWIMMING_LANE_EDITOR);
+		return makePaletteElement(annotation, new AnnotationGR(annotation, null), DROP_ON_PETRI_GRAPH);
 	}
 
 	public WKFPaletteElement makeDataSourceElement(int x, int y) {
-		WKFDataSource annotation = new WKFDataSource((FlexoProcess)null);
+		WKFDataSource annotation = new WKFDataSource((FlexoProcess) null);
 		annotation.setText(FlexoLocalization.localizedForKey("data_source"));
-		annotation.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setLabelX(20,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setLabelY(50,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setTextFont(new FlexoFont("Lucida Sans",Font.PLAIN, 10));
-		return makePaletteElement(
-				annotation,
-				new DataSourceGR(annotation,null),
-				DROP_ON_PETRI_GRAPH);
+		annotation.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setLabelX(20, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setLabelY(50, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.PLAIN, 10));
+		return makePaletteElement(annotation, new DataSourceGR(annotation, null), DROP_ON_PETRI_GRAPH);
 
 	}
 
 	public WKFPaletteElement makeDataFileElement(int x, int y) {
-		WKFDataObject annotation = new WKFDataObject((FlexoProcess)null);
+		WKFDataObject annotation = new WKFDataObject((FlexoProcess) null);
 		annotation.setText(FlexoLocalization.localizedForKey("document"));
-		annotation.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setLabelX(20,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setLabelY(50,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setTextFont(new FlexoFont("Lucida Sans",Font.PLAIN, 10));
-		return makePaletteElement(
-				annotation,
-				new DataObjectGR(annotation,null),
-				DROP_ON_PETRI_GRAPH);
+		annotation.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setLabelX(20, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setLabelY(50, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.PLAIN, 10));
+		return makePaletteElement(annotation, new DataObjectGR(annotation, null), DROP_ON_PETRI_GRAPH);
 
 	}
 
 	public WKFPaletteElement makeStockElement(int x, int y) {
-		WKFStockObject annotation = new WKFStockObject((FlexoProcess)null);
+		WKFStockObject annotation = new WKFStockObject((FlexoProcess) null);
 		annotation.setText(FlexoLocalization.localizedForKey("stock"));
-		annotation.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		annotation.setTextFont(new FlexoFont("Lucida Sans",Font.PLAIN, 10));
+		annotation.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.PLAIN, 10));
 		annotation.setLabelX(15, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		annotation.setLabelY(45, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				annotation,
-				new StockObjectGR(annotation,null),
-				DROP_ON_PETRI_GRAPH);
+		return makePaletteElement(annotation, new StockObjectGR(annotation, null), DROP_ON_PETRI_GRAPH);
 
 	}
 

@@ -33,7 +33,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -96,7 +95,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
-
 
 /**
  * A FlexoWorkflow represent all the processes defined in corresponding project, and their hierarchy. A FlexoWorkflow always codes one and
@@ -191,10 +189,12 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		setWorkflowName(project.getProjectName());
 	}
 
+	@Override
 	public FlexoWorkflowResource getFlexoResource() {
 		return _resource;
 	}
 
+	@Override
 	public FlexoXMLStorageResource getFlexoXMLFileResource() {
 		return _resource;
 	}
@@ -267,11 +267,13 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		return getProject().getProjectName() + ".WORKFLOW";
 	}
 
+	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoWorkflowResource) resource;
 		_project = null;
 	}
 
+	@Override
 	public void setProject(FlexoProject aProject) {
 		_project = aProject;
 	}
@@ -284,6 +286,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
 	 */
+	@Override
 	public void save() throws SaveResourceException {
 		_resource.saveResourceData();
 	}
@@ -1888,6 +1891,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		addToArtefactMetricsDefinitions(md);
 	}
 
+	@Override
 	public String getInspectorName() {
 		return Inspectors.WKF.WORKFLOW_INSPECTOR;
 	}

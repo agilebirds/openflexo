@@ -24,22 +24,18 @@ import java.util.Hashtable;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dkv.Domain;
-import org.openflexo.foundation.dkv.Key;
-import org.openflexo.foundation.dkv.Language;
 import org.openflexo.foundation.dkv.action.AddDomainAction;
 import org.openflexo.foundation.dkv.action.AddKeyAction;
 import org.openflexo.foundation.dkv.action.AddLanguageAction;
 
-
-public abstract class DKVTestCase extends FlexoTestCase{
+public abstract class DKVTestCase extends FlexoTestCase {
 
 	public DKVTestCase(String arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
-	protected Domain createDomain(String newDomainName, FlexoEditor editor){
+	protected Domain createDomain(String newDomainName, FlexoEditor editor) {
 		AddDomainAction addDomain = AddDomainAction.actionType.makeNewAction(editor.getProject().getDKVModel(), null, editor);
 		addDomain.setDkvModel(editor.getProject().getDKVModel());
 		addDomain.setNewDomainDescription("description test");
@@ -49,8 +45,8 @@ public abstract class DKVTestCase extends FlexoTestCase{
 		assertNotNull(addDomain.getNewDomain());
 		return addDomain.getNewDomain();
 	}
-	
-	protected Language createLanguage(String newLanguageName, FlexoEditor editor){
+
+	protected Language createLanguage(String newLanguageName, FlexoEditor editor) {
 		AddLanguageAction addLanguage = AddLanguageAction.actionType.makeNewAction(editor.getProject().getDKVModel(), null, editor);
 		addLanguage.setDkvModel(editor.getProject().getDKVModel());
 		addLanguage.setLanguageName(newLanguageName);
@@ -59,8 +55,8 @@ public abstract class DKVTestCase extends FlexoTestCase{
 		assertNotNull(addLanguage.getNewLanguage());
 		return addLanguage.getNewLanguage();
 	}
-	
-	protected Key createKey(Domain domain,String val, Hashtable<String, Language> values, FlexoEditor editor){
+
+	protected Key createKey(Domain domain, String val, Hashtable<String, Language> values, FlexoEditor editor) {
 		AddKeyAction addKey = AddKeyAction.actionType.makeNewAction(domain, null, editor);
 		addKey.setDomain(domain);
 		addKey.setKeyName(val);
@@ -73,5 +69,5 @@ public abstract class DKVTestCase extends FlexoTestCase{
 		assertNotNull(addKey.getNewKey());
 		return addKey.getNewKey();
 	}
-	
+
 }

@@ -29,97 +29,83 @@ import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.CircleConstruction;
 import org.openflexo.fge.geomedit.construction.CircleReference;
 
-
-public class ObtainCircle extends EditionInput<FGECircle> 
-{
+public class ObtainCircle extends EditionInput<FGECircle> {
 	public static int preferredMethodIndex = 0;
 
-	public ObtainCircle(String anInputLabel, GeomEditController controller) 
-	{
+	public ObtainCircle(String anInputLabel, GeomEditController controller) {
 		super(anInputLabel, controller);
 
 		availableMethods.add(new CircleSelection());
 	}
 
 	@Override
-	protected int getPreferredMethodIndex()
-	{
+	protected int getPreferredMethodIndex() {
 		return preferredMethodIndex;
 	}
 
 	@Override
-	public void setActiveMethod(EditionInputMethod aMethod)
-	{
+	public void setActiveMethod(EditionInputMethod aMethod) {
 		super.setActiveMethod(aMethod);
 		preferredMethodIndex = availableMethods.indexOf(aMethod);
 	}
 
-	public class CircleSelection extends EditionInputMethod<FGECircle,ObtainCircle> {
+	public class CircleSelection extends EditionInputMethod<FGECircle, ObtainCircle> {
 
 		private GeometricGraphicalRepresentation focusedObject;
 
 		public CircleSelection() {
 			super("With mouse", ObtainCircle.this);
-		}		
+		}
 
 		@Override
-		public void mouseClicked(MouseEvent e)
-		{
+		public void mouseClicked(MouseEvent e) {
 			if (focusedObject != null) {
 				focusedObject.setIsFocused(false);
-				referencedCircle = (Circle)focusedObject.getDrawable();
+				referencedCircle = (Circle) focusedObject.getDrawable();
 				setConstruction(new CircleReference(referencedCircle.getConstruction()));
 				done();
 			}
 		}
 
 		@Override
-		public void mouseMoved(MouseEvent e)
-		{
+		public void mouseMoved(MouseEvent e) {
 			GraphicalRepresentation focused = getFocusRetriever().getFocusedObject(e);
 
 			if (focusedObject != null && focusedObject != focused) {
 				focusedObject.setIsFocused(false);
 			}
 
-			if (focused instanceof GeometricGraphicalRepresentation 
-					&& ((GeometricGraphicalRepresentation)focused).getGeometricObject() instanceof FGECircle) {
-				focusedObject = (GeometricGraphicalRepresentation)focused;
+			if (focused instanceof GeometricGraphicalRepresentation
+					&& ((GeometricGraphicalRepresentation) focused).getGeometricObject() instanceof FGECircle) {
+				focusedObject = (GeometricGraphicalRepresentation) focused;
 				focusedObject.setIsFocused(true);
-			}
-			else {
+			} else {
 				focusedObject = null;
 			}
 
 		}
 
 		@Override
-		public InputComponent getInputComponent()
-		{
+		public InputComponent getInputComponent() {
 			return new InputComponentButton(CircleSelection.this);
 		}
 
-
 	}
 
 	@Override
-	public CircleConstruction getConstruction()
-	{
-		return (CircleConstruction)super.getConstruction();
+	public CircleConstruction getConstruction() {
+		return (CircleConstruction) super.getConstruction();
 	}
-	
+
 	@Override
-	public boolean endOnRightClick()
-	{
+	public boolean endOnRightClick() {
 		return false;
 	}
-	
+
 	private Circle referencedCircle;
-	
-	public Circle getReferencedCircle()
-	{
+
+	public Circle getReferencedCircle() {
 		return referencedCircle;
 	}
-
 
 }

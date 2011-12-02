@@ -23,20 +23,17 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
-public class EditionSchemeRemoved extends OEDataModification
-{
+public class EditionSchemeRemoved extends OEDataModification {
 
-    private EditionPattern _parent;
+	private EditionPattern _parent;
 
-    public EditionSchemeRemoved(EditionScheme editionScheme, EditionPattern parent)
-    {
-        super(editionScheme,null);
-        _parent = parent;
-    }
+	public EditionSchemeRemoved(EditionScheme editionScheme, EditionPattern parent) {
+		super(editionScheme, null);
+		_parent = parent;
+	}
 
-    public EditionPattern getParent()
-    {
-        return _parent;
-    }
+	public EditionPattern getParent() {
+		return _parent;
+	}
 
 }

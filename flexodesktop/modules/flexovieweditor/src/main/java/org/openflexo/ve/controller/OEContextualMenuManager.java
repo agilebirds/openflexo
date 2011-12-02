@@ -26,7 +26,6 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
-
 /**
  * 
  * Contextual menu manager for this module
@@ -35,20 +34,18 @@ import org.openflexo.selection.ContextualMenuManager;
  */
 public class OEContextualMenuManager extends ContextualMenuManager {
 
-    private OEController _controller;
-    
-    public OEContextualMenuManager(OESelectionManager selectionManager, FlexoEditor editor, OEController controller)
-    {
-        super(selectionManager,editor);
-        _controller = controller;
-    }
-    
-     @Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e)
-    {
-         // put some code here to detect focused object
-         // finally calls super's implementation
-          return super.getFocusedObject(focusedComponent,e);
-    }
+	private OEController _controller;
+
+	public OEContextualMenuManager(OESelectionManager selectionManager, FlexoEditor editor, OEController controller) {
+		super(selectionManager, editor);
+		_controller = controller;
+	}
+
+	@Override
+	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+		// put some code here to detect focused object
+		// finally calls super's implementation
+		return super.getFocusedObject(focusedComponent, e);
+	}
 
 }

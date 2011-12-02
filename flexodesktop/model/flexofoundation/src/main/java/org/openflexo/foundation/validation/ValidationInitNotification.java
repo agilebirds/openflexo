@@ -25,19 +25,16 @@ package org.openflexo.foundation.validation;
  * @author sguerin
  * 
  */
-public class ValidationInitNotification extends ValidationNotification
-{
-    private int _nbOfObjectToValidate;
+public class ValidationInitNotification extends ValidationNotification {
+	private int _nbOfObjectToValidate;
 
-    public ValidationInitNotification(Validable rootObject, int nbOfObjectToValidate)
-    {
-        super(rootObject);
-        _nbOfObjectToValidate = nbOfObjectToValidate;
-    }
+	public ValidationInitNotification(Validable rootObject, int nbOfObjectToValidate) {
+		super(rootObject);
+		_nbOfObjectToValidate = nbOfObjectToValidate;
+	}
 
-    public int getNbOfObjectToValidate()
-    {
-        return _nbOfObjectToValidate;
-    }
+	public int getNbOfObjectToValidate() {
+		return _nbOfObjectToValidate;
+	}
 
 }

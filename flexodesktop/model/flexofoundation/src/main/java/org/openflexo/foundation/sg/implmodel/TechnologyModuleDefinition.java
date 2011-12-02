@@ -42,7 +42,6 @@ import org.openflexo.toolbox.JavaResourceUtil;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * Contains the content of the module.xml at the {@link TechnologyModuleImplementation} creation
  * 
@@ -78,14 +77,16 @@ public abstract class TechnologyModuleDefinition {
 	 * Pay attention that this method will be called BEFORE the module initialization (thus before having its name/version/... set)
 	 * 
 	 * @return the path to the resources needed by this module.
-	 * @throws TechnologyModuleInitializationException if resource path cannot be found
+	 * @throws TechnologyModuleInitializationException
+	 *             if resource path cannot be found
 	 */
 	public String getResourcePath() {
 		for (String resourceName : JavaResourceUtil.getMatchingResources(this.getClass(), "module.xml")) {
-			if(resourceName.endsWith("/module.xml"))
+			if (resourceName.endsWith("/module.xml")) {
 				return resourceName.substring(0, resourceName.length() - "/module.xml".length());
+			}
 		}
-		
+
 		throw new TechnologyModuleInitializationException("module.xml not found for module '" + this.getClass() + "' !");
 	}
 
@@ -94,9 +95,11 @@ public abstract class TechnologyModuleDefinition {
 	 * 
 	 * @param implementationModel
 	 * @return the created {@link TechnologyModuleImplementation}
-	 * @throws TechnologyModuleCompatibilityCheckException if there is incompatibility with existing module.
+	 * @throws TechnologyModuleCompatibilityCheckException
+	 *             if there is incompatibility with existing module.
 	 */
-	public abstract TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException;
+	public abstract TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel)
+			throws TechnologyModuleCompatibilityCheckException;
 
 	/**
 	 * Load and parse the module.xml file associated to this {@link TechnologyModuleDefinition}. <br>
@@ -105,7 +108,8 @@ public abstract class TechnologyModuleDefinition {
 	 * For example it will record all inspectors available in this jar. <br>
 	 * Override the method to load the needed GUI elements in the module using SGModule.recordTechnologyModuleGUIFactory.
 	 * 
-	 * @throws TechnologyModuleInitializationException if the module.xml file is not found, if it has parsing error or if any other exception occurred during initialization
+	 * @throws TechnologyModuleInitializationException
+	 *             if the module.xml file is not found, if it has parsing error or if any other exception occurred during initialization
 	 */
 	protected void loadModule() throws TechnologyModuleInitializationException {
 
@@ -116,8 +120,9 @@ public abstract class TechnologyModuleDefinition {
 
 			if (inputStream == null) {
 				File xmlFile = new File(new File(MODULES_DIR, getResourcePath()), "module.xml");
-				if (xmlFile.exists())
+				if (xmlFile.exists()) {
 					inputStream = new FileInputStream(xmlFile);
+				}
 			}
 
 			if (inputStream == null) {
@@ -125,7 +130,8 @@ public abstract class TechnologyModuleDefinition {
 				throw new TechnologyModuleInitializationException("Cannot find module.xml using path '" + getResourcePath() + "' !");
 			}
 
-			TechnologyModuleDefinitionDTO returned = (TechnologyModuleDefinitionDTO) XMLDecoder.decodeObjectWithMapping(inputStream, getModuleModel());
+			TechnologyModuleDefinitionDTO returned = (TechnologyModuleDefinitionDTO) XMLDecoder.decodeObjectWithMapping(inputStream,
+					getModuleModel());
 			fillFromDTO(returned);
 
 			// Load inspectors
@@ -135,8 +141,9 @@ public abstract class TechnologyModuleDefinition {
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Cannot load module '" + getClass() + "' !", e);
 
-			if (e instanceof TechnologyModuleInitializationException)
+			if (e instanceof TechnologyModuleInitializationException) {
 				throw (TechnologyModuleInitializationException) e;
+			}
 
 			throw new TechnologyModuleInitializationException(e);
 		} finally {
@@ -157,12 +164,14 @@ public abstract class TechnologyModuleDefinition {
 			this.requiredModuleNames.add(module.name);
 		}
 		for (TechnologyModuleDefinitionDTO.CompatibilityModule module : dto.compatibleModuleList) {
-			if (!this.requiredModuleNames.contains(module.name))
+			if (!this.requiredModuleNames.contains(module.name)) {
 				this.compatibleModuleNames.add(module.name);
+			}
 		}
 		for (TechnologyModuleDefinitionDTO.CompatibilityModule module : dto.incompatibleModuleList) {
-			if (!this.requiredModuleNames.contains(module.name) && !this.compatibleModuleNames.contains(module.name))
+			if (!this.requiredModuleNames.contains(module.name) && !this.compatibleModuleNames.contains(module.name)) {
 				this.incompatibleModuleNames.add(module.name);
+			}
 		}
 	}
 
@@ -191,8 +200,9 @@ public abstract class TechnologyModuleDefinition {
 		Map<Integer, LinkedHashSet<TechnologyModuleDefinition>> requiredModules = getAllRequiredModulesByLevel();
 
 		LinkedHashSet<TechnologyModuleDefinition> result = new LinkedHashSet<TechnologyModuleDefinition>();
-		for (LinkedHashSet<TechnologyModuleDefinition> set : requiredModules.values())
+		for (LinkedHashSet<TechnologyModuleDefinition> set : requiredModules.values()) {
 			result.addAll(set);
+		}
 
 		return result;
 	}
@@ -201,8 +211,9 @@ public abstract class TechnologyModuleDefinition {
 
 		// Avoid infinite loop (module1 requires module2 and module2 requires module1)
 		for (LinkedHashSet<TechnologyModuleDefinition> set : requiredModules.values()) {
-			if (set.contains(this))
+			if (set.contains(this)) {
 				return;
+			}
 		}
 
 		LinkedHashSet<TechnologyModuleDefinition> set = requiredModules.get(level);
@@ -212,10 +223,11 @@ public abstract class TechnologyModuleDefinition {
 		}
 		set.add(this);
 
-		for (TechnologyModuleDefinition moduleDefinition : getRequiredModules())
+		for (TechnologyModuleDefinition moduleDefinition : getRequiredModules()) {
 			moduleDefinition.fillRequiredModules(requiredModules, level + 1);
+		}
 	}
-	
+
 	protected static XMLMapping getModuleModel() {
 		if (MODULE_MODEL == null) {
 			File moduleModelFile = new FileResource("Models/TechnologyModules/ModuleModel.xml");
@@ -223,8 +235,9 @@ public abstract class TechnologyModuleDefinition {
 				MODULE_MODEL = new XMLMapping(moduleModelFile);
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -246,11 +259,12 @@ public abstract class TechnologyModuleDefinition {
 			while (iterator.hasNext()) {
 				TechnologyModuleDefinition technologyModuleDefinition = iterator.next();
 
-				if (technologyModuleDefinitionMap.containsKey(technologyModuleDefinition.getName()))
+				if (technologyModuleDefinitionMap.containsKey(technologyModuleDefinition.getName())) {
 					logger.severe("Cannot include TechnologyModuleDefinition with name '" + technologyModuleDefinition.getName()
 							+ "' because it already exists !!!! A Technology module name MUST be unique !");
-				else
+				} else {
 					technologyModuleDefinitionMap.put(technologyModuleDefinition.getName(), technologyModuleDefinition);
+				}
 			}
 		}
 
@@ -312,8 +326,9 @@ public abstract class TechnologyModuleDefinition {
 		LinkedHashSet<TechnologyModuleDefinition> result = new LinkedHashSet<TechnologyModuleDefinition>();
 		for (String name : requiredModuleNames) {
 			TechnologyModuleDefinition technologyModuleDefinition = getTechnologyModuleDefinition(name);
-			if (technologyModuleDefinition != null)
+			if (technologyModuleDefinition != null) {
 				result.add(technologyModuleDefinition);
+			}
 		}
 
 		return result;
@@ -323,8 +338,9 @@ public abstract class TechnologyModuleDefinition {
 		LinkedHashSet<TechnologyModuleDefinition> result = new LinkedHashSet<TechnologyModuleDefinition>();
 		for (String name : compatibleModuleNames) {
 			TechnologyModuleDefinition technologyModuleDefinition = getTechnologyModuleDefinition(name);
-			if (technologyModuleDefinition != null)
+			if (technologyModuleDefinition != null) {
 				result.add(technologyModuleDefinition);
+			}
 		}
 
 		return result;
@@ -334,8 +350,9 @@ public abstract class TechnologyModuleDefinition {
 		LinkedHashSet<TechnologyModuleDefinition> result = new LinkedHashSet<TechnologyModuleDefinition>();
 		for (String name : incompatibleModuleNames) {
 			TechnologyModuleDefinition technologyModuleDefinition = getTechnologyModuleDefinition(name);
-			if (technologyModuleDefinition != null)
+			if (technologyModuleDefinition != null) {
 				result.add(technologyModuleDefinition);
+			}
 		}
 
 		return result;

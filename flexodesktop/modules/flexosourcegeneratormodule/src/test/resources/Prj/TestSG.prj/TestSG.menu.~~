@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoNavigationMenu id="SYL_387" useDefaultImage="true" lastUpdateDateForLogo="HH:mm:ss dd/MM/yyyy,14:23:38 15/02/2011" userProfileProcessFlexoID="-1" userProfileOperationFlexoID="-1" userID="SYL" flexoID="387" dontGenerate="false" useSpecificDescriptions="false">
+  <FlexoItemMenu id="SYL_392" processFlexoID="-1" operationFlexoID="-1" isPageTarget="true" useUrl="false" userID="SYL" flexoID="392" dontGenerate="false" useSpecificDescriptions="false">
+    <menuLabel>Default page</menuLabel>
+  </FlexoItemMenu>
+</FlexoNavigationMenu>
+

@@ -21,32 +21,33 @@ package org.openflexo.xml.diff3;
 
 import org.jdom.Element;
 
-public class MergeAttributeAction extends MergeAction{
+public class MergeAttributeAction extends MergeAction {
 
 	private String _attributeName;
 	private String _attributeValue;
 	private Element _element;
 	private String _oldValue;
-	
-	public MergeAttributeAction(int actionIndex,MergeActionType actionType,String attributeName, String attributeValue, Element element){
-		super(actionIndex,actionType);
+
+	public MergeAttributeAction(int actionIndex, MergeActionType actionType, String attributeName, String attributeValue, Element element) {
+		super(actionIndex, actionType);
 		_element = element;
 		_attributeName = attributeName;
 		_attributeValue = attributeValue;
 	}
 
 	@Override
-	public String getLabel(){
+	public String getLabel() {
 		switch (_actionType) {
 		case DELETE:
-			return "delete "+_attributeName;
+			return "delete " + _attributeName;
 		case UPDATE:
-			return _attributeName+" = "+_attributeValue;
+			return _attributeName + " = " + _attributeValue;
 		case INSERT:
-			return "add "+_attributeName+" = "+_attributeValue;
+			return "add " + _attributeName + " = " + _attributeValue;
 		}
-		return "error : action type "+_actionType+" is not supposed to be set on this conflict";
+		return "error : action type " + _actionType + " is not supposed to be set on this conflict";
 	}
+
 	@Override
 	public void execute() {
 		switch (_actionType) {
@@ -55,29 +56,29 @@ public class MergeAttributeAction extends MergeAction{
 			break;
 		case UPDATE:
 			_oldValue = _element.getAttributeValue(_attributeName);
-			_element.setAttribute(_attributeName,_attributeValue);
+			_element.setAttribute(_attributeName, _attributeValue);
 			break;
 		case INSERT:
-			_element.setAttribute(_attributeName,_attributeValue);
+			_element.setAttribute(_attributeName, _attributeValue);
 			break;
 
 		default:
 			break;
 		}
 	}
-	
+
 	@Override
 	public void undo() {
 		switch (_actionType) {
 		case DELETE:
-			_element.setAttribute(_attributeName,_attributeValue);
+			_element.setAttribute(_attributeName, _attributeValue);
 			break;
 		case UPDATE:
-			_element.setAttribute(_attributeName,_oldValue);
+			_element.setAttribute(_attributeName, _oldValue);
 			break;
 		case INSERT:
 			_element.removeAttribute(_attributeName);
-			
+
 			break;
 
 		default:

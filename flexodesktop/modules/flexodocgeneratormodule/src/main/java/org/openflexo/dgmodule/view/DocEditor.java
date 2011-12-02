@@ -26,34 +26,28 @@ import org.openflexo.foundation.rm.cg.ASCIIFile;
 import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.generator.rm.GenerationAvailableFileResource;
 
+public class DocEditor extends DocDisplayer implements FileContentEditor {
 
-public class DocEditor extends DocDisplayer implements FileContentEditor
-{
-
-	public DocEditor(GenerationAvailableFileResource resource, DGController controller)
-	{
-		super(resource,controller);
+	public DocEditor(GenerationAvailableFileResource resource, DGController controller) {
+		super(resource, controller);
 		_component.setEditable(true);
 		setEditedContent(getCGFile());
 	}
 
 	@Override
-	public String getEditedContentForKey(String contentKey) 
-	{
+	public String getEditedContentForKey(String contentKey) {
 		return _component.getEditedContentForKey(contentKey);
 	}
 
 	@Override
-	public void setEditedContent(CGFile file) 
-	{
+	public void setEditedContent(CGFile file) {
 		_component.setEditedContent(file);
 	}
 
 	@Override
-	protected CodeDisplayerComponent buildComponent()
-	{
+	protected CodeDisplayerComponent buildComponent() {
 		_component = null;
-		
+
 		if (getResourceData() instanceof ASCIIFile) {
 			_component = new ASCIIFileCodePanel(ContentSource.CONTENT_ON_DISK);
 		}

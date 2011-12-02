@@ -34,86 +34,74 @@ import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.view.menu.WindowMenu;
 
-
 /**
  * Class representing menus related to WorkflowEditor window
  * 
  * @author benoit, yourname
  */
-public class OEMenuBar extends FlexoMenuBar
-{
+public class OEMenuBar extends FlexoMenuBar {
 
-    private OEFileMenu _fileMenu;
-    private OEEditMenu _editMenu;
-    private OEToolsMenu _toolsMenu;
- 
+	private OEFileMenu _fileMenu;
+	private OEEditMenu _editMenu;
+	private OEToolsMenu _toolsMenu;
 
-    public OEMenuBar(OEController controller)
-    {
-        super(controller, Module.XXX_MODULE);
-     }
+	public OEMenuBar(OEController controller) {
+		super(controller, Module.XXX_MODULE);
+	}
 
-    /**
-     * Build if required and return WKF 'File' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a XXXFileMenu instance
-     */
-    @Override
-	public FileMenu getFileMenu(FlexoController controller)
-    {
-        if (_fileMenu == null) {
-            _fileMenu = new OEFileMenu((OEController)controller);
-        }
-        return _fileMenu;
-    }
+	/**
+	 * Build if required and return WKF 'File' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a XXXFileMenu instance
+	 */
+	@Override
+	public FileMenu getFileMenu(FlexoController controller) {
+		if (_fileMenu == null) {
+			_fileMenu = new OEFileMenu((OEController) controller);
+		}
+		return _fileMenu;
+	}
 
-    /**
-     * Build if required and return WKF 'Edit' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a XXXEditMenu instance
-     */
-     @Override
-	public EditMenu getEditMenu(FlexoController controller)
-    {
-        if (_editMenu == null) {
-            _editMenu = new OEEditMenu((OEController)controller);
-        }
-        return _editMenu;
-    }
+	/**
+	 * Build if required and return WKF 'Edit' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a XXXEditMenu instance
+	 */
+	@Override
+	public EditMenu getEditMenu(FlexoController controller) {
+		if (_editMenu == null) {
+			_editMenu = new OEEditMenu((OEController) controller);
+		}
+		return _editMenu;
+	}
 
-     /**
-      * Build if required and return WKF 'Window' menu.
-      * This method overrides the default one defined on superclass
-      * 
-      * @param controller
-      * @return a XXXWindowMenu instance
-      */
-   @Override
-public WindowMenu getWindowMenu(FlexoController controller, Module module)
-    {
-        if (_windowMenu == null) {
-            _windowMenu = new OEWindowMenu((OEController) controller);
-        }
-        return _windowMenu;
-    }
+	/**
+	 * Build if required and return WKF 'Window' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a XXXWindowMenu instance
+	 */
+	@Override
+	public WindowMenu getWindowMenu(FlexoController controller, Module module) {
+		if (_windowMenu == null) {
+			_windowMenu = new OEWindowMenu((OEController) controller);
+		}
+		return _windowMenu;
+	}
 
-   /**
-    * Build if required and return WKF 'Tools' menu.
-    * This method overrides the default one defined on superclass
-    * 
-    * @param controller
-    * @return a XXXToolsMenu instance
-    */
- public ToolsMenu getToolsMenu(FlexoController controller, Module module)
-  {
-      if (_toolsMenu == null) {
-          _toolsMenu = new OEToolsMenu((OEController) controller);
-      }
-      return _toolsMenu;
-  }
+	/**
+	 * Build if required and return WKF 'Tools' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a XXXToolsMenu instance
+	 */
+	public ToolsMenu getToolsMenu(FlexoController controller, Module module) {
+		if (_toolsMenu == null) {
+			_toolsMenu = new OEToolsMenu((OEController) controller);
+		}
+		return _toolsMenu;
+	}
 
 }

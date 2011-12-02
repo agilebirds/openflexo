@@ -21,49 +21,41 @@ package org.openflexo.fge.shapes;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
-public class Losange extends Polygon {
+public class Losange extends RegularPolygon {
 
 	// *******************************************************************************
-	// *                               Constructor                                   *
+	// * Constructor *
 	// *******************************************************************************
-	
-	public Losange() 
-	{
+
+	public Losange() {
 		this(null);
 	}
-	
-	public Losange(ShapeGraphicalRepresentation aGraphicalRepresentation) 
-	{
-		super(aGraphicalRepresentation,4);
+
+	public Losange(ShapeGraphicalRepresentation aGraphicalRepresentation) {
+		super(aGraphicalRepresentation, 4);
 	}
-	
+
 	@Override
-	public ShapeType getShapeType()
-	{
+	public ShapeType getShapeType() {
 		return ShapeType.LOSANGE;
 	}
 
 	@Override
-	public int getNPoints()
-	{
+	public int getNPoints() {
 		return 4;
 	}
 
 	@Override
-	public void setNPoints(int pointsNb)
-	{
+	public void setNPoints(int pointsNb) {
 	}
-	
+
 	@Override
-	public int getStartAngle()
-	{
+	public int getStartAngle() {
 		return 90;
 	}
 
 	@Override
-	public void setStartAngle(int anAngle)
-	{
+	public void setStartAngle(int anAngle) {
 	}
-
 
 }

@@ -8,20 +8,22 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of utils
  * 
  * @author sylvain
- *
+ * 
  */
 public class UtilsIconLibrary {
 
-	
 	// Common icons used in the context of utils
-	
-    public static final ImageIcon ARROW_DOWN = new ImageIconResource("Icons/ArrowDown.gif");
-    public static final ImageIcon ARROW_UP = new ImageIconResource("Icons/ArrowUp.gif");
-    public static final ImageIcon ARROW_LEFT = new ImageIconResource("Icons/ArrowLeft.gif");
-    public static final ImageIcon ARROW_RIGHT = new ImageIconResource("Icons/ArrowRight.gif");
-    
-    // Diff icons
-    
+
+	public static final ImageIcon CUSTOM_POPUP_DOWN = new ImageIconResource("Icons/CustomPopupDown.png");
+	public static final ImageIcon CUSTOM_POPUP_DOWN_DISABLED = new ImageIconResource("Icons/CustomPopupDownDisabled.png");
+
+	public static final ImageIcon ARROW_DOWN = new ImageIconResource("Icons/ArrowDown.gif");
+	public static final ImageIcon ARROW_UP = new ImageIconResource("Icons/ArrowUp.gif");
+	public static final ImageIcon ARROW_LEFT = new ImageIconResource("Icons/ArrowLeft.gif");
+	public static final ImageIcon ARROW_RIGHT = new ImageIconResource("Icons/ArrowRight.gif");
+
+	// Diff icons
+
 	public static final ImageIcon ADDITION_ICON = new ImageIconResource("Icons/IconsDiff/Addition.gif");
 	public static final ImageIcon REMOVAL_ICON = new ImageIconResource("Icons/IconsDiff/Removal.gif");
 	public static final ImageIcon ADDITION_LEFT_ICON = new ImageIconResource("Icons/IconsDiff/Addition-left.gif");
@@ -30,12 +32,12 @@ public class UtilsIconLibrary {
 	public static final ImageIcon ADDITION_RIGHT_ICON = new ImageIconResource("Icons/IconsDiff/Addition-right.gif");
 	public static final ImageIcon REMOVAL_RIGHT_ICON = new ImageIconResource("Icons/IconsDiff/Removal-right.gif");
 	public static final ImageIcon MODIFICATION_RIGHT_ICON = new ImageIconResource("Icons/IconsDiff/Modification-right.gif");
-	
+
 	public static final ImageIcon RIGHT_UPDATE_ICON = new ImageIconResource("Icons/IconsDiff/RightUpdate.gif");
 	public static final ImageIcon LEFT_UPDATE_ICON = new ImageIconResource("Icons/IconsDiff/LeftUpdate.gif");
-	
+
 	// Merge icons
-	
+
 	public static final ImageIcon LEFT_ADDITION_ICON = new ImageIconResource("Icons/IconsMerge/r_outadd_ov2.gif");
 	public static final ImageIcon LEFT_MODIFICATION_ICON = new ImageIconResource("Icons/IconsMerge/r_outchg_ov2.gif");
 	public static final ImageIcon LEFT_REMOVAL_ICON = new ImageIconResource("Icons/IconsMerge/r_outdel_ov2.gif");
@@ -77,5 +79,4 @@ public class UtilsIconLibrary {
 	public static final IconMarker RIGHT_REMOVAL = new IconMarker(RIGHT_REMOVAL_ICON, 12, 7);
 	public static final IconMarker CONFLICT = new IconMarker(CONFLICT_ICON, 12, 7);
 
-	
 }

@@ -35,56 +35,56 @@ import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 
+public class PackagedResourceToCopyGenerator<R extends GenerationRepository> extends Generator<FlexoModelObject, R> implements
+		IFlexoResourceGenerator {
 
-public class PackagedResourceToCopyGenerator<R extends GenerationRepository> extends Generator<FlexoModelObject, R> implements IFlexoResourceGenerator {
+	private static final Logger logger = Logger.getLogger(PackagedResourceToCopyGenerator.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(PackagedResourceToCopyGenerator.class.getPackage().getName());
+	private final FileResource _source;
+	private final String _relativePath;
+	private final CGSymbolicDirectory _symbolicDir;
+	private final FileFormat _format;
+	private final ResourceType _type;
 
-    private final FileResource _source;
-    private final String _relativePath;
-    private final CGSymbolicDirectory _symbolicDir;
-    private final FileFormat _format;
-    private final ResourceType _type;
-    
-    public PackagedResourceToCopyGenerator(AbstractProjectGenerator<R> projectGenerator,FileFormat format, ResourceType type,
-    		FileResource source, CGSymbolicDirectory symbolicDir, String relativePath) {
-    	super(projectGenerator,null);
-    	_relativePath = relativePath;
-    	_symbolicDir = symbolicDir;
-    	_format = format;
-    	_type = type;
-    	_source = source;
-    	generatedCode = new GeneratedCopiedFile(_source);
-    }
-    
+	public PackagedResourceToCopyGenerator(AbstractProjectGenerator<R> projectGenerator, FileFormat format, ResourceType type,
+			FileResource source, CGSymbolicDirectory symbolicDir, String relativePath) {
+		super(projectGenerator, null);
+		_relativePath = relativePath;
+		_symbolicDir = symbolicDir;
+		_format = format;
+		_type = type;
+		_source = source;
+		generatedCode = new GeneratedCopiedFile(_source);
+	}
+
 	@Override
 	public void generate(boolean forceRegenerate) {
 	}
-	
+
 	@Override
 	public boolean needsGeneration() {
 		return !isCodeAlreadyGenerated();
 	}
-	
+
 	@Override
 	public boolean needsRegenerationBecauseOfTemplateUpdated() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean needsRegenerationBecauseOfTemplateUpdated(Date diskLastGenerationDate) {
 		return FileUtils.getDiskLastModifiedDate(_source).after(diskLastGenerationDate);
 	}
-	
-	public FileResource getSource(){
+
+	public FileResource getSource() {
 		return _source;
 	}
-	
-	public ResourceType getFileType(){
+
+	public ResourceType getFileType() {
 		return _type;
 	}
-	
-	public FileFormat getFileFormat(){
+
+	public FileFormat getFileFormat() {
 		return _format;
 	}
 
@@ -95,18 +95,19 @@ public class PackagedResourceToCopyGenerator<R extends GenerationRepository> ext
 	public CGSymbolicDirectory getSymbolicDirectory(R repository) {
 		return _symbolicDir;
 	}
-	
+
 	@Override
 	public void buildResourcesAndSetGenerators(R repository, Vector<CGRepositoryFileResource> resources) {
-		FlexoCopyOfFileResource copiedFile = GeneratedResourceFileFactory.createNewFlexoCopyOfFileResource(repository, (PackagedResourceToCopyGenerator<GenerationRepository>) this);
-        resources.add(copiedFile);
+		FlexoCopyOfFileResource copiedFile = GeneratedResourceFileFactory.createNewFlexoCopyOfFileResource(repository,
+				(PackagedResourceToCopyGenerator<GenerationRepository>) this);
+		resources.add(copiedFile);
 	}
-	
+
 	@Override
 	public String getIdentifier() {
-		return "COPY_OF_"+_source.getName();
+		return "COPY_OF_" + _source.getName();
 	}
-	
+
 	@Override
 	public TemplateLocator getTemplateLocator() {
 		return null;

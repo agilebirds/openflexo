@@ -25,102 +25,85 @@ import org.openflexo.fge.geomedit.construction.CircleConstruction;
 import org.openflexo.fge.geomedit.gr.EllipsGraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 
-
 public class Circle extends Ellips {
 
 	private EllipsGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public Circle(GeomEditBuilder builder)
-	{
+	public Circle(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public Circle(GeometricSet set, CircleConstruction construction) 
-	{
+
+	public Circle(GeometricSet set, CircleConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new EllipsGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new EllipsGraphicalRepresentation(this, set.getEditedDrawing());
 	}
 
 	@Override
-	public EllipsGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public EllipsGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
 	@Override
-	public void setGraphicalRepresentation(EllipsGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(EllipsGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
-	
+
 	@Override
-	public FGECircle getGeometricObject()
-	{
-		return (FGECircle)super.getGeometricObject();
-	}
-	
-	@Override
-	public CircleConstruction getConstruction()
-	{
-		return (CircleConstruction)super.getConstruction();
+	public FGECircle getGeometricObject() {
+		return (FGECircle) super.getGeometricObject();
 	}
 
-	public void setConstruction(CircleConstruction circleConstruction)
-	{
+	@Override
+	public CircleConstruction getConstruction() {
+		return (CircleConstruction) super.getConstruction();
+	}
+
+	public void setConstruction(CircleConstruction circleConstruction) {
 		_setConstruction(circleConstruction);
 	}
 
-
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "Circle.inspector";
 	}
 
-
-	public double getCenterX()
-	{
+	public double getCenterX() {
 		return getGeometricObject().getCenterX();
 	}
 
-	public void setCenterX(double centerX)
-	{
-		if (centerX != getCenterX()) { 
+	public void setCenterX(double centerX) {
+		if (centerX != getCenterX()) {
 			double oldCenterX = getCenterX();
-			getGeometricObject().x = centerX-getGeometricObject().getRadius();
-			getGraphicalRepresentation().notify(new FGENotification("centerX",oldCenterX,centerX));
+			getGeometricObject().x = centerX - getGeometricObject().getRadius();
+			getGraphicalRepresentation().notify(new FGENotification("centerX", oldCenterX, centerX));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
 
-	public double getCenterY()
-	{
+	public double getCenterY() {
 		return getGeometricObject().getCenterY();
 	}
 
-	public void setCenterY(double centerY)
-	{
-		if (centerY != getCenterY()) { 
+	public void setCenterY(double centerY) {
+		if (centerY != getCenterY()) {
 			double oldCenterY = getCenterY();
-			getGeometricObject().y = centerY-getGeometricObject().getRadius();
-			getGraphicalRepresentation().notify(new FGENotification("centerY",oldCenterY,centerY));
+			getGeometricObject().y = centerY - getGeometricObject().getRadius();
+			getGraphicalRepresentation().notify(new FGENotification("centerY", oldCenterY, centerY));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
 
-	public double getRadius()
-	{
+	public double getRadius() {
 		return getGeometricObject().getRadius();
 	}
 
-	public void setRadius(double aRadius)
-	{
-		if (aRadius != getRadius()) { 
+	public void setRadius(double aRadius) {
+		if (aRadius != getRadius()) {
 			double oldRadius = getRadius();
 			getGeometricObject().setRadius(aRadius);
-			getGraphicalRepresentation().notify(new FGENotification("radius",oldRadius,aRadius));
+			getGraphicalRepresentation().notify(new FGENotification("radius", oldRadius, aRadius));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}

@@ -25,10 +25,8 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.javaparser.ParsedJavaField;
 
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
-
 
 public class FJPJavaField extends FJPJavaEntity implements ParsedJavaField {
 
@@ -36,72 +34,60 @@ public class FJPJavaField extends FJPJavaEntity implements ParsedJavaField {
 	private static final Logger logger = Logger.getLogger(FJPJavaField.class.getPackage().getName());
 
 	private JavaField _qdJavaField;
-	
-	public FJPJavaField (JavaField qdJavaField, FJPJavaSource aJavaSource)
-	{
-		super(qdJavaField,aJavaSource);
+
+	public FJPJavaField(JavaField qdJavaField, FJPJavaSource aJavaSource) {
+		super(qdJavaField, aJavaSource);
 		_qdJavaField = qdJavaField;
 	}
 
-	public String getCallSignature()
-	{
+	public String getCallSignature() {
 		return _qdJavaField.getCallSignature();
 	}
 
-	public String getDeclarationSignature(boolean withModifiers) 
-	{
+	public String getDeclarationSignature(boolean withModifiers) {
 		return _qdJavaField.getDeclarationSignature(withModifiers);
 	}
 
-	public String getDeclarationSignature() 
-	{
+	public String getDeclarationSignature() {
 		return _qdJavaField.getDeclarationSignature(true);
 	}
 
 	@Override
-	public String getInitializationExpression() 
-	{
+	public String getInitializationExpression() {
 		return _qdJavaField.getInitializationExpression();
 	}
 
 	@Override
-	public String getName() 
-	{
+	public String getName() {
 		return _qdJavaField.getName();
 	}
 
-	public FJPJavaClass getParentClass() 
-	{
-		return getClass((JavaClass)_qdJavaField.getParent());
+	public FJPJavaClass getParentClass() {
+		return getClass((JavaClass) _qdJavaField.getParent());
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.CG.JAVA_FIELD_INSPECTOR;
 	}
 
 	@Override
-	public int getLinesCount()
-	{
+	public int getLinesCount() {
 		return 1;
 	}
 
 	@Override
-	public DMType getType() 
-	{
-		return (DMType)_qdJavaField.getType();
+	public DMType getType() {
+		return (DMType) _qdJavaField.getType();
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getName();
 	}
 
 	@Override
-	public String getUniqueIdentifier()
-	{
+	public String getUniqueIdentifier() {
 		return getName();
 	}
 

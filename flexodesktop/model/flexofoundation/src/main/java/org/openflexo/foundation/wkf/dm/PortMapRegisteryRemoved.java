@@ -27,20 +27,17 @@ import org.openflexo.foundation.wkf.ws.PortMapRegistery;
  * @author sguerin
  * 
  */
-public class PortMapRegisteryRemoved extends WKFDataModification
-{
+public class PortMapRegisteryRemoved extends WKFDataModification {
 
-    private PortMapRegistery _removedPortMapRegistery;
+	private PortMapRegistery _removedPortMapRegistery;
 
-    public PortMapRegisteryRemoved(PortMapRegistery removedPortMapRegistery)
-    {
-        super(null, removedPortMapRegistery);
-        _removedPortMapRegistery = removedPortMapRegistery;
-    }
+	public PortMapRegisteryRemoved(PortMapRegistery removedPortMapRegistery) {
+		super(null, removedPortMapRegistery);
+		_removedPortMapRegistery = removedPortMapRegistery;
+	}
 
-    public PortMapRegistery getRemovedPortMapRegistery()
-    {
-        return _removedPortMapRegistery;
-    }
+	public PortMapRegistery getRemovedPortMapRegistery() {
+		return _removedPortMapRegistery;
+	}
 
 }

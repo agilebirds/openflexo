@@ -26,34 +26,29 @@ public class FIBComponentDynamicModel<T> {
 	private FIBComponent component;
 	public boolean isVisible;
 	private T data;
-	
-	public FIBComponentDynamicModel(T data)
-	{
+
+	public FIBComponentDynamicModel(T data) {
 		this.data = data;
 	}
-	
-	public void delete()
-	{
+
+	public void delete() {
 		data = null;
 	}
 
-	public T getData()
-	{
+	public T getData() {
 		return data;
 	}
 
-	public void setData(T data)
-	{
+	public void setData(T data) {
 		this.data = data;
 	}
-	
-	public FIBComponent getComponent()
-	{
+
+	public FIBComponent getComponent() {
 		return component;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "FIBComponentDynamicModel,data="+getData();
+		return "FIBComponentDynamicModel,data=" + getData();
 	}
 }

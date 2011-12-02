@@ -29,179 +29,173 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public enum TextFieldFormatType implements StringConvertable
-{
+public enum TextFieldFormatType implements StringConvertable {
 
-	NONE("None"),
-	URL("Url"),
-	EMAIL("Email"),
-	PHONE("Phone"),
-	BANK_ACCOUNT("BankAccount")/*,
-	AUTOCOMPLETE("AutoComplete")*/;
-	
-	
+	NONE("None"), URL("Url"), EMAIL("Email"), PHONE("Phone"), BANK_ACCOUNT("BankAccount")/*,
+																							AUTOCOMPLETE("AutoComplete")*/;
+
 	private final String name;
 
-	public String getName(){
+	public String getName() {
 		return name;
 	}
-	
-	TextFieldFormatType(String _name){
+
+	TextFieldFormatType(String _name) {
 		this.name = _name;
 	}
-	
+
 	@Override
 	public Converter getConverter() {
 		return textFieldFormatTypeConverter;
 	}
-	
-	public static final StringEncoder.EnumerationConverter<TextFieldFormatType> textFieldFormatTypeConverter = new StringEncoder.EnumerationConverter<TextFieldFormatType>(TextFieldFormatType.class,"getName");
 
-	
+	public static final StringEncoder.EnumerationConverter<TextFieldFormatType> textFieldFormatTypeConverter = new StringEncoder.EnumerationConverter<TextFieldFormatType>(
+			TextFieldFormatType.class, "getName");
+
 	/*
 	
 	
-    private static final Logger logger = Logger.getLogger(TextFieldFormatType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TextFieldFormatType.class.getPackage().getName());
 
-    public static final TextFieldFormatType NONE = new NoneType();
+	public static final TextFieldFormatType NONE = new NoneType();
 
-    public static final TextFieldFormatType URL = new UrlType();
+	public static final TextFieldFormatType URL = new UrlType();
 
-    public static final TextFieldFormatType EMAIL = new EmailType();
+	public static final TextFieldFormatType EMAIL = new EmailType();
 
-    public static final TextFieldFormatType PHONE = new PhoneType();
+	public static final TextFieldFormatType PHONE = new PhoneType();
 
-    public static final TextFieldFormatType BANK_ACCOUNT = new BankAccountType();
+	public static final TextFieldFormatType BANK_ACCOUNT = new BankAccountType();
 
-    public static final TextFieldFormatType AUTOCOMPLETE = new AutoCompleteType();
+	public static final TextFieldFormatType AUTOCOMPLETE = new AutoCompleteType();
 
-    public static StringEncoder.Converter textFieldFormatTypeConverter = new Converter(TextFieldFormatType.class) {
+	public static StringEncoder.Converter textFieldFormatTypeConverter = new Converter(TextFieldFormatType.class) {
 
-        public Object convertFromString(String value)
-        {
-            return get(value);
-        }
+	    public Object convertFromString(String value)
+	    {
+	        return get(value);
+	    }
 
-        public String convertToString(Object value)
-        {
-            return ((TextFieldFormatType) value).getName();
-        }
+	    public String convertToString(Object value)
+	    {
+	        return ((TextFieldFormatType) value).getName();
+	    }
 
-    };
+	};
 
-    public static class NoneType extends TextFieldFormatType implements Serializable
-    {
-        protected NoneType()
-        {
-        }
+	public static class NoneType extends TextFieldFormatType implements Serializable
+	{
+	    protected NoneType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "None";
-        }
-    }
+	    public String getName()
+	    {
+	        return "None";
+	    }
+	}
 
-    public static class UrlType extends TextFieldFormatType implements Serializable
-    {
-        protected UrlType()
-        {
-        }
+	public static class UrlType extends TextFieldFormatType implements Serializable
+	{
+	    protected UrlType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "Url";
-        }
-    }
+	    public String getName()
+	    {
+	        return "Url";
+	    }
+	}
 
-    public static class EmailType extends TextFieldFormatType implements Serializable
-    {
-        protected EmailType()
-        {
-        }
+	public static class EmailType extends TextFieldFormatType implements Serializable
+	{
+	    protected EmailType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "Email";
-        }
-    }
+	    public String getName()
+	    {
+	        return "Email";
+	    }
+	}
 
-    public static class PhoneType extends TextFieldFormatType implements Serializable
-    {
-        protected PhoneType()
-        {
-        }
+	public static class PhoneType extends TextFieldFormatType implements Serializable
+	{
+	    protected PhoneType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "Phone";
-        }
-    }
+	    public String getName()
+	    {
+	        return "Phone";
+	    }
+	}
 
-    public static class BankAccountType extends TextFieldFormatType implements Serializable
-    {
-        
-        protected BankAccountType()
-        {
-        }
+	public static class BankAccountType extends TextFieldFormatType implements Serializable
+	{
+	    
+	    protected BankAccountType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "BankAccount";
-        }
-    }
+	    public String getName()
+	    {
+	        return "BankAccount";
+	    }
+	}
 
-    public static class AutoCompleteType extends TextFieldFormatType implements Serializable
-    {
-        protected AutoCompleteType()
-        {
-        }
+	public static class AutoCompleteType extends TextFieldFormatType implements Serializable
+	{
+	    protected AutoCompleteType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "AutoComplete";
-        }
-    }
+	    public String getName()
+	    {
+	        return "AutoComplete";
+	    }
+	}
 
-    public abstract String getName();
+	public abstract String getName();
 
-    public static TextFieldFormatType get(String typeName)
-    {
-        for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
-            TextFieldFormatType temp = (TextFieldFormatType) e.nextElement();
-            if (temp.getName().equals(typeName)) {
-                return temp;
-            }
-        }
+	public static TextFieldFormatType get(String typeName)
+	{
+	    for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
+	        TextFieldFormatType temp = (TextFieldFormatType) e.nextElement();
+	        if (temp.getName().equals(typeName)) {
+	            return temp;
+	        }
+	    }
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find ListType named " + typeName);
-        return null;
-    }
+	    if (logger.isLoggable(Level.WARNING))
+	        logger.warning("Could not find ListType named " + typeName);
+	    return null;
+	}
 
-    private Vector<TextFieldFormatType> _availableValues = null;
+	private Vector<TextFieldFormatType> _availableValues = null;
 
-    public Vector getAvailableValues()
-    {
-        if (_availableValues == null) {
-            _availableValues = new Vector<TextFieldFormatType>();
-            _availableValues.add(NONE);
-            _availableValues.add(URL);
-            _availableValues.add(EMAIL);
-            _availableValues.add(PHONE);
-            _availableValues.add(BANK_ACCOUNT);
-            _availableValues.add(AUTOCOMPLETE);
-        }
-        return _availableValues;
-    }
+	public Vector getAvailableValues()
+	{
+	    if (_availableValues == null) {
+	        _availableValues = new Vector<TextFieldFormatType>();
+	        _availableValues.add(NONE);
+	        _availableValues.add(URL);
+	        _availableValues.add(EMAIL);
+	        _availableValues.add(PHONE);
+	        _availableValues.add(BANK_ACCOUNT);
+	        _availableValues.add(AUTOCOMPLETE);
+	    }
+	    return _availableValues;
+	}
 
-    public StringEncoder.Converter getConverter()
-    {
-        return textFieldFormatTypeConverter;
-    }
+	public StringEncoder.Converter getConverter()
+	{
+	    return textFieldFormatTypeConverter;
+	}
 
-    public static Vector availableValues()
-    {
-        return NONE.getAvailableValues();
-    }
-*/
+	public static Vector availableValues()
+	{
+	    return NONE.getAvailableValues();
+	}
+	*/
 }

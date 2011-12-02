@@ -25,50 +25,47 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DocTypeElement extends BrowserElement
-{
+public class DocTypeElement extends BrowserElement {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public DocTypeElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.DOC_TYPE, browser, parent);
-    }
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public DocTypeElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.DOC_TYPE, browser, parent);
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-    protected void buildChildrenVector()
-    {
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+	}
 
-    /**
-     * Overrides getObject
-     * @see org.openflexo.components.browser.BrowserElement#getObject()
-     */
-    @Override
-    public DocType getObject()
-    {
-        return (DocType) super.getObject();
-    }
-    
-    /**
-     * Overrides getName
-     * @see org.openflexo.components.browser.BrowserElement#getName()
-     */
-    @Override
-    public String getName()
-    {
-        return getObject().getName();
-    }
+	/**
+	 * Overrides getObject
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#getObject()
+	 */
+	@Override
+	public DocType getObject() {
+		return (DocType) super.getObject();
+	}
+
+	/**
+	 * Overrides getName
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#getName()
+	 */
+	@Override
+	public String getName() {
+		return getObject().getName();
+	}
 }

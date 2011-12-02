@@ -24,49 +24,41 @@ import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.QuadCurveConstruction;
 import org.openflexo.fge.geomedit.gr.QuadCurveGraphicalRepresentation;
 
-
 public class QuadCurve extends GeometricObject<FGEQuadCurve> {
 
 	private QuadCurveGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public QuadCurve(GeomEditBuilder builder)
-	{
+	public QuadCurve(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public QuadCurve(GeometricSet set, QuadCurveConstruction construction) 
-	{
+
+	public QuadCurve(GeometricSet set, QuadCurveConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new QuadCurveGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new QuadCurveGraphicalRepresentation(this, set.getEditedDrawing());
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "QuadCurve.inspector";
 	}
 
 	@Override
-	public QuadCurveGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public QuadCurveGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(QuadCurveGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(QuadCurveGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
 
 	@Override
-	public QuadCurveConstruction getConstruction()
-	{
-		return (QuadCurveConstruction)super.getConstruction();
+	public QuadCurveConstruction getConstruction() {
+		return (QuadCurveConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(QuadCurveConstruction pointConstruction)
-	{
+	public void setConstruction(QuadCurveConstruction pointConstruction) {
 		_setConstruction(pointConstruction);
 	}
 

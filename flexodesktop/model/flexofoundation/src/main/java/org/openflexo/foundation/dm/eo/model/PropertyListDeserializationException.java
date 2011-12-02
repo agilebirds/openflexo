@@ -23,22 +23,20 @@ import java.io.File;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class PropertyListDeserializationException extends Exception
-{
+public class PropertyListDeserializationException extends Exception {
 
-    private File file;
-    
-    /**
-     * @param file
-     */
-    public PropertyListDeserializationException(File file)
-    {
-        this.file = file;
-    }
+	private File file;
 
-    public File getFile() {
-        return file;
-    }
+	/**
+	 * @param file
+	 */
+	public PropertyListDeserializationException(File file) {
+		this.file = file;
+	}
+
+	public File getFile() {
+		return file;
+	}
 }

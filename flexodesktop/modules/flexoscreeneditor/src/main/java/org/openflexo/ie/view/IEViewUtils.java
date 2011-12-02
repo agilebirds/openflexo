@@ -31,48 +31,44 @@ import org.openflexo.foundation.ie.operator.IEOperator;
 import org.openflexo.foundation.ie.util.FlexoConceptualColor;
 import org.openflexo.foundation.utils.FlexoCSS;
 
-
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class IEViewUtils
-{
+public class IEViewUtils {
 
-    private static final Logger logger = Logger.getLogger(IEViewUtils.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEViewUtils.class.getPackage().getName());
 
-    public static Color colorFromConceptualColor(FlexoConceptualColor conceptualColor, FlexoCSS css)
-    {
-        if (conceptualColor instanceof FlexoConceptualColor.CustomColor) {
-            return ((FlexoConceptualColor.CustomColor) conceptualColor).getColor();
-        } else if (conceptualColor == FlexoConceptualColor.MAIN_COLOR) {
-            return css.getMainColor();
-        } else if (conceptualColor == FlexoConceptualColor.TEXT_COLOR) {
-            return css.getTextColor();
-        } else if (conceptualColor == FlexoConceptualColor.ODD_LINE_COLOR) {
-            return css.getOddLineColor();
-        } else if (conceptualColor == FlexoConceptualColor.OTHER_LINE_COLOR) {
-            return css.getOtherLineColor();
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("No color defined for FlexoConceptualColor " + conceptualColor);
-            return Color.WHITE;
-        }
-    }
+	public static Color colorFromConceptualColor(FlexoConceptualColor conceptualColor, FlexoCSS css) {
+		if (conceptualColor instanceof FlexoConceptualColor.CustomColor) {
+			return ((FlexoConceptualColor.CustomColor) conceptualColor).getColor();
+		} else if (conceptualColor == FlexoConceptualColor.MAIN_COLOR) {
+			return css.getMainColor();
+		} else if (conceptualColor == FlexoConceptualColor.TEXT_COLOR) {
+			return css.getTextColor();
+		} else if (conceptualColor == FlexoConceptualColor.ODD_LINE_COLOR) {
+			return css.getOddLineColor();
+		} else if (conceptualColor == FlexoConceptualColor.OTHER_LINE_COLOR) {
+			return css.getOtherLineColor();
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("No color defined for FlexoConceptualColor " + conceptualColor);
+			}
+			return Color.WHITE;
+		}
+	}
 
-    public static Border getBorderForOperator(IEOperator operator)
-    {
-        if (operator instanceof ConditionalOperator) {
-            return new LineBorder(Color.BLUE);
-        }
-        return new LineBorder(Color.GREEN);
-    }
+	public static Border getBorderForOperator(IEOperator operator) {
+		if (operator instanceof ConditionalOperator) {
+			return new LineBorder(Color.BLUE);
+		}
+		return new LineBorder(Color.GREEN);
+	}
 
-    /**
-     * @param insertedWidget
-     * @return
-     */
+	/**
+	 * @param insertedWidget
+	 * @return
+	 */
 
 }

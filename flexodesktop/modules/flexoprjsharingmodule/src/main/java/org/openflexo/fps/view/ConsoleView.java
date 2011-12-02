@@ -32,95 +32,92 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.fps.CVSConsole;
+import org.openflexo.fps.CVSConsole.ConsoleListener;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.JConsole;
 
-import org.openflexo.fps.CVSConsole;
-import org.openflexo.fps.CVSConsole.ConsoleListener;
-
-public class ConsoleView extends JPanel implements ConsoleListener
-{
+public class ConsoleView extends JPanel implements ConsoleListener {
 	StringBuffer sbContent;
-	
+
 	private JConsole console;
-	
+
 	private JCheckBox showCommandLogs;
 	private JCheckBox showErrorsLogs;
 	private JCheckBox showInfoLogs;
 	private JButton clearConsole;
-	
-	public ConsoleView()
-	{
-		super(new BorderLayout());
-		
-		sbContent = new StringBuffer();
-		
-		console = new JConsole();
-        console.setText("");
-        console.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-        console.setFont(FlexoCst.CODE_FONT);
-        console.setForeground(Color.DARK_GRAY);
-        console.setEditable(false);
-        console.setMinimumSize(new Dimension(0,0));
-        
-        add(console,BorderLayout.CENTER);
-        
-        CVSConsole.getCVSConsole().addToConsoleListeners(this);
 
-    	showCommandLogs = new JCheckBox(FlexoLocalization.localizedForKey("show_cvs_commands"),true);
-    	showCommandLogs.setFont(FlexoCst.SMALL_FONT);
-    	showCommandLogs.setBorder(BorderFactory.createEmptyBorder());
-    	showErrorsLogs = new JCheckBox(FlexoLocalization.localizedForKey("show_cvs_errors"),true);
-    	showErrorsLogs.setFont(FlexoCst.SMALL_FONT);
-    	showErrorsLogs.setBorder(BorderFactory.createEmptyBorder());
-    	showInfoLogs = new JCheckBox(FlexoLocalization.localizedForKey("show_cvs_logs"),false);
-    	showInfoLogs.setFont(FlexoCst.SMALL_FONT);
-    	showInfoLogs.setBorder(BorderFactory.createEmptyBorder());
-   	
-    	clearConsole = new JButton(FlexoLocalization.localizedForKey("clear"),GeneratorIconLibrary.CANCEL_ICON);
-    	clearConsole.setToolTipText(FlexoLocalization.localizedForKey("clear_console"));
-    	//clearConsole.setBorder(BorderFactory.createEmptyBorder());
-    	clearConsole.addActionListener(new ActionListener() {
+	public ConsoleView() {
+		super(new BorderLayout());
+
+		sbContent = new StringBuffer();
+
+		console = new JConsole();
+		console.setText("");
+		console.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		console.setFont(FlexoCst.CODE_FONT);
+		console.setForeground(Color.DARK_GRAY);
+		console.setEditable(false);
+		console.setMinimumSize(new Dimension(0, 0));
+
+		add(console, BorderLayout.CENTER);
+
+		CVSConsole.getCVSConsole().addToConsoleListeners(this);
+
+		showCommandLogs = new JCheckBox(FlexoLocalization.localizedForKey("show_cvs_commands"), true);
+		showCommandLogs.setFont(FlexoCst.SMALL_FONT);
+		showCommandLogs.setBorder(BorderFactory.createEmptyBorder());
+		showErrorsLogs = new JCheckBox(FlexoLocalization.localizedForKey("show_cvs_errors"), true);
+		showErrorsLogs.setFont(FlexoCst.SMALL_FONT);
+		showErrorsLogs.setBorder(BorderFactory.createEmptyBorder());
+		showInfoLogs = new JCheckBox(FlexoLocalization.localizedForKey("show_cvs_logs"), false);
+		showInfoLogs.setFont(FlexoCst.SMALL_FONT);
+		showInfoLogs.setBorder(BorderFactory.createEmptyBorder());
+
+		clearConsole = new JButton(FlexoLocalization.localizedForKey("clear"), GeneratorIconLibrary.CANCEL_ICON);
+		clearConsole.setToolTipText(FlexoLocalization.localizedForKey("clear_console"));
+		// clearConsole.setBorder(BorderFactory.createEmptyBorder());
+		clearConsole.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				console.clear();
 			}
-    	});
-    	
-    	JPanel header = new JPanel(new BorderLayout());
-    	header.setBorder(BorderFactory.createEmptyBorder());
-    	JPanel checkBoxes = new JPanel(new FlowLayout(FlowLayout.CENTER,0,0));
-    	checkBoxes.setBorder(BorderFactory.createEmptyBorder());
-    	checkBoxes.add(showCommandLogs);
-    	checkBoxes.add(showErrorsLogs);
-    	checkBoxes.add(showInfoLogs);
+		});
 
-    	header.add(checkBoxes,BorderLayout.WEST);
-    	header.add(clearConsole,BorderLayout.EAST);
- 
-    	add(header,BorderLayout.NORTH);
+		JPanel header = new JPanel(new BorderLayout());
+		header.setBorder(BorderFactory.createEmptyBorder());
+		JPanel checkBoxes = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		checkBoxes.setBorder(BorderFactory.createEmptyBorder());
+		checkBoxes.add(showCommandLogs);
+		checkBoxes.add(showErrorsLogs);
+		checkBoxes.add(showInfoLogs);
+
+		header.add(checkBoxes, BorderLayout.WEST);
+		header.add(clearConsole, BorderLayout.EAST);
+
+		add(header, BorderLayout.NORTH);
 	}
 
 	@Override
-	public void errorLog(String logString)
-	{
-		if (showErrorsLogs.isSelected())
+	public void errorLog(String logString) {
+		if (showErrorsLogs.isSelected()) {
 			console.log(logString, Color.RED);
+		}
 	}
 
 	@Override
-	public void log(String logString)
-	{
-		if (showInfoLogs.isSelected())
+	public void log(String logString) {
+		if (showInfoLogs.isSelected()) {
 			console.log(logString, Color.BLUE);
+		}
 	}
 
 	@Override
-	public void commandLog(String logString) 
-	{
-		if (showCommandLogs.isSelected())
+	public void commandLog(String logString) {
+		if (showCommandLogs.isSelected()) {
 			console.log(logString, Color.BLACK);
+		}
 	}
 
 }

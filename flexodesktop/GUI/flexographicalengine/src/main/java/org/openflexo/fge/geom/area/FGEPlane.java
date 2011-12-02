@@ -22,75 +22,72 @@ package org.openflexo.fge.geom.area;
 import java.awt.geom.AffineTransform;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 
-
 public class FGEPlane implements FGEArea {
-	
+
 	public FGEPlane() {
 		super();
 	}
-	
+
 	@Override
-	public boolean containsPoint(FGEPoint p)
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean containsArea(FGEArea a)
-	{
+	public boolean containsPoint(FGEPoint p) {
 		return true;
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l)
-	{
+	public boolean containsArea(FGEArea a) {
 		return true;
 	}
-	
+
 	@Override
-	public FGEArea exclusiveOr(FGEArea area)
-	{
+	public boolean containsLine(FGEAbstractLine l) {
+		return true;
+	}
+
+	@Override
+	public FGEArea exclusiveOr(FGEArea area) {
 		return new FGEEmptyArea();
 	}
 
 	@Override
-	public FGEArea intersect(FGEArea area)
-	{
+	public FGEArea intersect(FGEArea area) {
 		return area.clone();
 	}
 
 	@Override
-	public FGEArea substract(FGEArea area, boolean isStrict)
-	{
-		return new FGESubstractionArea(this,area,isStrict);
+	public FGEArea substract(FGEArea area, boolean isStrict) {
+		return new FGESubstractionArea(this, area, isStrict);
 	}
 
 	@Override
-	public FGEArea union(FGEArea area)
-	{
-		if (containsArea(area)) return clone();
-		if (area.containsArea(this)) return area.clone();
-		
+	public FGEArea union(FGEArea area) {
+		if (containsArea(area)) {
+			return clone();
+		}
+		if (area.containsArea(this)) {
+			return area.clone();
+		}
+
 		return clone();
 	}
-	
+
 	/**
-	 * Creates a new object of the same class and with the same
-	 * contents as this object.
-	 * @return     a clone of this instance.
-	 * @exception  OutOfMemoryError            if there is not enough memory.
-	 * @see        java.lang.Cloneable
-	 * @since      1.2
+	 * Creates a new object of the same class and with the same contents as this object.
+	 * 
+	 * @return a clone of this instance.
+	 * @exception OutOfMemoryError
+	 *                if there is not enough memory.
+	 * @see java.lang.Cloneable
+	 * @since 1.2
 	 */
 	@Override
 	public FGEPlane clone() {
 		try {
-			return (FGEPlane)super.clone();
+			return (FGEPlane) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// cannot happen
 			e.printStackTrace();
@@ -99,45 +96,41 @@ public class FGEPlane implements FGEArea {
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "FGEPlane";
 	}
 
 	@Override
-	public FGEPlane transform(AffineTransform t)
-	{
+	public FGEPlane transform(AffineTransform t) {
 		return clone();
 	}
 
 	@Override
-	public void paint(FGEGraphics g)
-	{
+	public void paint(FGEGraphics g) {
 		// TODO
 	}
-	
+
 	@Override
-	public FGEPoint getNearestPoint(FGEPoint aPoint)
-	{
+	public FGEPoint getNearestPoint(FGEPoint aPoint) {
 		return aPoint.clone();
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (obj instanceof FGEPlane) return true;
-		else return super.equals(obj);
+	public boolean equals(Object obj) {
+		if (obj instanceof FGEPlane) {
+			return true;
+		} else {
+			return super.equals(obj);
+		}
 	}
 
 	@Override
-	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation)
-	{
+	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation) {
 		return this;
 	}
 
 	@Override
-	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection direction)
-	{
+	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection direction) {
 		return this;
 	}
 
@@ -145,35 +138,32 @@ public class FGEPlane implements FGEArea {
 	 * This area is infinite, so always return false
 	 */
 	@Override
-	public final boolean isFinite()
-	{
+	public final boolean isFinite() {
 		return false;
 	}
-	
+
 	/**
 	 * This area is infinite, so always return null
 	 */
 	@Override
-	public final FGERectangle getEmbeddingBounds()
-	{
+	public final FGERectangle getEmbeddingBounds() {
 		return null;
 	}
-	
+
 	/**
 	 * Return nearest point from point "from" following supplied orientation
 	 * 
 	 * Returns null if no intersection was found
 	 * 
-	 * @param from point from which we are coming to area
-	 * @param orientation orientation we are coming from
-	 * @return 
+	 * @param from
+	 *            point from which we are coming to area
+	 * @param orientation
+	 *            orientation we are coming from
+	 * @return
 	 */
 	@Override
-	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation) 
-	{
+	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation) {
 		return from.clone();
 	}
-
-
 
 }

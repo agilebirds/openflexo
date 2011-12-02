@@ -32,38 +32,35 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MoveMenuUpInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MoveMenuUpInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(MoveMenuUp.actionType,actionInitializer);
+	MoveMenuUpInitializer(IEControllerActionInitializer actionInitializer) {
+		super(MoveMenuUp.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<MoveMenuUp> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MoveMenuUp> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveMenuUp>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuUp action)
-			{
+			public boolean run(ActionEvent e, MoveMenuUp action) {
 				boolean doable = false;
 				if (action.getFocusedObject() instanceof FlexoItemMenu) {
 					FlexoItemMenu item = (FlexoItemMenu) action.getFocusedObject();
 					if (item.getFather() != null) {
-						if (item.getFather().getSubItems().indexOf(item) > 0)
+						if (item.getFather().getSubItems().indexOf(item) > 0) {
 							doable = true;
+						}
 					}
-					if (doable)
+					if (doable) {
 						(action).setItemMenu(item);
+					}
 				}
 				return doable;
 			}
@@ -71,22 +68,18 @@ public class MoveMenuUpInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MoveMenuUp> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MoveMenuUp> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveMenuUp>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuUp action)
-			{
+			public boolean run(ActionEvent e, MoveMenuUp action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.MOVE_UP_ICON;
 	}
-
 
 }

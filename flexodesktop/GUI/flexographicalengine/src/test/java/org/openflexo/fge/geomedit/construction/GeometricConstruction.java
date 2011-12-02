@@ -24,79 +24,78 @@ import java.util.Vector;
 import org.openflexo.inspector.DefaultInspectableObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 public abstract class GeometricConstruction<O extends Object> extends DefaultInspectableObject implements XMLSerializable {
 
 	private O computedData;
-	
+
 	protected abstract O computeData();
 
-	public final O getData()
-	{		
-		//System.out.println("getData() for "+this.getClass().getSimpleName());
-		
-		 ensureUpToDate();
+	public final O getData() {
+		// System.out.println("getData() for "+this.getClass().getSimpleName());
 
-		 if (computedData == null) {
+		ensureUpToDate();
+
+		if (computedData == null) {
 			computedData = computeData();
 		}
-		
-		
+
 		return computedData;
 	}
-	
-	private void ensureUpToDate()
-	{
+
+	private void ensureUpToDate() {
 		ensureUpToDate(new Vector<GeometricConstruction>());
 	}
-	
-	private void ensureUpToDate(Vector<GeometricConstruction> updatedConstructions)
-	{
+
+	private void ensureUpToDate(Vector<GeometricConstruction> updatedConstructions) {
 		// Recursively called ensureUpToDate() on dependancies
-		if (getDepends() != null) 
+		if (getDepends() != null) {
 			for (GeometricConstruction<?> c : getDepends()) {
-				if (!c._altered.contains(this)) c._altered.add(this);
+				if (!c._altered.contains(this)) {
+					c._altered.add(this);
+				}
 				c.ensureUpToDate(updatedConstructions);
 			}
-			
+		}
+
 		if (modified || updatedConstructions.size() > 0) {
-			//System.out.println("Recompute data for "+this.getClass().getSimpleName());
+			// System.out.println("Recompute data for "+this.getClass().getSimpleName());
 			computedData = computeData();
 			updatedConstructions.add(this);
 			modified = false;
 		}
 	}
-	
-	public final void refresh()
-	{
-		//System.out.println("Refresh for "+this.getClass().getSimpleName());
-		if (getDepends() != null) for (GeometricConstruction c : getDepends()) c.refresh();
+
+	public final void refresh() {
+		// System.out.println("Refresh for "+this.getClass().getSimpleName());
+		if (getDepends() != null) {
+			for (GeometricConstruction c : getDepends()) {
+				c.refresh();
+			}
+		}
 		computedData = computeData();
 	}
-	
+
 	@Override
 	public abstract String toString();
-	
+
 	public abstract GeometricConstruction[] getDepends();
-	
+
 	private boolean modified = true;
-	
-	protected void setModified()
-	{
+
+	protected void setModified() {
 		modified = true;
 		for (GeometricConstruction c : _altered) {
 			c.computedData = null;
 			c.setModified();
 		}
 	}
-	
+
 	private Vector<GeometricConstruction> _altered = new Vector<GeometricConstruction>();
-	
+
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		// Never inspected alone
 		return null;
 	}
-	
+
 }

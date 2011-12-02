@@ -23,57 +23,50 @@ package org.openflexo.xmlcode.examples.example1;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>Command</code> is intented to represent a command object in XML
- * coding/decoding example.
+ * Class <code>Command</code> is intented to represent a command object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Command implements XMLSerializable
-{
+public class Command implements XMLSerializable {
 
-    private int qty;
+	private int qty;
 
-    public boolean commandIsAlreadyPaid;
+	public boolean commandIsAlreadyPaid;
 
-    private Movie movie;
+	private Movie movie;
 
-    public Customer customer;
+	public Customer customer;
 
-    @Override
-	public String toString()
-    {
-        String returnedString = "Command (qty=" + qty + ", paid=" + commandIsAlreadyPaid;
-        if (movie != null) {
-            returnedString += "," + movie.toString();
-        }
-        if (customer != null) {
-            returnedString += "," + customer.toString();
-        }
-        returnedString += ")\n";
-        return returnedString;
-    }
+	@Override
+	public String toString() {
+		String returnedString = "Command (qty=" + qty + ", paid=" + commandIsAlreadyPaid;
+		if (movie != null) {
+			returnedString += "," + movie.toString();
+		}
+		if (customer != null) {
+			returnedString += "," + customer.toString();
+		}
+		returnedString += ")\n";
+		return returnedString;
+	}
 
-    public int getQty()
-    {
-        return qty;
-    }
+	public int getQty() {
+		return qty;
+	}
 
-    public void setQty(int aQty)
-    {
+	public void setQty(int aQty) {
 
-        qty = aQty;
-    }
+		qty = aQty;
+	}
 
-    public Movie getMovie()
-    {
+	public Movie getMovie() {
 
-        return movie;
-    }
+		return movie;
+	}
 
-    public void setMovie(Movie aMovie)
-    {
+	public void setMovie(Movie aMovie) {
 
-        movie = aMovie;
-    }
+		movie = aMovie;
+	}
 
 }

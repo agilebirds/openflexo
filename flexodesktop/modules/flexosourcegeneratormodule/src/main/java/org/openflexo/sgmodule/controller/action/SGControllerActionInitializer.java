@@ -42,7 +42,6 @@ import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.sgmodule.controller.SGSelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 /**
  * 
  * Action initializing for this module
@@ -51,52 +50,47 @@ import org.openflexo.view.controller.ControllerActionInitializer;
  */
 public class SGControllerActionInitializer extends ControllerActionInitializer {
 
-    private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    private SGController _sgController;
-    
-    public SGControllerActionInitializer(SGController controller)
-    {
-        super(controller);
-        _sgController = controller;
-    }
-    
-    protected SGController getSGController()
-    {
-        return _sgController;
-    }
-    
-    protected SGSelectionManager getSGSelectionManager()
-    {
-        return getSGController().getSGSelectionManager();
-    }
-    
+	private SGController _sgController;
 
-    
-    @Override
-	public void initializeActions()
-    {
-        super.initializeActions();
- 
+	public SGControllerActionInitializer(SGController controller) {
+		super(controller);
+		_sgController = controller;
+	}
+
+	protected SGController getSGController() {
+		return _sgController;
+	}
+
+	protected SGSelectionManager getSGSelectionManager() {
+		return getSGController().getSGSelectionManager();
+	}
+
+	@Override
+	public void initializeActions() {
+		super.initializeActions();
+
 		getSGController().getProject().getGeneratedSources().setFactory(new GCAction.ProjectGeneratorFactory() {
 			@Override
 			public AbstractProjectGenerator<? extends GenerationRepository> generatorForRepository(GenerationRepository repository) {
-				if (repository instanceof SourceRepository)
+				if (repository instanceof SourceRepository) {
 					return getSGController().getProjectGenerator((SourceRepository) repository);
-				else {
-					if (logger.isLoggable(Level.SEVERE))
-						logger.severe("Cannot create project generator for "+repository);
+				} else {
+					if (logger.isLoggable(Level.SEVERE)) {
+						logger.severe("Cannot create project generator for " + repository);
+					}
 				}
 				return null;
 			}
 		});
 
-        (new SGSetPropertyInitializer(this)).init();
-        
-        // Implementation model management
-        (new CreateImplementationModelInitializer(this)).init();
+		(new SGSetPropertyInitializer(this)).init();
+
+		// Implementation model management
+		(new CreateImplementationModelInitializer(this)).init();
 		(new CreateTechnologyModuleImplementationInitializer(this)).init();
-        
+
 		// Validate project
 		(new ValidateProjectInitializer(this)).init();
 
@@ -106,8 +100,8 @@ public class SGControllerActionInitializer extends ControllerActionInitializer {
 		new GenerateAndWriteCodeInitializer(this).init();
 		(new ForceRegenerateSourceCodeInitializer(this)).init();
 		(new RegenerateAndOverrideInitializer(this)).init();
-        (new IncludeFromGenerationInitializer(this)).init();
-        (new ExcludeFromGenerationInitializer(this)).init();
+		(new IncludeFromGenerationInitializer(this)).init();
+		(new ExcludeFromGenerationInitializer(this)).init();
 
 		(new WriteModifiedGeneratedFilesInitializer(this)).init();
 		(new DismissUnchangedGeneratedFilesInitializer(this)).init();
@@ -181,12 +175,15 @@ public class SGControllerActionInitializer extends ControllerActionInitializer {
 			technologyModuleGUIFactory.initializeActions(this);
 		}
 
-		CGFile.showTemplateActionizer = new FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(OpenTemplateFileInNewWindow.actionType, getSGController().getEditor());
+		CGFile.showTemplateActionizer = new FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(
+				OpenTemplateFileInNewWindow.actionType, getSGController().getEditor());
 
-		CGFile.editCustomTemplateActionizer = new FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(EditCustomTemplateFile.actionType, getSGController().getEditor());
+		CGFile.editCustomTemplateActionizer = new FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(
+				EditCustomTemplateFile.actionType, getSGController().getEditor());
 
-		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject>(RedefineCustomTemplateFile.actionType, getSGController().getEditor());
+		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject>(
+				RedefineCustomTemplateFile.actionType, getSGController().getEditor());
 
 	}
-  
+
 }

@@ -26,7 +26,6 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
@@ -44,147 +43,134 @@ import org.openflexo.toolbox.ImageInfo;
 
 /**
  * Represents a button
- *
+ * 
  * @author bmangez
  */
-public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Serializable, IButton
-{
+public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Serializable, IButton {
 	/**
      *
      */
-    public static final String BUTTON_WIDGET = "button_widget";
+	public static final String BUTTON_WIDGET = "button_widget";
 
-    private static final Logger logger = FlexoLogger.getLogger(IEButtonWidget.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(IEButtonWidget.class.getPackage().getName());
 
-    private ImageFile file;
+	private ImageFile file;
 
-    private boolean maintainAspectRatio = true;
-    private boolean usePercentage = false;
+	private boolean maintainAspectRatio = true;
+	private boolean usePercentage = false;
 
-    private int widthPercentage=100;
-    private int heightPercentage=100;
-    private int widthPixel=-1;
-    private int heightPixel=-1;
+	private int widthPercentage = 100;
+	private int heightPercentage = 100;
+	private int widthPixel = -1;
+	private int heightPixel = -1;
 
-    public IEButtonWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
-
-    public IEButtonWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
-
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return Inspectors.IE.BUTTON_INSPECTOR;
-    }
-
-    public int getSmallButtonIndex()
-    {
-        return ((ButtonContainerInterface) getParent()).getButtonIndex(this);
-    }
-
-    /**
-     *
-     * @return
-     * @deprecated use getName()
-     */
-    @Deprecated
-	public String getButtonName()
-    {
-        return getName();
-    }
-
-    /**
-     *
-     * @param name
-     * @deprecated use setName();
-     */
-    @Deprecated
-	public void setButtonName(String name)
-    {
-        setName(name);
-    }
-
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Button" + getButtonName();
-    }
-
-	public boolean isImportedImage() {
-		return getFile()!=null && getFile().isImported();
+	public IEButtonWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
 	}
 
-    @Override
-	public String getBeautifiedName()
-    {
-        String s = "";
-        s = getLabel();
-        if (s == null || s.trim().length() == 0)
-            s = getName();
-        if ((s == null || s.trim().length() == 0) && getFile()!=null && getFile().getImageName() != null)
-            s = getFile().getBeautifiedImageName();
-        return s;
-    }
+	public IEButtonWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    public ImageFile getFile()
-    {
-    	if (file==null && getProject()!=null && !isDeserializing())
-    		return getProject().getDefaultImageFile();
-        return file;
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return Inspectors.IE.BUTTON_INSPECTOR;
+	}
 
-    public void setFile(ImageFile f)
-    {
-        Object old = this.file;
-        this.file = f;
-        imageInformation = null;
-        if (f != null) {
-            setWidthPercentage(widthPercentage);
-           	setWidthPixel(getImageInformation().getWidth());
-           	setHeightPixel(getImageInformation().getHeight());
-        }
-        setChanged();
-        notifyObservers(new IEDataModification("file", old, f));
-    }
+	public int getSmallButtonIndex() {
+		return ((ButtonContainerInterface) getParent()).getButtonIndex(this);
+	}
 
-    public String getImageName() {
-    	if (getFile()!=null)
-    		return getFile().getImageName();
-    	return null;
-    }
+	/**
+	 * 
+	 * @return
+	 * @deprecated use getName()
+	 */
+	@Deprecated
+	public String getButtonName() {
+		return getName();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     *
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return BUTTON_WIDGET;
-    }
+	/**
+	 * 
+	 * @param name
+	 * @deprecated use setName();
+	 */
+	@Deprecated
+	public void setButtonName(String name) {
+		setName(name);
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return "Button" + getButtonName();
+	}
+
+	public boolean isImportedImage() {
+		return getFile() != null && getFile().isImported();
+	}
+
+	@Override
+	public String getBeautifiedName() {
+		String s = "";
+		s = getLabel();
+		if (s == null || s.trim().length() == 0) {
+			s = getName();
+		}
+		if ((s == null || s.trim().length() == 0) && getFile() != null && getFile().getImageName() != null) {
+			s = getFile().getBeautifiedImageName();
+		}
+		return s;
+	}
+
+	public ImageFile getFile() {
+		if (file == null && getProject() != null && !isDeserializing()) {
+			return getProject().getDefaultImageFile();
+		}
+		return file;
+	}
+
+	public void setFile(ImageFile f) {
+		Object old = this.file;
+		this.file = f;
+		imageInformation = null;
+		if (f != null) {
+			setWidthPercentage(widthPercentage);
+			setWidthPixel(getImageInformation().getWidth());
+			setHeightPixel(getImageInformation().getHeight());
+		}
+		setChanged();
+		notifyObservers(new IEDataModification("file", old, f));
+	}
+
+	public String getImageName() {
+		if (getFile() != null) {
+			return getFile().getImageName();
+		}
+		return null;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return BUTTON_WIDGET;
+	}
 
 	/********************************************************
-	 * WARNING: The code hereunder can be quite sensitive and
-	 * should be modified with great care. There are several
-	 * different cases that are quite tricky. Make sure to
-	 * test a lot your modification and verify the various
-	 * cases that can happen:
-	 *  - aspect ratio
-	 *  - using percentage
-	 *  - width/height pixel/percentage
+	 * WARNING: The code hereunder can be quite sensitive and should be modified with great care. There are several different cases that are
+	 * quite tricky. Make sure to test a lot your modification and verify the various cases that can happen: - aspect ratio - using
+	 * percentage - width/height pixel/percentage
 	 ********************************************************/
 
 	private ImageInfo imageInformation;
 
 	public ImageInfo getImageInformation() {
-		if (imageInformation==null) {
+		if (imageInformation == null) {
 			ImageInfo ii = new ImageInfo();
 			FileInputStream fis = null;
 			if (getFile() != null) {
@@ -195,16 +181,18 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} finally {
-					if (fis != null)
+					if (fis != null) {
 						try {
 							fis.close();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
+					}
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("This button has no file");
+				}
 			}
 		}
 		return imageInformation;
@@ -217,12 +205,12 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 	public void setMaintainAspectRatio(boolean maintainAspectRatio) {
 		boolean old = this.maintainAspectRatio;
 		this.maintainAspectRatio = maintainAspectRatio;
-		if (!isDeserializing() && !isCreatedByCloning() && old!=maintainAspectRatio && maintainAspectRatio) {
+		if (!isDeserializing() && !isCreatedByCloning() && old != maintainAspectRatio && maintainAspectRatio) {
 			setWidthPixel(getWidthPixel());
 			setWidthPercentage(getWidthPercentage());
 		}
 		setChanged();
-		notifyObservers(new IEDataModification("maintainAspectRatio",null,maintainAspectRatio));
+		notifyObservers(new IEDataModification("maintainAspectRatio", null, maintainAspectRatio));
 	}
 
 	public boolean getUsePercentage() {
@@ -240,11 +228,12 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 				heightPixel = Math.round((float)heightPercentage * ii.getHeight()/100);
 			}
 		}*/
-		if (usePercentage)// If we use percentage, we better force to maintain aspect ratio because browsers don't render them the same way.
+		if (usePercentage) {
 			setMaintainAspectRatio(true);
+		}
 		this.usePercentage = usePercentage;
 		setChanged();
-		notifyObservers(new IEDataModification("usePercentage",null,usePercentage));
+		notifyObservers(new IEDataModification("usePercentage", null, usePercentage));
 	}
 
 	public int getWidthPercentage() {
@@ -260,7 +249,7 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 			if (maintainAspectRatio) {
 				this.heightPercentage = widthPercentage;
 				setChanged();
-				notifyObservers(new IEDataModification("heightPercentage",null,heightPercentage));
+				notifyObservers(new IEDataModification("heightPercentage", null, heightPercentage));
 			}
 			/*if (getImageInformation()!=null) {
 				this.widthPixel = widthPercentage*getImageInformation().getWidth()/100;
@@ -273,7 +262,7 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 				}
 			}*/
 			setChanged();
-			notifyObservers(new IEDataModification("widthPercentage",null,widthPercentage));
+			notifyObservers(new IEDataModification("widthPercentage", null, widthPercentage));
 		}
 	}
 
@@ -290,25 +279,25 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 			if (maintainAspectRatio) {
 				this.widthPercentage = heightPercentage;
 				setChanged();
-				notifyObservers(new IEDataModification("widthPercentage",null,widthPercentage));
+				notifyObservers(new IEDataModification("widthPercentage", null, widthPercentage));
 			}
-			if (getImageInformation()!=null) {
-				this.heightPixel = heightPercentage*getImageInformation().getHeight()/100;
+			if (getImageInformation() != null) {
+				this.heightPixel = heightPercentage * getImageInformation().getHeight() / 100;
 				setChanged();
-				notifyObservers(new IEDataModification("heightPixel",null,heightPixel));
+				notifyObservers(new IEDataModification("heightPixel", null, heightPixel));
 				if (maintainAspectRatio) {
-					this.widthPixel = widthPercentage*getImageInformation().getWidth()/100;
+					this.widthPixel = widthPercentage * getImageInformation().getWidth() / 100;
 					setChanged();
-					notifyObservers(new IEDataModification("widthPixel",null,widthPixel));
+					notifyObservers(new IEDataModification("widthPixel", null, widthPixel));
 				}
 			}
 			setChanged();
-			notifyObservers(new IEDataModification("heightPercentage",null,heightPercentage));
+			notifyObservers(new IEDataModification("heightPercentage", null, heightPercentage));
 		}
 	}
 
 	public int getWidthPixel() {
-		if (widthPixel<0 && getFile()!=null && getFile().exists() && getImageInformation()!=null) {
+		if (widthPixel < 0 && getFile() != null && getFile().exists() && getImageInformation() != null) {
 			ImageInfo ii = getImageInformation();
 			widthPixel = ii.getWidth();
 			heightPixel = ii.getHeight();
@@ -327,24 +316,24 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 						notifyObservers(new IEDataModification("heightPixel", null, heightPixel));
 					}
 				}
-/*				if (getImageInformation() != null) {
-					this.widthPercentage = (widthPixel * 100 / getImageInformation().getWidth());
-					setChanged();
-					notifyObservers(new IEDataModification("widthPercentage", null, widthPercentage));
-					if (maintainAspectRatio) {
-						this.heightPercentage = (heightPixel * 100 / getImageInformation().getHeight());
-						setChanged();
-						notifyObservers(new IEDataModification("heightPercentage", null, heightPercentage));
-					}
-				}*/
+				/*				if (getImageInformation() != null) {
+									this.widthPercentage = (widthPixel * 100 / getImageInformation().getWidth());
+									setChanged();
+									notifyObservers(new IEDataModification("widthPercentage", null, widthPercentage));
+									if (maintainAspectRatio) {
+										this.heightPercentage = (heightPixel * 100 / getImageInformation().getHeight());
+										setChanged();
+										notifyObservers(new IEDataModification("heightPercentage", null, heightPercentage));
+									}
+								}*/
 			}
 			setChanged();
-			notifyObservers(new IEDataModification("widthPixel",null,widthPixel));
+			notifyObservers(new IEDataModification("widthPixel", null, widthPixel));
 		}
 	}
 
 	public int getHeightPixel() {
-		if (heightPixel<0 && getFile()!=null && getFile().exists() && getImageInformation()!=null) {
+		if (heightPixel < 0 && getFile() != null && getFile().exists() && getImageInformation() != null) {
 			ImageInfo ii = getImageInformation();
 			heightPixel = ii.getHeight();
 			widthPixel = ii.getWidth();
@@ -375,13 +364,13 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 				}*/
 			}
 			setChanged();
-			notifyObservers(new IEDataModification("heightPixel",null,heightPixel));
+			notifyObservers(new IEDataModification("heightPixel", null, heightPixel));
 		}
 	}
 
 	public boolean isOriginalSize() {
-		if (getImageInformation()!=null) {
-			return getImageInformation().getWidth()==getWidthPixel() && getImageInformation().getHeight()==getHeightPixel();
+		if (getImageInformation() != null) {
+			return getImageInformation().getWidth() == getWidthPixel() && getImageInformation().getHeight() == getHeightPixel();
 		}
 		return false;
 	}
@@ -390,52 +379,49 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 	 * Validation
 	 */
 
-    public static class EmailButtonMustBeOfTypeEmail extends ValidationRule<EmailButtonMustBeOfTypeEmail, IEButtonWidget>
-    {
-        public EmailButtonMustBeOfTypeEmail()
-        {
-            super(IEButtonWidget.class, "this_kind_of_button_is_usually_a_mailto_link");
-        }
+	public static class EmailButtonMustBeOfTypeEmail extends ValidationRule<EmailButtonMustBeOfTypeEmail, IEButtonWidget> {
+		public EmailButtonMustBeOfTypeEmail() {
+			super(IEButtonWidget.class, "this_kind_of_button_is_usually_a_mailto_link");
+		}
 
-        @Override
-		public ValidationIssue applyValidation(IEButtonWidget object)
-        {
-        	IEButtonWidget button = object;
-            if (button.getFile() != null && button.getFile().getImageFile() != null && button.getFile().getImageName().toUpperCase().indexOf("EMAIL") > -1
-                    && (button.getHyperlinkType() == null || button.getHyperlinkType() != HyperlinkType.MAILTO)) {
-                ValidationWarning warning = new ValidationWarning<EmailButtonMustBeOfTypeEmail, IEButtonWidget>(this, object, "this_kind_of_button_is_usually_a_mailto_link");
+		@Override
+		public ValidationIssue applyValidation(IEButtonWidget object) {
+			IEButtonWidget button = object;
+			if (button.getFile() != null && button.getFile().getImageFile() != null
+					&& button.getFile().getImageName().toUpperCase().indexOf("EMAIL") > -1
+					&& (button.getHyperlinkType() == null || button.getHyperlinkType() != HyperlinkType.MAILTO)) {
+				ValidationWarning warning = new ValidationWarning<EmailButtonMustBeOfTypeEmail, IEButtonWidget>(this, object,
+						"this_kind_of_button_is_usually_a_mailto_link");
 
-                warning.addToFixProposals(new SetLinkTypeMailto(button));
+				warning.addToFixProposals(new SetLinkTypeMailto(button));
 
-                return warning;
-            }
-            return null;
-        }
+				return warning;
+			}
+			return null;
+		}
 
-    }
+	}
 
-    public static class SearchButtonMustBeOfTypeSearch extends ValidationRule
-    {
-        public SearchButtonMustBeOfTypeSearch()
-        {
-            super(IEButtonWidget.class, "this_kind_of_button_is_usually_a_search_button");
-        }
+	public static class SearchButtonMustBeOfTypeSearch extends ValidationRule {
+		public SearchButtonMustBeOfTypeSearch() {
+			super(IEButtonWidget.class, "this_kind_of_button_is_usually_a_search_button");
+		}
 
-        @Override
-		public ValidationIssue applyValidation(final Validable object)
-        {
-            final IEButtonWidget button = (IEButtonWidget) object;
-            if (button.getFile() != null && button.getFile().getImageFile() != null && button.getFile().getImageName().toUpperCase().indexOf("PREVIEWFILE") > -1
-                    && button.isInSearchArea() && (button.getHyperlinkType() == null || button.getHyperlinkType() != HyperlinkType.SEARCH)) {
-                ValidationWarning warning = new ValidationWarning(this, object, "this_kind_of_button_is_usually_a_search_button");
+		@Override
+		public ValidationIssue applyValidation(final Validable object) {
+			final IEButtonWidget button = (IEButtonWidget) object;
+			if (button.getFile() != null && button.getFile().getImageFile() != null
+					&& button.getFile().getImageName().toUpperCase().indexOf("PREVIEWFILE") > -1 && button.isInSearchArea()
+					&& (button.getHyperlinkType() == null || button.getHyperlinkType() != HyperlinkType.SEARCH)) {
+				ValidationWarning warning = new ValidationWarning(this, object, "this_kind_of_button_is_usually_a_search_button");
 
-                warning.addToFixProposals(new SetLinkTypeSearch(button));
+				warning.addToFixProposals(new SetLinkTypeSearch(button));
 
-                return warning;
-            }
-            return null;
-        }
+				return warning;
+			}
+			return null;
+		}
 
-    }
+	}
 
 }

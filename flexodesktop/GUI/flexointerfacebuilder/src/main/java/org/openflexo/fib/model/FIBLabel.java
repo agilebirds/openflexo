@@ -21,78 +21,81 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 
-import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 public class FIBLabel extends FIBWidget {
 
-	public static enum Parameters implements FIBModelAttribute
-	{
-		label,
-		align;
+	public static enum Parameters implements FIBModelAttribute {
+		label, align;
 	}
 
-	public static enum Align
-	{
-		left { @Override
-		public int getAlign() { return SwingConstants.LEFT; }},
-		right { @Override
-		public int getAlign() { return SwingConstants.RIGHT; }},
-		center { @Override
-		public int getAlign() { return SwingConstants.CENTER; }};
+	public static enum Align {
+		left {
+			@Override
+			public int getAlign() {
+				return SwingConstants.LEFT;
+			}
+		},
+		right {
+			@Override
+			public int getAlign() {
+				return SwingConstants.RIGHT;
+			}
+		},
+		center {
+			@Override
+			public int getAlign() {
+				return SwingConstants.CENTER;
+			}
+		};
 		public abstract int getAlign();
 	}
-	
+
 	private String label;
 	private Align align = Align.left;
-	
-	public FIBLabel() 
-	{
+
+	public FIBLabel() {
 		super();
 	}
-	
-	public FIBLabel(String label) 
-	{
+
+	@Override
+	protected String getBaseName() {
+		return "Label";
+	}
+
+	public FIBLabel(String label) {
 		super();
 		this.label = label;
 	}
-	
+
 	@Override
-	public String getIdentifier()
-	{
+	public String getIdentifier() {
 		return getLabel();
 	}
 
 	@Override
-	public Type getDefaultDataClass() 
-	{
+	public Type getDefaultDataClass() {
 		return String.class;
 	}
 
-	public String getLabel()
-	{
+	public String getLabel() {
 		return label;
 	}
 
-	public void setLabel(String label)
-	{
-		FIBAttributeNotification<String> notification = requireChange(
-				Parameters.label, label);
+	public void setLabel(String label) {
+		FIBAttributeNotification<String> notification = requireChange(Parameters.label, label);
 		if (notification != null) {
 			this.label = label;
 			hasChanged(notification);
 		}
 	}
 
-	public Align getAlign()
-	{
+	public Align getAlign() {
 		return align;
 	}
 
-	public void setAlign(Align align)
-	{
-		FIBAttributeNotification<Align> notification = requireChange(
-				Parameters.align, align);
+	public void setAlign(Align align) {
+		FIBAttributeNotification<Align> notification = requireChange(Parameters.align, align);
 		if (notification != null) {
 			this.align = align;
 			hasChanged(notification);

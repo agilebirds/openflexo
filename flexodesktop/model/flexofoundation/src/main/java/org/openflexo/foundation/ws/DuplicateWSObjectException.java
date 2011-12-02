@@ -21,29 +21,25 @@ package org.openflexo.foundation.ws;
 
 import org.openflexo.foundation.FlexoException;
 
+public class DuplicateWSObjectException extends FlexoException {
 
-
-public class DuplicateWSObjectException extends FlexoException{
- 
 	private WSObject object;
 
-    /**
+	/**
      * 
      */
-    public DuplicateWSObjectException(WSObject object, String localizationKey)
-    {
-        super(null, localizationKey);
-        this.object = object;
-    }
+	public DuplicateWSObjectException(WSObject object, String localizationKey) {
+		super(null, localizationKey);
+		this.object = object;
+	}
 
-    public WSObject getObject()
-    {
-        return object;
-    }
-    
-    @Override
-	public String getMessage(){
-    		return "DuplicateWSObjectException: wsobject " + (object!=null?object.getName():"null") + " already registered.";
-    }
-    
+	public WSObject getObject() {
+		return object;
+	}
+
+	@Override
+	public String getMessage() {
+		return "DuplicateWSObjectException: wsobject " + (object != null ? object.getName() : "null") + " already registered.";
+	}
+
 }

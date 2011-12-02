@@ -23,20 +23,17 @@ package org.openflexo.xmlcode.examples.example1;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>Customer</code> is intented to represent a customer object in
- * XML coding/decoding example.
+ * Class <code>Customer</code> is intented to represent a customer object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Customer implements XMLSerializable
-{
+public class Customer implements XMLSerializable {
 
-    public String name;
+	public String name;
 
-    @Override
-	public String toString()
-    {
-        return "Customer (name=" + name + ")";
-    }
+	@Override
+	public String toString() {
+		return "Customer (name=" + name + ")";
+	}
 
 }

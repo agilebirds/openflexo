@@ -27,10 +27,6 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.dm.view.DMModelView;
 import org.openflexo.dm.view.popups.AskNewRepositoryDialog;
-import org.openflexo.dm.view.popups.CreateProjectDatabaseRepositoryDialog;
-import org.openflexo.dm.view.popups.CreateProjectRepositoryDialog;
-import org.openflexo.dm.view.popups.ImportExternalDatabaseRepositoryDialog;
-import org.openflexo.dm.view.popups.ImportJARDialog;
 import org.openflexo.dm.view.popups.ImportRationalRoseRepositoryDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -47,200 +43,116 @@ import org.openflexo.module.ModuleLoader;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class CreateDMRepositoryInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDMRepositoryInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(CreateDMRepository.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-     @Override
-	protected FlexoActionFinalizer<CreateDMRepository> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<CreateDMRepository>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMRepository action)
-            {
-                if (action.getNewRepository() != null) {
-                    logger.info("Finalizer for CreateDMRepository in DMModelView with " + action.getNewRepository());
-                    if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getNewRepository().getDMModel()) {
-                        DMModelView dmModelView = (DMModelView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                        dmModelView.getRepositoryFolderTable().selectObject(action.getNewRepository().getRepositoryFolder());
-                        dmModelView.getRepositoriesTable().selectObject(action.getNewRepository());
-                    }
-                }
-                return true;
-          }
-        };
+	CreateDMRepositoryInitializer(DMControllerActionInitializer actionInitializer) {
+		super(CreateDMRepository.actionType, actionInitializer);
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionFinalizer<CreateDMRepository> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CreateDMRepository>() {
+			@Override
+			public boolean run(ActionEvent e, CreateDMRepository action) {
+				if (action.getNewRepository() != null) {
+					logger.info("Finalizer for CreateDMRepository in DMModelView with " + action.getNewRepository());
+					if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getNewRepository()
+							.getDMModel()) {
+						DMModelView dmModelView = (DMModelView) getControllerActionInitializer().getDMController()
+								.getCurrentEditedObjectView();
+						dmModelView.getRepositoryFolderTable().selectObject(action.getNewRepository().getRepositoryFolder());
+						dmModelView.getRepositoriesTable().selectObject(action.getNewRepository());
+					}
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.DM_REPOSITORY_ICON;
 	}
- 
+
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return null;
 	}
 
 	@Override
-	public void init()
-	{
-		initActionType(CreateDMRepository.actionType,
-				new FlexoActionInitializer<CreateDMRepository>() {
+	public void init() {
+		initActionType(CreateDMRepository.actionType, new FlexoActionInitializer<CreateDMRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMRepository action)
-			{
-				return (AskNewRepositoryDialog.displayDialog(action, 
-						getControllerActionInitializer().getDMController().getProject(), 
-						getControllerActionInitializer().getDMController()
-						.getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
+			public boolean run(ActionEvent e, CreateDMRepository action) {
+				return (AskNewRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
+						getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
 			}
-		}, 
-		getDefaultFinalizer(), 
-		getDefaultExceptionHandler(), 
-		null, 
-		null,
-		null, 
-		DMEIconLibrary.DM_REPOSITORY_ICON, 
-		null);
+		}, getDefaultFinalizer(), getDefaultExceptionHandler(), null, null, null, DMEIconLibrary.DM_REPOSITORY_ICON, null);
 
-		initActionType(CreateProjectRepository.actionType,
-				new FlexoActionInitializer<CreateDMRepository>() {
+		initActionType(CreateProjectRepository.actionType, new FlexoActionInitializer<CreateDMRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMRepository action)
-			{
-	               return (AskNewRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
-	            		   getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
+			public boolean run(ActionEvent e, CreateDMRepository action) {
+				return (AskNewRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
+						getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
 			}
-		}, 
-		getDefaultFinalizer(), 
-		getDefaultExceptionHandler(), 
-		null, 
-		null,
-		null, 
-		DMEIconLibrary.DM_REPOSITORY_ICON, 
-		null);
+		}, getDefaultFinalizer(), getDefaultExceptionHandler(), null, null, null, DMEIconLibrary.DM_REPOSITORY_ICON, null);
 
-		initActionType(CreateProjectDatabaseRepository.actionType,
-				new FlexoActionInitializer<CreateDMRepository>() {
+		initActionType(CreateProjectDatabaseRepository.actionType, new FlexoActionInitializer<CreateDMRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMRepository action)
-			{
-	               return (AskNewRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController()
-	                        .getProject(), getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
+			public boolean run(ActionEvent e, CreateDMRepository action) {
+				return (AskNewRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
+						getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
 			}
-		}, 
-		getDefaultFinalizer(), 
-		getDefaultExceptionHandler(), 
-		null, 
-		null,
-		null, 
-		DMEIconLibrary.DM_EOREPOSITORY_ICON, 
-		null);
+		}, getDefaultFinalizer(), getDefaultExceptionHandler(), null, null, null, DMEIconLibrary.DM_EOREPOSITORY_ICON, null);
 
-		initActionType(ImportExternalDatabaseRepository.actionType,
-				new FlexoActionInitializer<CreateDMRepository>() {
+		initActionType(ImportExternalDatabaseRepository.actionType, new FlexoActionInitializer<CreateDMRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMRepository action)
-			{
-	               return (AskNewRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController()
-	                        .getProject(), getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
+			public boolean run(ActionEvent e, CreateDMRepository action) {
+				return (AskNewRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
+						getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
 			}
-		}, 
-		getDefaultFinalizer(), 
-		getDefaultExceptionHandler(), 
-		null, 
-		null,
-		null, 
-		DMEIconLibrary.DM_EOREPOSITORY_ICON, 
-		null);
-		
-		if (ModuleLoader.isDevelopperRelease()
-				|| ModuleLoader.isMaintainerRelease()) {
-			initActionType(
-					ImportJARFileRepository.actionType,
-					new FlexoActionInitializer<CreateDMRepository>() {
-						@Override
-						public boolean run(ActionEvent e,
-								CreateDMRepository action) {
-							return (AskNewRepositoryDialog.displayDialog(action,
-									getControllerActionInitializer()
-											.getDMController().getProject(),
-									getControllerActionInitializer()
-											.getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
-						}
-					}, 
-					getDefaultFinalizer(), getDefaultExceptionHandler(),
-					null,
-					null,
-					null, 
-					DMEIconLibrary.DM_JAR_REPOSITORY_ICON, 
-					null);
+		}, getDefaultFinalizer(), getDefaultExceptionHandler(), null, null, null, DMEIconLibrary.DM_EOREPOSITORY_ICON, null);
+
+		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+			initActionType(ImportJARFileRepository.actionType, new FlexoActionInitializer<CreateDMRepository>() {
+				@Override
+				public boolean run(ActionEvent e, CreateDMRepository action) {
+					return (AskNewRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
+							getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
+				}
+			}, getDefaultFinalizer(), getDefaultExceptionHandler(), null, null, null, DMEIconLibrary.DM_JAR_REPOSITORY_ICON, null);
 		}
-		
-		initActionType(ImportRationalRoseRepository.actionType,
-				new FlexoActionInitializer<ImportRationalRoseRepository>() {
-			@Override
-			public boolean run(ActionEvent e, ImportRationalRoseRepository action)
-			{
-	               return (ImportRationalRoseRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController()
-	                        .getProject(), getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
-			}
-		}, 
-		getDefaultFinalizer(), 
-		getDefaultExceptionHandler(), 
-		null, 
-		null,
-		null, 
-		DMEIconLibrary.DM_REPOSITORY_ICON, 
-		null);
 
-		initActionType(ImportThesaurusRepository.actionType,
-				new FlexoActionInitializer<CreateDMRepository>() {
+		initActionType(ImportRationalRoseRepository.actionType, new FlexoActionInitializer<ImportRationalRoseRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMRepository action)
-			{
-				// Not implemented yet
-	               return false;
+			public boolean run(ActionEvent e, ImportRationalRoseRepository action) {
+				return (ImportRationalRoseRepositoryDialog.displayDialog(action, getControllerActionInitializer().getDMController()
+						.getProject(), getControllerActionInitializer().getDMController().getFlexoFrame()) == AskNewRepositoryDialog.VALIDATE);
 			}
-		}, 
-		getDefaultFinalizer(), 
-		getDefaultExceptionHandler(), 
-		null, 
-		null,
-		null, 
-		DMEIconLibrary.DM_REPOSITORY_ICON, 
-		null);
+		}, getDefaultFinalizer(), getDefaultExceptionHandler(), null, null, null, DMEIconLibrary.DM_REPOSITORY_ICON, null);
 
-		initActionType(ImportThesaurusDatabaseRepository.actionType,
-				new FlexoActionInitializer<CreateDMRepository>() {
+		initActionType(ImportThesaurusRepository.actionType, new FlexoActionInitializer<CreateDMRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMRepository action)
-			{
+			public boolean run(ActionEvent e, CreateDMRepository action) {
 				// Not implemented yet
-	               return false;
+				return false;
 			}
-		}, 
-		getDefaultFinalizer(), 
-		getDefaultExceptionHandler(), 
-		null, 
-		null,
-		null, 
-		DMEIconLibrary.DM_EOREPOSITORY_ICON, 
-		null);
+		}, getDefaultFinalizer(), getDefaultExceptionHandler(), null, null, null, DMEIconLibrary.DM_REPOSITORY_ICON, null);
+
+		initActionType(ImportThesaurusDatabaseRepository.actionType, new FlexoActionInitializer<CreateDMRepository>() {
+			@Override
+			public boolean run(ActionEvent e, CreateDMRepository action) {
+				// Not implemented yet
+				return false;
+			}
+		}, getDefaultFinalizer(), getDefaultExceptionHandler(), null, null, null, DMEIconLibrary.DM_EOREPOSITORY_ICON, null);
 	}
 
 }

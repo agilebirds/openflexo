@@ -31,75 +31,67 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.toolbox.StringUtils;
 
-
 /**
  * Represents a Wysiwyg widget
  * 
  * @author bmangez
  */
-public class IEWysiwygWidget extends IENonEditableTextWidget implements IEWidgetWithValueList
-{
+public class IEWysiwygWidget extends IENonEditableTextWidget implements IEWidgetWithValueList {
 
-    /**
+	/**
      * 
      */
-    public static final String WYSIWYG_WIDGET = "wysiwyg_widget";
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	public static final String WYSIWYG_WIDGET = "wysiwyg_widget";
 
-    public IEWysiwygWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IEWysiwygWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	public IEWysiwygWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return "Wysiwyg.inspector";
-    }
+	public IEWysiwygWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        return EMPTY_IOBJECT_VECTOR;
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return "Wysiwyg.inspector";
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Wysiwyg";
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return WYSIWYG_WIDGET;
-    }
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		return EMPTY_IOBJECT_VECTOR;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return "Wysiwyg";
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return WYSIWYG_WIDGET;
+	}
 
 	/**
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithValueList#getValueList()
 	 */
 	@Override
-	public List<Object> getValueList()
-	{
+	public List<Object> getValueList() {
 		return getValueList(null);
 	}
 
@@ -107,12 +99,12 @@ public class IEWysiwygWidget extends IENonEditableTextWidget implements IEWidget
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithValueList#getValueList(org.openflexo.foundation.wkf.FlexoProcess)
 	 */
 	@Override
-	public List<Object> getValueList(FlexoProcess process)
-	{
+	public List<Object> getValueList(FlexoProcess process) {
 		List<Object> result = new ArrayList<Object>();
-		if(!StringUtils.isEmpty(getValue()))
+		if (!StringUtils.isEmpty(getValue())) {
 			result.add(getValue());
+		}
 		return result;
 	}
-    
+
 }

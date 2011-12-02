@@ -45,7 +45,6 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
 import org.openflexo.module.external.ExternalModuleDelegater;
 
-
 /**
  * @author ndaniels
  * 
@@ -131,7 +130,8 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 		super(projectGenerator, source, templateName);
 	}
 
-	public DGJSGenerator(ProjectDocHTMLGenerator projectGenerator, T source, String templateName, String identifier, String fileName, TOCEntry entry) {
+	public DGJSGenerator(ProjectDocHTMLGenerator projectGenerator, T source, String templateName, String identifier, String fileName,
+			TOCEntry entry) {
 		super(projectGenerator, source, templateName, identifier, fileName, entry);
 	}
 
@@ -141,15 +141,17 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 	}
 
 	public static String splitOnUpperCase(String s) {
-		if (s == null || s.trim().length() == 0)
+		if (s == null || s.trim().length() == 0) {
 			return "";
+		}
 		Matcher m = UPPER_CASE_PATTERN.matcher(s);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
-			if (sb.length() == 0 && m.start() == 0)
+			if (sb.length() == 0 && m.start() == 0) {
 				m.appendReplacement(sb, "$0");
-			else
+			} else {
 				m.appendReplacement(sb, "&#8203;$0");
+			}
 		}
 		m.appendTail(sb);
 		return sb.toString();
@@ -184,7 +186,8 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 
 	@Override
 	public GeneratedCodeResult getGeneratedCode() {
-		if (generatedCode == null && jsResource != null && jsResource.getASCIIFile() != null && jsResource.getASCIIFile().hasLastAcceptedContent()) {
+		if (generatedCode == null && jsResource != null && jsResource.getASCIIFile() != null
+				&& jsResource.getASCIIFile().hasLastAcceptedContent()) {
 			generatedCode = new GeneratedTextResource(getFileName(), jsResource.getASCIIFile().getLastAcceptedContent());
 		}
 		return super.getGeneratedCode();
@@ -196,21 +199,27 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 
 	@Override
 	public void generate(boolean forceRegenerate) {
-		if (!forceRegenerate && !needsGeneration())
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
+		}
 		startGeneration();
 		try {
 			VelocityContext context = defaultContext();
 			if (getObject() instanceof FlexoProcess) {
-				if (ExternalModuleDelegater.getModuleLoader() != null && ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance() != null)
-					context.put("processRepresentation", ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance().getProcessRepresentation((FlexoProcess) getObject(), true));
+				if (ExternalModuleDelegater.getModuleLoader() != null
+						&& ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance() != null) {
+					context.put("processRepresentation", ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance()
+							.getProcessRepresentation((FlexoProcess) getObject(), true));
+				}
 			}
-			generatedCode = new GeneratedTextResource(getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName() + getFileExtension(), merge(getTemplateName(), context));
+			generatedCode = new GeneratedTextResource(getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName()
+					+ getFileExtension(), merge(getTemplateName(), context));
 		} catch (GenerationException e) {
 			setGenerationException(e);
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception occured: " + e.getMessage() + " for " + getObject().getFullyQualifiedName());
+			}
 			e.printStackTrace();
 			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
 		}

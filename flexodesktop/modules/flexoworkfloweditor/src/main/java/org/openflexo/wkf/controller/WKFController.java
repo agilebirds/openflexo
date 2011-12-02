@@ -90,14 +90,13 @@ import org.openflexo.wkf.view.doc.WKFDocumentationView;
 import org.openflexo.wkf.view.listener.WKFKeyEventListener;
 import org.openflexo.wkf.view.menu.WKFMenuBar;
 
-
 /**
  * The main controller for the WKF module
  * 
  * @author benoit, sylvain
  */
 public class WKFController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController,
-PrintManagingController {
+		PrintManagingController {
 
 	private static final Logger logger = Logger.getLogger(WKFController.class.getPackage().getName());
 
@@ -162,7 +161,7 @@ PrintManagingController {
 	private final JSplitPane _workflowProcessBrowserViews;
 	private final WorkflowBrowserView _wkfBrowserView;
 	private final ProcessBrowserView _processBrowserView;
-	RoleListBrowserView _roleListBrowserView;
+	private RoleListBrowserView roleListBrowserView;
 
 	// ==========================================================================
 	// ============================= Constructor ===============================
@@ -189,8 +188,8 @@ PrintManagingController {
 		_processBrowserView = new ProcessBrowserView(_processBrowser, this);
 		_workflowProcessBrowserViews = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _wkfBrowserView, _processBrowserView);
 		_workflowProcessBrowserViews.setBorder(BorderFactory.createEmptyBorder());
-		new FlexoSplitPaneLocationSaver(_workflowProcessBrowserViews, "WKFBrowsersLeftSplitPane", 1.0);
-		_roleListBrowserView = new RoleListBrowserView(_roleListBrowser, this);
+		new FlexoSplitPaneLocationSaver(_workflowProcessBrowserViews, "WKFBrowsersSplitPane", 1.0);
+		setRoleListBrowserView(new RoleListBrowserView(_roleListBrowser, this));
 
 		addToPerspectives(PROCESS_EDITOR_PERSPECTIVE = new ProcessPerspective(this));
 		addToPerspectives(SWIMMING_LANE_PERSPECTIVE = new SwimmingLanePerspective(this));
@@ -382,8 +381,8 @@ PrintManagingController {
 	}
 
 	public void setCurrentFlexoProcess(FlexoProcess process) {
-		if ((getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE) || (getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE)
-				|| (getCurrentPerspective() == DOCUMENTATION_PERSPECTIVE)) {
+		if (getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE || getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE
+				|| getCurrentPerspective() == DOCUMENTATION_PERSPECTIVE) {
 			if (process.isImported()) {
 				setCurrentImportedProcess(process);
 			} else {
@@ -394,7 +393,7 @@ PrintManagingController {
 
 	@Override
 	public ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
-		if ((object instanceof FlexoProcess) && ((FlexoProcess) object).isImported()) {
+		if (object instanceof FlexoProcess && ((FlexoProcess) object).isImported()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set an imported process as current module view: returning!");
 			}
@@ -469,7 +468,7 @@ PrintManagingController {
 
 	private void updateGraphicalRepresentationWithNewWKFPreferenceSettings() {
 		for (ModuleView<?> moduleView : getLoadedViews().values()) {
-			if ((moduleView instanceof DrawingView) && (((DrawingView<?>) moduleView).getDrawing() instanceof DefaultDrawing)) {
+			if (moduleView instanceof DrawingView && ((DrawingView<?>) moduleView).getDrawing() instanceof DefaultDrawing) {
 				DefaultDrawing<?> drawing = (DefaultDrawing<?>) ((DrawingView<?>) moduleView).getDrawing();
 				Enumeration<GraphicalRepresentation<?>> en = drawing.getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
@@ -530,7 +529,7 @@ PrintManagingController {
 
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
-		if ((inspectable instanceof Role) && (exception instanceof DuplicateRoleException)) {
+		if (inspectable instanceof Role && exception instanceof DuplicateRoleException) {
 			boolean isOK = false;
 			while (!isOK) {
 				String newRoleName = FlexoController.askForString(FlexoLocalization
@@ -549,7 +548,7 @@ PrintManagingController {
 			return true;
 		}
 
-		if ((inspectable instanceof Status) && (exception instanceof DuplicateStatusException)) {
+		if (inspectable instanceof Status && exception instanceof DuplicateStatusException) {
 			boolean isOK = false;
 			while (!isOK) {
 				String newStatusName = FlexoController.askForString(FlexoLocalization
@@ -568,7 +567,7 @@ PrintManagingController {
 			return true;
 		}
 
-		if ((inspectable instanceof OperationNode) && (exception instanceof DuplicateResourceException)) {
+		if (inspectable instanceof OperationNode && exception instanceof DuplicateResourceException) {
 			if (propertyName.equals("WOComponentName")) {
 				boolean isOK = false;
 				while (!isOK) {
@@ -710,8 +709,7 @@ PrintManagingController {
 	public void notifyUseSimpleEventPaletteHasChanged() {
 		JOptionPane.showMessageDialog(getPreferencesWindow(),
 				FlexoLocalization.localizedForKey("You must restart OpenFlexo to enable this change."),
-				FlexoLocalization.localizedForKey("Restart required"),
-				JOptionPane.INFORMATION_MESSAGE);
+				FlexoLocalization.localizedForKey("Restart required"), JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void notifyEdgeRepresentationChanged() {
@@ -741,6 +739,14 @@ PrintManagingController {
 
 	public JSplitPane getWorkflowProcessBrowserViews() {
 		return _workflowProcessBrowserViews;
+	}
+
+	public RoleListBrowserView getRoleListBrowserView() {
+		return roleListBrowserView;
+	}
+
+	public void setRoleListBrowserView(RoleListBrowserView _roleListBrowserView) {
+		this.roleListBrowserView = _roleListBrowserView;
 	}
 
 }

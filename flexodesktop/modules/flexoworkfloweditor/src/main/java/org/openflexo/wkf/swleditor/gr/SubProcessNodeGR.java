@@ -33,9 +33,9 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.graphics.TextStyle;
@@ -55,7 +55,6 @@ import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNode> {
 
 	private static final Logger logger = Logger.getLogger(SubProcessNodeGR.class.getPackage().getName());
@@ -64,10 +63,9 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 	private static final int ICONS_HEIGHT = 20;
 	private TextStyle subLabelTextStyle;
 
-	public SubProcessNodeGR(SubProcessNode subProcessNode, SwimmingLaneRepresentation aDrawing,boolean isInPalet)
-	{
+	public SubProcessNodeGR(SubProcessNode subProcessNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(subProcessNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
-		addToMouseDragControls(new ProcessOpener(),true);
+		addToMouseDragControls(new ProcessOpener(), true);
 		/*setBorder(new ShapeGraphicalRepresentation.ShapeBorder(
 				PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH,
 				PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH,
@@ -76,17 +74,15 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
+			public void paintShape(FGEShapeGraphics g) {
 				FGERectangle expandingRect = getExpandingRect();
-				g.drawImage(WKFIconLibrary.EXPANDABLE_ICON.getImage(), new FGEPoint(expandingRect.x,expandingRect.y));
+				g.drawImage(WKFIconLibrary.EXPANDABLE_ICON.getImage(), new FGEPoint(expandingRect.x, expandingRect.y));
 
 				ImageIcon typeIcon = getImageIcon(getSubProcessNode());
 				if (typeIcon != null) {
 					FGERectangle additionalSymbolRect = getAdditionalSymbolRect();
-					g.drawImage(typeIcon.getImage(), new FGEPoint(additionalSymbolRect.x,additionalSymbolRect.y));
+					g.drawImage(typeIcon.getImage(), new FGEPoint(additionalSymbolRect.x, additionalSymbolRect.y));
 				}
-
 
 			};
 		});
@@ -96,136 +92,111 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 	}
 
 	@Override
-	int getTopBorder() 
-	{
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
-	}
-	
-	@Override
-	int getBottomBorder() 
-	{
+	int getTopBorder() {
 		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
-	int getLeftBorder() 
-	{
+	int getBottomBorder() {
 		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
 	}
-	
+
 	@Override
-	int getRightBorder() 
-	{
+	int getLeftBorder() {
 		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
 	}
-	
+
+	@Override
+	int getRightBorder() {
+		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+	}
 
 	protected FlexoFont getRoleFont() {
-		if (getWorkflow()!=null) {
+		if (getWorkflow() != null) {
 			return getWorkflow().getRoleFont(WKFPreferences.getRoleFont());
 		}
 		return WKFPreferences.getRoleFont();
 	}
 
-	protected double getVerticalGap()
-	{
+	protected double getVerticalGap() {
 		Dimension labelSize = getNormalizedLabelSize();
-		return (getHeight()-labelSize.height-getRoleFont().getSize()-ICONS_HEIGHT-getExtraSpaceAbove()-getExtraSpaceBelow())/4;
+		return (getHeight() - labelSize.height - getRoleFont().getSize() - ICONS_HEIGHT - getExtraSpaceAbove() - getExtraSpaceBelow()) / 4;
 	}
 
 	@Override
-	public double getRelativeTextY()
-	{
+	public double getRelativeTextY() {
 		Dimension labelSize = getNormalizedLabelSize();
 		double vGap = getVerticalGap();
-		double absoluteCenterY = vGap+labelSize.height/2+getExtraSpaceAbove();
-		return absoluteCenterY/getHeight();
+		double absoluteCenterY = vGap + labelSize.height / 2 + getExtraSpaceAbove();
+		return absoluteCenterY / getHeight();
 	}
 
 	@Override
-	public double getRequiredHeight(double labelHeight)
-	{
-		return labelHeight+getRoleFont().getSize()+ICONS_HEIGHT+getExtraSpaceAbove()+getExtraSpaceBelow()+4*MIN_SPACE;
+	public double getRequiredHeight(double labelHeight) {
+		return labelHeight + getRoleFont().getSize() + ICONS_HEIGHT + getExtraSpaceAbove() + getExtraSpaceBelow() + 4 * MIN_SPACE;
 	}
 
-	private double getExtraSpaceBelow()
-	{
-		return getPortmapRegisteryOrientation() == SimplifiedCardinalDirection.SOUTH ?
-				heightForPortmapRegistery() : 0;
+	private double getExtraSpaceBelow() {
+		return getPortmapRegisteryOrientation() == SimplifiedCardinalDirection.SOUTH ? heightForPortmapRegistery() : 0;
 	}
 
-	private double getExtraSpaceAbove()
-	{
-		return getPortmapRegisteryOrientation() == SimplifiedCardinalDirection.NORTH ?
-				heightForPortmapRegistery() : 0;
+	private double getExtraSpaceAbove() {
+		return getPortmapRegisteryOrientation() == SimplifiedCardinalDirection.NORTH ? heightForPortmapRegistery() : 0;
 	}
 
-	public FGERectangle getExpandingRect()
-	{
+	public FGERectangle getExpandingRect() {
 		Dimension labelSize = getNormalizedLabelSize();
 		double vGap = getVerticalGap();
-		double absoluteIconY = vGap*3+labelSize.height+getRoleFont().getSize()+getExtraSpaceAbove();
+		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
 		double absoluteIconX;
 		ImageIcon typeIcon = getImageIcon(getSubProcessNode());
 		if (typeIcon == null) {
-			absoluteIconX = (getWidth()-WKFIconLibrary.EXPANDABLE_ICON.getIconWidth())/2;
+			absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()) / 2;
 		} else {
-			absoluteIconX = (getWidth()-WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()-typeIcon.getIconWidth()-MIN_SPACE)/2;
+			absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2;
 		}
-		return new FGERectangle(
-				absoluteIconX/getWidth(),
-				absoluteIconY/getHeight(),
-				WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()/getWidth(),
-				WKFIconLibrary.EXPANDABLE_ICON.getIconHeight()/getHeight());
+		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()
+				/ getWidth(), WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight());
 
 	}
 
-	protected FGERectangle getAdditionalSymbolRect()
-	{
+	protected FGERectangle getAdditionalSymbolRect() {
 		ImageIcon typeIcon = getImageIcon(getSubProcessNode());
 		if (typeIcon == null) {
 			return null;
 		}
 		Dimension labelSize = getNormalizedLabelSize();
 		double vGap = getVerticalGap();
-		double absoluteIconY = vGap*3+labelSize.height+getRoleFont().getSize()+getExtraSpaceAbove();
-		double absoluteIconX = (getWidth()-WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()-typeIcon.getIconWidth()-MIN_SPACE)/2 + WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
-		return new FGERectangle(
-				absoluteIconX/getWidth(),
-				absoluteIconY/getHeight(),
-				WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()/getWidth(),
-				WKFIconLibrary.EXPANDABLE_ICON.getIconHeight()/getHeight());
+		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
+		double absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2
+				+ WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
+		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()
+				/ getWidth(), WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight());
 
 	}
 
-	public static ImageIcon getImageIcon(SubProcessNode spNode)
-	{
+	public static ImageIcon getImageIcon(SubProcessNode spNode) {
 		if (spNode instanceof MultipleInstanceSubProcessNode) {
 			return WKFIconLibrary.MULTIPLE_INSTANCE_SUBPROCESS_ICON;
-		}
-		else if (spNode instanceof SingleInstanceSubProcessNode) {
+		} else if (spNode instanceof SingleInstanceSubProcessNode) {
 			return null;
-		}
-		else if (spNode instanceof LoopSubProcessNode) {
+		} else if (spNode instanceof LoopSubProcessNode) {
 			return WKFIconLibrary.LOOP_SUBPROCESS_ICON;
-		}
-		else if (spNode instanceof WSCallSubProcessNode) {
+		} else if (spNode instanceof WSCallSubProcessNode) {
 			return WKFIconLibrary.WS_CALL_SUBPROCESS_ICON;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
 
-	private double heightForPortmapRegistery()
-	{
-		return PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH/2;
+	private double heightForPortmapRegistery() {
+		return PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH / 2;
 	}
 
-	protected SimplifiedCardinalDirection getPortmapRegisteryOrientation()
-	{
+	protected SimplifiedCardinalDirection getPortmapRegisteryOrientation() {
 		if (getSubProcessNode().getPortMapRegistery() != null) {
-			PortmapRegisteryGR portmapRegisteryGR = (PortmapRegisteryGR)getGraphicalRepresentation(getSubProcessNode().getPortMapRegistery());
+			PortmapRegisteryGR portmapRegisteryGR = (PortmapRegisteryGR) getGraphicalRepresentation(getSubProcessNode()
+					.getPortMapRegistery());
 			if (portmapRegisteryGR != null) {
 				return portmapRegisteryGR.getOrientation();
 			}
@@ -233,15 +204,14 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		return null;
 	}
 
-	public SubProcessNode getSubProcessNode()
-	{
+	public SubProcessNode getSubProcessNode() {
 		return getDrawable();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
-		if ((dataModification instanceof AttributeDataModification) && "subProcess".equals(((AttributeDataModification)dataModification).propertyName())) {
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if ((dataModification instanceof AttributeDataModification)
+				&& "subProcess".equals(((AttributeDataModification) dataModification).propertyName())) {
 			getDrawing().updateGraphicalObjectsHierarchy();
 		}
 		super.update(observable, dataModification);
@@ -255,29 +225,29 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	public class ProcessOpener extends MouseDragControl {
 
-		public ProcessOpener()
-		{
-			super("SWL-Process opener", MouseButton.LEFT,
-					new CustomDragControlAction() {
+		public ProcessOpener() {
+			super("SWL-Process opener", MouseButton.LEFT, new CustomDragControlAction() {
 				@Override
-				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						MouseEvent event) {
 					logger.info("Opening process");
-					OpenEmbeddedProcess.actionType.makeNewAction(getSubProcessNode(),null,getDrawing().getEditor()).doAction();
+					OpenEmbeddedProcess.actionType.makeNewAction(getSubProcessNode(), null, getDrawing().getEditor()).doAction();
 					getDrawing().updateGraphicalObjectsHierarchy();
 					return true;
 				}
 
 				@Override
-				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event, boolean isSignificativeDrag) {
+				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						MouseEvent event, boolean isSignificativeDrag) {
 					return false;
 				}
 
 				@Override
-				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						MouseEvent event) {
 					return false;
 				}
-			},
-			false,false,false,false);
+			}, false, false, false, false);
 		}
 
 		@Override
@@ -287,12 +257,12 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	}
 
-	protected boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-	{
-		ShapeView view = (ShapeView)controller.getDrawingView().viewForObject(graphicalRepresentation);
+	protected boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+			MouseEvent event) {
+		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
 		FGERectangle expandingRect = getExpandingRect();
 		java.awt.Rectangle scaledExpandingRect = convertNormalizedRectangleToViewCoordinates(expandingRect, controller.getScale());
-		Point clickLocation = SwingUtilities.convertPoint((Component)event.getSource(), event.getPoint(), view);
+		Point clickLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), view);
 		return scaledExpandingRect.contains(clickLocation);
 	}
 

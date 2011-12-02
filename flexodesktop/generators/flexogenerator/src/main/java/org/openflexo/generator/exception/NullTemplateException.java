@@ -22,12 +22,8 @@ package org.openflexo.generator.exception;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 
-
-
-public class NullTemplateException extends TemplateReplacementException
-{
- 	public NullTemplateException( AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-	{
-		super("Null template exception","null_template_exception","see stack trace",new Exception(),projectGenerator);
+public class NullTemplateException extends TemplateReplacementException {
+	public NullTemplateException(AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super("Null template exception", "null_template_exception", "see stack trace", new Exception(), projectGenerator);
 	}
 }

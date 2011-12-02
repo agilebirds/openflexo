@@ -22,83 +22,89 @@ package org.openflexo.components.wizard;
 import java.awt.Image;
 import java.util.Vector;
 
-public abstract class FlexoWizard  {
-	
+public abstract class FlexoWizard {
+
 	private Vector<IWizardPage> pages;
-	
+
 	private IWizardPage currentPage;
-	
+
 	public FlexoWizard() {
 		pages = new Vector<IWizardPage>();
 	}
-	
+
 	public void addPage(IWizardPage page) {
-		if (page==null)
+		if (page == null) {
 			return;
+		}
 		pages.add(page);
-		if (pages.size()==1)
+		if (pages.size() == 1) {
 			currentPage = page;
+		}
 	}
-	
+
 	public boolean canFinish() {
 		for (IWizardPage page : pages) {
-			if (!page.isPageComplete())
+			if (!page.isPageComplete()) {
 				return false;
+			}
 		}
 		return true;
 	}
-	
+
 	public boolean needsPreviousAndNext() {
-		return pages.size()>1;
+		return pages.size() > 1;
 	}
-	
+
 	public boolean isPreviousEnabled() {
-		return getPreviousPage(currentPage)!=null;
+		return getPreviousPage(currentPage) != null;
 	}
-	
+
 	public IWizardPage getCurrentPage() {
 		return currentPage;
 	}
-	
+
 	public void setCurrentPage(IWizardPage currentPage) {
 		this.currentPage = currentPage;
 	}
-	
+
 	public IWizardPage getPreviousPage(IWizardPage page) {
-		if (page.getPreviousPage()!=null)
+		if (page.getPreviousPage() != null) {
 			return page.getPreviousPage();
-		else if (page.isPreviousEnabled() && pages.indexOf(page)>0)
-			return pages.get(pages.indexOf(page)-1);
-		else
+		} else if (page.isPreviousEnabled() && pages.indexOf(page) > 0) {
+			return pages.get(pages.indexOf(page) - 1);
+		} else {
 			return null;
+		}
 	}
-	
+
 	public boolean isNextEnabled() {
-		return getNextPage(currentPage)!=null && currentPage.isPageComplete();
+		return getNextPage(currentPage) != null && currentPage.isPageComplete();
 	}
-	
+
 	public IWizardPage getNextPage(IWizardPage page) {
-		if (page.getNextPage()!=null)
+		if (page.getNextPage() != null) {
 			return page.getNextPage();
-		else if (page.isNextEnabled() && pages.indexOf(page)>-1 && pages.indexOf(page)<pages.size()-1)
-			return pages.get(pages.indexOf(page)+1);
-		else
+		} else if (page.isNextEnabled() && pages.indexOf(page) > -1 && pages.indexOf(page) < pages.size() - 1) {
+			return pages.get(pages.indexOf(page) + 1);
+		} else {
 			return null;
+		}
 	}
-	
+
 	public Image getPageImage() {
-		if (currentPage.getPageImage()!=null)
+		if (currentPage.getPageImage() != null) {
 			return currentPage.getPageImage();
-		else
+		} else {
 			return getDefaultPageImage();
+		}
 	}
-	
+
 	public abstract String getWizardTitle();
-	
+
 	public abstract Image getDefaultPageImage();
-	
+
 	public abstract void performFinish();
-	
+
 	public abstract void performCancel();
 
 }

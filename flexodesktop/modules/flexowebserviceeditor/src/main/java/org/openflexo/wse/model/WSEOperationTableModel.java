@@ -42,118 +42,100 @@ import org.openflexo.view.controller.FlexoController;
  * @author dvanvyve
  * 
  */
-public class WSEOperationTableModel extends AbstractModel<ServiceInterface,ServiceOperation>
-{
+public class WSEOperationTableModel extends AbstractModel<ServiceInterface, ServiceOperation> {
 
-    protected static final Logger logger = Logger.getLogger(WSEOperationTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSEOperationTableModel.class.getPackage().getName());
 
-    public WSEOperationTableModel(ServiceInterface model, FlexoProject project, boolean readOnly)
-    {
-        super(model, project);
-        addToColumns(new IconColumn<ServiceOperation>("process_icon", 30) {
-            @Override
-			public Icon getIcon(ServiceOperation object)
-            {
-        		return WKFIconLibrary.getSmallImageIconForServiceOperation(object);
-            }
-            
-            @Override
-            public String getLocalizedTooltip(ServiceOperation object) {
-            	return object.getLocalizedLabel();
-            }
-        });
-        if(readOnly){
-        addToColumns(new StringColumn<ServiceOperation>("name", 190) {
-            @Override
-			public String getValue(ServiceOperation object)
-            {
-                return (object).getName();
-            }
-        });
-        addToColumns(new StringColumn<ServiceOperation>("description", 365) {
-            @Override
-			public String getValue(ServiceOperation object)
-            {
-                return (object).getDescription();
-            }
+	public WSEOperationTableModel(ServiceInterface model, FlexoProject project, boolean readOnly) {
+		super(model, project);
+		addToColumns(new IconColumn<ServiceOperation>("process_icon", 30) {
+			@Override
+			public Icon getIcon(ServiceOperation object) {
+				return WKFIconLibrary.getSmallImageIconForServiceOperation(object);
+			}
 
-  /*          public void setValue(FlexoModelObject object, String aValue)
-            {
-                ((FlexoPort) object).setDescription(aValue);
-            }*/
-        });
-        }
-        else{
-            addToColumns(new EditableStringColumn<ServiceOperation>("name", 190) {
-                @Override
-				public String getValue(ServiceOperation object)
-                {
-                    return (object).getName();
-                }
-                @Override
-				public void setValue(ServiceOperation object, String aValue)
-                {
-                    try {
-                        (object).setName(aValue);
-                    } catch (DuplicateWKFObjectException e) {
-                        FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
-                    }
-                    selectObject(object);
-                }
-            });
-            addToColumns(new EditableStringColumn<ServiceOperation>("description", 365) {
-                @Override
-				public String getValue(ServiceOperation object)
-                {
-                    return (object).getDescription();
-                }
+			@Override
+			public String getLocalizedTooltip(ServiceOperation object) {
+				return object.getLocalizedLabel();
+			}
+		});
+		if (readOnly) {
+			addToColumns(new StringColumn<ServiceOperation>("name", 190) {
+				@Override
+				public String getValue(ServiceOperation object) {
+					return (object).getName();
+				}
+			});
+			addToColumns(new StringColumn<ServiceOperation>("description", 365) {
+				@Override
+				public String getValue(ServiceOperation object) {
+					return (object).getDescription();
+				}
 
-                @Override
-				public void setValue(ServiceOperation object, String aValue)
-                {
-                    (object).setDescription(aValue);
-                }
-            });
-        }
-        setRowHeight(20);
-    }
+				/*          public void setValue(FlexoModelObject object, String aValue)
+				          {
+				              ((FlexoPort) object).setDescription(aValue);
+				          }*/
+			});
+		} else {
+			addToColumns(new EditableStringColumn<ServiceOperation>("name", 190) {
+				@Override
+				public String getValue(ServiceOperation object) {
+					return (object).getName();
+				}
 
-    public ServiceInterface getServiceInterface(){
-    		return getModel();
-    }
-    
-    public Vector<ServiceOperation> getOperations()
-    {	
-        return getServiceInterface().getOperations();
-    }
-    
-    
-    @Override
-	public ServiceOperation elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return getOperations().get(row);
-         } else {
-            return null;
-        }
-    }
+				@Override
+				public void setValue(ServiceOperation object, String aValue) {
+					try {
+						(object).setName(aValue);
+					} catch (DuplicateWKFObjectException e) {
+						FlexoController.notify(FlexoLocalization.localizedForKey(e.getLocalizationKey()));
+					}
+					selectObject(object);
+				}
+			});
+			addToColumns(new EditableStringColumn<ServiceOperation>("description", 365) {
+				@Override
+				public String getValue(ServiceOperation object) {
+					return (object).getDescription();
+				}
 
-    public ServiceOperation processAt(int row)
-    {
-        return elementAt(row);
-    }
+				@Override
+				public void setValue(ServiceOperation object, String aValue) {
+					(object).setDescription(aValue);
+				}
+			});
+		}
+		setRowHeight(20);
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getServiceInterface() != null) {
-            return getOperations().size();
-        }
-        return 0;
-    }
+	public ServiceInterface getServiceInterface() {
+		return getModel();
+	}
 
-   
+	public Vector<ServiceOperation> getOperations() {
+		return getServiceInterface().getOperations();
+	}
 
-   
+	@Override
+	public ServiceOperation elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return getOperations().get(row);
+		} else {
+			return null;
+		}
+	}
+
+	public ServiceOperation processAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getServiceInterface() != null) {
+			return getOperations().size();
+		}
+		return 0;
+	}
 
 }

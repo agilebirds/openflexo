@@ -28,42 +28,37 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
 
-
 public class RemoveTOCRepository extends FlexoAction<RemoveTOCRepository, TOCRepository, TOCObject> {
 
-	public static final FlexoActionType<RemoveTOCRepository, TOCRepository, TOCObject> actionType = 
-		new FlexoActionType<RemoveTOCRepository, TOCRepository, TOCObject>("remove_toc", FlexoActionType.defaultGroup, FlexoActionType.DELETE_ACTION_TYPE) {
+	public static final FlexoActionType<RemoveTOCRepository, TOCRepository, TOCObject> actionType = new FlexoActionType<RemoveTOCRepository, TOCRepository, TOCObject>(
+			"remove_toc", FlexoActionType.defaultGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-			@Override
-			protected boolean isEnabledForSelection(TOCRepository object,
-					Vector<TOCObject> globalSelection) {
-				return object!=null;
-			}
+		@Override
+		protected boolean isEnabledForSelection(TOCRepository object, Vector<TOCObject> globalSelection) {
+			return object != null;
+		}
 
-			@Override
-			protected boolean isVisibleForSelection(TOCRepository object,
-					Vector<TOCObject> globalSelection) {
-				return object!=null;
-			}
+		@Override
+		protected boolean isVisibleForSelection(TOCRepository object, Vector<TOCObject> globalSelection) {
+			return object != null;
+		}
 
-			@Override
-			public RemoveTOCRepository makeNewAction(
-					TOCRepository focusedObject,
-					Vector<TOCObject> globalSelection, FlexoEditor editor) {
-				return new RemoveTOCRepository(focusedObject,globalSelection,editor);
-			}
-		
+		@Override
+		public RemoveTOCRepository makeNewAction(TOCRepository focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
+			return new RemoveTOCRepository(focusedObject, globalSelection, editor);
+		}
+
 	};
-	
-	protected RemoveTOCRepository(TOCRepository focusedObject, Vector<TOCObject> globalSelection,
-			FlexoEditor editor) {
+
+	protected RemoveTOCRepository(TOCRepository focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getFocusedObject()!=null)
+		if (getFocusedObject() != null) {
 			getFocusedObject().delete();
+		}
 	}
 
 }

@@ -19,25 +19,21 @@
  */
 package org.openflexo.inspector.model;
 
+public class LayoutModel extends ParametersContainerModelObject {
 
-public class LayoutModel extends ParametersContainerModelObject
-{
+	public String name;
 
-    public String name;
+	public LayoutModel layoutModel;
 
-    public LayoutModel layoutModel;
+	public LayoutModel() {
+		super();
+	}
 
-    public LayoutModel()
-    {
-        super();
-    }
-
-    public void finalizeLayoutModelDecoding(/*AbstractController c*/)
-    {
-        /*
-         * if(hasValueForParameter("propertylist")){
-         * c.addToPropertyListAttributes(name,getValueForParameter("propertylist")); }
-         */
-    }
+	public void finalizeLayoutModelDecoding(/*AbstractController c*/) {
+		/*
+		 * if(hasValueForParameter("propertylist")){
+		 * c.addToPropertyListAttributes(name,getValueForParameter("propertylist")); }
+		 */
+	}
 
 }

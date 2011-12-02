@@ -33,137 +33,133 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMTypeInspectorWidget extends CustomInspectorWidget<DMType>
-{
+public class DMTypeInspectorWidget extends CustomInspectorWidget<DMType> {
 
-    protected static final Logger logger = Logger.getLogger(DMTypeInspectorWidget.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DMTypeInspectorWidget.class.getPackage().getName());
 
-    protected DMTypeSelector _selector;
+	protected DMTypeSelector _selector;
 
-    public DMTypeInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new DMTypeSelector(null, null, false) {
-            @Override
-			public void apply()
-            {
-                super.apply();
-                updateModelFromWidget();
-            }
+	public DMTypeInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new DMTypeSelector(null, null, false) {
+			@Override
+			public void apply() {
+				super.apply();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void cancel()
-            {
-                super.cancel();
-                updateModelFromWidget();
-            }
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-                _selector.getTextField().requestFocus();
-                _selector.getTextField().selectAll();
-            }
+			@Override
+			public void cancel() {
+				super.cancel();
+				updateModelFromWidget();
+			}
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Focus gained in " + getClass().getName());
+				}
+				super.focusGained(arg0);
+				_selector.getTextField().requestFocus();
+				_selector.getTextField().selectAll();
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
-
-    @Override
-	public Class getDefaultType()
-    {
-        return DMType.class;
-    }
-
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        _selector.setEditedObject(getObjectValue() != null ? getObjectValue().clone() : null);
-        _selector.setRevertValue(getObjectValue());
-    }
-
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-    	if (_selector.getEditedObject()!=null)
-    		setObjectValue(_selector.getEditedObject().clone());
-    	else
-    		setObjectValue(null);
-    	super.updateModelFromWidget();
-    }
-
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
-
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        super.setProject(aProject);
-        _selector.setProject(aProject);
-    }
-
-    @Override
-	protected void performModelUpdating(InspectableObject value)
-    {
-        if (hasValueForParameter("displayTypeAsSimplified")) {
-        	if (_selector != null) _selector.setDisplayTypeAsSimplified(getBooleanValueForParameter("displayTypeAsSimplified"));
-         }
-        if (hasValueForParameter("readOnly")) {
-        	if (_selector != null) _selector.setReadOnly(getBooleanValueForParameter("readOnly"));
-         }
-       if (hasValueForParameter("project")) {
-         	setProject((FlexoProject)getDynamicValueForParameter("project", value));
-         }
-       if (hasValueForParameter("owner")) {
-     	    if (getDynamicValueForParameter("owner", value) instanceof DMTypeOwner)
-    	    	setOwner((DMTypeOwner)getDynamicValueForParameter("owner", value));
-    	    else if (getDynamicValueForParameter("owner", value) != null)
-    	    	logger.warning("Object "+getDynamicValueForParameter("owner", value)+" is not an instanceof DMTypeOwner");
-        }
-    }
-
-	public void setOwner(DMTypeOwner owner)
-	{
-        _selector.setOwner(owner);
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Focus lost in " + getClass().getName());
+				}
+				super.focusLost(arg0);
+			}
+		});
 	}
 
-    @Override
-    public void fireEditingCanceled()
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	public Class getDefaultType() {
+		return DMType.class;
+	}
 
-    @Override
-    public void fireEditingStopped()
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		_selector.setEditedObject(getObjectValue() != null ? getObjectValue().clone() : null);
+		_selector.setRevertValue(getObjectValue());
+	}
 
-    @Override
-    public boolean disableTerminateEditOnFocusLost() {
-    	return true;
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		if (_selector.getEditedObject() != null) {
+			setObjectValue(_selector.getEditedObject().clone());
+		} else {
+			setObjectValue(null);
+		}
+		super.updateModelFromWidget();
+	}
+
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
+
+	@Override
+	public void setProject(FlexoProject aProject) {
+		super.setProject(aProject);
+		_selector.setProject(aProject);
+	}
+
+	@Override
+	protected void performModelUpdating(InspectableObject value) {
+		if (hasValueForParameter("displayTypeAsSimplified")) {
+			if (_selector != null) {
+				_selector.setDisplayTypeAsSimplified(getBooleanValueForParameter("displayTypeAsSimplified"));
+			}
+		}
+		if (hasValueForParameter("readOnly")) {
+			if (_selector != null) {
+				_selector.setReadOnly(getBooleanValueForParameter("readOnly"));
+			}
+		}
+		if (hasValueForParameter("project")) {
+			setProject((FlexoProject) getDynamicValueForParameter("project", value));
+		}
+		if (hasValueForParameter("owner")) {
+			if (getDynamicValueForParameter("owner", value) instanceof DMTypeOwner) {
+				setOwner((DMTypeOwner) getDynamicValueForParameter("owner", value));
+			} else if (getDynamicValueForParameter("owner", value) != null) {
+				logger.warning("Object " + getDynamicValueForParameter("owner", value) + " is not an instanceof DMTypeOwner");
+			}
+		}
+	}
+
+	public void setOwner(DMTypeOwner owner) {
+		_selector.setOwner(owner);
+	}
+
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
+
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null) {
+			_selector.closePopup();
+		}
+	}
+
+	@Override
+	public boolean disableTerminateEditOnFocusLost() {
+		return true;
+	}
 }

@@ -24,44 +24,38 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
 
-
 public class FGEShapeGraphics extends FGEGraphics {
 
-    private static final Logger logger = Logger.getLogger(FGEShapeGraphics.class.getPackage().getName());
-   
-	public FGEShapeGraphics(ShapeGraphicalRepresentation aGraphicalRepresentation)
-	{
+	private static final Logger logger = Logger.getLogger(FGEShapeGraphics.class.getPackage().getName());
+
+	public FGEShapeGraphics(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 	}
-	
+
 	@Override
-	public ShapeGraphicalRepresentation getGraphicalRepresentation() 
-	{
-		return (ShapeGraphicalRepresentation)super.getGraphicalRepresentation();
+	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+		return (ShapeGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
-	
+
 	@Override
-	protected void applyCurrentBackgroundStyle()
-	{
+	protected void applyCurrentBackgroundStyle() {
 		super.applyCurrentBackgroundStyle();
-		
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage 
-				&& ((BackgroundImage)currentBackground).getFitToShape()) {
-			BackgroundImage bgImage = (BackgroundImage)currentBackground;
+
+		if (currentBackground instanceof BackgroundStyle.BackgroundImage && ((BackgroundImage) currentBackground).getFitToShape()) {
+			BackgroundImage bgImage = (BackgroundImage) currentBackground;
 			bgImage.setDeltaX(0);
 			bgImage.setDeltaY(0);
 			if (bgImage.getImage() != null) {
 				// SGU: Big performance issue here
-				// I add to declare new methods without notification because in case of 
-				// the inspector is shown, an instability is raising: the shape is 
+				// I add to declare new methods without notification because in case of
+				// the inspector is shown, an instability is raising: the shape is
 				// continuously switching between two values
 				// Please investigate
-				bgImage.setScaleXNoNotification(getGraphicalRepresentation().getWidth()/bgImage.getImage().getWidth(null));
-				bgImage.setScaleYNoNotification(getGraphicalRepresentation().getHeight()/bgImage.getImage().getHeight(null));
+				bgImage.setScaleXNoNotification(getGraphicalRepresentation().getWidth() / bgImage.getImage().getWidth(null));
+				bgImage.setScaleYNoNotification(getGraphicalRepresentation().getHeight() / bgImage.getImage().getHeight(null));
 			}
 		}
-		
+
 	}
-	
 
 }

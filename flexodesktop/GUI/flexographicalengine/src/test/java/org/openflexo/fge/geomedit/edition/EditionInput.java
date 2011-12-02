@@ -36,63 +36,57 @@ import org.openflexo.fge.geomedit.construction.GeometricConstruction;
 import org.openflexo.fge.geomedit.edition.EditionInputMethod.InputComponent;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-public abstract class EditionInput<O extends Object> 
-{
+public abstract class EditionInput<O extends Object> {
 	private String inputLabel;
 
 	public Vector<EditionInputMethod> availableMethods;
 	public EditionInputMethod activeMethod;
-	
+
 	private GeomEditController controller;
 
 	private GeometricConstruction<O> contruction;
-	
-	public EditionInput(String anInputLabel, GeomEditController aController) 
-	{
+
+	public EditionInput(String anInputLabel, GeomEditController aController) {
 		super();
 		controller = aController;
 		inputLabel = anInputLabel;
 		availableMethods = new Vector<EditionInputMethod>();
 		activeMethod = null;
 	}
-	
+
 	protected abstract int getPreferredMethodIndex();
-	
+
 	private JPanel subPanel;
-	
-	public void resetControlPanel(JPanel controlPanel)
-	{
+
+	public void resetControlPanel(JPanel controlPanel) {
 		if (subPanel != null) {
 			controlPanel.remove(subPanel);
 			subPanel = null;
 		}
 	}
-	
-	public void updateControlPanel (JPanel controlPanel, JPanel availableMethodsPanel)
-	{
+
+	public void updateControlPanel(JPanel controlPanel, JPanel availableMethodsPanel) {
 		availableMethodsPanel.removeAll();
-		if (activeMethod == null && getPreferredMethodIndex() < availableMethods.size()) 
+		if (activeMethod == null && getPreferredMethodIndex() < availableMethods.size()) {
 			activeMethod = availableMethods.get(getPreferredMethodIndex());
+		}
 		availableMethodsPanel.add(new JLabel(inputLabel));
 		for (final EditionInputMethod method : availableMethods) {
 			InputComponent inputComponent = method.getInputComponent();
-			availableMethodsPanel.add((JComponent)inputComponent);
+			availableMethodsPanel.add((JComponent) inputComponent);
 			if (method == getActiveMethod()) {
 				inputComponent.enableInputComponent();
-			}
-			else {
+			} else {
 				inputComponent.disableInputComponent();
 			}
 		}
 		if (getActiveMethod().hasChildInputs()) {
 			subPanel = new JPanel(new BorderLayout());
-			JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,5,0));
-			subPanel.add(flowPanel,BorderLayout.WEST);
-			controlPanel.add(subPanel,BorderLayout.SOUTH);
-			getActiveMethod().getCurrentInput().updateControlPanel(subPanel, flowPanel);	
-		}
-		else if (subPanel != null) {
+			JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+			subPanel.add(flowPanel, BorderLayout.WEST);
+			controlPanel.add(subPanel, BorderLayout.SOUTH);
+			getActiveMethod().getCurrentInput().updateControlPanel(subPanel, flowPanel);
+		} else if (subPanel != null) {
 			controlPanel.remove(subPanel);
 			subPanel = null;
 		}
@@ -100,151 +94,125 @@ public abstract class EditionInput<O extends Object>
 		availableMethodsPanel.repaint();
 	}
 
-	public String getInputLabel()
-	{
+	public String getInputLabel() {
 		return inputLabel;
 	}
-	
-	public String getActiveMethodLabel()
-	{
-		if (getActiveMethod() != null)
+
+	public String getActiveMethodLabel() {
+		if (getActiveMethod() != null) {
 			return getActiveMethod().getMethodLabel();
+		}
 		return "No active selection method";
 	}
-	
-	public EditionInputMethod getActiveMethod()
-	{
+
+	public EditionInputMethod getActiveMethod() {
 		return activeMethod;
 	}
 
-	public void setActiveMethod(EditionInputMethod aMethod)
-	{
+	public void setActiveMethod(EditionInputMethod aMethod) {
 		if (activeMethod != aMethod) {
 			activeMethod = aMethod;
 			controller.updateCurrentInput();
 		}
 	}
 
-	public EditionInputMethod getDerivedActiveMethod()
-	{
+	public EditionInputMethod getDerivedActiveMethod() {
 		if (activeMethod.hasChildInputs()) {
 			return activeMethod.getCurrentInput().getDerivedActiveMethod();
-		}
-		else {
+		} else {
 			return activeMethod;
 		}
 	}
 
-	public GeomEditController getController()
-	{
+	public GeomEditController getController() {
 		return controller;
 	}
 
 	private O inputData;
-	
-	public O getInputData()
-	{
-		if (contruction != null)
+
+	public O getInputData() {
+		if (contruction != null) {
 			return contruction.getData();
+		}
 		return inputData;
 	}
 
-	public void setInputData(O data)
-	{
+	public void setInputData(O data) {
 		inputData = data;
 	}
 
-	public void setConstruction(GeometricConstruction<O> aContruction)
-	{
+	public void setConstruction(GeometricConstruction<O> aContruction) {
 		contruction = aContruction;
 	}
-	
-	public GeometricConstruction<? extends O> getConstruction()
-	{
+
+	public GeometricConstruction<? extends O> getConstruction() {
 		return contruction;
 	}
-	
-	public void done()
-	{
+
+	public void done() {
 		if (getParentInputMethod() != null) {
 			getParentInputMethod().nextChildInput();
-		}
-		else {
+		} else {
 			getController().currentInputGiven();
 		}
 	}
-	
-	public void endEdition()
-	{
+
+	public void endEdition() {
 	}
-	
-	public void paint(FGEDrawingGraphics graphics)
-	{
+
+	public void paint(FGEDrawingGraphics graphics) {
 	}
 
 	private EditionInputMethod parentInputMethod = null;
 
-	public EditionInputMethod getParentInputMethod()
-	{
+	public EditionInputMethod getParentInputMethod() {
 		return parentInputMethod;
 	}
 
-	public void setParentInputMethod(EditionInputMethod aMethod)
-	{
+	public void setParentInputMethod(EditionInputMethod aMethod) {
 		this.parentInputMethod = aMethod;
 	}
 
-	public class EndEditionSelection extends EditionInputMethod<O,EditionInput<O>> {
+	public class EndEditionSelection extends EditionInputMethod<O, EditionInput<O>> {
 
 		public EndEditionSelection() {
 			super("Done", EditionInput.this);
-		}		
+		}
 
 		@Override
-		public void mouseClicked(MouseEvent e)
-		{
+		public void mouseClicked(MouseEvent e) {
 			endEdition();
 		}
 
 		@Override
-		public InputComponent getInputComponent()
-		{
+		public InputComponent getInputComponent() {
 			return new EndEditionButton(this);
 		}
 
 	}
 
-	
-	public class EndEditionButton extends JButton implements InputComponent
-	{
-		public  EndEditionButton (final EndEditionSelection method)
-		{
+	public class EndEditionButton extends JButton implements InputComponent {
+		public EndEditionButton(final EndEditionSelection method) {
 			super(method.getMethodLabel());
 			addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					method.getEditionInput().endEdition();
 				}
 			});
 		}
 
 		@Override
-		public void enableInputComponent()
-		{
+		public void enableInputComponent() {
 			setSelected(true);
 		}
 
 		@Override
-		public void disableInputComponent()
-		{
+		public void disableInputComponent() {
 			setSelected(false);
 		}
 	}
 
 	public abstract boolean endOnRightClick();
-	
-
-
 
 }

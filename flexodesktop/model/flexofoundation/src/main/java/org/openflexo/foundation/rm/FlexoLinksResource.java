@@ -19,17 +19,15 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoLinks;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoLinksBuilder;
 
-
 public class FlexoLinksResource extends FlexoXMLStorageResource<FlexoLinks> {
 
-    private static final Logger logger = Logger.getLogger(FlexoLinksResource.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoLinksResource.class.getPackage().getName());
 
 	public FlexoLinksResource(FlexoProjectBuilder builder) {
 		this(builder.project);
@@ -70,17 +68,6 @@ public class FlexoLinksResource extends FlexoXMLStorageResource<FlexoLinks> {
 		FlexoLinksBuilder builder = new FlexoLinksBuilder(this);
 		builder.links = _resourceData;
 		return builder;
-	}
-
-	@Override
-	protected void saveResourceData(boolean clearIsModified)
-			throws org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException, SaveResourcePermissionDeniedException {
-		if (!FlexoProject.SKOS_ENABLE) {
-    		if (logger.isLoggable(Level.WARNING))
-				logger.warning("SAVE IS NOT ENABLE on "+getResourceType());
-    		return;
-    	}
-		super.saveResourceData(clearIsModified);
 	}
 
 	@Override

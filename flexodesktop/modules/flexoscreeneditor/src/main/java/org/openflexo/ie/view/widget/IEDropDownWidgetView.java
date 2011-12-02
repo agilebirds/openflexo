@@ -44,149 +44,148 @@ import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 
-
 /**
  * @author bmangez
- *
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class IEDropDownWidgetView extends AbstractInnerTableWidgetView<IEDropDownWidget>
-{
+public class IEDropDownWidgetView extends AbstractInnerTableWidgetView<IEDropDownWidget> {
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
-    private transient JComboBox _jComboBox;
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
+	private transient JComboBox _jComboBox;
 
-    private JPanel container;
+	private JPanel container;
 
-    protected TransparentMouseListener tml;
+	protected TransparentMouseListener tml;
 
-    public static final String BINDING_ISCHECKED_NAME = "isChecked";
+	public static final String BINDING_ISCHECKED_NAME = "isChecked";
 
-    public static final String ATTRIB_DEFAULTVALUE_NAME = "defaultValue";
+	public static final String ATTRIB_DEFAULTVALUE_NAME = "defaultValue";
 
-    public static final String ATTRIB_EXAMPLELIST_NAME = "exampleList";
+	public static final String ATTRIB_EXAMPLELIST_NAME = "exampleList";
 
-    public static final Font TEXTFIELD_FONT = new Font("SansSerif", Font.PLAIN, 10);
+	public static final Font TEXTFIELD_FONT = new Font("SansSerif", Font.PLAIN, 10);
 
-    public IEDropDownWidgetView(IEController ieController, IEDropDownWidget model, boolean addDnDSupport, IEWOComponentView view)
-    {
-        super(ieController, model, addDnDSupport,view);
-        FlowLayout layout = new FlowLayout(FlowLayout.CENTER,0,0);
-        setLayout(layout);
-        _jComboBox = new JComboBox(new Vector<Object>(model.getValueList()));
-        _jComboBox.setFont(TEXTFIELD_FONT);
-        _jComboBox.setFocusable(false);
-        tml = new TransparentMouseListener(_jComboBox, this);
-        _jComboBox.addMouseListener(tml);
-        _jComboBox.addMouseMotionListener(tml);
-        container = new JPanel(new FlowLayout(FlowLayout.CENTER,4,4));
-        container.setOpaque(false);
-        add(container);
-        container.add(_jComboBox);
-        if (getDropDownModel().getDescription() != null) {
-            _jComboBox.setToolTipText(getDropDownModel().getDescription());
-        }
-        if (getDropDownModel().getValue() != null) {
-            _jComboBox.setSelectedItem(getDropDownModel().getValue());
-        } else {
-            _jComboBox.setSelectedIndex(0);
-        }
-        _jComboBox.addActionListener(new ActionListener(){
+	public IEDropDownWidgetView(IEController ieController, IEDropDownWidget model, boolean addDnDSupport, IEWOComponentView view) {
+		super(ieController, model, addDnDSupport, view);
+		FlowLayout layout = new FlowLayout(FlowLayout.CENTER, 0, 0);
+		setLayout(layout);
+		_jComboBox = new JComboBox(new Vector<Object>(model.getValueList()));
+		_jComboBox.setFont(TEXTFIELD_FONT);
+		_jComboBox.setFocusable(false);
+		tml = new TransparentMouseListener(_jComboBox, this);
+		_jComboBox.addMouseListener(tml);
+		_jComboBox.addMouseMotionListener(tml);
+		container = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 4));
+		container.setOpaque(false);
+		add(container);
+		container.add(_jComboBox);
+		if (getDropDownModel().getDescription() != null) {
+			_jComboBox.setToolTipText(getDropDownModel().getDescription());
+		}
+		if (getDropDownModel().getValue() != null) {
+			_jComboBox.setSelectedItem(getDropDownModel().getValue());
+		} else {
+			_jComboBox.setSelectedIndex(0);
+		}
+		_jComboBox.addActionListener(new ActionListener() {
 
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                JComboBox cb = (JComboBox)e.getSource();
-                (getModel()).setValue((String)cb.getSelectedItem());
-            }
-        });
-        _jComboBox.setRenderer(new DefaultListCellRenderer() {
-            /**
-             * Overrides getListCellRendererComponent
-             * @see javax.swing.DefaultListCellRenderer#getListCellRendererComponent(javax.swing.JList, java.lang.Object, int, boolean, boolean)
-             */
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-            {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb = (JComboBox) e.getSource();
+				(getModel()).setValue((String) cb.getSelectedItem());
+			}
+		});
+		_jComboBox.setRenderer(new DefaultListCellRenderer() {
+			/**
+			 * Overrides getListCellRendererComponent
+			 * 
+			 * @see javax.swing.DefaultListCellRenderer#getListCellRendererComponent(javax.swing.JList, java.lang.Object, int, boolean,
+			 *      boolean)
+			 */
+			@Override
+			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
-                JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                l.addMouseListener(tml);
-                l.addMouseMotionListener(tml);
-                return l;
-            }
-        });
-        setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-        container.setBackground(getBackgroundColor());
-    }
+				JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				l.addMouseListener(tml);
+				l.addMouseMotionListener(tml);
+				return l;
+			}
+		});
+		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		container.setBackground(getBackgroundColor());
+	}
 
-    public IEDropDownWidget getDropDownModel()
-    {
-        return getModel();
-    }
+	public IEDropDownWidget getDropDownModel() {
+		return getModel();
+	}
 
-    @Override
-    public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null)return storedSize;
-        }
-		if(getModel().getParent() instanceof IETDWidget){
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null) {
+				return storedSize;
+			}
+		}
+		if (getModel().getParent() instanceof IETDWidget) {
 			Dimension d = container.getPreferredSize();
-            d.width+=2;
-            d.height+=2;
-            if (getHoldsNextComputedPreferredSize())
-                storePrefSize(d);
+			d.width += 2;
+			d.height += 2;
+			if (getHoldsNextComputedPreferredSize()) {
+				storePrefSize(d);
+			}
 			return d;
 		}
 		Dimension d = super.getPreferredSize();
-        if (getHoldsNextComputedPreferredSize())
-            storePrefSize(d);
-        return d;
-    }
+		if (getHoldsNextComputedPreferredSize()) {
+			storePrefSize(d);
+		}
+		return d;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-     */
-    @Override
-    public void update(FlexoObservable arg0, DataModification modif)
-    {
-        if (modif.modificationType() == DataModification.ATTRIBUTE) {
-            if (modif.propertyName().equals("value")) {
-                if (getDropDownModel().getValue() != null) {
-                    _jComboBox.setSelectedItem(getDropDownModel().getValue());
-                } else {
-                    _jComboBox.setSelectedIndex(0);
-                }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	@Override
+	public void update(FlexoObservable arg0, DataModification modif) {
+		if (modif.modificationType() == DataModification.ATTRIBUTE) {
+			if (modif.propertyName().equals("value")) {
+				if (getDropDownModel().getValue() != null) {
+					_jComboBox.setSelectedItem(getDropDownModel().getValue());
+				} else {
+					_jComboBox.setSelectedIndex(0);
+				}
 
-            } else if (modif.propertyName().equals(ATTRIB_EXAMPLELIST_NAME) || modif.propertyName().equals("domain") || modif instanceof ListOfValuesHasChanged) {
-            	container.remove(_jComboBox);
-                _jComboBox = new JComboBox(new Vector<Object>(getModel().getValueList()));
-                _jComboBox.setFont(TEXTFIELD_FONT);
-                if (getDropDownModel().getValue() != null) {
-                    _jComboBox.setSelectedItem(getDropDownModel().getValue());
-                } else {
-                    _jComboBox.setSelectedIndex(0);
-                }
-                _jComboBox.setFocusable(false);
-                container.add(_jComboBox);
-                validate();
-                repaint();
-            } else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-                getParent().doLayout();
-                ((JComponent) getParent()).repaint();
-            }
-        }
-        if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
-            delete();
-        } else
-            super.update(arg0, modif);
-    }
+			} else if (modif.propertyName().equals(ATTRIB_EXAMPLELIST_NAME) || modif.propertyName().equals("domain")
+					|| modif instanceof ListOfValuesHasChanged) {
+				container.remove(_jComboBox);
+				_jComboBox = new JComboBox(new Vector<Object>(getModel().getValueList()));
+				_jComboBox.setFont(TEXTFIELD_FONT);
+				if (getDropDownModel().getValue() != null) {
+					_jComboBox.setSelectedItem(getDropDownModel().getValue());
+				} else {
+					_jComboBox.setSelectedIndex(0);
+				}
+				_jComboBox.setFocusable(false);
+				container.add(_jComboBox);
+				validate();
+				repaint();
+			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
+				getParent().doLayout();
+				((JComponent) getParent()).repaint();
+			}
+		}
+		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
+			delete();
+		} else {
+			super.update(arg0, modif);
+		}
+	}
 
 }

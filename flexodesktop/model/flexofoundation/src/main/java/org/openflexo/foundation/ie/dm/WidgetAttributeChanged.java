@@ -19,18 +19,16 @@
  */
 package org.openflexo.foundation.ie.dm;
 
-public class WidgetAttributeChanged extends IEDataModification
-{
+public class WidgetAttributeChanged extends IEDataModification {
 
-    //public static final String 
-    
-    public static final String ACTION_TYPE="actionType";
-    
-    public static final String IS_MANDATORY_FLEXO_ACTION="IS_MANDATORY_FLEXO_ACTION";
-    
-    public WidgetAttributeChanged(String propertyName, Object oldValue, Object newValue)
-    {
-        super(propertyName, oldValue, newValue);
-    }
+	// public static final String
+
+	public static final String ACTION_TYPE = "actionType";
+
+	public static final String IS_MANDATORY_FLEXO_ACTION = "IS_MANDATORY_FLEXO_ACTION";
+
+	public WidgetAttributeChanged(String propertyName, Object oldValue, Object newValue) {
+		super(propertyName, oldValue, newValue);
+	}
 
 }

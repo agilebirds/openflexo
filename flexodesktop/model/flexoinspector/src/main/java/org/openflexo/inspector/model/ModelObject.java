@@ -29,23 +29,20 @@ import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * Abstract class defining a model object in inspector definition
  * 
  * @author sguerin
  * 
  */
-public abstract class ModelObject extends DefaultInspectableObject implements XMLSerializable
-{
+public abstract class ModelObject extends DefaultInspectableObject implements XMLSerializable {
 
 	private static final Logger logger = Logger.getLogger(InspectorModel.class.getPackage().getName());
 
 	private boolean isEncoding = false;
 
 	@Override
-	public synchronized String toString()
-	{
+	public synchronized String toString() {
 		if (!isEncoding) {
 			isEncoding = true;
 			try {
@@ -63,8 +60,7 @@ public abstract class ModelObject extends DefaultInspectableObject implements XM
 		return super.toString();
 	}
 
-	public XMLSerializable copy(AbstractController c)
-	{
+	public XMLSerializable copy(AbstractController c) {
 		try {
 			String temp = XMLCoder.encodeObjectWithMapping(this, InspectorMapping.getInstance(), StringEncoder.getDefaultInstance());
 			if (logger.isLoggable(Level.FINE)) {

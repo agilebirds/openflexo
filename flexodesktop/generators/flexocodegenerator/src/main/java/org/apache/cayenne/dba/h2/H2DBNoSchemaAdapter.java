@@ -23,7 +23,6 @@ package org.apache.cayenne.dba.h2;
 import org.apache.cayenne.dba.hsqldb.HSQLDBAdapter;
 import org.apache.cayenne.map.DbEntity;
 
-
 /**
  * A flavor of HSQLDBAdapter that implements workarounds for some old driver limitations.
  * 
@@ -31,56 +30,52 @@ import org.apache.cayenne.map.DbEntity;
  * @author Mike Kienenberger
  */
 public class H2DBNoSchemaAdapter extends HSQLDBAdapter {
-    /**
-     * Generate unqualified name without schema.
-     * 
-     * @since 1.2
-     */
-    @Override
-	protected String getTableName(DbEntity entity)
-    {
-        return  entity.getName();
-    }
+	/**
+	 * Generate unqualified name without schema.
+	 * 
+	 * @since 1.2
+	 */
+	@Override
+	protected String getTableName(DbEntity entity) {
+		return entity.getName();
+	}
 
-    /**
-     * Generate unqualified name.
-     * 
-     * @since 1.2
-     */
-    @Override
+	/**
+	 * Generate unqualified name.
+	 * 
+	 * @since 1.2
+	 */
+	@Override
 	protected String getSchemaName(DbEntity entity) {
-        return "";
-    }
+		return "";
+	}
 
-    /**
-     * Returns a SQL string to drop a table corresponding to <code>ent</code> DbEntity.
-     * 
-     * @since 1.2
-     */
-    @Override
+	/**
+	 * Returns a SQL string to drop a table corresponding to <code>ent</code> DbEntity.
+	 * 
+	 * @since 1.2
+	 */
+	@Override
 	public String dropTable(DbEntity ent) {
-        // hsqldb doesn't support schema namespaces, so remove if found
-        return "DROP TABLE " + getTableName(ent);
-    }
+		// hsqldb doesn't support schema namespaces, so remove if found
+		return "DROP TABLE " + getTableName(ent);
+	}
 
-    /**
-     * Uses unqualified entity names.
-     * 
-     * @since 1.2
-     */
-    @Override
+	/**
+	 * Uses unqualified entity names.
+	 * 
+	 * @since 1.2
+	 */
+	@Override
 	public String createTable(DbEntity ent) {
-        String sql = super.createTable(ent);
+		String sql = super.createTable(ent);
 
-        // hsqldb doesn't support schema namespaces, so remove if found
-        String fqnCreate = "CREATE CACHED TABLE " + super.getTableName(ent) + " (";
-        if (sql != null && sql.toUpperCase().startsWith(fqnCreate)) {
-            sql = "CREATE CACHED TABLE "
-                    + getTableName(ent)
-                    + " ("
-                    + sql.substring(fqnCreate.length());
-        }
+		// hsqldb doesn't support schema namespaces, so remove if found
+		String fqnCreate = "CREATE CACHED TABLE " + super.getTableName(ent) + " (";
+		if (sql != null && sql.toUpperCase().startsWith(fqnCreate)) {
+			sql = "CREATE CACHED TABLE " + getTableName(ent) + " (" + sql.substring(fqnCreate.length());
+		}
 
-        return sql;
-    }
+		return sql;
+	}
 }

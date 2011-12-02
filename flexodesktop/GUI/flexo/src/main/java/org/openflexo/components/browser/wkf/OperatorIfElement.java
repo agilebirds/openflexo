@@ -24,18 +24,15 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.node.IFOperator;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OperatorIfElement extends OperatorNodeElement
-{
+public class OperatorIfElement extends OperatorNodeElement {
 
-    public OperatorIfElement(IFOperator node, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(node, BrowserElementType.OPERATOR_IF_NODE, browser,parent);
-    }
+	public OperatorIfElement(IFOperator node, ProjectBrowser browser, BrowserElement parent) {
+		super(node, BrowserElementType.OPERATOR_IF_NODE, browser, parent);
+	}
 }

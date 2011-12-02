@@ -18,35 +18,36 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Partition object
- *
+ * 
  * @version $Id: Partition.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Partition extends QuidObject implements Named {
-  public Partition(PetalNode parent, Collection params) {
-    super(parent, "Partition", params);
-  }
+	public Partition(PetalNode parent, Collection params) {
+		super(parent, "Partition", params);
+	}
 
-  public Partition() {
-    super("Partition");
-  }
+	public Partition() {
+		super("Partition");
+	}
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

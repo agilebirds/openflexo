@@ -27,10 +27,9 @@ import org.openflexo.foundation.FlexoModelObject;
  * @author sguerin
  * 
  */
-public interface EditableColumn<D extends FlexoModelObject,T>
-{
+public interface EditableColumn<D extends FlexoModelObject, T> {
 
-    public boolean isCellEditableFor(D object);
+	public boolean isCellEditableFor(D object);
 
-    public void setValueFor(D object, T value);
+	public void setValueFor(D object, T value);
 }

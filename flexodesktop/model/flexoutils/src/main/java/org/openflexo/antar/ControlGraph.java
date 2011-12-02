@@ -21,7 +21,6 @@ package org.openflexo.antar;
 
 import java.util.logging.Logger;
 
-
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -32,47 +31,42 @@ public abstract class ControlGraph implements AlgorithmicUnit {
 
 	private String headerComment = null;
 	private String inlineComment = null;
-	
+
 	/**
-	 * Normalize this ControlGraph, by builing a new ControlGraph which is normalized
-	 * (We don't normalize our ControlGraph, we build an other one)
+	 * Normalize this ControlGraph, by builing a new ControlGraph which is normalized (We don't normalize our ControlGraph, we build an
+	 * other one)
 	 * 
 	 * @return
 	 */
 	public abstract ControlGraph normalize();
 
-	public String getHeaderComment() 
-	{
+	public String getHeaderComment() {
 		return headerComment;
 	}
 
-	public void setHeaderComment(String headerComment)
-	{
-		//if (this.comment != null) logger.info("replace "+this.comment+" by "+comment);
+	public void setHeaderComment(String headerComment) {
+		// if (this.comment != null) logger.info("replace "+this.comment+" by "+comment);
 		this.headerComment = headerComment;
 	}
 
-	public void appendHeaderComment(String comment,boolean first)
-	{
-		if (this.headerComment == null || this.headerComment.trim().equals(""))
+	public void appendHeaderComment(String comment, boolean first) {
+		if (this.headerComment == null || this.headerComment.trim().equals("")) {
 			setHeaderComment(comment);
-		else {
-			this.headerComment = (first?comment+StringUtils.LINE_SEPARATOR:"")+this.headerComment+(!first?StringUtils.LINE_SEPARATOR+comment:"");
+		} else {
+			this.headerComment = (first ? comment + StringUtils.LINE_SEPARATOR : "") + this.headerComment
+					+ (!first ? StringUtils.LINE_SEPARATOR + comment : "");
 		}
 	}
 
-	public String getInlineComment() 
-	{
+	public String getInlineComment() {
 		return inlineComment;
 	}
 
-	public void setInlineComment(String inlineComment) 
-	{
+	public void setInlineComment(String inlineComment) {
 		this.inlineComment = inlineComment;
 	}
 
-	public boolean hasComment()
-	{
+	public boolean hasComment() {
 		return getHeaderComment() != null || getInlineComment() != null;
 	}
 }

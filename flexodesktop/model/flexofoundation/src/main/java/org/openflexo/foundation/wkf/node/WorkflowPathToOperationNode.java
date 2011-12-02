@@ -29,7 +29,6 @@ import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Status;
 
-
 /**
  * @author nid
  * 
@@ -40,6 +39,7 @@ public class WorkflowPathToOperationNode {
 	private List<FlexoProcess> deletedProcesses = new ArrayList<FlexoProcess>();
 	private List<FlexoProcess> createdProcesses = new ArrayList<FlexoProcess>();
 	private List<WorkflowPathCondition> conditions = new ArrayList<WorkflowPathCondition>();
+
 	/**
 	 * @see java.lang.Object#clone()
 	 */
@@ -100,31 +100,38 @@ public class WorkflowPathToOperationNode {
 
 	public void addIfOperator(IFOperator ifOperator, boolean value) {
 		addCondition(ifOperator.getProcess(), ifOperator.getName(), ifOperator.getConditionPrimitive(), value);
-		if (value && ifOperator.getNewStatusForPositiveEvaluation() != null)
+		if (value && ifOperator.getNewStatusForPositiveEvaluation() != null) {
 			addNewStatus(ifOperator.getNewStatusForPositiveEvaluation());
-		else if (!value && ifOperator.getNewStatusForNegativeEvaluation() != null)
+		} else if (!value && ifOperator.getNewStatusForNegativeEvaluation() != null) {
 			addNewStatus(ifOperator.getNewStatusForNegativeEvaluation());
+		}
 	}
-	
+
 	/**
 	 * Add a condition to this path.
 	 * 
-	 * @param process: the current process for this condition
-	 * @param conditionDescription: the condition description. At least conditionDescription or conditionBinding must not be null.
-	 * @param conditionBinding: the actual condition binding. At least conditionDescription or conditionBinding must not be null.
-	 * @param isPositiveEvaluation: true if this path is used if the condition match, false if this path is used if the condition doesn't match.
+	 * @param process
+	 *            : the current process for this condition
+	 * @param conditionDescription
+	 *            : the condition description. At least conditionDescription or conditionBinding must not be null.
+	 * @param conditionBinding
+	 *            : the actual condition binding. At least conditionDescription or conditionBinding must not be null.
+	 * @param isPositiveEvaluation
+	 *            : true if this path is used if the condition match, false if this path is used if the condition doesn't match.
 	 */
-	public void addCondition(FlexoProcess process, String conditionDescription, AbstractBinding conditionBinding, boolean isPositiveEvaluation) {
+	public void addCondition(FlexoProcess process, String conditionDescription, AbstractBinding conditionBinding,
+			boolean isPositiveEvaluation) {
 		conditions.add(new WorkflowPathCondition(process, conditionDescription, conditionBinding, isPositiveEvaluation));
 	}
-	
+
 	public static class WorkflowPathCondition {
 		private FlexoProcess process;
 		private String conditionDescription;
 		private AbstractBinding conditionBinding;
 		private boolean isPositiveEvaluation;
-		
-		public WorkflowPathCondition(FlexoProcess process, String conditionDescription, AbstractBinding conditionBinding, boolean isPositiveEvaluation) {
+
+		public WorkflowPathCondition(FlexoProcess process, String conditionDescription, AbstractBinding conditionBinding,
+				boolean isPositiveEvaluation) {
 			this.process = process;
 			this.conditionDescription = conditionDescription;
 			this.conditionBinding = conditionBinding;

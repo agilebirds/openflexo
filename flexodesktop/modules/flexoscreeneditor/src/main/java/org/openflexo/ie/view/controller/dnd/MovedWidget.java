@@ -31,22 +31,18 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class MovedWidget
-{
+public class MovedWidget {
 
-    public MovedWidget(IEWidget widget)
-    {
-        _widget = widget;
-    }
+	public MovedWidget(IEWidget widget) {
+		_widget = widget;
+	}
 
-    public IEWidget getWidget()
-    {
-        return _widget;
-    }
+	public IEWidget getWidget() {
+		return _widget;
+	}
 
-    private IEWidget _widget;
+	private IEWidget _widget;
 
 }

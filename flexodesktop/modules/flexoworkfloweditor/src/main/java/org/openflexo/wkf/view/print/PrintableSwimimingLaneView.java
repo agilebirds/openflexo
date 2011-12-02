@@ -35,84 +35,74 @@ import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
 
-
 public class PrintableSwimimingLaneView extends SwimmingLaneView implements FlexoPrintableComponent {
 
-    protected static final Logger logger = Logger.getLogger(PrintableSwimimingLaneView.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(PrintableSwimimingLaneView.class.getPackage().getName());
 
-    private FlexoPrintableDelegate _printableDelegate;
+	private FlexoPrintableDelegate _printableDelegate;
 
-    public PrintableSwimimingLaneView(SwimmingLaneRepresentation processRepresentation, SwimmingLaneEditorController printController, WKFController controller)
-    {
-        super(processRepresentation,printController);
-        _printableDelegate = new FlexoPrintableDelegate(this,controller);
-     }
+	public PrintableSwimimingLaneView(SwimmingLaneRepresentation processRepresentation, SwimmingLaneEditorController printController,
+			WKFController controller) {
+		super(processRepresentation, printController);
+		_printableDelegate = new FlexoPrintableDelegate(this, controller);
+	}
 
-    @Override
-	public FlexoPrintableDelegate getPrintableDelegate()
-    {
-        return _printableDelegate;
-    }
+	@Override
+	public FlexoPrintableDelegate getPrintableDelegate() {
+		return _printableDelegate;
+	}
 
-    public FlexoProcess getFlexoProcess()
-    {
-    	return getModel().getProcess();
-    }
+	public FlexoProcess getFlexoProcess() {
+		return getModel().getProcess();
+	}
 
-    @Override
-	public FlexoModelObject getFlexoModelObject(){
-    	return getFlexoProcess();
-    }
-    
-    @Override
-	public String getDefaultPrintableName()
-    {
-        return getFlexoProcess().getName();
-    }
+	@Override
+	public FlexoModelObject getFlexoModelObject() {
+		return getFlexoProcess();
+	}
 
-    @Override
-	public void paint(Graphics graphics)
-    {
-    	//logger.info("graphics="+graphics);
-        FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D)graphics);
-        super.paint(graphics);
-        _printableDelegate.paintPostlude((Graphics2D)graphics, params);
-    }
+	@Override
+	public String getDefaultPrintableName() {
+		return getFlexoProcess().getName();
+	}
 
-    @Override
-	public void print(Graphics graphics)
-    {
-         super.print(graphics);
-    }
+	@Override
+	public void paint(Graphics graphics) {
+		// logger.info("graphics="+graphics);
+		FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D) graphics);
+		super.paint(graphics);
+		_printableDelegate.paintPostlude((Graphics2D) graphics, params);
+	}
 
-    @Override
-	public Rectangle getOptimalBounds()
-    {
-        return getOptimalBounds(getFlexoProcess());
-    }
+	@Override
+	public void print(Graphics graphics) {
+		super.print(graphics);
+	}
 
-    @Override
-	public void resizeComponent(Dimension aSize)
-    {
-        setSize(aSize);
-        setPreferredSize(aSize);
-    }
+	@Override
+	public Rectangle getOptimalBounds() {
+		return getOptimalBounds(getFlexoProcess());
+	}
 
-    @Override
-	public void refreshComponent()
-    {
-        revalidate();
-        repaint();
-    }
+	@Override
+	public void resizeComponent(Dimension aSize) {
+		setSize(aSize);
+		setPreferredSize(aSize);
+	}
+
+	@Override
+	public void refreshComponent() {
+		revalidate();
+		repaint();
+	}
 
 	/**
 	 * Return optimal size, regarding contained nodes
-  	 */
-	public static Rectangle getOptimalBounds(FlexoProcess process)
-	{
+	 */
+	public static Rectangle getOptimalBounds(FlexoProcess process) {
 		// Please reimplement this
-		return new Rectangle(0,0,(int)process.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR),(int)process.getHeight(SWLEditorConstants.SWIMMING_LANE_EDITOR));
+		return new Rectangle(0, 0, (int) process.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR),
+				(int) process.getHeight(SWLEditorConstants.SWIMMING_LANE_EDITOR));
 	}
-
 
 }

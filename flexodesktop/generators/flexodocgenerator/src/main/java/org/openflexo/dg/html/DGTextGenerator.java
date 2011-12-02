@@ -32,73 +32,70 @@ import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
 import org.openflexo.foundation.rm.cg.TextFileResource;
 import org.openflexo.toolbox.HTMLUtils;
 
-
 /**
  * @author ndaniels
  * 
  */
-public class DGTextGenerator<T extends FlexoModelObject> extends DGGenerator<T> implements IFlexoResourceGenerator
-{
-    protected static final String UPPER_CASE_REGEXP = "[A-Z]+";
+public class DGTextGenerator<T extends FlexoModelObject> extends DGGenerator<T> implements IFlexoResourceGenerator {
+	protected static final String UPPER_CASE_REGEXP = "[A-Z]+";
 
-    protected static final Pattern UPPER_CASE_PATTERN = Pattern.compile(UPPER_CASE_REGEXP);
+	protected static final Pattern UPPER_CASE_PATTERN = Pattern.compile(UPPER_CASE_REGEXP);
 
-    protected static final String LATEX_BACKSLASH = HTMLUtils.LATEX_BACKSLASH;
+	protected static final String LATEX_BACKSLASH = HTMLUtils.LATEX_BACKSLASH;
 
-    protected static final String JAVA_BACKSLASH = "\\";
+	protected static final String JAVA_BACKSLASH = "\\";
 
-    protected static final String LATEX_TAG_REGEXP = "^\\\\[^ {]+(\\{[^}]*\\}\\s*)*";
+	protected static final String LATEX_TAG_REGEXP = "^\\\\[^ {]+(\\{[^}]*\\}\\s*)*";
 
-    protected static final Pattern LATEX_TAG_PATTERN = Pattern.compile(LATEX_TAG_REGEXP);
+	protected static final Pattern LATEX_TAG_PATTERN = Pattern.compile(LATEX_TAG_REGEXP);
 
-    protected static final String CHARS_TO_ESCAPE_REGEXP = "[\\\\{}_&%#~]";
+	protected static final String CHARS_TO_ESCAPE_REGEXP = "[\\\\{}_&%#~]";
 
-    protected static final Pattern CHARS_TO_ESCAPE_PATTERN = Pattern.compile(CHARS_TO_ESCAPE_REGEXP);
+	protected static final Pattern CHARS_TO_ESCAPE_PATTERN = Pattern.compile(CHARS_TO_ESCAPE_REGEXP);
 
 	private TextFileResource<DGTextGenerator<T>, DGTextFile> textResource;
 
-    public DGTextGenerator(ProjectDocHTMLGenerator projectGenerator, T source, String templateName, String fileName)
-    {
-    	super(projectGenerator, source, templateName, null, fileName, null);
-    }
+	public DGTextGenerator(ProjectDocHTMLGenerator projectGenerator, T source, String templateName, String fileName) {
+		super(projectGenerator, source, templateName, null, fileName, null);
+	}
 
-    @Override
-	public boolean isCodeAlreadyGenerated()
-    {
-        return getGeneratedCode() != null;
-    }
-    
-    /**
-     * Overrides getSymbolicDirectory
-     * @see org.openflexo.dg.FlexoLatexResourceGenerator#getSymbolicDirectory(org.openflexo.foundation.cg.GenerationRepository)
-     */
-    public CGSymbolicDirectory getSymbolicDirectory(DGRepository repository)
-    {
-        return repository.getHTMLSymbolicDirectory();
-    }
-    
-    /**
-     * Overrides getFileExtension
-     * @see org.openflexo.dg.DGGenerator#getFileExtension()
-     */
-    @Override
-    public String getFileExtension()
-    {
-        return "";
-    }
-    
+	@Override
+	public boolean isCodeAlreadyGenerated() {
+		return getGeneratedCode() != null;
+	}
+
+	/**
+	 * Overrides getSymbolicDirectory
+	 * 
+	 * @see org.openflexo.dg.FlexoLatexResourceGenerator#getSymbolicDirectory(org.openflexo.foundation.cg.GenerationRepository)
+	 */
+	public CGSymbolicDirectory getSymbolicDirectory(DGRepository repository) {
+		return repository.getHTMLSymbolicDirectory();
+	}
+
+	/**
+	 * Overrides getFileExtension
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getFileExtension()
+	 */
+	@Override
+	public String getFileExtension() {
+		return "";
+	}
+
 	@Override
 	public GeneratedCodeResult getGeneratedCode() {
-		if (generatedCode==null && textResource!=null && textResource.getASCIIFile()!=null && textResource.getASCIIFile().hasLastAcceptedContent()) {
-			generatedCode = new GeneratedTextResource(getFileName(),textResource.getASCIIFile().getLastAcceptedContent());
+		if (generatedCode == null && textResource != null && textResource.getASCIIFile() != null
+				&& textResource.getASCIIFile().hasLastAcceptedContent()) {
+			generatedCode = new GeneratedTextResource(getFileName(), textResource.getASCIIFile().getLastAcceptedContent());
 		}
 		return super.getGeneratedCode();
 	}
-	
+
 	public void setTextResource(TextFileResource<DGTextGenerator<T>, DGTextFile> textResource) {
 		this.textResource = textResource;
 	}
-    
+
 	@Override
 	public boolean needsGeneration() {
 		return super.needsGeneration();

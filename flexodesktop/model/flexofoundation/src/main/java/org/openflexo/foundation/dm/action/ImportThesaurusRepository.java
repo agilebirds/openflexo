@@ -26,51 +26,40 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
 
+public class ImportThesaurusRepository extends CreateDMRepository {
 
-public class ImportThesaurusRepository extends CreateDMRepository 
-{
+	static final Logger logger = Logger.getLogger(ImportThesaurusRepository.class.getPackage().getName());
 
-    static final Logger logger = Logger.getLogger(ImportThesaurusRepository.class.getPackage().getName());
+	public static FlexoActionType<ImportThesaurusRepository, DMObject, DMObject> actionType = new FlexoActionType<ImportThesaurusRepository, DMObject, DMObject>(
+			"import_thesaurus", FlexoActionType.importMenu, FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<ImportThesaurusRepository,DMObject,DMObject> actionType 
-    = new FlexoActionType<ImportThesaurusRepository,DMObject,DMObject> (
-    		"import_thesaurus",
-    		FlexoActionType.importMenu,
-    		FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ImportThesaurusRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new ImportThesaurusRepository(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ImportThesaurusRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ImportThesaurusRepository(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return false;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return false;
-         }
-                
-    };
-    
-    ImportThesaurusRepository (DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	public String getRepositoryType() 
-    {
-        return THESAURUS_REPOSITORY;
-    }
+	ImportThesaurusRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
- 
+	@Override
+	public String getRepositoryType() {
+		return THESAURUS_REPOSITORY;
+	}
+
 }

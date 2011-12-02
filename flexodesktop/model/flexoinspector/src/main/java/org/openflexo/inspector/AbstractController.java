@@ -24,8 +24,7 @@ import org.openflexo.inspector.model.TabModel;
 /**
  * @author sguerin
  */
-public interface AbstractController
-{
+public interface AbstractController {
 	public InspectorDelegate getDelegate();
 
 	public HelpDelegate getHelpDelegate();

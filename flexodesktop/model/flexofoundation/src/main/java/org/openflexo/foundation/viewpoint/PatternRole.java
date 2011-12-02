@@ -19,18 +19,18 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 
 /**
  * A PatternRole is an element of an EditionPattern, which play a role in this edition pattern
  * 
  * @author sylvain
- *
+ * 
  */
 public abstract class PatternRole extends ViewPointObject {
 
-	public static enum PatternRoleType
-	{
+	public static enum PatternRoleType {
 		Shape,
 		Connector,
 		Individual,
@@ -45,61 +45,50 @@ public abstract class PatternRole extends ViewPointObject {
 		Shema,
 		Primitive
 	}
-	
 
 	private EditionPattern _pattern;
 	private String patternRoleName;
 	private String description;
-		
 
- 	public PatternRole()
-	{
+	public PatternRole() {
 	}
-	
-	public void setEditionPattern(EditionPattern pattern) 
-	{
+
+	public void setEditionPattern(EditionPattern pattern) {
 		_pattern = pattern;
 	}
 
-	public EditionPattern getEditionPattern() 
-	{
+	public EditionPattern getEditionPattern() {
 		return _pattern;
 	}
-	
+
 	@Override
-	public String getDescription() 
-	{
+	public String getDescription() {
 		return description;
 	}
 
 	@Override
-	public void setDescription(String description) 
-	{
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	@Override
-	public ViewPoint getCalc() 
-	{
+	public ViewPoint getCalc() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getCalc();
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getPatternRoleName();
 	}
-	
-	public String getPatternRoleName() 
-	{
+
+	public String getPatternRoleName() {
 		return patternRoleName;
 	}
 
-	public void setPatternRoleName(String patternRoleName) 
-	{
+	public void setPatternRoleName(String patternRoleName) {
 		this.patternRoleName = patternRoleName;
 		/*String oldValue = patternRoleName;
 		if (patternRoleName != null && !patternRoleName.equals(oldValue)) {
@@ -110,8 +99,7 @@ public abstract class PatternRole extends ViewPointObject {
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		if (getType() == PatternRoleType.Shape) {
 			return Inspectors.VPM.SHAPE_PATTERN_ROLE_INSPECTOR;
 		} else if (getType() == PatternRoleType.Connector) {
@@ -120,23 +108,28 @@ public abstract class PatternRole extends ViewPointObject {
 			return Inspectors.VPM.PATTERN_ROLE_INSPECTOR;
 		}
 	}
-	
+
 	@Override
-	public String toString() 
-	{
+	public String toString() {
 		return getPatternRoleName();
 	}
 
 	public abstract PatternRoleType getType();
 
-
 	public abstract String getPreciseType();
-	
 
-	public void finalizePatternRoleDeserialization()
-	{
+	public void finalizePatternRoleDeserialization() {
 	}
-	
+
 	public abstract Class<?> getAccessedClass();
+
+	@Override
+	public BindingModel getBindingModel() {
+		return getEditionPattern().getBindingModel();
+	}
+
+	public abstract boolean getIsPrimaryRole();
+
+	public abstract void setIsPrimaryRole(boolean isPrimary);
 
 }

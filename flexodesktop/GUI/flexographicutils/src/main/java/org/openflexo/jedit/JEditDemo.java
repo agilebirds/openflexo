@@ -23,24 +23,25 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-public class JEditDemo extends JFrame{
+public class JEditDemo extends JFrame {
 
 	private JEditTextArea editorPane;
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		JEditDemo demo = new JEditDemo();
 		demo.init();
 		demo.setVisible(true);
 	}
-	
-	private void init(){
+
+	private void init() {
 		editorPane = new JEditTextArea();
 		editorPane.setEditable(true);
 		editorPane.setTokenMarker(new JavaTokenMarker());
-		editorPane.setText("package org.openflexo.jedit;\nimport java.awt.Dimension;\nimport javax.swing.JFrame;\npublic class JEditDemo extends JFrame{\n	private JEditTextArea editorPane;\n\n	public static void main(String[] args) {\n// TODO Auto-generated method stub\nJEditDemo demo = new JEditDemo();\ndemo.init();\ndemo.setVisible(true);\n}\n\nprivate void init(){\neditorPane = new JEditTextArea();\neditorPane.setEditable(true);\neditorPane.setTokenMarker(new JavaTokenMarker());\ngetContentPane().add(editorPane);\nsetSize(new Dimension(400,400));\n}\n}\n");
+		editorPane
+				.setText("package org.openflexo.jedit;\nimport java.awt.Dimension;\nimport javax.swing.JFrame;\npublic class JEditDemo extends JFrame{\n	private JEditTextArea editorPane;\n\n	public static void main(String[] args) {\n// TODO Auto-generated method stub\nJEditDemo demo = new JEditDemo();\ndemo.init();\ndemo.setVisible(true);\n}\n\nprivate void init(){\neditorPane = new JEditTextArea();\neditorPane.setEditable(true);\neditorPane.setTokenMarker(new JavaTokenMarker());\ngetContentPane().add(editorPane);\nsetSize(new Dimension(400,400));\n}\n}\n");
 		getContentPane().add(editorPane);
-		setSize(new Dimension(400,400));
+		setSize(new Dimension(400, 400));
 	}
 
 }

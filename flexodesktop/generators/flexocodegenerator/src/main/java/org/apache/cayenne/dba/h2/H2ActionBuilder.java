@@ -35,40 +35,40 @@ import org.apache.cayenne.query.SelectQuery;
 
 class H2ActionBuilder extends JdbcActionBuilder {
 
-    H2ActionBuilder(DbAdapter adapter, EntityResolver resolver) {
-        super(adapter, resolver);
-    }
+	H2ActionBuilder(DbAdapter adapter, EntityResolver resolver) {
+		super(adapter, resolver);
+	}
 
-    @Override
+	@Override
 	public SQLAction objectSelectAction(SelectQuery query) {
-        return new SelectAction(query, adapter, entityResolver) {
+		return new SelectAction(query, adapter, entityResolver) {
 
-            @Override
+			@Override
 			protected SelectTranslator createTranslator(Connection connection) {
-                SelectTranslator translator = new H2SelectTranslator();
-                translator.setQuery(query);
-                translator.setAdapter(adapter);
-                translator.setEntityResolver(getEntityResolver());
-                translator.setConnection(connection);
-                return translator;
-            }
-        };
-    }
-    
-    @Override
-	public SQLAction procedureAction(ProcedureQuery query) {
-        return new ProcedureAction(query, adapter, entityResolver) {
+				SelectTranslator translator = new H2SelectTranslator();
+				translator.setQuery(query);
+				translator.setAdapter(adapter);
+				translator.setEntityResolver(getEntityResolver());
+				translator.setConnection(connection);
+				return translator;
+			}
+		};
+	}
 
-            @Override
+	@Override
+	public SQLAction procedureAction(ProcedureQuery query) {
+		return new ProcedureAction(query, adapter, entityResolver) {
+
+			@Override
 			protected ProcedureTranslator createTranslator(Connection connection) {
-                ProcedureTranslator transl = new H2DBProcedureTranslator();
-                transl.setAdapter(getAdapter());
-                transl.setQuery(query);
-                transl.setEntityResolver(getEntityResolver());
-                transl.setConnection(connection);
-                return transl;
-            }
-        };
-    }
+				ProcedureTranslator transl = new H2DBProcedureTranslator();
+				transl.setAdapter(getAdapter());
+				transl.setQuery(query);
+				transl.setEntityResolver(getEntityResolver());
+				transl.setConnection(connection);
+				return transl;
+			}
+		};
+	}
 
 }

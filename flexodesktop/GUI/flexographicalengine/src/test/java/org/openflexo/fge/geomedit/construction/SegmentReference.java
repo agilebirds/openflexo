@@ -24,37 +24,30 @@ import org.openflexo.fge.geom.FGESegment;
 public class SegmentReference extends SegmentConstruction {
 
 	public SegmentConstruction reference;
-	
-	public SegmentReference() 
-	{
+
+	public SegmentReference() {
 		super();
 	}
 
-	public SegmentReference(SegmentConstruction aReference) 
-	{
+	public SegmentReference(SegmentConstruction aReference) {
 		this();
 		this.reference = aReference;
 	}
 
-	
 	@Override
-	protected FGESegment computeData()
-	{
+	protected FGESegment computeData() {
 		return reference.getData();
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "SegmentReference["+reference.toString()+"]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public String toString() {
+		return "SegmentReference[" + reference.toString() + "]";
+	}
+
+	@Override
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { reference };
 		return returned;
 	}
-
 
 }

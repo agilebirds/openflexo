@@ -20,14 +20,13 @@
 package org.netbeans.lib.cvsclient.command;
 
 /**
- * @author  Milos Kleint
+ * @author Milos Kleint
  */
 public interface Builder {
 
-    void parseLine(String line, boolean isErrorMessage);
+	void parseLine(String line, boolean isErrorMessage);
 
-    void parseEnhancedMessage(String key, Object value);
+	void parseEnhancedMessage(String key, Object value);
 
-    void outputDone();
+	void outputDone();
 }
-

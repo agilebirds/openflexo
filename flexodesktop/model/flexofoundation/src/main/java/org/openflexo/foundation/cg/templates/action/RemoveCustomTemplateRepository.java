@@ -30,55 +30,49 @@ import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 
+public class RemoveCustomTemplateRepository extends
+		FlexoAction<RemoveCustomTemplateRepository, CustomCGTemplateRepository, CGTemplateObject> {
 
-public class RemoveCustomTemplateRepository extends FlexoAction<RemoveCustomTemplateRepository,CustomCGTemplateRepository,CGTemplateObject>
-{
+	private static final Logger logger = Logger.getLogger(RemoveCustomTemplateRepository.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RemoveCustomTemplateRepository.class.getPackage().getName());
+	public static FlexoActionType<RemoveCustomTemplateRepository, CustomCGTemplateRepository, CGTemplateObject> actionType = new FlexoActionType<RemoveCustomTemplateRepository, CustomCGTemplateRepository, CGTemplateObject>(
+			"remove_custom_template_repository", FlexoActionType.defaultGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-    public static FlexoActionType<RemoveCustomTemplateRepository,CustomCGTemplateRepository,CGTemplateObject> actionType = new FlexoActionType<RemoveCustomTemplateRepository,CustomCGTemplateRepository,CGTemplateObject> ("remove_custom_template_repository",FlexoActionType.defaultGroup,FlexoActionType.DELETE_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RemoveCustomTemplateRepository makeNewAction(CustomCGTemplateRepository focusedObject,
+				Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+			return new RemoveCustomTemplateRepository(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RemoveCustomTemplateRepository makeNewAction(CustomCGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RemoveCustomTemplateRepository(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CustomCGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CustomCGTemplateRepository object, Vector<CGTemplateObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(CustomCGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+			return (object != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CustomCGTemplateRepository object, Vector<CGTemplateObject> globalSelection) 
-        {
-            return (object != null);
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (RemoveCustomTemplateRepository.actionType, CustomCGTemplateRepository.class);
-    }
-    
+	};
 
-    
-    RemoveCustomTemplateRepository (CustomCGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(RemoveCustomTemplateRepository.actionType, CustomCGTemplateRepository.class);
+	}
 
-    @Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException
-    {
-    	logger.info ("Remove CustomTemplateRepository "+getFocusedObject());
-    	if (getFocusedObject() != null) {
-    		getFocusedObject().delete();
-     	}
-     }
+	RemoveCustomTemplateRepository(CustomCGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException {
+		logger.info("Remove CustomTemplateRepository " + getFocusedObject());
+		if (getFocusedObject() != null) {
+			getFocusedObject().delete();
+		}
+	}
 
 }

@@ -22,75 +22,72 @@ package cb.petal;
 import java.util.Collection;
 
 /**
- * Super class for all petal objects that have access qualifiers, i.e.,
- * "Public", "Protected", "Private", or "Implementation" (whatever that means, probably
- * it reads "language dependent")
- *
+ * Super class for all petal objects that have access qualifiers, i.e., "Public", "Protected", "Private", or "Implementation" (whatever that
+ * means, probably it reads "language dependent")
+ * 
  * @version $Id: AccessObject.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
  * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
-public abstract class AccessObject extends QuidObject
-  implements AccessQualified, Named, StereoTyped, Documented
-{
-  static final long serialVersionUID = -1442259881847075234L;
+public abstract class AccessObject extends QuidObject implements AccessQualified, Named, StereoTyped, Documented {
+	static final long serialVersionUID = -1442259881847075234L;
 
-  protected AccessObject(PetalNode parent, String name, Collection params) {
-    super(parent, name, params);
-  }
+	protected AccessObject(PetalNode parent, String name, Collection params) {
+		super(parent, name, params);
+	}
 
-  protected AccessObject(String name) {
-    super(name);
-  }
+	protected AccessObject(String name) {
+		super(name);
+	}
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  @Override
-public String getDocumentation() {
-    return getPropertyAsString("documentation");
-  }
+	@Override
+	public String getDocumentation() {
+		return getPropertyAsString("documentation");
+	}
 
-  @Override
-public void setDocumentation(String o) {
-    defineProperty("documentation", o);
-  }
+	@Override
+	public void setDocumentation(String o) {
+		defineProperty("documentation", o);
+	}
 
-  @Override
-public String getStereotype() {
-    return getPropertyAsString("stereotype");
-  }
+	@Override
+	public String getStereotype() {
+		return getPropertyAsString("stereotype");
+	}
 
-  @Override
-public void setStereotype(String c) {
-    defineProperty("stereotype", c);
-  }
+	@Override
+	public void setStereotype(String c) {
+		defineProperty("stereotype", c);
+	}
 
-  @Override
-public String getExportControl() {
-    return getPropertyAsString("exportControl");
-  }
+	@Override
+	public String getExportControl() {
+		return getPropertyAsString("exportControl");
+	}
 
-  @Override
-public void setExportControl(String o) {
-    defineProperty("exportControl", o);
-  }
+	@Override
+	public void setExportControl(String o) {
+		defineProperty("exportControl", o);
+	}
 
-  public boolean isPublic() {
-    return "Public".equals(getExportControl());
-  }
+	public boolean isPublic() {
+		return "Public".equals(getExportControl());
+	}
 
-  public boolean isProtected() {
-      return "Protected".equals(getExportControl());
-  }
+	public boolean isProtected() {
+		return "Protected".equals(getExportControl());
+	}
 
-  public boolean isPrivate() {
-      return "Private".equals(getExportControl());
-  }
+	public boolean isPrivate() {
+		return "Private".equals(getExportControl());
+	}
 }

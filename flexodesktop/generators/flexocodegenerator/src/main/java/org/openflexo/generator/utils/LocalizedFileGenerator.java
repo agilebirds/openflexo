@@ -38,7 +38,6 @@ import org.openflexo.generator.rm.LocalizationFileResource;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
-
 public class LocalizedFileGenerator extends MetaFileGenerator {
 
 	private static final Logger logger = FlexoLogger.getLogger(LocalizedFileGenerator.class.getPackage().getName());
@@ -50,7 +49,8 @@ public class LocalizedFileGenerator extends MetaFileGenerator {
 	 * @param object
 	 */
 	public LocalizedFileGenerator(ProjectGenerator projectGenerator, Language language) {
-		super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, language.getName(), "LOCALIZATION." + language.getFullyQualifiedName());
+		super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, language.getName(), "LOCALIZATION."
+				+ language.getFullyQualifiedName());
 		_langage = language;
 	}
 
@@ -62,7 +62,8 @@ public class LocalizedFileGenerator extends MetaFileGenerator {
 	@Override
 	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		// PList file
-		textResource = (LocalizationFileResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		textResource = (LocalizationFileResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
 		if (textResource == null) {
 			textResource = GeneratedFileResourceFactory.createNewLocalizedFileResource(repository, this);
 			textResource.setGenerator(this);

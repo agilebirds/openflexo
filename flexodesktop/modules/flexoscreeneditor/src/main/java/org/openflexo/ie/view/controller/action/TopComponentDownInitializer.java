@@ -34,36 +34,32 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class TopComponentDownInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	TopComponentDownInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(TopComponentDown.actionType,actionInitializer);
+	TopComponentDownInitializer(IEControllerActionInitializer actionInitializer) {
+		super(TopComponentDown.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<TopComponentDown> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<TopComponentDown> getDefaultInitializer() {
 		return new FlexoActionInitializer<TopComponentDown>() {
 			@Override
-			public boolean run(ActionEvent e, TopComponentDown action)
-			{
+			public boolean run(ActionEvent e, TopComponentDown action) {
 				boolean doable = false;
-				IEWidget top =  action.getFocusedObject();
+				IEWidget top = action.getFocusedObject();
 				if (top.getParent() instanceof IESequence) {
 					IESequence<IWidget> c = (IESequence<IWidget>) top.getParent();
 					doable = c.indexOf(top) - 1 < c.length();
-					if (doable)
+					if (doable) {
 						(action).setComponent(top);
+					}
 				}
 				return doable;
 			}
@@ -71,22 +67,18 @@ public class TopComponentDownInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<TopComponentDown> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<TopComponentDown> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<TopComponentDown>() {
 			@Override
-			public boolean run(ActionEvent e, TopComponentDown action)
-			{
+			public boolean run(ActionEvent e, TopComponentDown action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.MOVE_DOWN_ICON;
 	}
-
 
 }

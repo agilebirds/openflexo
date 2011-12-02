@@ -41,136 +41,135 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DropIEElementInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DropIEElementInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(DropIEElement.actionType,actionInitializer);
+	DropIEElementInitializer(IEControllerActionInitializer actionInitializer) {
+		super(DropIEElement.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
 	public IEController getController() {
 		return getControllerActionInitializer().getIEController();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DropIEElement> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DropIEElement> getDefaultInitializer() {
 		return new FlexoActionInitializer<DropIEElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropIEElement action)
-			{
+			public boolean run(ActionEvent e, DropIEElement action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DropIEElement> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DropIEElement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DropIEElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropIEElement action)
-			{
-                if (action.getDroppedWidget() instanceof IEButtonWidget) {
-                    if (((IEButtonWidget) action.getDroppedWidget()).getImageName() != null) {
-                        if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("calendar") > -1) {
-                            action.getDroppedWidget().setTooltip(FlexoLocalization.localizedForKey("choose_a_date"));
-                            if (getProject().getFlexoComponentLibrary().getComponentNamed("WDLDateAssistant") instanceof PopupComponentDefinition) {
-                                ((IEButtonWidget) action.getDroppedWidget())
-                                        .setPopupComponentDefinition((PopupComponentDefinition) getProject()
-                                                .getFlexoComponentLibrary().getComponentNamed("WDLDateAssistant"));
-                                IEWidget widget = action.getDroppedWidget().getPreviousWidget();
-                                // If it is right before this widget
-                                if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
-                                    ((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
-                                }
-//                              If it is right after this widget
-                                widget = action.getDroppedWidget().getNextWidget();
-                                if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
-                                    ((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
-                                }
-                                if (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null && action.getDroppedWidget().findTDInParent()!=null) {
-                                    IETDWidget td = action.getDroppedWidget().findTDInParent();
-                                    Vector<IWidget> v = td.getSequenceWidget().getAllNonSequenceWidget();
-                                    if (v.indexOf(action.getDroppedWidget())>0) {
-                                        for (int i = v.indexOf(action.getDroppedWidget())-1; i>=0;i--) {
-                                            widget = (IEWidget) v.get(i);
-                                            if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
-                                                ((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
-                                            }
-                                        }
-                                    }
-                                    if (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null) {
-                                        for (int i = v.size()-1; i >= 0; i--) {
-                                            widget = (IEWidget) v.get(i);
-                                            if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
-                                                ((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
-                                            }
-                                        }
-                                    }
-                                    while (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null && td!=null) {
-                                        td = td.getPrevious();
-                                        if (td==null)
-                                            break;
-                                        if (td instanceof IESpanTDWidget)
-                                            continue;
-                                        v = td.getSequenceWidget().getAllNonSequenceWidget();
-                                        for (int i = v.size()-1; i >= 0; i--) {
-                                            widget = (IEWidget) v.get(i);
-                                            if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
-                                                ((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
-                                            }
-                                        }
-                                    }
-                                    td = action.getDroppedWidget().findTDInParent();
-                                    while (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null && td!=null) {
-                                        td = td.getNext();
-                                        if (td==null)
-                                            break;
-                                        if (td instanceof IESpanTDWidget)
-                                            continue;
-                                        v = td.getSequenceWidget().getAllNonSequenceWidget();
-                                        for (int i = 0; i < v.size(); i++) {
-                                            widget = (IEWidget) v.get(i);
-                                            if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
-                                                ((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+			public boolean run(ActionEvent e, DropIEElement action) {
+				if (action.getDroppedWidget() instanceof IEButtonWidget) {
+					if (((IEButtonWidget) action.getDroppedWidget()).getImageName() != null) {
+						if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("calendar") > -1) {
+							action.getDroppedWidget().setTooltip(FlexoLocalization.localizedForKey("choose_a_date"));
+							if (getProject().getFlexoComponentLibrary().getComponentNamed("WDLDateAssistant") instanceof PopupComponentDefinition) {
+								((IEButtonWidget) action.getDroppedWidget())
+										.setPopupComponentDefinition((PopupComponentDefinition) getProject().getFlexoComponentLibrary()
+												.getComponentNamed("WDLDateAssistant"));
+								IEWidget widget = action.getDroppedWidget().getPreviousWidget();
+								// If it is right before this widget
+								if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
+									((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
+								}
+								// If it is right after this widget
+								widget = action.getDroppedWidget().getNextWidget();
+								if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
+									((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
+								}
+								if (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null
+										&& action.getDroppedWidget().findTDInParent() != null) {
+									IETDWidget td = action.getDroppedWidget().findTDInParent();
+									Vector<IWidget> v = td.getSequenceWidget().getAllNonSequenceWidget();
+									if (v.indexOf(action.getDroppedWidget()) > 0) {
+										for (int i = v.indexOf(action.getDroppedWidget()) - 1; i >= 0; i--) {
+											widget = (IEWidget) v.get(i);
+											if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
+												((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
+											}
+										}
+									}
+									if (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null) {
+										for (int i = v.size() - 1; i >= 0; i--) {
+											widget = (IEWidget) v.get(i);
+											if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
+												((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
+											}
+										}
+									}
+									while (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null && td != null) {
+										td = td.getPrevious();
+										if (td == null) {
+											break;
+										}
+										if (td instanceof IESpanTDWidget) {
+											continue;
+										}
+										v = td.getSequenceWidget().getAllNonSequenceWidget();
+										for (int i = v.size() - 1; i >= 0; i--) {
+											widget = (IEWidget) v.get(i);
+											if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
+												((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
+											}
+										}
+									}
+									td = action.getDroppedWidget().findTDInParent();
+									while (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null && td != null) {
+										td = td.getNext();
+										if (td == null) {
+											break;
+										}
+										if (td instanceof IESpanTDWidget) {
+											continue;
+										}
+										v = td.getSequenceWidget().getAllNonSequenceWidget();
+										for (int i = 0; i < v.size(); i++) {
+											widget = (IEWidget) v.get(i);
+											if (widget instanceof IETextFieldWidget && ((IETextFieldWidget) widget).isDate()) {
+												((IEButtonWidget) action.getDroppedWidget()).setDateTextfield((IETextFieldWidget) widget);
+											}
+										}
+									}
+								}
+							}
 
-                        } else if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("delete") > -1)
-                            action.getDroppedWidget().setTooltip(FlexoLocalization.localizedForKey("delete"));
-                        else if (((IEButtonWidget)action.getDroppedWidget()).getImageName().toLowerCase().indexOf("remove")>-1)
-                            action.getDroppedWidget().setTooltip(FlexoLocalization.localizedForKey("remove"));
+						} else if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("delete") > -1) {
+							action.getDroppedWidget().setTooltip(FlexoLocalization.localizedForKey("delete"));
+						} else if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("remove") > -1) {
+							action.getDroppedWidget().setTooltip(FlexoLocalization.localizedForKey("remove"));
+						}
 
-                    }
-                    return true;
-                } else if (action.getDroppedWidget() instanceof IEHyperlinkWidget) {
-                	((IEHyperlinkWidget)action.getDroppedWidget()).setValue(((IEHyperlinkWidget)action.getDroppedWidget()).getDefaultValue());
-                }
-                if (action.getDroppedWidget()!=null) {
+					}
+					return true;
+				} else if (action.getDroppedWidget() instanceof IEHyperlinkWidget) {
+					((IEHyperlinkWidget) action.getDroppedWidget()).setValue(((IEHyperlinkWidget) action.getDroppedWidget())
+							.getDefaultValue());
+				}
+				if (action.getDroppedWidget() != null) {
 					getController().getIESelectionManager().setSelectedObject(action.getDroppedWidget());
 					IEPanel view = getController().viewForObject(action.getDroppedWidget());
 					if (view instanceof LabeledWidget) {
-						((LabeledWidget)view).editLabel();
+						((LabeledWidget) view).editLabel();
 					}
 				}
 				return true;
 			}
 		};
 	}
-
 
 }

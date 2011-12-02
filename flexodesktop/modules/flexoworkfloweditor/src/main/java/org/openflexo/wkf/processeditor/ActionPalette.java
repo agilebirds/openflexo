@@ -38,7 +38,6 @@ import org.openflexo.foundation.wkf.node.SelfExecutableActionNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.wkf.processeditor.gr.ActionNodeGR;
-import org.openflexo.wkf.processeditor.gr.ActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.BeginActionNodeGR;
 import org.openflexo.wkf.processeditor.gr.EndActionNodeGR;
 import org.openflexo.wkf.processeditor.gr.OperatorANDGR;
@@ -64,9 +63,8 @@ public class ActionPalette extends AbstractWKFPalette {
 	private ContainerValidity DROP_ON_OPERATION_FOR_INTERACTIVE_NODE = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(WKFObject container) {
-			return (container instanceof ActionPetriGraph
-					&& !(((ActionPetriGraph)container).getContainer() instanceof SelfExecutableNode)
-					&& !(((ActionPetriGraph)container).getContainer() instanceof LOOPOperator));
+			return (container instanceof ActionPetriGraph && !(((ActionPetriGraph) container).getContainer() instanceof SelfExecutableNode) && !(((ActionPetriGraph) container)
+					.getContainer() instanceof LOOPOperator));
 		}
 	};
 
@@ -138,15 +136,14 @@ public class ActionPalette extends AbstractWKFPalette {
 
 	private WKFPaletteElement complexOperatorElement;
 
-	public ActionPalette()
-	{
-		super(300,170,"action");
+	public ActionPalette() {
+		super(300, 170, "action");
 
 		selfExecActionElement = makeSelfExecActionElement(10, 0);
 		beginNodeElement = makeBeginNodeElement(60, 0);
 		endNodeElement = makeEndNodeElement(110, 0);
 		flexoActionElement = makeFlexoActionElement(165, 0);
-		displayActionElement = makeDisplayActionElement(230,0);
+		displayActionElement = makeDisplayActionElement(230, 0);
 
 		aNDOperatorElement = makeANDOperatorElement(10, 60);
 		oROperatorElement = makeOROperatorElement(82, 60);
@@ -155,180 +152,132 @@ public class ActionPalette extends AbstractWKFPalette {
 
 		iNCLUSIVEOperatorElement = makeINCLUSIVEOperatorElement(46, 105);
 		eXCLUSIVEEVENTBASEDOperatorElement = makeEXCLUSIVEEVENTBASEDOperatorElement(118, 105);
-		complexOperatorElement = makeCOMPLEXOperatorElement(190,105);
+		complexOperatorElement = makeCOMPLEXOperatorElement(190, 105);
 
 		makePalettePanel();
 	}
 
-	private WKFPaletteElement makeFlexoActionElement(int x, int y)
-	{
-		final ActionNode node = new ActionNode((FlexoProcess)null);
+	private WKFPaletteElement makeFlexoActionElement(int x, int y) {
+		final ActionNode node = new ActionNode((FlexoProcess) null);
 		node.setActionType(ActionType.FLEXO_ACTION);
 		node.setName(FlexoLocalization.localizedForKey("WORKFLOW"));
-		node.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelX(25,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelY(50,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				node,
-				new ActionNodeGR(node,null,true),
-				DROP_ON_OPERATION_FOR_INTERACTIVE_NODE);
+		node.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelX(25, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelY(50, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(node, new ActionNodeGR(node, null, true), DROP_ON_OPERATION_FOR_INTERACTIVE_NODE);
 	}
 
-	private WKFPaletteElement makeDisplayActionElement(int x, int y)
-	{
-		final ActionNode node = new ActionNode((FlexoProcess)null);
+	private WKFPaletteElement makeDisplayActionElement(int x, int y) {
+		final ActionNode node = new ActionNode((FlexoProcess) null);
 		node.setActionType(ActionType.DISPLAY_ACTION);
 		node.setName(FlexoLocalization.localizedForKey("DISPLAY"));
-		node.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelX(25,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelY(50,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				node,
-				new ActionNodeGR(node,null,true),
-				DROP_ON_OPERATION_FOR_INTERACTIVE_NODE);
+		node.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelX(25, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelY(50, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(node, new ActionNodeGR(node, null, true), DROP_ON_OPERATION_FOR_INTERACTIVE_NODE);
 	}
 
-	private WKFPaletteElement makeBeginNodeElement(int x, int y)
-	{
-		final ActionNode node = new ActionNode((FlexoProcess)null);
+	private WKFPaletteElement makeBeginNodeElement(int x, int y) {
+		final ActionNode node = new ActionNode((FlexoProcess) null);
 		node.setNodeType(NodeType.BEGIN);
 		node.setName(node.getDefaultName());
-		node.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelX(25,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelY(50,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				node,
-				new BeginActionNodeGR(node,null,true),
-				DROP_ON_OPERATION);
+		node.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelX(25, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelY(50, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(node, new BeginActionNodeGR(node, null, true), DROP_ON_OPERATION);
 	}
 
-	private WKFPaletteElement makeEndNodeElement(int x, int y)
-	{
-		final ActionNode node = new ActionNode((FlexoProcess)null);
+	private WKFPaletteElement makeEndNodeElement(int x, int y) {
+		final ActionNode node = new ActionNode((FlexoProcess) null);
 		node.setNodeType(NodeType.END);
 		node.setName(node.getDefaultName());
-		node.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelX(25,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelY(50,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				node,
-				new EndActionNodeGR(node,null,true),
-				DROP_ON_OPERATION);
+		node.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelX(25, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelY(50, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(node, new EndActionNodeGR(node, null, true), DROP_ON_OPERATION);
 	}
 
-	private WKFPaletteElement makeSelfExecActionElement(int x, int y)
-	{
-		final SelfExecutableActionNode node = new SelfExecutableActionNode((FlexoProcess)null);
+	private WKFPaletteElement makeSelfExecActionElement(int x, int y) {
+		final SelfExecutableActionNode node = new SelfExecutableActionNode((FlexoProcess) null);
 		node.setName("EXEC");
-		node.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelX(25,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		node.setLabelY(50,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				node,
-				new SelfExecActionNodeGR(node,null,true),
-				DROP_ON_OPERATION);
+		node.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelX(25, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		node.setLabelY(50, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(node, new SelfExecActionNodeGR(node, null, true), DROP_ON_OPERATION);
 	}
 
-	private WKFPaletteElement makeANDOperatorElement(int x, int y)
-	{
-		final ANDOperator operator = new ANDOperator((FlexoProcess)null);
+	private WKFPaletteElement makeANDOperatorElement(int x, int y) {
+		final ANDOperator operator = new ANDOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelX(28,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelY(55,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorANDGR(operator,null,true),
-				DROP_ON_OPERATION);
+		operator.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelX(28, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelY(55, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(operator, new OperatorANDGR(operator, null, true), DROP_ON_OPERATION);
 	}
 
-	private WKFPaletteElement makeINCLUSIVEOperatorElement(int x, int y)
-	{
-		final InclusiveOperator operator = new InclusiveOperator((FlexoProcess)null);
+	private WKFPaletteElement makeINCLUSIVEOperatorElement(int x, int y) {
+		final InclusiveOperator operator = new InclusiveOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelX(30,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelY(55,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorInclusiveGR(operator,null,true),
-				DROP_ON_OPERATION);
+		operator.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelX(30, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelY(55, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(operator, new OperatorInclusiveGR(operator, null, true), DROP_ON_OPERATION);
 	}
 
-	private WKFPaletteElement makeEXCLUSIVEEVENTBASEDOperatorElement(int x, int y)
-	{
-		final ExclusiveEventBasedOperator operator = new ExclusiveEventBasedOperator((FlexoProcess)null);
+	private WKFPaletteElement makeEXCLUSIVEEVENTBASEDOperatorElement(int x, int y) {
+		final ExclusiveEventBasedOperator operator = new ExclusiveEventBasedOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelX(30,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelY(55,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorExclusiveEventBasedGR(operator,null,true),
-				DROP_ON_OPERATION);
+		operator.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelX(30, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelY(55, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(operator, new OperatorExclusiveEventBasedGR(operator, null, true), DROP_ON_OPERATION);
 	}
 
-	private WKFPaletteElement makeOROperatorElement(int x, int y)
-	{
-		final OROperator operator = new OROperator((FlexoProcess)null);
+	private WKFPaletteElement makeOROperatorElement(int x, int y) {
+		final OROperator operator = new OROperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelX(28,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelY(55,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorORGR(operator,null,true),
-				DROP_ON_OPERATION);
+		operator.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelX(28, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelY(55, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(operator, new OperatorORGR(operator, null, true), DROP_ON_OPERATION);
 	}
 
-	private WKFPaletteElement makeIFOperatorElement(int x, int y)
-	{
-		final IFOperator operator = new IFOperator((FlexoProcess)null);
+	private WKFPaletteElement makeIFOperatorElement(int x, int y) {
+		final IFOperator operator = new IFOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelX(28,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelY(55,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorIFGR(operator,null,true),
-				DROP_ON_OPERATION);
+		operator.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelX(28, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelY(55, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(operator, new OperatorIFGR(operator, null, true), DROP_ON_OPERATION);
 	}
 
-	private WKFPaletteElement makeLOOPOperatorElement(int x, int y)
-	{
-		final LOOPOperator operator = new LOOPOperator((FlexoProcess)null);
+	private WKFPaletteElement makeLOOPOperatorElement(int x, int y) {
+		final LOOPOperator operator = new LOOPOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelX(28,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelY(55,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorLOOPGR(operator,null,true),
-				DROP_ON_OPERATION);
+		operator.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelX(28, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelY(55, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(operator, new OperatorLOOPGR(operator, null, true), DROP_ON_OPERATION);
 	}
 
-	private WKFPaletteElement makeCOMPLEXOperatorElement(int x, int y)
-	{
-		final ComplexOperator operator = new ComplexOperator((FlexoProcess)null);
+	private WKFPaletteElement makeCOMPLEXOperatorElement(int x, int y) {
+		final ComplexOperator operator = new ComplexOperator((FlexoProcess) null);
 		operator.setName(operator.getDefaultName());
-		operator.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelX(30,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		operator.setLabelY(55,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		return makePaletteElement(
-				operator,
-				new OperatorComplexGR(operator,null,true),
-				DROP_ON_OPERATION);
+		operator.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelX(30, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setLabelY(55, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		return makePaletteElement(operator, new OperatorComplexGR(operator, null, true), DROP_ON_OPERATION);
 	}
 }

@@ -21,23 +21,21 @@ package org.openflexo.module.external;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public interface IModuleLoader
-{
-    public IModule getActiveModule(); 
-    
-    public ExternalIEModule getIEModuleInstance();
-    
-    public ExternalDMModule getDMModuleInstance();
-    
-    public ExternalWKFModule getWKFModuleInstance();
+public interface IModuleLoader {
+	public IModule getActiveModule();
 
-    public ExternalCEDModule getCEDModuleInstance();
+	public ExternalIEModule getIEModuleInstance();
 
-    public ExternalOEModule getOEModuleInstance();
+	public ExternalDMModule getDMModuleInstance();
+
+	public ExternalWKFModule getWKFModuleInstance();
+
+	public ExternalCEDModule getCEDModuleInstance();
+
+	public ExternalOEModule getOEModuleInstance();
 
 	public boolean isWKFLoaded();
-    
-    
+
 }

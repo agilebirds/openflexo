@@ -32,62 +32,58 @@ import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.dm.ProcessAddedToFolder;
 import org.openflexo.foundation.wkf.dm.ProcessRemovedFromFolder;
 
-
 /**
  * Browser element representing the workflow
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ProcessFolderElement extends BrowserElement
-{
+public class ProcessFolderElement extends BrowserElement {
 
-    public ProcessFolderElement(ProcessFolder folder, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(folder, BrowserElementType.PROCESS_FOLDER, browser, parent);
-    }
+	public ProcessFolderElement(ProcessFolder folder, ProjectBrowser browser, BrowserElement parent) {
+		super(folder, BrowserElementType.PROCESS_FOLDER, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	for(Enumeration<ProcessFolder> en =getFolder().getSortedFolders();en.hasMoreElements();)
-    		addToChilds(en.nextElement());
-    	for(FlexoProcessNode node:getFolder().getProcesses())
-    		addToChilds(node.getProcess());
-    }
+	@Override
+	protected void buildChildrenVector() {
+		for (Enumeration<ProcessFolder> en = getFolder().getSortedFolders(); en.hasMoreElements();) {
+			addToChilds(en.nextElement());
+		}
+		for (FlexoProcessNode node : getFolder().getProcesses()) {
+			addToChilds(node.getProcess());
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getFolder().getName();
-    }
+	@Override
+	public String getName() {
+		return getFolder().getName();
+	}
 
-    @Override
-    public void setName(String aName) throws FlexoException {
-    	try {
+	@Override
+	public void setName(String aName) throws FlexoException {
+		try {
 			getFolder().setName(aName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
+	}
 
-    @Override
-    public boolean isNameEditable() {
-    	return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    public ProcessFolder getFolder()
-    {
-        return (ProcessFolder) getObject();
-    }
+	public ProcessFolder getFolder() {
+		return (ProcessFolder) getObject();
+	}
 
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification) {
-    	if (dataModification instanceof ProcessAddedToFolder
-    			|| dataModification instanceof ProcessRemovedFromFolder)
-    		refreshWhenPossible();
-    	else
-    		super.update(observable, dataModification);
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ProcessAddedToFolder || dataModification instanceof ProcessRemovedFromFolder) {
+			refreshWhenPossible();
+		} else {
+			super.update(observable, dataModification);
+		}
+	}
 
 }

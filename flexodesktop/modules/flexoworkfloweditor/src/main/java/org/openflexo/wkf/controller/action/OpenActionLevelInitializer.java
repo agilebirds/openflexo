@@ -29,34 +29,32 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.processeditor.ProcessView;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
 
-
 public class OpenActionLevelInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OpenActionLevelInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(OpenActionLevel.actionType,actionInitializer);
+	OpenActionLevelInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(OpenActionLevel.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionFinalizer<OpenActionLevel> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<OpenActionLevel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenActionLevel>() {
 			@Override
-			public boolean run(ActionEvent e, OpenActionLevel action)
-			{
-				if (action.getFocusedObject().getActionPetriGraph() != null && action.getFocusedObject().getActionPetriGraph().getIsVisible()) {
+			public boolean run(ActionEvent e, OpenActionLevel action) {
+				if (action.getFocusedObject().getActionPetriGraph() != null
+						&& action.getFocusedObject().getActionPetriGraph().getIsVisible()) {
 					if (getController().getCurrentModuleView() instanceof ProcessView) {
-						((ProcessView)getController().getCurrentModuleView()).getController().setObjectForPaletteSwitch(action.getFocusedObject().getActionPetriGraph());
+						((ProcessView) getController().getCurrentModuleView()).getController().setObjectForPaletteSwitch(
+								action.getFocusedObject().getActionPetriGraph());
 					} else if (getController().getCurrentModuleView() instanceof SwimmingLaneView) {
-						((SwimmingLaneView)getController().getCurrentModuleView()).getController().setObjectForPaletteSwitch(action.getFocusedObject().getActionPetriGraph());
+						((SwimmingLaneView) getController().getCurrentModuleView()).getController().setObjectForPaletteSwitch(
+								action.getFocusedObject().getActionPetriGraph());
 					}
 				}
 				return true;

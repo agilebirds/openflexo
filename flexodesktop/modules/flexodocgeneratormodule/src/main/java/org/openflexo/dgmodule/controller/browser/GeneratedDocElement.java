@@ -33,14 +33,11 @@ import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.toc.TOCRepository;
 
-
-public class GeneratedDocElement extends DGBrowserElement
-{
-	public GeneratedDocElement(GeneratedDoc generatedCode, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(generatedCode, BrowserElementType.GENERATED_DOC, browser,parent);
-        generatedCode.getProject().addObserver(this);
-        generatedCode.getProject().getTOCData().addObserver(this);
+public class GeneratedDocElement extends DGBrowserElement {
+	public GeneratedDocElement(GeneratedDoc generatedCode, ProjectBrowser browser, BrowserElement parent) {
+		super(generatedCode, BrowserElementType.GENERATED_DOC, browser, parent);
+		generatedCode.getProject().addObserver(this);
+		generatedCode.getProject().getTOCData().addObserver(this);
 	}
 
 	@Override
@@ -49,10 +46,9 @@ public class GeneratedDocElement extends DGBrowserElement
 		getGeneratedCode().getProject().getTOCData().deleteObserver(this);
 		super.delete();
 	}
-	
+
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (GenerationRepository repository : getGeneratedCode().getGeneratedRepositories()) {
 			addToChilds(repository);
 		}
@@ -60,31 +56,33 @@ public class GeneratedDocElement extends DGBrowserElement
 		for (TOCRepository rep : getProject().getTOCData().getRepositories()) {
 			addToChilds(rep);
 		}
-        for (DocType dt : getGeneratedCode().getProject().getDocTypes()) {
-            addToChilds(dt);
-        }
+		for (DocType dt : getGeneratedCode().getProject().getDocTypes()) {
+			addToChilds(dt);
+		}
 	}
 
-	public GeneratedDoc getGeneratedCode()
-	{
-		return (GeneratedDoc)getObject();
+	public GeneratedDoc getGeneratedCode() {
+		return (GeneratedDoc) getObject();
 	}
-    
-    /**
-     * Overrides update
-     * @see org.openflexo.dgmodule.controller.browser.DGBrowserElement#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
-     */
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (observable==getProject()) {
-            if (dataModification instanceof DocTypeAdded || dataModification instanceof DocTypeRemoved)
-                if (_browser != null) {
-                    refreshWhenPossible();
-                } else if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Received notification on null browser");
-            return;
-        }
-        super.update(observable, dataModification);
-    }
+
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.dgmodule.controller.browser.DGBrowserElement#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable == getProject()) {
+			if (dataModification instanceof DocTypeAdded || dataModification instanceof DocTypeRemoved) {
+				if (_browser != null) {
+					refreshWhenPossible();
+				} else if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Received notification on null browser");
+				}
+			}
+			return;
+		}
+		super.update(observable, dataModification);
+	}
 }

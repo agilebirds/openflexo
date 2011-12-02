@@ -23,44 +23,39 @@ import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.fps.controller.FPSController;
 
-
 /**
  * Represents the view for the browser of this module
  * 
  * @author yourname
  * 
  */
-public class SharedProjectBrowserView extends BrowserView
-{
+public class SharedProjectBrowserView extends BrowserView {
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    protected FPSController _controller;
+	protected FPSController _controller;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public SharedProjectBrowserView(FPSController controller)
-    {
-        super(controller.getSharedProjectBrowser(), controller.getKeyEventListener(), controller.getEditor());
-        _controller = controller;
-    }
+	public SharedProjectBrowserView(FPSController controller) {
+		super(controller.getSharedProjectBrowser(), controller.getKeyEventListener(), controller.getEditor());
+		_controller = controller;
+	}
 
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-    }
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+	}
 
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-        // Try to display object in view
-        _controller.selectAndFocusObject(object);
-    }
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		// Try to display object in view
+		_controller.selectAndFocusObject(object);
+	}
 
 }

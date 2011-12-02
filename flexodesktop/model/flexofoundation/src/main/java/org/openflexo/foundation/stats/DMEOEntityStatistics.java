@@ -21,66 +21,59 @@ package org.openflexo.foundation.stats;
 
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DMEOEntityStatistics extends FlexoStatistics<DMEOEntity>
-{
+public class DMEOEntityStatistics extends FlexoStatistics<DMEOEntity> {
 
-    private int eoAttributeCount = -1;
-    
-    private int eoRelationshipCount = -1;
-    
-    /**
+	private int eoAttributeCount = -1;
+
+	private int eoRelationshipCount = -1;
+
+	/**
      * 
      */
-    public DMEOEntityStatistics(DMEOEntity object)
-    {
-        super(object);
-        refresh();
-    }
+	public DMEOEntityStatistics(DMEOEntity object) {
+		super(object);
+		refresh();
+	}
 
-    /**
-     * Overrides refresh
-     * @see org.openflexo.foundation.stats.FlexoStatistics#refresh()
-     */
-    @Override
-    public void refresh()
-    {
-        setEoAttributeCount(getObject().getAttributes().size());
-        setEoRelationshipCount(getObject().getRelationships().size());
-    }
+	/**
+	 * Overrides refresh
+	 * 
+	 * @see org.openflexo.foundation.stats.FlexoStatistics#refresh()
+	 */
+	@Override
+	public void refresh() {
+		setEoAttributeCount(getObject().getAttributes().size());
+		setEoRelationshipCount(getObject().getRelationships().size());
+	}
 
-    public int getEoAttributeCount()
-    {
-        return eoAttributeCount;
-    }
+	public int getEoAttributeCount() {
+		return eoAttributeCount;
+	}
 
-    private void setEoAttributeCount(int attributeCount)
-    {
-        int old = this.eoAttributeCount;
-        this.eoAttributeCount = attributeCount;
-        if (old != attributeCount) {
-            setChanged();
-            notifyObservers(new StatModification("eoAttributeCount", old, attributeCount));
-        }
-    }
+	private void setEoAttributeCount(int attributeCount) {
+		int old = this.eoAttributeCount;
+		this.eoAttributeCount = attributeCount;
+		if (old != attributeCount) {
+			setChanged();
+			notifyObservers(new StatModification("eoAttributeCount", old, attributeCount));
+		}
+	}
 
-    public int getEoRelationshipCount()
-    {
-        return eoRelationshipCount;
-    }
+	public int getEoRelationshipCount() {
+		return eoRelationshipCount;
+	}
 
-    private void setEoRelationshipCount(int relationshipCount)
-    {
-        int old = this.eoRelationshipCount;
-        this.eoRelationshipCount = relationshipCount;
-        if (old != relationshipCount) {
-            setChanged();
-            notifyObservers(new StatModification("eoRelationshipCount", old, relationshipCount));
-        }
-    }
+	private void setEoRelationshipCount(int relationshipCount) {
+		int old = this.eoRelationshipCount;
+		this.eoRelationshipCount = relationshipCount;
+		if (old != relationshipCount) {
+			setChanged();
+			notifyObservers(new StatModification("eoRelationshipCount", old, relationshipCount));
+		}
+	}
 
 }

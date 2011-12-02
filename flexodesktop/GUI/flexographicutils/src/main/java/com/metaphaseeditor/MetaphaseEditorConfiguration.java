@@ -24,64 +24,56 @@ package com.metaphaseeditor;
 
 import java.util.Vector;
 
-public class MetaphaseEditorConfiguration 
-{
-    public Vector<MetaphaseEditorOption> options;
+public class MetaphaseEditorConfiguration {
+	public Vector<MetaphaseEditorOption> options;
 
-    public MetaphaseEditorConfiguration() 
-    {
-    	options = new Vector<MetaphaseEditorOption>();
+	public MetaphaseEditorConfiguration() {
+		options = new Vector<MetaphaseEditorOption>();
 	}
-    
-    public void addToOptions(MetaphaseEditorOption o)
-    {
-    	options.add(o);
-    }
-    
-    public MetaphaseEditorOption getOption(String optionName)
-    {
-    	for (MetaphaseEditorOption o : options) {
-    		if (o.optionName.equals(optionName)) return o;
-    	}
-    	return null;
-    }
-    
-    public boolean hasOption(String optionName)
-    {
-    	return getOption(optionName) != null;
-    }
-    
-    public boolean hasOption(String optionName, int line)
-    {
-    	MetaphaseEditorOption o = getOption(optionName);
-    	return o != null && o.line == line;
-    }
-    
-    @Override
-    public String toString() 
-    {
-        return "MetaphaseEditorConfiguration["+options+"]";
-    }
 
-    public static class MetaphaseEditorOption 
-    {
+	public void addToOptions(MetaphaseEditorOption o) {
+		options.add(o);
+	}
+
+	public MetaphaseEditorOption getOption(String optionName) {
+		for (MetaphaseEditorOption o : options) {
+			if (o.optionName.equals(optionName)) {
+				return o;
+			}
+		}
+		return null;
+	}
+
+	public boolean hasOption(String optionName) {
+		return getOption(optionName) != null;
+	}
+
+	public boolean hasOption(String optionName, int line) {
+		MetaphaseEditorOption o = getOption(optionName);
+		return o != null && o.line == line;
+	}
+
+	@Override
+	public String toString() {
+		return "MetaphaseEditorConfiguration[" + options + "]";
+	}
+
+	public static class MetaphaseEditorOption {
 		public String optionName;
-        public int index;
-        public int line;
+		public int index;
+		public int line;
 
-        public MetaphaseEditorOption(String optionName, int index, int line) 
-        {
+		public MetaphaseEditorOption(String optionName, int index, int line) {
 			super();
 			this.optionName = optionName;
 			this.index = index;
 			this.line = line;
 		}
 
-        @Override
-        public String toString() 
-        {
-            return "Option["+optionName+",index="+index+",line="+line+"]";
-        }
+		@Override
+		public String toString() {
+			return "Option[" + optionName + ",index=" + index + ",line=" + line + "]";
+		}
 
-    }
+	}
 }

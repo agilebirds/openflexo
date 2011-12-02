@@ -31,41 +31,34 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class SaveGeneratedFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	SaveGeneratedFileInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(SaveGeneratedFile.actionType,actionInitializer);
+	SaveGeneratedFileInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(SaveGeneratedFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<SaveGeneratedFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<SaveGeneratedFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<SaveGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveGeneratedFile action)
-			{
+			public boolean run(ActionEvent e, SaveGeneratedFile action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<SaveGeneratedFile> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<SaveGeneratedFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SaveGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveGeneratedFile action)
-			{
+			public boolean run(ActionEvent e, SaveGeneratedFile action) {
 				getControllerActionInitializer().getGeneratorController().selectAndFocusObject(action.getFocusedObject());
 				return true;
 			}
@@ -73,16 +66,13 @@ public class SaveGeneratedFileInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.SAVE_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return IconLibrary.SAVE_DISABLED_ICON;
 	}
-
 
 }

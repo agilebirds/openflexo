@@ -23,10 +23,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -52,6 +48,8 @@ import org.openflexo.foundation.dm.XMLSchemaRepository;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Please comment this class
@@ -59,142 +57,127 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
-public class DMRepositoryTableModel extends AbstractModel<DMRepositoryFolder,DMRepository>
-{
+public class DMRepositoryTableModel extends AbstractModel<DMRepositoryFolder, DMRepository> {
 
-    protected static final Logger logger = Logger.getLogger(DMRepositoryTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DMRepositoryTableModel.class.getPackage().getName());
 
-    public DMRepositoryTableModel(DMRepositoryFolder repositoryFolder, FlexoProject project)
-    {
-        super(repositoryFolder, project);
-        addToColumns(new IconColumn<DMRepository>("repository_icon", 30) {
-            @Override
-			public Icon getIcon(DMRepository repository)
-            {
-                return iconForRepository(repository);
-            }
-        });
-        addToColumns(new IconColumn<DMRepository>("read_only", 25) {
-            @Override
-			public Icon getIcon(DMRepository repository)
-            {
-                return (repository.isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
-            }
-            
-            @Override
-            public String getLocalizedTooltip(DMRepository repository) {
-            	return (repository.isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only"));
-            }
-        });
-        addToColumns(new StringColumn<DMRepository>("name", 190) {
-            @Override
-			public String getValue(DMRepository repository)
-            {
-                return repository.getLocalizedName();
-            }
-        });
-        addToColumns(new StringColumn<DMRepository>("type", 190) {
-            @Override
-			public String getValue(DMRepository repository)
-            {
-                return typeOfRepository(repository);
-            }
-        });
-        addToColumns(new EditableStringColumn<DMRepository>("description", 365) {
-            @Override
-			public String getValue(DMRepository repository)
-            {
-                return repository.getDescription();
-            }
+	public DMRepositoryTableModel(DMRepositoryFolder repositoryFolder, FlexoProject project) {
+		super(repositoryFolder, project);
+		addToColumns(new IconColumn<DMRepository>("repository_icon", 30) {
+			@Override
+			public Icon getIcon(DMRepository repository) {
+				return iconForRepository(repository);
+			}
+		});
+		addToColumns(new IconColumn<DMRepository>("read_only", 25) {
+			@Override
+			public Icon getIcon(DMRepository repository) {
+				return (repository.isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+			}
 
-            @Override
-			public void setValue(DMRepository repository, String aValue)
-            {
-                repository.setDescription(aValue);
-            }
-        });
-        setRowHeight(20);
-    }
+			@Override
+			public String getLocalizedTooltip(DMRepository repository) {
+				return (repository.isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only"));
+			}
+		});
+		addToColumns(new StringColumn<DMRepository>("name", 190) {
+			@Override
+			public String getValue(DMRepository repository) {
+				return repository.getLocalizedName();
+			}
+		});
+		addToColumns(new StringColumn<DMRepository>("type", 190) {
+			@Override
+			public String getValue(DMRepository repository) {
+				return typeOfRepository(repository);
+			}
+		});
+		addToColumns(new EditableStringColumn<DMRepository>("description", 365) {
+			@Override
+			public String getValue(DMRepository repository) {
+				return repository.getDescription();
+			}
 
-    public DMRepositoryFolder getDMRepositoryFolder()
-    {
-        return getModel();
-    }
+			@Override
+			public void setValue(DMRepository repository, String aValue) {
+				repository.setDescription(aValue);
+			}
+		});
+		setRowHeight(20);
+	}
 
-    @Override
-	public DMRepository elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return getDMRepositoryFolder().getRepositoryAtIndex(row);
-         } else {
-            return null;
-        }
-    }
+	public DMRepositoryFolder getDMRepositoryFolder() {
+		return getModel();
+	}
 
-    public DMRepository repositoryAt(int row)
-    {
-        return elementAt(row);
-    }
+	@Override
+	public DMRepository elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return getDMRepositoryFolder().getRepositoryAtIndex(row);
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDMRepositoryFolder() != null) {
-            return getDMRepositoryFolder().getRepositoriesCount();
-        }
-        return 0;
-    }
+	public DMRepository repositoryAt(int row) {
+		return elementAt(row);
+	}
 
-    protected static Icon iconForRepository(DMRepository repository)
-    {
-        if (repository instanceof JDKRepository) {
-            return DMEIconLibrary.JDK_REPOSITORY_ICON;
-        } else if (repository instanceof WORepository) {
-            return DMEIconLibrary.WO_REPOSITORY_ICON;
-        } else if (repository instanceof ComponentRepository) {
-            return DMEIconLibrary.COMPONENT_REPOSITORY_ICON;
-        } else if (repository instanceof ProcessInstanceRepository) {
-            return DMEIconLibrary.PROCESS_INSTANCE_REPOSITORY_ICON;
-        } else if (repository instanceof ProcessBusinessDataRepository) {
-        	return DMEIconLibrary.PROCESS_BUSINESS_DATA_REPOSITORY_ICON;
-        } else if (repository instanceof ExternalRepository) {
-            return DMEIconLibrary.EXTERNAL_REPOSITORY_ICON;
-        } else if (repository instanceof DMEORepository) {
-            return DMEIconLibrary.DM_EOREPOSITORY_ICON;
-        }
-        return DMEIconLibrary.DM_REPOSITORY_ICON;
-    }
+	@Override
+	public int getRowCount() {
+		if (getDMRepositoryFolder() != null) {
+			return getDMRepositoryFolder().getRepositoriesCount();
+		}
+		return 0;
+	}
 
-    protected static String typeOfRepository(DMRepository repository)
-    {
-        if ((repository instanceof JDKRepository) || (repository instanceof WORepository) || (repository instanceof ComponentRepository)
-                || (repository instanceof ProcessInstanceRepository) || (repository instanceof ProcessBusinessDataRepository) || (repository instanceof EOPrototypeRepository)
-                || (repository instanceof FlexoExecutionModelRepository)) {
-            return repository.getLocalizedName();
-        } else if (repository instanceof ProjectRepository) {
-            return FlexoLocalization.localizedForKey("project_repository");
-        } else if (repository instanceof ProjectDatabaseRepository) {
-            return FlexoLocalization.localizedForKey("project_database_repository");
-        } else if (repository instanceof ExternalRepository) {
-            return FlexoLocalization.localizedForKey("external_repository");
-        } else if (repository instanceof DenaliFoundationRepository) {
-            return FlexoLocalization.localizedForKey("denali_foundation_repository");
-        } else if (repository instanceof ExternalDatabaseRepository) {
-            return FlexoLocalization.localizedForKey("external_database_repository");
-        } else if (repository instanceof ThesaurusRepository) {
-            return FlexoLocalization.localizedForKey("thesaurus_repository");
-        } else if (repository instanceof ThesaurusDatabaseRepository) {
-            return FlexoLocalization.localizedForKey("thesaurus_database_repository");
-        } else if (repository instanceof RationalRoseRepository) {
-            return FlexoLocalization.localizedForKey("rational_rose_repository");
-        }
-        else if (repository instanceof WSDLRepository) {
-            return FlexoLocalization.localizedForKey("web_service_repository");
-        } 
-        else if (repository instanceof XMLSchemaRepository) {
-            return FlexoLocalization.localizedForKey("xml_schema_repository");
-        }
-        return "???";
-    }
+	protected static Icon iconForRepository(DMRepository repository) {
+		if (repository instanceof JDKRepository) {
+			return DMEIconLibrary.JDK_REPOSITORY_ICON;
+		} else if (repository instanceof WORepository) {
+			return DMEIconLibrary.WO_REPOSITORY_ICON;
+		} else if (repository instanceof ComponentRepository) {
+			return DMEIconLibrary.COMPONENT_REPOSITORY_ICON;
+		} else if (repository instanceof ProcessInstanceRepository) {
+			return DMEIconLibrary.PROCESS_INSTANCE_REPOSITORY_ICON;
+		} else if (repository instanceof ProcessBusinessDataRepository) {
+			return DMEIconLibrary.PROCESS_BUSINESS_DATA_REPOSITORY_ICON;
+		} else if (repository instanceof ExternalRepository) {
+			return DMEIconLibrary.EXTERNAL_REPOSITORY_ICON;
+		} else if (repository instanceof DMEORepository) {
+			return DMEIconLibrary.DM_EOREPOSITORY_ICON;
+		}
+		return DMEIconLibrary.DM_REPOSITORY_ICON;
+	}
+
+	protected static String typeOfRepository(DMRepository repository) {
+		if ((repository instanceof JDKRepository) || (repository instanceof WORepository) || (repository instanceof ComponentRepository)
+				|| (repository instanceof ProcessInstanceRepository) || (repository instanceof ProcessBusinessDataRepository)
+				|| (repository instanceof EOPrototypeRepository) || (repository instanceof FlexoExecutionModelRepository)) {
+			return repository.getLocalizedName();
+		} else if (repository instanceof ProjectRepository) {
+			return FlexoLocalization.localizedForKey("project_repository");
+		} else if (repository instanceof ProjectDatabaseRepository) {
+			return FlexoLocalization.localizedForKey("project_database_repository");
+		} else if (repository instanceof ExternalRepository) {
+			return FlexoLocalization.localizedForKey("external_repository");
+		} else if (repository instanceof DenaliFoundationRepository) {
+			return FlexoLocalization.localizedForKey("denali_foundation_repository");
+		} else if (repository instanceof ExternalDatabaseRepository) {
+			return FlexoLocalization.localizedForKey("external_database_repository");
+		} else if (repository instanceof ThesaurusRepository) {
+			return FlexoLocalization.localizedForKey("thesaurus_repository");
+		} else if (repository instanceof ThesaurusDatabaseRepository) {
+			return FlexoLocalization.localizedForKey("thesaurus_database_repository");
+		} else if (repository instanceof RationalRoseRepository) {
+			return FlexoLocalization.localizedForKey("rational_rose_repository");
+		} else if (repository instanceof WSDLRepository) {
+			return FlexoLocalization.localizedForKey("web_service_repository");
+		} else if (repository instanceof XMLSchemaRepository) {
+			return FlexoLocalization.localizedForKey("xml_schema_repository");
+		}
+		return "???";
+	}
 
 }

@@ -24,8 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinAdjustability;
-
-
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.FlexoWorkflow.GraphicalProperties;
 import org.openflexo.localization.FlexoLocalization;
@@ -35,7 +33,6 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.processeditor.gr.EdgeGR.EdgeRepresentation;
-
 
 /**
  * Please comment this class

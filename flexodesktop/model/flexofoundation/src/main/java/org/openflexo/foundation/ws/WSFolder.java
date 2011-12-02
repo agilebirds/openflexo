@@ -27,108 +27,109 @@ import javax.swing.tree.TreeNode;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 
-
 public abstract class WSFolder extends WSObject {
 
-	
-    /**
-     * @param dl
-     */
-    public WSFolder(FlexoWSLibrary dl)
-    {
-        super(dl);
-    }
+	/**
+	 * @param dl
+	 */
+	public WSFolder(FlexoWSLibrary dl) {
+		super(dl);
+	}
 
-    public abstract Vector getWSServices();
-    
-    
-    @Override
-	protected Vector getSpecificActionListForThatClass()
-    {
-         Vector returned = super.getSpecificActionListForThatClass();
-         returned.add(CreateNewWebService.actionType);
-         return returned;
-    }
-    
-    /**
-     * Overrides getFullyQualifiedName
-     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-     */
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "WS_FOLDER";
-    }
-    
-   public abstract String getLocalizedDescription();
-   
-  
-   @Override
-public void delete(){
-	   super.delete();
-   }
-    // ==========================================================================
-    // ======================== TreeNode implementation
-    // =========================
-    // ==========================================================================
+	public abstract Vector getWSServices();
 
-    @Override
-	public TreeNode getParent()
-    {
-        return getWSLibrary();
-    }
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector returned = super.getSpecificActionListForThatClass();
+		returned.add(CreateNewWebService.actionType);
+		return returned;
+	}
 
-    @Override
-	public boolean getAllowsChildren()
-    {
-        return true;
-    }
-    
-    @Override
-	public Vector getOrderedChildren(){
-    		return getWSServices();
-    }
-    
-    // ==========================================================================
-    // ======================== Search WSPortType
-    // =========================
-    // ==========================================================================
- 
-    /**
-     * utility method to retrieve a service from a serviceInterface.
-     * 
-     * @param si
-     * @return
-     */
-     public WSService getParentOfServiceInterface(ServiceInterface si){
-     		WSPortType pt = getWSPortTypeNamed(si.getName());
-     		if(pt!=null){
-     			return pt.getWSService();
-     		}
-     		return null;
-     }
-    
-    public WSPortType getWSPortTypeNamed(String name){
-		if(name==null)return null;
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "WS_FOLDER";
+	}
+
+	public abstract String getLocalizedDescription();
+
+	@Override
+	public void delete() {
+		super.delete();
+	}
+
+	// ==========================================================================
+	// ======================== TreeNode implementation
+	// =========================
+	// ==========================================================================
+
+	@Override
+	public TreeNode getParent() {
+		return getWSLibrary();
+	}
+
+	@Override
+	public boolean getAllowsChildren() {
+		return true;
+	}
+
+	@Override
+	public Vector getOrderedChildren() {
+		return getWSServices();
+	}
+
+	// ==========================================================================
+	// ======================== Search WSPortType
+	// =========================
+	// ==========================================================================
+
+	/**
+	 * utility method to retrieve a service from a serviceInterface.
+	 * 
+	 * @param si
+	 * @return
+	 */
+	public WSService getParentOfServiceInterface(ServiceInterface si) {
+		WSPortType pt = getWSPortTypeNamed(si.getName());
+		if (pt != null) {
+			return pt.getWSService();
+		}
+		return null;
+	}
+
+	public WSPortType getWSPortTypeNamed(String name) {
+		if (name == null) {
+			return null;
+		}
 		WSPortType found = null;
 		Enumeration en = getWSServices().elements();
 		while (en.hasMoreElements()) {
-			WSService group = (WSService)en.nextElement();
+			WSService group = (WSService) en.nextElement();
 			found = group.getWSPortTypeNamed(name);
-			if(found!=null)return found;
+			if (found != null) {
+				return found;
+			}
 		}
 		return null;
-    }
-    
-    public WSRepository getWSRepositoryNamed(String name){
-		if(name==null)return null;
+	}
+
+	public WSRepository getWSRepositoryNamed(String name) {
+		if (name == null) {
+			return null;
+		}
 		WSRepository found = null;
 		Enumeration en = getWSServices().elements();
 		while (en.hasMoreElements()) {
-			WSService group = (WSService)en.nextElement();
+			WSService group = (WSService) en.nextElement();
 			found = group.getWSRepositoryNamed(name);
-			if(found!=null)return found;
+			if (found != null) {
+				return found;
+			}
 		}
 		return null;
-    }
+	}
 }

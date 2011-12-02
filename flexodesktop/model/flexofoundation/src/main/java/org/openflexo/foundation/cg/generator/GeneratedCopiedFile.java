@@ -23,15 +23,13 @@ import java.io.File;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class GeneratedCopiedFile extends GeneratedCodeResult
-{
-    
-    public GeneratedCopiedFile(File toCopy)
-    {
-    	super(toCopy.getName());
-        setDefaultCode(toCopy.getAbsolutePath());
-    }
-    
+public class GeneratedCopiedFile extends GeneratedCodeResult {
+
+	public GeneratedCopiedFile(File toCopy) {
+		super(toCopy.getName());
+		setDefaultCode(toCopy.getAbsolutePath());
+	}
+
 }

@@ -26,32 +26,31 @@ import javax.swing.JPanel;
 
 import org.openflexo.xml.diff3.UnresolvedInsertionConflict;
 
+public class UnresolvedInsertionConflictView extends UnresolvedConflictView {
 
-public class UnresolvedInsertionConflictView  extends UnresolvedConflictView {
-	
 	private JPanel _choicePanel;
 	private JPanel _descriptionPanel;
-	
+
 	public UnresolvedInsertionConflictView(UnresolvedInsertionConflict model) {
 		super(model);
 	}
 
 	@Override
-	public UnresolvedInsertionConflict getModel(){
-		return (UnresolvedInsertionConflict)super.getModel();
+	public UnresolvedInsertionConflict getModel() {
+		return (UnresolvedInsertionConflict) super.getModel();
 	}
-	
+
 	@Override
 	public JPanel getChoicePane() {
 		refreshChoicePanel();
 		return _choicePanel;
 	}
-	
+
 	@Override
-	public void refreshChoicePanel(){
-		if(_choicePanel==null){
+	public void refreshChoicePanel() {
+		if (_choicePanel == null) {
 			_choicePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		}else{
+		} else {
 			_choicePanel.removeAll();
 			_choicePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		}
@@ -60,17 +59,18 @@ public class UnresolvedInsertionConflictView  extends UnresolvedConflictView {
 		} else {
 			_choicePanel.setBackground(findBackgroundColor());
 			_choicePanel.add(new JLabel("You choose :"));
-			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction()))
-				_choicePanel.add(new JLabel("Insert "+getModel().getRejectedChildName()));
-			else
-				_choicePanel.add(new JLabel("Insert "+getModel().getExistingChildName()));
+			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction())) {
+				_choicePanel.add(new JLabel("Insert " + getModel().getRejectedChildName()));
+			} else {
+				_choicePanel.add(new JLabel("Insert " + getModel().getExistingChildName()));
+			}
 		}
 		_choicePanel.validate();
 	}
-	
+
 	@Override
 	public JPanel getDescriptionPane() {
-		if(_descriptionPanel==null){
+		if (_descriptionPanel == null) {
 			_descriptionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 			_descriptionPanel.add(new JLabel("2 differents objects were inserted at the same place."));
 		}
@@ -79,11 +79,11 @@ public class UnresolvedInsertionConflictView  extends UnresolvedConflictView {
 
 	@Override
 	public String getThirdPartyChangeText() {
-		return "Insert "+getModel().getExistingChildName();
+		return "Insert " + getModel().getExistingChildName();
 	}
 
 	@Override
 	public String getYourChangeText() {
-		return "Insert "+getModel().getRejectedChildName();
+		return "Insert " + getModel().getRejectedChildName();
 	}
 }

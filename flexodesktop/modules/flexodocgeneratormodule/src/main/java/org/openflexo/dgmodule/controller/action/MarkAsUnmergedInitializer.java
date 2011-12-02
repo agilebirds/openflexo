@@ -28,45 +28,37 @@ import org.openflexo.generator.action.MarkAsUnmerged;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MarkAsUnmergedInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MarkAsUnmergedInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(MarkAsUnmerged.actionType,actionInitializer);
+	MarkAsUnmergedInitializer(DGControllerActionInitializer actionInitializer) {
+		super(MarkAsUnmerged.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<MarkAsUnmerged> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MarkAsUnmerged> getDefaultInitializer() {
 		return new FlexoActionInitializer<MarkAsUnmerged>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsUnmerged action)
-			{
+			public boolean run(ActionEvent e, MarkAsUnmerged action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MarkAsUnmerged> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MarkAsUnmerged> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MarkAsUnmerged>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsUnmerged action)
-			{
+			public boolean run(ActionEvent e, MarkAsUnmerged action) {
 				return true;
 			}
 		};
 	}
-
 
 }

@@ -123,9 +123,8 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 
 	/**
 	 * This method is very important, because it is the way we must identify or build all resources involved in code generation. After this
-	 * list has been built, we just let ResourceManager do the work. <br>
-	 * The order is important here because it defines the order the module main.xml will be loaded. So required modules must be loaded first
-	 * because it can defines symbolic directories needed in other module.
+	 * list has been built, we just let ResourceManager do the work. The order is important here because it defines the order the module
+	 * main.xml will be loaded. So required modules must be loaded first because it can defines symbolic directories needed in other module.
 	 * 
 	 * @param repository
 	 *            : repository where resources should be retrieved or built

@@ -27,89 +27,77 @@ import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 
-
 /**
  * Represents all generated sources
  * 
  * @author sguerin
  */
-public class GeneratedSourcesResource extends FlexoGeneratedOutputResource<GeneratedSources> implements Serializable
-{
+public class GeneratedSourcesResource extends FlexoGeneratedOutputResource<GeneratedSources> implements Serializable {
 
 	private static final Logger logger = Logger.getLogger(GeneratedSourcesResource.class.getPackage().getName());
-    
+
 	/**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public GeneratedSourcesResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-    }
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public GeneratedSourcesResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public GeneratedSourcesResource(FlexoProject aProject)
-    {
-        super(aProject);
-        if (aProject != null) {
-            try {
-                setResourceFile(new FlexoProjectFile(ProjectRestructuration
-                        .getExpectedGeneratedSourcesFile(aProject), aProject));
-            } catch (InvalidFileNameException e) {
-                FlexoProjectFile f = new FlexoProjectFile("GeneratedSources");
-                f.setProject(aProject);
-                try {
-                    setResourceFile(f);
-                } catch (InvalidFileNameException e1) {
-                    if (logger.isLoggable(Level.SEVERE))
-                        logger.severe("This should not happen.");
-                    e1.printStackTrace();
-                }
-            }
-        }
+	public GeneratedSourcesResource(FlexoProject aProject) {
+		super(aProject);
+		if (aProject != null) {
+			try {
+				setResourceFile(new FlexoProjectFile(ProjectRestructuration.getExpectedGeneratedSourcesFile(aProject), aProject));
+			} catch (InvalidFileNameException e) {
+				FlexoProjectFile f = new FlexoProjectFile("GeneratedSources");
+				f.setProject(aProject);
+				try {
+					setResourceFile(f);
+				} catch (InvalidFileNameException e1) {
+					if (logger.isLoggable(Level.SEVERE)) {
+						logger.severe("This should not happen.");
+					}
+					e1.printStackTrace();
+				}
+			}
+		}
 
-     }
+	}
 
-    public GeneratedSourcesResource(FlexoProject aProject,
-            FlexoProjectFile generatedCodeFile) throws InvalidFileNameException
-    {
-        super(aProject);
-        setResourceFile(generatedCodeFile);
-    }
+	public GeneratedSourcesResource(FlexoProject aProject, FlexoProjectFile generatedCodeFile) throws InvalidFileNameException {
+		super(aProject);
+		setResourceFile(generatedCodeFile);
+	}
 
-    public GeneratedSourcesResource(FlexoProject aProject, org.openflexo.foundation.cg.GeneratedOutput cg,
-            FlexoProjectFile generatedCodeFile) throws InvalidFileNameException
-    {
-        this(aProject, generatedCodeFile);
-        _resourceData = (GeneratedSources)cg;
-        try {
-            cg.setFlexoResource(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.GENERATED_SOURCES;
-    }
-
-    @Override
-	public Class<GeneratedSources> getResourceDataClass()
-    {
-        return GeneratedSources.class;
-    }
+	public GeneratedSourcesResource(FlexoProject aProject, org.openflexo.foundation.cg.GeneratedOutput cg,
+			FlexoProjectFile generatedCodeFile) throws InvalidFileNameException {
+		this(aProject, generatedCodeFile);
+		_resourceData = (GeneratedSources) cg;
+		try {
+			cg.setFlexoResource(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
-	public Object instanciateNewBuilder()
-	{
+	public ResourceType getResourceType() {
+		return ResourceType.GENERATED_SOURCES;
+	}
+
+	@Override
+	public Class<GeneratedSources> getResourceDataClass() {
+		return GeneratedSources.class;
+	}
+
+	@Override
+	public Object instanciateNewBuilder() {
 		GeneratedSourcesBuilder builder = new GeneratedSourcesBuilder(this);
 		builder.generatedSources = _resourceData;
 		return builder;
 	}
-
 
 }

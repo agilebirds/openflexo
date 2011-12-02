@@ -32,119 +32,110 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.ProjectGenerator;
-import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.localization.FlexoLocalization;
 
+public class GenerateWAR extends GCAction<GenerateWAR, CGRepository> {
 
-public class GenerateWAR extends GCAction<GenerateWAR,CGRepository>
-{
+	private static final Logger logger = Logger.getLogger(GenerateWAR.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(GenerateWAR.class.getPackage().getName());
+	public static FlexoActionType<GenerateWAR, CGRepository, CGObject> actionType = new FlexoActionType<GenerateWAR, CGRepository, CGObject>(
+			"generate_war", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<GenerateWAR,CGRepository,CGObject> actionType 
-    = new FlexoActionType<GenerateWAR,CGRepository,CGObject> ("generate_war",
-    		GENERATE_MENU,  WAR_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public GenerateWAR makeNewAction(CGRepository repository, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new GenerateWAR(repository, globalSelection, editor);
+		}
 
+		@Override
+		protected boolean isVisibleForSelection(CGRepository repository, Vector<CGObject> globalSelection) {
+			return true;
+		}
 
-    	/**
-    	 * Factory method
-    	 */
-    	@Override
-		public GenerateWAR makeNewAction(CGRepository repository, Vector<CGObject> globalSelection, FlexoEditor editor) 
-    	{
-    		return new GenerateWAR(repository, globalSelection, editor);
-    	}
+		@Override
+		protected boolean isEnabledForSelection(CGRepository repository, Vector<CGObject> globalSelection) {
+			ProjectGenerator pg = (ProjectGenerator) getProjectGenerator(repository);
+			return pg != null && pg.hasBeenInitialized() && repository.getWarDirectory() != null
+					&& repository.getWarRepository().isConnected() && repository.getWarRepository().getDirectory().exists();
+		}
 
-    	@Override
-		protected boolean isVisibleForSelection(CGRepository repository, Vector<CGObject> globalSelection) 
-    	{
-    		return true;
-    	}
+	};
 
-    	@Override
-		protected boolean isEnabledForSelection(CGRepository repository, Vector<CGObject> globalSelection) 
-    	{
-        	ProjectGenerator pg = (ProjectGenerator) getProjectGenerator(repository);
-            return pg != null && 
-            		pg.hasBeenInitialized() && 
-            		repository.getWarDirectory() != null && 
-            		repository.getWarRepository().isConnected()&& 
-            		repository.getWarRepository().getDirectory().exists();
-    	}
+	static {
+		FlexoModelObject.addActionForClass(GenerateWAR.actionType, CGRepository.class);
+	}
 
-    };
+	GenerateWAR(CGRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    static {
-        FlexoModelObject.addActionForClass (GenerateWAR.actionType, CGRepository.class);
-    }
-    
-    GenerateWAR (CGRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	private File generatedWar;
+	private boolean cleanImmediately = false;
 
-    private File generatedWar;
-    private boolean cleanImmediately = false;
-    @Override
-    public ProjectGenerator getProjectGenerator() {
-    	return (ProjectGenerator) super.getProjectGenerator();
-    }
-    
-    @Override
-    public CGRepository getRepository() {
-    	return (CGRepository) super.getRepository();
-    }
-    
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException
-    {
-       	ProjectGenerator pg = getProjectGenerator();
-    	pg.setAction(this);
- 
-    	if (getSaveBeforeGenerating()) {
-    		getRepository().getProject().save();
-    	}
-    	
-    	logger.info ("Generate WAR for "+getFocusedObject());
-    	if (getFlexoProgress()!=null)
-    	    getFlexoProgress().setProgress(FlexoLocalization.localizedForKey("generate") +  " "
-       			+ pg.getRepository().getWarName()+" "
-       			+ FlexoLocalization.localizedForKey("into")  +" "
-       			+ getFocusedObject().getWarDirectory().getAbsolutePath());
-    	try{
-    		if(_customOutStream!=null){
-    			_defaultOutStream = System.out;
-    			System.setOut(_customOutStream);
-    		}
-    		if(_customErrStream!=null){
-    			_defaultErrStream = System.err;
-    			System.setErr(_customErrStream);
-    		}
-    		generatedWar = pg.generateWar(cleanImmediately);
-    	} finally {
-    		if(_defaultOutStream!=null){
-    			System.setOut(_defaultOutStream);
-    		}
-    		if(_defaultErrStream!=null){
-    			System.setErr(_defaultErrStream);
-    		}
-    	}
-    	pg.getRepository().clearAllJavaParsingData();
-    	hideFlexoProgress();
-    }
-    
-    private PrintStream _defaultOutStream;
-    private PrintStream _customOutStream;
-    public void setCustomOutStream(OutputStream s){
-    	_customOutStream = new PrintStream(s);
-    }
-    
-    private PrintStream _defaultErrStream;
-    private PrintStream _customErrStream;
-    public void setCustomErrStream(OutputStream s){
-    	_customErrStream = new PrintStream(s);
-    }
+	@Override
+	public ProjectGenerator getProjectGenerator() {
+		return (ProjectGenerator) super.getProjectGenerator();
+	}
+
+	@Override
+	public CGRepository getRepository() {
+		return (CGRepository) super.getRepository();
+	}
+
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException {
+		ProjectGenerator pg = getProjectGenerator();
+		pg.setAction(this);
+
+		if (getSaveBeforeGenerating()) {
+			getRepository().getProject().save();
+		}
+
+		logger.info("Generate WAR for " + getFocusedObject());
+		if (getFlexoProgress() != null) {
+			getFlexoProgress().setProgress(
+					FlexoLocalization.localizedForKey("generate") + " " + pg.getRepository().getWarName() + " "
+							+ FlexoLocalization.localizedForKey("into") + " " + getFocusedObject().getWarDirectory().getAbsolutePath());
+		}
+		try {
+			if (_customOutStream != null) {
+				_defaultOutStream = System.out;
+				System.setOut(_customOutStream);
+			}
+			if (_customErrStream != null) {
+				_defaultErrStream = System.err;
+				System.setErr(_customErrStream);
+			}
+			generatedWar = pg.generateWar(cleanImmediately);
+		} finally {
+			if (_defaultOutStream != null) {
+				System.setOut(_defaultOutStream);
+			}
+			if (_defaultErrStream != null) {
+				System.setErr(_defaultErrStream);
+			}
+		}
+		pg.getRepository().clearAllJavaParsingData();
+		hideFlexoProgress();
+	}
+
+	private PrintStream _defaultOutStream;
+	private PrintStream _customOutStream;
+
+	public void setCustomOutStream(OutputStream s) {
+		_customOutStream = new PrintStream(s);
+	}
+
+	private PrintStream _defaultErrStream;
+	private PrintStream _customErrStream;
+
+	public void setCustomErrStream(OutputStream s) {
+		_customErrStream = new PrintStream(s);
+	}
+
 	public File getGeneratedWar() {
 		return generatedWar;
 	}
@@ -152,6 +143,5 @@ public class GenerateWAR extends GCAction<GenerateWAR,CGRepository>
 	public void setCleanImmediately(boolean cleanImmediately) {
 		this.cleanImmediately = cleanImmediately;
 	}
-    
 
 }

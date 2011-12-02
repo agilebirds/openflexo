@@ -30,77 +30,79 @@ import org.netbeans.lib.cvsclient.util.LoggedDataOutputStream;
 
 /**
  * Provides support for the :ext: connection method.
- *
+ * 
  * @author Maros Sandor
  */
 public class ExtConnection extends AbstractConnection {
 
-    private final String command;
+	private final String command;
 
-    private Process process;
+	private Process process;
 
-    /**
-     * Creates new EXT connection method support class. Given command will be used for getting I/O
-     * streams to CVS server. 
-     * 
-     * @param command command to execute
-     */ 
-    public ExtConnection(String command) {
-        this.command = command;
-    }
+	/**
+	 * Creates new EXT connection method support class. Given command will be used for getting I/O streams to CVS server.
+	 * 
+	 * @param command
+	 *            command to execute
+	 */
+	public ExtConnection(String command) {
+		this.command = command;
+	}
 
-    @Override
+	@Override
 	public void open() throws AuthenticationException, CommandAbortedException {
-        try {
-            process = Runtime.getRuntime().exec(command);
-            setInputStream(new LoggedDataInputStream(new BufferedInputStream(process.getInputStream())));
-            setOutputStream(new LoggedDataOutputStream(new BufferedOutputStream(process.getOutputStream())));
-        } catch (IOException e) {
-            throw new AuthenticationException(e, "Failed to execute: " + command);
-        }
-    }
+		try {
+			process = Runtime.getRuntime().exec(command);
+			setInputStream(new LoggedDataInputStream(new BufferedInputStream(process.getInputStream())));
+			setOutputStream(new LoggedDataOutputStream(new BufferedOutputStream(process.getOutputStream())));
+		} catch (IOException e) {
+			throw new AuthenticationException(e, "Failed to execute: " + command);
+		}
+	}
 
-    @Override
+	@Override
 	public void verify() throws AuthenticationException {
-        try {
-            open();
-            verifyProtocol();
-            process.destroy();
-        } catch (Exception e) {
-            throw new AuthenticationException(e, "Failed to execute: " + command);
-        }
-    }
+		try {
+			open();
+			verifyProtocol();
+			process.destroy();
+		} catch (Exception e) {
+			throw new AuthenticationException(e, "Failed to execute: " + command);
+		}
+	}
 
-    @Override
+	@Override
 	public void close() throws IOException {
-        if (isOpen()) {
-            process.destroy();
-        }
-    }
+		if (isOpen()) {
+			process.destroy();
+		}
+	}
 
-    @Override
+	@Override
 	public boolean isOpen() {
-        if (process == null) return false;
-        try {
-            process.exitValue();
-            return false;
-        } catch (IllegalThreadStateException e) {
-            return true;
-        }
-    }
+		if (process == null) {
+			return false;
+		}
+		try {
+			process.exitValue();
+			return false;
+		} catch (IllegalThreadStateException e) {
+			return true;
+		}
+	}
 
-    @Override
+	@Override
 	public int getPort() {
-        return 0;
-    }
+		return 0;
+	}
 
-    @Override
+	@Override
 	public void modifyInputStream(ConnectionModifier modifier) throws IOException {
-        modifier.modifyInputStream(getInputStream());
-    }
+		modifier.modifyInputStream(getInputStream());
+	}
 
-    @Override
+	@Override
 	public void modifyOutputStream(ConnectionModifier modifier) throws IOException {
-        modifier.modifyOutputStream(getOutputStream());
-    }
+		modifier.modifyOutputStream(getOutputStream());
+	}
 }

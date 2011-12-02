@@ -19,13 +19,10 @@
  */
 package org.openflexo.foundation.ie.dm;
 
-public class StyleSheetFolderChanged extends IEDataModification
-{
+public class StyleSheetFolderChanged extends IEDataModification {
 
-    public StyleSheetFolderChanged(Object oldValue, Object newValue)
-    {
-        super("cssSheet",oldValue, newValue);
-    }
-
+	public StyleSheetFolderChanged(Object oldValue, Object newValue) {
+		super("cssSheet", oldValue, newValue);
+	}
 
 }

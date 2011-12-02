@@ -28,8 +28,6 @@ import java.util.zip.Deflater;
 import java.util.zip.ZipOutputStream;
 
 import org.openflexo.dg.docx.ProjectDocDocxGenerator;
-
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
@@ -45,79 +43,68 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.ZipUtils;
 
-public class GenerateDocx extends GCAction<GenerateDocx, GenerationRepository>
-{
+public class GenerateDocx extends GCAction<GenerateDocx, GenerationRepository> {
 
-	public static final FlexoActionType<GenerateDocx, GenerationRepository, CGObject> actionType = new FlexoActionType<GenerateDocx, GenerationRepository, CGObject>("generate_docx", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE)
-	{
+	public static final FlexoActionType<GenerateDocx, GenerationRepository, CGObject> actionType = new FlexoActionType<GenerateDocx, GenerationRepository, CGObject>(
+			"generate_docx", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection)
-		{
-			if (repository.getFormat()!=Format.DOCX || !(repository instanceof DGRepository))
-    			return false;
+		protected boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
+			if (repository.getFormat() != Format.DOCX || !(repository instanceof DGRepository)) {
+				return false;
+			}
 			ProjectDocDocxGenerator pg = (ProjectDocDocxGenerator) getProjectGenerator(repository);
-            return pg != null && ((DGRepository)repository).getPostBuildDirectory() != null && pg.hasBeenInitialized();
+			return pg != null && ((DGRepository) repository).getPostBuildDirectory() != null && pg.hasBeenInitialized();
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection)
-		{
+		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
 			return object instanceof DGRepository && ((DGRepository) object).getFormat() == Format.DOCX;
 		}
 
 		@Override
-		public GenerateDocx makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-		{
+		public GenerateDocx makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
 			return new GenerateDocx(focusedObject, globalSelection, editor);
 		}
 
 	};
 
-	protected GenerateDocx(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-	{
+	protected GenerateDocx(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	static
-	{
+	static {
 		FlexoModelObject.addActionForClass(GenerateDocx.actionType, GenerationRepository.class);
 	}
 
-	protected class ZipFileFilter implements FileFilter
-	{
+	protected class ZipFileFilter implements FileFilter {
 
 		@Override
-		public boolean accept(File pathname)
-		{
-			return 
-			!pathname.equals(((DGRepository) getFocusedObject()).getPostBuildFile()) && 
-			!pathname.getName().equals(".cvsignore") && 
-			!pathname.getName().equals("DOCX") && 
-			!pathname.getName().equalsIgnoreCase(".dstore") && 
-			!pathname.getName().equalsIgnoreCase(".DS_Store") && 
-			!pathname.getName().equals(".history") &&
-			!pathname.getName().equals(".svn") && 
-			!pathname.getName().equals("CVS");
+		public boolean accept(File pathname) {
+			return !pathname.equals(((DGRepository) getFocusedObject()).getPostBuildFile()) && !pathname.getName().equals(".cvsignore")
+					&& !pathname.getName().equals("DOCX") && !pathname.getName().equalsIgnoreCase(".dstore")
+					&& !pathname.getName().equalsIgnoreCase(".DS_Store") && !pathname.getName().equals(".history")
+					&& !pathname.getName().equals(".svn") && !pathname.getName().equals("CVS");
 		}
 
 	}
 
 	@Override
-	protected void doAction(Object context) throws FlexoException
-	{
-		try
-		{
+	protected void doAction(Object context) throws FlexoException {
+		try {
 			File zipOutput = ((DGRepository) getFocusedObject()).getPostBuildFile();
-			
-			IProgress progress = makeFlexoProgress(FlexoLocalization.localizedForKey("creating_docx_file") + " " + ((DGRepository) getFocusedObject()).getPostProductName(), 1);
-			if(progress!=null)
-				progress.resetSecondaryProgress(FileUtils.countFilesInDirectory(getFocusedObject().getDirectory(), true)+1);
+
+			IProgress progress = makeFlexoProgress(FlexoLocalization.localizedForKey("creating_docx_file") + " "
+					+ ((DGRepository) getFocusedObject()).getPostProductName(), 1);
+			if (progress != null) {
+				progress.resetSecondaryProgress(FileUtils.countFilesInDirectory(getFocusedObject().getDirectory(), true) + 1);
+			}
 			FileUtils.createNewFile(zipOutput);
 			ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipOutput));
 			zos.setLevel(Deflater.DEFAULT_COMPRESSION);
 			try {
-				ZipUtils.zipDir(getFocusedObject().getDirectory().getAbsolutePath().length()+1, getFocusedObject().getDirectory(), zos, progress, new ZipFileFilter());
+				ZipUtils.zipDir(getFocusedObject().getDirectory().getAbsolutePath().length() + 1, getFocusedObject().getDirectory(), zos,
+						progress, new ZipFileFilter());
 			} finally {
 				zos.close();
 			}
@@ -127,8 +114,7 @@ public class GenerateDocx extends GCAction<GenerateDocx, GenerationRepository>
 		}
 	}
 
-	public File getGeneratedDocxFile()
-	{
+	public File getGeneratedDocxFile() {
 		return ((DGRepository) getFocusedObject()).getPostBuildFile();
 	}
 

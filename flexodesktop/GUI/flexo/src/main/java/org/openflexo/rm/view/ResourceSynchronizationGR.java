@@ -30,38 +30,30 @@ import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.rm.view.RMViewerRepresentation.ResourceSynchronization;
 
-
-public class ResourceSynchronizationGR extends ConnectorGraphicalRepresentation<ResourceSynchronization>  {
+public class ResourceSynchronizationGR extends ConnectorGraphicalRepresentation<ResourceSynchronization> {
 
 	private ForegroundStyle foreground;
 
-	public ResourceSynchronizationGR(ResourceSynchronization synchro, Drawing<?> aDrawing) 
-	{
-		super(ConnectorType.LINE,
-				(ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(synchro.getR1()),
-				(ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(synchro.getR2()),
-				synchro,
-				aDrawing);
+	public ResourceSynchronizationGR(ResourceSynchronization synchro, Drawing<?> aDrawing) {
+		super(ConnectorType.LINE, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(synchro.getR1()),
+				(ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(synchro.getR2()), synchro, aDrawing);
 		foreground = ForegroundStyle.makeStyle(Color.RED);
 		foreground.setLineWidth(1.6);
 		setForeground(foreground);
 
 		setStartSymbol(StartSymbolType.PLAIN_ARROW);
 		setEndSymbol(EndSymbolType.PLAIN_ARROW);
-		setLayer(Math.max(getStartObject().getLayer(),getEndObject().getLayer())+1);
+		setLayer(Math.max(getStartObject().getLayer(), getEndObject().getLayer()) + 1);
 
 	}
 
-
-	public ResourceSynchronization getResourceSynchronization()
-	{
+	public ResourceSynchronization getResourceSynchronization() {
 		return getDrawable();
 	}
 
 	@Override
-	public RMViewerRepresentation getDrawing() 
-	{
-		return (RMViewerRepresentation)super.getDrawing();
+	public RMViewerRepresentation getDrawing() {
+		return (RMViewerRepresentation) super.getDrawing();
 	}
 
 }

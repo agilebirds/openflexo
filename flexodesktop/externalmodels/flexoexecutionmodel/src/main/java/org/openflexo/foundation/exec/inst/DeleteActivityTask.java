@@ -24,12 +24,11 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 public class DeleteActivityTask extends CustomInstruction {
 
 	private AbstractActivityNode activity;
-	
-	public DeleteActivityTask (AbstractActivityNode activity)
-	{
+
+	public DeleteActivityTask(AbstractActivityNode activity) {
 		super();
 		this.activity = activity;
-		setInlineComment("Delete current ActivityTask for node "+getActivity().getName());
+		setInlineComment("Delete current ActivityTask for node " + getActivity().getName());
 	}
 
 	public AbstractActivityNode getActivity() {
@@ -37,20 +36,17 @@ public class DeleteActivityTask extends CustomInstruction {
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[DeleteActivityTask:"+activity+"]";
+	public String toString() {
+		return "[DeleteActivityTask:" + activity + "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "deleteActivityTask("+getActivity().getFlexoID()+");";
+	public String getJavaStringRepresentation() {
+		return "deleteActivityTask(" + getActivity().getFlexoID() + ");";
 	}
-	
+
 	@Override
-	public DeleteActivityTask clone()
-	{
+	public DeleteActivityTask clone() {
 		DeleteActivityTask returned = new DeleteActivityTask(activity);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

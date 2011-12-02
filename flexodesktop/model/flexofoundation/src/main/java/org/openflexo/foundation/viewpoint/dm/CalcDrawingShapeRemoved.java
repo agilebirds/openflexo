@@ -29,20 +29,17 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
  * @author sguerin
  * 
  */
-public class CalcDrawingShapeRemoved extends OEDataModification
-{
+public class CalcDrawingShapeRemoved extends OEDataModification {
 
-    private ExampleDrawingObject _parent;
+	private ExampleDrawingObject _parent;
 
-    public CalcDrawingShapeRemoved(ExampleDrawingShape element, ExampleDrawingObject parent)
-    {
-        super(element,null);
-        _parent = parent;
-    }
+	public CalcDrawingShapeRemoved(ExampleDrawingShape element, ExampleDrawingObject parent) {
+		super(element, null);
+		_parent = parent;
+	}
 
-    public ExampleDrawingObject getParent()
-    {
-        return _parent;
-    }
+	public ExampleDrawingObject getParent() {
+		return _parent;
+	}
 
 }

@@ -24,37 +24,30 @@ import org.openflexo.inspector.widget.LabelWidget;
 
 public class LabelParameter extends ParameterDefinition<String> {
 
-    public LabelParameter(String name, String label, String defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-    public LabelParameter(String name, String label, String defaultValue, boolean displayLabel)
-    {
-        this(name,label,defaultValue);
-        addParameter(DenaliWidget.DISPLAY_LABEL,""+displayLabel);
-    }
+	public LabelParameter(String name, String label, String defaultValue) {
+		super(name, label, defaultValue);
+	}
 
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.LABEL;
-    }
-   
-   public void setWidth(int width) 
-   {
-       addParameter(LabelWidget.WIDTH,""+width);
-   }
+	public LabelParameter(String name, String label, String defaultValue, boolean displayLabel) {
+		this(name, label, defaultValue);
+		addParameter(DenaliWidget.DISPLAY_LABEL, "" + displayLabel);
+	}
 
-   public void setHeight(int height) 
-   {
-       addParameter(LabelWidget.HEIGHT,""+height);
-   }
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.LABEL;
+	}
 
-   public void setAlign(String align)
-   {
-       addParameter(LabelWidget.ALIGN,align);
-    }
-   
+	public void setWidth(int width) {
+		addParameter(LabelWidget.WIDTH, "" + width);
+	}
+
+	public void setHeight(int height) {
+		addParameter(LabelWidget.HEIGHT, "" + height);
+	}
+
+	public void setAlign(String align) {
+		addParameter(LabelWidget.ALIGN, align);
+	}
 
 }

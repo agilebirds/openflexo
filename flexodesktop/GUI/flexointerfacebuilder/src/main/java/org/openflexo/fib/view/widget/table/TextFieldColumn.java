@@ -33,69 +33,64 @@ import javax.swing.table.TableCellRenderer;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTextFieldColumn;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class TextFieldColumn extends StringColumn implements EditableColumn<String>
-{
-	
+public class TextFieldColumn extends StringColumn implements EditableColumn<String> {
+
 	private DefaultCellEditor editor;
 
-    public TextFieldColumn(FIBTextFieldColumn columnModel, FIBTableModel tableModel, FIBController controller)
-    {
-        super(columnModel,tableModel,controller);
-    }
+	public TextFieldColumn(FIBTextFieldColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+		super(columnModel, tableModel, controller);
+	}
 
-    @Override
-	public boolean isCellEditableFor(Object object)
-    {
-        return true;
-    }
-    
-    @Override
-    public boolean requireCellRenderer() {
-    	return true;
-    }
+	@Override
+	public boolean isCellEditableFor(Object object) {
+		return true;
+	}
 
-    @Override
-    public TableCellRenderer getCellRenderer() {
-    	return getDefaultTableCellRenderer();
-    }
-    
-    @Override
-    public boolean requireCellEditor() {
-    	return true;
-    }
-    
-    @Override
-    public TableCellEditor getCellEditor() {
-    	if(editor==null) {
-    		editor = new DefaultCellEditor(new JTextField()) {
-    			@Override
-    			public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-    				final JTextField textfield = (JTextField)super.getTableCellEditorComponent(table, value, isSelected, row, column);
-    				textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-    				SwingUtilities.invokeLater(new Runnable(){
-    					@Override
+	@Override
+	public boolean requireCellRenderer() {
+		return true;
+	}
+
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return getDefaultTableCellRenderer();
+	}
+
+	@Override
+	public boolean requireCellEditor() {
+		return true;
+	}
+
+	@Override
+	public TableCellEditor getCellEditor() {
+		if (editor == null) {
+			editor = new DefaultCellEditor(new JTextField()) {
+				@Override
+				public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+					final JTextField textfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+					textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
 						public void run() {
-    						textfield.selectAll();
-    					}
-    				});
-    				return textfield;
-    			}
-    		};
-    		((JTextField)editor.getComponent()).setFont(getFont());
-    	}
-    	return editor;
-    }
-    
-    @Override
-	public String toString()
-    {
-        return "EditableStringColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
-    }
+							textfield.selectAll();
+						}
+					});
+					return textfield;
+				}
+			};
+			((JTextField) editor.getComponent()).setFont(getFont());
+		}
+		return editor;
+	}
+
+	@Override
+	public String toString() {
+		return "EditableStringColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
+	}
 }

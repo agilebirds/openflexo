@@ -72,15 +72,13 @@ import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public abstract class GraphicalRepresentation<O> extends DefaultInspectableObject
-implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGEConstants, Observer {
+public abstract class GraphicalRepresentation<O> extends DefaultInspectableObject implements XMLSerializable, Bindable,
+		BindingEvaluationContext, Cloneable, FGEConstants, Observer {
 
 	private static final Logger logger = Logger.getLogger(GraphicalRepresentation.class.getPackage().getName());
 	private Stroke specificStroke = null;
-	
-	private static BindingFactory BINDING_FACTORY = new GRBindingFactory();
 
+	private static BindingFactory BINDING_FACTORY = new GRBindingFactory();
 
 	// *******************************************************************************
 	// * Parameters *
@@ -96,6 +94,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		hasText,
 		text,
 		isMultilineAllowed,
+		continuousTextEditing,
 		textStyle,
 		relativeTextX,
 		relativeTextY,
@@ -122,6 +121,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	private TextStyle textStyle = TextStyle.makeDefault();
 	private String text;
 	private boolean multilineAllowed = false;
+	private boolean continuousTextEditing = true;
 	private double relativeTextX = 0.5;
 	private double relativeTextY = 0.5;
 	private double absoluteTextX = 0;
@@ -148,18 +148,14 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		CENTER, LEFT, RIGHT
 	}
 
-	protected static class ConstraintDependancy
-	{
+	protected static class ConstraintDependancy {
 		GraphicalRepresentation requiringGR;
 		GRParameter requiringParameter;
 		GraphicalRepresentation requiredGR;
 		GRParameter requiredParameter;
 
-		public ConstraintDependancy(GraphicalRepresentation requiringGR,
-				GRParameter requiringParameter,
-				GraphicalRepresentation requiredGR,
-				GRParameter requiredParameter)
-		{
+		public ConstraintDependancy(GraphicalRepresentation requiringGR, GRParameter requiringParameter,
+				GraphicalRepresentation requiredGR, GRParameter requiredParameter) {
 			super();
 			this.requiringGR = requiringGR;
 			this.requiringParameter = requiringParameter;
@@ -168,14 +164,11 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		}
 
 		@Override
-		public boolean equals(Object obj)
-		{
+		public boolean equals(Object obj) {
 			if (obj instanceof ConstraintDependancy) {
-				ConstraintDependancy opposite = (ConstraintDependancy)obj;
-				return requiredGR == opposite.requiredGR
-				&& requiringGR == opposite.requiringGR
-				&& requiringParameter == opposite.requiringParameter
-				&& requiredParameter == opposite.requiredParameter;
+				ConstraintDependancy opposite = (ConstraintDependancy) obj;
+				return requiredGR == opposite.requiredGR && requiringGR == opposite.requiringGR
+						&& requiringParameter == opposite.requiringParameter && requiredParameter == opposite.requiredParameter;
 			}
 			return super.equals(obj);
 		}
@@ -183,8 +176,6 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 
 	private Vector<ConstraintDependancy> dependancies;
 	private Vector<ConstraintDependancy> alterings;
-
-
 
 	// *******************************************************************************
 	// * Static code *
@@ -283,13 +274,12 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	// * Constructor *
 	// *******************************************************************************
 
-	protected GraphicalRepresentation(O aDrawable, Drawing<?> aDrawing)
-	{
+	protected GraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
 		super();
 		drawable = aDrawable;
 		drawing = aDrawing;
 		textStyle = TextStyle.makeDefault();
-		//textStyle.setGraphicalRepresentation(this);
+		// textStyle.setGraphicalRepresentation(this);
 		if (textStyle != null) {
 			textStyle.addObserver(this);
 		}
@@ -306,8 +296,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	// * Deletion *
 	// ***************************************************************************
 
-	public void delete()
-	{
+	public void delete() {
 		isDeleted = true;
 		if (textStyle != null) {
 			textStyle.deleteObserver(this);
@@ -322,9 +311,10 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		return isDeleted;
 	}
 
-	public GRParameter parameterWithName(String parameterName)
-	{
-		if (parameterName == null) return null;
+	public GRParameter parameterWithName(String parameterName) {
+		if (parameterName == null) {
+			return null;
+		}
 		for (GRParameter param : getAllParameters()) {
 			if (param.name().equals(parameterName)) {
 				return param;
@@ -332,12 +322,11 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		}
 		return null;
 	}
-	
-	public Vector<GRParameter> getAllParameters()
-	{
+
+	public Vector<GRParameter> getAllParameters() {
 		Vector<GRParameter> returned = new Vector<GRParameter>();
 		Parameters[] allParams = Parameters.values();
-		for (int i=0; i<allParams.length; i++) {
+		for (int i = 0; i < allParams.length; i++) {
 			returned.add(allParams[i]);
 		}
 		return returned;
@@ -437,9 +426,8 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		isDeserializing = true;
 	}
 
-	public void finalizeDeserialization()
-	{
-		//logger.info("Hop: finalizeDeserialization for "+this+" root is "+getRootGraphicalRepresentation());
+	public void finalizeDeserialization() {
+		// logger.info("Hop: finalizeDeserialization for "+this+" root is "+getRootGraphicalRepresentation());
 
 		if (getRootGraphicalRepresentation().getBindingModel() == null) {
 			getRootGraphicalRepresentation().createBindingModel();
@@ -458,38 +446,32 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 
 	private String identifier = null;
 
-	public void resetToDefaultIdentifier()
-	{
+	public void resetToDefaultIdentifier() {
 		identifier = retrieveDefaultIdentifier();
 	}
 
-	private String retrieveDefaultIdentifier()
-	{
+	private String retrieveDefaultIdentifier() {
 		if (getParentGraphicalRepresentation() == null) {
 			return "root";
-		}
-		else {
+		} else {
 			int index = getParentGraphicalRepresentation().getContainedGraphicalRepresentations().indexOf(this);
 			if (getParentGraphicalRepresentation().getParentGraphicalRepresentation() == null) {
-				//logger.info("retrieveDefaultIdentifier return "+index);
-				return "object_"+index;
-			}
-			else {
-				return getParentGraphicalRepresentation().retrieveDefaultIdentifier()+"_"+index;
+				// logger.info("retrieveDefaultIdentifier return "+index);
+				return "object_" + index;
+			} else {
+				return getParentGraphicalRepresentation().retrieveDefaultIdentifier() + "_" + index;
 			}
 		}
 	}
 
-	public String getIdentifier()
-	{
+	public String getIdentifier() {
 		if (identifier == null) {
 			return retrieveDefaultIdentifier();
 		}
 		return identifier;
 	}
 
-	public void setIdentifier(String identifier)
-	{
+	public void setIdentifier(String identifier) {
 		FGENotification notification = requireChange(Parameters.identifier, identifier);
 		if (notification != null) {
 			this.identifier = identifier;
@@ -498,8 +480,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		}
 	}
 
-	public int getLayer()
-	{
+	public int getLayer() {
 		return layer;
 	}
 
@@ -555,17 +536,17 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		return getDrawing().getContainedObjects(drawable);
 	}
 
-	public Object getContainer(Object drawable)
-	{
+	public Object getContainer(Object drawable) {
 		if (getDrawing() == null) {
 			return null;
 		}
 		return getDrawing().getContainer(drawable);
 	}
 
-	public List<? extends Object> getContainedObjects()
-	{
-		if (getDrawable() == null) return null;
+	public List<? extends Object> getContainedObjects() {
+		if (getDrawable() == null) {
+			return null;
+		}
 		if (getDrawing() == null) {
 			return null;
 		}
@@ -573,6 +554,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	}
 
 	public Vector<GraphicalRepresentation<?>> getContainedGraphicalRepresentations() {
+
 		if (getContainedObjects() == null) {
 			return null;
 		}
@@ -655,11 +637,10 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		return orderedGRList.indexOf(this);
 	}
 
-	public int getIndex()
-	{
+	public int getIndex() {
 		return getLayerOrder();
 	}
-	
+
 	public Object getContainer() {
 		if (drawing == null) {
 			return null;
@@ -869,8 +850,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		return textStyle;
 	}
 
-	public void setTextStyle(TextStyle aTextStyle)
-	{
+	public void setTextStyle(TextStyle aTextStyle) {
 		FGENotification notification = requireChange(Parameters.textStyle, aTextStyle);
 		if (notification != null) {
 			if (textStyle != null) {
@@ -1038,6 +1018,18 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		FGENotification notification = requireChange(Parameters.isMultilineAllowed, multilineAllowed);
 		if (notification != null) {
 			this.multilineAllowed = multilineAllowed;
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getContinuousTextEditing() {
+		return continuousTextEditing;
+	}
+
+	public void setContinuousTextEditing(boolean continuousTextEditing) {
+		FGENotification notification = requireChange(Parameters.continuousTextEditing, continuousTextEditing);
+		if (notification != null) {
+			this.continuousTextEditing = continuousTextEditing;
 			hasChanged(notification);
 		}
 	}
@@ -1232,7 +1224,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		} else {
 			oldValue = objectForKey(parameter.name());
 			if (value == oldValue && value != null && !value.getClass().isEnum()) {
-				//logger.warning(parameter.name() + ": require change called for same object: aren't you wrong ???");
+				// logger.warning(parameter.name() + ": require change called for same object: aren't you wrong ???");
 			}
 		}
 		// System.out.println("param: "+parameterKey.name()+" value="+oldValue+" value="+value);
@@ -1255,10 +1247,10 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		hasChanged(notification);
 	}
 
-	protected void hasChanged(FGENotification notification)
-	{
+	protected void hasChanged(FGENotification notification) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Change attribute " + notification.parameter + " for object " + this + " was: " + notification.oldValue + " is now: " + notification.newValue);
+			logger.fine("Change attribute " + notification.parameter + " for object " + this + " was: " + notification.oldValue
+					+ " is now: " + notification.newValue);
 		}
 		propagateConstraintsAfterModification(notification.parameter);
 		setChanged();
@@ -1295,17 +1287,15 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	}
 
 	// *******************************************************************************
-	// *                          Observer implementation                            *
+	// * Observer implementation *
 	// *******************************************************************************
 
 	@Override
-	public void update(Observable observable, Object notification)
-	{
+	public void update(Observable observable, Object notification) {
 		if (observable instanceof TextStyle) {
 			notifyAttributeChange(Parameters.textStyle);
 		}
 	}
-
 
 	// *******************************************************************************
 	// * Coordinates manipulation *
@@ -1408,11 +1398,15 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		while (current != source.getDrawing().getModel()) {
 			if (source.getDrawing().getGraphicalRepresentation(current) == null) {
 				throw new IllegalArgumentException(
-						"Drawable " + current + " has no graphical representation.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
+						"Drawable "
+								+ current
+								+ " has no graphical representation.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
 			}
 			if (source.getDrawing().getContainer(current) == null) {
 				throw new IllegalArgumentException(
-						"Drawable " + current + " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
+						"Drawable "
+								+ current
+								+ " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
 			}
 			tx += source.getDrawing().getGraphicalRepresentation(current).getViewX(scale);
 			ty += source.getDrawing().getGraphicalRepresentation(current).getViewY(scale);
@@ -1452,7 +1446,9 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		while (current != destination.getDrawing().getModel()) {
 			if (destination.getDrawing().getContainer(current) == null) {
 				throw new IllegalArgumentException(
-						"Drawable " + current + " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
+						"Drawable "
+								+ current
+								+ " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
 			}
 			tx -= destination.getDrawing().getGraphicalRepresentation(current).getViewX(scale);
 			ty -= destination.getDrawing().getGraphicalRepresentation(current).getViewY(scale);
@@ -1532,11 +1528,17 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	}
 
 	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation<?> source, double scale) {
+		if (!isConnectedToDrawing() || !source.isConnectedToDrawing()) {
+			return new FGEPoint(p.x / scale, p.y / scale);
+		}
 		Point pointRelativeToCurrentView = convertPoint(source, p, this, scale);
 		return convertViewCoordinatesToNormalizedPoint(pointRelativeToCurrentView, scale);
 	}
 
 	public FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, GraphicalRepresentation<?> destination, double scale) {
+		if (!isConnectedToDrawing() || !destination.isConnectedToDrawing()) {
+			return new FGEPoint(p.x * scale, p.y * scale);
+		}
 		Point pointRelativeToRemoteView = convertPoint(this, p, destination, scale);
 		return destination.convertViewCoordinatesToNormalizedPoint(pointRelativeToRemoteView, scale);
 	}
@@ -1861,13 +1863,11 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	// * Bindings: constraint expressions
 	// *******************************************************************************
 
-	public boolean isRootGraphicalRepresentation()
-	{
+	public boolean isRootGraphicalRepresentation() {
 		return getParentGraphicalRepresentation() == null;
 	}
 
-	public GraphicalRepresentation<?> getRootGraphicalRepresentation()
-	{
+	public GraphicalRepresentation<?> getRootGraphicalRepresentation() {
 		GraphicalRepresentation<?> current = this;
 		while (current != null && !current.isRootGraphicalRepresentation()) {
 			current = current.getParentGraphicalRepresentation();
@@ -1878,8 +1878,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	private BindingModel _bindingModel = null;
 
 	@Override
-	public final BindingModel getBindingModel()
-	{
+	public final BindingModel getBindingModel() {
 		if (_bindingModel == null) {
 			createBindingModel();
 		}
@@ -1891,13 +1890,11 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	}
 
 	@Override
-	public BindingFactory getBindingFactory() 
-	{
+	public BindingFactory getBindingFactory() {
 		return BINDING_FACTORY;
 	}
-	
-	public void updateBindingModel()
-	{
+
+	public void updateBindingModel() {
 		logger.fine("updateBindingModel()");
 		/*if (getRootGraphicalRepresentation() != null) {
 			getRootGraphicalRepresentation()._bindingModel = null;
@@ -1906,80 +1903,73 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		createBindingModel();
 	}
 
-	private void createBindingModel()
-	{
+	private void createBindingModel() {
 		_bindingModel = new BindingModel();
 
-		_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("this",this,this));
-		if (getParentGraphicalRepresentation() != null) _bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("parent",getParentGraphicalRepresentation(),this));
+		_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("this", this, this));
+		if (getParentGraphicalRepresentation() != null) {
+			_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("parent", getParentGraphicalRepresentation(),
+					this));
+		}
 		_bindingModel.addToBindingVariables(new ComponentsBindingVariable(this));
 
 		Iterator<GraphicalRepresentation> it = allContainedGRIterator();
 		while (it.hasNext()) {
 			GraphicalRepresentation subComponent = it.next();
-			//_bindingModel.addToBindingVariables(new ComponentBindingVariable(subComponent));
+			// _bindingModel.addToBindingVariables(new ComponentBindingVariable(subComponent));
 			subComponent.notifiedBindingModelRecreated();
 		}
 
-		logger.fine("Created binding model at root component level:\n"+_bindingModel);
+		logger.fine("Created binding model at root component level:\n" + _bindingModel);
 	}
 
 	@Override
-	public Object getValue(BindingVariable variable)
-	{
+	public Object getValue(BindingVariable variable) {
 		BindingVariable bv = getBindingModel().bindingVariableNamed(variable.getVariableName());
 		/*if (bv instanceof ComponentBindingVariable) {
 			return ((ComponentBindingVariable) bv).getReference();
 		}
-		else*/ if (bv instanceof ComponentPathElement) {
+		else*/if (bv instanceof ComponentPathElement) {
 			return ((ComponentPathElement) bv).getComponent();
-		}
-		else if (bv instanceof ComponentsBindingVariable) {
+		} else if (bv instanceof ComponentsBindingVariable) {
 			return getRootGraphicalRepresentation();
-		}
-		else {
-			logger.warning("Could not find variable named "+variable);
+		} else {
+			logger.warning("Could not find variable named " + variable);
 			return null;
 		}
 	}
 
-	public void notifiedBindingModelRecreated()
-	{
+	public void notifiedBindingModelRecreated() {
 		logger.fine("notifiedBindingModelRecreated()");
 	}
 
-	public void notifyBindingChanged(DataBinding binding)
-	{
-		logger.fine("notifyBindingChanged() for "+binding);
+	public void notifyBindingChanged(DataBinding binding) {
+		logger.fine("notifyBindingChanged() for " + binding);
 	}
 
-	public Vector<GraphicalRepresentation> retrieveAllContainedGR()
-	{
+	public Vector<GraphicalRepresentation> retrieveAllContainedGR() {
 		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
-		addAllContainedGR(this,returned);
+		addAllContainedGR(this, returned);
 		return returned;
 	}
 
-	private void addAllContainedGR(GraphicalRepresentation<?> gr, Vector<GraphicalRepresentation> returned)
-	{
+	private void addAllContainedGR(GraphicalRepresentation<?> gr, Vector<GraphicalRepresentation> returned) {
 		if (gr.getContainedGraphicalRepresentations() == null) {
 			return;
 		}
 		for (GraphicalRepresentation<?> gr2 : gr.getContainedGraphicalRepresentations()) {
 			returned.add(gr2);
-			addAllContainedGR(gr2,returned);
+			addAllContainedGR(gr2, returned);
 		}
 	}
 
-	public Iterator<GraphicalRepresentation> allGRIterator()
-	{
+	public Iterator<GraphicalRepresentation> allGRIterator() {
 		Vector<GraphicalRepresentation> returned = getRootGraphicalRepresentation().retrieveAllContainedGR();
-		returned.insertElementAt(getRootGraphicalRepresentation(),0);
+		returned.insertElementAt(getRootGraphicalRepresentation(), 0);
 		return returned.iterator();
 	}
 
-	public Iterator<GraphicalRepresentation> allContainedGRIterator()
-	{
+	public Iterator<GraphicalRepresentation> allContainedGRIterator() {
 		Vector<GraphicalRepresentation> allGR = retrieveAllContainedGR();
 		if (allGR == null) {
 			return new Iterator<GraphicalRepresentation>() {
@@ -1987,10 +1977,12 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 				public boolean hasNext() {
 					return false;
 				}
+
 				@Override
 				public GraphicalRepresentation next() {
 					return null;
 				}
+
 				@Override
 				public void remove() {
 				}
@@ -2000,19 +1992,17 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		}
 	}
 
-	public Vector<ConstraintDependancy> getDependancies()
-	{
+	public Vector<ConstraintDependancy> getDependancies() {
 		return dependancies;
 	}
 
-	public Vector<ConstraintDependancy> getAlterings()
-	{
+	public Vector<ConstraintDependancy> getAlterings() {
 		return alterings;
 	}
 
-	public void declareDependantOf(GraphicalRepresentation aComponent, GRParameter requiringParameter, GRParameter requiredParameter) throws DependancyLoopException
-	{
-		//logger.info("Component "+this+" depends of "+aComponent);
+	public void declareDependantOf(GraphicalRepresentation aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
+			throws DependancyLoopException {
+		// logger.info("Component "+this+" depends of "+aComponent);
 		if (aComponent == this) {
 			logger.warning("Forbidden reflexive dependancies");
 			return;
@@ -2021,9 +2011,9 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		try {
 			Vector<GraphicalRepresentation<?>> actualDependancies = new Vector<GraphicalRepresentation<?>>();
 			actualDependancies.add(aComponent);
-			searchLoopInDependanciesWith(aComponent,actualDependancies);
+			searchLoopInDependanciesWith(aComponent, actualDependancies);
 		} catch (DependancyLoopException e) {
-			logger.warning("Forbidden loop in dependancies: "+e.getMessage());
+			logger.warning("Forbidden loop in dependancies: " + e.getMessage());
 			throw e;
 		}
 
@@ -2031,15 +2021,16 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 
 		if (!dependancies.contains(newDependancy)) {
 			dependancies.add(newDependancy);
-			logger.info("Parameter "+requiringParameter+" of GR "+this+" depends of parameter "+requiredParameter+" of GR "+aComponent);
+			logger.info("Parameter " + requiringParameter + " of GR " + this + " depends of parameter " + requiredParameter + " of GR "
+					+ aComponent);
 		}
 		if (!aComponent.alterings.contains(newDependancy)) {
 			aComponent.alterings.add(newDependancy);
 		}
 	}
 
-	private void searchLoopInDependanciesWith(GraphicalRepresentation<?> aComponent, Vector<GraphicalRepresentation<?>> actualDependancies) throws DependancyLoopException
-	{
+	private void searchLoopInDependanciesWith(GraphicalRepresentation<?> aComponent, Vector<GraphicalRepresentation<?>> actualDependancies)
+			throws DependancyLoopException {
 		for (ConstraintDependancy dependancy : aComponent.dependancies) {
 			GraphicalRepresentation<?> c = dependancy.requiredGR;
 			if (c == this) {
@@ -2048,26 +2039,24 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 			Vector<GraphicalRepresentation<?>> newVector = new Vector<GraphicalRepresentation<?>>();
 			newVector.addAll(actualDependancies);
 			newVector.add(c);
-			searchLoopInDependanciesWith(c,newVector);
+			searchLoopInDependanciesWith(c, newVector);
 		}
 	}
 
-	protected static class DependancyLoopException extends Exception
-	{
+	protected static class DependancyLoopException extends Exception {
 		private Vector<GraphicalRepresentation<?>> dependancies;
-		public DependancyLoopException(Vector<GraphicalRepresentation<?>> dependancies)
-		{
+
+		public DependancyLoopException(Vector<GraphicalRepresentation<?>> dependancies) {
 			this.dependancies = dependancies;
 		}
+
 		@Override
-		public String getMessage()
-		{
-			return "DependancyLoopException: "+dependancies;
+		public String getMessage() {
+			return "DependancyLoopException: " + dependancies;
 		}
 	}
 
-	protected void propagateConstraintsAfterModification(GRParameter parameter)
-	{
+	protected void propagateConstraintsAfterModification(GRParameter parameter) {
 		for (ConstraintDependancy dependancy : alterings) {
 			if (dependancy.requiredParameter == parameter) {
 				dependancy.requiringGR.computeNewConstraint(dependancy);
@@ -2075,56 +2064,46 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		}
 	}
 
-	protected void computeNewConstraint(ConstraintDependancy dependancy)
-	{
+	protected void computeNewConstraint(ConstraintDependancy dependancy) {
 		// None known at this level
 	}
 
 	private Vector<GRVariable> variables = new Vector<GRVariable>();
 
-	public Vector<GRVariable> getVariables() 
-	{
+	public Vector<GRVariable> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(Vector<GRVariable> variables) 
-	{
+	public void setVariables(Vector<GRVariable> variables) {
 		this.variables = variables;
 	}
-	
-	public void addToVariables(GRVariable v) 
-	{
+
+	public void addToVariables(GRVariable v) {
 		variables.add(v);
 		setChanged();
 		notifyObservers(new FGENotification(Parameters.variables, variables, variables));
 	}
 
-	public void removeFromVariables(GRVariable v)
-	{
+	public void removeFromVariables(GRVariable v) {
 		variables.remove(v);
 		setChanged();
 		notifyObservers(new FGENotification(Parameters.variables, variables, variables));
 	}
 
-	public GRVariable createStringVariable()
-	{
-		GRVariable returned = new GRVariable("variable",GRVariableType.String,"value");
+	public GRVariable createStringVariable() {
+		GRVariable returned = new GRVariable("variable", GRVariableType.String, "value");
 		addToVariables(returned);
 		return returned;
 	}
 
-	public GRVariable createIntegerVariable()
-	{
-		GRVariable returned = new GRVariable("variable",GRVariableType.Integer,"0");
+	public GRVariable createIntegerVariable() {
+		GRVariable returned = new GRVariable("variable", GRVariableType.Integer, "0");
 		addToVariables(returned);
 		return returned;
 	}
 
-	public void deleteVariable(GRVariable v)
-	{
+	public void deleteVariable(GRVariable v) {
 		removeFromVariables(v);
 	}
 
-
-	
 }

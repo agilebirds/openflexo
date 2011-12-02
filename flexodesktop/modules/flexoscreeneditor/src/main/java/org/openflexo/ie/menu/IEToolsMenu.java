@@ -34,152 +34,131 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.view.menu.ToolsMenu;
 
-
 /**
  * IE Module tools menu
  * 
  * @author sguerin
  */
-public class IEToolsMenu extends ToolsMenu
-{
+public class IEToolsMenu extends ToolsMenu {
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-    public CheckLibraryConsistencyItem checkLibraryConsistencyItem;
+	public CheckLibraryConsistencyItem checkLibraryConsistencyItem;
 
-    public CheckComponentConsistencyItem checkComponentConsistencyItem;
-    
-    public CheckDKVConsistencyItem checkDKVConsistencyItem;
+	public CheckComponentConsistencyItem checkComponentConsistencyItem;
 
-    protected IEController _controller;
+	public CheckDKVConsistencyItem checkDKVConsistencyItem;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	protected IEController _controller;
 
-    public IEToolsMenu(IEController controller)
-    {
-        super(controller);
-        _controller = controller;
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    @Override
-	public void addSpecificItems()
-    {
-        add(checkLibraryConsistencyItem = new CheckLibraryConsistencyItem());
-        add(checkComponentConsistencyItem = new CheckComponentConsistencyItem());
-        add(checkDKVConsistencyItem = new CheckDKVConsistencyItem());
-        addSeparator();
-    }
+	public IEToolsMenu(IEController controller) {
+		super(controller);
+		_controller = controller;
+	}
 
-    // ==========================================================================
-    // ============================= Accessors
-    // ==================================
-    // ==========================================================================
+	@Override
+	public void addSpecificItems() {
+		add(checkLibraryConsistencyItem = new CheckLibraryConsistencyItem());
+		add(checkComponentConsistencyItem = new CheckComponentConsistencyItem());
+		add(checkDKVConsistencyItem = new CheckDKVConsistencyItem());
+		addSeparator();
+	}
 
-    public IEController getIEController()
-    {
-        return _controller;
-    }
+	// ==========================================================================
+	// ============================= Accessors
+	// ==================================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= CheckLibraryConsistency ===============================
-    // ==========================================================================
+	public IEController getIEController() {
+		return _controller;
+	}
 
-    public class CheckLibraryConsistencyItem extends FlexoMenuItem
-    {
+	// ==========================================================================
+	// ============================= CheckLibraryConsistency ===============================
+	// ==========================================================================
 
-        public CheckLibraryConsistencyItem()
-        {
-            super(new CheckLibraryConsistencyAction(), "check_component_library_consistency", null, getIEController(), true);
-        }
+	public class CheckLibraryConsistencyItem extends FlexoMenuItem {
 
-    }
+		public CheckLibraryConsistencyItem() {
+			super(new CheckLibraryConsistencyAction(), "check_component_library_consistency", null, getIEController(), true);
+		}
 
-    public class CheckLibraryConsistencyAction extends AbstractAction
-    {
-        public CheckLibraryConsistencyAction()
-        {
-            super();
-        }
+	}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-            getIEController().consistencyCheck(getIEController().getProject().getFlexoComponentLibrary());
-        }
+	public class CheckLibraryConsistencyAction extends AbstractAction {
+		public CheckLibraryConsistencyAction() {
+			super();
+		}
 
-    }
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			getIEController().consistencyCheck(getIEController().getProject().getFlexoComponentLibrary());
+		}
 
-    // ==========================================================================
-    // ======================= CheckComponentConsistency =========================
-    // ==========================================================================
+	}
 
-    public class CheckComponentConsistencyItem extends FlexoMenuItem
-    {
+	// ==========================================================================
+	// ======================= CheckComponentConsistency =========================
+	// ==========================================================================
 
-        public CheckComponentConsistencyItem()
-        {
-            super(new CheckComponentConsistencyAction(), "check_component_consistency", null, getIEController(), true);
-        }
+	public class CheckComponentConsistencyItem extends FlexoMenuItem {
 
-        @Override
-        public void itemWillShow() {
-        	setEnabled(getIEController().getCurrentEditedComponent() != null); 
-        	super.itemWillShow();
-        }
-    }
+		public CheckComponentConsistencyItem() {
+			super(new CheckComponentConsistencyAction(), "check_component_consistency", null, getIEController(), true);
+		}
 
-    public class CheckComponentConsistencyAction extends AbstractAction
-    {
-        public CheckComponentConsistencyAction()
-        {
-            super();
-        }
+		@Override
+		public void itemWillShow() {
+			setEnabled(getIEController().getCurrentEditedComponent() != null);
+			super.itemWillShow();
+		}
+	}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-            if (getIEController().getCurrentEditedComponent() != null) {
-	            try {
-	                getIEController().consistencyCheck(getIEController().getCurrentEditedComponent().getComponentDefinition());
-	            } catch (ClassCastException e) {
-	                FlexoController.showError(getIEController().getCurrentEditedComponent().getClass() + " is not Validable !");
-	
-	            }
-            }
-        }
+	public class CheckComponentConsistencyAction extends AbstractAction {
+		public CheckComponentConsistencyAction() {
+			super();
+		}
 
-    }
-    
-    
-    public class CheckDKVConsistencyItem extends FlexoMenuItem
-    {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if (getIEController().getCurrentEditedComponent() != null) {
+				try {
+					getIEController().consistencyCheck(getIEController().getCurrentEditedComponent().getComponentDefinition());
+				} catch (ClassCastException e) {
+					FlexoController.showError(getIEController().getCurrentEditedComponent().getClass() + " is not Validable !");
 
-        public CheckDKVConsistencyItem()
-        {
-            super(new CheckDKVConsistencyAction(), "check_dkv_consistency", null, getIEController(), true);
-        }
+				}
+			}
+		}
 
-    }
+	}
 
-    public class CheckDKVConsistencyAction extends AbstractAction
-    {
-        public CheckDKVConsistencyAction()
-        {
-            super();
-        }
+	public class CheckDKVConsistencyItem extends FlexoMenuItem {
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-                getIEController().consistencyCheck(getIEController().getProject().getDKVModel());
-        }
+		public CheckDKVConsistencyItem() {
+			super(new CheckDKVConsistencyAction(), "check_dkv_consistency", null, getIEController(), true);
+		}
 
-    }
+	}
+
+	public class CheckDKVConsistencyAction extends AbstractAction {
+		public CheckDKVConsistencyAction() {
+			super();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			getIEController().consistencyCheck(getIEController().getProject().getDKVModel());
+		}
+
+	}
 
 }

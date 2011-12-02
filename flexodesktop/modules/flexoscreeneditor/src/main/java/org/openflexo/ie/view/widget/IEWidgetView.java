@@ -36,7 +36,6 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoModelObject;
@@ -55,382 +54,358 @@ import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.utils.DrawUtils;
 
-
 /**
- * Abstract parent class for all IE widget At this level are managed following
- * features:
+ * Abstract parent class for all IE widget At this level are managed following features:
  * <ul>
  * <li>Selection and Focus</li>
  * <li>Represented object retrieving</li>
  * <li>Inspection of represented object</li>
  * </ul>
- *
+ * 
  * @author bmangez, sguerin
  */
-public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetView implements /* InspectableObjectView, */GraphicalFlexoObserver,
-        IESelectable, Layoutable {
+public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetView implements
+/* InspectableObjectView, */GraphicalFlexoObserver, IESelectable, Layoutable {
 
-    private static final Logger logger = Logger.getLogger(IEWidgetView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEWidgetView.class.getPackage().getName());
 
-    public static final String ATTRIB_DESCRIPTION_NAME = "description";
+	public static final String ATTRIB_DESCRIPTION_NAME = "description";
 
-    public static final String BINDING_VALUE_NAME = "value";
+	public static final String BINDING_VALUE_NAME = "value";
 
-    public static final String BINDING_TOOLTIP_NAME = "tooltip";
+	public static final String BINDING_TOOLTIP_NAME = "tooltip";
 
-    protected static final Border EMPTY_BORDER_1 = BorderFactory.createEmptyBorder(1, 1, 1, 1);
-    
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	protected static final Border EMPTY_BORDER_1 = BorderFactory.createEmptyBorder(1, 1, 1, 1);
 
-    private boolean _isSelected = false;
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    private boolean _isFocused = false;
+	private boolean _isSelected = false;
 
-    private T _model;
+	private boolean _isFocused = false;
 
-    protected IEWOComponentView _componentView;
+	private T _model;
 
-    //protected boolean holdsNextComputedPreferredSize = false;
+	protected IEWOComponentView _componentView;
 
-    //protected Dimension preferredSize = null;
+	// protected boolean holdsNextComputedPreferredSize = false;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// protected Dimension preferredSize = null;
 
-    public IEWidgetView(IEController ieController, T model, boolean addDnDSupport, IEWOComponentView componentView)
-    {
-        super(ieController, model, addDnDSupport);
-        _componentView = componentView;
-        _componentView.registerViewForWidget(model, this);
-        _model = model;
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Build new " + getClass().getName());
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Add " + getClass().getName() + " to pending views");
-        model.addObserver(this);
-        updateTooltip();
-        setIsSelected(false);
-        setIsFocused(false);
-        addMouseListener(ieController.getIESelectionManager());
-        addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e)
-            {
-                getIEController().getIESelectionManager().processMouseMoved(e);
-            }
-        });
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    private String getTooltipFromModel() {
-        return getModel().getTooltip();
-    }
+	public IEWidgetView(IEController ieController, T model, boolean addDnDSupport, IEWOComponentView componentView) {
+		super(ieController, model, addDnDSupport);
+		_componentView = componentView;
+		_componentView.registerViewForWidget(model, this);
+		_model = model;
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Build new " + getClass().getName());
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Add " + getClass().getName() + " to pending views");
+		}
+		model.addObserver(this);
+		updateTooltip();
+		setIsSelected(false);
+		setIsFocused(false);
+		addMouseListener(ieController.getIESelectionManager());
+		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				getIEController().getIESelectionManager().processMouseMoved(e);
+			}
+		});
+	}
 
-    private void updateTooltip()
-    {
-        if (getTooltipFromModel() != null && getTooltipFromModel().trim().length() > 0)
-            if (getTooltipFromModel().length() <= 100)
-                setToolTipText(getTooltipFromModel());
-            else {
-                if (getTooltipFromModel().indexOf(' ', 100) > -1)
-                    setToolTipText(getTooltipFromModel().substring(0, getTooltipFromModel().indexOf(' ', 100)) + "...");
-                else
-                    setToolTipText(getTooltipFromModel().substring(0, 100) + "...");
-            }
-        else
-            setToolTipText(null);
-    }
+	private String getTooltipFromModel() {
+		return getModel().getTooltip();
+	}
 
-    @Override
-    public IEWidgetView findViewForModel(IEObject object)
-    {
-        return _componentView.findViewForModel(object);
-    }
+	private void updateTooltip() {
+		if (getTooltipFromModel() != null && getTooltipFromModel().trim().length() > 0) {
+			if (getTooltipFromModel().length() <= 100) {
+				setToolTipText(getTooltipFromModel());
+			} else {
+				if (getTooltipFromModel().indexOf(' ', 100) > -1) {
+					setToolTipText(getTooltipFromModel().substring(0, getTooltipFromModel().indexOf(' ', 100)) + "...");
+				} else {
+					setToolTipText(getTooltipFromModel().substring(0, 100) + "...");
+				}
+			}
+		} else {
+			setToolTipText(null);
+		}
+	}
 
-    public String getCSSName()
-    {
-        return getModel().getCSSName();
-    }
+	@Override
+	public IEWidgetView findViewForModel(IEObject object) {
+		return _componentView.findViewForModel(object);
+	}
 
-    public FlexoCSS getFlexoCSS()
-    {
-        return getModel().getFlexoCSS();
-    }
+	public String getCSSName() {
+		return getModel().getCSSName();
+	}
 
-    public Color getMainColor()
-    {
-        return colorFromConceptualColor(FlexoConceptualColor.MAIN_COLOR, getFlexoCSS());
-    }
+	public FlexoCSS getFlexoCSS() {
+		return getModel().getFlexoCSS();
+	}
 
-    public Color getTextColor()
-    {
-        return colorFromConceptualColor(FlexoConceptualColor.TEXT_COLOR, getFlexoCSS());
-    }
+	public Color getMainColor() {
+		return colorFromConceptualColor(FlexoConceptualColor.MAIN_COLOR, getFlexoCSS());
+	}
 
-    /**
-     * Overrides doLayout
-     *
-     * @see java.awt.Container#doLayout()
-     */
-    @Override
-    public void doLayout()
-    {
-        _componentView.notifyAllViewsToHoldTheirNextComputedPreferredSize(this);
-        if (getParent() instanceof Layoutable) {
-            ((Layoutable) getParent()).doLayout();
-        }
-        super.doLayout();
-        _componentView.resetAllViewsPreferredSize(this);
-    }
+	public Color getTextColor() {
+		return colorFromConceptualColor(FlexoConceptualColor.TEXT_COLOR, getFlexoCSS());
+	}
 
-    /**
-     * Overrides propagateResize
-     *
-     * @see org.openflexo.ie.view.Layoutable#propagateResize()
-     */
-    @Override
-	public void propagateResize()
-    {
-        // Does nothing by default
-    }
+	/**
+	 * Overrides doLayout
+	 * 
+	 * @see java.awt.Container#doLayout()
+	 */
+	@Override
+	public void doLayout() {
+		_componentView.notifyAllViewsToHoldTheirNextComputedPreferredSize(this);
+		if (getParent() instanceof Layoutable) {
+			((Layoutable) getParent()).doLayout();
+		}
+		super.doLayout();
+		_componentView.resetAllViewsPreferredSize(this);
+	}
 
-    public void delete()
-    {
-        _model.deleteObserver(this);
-        if (getParent() != null)
-            getParent().remove(this);
-        Component[] comp = getComponents();
-        for (int i=0;i<comp.length;i++) {
-        	if (comp[i] instanceof IEWidgetView)
-        		((IEWidgetView)comp[i]).delete();
-        }
-        _componentView.removeFrowWidgetViews(getModel());
-        removeAll();
-    }
+	/**
+	 * Overrides propagateResize
+	 * 
+	 * @see org.openflexo.ie.view.Layoutable#propagateResize()
+	 */
+	@Override
+	public void propagateResize() {
+		// Does nothing by default
+	}
 
-    public void setDefaultBorder()
-    {
-        if (getModel().getIsRootOfPartialComponent() && getParent() != null) {
-            ((JPanel) getParent()).setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
-        } else if (getParent() != null && getParent() instanceof IETDWidgetView) {
-            setBorder(null);
-        } else
-        	setBorder(EMPTY_BORDER_1);
-    }
+	public void delete() {
+		_model.deleteObserver(this);
+		if (getParent() != null) {
+			getParent().remove(this);
+		}
+		Component[] comp = getComponents();
+		for (int i = 0; i < comp.length; i++) {
+			if (comp[i] instanceof IEWidgetView) {
+				((IEWidgetView) comp[i]).delete();
+			}
+		}
+		_componentView.removeFrowWidgetViews(getModel());
+		removeAll();
+	}
 
-    // ==========================================================================
-    // ======================= IESelectable ============================
-    // ==========================================================================
+	public void setDefaultBorder() {
+		if (getModel().getIsRootOfPartialComponent() && getParent() != null) {
+			((JPanel) getParent()).setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
+		} else if (getParent() != null && getParent() instanceof IETDWidgetView) {
+			setBorder(null);
+		} else {
+			setBorder(EMPTY_BORDER_1);
+		}
+	}
 
-    /**
-     * Return boolean indicating if related object is selected
-     *
-     * @return boolean
-     */
-    @Override
-	public boolean isSelected()
-    {
-        return _isSelected;
-    }
+	// ==========================================================================
+	// ======================= IESelectable ============================
+	// ==========================================================================
 
-    @Override
-	public void setIsSelected(boolean b)
-    {
-        _isSelected = b;
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("setIsSelected=" + b + " dans " + getClass().getName());
-        repaint();
-    }
+	/**
+	 * Return boolean indicating if related object is selected
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isSelected() {
+		return _isSelected;
+	}
 
-    /**
-     * Sets related object to be focused or not
-     */
-    @Override
-	public void setIsFocused(boolean b)
-    {
-        _isFocused = b;
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("setIsFocused=" + b + " dans " + getClass().getName());
-        if (b) {
-            setBorder(BorderFactory.createLineBorder(ColorCst.BORDER_COLOR_FOR_FOCUSED_WIDGET));
-        } else {
-            setDefaultBorder();
-        }
-        repaint();
-    }
+	@Override
+	public void setIsSelected(boolean b) {
+		_isSelected = b;
+		if (logger.isLoggable(Level.FINEST)) {
+			logger.finest("setIsSelected=" + b + " dans " + getClass().getName());
+		}
+		repaint();
+	}
 
-    /**
-     * Return boolean indicating if related object is focused
-     *
-     * @return boolean
-     */
-    @Override
-	public boolean isFocused()
-    {
-        return _isFocused;
-    }
+	/**
+	 * Sets related object to be focused or not
+	 */
+	@Override
+	public void setIsFocused(boolean b) {
+		_isFocused = b;
+		if (logger.isLoggable(Level.FINEST)) {
+			logger.finest("setIsFocused=" + b + " dans " + getClass().getName());
+		}
+		if (b) {
+			setBorder(BorderFactory.createLineBorder(ColorCst.BORDER_COLOR_FOR_FOCUSED_WIDGET));
+		} else {
+			setDefaultBorder();
+		}
+		repaint();
+	}
 
-    public IEWidget getSelectedObject()
-    {
-        return _model;
-    }
+	/**
+	 * Return boolean indicating if related object is focused
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isFocused() {
+		return _isFocused;
+	}
 
-    @Override
-	public FlexoModelObject getObject()
-    {
-        return getSelectedObject();
-    }
+	public IEWidget getSelectedObject() {
+		return _model;
+	}
 
-    // ==========================================================================
-    // ======================= InspectableObjectView
-    // ============================
-    // ==========================================================================
+	@Override
+	public FlexoModelObject getObject() {
+		return getSelectedObject();
+	}
 
-    @Override
-	public DeletableObject getDeletableObject()
-    {
-        return _model;
-    }
+	// ==========================================================================
+	// ======================= InspectableObjectView
+	// ============================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Accessors
-    // ==================================
-    // ==========================================================================
+	@Override
+	public DeletableObject getDeletableObject() {
+		return _model;
+	}
 
-    public T getModel()
-    {
-        return _model;
-    }
-    
-    public final IEWidget getContainerModel() {
-    	return getModel();
-    }
-    
-    public final IEWOComponent getWOComponent() {
-    	return _model.getWOComponent();
-    }
+	// ==========================================================================
+	// ============================= Accessors
+	// ==================================
+	// ==========================================================================
 
-    protected void switchToModel(T model)
-    {
-        _model.deleteObserver(this);
-        _model = model;
-        model.addObserver(this);
-    }
+	public T getModel() {
+		return _model;
+	}
 
-    public IEWidget getIEModel()
-    {
-        return getModel();
-    }
+	public final IEWidget getContainerModel() {
+		return getModel();
+	}
 
-    public Point getCenter()
-    {
-        return new Point(getWidth() / 2, getHeight() / 2);
-    }
+	public final IEWOComponent getWOComponent() {
+		return _model.getWOComponent();
+	}
 
-    @Override
-    public Dimension getMinimumSize()
-    {
-        return getPreferredSize();
-    }
+	protected void switchToModel(T model) {
+		_model.deleteObserver(this);
+		_model = model;
+		model.addObserver(this);
+	}
 
-    @Override
-    public void paint(Graphics g)
-    {
+	public IEWidget getIEModel() {
+		return getModel();
+	}
+
+	public Point getCenter() {
+		return new Point(getWidth() / 2, getHeight() / 2);
+	}
+
+	@Override
+	public Dimension getMinimumSize() {
+		return getPreferredSize();
+	}
+
+	@Override
+	public void paint(Graphics g) {
 		super.paint(g);
-        if (_isSelected) {
-            paintSelection(g);
-        }
-    }
+		if (_isSelected) {
+			paintSelection(g);
+		}
+	}
 
-    public void paintSelection(Graphics g)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("Drawing selection");
-        Graphics2D g2 = (Graphics2D) g;
-        DrawUtils.turnOnAntiAlising(g2);
-        DrawUtils.setRenderQuality(g2);
-        DrawUtils.setColorRenderQuality(g2);
-        g2.setColor(Color.BLUE);
-        Dimension panelDim = getSize();
-        g2.fillRect(0, 0, 5, 5);
-        g2.fillRect(panelDim.width - 5, 0, 5, 5);
-        g2.fillRect(0, panelDim.height - 5, 5, 5);
-        g2.fillRect(panelDim.width - 5, panelDim.height - 5, 5, 5);
-    }
+	public void paintSelection(Graphics g) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.finer("Drawing selection");
+		}
+		Graphics2D g2 = (Graphics2D) g;
+		DrawUtils.turnOnAntiAlising(g2);
+		DrawUtils.setRenderQuality(g2);
+		DrawUtils.setColorRenderQuality(g2);
+		g2.setColor(Color.BLUE);
+		Dimension panelDim = getSize();
+		g2.fillRect(0, 0, 5, 5);
+		g2.fillRect(panelDim.width - 5, 0, 5, 5);
+		g2.fillRect(0, panelDim.height - 5, 5, 5);
+		g2.fillRect(panelDim.width - 5, panelDim.height - 5, 5, 5);
+	}
 
-    @Override
-    public String toString()
-    {
-        return getClass().getName() + "/" + hashCode() + " view for model " + getModel();
-    }
+	@Override
+	public String toString() {
+		return getClass().getName() + "/" + hashCode() + " view for model " + getModel();
+	}
 
-    public FlexoComponentLibrary getFlexoComponentLibrary()
-    {
-        return getIEController().getProject().getFlexoComponentLibrary();
-    }
+	public FlexoComponentLibrary getFlexoComponentLibrary() {
+		return getIEController().getProject().getFlexoComponentLibrary();
+	}
 
-    public void updateConstraints()
-    {
-        Container c = getParent();
-        IESequenceTRWidgetView tr = null;
-        while (c != null) {
-            if (c instanceof IESequenceTRWidgetView)
-                tr = (IESequenceTRWidgetView) c;
-            c = c.getParent();
-        }
-        if (tr != null) {
-            (tr).updateConstraints();
-            tr.doLayout();
-            tr.repaint();
-        }
-    }
+	public void updateConstraints() {
+		Container c = getParent();
+		IESequenceTRWidgetView tr = null;
+		while (c != null) {
+			if (c instanceof IESequenceTRWidgetView) {
+				tr = (IESequenceTRWidgetView) c;
+			}
+			c = c.getParent();
+		}
+		if (tr != null) {
+			(tr).updateConstraints();
+			tr.doLayout();
+			tr.repaint();
+		}
+	}
 
-    /**
-     * Overrides update
-     *
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (observable == getModel() && dataModification instanceof DisplayNeedsRefresh) {
-            doLayout();
-            repaint();
-        } else if (observable == getModel() && dataModification.propertyName() != null
-                && dataModification.propertyName().equals("tooltip")) {
-            updateTooltip();
-        }
-    }
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable == getModel() && dataModification instanceof DisplayNeedsRefresh) {
+			doLayout();
+			repaint();
+		} else if (observable == getModel() && dataModification.propertyName() != null && dataModification.propertyName().equals("tooltip")) {
+			updateTooltip();
+		}
+	}
 
-    @Override
-	public boolean getHoldsNextComputedPreferredSize()
-    {
-    	return _componentView.holdsNextComputedPreferredSize;
-        //return holdsNextComputedPreferredSize;
-    }
+	@Override
+	public boolean getHoldsNextComputedPreferredSize() {
+		return _componentView.holdsNextComputedPreferredSize;
+		// return holdsNextComputedPreferredSize;
+	}
 
-    @Override
-	public void setHoldsNextComputedPreferredSize()
-    {
-        //holdsNextComputedPreferredSize = true;
-    }
+	@Override
+	public void setHoldsNextComputedPreferredSize() {
+		// holdsNextComputedPreferredSize = true;
+	}
 
-    @Override
-	public void resetPreferredSize()
-    {
-        //preferredSize = null;
-        //holdsNextComputedPreferredSize = false;
-    }
+	@Override
+	public void resetPreferredSize() {
+		// preferredSize = null;
+		// holdsNextComputedPreferredSize = false;
+	}
 
-    public void storePrefSize(Dimension value){
+	public void storePrefSize(Dimension value) {
 		_componentView.storePrefSize(this, value);
 	}
-    public Dimension storedPrefSize(){
-    	return _componentView.storedPrefSize(this);
-    }
+
+	public Dimension storedPrefSize() {
+		return _componentView.storedPrefSize(this);
+	}
 }

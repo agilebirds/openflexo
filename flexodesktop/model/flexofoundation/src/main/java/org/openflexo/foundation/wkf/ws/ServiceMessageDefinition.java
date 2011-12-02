@@ -27,7 +27,6 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * 
  * Used to store port's message definition
@@ -78,13 +77,16 @@ public class ServiceMessageDefinition extends AbstractMessageDefinition implemen
 
 	@Override
 	public void delete() {
-		if (isInputMessageDefinition())
+		if (isInputMessageDefinition()) {
 			getOperation().setInputMessageDefinition(null);
-		if (isOutputMessageDefinition())
+		}
+		if (isOutputMessageDefinition()) {
 			getOperation().setOutputMessageDefinition(null);
+		}
 		if (isFaultMessageDefinition()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("implement delete for fault message definition");
+			}
 		}
 		super.delete();
 		deleteObservers();

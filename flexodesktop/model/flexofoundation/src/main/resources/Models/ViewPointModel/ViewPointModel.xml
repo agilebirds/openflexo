@@ -30,7 +30,9 @@
 		<property name="name" xmlTag="name" attribute="YES" />
 		<property name="description" xmlTag="description" />
 		<property name="editionSchemes" type="vector" contains="org.openflexo.foundation.viewpoint.EditionScheme" />
-		<property name="patternRoles" type="vector" contains="org.openflexo.foundation.viewpoint.PatternRole" />
+		<property name="patternRoles" type="vector" contains="org.openflexo.foundation.viewpoint.PatternRole" context="Contained"/>
+		<property name="primaryConceptRole" contains="org.openflexo.foundation.viewpoint.PatternRole" context="PrimaryConcept"/>
+		<property name="primaryRepresentationRole" contains="org.openflexo.foundation.viewpoint.PatternRole" context="PrimaryRepresentation"/>
 		<property name="inspector" xmlTag="Inspector" />
 	</entity>
 
@@ -60,14 +62,14 @@
 	<entity name="org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry" xmlTag="Checkbox">
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.PatternRole" abstract="yes">
+	<entity name="org.openflexo.foundation.viewpoint.PatternRole" abstract="yes" contexts="Contained,PrimaryConcept,PrimaryRepresentation">
 		<property name="patternRoleName" xmlTag="patternRole" attribute="YES" />
 		<property name="description" xmlTag="description" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.GraphicalElementPatternRole" abstract="yes">
-		<property name="boundPatternRoleName" xmlTag="boundPatternRole" attribute="YES" />
-		<property name="labelRepresentation" xmlTag="Label" />
+		<property name="label" xmlTag="label" attribute="YES"/>
+		<property name="readOnlyLabel" xmlTag="readOnlyLabel" attribute="YES"/>
 	</entity>
 
 
@@ -125,14 +127,6 @@
 		<property name="primitiveType" xmlTag="primitiveType" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.LabelRepresentation"
-		xmlTag="Label">
-		<property name="propertyURI" xmlTag="propertyURI" attribute="YES" />
-		<property name="text" xmlTag="text" attribute="YES" />
-		<property name="type" xmlTag="type" attribute="YES" />
-	</entity>
-
-
 	<entity name="org.openflexo.foundation.viewpoint.EditionScheme"
 		abstract="yes">
 		<property name="name" xmlTag="name" attribute="YES" />
@@ -140,7 +134,7 @@
 		<property name="skipConfirmationPanel" xmlTag="skipConfirmationPanel" attribute="YES" />
 		<property name="description" xmlTag="description" />
 		<property name="parameters" type="vector"
-			contains="org.openflexo.foundation.viewpoint.EditionPatternParameter"
+			contains="org.openflexo.foundation.viewpoint.EditionSchemeParameter"
 			primary="yes" />
 		<property name="actions" type="vector"
 			contains="org.openflexo.foundation.viewpoint.EditionAction"
@@ -164,22 +158,51 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.viewpoint.EditionPatternParameter"
-		xmlTag="Parameter">
+		name="org.openflexo.foundation.viewpoint.EditionSchemeParameter" abstract="yes">
 		<property name="name" xmlTag="name" attribute="YES" />
-		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 		<property name="label" xmlTag="label" attribute="YES" />
-		<property name="widget" xmlTag="widget" attribute="YES" />
-		<property name="customType" xmlTag="type" attribute="YES" />
-		<property name="values" xmlTag="values" attribute="YES" />
 		<property name="defaultValue" xmlTag="defaultValue"
 			attribute="YES" />
 		<property name="usePaletteLabelAsDefaultValue" xmlTag="usePaletteLabelAsDefaultValue"
 			attribute="YES" />
-		<property name="uniqueURI" xmlTag="uniqueURI" attribute="YES" />
-		<property name="base" xmlTag="base" attribute="YES" />
 		<property name="description" xmlTag="description" />
 		<property name="conditional" xmlTag="conditional" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.URIParameter" xmlTag="URIParameter">
+		<property name="baseURI" xmlTag="base" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.TextFieldParameter" xmlTag="TextFieldParameter">
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.TextAreaParameter" xmlTag="TextAreaParameter">
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.CheckboxParameter" xmlTag="CheckBoxParameter">
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.IntegerParameter" xmlTag="IntegerParameter">
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.DropDownParameter" xmlTag="DropDownParameter">
+		<property name="values" xmlTag="values" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.IndividualParameter" xmlTag="IndividualParameter">
+		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.FlexoObjectParameter" xmlTag="FlexoObjectParameter">
+		<property name="flexoObjectType" xmlTag="flexoObjectType" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.EditionAction"
@@ -214,12 +237,12 @@
 	<entity name="org.openflexo.foundation.viewpoint.AddShema"
 		xmlTag="AddShema">
 		<property name="shemaName" xmlTag="shemaName" attribute="YES" />
-		<property name="shapePatternRole" xmlTag="shapePatternRole" attribute="YES" />
+		<property name="shapePatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.GoToAction"
 		xmlTag="GoToAction">
-		<property name="targetObject" xmlTag="targetObject" attribute="YES" />
+		<property name="target" xmlTag="targetObject" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddConcept"
@@ -238,7 +261,7 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.AddClass"
 		xmlTag="AddClass">
-		<property name="newClassName" xmlTag="newClassName"
+		<property name="className" xmlTag="newClassName"
 			attribute="YES" />
 	</entity>
 
@@ -295,65 +318,92 @@
 
 	<!-- Mapping for graphical representation stuff -->
 
-	<entity name="org.openflexo.fge.GraphicalRepresentation"
-		xmlTag="GraphicalRepresentation" abstract="YES" finalizer="finalizeDeserialization">
-		<description>Abstract graphical representation</description>
-		<property name="text" xmlTag="text" attribute="YES" />
-		<property name="toolTipText" xmlTag="toolTipText" attribute="YES" />
-		<property name="isMultilineAllowed" xmlTag="isMultilineAllowed"
-			attribute="YES" />
-		<property name="isReadOnly" xmlTag="isReadOnly" attribute="YES" />
-		<property name="isSelectable" xmlTag="isSelectable"
-			attribute="YES" />
-		<property name="isFocusable" xmlTag="isFocusable" attribute="YES" />
-		<property name="textStyle" xmlTag="TextStyle" />
-		<property name="relativeTextX" xmlTag="relativeTextX"
-			attribute="YES" />
-		<property name="relativeTextY" xmlTag="relativeTextY"
-			attribute="YES" />
-		<property name="absoluteTextX" xmlTag="absoluteTextX"
-			attribute="YES" />
-		<property name="absoluteTextY" xmlTag="absoluteTextY"
-			attribute="YES" />
-		<property name="textAlignment" xmlTag="textAlignment"
-			attribute="YES" />
-	</entity>
+  <entity name="org.openflexo.fge.GraphicalRepresentation" xmlTag="GraphicalRepresentation" abstract="YES" finalizer="finalizeDeserialization">
+     <description>Abstract graphical representation</description>
+  	 <property name="identifier" xmlTag="identifier" attribute="YES"/>
+  	 <property name="layer" xmlTag="layer" attribute="YES"/>
+  	 <property name="hasText" xmlTag="hasText" attribute="YES"/>
+  	 <property name="text" xmlTag="text" attribute="YES"/>
+  	 <property name="isMultilineAllowed" xmlTag="isMultilineAllowed" attribute="YES"/>
+  	 <property name="continuousTextEditing" xmlTag="continuousTextEditing" attribute="YES"/>
+ 	 <property name="textStyle" xmlTag="TextStyle"/>
+  	 <property name="relativeTextX" xmlTag="relativeTextX" attribute="YES"/>
+  	 <property name="relativeTextY" xmlTag="relativeTextY" attribute="YES"/>
+  	 <property name="absoluteTextX" xmlTag="absoluteTextX" attribute="YES"/>
+  	 <property name="absoluteTextY" xmlTag="absoluteTextY" attribute="YES"/>
+  	 <property name="textAlignment" xmlTag="textAlignment" attribute="YES"/>
+  	 <property name="isSelectable" xmlTag="isSelectable" attribute="YES"/>
+  	 <property name="isFocusable" xmlTag="isFocusable" attribute="YES"/>
+  	 <property name="drawControlPointsWhenFocused" xmlTag="drawControlPointsWhenFocused" attribute="YES"/>
+  	 <property name="drawControlPointsWhenSelected" xmlTag="drawControlPointsWhenSelected" attribute="YES"/>
+  	 <property name="isReadOnly" xmlTag="isReadOnly" attribute="YES"/>
+  	 <property name="isLabelEditable" xmlTag="isLabelEditable" attribute="YES"/>
+ 	 <property name="isVisible" xmlTag="isVisible" attribute="YES"/>
+  	 <property name="toolTipText" xmlTag="toolTipText" attribute="YES"/>
+     <property name="variables" type="vector" contains="org.openflexo.fge.GRVariable" primary="yes"/>
+  </entity>
+	
+   <entity name="org.openflexo.fge.GRVariable" xmlTag="Variable">
+     <description>Graphical representation variable</description>
+   	 <property name="name" xmlTag="name" attribute="YES"/>
+   	 <property name="value" xmlTag="value" attribute="YES"/>
+   	 <property name="type" xmlTag="type" attribute="YES"/>
+  </entity>
 
-	<entity name="org.openflexo.fge.DrawingGraphicalRepresentation"
-		xmlTag="DrawingGraphicalRepresentation">
-		<description>Drawing graphical representation</description>
-		<property name="width" xmlTag="width" attribute="YES" />
-		<property name="height" xmlTag="height" attribute="YES" />
-		<property name="drawWorkingArea" xmlTag="drawWorkingArea"
-			attribute="YES" />
-		<property name="selectionColor" xmlTag="selectionColor"
-			attribute="YES" />
-		<property name="focusColor" xmlTag="focusColor" attribute="YES" />
-		<property name="backgroundColor" xmlTag="backgroundColor"
-			attribute="YES" />
-	</entity>
+   <entity name="org.openflexo.fge.DrawingGraphicalRepresentation" xmlTag="DrawingGraphicalRepresentation">
+     <description>Drawing graphical representation</description>
+   	 <property name="width" xmlTag="width" attribute="YES"/>
+   	 <property name="height" xmlTag="height" attribute="YES"/>
+     <property name="drawWorkingArea" xmlTag="drawWorkingArea" attribute="YES"/>
+   	 <property name="selectionColor" xmlTag="selectionColor" attribute="YES"/>
+   	 <property name="focusColor" xmlTag="focusColor" attribute="YES"/>
+  	 <property name="backgroundColor" xmlTag="backgroundColor" attribute="YES"/>
+  </entity>
 
-	<entity name="org.openflexo.fge.ShapeGraphicalRepresentation"
-		xmlTag="ShapeGraphicalRepresentation" contexts="Start,End,ArtifactFrom,ArtifactTo">
-		<description>Shape graphical representation</description>
-		<property name="x" xmlTag="x" attribute="YES" />
-		<property name="y" xmlTag="y" attribute="YES" />
-		<property name="width" xmlTag="width" attribute="YES" />
-		<property name="height" xmlTag="height" attribute="YES" />
-		<property name="foreground" xmlTag="ForegroundStyle" />
-		<property name="background" contains="org.openflexo.fge.graphics.BackgroundStyle" />
-		<property name="isVisible" xmlTag="isVisible" attribute="YES" />
-		<property name="locationConstraints" xmlTag="locationConstraints"
-			attribute="YES" />
-		<property name="dimensionConstraints" xmlTag="dimensionConstraints"
-			attribute="YES" />
-		<property name="border" xmlTag="Border" />
-		<property name="shadowStyle" xmlTag="ShadowStyle" />
-		<property name="layer" xmlTag="layer" attribute="YES" />
-		<property name="isFloatingLabel" xmlTag="isFloatingLabel"
-			attribute="YES" />
-		<property name="shape" contains="org.openflexo.fge.shapes.Shape" />
-	</entity>
+  <entity name="org.openflexo.fge.ShapeGraphicalRepresentation" xmlTag="ShapeGraphicalRepresentation" contexts="Start,End,ArtifactFrom,ArtifactTo">
+     <description>Shape graphical representation</description>
+ 	 <property name="x" xmlTag="x" attribute="YES"/>
+   	 <property name="y" xmlTag="y" attribute="YES"/>
+   	 <property name="width" xmlTag="width" attribute="YES"/>
+   	 <property name="height" xmlTag="height" attribute="YES"/>
+   	 <property name="minimalWidth" xmlTag="minimalWidth" attribute="YES"/>
+   	 <property name="minimalHeight" xmlTag="minimalHeight" attribute="YES"/>
+   	 <property name="maximalWidth" xmlTag="maximalWidth" attribute="YES"/>
+   	 <property name="maximalHeight" xmlTag="maximalHeight" attribute="YES"/>
+  	 <property name="locationConstraints" xmlTag="locationConstraints" attribute="YES"/>
+  	 <property name="dimensionConstraints" xmlTag="dimensionConstraints" attribute="YES"/>
+   	 <property name="adjustMinimalWidthToLabelWidth" xmlTag="adjustMinimalWidthToLabelWidth" attribute="YES"/>
+   	 <property name="adjustMinimalHeightToLabelHeight" xmlTag="adjustMinimalHeightToLabelHeight" attribute="YES"/>
+   	 <property name="adjustMaximalWidthToLabelWidth" xmlTag="adjustMaximalWidthToLabelWidth" attribute="YES"/>
+   	 <property name="adjustMaximalHeightToLabelHeight" xmlTag="adjustMaximalHeightToLabelHeight" attribute="YES"/>
+ 	 <property name="foreground" xmlTag="ForegroundStyle"/>
+  	 <property name="background" contains="org.openflexo.fge.graphics.BackgroundStyle"/>
+  	 <property name="border" xmlTag="Border"/>
+ 	 <property name="shape" contains="org.openflexo.fge.shapes.Shape"/>
+   	 <property name="shadowStyle" xmlTag="ShadowStyle"/>
+     <property name="isFloatingLabel" xmlTag="isFloatingLabel" attribute="YES"/>
+     <property name="allowToLeaveBounds" xmlTag="allowToLeaveBounds" attribute="YES"/>
+ 	 <property name="xConstraints" xmlTag="xConstraints" attribute="YES"/>
+ 	 <property name="yConstraints" xmlTag="yConstraints" attribute="YES"/>
+ 	 <property name="widthConstraints" xmlTag="widthConstraints" attribute="YES"/>
+ 	 <property name="heightConstraints" xmlTag="heightConstraints" attribute="YES"/>
+  </entity>
+
+  <entity name="org.openflexo.fge.ConnectorGraphicalRepresentation" xmlTag="ConnectorGraphicalRepresentation">
+     <description>Connector graphical representation</description>
+ 	 <property name="foreground" xmlTag="ForegroundStyle"/>
+ 	 <property name="startObject" contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="Start"/>
+ 	 <property name="endObject" contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="End"/>
+  	 <property name="connector" contains="org.openflexo.fge.connectors.Connector"/>
+	 <property name="startSymbol" xmlTag="startSymbol" attribute="YES"/>
+ 	 <property name="endSymbol" xmlTag="endSymbol" attribute="YES"/>
+ 	 <property name="middleSymbol" xmlTag="middleSymbol" attribute="YES"/>
+	 <property name="startSymbolSize" xmlTag="startSymbolSize" attribute="YES"/>
+ 	 <property name="endSymbolSize" xmlTag="endSymbolSize" attribute="YES"/>
+ 	 <property name="middleSymbolSize" xmlTag="middleSymbolSize" attribute="YES"/>
+	 <property name="relativeMiddleSymbolLocation" xmlTag="relativeMiddleSymbolLocation" attribute="YES"/>
+	 <property name="applyForegroundToSymbols" xmlTag="applyForegroundToSymbols" attribute="YES"/>
+  </entity>
 
 	<entity name="org.openflexo.fge.shapes.Rectangle" xmlTag="RectangleShape">
 		<description>Rectangle shape</description>
@@ -380,12 +430,17 @@
 		<description>Circle shape</description>
 	</entity>
 
-	<entity name="org.openflexo.fge.shapes.Polygon" xmlTag="PolygonShape">
-		<description>Regular polygon shape</description>
-		<property name="nPoints" xmlTag="nPoints" attribute="YES" />
-		<property name="startAngle" xmlTag="startAngle" attribute="YES" />
-	</entity>
-
+   <entity name="org.openflexo.fge.shapes.Polygon" xmlTag="CustomPolygon">
+     <description>Custom polygon shape</description>
+	 <property name="points" xmlTag="FGEPoint" type="vector" primary="yes"/>
+   </entity>
+	
+   <entity name="org.openflexo.fge.shapes.RegularPolygon" xmlTag="PolygonShape">
+     <description>Regular polygon shape</description>
+  	 <property name="nPoints" xmlTag="nPoints" attribute="YES"/>
+  	 <property name="startAngle" xmlTag="startAngle" attribute="YES"/>
+   </entity>
+	
 	<entity name="org.openflexo.fge.shapes.Triangle" xmlTag="TriangleShape">
 		<description>Triangle shape</description>
 	</entity>
@@ -399,31 +454,6 @@
 		<property name="nPoints" xmlTag="nPoints" attribute="YES" />
 		<property name="startAngle" xmlTag="startAngle" attribute="YES" />
 		<property name="ratio" xmlTag="ratio" attribute="YES" />
-	</entity>
-
-	<entity name="org.openflexo.fge.ConnectorGraphicalRepresentation"
-		xmlTag="ConnectorGraphicalRepresentation">
-		<description>Connector graphical representation</description>
-		<property name="foreground" xmlTag="ForegroundStyle" />
-		<property name="isVisible" xmlTag="isVisible" attribute="YES" />
-		<property name="startObject"
-			contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="Start" />
-		<property name="endObject"
-			contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="End" />
-		<property name="layer" xmlTag="layer" attribute="YES" />
-		<property name="connector" contains="org.openflexo.fge.connectors.Connector" />
-		<property name="startSymbol" xmlTag="startSymbol" attribute="YES" />
-		<property name="endSymbol" xmlTag="endSymbol" attribute="YES" />
-		<property name="middleSymbol" xmlTag="middleSymbol"
-			attribute="YES" />
-		<property name="startSymbolSize" xmlTag="startSymbolSize"
-			attribute="YES" />
-		<property name="endSymbolSize" xmlTag="endSymbolSize"
-			attribute="YES" />
-		<property name="middleSymbolSize" xmlTag="middleSymbolSize"
-			attribute="YES" />
-		<property name="debugCoveringArea" xmlTag="debugCoveringArea"
-			attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.fge.connectors.LineConnector"

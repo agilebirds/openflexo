@@ -21,18 +21,16 @@ package org.openflexo.foundation.wkf.dm;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ChildrenOrderChanged extends WKFDataModification
-{
+public class ChildrenOrderChanged extends WKFDataModification {
 
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public ChildrenOrderChanged()
-    {
-        super(null, null);
-    }
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public ChildrenOrderChanged() {
+		super(null, null);
+	}
 
 }

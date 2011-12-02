@@ -36,124 +36,126 @@ import org.openflexo.ie.view.controller.dnd.IEDTListener;
 import org.openflexo.selection.FlexoClipboard;
 import org.openflexo.selection.PastingGraphicalContext;
 
-
 /**
- * IEClipboard is intented to be the object working with the IESelectionManager
- * and storing copied, cutted and pasted objects. Handled objects are instances
- * implementing {@link org.openflexo.selection.SelectableView}.
+ * IEClipboard is intented to be the object working with the IESelectionManager and storing copied, cutted and pasted objects. Handled
+ * objects are instances implementing {@link org.openflexo.selection.SelectableView}.
  * 
  * @author sguerin
  */
-public class IEClipboard extends FlexoClipboard
-{
+public class IEClipboard extends FlexoClipboard {
 
-    private static final Logger logger = Logger.getLogger(IEClipboard.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEClipboard.class.getPackage().getName());
 
-    private IEWidget _clipboardData;
+	private IEWidget _clipboardData;
 
-    private IEController _ieController;
+	private IEController _ieController;
 
-    public IEClipboard(IESelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem)
-    {
-        super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
-        _ieController = aSelectionManager.getIEController();
-    }
+	public IEClipboard(IESelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem) {
+		super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
+		_ieController = aSelectionManager.getIEController();
+	}
 
-    /**
-     * Overrides hasCopiedData
-     * @see org.openflexo.selection.FlexoClipboard#hasCopiedData()
-     */
-    @Override
-    public boolean hasCopiedData()
-    {
-        return super.hasCopiedData() && !_clipboardData.isDeleted();
-    }
-    
-    @Override
-	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext)
-    {
-        JComponent container = graphicalContext.targetContainer;
-        Point location = graphicalContext.pastingLocation;
+	/**
+	 * Overrides hasCopiedData
+	 * 
+	 * @see org.openflexo.selection.FlexoClipboard#hasCopiedData()
+	 */
+	@Override
+	public boolean hasCopiedData() {
+		return super.hasCopiedData() && !_clipboardData.isDeleted();
+	}
 
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Pasting " + _clipboardData + " in container " + container);
-        if (isTargetValidForPasting(container)) {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Target is valid");
-            IEContainer targetContainer = (IEContainer) container;
-            if (!IEDTListener.isValidDropTargetContainer(targetContainer.getContainerModel(), _clipboardData)) {
-                JComponent subTarget = (JComponent) container.getComponentAt(location);
-                if ((subTarget instanceof IEContainer)
-                        && (IEDTListener.isValidDropTargetContainer(((IEContainer) subTarget).getContainerModel(), _clipboardData))) {
-                    targetContainer = (IEContainer) subTarget;
-                } else {
-                    return;
-                }
-            }
-            // Now we create the object to insert in the dropContainer.
-            IEWidget targetModel = targetContainer.getContainerModel();
-            if (targetModel instanceof IETDWidget)
-            	targetModel = ((IETDWidget)targetModel).getSequenceWidget();
-            IEWidget newWidget = IEDTListener.createModelFromMovedWidget(_clipboardData, targetModel, false);
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Widget has been created");
-            // IEWidgetView newView =
-            // IEDTListener.createView(_ieController,newWidget,targetModel);
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("View has been created");
+	@Override
+	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
+		JComponent container = graphicalContext.targetContainer;
+		Point location = graphicalContext.pastingLocation;
 
-            if (newWidget != null) {
-                IEDTListener.insertView(newWidget, targetContainer, location);
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("View has been inserted");
-                // _ieController.getIESelectionManager().processMouseClicked(newView,newView.getCenter(),1,false);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Pasting " + _clipboardData + " in container " + container);
+		}
+		if (isTargetValidForPasting(container)) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Target is valid");
+			}
+			IEContainer targetContainer = (IEContainer) container;
+			if (!IEDTListener.isValidDropTargetContainer(targetContainer.getContainerModel(), _clipboardData)) {
+				JComponent subTarget = (JComponent) container.getComponentAt(location);
+				if ((subTarget instanceof IEContainer)
+						&& (IEDTListener.isValidDropTargetContainer(((IEContainer) subTarget).getContainerModel(), _clipboardData))) {
+					targetContainer = (IEContainer) subTarget;
+				} else {
+					return;
+				}
+			}
+			// Now we create the object to insert in the dropContainer.
+			IEWidget targetModel = targetContainer.getContainerModel();
+			if (targetModel instanceof IETDWidget) {
+				targetModel = ((IETDWidget) targetModel).getSequenceWidget();
+			}
+			IEWidget newWidget = IEDTListener.createModelFromMovedWidget(_clipboardData, targetModel, false);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Widget has been created");
+			}
+			// IEWidgetView newView =
+			// IEDTListener.createView(_ieController,newWidget,targetModel);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("View has been created");
+			}
 
-            } else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Could not create view for model " + newWidget);
-            }
-        } else {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Target is NOT valid");
-        }
-    }
+			if (newWidget != null) {
+				IEDTListener.insertView(newWidget, targetContainer, location);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("View has been inserted");
+					// _ieController.getIESelectionManager().processMouseClicked(newView,newView.getCenter(),1,false);
+				}
 
-    @Override
-	protected boolean isCurrentSelectionValidForCopy(Vector currentlySelectedObjects)
-    {
-        if (currentlySelectedObjects == null || currentlySelectedObjects.size() == 0) {
-            return false;
-        }
-        return true;
-    }
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not create view for model " + newWidget);
+				}
+			}
+		} else {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Target is NOT valid");
+			}
+		}
+	}
 
-    @Override
-	protected boolean performCopyOfSelection(Vector currentlySelectedObjects)
-    {
-        if (currentlySelectedObjects.elementAt(0) instanceof IEWidget) {
-            if (currentlySelectedObjects.elementAt(0) instanceof IETDWidget) {
-                _clipboardData = ((IETDWidget) currentlySelectedObjects.elementAt(0)).getSequenceWidget();
-            } else {
-                IEWidget copiedWidget = (IEWidget) currentlySelectedObjects.elementAt(0);
-                _clipboardData = copiedWidget;
-            }
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Copying " + _clipboardData);
-            return true;
-        }
-        return false;
-    }
+	@Override
+	protected boolean isCurrentSelectionValidForCopy(Vector currentlySelectedObjects) {
+		if (currentlySelectedObjects == null || currentlySelectedObjects.size() == 0) {
+			return false;
+		}
+		return true;
+	}
 
-    protected boolean isTargetValidForPasting(JComponent targetContainer)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("isTargetValidForPasting(): container is a " + targetContainer.getClass().getName());
-        return targetContainer instanceof IEContainer;
-    }
+	@Override
+	protected boolean performCopyOfSelection(Vector currentlySelectedObjects) {
+		if (currentlySelectedObjects.elementAt(0) instanceof IEWidget) {
+			if (currentlySelectedObjects.elementAt(0) instanceof IETDWidget) {
+				_clipboardData = ((IETDWidget) currentlySelectedObjects.elementAt(0)).getSequenceWidget();
+			} else {
+				IEWidget copiedWidget = (IEWidget) currentlySelectedObjects.elementAt(0);
+				_clipboardData = copiedWidget;
+			}
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Copying " + _clipboardData);
+			}
+			return true;
+		}
+		return false;
+	}
 
-    protected void exportClipboardToPalette(File paletteDirectory, String newPaletteElementName)
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Sorry, exporting clipboard to IE palette not implemented.");
-    }
+	protected boolean isTargetValidForPasting(JComponent targetContainer) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("isTargetValidForPasting(): container is a " + targetContainer.getClass().getName());
+		}
+		return targetContainer instanceof IEContainer;
+	}
+
+	protected void exportClipboardToPalette(File paletteDirectory, String newPaletteElementName) {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Sorry, exporting clipboard to IE palette not implemented.");
+		}
+	}
 }

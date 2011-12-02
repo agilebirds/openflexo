@@ -25,15 +25,14 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents type of generation target (proto,hc-wo,engine)
@@ -43,256 +42,229 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
  * 
  */
 @Deprecated
-public abstract class CodeType extends TargetType implements StringConvertable, ChoiceList, Serializable
-{
+public abstract class CodeType extends TargetType implements StringConvertable, ChoiceList, Serializable {
 
-    public CodeType(FlexoProject project) {
+	public CodeType(FlexoProject project) {
 		super(project);
 	}
 
 	@Override
-    public String getFullyQualifiedName()
-    {
-        return "CODE_TYPE."+getName();
-    }
+	public String getFullyQualifiedName() {
+		return "CODE_TYPE." + getName();
+	}
 
-    @Override
-    public FlexoProject getProject()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Don't do that.");
-        return null;
-    }
+	@Override
+	public FlexoProject getProject() {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Don't do that.");
+		}
+		return null;
+	}
 
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return null;
-    }
+	@Override
+	public XMLMapping getXMLMapping() {
+		return null;
+	}
 
-    @Override
-    public XMLStorageResourceData getXMLResourceData()
-    {
-        return null;
-    }
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return null;
+	}
 
-    private static final Logger logger = Logger.getLogger(CodeType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CodeType.class.getPackage().getName());
 
-    public static final CodeType PROTOTYPE = new Prototype();
+	public static final CodeType PROTOTYPE = new Prototype();
 
-    public static final CodeType HC_WO_APPLICATION = new HCWOApplication();
+	public static final CodeType HC_WO_APPLICATION = new HCWOApplication();
 
-    public static final CodeType ENGINE_BASED_APPLICATION = new EngineBasedApplication();
+	public static final CodeType ENGINE_BASED_APPLICATION = new EngineBasedApplication();
 
-    public static final CodeType BPEL = new BPELApplication();
+	public static final CodeType BPEL = new BPELApplication();
 
-    public static final StringEncoder.Converter<CodeType> codeTypeConverter = new Converter<CodeType>(CodeType.class) {
+	public static final StringEncoder.Converter<CodeType> codeTypeConverter = new Converter<CodeType>(CodeType.class) {
 
-        @Override
-		public CodeType convertFromString(String value)
-        {
-            return get(value);
-        }
+		@Override
+		public CodeType convertFromString(String value) {
+			return get(value);
+		}
 
-        @Override
-		public String convertToString(CodeType value)
-        {
-            return value.getName();
-        }
+		@Override
+		public String convertToString(CodeType value) {
+			return value.getName();
+		}
 
-    };
+	};
 
-    public static class Prototype extends CodeType
-    {
-    	
-        private Vector<Format> availableFormats;
+	public static class Prototype extends CodeType {
 
-        protected Prototype()
-        {
-        	super(null);
-            availableFormats = new Vector<Format>();
-            availableFormats.add(Format.WEBOBJECTS);
-        }
+		private Vector<Format> availableFormats;
 
-        @Override
-		public String getName()
-        {
-            return "PROTOTYPE";
-        }
+		protected Prototype() {
+			super(null);
+			availableFormats = new Vector<Format>();
+			availableFormats.add(Format.WEBOBJECTS);
+		}
 
-        /**
-         * Overrides getTemplateFolderName
-         * 
-         * @see org.openflexo.foundation.CodeType#getTemplateFolderName()
-         */
-        @Override
-		public String getTemplateFolderName()
-        {
-            return "Prototype";
-        }
-        
-        @Override
-        public Vector<Format> getAvailableFormats() {
-        	return availableFormats;
-        }
-    }
+		@Override
+		public String getName() {
+			return "PROTOTYPE";
+		}
 
-    public static class HCWOApplication extends CodeType
-    {
-        private Vector<Format> availableFormats;
+		/**
+		 * Overrides getTemplateFolderName
+		 * 
+		 * @see org.openflexo.foundation.CodeType#getTemplateFolderName()
+		 */
+		@Override
+		public String getTemplateFolderName() {
+			return "Prototype";
+		}
 
-        protected HCWOApplication()
-        {
-        	super(null);
-            availableFormats = new Vector<Format>();
-            availableFormats.add(Format.WEBOBJECTS);
-            availableFormats.add(Format.BPEL);
-        }
+		@Override
+		public Vector<Format> getAvailableFormats() {
+			return availableFormats;
+		}
+	}
 
-        @Override
-		public String getName()
-        {
-            return "HC_WO_APPLICATION";
-        }
+	public static class HCWOApplication extends CodeType {
+		private Vector<Format> availableFormats;
 
-        /**
-         * Overrides getTemplateFolderName
-         * 
-         * @see org.openflexo.foundation.CodeType#getTemplateFolderName()
-         */
-        @Override
-		public String getTemplateFolderName()
-        {
-            return "HCWOApplication";
-        }
+		protected HCWOApplication() {
+			super(null);
+			availableFormats = new Vector<Format>();
+			availableFormats.add(Format.WEBOBJECTS);
+			availableFormats.add(Format.BPEL);
+		}
 
-        @Override
-        public Vector<Format> getAvailableFormats() {
-        	return availableFormats;
-        }
-    }
+		@Override
+		public String getName() {
+			return "HC_WO_APPLICATION";
+		}
 
-    public static class EngineBasedApplication extends CodeType
-    {
-        private Vector<Format> availableFormats;
+		/**
+		 * Overrides getTemplateFolderName
+		 * 
+		 * @see org.openflexo.foundation.CodeType#getTemplateFolderName()
+		 */
+		@Override
+		public String getTemplateFolderName() {
+			return "HCWOApplication";
+		}
 
-        protected EngineBasedApplication()
-        {
-        	super(null);
-            availableFormats = new Vector<Format>();
-            availableFormats.add(Format.WEBOBJECTS);
-        }
+		@Override
+		public Vector<Format> getAvailableFormats() {
+			return availableFormats;
+		}
+	}
 
-        @Override
-		public String getName()
-        {
-            return "ENGINE_BASED_APPLICATION";
-        }
+	public static class EngineBasedApplication extends CodeType {
+		private Vector<Format> availableFormats;
 
-        /**
-         * Overrides getTemplateFolderName
-         * 
-         * @see org.openflexo.foundation.CodeType#getTemplateFolderName()
-         */
-        @Override
-		public String getTemplateFolderName()
-        {
-            return "WOApplication";
-        }
-        
-        @Override
-        public Vector<Format> getAvailableFormats() {
-        	return availableFormats;
-        }
-    }
+		protected EngineBasedApplication() {
+			super(null);
+			availableFormats = new Vector<Format>();
+			availableFormats.add(Format.WEBOBJECTS);
+		}
 
-    @Deprecated
-    public static class BPELApplication extends CodeType
-    {
-        private Vector<Format> availableFormats;
+		@Override
+		public String getName() {
+			return "ENGINE_BASED_APPLICATION";
+		}
 
-        protected BPELApplication()
-        {
-        	super(null);
-            availableFormats = new Vector<Format>();
-            availableFormats.add(Format.BPEL);
-        }
+		/**
+		 * Overrides getTemplateFolderName
+		 * 
+		 * @see org.openflexo.foundation.CodeType#getTemplateFolderName()
+		 */
+		@Override
+		public String getTemplateFolderName() {
+			return "WOApplication";
+		}
 
-        @Override
-		public String getName()
-        {
-            return "BPEL";
-        }
+		@Override
+		public Vector<Format> getAvailableFormats() {
+			return availableFormats;
+		}
+	}
 
-        /**
-         * Overrides getTemplateFolderName
-         * 
-         * @see org.openflexo.foundation.CodeType#getTemplateFolderName()
-         */
-        @Override
-		public String getTemplateFolderName()
-        {
-            return "BPEL";
-        }
-        
-        @Override
-        public Vector<Format> getAvailableFormats() {
-        	return availableFormats;
-        }
-    }
+	@Deprecated
+	public static class BPELApplication extends CodeType {
+		private Vector<Format> availableFormats;
 
-   public static CodeType get(String typeName)
-    {
-        for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
-            CodeType temp = (CodeType) e.nextElement();
-            if (temp.getName().equals(typeName)) {
-                return temp;
-            }
-        }
+		protected BPELApplication() {
+			super(null);
+			availableFormats = new Vector<Format>();
+			availableFormats.add(Format.BPEL);
+		}
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find TargetType named " + typeName);
-        return null;
-    }
+		@Override
+		public String getName() {
+			return "BPEL";
+		}
 
-    private Vector<CodeType> _availableValues = null;
+		/**
+		 * Overrides getTemplateFolderName
+		 * 
+		 * @see org.openflexo.foundation.CodeType#getTemplateFolderName()
+		 */
+		@Override
+		public String getTemplateFolderName() {
+			return "BPEL";
+		}
 
-    @Override
-	public Vector<CodeType> getAvailableValues()
-    {
-        if (_availableValues == null) {
-            _availableValues = new Vector<CodeType>();
-            _availableValues.add(PROTOTYPE);
-            _availableValues.add(HC_WO_APPLICATION);
-            _availableValues.add(ENGINE_BASED_APPLICATION);
-            _availableValues.add(BPEL);
-        }
-        return _availableValues;
-    }
+		@Override
+		public Vector<Format> getAvailableFormats() {
+			return availableFormats;
+		}
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return codeTypeConverter;
-    }
+	public static CodeType get(String typeName) {
+		for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
+			CodeType temp = (CodeType) e.nextElement();
+			if (temp.getName().equals(typeName)) {
+				return temp;
+			}
+		}
 
-    public static Vector<CodeType> availableValues()
-    {
-        return PROTOTYPE.getAvailableValues();
-    }
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Could not find TargetType named " + typeName);
+		}
+		return null;
+	}
 
-    /**
-     * @return
-     */
-    @Override
-	public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	private Vector<CodeType> _availableValues = null;
 
-    public boolean isPrototype()
-    {
-        return this == PROTOTYPE;
-    }
-    
+	@Override
+	public Vector<CodeType> getAvailableValues() {
+		if (_availableValues == null) {
+			_availableValues = new Vector<CodeType>();
+			_availableValues.add(PROTOTYPE);
+			_availableValues.add(HC_WO_APPLICATION);
+			_availableValues.add(ENGINE_BASED_APPLICATION);
+			_availableValues.add(BPEL);
+		}
+		return _availableValues;
+	}
+
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return codeTypeConverter;
+	}
+
+	public static Vector<CodeType> availableValues() {
+		return PROTOTYPE.getAvailableValues();
+	}
+
+	/**
+	 * @return
+	 */
+	@Override
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
+
+	public boolean isPrototype() {
+		return this == PROTOTYPE;
+	}
+
 }

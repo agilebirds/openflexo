@@ -30,44 +30,41 @@ import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
-
 public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> {
 
 	private static final Logger logger = Logger.getLogger(ActionSchemeAction.class.getPackage().getName());
 
 	private ActionSchemeActionType actionType;
-	
-	public ActionSchemeAction(ActionSchemeActionType actionType, FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-	{
-		super(actionType,focusedObject,globalSelection,editor);
+
+	public ActionSchemeAction(ActionSchemeActionType actionType, FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+			FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
 		this.actionType = actionType;
 	}
 
-	public ActionScheme getActionScheme()
-	{
-		if (actionType != null)
+	public ActionScheme getActionScheme() {
+		if (actionType != null) {
 			return actionType.getActionScheme();
-		return null;
-	}
-	
-	@Override
-	public EditionPatternInstance getEditionPatternInstance()
-	{
-		if (actionType != null)
-			return actionType.getEditionPatternReference().getEditionPatternInstance();
+		}
 		return null;
 	}
 
 	@Override
-	public EditionScheme getEditionScheme()
-	{
+	public EditionPatternInstance getEditionPatternInstance() {
+		if (actionType != null) {
+			return actionType.getEditionPatternReference().getEditionPatternInstance();
+		}
+		return null;
+	}
+
+	@Override
+	public EditionScheme getEditionScheme() {
 		return getActionScheme();
 	}
 
 	@Override
-	protected void doAction(Object context) 
-	{
-		logger.info("Perform action "+actionType);
+	protected void doAction(Object context) {
+		logger.info("Perform action " + actionType);
 
 		if (getActionScheme() != null && getActionScheme().evaluateCondition(actionType.getEditionPatternReference())) {
 			applyEditionActions();
@@ -75,15 +72,15 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 	}
 
 	@Override
-	protected View retrieveOEShema()
-	{
-		if (getFocusedObject() instanceof ViewObject) return ((ViewObject)getFocusedObject()).getShema();
+	protected View retrieveOEShema() {
+		if (getFocusedObject() instanceof ViewObject) {
+			return ((ViewObject) getFocusedObject()).getShema();
+		}
 		return null;
 	}
 
 	@Override
-	protected Object getOverridenGraphicalRepresentation()
-	{
+	protected Object getOverridenGraphicalRepresentation() {
 		return null;
 	}
 }

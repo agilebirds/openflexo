@@ -19,62 +19,78 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
-
+import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class DataPropertyAssertion extends AbstractAssertion {
 
 	private String dataPropertyURI;
-	private String value;
 
-	public String _getDataPropertyURI() 
-	{
+	public String _getDataPropertyURI() {
 		return dataPropertyURI;
 	}
 
-	public void _setDataPropertyURI(String dataPropertyURI) 
-	{
+	public void _setDataPropertyURI(String dataPropertyURI) {
 		this.dataPropertyURI = dataPropertyURI;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.DATA_PROPERTY_ASSERTION_INSPECTOR;
 	}
 
-	public OntologyProperty getOntologyProperty()
-	{
+	public OntologyProperty getOntologyProperty() {
 		return getOntologyLibrary().getProperty(_getDataPropertyURI());
 	}
 
-	public void setOntologyProperty(OntologyProperty p)
-	{
+	public void setOntologyProperty(OntologyProperty p) {
 		_setDataPropertyURI(p != null ? p.getURI() : null);
 	}
-	
-	public String _getValue()
-	{
-		return value;
-	}
-	
-	public void _setValue(String aValue)
-	{
-		value = aValue;
+
+	public Object getValue(EditionSchemeAction action) {
+		return getValue().getBindingValue(action);
 	}
 
-	public EditionPatternParameter getValueParameter()
-	{
-		return getScheme().getParameter(value);
+	@Override
+	public BindingModel getBindingModel() {
+		return getEditionScheme().getBindingModel();
 	}
-	
-	public void setValueParameter(EditionPatternParameter param)
-	{
-		if (param != null) {
-			value = param.getName();
+
+	private ViewPointDataBinding value;
+
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+		@Override
+		public java.lang.reflect.Type getType() {
+			if (getOntologyProperty() instanceof OntologyDataProperty) {
+				return ((OntologyDataProperty) getOntologyProperty()).getDataType().getAccessedType();
+			}
+			return Object.class;
+		};
+	};
+
+	public BindingDefinition getValueBindingDefinition() {
+		return VALUE;
+	}
+
+	public ViewPointDataBinding getValue() {
+		if (value == null) {
+			value = new ViewPointDataBinding(this, EditionActionBindingAttribute.value, getValueBindingDefinition());
 		}
+		return value;
 	}
-	
+
+	public void setValue(ViewPointDataBinding value) {
+		value.setOwner(this);
+		value.setBindingAttribute(EditionActionBindingAttribute.value);
+		value.setBindingDefinition(getValueBindingDefinition());
+		this.value = value;
+	}
 
 }

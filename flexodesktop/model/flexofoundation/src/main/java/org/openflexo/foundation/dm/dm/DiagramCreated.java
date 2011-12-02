@@ -21,17 +21,14 @@ package org.openflexo.foundation.dm.dm;
 
 import org.openflexo.foundation.dm.ERDiagram;
 
-public class DiagramCreated extends DMDataModification
-{
+public class DiagramCreated extends DMDataModification {
 
-     public DiagramCreated(ERDiagram newDiagram)
-    {
-        super(null, newDiagram);
-     }
+	public DiagramCreated(ERDiagram newDiagram) {
+		super(null, newDiagram);
+	}
 
-     @Override
-    public ERDiagram newValue()
-     {
-    	return (ERDiagram)super.newValue();
-    }
+	@Override
+	public ERDiagram newValue() {
+		return (ERDiagram) super.newValue();
+	}
 }

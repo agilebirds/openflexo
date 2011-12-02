@@ -30,211 +30,177 @@ import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.toolbox.TokenMarkerStyle;
 import org.openflexo.xmlcode.StringEncoder;
 
-
 /**
- * Utility class used to define AutomaticMergeResolvingModel for the
- * MergedDocumentType for each ResourceType.
+ * Utility class used to define AutomaticMergeResolvingModel for the MergedDocumentType for each ResourceType.
  * 
  * @author sylvain
  */
 public class ProcessAutomergeInitializer {
 
-    protected static final XMLAutomaticMergeResolvingRule AVERAGE_POSIX 
-	= new XMLAutomaticMergeResolvingRule() {
+	protected static final XMLAutomaticMergeResolvingRule AVERAGE_POSIX = new XMLAutomaticMergeResolvingRule() {
 		@Override
-		public String getMergedResult(MergeChange change) 
-		{
+		public String getMergedResult(MergeChange change) {
 			int leftValue = getLeftIntAttributeValue(change);
 			int rightValue = getRightIntAttributeValue(change);
-			return StringEncoder.encodeInteger(((leftValue+rightValue)/2));
+			return StringEncoder.encodeInteger(((leftValue + rightValue) / 2));
 		}
+
 		@Override
-		public boolean isApplicable(MergeChange change) 
-		{
+		public boolean isApplicable(MergeChange change) {
 			return isXMLAttributeValueConflict(change, "posiX");
-		}		
+		}
+
 		@Override
-		public String getDescription() 
-		{
+		public String getDescription() {
 			return "computed_average_of_posiX_values";
 		}
-    };
+	};
 
-    protected static final XMLAutomaticMergeResolvingRule AVERAGE_POSIY 
-    = new XMLAutomaticMergeResolvingRule() {
-    	@Override
-		public String getMergedResult(MergeChange change) 
-    	{
-    		int leftValue = getLeftIntAttributeValue(change);
-    		int rightValue = getRightIntAttributeValue(change);
-    		return StringEncoder.encodeInteger(((leftValue+rightValue)/2));
-    	}
-    	@Override
-		public boolean isApplicable(MergeChange change) 
-    	{
-    		return isXMLAttributeValueConflict(change, "posiY");
-    	}			
+	protected static final XMLAutomaticMergeResolvingRule AVERAGE_POSIY = new XMLAutomaticMergeResolvingRule() {
 		@Override
-		public String getDescription() 
-		{
+		public String getMergedResult(MergeChange change) {
+			int leftValue = getLeftIntAttributeValue(change);
+			int rightValue = getRightIntAttributeValue(change);
+			return StringEncoder.encodeInteger(((leftValue + rightValue) / 2));
+		}
+
+		@Override
+		public boolean isApplicable(MergeChange change) {
+			return isXMLAttributeValueConflict(change, "posiY");
+		}
+
+		@Override
+		public String getDescription() {
 			return "computed_average_of_posiY_values";
 		}
-   };
+	};
 
-    protected static final XMLAutomaticMergeResolvingRule MAX_WIDTH 
-    = new XMLAutomaticMergeResolvingRule() {
-    	@Override
-		public String getMergedResult(MergeChange change) 
-    	{
-    		int leftValue = getLeftIntAttributeValue(change);
-    		int rightValue = getRightIntAttributeValue(change);
-    		return StringEncoder.encodeInteger(Math.max(leftValue,rightValue));
-    	}
-    	@Override
-		public boolean isApplicable(MergeChange change) 
-    	{
-    		return isXMLAttributeValueConflict(change, "width");
-    	}			
+	protected static final XMLAutomaticMergeResolvingRule MAX_WIDTH = new XMLAutomaticMergeResolvingRule() {
 		@Override
-		public String getDescription() 
-		{
+		public String getMergedResult(MergeChange change) {
+			int leftValue = getLeftIntAttributeValue(change);
+			int rightValue = getRightIntAttributeValue(change);
+			return StringEncoder.encodeInteger(Math.max(leftValue, rightValue));
+		}
+
+		@Override
+		public boolean isApplicable(MergeChange change) {
+			return isXMLAttributeValueConflict(change, "width");
+		}
+
+		@Override
+		public String getDescription() {
 			return "choosen_maximum_of_width_values";
 		}
-    };
+	};
 
-    protected static final XMLAutomaticMergeResolvingRule MAX_HEIGHT 
-    = new XMLAutomaticMergeResolvingRule() {
-    	@Override
-		public String getMergedResult(MergeChange change) 
-    	{
-    		int leftValue = getLeftIntAttributeValue(change);
-    		int rightValue = getRightIntAttributeValue(change);
-    		return StringEncoder.encodeInteger(Math.max(leftValue,rightValue));
-    	}
-    	@Override
-		public boolean isApplicable(MergeChange change) 
-    	{
-    		return isXMLAttributeValueConflict(change, "height");
-    	}			
+	protected static final XMLAutomaticMergeResolvingRule MAX_HEIGHT = new XMLAutomaticMergeResolvingRule() {
 		@Override
-		public String getDescription() 
-		{
+		public String getMergedResult(MergeChange change) {
+			int leftValue = getLeftIntAttributeValue(change);
+			int rightValue = getRightIntAttributeValue(change);
+			return StringEncoder.encodeInteger(Math.max(leftValue, rightValue));
+		}
+
+		@Override
+		public boolean isApplicable(MergeChange change) {
+			return isXMLAttributeValueConflict(change, "height");
+		}
+
+		@Override
+		public String getDescription() {
 			return "choosen_maximum_of_height_values";
 		}
-   };
+	};
 
-   protected static final XMLAutomaticMergeResolvingRule MIDDLE_OF_INDUCED_LOCATION 
-   = new XMLAutomaticMergeResolvingRule() {
-   	@Override
-	public String getMergedResult(MergeChange change) 
-   	{
-   		Point leftValue = getLeftPointAttributeValue(change);
-   		Point rightValue = getRightPointAttributeValue(change);
-   		return StringEncoder.encodeObject(new Point((leftValue.x+rightValue.x)/2,(leftValue.y+rightValue.y)/2));
-   	}
-   	@Override
-	public boolean isApplicable(MergeChange change) 
-   	{
-   		return isXMLAttributeValueConflict(change, "inducedLocation");
-   	}			
+	protected static final XMLAutomaticMergeResolvingRule MIDDLE_OF_INDUCED_LOCATION = new XMLAutomaticMergeResolvingRule() {
 		@Override
-		public String getDescription() 
-		{
+		public String getMergedResult(MergeChange change) {
+			Point leftValue = getLeftPointAttributeValue(change);
+			Point rightValue = getRightPointAttributeValue(change);
+			return StringEncoder.encodeObject(new Point((leftValue.x + rightValue.x) / 2, (leftValue.y + rightValue.y) / 2));
+		}
+
+		@Override
+		public boolean isApplicable(MergeChange change) {
+			return isXMLAttributeValueConflict(change, "inducedLocation");
+		}
+
+		@Override
+		public String getDescription() {
 			return "choosen_middle_of_induced_location";
 		}
-  };
+	};
 
-  protected static final XMLAutomaticMergeResolvingRule MIDDLE_OF_DEDUCED_LOCATION 
-  = new XMLAutomaticMergeResolvingRule() {
-  	@Override
-	public String getMergedResult(MergeChange change) 
-  	{
-  		Point leftValue = getLeftPointAttributeValue(change);
-  		Point rightValue = getRightPointAttributeValue(change);
-  		return StringEncoder.encodeObject(new Point((leftValue.x+rightValue.x)/2,(leftValue.y+rightValue.y)/2));
-  	}
-  	@Override
-	public boolean isApplicable(MergeChange change) 
-  	{
-  		return isXMLAttributeValueConflict(change, "deducedLocation");
-  	}			
+	protected static final XMLAutomaticMergeResolvingRule MIDDLE_OF_DEDUCED_LOCATION = new XMLAutomaticMergeResolvingRule() {
 		@Override
-		public String getDescription() 
-		{
+		public String getMergedResult(MergeChange change) {
+			Point leftValue = getLeftPointAttributeValue(change);
+			Point rightValue = getRightPointAttributeValue(change);
+			return StringEncoder.encodeObject(new Point((leftValue.x + rightValue.x) / 2, (leftValue.y + rightValue.y) / 2));
+		}
+
+		@Override
+		public boolean isApplicable(MergeChange change) {
+			return isXMLAttributeValueConflict(change, "deducedLocation");
+		}
+
+		@Override
+		public String getDescription() {
 			return "choosen_middle_of_deduced_location";
 		}
- };
+	};
 
- protected static final XMLAutomaticMergeResolvingRule MIDDLE_OF_INDUCED_DEDUCED_LOCATION 
- = new XMLAutomaticMergeResolvingRule() {
- 	@Override
-	public String getMergedResult(MergeChange change) 
- 	{
- 		Point leftValue = getLeftPointAttributeValue(change);
- 		Point rightValue = getRightPointAttributeValue(change);
- 		return StringEncoder.encodeObject(new Point((leftValue.x+rightValue.x)/2,(leftValue.y+rightValue.y)/2));
- 	}
- 	@Override
-	public boolean isApplicable(MergeChange change) 
- 	{
- 		return isXMLAttributeValueConflict(change, "inducedDeducedLocation");
- 	}			
+	protected static final XMLAutomaticMergeResolvingRule MIDDLE_OF_INDUCED_DEDUCED_LOCATION = new XMLAutomaticMergeResolvingRule() {
 		@Override
-		public String getDescription() 
-		{
+		public String getMergedResult(MergeChange change) {
+			Point leftValue = getLeftPointAttributeValue(change);
+			Point rightValue = getRightPointAttributeValue(change);
+			return StringEncoder.encodeObject(new Point((leftValue.x + rightValue.x) / 2, (leftValue.y + rightValue.y) / 2));
+		}
+
+		@Override
+		public boolean isApplicable(MergeChange change) {
+			return isXMLAttributeValueConflict(change, "inducedDeducedLocation");
+		}
+
+		@Override
+		public String getDescription() {
 			return "choosen_middle_of_induced_deduced_location";
 		}
-};
+	};
 
-   protected static final XMLAutomaticMergeResolvingRule NEWEST_LAST_UPDATE 
-   = new XMLAutomaticMergeResolvingRule() {
-	   @Override
-	public String getMergedResult(MergeChange change) 
-	   {
-		   String leftDateAsString = extractContainerAttributeValueFromLeft(change, "lastUpdate");
-		   String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastUpdate");
-		   Date leftDate = StringEncoder.decodeObject(leftDateAsString,Date.class);
-		   Date rightDate = StringEncoder.decodeObject(rightDateAsString,Date.class);
-		   if (leftDate.after(rightDate)) return change.getLeftText();
-		   return change.getRightText();
-	   }
-	   @Override
-	public boolean isApplicable(MergeChange change) 
-	   {
-		   return isInsideAnXMLAttributeValueConflict(change, "lastUpdate");
-	   }			
-	   @Override
-	public String getDescription() 
-	   {
-		   return "choosen_newest_last_update";
-	   }
-   };
+	protected static final XMLAutomaticMergeResolvingRule NEWEST_LAST_UPDATE = new XMLAutomaticMergeResolvingRule() {
+		@Override
+		public String getMergedResult(MergeChange change) {
+			String leftDateAsString = extractContainerAttributeValueFromLeft(change, "lastUpdate");
+			String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastUpdate");
+			Date leftDate = StringEncoder.decodeObject(leftDateAsString, Date.class);
+			Date rightDate = StringEncoder.decodeObject(rightDateAsString, Date.class);
+			if (leftDate.after(rightDate)) {
+				return change.getLeftText();
+			}
+			return change.getRightText();
+		}
 
-	public static void initialize()
-	{
-		DefaultAutomaticMergeResolvingModel processAutomergeModel
-		= new FlexoAutomaticMergeResolvingModel();
+		@Override
+		public boolean isApplicable(MergeChange change) {
+			return isInsideAnXMLAttributeValueConflict(change, "lastUpdate");
+		}
 
-		processAutomergeModel.addToPrimaryRules(
-				new IgnoreRightUnsignificantChangesRemovedByOpposite(
-						"lastUpdate",
-						"posiX",
-						"posiY",
-						"width",
-						"height",
-						"inducedLocation",
-						"deducedLocation",
-						"inducedDeducedLocation"));
-		processAutomergeModel.addToPrimaryRules(
-				new IgnoreLeftUnsignificantChangesRemovedByOpposite(
-						"lastUpdate",
-						"posiX",
-						"posiY",
-						"width",
-						"height",
-						"inducedLocation",
-						"deducedLocation",
-						"inducedDeducedLocation"));
+		@Override
+		public String getDescription() {
+			return "choosen_newest_last_update";
+		}
+	};
+
+	public static void initialize() {
+		DefaultAutomaticMergeResolvingModel processAutomergeModel = new FlexoAutomaticMergeResolvingModel();
+
+		processAutomergeModel.addToPrimaryRules(new IgnoreRightUnsignificantChangesRemovedByOpposite("lastUpdate", "posiX", "posiY",
+				"width", "height", "inducedLocation", "deducedLocation", "inducedDeducedLocation"));
+		processAutomergeModel.addToPrimaryRules(new IgnoreLeftUnsignificantChangesRemovedByOpposite("lastUpdate", "posiX", "posiY",
+				"width", "height", "inducedLocation", "deducedLocation", "inducedDeducedLocation"));
 
 		processAutomergeModel.addToDetailedRules(AVERAGE_POSIX);
 		processAutomergeModel.addToDetailedRules(AVERAGE_POSIY);
@@ -245,9 +211,7 @@ public class ProcessAutomergeInitializer {
 		processAutomergeModel.addToDetailedRules(MIDDLE_OF_INDUCED_DEDUCED_LOCATION);
 		processAutomergeModel.addToDetailedRules(NEWEST_LAST_UPDATE);
 
-		ResourceType.PROCESS.setMergedDocumentType(new DefaultMergedDocumentType(
-				DelimitingMethod.XML,
-				TokenMarkerStyle.XML,
+		ResourceType.PROCESS.setMergedDocumentType(new DefaultMergedDocumentType(DelimitingMethod.XML, TokenMarkerStyle.XML,
 				processAutomergeModel));
 
 	}

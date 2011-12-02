@@ -19,7 +19,6 @@
  */
 package org.openflexo.diff.merge;
 
-
 import java.io.File;
 import java.io.IOException;
 
@@ -30,93 +29,87 @@ import org.openflexo.diff.merge.MergeChange.MergeChangeSource;
 import org.openflexo.diff.merge.MergeChange.MergeChangeType;
 import org.openflexo.toolbox.FileResource;
 
-
 public class TestMerge extends TestCase {
 
-	public void test0() throws IOException
-	{
+	public void test0() throws IOException {
 		File original = new FileResource("TestMerge/TestMerge0-original.java");
 		File left = new FileResource("TestMerge/TestMerge0-left.java");
 		File right = new FileResource("TestMerge/TestMerge0-right.java");
-		Merge merge = new Merge(new DiffSource(original),new DiffSource(left),new DiffSource(right),DefaultMergedDocumentType.JAVA);
+		Merge merge = new Merge(new DiffSource(original), new DiffSource(left), new DiffSource(right), DefaultMergedDocumentType.JAVA);
 		assertEquals(merge.getChanges().size(), 0);
 		assertFalse(merge.isReallyConflicting());
 	}
 
-	public void test1() throws IOException
-	{
+	public void test1() throws IOException {
 		File original = new FileResource("TestMerge/TestMerge1-original.java");
 		File left = new FileResource("TestMerge/TestMerge1-left.java");
 		File right = new FileResource("TestMerge/TestMerge1-right.java");
-		Merge merge = new Merge(new DiffSource(original),new DiffSource(left),new DiffSource(right),DefaultMergedDocumentType.JAVA);
+		Merge merge = new Merge(new DiffSource(original), new DiffSource(left), new DiffSource(right), DefaultMergedDocumentType.JAVA);
 		assertEquals(merge.getChanges().size(), 9);
 		assertFalse(merge.isReallyConflicting());
-		assertChange(merge.getChanges().get(0),MergeChangeSource.Left,MergeChangeType.Removal,23,22,23,33,23,33);
-		assertChange(merge.getChanges().get(1),MergeChangeSource.Left,MergeChangeType.Addition,25,25,36,35,36,35);
-		assertChange(merge.getChanges().get(2),MergeChangeSource.Right,MergeChangeType.Addition,91,90,101,100,101,105);
-		assertChange(merge.getChanges().get(3),MergeChangeSource.Right,MergeChangeType.Modification,98,98,108,108,113,114);
-		assertChange(merge.getChanges().get(4),MergeChangeSource.Left,MergeChangeType.Addition,100,100,110,109,116,115);
-		assertChange(merge.getChanges().get(5),MergeChangeSource.Right,MergeChangeType.Removal,103,103,112,112,118,117);
-		assertChange(merge.getChanges().get(6),MergeChangeSource.Left,MergeChangeType.Modification,106,106,115,115,120,120);
-		assertChange(merge.getChanges().get(7),MergeChangeSource.Left,MergeChangeType.Modification,130,130,139,139,144,144);
-		assertChange(merge.getChanges().get(8),MergeChangeSource.Left,MergeChangeType.Modification,134,134,143,143,148,148);
+		assertChange(merge.getChanges().get(0), MergeChangeSource.Left, MergeChangeType.Removal, 23, 22, 23, 33, 23, 33);
+		assertChange(merge.getChanges().get(1), MergeChangeSource.Left, MergeChangeType.Addition, 25, 25, 36, 35, 36, 35);
+		assertChange(merge.getChanges().get(2), MergeChangeSource.Right, MergeChangeType.Addition, 91, 90, 101, 100, 101, 105);
+		assertChange(merge.getChanges().get(3), MergeChangeSource.Right, MergeChangeType.Modification, 98, 98, 108, 108, 113, 114);
+		assertChange(merge.getChanges().get(4), MergeChangeSource.Left, MergeChangeType.Addition, 100, 100, 110, 109, 116, 115);
+		assertChange(merge.getChanges().get(5), MergeChangeSource.Right, MergeChangeType.Removal, 103, 103, 112, 112, 118, 117);
+		assertChange(merge.getChanges().get(6), MergeChangeSource.Left, MergeChangeType.Modification, 106, 106, 115, 115, 120, 120);
+		assertChange(merge.getChanges().get(7), MergeChangeSource.Left, MergeChangeType.Modification, 130, 130, 139, 139, 144, 144);
+		assertChange(merge.getChanges().get(8), MergeChangeSource.Left, MergeChangeType.Modification, 134, 134, 143, 143, 148, 148);
 	}
 
-	public void test2() throws IOException
-	{
+	public void test2() throws IOException {
 		File original = new FileResource("TestMerge/TestMerge2-original.java");
 		File left = new FileResource("TestMerge/TestMerge2-left.java");
 		File right = new FileResource("TestMerge/TestMerge2-right.java");
-		Merge merge = new Merge(new DiffSource(original),new DiffSource(left),new DiffSource(right),DefaultMergedDocumentType.JAVA);
+		Merge merge = new Merge(new DiffSource(original), new DiffSource(left), new DiffSource(right), DefaultMergedDocumentType.JAVA);
 		assertEquals(merge.getChanges().size(), 14);
 		assertTrue(merge.isReallyConflicting());
-		assertChange(merge.getChanges().get(0),MergeChangeSource.Left,MergeChangeType.Removal,7,6,7,7,7,7);
-		assertChange(merge.getChanges().get(1),MergeChangeSource.Right,MergeChangeType.Addition,10,9,11,10,11,11);
-		assertChange(merge.getChanges().get(2),MergeChangeSource.Conflict,MergeChangeType.Modification,13,13,14,13,15,15);
-		assertChange(merge.getChanges().get(3),MergeChangeSource.Left,MergeChangeType.Addition,19,19,19,18,21,20);
-		assertChange(merge.getChanges().get(4),MergeChangeSource.Right,MergeChangeType.Addition,35,34,34,33,36,39);
-		assertChange(merge.getChanges().get(5),MergeChangeSource.Conflict,MergeChangeType.Modification,79,79,78,77,84,85);
-		assertChange(merge.getChanges().get(6),MergeChangeSource.Left,MergeChangeType.Addition,86,86,84,83,92,91);
-		assertChange(merge.getChanges().get(7),MergeChangeSource.Right,MergeChangeType.Addition,102,101,99,98,107,109);
-		assertChange(merge.getChanges().get(8),MergeChangeSource.Left,MergeChangeType.Modification,129,129,126,126,137,137);
-		assertChange(merge.getChanges().get(9),MergeChangeSource.Conflict,MergeChangeType.Modification,135,138,132,135,143,146);
-		assertChange(merge.getChanges().get(10),MergeChangeSource.Right,MergeChangeType.Addition,140,139,137,136,148,148);
-		assertChange(merge.getChanges().get(11),MergeChangeSource.Left,MergeChangeType.Addition,141,141,138,137,150,149);
-		assertChange(merge.getChanges().get(12),MergeChangeSource.Conflict,MergeChangeType.Modification,143,148,139,144,151,156);
-		assertChange(merge.getChanges().get(13),MergeChangeSource.Right,MergeChangeType.Addition,156,155,152,151,164,164);
+		assertChange(merge.getChanges().get(0), MergeChangeSource.Left, MergeChangeType.Removal, 7, 6, 7, 7, 7, 7);
+		assertChange(merge.getChanges().get(1), MergeChangeSource.Right, MergeChangeType.Addition, 10, 9, 11, 10, 11, 11);
+		assertChange(merge.getChanges().get(2), MergeChangeSource.Conflict, MergeChangeType.Modification, 13, 13, 14, 13, 15, 15);
+		assertChange(merge.getChanges().get(3), MergeChangeSource.Left, MergeChangeType.Addition, 19, 19, 19, 18, 21, 20);
+		assertChange(merge.getChanges().get(4), MergeChangeSource.Right, MergeChangeType.Addition, 35, 34, 34, 33, 36, 39);
+		assertChange(merge.getChanges().get(5), MergeChangeSource.Conflict, MergeChangeType.Modification, 79, 79, 78, 77, 84, 85);
+		assertChange(merge.getChanges().get(6), MergeChangeSource.Left, MergeChangeType.Addition, 86, 86, 84, 83, 92, 91);
+		assertChange(merge.getChanges().get(7), MergeChangeSource.Right, MergeChangeType.Addition, 102, 101, 99, 98, 107, 109);
+		assertChange(merge.getChanges().get(8), MergeChangeSource.Left, MergeChangeType.Modification, 129, 129, 126, 126, 137, 137);
+		assertChange(merge.getChanges().get(9), MergeChangeSource.Conflict, MergeChangeType.Modification, 135, 138, 132, 135, 143, 146);
+		assertChange(merge.getChanges().get(10), MergeChangeSource.Right, MergeChangeType.Addition, 140, 139, 137, 136, 148, 148);
+		assertChange(merge.getChanges().get(11), MergeChangeSource.Left, MergeChangeType.Addition, 141, 141, 138, 137, 150, 149);
+		assertChange(merge.getChanges().get(12), MergeChangeSource.Conflict, MergeChangeType.Modification, 143, 148, 139, 144, 151, 156);
+		assertChange(merge.getChanges().get(13), MergeChangeSource.Right, MergeChangeType.Addition, 156, 155, 152, 151, 164, 164);
 	}
 
-	public void test3() throws IOException
-	{
+	public void test3() throws IOException {
 		File original = new FileResource("TestMerge/TestMerge3-original.java");
 		File left = new FileResource("TestMerge/TestMerge3-left.java");
 		File right = new FileResource("TestMerge/TestMerge3-right.java");
-		Merge merge = new Merge(new DiffSource(original),new DiffSource(left),new DiffSource(right),DefaultMergedDocumentType.JAVA);
+		Merge merge = new Merge(new DiffSource(original), new DiffSource(left), new DiffSource(right), DefaultMergedDocumentType.JAVA);
 		assertEquals(merge.getChanges().size(), 9);
 		assertTrue(merge.isReallyConflicting());
-		assertChange(merge.getChanges().get(0),MergeChangeSource.Conflict,MergeChangeType.Modification,2,4,2,4,2,4);
-		assertChange(merge.getChanges().get(1),MergeChangeSource.Right,MergeChangeType.Modification,7,7,7,7,7,7);
-		assertChange(merge.getChanges().get(2),MergeChangeSource.Left,MergeChangeType.Modification,17,17,17,17,17,17);
-		assertChange(merge.getChanges().get(3),MergeChangeSource.Left,MergeChangeType.Addition,23,23,23,22,23,22);
-		assertChange(merge.getChanges().get(4),MergeChangeSource.Conflict,MergeChangeType.Modification,27,32,26,31,26,31);
-		assertChange(merge.getChanges().get(5),MergeChangeSource.Right,MergeChangeType.Addition,35,34,34,33,34,37);
-		assertChange(merge.getChanges().get(6),MergeChangeSource.Left,MergeChangeType.Addition,77,80,76,75,80,79);
-		assertChange(merge.getChanges().get(7),MergeChangeSource.Conflict,MergeChangeType.Modification,154,154,149,149,153,153);
-		assertChange(merge.getChanges().get(8),MergeChangeSource.Conflict,MergeChangeType.Modification,159,159,154,154,158,158);
+		assertChange(merge.getChanges().get(0), MergeChangeSource.Conflict, MergeChangeType.Modification, 2, 4, 2, 4, 2, 4);
+		assertChange(merge.getChanges().get(1), MergeChangeSource.Right, MergeChangeType.Modification, 7, 7, 7, 7, 7, 7);
+		assertChange(merge.getChanges().get(2), MergeChangeSource.Left, MergeChangeType.Modification, 17, 17, 17, 17, 17, 17);
+		assertChange(merge.getChanges().get(3), MergeChangeSource.Left, MergeChangeType.Addition, 23, 23, 23, 22, 23, 22);
+		assertChange(merge.getChanges().get(4), MergeChangeSource.Conflict, MergeChangeType.Modification, 27, 32, 26, 31, 26, 31);
+		assertChange(merge.getChanges().get(5), MergeChangeSource.Right, MergeChangeType.Addition, 35, 34, 34, 33, 34, 37);
+		assertChange(merge.getChanges().get(6), MergeChangeSource.Left, MergeChangeType.Addition, 77, 80, 76, 75, 80, 79);
+		assertChange(merge.getChanges().get(7), MergeChangeSource.Conflict, MergeChangeType.Modification, 154, 154, 149, 149, 153, 153);
+		assertChange(merge.getChanges().get(8), MergeChangeSource.Conflict, MergeChangeType.Modification, 159, 159, 154, 154, 158, 158);
 	}
 
-	private void assertChange(MergeChange change, MergeChangeSource changeSource, MergeChangeType changeType, int first0, int last0, int first1, int last1, int first2, int last2) 
-	{
-		assertEquals (change.getMergeChangeSource(),changeSource);
-		assertEquals (change.getMergeChangeType(),changeType);
-		assertEquals(first0,change.getFirst0());
-		assertEquals(first1,change.getFirst1());
-		assertEquals(first2,change.getFirst2());
-		assertEquals(last0,change.getLast0());
-		assertEquals(last1,change.getLast1());
-		assertEquals(last2,change.getLast2());
+	private void assertChange(MergeChange change, MergeChangeSource changeSource, MergeChangeType changeType, int first0, int last0,
+			int first1, int last1, int first2, int last2) {
+		assertEquals(change.getMergeChangeSource(), changeSource);
+		assertEquals(change.getMergeChangeType(), changeType);
+		assertEquals(first0, change.getFirst0());
+		assertEquals(first1, change.getFirst1());
+		assertEquals(first2, change.getFirst2());
+		assertEquals(last0, change.getLast0());
+		assertEquals(last1, change.getLast1());
+		assertEquals(last2, change.getLast2());
 	}
-
 
 	/*public static void main(String[] args) 
 	{
@@ -237,5 +230,5 @@ public class TestMerge extends TestCase {
 		dialog.pack();
 		dialog.setVisible(true);
 	}
-*/
+	*/
 }

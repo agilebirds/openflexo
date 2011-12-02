@@ -423,7 +423,8 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 			Enumeration<IESpanTDWidget> en = ((Vector<IESpanTDWidget>) getSpannedTD().clone()).elements();
 			while (en.hasMoreElements()) {
 				IESpanTDWidget span = en.nextElement();
-				if (span.getXLocation() == getXLocation() + _colSpan && span.getYLocation() >= getYLocation() && span.getYLocation() < getYLocation() + getRowSpan()) {
+				if (span.getXLocation() == getXLocation() + _colSpan && span.getYLocation() >= getYLocation()
+						&& span.getYLocation() < getYLocation() + getRowSpan()) {
 					span.replaceByNormalTD();
 					getSpannedTD().remove(span);
 				}
@@ -444,7 +445,8 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 			Enumeration<IESpanTDWidget> en = ((Vector<IESpanTDWidget>) getSpannedTD().clone()).elements();
 			while (en.hasMoreElements()) {
 				IESpanTDWidget span = en.nextElement();
-				if (span.getYLocation() == getYLocation() + _rowSpan && span.getXLocation() >= getXLocation() && span.getXLocation() < getXLocation() + getColSpan()) {
+				if (span.getYLocation() == getYLocation() + _rowSpan && span.getXLocation() >= getXLocation()
+						&& span.getXLocation() < getXLocation() + getColSpan()) {
 					span.replaceByNormalTD();
 					getSpannedTD().remove(span);
 				}
@@ -795,8 +797,8 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 			for (int i = 1; i < _colSpan; i++) {
 				if (htmlTable.getTDAt(getYLocation(), getXLocation() + i) != null) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("It seems that spanned td has already been inserted or something is in the way. Not inserting." + htmlTable
-								.getTDAt(getYLocation(), getXLocation() + i));
+						logger.warning("It seems that spanned td has already been inserted or something is in the way. Not inserting."
+								+ htmlTable.getTDAt(getYLocation(), getXLocation() + i));
 					}
 					continue;
 				}
@@ -811,8 +813,8 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 					for (int j = 0; j < _colSpan; j++) {
 						if (htmlTable.getTDAt(getYLocation() + i, getXLocation() + j) != null) {
 							if (logger.isLoggable(Level.WARNING)) {
-								logger.warning("It seems that spanned td has already been inserted or something is in the way. Not inserting." + htmlTable
-										.getTDAt(getYLocation() + i, getXLocation() + j));
+								logger.warning("It seems that spanned td has already been inserted or something is in the way. Not inserting."
+										+ htmlTable.getTDAt(getYLocation() + i, getXLocation() + j));
 							}
 							continue;
 						}

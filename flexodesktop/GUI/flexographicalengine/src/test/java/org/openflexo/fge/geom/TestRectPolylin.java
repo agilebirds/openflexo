@@ -21,106 +21,88 @@ package org.openflexo.fge.geom;
 
 import java.util.logging.Logger;
 
+import junit.framework.TestCase;
+
 import org.openflexo.fge.geomedit.GeometricObject;
 import org.openflexo.fge.geomedit.GeometricSet;
 import org.openflexo.toolbox.FileResource;
-
-import junit.framework.TestCase;
 
 public class TestRectPolylin extends TestCase {
 
 	private static final Logger logger = Logger.getLogger(TestRectPolylin.class.getPackage().getName());
 
 	@Override
-	protected void setUp() throws Exception 
-	{
+	protected void setUp() throws Exception {
 		super.setUp();
 	}
 
 	@Override
-	protected void tearDown() throws Exception
-	{
+	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
-	public void testNorthNorth()
-	{
+
+	public void testNorthNorth() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_NORTH_NORTH.drw"));
 	}
-	
-	public void testEastEast()
-	{
+
+	public void testEastEast() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_EAST_EAST.drw"));
 	}
-	
-	public void testSouthSouth()
-	{
+
+	public void testSouthSouth() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_SOUTH_SOUTH.drw"));
 	}
-	
-	public void testWestWest()
-	{
+
+	public void testWestWest() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_WEST_WEST.drw"));
 	}
-	
-	public void testEastWest()
-	{
+
+	public void testEastWest() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_EAST_WEST.drw"));
 	}
-	
-	public void testNorthSouth()
-	{
+
+	public void testNorthSouth() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_NORTH_SOUTH.drw"));
 	}
-	
-	public void testNorthEast()
-	{
+
+	public void testNorthEast() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_NORTH_EAST.drw"));
 	}
-	
-	public void testEastNorth()
-	{
+
+	public void testEastNorth() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_EAST_NORTH.drw"));
 	}
-	
-	public void testSouthEast()
-	{
+
+	public void testSouthEast() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_SOUTH_EAST.drw"));
 	}
-	
-	public void testEastSouth()
-	{
+
+	public void testEastSouth() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_EAST_SOUTH.drw"));
 	}
-	
-	public void testNorthWest()
-	{
+
+	public void testNorthWest() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_NORTH_WEST.drw"));
 	}
-	
-	public void testWestNorth()
-	{
+
+	public void testWestNorth() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_WEST_NORTH.drw"));
 	}
-	
-	public void testSouthWest()
-	{
+
+	public void testSouthWest() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_SOUTH_WEST.drw"));
 	}
-	
-	public void testWestSouth()
-	{
+
+	public void testWestSouth() {
 		executeTest(new FileResource("GeomJUnitTest/RectPolylin/Polylin_WEST_SOUTH.drw"));
 	}
-	
 
-	private void executeTest(FileResource testFile)
-	{
-		logger.info(">>>>>>> Test "+testFile.getName());
+	private void executeTest(FileResource testFile) {
+		logger.info(">>>>>>> Test " + testFile.getName());
 		GeometricSet geometricSet = GeometricSet.load(testFile);
 		for (GeometricObject object : geometricSet.getChilds()) {
-			logger.fine("Check equals: "+object.getResultingGeometricObject()+" / "+object.getGeometricObject());
-			assertEquals(object.getResultingGeometricObject(),object.getGeometricObject());
+			logger.fine("Check equals: " + object.getResultingGeometricObject() + " / " + object.getGeometricObject());
+			assertEquals(object.getResultingGeometricObject(), object.getGeometricObject());
 		}
 	}
 }

@@ -24,30 +24,26 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
 public abstract class AddToXRoleInitializer<A extends AddToXRole<A>> extends
-ActionInitializer<A, AbstractActivityNode, AbstractActivityNode> {
+		ActionInitializer<A, AbstractActivityNode, AbstractActivityNode> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
 	AddToXRoleInitializer(FlexoActionType<A, AbstractActivityNode, AbstractActivityNode> actionType,
-			WKFControllerActionInitializer actionInitializer)
-			{
+			WKFControllerActionInitializer actionInitializer) {
 		super(actionType, actionInitializer);
-			}
-
-	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<A> getDefaultInitializer()
-	{
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<A> getDefaultInitializer() {
 		return new FlexoActionInitializer<A>() {
 
 			@Override
-			public boolean run(ActionEvent e, A action)
-			{
+			public boolean run(ActionEvent e, A action) {
 				String EXISTING = FlexoLocalization.localizedForKey("existing_role");
 				String NEW = FlexoLocalization.localizedForKey("new_role");
 
@@ -58,7 +54,8 @@ ActionInitializer<A, AbstractActivityNode, AbstractActivityNode> {
 				ParameterDefinition[] parameters = new ParameterDefinition[5];
 				parameters[0] = new RadioButtonListParameter<String>("select", "select_existing_new_role", hasRoles ? EXISTING : NEW,
 						EXISTING, NEW);
-				DynamicDropDownParameter<Role> availableRolesParameter = new DynamicDropDownParameter<Role>("role", "role", availableRoles, selectedValue);
+				DynamicDropDownParameter<Role> availableRolesParameter = new DynamicDropDownParameter<Role>("role", "role", availableRoles,
+						selectedValue);
 				availableRolesParameter.setShowReset(false);
 				availableRolesParameter.setStringFormatter("nameForInspector");
 				parameters[1] = availableRolesParameter;

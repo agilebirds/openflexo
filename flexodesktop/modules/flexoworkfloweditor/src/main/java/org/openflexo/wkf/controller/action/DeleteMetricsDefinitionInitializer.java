@@ -25,43 +25,39 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.wkf.MetricsDefinition;
+import org.openflexo.foundation.wkf.action.DeleteMetricsDefinition;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.wkf.MetricsDefinition;
-import org.openflexo.foundation.wkf.action.DeleteMetricsDefinition;
-
 public class DeleteMetricsDefinitionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteMetricsDefinitionInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(DeleteMetricsDefinition.actionType,actionInitializer);
+	DeleteMetricsDefinitionInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(DeleteMetricsDefinition.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DeleteMetricsDefinition> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeleteMetricsDefinition> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteMetricsDefinition>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteMetricsDefinition action)
-			{
+			public boolean run(ActionEvent e, DeleteMetricsDefinition action) {
 				boolean doIt;
 				Vector<MetricsDefinition> metricsDefinitionToDelete = action.getMetricsDefinitionToDelete();
-				if (metricsDefinitionToDelete.size()==0) 
+				if (metricsDefinitionToDelete.size() == 0) {
 					return false;
+				}
 				/* TODO: tell if the metric definition is used somewhere using referencers-->referenceOwner-->getDisplayableName()
 				Vector<FlexoModelObjectReference.ReferenceOwner> nodes = new Vector<ReferenceOwner>();
 				for (MetricsDefinition r : metricsDefinitionToDelete) {
@@ -92,22 +88,21 @@ public class DeleteMetricsDefinitionInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeleteMetricsDefinition> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DeleteMetricsDefinition> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteMetricsDefinition>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteMetricsDefinition action)
-			{
-				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject()!=null && getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
+			public boolean run(ActionEvent e, DeleteMetricsDefinition action) {
+				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();
-                return true;
-          }
-        };
+				}
+				return true;
+			}
+		};
 	}
-     
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
 

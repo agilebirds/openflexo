@@ -28,47 +28,43 @@ import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * @author gpolet
  * 
  */
-public class GeneratorMainPane extends FlexoMainPane
-{
+public class GeneratorMainPane extends FlexoMainPane {
 
-    private BrowserView browserView;
+	private BrowserView browserView;
 
-    private GeneratorController _controller;
+	private GeneratorController _controller;
 
-    /**
-     * @param moduleView
-     * @param mainFrame
-     * @param controller
-     */
-    public GeneratorMainPane(GeneratorController controller, ModuleView moduleView, FlexoFrame mainFrame)
-    {
-        super(moduleView, mainFrame, controller);
-        browserView = new GeneratorBrowserView(controller, new GeneratorBrowser(controller));
-        this._controller = controller;
-        setLeftView(browserView);
-    }
+	/**
+	 * @param moduleView
+	 * @param mainFrame
+	 * @param controller
+	 */
+	public GeneratorMainPane(GeneratorController controller, ModuleView moduleView, FlexoFrame mainFrame) {
+		super(moduleView, mainFrame, controller);
+		browserView = new GeneratorBrowserView(controller, new GeneratorBrowser(controller));
+		this._controller = controller;
+		setLeftView(browserView);
+	}
 
-    /**
-     * Overrides getParentObject
-     * 
-     * @see org.openflexo.view.FlexoMainPane#getParentObject(org.openflexo.foundation.FlexoModelObject)
-     */
-    @Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-        if (object instanceof CGFile)
-            return ((CGFile) object).getRepository();
-        return null;
-    }
+	/**
+	 * Overrides getParentObject
+	 * 
+	 * @see org.openflexo.view.FlexoMainPane#getParentObject(org.openflexo.foundation.FlexoModelObject)
+	 */
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		if (object instanceof CGFile) {
+			return ((CGFile) object).getRepository();
+		}
+		return null;
+	}
 
 	@Override
-	public GeneratorController getController() 
-	{
+	public GeneratorController getController() {
 		return _controller;
 	}
 

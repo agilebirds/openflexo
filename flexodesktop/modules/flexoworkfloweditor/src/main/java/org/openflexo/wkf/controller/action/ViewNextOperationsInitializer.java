@@ -30,48 +30,39 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.view.popups.ViewNextOperationPopup;
 
-
 public class ViewNextOperationsInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ViewNextOperationsInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(ViewNextOperations.actionType,actionInitializer);
+	ViewNextOperationsInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(ViewNextOperations.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<ViewNextOperations> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ViewNextOperations> getDefaultInitializer() {
 		return new FlexoActionInitializer<ViewNextOperations>() {
-            @Override
-			public boolean run(ActionEvent e, ViewNextOperations action)
-            {
-                return action.getFocusedObject() instanceof ActionNode;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, ViewNextOperations action) {
+				return action.getFocusedObject() instanceof ActionNode;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<ViewNextOperations> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<ViewNextOperations> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ViewNextOperations>() {
-            @Override
-			public boolean run(ActionEvent e, ViewNextOperations action)
-            {
-                new ViewNextOperationPopup(
-                		getControllerActionInitializer().getWKFController().getMainFrame(), 
-                		getControllerActionInitializer().getWKFController(), 
-                		(ActionNode) action.getFocusedObject());
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, ViewNextOperations action) {
+				new ViewNextOperationPopup(getControllerActionInitializer().getWKFController().getMainFrame(),
+						getControllerActionInitializer().getWKFController(), (ActionNode) action.getFocusedObject());
+				return true;
+			}
+		};
 	}
 
- }
+}

@@ -19,11 +19,9 @@
  */
 package org.openflexo.fps;
 
-
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 import junit.framework.AssertionFailedError;
 
@@ -33,13 +31,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.fps.CVSConsole;
-import org.openflexo.fps.CVSFile;
-import org.openflexo.fps.CVSModule;
-import org.openflexo.fps.CVSRepository;
-import org.openflexo.fps.CVSRepositoryList;
-import org.openflexo.fps.CVSStatus;
-import org.openflexo.fps.SharedProject;
 import org.openflexo.fps.action.CVSRefresh;
 import org.openflexo.fps.action.CheckoutProject;
 import org.openflexo.fps.action.ShareProject;
@@ -47,7 +38,7 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ToolBox;
 
-public class TestFPS2 extends FPSTestCase  {
+public class TestFPS2 extends FPSTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestFPS2.class.getPackage().getName());
 
@@ -58,10 +49,10 @@ public class TestFPS2 extends FPSTestCase  {
 	protected static FlexoProject _checkoutedProject;
 	protected static String _projectName;
 	protected static String _projectIdentifier;
-	
+
 	protected static CVSRepositoryList _repositories;
 	protected static CVSRepository _workingCVSRepository;
-	
+
 	protected static SharedProject _project1;
 	protected static SharedProject _project2;
 
@@ -72,50 +63,48 @@ public class TestFPS2 extends FPSTestCase  {
 	private static final String TEST_FPS = "TestFPS";
 
 	static {
-	      ToolBox.setPlatform();
-	      FlexoLoggingManager.forceInitialize();
-	      CVSConsole.logger.setLevel(Level.FINE);
+		ToolBox.setPlatform();
+		FlexoLoggingManager.forceInitialize();
+		CVSConsole.logger.setLevel(Level.FINE);
 	}
-	
+
 	private static FlexoEditor EDITOR = new DefaultFlexoEditor(null);
-	
- 	/**
+
+	/**
 	 * Creates a new project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		log("test0CreateProject");
 		_initialProjectEditor = createFPSProject(TEST_FPS);
 		_initialProject = _initialProjectEditor.getProject();
-		_projectName = _initialProject.getProjectName()+".prj";
+		_projectName = _initialProject.getProjectName() + ".prj";
 		_projectIdentifier = _initialProject.getProjectName();
 	}
 
 	/**
 	 * Initialize CVS environment by initializing a new CVS repository
 	 */
-	public void test1InitCVS()
-	{
+	public void test1InitCVS() {
 		log("test1InitCVS");
 		_repositories = new CVSRepositoryList();
 		FileResource cvsRepFile = new FileResource("src/test/resources/TestCVSRepository.cvs");
 		_workingCVSRepository = new CVSRepository(cvsRepFile);
 		_repositories.addToCVSRepositories(_workingCVSRepository);
-		CVSRefresh refreshRepository = CVSRefresh.actionType.makeNewAction(_workingCVSRepository,null, EDITOR);
+		CVSRefresh refreshRepository = CVSRefresh.actionType.makeNewAction(_workingCVSRepository, null, EDITOR);
 		assertTrue(refreshRepository.doAction().hasActionExecutionSucceeded());
 	}
 
 	/**
 	 * Share this project
 	 */
-	public void test2ShareProjectAs()
-	{
+	public void test2ShareProjectAs() {
 		log("test2ShareProjectAs");
-		
-		ShareProject shareProject = ShareProject.actionType.makeNewAction(_repositories,null, EDITOR);
+
+		ShareProject shareProject = ShareProject.actionType.makeNewAction(_repositories, null, EDITOR);
 		shareProject.setProjectDirectory(_initialProject.getProjectDirectory());
 		shareProject.setRepository(_workingCVSRepository);
-		shareProject.setModuleName("Module"+_initialProject.getProjectName()+File.separator+"SubModule"+File.separator+"Renamed"+_initialProject.getProjectName()+".prj");
+		shareProject.setModuleName("Module" + _initialProject.getProjectName() + File.separator + "SubModule" + File.separator + "Renamed"
+				+ _initialProject.getProjectName() + ".prj");
 		shareProject.setCvsIgnorize(true);
 		assertTrue(shareProject.doAction().hasActionExecutionSucceeded());
 		_project1 = shareProject.getProject();
@@ -124,32 +113,32 @@ public class TestFPS2 extends FPSTestCase  {
 	/**
 	 * Now checkout in a new location, with a new name
 	 */
-	public void test3CheckoutProjectAs()
-	{		
+	public void test3CheckoutProjectAs() {
 		log("test3CheckoutProjectAs");
-		File checkoutDirectory = new File(
-				_initialProject.getProjectDirectory().getParentFile(),
-				"TestCheckout");
-		if (!checkoutDirectory.exists()) checkoutDirectory.mkdirs();
+		File checkoutDirectory = new File(_initialProject.getProjectDirectory().getParentFile(), "TestCheckout");
+		if (!checkoutDirectory.exists()) {
+			checkoutDirectory.mkdirs();
+		}
 
 		// Retrieve module
 		CVSModule moduleToCheckout = _project1.getCVSModule();
-		logger.info ("Trying to checkout "+moduleToCheckout.getFullQualifiedModuleName()+" in "+checkoutDirectory);
+		logger.info("Trying to checkout " + moduleToCheckout.getFullQualifiedModuleName() + " in " + checkoutDirectory);
 		assertNotNull(moduleToCheckout);
-		
+
 		// Perform the checkout
 		CheckoutProject checkoutProject = CheckoutProject.actionType.makeNewAction(moduleToCheckout, null, EDITOR);
 		checkoutProject.setLocalDirectory(checkoutDirectory);
-		checkoutProject.setLocalName("Checkouted"+_initialProject.getProjectName()+".prj");
+		checkoutProject.setLocalName("Checkouted" + _initialProject.getProjectName() + ".prj");
 		assertTrue(checkoutProject.doAction().hasActionExecutionSucceeded());
 		_project2 = checkoutProject.getCheckoutedProject();
-		
+
 		assertAllFilesAreUpToDateOrCVSIgnored(_project2);
 		assertEquals(_project2.getCVSFile(".cvsrepository").getStatus(), CVSStatus.CVSIgnored);
-		
+
 		// Test that checkouted project is still readable by Flexo
 		try {
-			assertNotNull(_checkoutedProjectEditor = FlexoResourceManager.initializeExistingProject(_project2.getModuleDirectory(),EDITOR_FACTORY,null));
+			assertNotNull(_checkoutedProjectEditor = FlexoResourceManager.initializeExistingProject(_project2.getModuleDirectory(),
+					EDITOR_FACTORY, null));
 			_checkoutedProject = _checkoutedProjectEditor.getProject();
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
@@ -162,33 +151,34 @@ public class TestFPS2 extends FPSTestCase  {
 		_checkoutedProject.close();
 	}
 
-	private void assertAllFilesAreUpToDateOrCVSIgnored(SharedProject prj)
-	{
-		assertAllFilesAreUpToDateOrCVSIgnoredExcept(prj,new CVSFile[0]);
+	private void assertAllFilesAreUpToDateOrCVSIgnored(SharedProject prj) {
+		assertAllFilesAreUpToDateOrCVSIgnoredExcept(prj, new CVSFile[0]);
 	}
-	
-	private void assertAllFilesAreUpToDateOrCVSIgnoredExcept(SharedProject prj, CVSFile... files)
-	{
+
+	private void assertAllFilesAreUpToDateOrCVSIgnoredExcept(SharedProject prj, CVSFile... files) {
 		String errors = "";
 		boolean hasErrors = false;
 		for (CVSFile f : prj.getAllCVSFiles()) {
-			//logger.info("File "+f.getFile()+" status="+f.getStatus());
+			// logger.info("File "+f.getFile()+" status="+f.getStatus());
 			boolean isException = false;
 			for (CVSFile f2 : files) {
-				if (f == f2) isException=true;
+				if (f == f2) {
+					isException = true;
+				}
 			}
 			try {
-			if (!isException) assertTrue(f.getStatus() == CVSStatus.CVSIgnored || f.getStatus() == CVSStatus.UpToDate);
-			}
-			catch (AssertionFailedError e) {
+				if (!isException) {
+					assertTrue(f.getStatus() == CVSStatus.CVSIgnored || f.getStatus() == CVSStatus.UpToDate);
+				}
+			} catch (AssertionFailedError e) {
 				hasErrors = true;
-				errors += "Found file "+f.getFile()+" status="+f.getStatus()+" expected CVSIgnored or UpToDate\n";
+				errors += "Found file " + f.getFile() + " status=" + f.getStatus() + " expected CVSIgnored or UpToDate\n";
 			}
 		}
 		if (hasErrors) {
-			logger.warning("Status errors\n"+errors);
+			logger.warning("Status errors\n" + errors);
 			fail();
 		}
 	}
-	
+
 }

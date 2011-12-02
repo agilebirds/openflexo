@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.jedit;
+
 /*
  * PatchTokenMarker.java - DIFF patch token marker
  * Copyright (C) 1999 Slava Pestov
@@ -31,38 +32,38 @@ import javax.swing.text.Segment;
 
 /**
  * Patch/diff token marker.
- *
+ * 
  * @author Slava Pestov
  * @version $Id: PatchTokenMarker.java,v 1.2 2011/09/12 11:47:09 gpolet Exp $
  */
-public class PatchTokenMarker extends TokenMarker
-{
+public class PatchTokenMarker extends TokenMarker {
 	@Override
-	public byte markTokensImpl(byte token, Segment line, int lineIndex)
-	{
-		if(line.count == 0)
+	public byte markTokensImpl(byte token, Segment line, int lineIndex) {
+		if (line.count == 0) {
 			return Token.NULL;
-		switch(line.array[line.offset])
-		{
-		case '+': case '>':
-			addToken(line.count,Token.KEYWORD1);
+		}
+		switch (line.array[line.offset]) {
+		case '+':
+		case '>':
+			addToken(line.count, Token.KEYWORD1);
 			break;
-		case '-': case '<':
-			addToken(line.count,Token.KEYWORD2);
+		case '-':
+		case '<':
+			addToken(line.count, Token.KEYWORD2);
 			break;
-		case '@': case '*':
-			addToken(line.count,Token.KEYWORD3);
+		case '@':
+		case '*':
+			addToken(line.count, Token.KEYWORD3);
 			break;
-	        default:
-			addToken(line.count,Token.NULL);
+		default:
+			addToken(line.count, Token.NULL);
 			break;
 		}
 		return Token.NULL;
 	}
 
 	@Override
-	public boolean supportsMultilineTokens()
-	{
+	public boolean supportsMultilineTokens() {
 		return false;
 	}
 }

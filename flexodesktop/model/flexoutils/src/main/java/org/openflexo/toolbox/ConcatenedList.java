@@ -88,8 +88,7 @@ public class ConcatenedList<E> extends AbstractList<E> {
 					return (E) list.get(index - current);
 				}
 				current += list.size();
-			}
- else {
+			} else {
 				if (index == current) {
 					return (E) o;
 				}

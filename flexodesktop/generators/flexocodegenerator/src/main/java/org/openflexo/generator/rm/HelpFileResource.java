@@ -36,8 +36,7 @@ import org.openflexo.generator.cg.CGTextFile;
 import org.openflexo.generator.utils.HelpGenerator;
 import org.openflexo.toolbox.FileFormat;
 
-
-public class HelpFileResource extends TextFileResource<HelpGenerator, CGTextFile> implements GenerationAvailableFileResource, FlexoObserver{
+public class HelpFileResource extends TextFileResource<HelpGenerator, CGTextFile> implements GenerationAvailableFileResource, FlexoObserver {
 
 	private final boolean isObserverRegistered = false;
 
@@ -50,78 +49,67 @@ public class HelpFileResource extends TextFileResource<HelpGenerator, CGTextFile
 		super(aProject);
 		setResourceFormat(FileFormat.TEXT);
 	}
-    
-    @Override
-	protected HelpFile createGeneratedResourceData()
-    {
-        return new HelpFile(getFile(),this);
-    }
-    
-    
-    public void registerObserverWhenRequired()
-    {
-    }
 
-    /**
-     * Overrides update
-     * 
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        
-    }
-    
-    @Override
-	public HelpFile getGeneratedResourceData()
-    {
-    	return (HelpFile)super.getGeneratedResourceData();
-    }
-    
-    /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant
-     * resources
-     * 
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
-    @Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-    {
-    	if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+	@Override
+	protected HelpFile createGeneratedResourceData() {
+		return new HelpFile(getFile(), this);
+	}
+
+	public void registerObserverWhenRequired() {
+	}
+
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+
+	}
+
+	@Override
+	public HelpFile getGeneratedResourceData() {
+		return (HelpFile) super.getGeneratedResourceData();
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		if (resource instanceof TemplateLocator) {
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
 		}
-    	if(resource.getResourceType()!=ResourceType.PROCESS) {
+		if (resource.getResourceType() != ResourceType.PROCESS) {
 			return false;
 		}
-    	if(resource.getLastUpdate().before(getLastGenerationDate())) {
+		if (resource.getLastUpdate().before(getLastGenerationDate())) {
 			return false;
 		}
-        return super.optimisticallyDependsOf(resource, requestDate);
-    }
+		return super.optimisticallyDependsOf(resource, requestDate);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        Enumeration<FlexoProcess> en  = getProject().getAllLocalFlexoProcesses().elements();
-        while(en.hasMoreElements()){
-        	addToDependantResources(en.nextElement().getFlexoResource());
-        }
-    }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		Enumeration<FlexoProcess> en = getProject().getAllLocalFlexoProcesses().elements();
+		while (en.hasMoreElements()) {
+			addToDependantResources(en.nextElement().getFlexoResource());
+		}
+	}
 
-    
-    static String getDefaultFileName()
-    {
-        return "help.properties";
-    }
-
+	static String getDefaultFileName() {
+		return "help.properties";
+	}
 
 }

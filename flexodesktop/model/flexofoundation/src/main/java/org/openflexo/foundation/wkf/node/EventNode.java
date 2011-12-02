@@ -23,12 +23,11 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
@@ -51,60 +50,60 @@ import org.openflexo.toolbox.ProgrammingLanguage;
 
 /**
  * This represents a event FlexoNode
- *
+ * 
  * @author sguerin
- *
+ * 
  */
 public class EventNode extends PetriGraphNode implements ExecutableWorkflowElement {
 
 	public enum EVENT_TYPE {
-		Start,Intermediate, End, NonInteruptive, NonInteruptiveBoundary, IntermediateDrop
+		Start, Intermediate, End, NonInteruptive, NonInteruptiveBoundary, IntermediateDrop
 	}
 
 	public enum TriggerType {
-		NONE,TIMER,MESSAGE,ERROR,CANCEL,COMPENSATION,CONDITIONAL,LINK,SIGNAL,TERMINATE,MULTIPLE,ESCALATION,MULTIPLEPARA;
+		NONE, TIMER, MESSAGE, ERROR, CANCEL, COMPENSATION, CONDITIONAL, LINK, SIGNAL, TERMINATE, MULTIPLE, ESCALATION, MULTIPLEPARA;
 
 		public boolean canBeStarting() {
-			return this!=CANCEL && this!=TERMINATE && this!=LINK;
+			return this != CANCEL && this != TERMINATE && this != LINK;
 		}
 
 		public boolean canBeEnding() {
-			return this!=LINK && this!=CONDITIONAL && this!=TIMER;
+			return this != LINK && this != CONDITIONAL && this != TIMER;
 		}
 
 		public boolean canBeIntermediate() {
-			return this!=TERMINATE;
+			return this != TERMINATE;
 		}
 	}
 
 	private static final Logger logger = Logger.getLogger(EventNode.class.getPackage().getName());
 
-//	protected static final ImageIcon MAIL_IN_ICON = new ImageIconResource("Resources/WKF/MailIn.gif");
-//
-//	protected static final ImageIcon MAIL_OUT_ICON = new ImageIconResource("Resources/WKF/MailOut.gif");
-//
-//	protected static final ImageIcon TIMER_ICON = new ImageIconResource("Resources/WKF/Timer.gif");
-//
-//	protected static final ImageIcon TIME_OUT_ICON = new ImageIconResource("Resources/WKF/TimeOut.gif");
-//
-//	protected static final ImageIcon FAULT_THROWER_ICON = new ImageIconResource("Resources/WKF/Throw.gif");
-//
-//	protected static final ImageIcon FAULT_HANDLER_ICON = new ImageIconResource("Resources/WKF/Catch.gif");
-//
-//	protected static final ImageIcon CANCEL_THROWER_ICON = new ImageIconResource("Resources/WKF/CancelThrower.gif");
-//
-//	protected static final ImageIcon CANCEL_HANDLER_ICON = new ImageIconResource("Resources/WKF/CancelHandler.gif");
-//
-//	protected static final ImageIcon COMPENSATE_THROWER_ICON = new ImageIconResource("Resources/WKF/CompensateThrower.gif");
-//
-//	protected static final ImageIcon COMPENSATE_HANDLER_ICON = new ImageIconResource("Resources/WKF/CompensateHandler.gif");
-//
-//	protected static final ImageIcon CHECKPOINT_ICON = new ImageIconResource("Resources/WKF/Checkpoint.gif");
-//
-//	protected static final ImageIcon REVERT_ICON = new ImageIconResource("Resources/WKF/Revert.gif");
+	// protected static final ImageIcon MAIL_IN_ICON = new ImageIconResource("Resources/WKF/MailIn.gif");
+	//
+	// protected static final ImageIcon MAIL_OUT_ICON = new ImageIconResource("Resources/WKF/MailOut.gif");
+	//
+	// protected static final ImageIcon TIMER_ICON = new ImageIconResource("Resources/WKF/Timer.gif");
+	//
+	// protected static final ImageIcon TIME_OUT_ICON = new ImageIconResource("Resources/WKF/TimeOut.gif");
+	//
+	// protected static final ImageIcon FAULT_THROWER_ICON = new ImageIconResource("Resources/WKF/Throw.gif");
+	//
+	// protected static final ImageIcon FAULT_HANDLER_ICON = new ImageIconResource("Resources/WKF/Catch.gif");
+	//
+	// protected static final ImageIcon CANCEL_THROWER_ICON = new ImageIconResource("Resources/WKF/CancelThrower.gif");
+	//
+	// protected static final ImageIcon CANCEL_HANDLER_ICON = new ImageIconResource("Resources/WKF/CancelHandler.gif");
+	//
+	// protected static final ImageIcon COMPENSATE_THROWER_ICON = new ImageIconResource("Resources/WKF/CompensateThrower.gif");
+	//
+	// protected static final ImageIcon COMPENSATE_HANDLER_ICON = new ImageIconResource("Resources/WKF/CompensateHandler.gif");
+	//
+	// protected static final ImageIcon CHECKPOINT_ICON = new ImageIconResource("Resources/WKF/Checkpoint.gif");
+	//
+	// protected static final ImageIcon REVERT_ICON = new ImageIconResource("Resources/WKF/Revert.gif");
 
 	private Role _role;
-	
+
 	private AbstractActivityNode boundaryOf;
 
 	private String documentationUrl;
@@ -132,51 +131,66 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	// ================================
 	// ==========================================================================
 
-	public boolean isMessageSent(){
-		return getTrigger()==TriggerType.MESSAGE && !getIsCatching();
+	public boolean isMessageSent() {
+		return getTrigger() == TriggerType.MESSAGE && !getIsCatching();
 	}
-	public boolean isMessageReceive(){
-		return getTrigger()==TriggerType.MESSAGE && getIsCatching();
+
+	public boolean isMessageReceive() {
+		return getTrigger() == TriggerType.MESSAGE && getIsCatching();
 	}
-	public boolean isTriggerNone(){
-		return getTrigger()==TriggerType.NONE;
+
+	public boolean isTriggerNone() {
+		return getTrigger() == TriggerType.NONE;
 	}
-	public boolean isTriggerError(){
-		return getTrigger()==TriggerType.ERROR;
+
+	public boolean isTriggerError() {
+		return getTrigger() == TriggerType.ERROR;
 	}
-	public boolean isTriggerSignal(){
-		return getTrigger()==TriggerType.SIGNAL;
+
+	public boolean isTriggerSignal() {
+		return getTrigger() == TriggerType.SIGNAL;
 	}
-	public boolean isTriggerMessage(){
-		return getTrigger()==TriggerType.MESSAGE;
+
+	public boolean isTriggerMessage() {
+		return getTrigger() == TriggerType.MESSAGE;
 	}
-	public boolean isTriggerMultiple(){
-		return getTrigger()==TriggerType.MULTIPLE;
+
+	public boolean isTriggerMultiple() {
+		return getTrigger() == TriggerType.MULTIPLE;
 	}
-	public boolean isTriggerMultiplePara(){
-		return getTrigger()==TriggerType.MULTIPLEPARA;
+
+	public boolean isTriggerMultiplePara() {
+		return getTrigger() == TriggerType.MULTIPLEPARA;
 	}
-	public boolean isTriggerConditional(){
-		return getTrigger()==TriggerType.CONDITIONAL;
+
+	public boolean isTriggerConditional() {
+		return getTrigger() == TriggerType.CONDITIONAL;
 	}
-	public boolean isTriggerLink(){
-		return getTrigger()==TriggerType.LINK;
+
+	public boolean isTriggerLink() {
+		return getTrigger() == TriggerType.LINK;
 	}
-	public boolean isTriggerTerminate(){
-		return getTrigger()==TriggerType.TERMINATE;
+
+	public boolean isTriggerTerminate() {
+		return getTrigger() == TriggerType.TERMINATE;
 	}
-	public boolean isTriggerTimer(){
-		return getTrigger()==TriggerType.TIMER;
+
+	public boolean isTriggerTimer() {
+		return getTrigger() == TriggerType.TIMER;
 	}
-	public boolean isTriggerCancel(){
-		return getTrigger()==TriggerType.CANCEL;
+
+	public boolean isTriggerCancel() {
+		return getTrigger() == TriggerType.CANCEL;
 	}
-	public boolean isTriggerCompensation(){
-		return getTrigger()==TriggerType.COMPENSATION;
+
+	public boolean isTriggerCompensation() {
+		return getTrigger() == TriggerType.COMPENSATION;
 	}
-	public boolean isTriggerEscalation(){
-		return getTrigger()==TriggerType.ESCALATION;
+
+	public boolean isTriggerEscalation() {
+		return getTrigger() == TriggerType.ESCALATION;
 	}
+
 	public TriggerType getTrigger() {
 		return trigger;
 	}
@@ -192,19 +206,22 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	}
 
 	public void setEventType(EVENT_TYPE eventType) {
-		if (!isDeserializing() && getTrigger()!=null) {
-			switch(eventType) {
+		if (!isDeserializing() && getTrigger() != null) {
+			switch (eventType) {
 			case Start:
-				if (!getTrigger().canBeStarting())
+				if (!getTrigger().canBeStarting()) {
 					return;
+				}
 				break;
 			case Intermediate:
-				if (!getTrigger().canBeIntermediate())
+				if (!getTrigger().canBeIntermediate()) {
 					return;
+				}
 				break;
 			case End:
-				if (!getTrigger().canBeEnding())
+				if (!getTrigger().canBeEnding()) {
 					return;
+				}
 				break;
 			}
 		}
@@ -220,15 +237,14 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		super(process);
 	}
 
-	public EventNode(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	public EventNode(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
 	@Override
-	public String getDefaultName(){
-		return FlexoLocalization.localizedForKey(getEventType()+"_"+getTrigger());
+	public String getDefaultName() {
+		return FlexoLocalization.localizedForKey(getEventType() + "_" + getTrigger());
 	}
 
 	@Override
@@ -249,7 +265,7 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	// ==========================================================================
 
 	@Override
-	public String getInspectorName(){
+	public String getInspectorName() {
 		return "EventNode.inspector";
 	}
 
@@ -259,20 +275,20 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		deleteObservers();
 	}
 
-//	public abstract ImageIcon getImageIcon();
+	// public abstract ImageIcon getImageIcon();
 
 	public boolean isStart() {
-		return EVENT_TYPE.Start==getEventType();
+		return EVENT_TYPE.Start == getEventType();
 	}
 
 	public boolean isEnd() {
-		return EVENT_TYPE.End==getEventType();
+		return EVENT_TYPE.End == getEventType();
 	}
 
 	public boolean isIntermediate() {
 		return EVENT_TYPE.Intermediate == getEventType();
 	}
-	
+
 	public boolean isIntermediateDrop() {
 		return EVENT_TYPE.IntermediateDrop == getEventType();
 	}
@@ -283,10 +299,11 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoModelObject> getRoleReference() {
-		if (getRole() != null)
+		if (getRole() != null) {
 			return new FlexoModelObjectReference<FlexoModelObject>(getProject(), getRole());
-		else
+		} else {
 			return null;
+		}
 	}
 
 	// Used when deserializing
@@ -317,11 +334,11 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 	public FlexoProcess getLinkedProcess() {
 		if (linkedProcess == null) {
-        	if (_deserializedReference != null && _deserializedReference.getObject(false) != null) {
-        		setLinkedProcess(_deserializedReference.getObject(false));
-        	}
-         }
-        return linkedProcess;
+			if (_deserializedReference != null && _deserializedReference.getObject(false) != null) {
+				setLinkedProcess(_deserializedReference.getObject(false));
+			}
+		}
+		return linkedProcess;
 	}
 
 	public void setLinkedProcess(FlexoProcess linkedProcess) {
@@ -330,22 +347,23 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoProcess> getLinkedProcessReference() {
-		if (getLinkedProcess()!=null)
-    		return new FlexoModelObjectReference<FlexoProcess>(getProject(), getLinkedProcess());
-    	else {
-    		return _deserializedReference;
-    	}
+		if (getLinkedProcess() != null) {
+			return new FlexoModelObjectReference<FlexoProcess>(getProject(), getLinkedProcess());
+		} else {
+			return _deserializedReference;
+		}
 	}
 
-    private FlexoModelObjectReference<FlexoProcess> _deserializedReference;
+	private FlexoModelObjectReference<FlexoProcess> _deserializedReference;
 
 	// Used when deserializing
 	public void setLinkedProcessReference(FlexoModelObjectReference<FlexoProcess> aProcessReference) {
 		FlexoProcess subProcess = aProcessReference.getObject(false); // False because we never know if a loop is possible...
-    	if (subProcess != null)
-    		setLinkedProcess(subProcess);
-    	else
-    		_deserializedReference = aProcessReference;
+		if (subProcess != null) {
+			setLinkedProcess(subProcess);
+		} else {
+			_deserializedReference = aProcessReference;
+		}
 	}
 
 	public String getDefaultEnglishName() {
@@ -353,39 +371,39 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	}
 
 	// =========================================================
-    // ============= Control graph management ==================
-    // =========================================================
+	// ============= Control graph management ==================
+	// =========================================================
 
-    private static ControlGraphFactory<EventNode> _executionComputingFactory;
+	private static ControlGraphFactory<EventNode> _executionComputingFactory;
 
-    public static void setExecutionComputingFactory(ControlGraphFactory<EventNode> factory)
-    {
-    	_executionComputingFactory = factory;
-    }
+	public static void setExecutionComputingFactory(ControlGraphFactory<EventNode> factory) {
+		_executionComputingFactory = factory;
+	}
 
-     public WorkflowControlGraph<EventNode> getExecution()
-    {
-    	if (_executionComputingFactory != null)
-    		return _executionComputingFactory.getControlGraph(this);
-    	return null;
-    }
-
-	@Override
-	public void setProgrammingLanguageForControlGraphComputation(ProgrammingLanguage language)
-	{
-		if (getExecution() != null) getExecution().setProgrammingLanguage(language);
+	public WorkflowControlGraph<EventNode> getExecution() {
+		if (_executionComputingFactory != null) {
+			return _executionComputingFactory.getControlGraph(this);
+		}
+		return null;
 	}
 
 	@Override
-	public void setInterproceduralForControlGraphComputation(boolean interprocedural)
-	{
-		if (getExecution() != null) getExecution().setInterprocedural(interprocedural);
+	public void setProgrammingLanguageForControlGraphComputation(ProgrammingLanguage language) {
+		if (getExecution() != null) {
+			getExecution().setProgrammingLanguage(language);
+		}
 	}
 
 	@Override
-	public String getExecutableElementName()
-	{
-		return FlexoLocalization.localizedForKeyWithParams("event_($0)",getName());
+	public void setInterproceduralForControlGraphComputation(boolean interprocedural) {
+		if (getExecution() != null) {
+			getExecution().setInterprocedural(interprocedural);
+		}
+	}
+
+	@Override
+	public String getExecutableElementName() {
+		return FlexoLocalization.localizedForKeyWithParams("event_($0)", getName());
 	}
 
 	@Override
@@ -425,13 +443,11 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		_toAddress = address;
 	}
 
-	public Duration getDelay()
-	{
+	public Duration getDelay() {
 		return _delay;
 	}
 
-	public void setDelay(Duration delay)
-	{
+	public void setDelay(Duration delay) {
 		if (_delay == null || !_delay.equals(delay)) {
 			Duration oldDelay = _delay;
 			_delay = delay;
@@ -440,217 +456,218 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		}
 	}
 
-	public boolean isCancelHandler(){
+	public boolean isCancelHandler() {
 		return isTriggerCancel() && getIsCatching();
 	}
 
-	public boolean isCancelThrower(){
+	public boolean isCancelThrower() {
 		return isTriggerCancel() && !getIsCatching();
 	}
 
-	public boolean isErrorHandler(){
+	public boolean isErrorHandler() {
 		return isTriggerError() && getIsCatching();
 	}
 
-	public boolean isErrorThrower(){
+	public boolean isErrorThrower() {
 		return isTriggerError() && !getIsCatching();
 	}
 
-	public boolean isCompensateHandler(){
+	public boolean isCompensateHandler() {
 		return isTriggerCompensation() && getIsCatching();
 	}
 
-	public boolean isCompensateThrower(){
+	public boolean isCompensateThrower() {
 		return isTriggerCompensation() && !getIsCatching();
 	}
 
 	/**
-	 * @deprecated : used in process.js.vm
-	 * one day is someone have time to look at this...
+	 * @deprecated : used in process.js.vm one day is someone have time to look at this...
 	 * @return
 	 */
 	@Deprecated
-	public boolean isTimeOut(){
+	public boolean isTimeOut() {
 		return isTriggerTimer() && isEnd();
 	}
 
 	/**
-	 * @deprecated : used in process.js.vm
-	 * one day is someone have time to look at this...
+	 * @deprecated : used in process.js.vm one day is someone have time to look at this...
 	 * @return
 	 */
 	@Deprecated
-	public boolean isTimer(){
+	public boolean isTimer() {
 		return isTriggerTimer() && !isEnd();
 	}
 
-	public WKFBindingDefinition getDateBindingDefinition()
-	    {
-	    	if (getProject() != null) {
-	    		WKFBindingDefinition returned = WKFBindingDefinition.get(this, DATE_BINDING, Date.class,BindingDefinitionType.GET,false);
-	    		if (logger.isLoggable(Level.FINE))
-	    			logger.fine("Returned WKFBindingDefinition : "+returned);
-	    		return returned;
-	    	}
-	    	return null;
-	    }
-
-	    public AbstractBinding getDateBinding()
-	    {
-	        if (isBeingCloned())
-	            return null;
-	        return dateBinding;
-	    }
-
-	    public void setDateBinding(AbstractBinding aConditionPrimitive)
-	    {
-	    	AbstractBinding oldBindingValue = dateBinding;
-	        this.dateBinding = aConditionPrimitive;
-	        if (this.dateBinding != null) {
-	        	this.dateBinding.setOwner(this);
-	        	this.dateBinding.setBindingDefinition(getDateBindingDefinition());
-	        }
-	        setChanged();
-	        notifyObservers(new WKFAttributeDataModification(DATE_BINDING, oldBindingValue, aConditionPrimitive));
-	    }
-
-	    public boolean getIsCatching() {
-			return isCatching;
-		}
-		public void setIsCatching(boolean isCatching) {
-			this.isCatching = isCatching;
-			setChanged();
-			notifyModification("isCatching", !isCatching, isCatching);
-		}
-
-		//Usefull factory method used by Palette
-		public static EventNode makeEventNode(TriggerType trigger, EVENT_TYPE eventType, boolean isCatching){
-			EventNode reply = new EventNode((FlexoProcess)null);
-			reply.setEventType(eventType);
-			reply.setTrigger(trigger);
-			reply.setIsCatching(isCatching);
-			return reply;
-		}
-		private String boundaryActivityID;
-		// Used when serializing
-		public String getBoundaryActivityID() {
-			if(boundaryActivityID==null && boundaryOf==null)return null;
-			if(boundaryActivityID==null){
-				return boundaryOf.getFlexoID()+"";
+	public WKFBindingDefinition getDateBindingDefinition() {
+		if (getProject() != null) {
+			WKFBindingDefinition returned = WKFBindingDefinition.get(this, DATE_BINDING, Date.class, BindingDefinitionType.GET, false);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Returned WKFBindingDefinition : " + returned);
 			}
-			return boundaryActivityID;
+			return returned;
+		}
+		return null;
+	}
+
+	public AbstractBinding getDateBinding() {
+		if (isBeingCloned()) {
+			return null;
+		}
+		return dateBinding;
+	}
+
+	public void setDateBinding(AbstractBinding aConditionPrimitive) {
+		AbstractBinding oldBindingValue = dateBinding;
+		this.dateBinding = aConditionPrimitive;
+		if (this.dateBinding != null) {
+			this.dateBinding.setOwner(this);
+			this.dateBinding.setBindingDefinition(getDateBindingDefinition());
+		}
+		setChanged();
+		notifyObservers(new WKFAttributeDataModification(DATE_BINDING, oldBindingValue, aConditionPrimitive));
+	}
+
+	public boolean getIsCatching() {
+		return isCatching;
+	}
+
+	public void setIsCatching(boolean isCatching) {
+		this.isCatching = isCatching;
+		setChanged();
+		notifyModification("isCatching", !isCatching, isCatching);
+	}
+
+	// Usefull factory method used by Palette
+	public static EventNode makeEventNode(TriggerType trigger, EVENT_TYPE eventType, boolean isCatching) {
+		EventNode reply = new EventNode((FlexoProcess) null);
+		reply.setEventType(eventType);
+		reply.setTrigger(trigger);
+		reply.setIsCatching(isCatching);
+		return reply;
+	}
+
+	private String boundaryActivityID;
+
+	// Used when serializing
+	public String getBoundaryActivityID() {
+		if (boundaryActivityID == null && boundaryOf == null) {
+			return null;
+		}
+		if (boundaryActivityID == null) {
+			return boundaryOf.getFlexoID() + "";
+		}
+		return boundaryActivityID;
+	}
+
+	// Used when deserializing
+	public void setBoundaryActivityID(String aRoleReference) {
+		// if(!isCreatedByCloning())
+		boundaryActivityID = aRoleReference;
+	}
+
+	public void setBoundaryOf(AbstractActivityNode boundaryOf) {
+		this.boundaryOf = boundaryOf;
+	}
+
+	public AbstractActivityNode getBoundaryOf() {
+		if (boundaryOf == null && boundaryActivityID == null) {
+			return null;
+		}
+		if (boundaryOf == null) {
+			long id = new Long(boundaryActivityID);
+			for (AbstractActivityNode node : getProcess().getAllAbstractActivityNodes()) {
+				if (node.getFlexoID() == id) {
+					boundaryOf = node;
+					return boundaryOf;
+				}
+			}
+		}
+		return boundaryOf;
+	}
+
+	public static class StartEventCannotHaveIncomingTokenFlow extends ValidationRule<StartEventCannotHaveIncomingTokenFlow, EventNode> {
+		public StartEventCannotHaveIncomingTokenFlow() {
+			super(EventNode.class, "StartEventCannotHaveIncomingTokenFlow");
 		}
 
-		// Used when deserializing
-		public void setBoundaryActivityID(String aRoleReference) {
-		//	if(!isCreatedByCloning())
-				boundaryActivityID = aRoleReference;
-		}
-
-		public void setBoundaryOf(AbstractActivityNode boundaryOf) {
-			this.boundaryOf = boundaryOf;
-		}
-		public AbstractActivityNode getBoundaryOf() {
-			if(boundaryOf==null && boundaryActivityID==null) return null;
-			if(boundaryOf==null){
-				long id = new Long(boundaryActivityID);
-				for(AbstractActivityNode node:getProcess().getAllAbstractActivityNodes()){
-					if(node.getFlexoID()==id){
-						boundaryOf = node;
-						return boundaryOf;
+		/**
+		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		 */
+		@Override
+		public ValidationIssue<StartEventCannotHaveIncomingTokenFlow, EventNode> applyValidation(EventNode node) {
+			if (node.isStart() && node.getIncomingPostConditions().size() > 0) {
+				for (FlexoPostCondition fpc : node.getIncomingPostConditions()) {
+					if (fpc instanceof TokenEdge) {
+						return new ValidationWarning<StartEventCannotHaveIncomingTokenFlow, EventNode>(this, node,
+								"StartEventCannotHaveIncomingTokenFlow");
 					}
 				}
 			}
-			return boundaryOf;
+			return null;
+		}
+	}
+
+	public static class EndEventCannotHaveAStartingTokenFlow extends ValidationRule<EndEventCannotHaveAStartingTokenFlow, EventNode> {
+		public EndEventCannotHaveAStartingTokenFlow() {
+			super(EventNode.class, "EndEventCannotHaveAStartingTokenFlow");
 		}
 
-		public static class StartEventCannotHaveIncomingTokenFlow extends ValidationRule<StartEventCannotHaveIncomingTokenFlow,EventNode>
-	    {
-	        public StartEventCannotHaveIncomingTokenFlow()
-	        {
-				super(EventNode.class, "StartEventCannotHaveIncomingTokenFlow");
-	        }
+		/**
+		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		 */
+		@Override
+		public ValidationIssue<EndEventCannotHaveAStartingTokenFlow, EventNode> applyValidation(EventNode node) {
+			if (node.isEnd() && node.getParentPetriGraph().isRootPetriGraph() && node.getOutgoingPostConditions().size() > 0) {
+				for (FlexoPostCondition fpc : node.getOutgoingPostConditions()) {
+					if (fpc instanceof TokenEdge) {
+						return new ValidationWarning<EndEventCannotHaveAStartingTokenFlow, EventNode>(this, node,
+								"EndEventCannotHaveAStartingTokenFlow");
+					}
 
-	        /**
-	         * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-	         */
-	        @Override
-	        public ValidationIssue<StartEventCannotHaveIncomingTokenFlow,EventNode> applyValidation(EventNode node)
-	        {
-	            if (node.isStart() && node.getIncomingPostConditions().size()>0){
-	            	for(FlexoPostCondition fpc:node.getIncomingPostConditions()){
-	            		if(fpc instanceof TokenEdge)
-	            			return new ValidationWarning<StartEventCannotHaveIncomingTokenFlow,EventNode>(this, node, "StartEventCannotHaveIncomingTokenFlow");
-	            	}
-	            }
-	            return null;
-	        }
-	    }
+				}
 
-	    public static class EndEventCannotHaveAStartingTokenFlow extends ValidationRule<EndEventCannotHaveAStartingTokenFlow,EventNode>
-	    {
-	        public EndEventCannotHaveAStartingTokenFlow()
-	        {
-				super(EventNode.class, "EndEventCannotHaveAStartingTokenFlow");
-	        }
+			}
+			return null;
+		}
+	}
 
-	        /**
-	         * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-	         */
-	        @Override
-	        public ValidationIssue<EndEventCannotHaveAStartingTokenFlow,EventNode> applyValidation(EventNode node)
-	        {
-	            if (node.isEnd() && node.getParentPetriGraph().isRootPetriGraph() && node.getOutgoingPostConditions().size()>0){
-	            	for(FlexoPostCondition fpc:node.getOutgoingPostConditions()){
-	            		if(fpc instanceof TokenEdge)
-	            			return new ValidationWarning<EndEventCannotHaveAStartingTokenFlow,EventNode>(this, node, "EndEventCannotHaveAStartingTokenFlow");
+	public static class IntermediateEventCannotHaveMoreThanOneIncomingEdge extends
+			ValidationRule<IntermediateEventCannotHaveMoreThanOneIncomingEdge, EventNode> {
+		public IntermediateEventCannotHaveMoreThanOneIncomingEdge() {
+			super(EventNode.class, "IntermediateEventCannotHaveMoreThanOneIncomingEdge");
+		}
 
-	            	}
+		/**
+		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		 */
+		@Override
+		public ValidationIssue<IntermediateEventCannotHaveMoreThanOneIncomingEdge, EventNode> applyValidation(EventNode node) {
+			if (node.isIntermediate() && node.getIncomingPostConditions().size() > 1) {
+				return new ValidationWarning<IntermediateEventCannotHaveMoreThanOneIncomingEdge, EventNode>(this, node,
+						"IntermediateEventCannotHaveMoreThanOneIncomingEdge");
+			}
+			return null;
+		}
+	}
 
-	            }
-	            return null;
-	        }
-	    }
+	public static class IntermediateEventCannotHaveMoreThanOneOutgoingEdge extends
+			ValidationRule<IntermediateEventCannotHaveMoreThanOneOutgoingEdge, EventNode> {
+		public IntermediateEventCannotHaveMoreThanOneOutgoingEdge() {
+			super(EventNode.class, "IntermediateEventCannotHaveMoreThanOneOutgoingEdge");
+		}
 
-	    public static class IntermediateEventCannotHaveMoreThanOneIncomingEdge extends ValidationRule<IntermediateEventCannotHaveMoreThanOneIncomingEdge,EventNode>
-	    {
-	        public IntermediateEventCannotHaveMoreThanOneIncomingEdge()
-	        {
-				super(EventNode.class, "IntermediateEventCannotHaveMoreThanOneIncomingEdge");
-	        }
-
-	        /**
-	         * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-	         */
-	        @Override
-	        public ValidationIssue<IntermediateEventCannotHaveMoreThanOneIncomingEdge,EventNode> applyValidation(EventNode node)
-	        {
-	            if (node.isIntermediate() && node.getIncomingPostConditions().size()>1){
-	            	return new ValidationWarning<IntermediateEventCannotHaveMoreThanOneIncomingEdge,EventNode>(this, node, "IntermediateEventCannotHaveMoreThanOneIncomingEdge");
-	            }
-	            return null;
-	        }
-	    }
-
-	    public static class IntermediateEventCannotHaveMoreThanOneOutgoingEdge extends ValidationRule<IntermediateEventCannotHaveMoreThanOneOutgoingEdge,EventNode>
-	    {
-	        public IntermediateEventCannotHaveMoreThanOneOutgoingEdge()
-	        {
-				super(EventNode.class, "IntermediateEventCannotHaveMoreThanOneOutgoingEdge");
-	        }
-
-	        /**
-	         * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-	         */
-	        @Override
-	        public ValidationIssue<IntermediateEventCannotHaveMoreThanOneOutgoingEdge,EventNode> applyValidation(EventNode node)
-	        {
-	            if (node.isIntermediate() && node.getOutgoingPostConditions().size()>1){
-	            	return new ValidationWarning<IntermediateEventCannotHaveMoreThanOneOutgoingEdge,EventNode>(this, node, "IntermediateEventCannotHaveMoreThanOneOutgoingEdge");
-	            }
-	            return null;
-	        }
-	    }
+		/**
+		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		 */
+		@Override
+		public ValidationIssue<IntermediateEventCannotHaveMoreThanOneOutgoingEdge, EventNode> applyValidation(EventNode node) {
+			if (node.isIntermediate() && node.getOutgoingPostConditions().size() > 1) {
+				return new ValidationWarning<IntermediateEventCannotHaveMoreThanOneOutgoingEdge, EventNode>(this, node,
+						"IntermediateEventCannotHaveMoreThanOneOutgoingEdge");
+			}
+			return null;
+		}
+	}
 
 	public static class NodeAfterEventBasedGatewayRules extends ValidationRule<NodeAfterEventBasedGatewayRules, EventNode> {
 
@@ -661,18 +678,22 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		@Override
 		public ValidationIssue<NodeAfterEventBasedGatewayRules, EventNode> applyValidation(EventNode operator) {
 			boolean hasIncomingPostConditionFromEventGateway = false;
-			for(FlexoPostCondition<AbstractNode, AbstractNode> post: operator.getIncomingPostConditions()) {
+			for (FlexoPostCondition<AbstractNode, AbstractNode> post : operator.getIncomingPostConditions()) {
 				hasIncomingPostConditionFromEventGateway = post.isStartingFromAnExclusiveGateway();
-				if (hasIncomingPostConditionFromEventGateway)
+				if (hasIncomingPostConditionFromEventGateway) {
 					break;
+				}
 			}
 			if (hasIncomingPostConditionFromEventGateway) {
-				if (!operator.isIntermediate())
+				if (!operator.isIntermediate()) {
 					return new ValidationError<NodeAfterEventBasedGatewayRules, EventNode>(this, operator,
-							"event_gateway_output_must_be_intermediate_catching_events_or_activities", operator.getTrigger().canBeIntermediate()?new ChangeToIntermediateEvent():null);
-				if (!operator.getIsCatching())
+							"event_gateway_output_must_be_intermediate_catching_events_or_activities", operator.getTrigger()
+									.canBeIntermediate() ? new ChangeToIntermediateEvent() : null);
+				}
+				if (!operator.getIsCatching()) {
 					return new ValidationError<NodeAfterEventBasedGatewayRules, EventNode>(this, operator,
 							"event_gateway_output_must_be_intermediate_catching_events_or_activities", new ChangeToCatchingEvent());
+				}
 			}
 			return null;
 		}
@@ -685,8 +706,9 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 			@Override
 			protected void fixAction() {
-				if (getObject().getTrigger().canBeIntermediate())
+				if (getObject().getTrigger().canBeIntermediate()) {
 					getObject().setEventType(EVENT_TYPE.Intermediate);
+				}
 			}
 		}
 
@@ -703,4 +725,3 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		}
 	}
 }
-

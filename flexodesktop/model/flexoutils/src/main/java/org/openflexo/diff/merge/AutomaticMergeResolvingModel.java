@@ -23,33 +23,27 @@ import java.util.Vector;
 
 import org.openflexo.diff.merge.MergeChange.MergeChangeSource;
 
-
-public class AutomaticMergeResolvingModel implements AutomaticMergeResolvingModelInterface 
-{
+public class AutomaticMergeResolvingModel implements AutomaticMergeResolvingModelInterface {
 	private Vector<AutomaticMergeResolvingRule> _primaryRules;
-	private Vector<AutomaticMergeResolvingRule> _detailedRules;	
-	
-	public AutomaticMergeResolvingModel()
-	{
+	private Vector<AutomaticMergeResolvingRule> _detailedRules;
+
+	public AutomaticMergeResolvingModel() {
 		super();
 		_primaryRules = new Vector<AutomaticMergeResolvingRule>();
 		_detailedRules = new Vector<AutomaticMergeResolvingRule>();
 	}
-	
-	public void addToPrimaryRules(AutomaticMergeResolvingRule aRule)
-	{
+
+	public void addToPrimaryRules(AutomaticMergeResolvingRule aRule) {
 		_primaryRules.add(aRule);
 	}
-	
-	public void addToDetailedRules(AutomaticMergeResolvingRule aRule)
-	{
+
+	public void addToDetailedRules(AutomaticMergeResolvingRule aRule) {
 		_detailedRules.add(aRule);
 	}
-	
+
 	@Override
-	public boolean resolve(MergeChange change) 
-	{
-		//System.out.println("Resolve "+change);
+	public boolean resolve(MergeChange change) {
+		// System.out.println("Resolve "+change);
 		if (change.getMergeChangeSource() == MergeChangeSource.Conflict) {
 			if (change.getMerge() instanceof DetailedMerge) {
 				// This is a change from a detailed merge,
@@ -57,7 +51,7 @@ public class AutomaticMergeResolvingModel implements AutomaticMergeResolvingMode
 				for (AutomaticMergeResolvingRule rule : _detailedRules) {
 					if (rule.isApplicable(change)) {
 						// This rule apply, ok return result
-						//return rule.getMergedResult(change);
+						// return rule.getMergedResult(change);
 						change.setAutomaticResolvedMerge(rule.getMergedResult(change));
 						change.setAutomaticMergeReason(localizedForKey(rule.getDescription()));
 						return true;
@@ -65,16 +59,15 @@ public class AutomaticMergeResolvingModel implements AutomaticMergeResolvingMode
 				}
 				// Not resolvable
 				return false;
-				//return null;
-			}
-			else {
+				// return null;
+			} else {
 				// This is a change that might be tokenized
-				// Before to analyse deeply, look if a primary 
+				// Before to analyse deeply, look if a primary
 				// rule may resolve conflict
 				for (AutomaticMergeResolvingRule rule : _primaryRules) {
 					if (rule.isApplicable(change)) {
 						// This rule apply, ok return result
-						//return rule.getMergedResult(change);
+						// return rule.getMergedResult(change);
 						change.setAutomaticResolvedMerge(rule.getMergedResult(change));
 						change.setAutomaticMergeReason(localizedForKey(rule.getDescription()));
 						return true;
@@ -85,7 +78,7 @@ public class AutomaticMergeResolvingModel implements AutomaticMergeResolvingMode
 					if (!resolve(c)) {
 						// At least one change was not resolvable, return null
 						return false;
-						//return null;
+						// return null;
 					}
 				}
 				// Arriving here means that all changes were resolved,
@@ -94,15 +87,13 @@ public class AutomaticMergeResolvingModel implements AutomaticMergeResolvingMode
 				change.setAutomaticMergeReason(localizedForKey("all_changes_are_resolved_by_detailed_analysis"));
 				return true;
 			}
-		}
-		else {
+		} else {
 			return true;
-			//return change.getMergeChangeResult().merge;
+			// return change.getMergeChangeResult().merge;
 		}
 	}
 
-	protected String localizedForKey(String key)
-	{
+	protected String localizedForKey(String key) {
 		return key;
 	}
 }

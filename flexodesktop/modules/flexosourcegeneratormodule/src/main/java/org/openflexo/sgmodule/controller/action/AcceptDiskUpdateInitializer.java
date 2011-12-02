@@ -27,14 +27,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.sgmodule.view.popup.SelectFilesPopup;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
-
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -42,111 +34,97 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.generator.action.AcceptDiskUpdate;
-
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.sgmodule.view.popup.SelectFilesPopup;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AcceptDiskUpdateInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AcceptDiskUpdateInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(AcceptDiskUpdate.actionType,actionInitializer);
+	AcceptDiskUpdateInitializer(SGControllerActionInitializer actionInitializer) {
+		super(AcceptDiskUpdate.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<AcceptDiskUpdate> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AcceptDiskUpdate> getDefaultInitializer() {
 		return new FlexoActionInitializer<AcceptDiskUpdate>() {
-            @Override
-			public boolean run(ActionEvent e, AcceptDiskUpdate action)
-            {
-             	if (action.getFilesToAccept().size() == 0) {
-            		FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
-            		return false;
-            	}
-            	else if (action.getFilesToAccept().size() > 1 
-            			|| (!(action.getFocusedObject() instanceof CGFile))) {
-            		SelectFilesPopup popup 
-            		= new SelectFilesPopup(FlexoLocalization.localizedForKey("accept_disk_version"),
-            				FlexoLocalization.localizedForKey("accept_disk_version_description"),
-            				"accept_disk_version",
-            				action.getFilesToAccept(),
-            				action.getFocusedObject().getProject(),
-            				getControllerActionInitializer().getSGController());
-            		popup.setVisible(true);
-            		if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) 
-            				&& (popup.getFileSet().getSelectedFiles().size() > 0)) {
-            			action.setFilesToAccept(popup.getFileSet().getSelectedFiles());
-            		}
-            		else {
-            			return false;
-            		}
-            	}
-            	else {
-            		// 1 occurence, continue without confirmation
-            	}
+			@Override
+			public boolean run(ActionEvent e, AcceptDiskUpdate action) {
+				if (action.getFilesToAccept().size() == 0) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
+					return false;
+				} else if (action.getFilesToAccept().size() > 1 || (!(action.getFocusedObject() instanceof CGFile))) {
+					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("accept_disk_version"),
+							FlexoLocalization.localizedForKey("accept_disk_version_description"), "accept_disk_version",
+							action.getFilesToAccept(), action.getFocusedObject().getProject(), getControllerActionInitializer()
+									.getSGController());
+					popup.setVisible(true);
+					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
+						action.setFilesToAccept(popup.getFileSet().getSelectedFiles());
+					} else {
+						return false;
+					}
+				} else {
+					// 1 occurence, continue without confirmation
+				}
 
-              	action.getProjectGenerator().startHandleLogs();
-                return true;
-            }
-        };
+				action.getProjectGenerator().startHandleLogs();
+				return true;
+			}
+		};
 	}
-
-     @Override
-	protected FlexoActionFinalizer<AcceptDiskUpdate> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<AcceptDiskUpdate>() {
-            @Override
-			public boolean run(ActionEvent e, AcceptDiskUpdate action)
-            {
-                action.getProjectGenerator().stopHandleLogs();
-                action.getProjectGenerator().flushLogs();
-                return true;
-           }
-        };
-	}
-
-     @Override
- 	protected FlexoExceptionHandler<AcceptDiskUpdate> getDefaultExceptionHandler() 
- 	{
- 		return new FlexoExceptionHandler<AcceptDiskUpdate>() {
- 			@Override
-			public boolean handleException(FlexoException exception, AcceptDiskUpdate action) {
-                getControllerActionInitializer().getSGController().disposeProgressWindow();
-                exception.printStackTrace();
-                if (exception.getCause()!=null)
-                FlexoController.showError(FlexoLocalization.localizedForKey("file_accepting_failed") + ":\n"
-                        + exception.getCause().getLocalizedMessage());
-                else
-                    FlexoController.showError(FlexoLocalization.localizedForKey("file_accepting_failed") + ":\n"
-                            + exception.getMessage());
-                return true;
- 			}
-        };
- 	}
-
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<AcceptDiskUpdate> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<AcceptDiskUpdate>() {
+			@Override
+			public boolean run(ActionEvent e, AcceptDiskUpdate action) {
+				action.getProjectGenerator().stopHandleLogs();
+				action.getProjectGenerator().flushLogs();
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<AcceptDiskUpdate> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<AcceptDiskUpdate>() {
+			@Override
+			public boolean handleException(FlexoException exception, AcceptDiskUpdate action) {
+				getControllerActionInitializer().getSGController().disposeProgressWindow();
+				exception.printStackTrace();
+				if (exception.getCause() != null) {
+					FlexoController.showError(FlexoLocalization.localizedForKey("file_accepting_failed") + ":\n"
+							+ exception.getCause().getLocalizedMessage());
+				} else {
+					FlexoController.showError(FlexoLocalization.localizedForKey("file_accepting_failed") + ":\n" + exception.getMessage());
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.ACCEPT_FROM_DISK_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.ACCEPT_FROM_DISK_DISABLED_ICON;
 	}
- 
+
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_U, FlexoCst.META_MASK);
 	}
 }

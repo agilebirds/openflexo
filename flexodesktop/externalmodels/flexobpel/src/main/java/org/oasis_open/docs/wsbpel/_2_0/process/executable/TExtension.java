@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,11 +31,12 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tExtension complex type.
+ * <p>
+ * Java class for tExtension complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tExtension">
@@ -53,62 +53,54 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tExtension")
-public class TExtension
-    extends TExtensibleElements
-{
+public class TExtension extends TExtensibleElements {
 
-    @XmlAttribute(required = true)
-    @XmlSchemaType(name = "anyURI")
-    protected String namespace;
-    @XmlAttribute(required = true)
-    protected TBoolean mustUnderstand;
+	@XmlAttribute(required = true)
+	@XmlSchemaType(name = "anyURI")
+	protected String namespace;
+	@XmlAttribute(required = true)
+	protected TBoolean mustUnderstand;
 
-    /**
-     * Gets the value of the namespace property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getNamespace() {
-        return namespace;
-    }
+	/**
+	 * Gets the value of the namespace property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getNamespace() {
+		return namespace;
+	}
 
-    /**
-     * Sets the value of the namespace property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNamespace(String value) {
-        this.namespace = value;
-    }
+	/**
+	 * Sets the value of the namespace property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setNamespace(String value) {
+		this.namespace = value;
+	}
 
-    /**
-     * Gets the value of the mustUnderstand property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TBoolean }
-     *     
-     */
-    public TBoolean getMustUnderstand() {
-        return mustUnderstand;
-    }
+	/**
+	 * Gets the value of the mustUnderstand property.
+	 * 
+	 * @return possible object is {@link TBoolean }
+	 * 
+	 */
+	public TBoolean getMustUnderstand() {
+		return mustUnderstand;
+	}
 
-    /**
-     * Sets the value of the mustUnderstand property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TBoolean }
-     *     
-     */
-    public void setMustUnderstand(TBoolean value) {
-        this.mustUnderstand = value;
-    }
+	/**
+	 * Sets the value of the mustUnderstand property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TBoolean }
+	 * 
+	 */
+	public void setMustUnderstand(TBoolean value) {
+		this.mustUnderstand = value;
+	}
 
 }

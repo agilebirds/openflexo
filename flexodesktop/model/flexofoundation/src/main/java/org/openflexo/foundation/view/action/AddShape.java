@@ -30,53 +30,41 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 
-
-public class AddShape extends FlexoAction<AddShape,ViewObject,ViewObject> 
-{
+public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
-	public static FlexoActionType<AddShape,ViewObject,ViewObject> actionType 
-	= new FlexoActionType<AddShape,ViewObject,ViewObject> (
-			"add_new_shape",
-			FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddShape, ViewObject, ViewObject> actionType = new FlexoActionType<AddShape, ViewObject, ViewObject>(
+			"add_new_shape", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddShape makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) 
-		{
+		public AddShape makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
 			return new AddShape(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) 
-		{
-			return (object instanceof View 
-					|| object instanceof ViewShape);
+		protected boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+			return (object instanceof View || object instanceof ViewShape);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddShape.actionType, View.class);
-		FlexoModelObject.addActionForClass (AddShape.actionType, ViewShape.class);
+		FlexoModelObject.addActionForClass(AddShape.actionType, View.class);
+		FlexoModelObject.addActionForClass(AddShape.actionType, ViewShape.class);
 	}
-
-
 
 	private ViewShape _newShape;
 	private String _newShapeName;
@@ -84,15 +72,13 @@ public class AddShape extends FlexoAction<AddShape,ViewObject,ViewObject>
 	private Object _graphicalRepresentation;
 	private boolean nameSetToNull = false;
 
-	AddShape (ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor)
-	{
+	AddShape(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException,NotImplementedException,InvalidParameterException
-	{
-		logger.info ("Add shape");  	
+	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+		logger.info("Add shape");
 
 		if (getParent() == null) {
 			throw new InvalidParameterException("folder is undefined");
@@ -102,69 +88,63 @@ public class AddShape extends FlexoAction<AddShape,ViewObject,ViewObject>
 		}
 
 		_newShape = new ViewShape(getParent().getShema());
-		if (getGraphicalRepresentation() != null) _newShape.setGraphicalRepresentation(getGraphicalRepresentation());
+		if (getGraphicalRepresentation() != null) {
+			_newShape.setGraphicalRepresentation(getGraphicalRepresentation());
+		}
 
 		_newShape.setName(getNewShapeName());
-		getParent().addToChilds(_newShape);   
+		getParent().addToChilds(_newShape);
 
-		logger.info("Added shape "+_newShape+" under "+getParent());
+		logger.info("Added shape " + _newShape + " under " + getParent());
 	}
 
-	public FlexoProject getProject()
-	{
-		if (getFocusedObject() != null) return getFocusedObject().getProject();
+	public FlexoProject getProject() {
+		if (getFocusedObject() != null) {
+			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 
-	public ViewShape getNewShape() 
-	{
+	public ViewShape getNewShape() {
 		return _newShape;
 	}
 
-	public ViewObject getParent()
-	{
+	public ViewObject getParent() {
 		if (_parent == null) {
 			if (getFocusedObject() instanceof ViewShape) {
 				_parent = getFocusedObject();
 			} else if (getFocusedObject() instanceof View) {
 				_parent = getFocusedObject();
-			} 
+			}
 		}
 		return _parent;
 	}
 
-	public void setParent(ViewObject parent) 
-	{
+	public void setParent(ViewObject parent) {
 		_parent = parent;
 	}
 
-	public String getNewShapeName() 
-	{
+	public String getNewShapeName() {
 		return _newShapeName;
 	}
 
-	public void setNewShapeName(String newShapeName) 
-	{
+	public void setNewShapeName(String newShapeName) {
 		_newShapeName = newShapeName;
 	}
 
-	public Object getGraphicalRepresentation() 
-	{
+	public Object getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(Object graphicalRepresentation) 
-	{
+	public void setGraphicalRepresentation(Object graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 	}
 
-	public boolean isNameSetToNull() 
-	{
+	public boolean isNameSetToNull() {
 		return nameSetToNull;
 	}
 
-	public void setNameSetToNull(boolean nameSetToNull)
-	{
+	public void setNameSetToNull(boolean nameSetToNull) {
 		this.nameSetToNull = nameSetToNull;
 	}
 

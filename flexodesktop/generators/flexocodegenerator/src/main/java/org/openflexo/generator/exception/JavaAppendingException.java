@@ -21,22 +21,16 @@ package org.openflexo.generator.exception;
 
 import org.openflexo.foundation.dm.javaparser.JavaParseException;
 import org.openflexo.generator.CGGenerator;
-import org.openflexo.generator.exception.GenerationException;
 
-
-
-public class JavaAppendingException extends GenerationException
-{
+public class JavaAppendingException extends GenerationException {
 	private CGGenerator _generator;
-	
- 	public JavaAppendingException(CGGenerator generator, String fullclassname, JavaParseException cause)
-	{
-		super("Failed appending java code on class : "+fullclassname, (String)null,cause.getMessage(), cause);
+
+	public JavaAppendingException(CGGenerator generator, String fullclassname, JavaParseException cause) {
+		super("Failed appending java code on class : " + fullclassname, (String) null, cause.getMessage(), cause);
 		_generator = generator;
 	}
 
-	public CGGenerator getGenerator()
-	{
+	public CGGenerator getGenerator() {
 		return _generator;
 	}
 }

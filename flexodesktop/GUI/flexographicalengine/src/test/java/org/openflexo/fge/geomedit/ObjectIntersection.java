@@ -27,56 +27,46 @@ import org.openflexo.fge.geomedit.construction.IntersectionConstruction;
 import org.openflexo.fge.geomedit.construction.ObjectReference;
 import org.openflexo.fge.geomedit.gr.ComputedAreaGraphicalRepresentation;
 
-
 public class ObjectIntersection extends GeometricObject<FGEArea> {
 
 	private ComputedAreaGraphicalRepresentation<ObjectIntersection> graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public ObjectIntersection(GeomEditBuilder builder)
-	{
+	public ObjectIntersection(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public ObjectIntersection(GeometricSet set, IntersectionConstruction construction) 
-	{
+
+	public ObjectIntersection(GeometricSet set, IntersectionConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new ComputedAreaGraphicalRepresentation<ObjectIntersection>(this,set.getEditedDrawing());
+		graphicalRepresentation = new ComputedAreaGraphicalRepresentation<ObjectIntersection>(this, set.getEditedDrawing());
 	}
 
 	@Override
-	public ComputedAreaGraphicalRepresentation<ObjectIntersection> getGraphicalRepresentation()
-	{
+	public ComputedAreaGraphicalRepresentation<ObjectIntersection> getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(ComputedAreaGraphicalRepresentation<ObjectIntersection> aGR)
-	{
+	public void setGraphicalRepresentation(ComputedAreaGraphicalRepresentation<ObjectIntersection> aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
 
 	@Override
-	public IntersectionConstruction getConstruction()
-	{
-		return (IntersectionConstruction)super.getConstruction();
+	public IntersectionConstruction getConstruction() {
+		return (IntersectionConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(IntersectionConstruction intersectionConstruction)
-	{
+	public void setConstruction(IntersectionConstruction intersectionConstruction) {
 		_setConstruction(intersectionConstruction);
 	}
 
-
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "Intersection.inspector";
 	}
 
-	public Vector<ObjectReference<? extends FGEArea>> getObjects()
-	{
+	public Vector<ObjectReference<? extends FGEArea>> getObjects() {
 		return getConstruction().objectConstructions;
 	}
-	
+
 }

@@ -22,7 +22,6 @@ package org.openflexo.cgmodule.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.cgmodule.GeneratorPreferences;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.validation.ConsistencyCheckDialog;
@@ -38,47 +37,41 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class ValidateProjectInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ValidateProjectInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(ValidateProject.actionType,actionInitializer);
+	ValidateProjectInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(ValidateProject.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ValidateProject> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ValidateProject> getDefaultInitializer() {
 		return new FlexoActionInitializer<ValidateProject>() {
 			@Override
-			public boolean run(ActionEvent e, ValidateProject action)
-			{
+			public boolean run(ActionEvent e, ValidateProject action) {
 				// If disabled, don't do it
 				if (action.getContext() instanceof SynchronizeRepositoryCodeGeneration) {
 					return (GeneratorPreferences.getValidateBeforeGenerating());
 				}
-				if (action.getProjectGenerator() != null)
+				if (action.getProjectGenerator() != null) {
 					action.getProjectGenerator().startHandleLogs();
+				}
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ValidateProject> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ValidateProject> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ValidateProject>() {
 			@Override
-			public boolean run(ActionEvent e, ValidateProject action)
-			{
+			public boolean run(ActionEvent e, ValidateProject action) {
 				if (action.getProjectGenerator() != null) {
 					action.getProjectGenerator().stopHandleLogs();
 					action.getProjectGenerator().flushLogs();
@@ -93,8 +86,7 @@ public class ValidateProjectInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<ValidateProject> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<ValidateProject> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<ValidateProject>() {
 			@Override
 			public boolean handleException(FlexoException exception, ValidateProject action) {
@@ -103,11 +95,12 @@ public class ValidateProjectInitializer extends ActionInitializer {
 					ProgressWindow.hideProgressWindow();
 					if (action.getContext() instanceof SynchronizeRepositoryCodeGeneration) {
 						SynchronizeRepositoryCodeGeneration myAction = (SynchronizeRepositoryCodeGeneration) action.getContext();
-						int whatToDo = FlexoController.selectOption(FlexoLocalization.localizedForKey("check_consistency_failed") + "\n"
-								+ FlexoLocalization.localizedForKey("what_would_you_like_to_do") + "\n"
-								+ FlexoLocalization.localizedForKey("you_can_desactivate_automatic_validation_in_preferences"),
-								FlexoLocalization.localizedForKey("abort"), FlexoLocalization.localizedForKey("abort"), FlexoLocalization
-								.localizedForKey("generate_anyway"), FlexoLocalization.localizedForKey("review_errors"));
+						int whatToDo = FlexoController.selectOption(
+								FlexoLocalization.localizedForKey("check_consistency_failed") + "\n"
+										+ FlexoLocalization.localizedForKey("what_would_you_like_to_do") + "\n"
+										+ FlexoLocalization.localizedForKey("you_can_desactivate_automatic_validation_in_preferences"),
+								FlexoLocalization.localizedForKey("abort"), FlexoLocalization.localizedForKey("abort"),
+								FlexoLocalization.localizedForKey("generate_anyway"), FlexoLocalization.localizedForKey("review_errors"));
 						if (whatToDo == 0) {
 							// Abort
 							myAction.setContinueAfterValidation(false);
@@ -116,8 +109,8 @@ public class ValidateProjectInitializer extends ActionInitializer {
 							// continue
 							myAction.setContinueAfterValidation(true);
 						} else if (whatToDo == 2) {
-							ConsistencyCheckDialog reviewDialog = new ConsistencyCheckDialog(null, ((ModelValidationException) exception)
-									.getValidationReport());
+							ConsistencyCheckDialog reviewDialog = new ConsistencyCheckDialog(null,
+									((ModelValidationException) exception).getValidationReport());
 							reviewDialog.setVisible(true);
 							// Abort
 							myAction.setContinueAfterValidation(false);
@@ -130,8 +123,8 @@ public class ValidateProjectInitializer extends ActionInitializer {
 							// Done
 						} else if (whatToDo == 1) {
 							// Review errors
-							ConsistencyCheckDialog reviewDialog = new ConsistencyCheckDialog(null,((ModelValidationException) exception)
-									.getValidationReport());
+							ConsistencyCheckDialog reviewDialog = new ConsistencyCheckDialog(null,
+									((ModelValidationException) exception).getValidationReport());
 							reviewDialog.setVisible(true);
 						}
 					}

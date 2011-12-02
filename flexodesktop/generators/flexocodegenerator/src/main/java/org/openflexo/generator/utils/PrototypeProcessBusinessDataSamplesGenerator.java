@@ -38,9 +38,7 @@ import org.openflexo.generator.rm.GeneratedFileResourceFactory;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
-
-public class PrototypeProcessBusinessDataSamplesGenerator extends MetaFileGenerator
-{
+public class PrototypeProcessBusinessDataSamplesGenerator extends MetaFileGenerator {
 
 	private static final Logger logger = FlexoLogger.getLogger(PrototypeProcessBusinessDataSamplesGenerator.class.getPackage().getName());
 
@@ -51,9 +49,10 @@ public class PrototypeProcessBusinessDataSamplesGenerator extends MetaFileGenera
 	 * @param projectGenerator
 	 * @param object
 	 */
-	public PrototypeProcessBusinessDataSamplesGenerator(ProjectGenerator projectGenerator, String processBusinessDataKey, PrototypeProcessBusinessDataSamplesCreator samplesCreator)
-	{ 
-		super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, processBusinessDataKey + ".csv", "PROCESSBUSINESSDATASAMPLE_" + processBusinessDataKey);
+	public PrototypeProcessBusinessDataSamplesGenerator(ProjectGenerator projectGenerator, String processBusinessDataKey,
+			PrototypeProcessBusinessDataSamplesCreator samplesCreator) {
+		super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, processBusinessDataKey + ".csv", "PROCESSBUSINESSDATASAMPLE_"
+				+ processBusinessDataKey);
 		this.samplesCreator = samplesCreator;
 		this.processBusinessDataKey = processBusinessDataKey;
 	}
@@ -61,30 +60,25 @@ public class PrototypeProcessBusinessDataSamplesGenerator extends MetaFileGenera
 	/**
 	 * Overrides buildResourcesAndSetGenerators
 	 * 
-	 * @see org.openflexo.generator.CGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.CGRepository,
-	 *      Vector)
+	 * @see org.openflexo.generator.CGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.CGRepository, Vector)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-	{
-		textResource = (TextFileResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
-		if (textResource == null)
-		{
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		textResource = (TextFileResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		if (textResource == null) {
 			textResource = GeneratedFileResourceFactory.createNewPrototypeProcessInstanceSamplesResource(repository, this);
 			textResource.setGenerator(this);
 			logger.info("Created Process sample resource " + textResource.getName());
-		}
-		else
-		{
+		} else {
 			textResource.setGenerator(this);
 			logger.info("Successfully retrieved Process sample FILE resource " + textResource.getName());
 		}
 		resources.add(textResource);
 	}
-	
-	public String getProcessBusinessDataKey()
-	{
+
+	public String getProcessBusinessDataKey() {
 		return processBusinessDataKey;
 	}
 
@@ -94,23 +88,17 @@ public class PrototypeProcessBusinessDataSamplesGenerator extends MetaFileGenera
 	 * @see org.openflexo.generator.CGGenerator#generate(boolean)
 	 */
 	@Override
-	public void generate(boolean forceRegenerate)
-	{
+	public void generate(boolean forceRegenerate) {
 		startGeneration();
 		VelocityContext vc = defaultContext();
 		vc.put("processBusinessDataKey", getProcessBusinessDataKey());
-		try
-		{
+		try {
 			String mergeResult = merge("PrototypeProcessSample.csv.vm", vc);
 			generatedCode = new GeneratedTextResource(getFileName(), mergeResult);
 			stopGeneration();
-		}
-		catch (GenerationException e)
-		{
+		} catch (GenerationException e) {
 			setGenerationException(e);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
 		}
 	}
@@ -121,30 +109,25 @@ public class PrototypeProcessBusinessDataSamplesGenerator extends MetaFileGenera
 	 * @see org.openflexo.generator.CGGenerator#getGeneratorLogger()
 	 */
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	@Override
-	public String getRelativePath()
-	{
+	public String getRelativePath() {
 		return "";
 	}
 
 	@Override
-	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository)
-	{
+	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
 		return repository.getResourcesSymbolicDirectory();
 	}
 
-	public String getDirectoryPath()
-	{
+	public String getDirectoryPath() {
 		return "processsamples";
 	}
-	
-	public List<List<String>> getProcessSamples()
-	{
+
+	public List<List<String>> getProcessSamples() {
 		return samplesCreator.getProcessSamples(getProcessBusinessDataKey());
 	}
 }

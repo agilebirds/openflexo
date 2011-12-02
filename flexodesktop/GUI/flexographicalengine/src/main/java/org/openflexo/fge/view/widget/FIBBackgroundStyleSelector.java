@@ -22,6 +22,7 @@ package org.openflexo.fge.view.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.List;
 import java.util.Vector;
@@ -31,7 +32,6 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -54,6 +54,7 @@ import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.swing.CustomPopup;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * Widget allowing to view and edit a BackgroundStyle
@@ -61,129 +62,126 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle>
-implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
-{
+public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> implements
+		FIBCustomComponent<BackgroundStyle, FIBBackgroundStyleSelector> {
 
 	static final Logger logger = Logger.getLogger(FIBBackgroundStyleSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/BackgroundStylePanel.fib");
 
 	private static final Color DEFAULT_COLOR1 = Color.RED;
-    private static final Color DEFAULT_COLOR2 = Color.WHITE;
-       
-    private BackgroundStyle _revertValue;
+	private static final Color DEFAULT_COLOR2 = Color.WHITE;
 
-    protected BackgroundStyleDetailsPanel _selectorPanel;
+	private BackgroundStyle _revertValue;
 
-    
-    public FIBBackgroundStyleSelector(BackgroundStyle editedObject)
-    {
-        super(editedObject);
-        setRevertValue(editedObject!=null?editedObject.clone():null);
-        setFocusable(true);
-    }
+	protected BackgroundStyleDetailsPanel _selectorPanel;
 
-	@Override
-	public void init(FIBCustom component, FIBController controller) 
-	{
+	public FIBBackgroundStyleSelector(BackgroundStyle editedObject) {
+		super(editedObject);
+		setRevertValue(editedObject != null ? editedObject.clone() : null);
+		setFocusable(true);
 	}
 
 	@Override
-	public void setRevertValue(BackgroundStyle oldValue)
-    {
-    	// WARNING: we need here to clone to keep track back of previous data !!!
-        if (oldValue != null) {
+	public void init(FIBCustom component, FIBController controller) {
+	}
+
+	@Override
+	public void setRevertValue(BackgroundStyle oldValue) {
+		// WARNING: we need here to clone to keep track back of previous data !!!
+		if (oldValue != null) {
 			_revertValue = oldValue.clone();
 		} else {
 			_revertValue = null;
 		}
-        if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Sets revert value to "+_revertValue);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Sets revert value to " + _revertValue);
 		}
-    }
+	}
 
-    @Override
-	public BackgroundStyle getRevertValue()
-    {
-        return _revertValue;
-    }
+	@Override
+	public BackgroundStyle getRevertValue() {
+		return _revertValue;
+	}
 
-     @Override
-	protected ResizablePanel createCustomPanel(BackgroundStyle editedObject)
-    {
-    	 _selectorPanel = makeCustomPanel(editedObject);
-    	 return _selectorPanel;
-    }
+	@Override
+	protected ResizablePanel createCustomPanel(BackgroundStyle editedObject) {
+		_selectorPanel = makeCustomPanel(editedObject);
+		return _selectorPanel;
+	}
 
-    protected BackgroundStyleDetailsPanel makeCustomPanel(BackgroundStyle editedObject)
-    {
-    	return new BackgroundStyleDetailsPanel(editedObject);
-    }
+	protected BackgroundStyleDetailsPanel makeCustomPanel(BackgroundStyle editedObject) {
+		return new BackgroundStyleDetailsPanel(editedObject);
+	}
 
-    @Override
-	public void updateCustomPanel(BackgroundStyle editedObject)
-    {
-    	//logger.info("updateCustomPanel with "+editedObject+" _selectorPanel="+_selectorPanel);
-         if (_selectorPanel != null) {
-            _selectorPanel.update();
-        }
-         getFrontComponent().update();
-    }
+	@Override
+	public void updateCustomPanel(BackgroundStyle editedObject) {
+		if (_selectorPanel != null) {
+			_selectorPanel.update();
+		}
+		getFrontComponent().update();
+	}
 
-   	/**
-     * Convenient class use to manipulate BackgroundStyle
-     * 
-     * @author sylvain
-     *
-     */
-    public static class BackgroundStyleFactory
-    {
-    	private BackgroundStyle backgroundStyle;
- 		private Color color1 = Color.RED;
-    	private Color color2 = Color.WHITE;
-    	private ColorGradientDirection gradientDirection = ColorGradientDirection.NORTH_SOUTH;
-       	private TextureType textureType = TextureType.TEXTURE1;
-       	private File imageFile;
-           	
-    	public BackgroundStyleFactory(BackgroundStyle backgroundStyle) 
-    	{
+	/**
+	 * Convenient class use to manipulate BackgroundStyle
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public static class BackgroundStyleFactory implements HasPropertyChangeSupport {
+		private BackgroundStyle backgroundStyle;
+		private Color color1 = Color.RED;
+		private Color color2 = Color.WHITE;
+		private ColorGradientDirection gradientDirection = ColorGradientDirection.NORTH_SOUTH;
+		private TextureType textureType = TextureType.TEXTURE1;
+		private File imageFile;
+		private PropertyChangeSupport pcSupport;
+
+		public BackgroundStyleFactory(BackgroundStyle backgroundStyle) {
+			pcSupport = new PropertyChangeSupport(this);
 			this.backgroundStyle = backgroundStyle;
 		}
-    	
-       	public BackgroundStyle getBackgroundStyle() {
+
+		@Override
+		public PropertyChangeSupport getPropertyChangeSupport() {
+			return pcSupport;
+		}
+
+		public BackgroundStyle getBackgroundStyle() {
 			return backgroundStyle;
 		}
 
 		public void setBackgroundStyle(BackgroundStyle backgroundStyle) {
+			BackgroundStyle oldBackgroundStyle = this.backgroundStyle;
 			this.backgroundStyle = backgroundStyle;
+			pcSupport.firePropertyChange("backgroundStyle", oldBackgroundStyle, backgroundStyle);
 		}
 
-		public BackgroundStyleType getBackgroundStyleType() 
-		{
+		public BackgroundStyleType getBackgroundStyleType() {
 			return backgroundStyle.getBackgroundStyleType();
 		}
 
-		public void setBackgroundStyleType(BackgroundStyleType backgroundStyleType) 
-		{
+		public void setBackgroundStyleType(BackgroundStyleType backgroundStyleType) {
+			// logger.info("setBackgroundStyleType with " + backgroundStyleType);
+			BackgroundStyleType oldBackgroundStyleType = getBackgroundStyleType();
 			switch (getBackgroundStyleType()) {
 			case NONE:
 				break;
 			case COLOR:
-				color1 = ((BackgroundStyle.Color)backgroundStyle).getColor();
+				color1 = ((BackgroundStyle.Color) backgroundStyle).getColor();
 				break;
 			case COLOR_GRADIENT:
-				color1 = ((BackgroundStyle.ColorGradient)backgroundStyle).getColor1();
-				color2 = ((BackgroundStyle.ColorGradient)backgroundStyle).getColor2();
-				gradientDirection = ((BackgroundStyle.ColorGradient)backgroundStyle).getDirection();
+				color1 = ((BackgroundStyle.ColorGradient) backgroundStyle).getColor1();
+				color2 = ((BackgroundStyle.ColorGradient) backgroundStyle).getColor2();
+				gradientDirection = ((BackgroundStyle.ColorGradient) backgroundStyle).getDirection();
 				break;
 			case TEXTURE:
-				color1 = ((BackgroundStyle.Texture)backgroundStyle).getColor1();
-				color2 = ((BackgroundStyle.Texture)backgroundStyle).getColor2();
-				textureType = ((BackgroundStyle.Texture)backgroundStyle).getTextureType();
+				color1 = ((BackgroundStyle.Texture) backgroundStyle).getColor1();
+				color2 = ((BackgroundStyle.Texture) backgroundStyle).getColor2();
+				textureType = ((BackgroundStyle.Texture) backgroundStyle).getTextureType();
 				break;
-   			case IMAGE:
-   				imageFile = ((BackgroundStyle.BackgroundImage)backgroundStyle).getImageFile();
+			case IMAGE:
+				imageFile = ((BackgroundStyle.BackgroundImage) backgroundStyle).getImageFile();
 				break;
 			default:
 				break;
@@ -197,159 +195,143 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
 				backgroundStyle = BackgroundStyle.makeColoredBackground(color1);
 				break;
 			case COLOR_GRADIENT:
-				backgroundStyle = BackgroundStyle.makeColorGradientBackground(color1,color2,gradientDirection);
+				backgroundStyle = BackgroundStyle.makeColorGradientBackground(color1, color2, gradientDirection);
 				break;
 			case TEXTURE:
-				backgroundStyle = BackgroundStyle.makeTexturedBackground(textureType,color1,color2);
+				backgroundStyle = BackgroundStyle.makeTexturedBackground(textureType, color1, color2);
 				break;
-   			case IMAGE:
-   				backgroundStyle = BackgroundStyle.makeImageBackground(imageFile);
+			case IMAGE:
+				backgroundStyle = BackgroundStyle.makeImageBackground(imageFile);
 				break;
 			default:
 				break;
 			}
 
+			pcSupport.firePropertyChange("backgroundStyleType", oldBackgroundStyleType, getBackgroundStyleType());
 		}
-    	
-    }
 
-    public class BackgroundStyleDetailsPanel extends ResizablePanel
-    {
-        private FIBComponent fibComponent;
-        private FIBView fibView;
-        private CustomFIBController controller;
-        private BackgroundStyleFactory bsFactory;
-        
-        protected BackgroundStyleDetailsPanel(BackgroundStyle backgroundStyle)
-        {
-        	super();
+	}
 
-        	bsFactory = new BackgroundStyleFactory(backgroundStyle);
-        	fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
-        	controller = new CustomFIBController(fibComponent);
-    		fibView =  controller.buildView(fibComponent);
+	public class BackgroundStyleDetailsPanel extends ResizablePanel {
+		private FIBComponent fibComponent;
+		private FIBView fibView;
+		private CustomFIBController controller;
+		private BackgroundStyleFactory bsFactory;
 
-        	controller.setDataObject(bsFactory);
-        	
-        	setLayout(new BorderLayout());
-        	add(fibView.getResultingJComponent(),BorderLayout.CENTER);
+		protected BackgroundStyleDetailsPanel(BackgroundStyle backgroundStyle) {
+			super();
 
-        }
+			bsFactory = new BackgroundStyleFactory(backgroundStyle);
+			fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
+			controller = new CustomFIBController(fibComponent);
+			fibView = controller.buildView(fibComponent);
 
-        public void update()
-        {
-        	bsFactory.backgroundStyle = getEditedObject();
-        	controller.setDataObject(bsFactory);
-        }
-        
-        @Override
-		public Dimension getDefaultSize()
-        {
-        	return new Dimension(fibComponent.getWidth(),fibComponent.getHeight());
-        }
+			controller.setDataObject(bsFactory);
 
-        public void delete()
-        {
-        }
+			setLayout(new BorderLayout());
+			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
 
-		public class CustomFIBController extends FIBController<BackgroundStyleFactory>
-    	{
-    		public CustomFIBController(FIBComponent component)
-    		{
-    			super(component);
-    		}
-
-    		public void apply() 
-    		{
-    			setEditedObject(bsFactory.getBackgroundStyle());
-    			FIBBackgroundStyleSelector.this.apply();
-    		}
-
-    		public void cancel() 
-    		{
-    			FIBBackgroundStyleSelector.this.cancel();
-    		}
-
-    		public void parameterChanged()
-    		{
-    			//System.out.println("parameterChanged() for "+bsFactory.getBackgroundStyle());
-    			setEditedObject(bsFactory.getBackgroundStyle());
-       			getFrontComponent().update();
-      			//notifyApplyPerformed();
-    		}
-
-       		public void backgroundStyleChanged()
-    		{
-    			//System.out.println("backgroundStyleChanged() for "+bsFactory.getBackgroundStyle());
-    			setEditedObject(bsFactory.getBackgroundStyle());
-       			getFrontComponent().update();
-       			notifyApplyPerformed();
-    		}
-
-     	}
-
- 
-    }
-
-   /* @Override
-    public void setEditedObject(BackgroundStyle object)
-    {
-    	logger.info("setEditedObject with "+object);
-    	super.setEditedObject(object);
-    }*/
-    
-    @Override
-	public void apply()
-    {
-    	setRevertValue(getEditedObject()!=null?getEditedObject().clone():null);
-    	closePopup();
-        super.apply();
-    }
-
-    @Override
-	public void cancel()
-    {
-    	if(logger.isLoggable(Level.FINE)) {
-			logger.fine("CANCEL: revert to "+getRevertValue());
 		}
-        setEditedObject(getRevertValue());
-        closePopup();
-        super.cancel();
-    }
 
-     @Override
-	protected void deletePopup()
-    {
-        if (_selectorPanel != null) {
+		public void update() {
+			// logger.info("Update with " + getEditedObject());
+			bsFactory.setBackgroundStyle(getEditedObject());
+			controller.setDataObject(bsFactory, true);
+		}
+
+		@Override
+		public Dimension getDefaultSize() {
+			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
+		}
+
+		public void delete() {
+		}
+
+		public class CustomFIBController extends FIBController<BackgroundStyleFactory> {
+			public CustomFIBController(FIBComponent component) {
+				super(component);
+			}
+
+			public void apply() {
+				setEditedObject(bsFactory.getBackgroundStyle());
+				FIBBackgroundStyleSelector.this.apply();
+			}
+
+			public void cancel() {
+				FIBBackgroundStyleSelector.this.cancel();
+			}
+
+			public void parameterChanged() {
+				// System.out.println("parameterChanged() for "+bsFactory.getBackgroundStyle());
+				setEditedObject(bsFactory.getBackgroundStyle());
+				getFrontComponent().update();
+				// notifyApplyPerformed();
+			}
+
+			public void backgroundStyleChanged() {
+				// System.out.println("backgroundStyleChanged() for "+bsFactory.getBackgroundStyle());
+				setEditedObject(bsFactory.getBackgroundStyle());
+				getFrontComponent().update();
+				notifyApplyPerformed();
+			}
+
+		}
+
+	}
+
+	/* @Override
+	 public void setEditedObject(BackgroundStyle object)
+	 {
+	 	logger.info("setEditedObject with "+object);
+	 	super.setEditedObject(object);
+	 }*/
+
+	@Override
+	public void apply() {
+		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : null);
+		closePopup();
+		super.apply();
+	}
+
+	@Override
+	public void cancel() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("CANCEL: revert to " + getRevertValue());
+		}
+		setEditedObject(getRevertValue());
+		closePopup();
+		super.cancel();
+	}
+
+	@Override
+	protected void deletePopup() {
+		if (_selectorPanel != null) {
 			_selectorPanel.delete();
 		}
-        _selectorPanel = null;
-        super.deletePopup();
-    }
+		_selectorPanel = null;
+		super.deletePopup();
+	}
 
-    /*protected void pointerLeavesPopup()
-    {
-       cancel();
-    }*/
-
-	public BackgroundStyleDetailsPanel getSelectorPanel() 
+	/*protected void pointerLeavesPopup()
 	{
+	   cancel();
+	}*/
+
+	public BackgroundStyleDetailsPanel getSelectorPanel() {
 		return _selectorPanel;
 	}
-	
+
 	@Override
-	protected BackgroundStylePreviewPanel buildFrontComponent()
-	{
+	protected BackgroundStylePreviewPanel buildFrontComponent() {
 		return new BackgroundStylePreviewPanel();
 	}
-	
+
 	@Override
-	public BackgroundStylePreviewPanel getFrontComponent()
-	{
-		return (BackgroundStylePreviewPanel)super.getFrontComponent();
+	public BackgroundStylePreviewPanel getFrontComponent() {
+		return (BackgroundStylePreviewPanel) super.getFrontComponent();
 	}
-	
-	@Override
+
+	/*@Override
 	protected Border getDownButtonBorder()
 	{
 		return BorderFactory.createCompoundBorder(
@@ -360,36 +342,30 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
 		//return BorderFactory.createEtchedBorder();
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
-	}
-	
-	
-	protected class BackgroundStylePreviewPanel extends JPanel
-	{
+	}*/
+
+	protected class BackgroundStylePreviewPanel extends JPanel {
 		private Drawing drawing;
 		private DrawingGraphicalRepresentation drawingGR;
 		private DrawingController<?> controller;
 		private Object rect;
 		private ShapeGraphicalRepresentation rectGR;
-		
-		
-		
-		protected BackgroundStylePreviewPanel()
-		{
+
+		protected BackgroundStylePreviewPanel() {
 			super(new BorderLayout());
-			setBorder(BorderFactory.createEtchedBorder(Color.GRAY,Color.LIGHT_GRAY));
-			//setBorder(BorderFactory.createEtchedBorder());
-			setPreferredSize(new Dimension(40,19));
-			//setBackground(Color.WHITE);
-			
+			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
+			// setBorder(BorderFactory.createEtchedBorder());
+			setPreferredSize(new Dimension(40, 19));
+			// setBackground(Color.WHITE);
+
 			rect = new Object();
-			
+
 			final Vector<Object> singleton = new Vector<Object>();
 			singleton.add(rect);
-			
+
 			drawing = new Drawing<BackgroundStylePreviewPanel>() {
 				@Override
-				public List<?> getContainedObjects(Object aDrawable)
-				{
+				public List<?> getContainedObjects(Object aDrawable) {
 					if (aDrawable == BackgroundStylePreviewPanel.this) {
 						return singleton;
 					}
@@ -397,8 +373,7 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
 				}
 
 				@Override
-				public Object getContainer(Object aDrawable)
-				{
+				public Object getContainer(Object aDrawable) {
 					if (aDrawable == rect) {
 						return BackgroundStylePreviewPanel.this;
 					}
@@ -406,14 +381,12 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
 				}
 
 				@Override
-				public DrawingGraphicalRepresentation<BackgroundStylePreviewPanel> getDrawingGraphicalRepresentation()
-				{
+				public DrawingGraphicalRepresentation<BackgroundStylePreviewPanel> getDrawingGraphicalRepresentation() {
 					return drawingGR;
 				}
 
 				@Override
-				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable)
-				{
+				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
 					if (aDrawable == BackgroundStylePreviewPanel.this) {
 						return drawingGR;
 					} else if (aDrawable == rect) {
@@ -423,43 +396,39 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
 				}
 
 				@Override
-				public BackgroundStylePreviewPanel getModel()
-				{
+				public BackgroundStylePreviewPanel getModel() {
 					return BackgroundStylePreviewPanel.this;
 				}
-				
-				
+
 			};
-			drawingGR = new DrawingGraphicalRepresentation(drawing,false);
+			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			rectGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE,rect,drawing);
+			rectGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE, rect, drawing);
 			rectGR.setWidth(36);
 			rectGR.setHeight(20);
 			rectGR.setX(0);
 			rectGR.setY(0);
 			rectGR.setForeground(ForegroundStyle.makeNone());
-			rectGR.setBackground(getEditedObject()!=null?getEditedObject():BackgroundStyle.makeColoredBackground(DEFAULT_COLOR1));
+			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : BackgroundStyle.makeColoredBackground(DEFAULT_COLOR1));
 			rectGR.setShadowStyle(ShadowStyle.makeNone());
 			rectGR.setIsSelectable(false);
 			rectGR.setIsFocusable(false);
 			rectGR.setIsReadOnly(true);
-			rectGR.setBorder(new ShapeBorder(0,0,0,0));
-			
+			rectGR.setBorder(new ShapeBorder(0, 0, 0, 0));
+
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
 		}
 
-		protected void update()
-		{
-			rectGR.setBackground(getEditedObject()!=null?getEditedObject():BackgroundStyle.makeColoredBackground(DEFAULT_COLOR1));
+		protected void update() {
+			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : BackgroundStyle.makeColoredBackground(DEFAULT_COLOR1));
 			// We do it later because producer of texture may not has finished its job
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					if (getEditedObject() == null) {
 						return;
 					}
@@ -469,18 +438,15 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
 			});
 		}
 
-		
 	}
 
 	@Override
-	public FIBBackgroundStyleSelector getJComponent()
-	{
+	public FIBBackgroundStyleSelector getJComponent() {
 		return this;
 	}
 
 	@Override
-	public Class<BackgroundStyle> getRepresentedType()
-	{
+	public Class<BackgroundStyle> getRepresentedType() {
 		return BackgroundStyle.class;
 	}
 

@@ -18,206 +18,211 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Role object
- *
+ * 
  * @version $Id: Role.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
-public class Role extends QuiduObject
-  implements AccessQualified, HasSupplier, Named, Documented
-{
-  static final long serialVersionUID = -8702356058432809151L;
+public class Role extends QuiduObject implements AccessQualified, HasSupplier, Named, Documented {
+	static final long serialVersionUID = -8702356058432809151L;
 
-  public String commentaires;
-  
-  public Role(PetalNode parent, Collection params) {
-    super(parent, "Role", params);
-  }
+	public String commentaires;
 
-  public Role() {
-    super("Role");
-  }
+	public Role(PetalNode parent, Collection params) {
+		super(parent, "Role", params);
+	}
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+	public Role() {
+		super("Role");
+	}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  @Override
-public String getSupplier() {
-    return getPropertyAsString("supplier");
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  @Override
-public void setSupplier(String o) {
-    defineProperty("supplier", o);
-  }
+	@Override
+	public String getSupplier() {
+		return getPropertyAsString("supplier");
+	}
 
-  /** @return cardinality of role as string
-   */
-  public String getCardinality() {
-    Value v = getClientCardinality();
+	@Override
+	public void setSupplier(String o) {
+		defineProperty("supplier", o);
+	}
 
-    if(v != null)
-      return v.getStringValue();
-    else
-      return null;
-  }
+	/**
+	 * @return cardinality of role as string
+	 */
+	public String getCardinality() {
+		Value v = getClientCardinality();
 
-  public void setCardinality(String card) {
-     setClientCardinality(new Value("cardinality", new StringLiteral(card)));
-  }
+		if (v != null) {
+			return v.getStringValue();
+		} else {
+			return null;
+		}
+	}
 
-  /** @return role object of other side of this association
-   */
-  public Role getOtherRole() {
-    Association assoc = (Association)getParent();
-    return (assoc.getFirstRole() == this)? assoc.getSecondRole() : assoc.getFirstRole();
-  }
+	public void setCardinality(String card) {
+		setClientCardinality(new Value("cardinality", new StringLiteral(card)));
+	}
 
-  /** @return true if this an aggregation, i.e., the rhomb is not filled, this depends
-   * on the containment of the other role
-   */
-  public boolean isAggregation() {
-    return getIsAggregate() && !isComposition();
-  }
+	/**
+	 * @return role object of other side of this association
+	 */
+	public Role getOtherRole() {
+		Association assoc = (Association) getParent();
+		return (assoc.getFirstRole() == this) ? assoc.getSecondRole() : assoc.getFirstRole();
+	}
 
-  /** @return true if this a composite, i.e., the rhomb is filled,
-   * this depends on the containment of the other role.
-   */
-  public boolean isComposition() {
-    if(getIsAggregate()) {
-      String cont = getOtherRole().getContainment();
+	/**
+	 * @return true if this an aggregation, i.e., the rhomb is not filled, this depends on the containment of the other role
+	 */
+	public boolean isAggregation() {
+		return getIsAggregate() && !isComposition();
+	}
 
-      if(cont == null)
-	return false;
+	/**
+	 * @return true if this a composite, i.e., the rhomb is filled, this depends on the containment of the other role.
+	 */
+	public boolean isComposition() {
+		if (getIsAggregate()) {
+			String cont = getOtherRole().getContainment();
 
-      return "by value".equals(cont.toLowerCase());
-    } else
-      return false;
-  }
+			if (cont == null) {
+				return false;
+			}
 
-  public Value getClientCardinality() {
-    return (Value)getProperty("client_cardinality");
-  }
+			return "by value".equals(cont.toLowerCase());
+		} else {
+			return false;
+		}
+	}
 
-  public void setClientCardinality(Value o) {
-    defineProperty("client_cardinality", o);
-  }
+	public Value getClientCardinality() {
+		return (Value) getProperty("client_cardinality");
+	}
 
-  public boolean getIsAggregate() {
-    return getPropertyAsBoolean("is_aggregate");
-  }
+	public void setClientCardinality(Value o) {
+		defineProperty("client_cardinality", o);
+	}
 
-  public void setIsAggregate(boolean o) {
-    defineProperty("is_aggregate", o);
-  }
+	public boolean getIsAggregate() {
+		return getPropertyAsBoolean("is_aggregate");
+	}
 
-  public List getAttributes() {
-    return (List)getProperty("attributes");
-  }
+	public void setIsAggregate(boolean o) {
+		defineProperty("is_aggregate", o);
+	}
 
-  public void setAttributes(List o) {
-    defineProperty("attributes", o);
-  }
+	public List getAttributes() {
+		return (List) getProperty("attributes");
+	}
 
-  public String getRoleName() {
-    return getNameParameter();
-  }
+	public void setAttributes(List o) {
+		defineProperty("attributes", o);
+	}
 
-  public void setRoleName(String o) {
-    setNameParameter(o);
-    setLabel(o);
-  }
+	public String getRoleName() {
+		return getNameParameter();
+	}
 
-  public String getLabel() {
-    return getPropertyAsString("label");
-  }
+	public void setRoleName(String o) {
+		setNameParameter(o);
+		setLabel(o);
+	}
 
-  public void setLabel(String o) {
-    defineProperty("label", o);
-  }
+	public String getLabel() {
+		return getPropertyAsString("label");
+	}
 
-  public String getContainment() {
-    return getPropertyAsString("Containment");
-  }
+	public void setLabel(String o) {
+		defineProperty("label", o);
+	}
 
-  /** Possible values are: "By value" and "By reference"
-   */
-  public void setContainment(String o) {
-    defineProperty("Containment", o);
-  }
+	public String getContainment() {
+		return getPropertyAsString("Containment");
+	}
 
-  public String getConstraints() {
-    return getPropertyAsString("Constraints");
-  }
+	/**
+	 * Possible values are: "By value" and "By reference"
+	 */
+	public void setContainment(String o) {
+		defineProperty("Containment", o);
+	}
 
-  public void setConstraints(String o) {
-    defineProperty("Constraints", o);
-  }
+	public String getConstraints() {
+		return getPropertyAsString("Constraints");
+	}
 
-  public boolean isNavigable() {
-    return getPropertyAsBoolean("is_navigable");
-  }
+	public void setConstraints(String o) {
+		defineProperty("Constraints", o);
+	}
 
-  public void isNavigable(boolean o) {
-    defineProperty("is_navigable", o);
-  }
+	public boolean isNavigable() {
+		return getPropertyAsBoolean("is_navigable");
+	}
 
-  public boolean isAggregate() {
-    return getPropertyAsBoolean("is_aggregate");
-  }
+	public void isNavigable(boolean o) {
+		defineProperty("is_navigable", o);
+	}
 
-  public void isAggregate(boolean o) {
-    defineProperty("is_aggregate", o);
-  }
+	public boolean isAggregate() {
+		return getPropertyAsBoolean("is_aggregate");
+	}
 
-  public boolean isPrincipal() {
-    return getPropertyAsBoolean("is_principal");
-  }
+	public void isAggregate(boolean o) {
+		defineProperty("is_aggregate", o);
+	}
 
-  public void isPrincipal(boolean o) {
-    defineProperty("is_principal", o);
-  }
+	public boolean isPrincipal() {
+		return getPropertyAsBoolean("is_principal");
+	}
 
-  @Override
-public String getDocumentation() {
-    return getPropertyAsString("documentation");
-  }
+	public void isPrincipal(boolean o) {
+		defineProperty("is_principal", o);
+	}
 
-  @Override
-public void setDocumentation(String o) {
-    defineProperty("documentation", o);
-  }
+	@Override
+	public String getDocumentation() {
+		return getPropertyAsString("documentation");
+	}
 
-  public boolean getStatic() {
-    return getPropertyAsBoolean("static");
-  }
+	@Override
+	public void setDocumentation(String o) {
+		defineProperty("documentation", o);
+	}
 
-  public void setStatic(boolean o) {
-    defineProperty("static", o);
-  }
+	public boolean getStatic() {
+		return getPropertyAsBoolean("static");
+	}
 
-  @Override
-public String getExportControl() {
-    return getPropertyAsString("exportControl");
-  }
+	public void setStatic(boolean o) {
+		defineProperty("static", o);
+	}
 
-  @Override
-public void setExportControl(String o) {
-    defineProperty("exportControl", o);
-  }
+	@Override
+	public String getExportControl() {
+		return getPropertyAsString("exportControl");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void setExportControl(String o) {
+		defineProperty("exportControl", o);
+	}
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

@@ -20,14 +20,15 @@
 package org.netbeans.lib.cvsclient.connection;
 
 /**
- * Provides methods used to scramble text. A concrete implementation will
- * use a particular encoding scheme to scramble the text.
- * @author  Robert Greig
+ * Provides methods used to scramble text. A concrete implementation will use a particular encoding scheme to scramble the text.
+ * 
+ * @author Robert Greig
  */
 public interface Scrambler {
-    /**
-     * Scramble text, turning it into a String of scrambled data
-     * @return a String containing the scrambled data
-     */
-    String scramble(String text);
+	/**
+	 * Scramble text, turning it into a String of scrambled data
+	 * 
+	 * @return a String containing the scrambled data
+	 */
+	String scramble(String text);
 }

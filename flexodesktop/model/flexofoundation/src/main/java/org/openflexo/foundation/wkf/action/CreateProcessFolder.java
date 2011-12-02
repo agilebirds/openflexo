@@ -32,73 +32,71 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
+public class CreateProcessFolder extends FlexoAction<CreateProcessFolder, FlexoModelObject, FlexoModelObject> {
 
-public class CreateProcessFolder extends FlexoAction<CreateProcessFolder,FlexoModelObject,FlexoModelObject>
-{
-
-    private static final Logger logger = Logger.getLogger(CreateProcessFolder.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateProcessFolder.class.getPackage().getName());
 
 	public static FlexoActionType<CreateProcessFolder, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<CreateProcessFolder, FlexoModelObject, FlexoModelObject>(
 			"create_process_folder", FlexoActionType.newMenu, FlexoActionType.newMenuGroup1, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateProcessFolder makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-        {
-            return new CreateProcessFolder(focusedObject, globalSelection,editor);
-        }
-
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return object != null && !object.isImported();
-        }
-
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return (object instanceof FlexoFolderContainerNode || object instanceof FlexoProcess) && !object.isImported();
-        }
-
-    };
-
-    CreateProcessFolder (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
-
-    static {
-    	FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
-    	FlexoModelObject.addActionForClass(actionType, FlexoFolderContainerNode.class);
-    }
-
-    private ProcessFolder newFolder;
-
-    private String name;
-    private String description;
-
-    @Override
-	protected void doAction(Object context) {
-    	newFolder = new ProcessFolder(getParent().getWorkflow(),getParent());
-    	try {
-			newFolder.setName(getName());
-			if (description!=null)
-				newFolder.setDescription(description);
-		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
-				logger.log(Level.WARNING,"Invalid name "+getName(),e);
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateProcessFolder makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new CreateProcessFolder(focusedObject, globalSelection, editor);
 		}
-    }
 
-    private FlexoFolderContainerNode getParent() {
-    	if (getFocusedObject() instanceof FlexoProcessNode)
-    		return (FlexoProcessNode) getFocusedObject();
-    	else if (getFocusedObject() instanceof FlexoProcess) {
-    		return ((FlexoProcess)getFocusedObject()).getProcessNode();
-    	} else if (getFocusedObject() instanceof ProcessFolder)
-    		return ((ProcessFolder)getFocusedObject());
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object != null && !object.isImported();
+		}
+
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return (object instanceof FlexoFolderContainerNode || object instanceof FlexoProcess) && !object.isImported();
+		}
+
+	};
+
+	CreateProcessFolder(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoFolderContainerNode.class);
+	}
+
+	private ProcessFolder newFolder;
+
+	private String name;
+	private String description;
+
+	@Override
+	protected void doAction(Object context) {
+		newFolder = new ProcessFolder(getParent().getWorkflow(), getParent());
+		try {
+			newFolder.setName(getName());
+			if (description != null) {
+				newFolder.setDescription(description);
+			}
+		} catch (Exception e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING, "Invalid name " + getName(), e);
+			}
+		}
+	}
+
+	private FlexoFolderContainerNode getParent() {
+		if (getFocusedObject() instanceof FlexoProcessNode) {
+			return (FlexoProcessNode) getFocusedObject();
+		} else if (getFocusedObject() instanceof FlexoProcess) {
+			return ((FlexoProcess) getFocusedObject()).getProcessNode();
+		} else if (getFocusedObject() instanceof ProcessFolder) {
+			return ((ProcessFolder) getFocusedObject());
+		}
 		return null;
 	}
 
@@ -111,7 +109,7 @@ public class CreateProcessFolder extends FlexoAction<CreateProcessFolder,FlexoMo
 	}
 
 	public String getName() {
-		if (name==null) {
+		if (name == null) {
 			return name = getParent().getNewFolderName();
 		}
 		return name;

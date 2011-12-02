@@ -24,45 +24,41 @@ import java.awt.Color;
 import org.openflexo.diff.merge.MergeChange;
 import org.openflexo.jedit.LinesHighlight;
 
-
 public class MergeHighlight extends LinesHighlight {
 
-	public static final Color ADDITION_SELECTED_COLOR = new Color(181,213,255);
-	public static final Color ADDITION_UNSELECTED_COLOR = new Color(230,255,255);
+	public static final Color ADDITION_SELECTED_COLOR = new Color(181, 213, 255);
+	public static final Color ADDITION_UNSELECTED_COLOR = new Color(230, 255, 255);
 	public static final Color ADDITION_SELECTED_BORDER_COLOR = Color.BLUE;
 	public static final Color ADDITION_UNSELECTED_BORDER_COLOR = ADDITION_SELECTED_COLOR;
-	
-	public static final Color REMOVAL_SELECTED_COLOR = new Color(255,190,182);
-	public static final Color REMOVAL_UNSELECTED_COLOR = new Color(255,214,214);
+
+	public static final Color REMOVAL_SELECTED_COLOR = new Color(255, 190, 182);
+	public static final Color REMOVAL_UNSELECTED_COLOR = new Color(255, 214, 214);
 	public static final Color REMOVAL_SELECTED_BORDER_COLOR = Color.RED;
 	public static final Color REMOVAL_UNSELECTED_BORDER_COLOR = REMOVAL_SELECTED_COLOR;
-	
-	public static final Color MODIFICATION_SELECTED_COLOR = new Color(220,220,220);
-	public static final Color MODIFICATION_UNSELECTED_COLOR = new Color(240,240,240);
+
+	public static final Color MODIFICATION_SELECTED_COLOR = new Color(220, 220, 220);
+	public static final Color MODIFICATION_UNSELECTED_COLOR = new Color(240, 240, 240);
 	public static final Color MODIFICATION_SELECTED_BORDER_COLOR = Color.GRAY;
 	public static final Color MODIFICATION_UNSELECTED_BORDER_COLOR = MODIFICATION_SELECTED_COLOR;
-	
+
 	private Color selectedBg;
 	private Color unselectedBg;
 	private Color selectedFg;
 	private Color unselectedFg;
-	
-	public MergeHighlight (MergeChange change, MergeTextArea MergeTA)
-	{
+
+	public MergeHighlight(MergeChange change, MergeTextArea MergeTA) {
 		super();
 		if (change.getMergeChangeSource() == MergeChange.MergeChangeSource.Left) {
 			selectedBg = MODIFICATION_SELECTED_COLOR;
 			unselectedBg = MODIFICATION_UNSELECTED_COLOR;
 			selectedFg = MODIFICATION_SELECTED_BORDER_COLOR;
 			unselectedFg = MODIFICATION_UNSELECTED_BORDER_COLOR;
-		}
-		else if (change.getMergeChangeSource() == MergeChange.MergeChangeSource.Conflict) {
+		} else if (change.getMergeChangeSource() == MergeChange.MergeChangeSource.Conflict) {
 			selectedBg = REMOVAL_SELECTED_COLOR;
 			unselectedBg = REMOVAL_UNSELECTED_COLOR;
 			selectedFg = REMOVAL_SELECTED_BORDER_COLOR;
 			unselectedFg = REMOVAL_UNSELECTED_BORDER_COLOR;
-		}
-		else if (change.getMergeChangeSource() == MergeChange.MergeChangeSource.Right) {
+		} else if (change.getMergeChangeSource() == MergeChange.MergeChangeSource.Right) {
 			selectedBg = ADDITION_SELECTED_COLOR;
 			unselectedBg = ADDITION_UNSELECTED_COLOR;
 			selectedFg = ADDITION_SELECTED_BORDER_COLOR;
@@ -70,17 +66,15 @@ public class MergeHighlight extends LinesHighlight {
 		}
 		deselect();
 	}
-	
-	public void select()
-	{
+
+	public void select() {
 		setBgColor(selectedBg);
 		setFgColor(selectedFg);
 	}
 
-	public void deselect()
-	{
+	public void deselect() {
 		setBgColor(unselectedBg);
 		setFgColor(unselectedFg);
 	}
-	
+
 }

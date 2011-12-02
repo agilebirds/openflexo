@@ -36,88 +36,88 @@ import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.controller.IEController;
 
+public class IEReusableWidgetView<D extends IEReusableWidget<C, CI>, CI extends PartialComponentInstance, C extends PartialComponentDefinition>
+		extends IEWidgetView<D> {
 
-public class IEReusableWidgetView<D extends IEReusableWidget<C, CI>, CI extends PartialComponentInstance, C extends PartialComponentDefinition> extends IEWidgetView<D>
-{
+	private IEReusableWidgetComponentView _reusableWidgetComponentView;
 
-    private IEReusableWidgetComponentView _reusableWidgetComponentView;
-    
-    public IEReusableWidgetView(IEController ieController, D model, boolean addDnDSupport, IEWOComponentView view)
-    {
-        super(ieController, model, addDnDSupport,view);
-        this.setBackground(Color.WHITE);
-        _reusableWidgetComponentView = new IEReusableWidgetComponentView(getIEController(), model.getReusableComponentInstance());;
-        setLayout(new BorderLayout());
-        add(_reusableWidgetComponentView);
-        ieController.getSelectionManager().addToSelectionListeners(_reusableWidgetComponentView);
-        validate();
-    }
+	public IEReusableWidgetView(IEController ieController, D model, boolean addDnDSupport, IEWOComponentView view) {
+		super(ieController, model, addDnDSupport, view);
+		this.setBackground(Color.WHITE);
+		_reusableWidgetComponentView = new IEReusableWidgetComponentView(getIEController(), model.getReusableComponentInstance());
+		;
+		setLayout(new BorderLayout());
+		add(_reusableWidgetComponentView);
+		ieController.getSelectionManager().addToSelectionListeners(_reusableWidgetComponentView);
+		validate();
+	}
 
-    @Override
-	public IEWidgetView findViewForModel(IEObject object)
-    {
-        return _reusableWidgetComponentView.findViewForModel(object);
-    }
-    
-    @Override
-    public void delete() {
-    	getIEController().getIESelectionManager().removeFromSelectionListeners(getReusableWidgetComponentView());
-    	super.delete();
-    }
-    
-    /**
-     * Overrides propagateResize
-     * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
-     */
-    @Override
-    public void propagateResize()
-    {
-        Component[] c = getComponents();
-        for (int i = 0; i < c.length; i++) {
-            if (c[i] instanceof Layoutable)
-                ((Layoutable)c[i]).propagateResize();
-        }
-    }
-    
-    @Override
-    public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null)return storedSize;
-        }
-        Dimension d = _reusableWidgetComponentView.getPreferredSize();
-        if (getHoldsNextComputedPreferredSize())
-            storePrefSize(d);
-        return d;
-    }
-    
-    @Override
-	public void update(FlexoObservable o, DataModification arg)
-    {
-        if (arg instanceof ObjectDeleted && o==getModel()) {
-        	delete();
-        } else
-            super.update(o , arg);
+	@Override
+	public IEWidgetView findViewForModel(IEObject object) {
+		return _reusableWidgetComponentView.findViewForModel(object);
+	}
 
-    }
+	@Override
+	public void delete() {
+		getIEController().getIESelectionManager().removeFromSelectionListeners(getReusableWidgetComponentView());
+		super.delete();
+	}
 
-    public CI getComponentInstance()
-    {
-        return getModel().getReusableComponentInstance();
-    }
+	/**
+	 * Overrides propagateResize
+	 * 
+	 * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
+	 */
+	@Override
+	public void propagateResize() {
+		Component[] c = getComponents();
+		for (int i = 0; i < c.length; i++) {
+			if (c[i] instanceof Layoutable) {
+				((Layoutable) c[i]).propagateResize();
+			}
+		}
+	}
 
-    public IEReusableWidgetComponentView getReusableWidgetComponentView(){
-    	return _reusableWidgetComponentView;
-    }
-    
-    /*public void setHTMLTableWidget(IEHTMLTableWidget htmlTable) {
-    	if(getViewForRootWidget() instanceof IESequenceTRWidgetView){
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null) {
+				return storedSize;
+			}
+		}
+		Dimension d = _reusableWidgetComponentView.getPreferredSize();
+		if (getHoldsNextComputedPreferredSize()) {
+			storePrefSize(d);
+		}
+		return d;
+	}
+
+	@Override
+	public void update(FlexoObservable o, DataModification arg) {
+		if (arg instanceof ObjectDeleted && o == getModel()) {
+			delete();
+		} else {
+			super.update(o, arg);
+		}
+
+	}
+
+	public CI getComponentInstance() {
+		return getModel().getReusableComponentInstance();
+	}
+
+	public IEReusableWidgetComponentView getReusableWidgetComponentView() {
+		return _reusableWidgetComponentView;
+	}
+
+	/*public void setHTMLTableWidget(IEHTMLTableWidget htmlTable) {
+		if(getViewForRootWidget() instanceof IESequenceTRWidgetView){
 		Enumeration<IETDWidgetView> en = ((IESequenceTRWidgetView)getViewForRootWidget()).getAllTDView().elements();
 		while(en.hasMoreElements()){
 			en.nextElement().setHTMLTableWidget(htmlTable);
 		}
-    	}
+		}
 		
 	}*/
 }

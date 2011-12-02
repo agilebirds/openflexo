@@ -41,7 +41,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 
 /**
  * Some File utilities
- *
+ * 
  * @author sguerin
  */
 public class FileUtils {
@@ -70,7 +70,9 @@ public class FileUtils {
 
 	private static final Pattern UNACCEPTABLE_SLASH_PATTERN = Pattern.compile(UNACCEPTABLE_SLASH);
 
-	public static final String VALID_FILE_NAME_REGEXP = SLASH + "?(" + NO_BLANK_NO_SLASH + "(" + NO_SLASH + "+?" + NO_BLANK_NO_SLASH + "|" + NO_BLANK_NO_SLASH + "*?)(" + SLASH + "(" + NO_BLANK_NO_SLASH + "*?|" + NO_BLANK_NO_SLASH + NO_SLASH + "+?)" + NO_BLANK_NO_SLASH + ")*)+" + SLASH + "?";
+	public static final String VALID_FILE_NAME_REGEXP = SLASH + "?(" + NO_BLANK_NO_SLASH + "(" + NO_SLASH + "+?" + NO_BLANK_NO_SLASH + "|"
+			+ NO_BLANK_NO_SLASH + "*?)(" + SLASH + "(" + NO_BLANK_NO_SLASH + "*?|" + NO_BLANK_NO_SLASH + NO_SLASH + "+?)"
+			+ NO_BLANK_NO_SLASH + ")*)+" + SLASH + "?";
 
 	public static byte[] getBytes(File f) {
 		byte[] b = new byte[(int) f.length()];
@@ -147,7 +149,7 @@ public class FileUtils {
 			if (curFile.isDirectory() && !curFile.getName().equals("CVS") && fileFilter.accept(curFile)) {
 				copyContentDirToDir(curFile, new File(dest, curFile.getName()), strategy, fileFilter);
 			} else if (curFile.isFile() && fileFilter.accept(curFile)) {
-				File destFile = new File(dest,curFile.getName());
+				File destFile = new File(dest, curFile.getName());
 				if (destFile.exists()) {
 					switch (strategy) {
 					case IGNORE_EXISTING:
@@ -198,20 +200,18 @@ public class FileUtils {
 					ret = newFile.getParentFile().mkdirs();
 				}
 				if (!ret) {
-					System.err
-					.println("WARNING: cannot create directory: " + newFile.getParent() + " createNewFile(File)[" + FileUtils.class
-							.getName() + "]");
+					System.err.println("WARNING: cannot create directory: " + newFile.getParent() + " createNewFile(File)["
+							+ FileUtils.class.getName() + "]");
 				}
 			}
 			try {
-				ret=newFile.createNewFile();
+				ret = newFile.createNewFile();
 			} catch (IOException e) {
 				newFile = newFile.getCanonicalFile();
-				ret=newFile.createNewFile();
+				ret = newFile.createNewFile();
 				if (!ret) {
-					System.err
-					.println("WARNING: cannot create file: " + newFile.getAbsolutePath() + " createNewFile(File)[" + FileUtils.class
-							.getName() + "]");
+					System.err.println("WARNING: cannot create file: " + newFile.getAbsolutePath() + " createNewFile(File)["
+							+ FileUtils.class.getName() + "]");
 				}
 			}
 		}
@@ -294,7 +294,7 @@ public class FileUtils {
 		createNewFile(dest);
 		FileOutputStream fos = new FileOutputStream(dest);
 		BufferedReader bufferedReader = new BufferedReader(new StringReader(fileContent));
-		OutputStreamWriter fw = new OutputStreamWriter(fos, Charset.forName(encoding!=null ? encoding : "UTF-8"));
+		OutputStreamWriter fw = new OutputStreamWriter(fos, Charset.forName(encoding != null ? encoding : "UTF-8"));
 		String line = null;
 		try {
 			while ((line = bufferedReader.readLine()) != null) {
@@ -403,7 +403,7 @@ public class FileUtils {
 			File file = files[i];
 			if (file.isDirectory()) {
 				if (recursive) {
-					count+=countFilesInDirectory(file, recursive);
+					count += countFilesInDirectory(file, recursive);
 				}
 			} else {
 				count++;
@@ -414,7 +414,7 @@ public class FileUtils {
 
 	/**
 	 * Recursive computing of last modified date (deep check for contained files)
-	 *
+	 * 
 	 * @param file
 	 * @return
 	 */
@@ -468,25 +468,26 @@ public class FileUtils {
 		return s != null && !UNACCEPTABLE_CHARS_PATTERN.matcher(s).find() && s.matches(VALID_FILE_NAME_REGEXP);
 	}
 
-	public static String removeNonASCIIAndPonctuationAndBadFileNameChars(String s){
-		if(s.lastIndexOf(".")>0){
-			String s1 = s.substring(s.lastIndexOf(".")+1);
-			String s0 = s.substring(0,s.lastIndexOf("."));
+	public static String removeNonASCIIAndPonctuationAndBadFileNameChars(String s) {
+		if (s.lastIndexOf(".") > 0) {
+			String s1 = s.substring(s.lastIndexOf(".") + 1);
+			String s0 = s.substring(0, s.lastIndexOf("."));
 			s0 = performCleanup(s0);
 			s1 = performCleanup(s1);
-			return s0+"."+s1;
+			return s0 + "." + s1;
 		}
 
 		return performCleanup(s);
 	}
 
-	private static String performCleanup(String s){
+	private static String performCleanup(String s) {
 		s = StringUtils.convertAccents(s);
 		s = s.replaceAll(BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP, "-");
 		s = s.replaceAll("\\P{ASCII}+", "-");
 		s = s.replaceAll("[^\\w]+", "-");
 		return s;
 	}
+
 	/**
 	 * @param componentName
 	 * @return
@@ -536,7 +537,7 @@ public class FileUtils {
 	 * @param dir
 	 */
 	public static void deleteFilesInDir(File dir) {
-		deleteFilesInDir(dir,false);
+		deleteFilesInDir(dir, false);
 	}
 
 	public static void deleteFilesInDir(File dir, boolean keepCVSTags) {
@@ -557,7 +558,7 @@ public class FileUtils {
 			File file = f[i];
 			if (file.isDirectory()) {
 				if (!file.getName().equals("CVS") || !keepCVSTags) {
-					deleteFilesInDir(file,keepCVSTags);
+					deleteFilesInDir(file, keepCVSTags);
 				}
 			} else {
 				file.delete();
@@ -606,7 +607,6 @@ public class FileUtils {
 			}
 		}
 	}
-
 
 	/**
 	 * @param desktopIni
@@ -666,18 +666,18 @@ public class FileUtils {
 		}
 		String common = d.substring(0, i);
 		if (!new File(common).exists()) {
-			if (common.indexOf('/')>-1) {
-				common = common.substring(0,common.lastIndexOf('/')+1);
+			if (common.indexOf('/') > -1) {
+				common = common.substring(0, common.lastIndexOf('/') + 1);
 			}
 			if (!new File(common).exists()) {
-				System.err.println("WARNING\tNothing in common between\n"+file.getAbsolutePath()+" and\n"+dir.getAbsolutePath());
+				System.err.println("WARNING\tNothing in common between\n" + file.getAbsolutePath() + " and\n" + dir.getAbsolutePath());
 				return file.getAbsolutePath();
 			}
 		}
 		File commonFather = new File(common);
 		File parentDir = dir;
 		StringBuilder sb = new StringBuilder();
-		while(parentDir!=null && !commonFather.equals(parentDir)) {
+		while (parentDir != null && !commonFather.equals(parentDir)) {
 			sb.append("../");
 			parentDir = parentDir.getParentFile();
 		}
@@ -739,7 +739,7 @@ public class FileUtils {
 		if (tmp.delete() && tmpDir.mkdirs()) {
 			return tmpDir;
 		} else {
-			tmpDir = new File(System.getProperty("java.io.tmpdir"),prefix+suffix);
+			tmpDir = new File(System.getProperty("java.io.tmpdir"), prefix + suffix);
 			tmpDir.mkdirs();
 			return tmpDir;
 		}
@@ -766,7 +766,7 @@ public class FileUtils {
 		if (fileName == null) {
 			return null;
 		}
-		if (fileName.indexOf('.')>-1) {
+		if (fileName.indexOf('.') > -1) {
 			return fileName.substring(0, fileName.lastIndexOf('.')) + fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
 		}
 		return fileName;

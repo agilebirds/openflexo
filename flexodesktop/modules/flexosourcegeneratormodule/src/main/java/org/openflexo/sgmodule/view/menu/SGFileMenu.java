@@ -30,38 +30,34 @@ import java.util.logging.Logger;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.menu.FileMenu;
 
-
 /**
  * 'File' menu for this Module
  * 
  * @author yourname
  */
-public class SGFileMenu extends FileMenu
-{
+public class SGFileMenu extends FileMenu {
 
-    private static final Logger logger = Logger.getLogger(SGFileMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(SGFileMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected SGController _sgController;
+	protected SGController _sgController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public SGFileMenu(SGController controller)
-    {
-        super(controller);
-        _sgController = controller;
-        // Put your actions here
-    }
+	public SGFileMenu(SGController controller) {
+		super(controller);
+		_sgController = controller;
+		// Put your actions here
+	}
 
-    public SGController getSGController()
-    {
-        return _sgController;
-    }
+	public SGController getSGController() {
+		return _sgController;
+	}
 }

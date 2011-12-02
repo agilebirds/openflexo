@@ -22,7 +22,6 @@ package org.openflexo.dg.rm;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
@@ -36,85 +35,79 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVModelLatexFileResource extends LatexFileResource<DGLatexGenerator<DKVModel>> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(DKVModelLatexFileResource.class.getPackage().getName());
+public class DKVModelLatexFileResource extends LatexFileResource<DGLatexGenerator<DKVModel>> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(DKVModelLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public DKVModelLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public DKVModelLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public DKVModelLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public DKVModelLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    private boolean isObserverRegistered = false;
+	private boolean isObserverRegistered = false;
 
-    @Override
-	public String getName()
-    {
-    	if (getCGFile()==null || getCGFile().getRepository()==null || getDKV()==null)
-            return super.getName();
-    	registerObserverWhenRequired();
-    	if (super.getName()==null)
-    		setName(nameForRepositoryAndDKV(getCGFile().getRepository(), getDKV()));
-    	return nameForRepositoryAndDKV(getCGFile().getRepository(), getDKV());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getDKV() == null) {
+			return super.getName();
+		}
+		registerObserverWhenRequired();
+		if (super.getName() == null) {
+			setName(nameForRepositoryAndDKV(getCGFile().getRepository(), getDKV()));
+		}
+		return nameForRepositoryAndDKV(getCGFile().getRepository(), getDKV());
+	}
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getDKV() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getProject());
-            getDKV().addObserver(this);
-    	}
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getDKV() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
+			getDKV().addObserver(this);
+		}
+	}
 
-    public static String nameForRepositoryAndDKV(GenerationRepository repository, DKVModel dkvModel)
-    {
-    	return repository.getName()+".DKVMODEL_LATEX."+dkvModel.getName();
-    }
+	public static String nameForRepositoryAndDKV(GenerationRepository repository, DKVModel dkvModel) {
+		return repository.getName() + ".DKVMODEL_LATEX." + dkvModel.getName();
+	}
 
-    public DKVModel getDKV()
-    {
-    	if (getGenerator() != null)
-            return getGenerator().getObject();
-    	return null;
-    }
+	public DKVModel getDKV() {
+		if (getGenerator() != null) {
+			return getGenerator().getObject();
+		}
+		return null;
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToDependantResources(getProject().getFlexoDKVResource());
-   }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getFlexoDKVResource());
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getDKV()) {
 			if (dataModification instanceof AttributeDataModification) {
-				if (((AttributeDataModification)dataModification).getAttributeName().equals("name")) {
+				if (((AttributeDataModification) dataModification).getAttributeName().equals("name")) {
 					logger.info("Building new resource after process renaming");
 					DGLatexGenerator<DKVModel> generator = getGenerator();
 					setGenerator(null);

@@ -25,35 +25,29 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFolder;
 
+public class CGTemplateFolderElement extends BrowserElement {
 
-public class CGTemplateFolderElement extends BrowserElement
-{
+	public CGTemplateFolderElement(CGTemplateFolder templateFolder, ProjectBrowser browser, BrowserElement parent) {
+		super(templateFolder, BrowserElementType.TEMPLATE_FOLDER, browser, parent);
+	}
 
-    public CGTemplateFolderElement(CGTemplateFolder templateFolder, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(templateFolder, BrowserElementType.TEMPLATE_FOLDER, browser, parent);
-    }
+	@Override
+	public String getName() {
+		return getCGTemplateFolder().getName();
+	}
 
-    @Override
-	public String getName()
-    {
-    	return getCGTemplateFolder().getName();
-    }
-
-    @Override
-	protected void buildChildrenVector()
-    {
-    	for (CGTemplateFolder f : getCGTemplateFolder().dirs) {
-    		addToChilds(f);
-    	}
+	@Override
+	protected void buildChildrenVector() {
+		for (CGTemplateFolder f : getCGTemplateFolder().dirs) {
+			addToChilds(f);
+		}
 		for (CGTemplate f : getCGTemplateFolder().templates) {
-    		addToChilds(f);
-    	}
-      }
+			addToChilds(f);
+		}
+	}
 
-    protected CGTemplateFolder getCGTemplateFolder()
-    {
-        return (CGTemplateFolder) getObject();
-    }
+	protected CGTemplateFolder getCGTemplateFolder() {
+		return (CGTemplateFolder) getObject();
+	}
 
- }
+}

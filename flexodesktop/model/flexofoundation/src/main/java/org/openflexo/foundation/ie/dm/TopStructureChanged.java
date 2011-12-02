@@ -24,18 +24,15 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class TopStructureChanged extends IEDataModification
-{
+public class TopStructureChanged extends IEDataModification {
 
-    public ComponentDefinition modifiedComponent;
+	public ComponentDefinition modifiedComponent;
 
-    public TopStructureChanged(ComponentDefinition component)
-    {
-        super(component, null);
-        modifiedComponent = component;
-    }
+	public TopStructureChanged(ComponentDefinition component) {
+		super(component, null);
+		modifiedComponent = component;
+	}
 
 }

@@ -33,74 +33,77 @@ public class MinDataRestrictionStatement extends DataRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(MinDataRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
+	private OntologyDataProperty property;
 	private int minCardinality = 0;
-	private DataType dataRange = DataType.Unknown;
-	
-	public MinDataRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
-	{
-		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		
+	private OntologicDataType dataRange;
+
+	public MinDataRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
+		super(subject, s, r);
+		property = (OntologyDataProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
-		Property ON_DATA_RANGE = ResourceFactory.createProperty( OWL + "onDataRange" );
-		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty( OWL + "qualifiedCardinality" );
+		Property ON_DATA_RANGE = ResourceFactory.createProperty(OWL + "onDataRange");
+		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + "qualifiedCardinality");
 
 		Statement onDataRangeStmt = r.getProperty(ON_DATA_RANGE);
 		Statement cardinalityStmt = r.getProperty(QUALIFIED_CARDINALITY);
-		
+
 		RDFNode onDataRangeStmtValue = onDataRangeStmt.getObject();
 		RDFNode minCardinalityStmtValue = cardinalityStmt.getObject();
-		
+
 		if (onDataRangeStmtValue instanceof Resource) {
-			dataRange = getDataType(((Resource)onDataRangeStmtValue).getURI());
+			dataRange = OntologicDataType.fromURI(((Resource) onDataRangeStmtValue).getURI());
 		}
-	
+
 		if (minCardinalityStmtValue.isLiteral() && minCardinalityStmtValue.canAs(Literal.class)) {
-			Literal literal = (Literal)minCardinalityStmtValue.as(Literal.class);
+			Literal literal = (Literal) minCardinalityStmtValue.as(Literal.class);
 			minCardinality = literal.getInt();
 		}
-		
-		
-		//object = getOntologyLibrary().getOntologyObject(r.get().getURI());
-		//cardinality = r.getCardinality();
+
+		// object = getOntologyLibrary().getOntologyObject(r.get().getURI());
+		// cardinality = r.getCardinality();
 	}
 
 	@Override
-	public DataType getDataRange()
-	{
+	public OntologicDataType getDataRange() {
 		return dataRange;
 	}
-	
+
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "min_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "MinRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "MinRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyProperty getProperty() 
-	{
+	public OntologyDataProperty getProperty() {
 		return property;
 	}
 
-
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" min "+minCardinality+" "+getDataRange();
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " min "
+				+ minCardinality + " " + getDataRange();
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" min "+minCardinality;
+		return property.getName() + " min " + minCardinality;
+	}
+
+	@Override
+	public int getCardinality() {
+		return minCardinality;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Min;
 	}
 
 }

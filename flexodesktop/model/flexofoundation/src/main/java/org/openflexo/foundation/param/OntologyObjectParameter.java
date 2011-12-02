@@ -22,19 +22,16 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class OntologyObjectParameter extends ParameterDefinition<OntologyObject> {
 
-    public OntologyObjectParameter(String name, String label, OntologyObject defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.OntologyObjectInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public OntologyObjectParameter(String name, String label, OntologyObject defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.OntologyObjectInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

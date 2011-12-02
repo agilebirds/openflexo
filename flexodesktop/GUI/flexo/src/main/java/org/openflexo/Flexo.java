@@ -56,6 +56,7 @@ import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
+import org.openflexo.view.FlexoFrame;
 
 /**
  * Main class of the Flexo Application Suite
@@ -65,6 +66,8 @@ import org.openflexo.utils.TooManyFailedAttemptException;
  */
 public class Flexo {
 	private static final Logger logger = Logger.getLogger(Flexo.class.getPackage().getName());
+
+	public static boolean isDev = false;
 
 	private static String getResourcePath() {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -110,7 +113,6 @@ public class Flexo {
 	 */
 	public static void main(String[] args) {
 		String userTypeName = null;
-		boolean isDev = false;
 		boolean noSplash = false;
 		if (args.length > 0) {
 			// ATTENTION: Argument cannot start with "-D", nor start with "-X", nor start with "-agentlib" since they are reserved keywords
@@ -149,7 +151,7 @@ public class Flexo {
 			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
 		}
 		if (!noSplash) {
-			new SplashWindow(ToolBox.getFrame(null), userTypeNamed, 10000);
+			new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed, 10000);
 		}
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
@@ -184,7 +186,12 @@ public class Flexo {
 			 */
 			@Override
 			public void run() {
-				ModuleLoader.initializeModules(UserType.getUserTypeNamed(userTypeName2), true);
+				ModuleLoader.initializeModules(UserType.getUserTypeNamed(userTypeName2)/*, true*/);
+				if (ModuleLoader.fileNameToOpen == null) {
+					ModuleLoader.showWelcomeDialog();
+				} else {
+					ModuleLoader.loadProject(new File(ModuleLoader.fileNameToOpen));
+				}
 			}
 		});
 	}
@@ -380,7 +387,8 @@ public class Flexo {
 		try {
 			FlexoLoggingManager.initialize();
 		} catch (SecurityException e) {
-			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file") + "\nIt seems the file has read access protection.");
+			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file")
+					+ "\nIt seems the file has read access protection.");
 			e.printStackTrace();
 		} catch (IOException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file"));

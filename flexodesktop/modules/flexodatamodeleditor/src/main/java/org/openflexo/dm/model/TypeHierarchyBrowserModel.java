@@ -37,187 +37,164 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoProject;
 
+public class TypeHierarchyBrowserModel extends TabularBrowserModel {
 
-public class TypeHierarchyBrowserModel extends TabularBrowserModel
-{
+	protected static final Logger logger = Logger.getLogger(TypeHierarchyBrowserModel.class.getPackage().getName());
 
-    protected static final Logger logger = Logger.getLogger(TypeHierarchyBrowserModel.class.getPackage().getName());
-
-    public TypeHierarchyBrowserModel(DMEntity entity)
-    {
-        super(makeBrowserConfiguration(entity)," ",300); 
-        addToColumns(new StringColumn("package",250) {
-             @Override
+	public TypeHierarchyBrowserModel(DMEntity entity) {
+		super(makeBrowserConfiguration(entity), " ", 300);
+		addToColumns(new StringColumn("package", 250) {
+			@Override
 			public String getValue(FlexoModelObject object) {
-                if (object instanceof DMEntity) {
-                    return ((DMEntity)object).getPackage().getLocalizedName();
-                }
-                return null;
-           }
-        });
-        addToColumns(new EditableStringColumn<FlexoModelObject>("description",300) {
-            @Override
+				if (object instanceof DMEntity) {
+					return ((DMEntity) object).getPackage().getLocalizedName();
+				}
+				return null;
+			}
+		});
+		addToColumns(new EditableStringColumn<FlexoModelObject>("description", 300) {
+			@Override
 			public void setValue(FlexoModelObject object, String aValue) {
-                if (object instanceof DMEntity) {
-                    ((DMEntity)object).setDescription(aValue);
-                }
-              }
-             @Override
+				if (object instanceof DMEntity) {
+					((DMEntity) object).setDescription(aValue);
+				}
+			}
+
+			@Override
 			public String getValue(FlexoModelObject object) {
-                 if (object instanceof DMEntity) {
-                     return ((DMEntity)object).getDescription();
-                 }
-                 return null;
-            }
-         });
-         setRowHeight(20);
-         focusOn(entity);
-    }
-   
-    private static BrowserConfiguration makeBrowserConfiguration(final DMEntity entity)
-    {
-        BrowserConfiguration returned = new TypeHierarchyBrowserConfiguration(entity);
-        return returned;
-    }
-    
-    private static class TypeHierarchyBrowserConfiguration implements BrowserConfiguration
-    {
-        private DMEntity _entity;
-        private Vector<DMEntity> _parentEntities;
-        private TypeHierarchyBrowserElementFactory _factory;
-        private DMEntity _topLevelEntity;
-       
-        protected TypeHierarchyBrowserConfiguration(DMEntity entity)
-        {
-            super();
-            _entity = entity;
-            _parentEntities = new Vector<DMEntity>();
-            _parentEntities.add(_entity);
-            DMEntity current = _entity;
-            while (current.getParentBaseEntity() != null) {
-                _parentEntities.add(current.getParentBaseEntity());
-                current = current.getParentBaseEntity();
-            }
-            _topLevelEntity = current;
-            _factory = new TypeHierarchyBrowserElementFactory();
-         }
-        
-        protected DMEntity getEntity()
-        {
-            return _entity;
-        }
-        
-        protected Vector getParentEntities()
-        {
-            return _parentEntities;
-        }
-        
-        @Override
-		public FlexoProject getProject() 
-        {
-            return _entity.getProject();
-        }
+				if (object instanceof DMEntity) {
+					return ((DMEntity) object).getDescription();
+				}
+				return null;
+			}
+		});
+		setRowHeight(20);
+		focusOn(entity);
+	}
 
-        @Override
-		public void configure(ProjectBrowser browser) 
-        {
-        }
+	private static BrowserConfiguration makeBrowserConfiguration(final DMEntity entity) {
+		BrowserConfiguration returned = new TypeHierarchyBrowserConfiguration(entity);
+		return returned;
+	}
 
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-        	return _topLevelEntity;
-            //return getProject().getDataModel().getDMEntity(Object.class);
-        }
+	private static class TypeHierarchyBrowserConfiguration implements BrowserConfiguration {
+		private DMEntity _entity;
+		private Vector<DMEntity> _parentEntities;
+		private TypeHierarchyBrowserElementFactory _factory;
+		private DMEntity _topLevelEntity;
 
-        @Override
-		public BrowserElementFactory getBrowserElementFactory()
-        {
-            return _factory; 
-        }
+		protected TypeHierarchyBrowserConfiguration(DMEntity entity) {
+			super();
+			_entity = entity;
+			_parentEntities = new Vector<DMEntity>();
+			_parentEntities.add(_entity);
+			DMEntity current = _entity;
+			while (current.getParentBaseEntity() != null) {
+				_parentEntities.add(current.getParentBaseEntity());
+				current = current.getParentBaseEntity();
+			}
+			_topLevelEntity = current;
+			_factory = new TypeHierarchyBrowserElementFactory();
+		}
 
-        private class TypeHierarchyBrowserElementFactory implements BrowserElementFactory
-        {
-        	
-        	
-            TypeHierarchyBrowserElementFactory() {
+		protected DMEntity getEntity() {
+			return _entity;
+		}
+
+		protected Vector getParentEntities() {
+			return _parentEntities;
+		}
+
+		@Override
+		public FlexoProject getProject() {
+			return _entity.getProject();
+		}
+
+		@Override
+		public void configure(ProjectBrowser browser) {
+		}
+
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			return _topLevelEntity;
+			// return getProject().getDataModel().getDMEntity(Object.class);
+		}
+
+		@Override
+		public BrowserElementFactory getBrowserElementFactory() {
+			return _factory;
+		}
+
+		private class TypeHierarchyBrowserElementFactory implements BrowserElementFactory {
+
+			TypeHierarchyBrowserElementFactory() {
 				super();
 			}
 
 			@Override
-			public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-            {
-                if (object instanceof DMEOEntity) {
-                    return new THDMEOEntityElement((DMEOEntity)object,browser,parent);
-                }
-                else if (object instanceof DMEntity) {
-                    return new THDMEntityElement((DMEntity)object,browser,parent);
-                }
-                return null;
-            }
-            
-            private class THDMEntityElement extends DMEntityElement
-            {
-                public THDMEntityElement(DMEntity entity, ProjectBrowser browser, BrowserElement parent)
-                {
-                    super(entity, browser,parent);
-                }
-                
-                @Override
-				protected void buildChildrenVector()
-                {
-                    //logger.info("Build children for "+getDMEntity());
-                    for (Enumeration e = getDMEntity().getChildEntities().elements(); e.hasMoreElements();) {
-                        DMEntity next = (DMEntity) e.nextElement();
-                        //logger.info("Identify "+next+" as children for "+getDMEntity());
-                        TabularBrowserModel myBrowser = (TabularBrowserModel)_browser;
-                        TypeHierarchyBrowserConfiguration configuration = (TypeHierarchyBrowserConfiguration)myBrowser.getConfiguration();
-                        //logger.info("configuration="+configuration);
-                         if (next.isAncestorOf(configuration.getEntity())) {
-                            //logger.info("Anscestor "+next+"_parentEntities="+configuration.getParentEntities());
-                            if (configuration.getParentEntities().contains(next)) {
-                                addToChilds(next);                                
-                            }
-                        }
-                        else if (configuration.getEntity().isAncestorOf(next)) {
-                            addToChilds(next);                                                           
-                        }
-                    }
-                }
+			public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+				if (object instanceof DMEOEntity) {
+					return new THDMEOEntityElement((DMEOEntity) object, browser, parent);
+				} else if (object instanceof DMEntity) {
+					return new THDMEntityElement((DMEntity) object, browser, parent);
+				}
+				return null;
+			}
 
-            }
+			private class THDMEntityElement extends DMEntityElement {
+				public THDMEntityElement(DMEntity entity, ProjectBrowser browser, BrowserElement parent) {
+					super(entity, browser, parent);
+				}
 
-            private class THDMEOEntityElement extends DMEOEntityElement
-            {
-                public THDMEOEntityElement(DMEOEntity entity, ProjectBrowser browser, BrowserElement parent)
-                {
-                    super(entity, browser,parent);
-                }
+				@Override
+				protected void buildChildrenVector() {
+					// logger.info("Build children for "+getDMEntity());
+					for (Enumeration e = getDMEntity().getChildEntities().elements(); e.hasMoreElements();) {
+						DMEntity next = (DMEntity) e.nextElement();
+						// logger.info("Identify "+next+" as children for "+getDMEntity());
+						TabularBrowserModel myBrowser = (TabularBrowserModel) _browser;
+						TypeHierarchyBrowserConfiguration configuration = (TypeHierarchyBrowserConfiguration) myBrowser.getConfiguration();
+						// logger.info("configuration="+configuration);
+						if (next.isAncestorOf(configuration.getEntity())) {
+							// logger.info("Anscestor "+next+"_parentEntities="+configuration.getParentEntities());
+							if (configuration.getParentEntities().contains(next)) {
+								addToChilds(next);
+							}
+						} else if (configuration.getEntity().isAncestorOf(next)) {
+							addToChilds(next);
+						}
+					}
+				}
 
-                @Override
-				protected void buildChildrenVector()
-                {
-                    //logger.info("Build children for "+getDMEntity());
-                    for (Enumeration e = getDMEntity().getChildEntities().elements(); e.hasMoreElements();) {
-                        DMEntity next = (DMEntity) e.nextElement();
-                        //logger.info("Identify "+next+" as children for "+getDMEntity());
-                        TabularBrowserModel myBrowser = (TabularBrowserModel)_browser;
-                        TypeHierarchyBrowserConfiguration configuration = (TypeHierarchyBrowserConfiguration)myBrowser.getConfiguration();
-                        //logger.info("configuration="+configuration);
-                         if (next.isAncestorOf(configuration.getEntity())) {
-                            //logger.info("Anscestor "+next+"_parentEntities="+configuration.getParentEntities());
-                            if (configuration.getParentEntities().contains(next)) {
-                                addToChilds(next);                                
-                            }
-                        }
-                        else if (configuration.getEntity().isAncestorOf(next)) {
-                            addToChilds(next);                                                           
-                        }
-                    }
-                }
+			}
 
-            }
-}
-    }
-    
+			private class THDMEOEntityElement extends DMEOEntityElement {
+				public THDMEOEntityElement(DMEOEntity entity, ProjectBrowser browser, BrowserElement parent) {
+					super(entity, browser, parent);
+				}
+
+				@Override
+				protected void buildChildrenVector() {
+					// logger.info("Build children for "+getDMEntity());
+					for (Enumeration e = getDMEntity().getChildEntities().elements(); e.hasMoreElements();) {
+						DMEntity next = (DMEntity) e.nextElement();
+						// logger.info("Identify "+next+" as children for "+getDMEntity());
+						TabularBrowserModel myBrowser = (TabularBrowserModel) _browser;
+						TypeHierarchyBrowserConfiguration configuration = (TypeHierarchyBrowserConfiguration) myBrowser.getConfiguration();
+						// logger.info("configuration="+configuration);
+						if (next.isAncestorOf(configuration.getEntity())) {
+							// logger.info("Anscestor "+next+"_parentEntities="+configuration.getParentEntities());
+							if (configuration.getParentEntities().contains(next)) {
+								addToChilds(next);
+							}
+						} else if (configuration.getEntity().isAncestorOf(next)) {
+							addToChilds(next);
+						}
+					}
+				}
+
+			}
+		}
+	}
+
 }

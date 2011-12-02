@@ -28,72 +28,67 @@ import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.controller.OEController;
 
-
 /**
  * Contains preferences for this module
  * 
  * @author yourname
  * 
  */
-public final class VEPreferences extends ModulePreferences
-{
-    
-    private static final Logger logger = Logger.getLogger(VEPreferences.class.getPackage().getName());
-    
-    private static final Class OE_PREFERENCES = VEPreferences.class;
-    
+public final class VEPreferences extends ModulePreferences {
+
+	private static final Logger logger = Logger.getLogger(VEPreferences.class.getPackage().getName());
+
+	private static final Class OE_PREFERENCES = VEPreferences.class;
+
 	protected static final String SCREENSHOT_QUALITY = "screenshotQuality";
 
-   protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
-    
-    private static OEController _controller;
-    
-    public static void init(OEController controller)
-    {
-        _controller = controller;
-        preferences(OE_PREFERENCES);
-    }
-    
-    public VEPreferences()
-    {
-        super(Module.VE_MODULE);
-    }
-    
-    @Override
-	public File getInspectorFile()
-    {
-        return new FileResource("Config" + File.separator + "Preferences" + File.separator + "OEPrefs.inspector");
-    }
-    
-    public static Boolean getExamplePrefValue()
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("getExamplePrefValue");
-        Boolean value = preferences(OE_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
-        if (value == null) {
-            setExamplePrefValue(Boolean.FALSE);
-            return getExamplePrefValue();
-        }
-        return value;
-    }
-    
-    public static void setExamplePrefValue(Boolean alignOnGrid)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("setExamplePrefValue");
-        preferences(OE_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
-    }
-    
-    public static int getScreenshotQuality(){
-        Integer limit = preferences(OE_PREFERENCES).getIntegerProperty(SCREENSHOT_QUALITY);
-        if(limit==null)limit=100;
-        return limit;
-    }
+	protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
 
-    public static void setScreenshotQuality(int limit) {
-        preferences(OE_PREFERENCES).setIntegerProperty(SCREENSHOT_QUALITY, limit);
-    }
+	private static OEController _controller;
 
+	public static void init(OEController controller) {
+		_controller = controller;
+		preferences(OE_PREFERENCES);
+	}
 
-    
+	public VEPreferences() {
+		super(Module.VE_MODULE);
+	}
+
+	@Override
+	public File getInspectorFile() {
+		return new FileResource("Config" + File.separator + "Preferences" + File.separator + "OEPrefs.inspector");
+	}
+
+	public static Boolean getExamplePrefValue() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("getExamplePrefValue");
+		}
+		Boolean value = preferences(OE_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
+		if (value == null) {
+			setExamplePrefValue(Boolean.FALSE);
+			return getExamplePrefValue();
+		}
+		return value;
+	}
+
+	public static void setExamplePrefValue(Boolean alignOnGrid) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("setExamplePrefValue");
+		}
+		preferences(OE_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
+	}
+
+	public static int getScreenshotQuality() {
+		Integer limit = preferences(OE_PREFERENCES).getIntegerProperty(SCREENSHOT_QUALITY);
+		if (limit == null) {
+			limit = 100;
+		}
+		return limit;
+	}
+
+	public static void setScreenshotQuality(int limit) {
+		preferences(OE_PREFERENCES).setIntegerProperty(SCREENSHOT_QUALITY, limit);
+	}
+
 }

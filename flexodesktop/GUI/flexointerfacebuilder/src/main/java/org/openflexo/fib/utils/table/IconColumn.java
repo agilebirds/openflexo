@@ -33,89 +33,80 @@ import javax.swing.table.TableCellRenderer;
  * @author sguerin
  * 
  */
-public abstract class IconColumn<D extends Observable> extends AbstractColumn<D,Icon>
-{
+public abstract class IconColumn<D extends Observable> extends AbstractColumn<D, Icon> {
 
-    public IconColumn(String title, int defaultWidth)
-    {
-        super(title, defaultWidth, false);
-    }
+	public IconColumn(String title, int defaultWidth) {
+		super(title, defaultWidth, false);
+	}
 
-    @Override
-	public String getLocalizedTitle()
-    {
-        return " ";
-    }
+	@Override
+	public String getLocalizedTitle() {
+		return " ";
+	}
 
-    @Override
-	public Class getValueClass()
-    {
-        return Icon.class;
-    }
+	@Override
+	public Class getValueClass() {
+		return Icon.class;
+	}
 
-    @Override
-	public Icon getValueFor(D object)
-    {
-        return getIcon(object);
-    }
+	@Override
+	public Icon getValueFor(D object) {
+		return getIcon(object);
+	}
 
-    public abstract Icon getIcon(D object);
+	public abstract Icon getIcon(D object);
 
-    @Override
-	public String toString()
-    {
-        return "IconColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
-    }
+	@Override
+	public String toString() {
+		return "IconColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
+	}
 
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    @Override
-	public TableCellRenderer getCellRenderer()
-    {
-        if (_iconTableCellRenderer == null) {
-            _iconTableCellRenderer = new IconCellRenderer();
-            _iconTableCellRenderer.setToolTipText(getLocalizedTooltip());
-        }
-        return _iconTableCellRenderer;
-    }
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		if (_iconTableCellRenderer == null) {
+			_iconTableCellRenderer = new IconCellRenderer();
+			_iconTableCellRenderer.setToolTipText(getLocalizedTooltip());
+		}
+		return _iconTableCellRenderer;
+	}
 
-    private TabularViewCellRenderer _iconTableCellRenderer;
+	private TabularViewCellRenderer _iconTableCellRenderer;
 
-    private class IconCellRenderer extends TabularViewCellRenderer
-    {
-    	IconCellRenderer() {
+	private class IconCellRenderer extends TabularViewCellRenderer {
+		IconCellRenderer() {
 			super();
 		}
-        /**
-         * 
-         * Returns the cell renderer.
-         * 
-         * @param table
-         *            the <code>JTable</code>
-         * @param value
-         *            the value to assign to the cell at
-         *            <code>[row, column]</code>
-         * @param isSelected
-         *            true if cell is selected
-         * @param hasFocus
-         *            true if cell has focus
-         * @param row
-         *            the row of the cell to render
-         * @param column
-         *            the column of the cell to render
-         * @return the default table cell renderer
-         */
-        @Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-        {
-            Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            ((JLabel) returned).setText(null);
-            ((JLabel) returned).setIcon((Icon) value);
-            return returned;
-        }
-    }
+
+		/**
+		 * 
+		 * Returns the cell renderer.
+		 * 
+		 * @param table
+		 *            the <code>JTable</code>
+		 * @param value
+		 *            the value to assign to the cell at <code>[row, column]</code>
+		 * @param isSelected
+		 *            true if cell is selected
+		 * @param hasFocus
+		 *            true if cell has focus
+		 * @param row
+		 *            the row of the cell to render
+		 * @param column
+		 *            the column of the cell to render
+		 * @return the default table cell renderer
+		 */
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			((JLabel) returned).setText(null);
+			((JLabel) returned).setIcon((Icon) value);
+			return returned;
+		}
+	}
 
 }

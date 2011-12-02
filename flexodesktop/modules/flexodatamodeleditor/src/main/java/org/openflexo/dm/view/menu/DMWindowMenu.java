@@ -29,25 +29,19 @@ import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.module.Module;
 import org.openflexo.view.menu.WindowMenu;
 
-
 /**
  * 'Window' menu for DME
  * 
  * @author sylvain
  */
-public class DMWindowMenu extends WindowMenu
-{
+public class DMWindowMenu extends WindowMenu {
 
+	protected DMController _controller;
 
-    protected DMController _controller;
-
-    public DMWindowMenu(DMController controller,Module module)
-    {
-        super(controller,Module.DM_MODULE);
-        _controller = controller;
-        paletteItem.setEnabled(false);
-    }
-
- 
+	public DMWindowMenu(DMController controller, Module module) {
+		super(controller, Module.DM_MODULE);
+		_controller = controller;
+		paletteItem.setEnabled(false);
+	}
 
 }

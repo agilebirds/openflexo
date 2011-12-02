@@ -35,14 +35,12 @@ import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.EmptyVector;
 
-
 /**
  * A Process folder is a set of process nodes that simply aggregates some process into a logical category
- *
+ * 
  * @author guillaume
  */
-public class ProcessFolder extends FlexoFolderContainerNode implements InspectableObject, Sortable
-{
+public class ProcessFolder extends FlexoFolderContainerNode implements InspectableObject, Sortable {
 	private static final Logger logger = Logger.getLogger(ProcessFolder.class.getPackage().getName());
 
 	private FlexoFolderContainerNode parent;
@@ -50,98 +48,97 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 	private Vector<FlexoProcessNode> processes;
 	private int index = -1;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public ProcessFolder (FlexoWorkflowBuilder builder)
-    {
-    	this(builder.workflow);
-    	initializeDeserialization(builder);
-    }
-
-    public ProcessFolder(FlexoWorkflow workflow)
-    {
-        super(workflow.getProject(), workflow);
-        processes = new Vector<FlexoProcessNode>();
-    }
-
-    public ProcessFolder(FlexoWorkflow workflow, FlexoFolderContainerNode parent) {
-    	this(workflow);
-    	parent.addToFolders(this);
+	public ProcessFolder(FlexoWorkflowBuilder builder) {
+		this(builder.workflow);
+		initializeDeserialization(builder);
 	}
 
-    @Override
-    public void delete() {
-    	super.delete();
-    	for(FlexoProcessNode node:new Vector<FlexoProcessNode>(getProcesses())) {
-    		if (getParent() instanceof ProcessFolder)
-    			((ProcessFolder)getParent()).addToProcesses(node);
-    		else
-    			node.removeParentFolder(this);
-    	}
-    	setParent(null);
-    	deleteObservers();
-    }
+	public ProcessFolder(FlexoWorkflow workflow) {
+		super(workflow.getProject(), workflow);
+		processes = new Vector<FlexoProcessNode>();
+	}
 
-    public FlexoFolderContainerNode getParent() {
+	public ProcessFolder(FlexoWorkflow workflow, FlexoFolderContainerNode parent) {
+		this(workflow);
+		parent.addToFolders(this);
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		for (FlexoProcessNode node : new Vector<FlexoProcessNode>(getProcesses())) {
+			if (getParent() instanceof ProcessFolder) {
+				((ProcessFolder) getParent()).addToProcesses(node);
+			} else {
+				node.removeParentFolder(this);
+			}
+		}
+		setParent(null);
+		deleteObservers();
+	}
+
+	public FlexoFolderContainerNode getParent() {
 		return parent;
 	}
 
-    public void setParent(FlexoFolderContainerNode parent) {
-    	if (this.parent==parent)
-    		return;
-    	if (this.parent!=null) {
-    		this.parent.removeFromFolders(this);
-    	}
+	public void setParent(FlexoFolderContainerNode parent) {
+		if (this.parent == parent) {
+			return;
+		}
+		if (this.parent != null) {
+			this.parent.removeFromFolders(this);
+		}
 		this.parent = parent;
-		if (this.parent!=null) {
+		if (this.parent != null) {
 			this.parent.addToFolders(this);
 		}
 	}
 
-    @Override
+	@Override
 	public String getInspectorName() {
-    	return Inspectors.WKF.PROCESS_FOLDER_INSPECTOR;
-    }
+		return Inspectors.WKF.PROCESS_FOLDER_INSPECTOR;
+	}
 
 	@Override
-    public String getFullyQualifiedName()
-    {
-        return "PROCESS_FOLDER."+getName();
-    }
+	public String getFullyQualifiedName() {
+		return "PROCESS_FOLDER." + getName();
+	}
 
-    public Vector<FlexoProcessNode> getProcesses() {
+	public Vector<FlexoProcessNode> getProcesses() {
 		return processes;
 	}
 
-    public void setProcesses(Vector<FlexoProcessNode> processes) {
+	public void setProcesses(Vector<FlexoProcessNode> processes) {
 		this.processes = processes;
 	}
 
-    public void addToProcesses(FlexoProcessNode process) {
-    	if(!processes.contains(process) && (process.getFatherProcessNode()==getProcessNode() || isDeserializing())) {
-    		if (process.getParentFolder()!=null) {
-    			process.getParentFolder().removeFromProcesses(process);
-    		}
-    		processes.add(process);
-    		process.addParentFolder(this);
-    		if (!isDeserializing()) {
-	    		setChanged();
-	    		notifyObservers(new ProcessAddedToFolder(process));
-	    		if (getProcessNode()!=null) {
-	    			getProcessNode().setChanged();
-	    			getProcessNode().notifyObservers(new ProcessAddedToFolder(process));
-	    		}
-    		}
-    	}
-    }
+	public void addToProcesses(FlexoProcessNode process) {
+		if (!processes.contains(process) && (process.getFatherProcessNode() == getProcessNode() || isDeserializing())) {
+			if (process.getParentFolder() != null) {
+				process.getParentFolder().removeFromProcesses(process);
+			}
+			processes.add(process);
+			process.addParentFolder(this);
+			if (!isDeserializing()) {
+				setChanged();
+				notifyObservers(new ProcessAddedToFolder(process));
+				if (getProcessNode() != null) {
+					getProcessNode().setChanged();
+					getProcessNode().notifyObservers(new ProcessAddedToFolder(process));
+				}
+			}
+		}
+	}
 
-    public void removeFromProcesses(FlexoProcessNode process) {
-    	if (processes.contains(process)) {
-    		processes.remove(process);
-    		process.removeParentFolder(this);
+	public void removeFromProcesses(FlexoProcessNode process) {
+		if (processes.contains(process)) {
+			processes.remove(process);
+			process.removeParentFolder(this);
 			if (!isDeserializing()) {
 				setChanged();
 				notifyObservers(new ProcessRemovedFromFolder(process));
@@ -149,9 +146,9 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 					getProcessNode().setChanged();
 					getProcessNode().notifyObservers(new ProcessRemovedFromFolder(process));
 				}
-    		}
-    	}
-    }
+			}
+		}
+	}
 
 	@Override
 	public Vector<Validable> getAllEmbeddedValidableObjects() {
@@ -163,12 +160,12 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 		return "process_folder";
 	}
 
-    @Override
-	public int getIndex()
-	{
-		if (isBeingCloned())
+	@Override
+	public int getIndex() {
+		if (isBeingCloned()) {
 			return -1;
-		if (index==-1 && getCollection()!=null) {
+		}
+		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
@@ -176,8 +173,7 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 	}
 
 	@Override
-	public void setIndex(int index)
-	{
+	public void setIndex(int index) {
 		if (isDeserializing() || isCreatedByCloning()) {
 			setIndexValue(index);
 			return;
@@ -192,16 +188,15 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 	}
 
 	@Override
-	public int getIndexValue()
-	{
+	public int getIndexValue() {
 		return index;
 	}
 
 	@Override
-	public void setIndexValue(int index)
-	{
-		if (this.index==index)
-			 return;
+	public void setIndexValue(int index) {
+		if (this.index == index) {
+			return;
+		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
@@ -214,68 +209,77 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 
 	/**
 	 * Overrides getCollection
+	 * 
 	 * @see org.openflexo.foundation.utils.Sortable#getCollection()
 	 */
 	@Override
-	public ProcessFolder[] getCollection()
-	{
+	public ProcessFolder[] getCollection() {
 		return getParent().getFolders().toArray(new ProcessFolder[0]);
 	}
 
 	public void setIndexForProcess(int index, FlexoProcessNode node) {
-		if (processes.indexOf(node)>-1) {
-			index = Math.min(processes.size()-1,index);
-			if(index < 0)
+		if (processes.indexOf(node) > -1) {
+			index = Math.min(processes.size() - 1, index);
+			if (index < 0) {
 				index = 0;
+			}
 			processes.remove(node);
 			processes.insertElementAt(node, index);
 			setChanged();
 			notifyObservers(new ChildrenOrderChanged());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set index for a process which is not in this folder");
+			}
 		}
 	}
 
 	@Override
 	public FlexoProcessNode getProcessNode() {
-		if (getParent() instanceof ProcessFolder)
+		if (getParent() instanceof ProcessFolder) {
 			return getParent().getProcessNode();
-		if (getParent() instanceof FlexoProcessNode)
+		}
+		if (getParent() instanceof FlexoProcessNode) {
 			return (FlexoProcessNode) getParent();
-		else {
-			if (logger.isLoggable(Level.WARNING))
-				logger.warning("No parent for process folder "+getName());
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("No parent for process folder " + getName());
+			}
 			return null;
 		}
 	}
 
 	public Vector<FlexoProcessNode> getAllDirectSubProcessNodes() {
 		Vector<FlexoProcessNode> nodes = new Vector<FlexoProcessNode>(processes);
-		for (ProcessFolder folder: getFolders()) {
+		for (ProcessFolder folder : getFolders()) {
 			nodes.addAll(folder.getAllDirectSubProcessNodes());
 		}
 		return nodes;
 	}
 
-    public boolean isAcceptableParentFolder(ProcessFolder parent) {
-    	if (parent==null || parent.getProcessNode()==null)
-    		return false;
-    	ProcessFolder current = parent;
-    	while (current!=null) {
-    		if (current==this) {
-    			return false;
-    		}
-    		if (current.getParent() instanceof ProcessFolder)
-    			current = (ProcessFolder) current.getParent();
-    		else
-    			break;
-    	}
-    	if (getProcessNode()!=parent.getProcessNode())
-    		for(FlexoProcessNode node:getAllDirectSubProcessNodes())
-    			if (node.getProcess().isAcceptableAsParentProcess(parent.getProcessNode().getProcess()))
-    				return false;
-    	return true;
-    }
+	public boolean isAcceptableParentFolder(ProcessFolder parent) {
+		if (parent == null || parent.getProcessNode() == null) {
+			return false;
+		}
+		ProcessFolder current = parent;
+		while (current != null) {
+			if (current == this) {
+				return false;
+			}
+			if (current.getParent() instanceof ProcessFolder) {
+				current = (ProcessFolder) current.getParent();
+			} else {
+				break;
+			}
+		}
+		if (getProcessNode() != parent.getProcessNode()) {
+			for (FlexoProcessNode node : getAllDirectSubProcessNodes()) {
+				if (node.getProcess().isAcceptableAsParentProcess(parent.getProcessNode().getProcess())) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 }

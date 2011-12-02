@@ -21,14 +21,15 @@ package org.netbeans.lib.cvsclient.command;
 
 /**
  * This exception is thrown when a command is aborted during execution
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 public class CommandAbortedException extends CommandException {
-    /**
-     * Creates new CommandAbortedException.
-     */
-    public CommandAbortedException(String message, String localizedMessage) {
-        super(message, localizedMessage);
-    }
+	/**
+	 * Creates new CommandAbortedException.
+	 */
+	public CommandAbortedException(String message, String localizedMessage) {
+		super(message, localizedMessage);
+	}
 
 }

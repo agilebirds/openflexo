@@ -31,124 +31,119 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
  * @author bmangez
- * @deprecated
- * <B>Class Description</B>
+ * @deprecated <B>Class Description</B>
  */
 @Deprecated
-public final class SingleWidgetComponent extends IEPartialComponent implements DataFlexoObserver
-{
+public final class SingleWidgetComponent extends IEPartialComponent implements DataFlexoObserver {
 
-    private static final Logger logger = Logger.getLogger(IETabComponent.class.getPackage()
-            .getName());
+	private static final Logger logger = Logger.getLogger(IETabComponent.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    private IEWidget _rootWidget;
+	private IEWidget _rootWidget;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor invoked during deserialization for IEThumbnailComponent
-     * 
-     * @param componentDefinition
-     */
-    public SingleWidgetComponent(FlexoComponentBuilder builder)
-    {
-        super(builder);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor invoked during deserialization for IEThumbnailComponent
+	 * 
+	 * @param componentDefinition
+	 */
+	public SingleWidgetComponent(FlexoComponentBuilder builder) {
+		super(builder);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor for IEThumbnailComponent
-     * 
-     * @param componentDefinition
-     * @deprecated
-     */
-    @Deprecated
-	public SingleWidgetComponent(ComponentDefinition componentDefinition, FlexoProject prj)
-    {
-        super(componentDefinition, prj);
-    }
+	/**
+	 * Default constructor for IEThumbnailComponent
+	 * 
+	 * @param componentDefinition
+	 * @deprecated
+	 */
+	@Deprecated
+	public SingleWidgetComponent(ComponentDefinition componentDefinition, FlexoProject prj) {
+		super(componentDefinition, prj);
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return null;
-    }
+	@Override
+	public String getInspectorName() {
+		return null;
+	}
 
-    public IEWidget getRootWidget()
-    {
-        if (!isDeserializing() && _rootWidget==null) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Reusable component "+getComponentDefinition().getComponentName()+" has no root widget defined-->this component will be deleted");
-            getFlexoResource().delete();
-        }
-        return _rootWidget;
-    }
+	public IEWidget getRootWidget() {
+		if (!isDeserializing() && _rootWidget == null) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Reusable component " + getComponentDefinition().getComponentName()
+						+ " has no root widget defined-->this component will be deleted");
+			}
+			getFlexoResource().delete();
+		}
+		return _rootWidget;
+	}
 
-    public void setRootWidget(IEWidget widget)
-    {
-        _rootWidget = widget;
-        _rootWidget.setWOComponent(this);
-        _rootWidget.setParent(this);
-    }
+	public void setRootWidget(IEWidget widget) {
+		_rootWidget = widget;
+		_rootWidget.setWOComponent(this);
+		_rootWidget.setParent(this);
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        Vector answer = super.getEmbeddedIEObjects();
-        Object o = getRootWidget();
-        if (o != null)
-            answer.add(o);
-        return answer;
-    }
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		Vector answer = super.getEmbeddedIEObjects();
+		Object o = getRootWidget();
+		if (o != null) {
+			answer.add(o);
+		}
+		return answer;
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "ReusableComponent:" + getName();
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "single_widget_component";
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "ReusableComponent:" + getName();
+	}
 
-    public HTMLListDescriptorCollection getAllHTMLTableList(){
-    	HTMLListDescriptorCollection v = new HTMLListDescriptorCollection();
-        
-       if (getRootWidget() instanceof IEBlocWidget) {
-    	   IEBlocWidget w = (IEBlocWidget) getRootWidget();
-    	   HTMLListDescriptor d = HTMLListDescriptor.createInstanceForBloc(w);
-    	   if (d != null) v.add(d);
-       }
-        
-        return v;
-    }
-    
-    @Override
-	public Vector<IESequenceTab> getAllTabContainers(){
-    	if(getRootWidget() instanceof IETopComponent)return ((IETopComponent)getRootWidget()).getAllTabContainers();
-    	return new Vector<IESequenceTab>();
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "single_widget_component";
+	}
+
+	public HTMLListDescriptorCollection getAllHTMLTableList() {
+		HTMLListDescriptorCollection v = new HTMLListDescriptorCollection();
+
+		if (getRootWidget() instanceof IEBlocWidget) {
+			IEBlocWidget w = (IEBlocWidget) getRootWidget();
+			HTMLListDescriptor d = HTMLListDescriptor.createInstanceForBloc(w);
+			if (d != null) {
+				v.add(d);
+			}
+		}
+
+		return v;
+	}
+
+	@Override
+	public Vector<IESequenceTab> getAllTabContainers() {
+		if (getRootWidget() instanceof IETopComponent) {
+			return ((IETopComponent) getRootWidget()).getAllTabContainers();
+		}
+		return new Vector<IESequenceTab>();
+	}
 }

@@ -22,7 +22,6 @@ package org.openflexo.foundation.dm;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.dm.DMObject.DataModelObjectNameMustBeValid.CleanDataModelObjectName;
@@ -48,490 +47,499 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public class WORepository extends DMRepository
-{
+public class WORepository extends DMRepository {
 
-    private static final Logger logger = Logger.getLogger(WORepository.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WORepository.class.getPackage().getName());
 
-    private static final String WO_APPSERVER_PACKAGE_NAME = "com.webobjects.appserver";
+	private static final String WO_APPSERVER_PACKAGE_NAME = "com.webobjects.appserver";
 
-    private static final String WO_APPLICATION_CLASS_NAME = "WOApplication";
-    private static final String WO_SESSION_CLASS_NAME = "WOSession";
-    private static final String WO_DIRECT_ACTION_CLASS_NAME = "WODirectAction";
-    private static final String WO_COMPONENT_CLASS_NAME = "WOComponent";
+	private static final String WO_APPLICATION_CLASS_NAME = "WOApplication";
+	private static final String WO_SESSION_CLASS_NAME = "WOSession";
+	private static final String WO_DIRECT_ACTION_CLASS_NAME = "WODirectAction";
+	private static final String WO_COMPONENT_CLASS_NAME = "WOComponent";
 
-    private DMEntity _applicationEntity;
-    private DMEntity _sessionEntity;
-    private DMEntity _directActionEntity;
-    private DMEntity _componentEntity;
+	private DMEntity _applicationEntity;
+	private DMEntity _sessionEntity;
+	private DMEntity _directActionEntity;
+	private DMEntity _componentEntity;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public WORepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public WORepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public WORepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Default constructor
+	 */
+	public WORepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getInternalRepositoryFolder();
-    }
-    
-   @Override
-public int getOrder()
-    {
-        return 2;
-    }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getInternalRepositoryFolder();
+	}
 
-    @Override
-	public String getName()
-    {
-        return "wo_repository";
-    }
+	@Override
+	public int getOrder() {
+		return 2;
+	}
 
-    @Override
-	public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	@Override
+	public String getName() {
+		return "wo_repository";
+	}
 
-    @Override
-	public void setName(String name)
-    {
-        // Not allowed
-    }
+	@Override
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
 
-    /**
-     * @param dmModel
-     * @return
-     */
-    public static WORepository createNewWORepository(DMModel dmModel)
-    {
-        WORepository newWORepository = new WORepository(dmModel);
-        dmModel.setWORepository(newWORepository);
-        /*createApplicationEntity(newWORepository);
-        createSessionEntity(newWORepository);
-        createComponentEntity(newWORepository);
-        createDirectActionEntity(newWORepository);*/
-        newWORepository.initCustomEntities();
-        return newWORepository;
-    }
+	@Override
+	public void setName(String name) {
+		// Not allowed
+	}
 
-    public void convertFromVersion_2_0 ()
-    {
-    	initCustomEntities();
-    }
-    
-    public void convertFromVersion_2_3_prelude ()
-    {
-    	DMEntity applicationEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_APPLICATION_CLASS_NAME);
-    	if (applicationEntityToRemove != null) applicationEntityToRemove.delete();
-      	DMEntity componentEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_COMPONENT_CLASS_NAME);
-    	if (componentEntityToRemove != null) componentEntityToRemove.delete();
-      	DMEntity directActionEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_DIRECT_ACTION_CLASS_NAME);
-    	if (directActionEntityToRemove != null) directActionEntityToRemove.delete();
-      	DMEntity sessionEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_SESSION_CLASS_NAME);
-    	if (sessionEntityToRemove != null) sessionEntityToRemove.delete();
-     }
-    
-    public void convertFromVersion_2_3_postlude ()
-    {
-    	initCustomEntities();
-         if (isDenaliCoreAvailable()){
-            if (getCustomApplicationEntity()!=null) getCustomApplicationEntity().setParentType(DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLApplication")), true);
-            if (getCustomSessionEntity()!=null) getCustomSessionEntity().setParentType(DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.DLSession")), true);
-            if (getCustomDirectActionEntity()!=null) getCustomDirectActionEntity().setParentType(DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLDirectAction")), true);
-            if (getCustomComponentEntity()!=null) getCustomComponentEntity().setParentType(DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLComponent")), true);
-        }
-        else if (isWebObjectsAvailable()){
-        	if (getCustomApplicationEntity()!=null) getCustomApplicationEntity().setParentType(DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WOApplication")), true);
-        	if (getCustomSessionEntity()!=null) getCustomSessionEntity().setParentType(DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WOSession")), true);
-        	if (getCustomDirectActionEntity()!=null) getCustomDirectActionEntity().setParentType(DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WODirectAction")), true);
-        	if (getCustomComponentEntity()!=null) getCustomComponentEntity().setParentType(DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WOComponent")), true);
-        } 
-    }
+	/**
+	 * @param dmModel
+	 * @return
+	 */
+	public static WORepository createNewWORepository(DMModel dmModel) {
+		WORepository newWORepository = new WORepository(dmModel);
+		dmModel.setWORepository(newWORepository);
+		/*createApplicationEntity(newWORepository);
+		createSessionEntity(newWORepository);
+		createComponentEntity(newWORepository);
+		createDirectActionEntity(newWORepository);*/
+		newWORepository.initCustomEntities();
+		return newWORepository;
+	}
 
-    private void initCustomEntities() 
-    {
-    	DMModel dmModel = getDMModel();
+	public void convertFromVersion_2_0() {
+		initCustomEntities();
+	}
 
-    	try {
-    		if (getCustomApplicationEntity() == null) {
-    			DMEntity applicationEntity = new DMEntity(dmModel, "Application", getDefaultPackage().getName(), "Application", null);
-    			registerEntity(applicationEntity);
-    			if (isDenaliCoreAvailable()){
-    				applicationEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.WDLApplication")), true);
-    			}
-    			else if (isWebObjectsAvailable()){
-    				applicationEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOApplication")), true);
-    			} 
-    			setCustomApplicationEntity(applicationEntity);  		
-    		}
+	public void convertFromVersion_2_3_prelude() {
+		DMEntity applicationEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_APPLICATION_CLASS_NAME);
+		if (applicationEntityToRemove != null) {
+			applicationEntityToRemove.delete();
+		}
+		DMEntity componentEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_COMPONENT_CLASS_NAME);
+		if (componentEntityToRemove != null) {
+			componentEntityToRemove.delete();
+		}
+		DMEntity directActionEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_DIRECT_ACTION_CLASS_NAME);
+		if (directActionEntityToRemove != null) {
+			directActionEntityToRemove.delete();
+		}
+		DMEntity sessionEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_SESSION_CLASS_NAME);
+		if (sessionEntityToRemove != null) {
+			sessionEntityToRemove.delete();
+		}
+	}
 
-    		if (getCustomDirectActionEntity() == null) {
-    			DMEntity directActionEntity = new DMEntity(dmModel, "DirectAction", getDefaultPackage().getName(), "DirectAction", null);
-    			registerEntity(directActionEntity);
-    			if (isDenaliCoreAvailable()){
-    				directActionEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.WDLDirectAction")), true);
-    			}
-    			else if (isWebObjectsAvailable()){
-    				directActionEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WODirectAction")), true);
-    			} 
-    			setCustomDirectActionEntity(directActionEntity);  		
-    		}
-
-    		if (getCustomSessionEntity() == null) {
-    			DMEntity sessionEntity = new DMEntity(dmModel, "Session", getDefaultPackage().getName(), "Session", null);
-    			registerEntity(sessionEntity);
-    			if (isDenaliCoreAvailable()){
-    				sessionEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.DLSession")), true);
-    			}
-    			else if (isWebObjectsAvailable()){
-    				sessionEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOSession")), true);
-    			} 
-    			setCustomSessionEntity(sessionEntity);
-    		}
-
-    		if (getCustomComponentEntity() == null) {
-    			String prefix = getProject().getPrefix()==null ? "Project" : getProject().getPrefix();
-    			createCustomComponentEntity(prefix+"Component");
-    		}
-
-    	}catch(Exception e){
-    		e.printStackTrace();
-    		if(logger.isLoggable(Level.WARNING))
-    			logger.warning("Exception while initializing custom base entities : "+e.getMessage());
-    	}
-
-    }
-    
-    @Override
-	public void finalizeDeserialization(Object builder)
-    {
-     	logger.fine("Finalizing WORepository deserialization");
-     	DMEntity componentEntity = getCustomComponentEntity();
-     	if (componentEntity != null) {
-        DMProperty session = componentEntity.getProperty("session");
-        if (session!=null && session.getGetterCode()!=null && session.getGetterCode().indexOf("return null")>-1) {
-            session.setIsSettable(false);
-            try {
-				session.getGetterSourceCode().setCode("public Session getSession() {"+StringUtils.LINE_SEPARATOR+"\t return (Session)session();"+StringUtils.LINE_SEPARATOR+"}");
-			} catch (ParserNotInstalledException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (DuplicateMethodSignatureException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public void convertFromVersion_2_3_postlude() {
+		initCustomEntities();
+		if (isDenaliCoreAvailable()) {
+			if (getCustomApplicationEntity() != null) {
+				getCustomApplicationEntity().setParentType(
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLApplication")), true);
 			}
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Fixing session property returning null");
-        }
-        DMProperty application = componentEntity.getProperty("application");
-        if (application!=null && application.getGetterCode()!=null && application.getGetterCode().indexOf("return null")>-1) {
-            application.setIsSettable(false);
-            try {
-				application.getGetterSourceCode().setCode("public Application getApplication() {"+StringUtils.LINE_SEPARATOR+"\t return (Application)application();"+StringUtils.LINE_SEPARATOR+"}");
-			} catch (ParserNotInstalledException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (DuplicateMethodSignatureException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (getCustomSessionEntity() != null) {
+				getCustomSessionEntity().setParentType(
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.DLSession")), true);
 			}
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Fixing application property returning null");
-        }
-     	}
-       	super.finalizeDeserialization(builder);
-    }
-     
-      
-
-    DMEntity createCustomComponentEntity (String name)
-    {
-       	DMModel dmModel = getDMModel();
-			DMEntity componentEntity = new DMEntity(dmModel, name, getDefaultPackage().getName(), name, null);
-			registerEntity(componentEntity);
-			if (isDenaliCoreAvailable()){
-				componentEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.WDLComponent")), true);
+			if (getCustomDirectActionEntity() != null) {
+				getCustomDirectActionEntity().setParentType(
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLDirectAction")), true);
 			}
-			else if (isWebObjectsAvailable()){
-				componentEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOComponent")), true);
-			} 
-			DMProperty sessionProperty = new DMProperty(dmModel, "session", DMType.makeResolvedDMType(getCustomSessionEntity()), DMCardinality.SINGLE,
-					true, false, DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY);
-			componentEntity.registerProperty(sessionProperty,false);
-			try {
-				sessionProperty.setGetterCode("public Session getSession() {"+StringUtils.LINE_SEPARATOR+"\t return (Session)session();"+StringUtils.LINE_SEPARATOR+"}");
-			} catch (ParserNotInstalledException e) {
-				e.printStackTrace();
-			} catch (DuplicateMethodSignatureException e) {
-				e.printStackTrace();
+			if (getCustomComponentEntity() != null) {
+				getCustomComponentEntity().setParentType(
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLComponent")), true);
 			}
-			DMProperty applicationProperty = new DMProperty(dmModel, "application", DMType.makeResolvedDMType(getCustomApplicationEntity()), DMCardinality.SINGLE,
-					true, false, DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY);
-			componentEntity.registerProperty(applicationProperty,false);
-			setCustomComponentEntity(componentEntity);
-            try {
-				applicationProperty.setGetterCode("public Application getApplication() {"+StringUtils.LINE_SEPARATOR+"\t return (Application)application();"+StringUtils.LINE_SEPARATOR+"}");
-			} catch (ParserNotInstalledException e) {
-				e.printStackTrace();
-			} catch (DuplicateMethodSignatureException e) {
-				e.printStackTrace();
+		} else if (isWebObjectsAvailable()) {
+			if (getCustomApplicationEntity() != null) {
+				getCustomApplicationEntity().setParentType(
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WOApplication")), true);
 			}
-            return componentEntity;
-    }
+			if (getCustomSessionEntity() != null) {
+				getCustomSessionEntity().setParentType(
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WOSession")), true);
+			}
+			if (getCustomDirectActionEntity() != null) {
+				getCustomDirectActionEntity().setParentType(
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WODirectAction")), true);
+			}
+			if (getCustomComponentEntity() != null) {
+				getCustomComponentEntity().setParentType(
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WOComponent")), true);
+			}
+		}
+	}
 
-    public boolean isDenaliCoreAvailable()
-    {
-    	return getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLComponent") != null;
-    }
+	private void initCustomEntities() {
+		DMModel dmModel = getDMModel();
 
-    public boolean isWebObjectsAvailable()
-    {
-    	return getDMModel().getEntityNamed("com.webobjects.appserver.WOApplication") != null;
-    }
-    
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getDMModel().getFullyQualifiedName() + ".WO";
-    }
+		try {
+			if (getCustomApplicationEntity() == null) {
+				DMEntity applicationEntity = new DMEntity(dmModel, "Application", getDefaultPackage().getName(), "Application", null);
+				registerEntity(applicationEntity);
+				if (isDenaliCoreAvailable()) {
+					applicationEntity.setParentType(
+							DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.WDLApplication")), true);
+				} else if (isWebObjectsAvailable()) {
+					applicationEntity.setParentType(
+							DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOApplication")), true);
+				}
+				setCustomApplicationEntity(applicationEntity);
+			}
 
-    @Override
-	public boolean isReadOnly()
-    {
-        return false;
-    }
+			if (getCustomDirectActionEntity() == null) {
+				DMEntity directActionEntity = new DMEntity(dmModel, "DirectAction", getDefaultPackage().getName(), "DirectAction", null);
+				registerEntity(directActionEntity);
+				if (isDenaliCoreAvailable()) {
+					directActionEntity.setParentType(
+							DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.WDLDirectAction")), true);
+				} else if (isWebObjectsAvailable()) {
+					directActionEntity.setParentType(
+							DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WODirectAction")), true);
+				}
+				setCustomDirectActionEntity(directActionEntity);
+			}
 
-    @Override
-	public boolean isDeletable()
-    {
-        return false;
-    }
+			if (getCustomSessionEntity() == null) {
+				DMEntity sessionEntity = new DMEntity(dmModel, "Session", getDefaultPackage().getName(), "Session", null);
+				registerEntity(sessionEntity);
+				if (isDenaliCoreAvailable()) {
+					sessionEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.DLSession")),
+							true);
+				} else if (isWebObjectsAvailable()) {
+					sessionEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOSession")),
+							true);
+				}
+				setCustomSessionEntity(sessionEntity);
+			}
 
+			if (getCustomComponentEntity() == null) {
+				String prefix = getProject().getPrefix() == null ? "Project" : getProject().getPrefix();
+				createCustomComponentEntity(prefix + "Component");
+			}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return getName();
-    }
-    
-    public DMEntity getCustomApplicationEntity() {
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception while initializing custom base entities : " + e.getMessage());
+			}
+		}
+
+	}
+
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		logger.fine("Finalizing WORepository deserialization");
+		DMEntity componentEntity = getCustomComponentEntity();
+		if (componentEntity != null) {
+			DMProperty session = componentEntity.getProperty("session");
+			if (session != null && session.getGetterCode() != null && session.getGetterCode().indexOf("return null") > -1) {
+				session.setIsSettable(false);
+				try {
+					session.getGetterSourceCode().setCode(
+							"public Session getSession() {" + StringUtils.LINE_SEPARATOR + "\t return (Session)session();"
+									+ StringUtils.LINE_SEPARATOR + "}");
+				} catch (ParserNotInstalledException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DuplicateMethodSignatureException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Fixing session property returning null");
+				}
+			}
+			DMProperty application = componentEntity.getProperty("application");
+			if (application != null && application.getGetterCode() != null && application.getGetterCode().indexOf("return null") > -1) {
+				application.setIsSettable(false);
+				try {
+					application.getGetterSourceCode().setCode(
+							"public Application getApplication() {" + StringUtils.LINE_SEPARATOR + "\t return (Application)application();"
+									+ StringUtils.LINE_SEPARATOR + "}");
+				} catch (ParserNotInstalledException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DuplicateMethodSignatureException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Fixing application property returning null");
+				}
+			}
+		}
+		super.finalizeDeserialization(builder);
+	}
+
+	DMEntity createCustomComponentEntity(String name) {
+		DMModel dmModel = getDMModel();
+		DMEntity componentEntity = new DMEntity(dmModel, name, getDefaultPackage().getName(), name, null);
+		registerEntity(componentEntity);
+		if (isDenaliCoreAvailable()) {
+			componentEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.WDLComponent")), true);
+		} else if (isWebObjectsAvailable()) {
+			componentEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOComponent")), true);
+		}
+		DMProperty sessionProperty = new DMProperty(dmModel, "session", DMType.makeResolvedDMType(getCustomSessionEntity()),
+				DMCardinality.SINGLE, true, false, DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY);
+		componentEntity.registerProperty(sessionProperty, false);
+		try {
+			sessionProperty.setGetterCode("public Session getSession() {" + StringUtils.LINE_SEPARATOR + "\t return (Session)session();"
+					+ StringUtils.LINE_SEPARATOR + "}");
+		} catch (ParserNotInstalledException e) {
+			e.printStackTrace();
+		} catch (DuplicateMethodSignatureException e) {
+			e.printStackTrace();
+		}
+		DMProperty applicationProperty = new DMProperty(dmModel, "application", DMType.makeResolvedDMType(getCustomApplicationEntity()),
+				DMCardinality.SINGLE, true, false, DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY);
+		componentEntity.registerProperty(applicationProperty, false);
+		setCustomComponentEntity(componentEntity);
+		try {
+			applicationProperty.setGetterCode("public Application getApplication() {" + StringUtils.LINE_SEPARATOR
+					+ "\t return (Application)application();" + StringUtils.LINE_SEPARATOR + "}");
+		} catch (ParserNotInstalledException e) {
+			e.printStackTrace();
+		} catch (DuplicateMethodSignatureException e) {
+			e.printStackTrace();
+		}
+		return componentEntity;
+	}
+
+	public boolean isDenaliCoreAvailable() {
+		return getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLComponent") != null;
+	}
+
+	public boolean isWebObjectsAvailable() {
+		return getDMModel().getEntityNamed("com.webobjects.appserver.WOApplication") != null;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getDMModel().getFullyQualifiedName() + ".WO";
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return false;
+	}
+
+	@Override
+	public boolean isDeletable() {
+		return false;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
+
+	public DMEntity getCustomApplicationEntity() {
 		return _applicationEntity;
 	}
 
-	public void setCustomApplicationEntity(DMEntity entity) 
-	{
+	public void setCustomApplicationEntity(DMEntity entity) {
 		DMEntity oldValue = _applicationEntity;
 		_applicationEntity = entity;
 		setChanged();
-		notifyObservers(new DMAttributeDataModification(CUSTOM_APPLICATION_ENTITY_KEY,oldValue,entity));
+		notifyObservers(new DMAttributeDataModification(CUSTOM_APPLICATION_ENTITY_KEY, oldValue, entity));
 	}
 
 	public DMEntity getCustomDirectActionEntity() {
 		return _directActionEntity;
 	}
 
-	public void setCustomDirectActionEntity(DMEntity actionEntity) 
-	{
+	public void setCustomDirectActionEntity(DMEntity actionEntity) {
 		DMEntity oldValue = _directActionEntity;
 		_directActionEntity = actionEntity;
 		setChanged();
-		notifyObservers(new DMAttributeDataModification(CUSTOM_DIRECT_ACTION_ENTITY_KEY,oldValue,actionEntity));
+		notifyObservers(new DMAttributeDataModification(CUSTOM_DIRECT_ACTION_ENTITY_KEY, oldValue, actionEntity));
 	}
 
 	public DMEntity getCustomSessionEntity() {
 		return _sessionEntity;
 	}
 
-	public void setCustomSessionEntity(DMEntity entity) 
-	{
+	public void setCustomSessionEntity(DMEntity entity) {
 		DMEntity oldValue = _sessionEntity;
 		_sessionEntity = entity;
 		setChanged();
-		notifyObservers(new DMAttributeDataModification(CUSTOM_SESSION_ENTITY_KEY,oldValue,entity));
+		notifyObservers(new DMAttributeDataModification(CUSTOM_SESSION_ENTITY_KEY, oldValue, entity));
 	}
-	
+
 	public DMEntity getCustomComponentEntity() {
 		return _componentEntity;
 	}
 
-	public void setCustomComponentEntity(DMEntity entity) 
-	{
+	public void setCustomComponentEntity(DMEntity entity) {
 		DMEntity oldValue = _componentEntity;
 		_componentEntity = entity;
 		setChanged();
-		notifyObservers(new DMAttributeDataModification(CUSTOM_COMPONENT_ENTITY_KEY,oldValue,entity));
+		notifyObservers(new DMAttributeDataModification(CUSTOM_COMPONENT_ENTITY_KEY, oldValue, entity));
 	}
 
-    @Override
-	public String getInspectorName()
-    {
-    	return Inspectors.DM.DM_WOREPOSITORY_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.DM.DM_WOREPOSITORY_INSPECTOR;
+	}
 
-    public static final String CUSTOM_COMPONENT_ENTITY_KEY = "customComponentEntity";
-    public static final String CUSTOM_SESSION_ENTITY_KEY = "customSessionEntity";
-    public static final String CUSTOM_DIRECT_ACTION_ENTITY_KEY = "customDirectActionEntity";
-    public static final String CUSTOM_APPLICATION_ENTITY_KEY = "customApplicationEntity";
-    
-    DMEntity getDefaultCustomComponentCandidate()
-    {
-    	for (DMEntity e : getEntities().values()) {
-    		if (e == getCustomComponentEntity()) return e;
-    		if (e != getCustomApplicationEntity()
-    				&& e != getCustomSessionEntity()
-    				&& e != getCustomDirectActionEntity()) return e;
-     	}
-    	if (getEntities().size() > 0) return getEntities().elements().nextElement();
-    	return null;
-    }
-    
-    private boolean hasDefaultCustomComponentCandidate()
-    {
-    	return getDefaultCustomComponentCandidate() != null;
-    }
-    
-   public static class ADefaultComponentEntityMustBeDeclared extends ValidationRule
-    {
+	public static final String CUSTOM_COMPONENT_ENTITY_KEY = "customComponentEntity";
+	public static final String CUSTOM_SESSION_ENTITY_KEY = "customSessionEntity";
+	public static final String CUSTOM_DIRECT_ACTION_ENTITY_KEY = "customDirectActionEntity";
+	public static final String CUSTOM_APPLICATION_ENTITY_KEY = "customApplicationEntity";
 
-        /**
-         * @param objectType
-         * @param ruleName
-         */
-        public ADefaultComponentEntityMustBeDeclared()
-        {
-            super(WORepository.class, "a_default_component_entity_must_be_declared");
-        }
+	DMEntity getDefaultCustomComponentCandidate() {
+		for (DMEntity e : getEntities().values()) {
+			if (e == getCustomComponentEntity()) {
+				return e;
+			}
+			if (e != getCustomApplicationEntity() && e != getCustomSessionEntity() && e != getCustomDirectActionEntity()) {
+				return e;
+			}
+		}
+		if (getEntities().size() > 0) {
+			return getEntities().elements().nextElement();
+		}
+		return null;
+	}
 
-        /**
-         * Overrides applyValidation
-         * 
-         * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-         */
-        @Override
-        public ValidationIssue applyValidation(Validable object)
-        {
-            WORepository o = (WORepository) object;
-            if (o.getCustomComponentEntity() == null) {
-            	ValidationError err = new ValidationError(this, o,
-            			"no_component_entity_declared");
-          		err.addToFixProposals(new ChooseEntityProposal());
-         		err.addToFixProposals(new CreateEntityProposal());
-             	return err;
-            }
-            
-            if (!o.isNameValid()){
-                ValidationError err = new ValidationError(this, o,
-                        "data_model_objects_can_contain_only_alphanumeric_characters_or_underscore_and_must_start_with_a_letter");
-                if (o.getName() != null)
-                    err.addToFixProposals(new CleanDataModelObjectName(ToolBox.cleanStringForJava(o.getName())));
-                err.addToFixProposals(new SetCustomName());
-                return err;
-            }
-            return null;
-        }
+	private boolean hasDefaultCustomComponentCandidate() {
+		return getDefaultCustomComponentCandidate() != null;
+	}
 
-        public static class ChooseEntityProposal extends ParameteredFixProposal
-        {
+	public static class ADefaultComponentEntityMustBeDeclared extends ValidationRule {
 
-            private static final ParameterDefinition[] parameters = new ParameterDefinition[]{new DMEntityParameter("componentEntity","component_entity",null)};
-            
-            /**
-             * @param aMessage
-             */
-            public ChooseEntityProposal()
-            {
-                super("choose_component_entity",parameters);
-            }
+		/**
+		 * @param objectType
+		 * @param ruleName
+		 */
+		public ADefaultComponentEntityMustBeDeclared() {
+			super(WORepository.class, "a_default_component_entity_must_be_declared");
+		}
 
-            /**
-             * Overrides fixAction
-             * @see org.openflexo.foundation.validation.FixProposal#fixAction()
-             */
-            @Override
-            protected void fixAction()
-            {
-                DMEntity e = (DMEntity) getValueForParameter("componentEntity");
-                if (e!=null) {
-                	SetPropertyAction action = SetPropertyAction.actionType.makeNewAction(((WORepository)getObject()), null);
-                	action.setKey(CUSTOM_COMPONENT_ENTITY_KEY);
-                   	action.setValue(e);
-                   	action.doAction();
-                }
-             }
-            
-            @Override
-			public void updateBeforeApply()
-            {
-                WORepository woRep = ((WORepository)getObject());
-                parameters[0].setValue(woRep.getDefaultCustomComponentCandidate());
-          }
+		/**
+		 * Overrides applyValidation
+		 * 
+		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		 */
+		@Override
+		public ValidationIssue applyValidation(Validable object) {
+			WORepository o = (WORepository) object;
+			if (o.getCustomComponentEntity() == null) {
+				ValidationError err = new ValidationError(this, o, "no_component_entity_declared");
+				err.addToFixProposals(new ChooseEntityProposal());
+				err.addToFixProposals(new CreateEntityProposal());
+				return err;
+			}
 
-        }
-        
-        public static class CreateEntityProposal extends ParameteredFixProposal
-        {
+			if (!o.isNameValid()) {
+				ValidationError err = new ValidationError(this, o,
+						"data_model_objects_can_contain_only_alphanumeric_characters_or_underscore_and_must_start_with_a_letter");
+				if (o.getName() != null) {
+					err.addToFixProposals(new CleanDataModelObjectName(ToolBox.cleanStringForJava(o.getName())));
+				}
+				err.addToFixProposals(new SetCustomName());
+				return err;
+			}
+			return null;
+		}
 
-            private static final ParameterDefinition[] parameters = new ParameterDefinition[]{new TextFieldParameter("name","name",null)};
-            
-            /**
-             * @param aMessage
-             */
-            public CreateEntityProposal()
-            {
-                super("create_component_entity",parameters);
-             }
+		public static class ChooseEntityProposal extends ParameteredFixProposal {
 
-            /**
-             * Overrides fixAction
-             * @see org.openflexo.foundation.validation.FixProposal#fixAction()
-             */
-            @Override
-            protected void fixAction()
-            {
-                String name = (String) getValueForParameter("name");
-                WORepository woRep = ((WORepository)getObject());
-                DMEntity e = woRep.createCustomComponentEntity(name);
-                if (e!=null) {
-                	SetPropertyAction action = SetPropertyAction.actionType.makeNewAction(((WORepository)getObject()), null);
-                	action.setKey(CUSTOM_COMPONENT_ENTITY_KEY);
-                   	action.setValue(e);
-                   	action.doAction();
-                }
-           }
-            
-            @Override
-			public void updateBeforeApply()
-            {
-            	WORepository woRep = ((WORepository)getObject());
-            	String prefix = getProject().getPrefix()==null ? "Project" : getProject().getPrefix();
-            	parameters[0].setValue(getProject().getDataModel().getNextDefautEntityName(woRep.getDefaultPackage(),prefix+"Component"));
-            }
+			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new DMEntityParameter("componentEntity",
+					"component_entity", null) };
 
-        }
-        
-    }
+			/**
+			 * @param aMessage
+			 */
+			public ChooseEntityProposal() {
+				super("choose_component_entity", parameters);
+			}
+
+			/**
+			 * Overrides fixAction
+			 * 
+			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
+			 */
+			@Override
+			protected void fixAction() {
+				DMEntity e = (DMEntity) getValueForParameter("componentEntity");
+				if (e != null) {
+					SetPropertyAction action = SetPropertyAction.actionType.makeNewAction(((WORepository) getObject()), null);
+					action.setKey(CUSTOM_COMPONENT_ENTITY_KEY);
+					action.setValue(e);
+					action.doAction();
+				}
+			}
+
+			@Override
+			public void updateBeforeApply() {
+				WORepository woRep = ((WORepository) getObject());
+				parameters[0].setValue(woRep.getDefaultCustomComponentCandidate());
+			}
+
+		}
+
+		public static class CreateEntityProposal extends ParameteredFixProposal {
+
+			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new TextFieldParameter("name", "name", null) };
+
+			/**
+			 * @param aMessage
+			 */
+			public CreateEntityProposal() {
+				super("create_component_entity", parameters);
+			}
+
+			/**
+			 * Overrides fixAction
+			 * 
+			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
+			 */
+			@Override
+			protected void fixAction() {
+				String name = (String) getValueForParameter("name");
+				WORepository woRep = ((WORepository) getObject());
+				DMEntity e = woRep.createCustomComponentEntity(name);
+				if (e != null) {
+					SetPropertyAction action = SetPropertyAction.actionType.makeNewAction(((WORepository) getObject()), null);
+					action.setKey(CUSTOM_COMPONENT_ENTITY_KEY);
+					action.setValue(e);
+					action.doAction();
+				}
+			}
+
+			@Override
+			public void updateBeforeApply() {
+				WORepository woRep = ((WORepository) getObject());
+				String prefix = getProject().getPrefix() == null ? "Project" : getProject().getPrefix();
+				parameters[0]
+						.setValue(getProject().getDataModel().getNextDefautEntityName(woRep.getDefaultPackage(), prefix + "Component"));
+			}
+
+		}
+
+	}
 
 }

@@ -18,61 +18,62 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents SubSystem object
- *
+ * 
  * @version $Id: SubSystem.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class SubSystem extends QuidObject implements Named, StereoTyped {
-  public SubSystem(PetalNode parent, Collection params) {
-    super(parent, "SubSystem", params);
-  }
+	public SubSystem(PetalNode parent, Collection params) {
+		super(parent, "SubSystem", params);
+	}
 
-  public SubSystem() {
-    super("SubSystem");
-  }
+	public SubSystem() {
+		super("SubSystem");
+	}
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  @Override
-public String getStereotype() {
-    return getPropertyAsString("stereotype");
-  }
+	@Override
+	public String getStereotype() {
+		return getPropertyAsString("stereotype");
+	}
 
-  @Override
-public void setStereotype(String o) {
-    defineProperty("stereotype", o);
-  }
+	@Override
+	public void setStereotype(String o) {
+		defineProperty("stereotype", o);
+	}
 
-  public List getPhysicalModels() {
-    return (List)getProperty("physical_models");
-  }
+	public List getPhysicalModels() {
+		return (List) getProperty("physical_models");
+	}
 
-  public void setPhysicalModels(List o) {
-    defineProperty("physical_models", o);
-  }
+	public void setPhysicalModels(List o) {
+		defineProperty("physical_models", o);
+	}
 
-  public List getPhysicalPresentations() {
-    return (List)getProperty("physical_presentations");
-  }
+	public List getPhysicalPresentations() {
+		return (List) getProperty("physical_presentations");
+	}
 
-  public void setPhysicalPresentations(List o) {
-    defineProperty("physical_presentations", o);
-  }
+	public void setPhysicalPresentations(List o) {
+		defineProperty("physical_presentations", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

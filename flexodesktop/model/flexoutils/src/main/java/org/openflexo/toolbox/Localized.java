@@ -24,8 +24,8 @@ public class Localized {
 
 	public static String localizedForKey(String key) {
 		return instance.getLocalizedForKey(key);
-	} 
-	
+	}
+
 	protected String getLocalizedForKey(String key) {
 		return key;
 	}
@@ -37,5 +37,5 @@ public class Localized {
 	public static void setInstance(Localized instance) {
 		Localized.instance = instance;
 	}
-	
+
 }

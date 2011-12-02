@@ -31,81 +31,71 @@ import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.dm.eo.EOAccessException;
 
+public class CreateDMEOEntity extends FlexoAction<CreateDMEOEntity, DMEOModel, DMObject> {
 
-public class CreateDMEOEntity extends FlexoAction<CreateDMEOEntity,DMEOModel,DMObject>
-{
+	private static final Logger logger = Logger.getLogger(CreateDMEOEntity.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDMEOEntity.class.getPackage().getName());
+	public static FlexoActionType<CreateDMEOEntity, DMEOModel, DMObject> actionType = new FlexoActionType<CreateDMEOEntity, DMEOModel, DMObject>(
+			"add_eo_entity", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<CreateDMEOEntity,DMEOModel,DMObject> actionType = new FlexoActionType<CreateDMEOEntity,DMEOModel,DMObject>("add_eo_entity",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateDMEOEntity makeNewAction(DMEOModel focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new CreateDMEOEntity(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateDMEOEntity makeNewAction(DMEOModel focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMEOEntity(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMEOModel object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMEOModel object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMEOModel object, Vector<DMObject> globalSelection) {
+			return object != null && !object.getRepository().isReadOnly();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMEOModel object, Vector<DMObject> globalSelection) 
-        {
-            return object != null && !object.getRepository().isReadOnly();
-        }
-                
-    };
-    
-    private DMEOModel _dmEOModel;
-    private String _newEntityName;
-    private DMEOEntity _newEntity;
-    
-    CreateDMEOEntity (DMEOModel focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) throws EOAccessException 
-    {
-      logger.info ("CreateDMEntity");
-      if (getDMEOModel() != null) {
-          _newEntityName = _dmEOModel.getNextDefautEntityName(getRepository().getPackageWithName(getDMEOModel().derivePackageName()));
-          _newEntity = DMEOEntity.createsNewDMEOEntity(getRepository().getDMModel(), _newEntityName, getDMEOModel(), _newEntityName);
-          getRepository().registerEntity(_newEntity);
-          _dmEOModel.notifyEOEntityAdded(_newEntity);
-      }
-    }
+	private DMEOModel _dmEOModel;
+	private String _newEntityName;
+	private DMEOEntity _newEntity;
 
-   public String getNewEntityName()
-   {
-       return _newEntityName;
-   }
-   
-   public DMEOModel getDMEOModel()
-   {
-       if (_dmEOModel == null) {
-           if (getFocusedObject() != null) {
-               _dmEOModel = getFocusedObject();
-            }           
-       }
-       return _dmEOModel;
-   }
+	CreateDMEOEntity(DMEOModel focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public DMEORepository getRepository()
-   {
-       return getDMEOModel().getRepository();
-   }
-   
-   public DMEOEntity getNewEntity()
-   {
-       return _newEntity;
-   }
+	@Override
+	protected void doAction(Object context) throws EOAccessException {
+		logger.info("CreateDMEntity");
+		if (getDMEOModel() != null) {
+			_newEntityName = _dmEOModel.getNextDefautEntityName(getRepository().getPackageWithName(getDMEOModel().derivePackageName()));
+			_newEntity = DMEOEntity.createsNewDMEOEntity(getRepository().getDMModel(), _newEntityName, getDMEOModel(), _newEntityName);
+			getRepository().registerEntity(_newEntity);
+			_dmEOModel.notifyEOEntityAdded(_newEntity);
+		}
+	}
+
+	public String getNewEntityName() {
+		return _newEntityName;
+	}
+
+	public DMEOModel getDMEOModel() {
+		if (_dmEOModel == null) {
+			if (getFocusedObject() != null) {
+				_dmEOModel = getFocusedObject();
+			}
+		}
+		return _dmEOModel;
+	}
+
+	public DMEORepository getRepository() {
+		return getDMEOModel().getRepository();
+	}
+
+	public DMEOEntity getNewEntity() {
+		return _newEntity;
+	}
 
 }

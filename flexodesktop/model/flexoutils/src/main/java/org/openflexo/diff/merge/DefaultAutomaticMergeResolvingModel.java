@@ -21,40 +21,35 @@ package org.openflexo.diff.merge;
 
 import org.openflexo.localization.FlexoLocalization;
 
-
-public class DefaultAutomaticMergeResolvingModel extends AutomaticMergeResolvingModel 
-{
-	public DefaultAutomaticMergeResolvingModel()
-	{
+public class DefaultAutomaticMergeResolvingModel extends AutomaticMergeResolvingModel {
+	public DefaultAutomaticMergeResolvingModel() {
 		super();
 		addToPrimaryRules(SAME_CONCURRENT_CHANGES);
 		addToDetailedRules(SAME_CONCURRENT_CHANGES);
 	}
-	
-	public static final AutomaticMergeResolvingRule SAME_CONCURRENT_CHANGES
-	= new AutomaticMergeResolvingRule() {
+
+	public static final AutomaticMergeResolvingRule SAME_CONCURRENT_CHANGES = new AutomaticMergeResolvingRule() {
 		@Override
 		public String getMergedResult(MergeChange change) {
 			return (change.getLeftText());
 		}
+
 		@Override
-		public boolean isApplicable(MergeChange change) 
-		{
-			//System.out.println("change.getLeftText()="+change.getLeftText());
-			//System.out.println("change.getRightText()="+change.getRightText());
-			//System.out.println("return="+change.getLeftText().equals(change.getRightText()));
+		public boolean isApplicable(MergeChange change) {
+			// System.out.println("change.getLeftText()="+change.getLeftText());
+			// System.out.println("change.getRightText()="+change.getRightText());
+			// System.out.println("return="+change.getLeftText().equals(change.getRightText()));
 			return (change.getLeftText().equals(change.getRightText()));
 		}
+
 		@Override
-		public String getDescription() 
-		{
+		public String getDescription() {
 			return "concurrent_changes_for_same_text";
 		}
 	};
-	
+
 	@Override
-	protected String localizedForKey(String key)
-	{
+	protected String localizedForKey(String key) {
 		return FlexoLocalization.localizedForKey(key);
 	}
 

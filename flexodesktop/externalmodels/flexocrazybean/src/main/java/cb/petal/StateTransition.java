@@ -18,79 +18,78 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents State_Transition object
- *
+ * 
  * @version $Id: StateTransition.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
-public class StateTransition extends QuiduObject
-  implements Labeled, HasSupplier
-{
-  public StateTransition(PetalNode parent, Collection params) {
-    super(parent, "State_Transition", params);
-  }
+public class StateTransition extends QuiduObject implements Labeled, HasSupplier {
+	public StateTransition(PetalNode parent, Collection params) {
+		super(parent, "State_Transition", params);
+	}
 
-  public StateTransition() {
-    super("State_Transition");
-  }
+	public StateTransition() {
+		super("State_Transition");
+	}
 
-  @Override
-public String getLabel() {
-    return getPropertyAsString("label");
-  }
+	@Override
+	public String getLabel() {
+		return getPropertyAsString("label");
+	}
 
-  @Override
-public void setLabel(String o) {
-    defineProperty("label", o);
-  }
+	@Override
+	public void setLabel(String o) {
+		defineProperty("label", o);
+	}
 
-  @Override
-public String getSupplier() {
-    return getPropertyAsString("supplier");
-  }
+	@Override
+	public String getSupplier() {
+		return getPropertyAsString("supplier");
+	}
 
-  @Override
-public void setSupplier(String o) {
-    defineProperty("supplier", o);
-  }
+	@Override
+	public void setSupplier(String o) {
+		defineProperty("supplier", o);
+	}
 
-  public Event getEvent() {
-    return (Event)getProperty("Event");
-  }
+	public Event getEvent() {
+		return (Event) getProperty("Event");
+	}
 
-  public void setEvent(Event o) {
-    defineProperty("Event", o);
-  }
+	public void setEvent(Event o) {
+		defineProperty("Event", o);
+	}
 
-  public Action getAction() {
-    return (Action)getProperty("action");
-  }
+	public Action getAction() {
+		return (Action) getProperty("action");
+	}
 
-  public void setAction(Action o) {
-    defineProperty("action", o);
-  }
+	public void setAction(Action o) {
+		defineProperty("action", o);
+	}
 
-  public SendEvent getSendEvent() {
-    return (SendEvent)getProperty("sendEvent");
-  }
+	public SendEvent getSendEvent() {
+		return (SendEvent) getProperty("sendEvent");
+	}
 
-  public void setSendEvent(SendEvent o) {
-    defineProperty("sendEvent", o);
-  }
+	public void setSendEvent(SendEvent o) {
+		defineProperty("sendEvent", o);
+	}
 
-  public String getCondition() {
-    return getPropertyAsString("condition");
-  }
+	public String getCondition() {
+		return getPropertyAsString("condition");
+	}
 
-  public void setCondition(String o) {
-    defineProperty("condition", o);
-  }
+	public void setCondition(String o) {
+		defineProperty("condition", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

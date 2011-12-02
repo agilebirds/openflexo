@@ -34,86 +34,74 @@ import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.view.menu.WindowMenu;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * Class representing menus related to WorkflowEditor window
  * 
  * @author benoit, yourname
  */
-public class WSEMenuBar extends FlexoMenuBar
-{
+public class WSEMenuBar extends FlexoMenuBar {
 
-    private WSEFileMenu _fileMenu;
-    private WSEEditMenu _editMenu;
-    private WSEToolsMenu _toolsMenu;
- 
+	private WSEFileMenu _fileMenu;
+	private WSEEditMenu _editMenu;
+	private WSEToolsMenu _toolsMenu;
 
-    public WSEMenuBar(WSEController controller)
-    {
-        super(controller, Module.WSE_MODULE);
-     }
+	public WSEMenuBar(WSEController controller) {
+		super(controller, Module.WSE_MODULE);
+	}
 
-    /**
-     * Build if required and return WKF 'File' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a WSEFileMenu instance
-     */
-    @Override
-	public FileMenu getFileMenu(FlexoController controller)
-    {
-        if (_fileMenu == null) {
-            _fileMenu = new WSEFileMenu((WSEController)controller);
-        }
-        return _fileMenu;
-    }
+	/**
+	 * Build if required and return WKF 'File' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a WSEFileMenu instance
+	 */
+	@Override
+	public FileMenu getFileMenu(FlexoController controller) {
+		if (_fileMenu == null) {
+			_fileMenu = new WSEFileMenu((WSEController) controller);
+		}
+		return _fileMenu;
+	}
 
-    /**
-     * Build if required and return WKF 'Edit' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a WSEEditMenu instance
-     */
-     @Override
-	public EditMenu getEditMenu(FlexoController controller)
-    {
-        if (_editMenu == null) {
-            _editMenu = new WSEEditMenu((WSEController)controller);
-        }
-        return _editMenu;
-    }
+	/**
+	 * Build if required and return WKF 'Edit' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a WSEEditMenu instance
+	 */
+	@Override
+	public EditMenu getEditMenu(FlexoController controller) {
+		if (_editMenu == null) {
+			_editMenu = new WSEEditMenu((WSEController) controller);
+		}
+		return _editMenu;
+	}
 
-     /**
-      * Build if required and return WKF 'Window' menu.
-      * This method overrides the default one defined on superclass
-      * 
-      * @param controller
-      * @return a WSEWindowMenu instance
-      */
-   @Override
-public WindowMenu getWindowMenu(FlexoController controller, Module module)
-    {
-        if (_windowMenu == null) {
-            _windowMenu = new WSEWindowMenu((WSEController) controller);
-        }
-        return _windowMenu;
-    }
+	/**
+	 * Build if required and return WKF 'Window' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a WSEWindowMenu instance
+	 */
+	@Override
+	public WindowMenu getWindowMenu(FlexoController controller, Module module) {
+		if (_windowMenu == null) {
+			_windowMenu = new WSEWindowMenu((WSEController) controller);
+		}
+		return _windowMenu;
+	}
 
-   /**
-    * Build if required and return WKF 'Tools' menu.
-    * This method overrides the default one defined on superclass
-    * 
-    * @param controller
-    * @return a WSEToolsMenu instance
-    */
- public ToolsMenu getToolsMenu(FlexoController controller, Module module)
-  {
-      if (_toolsMenu == null) {
-          _toolsMenu = new WSEToolsMenu((WSEController) controller);
-      }
-      return _toolsMenu;
-  }
+	/**
+	 * Build if required and return WKF 'Tools' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a WSEToolsMenu instance
+	 */
+	public ToolsMenu getToolsMenu(FlexoController controller, Module module) {
+		if (_toolsMenu == null) {
+			_toolsMenu = new WSEToolsMenu((WSEController) controller);
+		}
+		return _toolsMenu;
+	}
 
 }

@@ -24,49 +24,42 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.cg.templates.action.RemoveTemplateFile;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.cg.templates.action.RemoveTemplateFile;
-
 public class RemoveTemplateFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveTemplateFileInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(RemoveTemplateFile.actionType,actionInitializer);
+	RemoveTemplateFileInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(RemoveTemplateFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RemoveTemplateFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTemplateFile action)
-			{
-				return FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("are_you_sure_that_you_want_to_remove_definitely_this_template?"));
+			public boolean run(ActionEvent e, RemoveTemplateFile action) {
+				return FlexoController.confirmWithWarning(FlexoLocalization
+						.localizedForKey("are_you_sure_that_you_want_to_remove_definitely_this_template?"));
 
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
-
-	
 
 }

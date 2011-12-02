@@ -23,18 +23,16 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoObserver;
 
-
 /**
  * @author gpolet
  * 
  */
-public interface ITabWidget extends IWidget
-{
-    public Vector<IETabWidget> getAllTabs();
+public interface ITabWidget extends IWidget {
+	public Vector<IETabWidget> getAllTabs();
 
-    public IESequenceTab getRootParent();
+	public IESequenceTab getRootParent();
 
-    public void addObserver(FlexoObserver observer);
+	public void addObserver(FlexoObserver observer);
 
-    public void deleteObserver(FlexoObserver observer);
+	public void deleteObserver(FlexoObserver observer);
 }

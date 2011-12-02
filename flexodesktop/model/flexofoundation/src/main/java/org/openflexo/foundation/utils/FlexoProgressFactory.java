@@ -20,15 +20,13 @@
 package org.openflexo.foundation.utils;
 
 /**
- * Interface implemented by all components allowing to instanciate
- * a new FlexoProgress object
+ * Interface implemented by all components allowing to instanciate a new FlexoProgress object
  * 
  * @author sguerin
  * 
  */
-public interface FlexoProgressFactory
-{
+public interface FlexoProgressFactory {
 
-    public FlexoProgress makeFlexoProgress(String title, int steps);
- 
+	public FlexoProgress makeFlexoProgress(String title, int steps);
+
 }

@@ -21,15 +21,24 @@ package org.openflexo.foundation.ontology;
 
 import java.util.logging.Logger;
 
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 public abstract class IsAStatement extends OntologyStatement {
 
 	private static final Logger logger = Logger.getLogger(IsAStatement.class.getPackage().getName());
 
-	public IsAStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+	private OntologyObject parentObject;
+
+	public IsAStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
+		if (s.getObject() instanceof Resource) {
+			parentObject = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+		}
+	}
+
+	public OntologyObject getParentObject() {
+		return parentObject;
 	}
 
 }

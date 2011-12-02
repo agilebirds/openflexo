@@ -32,44 +32,41 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.FileUtils;
 
-
 public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebServerResourceData> {
 
 	private static final Logger logger = Logger.getLogger(FlexoWebServerFileResource.class.getPackage().getName());
 
-	public static FlexoWebServerFileResource createNewWebServerFileResource(File src, FlexoProject project)
-    {
-    	 FlexoWebServerFileResource returned = new FlexoWebServerFileResource(project);
-  		 String folderPath =  project.getImportedImagesDir().getName();
-         String name = FileUtils.lowerCaseExtension(src.getName());
-         FlexoProjectFile file = new FlexoProjectFile(folderPath+"/"+name);
-         try {
-        	 returned.setResourceFile(file);
-         } catch (InvalidFileNameException e1) {
-             file = new FlexoProjectFile(FileUtils.getValidFileName(file.getRelativePath()));
-             try {
-            	 returned.setResourceFile(file);
-             } catch (InvalidFileNameException e) {
-                 if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("Invalid file name: "+file.getRelativePath()+". This should never happen.");
+	public static FlexoWebServerFileResource createNewWebServerFileResource(File src, FlexoProject project) {
+		FlexoWebServerFileResource returned = new FlexoWebServerFileResource(project);
+		String folderPath = project.getImportedImagesDir().getName();
+		String name = FileUtils.lowerCaseExtension(src.getName());
+		FlexoProjectFile file = new FlexoProjectFile(folderPath + "/" + name);
+		try {
+			returned.setResourceFile(file);
+		} catch (InvalidFileNameException e1) {
+			file = new FlexoProjectFile(FileUtils.getValidFileName(file.getRelativePath()));
+			try {
+				returned.setResourceFile(file);
+			} catch (InvalidFileNameException e) {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("Invalid file name: " + file.getRelativePath() + ". This should never happen.");
 				}
-                 return null;
-             }
-         }
-         try {
-             project.registerResource(returned);
-         } catch (DuplicateResourceException e) {
-             // Warns about the exception
-             logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-             e.printStackTrace();
-         }
-         returned._setLastWrittenOnDisk(new Date());
-         returned.setLastImportDate(new Date());
-         returned.rebuildDependancies();
+				return null;
+			}
+		}
+		try {
+			project.registerResource(returned);
+		} catch (DuplicateResourceException e) {
+			// Warns about the exception
+			logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			e.printStackTrace();
+		}
+		returned._setLastWrittenOnDisk(new Date());
+		returned.setLastImportDate(new Date());
+		returned.rebuildDependancies();
 
-        return returned;
-    }
-
+		return returned;
+	}
 
 	public FlexoWebServerFileResource(FlexoProjectBuilder builder) {
 		this(builder.project);
@@ -80,10 +77,9 @@ public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebSe
 		super(aProject);
 	}
 
-
 	@Override
 	public String getName() {
-		if (getFile()!=null) {
+		if (getFile() != null) {
 			return getFile().getName();
 		}
 		return null;
@@ -97,32 +93,30 @@ public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebSe
 	@Override
 	public FileFormat getResourceFormat() {
 		String fileName = getFileName();
-		if (fileName==null) {
+		if (fileName == null) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Null filename for FlexoFileResource of type "+this.getClass().getName());
+				logger.warning("Null filename for FlexoFileResource of type " + this.getClass().getName());
 			}
 			return super.getResourceFormat();
 		}
 		int index = fileName.lastIndexOf('.');
-		if ((index==-1) || (index == fileName.length())) {
+		if ((index == -1) || (index == fileName.length())) {
 			return super.getResourceFormat();
 		}
-		FileFormat returned = FileFormat.getDefaultFileFormatByExtension(fileName.substring(index+1).toLowerCase());
-		//logger.warning("Pour le WebServerFileResource le format obtenu d'apres "+fileName+" c'est "+returned);
+		FileFormat returned = FileFormat.getDefaultFileFormatByExtension(fileName.substring(index + 1).toLowerCase());
+		// logger.warning("Pour le WebServerFileResource le format obtenu d'apres "+fileName+" c'est "+returned);
 		return returned;
 	}
 
 	@Override
-	protected void performUpdating(FlexoResourceTree updatedResources)
-			throws ResourceDependancyLoopException, LoadResourceException,
-			FileNotFoundException, ProjectLoadingCancelledException,
-			FlexoException {
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException,
+			FileNotFoundException, ProjectLoadingCancelledException, FlexoException {
 
 	}
 
 	@Override
 	protected FlexoWebServerResourceData doImport() throws FlexoException {
-		if(_resourceData==null){
+		if (_resourceData == null) {
 			_resourceData = new FlexoWebServerResourceData();
 			_resourceData.setProject(getProject());
 			_resourceData.setFlexoResource(this);
@@ -130,11 +124,11 @@ public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebSe
 		return _resourceData;
 	}
 
-	public static void importSpecificButtonsIntoResources(FlexoProject project){
+	public static void importSpecificButtonsIntoResources(FlexoProject project) {
 		File[] files = project.getSpecificButtonDirectory().listFiles();
-		for(int i=0;i<files.length;i++){
-			if(!files[i].isDirectory()){
-				if(project.getWebServerResource(files[i].getName())==null){
+		for (int i = 0; i < files.length; i++) {
+			if (!files[i].isDirectory()) {
+				if (project.getWebServerResource(files[i].getName()) == null) {
 					try {
 						FileUtils.copyFileToDir(files[i], project.getImportedImagesDir());
 						createNewWebServerFileResource(files[i], project);

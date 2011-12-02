@@ -27,7 +27,6 @@ import org.openflexo.foundation.ie.dm.BindingRemoved;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * 
  * Used to store port's message definition
@@ -36,110 +35,102 @@ import org.openflexo.inspector.InspectableObject;
  */
 public class DefaultServiceMessageDefinition extends ServiceMessageDefinition implements InspectableObject {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DefaultServiceMessageDefinition.class.getPackage().getName());
 
-    private MessageDefinition portMessageDefinition;
+	private MessageDefinition portMessageDefinition;
 
-    
-    /**
-     * Dynamic constructor
-     */
-    public DefaultServiceMessageDefinition(FlexoProcess process,ServiceOperation operation, MessageDefinition def)
-    {
-        super(process, operation);
-        portMessageDefinition=def;
-    }
-   
+	/**
+	 * Dynamic constructor
+	 */
+	public DefaultServiceMessageDefinition(FlexoProcess process, ServiceOperation operation, MessageDefinition def) {
+		super(process, operation);
+		portMessageDefinition = def;
+	}
 
-   
-   @Override
-public boolean isInputMessageDefinition(){
-   		return portMessageDefinition.isInputMessageDefinition();
-   }
-   @Override
-public boolean isOutputMessageDefinition(){
-   		return portMessageDefinition.isOutputMessageDefinition();
-   }
-   @Override
-public boolean isFaultMessageDefinition(){
-   		return portMessageDefinition.isFaultMessageDefinition();
-   }
-   @Override
-public void setIsInputMessageDefinition(){
-   		portMessageDefinition.setIsInputMessageDefinition();
-   }
-   @Override
-public void setIsOutputMessageDefinition(){
-   		portMessageDefinition.setIsOutputMessageDefinition();
-   }
-   @Override
-public void setIsFaultMessageDefinition(){
-   		portMessageDefinition.setIsFaultMessageDefinition();
-   }
+	@Override
+	public boolean isInputMessageDefinition() {
+		return portMessageDefinition.isInputMessageDefinition();
+	}
 
-   @Override
-public String getName(){
-   		return portMessageDefinition.getName();
-   }
-   
-   @Override
-public void setName(String n){
-   		portMessageDefinition.setName(n);
-   }
-   
-   @Override
-public String getDescription(){
-   		return portMessageDefinition.getDescription();
-   }
-   
-   @Override
-public void setDescription(String s){
-   		portMessageDefinition.setDescription(s);
-   }
-   
+	@Override
+	public boolean isOutputMessageDefinition() {
+		return portMessageDefinition.isOutputMessageDefinition();
+	}
 
-   @Override
-public Vector getEntries() 
-   {
-       return portMessageDefinition.getEntries();
-   }
+	@Override
+	public boolean isFaultMessageDefinition() {
+		return portMessageDefinition.isFaultMessageDefinition();
+	}
 
-   @Override
-public void setEntries(Vector entries) 
-   {
-       portMessageDefinition.setEntries(entries);
-   }
+	@Override
+	public void setIsInputMessageDefinition() {
+		portMessageDefinition.setIsInputMessageDefinition();
+	}
 
-   @Override
-public void addToEntries(MessageEntry entry) 
-   {
-	   portMessageDefinition.addToEntries(entry);
-	   setChanged();
-       notifyObservers(new BindingAdded(entry));
-   }
+	@Override
+	public void setIsOutputMessageDefinition() {
+		portMessageDefinition.setIsOutputMessageDefinition();
+	}
 
-   @Override
-public void removeFromEntries(MessageEntry entry) 
-   {
-	   portMessageDefinition.removeFromEntries(entry);
-       setChanged();
-       notifyObservers(new BindingRemoved(entry));
-  }
+	@Override
+	public void setIsFaultMessageDefinition() {
+		portMessageDefinition.setIsFaultMessageDefinition();
+	}
 
+	@Override
+	public String getName() {
+		return portMessageDefinition.getName();
+	}
 
-   // ==========================================================================
-   // ================================= Delete ===============================
-   // ==========================================================================
+	@Override
+	public void setName(String n) {
+		portMessageDefinition.setName(n);
+	}
 
-  
-   @Override
-public void delete()
-   {
-	   portMessageDefinition.delete();
-       super.delete();
-       portMessageDefinition=null;
-   }
- 
+	@Override
+	public String getDescription() {
+		return portMessageDefinition.getDescription();
+	}
+
+	@Override
+	public void setDescription(String s) {
+		portMessageDefinition.setDescription(s);
+	}
+
+	@Override
+	public Vector getEntries() {
+		return portMessageDefinition.getEntries();
+	}
+
+	@Override
+	public void setEntries(Vector entries) {
+		portMessageDefinition.setEntries(entries);
+	}
+
+	@Override
+	public void addToEntries(MessageEntry entry) {
+		portMessageDefinition.addToEntries(entry);
+		setChanged();
+		notifyObservers(new BindingAdded(entry));
+	}
+
+	@Override
+	public void removeFromEntries(MessageEntry entry) {
+		portMessageDefinition.removeFromEntries(entry);
+		setChanged();
+		notifyObservers(new BindingRemoved(entry));
+	}
+
+	// ==========================================================================
+	// ================================= Delete ===============================
+	// ==========================================================================
+
+	@Override
+	public void delete() {
+		portMessageDefinition.delete();
+		super.delete();
+		portMessageDefinition = null;
+	}
 
 }

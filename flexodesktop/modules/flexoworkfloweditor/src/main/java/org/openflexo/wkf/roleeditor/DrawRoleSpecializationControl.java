@@ -34,7 +34,6 @@ import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.foundation.wkf.action.AddRoleSpecialization;
 import org.openflexo.wkf.WKFCst;
 
-
 public class DrawRoleSpecializationControl extends MouseDragControl {
 
 	protected Point currentDraggingLocationInDrawingView = null;
@@ -42,32 +41,31 @@ public class DrawRoleSpecializationControl extends MouseDragControl {
 	protected RoleGR fromRole = null;
 	protected RoleGR toRole = null;
 
-	public DrawRoleSpecializationControl()
-	{
-		super("Draw edge", MouseButton.LEFT,false,true,false,false); // CTRL DRAG
+	public DrawRoleSpecializationControl() {
+		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
 		action = new DrawRoleSpecializationAction();
 	}
 
-	protected class DrawRoleSpecializationAction extends CustomDragControlAction
-	{
+	protected class DrawRoleSpecializationAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-		{
+		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event) {
 			if (graphicalRepresentation instanceof RoleGR) {
 				drawEdge = true;
-				fromRole = (RoleGR)graphicalRepresentation;
-				((RoleEditorView)controller.getDrawingView()).setDrawEdgeAction(this);
+				fromRole = (RoleGR) graphicalRepresentation;
+				((RoleEditorView) controller.getDrawingView()).setDrawEdgeAction(this);
 				return true;
-	        }
+			}
 			return false;
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event, boolean isSignificativeDrag)
-		{
+		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (fromRole != null && toRole != null) {
-					AddRoleSpecialization action = AddRoleSpecialization.actionType.makeNewAction(fromRole.getDrawable(), null,((RoleEditorController)controller).getWKFController().getEditor());
+					AddRoleSpecialization action = AddRoleSpecialization.actionType.makeNewAction(fromRole.getDrawable(), null,
+							((RoleEditorController) controller).getWKFController().getEditor());
 					action.setNewParentRole(toRole.getDrawable());
 					action.setRoleSpecializationAutomaticallyCreated(true);
 					action.doAction();
@@ -75,44 +73,40 @@ public class DrawRoleSpecializationControl extends MouseDragControl {
 				drawEdge = false;
 				fromRole = null;
 				toRole = null;
-				((RoleEditorView)controller.getDrawingView()).setDrawEdgeAction(null);
+				((RoleEditorView) controller.getDrawingView()).setDrawEdgeAction(null);
 				return true;
 			}
 			return false;
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-		{
+		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event) {
 			if (drawEdge) {
 				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof RoleGR
-						&& gr != fromRole
-						&& !(fromRole.getAncestors().contains(gr.getDrawable()))) {
-					toRole = (RoleGR)gr;
-				}
-				else {
+				if (gr instanceof RoleGR && gr != fromRole && !(fromRole.getAncestors().contains(gr.getDrawable()))) {
+					toRole = (RoleGR) gr;
+				} else {
 					toRole = null;
 				}
-				currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component)event.getSource(),event.getPoint(),controller.getDrawingView());
+				currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+						controller.getDrawingView());
 				controller.getDrawingView().repaint();
 				return true;
 			}
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController controller)
-		{
+		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						fromRole.getShape().getShape().getCenter(), fromRole, controller.getScale());
 				Point to = currentDraggingLocationInDrawingView;
 				if (toRole != null) {
 					to = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-						toRole.getShape().getShape().getCenter(), toRole, controller.getScale());
+							toRole.getShape().getShape().getCenter(), toRole, controller.getScale());
 					g.setColor(WKFCst.OK);
-				}
-				else {
+				} else {
 					g.setColor(Color.RED);
 				}
 				g.drawLine(from.x, from.y, to.x, to.y);

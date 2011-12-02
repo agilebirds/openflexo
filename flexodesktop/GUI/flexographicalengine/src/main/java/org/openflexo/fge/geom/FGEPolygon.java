@@ -41,17 +41,14 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEGraphics;
 
-
 /**
- * The <code>FGEPolygon</code> class encapsulates a description of a
- * closed, two-dimensional region within a coordinate space. This
- * region is bounded by an arbitrary number of line segments, each of
- * which is one side of the polygon.
- *
+ * The <code>FGEPolygon</code> class encapsulates a description of a closed, two-dimensional region within a coordinate space. This region
+ * is bounded by an arbitrary number of line segments, each of which is one side of the polygon.
+ * 
  * Some parts of this code are "inspired" from java.awt.Polygon implementation
- *
+ * 
  * @author sylvain
- *
+ * 
  */
 public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEPolygon> {
 
@@ -64,120 +61,118 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 
 	private FGERectangle bounds;
 
-	public FGEPolygon()
-	{
+	public FGEPolygon() {
 		this(Filling.NOT_FILLED);
 	}
 
-	public FGEPolygon(Filling filling)
-	{
+	public FGEPolygon(Filling filling) {
 		super();
 		_filling = filling;
 		_points = new Vector<FGEPoint>();
 		_segments = new Vector<FGESegment>();
 	}
 
-	public FGEPolygon(Filling filling, List<FGEPoint> points)
-	{
+	public FGEPolygon(Filling filling, List<FGEPoint> points) {
 		this(filling);
-		for (FGEPoint p : points) addToPoints(p);
+		if (points != null) {
+			for (FGEPoint p : points) {
+				addToPoints(p);
+			}
+		}
 	}
 
-	public FGEPolygon(Filling filling,FGEPoint... points)
-	{
+	public FGEPolygon(Filling filling, FGEPoint... points) {
 		this(filling);
-		for (FGEPoint p : points) addToPoints(p);
+		for (FGEPoint p : points) {
+			addToPoints(p);
+		}
 	}
 
 	@Override
-	public boolean getIsFilled()
-	{
+	public boolean getIsFilled() {
 		return _filling == Filling.FILLED;
 	}
 
 	@Override
-	public void setIsFilled(boolean filled)
-	{
-		_filling = (filled?Filling.FILLED:Filling.NOT_FILLED);
+	public void setIsFilled(boolean filled) {
+		_filling = (filled ? Filling.FILLED : Filling.NOT_FILLED);
 	}
 
 	@Override
-	public FGEPoint getCenter()
-	{
-		if (_points.size() == 0) return new FGEPoint(0,0);
+	public FGEPoint getCenter() {
+		if (_points.size() == 0) {
+			return new FGEPoint(0, 0);
+		}
 
 		double sumX = 0;
 		double sumY = 0;
 
 		for (FGEPoint p : _points) {
-			sumX+=p.x;
-			sumY+=p.y;
+			sumX += p.x;
+			sumY += p.y;
 		}
-		return new FGEPoint(sumX/_points.size(),sumY/_points.size());
+		return new FGEPoint(sumX / _points.size(), sumY / _points.size());
 	}
 
 	@Override
-	public List<FGEPoint> getControlPoints()
-	{
+	public List<FGEPoint> getControlPoints() {
 		return getPoints();
 	}
 
-	public void clearPoints()
-	{
+	public void clearPoints() {
 		_points.clear();
 		_segments.clear();
 	}
 
-	public Vector<FGEPoint> getPoints()
-	{
+	public Vector<FGEPoint> getPoints() {
 		return _points;
 	}
 
-	public void setPoints(Vector<FGEPoint> points)
-	{
+	public void setPoints(Vector<FGEPoint> points) {
 		_points.clear();
 		_segments.clear();
-		for (FGEPoint p : points) addToPoints(p);
+		for (FGEPoint p : points) {
+			addToPoints(p);
+		}
 	}
 
-	public void addToPoints(FGEPoint aPoint)
-	{
+	public void addToPoints(FGEPoint aPoint) {
 		_points.add(aPoint);
 		if (_points.size() > 1) {
-			FGESegment s2 = new FGESegment(_points.elementAt(_points.size()-2),_points.elementAt(_points.size()-1));
-			if (_segments.size() <= _points.size()-2)
+			FGESegment s2 = new FGESegment(_points.elementAt(_points.size() - 2), _points.elementAt(_points.size() - 1));
+			if (_segments.size() <= _points.size() - 2) {
 				_segments.add(s2);
-			else
-				_segments.set(_points.size()-2, s2);
-			FGESegment s3 = new FGESegment(_points.elementAt(_points.size()-1),_points.elementAt(0));
+			} else {
+				_segments.set(_points.size() - 2, s2);
+			}
+			FGESegment s3 = new FGESegment(_points.elementAt(_points.size() - 1), _points.elementAt(0));
 			_segments.add(s3);
 		}
 		reCalculateBounds();
 	}
 
-	public void removeFromPoints(FGEPoint aPoint)
-	{
+	public void removeFromPoints(FGEPoint aPoint) {
 		_points.remove(aPoint);
 		reCalculateBounds();
 	}
 
-	public Vector<FGESegment> getSegments()
-	{
+	public Vector<FGESegment> getSegments() {
 		return _segments;
 	}
 
-	public int getPointsNb()
-	{
+	public int getPointsNb() {
 		return _points.size();
 	}
 
-	public FGEPoint getPointAt(int index)
-	{
+	public FGEPoint getPointAt(int index) {
 		return _points.elementAt(index);
 	}
 
-	private void reCalculateBounds()
-	{
+	public void geometryChanged() {
+		reCalculateBounds();
+	}
+
+	private void reCalculateBounds() {
 		double boundsMinX = Double.POSITIVE_INFINITY;
 		double boundsMinY = Double.POSITIVE_INFINITY;
 		double boundsMaxX = Double.NEGATIVE_INFINITY;
@@ -192,38 +187,37 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 			boundsMinY = Math.min(boundsMinY, y);
 			boundsMaxY = Math.max(boundsMaxY, y);
 		}
-		bounds = new FGERectangle(boundsMinX, boundsMinY,
-				boundsMaxX - boundsMinX,
-				boundsMaxY - boundsMinY,_filling);
+		bounds = new FGERectangle(boundsMinX, boundsMinY, boundsMaxX - boundsMinX, boundsMaxY - boundsMinY, _filling);
 	}
 
 	@Override
-	public FGERectangle getBoundingBox()
-	{
+	public FGERectangle getBoundingBox() {
 		return bounds;
 	}
 
-
 	@Override
-	public boolean containsLine(FGEAbstractLine l)
-	{
-		if (l instanceof FGEHalfLine) return false;
+	public boolean containsLine(FGEAbstractLine l) {
+		if (l instanceof FGEHalfLine) {
+			return false;
+		}
 		if (l instanceof FGESegment) {
 			return (containsPoint(l.getP1()) && containsPoint(l.getP2()));
 		}
 		return false;
 	}
 
-
 	@Override
-	public boolean contains(double x, double y)
-	{
-		FGEPoint pt = new FGEPoint(x,y);
+	public boolean contains(double x, double y) {
+		FGEPoint pt = new FGEPoint(x, y);
 		for (FGESegment s : getSegments()) {
-			if (s.contains(pt)) return true;
+			if (s.contains(pt)) {
+				return true;
+			}
 		}
 
-		if (!getIsFilled()) return false;
+		if (!getIsFilled()) {
+			return false;
+		}
 
 		// Otherwise test on inside
 
@@ -232,7 +226,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 		}
 		int hits = 0;
 
-		FGEPoint lastPoint = getPointAt(getPointsNb()-1);
+		FGEPoint lastPoint = getPointAt(getPointsNb() - 1);
 
 		double lastx = lastPoint.getX();
 		double lasty = lastPoint.getY();
@@ -296,19 +290,19 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 		return ((hits & 1) != 0);
 	}
 
-
 	/**
-	 * Creates a new object of the same class and with the same
-	 * contents as this object.
-	 * @return     a clone of this instance.
-	 * @exception  OutOfMemoryError            if there is not enough memory.
-	 * @see        java.lang.Cloneable
-	 * @since      1.2
+	 * Creates a new object of the same class and with the same contents as this object.
+	 * 
+	 * @return a clone of this instance.
+	 * @exception OutOfMemoryError
+	 *                if there is not enough memory.
+	 * @see java.lang.Cloneable
+	 * @since 1.2
 	 */
 	@Override
 	public FGEPolygon clone() {
 		try {
-			return (FGEPolygon)super.clone();
+			return (FGEPolygon) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// this shouldn't happen, since we are Cloneable
 			throw new InternalError();
@@ -316,14 +310,12 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 	}
 
 	@Override
-	public FGEPoint getNearestPoint(FGEPoint aPoint)
-	{
+	public FGEPoint getNearestPoint(FGEPoint aPoint) {
 		return nearestOutlinePoint(aPoint);
 	}
 
 	@Override
-	public FGEPoint nearestOutlinePoint(FGEPoint aPoint)
-	{
+	public FGEPoint nearestOutlinePoint(FGEPoint aPoint) {
 		FGEPoint returnedPoint = null;
 		double smallestDistance = Double.POSITIVE_INFINITY;
 
@@ -339,16 +331,17 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 
 	/**
 	 * Return nearest point from point "from" following supplied orientation
-	 *
+	 * 
 	 * Returns null if no intersection was found
-	 *
-	 * @param from point from which we are coming to area
-	 * @param orientation orientation we are coming from
+	 * 
+	 * @param from
+	 *            point from which we are coming to area
+	 * @param orientation
+	 *            orientation we are coming from
 	 * @return
 	 */
 	@Override
-	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation)
-	{
+	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation) {
 		FGEHalfLine hl = FGEHalfLine.makeHalfLine(from, orientation);
 
 		FGEPoint returned = null;
@@ -357,8 +350,8 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 		for (FGESegment segment : _segments) {
 			if (FGESegment.intersectsInsideSegment(segment, hl)) {
 				try {
-					FGEPoint p = FGEAbstractLine.getLineIntersection(segment,hl);
-					double distSq = FGEPoint.distanceSq(from,p);
+					FGEPoint p = FGEAbstractLine.getLineIntersection(segment, hl);
+					double distSq = FGEPoint.distanceSq(from, p);
 					if (distSq < minimalDistanceSq) {
 						returned = p;
 						minimalDistanceSq = distSq;
@@ -368,13 +361,12 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 				}
 			}
 		}
-		//logger.info("from: "+from+" orientation="+orientation+" return "+returned);
+		// logger.info("from: "+from+" orientation="+orientation+" return "+returned);
 		return returned;
 	}
 
-	private FGEArea computeAreaIntersection(FGEArea area)
-	{
-		//System.out.println("Intersection between "+this+" and "+area);
+	private FGEArea computeAreaIntersection(FGEArea area) {
+		// System.out.println("Intersection between "+this+" and "+area);
 
 		boolean fullyInside = true;
 		boolean fullyOutside = true;
@@ -389,12 +381,12 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 		}
 
 		if (fullyOutside) {
-			//System.out.println("Fully outside");
+			// System.out.println("Fully outside");
 			return new FGEEmptyArea();
 		}
 
 		if (fullyInside) {
-			//System.out.println("Fully inside");
+			// System.out.println("Fully inside");
 			return this.clone();
 		}
 
@@ -404,36 +396,43 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 		filledBoundingBox.setIsFilled(true);
 		FGEArea boundingIntersect = area.intersect(filledBoundingBox);
 
-		//System.out.println("Y'a une intersection zarrebi: boundingIntersect="+boundingIntersect+" resultat: "+intersect(boundingIntersect));
+		// System.out.println("Y'a une intersection zarrebi: boundingIntersect="+boundingIntersect+" resultat: "+intersect(boundingIntersect));
 
 		return intersect(boundingIntersect);
 
 	}
 
-	private FGEArea computeLineIntersection(FGEAbstractLine line)
-	{
+	private FGEArea computeLineIntersection(FGEAbstractLine line) {
 		Vector<FGEPoint> crossed = new Vector<FGEPoint>();
 		for (FGESegment s : _segments) {
-			if (line.overlap(s)) return s.clone(); // TODO: perform union of potential multiple overlaping segments
+			if (line.overlap(s)) {
+				return s.clone(); // TODO: perform union of potential multiple overlaping segments
+			}
 			try {
 				if (s.intersectsInsideSegment(line)) {
 					FGEPoint intersection = s.getLineIntersection(line);
-					if (line.contains(intersection)) crossed.add(intersection);
+					if (line.contains(intersection)) {
+						crossed.add(intersection);
+					}
 				}
 			} catch (ParallelLinesException e) {
 				// don't care
 			}
 		}
 
-		if (crossed.size() == 0) return new FGEEmptyArea();
-
-		if (crossed.size() == 1) return crossed.firstElement();
-
-		else if (crossed.size() == 2) {
-			if (getIsFilled()) return new FGESegment(crossed.firstElement(),crossed.elementAt(1));
-			else return FGEUnionArea.makeUnion(crossed.firstElement(),crossed.elementAt(1));
+		if (crossed.size() == 0) {
+			return new FGEEmptyArea();
 		}
-		else {
+
+		if (crossed.size() == 1) {
+			return crossed.firstElement();
+		} else if (crossed.size() == 2) {
+			if (getIsFilled()) {
+				return new FGESegment(crossed.firstElement(), crossed.elementAt(1));
+			} else {
+				return FGEUnionArea.makeUnion(crossed.firstElement(), crossed.elementAt(1));
+			}
+		} else {
 			// TODO: not yet implemented for filled polygon
 			logger.warning("computeLineIntersection() not yet implemented for polygon");
 			return FGEUnionArea.makeUnion(crossed);
@@ -442,74 +441,95 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 	}
 
 	@Override
-	public FGEArea exclusiveOr(FGEArea area)
-	{
-		return new FGEExclusiveOrArea(this,area);
+	public FGEArea exclusiveOr(FGEArea area) {
+		return new FGEExclusiveOrArea(this, area);
 	}
 
 	@Override
-	public FGEArea intersect(FGEArea area)
-	{
-		//logger.info("Polygon "+this+" intersect with "+area);
+	public FGEArea intersect(FGEArea area) {
+		// logger.info("Polygon "+this+" intersect with "+area);
 
-		if (area.containsArea(this)) return this.clone();
-		if (containsArea(area)) return area.clone();
-		if (area instanceof FGEAbstractLine) return computeLineIntersection((FGEAbstractLine)area);
-		if (area instanceof FGERectangle) return ((FGERectangle)area).intersect(this);
-		if (area instanceof FGEHalfPlane) return ((FGEHalfPlane)area).intersect(this);
-		if (area instanceof FGEPolygon) return FGEShape.AreaComputation.computeShapeIntersection(this, (FGEPolygon)area);
-		if (area instanceof FGEBand) return computeAreaIntersection(area);
-		if (area instanceof FGEHalfBand) return computeAreaIntersection(area);
+		if (area.containsArea(this)) {
+			return this.clone();
+		}
+		if (containsArea(area)) {
+			return area.clone();
+		}
+		if (area instanceof FGEAbstractLine) {
+			return computeLineIntersection((FGEAbstractLine) area);
+		}
+		if (area instanceof FGERectangle) {
+			return ((FGERectangle) area).intersect(this);
+		}
+		if (area instanceof FGEHalfPlane) {
+			return ((FGEHalfPlane) area).intersect(this);
+		}
+		if (area instanceof FGEPolygon) {
+			return FGEShape.AreaComputation.computeShapeIntersection(this, (FGEPolygon) area);
+		}
+		if (area instanceof FGEBand) {
+			return computeAreaIntersection(area);
+		}
+		if (area instanceof FGEHalfBand) {
+			return computeAreaIntersection(area);
+		}
 
-		FGEIntersectionArea returned = new FGEIntersectionArea(this,area);
-		if (returned.isDevelopable()) return returned.makeDevelopped();
-		else return returned;
+		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
+		if (returned.isDevelopable()) {
+			return returned.makeDevelopped();
+		} else {
+			return returned;
+		}
 	}
 
 	@Override
-	public FGEArea substract(FGEArea area, boolean isStrict)
-	{
-		return new FGESubstractionArea(this,area,isStrict);
+	public FGEArea substract(FGEArea area, boolean isStrict) {
+		return new FGESubstractionArea(this, area, isStrict);
 	}
 
 	@Override
-	public FGEArea union(FGEArea area)
-	{
-		if (containsArea(area)) return clone();
-		if (area.containsArea(this)) return area.clone();
+	public FGEArea union(FGEArea area) {
+		if (containsArea(area)) {
+			return clone();
+		}
+		if (area.containsArea(this)) {
+			return area.clone();
+		}
 
-		return new FGEUnionArea(this,area);
+		return new FGEUnionArea(this, area);
 	}
 
 	@Override
-	public boolean containsPoint(FGEPoint p)
-	{
-		return contains(p.getX(),p.getY());
+	public boolean containsPoint(FGEPoint p) {
+		return contains(p.getX(), p.getY());
 	}
 
 	@Override
-	public boolean containsArea(FGEArea a)
-	{
-		if (a instanceof FGEPoint) return containsPoint((FGEPoint)a);
-		if (a instanceof FGESegment) return containsPoint(((FGESegment)a).getP1()) && containsPoint(((FGESegment)a).getP2());
-		if (a instanceof FGEShape) return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>)a, this);
+	public boolean containsArea(FGEArea a) {
+		if (a instanceof FGEPoint) {
+			return containsPoint((FGEPoint) a);
+		}
+		if (a instanceof FGESegment) {
+			return containsPoint(((FGESegment) a).getP1()) && containsPoint(((FGESegment) a).getP2());
+		}
+		if (a instanceof FGEShape) {
+			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>) a, this);
+		}
 		return false;
 	}
 
 	@Override
-	public FGEPolygon transform(AffineTransform t)
-	{
+	public FGEPolygon transform(AffineTransform t) {
 		Vector<FGEPoint> points = new Vector<FGEPoint>();
 		for (FGEPoint p : _points) {
 			points.add(p.transform(t));
 		}
-		FGEPolygon returned = new FGEPolygon(_filling,points);
+		FGEPolygon returned = new FGEPolygon(_filling, points);
 		return returned;
 	}
 
 	@Override
-	public void paint(FGEGraphics g)
-	{
+	public void paint(FGEGraphics g) {
 		if (getIsFilled()) {
 			g.useDefaultBackgroundStyle();
 			g.fillPolygon(getPoints().toArray(new FGEPoint[getPoints().size()]));
@@ -524,59 +544,62 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 	}
 
 	@Override
-	public String toString()
-	{
-		return "FGEPolygon: "+_points;
+	public String toString() {
+		return "FGEPolygon: " + _points;
 	}
 
 	@Override
-	public String getStringRepresentation()
-	{
+	public String getStringRepresentation() {
 		return toString();
 	}
 
-
 	// TODO: this algorithm is really not optimal since we explore all solution with a combinational algorithm !!!
 	// As we stay with a small number of points, we keep it for now
-	private static List<FGEPoint> sortToAvoidCuts(List<FGEPoint> aList)
-	{
+	private static List<FGEPoint> sortToAvoidCuts(List<FGEPoint> aList) {
 		for (FGEPoint p : aList) {
-			if (Double.isNaN(p.x)|| p.x == Double.POSITIVE_INFINITY || p.x == Double.NEGATIVE_INFINITY) return aList; // On laisse tomber
-			if (Double.isNaN(p.y) || p.y == Double.POSITIVE_INFINITY || p.y == Double.NEGATIVE_INFINITY) return aList; // On laisse tomber
+			if (Double.isNaN(p.x) || p.x == Double.POSITIVE_INFINITY || p.x == Double.NEGATIVE_INFINITY) {
+				return aList; // On laisse tomber
+			}
+			if (Double.isNaN(p.y) || p.y == Double.POSITIVE_INFINITY || p.y == Double.NEGATIVE_INFINITY) {
+				return aList; // On laisse tomber
+			}
 		}
 
-		return sortToAvoidCuts(new Vector<FGEPoint>(),aList);
+		return sortToAvoidCuts(new Vector<FGEPoint>(), aList);
 	}
 
-	private static List<FGEPoint> sortToAvoidCuts(List<FGEPoint> aList, List<FGEPoint> remainingPoints)
-	{
-		if (remainingPoints.size() == 0) return aList;
+	private static List<FGEPoint> sortToAvoidCuts(List<FGEPoint> aList, List<FGEPoint> remainingPoints) {
+		if (remainingPoints.size() == 0) {
+			return aList;
+		}
 
 		for (FGEPoint newP : remainingPoints) {
 			Vector<FGESegment> sl = new Vector<FGESegment>();
 			FGEPoint previous = null;
 			for (FGEPoint p : aList) {
-				if (previous != null) sl.add(new FGESegment(previous,p));
+				if (previous != null) {
+					sl.add(new FGESegment(previous, p));
+				}
 				previous = p;
 			}
 			boolean thisPointMightBeGood = true;
 			if (sl.size() > 0) {
-				//System.out.println("Segments = "+sl);
-				FGESegment newSegment = new FGESegment(aList.get(aList.size()-1),newP);
+				// System.out.println("Segments = "+sl);
+				FGESegment newSegment = new FGESegment(aList.get(aList.size() - 1), newP);
 				for (FGESegment oldS : sl) {
-					if (oldS.intersectsInsideSegment(newSegment,true)) {
+					if (oldS.intersectsInsideSegment(newSegment, true)) {
 						thisPointMightBeGood = false;
-						//System.out.println("Failed because new segment "+newSegment+" intersect with segment "+oldS);
+						// System.out.println("Failed because new segment "+newSegment+" intersect with segment "+oldS);
 					}
 				}
 				if (remainingPoints.size() == 1) {
 					// This is the last point, we must also check closure
-					FGESegment closure = new FGESegment(newP,aList.get(0));
-					//System.out.println("Also check closure = "+closure);
+					FGESegment closure = new FGESegment(newP, aList.get(0));
+					// System.out.println("Also check closure = "+closure);
 					for (FGESegment oldS : sl) {
-						if (oldS.intersectsInsideSegment(closure,true)) {
+						if (oldS.intersectsInsideSegment(closure, true)) {
 							thisPointMightBeGood = false;
-							//System.out.println("Failed because closure "+closure+" intersect with segment "+oldS);
+							// System.out.println("Failed because closure "+closure+" intersect with segment "+oldS);
 						}
 					}
 				}
@@ -588,9 +611,9 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 				Vector<FGEPoint> newRemainingList = new Vector<FGEPoint>();
 				newRemainingList.addAll(remainingPoints);
 				newRemainingList.remove(newP);
-				 List<FGEPoint> returned = sortToAvoidCuts(newList,newRemainingList);
+				List<FGEPoint> returned = sortToAvoidCuts(newList, newRemainingList);
 				if (returned != null) {
-					//System.out.println("return "+returned);
+					// System.out.println("return "+returned);
 					return returned;
 				}
 			}
@@ -600,86 +623,96 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 		return null;
 	}
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 
-		for (int n = 1; n<100; n++) {
+		for (int n = 1; n < 100; n++) {
 			Vector<FGEPoint> pts = new Vector<FGEPoint>();
 
-			logger.info("n="+n);
+			logger.info("n=" + n);
 			Random rand = new Random();
 
-			for (int i=0; i<n; i++) {
-				pts.add(new FGEPoint(rand.nextDouble(),rand.nextDouble()));
+			for (int i = 0; i < n; i++) {
+				pts.add(new FGEPoint(rand.nextDouble(), rand.nextDouble()));
 			}
 
-			logger.info("resultat: "+sortToAvoidCuts(pts));
+			logger.info("resultat: " + sortToAvoidCuts(pts));
 		}
 	}
 
 	/**
-	 * Make a new area given a list of point
-	 * May return a rectangle, a polygon or a segment
-	 *
+	 * Make a new area given a list of point May return a rectangle, a polygon or a segment
+	 * 
 	 * @param filling
 	 * @param points
 	 * @return
 	 */
-	public static FGEArea makeArea(Filling filling, List<FGEPoint> somePoints)
-	{
-		if (somePoints.size() < 1) throw new IllegalArgumentException("makeArea() called with "+somePoints.size()+" points");
-
-		else if (somePoints.size() == 1) return new FGEPoint(somePoints.get(0));
-
-		else if (somePoints.size() == 2) return new FGESegment(somePoints.get(0),somePoints.get(1));
-
-		else {
+	public static FGEArea makeArea(Filling filling, List<FGEPoint> somePoints) {
+		if (somePoints.size() < 1) {
+			throw new IllegalArgumentException("makeArea() called with " + somePoints.size() + " points");
+		} else if (somePoints.size() == 1) {
+			return new FGEPoint(somePoints.get(0));
+		} else if (somePoints.size() == 2) {
+			return new FGESegment(somePoints.get(0), somePoints.get(1));
+		} else {
 			List<FGEPoint> points = sortToAvoidCuts(somePoints);
 
 			if (points.size() == 4) {
 				boolean isRectangle = true;
-				double minx=Double.POSITIVE_INFINITY;
-				double miny=Double.POSITIVE_INFINITY;
-				double maxx=Double.NEGATIVE_INFINITY;
-				double maxy=Double.NEGATIVE_INFINITY;
-				for (int i=0; i<points.size(); i++) {
-					if (points.get(i).x < minx) minx = points.get(i).x;
-					if (points.get(i).y < miny) miny = points.get(i).y;
-					if (points.get(i).x > maxx) maxx = points.get(i).x;
-					if (points.get(i).y > maxy) maxy = points.get(i).y;
+				double minx = Double.POSITIVE_INFINITY;
+				double miny = Double.POSITIVE_INFINITY;
+				double maxx = Double.NEGATIVE_INFINITY;
+				double maxy = Double.NEGATIVE_INFINITY;
+				for (int i = 0; i < points.size(); i++) {
+					if (points.get(i).x < minx) {
+						minx = points.get(i).x;
+					}
+					if (points.get(i).y < miny) {
+						miny = points.get(i).y;
+					}
+					if (points.get(i).x > maxx) {
+						maxx = points.get(i).x;
+					}
+					if (points.get(i).y > maxy) {
+						maxy = points.get(i).y;
+					}
 				}
-				for (int i=0; i<points.size(); i++) {
+				for (int i = 0; i < points.size(); i++) {
 					FGEPoint p = points.get(i);
-					if (!((p.x == minx || p.x == maxx)
-							&& (p.y == miny || p.y == maxy)))
+					if (!((p.x == minx || p.x == maxx) && (p.y == miny || p.y == maxy))) {
 						isRectangle = false;
+					}
 				}
 				if (isRectangle) {
-					if (maxx-minx == 0) { // width = 0
-						if (maxy-miny == 0) return new FGEPoint(minx,miny);
-						else return new FGESegment(minx,miny,minx,maxy);
-					}
-					else {
-						if (maxy-miny == 0) return new FGESegment(minx,miny,maxx,miny); // height = 0;
-						else return new FGERectangle(minx,miny,maxx-minx,maxy-miny,filling);
+					if (maxx - minx == 0) { // width = 0
+						if (maxy - miny == 0) {
+							return new FGEPoint(minx, miny);
+						} else {
+							return new FGESegment(minx, miny, minx, maxy);
+						}
+					} else {
+						if (maxy - miny == 0) {
+							return new FGESegment(minx, miny, maxx, miny); // height = 0;
+						} else {
+							return new FGERectangle(minx, miny, maxx - minx, maxy - miny, filling);
+						}
 					}
 				}
 			}
 
-			return new FGEPolygon(filling,points);
+			return new FGEPolygon(filling, points);
 		}
 	}
 
-	public static FGEArea makeArea(Filling filling, FGEPoint... points)
-	{
+	public static FGEArea makeArea(Filling filling, FGEPoint... points) {
 		Vector<FGEPoint> v = new Vector<FGEPoint>();
-		for (FGEPoint p : points) v.add(p);
+		for (FGEPoint p : points) {
+			v.add(p);
+		}
 		return makeArea(filling, v);
 	}
 
 	@Override
-	public boolean contains(Point2D p)
-	{
+	public boolean contains(Point2D p) {
 		return contains(p.getX(), p.getY());
 	}
 
@@ -688,233 +721,219 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 		return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 	}
 
-    @Override
+	@Override
 	public boolean contains(double x, double y, double w, double h) {
-    	if (_points.size() <= 0 || !bounds.intersects(x, y, w, h)) {
-    	    return false;
-    	}
+		if (_points.size() <= 0 || !bounds.intersects(x, y, w, h)) {
+			return false;
+		}
 
-    	// Implement this;
-    	//Crossings cross = getCrossings(x, y, x+w, y+h);
-    	//return (cross != null && cross.covers(y, y+h));
+		// Implement this;
+		// Crossings cross = getCrossings(x, y, x+w, y+h);
+		// return (cross != null && cross.covers(y, y+h));
 
-    	return true;
-    }
+		return true;
+	}
 
 	@Override
-	public boolean intersects(Rectangle2D r)
-	{
+	public boolean intersects(Rectangle2D r) {
 		return intersects(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 	}
 
 	@Override
-	public boolean intersects(double x, double y, double w, double h)
-	{
+	public boolean intersects(double x, double y, double w, double h) {
 		// TODO Implement this
 
-		//Crossings cross = getCrossings(x, y, x+w, y+h);
-		//return (cross == null || !cross.isEmpty());
+		// Crossings cross = getCrossings(x, y, x+w, y+h);
+		// return (cross == null || !cross.isEmpty());
 
 		return false;
 	}
 
-
-
-    @Override
+	@Override
 	public Rectangle getBounds() {
-    	return new Rectangle((int)bounds.getX(),(int)bounds.getY(),(int)bounds.getWidth(),(int)bounds.getHeight());
-    }
+		return new Rectangle((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
+	}
 
-    @Override
+	@Override
 	public Rectangle2D getBounds2D() {
-    	return getBounds();
-    }
+		return getBounds();
+	}
 
-    /**
-     * Returns an iterator object that iterates along the boundary of this
-     * <code>Polygon</code> and provides access to the geometry
-     * of the outline of this <code>Polygon</code>.  An optional
-     * {@link AffineTransform} can be specified so that the coordinates
-     * returned in the iteration are transformed accordingly.
-     * @param at an optional <code>AffineTransform</code> to be applied to the
-     * 		coordinates as they are returned in the iteration, or
-     *		<code>null</code> if untransformed coordinates are desired
-     * @return a {@link PathIterator} object that provides access to the
-     *		geometry of this <code>Polygon</code>.
-     */
-    @Override
+	/**
+	 * Returns an iterator object that iterates along the boundary of this <code>Polygon</code> and provides access to the geometry of the
+	 * outline of this <code>Polygon</code>. An optional {@link AffineTransform} can be specified so that the coordinates returned in the
+	 * iteration are transformed accordingly.
+	 * 
+	 * @param at
+	 *            an optional <code>AffineTransform</code> to be applied to the coordinates as they are returned in the iteration, or
+	 *            <code>null</code> if untransformed coordinates are desired
+	 * @return a {@link PathIterator} object that provides access to the geometry of this <code>Polygon</code>.
+	 */
+	@Override
 	public PathIterator getPathIterator(AffineTransform at) {
-	return new PolygonPathIterator(this, at);
-    }
+		return new PolygonPathIterator(this, at);
+	}
 
-    /**
-     * Returns an iterator object that iterates along the boundary of
-     * the <code>Shape</code> and provides access to the geometry of the
-     * outline of the <code>Shape</code>.  Only SEG_MOVETO, SEG_LINETO, and
-     * SEG_CLOSE point types are returned by the iterator.
-     * Since polygons are already flat, the <code>flatness</code> parameter
-     * is ignored.  An optional <code>AffineTransform</code> can be specified
-     * in which case the coordinates returned in the iteration are transformed
-     * accordingly.
-     * @param at an optional <code>AffineTransform</code> to be applied to the
-     * 		coordinates as they are returned in the iteration, or
-     *		<code>null</code> if untransformed coordinates are desired
-     * @param flatness the maximum amount that the control points
-     * 		for a given curve can vary from colinear before a subdivided
-     *		curve is replaced by a straight line connecting the
-     * 		endpoints.  Since polygons are already flat the
-     * 		<code>flatness</code> parameter is ignored.
-     * @return a <code>PathIterator</code> object that provides access to the
-     * 		<code>Shape</code> object's geometry.
-     */
-    @Override
+	/**
+	 * Returns an iterator object that iterates along the boundary of the <code>Shape</code> and provides access to the geometry of the
+	 * outline of the <code>Shape</code>. Only SEG_MOVETO, SEG_LINETO, and SEG_CLOSE point types are returned by the iterator. Since
+	 * polygons are already flat, the <code>flatness</code> parameter is ignored. An optional <code>AffineTransform</code> can be specified
+	 * in which case the coordinates returned in the iteration are transformed accordingly.
+	 * 
+	 * @param at
+	 *            an optional <code>AffineTransform</code> to be applied to the coordinates as they are returned in the iteration, or
+	 *            <code>null</code> if untransformed coordinates are desired
+	 * @param flatness
+	 *            the maximum amount that the control points for a given curve can vary from colinear before a subdivided curve is replaced
+	 *            by a straight line connecting the endpoints. Since polygons are already flat the <code>flatness</code> parameter is
+	 *            ignored.
+	 * @return a <code>PathIterator</code> object that provides access to the <code>Shape</code> object's geometry.
+	 */
+	@Override
 	public PathIterator getPathIterator(AffineTransform at, double flatness) {
-	return getPathIterator(at);
-    }
-
-    class PolygonPathIterator implements PathIterator {
-	FGEPolygon poly;
-	AffineTransform transform;
-	int index;
-
-	public PolygonPathIterator(FGEPolygon pg, AffineTransform at) {
-	    poly = pg;
-	    transform = at;
-	    if (pg.getPointsNb() == 0) {
-		// Prevent a spurious SEG_CLOSE segment
-		index = 1;
-	    }
+		return getPathIterator(at);
 	}
 
-	/**
-	 * Returns the winding rule for determining the interior of the
-	 * path.
-         * @return an integer representing the current winding rule.
-	 * @see PathIterator#WIND_NON_ZERO
-	 */
-	@Override
-	public int getWindingRule() {
-	    return WIND_EVEN_ODD;
+	class PolygonPathIterator implements PathIterator {
+		FGEPolygon poly;
+		AffineTransform transform;
+		int index;
+
+		public PolygonPathIterator(FGEPolygon pg, AffineTransform at) {
+			poly = pg;
+			transform = at;
+			if (pg.getPointsNb() == 0) {
+				// Prevent a spurious SEG_CLOSE segment
+				index = 1;
+			}
+		}
+
+		/**
+		 * Returns the winding rule for determining the interior of the path.
+		 * 
+		 * @return an integer representing the current winding rule.
+		 * @see PathIterator#WIND_NON_ZERO
+		 */
+		@Override
+		public int getWindingRule() {
+			return WIND_EVEN_ODD;
+		}
+
+		/**
+		 * Tests if there are more points to read.
+		 * 
+		 * @return <code>true</code> if there are more points to read; <code>false</code> otherwise.
+		 */
+		@Override
+		public boolean isDone() {
+			return index > poly.getPointsNb();
+		}
+
+		/**
+		 * Moves the iterator forwards, along the primary direction of traversal, to the next segment of the path when there are more points
+		 * in that direction.
+		 */
+		@Override
+		public void next() {
+			index++;
+		}
+
+		/**
+		 * Returns the coordinates and type of the current path segment in the iteration. The return value is the path segment type:
+		 * SEG_MOVETO, SEG_LINETO, or SEG_CLOSE. A <code>float</code> array of length 2 must be passed in and can be used to store the
+		 * coordinates of the point(s). Each point is stored as a pair of <code>float</code> x,&nbsp;y coordinates. SEG_MOVETO and
+		 * SEG_LINETO types return one point, and SEG_CLOSE does not return any points.
+		 * 
+		 * @param coords
+		 *            a <code>float</code> array that specifies the coordinates of the point(s)
+		 * @return an integer representing the type and coordinates of the current path segment.
+		 * @see PathIterator#SEG_MOVETO
+		 * @see PathIterator#SEG_LINETO
+		 * @see PathIterator#SEG_CLOSE
+		 */
+		@Override
+		public int currentSegment(float[] coords) {
+			if (index >= poly.getPointsNb()) {
+				return SEG_CLOSE;
+			}
+			FGEPoint p = poly.getPointAt(index);
+			coords[0] = (float) p.x;
+			coords[1] = (float) p.y;
+			if (transform != null) {
+				transform.transform(coords, 0, coords, 0, 1);
+			}
+			return (index == 0 ? SEG_MOVETO : SEG_LINETO);
+		}
+
+		/**
+		 * Returns the coordinates and type of the current path segment in the iteration. The return value is the path segment type:
+		 * SEG_MOVETO, SEG_LINETO, or SEG_CLOSE. A <code>double</code> array of length 2 must be passed in and can be used to store the
+		 * coordinates of the point(s). Each point is stored as a pair of <code>double</code> x,&nbsp;y coordinates. SEG_MOVETO and
+		 * SEG_LINETO types return one point, and SEG_CLOSE does not return any points.
+		 * 
+		 * @param coords
+		 *            a <code>double</code> array that specifies the coordinates of the point(s)
+		 * @return an integer representing the type and coordinates of the current path segment.
+		 * @see PathIterator#SEG_MOVETO
+		 * @see PathIterator#SEG_LINETO
+		 * @see PathIterator#SEG_CLOSE
+		 */
+		@Override
+		public int currentSegment(double[] coords) {
+			if (index >= poly.getPointsNb()) {
+				return SEG_CLOSE;
+			}
+			FGEPoint p = poly.getPointAt(index);
+			coords[0] = (float) p.x;
+			coords[1] = (float) p.y;
+			if (transform != null) {
+				transform.transform(coords, 0, coords, 0, 1);
+			}
+			return (index == 0 ? SEG_MOVETO : SEG_LINETO);
+		}
 	}
 
-	/**
-	 * Tests if there are more points to read.
-	 * @return <code>true</code> if there are more points to read;
-         *          <code>false</code> otherwise.
-	 */
 	@Override
-	public boolean isDone() {
-	    return index > poly.getPointsNb();
-	}
-
-	/**
-	 * Moves the iterator forwards, along the primary direction of
-         * traversal, to the next segment of the path when there are
-	 * more points in that direction.
-	 */
-	@Override
-	public void next() {
-	    index++;
-	}
-
-	/**
-	 * Returns the coordinates and type of the current path segment in
-	 * the iteration.
-	 * The return value is the path segment type:
-	 * SEG_MOVETO, SEG_LINETO, or SEG_CLOSE.
-	 * A <code>float</code> array of length 2 must be passed in and
-         * can be used to store the coordinates of the point(s).
-	 * Each point is stored as a pair of <code>float</code> x,&nbsp;y
-         * coordinates.  SEG_MOVETO and SEG_LINETO types return one
-         * point, and SEG_CLOSE does not return any points.
-         * @param coords a <code>float</code> array that specifies the
-         * coordinates of the point(s)
-         * @return an integer representing the type and coordinates of the
-         * 		current path segment.
-	 * @see PathIterator#SEG_MOVETO
-	 * @see PathIterator#SEG_LINETO
-	 * @see PathIterator#SEG_CLOSE
-	 */
-	@Override
-	public int currentSegment(float[] coords) {
-	    if (index >= poly.getPointsNb()) {
-		return SEG_CLOSE;
-	    }
-	    FGEPoint p = poly.getPointAt(index);
-	    coords[0] = (float)p.x;
-	    coords[1] = (float)p.y;
-	    if (transform != null) {
-		transform.transform(coords, 0, coords, 0, 1);
-	    }
-	    return (index == 0 ? SEG_MOVETO : SEG_LINETO);
-	}
-
-	/**
-	 * Returns the coordinates and type of the current path segment in
-	 * the iteration.
-	 * The return value is the path segment type:
-	 * SEG_MOVETO, SEG_LINETO, or SEG_CLOSE.
-	 * A <code>double</code> array of length 2 must be passed in and
-         * can be used to store the coordinates of the point(s).
-	 * Each point is stored as a pair of <code>double</code> x,&nbsp;y
-         * coordinates.
-	 * SEG_MOVETO and SEG_LINETO types return one point,
-	 * and SEG_CLOSE does not return any points.
-         * @param coords a <code>double</code> array that specifies the
-         * coordinates of the point(s)
-         * @return an integer representing the type and coordinates of the
-         * 		current path segment.
-	 * @see PathIterator#SEG_MOVETO
-	 * @see PathIterator#SEG_LINETO
-	 * @see PathIterator#SEG_CLOSE
-	 */
-	@Override
-	public int currentSegment(double[] coords) {
-	    if (index >= poly.getPointsNb()) {
-		return SEG_CLOSE;
-	    }
-	    FGEPoint p = poly.getPointAt(index);
-	    coords[0] = (float)p.x;
-	    coords[1] = (float)p.y;
-	    if (transform != null) {
-		transform.transform(coords, 0, coords, 0, 1);
-	    }
-	    return (index == 0 ? SEG_MOVETO : SEG_LINETO);
-	}
-    }
-
-	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof FGEPolygon) {
-			FGEPolygon p = (FGEPolygon)obj;
-			if (getPointsNb() != p.getPointsNb()) return false;
+			FGEPolygon p = (FGEPolygon) obj;
+			if (getPointsNb() != p.getPointsNb()) {
+				return false;
+			}
 			if (getIsFilled() != p.getIsFilled()) {
 				return false;
 			}
 			// Test same order with different indexes
-			for (int j=0; j<getPointsNb(); j++) {
+			for (int j = 0; j < getPointsNb(); j++) {
 				boolean testWithIndexJ = true;
-				for (int i=0; i<getPointsNb(); i++) {
-					int k = i+j;
-					if (k>=getPointsNb()) k = k-getPointsNb();
+				for (int i = 0; i < getPointsNb(); i++) {
+					int k = i + j;
+					if (k >= getPointsNb()) {
+						k = k - getPointsNb();
+					}
 					if (!getPointAt(i).equals(p.getPointAt(k))) {
 						testWithIndexJ = false;
 					}
 				}
-				if (testWithIndexJ) return true;
+				if (testWithIndexJ) {
+					return true;
+				}
 			}
 			// Test reverse order with different indexes
-			for (int j=0; j<getPointsNb(); j++) {
+			for (int j = 0; j < getPointsNb(); j++) {
 				boolean testWithIndexJ = true;
-				for (int i=0; i<getPointsNb(); i++) {
-					int k = -i+j;
-					if (k<0) k = k+getPointsNb();
+				for (int i = 0; i < getPointsNb(); i++) {
+					int k = -i + j;
+					if (k < 0) {
+						k = k + getPointsNb();
+					}
 					if (!getPointAt(i).equals(p.getPointAt(k))) {
 						testWithIndexJ = false;
 					}
 				}
-				if (testWithIndexJ) return true;
+				if (testWithIndexJ) {
+					return true;
+				}
 			}
 			return false;
 		}
@@ -922,14 +941,12 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 	}
 
 	@Override
-	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation)
-	{
+	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation) {
 		return getAnchorAreaFrom(orientation).getOrthogonalPerspectiveArea(orientation);
 	}
 
 	@Override
-	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection orientation)
-	{
+	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection orientation) {
 		// This algorithm is not quite correct, you can find *very* pathologic cases, but works in most cases
 
 		Vector<FGESegment> keptSegments = new Vector<FGESegment>();
@@ -957,10 +974,12 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 			for (FGESegment s2 : getSegments()) {
 				if (!s.equals(s2)) {
 					FGEArea intersect = s2.intersect(hl);
-					if (intersect instanceof FGEPoint) cutsAnOtherSegment = true;
-					else if (intersect instanceof FGEEmptyArea) /* OK */;
-					else {
-						logger.warning("Unexpected intersection: "+intersect);
+					if (intersect instanceof FGEPoint) {
+						cutsAnOtherSegment = true;
+					} else if (intersect instanceof FGEEmptyArea) {
+						;
+					} else {
+						logger.warning("Unexpected intersection: " + intersect);
 						cutsAnOtherSegment = true;
 					}
 				}
@@ -982,21 +1001,18 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 			// Chains segments
 			Vector<FGESegment> chain = new Vector<FGESegment>();
 			for (FGESegment s : keptSegments) {
-				if (chain.size() == 0) chain.add(s);
-				else {
+				if (chain.size() == 0) {
+					chain.add(s);
+				} else {
 					if (s.getP1().equals(chain.firstElement().getP1())) {
-						chain.add(0, new FGESegment(s.getP2(),s.getP1()));
-					}
-					else if (s.getP2().equals(chain.firstElement().getP1())) {
+						chain.add(0, new FGESegment(s.getP2(), s.getP1()));
+					} else if (s.getP2().equals(chain.firstElement().getP1())) {
 						chain.add(0, s);
-					}
-					else if (s.getP1().equals(chain.lastElement().getP2())) {
+					} else if (s.getP1().equals(chain.lastElement().getP2())) {
 						chain.add(s);
-					}
-					else if (s.getP2().equals(chain.lastElement().getP2())) {
-						chain.add(new FGESegment(s.getP2(),s.getP1()));
-					}
-					else {
+					} else if (s.getP2().equals(chain.lastElement().getP2())) {
+						chain.add(new FGESegment(s.getP2(), s.getP1()));
+					} else {
 						logger.warning("Multiple chains not implemented yet");
 					}
 				}
@@ -1008,7 +1024,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 				pts.add(s.getP2());
 			}
 
-			//logger.info("anchor area for "+orientation+" : "+new FGEPolylin(pts) );
+			// logger.info("anchor area for "+orientation+" : "+new FGEPolylin(pts) );
 
 			return new FGEPolylin(pts);
 		}
@@ -1019,8 +1035,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 	 * This area is finite, so always return true
 	 */
 	@Override
-	public final boolean isFinite()
-	{
+	public final boolean isFinite() {
 		return true;
 	}
 
@@ -1028,17 +1043,16 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 	 * This area is finite, so always return null
 	 */
 	@Override
-	public final FGERectangle getEmbeddingBounds()
-	{
+	public final FGERectangle getEmbeddingBounds() {
 		return getBoundingBox();
 	}
 
 	/**
 	 * Build and return new polylin representing outline
+	 * 
 	 * @return
 	 */
-	public FGEPolylin getOutline()
-	{
+	public FGEPolylin getOutline() {
 		Vector<FGEPoint> pts = new Vector<FGEPoint>();
 		pts.addAll(getPoints());
 		pts.add(getPoints().firstElement());

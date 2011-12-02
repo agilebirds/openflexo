@@ -29,8 +29,6 @@ import javax.imageio.ImageIO;
 
 import org.openflexo.dg.exception.PDFGenerationFailedException;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
-
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Format;
@@ -46,197 +44,195 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.LatexUtils;
 import org.openflexo.toolbox.LogListener;
 
-public class GeneratePDF extends GCAction<GeneratePDF,DGRepository> implements LogListener
-{
+public class GeneratePDF extends GCAction<GeneratePDF, DGRepository> implements LogListener {
 
-    private static final Logger logger = Logger.getLogger(GeneratePDF.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(GeneratePDF.class.getPackage().getName());
 
-    public static FlexoActionType<GeneratePDF,DGRepository,CGObject> actionType
-    = new FlexoActionType<GeneratePDF,DGRepository,CGObject> ("generate_PDF",
-            GENERATE_MENU,  WAR_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<GeneratePDF, DGRepository, CGObject> actionType = new FlexoActionType<GeneratePDF, DGRepository, CGObject>(
+			"generate_PDF", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
+		/**
+		 * Factory method
+		 */
+		@Override
+		public GeneratePDF makeNewAction(DGRepository repository, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new GeneratePDF(repository, globalSelection, editor);
+		}
 
-    	/**
-    	 * Factory method
-    	 */
-    	@Override
-		public GeneratePDF makeNewAction(DGRepository repository, Vector<CGObject> globalSelection, FlexoEditor editor)
-    	{
-    		return new GeneratePDF(repository, globalSelection,editor);
-    	}
+		@Override
+		protected boolean isVisibleForSelection(DGRepository repository, Vector<CGObject> globalSelection) {
+			return repository.getFormat() == Format.LATEX;
+		}
 
-    	@Override
-		protected boolean isVisibleForSelection(DGRepository repository, Vector<CGObject> globalSelection)
-    	{
-    		return repository.getFormat()==Format.LATEX;
-    	}
+		@Override
+		protected boolean isEnabledForSelection(DGRepository repository, Vector<CGObject> globalSelection) {
+			if (repository.getFormat() != Format.LATEX) {
+				return false;
+			}
+			ProjectDocLatexGenerator pg = (ProjectDocLatexGenerator) getProjectGenerator(repository);
+			return pg != null && repository.getPostBuildDirectory() != null && pg.getProjectDocResource() != null
+					&& pg.getProjectDocResource().getFile() != null && pg.getProjectDocResource().getFile().exists();
+		}
 
-    	@Override
-		protected boolean isEnabledForSelection(DGRepository repository, Vector<CGObject> globalSelection)
-    	{
-    		if (repository.getFormat()!=Format.LATEX)
-    			return false;
-    		ProjectDocLatexGenerator pg = (ProjectDocLatexGenerator) getProjectGenerator(repository);
-            return pg != null && repository.getPostBuildDirectory() != null && pg.getProjectDocResource()!=null && pg.getProjectDocResource().getFile()!=null && pg.getProjectDocResource().getFile().exists();
-    	}
+	};
 
-    };
+	static {
+		FlexoModelObject.addActionForClass(GeneratePDF.actionType, DGRepository.class);
+	}
 
-    static {
-        FlexoModelObject.addActionForClass (GeneratePDF.actionType, DGRepository.class);
-    }
+	private String latexCommand;
 
-    private String latexCommand;
+	private File generatedPDF;
 
-    private File generatedPDF;
+	private Integer latexTimeOutInSeconds;
 
-    private Integer latexTimeOutInSeconds;
+	protected GeneratePDF(DGRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    protected GeneratePDF (DGRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	@Override
+	public ProjectDocLatexGenerator getProjectGenerator() {
+		return (ProjectDocLatexGenerator) super.getProjectGenerator();
+	}
 
-    @Override
-    public ProjectDocLatexGenerator getProjectGenerator() {
-    	return (ProjectDocLatexGenerator) super.getProjectGenerator();
-    }
+	@Override
+	public DGRepository getRepository() {
+		return (DGRepository) super.getRepository();
+	}
 
-    @Override
-    public DGRepository getRepository() {
-    	return (DGRepository) super.getRepository();
-    }
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException {
+		ProjectDocLatexGenerator pg = getProjectGenerator();
+		pg.setAction(this);
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException
-    {
-       	ProjectDocLatexGenerator pg = getProjectGenerator();
-    	pg.setAction(this);
+		if (getSaveBeforeGenerating()) {
+			getRepository().getProject().save();
+		}
 
-    	if (getSaveBeforeGenerating()) {
-    		getRepository().getProject().save();
-    	}
+		logger.info("Generate PDF for " + getFocusedObject());
+		makeFlexoProgress(FlexoLocalization.localizedForKey("generate") + " " + getFocusedObject().getPostProductName() + " "
+				+ FlexoLocalization.localizedForKey("into") + " " + getFocusedObject().getPostBuildDirectory().getAbsolutePath(), 15);
+		convertGifToPng();
+		try {
+			pg.addToLogListeners(this);
+			pg.setLatexTimeOutInMillis(getLatexTimeOutInSeconds() * 1000);
+			generatedPDF = pg.generatePDF(getLatexCommand());
+			if (generatedPDF == null) {
+				throw new PDFGenerationFailedException(pg, getLatexErrorMessage());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new IOExceptionOccuredException(e, pg);
+		} finally {
+			pg.removeFromLogListeners(this);
+		}
+		hideFlexoProgress();
+	}
 
-    	logger.info ("Generate PDF for "+getFocusedObject());
-       	makeFlexoProgress(FlexoLocalization.localizedForKey("generate") +  " "
-       			+ getFocusedObject().getPostProductName()+" "
-       			+ FlexoLocalization.localizedForKey("into")  +" "
-       			+ getFocusedObject().getPostBuildDirectory().getAbsolutePath(), 15);
-       	convertGifToPng();
-    	try {
-            pg.addToLogListeners(this);
-            pg.setLatexTimeOutInMillis(getLatexTimeOutInSeconds()*1000);
-            generatedPDF = pg.generatePDF(getLatexCommand());
-            if (generatedPDF==null)
-                throw new PDFGenerationFailedException(pg, getLatexErrorMessage());
-        } catch (IOException e) {
-        	e.printStackTrace();
-            throw new IOExceptionOccuredException(e,pg);
-        } finally {
-            pg.removeFromLogListeners(this);
-        }
-    	hideFlexoProgress();
-    }
-
-    private void convertGifToPng() {
-    	if (getRepository().isConnected()) {
-    		for(CGFile file:getRepository().getFiguresSymbolicDirectory().getFiles()) {
-    			if (file.getResource()!=null && file.getResource().getFile()!=null && file.getResource().getFile().exists() && file.getResource().getFile().getName().toLowerCase().endsWith(".gif")) {
-    				String name = file.getResource().getFile().getName();
-    				if (name.toLowerCase().endsWith("gif"))
-    					name = "CONVERTED-GIF"+name.substring(0,name.length()-3)+"png";
-					File f = new File(file.getResource().getFile().getParentFile(),name);
-					if (!f.exists() || f.lastModified()<file.getResource().getFile().lastModified()) {
-						if (logger.isLoggable(Level.INFO))
-							logger.info("Converting "+file.getResourceName()+" to "+f.getName());
-	    				try {
-							ImageIO.write(ImageIO.read(file.getResource().getFile()),"png",f);
+	private void convertGifToPng() {
+		if (getRepository().isConnected()) {
+			for (CGFile file : getRepository().getFiguresSymbolicDirectory().getFiles()) {
+				if (file.getResource() != null && file.getResource().getFile() != null && file.getResource().getFile().exists()
+						&& file.getResource().getFile().getName().toLowerCase().endsWith(".gif")) {
+					String name = file.getResource().getFile().getName();
+					if (name.toLowerCase().endsWith("gif")) {
+						name = "CONVERTED-GIF" + name.substring(0, name.length() - 3) + "png";
+					}
+					File f = new File(file.getResource().getFile().getParentFile(), name);
+					if (!f.exists() || f.lastModified() < file.getResource().getFile().lastModified()) {
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("Converting " + file.getResourceName() + " to " + f.getName());
+						}
+						try {
+							ImageIO.write(ImageIO.read(file.getResource().getFile()), "png", f);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 					}
-    			}
-    		}
-    	} else {
-    		if (logger.isLoggable(Level.INFO))
+				}
+			}
+		} else {
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Repository is not connected");
-    	}
+			}
+		}
 	}
 
-	public String getLatexCommand()
-    {
-    	if (latexCommand==null)
-    		latexCommand = LatexUtils.getDefaultLatex2PDFCommand();
-        return latexCommand;
-    }
+	public String getLatexCommand() {
+		if (latexCommand == null) {
+			latexCommand = LatexUtils.getDefaultLatex2PDFCommand();
+		}
+		return latexCommand;
+	}
 
-    public void setLatexCommand(String latexCommand)
-    {
-        this.latexCommand = latexCommand;
-    }
+	public void setLatexCommand(String latexCommand) {
+		this.latexCommand = latexCommand;
+	}
 
-    public File getGeneratedPDF()
-    {
-        return generatedPDF;
-    }
+	public File getGeneratedPDF() {
+		return generatedPDF;
+	}
 
-    /**
-     * Overrides err
-     * @see org.openflexo.toolbox.LogListener#err(java.lang.String)
-     */
-    @Override
-	public void err(String line)
-    {
-        errs.append(line).append('\n');
-    }
+	/**
+	 * Overrides err
+	 * 
+	 * @see org.openflexo.toolbox.LogListener#err(java.lang.String)
+	 */
+	@Override
+	public void err(String line) {
+		errs.append(line).append('\n');
+	}
 
-    @Override
+	@Override
 	public void warn(String line) {
-    	warn.append(line).append('\n');
-    }
+		warn.append(line).append('\n');
+	}
 
-    /**
-     * Overrides log
-     * @see org.openflexo.toolbox.LogListener#log(java.lang.String)
-     */
-    @Override
-	public synchronized void log(String line)
-    {
-        logs.append(line).append('\n');
-    }
+	/**
+	 * Overrides log
+	 * 
+	 * @see org.openflexo.toolbox.LogListener#log(java.lang.String)
+	 */
+	@Override
+	public synchronized void log(String line) {
+		logs.append(line).append('\n');
+	}
 
-    public String getLatexErrorMessage() {
-        if (errs.length()>0) {
-            int start = errs.indexOf("texify: ");
-            if (start>-1) {
-                int end = errs.indexOf("\n", start+9);
-                if (end>start)
-                    return errs.substring(start+8,end);
-                else
-                    return errs.substring(start+8);
-            }
-            return errs.toString();
-        }
-        if (logs.indexOf("LaTeX Error: ")>-1) {
-            int index = logs.lastIndexOf("LaTeX Error: ");
-            int end = logs.indexOf("\n", index);
-            if (end>index)
-                return logs.substring(index,end);
-            else
-                return logs.substring(index);
-        }
-        return null;
-    }
+	public String getLatexErrorMessage() {
+		if (errs.length() > 0) {
+			int start = errs.indexOf("texify: ");
+			if (start > -1) {
+				int end = errs.indexOf("\n", start + 9);
+				if (end > start) {
+					return errs.substring(start + 8, end);
+				} else {
+					return errs.substring(start + 8);
+				}
+			}
+			return errs.toString();
+		}
+		if (logs.indexOf("LaTeX Error: ") > -1) {
+			int index = logs.lastIndexOf("LaTeX Error: ");
+			int end = logs.indexOf("\n", index);
+			if (end > index) {
+				return logs.substring(index, end);
+			} else {
+				return logs.substring(index);
+			}
+		}
+		return null;
+	}
 
-    private StringBuffer logs = new StringBuffer();
+	private StringBuffer logs = new StringBuffer();
 
-    private StringBuffer warn = new StringBuffer();
+	private StringBuffer warn = new StringBuffer();
 
-    private StringBuffer errs = new StringBuffer();
+	private StringBuffer errs = new StringBuffer();
 
 	public Integer getLatexTimeOutInSeconds() {
-		if (latexTimeOutInSeconds==null)
+		if (latexTimeOutInSeconds == null) {
 			latexTimeOutInSeconds = 15;
+		}
 		return latexTimeOutInSeconds;
 	}
 

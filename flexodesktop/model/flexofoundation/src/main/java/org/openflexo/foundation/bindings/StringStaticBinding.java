@@ -22,72 +22,61 @@ package org.openflexo.foundation.bindings;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 public class StringStaticBinding extends StaticBinding<String> {
 
 	private String value;
-	
-	public StringStaticBinding()
-	{
+
+	public StringStaticBinding() {
 		super();
 	}
-	
-	public StringStaticBinding(String aValue)
-	{
+
+	public StringStaticBinding(String aValue) {
 		super();
 		value = aValue;
 	}
-	
-   public StringStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, String aValue)
-    {
-    	super(bindingDefinition,owner);
+
+	public StringStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, String aValue) {
+		super(bindingDefinition, owner);
 		value = aValue;
-   }
+	}
 
 	@Override
-	public EvaluationType getEvaluationType()
-	{
+	public EvaluationType getEvaluationType() {
 		return EvaluationType.STRING;
 	}
 
 	@Override
-	public String getSerializationRepresentation() 
-	{
-		return "$'"+value+"'";
+	public String getSerializationRepresentation() {
+		return "$'" + value + "'";
 	}
 
 	@Override
-	public String getStringRepresentation() 
-	{
-		return '"'+value+'"';
+	public String getStringRepresentation() {
+		return '"' + value + '"';
 	}
-	
+
 	@Override
 	public String getWodStringRepresentation() {
 		return getStringRepresentation();
 	}
-	
+
 	@Override
-	public String getValue() 
-	{
+	public String getValue() {
 		return value;
 	}
 
 	@Override
-	public void setValue(String aValue) 
-	{
+	public void setValue(String aValue) {
 		value = aValue;
 	}
 
 	@Override
-	public Class<String> getStaticBindingClass()
-	{
+	public Class<String> getStaticBindingClass() {
 		return String.class;
 	}
 
 	@Override
-	public StringStaticBinding clone()
-	{
+	public StringStaticBinding clone() {
 		StringStaticBinding returned = new StringStaticBinding();
 		returned.setsWith(this);
 		return returned;

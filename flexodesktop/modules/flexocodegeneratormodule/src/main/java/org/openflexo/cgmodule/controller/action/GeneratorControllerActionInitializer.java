@@ -41,54 +41,49 @@ import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.action.GCAction;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
-public class GeneratorControllerActionInitializer extends ControllerActionInitializer
-{
+public class GeneratorControllerActionInitializer extends ControllerActionInitializer {
 
 	protected static final Logger logger = Logger.getLogger(GeneratorControllerActionInitializer.class.getPackage().getName());
 
 	static {
-        FlexoModelObject.addActionForClass (OpenFileInExplorer.actionType, CGFile.class);
-    }
-	
+		FlexoModelObject.addActionForClass(OpenFileInExplorer.actionType, CGFile.class);
+	}
+
 	private GeneratorController _generatorController;
 
-	public GeneratorControllerActionInitializer(GeneratorController controller)
-	{
+	public GeneratorControllerActionInitializer(GeneratorController controller) {
 		super(controller);
 		_generatorController = controller;
 	}
 
-	protected GeneratorController getGeneratorController()
-	{
+	protected GeneratorController getGeneratorController() {
 		return _generatorController;
 	}
 
-	protected GeneratorSelectionManager getGeneratorSelectionManager()
-	{
+	protected GeneratorSelectionManager getGeneratorSelectionManager() {
 		return getGeneratorController().getGeneratorSelectionManager();
 	}
 
 	@Override
-	public void initializeActions()
-	{
+	public void initializeActions() {
 		super.initializeActions();
 		getGeneratorController().getProject().getGeneratedCode().setFactory(new GCAction.ProjectGeneratorFactory() {
 			@Override
 			public AbstractProjectGenerator<? extends GenerationRepository> generatorForRepository(GenerationRepository repository) {
-				if (repository instanceof CGRepository)
+				if (repository instanceof CGRepository) {
 					return getGeneratorController().getProjectGenerator((CGRepository) repository);
-				else {
-					if (logger.isLoggable(Level.SEVERE))
-						logger.severe("Cannot create project generator for "+repository);
+				} else {
+					if (logger.isLoggable(Level.SEVERE)) {
+						logger.severe("Cannot create project generator for " + repository);
+					}
 				}
 				return null;
 			}
 		});
 
-        (new CGSetPropertyInitializer(this)).init();
-        (new OpenFileInExplorerInitializer(this)).init();
-        new CompareTemplatesInNewWindowInitializer(this).init();
+		(new CGSetPropertyInitializer(this)).init();
+		(new OpenFileInExplorerInitializer(this)).init();
+		new CompareTemplatesInNewWindowInitializer(this).init();
 		// Validate project
 		(new ValidateProjectInitializer(this)).init();
 
@@ -98,8 +93,8 @@ public class GeneratorControllerActionInitializer extends ControllerActionInitia
 		new GenerateAndWriteCodeInitializer(this).init();
 		(new ForceRegenerateSourceCodeInitializer(this)).init();
 		(new RegenerateAndOverrideInitializer(this)).init();
-        (new IncludeFromGenerationInitializer(this)).init();
-        (new ExcludeFromGenerationInitializer(this)).init();
+		(new IncludeFromGenerationInitializer(this)).init();
+		(new ExcludeFromGenerationInitializer(this)).init();
 
 		(new WriteModifiedGeneratedFilesInitializer(this)).init();
 		(new DismissUnchangedGeneratedFilesInitializer(this)).init();
@@ -153,9 +148,9 @@ public class GeneratorControllerActionInitializer extends ControllerActionInitia
 		// Show/view
 		(new ShowFileVersionInitializer(this)).init();
 		(new OpenDiffEditorInitializer(this)).init();
-        (new GoToCorrespondingJavaInitializer(this)).init();
-        (new GoToCorrespondingWOInitializer(this)).init();
-        
+		(new GoToCorrespondingJavaInitializer(this)).init();
+		(new GoToCorrespondingWOInitializer(this)).init();
+
 		// Templates management
 		(new AddCustomTemplateRepositoryInitializer(this)).init();
 		(new RemoveCustomTemplateRepositoryInitializer(this)).init();
@@ -170,12 +165,15 @@ public class GeneratorControllerActionInitializer extends ControllerActionInitia
 		(new ImportTemplatesInitializer(this)).init();
 		// Initialize actions available using inspector (template tab)
 
-		CGFile.showTemplateActionizer = new FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(OpenTemplateFileInNewWindow.actionType, getGeneratorController().getEditor());
+		CGFile.showTemplateActionizer = new FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(
+				OpenTemplateFileInNewWindow.actionType, getGeneratorController().getEditor());
 
-		CGFile.editCustomTemplateActionizer = new FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(EditCustomTemplateFile.actionType, getGeneratorController().getEditor());
+		CGFile.editCustomTemplateActionizer = new FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(
+				EditCustomTemplateFile.actionType, getGeneratorController().getEditor());
 
-		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject>(RedefineCustomTemplateFile.actionType, getGeneratorController().getEditor());
-		
+		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject>(
+				RedefineCustomTemplateFile.actionType, getGeneratorController().getEditor());
+
 	}
 
 }

@@ -31,86 +31,76 @@ import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.SharedProject;
 
-
 /**
  * Abstract class for actions applying on a set of CVSFile
  * 
  * @author sylvain
- *
+ * 
  */
-public abstract class MultipleFileCVSAction<A extends MultipleFileCVSAction<A>> extends CVSAction<A,FPSObject>
-{
+public abstract class MultipleFileCVSAction<A extends MultipleFileCVSAction<A>> extends CVSAction<A, FPSObject> {
 
 	private static final Logger logger = Logger.getLogger(MultipleFileCVSAction.class.getPackage().getName());
 
-	public static abstract class MultipleFileCVSActionType<A extends MultipleFileCVSAction<?>> extends FlexoActionType<A,FPSObject,FPSObject>
-	{
-	    protected MultipleFileCVSActionType (String actionName, ActionMenu actionMenu, ActionGroup actionGroup, int actionCategory)
-	    {
-	        super(actionName,actionMenu,actionGroup,actionCategory);
-	    }
-	    
-	    protected MultipleFileCVSActionType (String actionName, ActionGroup actionGroup, int actionCategory)
-	    {
-	    	super(actionName,actionGroup,actionCategory);
-	    }
-	    
-        @Override
-		protected boolean isVisibleForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) 
-        {
-            Vector<FPSObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
-            for (FPSObject obj : topLevelObjects) {
-            	if (!(obj instanceof CVSAbstractFile)) {
+	public static abstract class MultipleFileCVSActionType<A extends MultipleFileCVSAction<?>> extends
+			FlexoActionType<A, FPSObject, FPSObject> {
+		protected MultipleFileCVSActionType(String actionName, ActionMenu actionMenu, ActionGroup actionGroup, int actionCategory) {
+			super(actionName, actionMenu, actionGroup, actionCategory);
+		}
+
+		protected MultipleFileCVSActionType(String actionName, ActionGroup actionGroup, int actionCategory) {
+			super(actionName, actionGroup, actionCategory);
+		}
+
+		@Override
+		protected boolean isVisibleForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
+			Vector<FPSObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
+			for (FPSObject obj : topLevelObjects) {
+				if (!(obj instanceof CVSAbstractFile)) {
 					return false;
-				} else if (((CVSAbstractFile)obj).getSharedProject() == null) {
+				} else if (((CVSAbstractFile) obj).getSharedProject() == null) {
 					return false;
 				}
-             }
-            return true;
-        }
+			}
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) 
-        {
-        	SharedProject project = getSharedProject(focusedObject, globalSelection);
-        	if (project == null) {
+		@Override
+		protected boolean isEnabledForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
+			SharedProject project = getSharedProject(focusedObject, globalSelection);
+			if (project == null) {
 				return false;
 			}
-           	Vector<CVSFile> selectedFiles = 
-           		getSelectedCVSFilesOnWhyCurrentActionShouldApply(focusedObject,globalSelection);
-         	return selectedFiles.size()>0;
-        }
-        
-        protected Vector<CVSFile> getSelectedCVSFilesOnWhyCurrentActionShouldApply(FPSObject focusedObject, Vector<FPSObject> globalSelection)
-        {
-          	Vector<CVSFile> selectedFiles = getSelectedCVSFiles(focusedObject, globalSelection);
-          	Vector<CVSFile> returned = new Vector<CVSFile>();
-          	for (CVSFile file : selectedFiles) {
-          		if (accept(file)) {
+			Vector<CVSFile> selectedFiles = getSelectedCVSFilesOnWhyCurrentActionShouldApply(focusedObject, globalSelection);
+			return selectedFiles.size() > 0;
+		}
+
+		protected Vector<CVSFile> getSelectedCVSFilesOnWhyCurrentActionShouldApply(FPSObject focusedObject,
+				Vector<FPSObject> globalSelection) {
+			Vector<CVSFile> selectedFiles = getSelectedCVSFiles(focusedObject, globalSelection);
+			Vector<CVSFile> returned = new Vector<CVSFile>();
+			for (CVSFile file : selectedFiles) {
+				if (accept(file)) {
 					returned.add(file);
 				}
-           	}
-          	return returned;
-        }
+			}
+			return returned;
+		}
 
-        protected abstract boolean accept (CVSFile aFile);
+		protected abstract boolean accept(CVSFile aFile);
 	}
-	
-	
-    MultipleFileCVSAction (MultipleFileCVSActionType<A> actionType, FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-    
-    @Override
-	public MultipleFileCVSActionType<A> getActionType() 
-    {
-        return (MultipleFileCVSActionType<A>)super.getActionType();
-    }
 
-    protected Vector<CVSFile> getSelectedCVSFilesOnWhyCurrentActionShouldApply()
-    {
-      	return getActionType().getSelectedCVSFilesOnWhyCurrentActionShouldApply(getFocusedObject(), getGlobalSelection());
-    }
+	MultipleFileCVSAction(MultipleFileCVSActionType<A> actionType, FPSObject focusedObject, Vector<FPSObject> globalSelection,
+			FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	public MultipleFileCVSActionType<A> getActionType() {
+		return (MultipleFileCVSActionType<A>) super.getActionType();
+	}
+
+	protected Vector<CVSFile> getSelectedCVSFilesOnWhyCurrentActionShouldApply() {
+		return getActionType().getSelectedCVSFilesOnWhyCurrentActionShouldApply(getFocusedObject(), getGlobalSelection());
+	}
 
 }

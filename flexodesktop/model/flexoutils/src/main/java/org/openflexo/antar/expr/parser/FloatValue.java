@@ -21,44 +21,37 @@ package org.openflexo.antar.expr.parser;
 
 public class FloatValue extends Value {
 
-    private double _value;
-    
-    public FloatValue (double value)
-    {
-        super();
-        _value = value;
-    }
-    
-    public double getDoubleValue() 
-    {
-        return _value;
-    }
-    
-    @Override
-	public String toString()
-    {
-        return getPrefix()+"Double["+_value+"]";
-    }
+	private double _value;
 
-    @Override
-	public String getStringValue() 
-    {
-        return ""+_value;
-    }
-    
-    public String getSerializationValue()
-    {
-        return "$"+getStringValue();
-    }
+	public FloatValue(double value) {
+		super();
+		_value = value;
+	}
 
-   @Override
-public boolean equals (Object obj)
-    {
-        if (obj instanceof FloatValue) {
-            return (getDoubleValue() == ((FloatValue)obj).getDoubleValue());
-        }
-        return super.equals(obj);
-    }
+	public double getDoubleValue() {
+		return _value;
+	}
 
+	@Override
+	public String toString() {
+		return getPrefix() + "Double[" + _value + "]";
+	}
+
+	@Override
+	public String getStringValue() {
+		return "" + _value;
+	}
+
+	public String getSerializationValue() {
+		return "$" + getStringValue();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof FloatValue) {
+			return (getDoubleValue() == ((FloatValue) obj).getDoubleValue());
+		}
+		return super.equals(obj);
+	}
 
 }

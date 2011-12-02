@@ -32,48 +32,42 @@ import org.openflexo.localization.FlexoLocalization;
 
 public abstract class ButtonAction implements ActionListener {
 
-    private FlexoActionType _actionType;
-    private String _unlocalizedName = null;
-    private FlexoEditor _editor;
-    
-    public ButtonAction(FlexoActionType actionType, FlexoEditor editor)
-    {
-        super();
-        _actionType = actionType;
-        _editor = editor;
-    }
-    
-    public ButtonAction(FlexoActionType actionType, String actionName, FlexoEditor editor)
-    {
-        this(actionType,editor);
-        _unlocalizedName = actionName;
-    }
-    
-    @Override
-	public void actionPerformed(ActionEvent event)
-    {
-        FlexoAction action = _actionType.makeNewAction (getFocusedObject(),getGlobalSelection(), _editor);
-        action.actionPerformed(event);
-    }
+	private FlexoActionType _actionType;
+	private String _unlocalizedName = null;
+	private FlexoEditor _editor;
 
-    protected abstract Vector getGlobalSelection();
+	public ButtonAction(FlexoActionType actionType, FlexoEditor editor) {
+		super();
+		_actionType = actionType;
+		_editor = editor;
+	}
 
-    protected abstract FlexoModelObject getFocusedObject();
+	public ButtonAction(FlexoActionType actionType, String actionName, FlexoEditor editor) {
+		this(actionType, editor);
+		_unlocalizedName = actionName;
+	}
 
-    public FlexoActionType getActionType() 
-    {
-        return _actionType;
-    }
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		FlexoAction action = _actionType.makeNewAction(getFocusedObject(), getGlobalSelection(), _editor);
+		action.actionPerformed(event);
+	}
 
-    public String getLocalizedName (Component component)
-    {
-        if (_unlocalizedName == null) {
-            return _actionType.getLocalizedName(component);
-                       
-        }
-        else {
-            return FlexoLocalization.localizedForKey(_unlocalizedName,component);
-        }
-    }
+	protected abstract Vector getGlobalSelection();
+
+	protected abstract FlexoModelObject getFocusedObject();
+
+	public FlexoActionType getActionType() {
+		return _actionType;
+	}
+
+	public String getLocalizedName(Component component) {
+		if (_unlocalizedName == null) {
+			return _actionType.getLocalizedName(component);
+
+		} else {
+			return FlexoLocalization.localizedForKey(_unlocalizedName, component);
+		}
+	}
 
 }

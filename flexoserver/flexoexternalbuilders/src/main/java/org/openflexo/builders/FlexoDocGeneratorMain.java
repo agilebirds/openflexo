@@ -15,8 +15,6 @@ import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.action.AddDocType;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.action.ConnectCGRepository;
-import org.openflexo.foundation.cg.templates.CGTemplate;
-import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.cg.templates.action.AddCustomTemplateRepository;
 import org.openflexo.foundation.cg.templates.action.ImportTemplates;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -73,7 +71,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 				} else if (args[i].startsWith(TOC_FLEXOID)) {
 					String tocString = args[i].substring(TOC_FLEXOID.length()).trim();
 					tocFlexoID = Long.valueOf(tocString);
-				}  else if (args[i].startsWith(TOC_UID)) {
+				} else if (args[i].startsWith(TOC_UID)) {
 					tocUserID = args[i].substring(TOC_UID.length());
 				} else if (args[i].startsWith(TEMPLATES_ARGUMENT_PREFIX)) {
 					templates = new File(args[i].substring(TEMPLATES_ARGUMENT_PREFIX.length()));
@@ -86,7 +84,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 						outputPath = outputPath.substring(1);
 					}
 					if (outputPath.endsWith("\"")) {
-						outputPath = outputPath.substring(0,outputPath.length()-1);
+						outputPath = outputPath.substring(0, outputPath.length() - 1);
 					}
 				} else if (args[i].startsWith(WORKING_DIR)) {
 					workingDir = args[i].substring(WORKING_DIR.length());
@@ -94,7 +92,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 						workingDir = workingDir.substring(1);
 					}
 					if (workingDir.endsWith("\"")) {
-						workingDir = workingDir.substring(0,workingDir.length()-1);
+						workingDir = workingDir.substring(0, workingDir.length() - 1);
 					}
 				} else if (args[i].startsWith(FORMAT)) {
 					String t = args[i].substring(FORMAT.length());
@@ -102,7 +100,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 						t = t.substring(1);
 					}
 					if (t.endsWith("\"")) {
-						t = t.substring(0,t.length()-1);
+						t = t.substring(0, t.length() - 1);
 					}
 					try {
 						format = Format.valueOf(t);
@@ -122,11 +120,11 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 				}
 			}
 			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("Missing argument. Usage java " + FlexoDocGeneratorMain.class.getName() + " "
-						+ RESOURCE_PATH_ARGUMENT_PREFIX + " " + OUTPUT_FILE_ARGUMENT_PREFIX + " " + DOC_TYPE_ARGUMENT_PREFIX + " "
-						+ TEMPLATES_ARGUMENT_PREFIX + " " + "\n" + (args.length > 0 ? sb.toString() : "No arguments !!!"));
+				logger.severe("Missing argument. Usage java " + FlexoDocGeneratorMain.class.getName() + " " + RESOURCE_PATH_ARGUMENT_PREFIX
+						+ " " + OUTPUT_FILE_ARGUMENT_PREFIX + " " + DOC_TYPE_ARGUMENT_PREFIX + " " + TEMPLATES_ARGUMENT_PREFIX + " " + "\n"
+						+ (args.length > 0 ? sb.toString() : "No arguments !!!"));
 			}
-			if (outputPath==null) {
+			if (outputPath == null) {
 				throw new MissingArgumentException(OUTPUT_FILE_ARGUMENT_PREFIX);
 			}
 		}
@@ -135,17 +133,18 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 	@Override
 	protected void run() {
 		File output = null;
-		if (workingDir!=null) {
+		if (workingDir != null) {
 			output = new File(workingDir);
 			output.mkdirs();
 			if (!output.exists() || !output.canWrite()) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Output path: "+output.getAbsolutePath()+" either does not exist or does not have write permissions.");
+					logger.warning("Output path: " + output.getAbsolutePath()
+							+ " either does not exist or does not have write permissions.");
 				}
 				output = null;
 			}
 		}
-		if (output==null) {
+		if (output == null) {
 			try {
 				output = FileUtils.createTempDirectory("DocOutput", "");
 			} catch (IOException e) {
@@ -155,21 +154,21 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			}
 		}
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Working directory is: "+output.getAbsolutePath());
+			logger.info("Working directory is: " + output.getAbsolutePath());
 		}
-		File latexDir = new File(output, "Doc"+format.name()+"Source");
-		File pdfDir = new File(output, format==Format.LATEX?"PDF":"ZIP");
+		File latexDir = new File(output, "Doc" + format.name() + "Source");
+		File pdfDir = new File(output, format == Format.LATEX ? "PDF" : "ZIP");
 		latexDir.mkdirs();
 		pdfDir.mkdirs();
 		if (project != null) {
-			project.computeDiff = false;
+			project.setComputeDiff(false);
 			AddGeneratedCodeRepository add = AddGeneratedCodeRepository.actionType.makeNewAction(editor.getProject().getGeneratedDoc(),
 					null, editor);
-			if (editor.getProject().getDocTypeNamed(docType)==null) {
+			if (editor.getProject().getDocTypeNamed(docType) == null) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Doc type '"+docType+"' cannot be found in project! Let's create it temporarily in this project");
+					logger.warning("Doc type '" + docType + "' cannot be found in project! Let's create it temporarily in this project");
 				}
-				AddDocType addDocType = AddDocType.actionType.makeNewAction(editor.getProject(),null,editor);
+				AddDocType addDocType = AddDocType.actionType.makeNewAction(editor.getProject(), null, editor);
 				addDocType.setNewName(docType);
 				addDocType.doAction();
 				add.setNewDocType(addDocType.getNewDocType());
@@ -185,20 +184,22 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			// the
 			// repository
 			repository.setPostBuildDirectory(pdfDir);
-			repository.setPostProductName(repository.getName()+ format.getPostBuildFileExtension());
+			repository.setPostProductName(repository.getName() + format.getPostBuildFileExtension());
 			repository.setManageHistory(false);
 			if (!add.hasActionExecutionSucceeded()) {
 				handleActionFailed(add);
 			}
-			if (templates!=null) {
-				AddCustomTemplateRepository custom = AddCustomTemplateRepository.actionType.makeNewAction(project.getGeneratedDoc().getTemplates(), null, editor);
+			if (templates != null) {
+				AddCustomTemplateRepository custom = AddCustomTemplateRepository.actionType.makeNewAction(project.getGeneratedDoc()
+						.getTemplates(), null, editor);
 				custom.setNewCustomTemplatesRepositoryName("FlexoServerTemplates");
-				custom.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(project,"FlexoServerTemplates"));
+				custom.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(project, "FlexoServerTemplates"));
 				custom.doAction();
 				if (!custom.hasActionExecutionSucceeded()) {
 					handleActionFailed(custom);
 				}
-				ImportTemplates importTemplates =ImportTemplates.actionType.makeNewAction(project.getGeneratedDoc().getTemplates().getApplicationRepository(), null, editor);
+				ImportTemplates importTemplates = ImportTemplates.actionType.makeNewAction(project.getGeneratedDoc().getTemplates()
+						.getApplicationRepository(), null, editor);
 				importTemplates.setExternalTemplateDirectory(templates);
 				importTemplates.setRepository(custom.getNewCustomTemplatesRepository());
 				importTemplates.doAction();
@@ -212,18 +213,18 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 					}
 				}*/
 			}
-			TOCRepository rep=null;
-			if(tocUserID!=null && tocFlexoID!=-1 && project.getTOCData()!=null){
+			TOCRepository rep = null;
+			if (tocUserID != null && tocFlexoID != -1 && project.getTOCData() != null) {
 				rep = project.getTOCData().getRepositoryWithIdentifier(tocUserID, tocFlexoID);
-				if (rep==null) {
-					logger.severe("Cannot find TOCRepository : flexoID="+tocFlexoID+" userID="+tocUserID);
-					reportMessage("Cannot find TOCRepository : flexoID="+tocFlexoID+" userID="+tocUserID);
+				if (rep == null) {
+					logger.severe("Cannot find TOCRepository : flexoID=" + tocFlexoID + " userID=" + tocUserID);
+					reportMessage("Cannot find TOCRepository : flexoID=" + tocFlexoID + " userID=" + tocUserID);
 					setExitCode(TOC_REPOSITORY_NOT_FOUND);
 					return;
 				}
 
 			}
-			if (rep==null) {
+			if (rep == null) {
 				AddTOCRepository tocRepository = AddTOCRepository.actionType.makeNewAction(project.getTOCData(), null, editor);
 				tocRepository.setRepositoryName("Automatically generated table of content");
 				tocRepository.setDocType(add.getNewDocType());
@@ -237,14 +238,15 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			docType = add.getNewDocType().toString();
 			ConnectCGRepository connect = ConnectCGRepository.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
 			connect.doAction();
-			SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
+			SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+					add.getNewGeneratedCodeRepository(), null, editor);
 			sync.setSaveBeforeGenerating(false);
 			sync.doAction();
 			if (!sync.hasActionExecutionSucceeded()) {
 				handleActionFailed(sync);
 			}
-			WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewAction(add
-					.getNewGeneratedCodeRepository(), null, editor);
+			WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewAction(add.getNewGeneratedCodeRepository(),
+					null, editor);
 			write.setSaveBeforeGenerating(false);
 			write.doAction();
 			if (!write.hasActionExecutionSucceeded()) {
@@ -265,9 +267,9 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 				pdf.setSaveBeforeGenerating(false);
 				pdf.setLatexTimeOutInSeconds(120);
 				pdf.doAction();
-				if (pdf.getLatexErrorMessage()!=null) {
+				if (pdf.getLatexErrorMessage() != null) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("PDF generation error: "+pdf.getLatexErrorMessage());
+						logger.warning("PDF generation error: " + pdf.getLatexErrorMessage());
 					}
 				}
 				if (!pdf.hasActionExecutionSucceeded()) {
@@ -299,7 +301,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 				}
 				break;
 			}
-			if (postBuildFile==null) {
+			if (postBuildFile == null) {
 				setExitCode(POST_BUILD_ERROR);
 			}
 			try {

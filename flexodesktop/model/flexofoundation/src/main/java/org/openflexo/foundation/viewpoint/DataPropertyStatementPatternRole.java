@@ -7,46 +7,40 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 public class DataPropertyStatementPatternRole extends StatementPatternRole {
 
 	@Override
-	public PatternRoleType getType()
-	{
+	public PatternRoleType getType() {
 		return PatternRoleType.DataPropertyStatement;
 	}
 
 	@Override
-	public  String getPreciseType()
-	{
-		if (getDataProperty() != null) return getDataProperty().getName();
+	public String getPreciseType() {
+		if (getDataProperty() != null) {
+			return getDataProperty().getName();
+		}
 		return "";
 	}
-	
+
 	@Override
-	public Class<DataPropertyStatement> getAccessedClass()
-	{
+	public Class<DataPropertyStatement> getAccessedClass() {
 		return DataPropertyStatement.class;
 	}
 
 	private String dataPropertyURI;
 
-	public String _getDataPropertyURI()
-	{
+	public String _getDataPropertyURI() {
 		return dataPropertyURI;
 	}
 
-	public void _setDataPropertyURI(String dataPropertyURI) 
-	{
+	public void _setDataPropertyURI(String dataPropertyURI) {
 		this.dataPropertyURI = dataPropertyURI;
 	}
 
-	public OntologyDataProperty getDataProperty()
-	{
+	public OntologyDataProperty getDataProperty() {
 		getCalc().loadWhenUnloaded();
 		return getOntologyLibrary().getDataProperty(_getDataPropertyURI());
 	}
-	
-	public void setDataProperty(OntologyProperty p)
-	{
+
+	public void setDataProperty(OntologyProperty p) {
 		_setDataPropertyURI(p != null ? p.getURI() : null);
 	}
-	
 
 }

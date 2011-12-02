@@ -20,6 +20,7 @@
 package org.openflexo.generator.utils;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,69 +34,68 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.localization.FlexoLocalization;
 
-
-public class JarResourcesGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
-{
+public class JarResourcesGenerator extends MetaGenerator<FlexoModelObject, CGRepository> {
 	private static final Logger logger = Logger.getLogger(WebServerResourcesGenerator.class.getPackage().getName());
-	
-    public JarResourcesGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,null);
-        _generators = new Hashtable<FlexoJarResource,ResourceToCopyGenerator>();
-    }
-    
-    @Override
-    public ProjectGenerator getProjectGenerator() {
-    	return (ProjectGenerator) super.getProjectGenerator();
-    }
-    
+
+	public JarResourcesGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null);
+		_generators = new Hashtable<FlexoJarResource, ResourceToCopyGenerator>();
+	}
+
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public ProjectGenerator getProjectGenerator() {
+		return (ProjectGenerator) super.getProjectGenerator();
+	}
+
+	@Override
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public void generate(boolean forceRegenerate) throws GenerationException
-    {
-    	if (logger.isLoggable(Level.FINE))
-    		logger.fine("Called JarResourcesGenerator.generate(forceRegenerate)");
-    	resetSecondaryProgressWindow(_generators.values().size());
-    	startGeneration();
-    	for (ResourceToCopyGenerator generator : _generators.values()) {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+generator.getIdentifier(),false);
-    		generator.generate(forceRegenerate);
-    	}
-    	stopGeneration();
-    }
-    
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
-		
-		Vector<FlexoJarResource> allJars = getProject().getResourcesOfClass(FlexoJarResource.class);
+	public void generate(boolean forceRegenerate) throws GenerationException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Called JarResourcesGenerator.generate(forceRegenerate)");
+		}
+		resetSecondaryProgressWindow(_generators.values().size());
+		startGeneration();
+		for (ResourceToCopyGenerator generator : _generators.values()) {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + generator.getIdentifier(), false);
+			generator.generate(forceRegenerate);
+		}
+		stopGeneration();
+	}
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+
+		List<FlexoJarResource> allJars = getProject().getResourcesOfClass(FlexoJarResource.class);
 		resetSecondaryProgressWindow(allJars.size());
 		for (FlexoJarResource jar : allJars) {
 			ResourceToCopyGenerator generator = getGenerator(jar);
-			if(jar.getFile()==null || !jar.getFile().exists() || jar.getJarRepository()==null || !jar.getJarRepository().getIsImportedByUser())continue;
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+jar.getName(),false);
-			if (generator != null)
-				generator.buildResourcesAndSetGenerators(repository,resources);
-			else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Could not instanciate JarResourceGenerator for "+jar);
+			if (jar.getFile() == null || !jar.getFile().exists() || jar.getJarRepository() == null
+					|| !jar.getJarRepository().getIsImportedByUser()) {
+				continue;
+			}
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + jar.getName(), false);
+			if (generator != null) {
+				generator.buildResourcesAndSetGenerators(repository, resources);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not instanciate JarResourceGenerator for " + jar);
+				}
 			}
 		}
-		
+
 	}
 
-	private Hashtable<FlexoJarResource,ResourceToCopyGenerator> _generators;
-	
-	protected ResourceToCopyGenerator getGenerator(FlexoJarResource jarResource)
-	{
+	private Hashtable<FlexoJarResource, ResourceToCopyGenerator> _generators;
+
+	protected ResourceToCopyGenerator getGenerator(FlexoJarResource jarResource) {
 		ResourceToCopyGenerator returned = _generators.get(jarResource);
 		if (returned == null) {
-			_generators.put(jarResource,returned=new ResourceToCopyGenerator(getProjectGenerator(),jarResource, getRepository().getLibSymbolicDirectory()));
+			_generators.put(jarResource, returned = new ResourceToCopyGenerator(getProjectGenerator(), jarResource, getRepository()
+					.getLibSymbolicDirectory()));
 		}
 		return returned;
 	}

@@ -27,43 +27,41 @@ import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
  * Return a file or directory which is included in a particular module.
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 class ModuleExpansionResponse implements Response {
 
-    /**
-     * Creates new ModuleExpansionResponse
-     */
-    public ModuleExpansionResponse() {
-    }
+	/**
+	 * Creates new ModuleExpansionResponse
+	 */
+	public ModuleExpansionResponse() {
+	}
 
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            final String localPath = dis.readLine();
-            EventManager em = services.getEventManager();
-            em.fireCVSEvent(new ModuleExpansionEvent(this, localPath));
-        }
-        catch (IOException e) {
-            throw new ResponseException(e);
-        }
-    }
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			final String localPath = dis.readLine();
+			EventManager em = services.getEventManager();
+			em.fireCVSEvent(new ModuleExpansionEvent(this, localPath));
+		} catch (IOException e) {
+			throw new ResponseException(e);
+		}
+	}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

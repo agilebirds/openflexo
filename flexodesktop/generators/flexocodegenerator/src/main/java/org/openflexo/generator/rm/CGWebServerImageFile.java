@@ -34,28 +34,23 @@ import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
-import org.openflexo.generator.rm.FlexoCopyOfFileResource;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.toolbox.FileUtils;
 
 @Deprecated
 public class CGWebServerImageFile extends AbstractCGFile implements GenerationAvailableFile, GeneratedResourceData {
 
-	public CGWebServerImageFile(GeneratedCodeBuilder builder)
-    {
-        super(builder.generatedCode);
-     }
-    
-    public CGWebServerImageFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
+	public CGWebServerImageFile(GeneratedCodeBuilder builder) {
+		super(builder.generatedCode);
+	}
 
-    public CGWebServerImageFile(GenerationRepository repository, CGRepositoryFileResource resource)
-    {
-        super(repository.getGeneratedCode());
-        setResource(resource);
-    }
+	public CGWebServerImageFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public CGWebServerImageFile(GenerationRepository repository, CGRepositoryFileResource resource) {
+		super(repository.getGeneratedCode());
+		setResource(resource);
+	}
 
 	@Override
 	public void generate() throws FlexoException {
@@ -88,10 +83,9 @@ public class CGWebServerImageFile extends AbstractCGFile implements GenerationAv
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
 		super.setResource((CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>) resource);
 	}
-	
+
 	@Override
-	public boolean hasGenerationErrors()
-	{
+	public boolean hasGenerationErrors() {
 		return false;
 	}
 

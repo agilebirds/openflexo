@@ -24,22 +24,19 @@ import org.openflexo.fge.geom.FGERectangle;
 public abstract class RectangleConstruction extends GeometricConstruction<FGERectangle> {
 
 	private boolean isFilled;
-	
-	public final FGERectangle getRectangle()
-	{
+
+	public final FGERectangle getRectangle() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGERectangle computeData();
 
-	public boolean getIsFilled()
-	{
+	public boolean getIsFilled() {
 		return isFilled;
 	}
 
-	public void setIsFilled(boolean isFilled)
-	{
+	public void setIsFilled(boolean isFilled) {
 		this.isFilled = isFilled;
 		setModified();
 	}

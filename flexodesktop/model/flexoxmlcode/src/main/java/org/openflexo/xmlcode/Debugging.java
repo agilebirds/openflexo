@@ -27,53 +27,48 @@ package org.openflexo.xmlcode;
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Debugging
-{
+public class Debugging {
 
-    /** Flag indicating if debug should be displayed or not */
-    protected static boolean debugEnabled = false;
+	/** Flag indicating if debug should be displayed or not */
+	protected static boolean debugEnabled = false;
 
-    /**
-     * Enable debug
-     */
-    public static void enableDebug()
-    {
+	/**
+	 * Enable debug
+	 */
+	public static void enableDebug() {
 
-        debugEnabled = true;
-    }
+		debugEnabled = true;
+	}
 
-    /**
-     * Disable debug
-     */
-    public static void disableDebug()
-    {
+	/**
+	 * Disable debug
+	 */
+	public static void disableDebug() {
 
-        debugEnabled = false;
-    }
+		debugEnabled = false;
+	}
 
-    /**
-     * Prints to stdout specified string, if debug was enabled
-     */
-    public static void debug(String aDebugString)
-    {
+	/**
+	 * Prints to stdout specified string, if debug was enabled
+	 */
+	public static void debug(String aDebugString) {
 
-        if (debugEnabled) {
-            System.out.println(aDebugString);
-        }
+		if (debugEnabled) {
+			System.out.println(aDebugString);
+		}
 
-    }
+	}
 
-    /**
-     * Prints to stderr specified string as a warning
-     */
-    public static void warn(String aWarningMessage)
-    {
+	/**
+	 * Prints to stderr specified string as a warning
+	 */
+	public static void warn(String aWarningMessage) {
 
-        System.err.println("!!! WARNING !!!");
-        System.err.println("Message:\n" + aWarningMessage);
-        System.err.println("StackTrace:\n");
-        (new RuntimeException()).printStackTrace();
+		System.err.println("!!! WARNING !!!");
+		System.err.println("Message:\n" + aWarningMessage);
+		System.err.println("StackTrace:\n");
+		(new RuntimeException()).printStackTrace();
 
-    }
+	}
 
 }

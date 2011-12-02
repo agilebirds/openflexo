@@ -35,101 +35,100 @@ import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
 
+public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> {
 
-public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject,TOCObject>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AddTOCEntry.class.getPackage().getName());
 
-    public static FlexoActionType<AddTOCEntry, TOCObject, TOCObject> actionType = new FlexoActionType<AddTOCEntry, TOCObject, TOCObject>(
-            "add_toc_entry", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddTOCEntry, TOCObject, TOCObject> actionType = new FlexoActionType<AddTOCEntry, TOCObject, TOCObject>(
+			"add_toc_entry", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-        public AddTOCEntry makeNewAction(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor)
-        {
-            return new AddTOCEntry(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddTOCEntry makeNewAction(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
+			return new AddTOCEntry(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-        protected boolean isVisibleForSelection(TOCObject object, Vector<TOCObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-        protected boolean isEnabledForSelection(TOCObject object, Vector<TOCObject> globalSelection)
-        {
-            return (object instanceof TOCEntry && ((TOCEntry)object).canHaveChildren());
-        }
+		@Override
+		protected boolean isEnabledForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
+			return (object instanceof TOCEntry && ((TOCEntry) object).canHaveChildren());
+		}
 
-    };
+	};
 
-    private String tocEntryTitle;
+	private String tocEntryTitle;
 
-    AddTOCEntry(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	AddTOCEntry(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    private DocSection section;
-    private ProcessDocSectionSubType subType;
-    private FlexoModelObject modelObject;
+	private DocSection section;
+	private ProcessDocSectionSubType subType;
+	private FlexoModelObject modelObject;
 
-    public TOCRepository getRepository() {
-    	return ((TOCEntry)getFocusedObject()).getRepository();
-    }
-    
-    @Override
-    protected void doAction(Object context) throws DuplicateSectionException, InvalidLevelException
-    {
-    	if (section!=null) {
-    		if (getRepository().getTOCEntryWithID(section)!=null && modelObject==null)
-    			throw new DuplicateSectionException();
-    	}
-    	TOCEntry entry;
-    	if (section!=null || modelObject!=null) {
-    		if(section!=null && modelObject!=null)
-    			entry = getRepository().createObjectEntry(modelObject,section);
-    		else if(section!=null)
-    			entry = getRepository().createDefaultEntry(section);
-    		else
-    			entry = getRepository().createObjectEntry(modelObject);
-    		entry.setTitle(getTocEntryTitle());
-    		if(subType!=null)entry.setSubType(subType);
-    		if (entry.getPreferredLevel()==-1) {
-    			addEntryToFocusedObject(entry);
-    		} else {
-    			if (entry.getPreferredLevel()==1) {
-    				getRepository().addToTocEntries(entry);
-    			}
-    			else {
-    				if (getFocusedObject() instanceof TOCRepository || (((TOCEntry)getFocusedObject()).getLevel()+1<entry.getPreferredLevel())) {
-    					throw new InvalidLevelException();
-    				} else {
-    					TOCEntry parent = ((TOCEntry)getFocusedObject());
-    					while (parent.getLevel()>=entry.getPreferredLevel()) {
-    						parent = parent.getParent();
-    					}
-    					parent.addToTocEntries(entry);
-    				}
-    			}
-    		}
-    	} else {
-    		entry = new TOCEntry(getFocusedObject().getData());
-    		if(subType!=null)entry.setSubType(subType);
+	public TOCRepository getRepository() {
+		return ((TOCEntry) getFocusedObject()).getRepository();
+	}
+
+	@Override
+	protected void doAction(Object context) throws DuplicateSectionException, InvalidLevelException {
+		if (section != null) {
+			if (getRepository().getTOCEntryWithID(section) != null && modelObject == null) {
+				throw new DuplicateSectionException();
+			}
+		}
+		TOCEntry entry;
+		if (section != null || modelObject != null) {
+			if (section != null && modelObject != null) {
+				entry = getRepository().createObjectEntry(modelObject, section);
+			} else if (section != null) {
+				entry = getRepository().createDefaultEntry(section);
+			} else {
+				entry = getRepository().createObjectEntry(modelObject);
+			}
+			entry.setTitle(getTocEntryTitle());
+			if (subType != null) {
+				entry.setSubType(subType);
+			}
+			if (entry.getPreferredLevel() == -1) {
+				addEntryToFocusedObject(entry);
+			} else {
+				if (entry.getPreferredLevel() == 1) {
+					getRepository().addToTocEntries(entry);
+				} else {
+					if (getFocusedObject() instanceof TOCRepository
+							|| (((TOCEntry) getFocusedObject()).getLevel() + 1 < entry.getPreferredLevel())) {
+						throw new InvalidLevelException();
+					} else {
+						TOCEntry parent = ((TOCEntry) getFocusedObject());
+						while (parent.getLevel() >= entry.getPreferredLevel()) {
+							parent = parent.getParent();
+						}
+						parent.addToTocEntries(entry);
+					}
+				}
+			}
+		} else {
+			entry = new TOCEntry(getFocusedObject().getData());
+			if (subType != null) {
+				entry.setSubType(subType);
+			}
 			entry.setTitle(getTocEntryTitle());
 			addEntryToFocusedObject(entry);
-    	}
-    }
+		}
+	}
 
-    private void addEntryToFocusedObject(TOCEntry entry) {
-   		((TOCEntry)getFocusedObject()).addToTocEntries(entry);
-    }
-    
+	private void addEntryToFocusedObject(TOCEntry entry) {
+		((TOCEntry) getFocusedObject()).addToTocEntries(entry);
+	}
+
 	public String getTocEntryTitle() {
 		return tocEntryTitle;
 	}
@@ -141,7 +140,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject,TOCObject>
 	public void setSection(DocSection section) {
 		this.section = section;
 	}
-	
+
 	public void setModelObject(FlexoModelObject modelObject) {
 		this.modelObject = modelObject;
 	}

@@ -26,59 +26,54 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.ve.view.menu.OEMenuBar;
 
-
 /**
  * Selection manager dedicated to this module
  * 
  * @author yourname
  */
-public class OESelectionManager extends SelectionManager
-{
+public class OESelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(OESelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(OESelectionManager.class.getPackage().getName());
 
-    public OESelectionManager(OEController controller)
-    {
-        super(controller);
-        OEMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new OEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        _contextualMenuManager = new OEContextualMenuManager(this,controller.getEditor(),controller);
-   }
+	public OESelectionManager(OEController controller) {
+		super(controller);
+		OEMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new OEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		_contextualMenuManager = new OEContextualMenuManager(this, controller.getEditor(), controller);
+	}
 
-    public OEController getXXXController()
-    {
-        return (OEController) getController();
-    }
+	public OEController getXXXController() {
+		return (OEController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in this module");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("'Select All' not implemented yet in this module");
+		}
+		return false;
+	}
 
-    // ==========================================================================
-    // ============================= Deletion
-    // ===================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Deletion
+	// ===================================
+	// ==========================================================================
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoModelObject
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getXXXController().getCurrentDisplayedObjectAsModuleView();
-    }
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoModelObject
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getXXXController().getCurrentDisplayedObjectAsModuleView();
+	}
 
-    @Override
-	public FlexoModelObject getPasteContext()
-    {
-        // TODO please implement this
-        return null;
-    }
+	@Override
+	public FlexoModelObject getPasteContext() {
+		// TODO please implement this
+		return null;
+	}
 
 }

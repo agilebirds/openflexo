@@ -25,48 +25,67 @@ import cb.petal.ClassAttribute;
 
 /**
  * Simple representation of a Java field.
- *
+ * 
  * @version $Id: FieldImpl.java,v 1.3 2011/09/12 11:47:23 gpolet Exp $
  * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class FieldImpl extends NodeImpl implements Field {
-  private   String init, type;
-  protected ClassAttribute attribute;
+	private String init, type;
+	protected ClassAttribute attribute;
 
-  public FieldImpl() {  }
+	public FieldImpl() {
+	}
 
-  public void           setAttribute(ClassAttribute a) { attribute = a; }
-  public ClassAttribute getAttribute()                 { return attribute; }
+	public void setAttribute(ClassAttribute a) {
+		attribute = a;
+	}
 
-  @Override
-public void   setInitialValue(String s) { init = s; }
-  @Override
-public String getInitialValue() { return init; }
-  @Override
-public void   setType(String p) { type = p; }
-  @Override
-public String getType() { return type; }
+	public ClassAttribute getAttribute() {
+		return attribute;
+	}
 
-  /** Default implementation prints Java code
-   */
-  @Override
-public void dump(PrintWriter stream) {
-    printDocumentation(stream, attribute);
+	@Override
+	public void setInitialValue(String s) {
+		init = s;
+	}
 
-    stream.print("  ");
-    print(stream, "", getAccess(), " ");
-    stream.print(getType() + " " + getName());
-    print(stream, " = ", getInitialValue(), "");
-    stream.println(";");
-  }
+	@Override
+	public String getInitialValue() {
+		return init;
+	}
 
-  @Override
-public boolean equals(Object o) {
-    if(o instanceof Field) {
-      Field f = (Field)o;
+	@Override
+	public void setType(String p) {
+		type = p;
+	}
 
-      return getType().equals(f.getType()) && getName().equals(f.getName());
-    } else
-      return false;
-  }
+	@Override
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * Default implementation prints Java code
+	 */
+	@Override
+	public void dump(PrintWriter stream) {
+		printDocumentation(stream, attribute);
+
+		stream.print("  ");
+		print(stream, "", getAccess(), " ");
+		stream.print(getType() + " " + getName());
+		print(stream, " = ", getInitialValue(), "");
+		stream.println(";");
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Field) {
+			Field f = (Field) o;
+
+			return getType().equals(f.getType()) && getName().equals(f.getName());
+		} else {
+			return false;
+		}
+	}
 }

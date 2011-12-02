@@ -22,7 +22,6 @@ package org.openflexo.foundation.sg.implmodel;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -36,90 +35,82 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModelDefinition.Dupli
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateImplementationModel extends FlexoAction<CreateImplementationModel,GeneratedSources,CGObject> 
-{
+public class CreateImplementationModel extends FlexoAction<CreateImplementationModel, GeneratedSources, CGObject> {
 
-    private static final Logger logger = Logger.getLogger(CreateImplementationModel.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateImplementationModel.class.getPackage().getName());
 
-    public static FlexoActionType<CreateImplementationModel,GeneratedSources,CGObject> actionType 
-    = new FlexoActionType<CreateImplementationModel,GeneratedSources,CGObject> (
-    		"create_new_implementation_model",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.defaultGroup,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateImplementationModel, GeneratedSources, CGObject> actionType = new FlexoActionType<CreateImplementationModel, GeneratedSources, CGObject>(
+			"create_new_implementation_model", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateImplementationModel makeNewAction(GeneratedSources focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateImplementationModel(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateImplementationModel makeNewAction(GeneratedSources focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new CreateImplementationModel(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(GeneratedSources object, Vector<CGObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(GeneratedSources object, Vector<CGObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(GeneratedSources object, Vector<CGObject> globalSelection) 
-        {
-            return object != null;
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (CreateImplementationModel.actionType, GeneratedSources.class);
-    }
-    
-     private ImplementationModelDefinition _newImplementationModelDefinition;
+		@Override
+		protected boolean isEnabledForSelection(GeneratedSources object, Vector<CGObject> globalSelection) {
+			return object != null;
+		}
 
-     public String newModelName;
-     public String newModelDescription;
-     public boolean skipDialog = false;
-    
-    CreateImplementationModel (GeneratedSources focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) throws InvalidParametersException, DuplicateImplementationModelNameException, DuplicateResourceException 
-    {
-       	logger.info ("Add implementation model");  	
-    	
-    	if (StringUtils.isEmpty(newModelName)) {
-    		throw new InvalidParametersException("model name is undefined");
-    	}
-    	if (getProject().getGeneratedSources().getImplementationModelNamed(newModelName)!=null)
-    		throw new ImplementationModelDefinition.DuplicateImplementationModelNameException(newModelName);
+	static {
+		FlexoModelObject.addActionForClass(CreateImplementationModel.actionType, GeneratedSources.class);
+	}
 
-    	_newImplementationModelDefinition = new ImplementationModelDefinition(newModelName, getFocusedObject(), getProject(),true);
-    	_newImplementationModelDefinition.setDescription(newModelDescription);
-    	logger.info ("Created implementation model "+_newImplementationModelDefinition+" for project "+_newImplementationModelDefinition.getProject());
-    	// Creates the resource here
-    	_newImplementationModelDefinition.getImplementationModelResource();
-    }
+	private ImplementationModelDefinition _newImplementationModelDefinition;
 
-     public FlexoProject getProject()
-    {
-    	if (getFocusedObject() != null) return getFocusedObject().getProject();
-    	return null;
-    }
-    
-    public ImplementationModelDefinition getNewImplementationModelDefinition() 
-    {
-        return _newImplementationModelDefinition;
-    }
+	public String newModelName;
+	public String newModelDescription;
+	public boolean skipDialog = false;
+
+	CreateImplementationModel(GeneratedSources focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws InvalidParametersException, DuplicateImplementationModelNameException,
+			DuplicateResourceException {
+		logger.info("Add implementation model");
+
+		if (StringUtils.isEmpty(newModelName)) {
+			throw new InvalidParametersException("model name is undefined");
+		}
+		if (getProject().getGeneratedSources().getImplementationModelNamed(newModelName) != null) {
+			throw new ImplementationModelDefinition.DuplicateImplementationModelNameException(newModelName);
+		}
+
+		_newImplementationModelDefinition = new ImplementationModelDefinition(newModelName, getFocusedObject(), getProject(), true);
+		_newImplementationModelDefinition.setDescription(newModelDescription);
+		logger.info("Created implementation model " + _newImplementationModelDefinition + " for project "
+				+ _newImplementationModelDefinition.getProject());
+		// Creates the resource here
+		_newImplementationModelDefinition.getImplementationModelResource();
+	}
+
+	public FlexoProject getProject() {
+		if (getFocusedObject() != null) {
+			return getFocusedObject().getProject();
+		}
+		return null;
+	}
+
+	public ImplementationModelDefinition getNewImplementationModelDefinition() {
+		return _newImplementationModelDefinition;
+	}
 
 	public String errorMessage;
-	
-	public boolean isValid()
-	{
-    	if (StringUtils.isEmpty(newModelName)) {
+
+	public boolean isValid() {
+		if (StringUtils.isEmpty(newModelName)) {
 			errorMessage = FlexoLocalization.localizedForKey("no_implementation_model_name_defined");
 			return false;
 		}

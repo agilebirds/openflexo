@@ -25,22 +25,18 @@ package org.openflexo.foundation.wkf.dm;
  * @author sguerin
  * 
  */
-public class WKFAttributeDataModification extends WKFDataModification
-{
+public class WKFAttributeDataModification extends WKFDataModification {
 
-    public WKFAttributeDataModification(String attributeName, Object oldValue, Object newValue)
-    {
-        super(attributeName, oldValue, newValue);
-    }
+	public WKFAttributeDataModification(String attributeName, Object oldValue, Object newValue) {
+		super(attributeName, oldValue, newValue);
+	}
 
-    public String getAttributeName()
-    {
-        return propertyName();
-    }
+	public String getAttributeName() {
+		return propertyName();
+	}
 
-    @Override
-	public String toString()
-    {
-        return "WKFAttributeDataModification: ["+getAttributeName()+"] old:"+oldValue()+" new:"+newValue();
-    }
+	@Override
+	public String toString() {
+		return "WKFAttributeDataModification: [" + getAttributeName() + "] old:" + oldValue() + " new:" + newValue();
+	}
 }

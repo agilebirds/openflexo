@@ -23,134 +23,104 @@ package org.openflexo.xmlcode.examples.example2;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>SellReport</code> is intented to represent a sellers' month
- * report.
+ * Class <code>SellReport</code> is intented to represent a sellers' month report.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class SellReport implements XMLSerializable
-{
+public class SellReport implements XMLSerializable {
 
-    // Serialized fields
-    protected Vendor vendor;
+	// Serialized fields
+	protected Vendor vendor;
 
-    protected CommandsList commands;
+	protected CommandsList commands;
 
-    // Computed fields
-    protected float totalAmount;
+	// Computed fields
+	protected float totalAmount;
 
-    protected float totalPaidAmount;
+	protected float totalPaidAmount;
 
-    protected float totalUnpaidAmount;
+	protected float totalUnpaidAmount;
 
-    @Override
-	public String toString()
-    {
-        String returnedString = "SellReport (totalAmount=" + totalAmount + ", totalPaidAmount=" + totalPaidAmount + ", totalUnpaidAmount=" + totalUnpaidAmount;
-        if (vendor != null) {
-            returnedString += ", vendor=" + vendor.toString();
-        }
-        returnedString += "\n";
-        if (commands != null) {
-            returnedString += commands.toString();
-        }
-        return returnedString;
-    }
+	@Override
+	public String toString() {
+		String returnedString = "SellReport (totalAmount=" + totalAmount + ", totalPaidAmount=" + totalPaidAmount + ", totalUnpaidAmount="
+				+ totalUnpaidAmount;
+		if (vendor != null) {
+			returnedString += ", vendor=" + vendor.toString();
+		}
+		returnedString += "\n";
+		if (commands != null) {
+			returnedString += commands.toString();
+		}
+		return returnedString;
+	}
 
-    public CommandsList getCommands()
-    {
-        return commands;
-    }
+	public CommandsList getCommands() {
+		return commands;
+	}
 
-    public void setCommands(CommandsList v)
-    {
-        commands = v;
-        v.setRelatedSellReport(this);
-    }
+	public void setCommands(CommandsList v) {
+		commands = v;
+		v.setRelatedSellReport(this);
+	}
 
-    public Vendor getVendor()
-    {
-        return vendor;
-    }
+	public Vendor getVendor() {
+		return vendor;
+	}
 
-    public void setVendor(Vendor v)
-    {
-        vendor = v;
-    }
+	public void setVendor(Vendor v) {
+		vendor = v;
+	}
 
-    public void setCommandForKey(Object aCommand, Object aKey)
-    {
-        System.out.println("setCommandForKey(Object,Object)");
-        commands.put(aKey, aCommand);
-    }
+	public void setCommandForKey(Command aCommand, CommandIdentifier aKey) {
+		System.out.println("setCommandForKey(Command,CommandIdentifier)");
+		commands.put(aKey, aCommand);
+	}
 
-    public void setCommandForKey(Command aCommand, Object aKey)
-    {
-        System.out.println("setCommandForKey(Command,Object)");
-        commands.put(aKey, aCommand);
-    }
+	public void removeCommandWithKey(Object aKey) {
+		System.out.println("removeCommandWithKey(Object)");
+		commands.remove(aKey);
+	}
 
-    public void setCommandForKey(Command aCommand, CommandIdentifier aKey)
-    {
-        System.out.println("setCommandForKey(Command,CommandIdentifier)");
-        commands.put(aKey, aCommand);
-    }
+	public void removeCommandWithKey(CommandIdentifier aKey) {
+		System.out.println("removeCommandWithKey(CommandIdentifier)");
+		commands.remove(aKey);
+	}
 
-    public void removeCommandWithKey(Object aKey)
-    {
-        System.out.println("removeCommandWithKey(Object)");
-        commands.remove(aKey);
-    }
+	public float getTotalAmount() {
+		return totalAmount;
+	}
 
-    public void removeCommandWithKey(CommandIdentifier aKey)
-    {
-        System.out.println("removeCommandWithKey(CommandIdentifier)");
-        commands.remove(aKey);
-    }
+	public void addToTotalAmount(float value) {
+		totalAmount += value;
+	}
 
-    public float getTotalAmount()
-    {
-        return totalAmount;
-    }
+	public void removeFromTotalAmount(float value) {
+		totalAmount -= value;
+	}
 
-    public void addToTotalAmount(float value)
-    {
-        totalAmount += value;
-    }
+	public float getPaidAmount() {
+		return totalPaidAmount;
+	}
 
-    public void removeFromTotalAmount(float value)
-    {
-        totalAmount -= value;
-    }
+	public void addToPaidAmount(float value) {
+		totalPaidAmount += value;
+	}
 
-    public float getPaidAmount()
-    {
-        return totalPaidAmount;
-    }
+	public void removeFromPaidAmount(float value) {
+		totalPaidAmount -= value;
+	}
 
-    public void addToPaidAmount(float value)
-    {
-        totalPaidAmount += value;
-    }
+	public float getUnpaidAmount() {
+		return totalUnpaidAmount;
+	}
 
-    public void removeFromPaidAmount(float value)
-    {
-        totalPaidAmount -= value;
-    }
+	public void addToUnpaidAmount(float value) {
+		totalUnpaidAmount += value;
+	}
 
-    public float getUnpaidAmount()
-    {
-        return totalUnpaidAmount;
-    }
-
-    public void addToUnpaidAmount(float value)
-    {
-        totalUnpaidAmount += value;
-    }
-
-    public void removeFromUnpaidAmount(float value)
-    {
-        totalUnpaidAmount -= value;
-    }
+	public void removeFromUnpaidAmount(float value) {
+		totalUnpaidAmount -= value;
+	}
 
 }

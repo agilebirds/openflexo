@@ -27,20 +27,20 @@ public interface FIBSelectable {
 
 	public Vector<Object> getSelection();
 
-	//public boolean isFocused();
-	
+	// public boolean isFocused();
+
 	public boolean synchronizedWithSelection();
-	
+
 	public boolean mayRepresent(Object o);
-	
+
 	public void objectAddedToSelection(Object o);
-	
+
 	public void objectRemovedFromSelection(Object o);
 
 	public void selectionResetted();
 
 	public void addToSelection(Object o);
-	
+
 	public void removeFromSelection(Object o);
 
 	public void resetSelection();

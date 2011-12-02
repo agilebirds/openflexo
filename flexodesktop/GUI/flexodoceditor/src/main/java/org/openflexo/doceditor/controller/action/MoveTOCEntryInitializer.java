@@ -28,38 +28,32 @@ import org.openflexo.foundation.toc.action.MoveTOCEntry;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MoveTOCEntryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    public MoveTOCEntryInitializer(ControllerActionInitializer actionInitializer)
-	{
-		super(MoveTOCEntry.actionType,actionInitializer);
+	public MoveTOCEntryInitializer(ControllerActionInitializer actionInitializer) {
+		super(MoveTOCEntry.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionInitializer<MoveTOCEntry> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MoveTOCEntry> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, MoveTOCEntry action)
-			{
+			public boolean run(ActionEvent e, MoveTOCEntry action) {
 				return true;
 			}
 		};
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<MoveTOCEntry> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MoveTOCEntry> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, MoveTOCEntry action)
-			{
+			public boolean run(ActionEvent e, MoveTOCEntry action) {
 				return true;
 			}
 		};
 	}
-	
+
 }

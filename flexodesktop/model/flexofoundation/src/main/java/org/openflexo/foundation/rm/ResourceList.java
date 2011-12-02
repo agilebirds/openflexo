@@ -19,148 +19,130 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.util.Enumeration;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * Represents a list of resources sharing the same relationship, related to a
- * given resource.
- *
+ * Represents a list of resources sharing the same relationship, related to a given resource.
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceData>> implements XMLSerializable
-{
-    private static final Logger logger = Logger.getLogger(ResourceList.class.getPackage().getName());
+public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceData>> implements XMLSerializable {
+	private static final Logger logger = Logger.getLogger(ResourceList.class.getPackage().getName());
 
-    private FlexoResource<FlexoResourceData> relatedResource;
+	private FlexoResource<? extends FlexoResourceData> relatedResource;
 
-    public ResourceList()
-    {
-        super();
-    }
+	public ResourceList() {
+		super();
+	}
 
-    public ResourceList(FlexoResource<FlexoResourceData> relatedResource)
-    {
-        super();
-        setRelatedResource(relatedResource);
-    }
+	public ResourceList(FlexoResource<? extends FlexoResourceData> relatedResource) {
+		super();
+		setRelatedResource(relatedResource);
+	}
 
-    /**
-     * The resource to which this resource list is connected.
-     * @return
-     */
-    public FlexoResource<FlexoResourceData> getRelatedResource()
-    {
-        return relatedResource;
-    }
+	/**
+	 * The resource to which this resource list is connected.
+	 * 
+	 * @return
+	 */
+	public FlexoResource<? extends FlexoResourceData> getRelatedResource() {
+		return relatedResource;
+	}
 
-    public void setRelatedResource(FlexoResource<FlexoResourceData> relatedResource)
-    {
-        this.relatedResource = relatedResource;
-    }
+	public void setRelatedResource(FlexoResource<? extends FlexoResourceData> relatedResource) {
+		this.relatedResource = relatedResource;
+	}
 
-    public Vector<FlexoResource<FlexoResourceData>> getResources()
-    {
-        return this;
-    }
+	public List<FlexoResource<FlexoResourceData>> getResources() {
+		return this;
+	}
 
-    public void setResources(Vector<FlexoResource<FlexoResourceData>> aVector)
-    {
-        removeAllElements();
-        for (Enumeration<FlexoResource<FlexoResourceData>> e = aVector.elements(); e.hasMoreElements();) {
-            addToResources(e.nextElement());
-        }
-        if (getRelatedResource() != null) {
-            getRelatedResource().getProject().notifyResourceChanged(getRelatedResource());
-        }
-        update();
-    }
+	public void setResources(List<FlexoResource<FlexoResourceData>> aVector) {
+		removeAllElements();
+		for (FlexoResource<FlexoResourceData> r : aVector) {
+			addToResources(r);
+		}
+		if (getRelatedResource() != null) {
+			getRelatedResource().getProject().notifyResourceChanged(getRelatedResource());
+		}
+		update();
+	}
 
-    public void addToResources(FlexoResource<FlexoResourceData> resource)
-    {
-        if (resource.isDeleted())
-            return;
-        if (!contains(resource)) {
-            add(resource);
-            if (getRelatedResource() != null) {
-            	getRelatedResource().getProject().notifyResourceChanged(getRelatedResource());
-            }
-            update();
-        }
-    }
+	public List<FlexoResource<FlexoResourceData>> getSerialisationResources() {
+		List<FlexoResource<FlexoResourceData>> resources = new ArrayList<FlexoResource<FlexoResourceData>>(size());
+		for (FlexoResource<FlexoResourceData> resource : this) {
+			if (!resource.isToBeSerialized() || getRelatedResource().getProject().getFlexoResource() != null
+					&& !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource.checkIntegrity()) {
+				continue;
+			}
+			resources.add(resource);
+		}
+		return resources;
+	}
 
-    public void removeFromResources(FlexoResource<FlexoResourceData> resource)
-    {
-        if (contains(resource)) {
-            remove(resource);
-            if (getRelatedResource() != null) {
-            	getRelatedResource().getProject().notifyResourceChanged(getRelatedResource());
-            }
-            update();
-        }
-    }
+	public void setSerialisationResources(List<FlexoResource<FlexoResourceData>> resources) {
+		setResources(resources);
+	}
 
-    public abstract void update();
+	public void addToSerialisationResources(FlexoResource<FlexoResourceData> resource) {
+		addToResources(resource);
+	}
 
-    /**
-     * This method overrides
-     *
-     * @see java.util.Vector#equals(java.lang.Object) in order to avoid XMLCoDe
-     *      to consider an empty vector is equals to an other one, and avoid
-     *      misleading references.
-     *
-     * Overrides
-     * @see java.lang.Object#equals(java.lang.Object)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-	public boolean equals(Object obj)
-    {
-        return (obj == this);
-    }
+	public void removeFromSerialisationResources(FlexoResource<FlexoResourceData> resource) {
+		removeFromResources(resource);
+	}
 
-    public void loadAll()
-    {
-        Enumeration en = elements();
-        while(en.hasMoreElements()){
-            FlexoResource resource = (FlexoResource)en.nextElement();
-            if (resource instanceof FlexoStorageResource) {
-                try {
-                    ((FlexoStorageResource)resource).loadResourceData();
-                } catch (FlexoException e) {
-                    // Warns about the exception
-                    logger.warning ("Exception raised: "+e.getClass().getName()+". See console for details.");
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+	public void addToResources(FlexoResource resource) {
+		if (resource.isDeleted()) {
+			return;
+		}
+		if (!contains(resource)) {
+			add(resource);
+			if (getRelatedResource() != null) {
+				getRelatedResource().getProject().notifyResourceChanged(getRelatedResource());
+			}
+			update();
+		}
+	}
 
-    public abstract String getSerializationIdentifier();
+	public void removeFromResources(FlexoResource resource) {
+		if (contains(resource)) {
+			remove(resource);
+			if (getRelatedResource() != null) {
+				getRelatedResource().getProject().notifyResourceChanged(getRelatedResource());
+			}
+			update();
+		}
+	}
 
-    @Override
-	public Enumeration<FlexoResource<FlexoResourceData>> elements()
-    {
-    	// If project is serializing (saving RM file, take only resources to be serialized)
-    	if (getRelatedResource().getProject().isSerializing()) {
-    		Vector<FlexoResource<FlexoResourceData>> returned = new Vector<FlexoResource<FlexoResourceData>>(this);
-    		Iterator<FlexoResource<FlexoResourceData>> i = returned.iterator();
-    		while(i.hasNext()) {
-    			FlexoResource<FlexoResourceData> resource = i.next();
-    			if (!resource.isToBeSerialized() || (getRelatedResource().getProject().getFlexoResource()!=null && !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource.checkIntegrity()))
-    				i.remove();
-    		}
-    		return returned.elements();
-    	}
-    	return super.elements();
-    }
+	public abstract void update();
 
+	/**
+	 * This method overrides
+	 * 
+	 * @see java.util.Vector#equals(java.lang.Object) in order to avoid XMLCoDe to consider an empty vector is equals to an other one, and
+	 *      avoid misleading references.
+	 * 
+	 *      Overrides
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj == this;
+	}
+
+	@Override
+	public synchronized int hashCode() {
+		return super.hashCode();
+	}
+
+	public abstract String getSerializationIdentifier();
 
 }

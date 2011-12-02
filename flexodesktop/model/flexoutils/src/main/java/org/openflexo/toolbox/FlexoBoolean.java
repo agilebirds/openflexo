@@ -21,25 +21,20 @@ package org.openflexo.toolbox;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class FlexoBoolean
-{
-    private boolean value;
+public class FlexoBoolean {
+	private boolean value;
 
-    public FlexoBoolean(boolean v)
-    {
-        this.value = v;
-    }
+	public FlexoBoolean(boolean v) {
+		this.value = v;
+	}
 
-    public boolean getValue()
-    {
-        return value;
-    }
+	public boolean getValue() {
+		return value;
+	}
 
-    public void setValue(boolean v)
-    {
-        this.value = v;
-    }
+	public void setValue(boolean v) {
+		this.value = v;
+	}
 }
-

@@ -25,13 +25,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.foundation.FlexoObject;
 
 /**
  * Represents the visibility modifier of a DMMethod
@@ -39,116 +38,102 @@ import org.openflexo.foundation.FlexoObject;
  * @author sguerin
  * 
  */
-public abstract class DMVisibilityType extends FlexoObject implements StringConvertable, ChoiceList, Serializable
-{
+public abstract class DMVisibilityType extends FlexoObject implements StringConvertable, ChoiceList, Serializable {
 
-    private static final Logger logger = Logger.getLogger(DMVisibilityType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DMVisibilityType.class.getPackage().getName());
 
-    public static final DMVisibilityType PUBLIC = new PublicVisibility();
+	public static final DMVisibilityType PUBLIC = new PublicVisibility();
 
-    public static final DMVisibilityType PROTECTED = new ProtectedVisibility();
+	public static final DMVisibilityType PROTECTED = new ProtectedVisibility();
 
-    public static final DMVisibilityType PRIVATE = new PrivateVisibility();
+	public static final DMVisibilityType PRIVATE = new PrivateVisibility();
 
-    public static final DMVisibilityType NONE = new NoneVisibility(); 
+	public static final DMVisibilityType NONE = new NoneVisibility();
 
-    public static final StringEncoder.Converter<DMVisibilityType> visibilityTypeConverter = new Converter<DMVisibilityType>(DMVisibilityType.class) {
+	public static final StringEncoder.Converter<DMVisibilityType> visibilityTypeConverter = new Converter<DMVisibilityType>(
+			DMVisibilityType.class) {
 
-        @Override
-		public DMVisibilityType convertFromString(String value)
-        {
-            return get(value);
-        }
+		@Override
+		public DMVisibilityType convertFromString(String value) {
+			return get(value);
+		}
 
-        @Override
-		public String convertToString(DMVisibilityType value)
-        {
-            return value.getName();
-        }
+		@Override
+		public String convertToString(DMVisibilityType value) {
+			return value.getName();
+		}
 
-    };
+	};
 
-    static class PublicVisibility extends DMVisibilityType
-    {
-        @Override
-		public String getName()
-        {
-            return "public";
-        }
-    }
+	static class PublicVisibility extends DMVisibilityType {
+		@Override
+		public String getName() {
+			return "public";
+		}
+	}
 
-    static class ProtectedVisibility extends DMVisibilityType
-    {
-        @Override
-		public String getName()
-        {
-            return "protected";
-        }
-    }
+	static class ProtectedVisibility extends DMVisibilityType {
+		@Override
+		public String getName() {
+			return "protected";
+		}
+	}
 
-    static class PrivateVisibility extends DMVisibilityType
-    {
-        @Override
-		public String getName()
-        {
-            return "private";
-        }
-    }
+	static class PrivateVisibility extends DMVisibilityType {
+		@Override
+		public String getName() {
+			return "private";
+		}
+	}
 
-    static class NoneVisibility extends DMVisibilityType
-    {
-        @Override
-		public String getName()
-        {
-            return "none";
-        }
-    }
+	static class NoneVisibility extends DMVisibilityType {
+		@Override
+		public String getName() {
+			return "none";
+		}
+	}
 
-   public abstract String getName();
+	public abstract String getName();
 
-    public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey("java_modifier_"+getName());
-    }
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey("java_modifier_" + getName());
+	}
 
-    public static DMVisibilityType get(String cardName)
-    {
-        for (Enumeration e = PUBLIC.getAvailableValues().elements(); e.hasMoreElements();) {
-            DMVisibilityType temp = (DMVisibilityType) e.nextElement();
-            if (temp.getName().equals(cardName)) {
-                return temp;
-            }
-        }
+	public static DMVisibilityType get(String cardName) {
+		for (Enumeration e = PUBLIC.getAvailableValues().elements(); e.hasMoreElements();) {
+			DMVisibilityType temp = (DMVisibilityType) e.nextElement();
+			if (temp.getName().equals(cardName)) {
+				return temp;
+			}
+		}
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find VisibilityType named " + cardName);
-        return null;
-    }
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Could not find VisibilityType named " + cardName);
+		}
+		return null;
+	}
 
-    private Vector<DMVisibilityType> _availableValues = null;
+	private Vector<DMVisibilityType> _availableValues = null;
 
-    @Override
-	public Vector<DMVisibilityType> getAvailableValues()
-    {
-        if (_availableValues == null) {
-            _availableValues = new Vector<DMVisibilityType>();
-            _availableValues.add(PUBLIC);
-            _availableValues.add(PROTECTED);
-            _availableValues.add(PRIVATE);
-            _availableValues.add(NONE);
-        }
-        return _availableValues;
-    }
+	@Override
+	public Vector<DMVisibilityType> getAvailableValues() {
+		if (_availableValues == null) {
+			_availableValues = new Vector<DMVisibilityType>();
+			_availableValues.add(PUBLIC);
+			_availableValues.add(PROTECTED);
+			_availableValues.add(PRIVATE);
+			_availableValues.add(NONE);
+		}
+		return _availableValues;
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return visibilityTypeConverter;
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return visibilityTypeConverter;
+	}
 
-    public static Vector<DMVisibilityType> availableValues()
-    {
-        return PUBLIC.getAvailableValues();
-    }
+	public static Vector<DMVisibilityType> availableValues() {
+		return PUBLIC.getAvailableValues();
+	}
 
 }

@@ -19,33 +19,28 @@
  */
 package org.openflexo.ie.view.dkv;
 
-
 import org.openflexo.components.tabular.TabularView;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.ie.view.controller.IEController;
 
-
 public class DKVTabularView extends TabularView {
 
-    public DKVTabularView(IEController controller, AbstractModel model, int visibleRowCount)
-    {
-        super(controller,model,visibleRowCount);
-    }
+	public DKVTabularView(IEController controller, AbstractModel model, int visibleRowCount) {
+		super(controller, model, visibleRowCount);
+	}
 
-    public DKVTabularView(IEController controller, AbstractModel model)
-    {
-        super(controller,model);
-    }
-    
-    @Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-        if (object instanceof DKVObject) {
-            return ((DKVObject)object).getParent();
-         }
-        return null;
-    }
+	public DKVTabularView(IEController controller, AbstractModel model) {
+		super(controller, model);
+	}
+
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		if (object instanceof DKVObject) {
+			return ((DKVObject) object).getParent();
+		}
+		return null;
+	}
 
 }

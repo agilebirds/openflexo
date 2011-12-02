@@ -45,7 +45,6 @@ import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -302,7 +301,8 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		if (parentSequenceView != null) {
 			int width = parentSequenceView.getAvailableWidth();
 			Dimension d = new Dimension(width, _dropTableZone.getComponentCount() > 0 ? new Double(_dropTableZone.getComponent(0)
-					.getPreferredSize().getHeight()).intValue() + titleAndButtonPanelHeight : 24 + titleAndButtonPanelHeight);
+					.getPreferredSize().getHeight()).intValue()
+					+ titleAndButtonPanelHeight : 24 + titleAndButtonPanelHeight);
 			if (getHoldsNextComputedPreferredSize()) {
 				storePrefSize(d);
 			}
@@ -313,10 +313,12 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 
 		int grandParentInsetsWidth = getParent().getParent() == null || getParent().getParent().getInsets() == null ? 0 : getParent()
 				.getParent().getInsets().left + getParent().getParent().getInsets().right;
-		int grandParentBorderInsetsWidth = getGrandParentBorder() != null ? getGrandParentBorderInsets().left + getGrandParentBorderInsets().right : 0;
+		int grandParentBorderInsetsWidth = getGrandParentBorder() != null ? getGrandParentBorderInsets().left
+				+ getGrandParentBorderInsets().right : 0;
 		int totalWidth = parentInsetsWidth + parentBorderInsetsWidth + grandParentInsetsWidth + grandParentBorderInsetsWidth;
 		Dimension dim = new Dimension(getDropZoneWith() - totalWidth, _dropTableZone.getComponentCount() > 0 ? new Double(_dropTableZone
-				.getComponent(0).getPreferredSize().getHeight()).intValue() + titleAndButtonPanelHeight : 24 + titleAndButtonPanelHeight);
+				.getComponent(0).getPreferredSize().getHeight()).intValue()
+				+ titleAndButtonPanelHeight : 24 + titleAndButtonPanelHeight);
 		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(dim);
 		}

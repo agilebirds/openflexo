@@ -23,26 +23,22 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 
 /**
- * Notify that a ComponentDefinition has been removed from a ComponentLibrary's
- * folder
+ * Notify that a ComponentDefinition has been removed from a ComponentLibrary's folder
  * 
  * @author sguerin
  * 
  */
-public class ComponentRemoved extends IEDataModification
-{
+public class ComponentRemoved extends IEDataModification {
 
-    private FlexoComponentFolder _folder;
+	private FlexoComponentFolder _folder;
 
-    public ComponentRemoved(ComponentDefinition component, FlexoComponentFolder folder)
-    {
-        super(component, null);
-        _folder = folder;
-    }
+	public ComponentRemoved(ComponentDefinition component, FlexoComponentFolder folder) {
+		super(component, null);
+		_folder = folder;
+	}
 
-    public FlexoComponentFolder getFlexoComponentFolder()
-    {
-        return _folder;
-    }
+	public FlexoComponentFolder getFlexoComponentFolder() {
+		return _folder;
+	}
 
 }

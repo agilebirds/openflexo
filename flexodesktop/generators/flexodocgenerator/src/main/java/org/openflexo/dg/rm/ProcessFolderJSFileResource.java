@@ -32,7 +32,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
-
 /**
  * @author gpolet
  * 
@@ -56,19 +55,22 @@ public class ProcessFolderJSFileResource extends JSFileResource<DGJSGenerator<Pr
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getProcessFolder() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getProcessFolder() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
-		if (super.getName() == null)
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndProcessFolder(getCGFile().getRepository(), getProcessFolder()));
+		}
 		return nameForRepositoryAndProcessFolder(getCGFile().getRepository(), getProcessFolder());
 	}
 
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getProcessFolder() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
 			getProcessFolder().addObserver(this);
 		}
 	}
@@ -78,8 +80,9 @@ public class ProcessFolderJSFileResource extends JSFileResource<DGJSGenerator<Pr
 	}
 
 	public ProcessFolder getProcessFolder() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 
@@ -93,15 +96,17 @@ public class ProcessFolderJSFileResource extends JSFileResource<DGJSGenerator<Pr
 		if (observable == getProcessFolder()) {
 			if (dataModification instanceof AttributeDataModification) {
 				if (((AttributeDataModification) dataModification).getAttributeName().equals("name")
-						&& !getCGFile().getFileName().equals(DGJSGenerator.nameForProcessFolder(getProcessFolder(), getGenerator().getRepository()))) {
+						&& !getCGFile().getFileName().equals(
+								DGJSGenerator.nameForProcessFolder(getProcessFolder(), getGenerator().getRepository()))) {
 					logger.info("Building new resource after process folder renaming");
 					DGJSGenerator<ProcessFolder> generator = getGenerator();
 					setGenerator(null);
 					getCGFile().setMarkedForDeletion(true);
 					generator.refreshConcernedResources();
 					generator.getRepository().refresh();
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Resource " + getName() + " is marked as deleted");
+					}
 					observable.deleteObserver(this);
 					isObserverRegistered = false;
 				}

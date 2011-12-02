@@ -22,7 +22,6 @@ package org.openflexo.dre.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.action.SubmitDocumentationAction;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dre.AbstractDocItemView;
@@ -48,103 +47,101 @@ public class SubmitVersionInitializer extends ActionInitializer {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	SubmitVersionInitializer(DREControllerActionInitializer actionInitializer)
-	{
-		super(SubmitVersion.actionType,actionInitializer);
+	SubmitVersionInitializer(DREControllerActionInitializer actionInitializer) {
+		super(SubmitVersion.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DREControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DREControllerActionInitializer)super.getControllerActionInitializer();
+	protected DREControllerActionInitializer getControllerActionInitializer() {
+		return (DREControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<SubmitVersion> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<SubmitVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<SubmitVersion>() {
-            @Override
-			public boolean run(ActionEvent e, SubmitVersion action)
-            {
-                 if ((action.getContext() != null)
-                        && (action.getContext() instanceof SubmitDocumentationAction)) {
-                    // In this case, action is a consequency of a SubmitDocumentationAction
-                    // launched from anywhere, no need to perform initializer here
-                    return true;
-                }
+			@Override
+			public boolean run(ActionEvent e, SubmitVersion action) {
+				if ((action.getContext() != null) && (action.getContext() instanceof SubmitDocumentationAction)) {
+					// In this case, action is a consequency of a SubmitDocumentationAction
+					// launched from anywhere, no need to perform initializer here
+					return true;
+				}
 
-                if (action.getDocItem() == null) return false;
-                 if (action.getVersion() == null) {
-                     Language language = null;
-                     if (action.getDocItem().getDocResourceCenter().getLanguages().size() > 1) {
-                         ParameterDefinition[] langParams = new ParameterDefinition[1];
-                         langParams[0] = new DynamicDropDownParameter("language", "language", action.getDocItem().getDocResourceCenter().getLanguages(),action.getDocItem().getDocResourceCenter().getLanguages().firstElement());
-                         langParams[0].addParameter("format","name");
-                         AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
-                                 null, FlexoLocalization.localizedForKey("choose_language"), FlexoLocalization.localizedForKey("define_submission_language"), langParams);
-                         if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                             language = (Language) dialog.parameterValueWithName("language");
-                         }
-                         else {
-                             return false;
-                         }
-                     }
-                     else if (action.getDocItem().getDocResourceCenter().getLanguages().size() == 1) {
-                         language = action.getDocItem().getDocResourceCenter().getLanguages().firstElement();
-                     }
-                     if (language == null)
-                         return false;
-                    SubmitNewVersionPopup editVersionPopup = new SubmitNewVersionPopup(action.getDocItem(),language,getControllerActionInitializer().getDREController().getFlexoFrame(),getControllerActionInitializer().getDREController().getEditor());
-                    action.setVersion(editVersionPopup.getVersionToSubmit());
-                }
-                if (action.getVersion() == null) {
-                    return false;
-                }
-                 String title;
-                DocItemAction lastAction = action.getDocItem().getLastActionForLanguage(action.getVersion().getLanguage()); 
-                if (lastAction == null) {
-                    title = FlexoLocalization.localizedForKey("submit_version");
-                }
-                else {
-                    title = FlexoLocalization.localizedForKey("review_version");       
-                    action.getVersion().setVersion(DocItemVersion.Version.versionByIncrementing(lastAction.getVersion().getVersion(),0,0,1));
-                }
-                ParameterDefinition[] parameters = new ParameterDefinition[4];
-                parameters[0] = new ReadOnlyTextFieldParameter("user", "username", DocResourceManager.instance().getUser().getIdentifier());
-                parameters[1] = new ReadOnlyTextFieldParameter("language", "language", action.getVersion().getLanguageId());
-                parameters[2] = new TextFieldParameter("version", "version", action.getVersion().getVersion().toString());
-                parameters[3] = new TextAreaParameter("note", "note", "",25,3);
-                AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
-                        null, title, FlexoLocalization.localizedForKey("define_submission_parameters"), parameters);
-                if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                    action.setAuthor(DocResourceManager.instance().getUser());
-                    String versionId = (String) dialog.parameterValueWithName("version");
-                    action.getVersion().setVersion(new DocItemVersion.Version(versionId));
-                    action.setNote((String) dialog.parameterValueWithName("note"));
-                     return true;
-                } else {
-                    return false;
-                }
-           }
-        };
+				if (action.getDocItem() == null) {
+					return false;
+				}
+				if (action.getVersion() == null) {
+					Language language = null;
+					if (action.getDocItem().getDocResourceCenter().getLanguages().size() > 1) {
+						ParameterDefinition[] langParams = new ParameterDefinition[1];
+						langParams[0] = new DynamicDropDownParameter("language", "language", action.getDocItem().getDocResourceCenter()
+								.getLanguages(), action.getDocItem().getDocResourceCenter().getLanguages().firstElement());
+						langParams[0].addParameter("format", "name");
+						AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+								FlexoLocalization.localizedForKey("choose_language"),
+								FlexoLocalization.localizedForKey("define_submission_language"), langParams);
+						if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+							language = (Language) dialog.parameterValueWithName("language");
+						} else {
+							return false;
+						}
+					} else if (action.getDocItem().getDocResourceCenter().getLanguages().size() == 1) {
+						language = action.getDocItem().getDocResourceCenter().getLanguages().firstElement();
+					}
+					if (language == null) {
+						return false;
+					}
+					SubmitNewVersionPopup editVersionPopup = new SubmitNewVersionPopup(action.getDocItem(), language,
+							getControllerActionInitializer().getDREController().getFlexoFrame(), getControllerActionInitializer()
+									.getDREController().getEditor());
+					action.setVersion(editVersionPopup.getVersionToSubmit());
+				}
+				if (action.getVersion() == null) {
+					return false;
+				}
+				String title;
+				DocItemAction lastAction = action.getDocItem().getLastActionForLanguage(action.getVersion().getLanguage());
+				if (lastAction == null) {
+					title = FlexoLocalization.localizedForKey("submit_version");
+				} else {
+					title = FlexoLocalization.localizedForKey("review_version");
+					action.getVersion().setVersion(
+							DocItemVersion.Version.versionByIncrementing(lastAction.getVersion().getVersion(), 0, 0, 1));
+				}
+				ParameterDefinition[] parameters = new ParameterDefinition[4];
+				parameters[0] = new ReadOnlyTextFieldParameter("user", "username", DocResourceManager.instance().getUser().getIdentifier());
+				parameters[1] = new ReadOnlyTextFieldParameter("language", "language", action.getVersion().getLanguageId());
+				parameters[2] = new TextFieldParameter("version", "version", action.getVersion().getVersion().toString());
+				parameters[3] = new TextAreaParameter("note", "note", "", 25, 3);
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, title,
+						FlexoLocalization.localizedForKey("define_submission_parameters"), parameters);
+				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+					action.setAuthor(DocResourceManager.instance().getUser());
+					String versionId = (String) dialog.parameterValueWithName("version");
+					action.getVersion().setVersion(new DocItemVersion.Version(versionId));
+					action.setNote((String) dialog.parameterValueWithName("note"));
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<SubmitVersion> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<SubmitVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SubmitVersion>() {
-            @Override
-			public boolean run(ActionEvent e, SubmitVersion action)
-            {
-                if (getControllerActionInitializer().getDREController().getCurrentDisplayedObjectAsModuleView() == action.getDocItem()) {
-                    AbstractDocItemView docItemView = (AbstractDocItemView)getControllerActionInitializer().getDREController().getCurrentModuleView();
-                    docItemView.updateViewFromModel();
-                    docItemView.setCurrentAction(action.getNewAction());
-                }
-               return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, SubmitVersion action) {
+				if (getControllerActionInitializer().getDREController().getCurrentDisplayedObjectAsModuleView() == action.getDocItem()) {
+					AbstractDocItemView docItemView = (AbstractDocItemView) getControllerActionInitializer().getDREController()
+							.getCurrentModuleView();
+					docItemView.updateViewFromModel();
+					docItemView.setCurrentAction(action.getNewAction());
+				}
+				return true;
+			}
+		};
 	}
 
- 
 }

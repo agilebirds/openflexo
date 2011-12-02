@@ -23,9 +23,8 @@ import org.openflexo.foundation.FlexoException;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class CannotRemoveLastDocType extends FlexoException
-{
+public class CannotRemoveLastDocType extends FlexoException {
 
 }

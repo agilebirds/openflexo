@@ -41,119 +41,104 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.toolbox.ToolBox;
 
-
-public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<EntitySpecialization> 
-implements ERDiagramConstants {
+public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<EntitySpecialization> implements ERDiagramConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(EntitySpecializationGR.class.getPackage().getName());
 
 	private TextStyle propertyNameStyle;
 	private ForegroundStyle foreground;
-	
 
-	public EntitySpecializationGR(EntitySpecialization anEntitySpecialization, Drawing<?> aDrawing) 
-	{
-		super(ConnectorType.RECT_POLYLIN, 
-				(ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(anEntitySpecialization.getSpecializedEntity()),
-				(ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(anEntitySpecialization.getParentEntity()),
-				anEntitySpecialization, aDrawing);
-		//setText(getRole().getName());
-		
+	public EntitySpecializationGR(EntitySpecialization anEntitySpecialization, Drawing<?> aDrawing) {
+		super(ConnectorType.RECT_POLYLIN, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(anEntitySpecialization
+				.getSpecializedEntity()), (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(anEntitySpecialization
+				.getParentEntity()), anEntitySpecialization, aDrawing);
+		// setText(getRole().getName());
+
 		updateStyles();
-		
+
 		propertyNameStyle = TextStyle.makeTextStyle(Color.DARK_GRAY, ATTRIBUTE_FONT);
 
 		setTextStyle(propertyNameStyle);
-		
+
 		getConnector().setIsRounded(true);
 		getConnector().setRectPolylinConstraints(RectPolylinConstraints.VERTICAL_LAYOUT);
 		getConnector().setAdjustability(RectPolylinAdjustability.FULLY_ADJUSTABLE);
 		getConnector().setStraightLineWhenPossible(true);
 		getConnector().setPixelOverlap(30);
-		
+
 		setEndSymbol(EndSymbolType.PLAIN_ARROW);
 		setEndSymbolSize(15);
-			
+
 		if (getSpecializedEntity().hasGraphicalPropertyForKey(getStoredPolylinKey())) {
 			ensurePolylinConverterIsRegistered();
-			polylinIWillBeAdustedTo = (FGERectPolylin)getSpecializedEntity()._graphicalPropertyForKey(getStoredPolylinKey());
+			polylinIWillBeAdustedTo = (FGERectPolylin) getSpecializedEntity()._graphicalPropertyForKey(getStoredPolylinKey());
 			getConnector().setWasManuallyAdjusted(true);
 		}
 
-		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY,1.6f));
-		
+		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
+
 		setIsFocusable(true);
-		
-		addToMouseClickControls(new ResetLayout(),true);
+
+		addToMouseClickControls(new ResetLayout(), true);
 		addToMouseClickControls(new ERDiagramController.ShowContextualMenuControl());
-		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new ERDiagramController.ShowContextualMenuControl(true));
 		}
-		//addToMouseDragControls(new DrawRoleSpecializationControl());
-		
+		// addToMouseDragControls(new DrawRoleSpecializationControl());
+
 	}
-	
+
 	@Override
-	public RectPolylinConnector getConnector()
-	{
-		return (RectPolylinConnector)super.getConnector();
+	public RectPolylinConnector getConnector() {
+		return (RectPolylinConnector) super.getConnector();
 	}
-	
-	private void updateStyles()
-	{
+
+	private void updateStyles() {
 		/*foreground = ForegroundStyle.makeStyle(getEntity().getColor());
 		foreground.setLineWidth(2);
 		background = BackgroundStyle.makeColorGradientBackground(getRole().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
 		setForeground(foreground);
 		setBackground(background);*/
 	}
-	
+
 	@Override
-	public ERDiagramRepresentation getDrawing() 
-	{
-		return (ERDiagramRepresentation)super.getDrawing();
+	public ERDiagramRepresentation getDrawing() {
+		return (ERDiagramRepresentation) super.getDrawing();
 	}
-	
-	public EntitySpecialization getEntitySpecialization()
-	{
+
+	public EntitySpecialization getEntitySpecialization() {
 		return getDrawable();
 	}
-	
-	public DMEntity getSpecializedEntity()
-	{
+
+	public DMEntity getSpecializedEntity() {
 		return getEntitySpecialization().getSpecializedEntity();
 	}
-	
+
 	public class ResetLayout extends MouseClickControl {
 
-		public ResetLayout()
-		{
-			super("ResetLayout", MouseButton.LEFT, 2,
-					new CustomClickControlAction() {
+		public ResetLayout() {
+			super("ResetLayout", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, java.awt.event.MouseEvent event)
-				{
-					//logger.info("Reset layout for edge");
+				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						java.awt.event.MouseEvent event) {
+					// logger.info("Reset layout for edge");
 					resetLayout();
 					return true;
 				}
-			},
-			false,false,false,false);
+			}, false, false, false, false);
 		}
 
 	}
 
-	public void resetLayout()
-	{
+	public void resetLayout() {
 		getConnector().setWasManuallyAdjusted(false);
 	}
 
 	private FGERectPolylin polylinIWillBeAdustedTo;
 
 	@Override
-	public void notifyObjectHierarchyHasBeenUpdated()
-	{
+	public void notifyObjectHierarchyHasBeenUpdated() {
 		super.notifyObjectHierarchyHasBeenUpdated();
 		if (polylinIWillBeAdustedTo != null && !getSpecializedEntity().isDeleted()) {
 			getConnector().manuallySetPolylin(polylinIWillBeAdustedTo);
@@ -161,11 +146,11 @@ implements ERDiagramConstants {
 			refreshConnector();
 		}
 	}
+
 	@Override
-	public void refreshConnector() 
-	{
+	public void refreshConnector() {
 		if (!isConnectorConsistent()) {
-			// Dont' go further for connector that are inconsistent (this may happen 
+			// Dont' go further for connector that are inconsistent (this may happen
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
@@ -174,48 +159,46 @@ implements ERDiagramConstants {
 	}
 
 	@Override
-	public void notifyConnectorChanged() 
-	{
+	public void notifyConnectorChanged() {
 		super.notifyConnectorChanged();
 		storeNewLayout();
 	}
 
-	private static String escapeStringForXML(String s) 
-	{
-		if (s==null)
+	private static String escapeStringForXML(String s) {
+		if (s == null) {
 			return null;
+		}
 		StringBuffer sb = new StringBuffer();
 		int n = s.length();
 		for (int i = 0; i < n; i++) {
 			char c = s.charAt(i);
-			if (Verifier.isXMLNameCharacter(c))			
+			if (Verifier.isXMLNameCharacter(c)) {
 				sb.append(c);
-			else sb.append("_");
+			} else {
+				sb.append("_");
+			}
 		}
 		return sb.toString();
 	}
 
-	private String getContext()
-	{
-		return "inheritance_"+escapeStringForXML(getEntitySpecialization().getSpecialization().getStringRepresentation())+"_diagram_"+getDrawing().getDiagram().getFlexoID();
+	private String getContext() {
+		return "inheritance_" + escapeStringForXML(getEntitySpecialization().getSpecialization().getStringRepresentation()) + "_diagram_"
+				+ getDrawing().getDiagram().getFlexoID();
 	}
 
-	private String getStoredPolylinKey()
-	{
-		return "polylin_"+getContext();
+	private String getStoredPolylinKey() {
+		return "polylin_" + getContext();
 	}
 
-	private void storeNewLayout()
-	{
+	private void storeNewLayout() {
 		if (isRegistered()) {
 			ensurePolylinConverterIsRegistered();
 			if (getConnector().getWasManuallyAdjusted() && getConnector()._getPolylin() != null) {
 				if (polylinIWillBeAdustedTo == null) { // Store this layout only in no other layout is beeing registering
-					//logger.info("Post "+getPostCondition().getName()+": store new layout to "+connector._getPolylin());
+					// logger.info("Post "+getPostCondition().getName()+": store new layout to "+connector._getPolylin());
 					getSpecializedEntity()._setGraphicalPropertyForKey(getConnector()._getPolylin(), getStoredPolylinKey());
 				}
-			}
-			else {
+			} else {
 				if (getSpecializedEntity().hasGraphicalPropertyForKey(getStoredPolylinKey())) {
 					getSpecializedEntity()._removeGraphicalPropertyWithKey(getStoredPolylinKey());
 				}
@@ -223,68 +206,57 @@ implements ERDiagramConstants {
 		}
 	}
 
-	
 	private boolean isPolylinConverterRegistered = false;
 
-	private void ensurePolylinConverterIsRegistered()
-	{
+	private void ensurePolylinConverterIsRegistered() {
 		if (!isPolylinConverterRegistered) {
-			if (getSpecializedEntity().getProject().getStringEncoder()._converterForClass(FGERectPolylin.class) == null)
+			if (getSpecializedEntity().getProject().getStringEncoder()._converterForClass(FGERectPolylin.class) == null) {
 				getSpecializedEntity().getProject().getStringEncoder()._addConverter(RECT_POLYLIN_CONVERTER);
+			}
 			isPolylinConverterRegistered = true;
 		}
 
 	}
 
 	@Override
-	public String getText() 
-	{
+	public String getText() {
 		return getEntitySpecialization().getLabel();
 	}
 
 	@Override
-	public double getAbsoluteTextX() 
-	{
+	public double getAbsoluteTextX() {
 		if (!getSpecializedEntity().hasLabelLocationForContext(getContext())) {
-			getSpecializedEntity().getLabelX(getContext(),getDefaultLabelX());
+			getSpecializedEntity().getLabelX(getContext(), getDefaultLabelX());
 		}
 		return getSpecializedEntity().getLabelX(getContext());
 	}
 
 	@Override
-	public void setAbsoluteTextXNoNotification(double posX) 
-	{
-		getSpecializedEntity().setLabelX(posX,getContext());
+	public void setAbsoluteTextXNoNotification(double posX) {
+		getSpecializedEntity().setLabelX(posX, getContext());
 	}
 
 	@Override
-	public double getAbsoluteTextY() 
-	{
+	public double getAbsoluteTextY() {
 		if (!getSpecializedEntity().hasLabelLocationForContext(getContext())) {
-			getSpecializedEntity().getLabelY(getContext(),getDefaultLabelY());
+			getSpecializedEntity().getLabelY(getContext(), getDefaultLabelY());
 		}
 		return getSpecializedEntity().getLabelY(getContext());
 	}
 
 	@Override
-	public void setAbsoluteTextYNoNotification(double posY) 
-	{
-		getSpecializedEntity().setLabelY(posY,getContext());
+	public void setAbsoluteTextYNoNotification(double posY) {
+		getSpecializedEntity().setLabelY(posY, getContext());
 	}
 
 	// Override to implement defaut automatic layout
-	public double getDefaultLabelX()
-	{
-		return Math.sin(getConnector().getMiddleSymbolAngle())*10;
+	public double getDefaultLabelX() {
+		return Math.sin(getConnector().getMiddleSymbolAngle()) * 10;
 	}
 
 	// Override to implement defaut automatic layout
-	public double getDefaultLabelY()
-	{
-		return Math.cos(getConnector().getMiddleSymbolAngle())*10;
+	public double getDefaultLabelY() {
+		return Math.cos(getConnector().getMiddleSymbolAngle()) * 10;
 	}
-
-
-
 
 }

@@ -33,48 +33,45 @@ import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.controller.WKFController;
 
-
 /**
  * The WKF Browser window
  * 
  * @author sguerin
  */
-public class ProcessBrowserWindow extends FlexoRelativeWindow
-{
+public class ProcessBrowserWindow extends FlexoRelativeWindow {
 
-    private ProcessBrowserView _processBrowserView;
+	private ProcessBrowserView _processBrowserView;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public ProcessBrowserWindow(WKFFrame mainFrame)
-    {
-        super(mainFrame);
-        getContentPane().setLayout(new BorderLayout());
+	public ProcessBrowserWindow(WKFFrame mainFrame) {
+		super(mainFrame);
+		getContentPane().setLayout(new BorderLayout());
 
-        _processBrowserView = new ProcessBrowserView(((WKFController) getController()).getExternalProcessBrowser(), (WKFController) getController());
-        getContentPane().add(_processBrowserView, BorderLayout.CENTER);
+		_processBrowserView = new ProcessBrowserView(((WKFController) getController()).getExternalProcessBrowser(),
+				(WKFController) getController());
+		getContentPane().add(_processBrowserView, BorderLayout.CENTER);
 
-        setTitle(FlexoLocalization.localizedForKey(getName()));
-        setSize(WKFCst.DEFAULT_PROCESS_BROWSER_WINDOW_WIDTH, WKFCst.DEFAULT_PROCESS_BROWSER_WINDOW_HEIGHT);
-        setLocation(WKFCst.DEFAULT_MAINFRAME_WIDTH + 2, WKFCst.DEFAULT_PALETTE_HEIGHT + 25 + WKFCst.DEFAULT_WORKFLOW_BROWSER_WINDOW_HEIGHT);
+		setTitle(FlexoLocalization.localizedForKey(getName()));
+		setSize(WKFCst.DEFAULT_PROCESS_BROWSER_WINDOW_WIDTH, WKFCst.DEFAULT_PROCESS_BROWSER_WINDOW_HEIGHT);
+		setLocation(WKFCst.DEFAULT_MAINFRAME_WIDTH + 2, WKFCst.DEFAULT_PALETTE_HEIGHT + 25 + WKFCst.DEFAULT_WORKFLOW_BROWSER_WINDOW_HEIGHT);
 
-        validate();
-        pack();
-    }
+		validate();
+		pack();
+	}
 
-    @Override
-    public void dispose() {
-    	_processBrowserView = null;
-    	super.dispose();
-    }
-    
-    @Override
-	public String getName()
-    {
-        return WKFCst.DEFAULT_PROCESS_BROWSER_WINDOW_TITLE;
-    }
+	@Override
+	public void dispose() {
+		_processBrowserView = null;
+		super.dispose();
+	}
+
+	@Override
+	public String getName() {
+		return WKFCst.DEFAULT_PROCESS_BROWSER_WINDOW_TITLE;
+	}
 
 }

@@ -34,63 +34,53 @@ import org.openflexo.ie.view.print.PrintComponentAction;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class PrintComponentInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	PrintComponentInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(PrintComponentAction.actionType,actionInitializer);
+	PrintComponentInitializer(IEControllerActionInitializer actionInitializer) {
+		super(PrintComponentAction.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<PrintComponentAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<PrintComponentAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<PrintComponentAction>() {
-            @Override
-			public boolean run(ActionEvent e, PrintComponentAction action)
-            {
-            	return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, PrintComponentAction action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<PrintComponentAction> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<PrintComponentAction>() {
-            @Override
-			public boolean run(ActionEvent e, PrintComponentAction action)
-            {
-               	return true;
-          }
-        };
-	}
-
-  	@Override
-	public void init()
-	{
-        PrintComponentAction.initWithController(getControllerActionInitializer().getIEController());
-        getControllerActionInitializer().registerAction(PrintComponentAction.actionType,getShortcut());
-	}
-	
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<PrintComponentAction> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<PrintComponentAction>() {
+			@Override
+			public boolean run(ActionEvent e, PrintComponentAction action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	public void init() {
+		PrintComponentAction.initWithController(getControllerActionInitializer().getIEController());
+		getControllerActionInitializer().registerAction(PrintComponentAction.actionType, getShortcut());
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.PRINT_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_P, FlexoCst.META_MASK);
 	}
-	
+
 }

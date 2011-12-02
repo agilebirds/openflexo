@@ -23,16 +23,17 @@ import org.openflexo.foundation.bindings.BindingValue.BindingPathElement;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-public abstract class PropertyProposal{
+public abstract class PropertyProposal {
 	private String name;
 	private IEWidget widget;
 	private BindingPathElement _implementedProperty;
-	
-	public PropertyProposal(IEWidget widget,String name){
+
+	public PropertyProposal(IEWidget widget, String name) {
 		super();
 		this.name = name;
 		this.widget = widget;
 	}
+
 	public String getName() {
 		return name;
 	}
@@ -40,15 +41,17 @@ public abstract class PropertyProposal{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public IEWidget getWidget() {
 		return widget;
 	}
+
 	public BindingPathElement getImplementedProperty() {
 		return _implementedProperty;
 	}
-	public void setImplementedProperty(DMProperty p){
+
+	public void setImplementedProperty(DMProperty p) {
 		_implementedProperty = p;
 	}
-	
+
 }

@@ -30,33 +30,31 @@ import java.util.logging.Logger;
  * @author sguerin
  * 
  */
-public class WidgetFocusListener implements FocusListener
-{
+public class WidgetFocusListener implements FocusListener {
 
-    private static final Logger logger = Logger.getLogger(WidgetFocusListener.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WidgetFocusListener.class.getPackage().getName());
 
-    private DenaliWidget _widget;
+	private DenaliWidget _widget;
 
-    public WidgetFocusListener(DenaliWidget widget)
-    {
-        super();
-        _widget = widget;
-    }
+	public WidgetFocusListener(DenaliWidget widget) {
+		super();
+		_widget = widget;
+	}
 
-    @Override
-	public void focusGained(FocusEvent arg0)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("focusGained()");
-        _widget.gainFocus();
-    }
+	@Override
+	public void focusGained(FocusEvent arg0) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("focusGained()");
+		}
+		_widget.gainFocus();
+	}
 
-    @Override
-	public void focusLost(FocusEvent arg0)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("focusLost()");
-        _widget.looseFocus();
-    }
+	@Override
+	public void focusLost(FocusEvent arg0) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("focusLost()");
+		}
+		_widget.looseFocus();
+	}
 
 }

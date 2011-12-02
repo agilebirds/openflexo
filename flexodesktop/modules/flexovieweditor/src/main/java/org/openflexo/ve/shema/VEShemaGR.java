@@ -28,11 +28,10 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.ConnectorInserted;
 import org.openflexo.foundation.view.ConnectorRemoved;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ShapeInserted;
 import org.openflexo.foundation.view.ShapeRemoved;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.xml.VEShemaBuilder;
-
 
 public class VEShemaGR extends DrawingGraphicalRepresentation<View> implements GraphicalFlexoObserver, VEShemaConstants {
 
@@ -40,62 +39,48 @@ public class VEShemaGR extends DrawingGraphicalRepresentation<View> implements G
 	private static final Logger logger = Logger.getLogger(VEShemaGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public VEShemaGR(VEShemaBuilder builder)
-	{
-		this((VEShemaRepresentation)null);
+	public VEShemaGR(VEShemaBuilder builder) {
+		this((VEShemaRepresentation) null);
 	}
 
-	public VEShemaGR(VEShemaRepresentation aDrawing) 
-	{
+	public VEShemaGR(VEShemaRepresentation aDrawing) {
 		super(aDrawing);
 
-		if (aDrawing != null 
-				&& aDrawing.getShema() != null 
-				&& aDrawing.getShema().getGraphicalRepresentation() != null) {
-			setsWith((GraphicalRepresentation<?>)aDrawing.getShema().getGraphicalRepresentation());
+		if (aDrawing != null && aDrawing.getShema() != null && aDrawing.getShema().getGraphicalRepresentation() != null) {
+			setsWith((GraphicalRepresentation<?>) aDrawing.getShema().getGraphicalRepresentation());
 		}
 
 		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());
 
-		if (aDrawing != null 
-				&& aDrawing.getShema() != null) { 	
+		if (aDrawing != null && aDrawing.getShema() != null) {
 			aDrawing.getShema().setGraphicalRepresentation(this);
 			aDrawing.getShema().addObserver(this);
 		}
 
 	}
 
-
 	@Override
-	public VEShemaRepresentation getDrawing() 
-	{
-		return (VEShemaRepresentation)super.getDrawing();
+	public VEShemaRepresentation getDrawing() {
+		return (VEShemaRepresentation) super.getDrawing();
 	}
-	
-	public View getShema()
-	{
+
+	public View getShema() {
 		return getDrawing().getShema();
 	}
 
-
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getShema()) {
-			//logger.info("Notified "+dataModification);
+			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof ShapeInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof ShapeRemoved) {
+			} else if (dataModification instanceof ShapeRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof ConnectorInserted) {
+			} else if (dataModification instanceof ConnectorInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof ConnectorRemoved) {
+			} else if (dataModification instanceof ConnectorRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
 		}

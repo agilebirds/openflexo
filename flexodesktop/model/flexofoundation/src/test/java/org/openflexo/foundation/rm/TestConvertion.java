@@ -24,8 +24,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.zip.ZipException;
 
-
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
@@ -37,66 +35,60 @@ import org.openflexo.toolbox.ZipUtils;
 
 public class TestConvertion extends FlexoTestCase {
 
-    protected static final Logger logger = Logger.getLogger(TestConvertion.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestConvertion.class.getPackage().getName());
 
-    public TestConvertion()
-    {
+	public TestConvertion() {
 		super("TestConvertion");
 	}
-    
-    public void testConvertFBV()
-    {
+
+	public void testConvertFBV() {
 		logger.info("testConvertFBV : not maintained");
 
-    	//openAndRunValidation("FBVWarTest","FBV.prj.1.1RC5.zip","FBV.prj",CodeType.PROTOTYPE);
-    }
+		// openAndRunValidation("FBVWarTest","FBV.prj.1.1RC5.zip","FBV.prj",CodeType.PROTOTYPE);
+	}
 
-    public void testConvertClimact()
-    {
+	public void testConvertClimact() {
 		logger.info("testConvertClimact : not maintained");
-		//openAndRunValidation("ClimactWarTest","Climact.prj.1.1RC5.zip","Climact.prj",CodeType.PROTOTYPE);
-    }
+		// openAndRunValidation("ClimactWarTest","Climact.prj.1.1RC5.zip","Climact.prj",CodeType.PROTOTYPE);
+	}
 
-    public void testConvertHyperlinkTest()
-    {
+	public void testConvertHyperlinkTest() {
 		logger.info("testConvertHyperlinkTest : not maintained");
-		//openAndRunValidation("HyperlinkTest","HyperlinkTest.prj.1.1RC5.zip","HyperlinkTest.prj",CodeType.PROTOTYPE);
-    }
+		// openAndRunValidation("HyperlinkTest","HyperlinkTest.prj.1.1RC5.zip","HyperlinkTest.prj",CodeType.PROTOTYPE);
+	}
 
-    public void testConvertRentDVD()
-    {
+	public void testConvertRentDVD() {
 		logger.info("testConvertRentDVD : not maintained");
-		//openAndRunValidation("RentDVD","RentDVD.1.2.zip","Rent_a_DVD.prj",CodeType.PROTOTYPE);
-    }
-    
-    private void openAndRunValidation(String name, String zipName, String prjName, CodeType codeType){
-        log("Convert : "+name);
-        ToolBox.setPlatform();
-        FlexoLoggingManager.forceInitialize();
-        File outputDir = null;
-        try {
-            File f = File.createTempFile("TestConvertion_", null);
-            outputDir = new File(f.getParentFile(), f.getName() + "DIR");
-            f.delete();
-        } catch (IOException e) {
-            e.printStackTrace();
-            outputDir = new File(System.getProperty("java.io.tmpdir"), "TestConvertion");
-        }
-        outputDir.mkdirs();
+		// openAndRunValidation("RentDVD","RentDVD.1.2.zip","Rent_a_DVD.prj",CodeType.PROTOTYPE);
+	}
 
-        File unzipDir = null;
-        try {
-            File f = File.createTempFile("TestConvertionUnzip_", null);
-            unzipDir = new File(f.getParentFile(), f.getName() + "Unzip"+name);
-            f.delete();
-        } catch (IOException e) {
-            e.printStackTrace();
-            unzipDir = new File(System.getProperty("java.io.tmpdir"), "TestConvertionUnzip"+name);
-        }
-        unzipDir.mkdirs();
+	private void openAndRunValidation(String name, String zipName, String prjName, CodeType codeType) {
+		log("Convert : " + name);
+		ToolBox.setPlatform();
+		FlexoLoggingManager.forceInitialize();
+		File outputDir = null;
+		try {
+			File f = File.createTempFile("TestConvertion_", null);
+			outputDir = new File(f.getParentFile(), f.getName() + "DIR");
+			f.delete();
+		} catch (IOException e) {
+			e.printStackTrace();
+			outputDir = new File(System.getProperty("java.io.tmpdir"), "TestConvertion");
+		}
+		outputDir.mkdirs();
 
+		File unzipDir = null;
+		try {
+			File f = File.createTempFile("TestConvertionUnzip_", null);
+			unzipDir = new File(f.getParentFile(), f.getName() + "Unzip" + name);
+			f.delete();
+		} catch (IOException e) {
+			e.printStackTrace();
+			unzipDir = new File(System.getProperty("java.io.tmpdir"), "TestConvertionUnzip" + name);
+		}
+		unzipDir.mkdirs();
 
-        try {
+		try {
 			ZipUtils.unzip(new FileResource(zipName), unzipDir);
 		} catch (ZipException e3) {
 			// TODO Auto-generated catch block
@@ -108,18 +100,18 @@ public class TestConvertion extends FlexoTestCase {
 			fail();
 		}
 
-        File projectDirectory = new File(unzipDir,prjName);
+		File projectDirectory = new File(unzipDir, prjName);
 
-        try {
-            projectDirectory = FileUtils.copyDirToDir(projectDirectory, outputDir);
-        } catch (IOException e2) {
-            e2.printStackTrace();
-            fail("Copy of Test project failed!");
-            return;
-        }
-        FlexoEditor editor = reloadProject(projectDirectory);
+		try {
+			projectDirectory = FileUtils.copyDirToDir(projectDirectory, outputDir);
+		} catch (IOException e2) {
+			e2.printStackTrace();
+			fail("Copy of Test project failed!");
+			return;
+		}
+		FlexoEditor editor = reloadProject(projectDirectory);
 		editor.getProject().checkModelConsistency(CodeType.PROTOTYPE);
 		saveProject(editor.getProject());
-		}
-    
+	}
+
 }

@@ -26,64 +26,53 @@ import org.openflexo.fge.geomedit.construction.ComplexCurveConstruction;
 import org.openflexo.fge.geomedit.gr.ComplexCurveGraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 
-
 public class ComplexCurve extends GeometricObject<FGEComplexCurve> {
 
 	private ComplexCurveGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public ComplexCurve(GeomEditBuilder builder)
-	{
+	public ComplexCurve(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public ComplexCurve(GeometricSet set, ComplexCurveConstruction construction) 
-	{
+
+	public ComplexCurve(GeometricSet set, ComplexCurveConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new ComplexCurveGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new ComplexCurveGraphicalRepresentation(this, set.getEditedDrawing());
 	}
 
 	@Override
-	public ComplexCurveGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public ComplexCurveGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(ComplexCurveGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(ComplexCurveGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
 
 	@Override
-	public ComplexCurveConstruction getConstruction()
-	{
-		return (ComplexCurveConstruction)super.getConstruction();
+	public ComplexCurveConstruction getConstruction() {
+		return (ComplexCurveConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(ComplexCurveConstruction polygonConstruction)
-	{
+	public void setConstruction(ComplexCurveConstruction polygonConstruction) {
 		_setConstruction(polygonConstruction);
 	}
 
-
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "ComplexCurve.inspector";
 	}
 
-	public Closure getClosure()
-	{
+	public Closure getClosure() {
 		return getConstruction().getClosure();
 	}
 
-	public void setClosure(Closure aClosure)
-	{
+	public void setClosure(Closure aClosure) {
 		if (aClosure != getClosure()) {
 			Closure oldClosure = getClosure();
 			getConstruction().setClosure(aClosure);
-			getGraphicalRepresentation().notify(new FGENotification("closure",oldClosure,aClosure));
+			getGraphicalRepresentation().notify(new FGENotification("closure", oldClosure, aClosure));
 		}
 	}
 

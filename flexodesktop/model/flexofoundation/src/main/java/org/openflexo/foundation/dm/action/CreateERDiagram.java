@@ -34,36 +34,28 @@ import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.localization.FlexoLocalization;
 
-public class CreateERDiagram extends FlexoAction<CreateERDiagram,DMObject,DMEntity>
-{
+public class CreateERDiagram extends FlexoAction<CreateERDiagram, DMObject, DMEntity> {
 
 	private static final Logger logger = Logger.getLogger(CreateERDiagram.class.getPackage().getName());
 
-	public static FlexoActionType<CreateERDiagram,DMObject,DMEntity> actionType
-	= new FlexoActionType<CreateERDiagram,DMObject,DMEntity>  (
-			"create_entity_diagram",
-			FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateERDiagram, DMObject, DMEntity> actionType = new FlexoActionType<CreateERDiagram, DMObject, DMEntity>(
+			"create_entity_diagram", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateERDiagram makeNewAction(DMObject focusedObject, Vector<DMEntity> globalSelection, FlexoEditor editor)
-		{
+		public CreateERDiagram makeNewAction(DMObject focusedObject, Vector<DMEntity> globalSelection, FlexoEditor editor) {
 			return new CreateERDiagram(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMEntity> globalSelection)
-		{
+		protected boolean isVisibleForSelection(DMObject object, Vector<DMEntity> globalSelection) {
 			return (object instanceof DMModel || object instanceof DMEntity);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMEntity> globalSelection)
-		{
+		protected boolean isEnabledForSelection(DMObject object, Vector<DMEntity> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
@@ -73,21 +65,18 @@ public class CreateERDiagram extends FlexoAction<CreateERDiagram,DMObject,DMEnti
 		FlexoModelObject.addActionForClass(actionType, DMObject.class);
 	}
 
-
 	private String diagramName;
 	private Vector<DMEntity> entitiesToPutInTheDiagram;
 	private ERDiagram newDiagram;
 	private DMRepository repository;
 
-	CreateERDiagram (DMObject focusedObject, Vector<DMEntity> globalSelection, FlexoEditor editor)
-	{
+	CreateERDiagram(DMObject focusedObject, Vector<DMEntity> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context)
-	{
-		logger.info ("CreateERDiagram "+diagramName);
+	protected void doAction(Object context) {
+		logger.info("CreateERDiagram " + diagramName);
 		if (getFocusedObject() != null) {
 			newDiagram = new ERDiagram(getFocusedObject().getDMModel());
 			for (DMEntity e : getEntitiesToPutInTheDiagram()) {
@@ -100,12 +89,12 @@ public class CreateERDiagram extends FlexoAction<CreateERDiagram,DMObject,DMEnti
 	}
 
 	public String getDiagramName() {
-		if (diagramName==null) {
+		if (diagramName == null) {
 			String base = FlexoLocalization.localizedForKey("new_diagram");
 			diagramName = base;
-			int i=0;
-			while(getFocusedObject().getDMModel().getDiagramWithName(diagramName,false)!=null) {
-				diagramName=base+"-"+i++;
+			int i = 0;
+			while (getFocusedObject().getDMModel().getDiagramWithName(diagramName, false) != null) {
+				diagramName = base + "-" + i++;
 			}
 		}
 		return diagramName;
@@ -115,29 +104,31 @@ public class CreateERDiagram extends FlexoAction<CreateERDiagram,DMObject,DMEnti
 		this.diagramName = diagramName;
 	}
 
-	public Vector<DMEntity> getEntitiesToPutInTheDiagram()
-	{
+	public Vector<DMEntity> getEntitiesToPutInTheDiagram() {
 		if (entitiesToPutInTheDiagram == null) {
 			entitiesToPutInTheDiagram = new Vector<DMEntity>();
 			for (FlexoModelObject o : getGlobalSelectionAndFocusedObject()) {
-				if (o instanceof DMEntity) entitiesToPutInTheDiagram.add((DMEntity)o);
+				if (o instanceof DMEntity) {
+					entitiesToPutInTheDiagram.add((DMEntity) o);
+				}
 			}
 		}
 		return entitiesToPutInTheDiagram;
 	}
 
-	public void setEntitiesToPutInTheDiagram(
-			Vector<DMEntity> entitiesToPutInTheDiagram) {
+	public void setEntitiesToPutInTheDiagram(Vector<DMEntity> entitiesToPutInTheDiagram) {
 		this.entitiesToPutInTheDiagram = entitiesToPutInTheDiagram;
 	}
 
-	public DMRepository getRepository()
-	{
+	public DMRepository getRepository() {
 		if (repository == null) {
-			Hashtable<DMRepository,Integer> occurences = new Hashtable<DMRepository,Integer>();
+			Hashtable<DMRepository, Integer> occurences = new Hashtable<DMRepository, Integer>();
 			for (DMEntity e : getEntitiesToPutInTheDiagram()) {
-				if (occurences.get(e.getRepository()) == null) occurences.put(e.getRepository(), 1);
-				else occurences.put(e.getRepository(),occurences.get(e.getRepository())+1);
+				if (occurences.get(e.getRepository()) == null) {
+					occurences.put(e.getRepository(), 1);
+				} else {
+					occurences.put(e.getRepository(), occurences.get(e.getRepository()) + 1);
+				}
 			}
 			int maxOccurs = -1;
 			for (DMRepository r : occurences.keySet()) {
@@ -146,21 +137,19 @@ public class CreateERDiagram extends FlexoAction<CreateERDiagram,DMObject,DMEnti
 					maxOccurs = occurences.get(r);
 				}
 			}
-			if (repository == null) repository = getFocusedObject().getProject().getDataModel().getRepositories().values().iterator().next();
+			if (repository == null) {
+				repository = getFocusedObject().getProject().getDataModel().getRepositories().values().iterator().next();
+			}
 		}
 		return repository;
 	}
 
-	public void setRepository(DMRepository repository)
-	{
+	public void setRepository(DMRepository repository) {
 		this.repository = repository;
 	}
 
 	public ERDiagram getNewDiagram() {
 		return newDiagram;
 	}
-
-
-
 
 }

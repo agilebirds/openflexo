@@ -27,20 +27,17 @@ import org.openflexo.foundation.dm.DMEntity;
  * @author sguerin
  * 
  */
-public class DMEntityNameChanged extends DMAttributeDataModification
-{
+public class DMEntityNameChanged extends DMAttributeDataModification {
 
-    private DMEntity _dmEntity;
+	private DMEntity _dmEntity;
 
-    public DMEntityNameChanged(DMEntity dmEntity, String oldName, String newName)
-    {
-        super("name", oldName, newName);
-        _dmEntity = dmEntity;
-    }
+	public DMEntityNameChanged(DMEntity dmEntity, String oldName, String newName) {
+		super("name", oldName, newName);
+		_dmEntity = dmEntity;
+	}
 
-    public DMEntity getDMEntity()
-    {
-        return _dmEntity;
-    }
+	public DMEntity getDMEntity() {
+		return _dmEntity;
+	}
 
 }

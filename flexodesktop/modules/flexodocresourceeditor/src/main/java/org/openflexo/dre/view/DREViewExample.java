@@ -33,90 +33,79 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * Please comment this class
  * 
  * @author yourname
  * 
  */
-public class DREViewExample extends JPanel implements ModuleView<DRMObject>, GraphicalFlexoObserver
-{
-    
-    private DREController _controller;
-    private DRMObject _object;
+public class DREViewExample extends JPanel implements ModuleView<DRMObject>, GraphicalFlexoObserver {
 
-     public DREViewExample(DRMObject object, DREController controller)
-    {
-        super(new BorderLayout());
-        add(new JLabel(object.getFullyQualifiedName(),SwingConstants.CENTER), BorderLayout.CENTER);
-        _controller = controller;
-        _object = object;
-    }
+	private DREController _controller;
+	private DRMObject _object;
 
-    public DREController getDREController()
-    {
-        return _controller;
-    }
+	public DREViewExample(DRMObject object, DREController controller) {
+		super(new BorderLayout());
+		add(new JLabel(object.getFullyQualifiedName(), SwingConstants.CENTER), BorderLayout.CENTER);
+		_controller = controller;
+		_object = object;
+	}
 
-   @Override
-public DRMObject getRepresentedObject()
-   {
-       return _object;
-   }
-    
-     @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        // TODO: Implements this
-    }
+	public DREController getDREController() {
+		return _controller;
+	}
 
-    @Override
-	public void deleteModuleView()
-    {
-         getDREController().removeModuleView(this);   
-    }
+	@Override
+	public DRMObject getRepresentedObject() {
+		return _object;
+	}
 
-    @Override
-	public FlexoPerspective<DRMObject> getPerspective()
-    {
-        return getDREController().DRE_PERSPECTIVE;
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// TODO: Implements this
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	@Override
+	public void deleteModuleView() {
+		getDREController().removeModuleView(this);
+	}
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	@Override
+	public FlexoPerspective<DRMObject> getPerspective() {
+		return getDREController().DRE_PERSPECTIVE;
+	}
 
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
 	@Override
-	public boolean isAutoscrolled() 
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
-
-
 
 }

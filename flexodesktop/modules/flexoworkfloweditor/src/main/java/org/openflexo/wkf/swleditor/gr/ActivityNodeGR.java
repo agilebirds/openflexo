@@ -32,18 +32,15 @@ import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
-	public ActivityNodeGR(ActivityNode activityNode, SwimmingLaneRepresentation aDrawing,boolean isInPalet)
-	{
-		super(activityNode, ShapeType.RECTANGLE, aDrawing,isInPalet);
+	public ActivityNodeGR(ActivityNode activityNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
+		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
 
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
-				if(getImageIcon()!=null){
+			public void paintShape(FGEShapeGraphics g) {
+				if (getImageIcon() != null) {
 					g.drawImage(getImageIcon().getImage(), new FGEPoint(0d, 0d));
 				}
 			};
@@ -54,39 +51,44 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 	}
 
 	@Override
-	int getTopBorder() 
-	{
+	int getTopBorder() {
 		return (isInPalette ? 10 : super.getTopBorder());
 	}
-	
+
 	@Override
-	int getBottomBorder() 
-	{
+	int getBottomBorder() {
 		return (isInPalette ? 1 : super.getBottomBorder());
 	}
 
 	@Override
-	int getLeftBorder() 
-	{
+	int getLeftBorder() {
 		return (isInPalette ? 1 : super.getLeftBorder());
 	}
-	
+
 	@Override
-	int getRightBorder() 
-	{
+	int getRightBorder() {
 		return (isInPalette ? 1 : super.getRightBorder());
 	}
-	
-	private ImageIcon getImageIcon(){
-		if(getActivityNode().getTaskType()==null)return null;
+
+	private ImageIcon getImageIcon() {
+		if (getActivityNode().getTaskType() == null) {
+			return null;
+		}
 		switch (getActivityNode().getTaskType()) {
-		case BusinessRule: return WKFIconLibrary.TASKTYPE_BUSINESSRULE;
-		case Manual: return WKFIconLibrary.TASKTYPE_MANUAL;
-		case Receive: return WKFIconLibrary.TASKTYPE_RECEIVE;
-		case Script: return WKFIconLibrary.TASKTYPE_SCRIPT;
-		case Send: return WKFIconLibrary.TASKTYPE_SEND;
-		case Service: return WKFIconLibrary.TASKTYPE_SERVICE;
-		case User: return WKFIconLibrary.TASKTYPE_USER;
+		case BusinessRule:
+			return WKFIconLibrary.TASKTYPE_BUSINESSRULE;
+		case Manual:
+			return WKFIconLibrary.TASKTYPE_MANUAL;
+		case Receive:
+			return WKFIconLibrary.TASKTYPE_RECEIVE;
+		case Script:
+			return WKFIconLibrary.TASKTYPE_SCRIPT;
+		case Send:
+			return WKFIconLibrary.TASKTYPE_SEND;
+		case Service:
+			return WKFIconLibrary.TASKTYPE_SERVICE;
+		case User:
+			return WKFIconLibrary.TASKTYPE_USER;
 
 		default:
 			return null;
@@ -95,20 +97,21 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
 	@Override
 	public double getRequiredWidth(double labelWidth) {
-		double required =  super.getRequiredWidth(labelWidth);
-		if (getImageIcon()!=null)
-			required+=getImageIcon().getIconWidth()*2;
+		double required = super.getRequiredWidth(labelWidth);
+		if (getImageIcon() != null) {
+			required += getImageIcon().getIconWidth() * 2;
+		}
 		return required;
 	}
 
-	public ActivityNode getActivityNode()
-	{
+	public ActivityNode getActivityNode() {
 		return getDrawable();
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof WKFAttributeDataModification && "taskType".equals(((WKFAttributeDataModification)dataModification).getAttributeName())) {
+		if (dataModification instanceof WKFAttributeDataModification
+				&& "taskType".equals(((WKFAttributeDataModification) dataModification).getAttributeName())) {
 			checkAndUpdateDimensionIfRequired();
 		}
 		super.update(observable, dataModification);

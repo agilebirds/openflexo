@@ -20,6 +20,7 @@
 package org.openflexo.vpm.drawingshema;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -29,67 +30,57 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-
 public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<ExampleDrawingShema> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingShemaModuleView.class.getPackage().getName());
 
 	private CalcDrawingShemaController _controller;
-	
-	public CalcDrawingShemaModuleView(CalcDrawingShemaController controller)
-	{
+
+	public CalcDrawingShemaModuleView(CalcDrawingShemaController controller) {
 		super();
 		setLayout(new BorderLayout());
 		_controller = controller;
-		JPanel topPanel = new JPanel(new BorderLayout());
-		topPanel.add(_controller.getToolbox().getToolboxPanel(),BorderLayout.WEST);
-		add(topPanel,BorderLayout.NORTH);
-		add(new JScrollPane(_controller.getDrawingView()),BorderLayout.CENTER);
+		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		topPanel.add(_controller.getToolbox().getStyleToolBar());
+		add(topPanel, BorderLayout.NORTH);
+		add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
 		validate();
 
 		controller.getCEDController().manageResource(controller.getShema());
-		
 
 	}
 
-	public CalcDrawingShemaController getController() 
-	{
+	public CalcDrawingShemaController getController() {
 		return _controller;
 	}
-	
+
 	@Override
-	public void deleteModuleView() 
-	{
+	public void deleteModuleView() {
 		getController().delete();
 	}
 
 	@Override
-	public ViewPointPerspective getPerspective() 
-	{
+	public ViewPointPerspective getPerspective() {
 		return getController().getCEDController().VIEW_POINT_PERSPECTIVE;
 	}
 
 	@Override
-	public ExampleDrawingShema getRepresentedObject() 
-	{
+	public ExampleDrawingShema getRepresentedObject() {
 		return _controller.getShema();
 	}
 
 	@Override
-	public boolean isAutoscrolled()
-	{
+	public boolean isAutoscrolled() {
 		return true;
 	}
 
 	@Override
-	public void willHide() 
-	{
+	public void willHide() {
 	}
 
 	@Override
-	public void willShow() 
-	{
+	public void willShow() {
 		getPerspective().focusOnShema(getRepresentedObject());
 	}
 

@@ -33,43 +33,38 @@ import org.openflexo.localization.FlexoLocalization;
 public abstract class CGTemplates extends CGTemplateObject {
 
 	protected CGTemplateRepository _applicationRepository;
-	private Hashtable<CustomTemplatesResource,CustomCGTemplateRepository> _customRepositories;
+	private Hashtable<CustomTemplatesResource, CustomCGTemplateRepository> _customRepositories;
 
 	private FlexoProject _project;
-    private Vector<TargetType> availableTargets;
+	private Vector<TargetType> availableTargets;
 
-    @Override
-    public FlexoProject getProject()
-    {
-
-       return _project;
-    }
-
-	public CGTemplates(FlexoProject project, Vector<TargetType> availableTargets)
-	{
-		super();
-        this.availableTargets = availableTargets;
-		_project = project;
-		_customRepositories = new Hashtable<CustomTemplatesResource,CustomCGTemplateRepository>();
-	}
-
-	public CustomCGTemplateRepository createNewCustomTemplatesRepository(CustomTemplatesResource resource)
-	{
-		return new CustomCGTemplateRepository(this,resource,availableTargets);
-	}
-	
 	@Override
-    public void update()
-	{
+	public FlexoProject getProject() {
+
+		return _project;
+	}
+
+	public CGTemplates(FlexoProject project, Vector<TargetType> availableTargets) {
+		super();
+		this.availableTargets = availableTargets;
+		_project = project;
+		_customRepositories = new Hashtable<CustomTemplatesResource, CustomCGTemplateRepository>();
+	}
+
+	public CustomCGTemplateRepository createNewCustomTemplatesRepository(CustomTemplatesResource resource) {
+		return new CustomCGTemplateRepository(this, resource, availableTargets);
+	}
+
+	@Override
+	public void update() {
 		boolean hasChanged = false;
 		Vector<CustomTemplatesResource> previousKnownResources = new Vector<CustomTemplatesResource>(_customRepositories.keySet());
 		for (CustomTemplatesResource resource : getProject().getCustomTemplatesResources()) {
 			if (_customRepositories.get(resource) == null) {
-				if (resource.getFile()!=null && resource.getFile().exists() && resource.getFile().isDirectory()) { 
-					_customRepositories.put(resource,createNewCustomTemplatesRepository(resource));
+				if (resource.getFile() != null && resource.getFile().exists() && resource.getFile().isDirectory()) {
+					_customRepositories.put(resource, createNewCustomTemplatesRepository(resource));
 					hasChanged = true;
-				}
-				else {
+				} else {
 					resource.delete();
 					continue;
 				}
@@ -86,108 +81,100 @@ public abstract class CGTemplates extends CGTemplateObject {
 		for (CustomCGTemplateRepository repository : _customRepositories.values()) {
 			repository.update();
 		}
-		
-		if(hasChanged)
-		{
+
+		if (hasChanged) {
 			setChanged();
 			notifyObservers(new TemplatesChanged());
 		}
 	}
 
-
 	@Override
-    public String getFullyQualifiedName()
-	{
+	public String getFullyQualifiedName() {
 		return "TEMPLATES";
 	}
 
 	@Override
-    public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "templates";
 	}
 
-	public CGTemplateRepository getApplicationRepository()
-	{
+	public CGTemplateRepository getApplicationRepository() {
 		return _applicationRepository;
 	}
 
-	public Enumeration<CustomCGTemplateRepository> getCustomRepositories()
-	{
+	public Enumeration<CustomCGTemplateRepository> getCustomRepositories() {
 		return _customRepositories.elements();
 	}
 
-	public Vector<CustomCGTemplateRepository> getCustomCodeRepositoriesVector()
-	{
+	public Vector<CustomCGTemplateRepository> getCustomCodeRepositoriesVector() {
 		Vector<CustomCGTemplateRepository> v = new Vector<CustomCGTemplateRepository>();
 		Enumeration<CustomCGTemplateRepository> en = getCustomRepositories();
 		while (en.hasMoreElements()) {
 			CustomCGTemplateRepository rep = en.nextElement();
-			if (rep.getRepositoryType()==TemplateRepositoryType.Code)
+			if (rep.getRepositoryType() == TemplateRepositoryType.Code) {
 				v.add(rep);
-			
+			}
+
 		}
 		return v;
 	}
 
-	public Vector<CustomCGTemplateRepository> getCustomDocRepositoriesVector()
-	{
+	public Vector<CustomCGTemplateRepository> getCustomDocRepositoriesVector() {
 		Vector<CustomCGTemplateRepository> v = new Vector<CustomCGTemplateRepository>();
 		Enumeration<CustomCGTemplateRepository> en = getCustomRepositories();
 		while (en.hasMoreElements()) {
 			CustomCGTemplateRepository rep = en.nextElement();
-			if (rep.getRepositoryType()==TemplateRepositoryType.Documentation)
+			if (rep.getRepositoryType() == TemplateRepositoryType.Documentation) {
 				v.add(rep);
-			
+			}
+
 		}
 		return v;
 	}
-	
-	public CustomCGTemplateRepository getCustomCGTemplateRepositoryForName (String aName)
-	{
-		if (aName == null) return null;
+
+	public CustomCGTemplateRepository getCustomCGTemplateRepositoryForName(String aName) {
+		if (aName == null) {
+			return null;
+		}
 		for (CustomCGTemplateRepository repository : _customRepositories.values()) {
-			if (repository.getName().equals(aName)) return repository;
+			if (repository.getName().equals(aName)) {
+				return repository;
+			}
 		}
 		return null;
 	}
 
-	public CustomCGTemplateRepository getCustomCGTemplateRepository (CustomTemplatesResource resource)
-	{
+	public CustomCGTemplateRepository getCustomCGTemplateRepository(CustomTemplatesResource resource) {
 		return _customRepositories.get(resource);
 	}
 
 	@Override
-    public CGTemplates getTemplates()
-	{
+	public CGTemplates getTemplates() {
 		return this;
 	}
 
-	   /**
-     * @param selectedDMPackage
-     * @return
-     */
-    public String getNextGeneratedCodeRepositoryName()
-    {
-        String baseName = FlexoLocalization.localizedForKey("default_custom_template_repository_name");
-        String testMe = baseName;
-        int test = 0;
-        while (getCustomCGTemplateRepositoryForName(testMe) != null) {
-            test++;
-            testMe = baseName + test;
-        }
-        return testMe;
-    }
+	/**
+	 * @param selectedDMPackage
+	 * @return
+	 */
+	public String getNextGeneratedCodeRepositoryName() {
+		String baseName = FlexoLocalization.localizedForKey("default_custom_template_repository_name");
+		String testMe = baseName;
+		int test = 0;
+		while (getCustomCGTemplateRepositoryForName(testMe) != null) {
+			test++;
+			testMe = baseName + test;
+		}
+		return testMe;
+	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.GENERATORS.CG_TEMPLATES;
 	}
 
 	@Override
-    public String getHelpText()
-	{
+	public String getHelpText() {
 		return FlexoLocalization.localizedForKey("contains_templates_used_for_code_generation");
 	}
 

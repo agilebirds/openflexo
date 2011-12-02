@@ -32,51 +32,43 @@ import org.openflexo.foundation.dm.action.DMSelectAll;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DMSelectAllInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DMSelectAllInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(DMSelectAll.actionType,actionInitializer);
+	DMSelectAllInitializer(DMControllerActionInitializer actionInitializer) {
+		super(DMSelectAll.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DMSelectAll> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DMSelectAll> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMSelectAll>() {
-            @Override
-			public boolean run(ActionEvent e, DMSelectAll action)
-            {
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, DMSelectAll action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<DMSelectAll> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<DMSelectAll> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DMSelectAll>() {
-            @Override
-			public boolean run(ActionEvent e, DMSelectAll action)
-            {
-            	getControllerActionInitializer().getDMSelectionManager().performSelectionSelectAll();
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, DMSelectAll action) {
+				getControllerActionInitializer().getDMSelectionManager().performSelectionSelectAll();
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected KeyStroke getShortcut()
-	{
+	@Override
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_A, FlexoCst.META_MASK);
 	}
 

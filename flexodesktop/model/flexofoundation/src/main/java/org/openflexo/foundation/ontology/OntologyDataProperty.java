@@ -25,36 +25,31 @@ import com.hp.hpl.jena.ontology.DatatypeProperty;
 
 public class OntologyDataProperty extends OntologyProperty implements Comparable<OntologyDataProperty> {
 
-	protected OntologyDataProperty(DatatypeProperty aDataProperty, FlexoOntology ontology)
-	{
-		super(aDataProperty,ontology);
+	protected OntologyDataProperty(DatatypeProperty aDataProperty, FlexoOntology ontology) {
+		super(aDataProperty, ontology);
 	}
-	
+
 	@Override
-	public void delete()
-	{		
+	public void delete() {
 		getFlexoOntology().removeDataProperty(this);
 		getOntResource().remove();
 		getFlexoOntology().updateConceptsAndProperties();
 		super.delete();
 		deleteObservers();
 	}
-		
+
 	@Override
-	public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "ontology_data_property";
 	}
 
 	@Override
-	public String getFullyQualifiedName() 
-	{
-		return "OntologyDataProperty:"+getURI();
+	public String getFullyQualifiedName() {
+		return "OntologyDataProperty:" + getURI();
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		if (getIsReadOnly()) {
 			return Inspectors.VE.ONTOLOGY_DATA_PROPERTY_READ_ONLY_INSPECTOR; // read-only
 		} else {
@@ -63,46 +58,40 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 	}
 
 	@Override
-	public DatatypeProperty getOntProperty() 
-	{
-		return (DatatypeProperty)super.getOntProperty();
+	public DatatypeProperty getOntProperty() {
+		return (DatatypeProperty) super.getOntProperty();
 	}
 
 	@Override
-	public int compareTo(OntologyDataProperty o) 
-	{
+	public int compareTo(OntologyDataProperty o) {
 		return COMPARATOR.compare(this, o);
 	}
 
 	@Override
-	public boolean isSuperConceptOf(OntologyObject concept)
-	{
+	public boolean isSuperConceptOf(OntologyObject concept) {
 		if (concept instanceof OntologyDataProperty) {
-			OntologyDataProperty ontologyDataProperty = (OntologyDataProperty)concept;
+			OntologyDataProperty ontologyDataProperty = (OntologyDataProperty) concept;
 			return ontologyDataProperty.getOntProperty().hasSuperProperty(getOntProperty(), false);
 		}
 		return false;
 	}
 
-	public OntologicDataType getDataType()
-	{
-		if (getRangeStatement() != null) return getRangeStatement().getDataType();
+	public OntologicDataType getDataType() {
+		if (getRangeStatement() != null) {
+			return getRangeStatement().getDataType();
+		}
 		return null;
 	}
 
 	@Override
-	public String getDisplayableDescription()
-	{
-		return "<html>Datatype property <b>"+getName()+"</b><br>"
-				+"<i>"+getURI()+"</i><br>"
-				+"Domain: "+(getDomain()!=null?getDomain().getURI():"?")+"<br>"
-				+"Range: "+(getDataType()!=null?getDataType().toString():"?")+"<br>"
-				+"</html>";
+	public String getDisplayableDescription() {
+		return "<html>Datatype property <b>" + getName() + "</b><br>" + "<i>" + getURI() + "</i><br>" + "Domain: "
+				+ (getDomain() != null ? getDomain().getURI() : "?") + "<br>" + "Range: "
+				+ (getDataType() != null ? getDataType().toString() : "?") + "<br>" + "</html>";
 	}
 
 	@Override
-	public boolean isOntologyDataProperty()
-	{
+	public boolean isOntologyDataProperty() {
 		return true;
 	}
 

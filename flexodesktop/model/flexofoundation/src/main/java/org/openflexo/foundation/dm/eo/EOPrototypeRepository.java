@@ -25,7 +25,6 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 
-
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMRepositoryFolder;
 import org.openflexo.foundation.dm.eo.model.EOAttribute;
@@ -44,191 +43,182 @@ import org.openflexo.toolbox.FileUtils;
  * @author sguerin
  * 
  */
-public class EOPrototypeRepository extends DMEORepository
-{
+public class EOPrototypeRepository extends DMEORepository {
 
-    public static final File EOPROTOTYPE_REPOSITORY_DIR = new FileResource("Library/EOPrototypes.eomodeld");
+	public static final File EOPROTOTYPE_REPOSITORY_DIR = new FileResource("Library/EOPrototypes.eomodeld");
 
-    /**
-     * Constructor used during deserialization
-     */
-    public EOPrototypeRepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public EOPrototypeRepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public EOPrototypeRepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Default constructor
+	 */
+	public EOPrototypeRepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getInternalRepositoryFolder();
-    }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getInternalRepositoryFolder();
+	}
 
-    /**
-     * @param dmModel
-     * @return
-     */
-    public static EOPrototypeRepository createNewEOPrototypeRepository(DMModel dmModel, FlexoDMResource dmRes)
-    {
-        EOPrototypeRepository newEOPrototypeRepository = new EOPrototypeRepository(dmModel);
+	/**
+	 * @param dmModel
+	 * @return
+	 */
+	public static EOPrototypeRepository createNewEOPrototypeRepository(DMModel dmModel, FlexoDMResource dmRes) {
+		EOPrototypeRepository newEOPrototypeRepository = new EOPrototypeRepository(dmModel);
 
-        File eoPrototypeFile = EOPROTOTYPE_REPOSITORY_DIR;
+		File eoPrototypeFile = EOPROTOTYPE_REPOSITORY_DIR;
 
-        File copiedDirectory = ProjectRestructuration.getExpectedDataModelDirectory(dmModel.getProject().getProjectDirectory());
-        File toCopy = eoPrototypeFile;
-        File copy = new File(copiedDirectory, toCopy.getName());
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Copying file " + toCopy.getAbsolutePath() + " to " + copy.getAbsolutePath());
-        try {
-            FileUtils.copyDirToDir(toCopy, copiedDirectory);
-        } catch (IOException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Could not copy " + eoPrototypeFile.getAbsolutePath() + " to " + copy.getAbsolutePath());
-        }
+		File copiedDirectory = ProjectRestructuration.getExpectedDataModelDirectory(dmModel.getProject().getProjectDirectory());
+		File toCopy = eoPrototypeFile;
+		File copy = new File(copiedDirectory, toCopy.getName());
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Copying file " + toCopy.getAbsolutePath() + " to " + copy.getAbsolutePath());
+		}
+		try {
+			FileUtils.copyDirToDir(toCopy, copiedDirectory);
+		} catch (IOException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not copy " + eoPrototypeFile.getAbsolutePath() + " to " + copy.getAbsolutePath());
+			}
+		}
 
-        FlexoProjectFile eoPrototypeEOModelFile = new FlexoProjectFile(copy, dmModel.getProject());
+		FlexoProjectFile eoPrototypeEOModelFile = new FlexoProjectFile(copy, dmModel.getProject());
 
-        dmModel.setEOPrototypeRepository(newEOPrototypeRepository);
-        try {
-            newEOPrototypeRepository.importEOModelFile(eoPrototypeEOModelFile, dmModel, dmRes);
-        } catch (InvalidEOModelFileException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Could not import EOModel:" + eoPrototypeEOModelFile.getFile().getName());
-        } catch (EOModelAlreadyRegisteredException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Could not import EOModel:" + eoPrototypeEOModelFile.getFile().getName() + " already registered");
-        } catch (InvalidFileNameException e) {
-            if (logger.isLoggable(Level.SEVERE))
-                logger.severe("EOprototypes could not be created because their name is invalid.");
-        }
+		dmModel.setEOPrototypeRepository(newEOPrototypeRepository);
+		try {
+			newEOPrototypeRepository.importEOModelFile(eoPrototypeEOModelFile, dmModel, dmRes);
+		} catch (InvalidEOModelFileException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not import EOModel:" + eoPrototypeEOModelFile.getFile().getName());
+			}
+		} catch (EOModelAlreadyRegisteredException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not import EOModel:" + eoPrototypeEOModelFile.getFile().getName() + " already registered");
+			}
+		} catch (InvalidFileNameException e) {
+			if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("EOprototypes could not be created because their name is invalid.");
+			}
+		}
 
-        DMEOModel eoPrototypeEOModel = newEOPrototypeRepository.getEOPrototypeEOModel();
-        try {
-            eoPrototypeEOModel.updateFromEOModel();
-        } catch (EOAccessException e1) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-            e1.printStackTrace();
-        }
+		DMEOModel eoPrototypeEOModel = newEOPrototypeRepository.getEOPrototypeEOModel();
+		try {
+			eoPrototypeEOModel.updateFromEOModel();
+		} catch (EOAccessException e1) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
+			e1.printStackTrace();
+		}
 
-        return newEOPrototypeRepository;
-    }
+		return newEOPrototypeRepository;
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getDMModel().getFullyQualifiedName() + ".EO_PROTOTYPES";
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return getDMModel().getFullyQualifiedName() + ".EO_PROTOTYPES";
+	}
 
-    @Override
-	public String getName()
-    {
-        return "eoprototype_repository";
-    }
+	@Override
+	public String getName() {
+		return "eoprototype_repository";
+	}
 
-    @Override
-	public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
 
-    @Override
-	public void setName(String name)
-    {
-        // Not allowed
-    }
+	@Override
+	public void setName(String name) {
+		// Not allowed
+	}
 
-    @Override
-	public int getOrder()
-    {
-        return 11;
-    }
+	@Override
+	public int getOrder() {
+		return 11;
+	}
 
-    @Override
-	public boolean isReadOnly()
-    {
-        return true;
-    }
+	@Override
+	public boolean isReadOnly() {
+		return true;
+	}
 
-    @Override
-	public boolean isDeletable()
-    {
-        return false;
-    }
+	@Override
+	public boolean isDeletable() {
+		return false;
+	}
 
-    public DMEOModel getEOPrototypeEOModel()
-    {
-        if (getDMEOModels().size() == 1) {
-            Enumeration en = getDMEOModels().elements();
-            return (DMEOModel) en.nextElement();
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Inconsistant data in EOPrototype repository");
-        }
-        return null;
-    }
+	public DMEOModel getEOPrototypeEOModel() {
+		if (getDMEOModels().size() == 1) {
+			Enumeration en = getDMEOModels().elements();
+			return (DMEOModel) en.nextElement();
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Inconsistant data in EOPrototype repository");
+			}
+		}
+		return null;
+	}
 
-    public DMEOEntity getEOPrototypeEntity()
-    {
-        if (getEOPrototypeEOModel().getEntities().size() == 1) {
-            return getEOPrototypeEOModel().getEntities().firstElement();
-        } else {
-        	// Don't warn, it might be normal during project creation
-            /*if (logger.isLoggable(Level.WARNING))
-                logger.warning("Inconsistant data in EOPrototype repository: "+getEOPrototypeEOModel().getEntities().size()+" entities");*/
-        }
-        return null;
-    }
+	public DMEOEntity getEOPrototypeEntity() {
+		if (getEOPrototypeEOModel().getEntities().size() == 1) {
+			return getEOPrototypeEOModel().getEntities().firstElement();
+		} else {
+			// Don't warn, it might be normal during project creation
+			/*if (logger.isLoggable(Level.WARNING))
+			    logger.warning("Inconsistant data in EOPrototype repository: "+getEOPrototypeEOModel().getEntities().size()+" entities");*/
+		}
+		return null;
+	}
 
-    public Vector getPrototypes()
-    {
-        return getOrderedChildren();
-    }
+	public Vector getPrototypes() {
+		return getOrderedChildren();
+	}
 
-    @Override
-	public Vector<DMEOAttribute> getOrderedChildren()
-    {
-    	if (getEOPrototypeEntity() != null)
-    		return getEOPrototypeEntity().getOrderedAttributes();
-    	return null;
-    }
+	@Override
+	public Vector<DMEOAttribute> getOrderedChildren() {
+		if (getEOPrototypeEntity() != null) {
+			return getEOPrototypeEntity().getOrderedAttributes();
+		}
+		return null;
+	}
 
-    public DMEOPrototype getPrototype(EOAttribute prototypeAttribute)
-    {
-        return (DMEOPrototype) (getEOPrototypeEntity().getAttribute(prototypeAttribute));
-    }
+	public DMEOPrototype getPrototype(EOAttribute prototypeAttribute) {
+		return (DMEOPrototype) (getEOPrototypeEntity().getAttribute(prototypeAttribute));
+	}
 
-    public DMEOPrototype getPrototypeNamed(String protoName)
-    {
-        if (getEOPrototypeEntity() == null)
-            return null;
-        Enumeration<DMEOAttribute> en = getOrderedChildren().elements();
-        while (en.hasMoreElements()) {
-            DMEOPrototype p = (DMEOPrototype) en.nextElement();
-            if (p.getName() != null && p.getName().equals(protoName))
-                return p;
-        }
-        return null;
-    }
+	public DMEOPrototype getPrototypeNamed(String protoName) {
+		if (getEOPrototypeEntity() == null) {
+			return null;
+		}
+		Enumeration<DMEOAttribute> en = getOrderedChildren().elements();
+		while (en.hasMoreElements()) {
+			DMEOPrototype p = (DMEOPrototype) en.nextElement();
+			if (p.getName() != null && p.getName().equals(protoName)) {
+				return p;
+			}
+		}
+		return null;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return getName();
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
 
 }

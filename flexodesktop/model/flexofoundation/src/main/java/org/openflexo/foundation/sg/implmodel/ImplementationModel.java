@@ -22,7 +22,6 @@ package org.openflexo.foundation.sg.implmodel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,7 +157,7 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	}
 
 	@Override
-	public Hashtable<String, String> getSpecificDescriptions() {
+	public Map<String, String> getSpecificDescriptions() {
 		if (isSerializing()) {
 			return null;
 		}

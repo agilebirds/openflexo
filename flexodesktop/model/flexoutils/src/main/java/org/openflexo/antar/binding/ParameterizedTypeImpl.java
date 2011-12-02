@@ -24,23 +24,20 @@ import java.lang.reflect.Type;
 
 public class ParameterizedTypeImpl implements ParameterizedType {
 
-	public ParameterizedTypeImpl(Class rawType, Type[] actualTypeArguments) 
-	{
-		this(rawType,null,actualTypeArguments);
+	public ParameterizedTypeImpl(Class rawType, Type[] actualTypeArguments) {
+		this(rawType, null, actualTypeArguments);
 	}
-	
-	public ParameterizedTypeImpl(Class rawType, Type actualTypeArgument) 
-	{
-		this(rawType,null,makeTypeArray(actualTypeArgument));
+
+	public ParameterizedTypeImpl(Class rawType, Type actualTypeArgument) {
+		this(rawType, null, makeTypeArray(actualTypeArgument));
 	}
-	
-	private static Type[] makeTypeArray(Type t)
-	{
+
+	private static Type[] makeTypeArray(Type t) {
 		Type[] returned = new Type[1];
 		returned[0] = t;
 		return returned;
 	}
-	
+
 	public ParameterizedTypeImpl(Class rawType, Type ownerType, Type[] actualTypeArguments) {
 		super();
 		this.rawType = rawType;
@@ -51,7 +48,7 @@ public class ParameterizedTypeImpl implements ParameterizedType {
 	private Class rawType;
 	private Type ownerType;
 	private Type[] actualTypeArguments;
-	
+
 	@Override
 	public Type[] getActualTypeArguments() {
 		return actualTypeArguments;
@@ -68,45 +65,40 @@ public class ParameterizedTypeImpl implements ParameterizedType {
 	}
 
 	@Override
-	public String toString() 
-	{
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(rawType.getSimpleName()+"<");
+		sb.append(rawType.getSimpleName() + "<");
 		boolean isFirst = true;
 		for (Type t : getActualTypeArguments()) {
-			sb.append((isFirst?"":",")+TypeUtils.simpleRepresentation(t));
+			sb.append((isFirst ? "" : ",") + TypeUtils.simpleRepresentation(t));
 			isFirst = false;
 		}
 		sb.append(">");
 		return sb.toString();
 	}
-	
-	public String fullQualifiedRepresentation() 
-	{
+
+	public String fullQualifiedRepresentation() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(rawType.getName()+"<");
+		sb.append(rawType.getName() + "<");
 		boolean isFirst = true;
 		for (Type t : getActualTypeArguments()) {
-			sb.append((isFirst?"":",")+TypeUtils.fullQualifiedRepresentation(t));
+			sb.append((isFirst ? "" : ",") + TypeUtils.fullQualifiedRepresentation(t));
 			isFirst = false;
 		}
 		sb.append(">");
 		return sb.toString();
 	}
-	
+
 	@Override
-	public int hashCode() 
-	{
+	public int hashCode() {
 		return fullQualifiedRepresentation().hashCode();
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) 
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof Type) {
-			return TypeUtils.fullQualifiedRepresentation(this).equals(TypeUtils.fullQualifiedRepresentation((Type)obj));
-		}
-		else {
+			return TypeUtils.fullQualifiedRepresentation(this).equals(TypeUtils.fullQualifiedRepresentation((Type) obj));
+		} else {
 			return super.equals(obj);
 		}
 		/*if (obj instanceof ParameterizedType) {

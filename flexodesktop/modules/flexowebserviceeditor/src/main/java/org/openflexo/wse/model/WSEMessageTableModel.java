@@ -24,10 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -35,6 +31,8 @@ import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Please comment this class
@@ -42,123 +40,109 @@ import org.openflexo.foundation.wkf.ws.ServiceOperation;
  * @author sguerin
  * 
  */
-public class WSEMessageTableModel extends AbstractModel<ServiceOperation,ServiceMessageDefinition>
-{
+public class WSEMessageTableModel extends AbstractModel<ServiceOperation, ServiceMessageDefinition> {
 
-    protected static final Logger logger = Logger.getLogger(WSEMessageTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSEMessageTableModel.class.getPackage().getName());
 
-    public WSEMessageTableModel(ServiceOperation model, FlexoProject project, boolean readOnly)
-    {
-        super(model, project);
-        addToColumns(new IconColumn<ServiceMessageDefinition>("process_icon", 30) {
-            @Override
-			public Icon getIcon(ServiceMessageDefinition object)
-            {
-         		if ((object).isInputMessageDefinition())
+	public WSEMessageTableModel(ServiceOperation model, FlexoProject project, boolean readOnly) {
+		super(model, project);
+		addToColumns(new IconColumn<ServiceMessageDefinition>("process_icon", 30) {
+			@Override
+			public Icon getIcon(ServiceMessageDefinition object) {
+				if ((object).isInputMessageDefinition()) {
 					return WSEIconLibrary.WS_IN_MESSAGE_LEFT_ICON;
-				else if ((object).isOutputMessageDefinition())
+				} else if ((object).isOutputMessageDefinition()) {
 					return WSEIconLibrary.WS_OUT_MESSAGE_LEFT_ICON;
-				else if ((object).isFaultMessageDefinition())
+				} else if ((object).isFaultMessageDefinition()) {
 					return WSEIconLibrary.WS_FAULT_MESSAGE__LEFT_ICON;
+				}
 				return null;
-            }
-            
-            @Override
-            public String getLocalizedTooltip(ServiceMessageDefinition object) {
-            	if ((object).isInputMessageDefinition())
+			}
+
+			@Override
+			public String getLocalizedTooltip(ServiceMessageDefinition object) {
+				if ((object).isInputMessageDefinition()) {
 					return FlexoLocalization.localizedForKey("input_message_def");
-				else if ((object).isOutputMessageDefinition())
+				} else if ((object).isOutputMessageDefinition()) {
 					return FlexoLocalization.localizedForKey("output_message_def");
-				else if ((object).isFaultMessageDefinition())
+				} else if ((object).isFaultMessageDefinition()) {
 					return FlexoLocalization.localizedForKey("fault_message_def");
+				}
 				return null;
-            }
-        });
-       
-        if(readOnly)
-        addToColumns(new StringColumn<ServiceMessageDefinition>("name", 190) {
-            @Override
-			public String getValue(ServiceMessageDefinition object)
-            {
-                return (object).getName();
-            }
-        });
-        else{
-        	addToColumns(new EditableStringColumn<ServiceMessageDefinition>("name", 190) {
-                @Override
-				public String getValue(ServiceMessageDefinition object)
-                {
-                    return (object).getName();
-                }
-                @Override
-				public void setValue(ServiceMessageDefinition object, String aValue)
-                {
-                        (object).setName(aValue);
-                        selectObject(object);
-                }
-            });
-        }
-      /*  addToColumns(new EditableStringColumn("description", 365) {
-            public String getValue(FlexoModelObject object)
-            {
-                return ((MessageDefinition) object).getDescription();
-            }
+			}
+		});
 
-            public void setValue(FlexoModelObject object, String aValue)
-            {
-                ((MessageDefinition) object).setDescription(aValue);
-            }
-        });*/
-        setRowHeight(20);
-    }
+		if (readOnly) {
+			addToColumns(new StringColumn<ServiceMessageDefinition>("name", 190) {
+				@Override
+				public String getValue(ServiceMessageDefinition object) {
+					return (object).getName();
+				}
+			});
+		} else {
+			addToColumns(new EditableStringColumn<ServiceMessageDefinition>("name", 190) {
+				@Override
+				public String getValue(ServiceMessageDefinition object) {
+					return (object).getName();
+				}
 
-    public ServiceOperation getServiceOperation(){
-    		return getModel();
-    }
-    
-    public Vector getMessages()
-    {	
-        Vector a = new Vector();
-        if(getServiceOperation().isInOutOperation()){
+				@Override
+				public void setValue(ServiceMessageDefinition object, String aValue) {
+					(object).setName(aValue);
+					selectObject(object);
+				}
+			});
+		}
+		/*  addToColumns(new EditableStringColumn("description", 365) {
+		      public String getValue(FlexoModelObject object)
+		      {
+		          return ((MessageDefinition) object).getDescription();
+		      }
+
+		      public void setValue(FlexoModelObject object, String aValue)
+		      {
+		          ((MessageDefinition) object).setDescription(aValue);
+		      }
+		  });*/
+		setRowHeight(20);
+	}
+
+	public ServiceOperation getServiceOperation() {
+		return getModel();
+	}
+
+	public Vector getMessages() {
+		Vector a = new Vector();
+		if (getServiceOperation().isInOutOperation()) {
 			a.add(getServiceOperation().getInputMessageDefinition());
 			a.add(getServiceOperation().getOutputMessageDefinition());
-   		}
-   		else if(getServiceOperation().isInOperation()){
+		} else if (getServiceOperation().isInOperation()) {
 			a.add(getServiceOperation().getInputMessageDefinition());
-   		}
-   		else if(getServiceOperation().isOutOperation()){
+		} else if (getServiceOperation().isOutOperation()) {
 			a.add(getServiceOperation().getOutputMessageDefinition());
-   		}
-        return a;
-    }
-    
-    
-    @Override
-	public ServiceMessageDefinition elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return (ServiceMessageDefinition) getMessages().get(row);
-         } else {
-            return null;
-        }
-    }
+		}
+		return a;
+	}
 
-    public ServiceMessageDefinition messageAt(int row)
-    {
-        return elementAt(row);
-    }
+	@Override
+	public ServiceMessageDefinition elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return (ServiceMessageDefinition) getMessages().get(row);
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getServiceOperation() != null) {
-            return getMessages().size();
-        }
-        return 0;
-    }
+	public ServiceMessageDefinition messageAt(int row) {
+		return elementAt(row);
+	}
 
-   
-
-   
+	@Override
+	public int getRowCount() {
+		if (getServiceOperation() != null) {
+			return getMessages().size();
+		}
+		return 0;
+	}
 
 }

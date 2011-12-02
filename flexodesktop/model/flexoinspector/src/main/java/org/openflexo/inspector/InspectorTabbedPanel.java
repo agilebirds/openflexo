@@ -41,9 +41,7 @@ import org.openflexo.inspector.selection.MultipleSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
-public class InspectorTabbedPanel extends JPanel implements InspectingWidget
-{
+public class InspectorTabbedPanel extends JPanel implements InspectingWidget {
 	private static final Logger logger = Logger.getLogger(InspectorTabbedPanel.class.getPackage().getName());
 
 	private JLabel _nothingToInspectLabel;
@@ -52,16 +50,15 @@ public class InspectorTabbedPanel extends JPanel implements InspectingWidget
 
 	private JComponent currentPane;
 	public InspectorModelView currentTabPanel;
-    private InspectorController _controller;
+	private InspectorController _controller;
 
-	public InspectorTabbedPanel(InspectorController controller)
-	{
+	public InspectorTabbedPanel(InspectorController controller) {
 		super(new BorderLayout());
 		_controller = controller;
-		_inspectorPanels = new Hashtable<String,InspectorModelView>();
-		_nothingToInspectLabel = new JLabel(getController().getNothingToInspectLabel(),SwingConstants.CENTER);
-		_multipleSelectionLabel = new JLabel(getController().getMultipleSelectionLabel(),SwingConstants.CENTER);
-		_nonApplicableLabel = new JLabel(getController().getNonApplicableLabel(),SwingConstants.CENTER);
+		_inspectorPanels = new Hashtable<String, InspectorModelView>();
+		_nothingToInspectLabel = new JLabel(getController().getNothingToInspectLabel(), SwingConstants.CENTER);
+		_multipleSelectionLabel = new JLabel(getController().getMultipleSelectionLabel(), SwingConstants.CENTER);
+		_nonApplicableLabel = new JLabel(getController().getNonApplicableLabel(), SwingConstants.CENTER);
 		setTabPanelToNone();
 	}
 
@@ -78,83 +75,78 @@ public class InspectorTabbedPanel extends JPanel implements InspectingWidget
 			}
 		}
 	}*/
-	
-	protected void setTabPanel(InspectorModelView tabPanel)
-    {
-        Component c = FocusManager.getCurrentManager().getFocusOwner();
-        if (c != null && (c instanceof JLabel || c instanceof JTextField)) {
-        }
-        if (tabPanel != null) {
-        	JScrollPane _currentScrollPane;
-        	if (currentPane != null) {
-        		remove(currentPane);
-        	}
-        	// If there is only one tab, directely insert this tab instead of JTabbedPane
-        	// GPO: The code below DOES NOT work (and causes issues in JTabbedPane in Java5)
-        	// See org.openflexo.inspector.InspectorModelView.removeTabAt(int)
-        	// See also Bug 1006487
-        	/*if (tabPanel.getTabsNb() == 1) {
-          		_currentScrollPane = getScrollPane(tabPanel.getTabAtIndex(0));
-        	}
-        	else {*/
-          		_currentScrollPane = getScrollPane(tabPanel);
-        	//}
-        	currentPane = _currentScrollPane;
-        	add(_currentScrollPane, BorderLayout.CENTER);
-        	validate();
-        	repaint();
-        	currentTabPanel = tabPanel;
-        }
-    }
 
-    protected void setTabPanelToNone()
-    {
-        if (currentPane != null) {
-            remove(currentPane);
-        }
-        currentPane = _nothingToInspectLabel;
-        add(currentPane, BorderLayout.CENTER);
-        validate();
-        repaint();
-        currentTabPanel = null;
-    }
+	protected void setTabPanel(InspectorModelView tabPanel) {
+		Component c = FocusManager.getCurrentManager().getFocusOwner();
+		if (c != null && (c instanceof JLabel || c instanceof JTextField)) {
+		}
+		if (tabPanel != null) {
+			JScrollPane _currentScrollPane;
+			if (currentPane != null) {
+				remove(currentPane);
+			}
+			// If there is only one tab, directely insert this tab instead of JTabbedPane
+			// GPO: The code below DOES NOT work (and causes issues in JTabbedPane in Java5)
+			// See org.openflexo.inspector.InspectorModelView.removeTabAt(int)
+			// See also Bug 1006487
+			/*if (tabPanel.getTabsNb() == 1) {
+				_currentScrollPane = getScrollPane(tabPanel.getTabAtIndex(0));
+			}
+			else {*/
+			_currentScrollPane = getScrollPane(tabPanel);
+			// }
+			currentPane = _currentScrollPane;
+			add(_currentScrollPane, BorderLayout.CENTER);
+			validate();
+			repaint();
+			currentTabPanel = tabPanel;
+		}
+	}
 
-    protected void setTabPanelToMultiple()
-    {
-        if (currentPane != null) {
-            remove(currentPane);
-        }
-        currentPane = _multipleSelectionLabel;
-        add(currentPane, BorderLayout.CENTER);
-        validate();
-        repaint();
-        currentTabPanel = null;
-    }
+	protected void setTabPanelToNone() {
+		if (currentPane != null) {
+			remove(currentPane);
+		}
+		currentPane = _nothingToInspectLabel;
+		add(currentPane, BorderLayout.CENTER);
+		validate();
+		repaint();
+		currentTabPanel = null;
+	}
 
-    protected void setTabPanelToNonApplicable()
-    {
-        if (currentPane != null) {
-            remove(currentPane);
-        }
-        currentPane = _nonApplicableLabel;
-        add(currentPane, BorderLayout.CENTER);
-        validate();
-        repaint();
-        currentTabPanel = null;
-    }
+	protected void setTabPanelToMultiple() {
+		if (currentPane != null) {
+			remove(currentPane);
+		}
+		currentPane = _multipleSelectionLabel;
+		add(currentPane, BorderLayout.CENTER);
+		validate();
+		repaint();
+		currentTabPanel = null;
+	}
 
-    private JScrollPane getScrollPane(JComponent content)
-    {
-        JScrollPane answer = new JScrollPane(content);
-        //content.setPreferredSize(new Dimension(getSize().height - 40, getSize().width - 20));
-        return answer;
-    }
+	protected void setTabPanelToNonApplicable() {
+		if (currentPane != null) {
+			remove(currentPane);
+		}
+		currentPane = _nonApplicableLabel;
+		add(currentPane, BorderLayout.CENTER);
+		validate();
+		repaint();
+		currentTabPanel = null;
+	}
 
+	private JScrollPane getScrollPane(JComponent content) {
+		JScrollPane answer = new JScrollPane(content);
+		// content.setPreferredSize(new Dimension(getSize().height - 40, getSize().width - 20));
+		return answer;
+	}
 
 	@Override
 	public void newSelection(InspectorSelection selection) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("newSelection() with " + selection);
+		}
 		InspectorSelection inspectorSelection = selection;
 		if (inspectorSelection instanceof EmptySelection) {
 			setTabPanelToNone();
@@ -162,45 +154,47 @@ public class InspectorTabbedPanel extends JPanel implements InspectingWidget
 			setTabPanelToMultiple();
 		} else if (inspectorSelection instanceof UniqueSelection) {
 			InspectableObject inspectedObject = ((UniqueSelection) inspectorSelection).getInspectedObject();
-			//logger.info("Inspect "+inspectedObject);
-			String inspectorName = _controller.getInspectorName(inspectedObject, ((UniqueSelection) inspectorSelection).getInspectionContext());
+			// logger.info("Inspect "+inspectedObject);
+			String inspectorName = _controller.getInspectorName(inspectedObject,
+					((UniqueSelection) inspectorSelection).getInspectionContext());
 			if (inspectorName != null) {
 				nextFocusedWidget = null;
 				nextFocusedTab = null;
 				InspectorModelView inspectorModelView = getInspectorTabPanelForInspectable(inspectedObject, inspectorName);
 				setTabPanel(inspectorModelView);
 				if (inspectorModelView != null/* && inspectorModelView.getTabCount() > 1*/) {
-				if (activeTabName != null)
-					nextFocusedTab = inspectorModelView.getTabModelViewForName(activeTabName);
-				if (nextFocusedTab != null && currentTabPanel.indexOfComponent(nextFocusedTab) > -1) {
-					currentTabPanel.setSelectedComponent(nextFocusedTab);
-					if (nextFocusedWidget != null) {
-						nextFocusedWidget.getDynamicComponent().grabFocus();
+					if (activeTabName != null) {
+						nextFocusedTab = inspectorModelView.getTabModelViewForName(activeTabName);
+					}
+					if (nextFocusedTab != null && currentTabPanel.indexOfComponent(nextFocusedTab) > -1) {
+						currentTabPanel.setSelectedComponent(nextFocusedTab);
+						if (nextFocusedWidget != null) {
+							nextFocusedWidget.getDynamicComponent().grabFocus();
+						}
+					}
+					if (currentTabPanel != null) {
+						nextFocusedTab = currentTabPanel.getSelectedComponent();
 					}
 				}
-				if (currentTabPanel != null)
-					nextFocusedTab = currentTabPanel.getSelectedComponent();
-				}
-			}
-			else {
+			} else {
 				setTabPanelToNonApplicable();
 			}
 		}
 	}
 
-    private Hashtable<String,InspectorModelView> _inspectorPanels;
+	private Hashtable<String, InspectorModelView> _inspectorPanels;
 
-    private InspectorModelView getInspectorTabPanelForInspectable(InspectableObject inspectable, String inspectorName)
-    {
-        InspectorModelView answer = getInspectorTabPanelForName(inspectorName);
-        if (answer == null)
-        	return null;
-        answer.updateExtraTabs(inspectable.inspectionExtraTabs());
-        answer.setInspectedObject(inspectable);
-        // answer.doLayout();
-        answer.updateUI();
-        return answer;
-    }
+	private InspectorModelView getInspectorTabPanelForInspectable(InspectableObject inspectable, String inspectorName) {
+		InspectorModelView answer = getInspectorTabPanelForName(inspectorName);
+		if (answer == null) {
+			return null;
+		}
+		answer.updateExtraTabs(inspectable.inspectionExtraTabs());
+		answer.setInspectedObject(inspectable);
+		// answer.doLayout();
+		answer.updateUI();
+		return answer;
+	}
 
 	/**
 	 * @param inspectorName
@@ -208,15 +202,15 @@ public class InspectorTabbedPanel extends JPanel implements InspectingWidget
 	 */
 	private InspectorModelView getInspectorTabPanelForName(String inspectorName) {
 		InspectorModelView answer = _inspectorPanels.get(inspectorName);
-        if (answer == null) {
-            InspectorModel inspectorModel = getController().getInspectorModel(inspectorName);
-            if (inspectorModel != null) {
-                answer = new InspectorModelView(inspectorModel, this);
-                _inspectorPanels.put(inspectorName, answer);
-            } else {
-                return null;
-            }
-        }
+		if (answer == null) {
+			InspectorModel inspectorModel = getController().getInspectorModel(inspectorName);
+			if (inspectorModel != null) {
+				answer = new InspectorModelView(inspectorModel, this);
+				_inspectorPanels.put(inspectorName, answer);
+			} else {
+				return null;
+			}
+		}
 		return answer;
 	}
 
@@ -225,94 +219,86 @@ public class InspectorTabbedPanel extends JPanel implements InspectingWidget
 		return _controller;
 	}
 
-    private TabModelView nextFocusedTab;
+	private TabModelView nextFocusedTab;
 
-    private String activeTabName;
+	private String activeTabName;
 
-    private DenaliWidget nextFocusedWidget;
+	private DenaliWidget nextFocusedWidget;
 
-    private String lastInspectedTabName;
+	private String lastInspectedTabName;
 
-    private String lastInspectedPropertyName;
+	private String lastInspectedPropertyName;
 
-    /**
-     * @param widget
-     */
-    public void widgetGetFocus(DenaliWidget widget)
-    {
-        lastInspectedPropertyName = widget.getObservedPropertyName();
-        lastInspectedTabName = widget.getObservedTabName();
-    }
+	/**
+	 * @param widget
+	 */
+	public void widgetGetFocus(DenaliWidget widget) {
+		lastInspectedPropertyName = widget.getObservedPropertyName();
+		lastInspectedTabName = widget.getObservedTabName();
+	}
 
-    public TabModelView getNextFocusedTab()
-    {
-        return nextFocusedTab;
-    }
+	public TabModelView getNextFocusedTab() {
+		return nextFocusedTab;
+	}
 
-    public void setNextFocusedTab(TabModelView nxtFocusedTab)
-    {
-        this.nextFocusedTab = nxtFocusedTab;
-    }
+	public void setNextFocusedTab(TabModelView nxtFocusedTab) {
+		this.nextFocusedTab = nxtFocusedTab;
+	}
 
-    public DenaliWidget getNextFocusedWidget()
-    {
-        return nextFocusedWidget;
-    }
+	public DenaliWidget getNextFocusedWidget() {
+		return nextFocusedWidget;
+	}
 
-    public void setNextFocusedWidget(DenaliWidget nxtFocusedWidget)
-    {
-        this.nextFocusedWidget = nxtFocusedWidget;
-    }
+	public void setNextFocusedWidget(DenaliWidget nxtFocusedWidget) {
+		this.nextFocusedWidget = nxtFocusedWidget;
+	}
 
-    public String getLastInspectedTabName()
-    {
-        return lastInspectedTabName;
-    }
+	public String getLastInspectedTabName() {
+		return lastInspectedTabName;
+	}
 
-    public void setLastInspectedTabName(String lstInspectedTabName)
-    {
-        this.lastInspectedTabName = lstInspectedTabName;
-    }
+	public void setLastInspectedTabName(String lstInspectedTabName) {
+		this.lastInspectedTabName = lstInspectedTabName;
+	}
 
-    public String getLastInspectedPropertyName()
-    {
-        return lastInspectedPropertyName;
-    }
+	public String getLastInspectedPropertyName() {
+		return lastInspectedPropertyName;
+	}
 
-    public void setLastInspectedPropertyName(String lstInspectedPropertyName)
-    {
-        this.lastInspectedPropertyName = lstInspectedPropertyName;
-    }
+	public void setLastInspectedPropertyName(String lstInspectedPropertyName) {
+		this.lastInspectedPropertyName = lstInspectedPropertyName;
+	}
 
 	@Override
-	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject)
-	{
+	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject) {
 		getController().notifiedInspectedObjectChange(newInspectedObject);
 	}
 
 	@Override
-	public void notifiedActiveTabChange(String newActiveTabName)
-	{
+	public void notifiedActiveTabChange(String newActiveTabName) {
 		activeTabName = newActiveTabName;
-		if (logger.isLoggable(Level.FINE)) logger.fine("SET activeTabName="+newActiveTabName);
- 	}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("SET activeTabName=" + newActiveTabName);
+		}
+	}
 
 	private Vector<InspectorModel> getAllExtendingInspectors(String inspectorName) {
 		InspectorModel model = getController().getInspectorModel(inspectorName);
-		if (model!=null) {
+		if (model != null) {
 			Vector<InspectorModel> models = new Vector<InspectorModel>();
-			addAllExtendingModels(model,models);
+			addAllExtendingModels(model, models);
 			return models;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
-				logger.warning("Inspector "+inspectorName+" could not be found");
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Inspector " + inspectorName + " could not be found");
+			}
 			return null;
 		}
 	}
 
 	private void addAllExtendingModels(InspectorModel model, Vector<InspectorModel> models) {
 		models.add(model);
-		for(InspectorModel i:model.extendingInspectors) {
+		for (InspectorModel i : model.extendingInspectors) {
 			addAllExtendingModels(i, models);
 		}
 	}
@@ -341,9 +327,9 @@ public class InspectorTabbedPanel extends JPanel implements InspectingWidget
 		}
 	}*/
 
-	public void refresh()
-	{
-		if (currentTabPanel != null)
+	public void refresh() {
+		if (currentTabPanel != null) {
 			currentTabPanel.updateFromModel();
+		}
 	}
 }

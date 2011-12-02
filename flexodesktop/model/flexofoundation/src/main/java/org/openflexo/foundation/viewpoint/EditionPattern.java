@@ -19,11 +19,16 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
@@ -35,17 +40,19 @@ import org.openflexo.xmlcode.StringEncoder;
 
 import com.ibm.icu.util.StringTokenizer;
 
-
 public class EditionPattern extends ViewPointObject implements StringConvertable<EditionPattern> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
 
 	private String name;
-	
+
 	private Vector<PatternRole> patternRoles;
 	private Vector<EditionScheme> editionSchemes;
 	private EditionPatternInspector inspector;
-	
+
+	private OntologicObjectPatternRole primaryConceptRole;
+	private GraphicalElementPatternRole primaryRepresentationRole;
+
 	private ViewPoint _calc;
 
 	@Override
@@ -53,47 +60,45 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		// TODO Auto-generated method stub
 		return super.getDescription();
 	}
-	
-	public EditionPattern() 
-	{
+
+	public EditionPattern() {
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
 	}
-	
+
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		if (getCalc() != null) {
 			getCalc().removeFromEditionPatterns(this);
 		}
 		super.delete();
 		deleteObservers();
 	}
-	
+
 	@Override
-	public String getName() 
-	{
+	public String getURI() {
+		return getCalc().getURI() + "#" + getName();
+	}
+
+	@Override
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public Vector<EditionScheme> getEditionSchemes() 
-	{
+	public Vector<EditionScheme> getEditionSchemes() {
 		return editionSchemes;
 	}
 
-	public void setEditionSchemes(Vector<EditionScheme> someEditionScheme)
-	{
+	public void setEditionSchemes(Vector<EditionScheme> someEditionScheme) {
 		editionSchemes = someEditionScheme;
 	}
 
-	public void addToEditionSchemes(EditionScheme anEditionScheme)
-	{
+	public void addToEditionSchemes(EditionScheme anEditionScheme) {
 		anEditionScheme.setEditionPattern(this);
 		editionSchemes.add(anEditionScheme);
 		if (getCalc() != null) {
@@ -103,8 +108,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		notifyObservers(new EditionSchemeInserted(anEditionScheme, this));
 	}
 
-	public void removeFromEditionSchemes(EditionScheme anEditionScheme)
-	{
+	public void removeFromEditionSchemes(EditionScheme anEditionScheme) {
 		anEditionScheme.setEditionPattern(null);
 		editionSchemes.remove(anEditionScheme);
 		if (getCalc() != null) {
@@ -113,20 +117,17 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		setChanged();
 		notifyObservers(new EditionSchemeRemoved(anEditionScheme, this));
 	}
-	
-	public Vector<PatternRole> getPatternRoles() 
-	{
+
+	public Vector<PatternRole> getPatternRoles() {
 		return patternRoles;
 	}
 
-	public void setPatternRoles(Vector<PatternRole> somePatternRole)
-	{
+	public void setPatternRoles(Vector<PatternRole> somePatternRole) {
 		patternRoles = somePatternRole;
 		availablePatternRoleNames = null;
 	}
 
-	public void addToPatternRoles(PatternRole aPatternRole)
-	{
+	public void addToPatternRoles(PatternRole aPatternRole) {
 		availablePatternRoleNames = null;
 		aPatternRole.setEditionPattern(this);
 		patternRoles.add(aPatternRole);
@@ -134,19 +135,51 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		notifyObservers(new PatternRoleInserted(aPatternRole, this));
 	}
 
-	public void removeFromPatternRoles(PatternRole aPatternRole)
-	{
+	public void removeFromPatternRoles(PatternRole aPatternRole) {
 		availablePatternRoleNames = null;
 		aPatternRole.setEditionPattern(null);
 		patternRoles.remove(aPatternRole);
 		setChanged();
 		notifyObservers(new PatternRoleRemoved(aPatternRole, this));
 	}
-	
+
+	public <R> List<R> getPatternRoles(Class<R> type) {
+		List<R> returned = new ArrayList<R>();
+		for (PatternRole r : patternRoles) {
+			if (TypeUtils.isTypeAssignableFrom(type, r.getClass())) {
+				returned.add((R) r);
+			}
+		}
+		return returned;
+	}
+
+	public List<ShapePatternRole> getShapePatternRoles() {
+		return getPatternRoles(ShapePatternRole.class);
+	}
+
+	public List<ConnectorPatternRole> getConnectorPatternRoles() {
+		return getPatternRoles(ConnectorPatternRole.class);
+	}
+
+	public ShapePatternRole getDefaultShapePatternRole() {
+		List<ShapePatternRole> l = getShapePatternRoles();
+		if (l.size() > 0) {
+			return l.get(0);
+		}
+		return null;
+	}
+
+	public ConnectorPatternRole getDefaultConnectorPatternRole() {
+		List<ConnectorPatternRole> l = getConnectorPatternRoles();
+		if (l.size() > 0) {
+			return l.get(0);
+		}
+		return null;
+	}
+
 	private Vector<String> availablePatternRoleNames = null;
-	
-	public Vector<String> getAvailablePatternRoleNames() 
-	{
+
+	public Vector<String> getAvailablePatternRoleNames() {
 		if (availablePatternRoleNames == null) {
 			availablePatternRoleNames = new Vector<String>();
 			for (PatternRole r : getPatternRoles()) {
@@ -156,120 +189,104 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return availablePatternRoleNames;
 	}
 
-
-	public PatternRole createShapePatternRole()
-	{
+	public PatternRole createShapePatternRole() {
 		ShapePatternRole newPatternRole = new ShapePatternRole();
 		newPatternRole.setPatternRoleName("shape");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public ConnectorPatternRole createConnectorPatternRole()
-	{
+
+	public ConnectorPatternRole createConnectorPatternRole() {
 		ConnectorPatternRole newPatternRole = new ConnectorPatternRole();
 		newPatternRole.setPatternRoleName("connector");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public ShemaPatternRole createShemaPatternRole()
-	{
+
+	public ShemaPatternRole createShemaPatternRole() {
 		ShemaPatternRole newPatternRole = new ShemaPatternRole();
 		newPatternRole.setPatternRoleName("shema");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public FlexoModelObjectPatternRole createFlexoModelObjectPatternRole()
-	{
+
+	public FlexoModelObjectPatternRole createFlexoModelObjectPatternRole() {
 		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole();
 		newPatternRole.setPatternRoleName("flexoObject");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public ClassPatternRole createClassPatternRole()
-	{
+
+	public ClassPatternRole createClassPatternRole() {
 		ClassPatternRole newPatternRole = new ClassPatternRole();
 		newPatternRole.setPatternRoleName("class");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public IndividualPatternRole createIndividualPatternRole()
-	{
+
+	public IndividualPatternRole createIndividualPatternRole() {
 		IndividualPatternRole newPatternRole = new IndividualPatternRole();
 		newPatternRole.setPatternRoleName("individual");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public ObjectPropertyPatternRole createObjectPropertyPatternRole()
-	{
+
+	public ObjectPropertyPatternRole createObjectPropertyPatternRole() {
 		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole();
 		newPatternRole.setPatternRoleName("property");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public DataPropertyPatternRole createDataPropertyPatternRole()
-	{
+
+	public DataPropertyPatternRole createDataPropertyPatternRole() {
 		DataPropertyPatternRole newPatternRole = new DataPropertyPatternRole();
 		newPatternRole.setPatternRoleName("property");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public IsAStatementPatternRole createIsAStatementPatternRole()
-	{
+
+	public IsAStatementPatternRole createIsAStatementPatternRole() {
 		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole();
 		newPatternRole.setPatternRoleName("fact");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public ObjectPropertyStatementPatternRole createObjectPropertyStatementPatternRole()
-	{
+
+	public ObjectPropertyStatementPatternRole createObjectPropertyStatementPatternRole() {
 		ObjectPropertyStatementPatternRole newPatternRole = new ObjectPropertyStatementPatternRole();
 		newPatternRole.setPatternRoleName("fact");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public DataPropertyStatementPatternRole createDataPropertyStatementPatternRole()
-	{
+
+	public DataPropertyStatementPatternRole createDataPropertyStatementPatternRole() {
 		DataPropertyStatementPatternRole newPatternRole = new DataPropertyStatementPatternRole();
 		newPatternRole.setPatternRoleName("fact");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public RestrictionStatementPatternRole createRestrictionStatementPatternRole()
-	{
+
+	public RestrictionStatementPatternRole createRestrictionStatementPatternRole() {
 		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole();
 		newPatternRole.setPatternRoleName("fact");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public PrimitivePatternRole createPrimitivePatternRole()
-	{
+
+	public PrimitivePatternRole createPrimitivePatternRole() {
 		PrimitivePatternRole newPatternRole = new PrimitivePatternRole();
 		newPatternRole.setPatternRoleName("primitive");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
-	
-	public PatternRole deletePatternRole(PatternRole aPatternRole)
-	{
+
+	public PatternRole deletePatternRole(PatternRole aPatternRole) {
 		removeFromPatternRoles(aPatternRole);
 		aPatternRole.delete();
 		return aPatternRole;
 	}
-	
-	public PatternRole getPatternRole(String patternRole) 
-	{
+
+	public PatternRole getPatternRole(String patternRole) {
 		for (PatternRole pr : patternRoles) {
 			if ((pr.getPatternRoleName() != null) && pr.getPatternRoleName().equals(patternRole)) {
 				return pr;
@@ -278,43 +295,37 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return null;
 	}
 
-
-	
-	public Vector<DropScheme> getDropSchemes() 
-	{
+	public Vector<DropScheme> getDropSchemes() {
 		Vector<DropScheme> returned = new Vector<DropScheme>();
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof DropScheme) {
-				returned.add((DropScheme)es);
+				returned.add((DropScheme) es);
 			}
 		}
 		return returned;
 	}
 
-	public Vector<LinkScheme> getLinkSchemes() 
-	{
+	public Vector<LinkScheme> getLinkSchemes() {
 		Vector<LinkScheme> returned = new Vector<LinkScheme>();
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof LinkScheme) {
-				returned.add((LinkScheme)es);
+				returned.add((LinkScheme) es);
 			}
 		}
 		return returned;
 	}
 
-	public Vector<ActionScheme> getActionSchemes() 
-	{
+	public Vector<ActionScheme> getActionSchemes() {
 		Vector<ActionScheme> returned = new Vector<ActionScheme>();
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof ActionScheme) {
-				returned.add((ActionScheme)es);
+				returned.add((ActionScheme) es);
 			}
 		}
 		return returned;
 	}
 
-	public boolean hasDropScheme()
-	{
+	public boolean hasDropScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof DropScheme) {
 				return true;
@@ -322,9 +333,8 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		}
 		return false;
 	}
-	
-	public boolean hasLinkScheme()
-	{
+
+	public boolean hasLinkScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof LinkScheme) {
 				return true;
@@ -332,9 +342,8 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		}
 		return false;
 	}
-	
-	public boolean hasActionScheme()
-	{
+
+	public boolean hasActionScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof ActionScheme) {
 				return true;
@@ -342,98 +351,84 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		}
 		return false;
 	}
-	
-	public DropScheme createDropScheme()
-	{
+
+	public DropScheme createDropScheme() {
 		DropScheme newDropScheme = new DropScheme();
 		newDropScheme.setName("drop");
 		addToEditionSchemes(newDropScheme);
 		return newDropScheme;
 	}
-	
-	public LinkScheme createLinkScheme()
-	{
+
+	public LinkScheme createLinkScheme() {
 		LinkScheme newLinkScheme = new LinkScheme();
 		newLinkScheme.setName("link");
 		addToEditionSchemes(newLinkScheme);
 		return newLinkScheme;
 	}
-	
-	public ActionScheme createActionScheme()
-	{
+
+	public ActionScheme createActionScheme() {
 		ActionScheme newActionScheme = new ActionScheme();
 		newActionScheme.setName("action");
 		addToEditionSchemes(newActionScheme);
 		return newActionScheme;
 	}
-	
-	public EditionScheme deleteEditionScheme(EditionScheme editionScheme)
-	{
+
+	public EditionScheme deleteEditionScheme(EditionScheme editionScheme) {
 		removeFromEditionSchemes(editionScheme);
 		editionScheme.delete();
 		return editionScheme;
 	}
 
-	public EditionPatternInspector getInspector() 
-	{
+	public EditionPatternInspector getInspector() {
 		if (inspector == null) {
 			inspector = EditionPatternInspector.makeEditionPatternInspector(this);
 		}
 		return inspector;
 	}
 
-	public void setInspector(EditionPatternInspector inspector)
-	{
+	public void setInspector(EditionPatternInspector inspector) {
 		inspector.setEditionPattern(this);
 		this.inspector = inspector;
 	}
 
-
 	@Override
-	public ViewPoint getCalc() 
-	{
+	public ViewPoint getCalc() {
 		return _calc;
 	}
 
-	public void setCalc(ViewPoint calc) 
-	{
+	public void setCalc(ViewPoint calc) {
 		_calc = calc;
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.EDITION_PATTERN_INSPECTOR;
 	}
 
-	public static class EditionPatternConverter extends StringEncoder.Converter<EditionPattern>
-	{
+	public static class EditionPatternConverter extends StringEncoder.Converter<EditionPattern> {
 		private final FlexoResourceCenter _resourceCenter;
-		 
-		public EditionPatternConverter(FlexoResourceCenter resourceCenter)
-		{
+
+		public EditionPatternConverter(FlexoResourceCenter resourceCenter) {
 			super(EditionPattern.class);
 			_resourceCenter = resourceCenter;
 		}
 
 		@Override
-		public EditionPattern convertFromString(String value)
-		{
+		public EditionPattern convertFromString(String value) {
 			String calcURI;
 			String editionPattern;
-			StringTokenizer st = new StringTokenizer(value,"#");
+			StringTokenizer st = new StringTokenizer(value, "#");
 			if (st.hasMoreElements()) {
 				calcURI = st.nextToken();
 				ViewPoint calc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc(calcURI);
 				if (calc == null) {
-					logger.warning("Could not find calc "+calcURI);
-				}
-				else {
+					logger.warning("Could not find calc " + calcURI);
+				} else {
 					if (st.hasMoreElements()) {
 						editionPattern = st.nextToken();
 						EditionPattern returned = calc.getEditionPattern(editionPattern);
 						if (calc == null) {
-							logger.warning("Could not find edition pattern "+editionPattern);
+							logger.warning("Could not find edition pattern " + editionPattern);
 						} else {
 							return returned;
 						}
@@ -444,62 +439,57 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		}
 
 		@Override
-		public String convertToString(EditionPattern value) 
-		{
-			return value.getCalc().getViewPointURI()+"#"+value.getName();
+		public String convertToString(EditionPattern value) {
+			return value.getCalc().getViewPointURI() + "#" + value.getName();
 		}
 	}
-	
-	
-	   @Override
-	public EditionPatternConverter getConverter()
-	    {
-		   return getViewPointLibrary().editionPatternConverter;
-		   
-		   /*if (getProject()!=null)
-			   return getProject().getEditionPatternConverter();
-		   return null;*/
-	    }
 
-	  /* public EditionAction getAction(String patternRole)
-	   {
-		   return getEditionScheme().getAction(patternRole);
-	   }
+	@Override
+	public EditionPatternConverter getConverter() {
+		return getViewPointLibrary().editionPatternConverter;
 
-	   public AddShape getAddShapeAction(String patternRole)
-	   {
-		   return getEditionScheme().getAddShapeAction(patternRole);
-	   }
+		/*if (getProject()!=null)
+		   return getProject().getEditionPatternConverter();
+		return null;*/
+	}
 
-	   public AddShemaElementAction getAddShemaElementAction(String patternRole)
-	   {
-		   return getEditionScheme().getAddShemaElementAction(patternRole);
-	   }
+	/* public EditionAction getAction(String patternRole)
+	 {
+	   return getEditionScheme().getAction(patternRole);
+	 }
 
-	   public AddClass getAddClassAction(String patternRole)
-	   {
-		   return getEditionScheme().getAddClassAction(patternRole);
-	   }
+	 public AddShape getAddShapeAction(String patternRole)
+	 {
+	   return getEditionScheme().getAddShapeAction(patternRole);
+	 }
 
-	   public AddIndividual getAddIndividualAction(String patternRole)
-	   {
-		   return getEditionScheme().getAddIndividualAction(patternRole);
-	   }
+	 public AddShemaElementAction getAddShemaElementAction(String patternRole)
+	 {
+	   return getEditionScheme().getAddShemaElementAction(patternRole);
+	 }
 
-	   public AddConnector getAddConnectorAction(String patternRole)
-	   {
-		   return getEditionScheme().getAddConnectorAction(patternRole);
-	   }
-	   */
+	 public AddClass getAddClassAction(String patternRole)
+	 {
+	   return getEditionScheme().getAddClassAction(patternRole);
+	 }
 
-	   @Override
-	   public String toString()
-	   {
-		   return "EditionPattern:"+getName();
-	   }
+	 public AddIndividual getAddIndividualAction(String patternRole)
+	 {
+	   return getEditionScheme().getAddIndividualAction(patternRole);
+	 }
 
-	public void finalizeEditionPatternDeserialization()
-	{
+	 public AddConnector getAddConnectorAction(String patternRole)
+	 {
+	   return getEditionScheme().getAddConnectorAction(patternRole);
+	 }
+	 */
+
+	@Override
+	public String toString() {
+		return "EditionPattern:" + getName();
+	}
+
+	public void finalizeEditionPatternDeserialization() {
 		for (EditionScheme es : getEditionSchemes()) {
 			es.finalizeEditionSchemeDeserialization();
 		}
@@ -508,14 +498,73 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		}
 	}
 
-	public void debug()
-	{
+	public void debug() {
 		System.out.println(getXMLRepresentation());
 	}
-	
-	public void save()
-	{
+
+	public void save() {
 		getCalc().save();
 	}
-	
+
+	private BindingModel _bindingModel;
+
+	@Override
+	public BindingModel getBindingModel() {
+		if (_bindingModel == null) {
+			createBindingModel();
+		}
+		return _bindingModel;
+	}
+
+	public void updateBindingModel() {
+		logger.fine("updateBindingModel()");
+		_bindingModel = null;
+		createBindingModel();
+	}
+
+	private void createBindingModel() {
+		_bindingModel = new BindingModel();
+		for (PatternRole role : getPatternRoles()) {
+			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role, this));
+		}
+	}
+
+	public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {
+		List<OntologicObjectPatternRole> roles = getPatternRoles(OntologicObjectPatternRole.class);
+		if (roles.size() > 0) {
+			return roles.get(0);
+		}
+		return null;
+	}
+
+	public GraphicalElementPatternRole getDefaultPrimaryRepresentationRole() {
+		List<GraphicalElementPatternRole> roles = getPatternRoles(GraphicalElementPatternRole.class);
+		if (roles.size() > 0) {
+			return roles.get(0);
+		}
+		return null;
+	}
+
+	public OntologicObjectPatternRole getPrimaryConceptRole() {
+		if (primaryConceptRole == null) {
+			return getDefaultPrimaryConceptRole();
+		}
+		return primaryConceptRole;
+	}
+
+	public void setPrimaryConceptRole(OntologicObjectPatternRole primaryConceptRole) {
+		this.primaryConceptRole = primaryConceptRole;
+	}
+
+	public GraphicalElementPatternRole getPrimaryRepresentationRole() {
+		if (primaryRepresentationRole == null) {
+			return getDefaultPrimaryRepresentationRole();
+		}
+		return primaryRepresentationRole;
+	}
+
+	public void setPrimaryRepresentationRole(GraphicalElementPatternRole primaryRepresentationRole) {
+		this.primaryRepresentationRole = primaryRepresentationRole;
+	}
+
 }

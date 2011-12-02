@@ -19,11 +19,8 @@
  */
 package org.openflexo.fps.dm;
 
-
-public class HasCVSExplored extends FPSDataModification
-{
-    public HasCVSExplored()
-    {
-        super(null,null);
-    }
+public class HasCVSExplored extends FPSDataModification {
+	public HasCVSExplored() {
+		super(null, null);
+	}
 }

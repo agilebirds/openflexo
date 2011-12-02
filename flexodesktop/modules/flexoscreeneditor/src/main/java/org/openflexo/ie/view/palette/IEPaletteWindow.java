@@ -30,7 +30,6 @@ import java.awt.HeadlessException;
 import java.util.logging.Logger;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.ie.IECst;
 import org.openflexo.ie.view.IEFrame;
 import org.openflexo.ie.view.controller.IEController;
@@ -38,54 +37,47 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.palette.FlexoPalette;
 import org.openflexo.view.palette.FlexoPaletteWindow;
 
-
 /**
  * The palette that contains the dragable elements. Currently draft version.
- *
+ * 
  * @author benoit
  */
-public class IEPaletteWindow extends FlexoPaletteWindow
-{
+public class IEPaletteWindow extends FlexoPaletteWindow {
 
-    private static final Logger logger = Logger.getLogger(IEPaletteWindow.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEPaletteWindow.class.getPackage().getName());
 
+	/**
+	 * Create a palette.
+	 * 
+	 * @param mainFrame
+	 * @throws java.awt.HeadlessException
+	 */
+	public IEPaletteWindow(IEFrame mainFrame) throws HeadlessException {
+		super(mainFrame);
 
-    /**
-     * Create a palette.
-     *
-     * @param mainFrame
-     * @throws java.awt.HeadlessException
-     */
-    public IEPaletteWindow(IEFrame mainFrame) throws HeadlessException
-    {
-        super(mainFrame);
+		setLocation(IECst.IE_WINDOW_WIDTH + 2, 0);
+		setSize(IECst.DEFAULT_PALETTE_WIDTH + 50, IECst.DEFAULT_PALETTE_HEIGHT + 50);
+		setTitle(getLocalizedName());
+		setBackground(ColorCst.GUI_BACK_COLOR);
+	}
 
-        setLocation(IECst.IE_WINDOW_WIDTH + 2, 0);
-        setSize(IECst.DEFAULT_PALETTE_WIDTH+50, IECst.DEFAULT_PALETTE_HEIGHT+50);
-        setTitle(getLocalizedName());
-        setBackground(ColorCst.GUI_BACK_COLOR);
-    }
+	@Override
+	public FlexoPalette buildNewPalette(FlexoController controller) {
+		return new IEPalette((IEController) controller);
+	}
 
-    @Override
-	public FlexoPalette buildNewPalette(FlexoController controller)
-    {
-        return new IEPalette((IEController)controller);
-    }
+	@Override
+	public IEPalette getPalette() {
+		return (IEPalette) super.getPalette();
+	}
 
-    @Override
-    public IEPalette getPalette() {
-    	return (IEPalette) super.getPalette();
-    }
+	public void setCurrentCSSStyle(String css) {
+		(getPalette()).setCurrentCSSStyle(css);
+	}
 
-    public void setCurrentCSSStyle(String css)
-    {
-       (getPalette()).setCurrentCSSStyle(css);
-    }
-
-    @Override
-	public String getName()
-    {
-        return IECst.DEFAULT_PALETTE_TITLE;
-    }
+	@Override
+	public String getName() {
+		return IECst.DEFAULT_PALETTE_TITLE;
+	}
 
 }

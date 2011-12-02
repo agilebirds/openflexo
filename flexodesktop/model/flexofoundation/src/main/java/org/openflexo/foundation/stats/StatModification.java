@@ -23,19 +23,17 @@ import org.openflexo.foundation.DataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class StatModification extends DataModification
-{
+public class StatModification extends DataModification {
 
-    /**
-     * @param modificationType
-     * @param oldValue
-     * @param newValue
-     */
-    public StatModification(String statName, Object oldValue, Object newValue)
-    {
-        super(ATTRIBUTE,statName, oldValue, newValue);
-    }
+	/**
+	 * @param modificationType
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public StatModification(String statName, Object oldValue, Object newValue) {
+		super(ATTRIBUTE, statName, oldValue, newValue);
+	}
 
 }

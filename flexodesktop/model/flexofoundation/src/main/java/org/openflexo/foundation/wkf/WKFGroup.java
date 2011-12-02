@@ -29,135 +29,114 @@ import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class WKFGroup extends WKFObject implements DeletableObject
-{
+public abstract class WKFGroup extends WKFObject implements DeletableObject {
 
-    private static final Logger logger = Logger.getLogger(WKFGroup.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WKFGroup.class.getPackage().getName());
 
-    private Vector<PetriGraphNode> nodes;
-    
-    private String groupName;
-    
+	private Vector<PetriGraphNode> nodes;
 
-    // =================================================================
-    // ========================= Constructor ===========================
-    // =================================================================
+	private String groupName;
 
-    /**
-     * Default constructor
-     */
-    public WKFGroup(FlexoProcess process)
-    {
-        super(process);
-        nodes = new Vector<PetriGraphNode>();
-        setIsVisible(true);
-    }
+	// =================================================================
+	// ========================= Constructor ===========================
+	// =================================================================
 
-	public Vector<PetriGraphNode> getNodes() 
-	{
+	/**
+	 * Default constructor
+	 */
+	public WKFGroup(FlexoProcess process) {
+		super(process);
+		nodes = new Vector<PetriGraphNode>();
+		setIsVisible(true);
+	}
+
+	public Vector<PetriGraphNode> getNodes() {
 		return nodes;
 	}
 
-	public void setNodes(Vector<PetriGraphNode> nodes)
-	{
+	public void setNodes(Vector<PetriGraphNode> nodes) {
 		this.nodes = nodes;
 	}
-    
-	public void addToNodes(PetriGraphNode node)
-	{
+
+	public void addToNodes(PetriGraphNode node) {
 		nodes.add(node);
 	}
-	
-	public void removeFromNodes(PetriGraphNode node)
-	{
+
+	public void removeFromNodes(PetriGraphNode node) {
 		nodes.remove(node);
 	}
-	
-	public void notifyGroupUpdated()
-	{
+
+	public void notifyGroupUpdated() {
 		setChanged();
 		notifyObservers(new GroupUpdated(this));
 	}
-	
+
 	@Override
-	public Vector<? extends WKFObject> getAllEmbeddedDeleted() 
-	{
+	public Vector<? extends WKFObject> getAllEmbeddedDeleted() {
 		return getNodes();
 	}
-	
+
 	@Override
-	public Vector<? extends WKFObject> getAllEmbeddedWKFObjects() 
-	{
+	public Vector<? extends WKFObject> getAllEmbeddedWKFObjects() {
 		return getNodes();
 	}
-	
-	public String getGroupName() 
-	{
+
+	public String getGroupName() {
 		return groupName;
 	}
 
-	public void setGroupName(String groupName) 
-	{
+	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
 
-	public boolean contains(AbstractNode node)
-	{
+	public boolean contains(AbstractNode node) {
 		return getNodes().contains(node);
 	}
 
-	public boolean isExpanded() 
-	{
+	public boolean isExpanded() {
 		return getIsVisible();
 	}
 
-	public void setExpanded(boolean isExpanded) 
-	{
+	public void setExpanded(boolean isExpanded) {
 		setIsVisible(isExpanded);
 	}
 
 	public static final FlexoColor DEFAULT_GROUP_COLOR = new FlexoColor(157, 162, 132);
-	
-	public FlexoColor getColor()
-	{
-		return getBgColor(DEFAULT,DEFAULT_GROUP_COLOR);
+
+	public FlexoColor getColor() {
+		return getBgColor(DEFAULT, DEFAULT_GROUP_COLOR);
 	}
 
-	public void setColor(FlexoColor aColor)
-	{
+	public void setColor(FlexoColor aColor) {
 		if (requireChange(getColor(), aColor)) {
 			FlexoColor oldColor = getColor();
 			setBgColor(aColor, DEFAULT);
 			setChanged();
-			notifyObservers(new WKFAttributeDataModification("color",oldColor,aColor));
+			notifyObservers(new WKFAttributeDataModification("color", oldColor, aColor));
 		}
 	}
 
 	private FlexoPetriGraph _petriGraph;
-	
-    public FlexoPetriGraph getParentPetriGraph()
-    {
-        return _petriGraph;
-    }
 
-    public final void setParentPetriGraph(FlexoPetriGraph pg)
-    {
-    	_petriGraph = pg;
-    }
+	public FlexoPetriGraph getParentPetriGraph() {
+		return _petriGraph;
+	}
+
+	public final void setParentPetriGraph(FlexoPetriGraph pg) {
+		_petriGraph = pg;
+	}
 
 	@Override
-	public final void delete()
-	{
+	public final void delete() {
 		logger.info("Called DELETE on WKFGroup");
 		FlexoPetriGraph parentPetriGraph = getParentPetriGraph();
-		Vector<PetriGraphNode> nodesInGroup =new Vector<PetriGraphNode>(getNodes());
+		Vector<PetriGraphNode> nodesInGroup = new Vector<PetriGraphNode>(getNodes());
 		for (PetriGraphNode n : nodesInGroup) {
 			n.delete();
 		}
@@ -167,13 +146,13 @@ public abstract class WKFGroup extends WKFObject implements DeletableObject
 		super.delete();
 		deleteObservers();
 	}
-	
-	public final void ungroup()
-	{
+
+	public final void ungroup() {
 		Vector<PetriGraphNode> nodesThatWereInGroup = new Vector<PetriGraphNode>(getNodes());
 		FlexoPetriGraph parentPetriGraph = getParentPetriGraph();
-		for (PetriGraphNode n : nodesThatWereInGroup)
+		for (PetriGraphNode n : nodesThatWereInGroup) {
 			removeFromNodes(n);
+		}
 		if (parentPetriGraph != null) {
 			parentPetriGraph.removeFromGroups(this);
 			parentPetriGraph.notifyNodeUngroup(this, nodesThatWereInGroup);

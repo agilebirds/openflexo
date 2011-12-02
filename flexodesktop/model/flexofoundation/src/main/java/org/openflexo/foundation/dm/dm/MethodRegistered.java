@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMMethod;
  * 
  * @author sguerin
  */
-public class MethodRegistered extends DMDataModification
-{
+public class MethodRegistered extends DMDataModification {
 
-    public MethodRegistered(DMMethod method)
-    {
-        super(null, method);
-    }
+	public MethodRegistered(DMMethod method) {
+		super(null, method);
+	}
 }

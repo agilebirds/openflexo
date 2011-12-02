@@ -32,90 +32,79 @@ import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.version.AbstractCGFileVersion;
 import org.openflexo.foundation.rm.cg.ContentSource;
 
+public class ShowDifferences extends FlexoGUIAction<ShowDifferences, CGObject, CGObject> {
 
-public class ShowDifferences extends FlexoGUIAction<ShowDifferences,CGObject,CGObject>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShowDifferences.class.getPackage().getName());
 
-    public static FlexoActionType<ShowDifferences,CGObject,CGObject> actionType
-    = new FlexoActionType<ShowDifferences,CGObject,CGObject> (
-    		"show_differences",
-    		AbstractGCAction.versionningMenu,
-    		AbstractGCAction.versionningShowGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<ShowDifferences, CGObject, CGObject> actionType = new FlexoActionType<ShowDifferences, CGObject, CGObject>(
+			"show_differences", AbstractGCAction.versionningMenu, AbstractGCAction.versionningShowGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ShowDifferences makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ShowDifferences(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ShowDifferences makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new ShowDifferences(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) 
-        {
-            return ((object != null)
-            		&& ((object instanceof CGFile) || (object instanceof AbstractCGFileVersion)));
-       }
+		@Override
+		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
+			return ((object != null) && ((object instanceof CGFile) || (object instanceof AbstractCGFileVersion)));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) 
-        {
-        	if (object == null) return false;
-        	if (object instanceof CGFile)
-        		return (((CGFile)object).getRepository().getManageHistory());
-        	if (object instanceof AbstractCGFileVersion)
-        		return (((AbstractCGFileVersion)object).getCGFile().getRepository().getManageHistory());
-        	return false;
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (ShowDifferences.actionType, CGFile.class);
-        FlexoModelObject.addActionForClass (ShowDifferences.actionType, AbstractCGFileVersion.class);
-    }
-    
+		@Override
+		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+			if (object == null) {
+				return false;
+			}
+			if (object instanceof CGFile) {
+				return (((CGFile) object).getRepository().getManageHistory());
+			}
+			if (object instanceof AbstractCGFileVersion) {
+				return (((AbstractCGFileVersion) object).getCGFile().getRepository().getManageHistory());
+			}
+			return false;
+		}
 
-    ShowDifferences (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(ShowDifferences.actionType, CGFile.class);
+		FlexoModelObject.addActionForClass(ShowDifferences.actionType, AbstractCGFileVersion.class);
+	}
+
+	ShowDifferences(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 	private ContentSource _leftSource;
 	private ContentSource _rightSource;
-	
-	public ContentSource getLeftSource() 
-	{
+
+	public ContentSource getLeftSource() {
 		return _leftSource;
 	}
-	
-	public void setLeftSource(ContentSource leftSource)
-	{
+
+	public void setLeftSource(ContentSource leftSource) {
 		_leftSource = leftSource;
 	}
-	
-	public ContentSource getRightSource() 
-	{
+
+	public ContentSource getRightSource() {
 		return _rightSource;
 	}
-	
-	public void setRightSource(ContentSource rightSource)
-	{
+
+	public void setRightSource(ContentSource rightSource) {
 		_rightSource = rightSource;
 	}
 
-    public CGFile getCGFile() 
-    {
-     	if (getFocusedObject() instanceof CGFile)
-    		return (CGFile)getFocusedObject();
-    	if (getFocusedObject() instanceof AbstractCGFileVersion)
-       		return ((AbstractCGFileVersion)getFocusedObject()).getCGFile();
-    	return null;
-   }
+	public CGFile getCGFile() {
+		if (getFocusedObject() instanceof CGFile) {
+			return (CGFile) getFocusedObject();
+		}
+		if (getFocusedObject() instanceof AbstractCGFileVersion) {
+			return ((AbstractCGFileVersion) getFocusedObject()).getCGFile();
+		}
+		return null;
+	}
 
 }

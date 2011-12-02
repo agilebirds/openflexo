@@ -25,38 +25,32 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewObject;
 
-
 /**
  * Browser element representing the ontology library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OEShemaElement extends BrowserElement
-{
+public class OEShemaElement extends BrowserElement {
 
-    protected OEShemaElement(View shema, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(shema, BrowserElementType.OE_SHEMA, browser, parent);
-    }
+	protected OEShemaElement(View shema, ProjectBrowser browser, BrowserElement parent) {
+		super(shema, BrowserElementType.OE_SHEMA, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	for (ViewObject o : getShema().getChilds()) {
-    		addToChilds(o);
-    	}
-     }
+	@Override
+	protected void buildChildrenVector() {
+		for (ViewObject o : getShema().getChilds()) {
+			addToChilds(o);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getShema().getName();
-    }
+	@Override
+	public String getName() {
+		return getShema().getName();
+	}
 
-    protected View getShema()
-    {
-        return (View) getObject();
-    }
+	protected View getShema() {
+		return (View) getObject();
+	}
 
 }

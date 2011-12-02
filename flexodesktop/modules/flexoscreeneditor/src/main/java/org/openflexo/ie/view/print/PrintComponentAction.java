@@ -36,47 +36,43 @@ import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 
+public class PrintComponentAction extends FlexoGUIAction<PrintComponentAction, FlexoModelObject, FlexoModelObject> {
 
-public class PrintComponentAction extends FlexoGUIAction<PrintComponentAction,FlexoModelObject,FlexoModelObject> 
-{
+	protected static final Logger logger = Logger.getLogger(PrintComponentAction.class.getPackage().getName());
 
-    protected static final Logger logger = Logger.getLogger(PrintComponentAction.class.getPackage().getName());
+	public static FlexoActionType<PrintComponentAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<PrintComponentAction, FlexoModelObject, FlexoModelObject>(
+			"print_component", FlexoActionType.printGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<PrintComponentAction,FlexoModelObject,FlexoModelObject> actionType = new FlexoActionType<PrintComponentAction,FlexoModelObject,FlexoModelObject> ("print_component",FlexoActionType.printGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public PrintComponentAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new PrintComponentAction(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public PrintComponentAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new PrintComponentAction(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return (getComponentForObject(object) != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return (getComponentForObject(object) != null);
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (PrintComponentAction.actionType, IEWOComponent.class);
-        FlexoModelObject.addActionForClass (PrintComponentAction.actionType, ComponentDefinition.class);
-    }
-    
-    protected IEWOComponent componentToPrint;
+	};
 
-    protected static IEWOComponent getComponentForObject(FlexoModelObject object)
-    {
-        if (object == null) {
+	static {
+		FlexoModelObject.addActionForClass(PrintComponentAction.actionType, IEWOComponent.class);
+		FlexoModelObject.addActionForClass(PrintComponentAction.actionType, ComponentDefinition.class);
+	}
+
+	protected IEWOComponent componentToPrint;
+
+	protected static IEWOComponent getComponentForObject(FlexoModelObject object) {
+		if (object == null) {
 			return null;
 		}
 		if (object instanceof IEWOComponent) {
@@ -87,49 +83,43 @@ public class PrintComponentAction extends FlexoGUIAction<PrintComponentAction,Fl
 			return ((ComponentInstance) object).getWOComponent();
 		}
 		return null;
-    }
-    
-    PrintComponentAction (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	}
 
-    public static void initWithController (final IEController controller)
-    {
-    	controller.getEditor().registerInitializerFor(actionType, new FlexoActionInitializer<PrintComponentAction>() {
-            @Override
-			public boolean run(ActionEvent e, PrintComponentAction anAction)
-            {
-                if (anAction.getFocusedObject() == null) {
-                    if (controller.getCurrentEditedComponent() != null) {
-                        anAction.setFocusedObject(controller.getCurrentEditedComponent().getComponentDefinition().getWOComponent());
-                    }
-                    else {
-                        FlexoController.showError(FlexoLocalization.localizedForKey("sorry_no_component_to_print"));
-                    }
-                }
-                return (anAction.getFocusedObject() != null);
-            }
-        }, controller.getModule());
-    	
-    	controller.getEditor().registerFinalizerFor(actionType, new FlexoActionFinalizer<PrintComponentAction>() {
-            @Override
-			public boolean run(ActionEvent e, final PrintComponentAction anAction)
-            {    
-                anAction.componentToPrint = anAction.getComponent();
-                ComponentDefinition cd = anAction.getComponent().getComponentDefinition();
-                final PrintableIEWOComponentView printableComponentView = new PrintableIEWOComponentView(cd.getDummyComponentInstance(),controller);
-                 PrintComponentPreviewDialog dialog = new PrintComponentPreviewDialog(controller,printableComponentView);
-                 return (dialog.getStatus() == PrintComponentPreviewDialog.ReturnedStatus.CONTINUE_PRINTING);
-            }
-        }, controller.getModule());
-      
-    }
-    
-    public IEWOComponent getComponent()
-    {
-        return getComponentForObject(getFocusedObject());
-    }
-    
-  
+	PrintComponentAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	public static void initWithController(final IEController controller) {
+		controller.getEditor().registerInitializerFor(actionType, new FlexoActionInitializer<PrintComponentAction>() {
+			@Override
+			public boolean run(ActionEvent e, PrintComponentAction anAction) {
+				if (anAction.getFocusedObject() == null) {
+					if (controller.getCurrentEditedComponent() != null) {
+						anAction.setFocusedObject(controller.getCurrentEditedComponent().getComponentDefinition().getWOComponent());
+					} else {
+						FlexoController.showError(FlexoLocalization.localizedForKey("sorry_no_component_to_print"));
+					}
+				}
+				return (anAction.getFocusedObject() != null);
+			}
+		}, controller.getModule());
+
+		controller.getEditor().registerFinalizerFor(actionType, new FlexoActionFinalizer<PrintComponentAction>() {
+			@Override
+			public boolean run(ActionEvent e, final PrintComponentAction anAction) {
+				anAction.componentToPrint = anAction.getComponent();
+				ComponentDefinition cd = anAction.getComponent().getComponentDefinition();
+				final PrintableIEWOComponentView printableComponentView = new PrintableIEWOComponentView(cd.getDummyComponentInstance(),
+						controller);
+				PrintComponentPreviewDialog dialog = new PrintComponentPreviewDialog(controller, printableComponentView);
+				return (dialog.getStatus() == PrintComponentPreviewDialog.ReturnedStatus.CONTINUE_PRINTING);
+			}
+		}, controller.getModule());
+
+	}
+
+	public IEWOComponent getComponent() {
+		return getComponentForObject(getFocusedObject());
+	}
+
 }

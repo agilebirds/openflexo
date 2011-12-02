@@ -24,72 +24,66 @@ import java.util.Vector;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class OperationStatistics extends FlexoStatistics<OperationNode>
-{
+public class OperationStatistics extends FlexoStatistics<OperationNode> {
 
-    private int actionCount = -1;
-    
-    private int realActionCount = -1;
-    
-    /**
-     * @param object
-     */
-    public OperationStatistics(OperationNode object)
-    {
-        super(object);
-        refresh();
-    }
+	private int actionCount = -1;
 
-    public int getActionCount()
-    {
-        return actionCount;
-    }
+	private int realActionCount = -1;
 
-    private void setActionCount(int actionCount)
-    {
-        int old = this.actionCount;
-        this.actionCount = actionCount;
-        if (old != actionCount) {
-            setChanged();
-            notifyObservers(new StatModification("actionCount", old, actionCount));
-        }
-    }
-    
-    public int getRealActionCount()
-    {
-        return realActionCount;
-    }
+	/**
+	 * @param object
+	 */
+	public OperationStatistics(OperationNode object) {
+		super(object);
+		refresh();
+	}
 
-    private void setRealActionCount(int realActionCount)
-    {
-        int old = this.realActionCount;
-        this.realActionCount = realActionCount;
-        if (old != realActionCount) {
-            setChanged();
-            notifyObservers(new StatModification("realActionCount", old, realActionCount));
-        }
-    }
+	public int getActionCount() {
+		return actionCount;
+	}
 
-    /**
-     * Overrides refresh
-     * @see org.openflexo.foundation.stats.FlexoStatistics#refresh()
-     */
-    @Override
-    public void refresh()
-    {
-        Vector<ActionNode> actions = getObject().getAllEmbeddedActionNodes();
-        setActionCount(actions.size());
-        int aCount = 0;
-        for (ActionNode act : actions) {
-            if (!act.isBeginOrEndNode())
-                aCount += 1;
-        }
-        setRealActionCount(aCount);
-    }
+	private void setActionCount(int actionCount) {
+		int old = this.actionCount;
+		this.actionCount = actionCount;
+		if (old != actionCount) {
+			setChanged();
+			notifyObservers(new StatModification("actionCount", old, actionCount));
+		}
+	}
+
+	public int getRealActionCount() {
+		return realActionCount;
+	}
+
+	private void setRealActionCount(int realActionCount) {
+		int old = this.realActionCount;
+		this.realActionCount = realActionCount;
+		if (old != realActionCount) {
+			setChanged();
+			notifyObservers(new StatModification("realActionCount", old, realActionCount));
+		}
+	}
+
+	/**
+	 * Overrides refresh
+	 * 
+	 * @see org.openflexo.foundation.stats.FlexoStatistics#refresh()
+	 */
+	@Override
+	public void refresh() {
+		Vector<ActionNode> actions = getObject().getAllEmbeddedActionNodes();
+		setActionCount(actions.size());
+		int aCount = 0;
+		for (ActionNode act : actions) {
+			if (!act.isBeginOrEndNode()) {
+				aCount += 1;
+			}
+		}
+		setRealActionCount(aCount);
+	}
 
 }

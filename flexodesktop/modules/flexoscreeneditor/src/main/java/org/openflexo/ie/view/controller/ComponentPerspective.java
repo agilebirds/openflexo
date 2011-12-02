@@ -42,20 +42,18 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-
-class ComponentPerspective extends FlexoPerspective<ComponentInstance>
-{
+class ComponentPerspective extends FlexoPerspective<ComponentInstance> {
 
 	private final IEController _controller;
 	private final IEPalette iePalette;
 	private JSplitPane splitPaneWithIEPaletteAndDocInspectorPanel;
 
 	/**
-	 * @param controller TODO
+	 * @param controller
+	 *            TODO
 	 * @param name
 	 */
-	public ComponentPerspective(IEController controller)
-	{
+	public ComponentPerspective(IEController controller) {
 		super("component_editor_perspective");
 		_controller = controller;
 		iePalette = new IEPalette(controller);
@@ -67,8 +65,7 @@ class ComponentPerspective extends FlexoPerspective<ComponentInstance>
 	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
-	public ImageIcon getActiveIcon()
-	{
+	public ImageIcon getActiveIcon() {
 		return SEIconLibrary.COMPONENT_PERSPECTIVE_ACTIVE_ICON;
 	}
 
@@ -78,14 +75,12 @@ class ComponentPerspective extends FlexoPerspective<ComponentInstance>
 	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
-	public ImageIcon getSelectedIcon()
-	{
+	public ImageIcon getSelectedIcon() {
 		return SEIconLibrary.COMPONENT_PERSPECTIVE_SELECTED_ICON;
 	}
 
 	@Override
-	public ComponentInstance getDefaultObject(FlexoModelObject proposedObject) 
-	{
+	public ComponentInstance getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof ComponentInstance) {
 			return (ComponentInstance) proposedObject;
 		}
@@ -93,14 +88,12 @@ class ComponentPerspective extends FlexoPerspective<ComponentInstance>
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) 
-	{
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
 		return object instanceof ComponentInstance;
 	}
-	
+
 	@Override
-	public ModuleView<ComponentInstance> createModuleViewForObject(ComponentInstance object, FlexoController controller) 
-	{
+	public ModuleView<ComponentInstance> createModuleViewForObject(ComponentInstance object, FlexoController controller) {
 		ComponentDefinition component = object.getComponentDefinition();
 		if (component != null) {
 			if (IEController.logger.isLoggable(Level.INFO)) {
@@ -113,34 +106,32 @@ class ComponentPerspective extends FlexoPerspective<ComponentInstance>
 			if (IEController.logger.isLoggable(Level.INFO))
 				IEController.logger.info("Accessed to resource: " + componentResource.getResourceIdentifier());*/
 			if (!component.isLoaded()) {
-				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_component ")+component.getName(), 1);
+				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_component ") + component.getName(), 1);
 				_controller.getSelectionManager().setSelectedObject(component.getWOComponent(ProgressWindow.instance()));
 				ProgressWindow.hideProgressWindow();
 			}
 			IEWOComponentView returned = null;
 			if (object instanceof PartialComponentInstance) {
-				returned = new IEReusableWidgetComponentView((IEController)controller, (PartialComponentInstance) object);
+				returned = new IEReusableWidgetComponentView((IEController) controller, (PartialComponentInstance) object);
 			} else {
-				returned = new IEWOComponentView((IEController)controller, object);
+				returned = new IEWOComponentView((IEController) controller, object);
 			}
 			returned.doLayout();
-			//componentResource.setResourceData(returned.getModel());
+			// componentResource.setResourceData(returned.getModel());
 			return returned;
 		}
 		return null;
 	}
-	
+
 	@Override
-	public boolean isAlwaysVisible() 
-	{
+	public boolean isAlwaysVisible() {
 		return true;
 	}
-	
+
 	@Override
-	public void notifyModuleViewDisplayed(ModuleView<?> moduleView)
-	{
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 		if (moduleView instanceof IEWOComponentView) {
-			ComponentInstance ci = ((IEWOComponentView)moduleView).getRepresentedObject();
+			ComponentInstance ci = ((IEWOComponentView) moduleView).getRepresentedObject();
 			ComponentDefinition component = ci.getComponentDefinition();
 			_controller.getComponentLibraryBrowser().focusOn(component);
 			_controller.getSelectionManager().setSelectedObject(component.getWOComponent());
@@ -148,40 +139,36 @@ class ComponentPerspective extends FlexoPerspective<ComponentInstance>
 			_controller.getComponentBrowser().focusOn(component);
 		}
 	}
-	
+
 	@Override
 	public boolean doesPerspectiveControlLeftView() {
 		return true;
 	}
 
 	@Override
-	public JComponent getLeftView() 
-	{
+	public JComponent getLeftView() {
 		return _controller.getSplitPaneWithBrowsers();
 	}
-	
+
 	@Override
-	public boolean doesPerspectiveControlRightView() 
-	{
+	public boolean doesPerspectiveControlRightView() {
 		return true;
 	}
-	
+
 	@Override
-	public JComponent getRightView() 
-	{
+	public JComponent getRightView() {
 		return getSplitPaneWithIEPaletteAndDocInspectorPanel();
 	}
 
 	/**
-	 * Return Split pane with Role palette and doc inspector panel
-	 * Disconnect doc inspector panel from its actual parent
+	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
+	 * 
 	 * @return
 	 */
-	protected JSplitPane getSplitPaneWithIEPaletteAndDocInspectorPanel()
-	{
+	protected JSplitPane getSplitPaneWithIEPaletteAndDocInspectorPanel() {
 		if (splitPaneWithIEPaletteAndDocInspectorPanel == null) {
-			splitPaneWithIEPaletteAndDocInspectorPanel
-			= new JSplitPane(JSplitPane.VERTICAL_SPLIT,iePalette,_controller.getDisconnectedDocInspectorPanel());
+			splitPaneWithIEPaletteAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, iePalette,
+					_controller.getDisconnectedDocInspectorPanel());
 			splitPaneWithIEPaletteAndDocInspectorPanel.setResizeWeight(0);
 			splitPaneWithIEPaletteAndDocInspectorPanel.setDividerLocation(IECst.PALETTE_DOC_SPLIT_LOCATION);
 			splitPaneWithIEPaletteAndDocInspectorPanel.setBorder(BorderFactory.createEmptyBorder());
@@ -189,14 +176,12 @@ class ComponentPerspective extends FlexoPerspective<ComponentInstance>
 		if (splitPaneWithIEPaletteAndDocInspectorPanel.getBottomComponent() == null) {
 			splitPaneWithIEPaletteAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
 		}
-		new FlexoSplitPaneLocationSaver(splitPaneWithIEPaletteAndDocInspectorPanel,"IEPaletteAndDocInspectorPanel");
+		new FlexoSplitPaneLocationSaver(splitPaneWithIEPaletteAndDocInspectorPanel, "IEPaletteAndDocInspectorPanel");
 		return splitPaneWithIEPaletteAndDocInspectorPanel;
 	}
 
 	public IEPalette getIEPalette() {
 		return iePalette;
 	}
-	
-
 
 }

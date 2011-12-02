@@ -29,54 +29,45 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.GenerationRepository;
 
+public class ConnectCGRepository extends AbstractGCAction<ConnectCGRepository, GenerationRepository> {
 
-public class ConnectCGRepository extends AbstractGCAction<ConnectCGRepository,GenerationRepository>
-{
+	private static final Logger logger = Logger.getLogger(ConnectCGRepository.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(ConnectCGRepository.class.getPackage().getName());
+	public static FlexoActionType<ConnectCGRepository, GenerationRepository, CGObject> actionType = new FlexoActionType<ConnectCGRepository, GenerationRepository, CGObject>(
+			"connect_repository", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<ConnectCGRepository,GenerationRepository,CGObject> actionType = new FlexoActionType<ConnectCGRepository,GenerationRepository,CGObject> ("connect_repository",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ConnectCGRepository makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new ConnectCGRepository(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ConnectCGRepository makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ConnectCGRepository(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
+			return ((repository != null) && (!repository.isEnabled()));
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) 
-        {
-            return ((repository != null) 
-            		&& (!repository.isEnabled()));
-        }
+		@Override
+		protected boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
+			return ((repository != null) && (!repository.isEnabled()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) 
-        {
-            return ((repository != null) 
-            		&& (!repository.isEnabled()));
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (ConnectCGRepository.actionType, GenerationRepository.class);
-    }
-    
-    ConnectCGRepository (GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException
-    {
-        logger.info ("ConnectCGRepository");
-       getFocusedObject().connect();
-    }
+	static {
+		FlexoModelObject.addActionForClass(ConnectCGRepository.actionType, GenerationRepository.class);
+	}
 
+	ConnectCGRepository(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException {
+		logger.info("ConnectCGRepository");
+		getFocusedObject().connect();
+	}
 
 }

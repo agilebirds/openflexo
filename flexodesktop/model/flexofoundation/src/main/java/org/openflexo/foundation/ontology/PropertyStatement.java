@@ -29,57 +29,59 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 public abstract class PropertyStatement extends OntologyStatement {
 
-	public PropertyStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+	public PropertyStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 	}
 
 	public abstract OntologyProperty getProperty();
-	
+
 	public abstract Literal getLiteral();
-	
-	public boolean hasLitteralValue()
-	{
+
+	public boolean hasLitteralValue() {
 		return getLiteral() != null;
 	}
 
-	public final boolean isStringValue()
-	{
+	public final boolean isStringValue() {
 		return getLiteral() != null && getLiteral().getDatatype().getJavaClass().equals(String.class);
 	}
-	
+
 	private Language language = null;
 	private String stringValue = null;
-	
-	public final String getStringValue()
-	{
-		if (getLiteral() == null) return null;
-		if (stringValue == null) stringValue = getLiteral().getString();
+
+	public final String getStringValue() {
+		if (getLiteral() == null) {
+			return null;
+		}
+		if (stringValue == null) {
+			stringValue = getLiteral().getString();
+		}
 		return stringValue;
 	}
-	
-	public final Language getLanguage()
-	{
-		if (getLiteral() == null) return null;
-		if (language == null) language = Language.retrieveLanguage(getLiteral().getLanguage());
+
+	public final Language getLanguage() {
+		if (getLiteral() == null) {
+			return null;
+		}
+		if (language == null) {
+			language = Language.retrieveLanguage(getLiteral().getLanguage());
+		}
 		return language;
 	}
-	
-	public final String getLanguageTag()
-	{
-		if (getLanguage() == null) return "";
+
+	public final String getLanguageTag() {
+		if (getLanguage() == null) {
+			return "";
+		}
 		return getLanguage().getTag();
 	}
-	
-	public final void setLanguage(Language aLanguage)
-	{
+
+	public final void setLanguage(Language aLanguage) {
 		if (aLanguage != getLanguage()) {
 			// Take care to this point: this object will disappear and be replaced by a new one
 			// during updateOntologyStatements() !!!!!
 			if (aLanguage != null) {
 				getSubject().getOntResource().addProperty(getProperty().getOntProperty(), getStringValue(), aLanguage.getTag());
-			}
-			else {
+			} else {
 				getSubject().getOntResource().addProperty(getProperty().getOntProperty(), getStringValue());
 			}
 			getSubject().removePropertyStatement(this);
@@ -87,9 +89,10 @@ public abstract class PropertyStatement extends OntologyStatement {
 		}
 	}
 
-	public final void setStringValue(String aValue, String language)
-	{
-		if (StringUtils.isSame(aValue, getStringValue())) return;
+	public final void setStringValue(String aValue, String language) {
+		if (StringUtils.isSame(aValue, getStringValue())) {
+			return;
+		}
 		// Take care to this point: this object will disappear and be replaced by a new one
 		// during updateOntologyStatements() !!!!!
 		getSubject().getOntResource().addProperty(getProperty().getOntProperty(), aValue, language);
@@ -102,25 +105,24 @@ public abstract class PropertyStatement extends OntologyStatement {
 	 * 
 	 * @param aValue
 	 */
-	public final void setStringValue(String aValue)
-	{
-		if (StringUtils.isSame(aValue, getStringValue())) return;
+	public final void setStringValue(String aValue) {
+		if (StringUtils.isSame(aValue, getStringValue())) {
+			return;
+		}
 		// Take care to this point: this object will disappear and be replaced by a new one
 		// during updateOntologyStatements() !!!!!
 		if (getLanguage() != null) {
-			getSubject().getOntResource().addProperty(getProperty().getOntProperty(), aValue,getLanguage().getTag());			
-		}
-		else {
+			getSubject().getOntResource().addProperty(getProperty().getOntProperty(), aValue, getLanguage().getTag());
+		} else {
 			getSubject().getOntResource().addProperty(getProperty().getOntProperty(), aValue);
 		}
 		getSubject().removePropertyStatement(this);
 		stringValue = aValue;
 	}
-	
+
 	public abstract boolean isAnnotationProperty();
 
-	public Vector<Language> allLanguages()
-	{
+	public Vector<Language> allLanguages() {
 		return Language.availableValues();
 	}
 

@@ -23,111 +23,100 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dm.eo.model.EOAttribute;
-import org.openflexo.foundation.dm.eo.model.EOEntity;
-import org.openflexo.foundation.dm.eo.model.EOModel;
-import org.openflexo.foundation.dm.eo.model.EOModelGroup;
-import org.openflexo.foundation.dm.eo.model.EORelationship;
-import org.openflexo.foundation.dm.eo.model.PropertyListDeserializationException;
-
 
 /**
  * @author gpolet
  * 
  */
-public class TestEOModelLoad extends FlexoTestCase
-{
+public class TestEOModelLoad extends FlexoTestCase {
 
-	public TestEOModelLoad()
-	{
+	public TestEOModelLoad() {
 		super("TestEOModelLoad");
 	}
 
-    /**
-     * Overrides setUp
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    @Override
-	protected void setUp() throws Exception
-    {
-        super.setUp();
-    }
+	/**
+	 * Overrides setUp
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
 
-    public void test0LoadmodelAndDependancies()
-    {
-        File fcModelFile = getResource("FCModel.eomodeld");
-        if (fcModelFile==null) {
-            fail();
-            return;
-        }
-        EOModelGroup group = new EOModelGroup();
-        EOModel fcModel;
-        try {
-            fcModel = group.addModel(fcModelFile);
-            fcModel.loadAllModelObjects();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            fail();
-            return;
-        } catch (PropertyListDeserializationException e) {
-            e.printStackTrace();
-            fail();
-            return;
-        }
-        assertEquals(12,fcModel.getEntities().size());
-        assertEquals(4, fcModel.getMissingEntities().size());
-        
-        File catModelFile = getResource("DLRCategoryModel.eomodeld");
-        if (catModelFile==null) {
-            fail();
-            return;
-        }
-        EOModel catModel;
-        try {
-            catModel = group.addModel(catModelFile);
-            catModel.loadAllModelObjects();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            fail();
-            return;
-        } catch (PropertyListDeserializationException e) {
-            e.printStackTrace();
-            fail();
-            return;
-        }
-        assertEquals(0, catModel.getMissingEntities().size());
-        assertEquals(3, fcModel.getMissingEntities().size());
-        
-        EOEntity vc = fcModel._entityNamed("FCVerticalChannel");
-        assertNotNull(vc);
-        EORelationship catRel = vc.relationshipNamed("category");
-        assertNotNull(catRel);
-        assertNotNull(catRel.getDestinationEntity());
-        assertNotNull(catRel.getJoins().get(0).getDestinationAttribute());
-        assertNotNull(catRel.getJoins().get(0).getSourceAttribute());
-        
-        File protoFile = getResource("EOPrototypes.eomodeld");
-        if (protoFile==null) {
-            fail();
-            return;
-        }
-        EOModel protoModel;
-        try {
-            protoModel = group.addModel(protoFile);
-            protoModel.loadAllModelObjects();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            fail();
-            return;
-        } catch (PropertyListDeserializationException e) {
-            e.printStackTrace();
-            fail();
-            return;
-        }
-        EOAttribute a = vc.attributeNamed("categoryID");
-        assertNotNull(a);
-        assertNotNull(a.getPrototype());
-        
-    }
+	public void test0LoadmodelAndDependancies() {
+		File fcModelFile = getResource("FCModel.eomodeld");
+		if (fcModelFile == null) {
+			fail();
+			return;
+		}
+		EOModelGroup group = new EOModelGroup();
+		EOModel fcModel;
+		try {
+			fcModel = group.addModel(fcModelFile);
+			fcModel.loadAllModelObjects();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			fail();
+			return;
+		} catch (PropertyListDeserializationException e) {
+			e.printStackTrace();
+			fail();
+			return;
+		}
+		assertEquals(12, fcModel.getEntities().size());
+		assertEquals(4, fcModel.getMissingEntities().size());
+
+		File catModelFile = getResource("DLRCategoryModel.eomodeld");
+		if (catModelFile == null) {
+			fail();
+			return;
+		}
+		EOModel catModel;
+		try {
+			catModel = group.addModel(catModelFile);
+			catModel.loadAllModelObjects();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			fail();
+			return;
+		} catch (PropertyListDeserializationException e) {
+			e.printStackTrace();
+			fail();
+			return;
+		}
+		assertEquals(0, catModel.getMissingEntities().size());
+		assertEquals(3, fcModel.getMissingEntities().size());
+
+		EOEntity vc = fcModel._entityNamed("FCVerticalChannel");
+		assertNotNull(vc);
+		EORelationship catRel = vc.relationshipNamed("category");
+		assertNotNull(catRel);
+		assertNotNull(catRel.getDestinationEntity());
+		assertNotNull(catRel.getJoins().get(0).getDestinationAttribute());
+		assertNotNull(catRel.getJoins().get(0).getSourceAttribute());
+
+		File protoFile = getResource("EOPrototypes.eomodeld");
+		if (protoFile == null) {
+			fail();
+			return;
+		}
+		EOModel protoModel;
+		try {
+			protoModel = group.addModel(protoFile);
+			protoModel.loadAllModelObjects();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			fail();
+			return;
+		} catch (PropertyListDeserializationException e) {
+			e.printStackTrace();
+			fail();
+			return;
+		}
+		EOAttribute a = vc.attributeNamed("categoryID");
+		assertNotNull(a);
+		assertNotNull(a.getPrototype());
+
+	}
 }

@@ -31,36 +31,30 @@ import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * Represents the main pane for this module
  * 
  * @author yourname
  */
-public class OEMainPane extends FlexoMainPane implements GraphicalFlexoObserver
-{
+public class OEMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-    public OEMainPane(ModuleView moduleView, OEFrame mainFrame, OEController controller)
-    {
-        super(moduleView,mainFrame,controller);
-        //setLeftView(new OEBrowserView(controller));
-    }
+	public OEMainPane(ModuleView moduleView, OEFrame mainFrame, OEController controller) {
+		super(moduleView, mainFrame, controller);
+		// setLeftView(new OEBrowserView(controller));
+	}
 
-    public void showBrowser()
-    {
-        showLeftView();
-    }
+	public void showBrowser() {
+		showLeftView();
+	}
 
-    public void hideBrowser()
-    {
-      hideLeftView();
-    }
+	public void hideBrowser() {
+		hideLeftView();
+	}
 
-    @Override
-	protected  FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-        // Implements it if required
-        return null;
-    }
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		// Implements it if required
+		return null;
+	}
 
 }

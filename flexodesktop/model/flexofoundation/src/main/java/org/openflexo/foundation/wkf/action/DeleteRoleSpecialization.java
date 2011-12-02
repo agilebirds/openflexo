@@ -29,69 +29,63 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.RoleSpecialization;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
 
+public class DeleteRoleSpecialization extends FlexoAction<DeleteRoleSpecialization, RoleSpecialization, WorkflowModelObject> {
 
-public class DeleteRoleSpecialization extends FlexoAction<DeleteRoleSpecialization,RoleSpecialization,WorkflowModelObject> 
-{
+	private static final Logger logger = Logger.getLogger(DeleteRoleSpecialization.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DeleteRoleSpecialization.class.getPackage().getName());
-    
-    public static FlexoActionType<DeleteRoleSpecialization,RoleSpecialization,WorkflowModelObject>  actionType 
-    = new FlexoActionType<DeleteRoleSpecialization,RoleSpecialization,WorkflowModelObject> (
-    		"delete_role_specialization",
-    		FlexoActionType.editGroup,
-    		FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType<DeleteRoleSpecialization, RoleSpecialization, WorkflowModelObject> actionType = new FlexoActionType<DeleteRoleSpecialization, RoleSpecialization, WorkflowModelObject>(
+			"delete_role_specialization", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-    	/**
-         * Factory method
-         */
-        @Override
-		public DeleteRoleSpecialization makeNewAction(RoleSpecialization focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new DeleteRoleSpecialization(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public DeleteRoleSpecialization makeNewAction(RoleSpecialization focusedObject, Vector<WorkflowModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new DeleteRoleSpecialization(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(RoleSpecialization role, Vector<WorkflowModelObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(RoleSpecialization role, Vector<WorkflowModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(RoleSpecialization role, Vector<WorkflowModelObject> globalSelection) 
-        {
-            return (role != null || (globalSelection != null && globalSelection.size() > 0));
-        }
-                
-    };
-    
-     DeleteRoleSpecialization (RoleSpecialization focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(RoleSpecialization role, Vector<WorkflowModelObject> globalSelection) {
+			return (role != null || (globalSelection != null && globalSelection.size() > 0));
+		}
 
-     @Override
-	protected void doAction(Object context)
-    {
-        logger.info ("Delete role specialization(s)");
-         for (RoleSpecialization r : getRoleSpecializationToDelete()) r.delete();
-    }
+	};
 
-     public Vector<RoleSpecialization> getRoleSpecializationToDelete()
-     {
-         Vector<RoleSpecialization> roleSpecializationToDelete = new Vector<RoleSpecialization>();
-         if (getGlobalSelection() != null) {
-        	 for (FlexoModelObject o : getGlobalSelection()) {
-        		 if (o instanceof RoleSpecialization) 
-        	      	 roleSpecializationToDelete.add((RoleSpecialization)o);
-        	 }
-          }
-         if (!roleSpecializationToDelete.contains(getFocusedObject())) roleSpecializationToDelete.add(getFocusedObject());
-         return roleSpecializationToDelete;
-    }
-     
-     public RoleSpecialization getRoleSpecialization()
-     {
-    	 return getFocusedObject();
-     }
-     
+	DeleteRoleSpecialization(RoleSpecialization focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Delete role specialization(s)");
+		for (RoleSpecialization r : getRoleSpecializationToDelete()) {
+			r.delete();
+		}
+	}
+
+	public Vector<RoleSpecialization> getRoleSpecializationToDelete() {
+		Vector<RoleSpecialization> roleSpecializationToDelete = new Vector<RoleSpecialization>();
+		if (getGlobalSelection() != null) {
+			for (FlexoModelObject o : getGlobalSelection()) {
+				if (o instanceof RoleSpecialization) {
+					roleSpecializationToDelete.add((RoleSpecialization) o);
+				}
+			}
+		}
+		if (!roleSpecializationToDelete.contains(getFocusedObject())) {
+			roleSpecializationToDelete.add(getFocusedObject());
+		}
+		return roleSpecializationToDelete;
+	}
+
+	public RoleSpecialization getRoleSpecialization() {
+		return getFocusedObject();
+	}
+
 }

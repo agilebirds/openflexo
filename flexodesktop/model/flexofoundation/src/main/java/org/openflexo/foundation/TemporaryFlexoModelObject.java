@@ -23,51 +23,49 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 public class TemporaryFlexoModelObject extends FlexoModelObject {
 
-    public TemporaryFlexoModelObject() {
+	public TemporaryFlexoModelObject() {
 		super(null);
 	}
-    
-    @Override
-    public boolean isDocEditable() {
-    	return false;
-    }
+
+	@Override
+	public boolean isDocEditable() {
+		return false;
+	}
 
 	@Override
 	public FlexoProject getProject() {
-        return null;
-    }
+		return null;
+	}
 
-    @Override
+	@Override
 	public String getFullyQualifiedName() {
-        return null;
-    }
+		return null;
+	}
 
-    @Override
+	@Override
 	public XMLMapping getXMLMapping() {
-        return null;
-    }
+		return null;
+	}
 
-    @Override
+	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-        return null;
-    }
+		return null;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "temporary_object";
-    }
-    
-    @Override
-    public long getFlexoID() 
-    {
-    	return -1;
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "temporary_object";
+	}
+
+	@Override
+	public long getFlexoID() {
+		return -1;
+	}
 }

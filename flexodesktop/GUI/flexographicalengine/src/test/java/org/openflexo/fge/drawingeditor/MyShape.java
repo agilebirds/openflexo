@@ -25,41 +25,34 @@ import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 
-
-public class MyShape extends MyDrawingElement
-{
+public class MyShape extends MyDrawingElement {
 	public String name;
 	private MyShapeGraphicalRepresentation gr;
-	
+
 	// Called for LOAD
-	public MyShape(DrawingBuilder builder)
-	{
+	public MyShape(DrawingBuilder builder) {
 		super(builder.drawing.getModel());
 		initializeDeserialization();
 	}
-	
-	
+
 	// Called for NEW
-	public MyShape(ShapeType shape, FGEPoint p, EditedDrawing drawing) 
-	{
+	public MyShape(ShapeType shape, FGEPoint p, EditedDrawing drawing) {
 		super(drawing.getModel());
-		gr = new MyShapeGraphicalRepresentation(shape,this,drawing);
+		gr = new MyShapeGraphicalRepresentation(shape, this, drawing);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setWidth(80);
 			gr.setHeight(80);
-		}
-		else {
+		} else {
 			gr.setWidth(100);
 			gr.setHeight(80);
 		}
 		gr.setX(p.x);
 		gr.setY(p.y);
 	}
-	
-	public MyShape(ShapeGraphicalRepresentation<?> aGR, FGEPoint p, EditedDrawing drawing) 
-	{
+
+	public MyShape(ShapeGraphicalRepresentation<?> aGR, FGEPoint p, EditedDrawing drawing) {
 		super(drawing.getModel());
-		gr = new MyShapeGraphicalRepresentation(aGR,this,drawing);
+		gr = new MyShapeGraphicalRepresentation(aGR, this, drawing);
 		/*if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setWidth(80);
 			gr.setHeight(80);
@@ -70,25 +63,22 @@ public class MyShape extends MyDrawingElement
 		}*/
 		gr.setX(p.x);
 		gr.setY(p.y);
-		
+
 	}
-	
+
 	@Override
-	public MyShapeGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public MyShapeGraphicalRepresentation getGraphicalRepresentation() {
 		return gr;
 	}
-	
-	public void setGraphicalRepresentation(MyShapeGraphicalRepresentation aGR)
-	{
+
+	public void setGraphicalRepresentation(MyShapeGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		gr = aGR;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "MyShape["+name+":"+gr.toString()+"]";
+	public String toString() {
+		return "MyShape[" + name + ":" + gr.toString() + "]";
 	}
 
 }

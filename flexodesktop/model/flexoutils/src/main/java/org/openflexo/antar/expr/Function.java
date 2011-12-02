@@ -25,9 +25,8 @@ public class Function extends Expression {
 
 	private String name;
 	private Vector<Expression> args;
-	
-	public Function(String name, Vector<Expression> args) 
-	{
+
+	public Function(String name, Vector<Expression> args) {
 		super();
 		this.name = name;
 		this.args = new Vector<Expression>();
@@ -35,63 +34,55 @@ public class Function extends Expression {
 	}
 
 	@Override
-	public int getDepth()
-	{
+	public int getDepth() {
 		return 0;
 	}
 
-	public String getName() 
-	{
+	public String getName() {
 		return name;
 	}
-	public void setName(String name) 
-	{
+
+	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public Vector<Expression> getArgs() 
-	{
+
+	public Vector<Expression> getArgs() {
 		return args;
 	}
-	
-	public void setArgs(Vector<Expression> args) 
-	{
+
+	public void setArgs(Vector<Expression> args) {
 		this.args = args;
 	}
 
-	public void addToArgs(Expression arg) 
-	{
+	public void addToArgs(Expression arg) {
 		this.args.add(arg);
 	}
 
-	public void removeFromArgs(Expression arg) 
-	{
+	public void removeFromArgs(Expression arg) {
 		this.args.remove(arg);
 	}
-	
+
 	@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException
-	{
+	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
 
 		Vector<Expression> evaluatedArgs = new Vector<Expression>();
 		for (Expression arg : getArgs()) {
 			evaluatedArgs.add(arg.evaluate(context));
 		}
-		if (context != null) return context.getFunctionFactory().makeFunction(getName(), evaluatedArgs);
-		return new Function(getName(),evaluatedArgs);
+		if (context != null) {
+			return context.getFunctionFactory().makeFunction(getName(), evaluatedArgs);
+		}
+		return new Function(getName(), evaluatedArgs);
 	}
 
 	@Override
-	public EvaluationType getEvaluationType()
-	{
+	public EvaluationType getEvaluationType() {
 		return EvaluationType.LITERAL;
 	}
 
 	@Override
-	protected Vector<Expression> getChilds()
-	{
+	protected Vector<Expression> getChilds() {
 		return null;
 	}
-
 
 }

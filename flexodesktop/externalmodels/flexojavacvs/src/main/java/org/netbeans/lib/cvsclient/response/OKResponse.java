@@ -24,33 +24,31 @@ import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
  * Handles the OK response
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 class OKResponse implements Response {
 
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     * @return true if processing should continue, false if processing should
-     * now stop
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        TerminationEvent termEvent = new TerminationEvent(this, false);
-        services.getEventManager().fireCVSEvent(termEvent);
-    }
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 * @return true if processing should continue, false if processing should now stop
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		TerminationEvent termEvent = new TerminationEvent(this, false);
+		services.getEventManager().fireCVSEvent(termEvent);
+	}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return true;
-    }
+		return true;
+	}
 }

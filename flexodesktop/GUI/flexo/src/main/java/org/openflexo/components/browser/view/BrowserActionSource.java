@@ -26,20 +26,16 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.DefaultFlexoActionSource;
 
+public class BrowserActionSource extends DefaultFlexoActionSource {
+	protected ProjectBrowser _browser;
 
-public class BrowserActionSource extends DefaultFlexoActionSource
-{
-    protected ProjectBrowser _browser;
-    
-    public BrowserActionSource (ProjectBrowser browser, FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(focusedObject,globalSelection, editor);
-        _browser = browser;
-    }
+	public BrowserActionSource(ProjectBrowser browser, FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(focusedObject, globalSelection, editor);
+		_browser = browser;
+	}
 
-    public ProjectBrowser getBrowser() 
-    {
-        return _browser;
-    }
+	public ProjectBrowser getBrowser() {
+		return _browser;
+	}
 
 }

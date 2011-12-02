@@ -22,7 +22,6 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class ProcessParameter extends ParameterDefinition<FlexoProcess> {
 
 	private ProcessSelectingConditional _processSelectingConditional;
@@ -39,8 +38,9 @@ public class ProcessParameter extends ParameterDefinition<FlexoProcess> {
 	}
 
 	public boolean isAcceptableProcess(FlexoProcess aProcess) {
-		if (_processSelectingConditional != null)
+		if (_processSelectingConditional != null) {
 			return _processSelectingConditional.isSelectable(aProcess);
+		}
 		return true;
 	}
 

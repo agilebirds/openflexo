@@ -23,7 +23,7 @@ public class FlexoWebServerResourceData implements ImportedResourceData {
 
 	private FlexoImportedResource _res;
 	private FlexoProject _project;
-	
+
 	@Override
 	public FlexoImportedResource getFlexoResource() {
 		return _res;
@@ -35,9 +35,8 @@ public class FlexoWebServerResourceData implements ImportedResourceData {
 	}
 
 	@Override
-	public void setFlexoResource(FlexoResource resource)
-			throws DuplicateResourceException {
-		_res = (FlexoImportedResource)resource;
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+		_res = (FlexoImportedResource) resource;
 
 	}
 

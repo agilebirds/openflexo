@@ -89,7 +89,8 @@ public class FIBEditableListWidget extends FIBListWidget implements FIBEditableV
 				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
 				if (n.getAttribute() == FIBList.Parameters.createNewRowOnClick
 						|| n.getAttribute() == FIBList.Parameters.rowHeight
-						|| n.getAttribute() == FIBList.Parameters.visibleRowCount) {
+						|| n.getAttribute() == FIBList.Parameters.visibleRowCount
+						|| n.getAttribute() == FIBList.Parameters.layoutOrientation) {
 					updateList();
 				}
 

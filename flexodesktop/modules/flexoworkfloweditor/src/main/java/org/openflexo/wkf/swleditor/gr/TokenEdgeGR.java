@@ -30,29 +30,22 @@ import org.openflexo.foundation.wkf.edge.TokenEdge;
 import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class TokenEdgeGR extends EdgeGR<TokenEdge> {
 
 	private static final Logger logger = Logger.getLogger(TokenEdgeGR.class.getPackage().getName());
 
-	public TokenEdgeGR(TokenEdge edge,SwimmingLaneRepresentation aDrawing) 
-	{
-		super(edge,
-				edge.getStartNode(),
-				edge.getEndNode(),
-				aDrawing);
+	public TokenEdgeGR(TokenEdge edge, SwimmingLaneRepresentation aDrawing) {
+		super(edge, edge.getStartNode(), edge.getEndNode(), aDrawing);
 
-		if (isInduced() 
-				&& !(aDrawing.getFirstVisibleObject(edge.getStartNode()) instanceof WKFGroup)
+		if (isInduced() && !(aDrawing.getFirstVisibleObject(edge.getStartNode()) instanceof WKFGroup)
 				&& !(aDrawing.getFirstVisibleObject(edge.getEndNode()) instanceof WKFGroup)
-				&& !(edge.getStartNode() instanceof FlexoNode && ((FlexoNode)edge.getStartNode()).isEndNode()) /* terminal induced edges are not represented in light gray anymore */) {
-			setForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY,1.6f));
+				&& !(edge.getStartNode() instanceof FlexoNode && ((FlexoNode) edge.getStartNode()).isEndNode()) /* terminal induced edges are not represented in light gray anymore */) {
+			setForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1.6f));
 		}
 	}
-	
+
 	@Override
-	public StartSymbolType getStartSymbol() 
-	{
+	public StartSymbolType getStartSymbol() {
 		if (getTokenEdge().getIsConditional() || getTokenEdge().getIsDefaultFlow()) {
 			return super.getStartSymbol();
 		} else if (isInduced()) {
@@ -61,30 +54,27 @@ public class TokenEdgeGR extends EdgeGR<TokenEdge> {
 			return StartSymbolType.FILLED_CIRCLE;
 		}
 	}
-	
-	public TokenEdge getTokenEdge()
-	{
+
+	public TokenEdge getTokenEdge() {
 		return getDrawable();
 	}
 
 	@Override
-	public String toString() 
-	{
-		return "TokenEdgeGR of "+getTokenEdge();
+	public String toString() {
+		return "TokenEdgeGR of " + getTokenEdge();
 	}
 
 	@Override
-	public void refreshConnector() 
-	{
+	public void refreshConnector() {
 		if (!isConnectorConsistent()) {
-			// Dont' go further for connector that are inconsistent (this may happen 
+			// Dont' go further for connector that are inconsistent (this may happen
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
 		if (getConnector() instanceof RectPolylinConnector) {
 			startOrientationFixed = false;
 			endOrientationFixed = false;
-			//((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);	
+			// ((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);
 		}
 		super.refreshConnector();
 	}

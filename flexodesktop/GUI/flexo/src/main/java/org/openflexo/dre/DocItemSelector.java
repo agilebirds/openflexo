@@ -29,73 +29,62 @@ import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Widget allowing to select a DocItem while browsing the DocResourceCenter
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DocItemSelector extends AbstractBrowserSelector<DocItem>
-{
+public class DocItemSelector extends AbstractBrowserSelector<DocItem> {
 
-    protected static final String EMPTY_STRING = "";
+	protected static final String EMPTY_STRING = "";
 
-    public DocItemSelector(FlexoProject project, DocItem docItem)
-    {
-        super(project, docItem, DocItem.class);
-    }
+	public DocItemSelector(FlexoProject project, DocItem docItem) {
+		super(project, docItem, DocItem.class);
+	}
 
-    public DocItemSelector(FlexoProject project, DocItem docItem, int cols)
-    {
-        super(project, docItem, DocItem.class, cols);
-    }
+	public DocItemSelector(FlexoProject project, DocItem docItem, int cols) {
+		super(project, docItem, DocItem.class, cols);
+	}
 
-     @Override
-	protected DocItemSelectorPanel makeCustomPanel(DocItem editedObject)
-    {
-        return new DocItemSelectorPanel();
-    }
+	@Override
+	protected DocItemSelectorPanel makeCustomPanel(DocItem editedObject) {
+		return new DocItemSelectorPanel();
+	}
 
-    @Override
-	public String renderedString(DocItem editedObject)
-    {
-        if (editedObject != null) {
-            return (editedObject).getIdentifier();
-        }
-        return EMPTY_STRING;
-    }
+	@Override
+	public String renderedString(DocItem editedObject) {
+		if (editedObject != null) {
+			return (editedObject).getIdentifier();
+		}
+		return EMPTY_STRING;
+	}
 
-    protected class DocItemSelectorPanel extends AbstractSelectorPanel<DocItem>
-    {
-        protected DocItemSelectorPanel()
-        {
-            super(DocItemSelector.this);
-        }
+	protected class DocItemSelectorPanel extends AbstractSelectorPanel<DocItem> {
+		protected DocItemSelectorPanel() {
+			super(DocItemSelector.this);
+		}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new DocItemBrowser();
-        }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new DocItemBrowser();
+		}
 
-        @Override
-		public Dimension getDefaultSize()
-        {
-            Dimension returned = _browserView.getDefaultSize();
-            returned.width = returned.width;
-            returned.height = returned.height - 100;
-            return returned;
-        }
-    }
+		@Override
+		public Dimension getDefaultSize() {
+			Dimension returned = _browserView.getDefaultSize();
+			returned.width = returned.width;
+			returned.height = returned.height - 100;
+			return returned;
+		}
+	}
 
-    protected class DocItemBrowser extends ConfigurableProjectBrowser
-    {
-        protected DocItemBrowser()
-        {
-            super(DREBrowser.makeBrowserConfiguration(DocItemSelector.this.getProject(),DocResourceManager.instance().getDocResourceCenter()));
-        }
+	protected class DocItemBrowser extends ConfigurableProjectBrowser {
+		protected DocItemBrowser() {
+			super(DREBrowser.makeBrowserConfiguration(DocItemSelector.this.getProject(), DocResourceManager.instance()
+					.getDocResourceCenter()));
+		}
 
-    }
+	}
 
 }

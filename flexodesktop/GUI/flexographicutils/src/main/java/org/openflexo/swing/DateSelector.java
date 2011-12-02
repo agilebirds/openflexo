@@ -50,8 +50,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class DateSelector extends TextFieldCustomPopup<Date>
-{
+public class DateSelector extends TextFieldCustomPopup<Date> {
 	public static final Font NORMAL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
 	static final String[] days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
@@ -64,24 +63,20 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 
 	Date _revertValue;
 
-
 	/* -------------- GUI Components --------------------------- */
 	CalendarPanel calendarPanel;
 
-	public DateSelector()
-	{
+	public DateSelector() {
 		super(null);
 	}
 
-	public DateSelector(Date d)
-	{
+	public DateSelector(Date d) {
 		this();
 		setEditedObject(d);
-		_revertValue = (Date)d.clone();
+		_revertValue = (Date) d.clone();
 	}
 
-	public Calendar getCalendar()
-	{
+	public Calendar getCalendar() {
 		if (_cal == null) {
 			_cal = Calendar.getInstance(Locale.ENGLISH);
 		}
@@ -89,21 +84,18 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 	}
 
 	@Override
-	protected ResizablePanel createCustomPanel(Date editedObject)
-	{
+	protected ResizablePanel createCustomPanel(Date editedObject) {
 		calendarPanel = new CalendarPanel();
 		return calendarPanel;
 	}
 
 	@Override
-	public Date getEditedObject()
-	{
+	public Date getEditedObject() {
 		return getDate();
 	}
 
 	@Override
-	public void setEditedObject(Date object)
-	{
+	public void setEditedObject(Date object) {
 		super.setEditedObject(object);
 		if (object != null) {
 			getCalendar().setTime(object);
@@ -115,20 +107,17 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 	 * 
 	 * @return The current selected date.
 	 */
-	public Date getDate()
-	{
+	public Date getDate() {
 		return getCalendar().getTime();
 	}
 
 	/**
-	 * Sets the date for the picker. All GUI elements associated with the picker
-	 * are updated and the grid of date buttons is rebuilt
+	 * Sets the date for the picker. All GUI elements associated with the picker are updated and the grid of date buttons is rebuilt
 	 * 
 	 * @param d
 	 *            the new date for this date picker.
 	 */
-	public void setDate(Date d)
-	{
+	public void setDate(Date d) {
 		if (d == null) {
 			d = new Date();
 		}
@@ -136,16 +125,14 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 	}
 
 	@Override
-	public void updateCustomPanel(Date editedObject)
-	{
+	public void updateCustomPanel(Date editedObject) {
 		if (calendarPanel != null) {
 			calendarPanel.update();
 		}
 	}
 
 	@Override
-	public String renderedString(Date editedObject)
-	{
+	public String renderedString(Date editedObject) {
 		if (formatter == null) {
 			formatter = new SimpleDateFormat();
 		}
@@ -153,8 +140,7 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 		return (formatter.format(getDate()));
 	}
 
-	protected class CalendarPanel extends ResizablePanel
-	{
+	protected class CalendarPanel extends ResizablePanel {
 		ButtonsControlPanel controlPanel;
 
 		private JButton prevMonth;
@@ -167,15 +153,13 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 
 		private JPanel dayButtons;
 
-		void update()
-		{
+		void update() {
 			yearSpinner.setValue(new Integer(getCalendar().get(Calendar.YEAR)));
 			monthComboBox.setSelectedIndex(getCalendar().get(Calendar.MONTH));
 			rebuildDayButtons();
 		}
 
-		protected CalendarPanel()
-		{
+		protected CalendarPanel() {
 			super();
 
 			// Create the month chooser as a comboBox
@@ -183,8 +167,7 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 			monthComboBox.setLightWeightPopupEnabled(false);
 			monthComboBox.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					getCalendar().set(Calendar.MONTH, monthComboBox.getSelectedIndex());
 					fireEditedObjectChanged();
 				}
@@ -201,8 +184,7 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 			// //just gets texfield of the spinners jformatted textfield
 			yearSpinner.addChangeListener(new ChangeListener() {
 				@Override
-				public void stateChanged(ChangeEvent e)
-				{
+				public void stateChanged(ChangeEvent e) {
 					if (e.getSource() == yearSpinner) {
 						getCalendar().set(Calendar.YEAR, ((Number) yearSpinner.getValue()).intValue());
 					}
@@ -215,16 +197,14 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 			// setup actionlisteners
 			prevMonth.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					getCalendar().add(Calendar.MONTH, -1);
 					fireEditedObjectChanged();
 				}
 			});
 			nextMonth.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					getCalendar().add(Calendar.MONTH, 1);
 					fireEditedObjectChanged();
 				}
@@ -256,38 +236,33 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 					return DateSelector.this.localizedForKeyAndButton(key, component);
 				}
 			};
-			controlPanel.addButton("apply",new ActionListener() {
+			controlPanel.addButton("apply", new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					apply();
 				}
 			});
-			controlPanel.addButton("cancel",new ActionListener() {
+			controlPanel.addButton("cancel", new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					cancel();
 				}
 			});
-			controlPanel.addButton("reset",new ActionListener() {
+			controlPanel.addButton("reset", new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					setEditedObject(null);
 					apply();
 				}
 			});
 
-			controlPanel.applyFocusTraversablePolicyTo(this,true);
+			controlPanel.applyFocusTraversablePolicyTo(this, true);
 
 			add(controlPanel, BorderLayout.SOUTH);
 		}
 
-
 		@Override
-		public Dimension getDefaultSize()
-		{
+		public Dimension getDefaultSize() {
 			return getSize();
 		}
 
@@ -297,12 +272,10 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 		}
 
 		/**
-		 * Anytime the date buttons need to be changes, this should be called
-		 * When the month or year changes, or when any dae button is clicked.
-		 * Clicked day buttons are highlighted, and so the grid is redrawn
+		 * Anytime the date buttons need to be changes, this should be called When the month or year changes, or when any dae button is
+		 * clicked. Clicked day buttons are highlighted, and so the grid is redrawn
 		 */
-		private void rebuildDayButtons()
-		{
+		private void rebuildDayButtons() {
 			// Completely cleanout the panel and rebuild it from scratch.
 			dayButtons.removeAll();
 
@@ -379,8 +352,7 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 				DateButton b = new DateButton(constructionCal);
 				b.addActionListener(new ActionListener() {
 					@Override
-					public void actionPerformed(ActionEvent e)
-					{
+					public void actionPerformed(ActionEvent e) {
 						getCalendar().setTime(((DateButton) e.getSource()).getDate());
 						fireEditedObjectChanged();
 					}
@@ -398,11 +370,9 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 		}
 
 		/**
-		 * An extension of JButton that shows a date as a digit indicating the
-		 * day of the month
+		 * An extension of JButton that shows a date as a digit indicating the day of the month
 		 */
-		private class DateButton extends JButton
-		{
+		private class DateButton extends JButton {
 
 			private boolean selectedDay = false;
 
@@ -410,8 +380,7 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 
 			private Date date = new Date();
 
-			public DateButton(Calendar cal)
-			{
+			public DateButton(Calendar cal) {
 				super("");
 				date = cal.getTime(); // create a date specifically for this
 				// button
@@ -433,8 +402,7 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 				setMaximumSize(getPreferredSize());
 			}
 
-			public void setDateStyle()
-			{
+			public void setDateStyle() {
 				if (selectedDay) {
 					setBackground(Color.GREEN);
 				} else if (busy) {
@@ -444,28 +412,23 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 				}
 			}
 
-			public Date getDate()
-			{
+			public Date getDate() {
 				return date;
 			}
 
-			public boolean isBusy()
-			{
+			public boolean isBusy() {
 				return busy;
 			}
 
-			public void setBusy(boolean b)
-			{
+			public void setBusy(boolean b) {
 				this.busy = b;
 			}
 
-			public boolean isSelectedDay()
-			{
+			public boolean isSelectedDay() {
 				return selectedDay;
 			}
 
-			public void setSelectedDay(boolean selected)
-			{
+			public void setSelectedDay(boolean selected) {
 				this.selectedDay = selected;
 			}
 
@@ -474,44 +437,38 @@ public class DateSelector extends TextFieldCustomPopup<Date>
 	}
 
 	@Override
-	public void apply()
-	{
+	public void apply() {
 		setRevertValue(getEditedObject());
 		closePopup();
 		super.apply();
 	}
 
 	@Override
-	public void cancel()
-	{
+	public void cancel() {
 		setEditedObject(_revertValue);
 		closePopup();
 		super.cancel();
 	}
 
 	@Override
-	public void setRevertValue(Date oldValue)
-	{
+	public void setRevertValue(Date oldValue) {
 		_revertValue = oldValue;
 	}
 
-	public Date getRevertValue()
-	{
+	public Date getRevertValue() {
 		return _revertValue;
 	}
-
 
 	@Override
 	protected void openPopup() {
 		super.openPopup();
 		if (calendarPanel != null) {
-			calendarPanel.controlPanel.applyFocusTraversablePolicyTo(calendarPanel,true);
+			calendarPanel.controlPanel.applyFocusTraversablePolicyTo(calendarPanel, true);
 		}
 	}
 
 	// Override if required
-	public String localizedForKeyAndButton(String key, JButton component)
-	{
+	public String localizedForKeyAndButton(String key, JButton component) {
 		return key;
 	}
 

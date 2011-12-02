@@ -22,93 +22,87 @@ package org.openflexo.foundation.ontology;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ontology.EditionPatternReference.ActorReference;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.logging.FlexoLogger;
 
-public class EditionPatternInstance extends FlexoObservable implements Bindable {
+public class EditionPatternInstance extends FlexoObservable implements Bindable, BindingEvaluationContext {
 
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternReference.class.getPackage().toString());
 
 	private FlexoProject _project;
 	private EditionPattern pattern;
 	private long instanceId;
-	private Hashtable<String,FlexoModelObject> actors;
+	private Hashtable<String, FlexoModelObject> actors;
 
-	public EditionPatternInstance(EditionPatternReference aPattern)
-	{
+	public EditionPatternInstance(EditionPatternReference aPattern) {
 		super();
-		//logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init1> actors="+actors);
+		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init1> actors="+actors);
 		_project = aPattern.getProject();
 		pattern = aPattern.getEditionPattern();
 		instanceId = aPattern.getInstanceId();
-		actors = new Hashtable<String,FlexoModelObject>();
+		actors = new Hashtable<String, FlexoModelObject>();
 		for (String patternRole : aPattern.getActors().keySet()) {
 			ActorReference actor = aPattern.getActors().get(patternRole);
 			FlexoModelObject object = actor.retrieveObject();
 			if (object != null) {
-				actors.put(patternRole,object);
+				actors.put(patternRole, object);
 			}
 		}
 	}
 
-	public EditionPatternInstance(EditionPattern aPattern, FlexoProject project)
-	{
+	public EditionPatternInstance(EditionPattern aPattern, FlexoProject project) {
 		super();
-		//logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init2> actors="+actors);
+		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init2> actors="+actors);
 		_project = project;
 		instanceId = _project.getNewFlexoID();
 		this.pattern = aPattern;
-		actors = new Hashtable<String,FlexoModelObject>();
+		actors = new Hashtable<String, FlexoModelObject>();
 	}
-	
-	public void delete()
-	{
+
+	public void delete() {
 		logger.warning("TODO: implements EditionPatternInstance deletion !");
 	}
-	
 
-	public FlexoModelObject getPatternActor(String patternRole)
-	{
-		//logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
+	public FlexoModelObject getPatternActor(String patternRole) {
+		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
 		return actors.get(patternRole);
 	}
 
-	public FlexoModelObject getPatternActor(PatternRole patternRole)
-	{
-		//logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
+	public FlexoModelObject getPatternActor(PatternRole patternRole) {
+		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
 		return actors.get(patternRole.getPatternRoleName());
 	}
 
-	public FlexoProject getProject() 
-	{
+	public FlexoProject getProject() {
 		return _project;
 	}
-	
-	public void setObjectForPatternRole (FlexoModelObject object, PatternRole patternRole)
-	{
-		//logger.info(">>>>>>>> For patternRole: "+patternRole+" set "+object);
-		actors.put(patternRole.getPatternRoleName(),object);
+
+	public void setObjectForPatternRole(FlexoModelObject object, PatternRole patternRole) {
+		// logger.info(">>>>>>>> For patternRole: "+patternRole+" set "+object);
+		actors.put(patternRole.getPatternRoleName(), object);
 		setChanged();
 		notifyObservers(new EditionPatternChanged(this));
-		//System.out.println("EditionPatternInstance "+Integer.toHexString(hashCode())+" setObjectForPatternRole() actors="+actors);
+		// System.out.println("EditionPatternInstance "+Integer.toHexString(hashCode())+" setObjectForPatternRole() actors="+actors);
 	}
 
-	public String debug() 
-	{
+	public String debug() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("EditionPattern: "+pattern.getName()+"\n");
-		sb.append("Instance: "+instanceId+"\n");
+		sb.append("EditionPattern: " + pattern.getName() + "\n");
+		sb.append("Instance: " + instanceId + "\n");
 		for (String patternRole : actors.keySet()) {
 			FlexoModelObject object = actors.get(patternRole);
-			sb.append("Role: "+patternRole+" : "+object+"\n");			
+			sb.append("Role: " + patternRole + " : " + object + "\n");
 		}
 		return sb.toString();
 	}
@@ -120,7 +114,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable 
 	public void setPattern(EditionPattern pattern) {
 		this.pattern = pattern;
 	}
-	
+
 	public long getInstanceId() {
 		return instanceId;
 	}
@@ -129,23 +123,19 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable 
 		this.instanceId = instanceId;
 	}
 
-	public Hashtable<String, FlexoModelObject> getActors() 
-	{
+	public Hashtable<String, FlexoModelObject> getActors() {
 		return actors;
 	}
 
-	public void setActors(Hashtable<String, FlexoModelObject> actors) 
-	{
+	public void setActors(Hashtable<String, FlexoModelObject> actors) {
 		this.actors = actors;
 	}
 
-	public void setActorForKey(FlexoModelObject o, String key)
-	{
-		actors.put(key,o);
+	public void setActorForKey(FlexoModelObject o, String key) {
+		actors.put(key, o);
 	}
 
-	public void removeActorWithKey(String key)
-	{
+	public void removeActorWithKey(String key) {
 		actors.remove(key);
 	}
 
@@ -158,18 +148,24 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable 
 	{
 		System.out.println("SET string value for "+inspectorEntryKey+" value: "+value);
 	}*/
-	
+
 	@Override
-	public BindingFactory getBindingFactory() 
-	{
+	public BindingFactory getBindingFactory() {
 		return getPattern().getInspector().getBindingFactory();
 	}
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		return getPattern().getInspector().getBindingModel();
 	}
-	
+
+	@Override
+	public Object getValue(BindingVariable variable) {
+		if (variable instanceof PatternRolePathElement) {
+			return getPatternActor(((PatternRolePathElement) variable).getPatternRole());
+		}
+		logger.warning("Unexpected " + variable);
+		return null;
+	}
 
 }

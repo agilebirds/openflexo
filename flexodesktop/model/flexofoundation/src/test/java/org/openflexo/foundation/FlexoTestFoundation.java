@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import org.openflexo.foundation.FlexoModelObject;
 
 public class FlexoTestFoundation extends FlexoTestCase {
 
@@ -29,11 +28,11 @@ public class FlexoTestFoundation extends FlexoTestCase {
 
 	public void testStringHasChanged() {
 		assertTrue(FlexoModelObject.stringHasChanged(null, "Something"));
-		assertTrue(FlexoModelObject.stringHasChanged("Something",null));
-		assertTrue(FlexoModelObject.stringHasChanged("Something","something"));
-		assertTrue(FlexoModelObject.stringHasChanged("Something","SomethingElse"));
-		assertFalse(FlexoModelObject.stringHasChanged("Something","Something"));
-		assertFalse(FlexoModelObject.stringHasChanged(null,null));
+		assertTrue(FlexoModelObject.stringHasChanged("Something", null));
+		assertTrue(FlexoModelObject.stringHasChanged("Something", "something"));
+		assertTrue(FlexoModelObject.stringHasChanged("Something", "SomethingElse"));
+		assertFalse(FlexoModelObject.stringHasChanged("Something", "Something"));
+		assertFalse(FlexoModelObject.stringHasChanged(null, null));
 	}
-	
+
 }

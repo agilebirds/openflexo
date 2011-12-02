@@ -33,75 +33,76 @@ public class ExactDataRestrictionStatement extends DataRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(ExactDataRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
+	private OntologyDataProperty property;
 	private int cardinality = 0;
-	private DataType dataRange = DataType.Unknown;
-	
-	public ExactDataRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
-	{
-		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		
+	private OntologicDataType dataRange;
+
+	public ExactDataRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
+		super(subject, s, r);
+		property = (OntologyDataProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
-		Property ON_DATA_RANGE = ResourceFactory.createProperty( OWL + "onDataRange" );
-		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty( OWL + "qualifiedCardinality" );
+		Property ON_DATA_RANGE = ResourceFactory.createProperty(OWL + "onDataRange");
+		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + "qualifiedCardinality");
 
 		Statement onDataRangeStmt = r.getProperty(ON_DATA_RANGE);
 		Statement cardinalityStmt = r.getProperty(QUALIFIED_CARDINALITY);
-		
+
 		RDFNode onDataRangeStmtValue = onDataRangeStmt.getObject();
 		RDFNode cardinalityStmtValue = cardinalityStmt.getObject();
-		
+
 		if (onDataRangeStmtValue instanceof Resource) {
-			dataRange = getDataType(((Resource)onDataRangeStmtValue).getURI());
+			dataRange = OntologicDataType.fromURI(((Resource) onDataRangeStmtValue).getURI());
 		}
-	
+
 		if (cardinalityStmtValue.isLiteral() && cardinalityStmtValue.canAs(Literal.class)) {
-			Literal literal = (Literal)cardinalityStmtValue.as(Literal.class);
+			Literal literal = (Literal) cardinalityStmtValue.as(Literal.class);
 			cardinality = literal.getInt();
 		}
-		
-		
-		//object = getOntologyLibrary().getOntologyObject(r.get().getURI());
-		//cardinality = r.getCardinality();
+
+		// object = getOntologyLibrary().getOntologyObject(r.get().getURI());
+		// cardinality = r.getCardinality();
 	}
 
 	@Override
-	public DataType getDataRange()
-	{
+	public OntologicDataType getDataRange() {
 		return dataRange;
 	}
-	
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "exact_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "ExactRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "ExactRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyProperty getProperty() 
-	{
+	public OntologyDataProperty getProperty() {
 		return property;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" exact "+cardinality+" "+getDataRange();
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " exact "
+				+ cardinality + " " + getDataRange();
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" exact "+cardinality;
+		return property.getName() + " exact " + cardinality;
 	}
 
+	@Override
+	public int getCardinality() {
+		return cardinality;
+	}
 
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Exact;
+	}
 }

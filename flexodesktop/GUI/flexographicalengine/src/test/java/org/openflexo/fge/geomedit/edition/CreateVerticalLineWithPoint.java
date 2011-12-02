@@ -26,34 +26,26 @@ import org.openflexo.fge.geomedit.Line;
 import org.openflexo.fge.geomedit.construction.VerticalLineWithPointConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateVerticalLineWithPoint extends Edition {
-	
+
 	public CreateVerticalLineWithPoint(GeomEditController controller) {
-		super("Create vertical line crossing point",controller);
-		inputs.add(new ObtainPoint("Select point",controller));
+		super("Create vertical line crossing point", controller);
+		inputs.add(new ObtainPoint("Select point", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainPoint p = (ObtainPoint)inputs.get(0);
-		
-		addObject (new Line(
-				getController().getDrawing().getModel(),
-				new VerticalLineWithPointConstruction(p.getConstruction())));
+	public void performEdition() {
+		ObtainPoint p = (ObtainPoint) inputs.get(0);
+
+		addObject(new Line(getController().getDrawing().getModel(), new VerticalLineWithPointConstruction(p.getConstruction())));
 
 	}
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			(FGELine.makeVerticalLine(lastMouseLocation)).paint(graphics);
 		}
 	}
 }
-
-

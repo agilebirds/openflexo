@@ -31,7 +31,6 @@ import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
-
 public class BeginActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 	private ForegroundStyle foreground;
@@ -40,10 +39,8 @@ public class BeginActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 	private ForegroundStyle painterForeground;
 	private BackgroundStyle painterBackground;
 
-
-	public BeginActivityNodeGR(ActivityNode activityNode, ProcessRepresentation aDrawing, boolean isInPalet)
-	{
-		super (activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
+	public BeginActivityNodeGR(ActivityNode activityNode, ProcessRepresentation aDrawing, boolean isInPalet) {
+		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
 
 		// Important: width is different from height here to avoid connector blinking when editing layout
 		// This little difference allows a kind of hysteresis favourizing horizontal layout
@@ -67,8 +64,7 @@ public class BeginActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
+			public void paintShape(FGEShapeGraphics g) {
 				g.useForegroundStyle(painterForeground);
 				g.drawCircle(0.2, 0.2, 0.6, 0.6);
 			}
@@ -81,15 +77,13 @@ public class BeginActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 		return BG_COLOR;
 	}
 
-	public ActivityNode getActivityNode()
-	{
+	public ActivityNode getActivityNode() {
 		return getDrawable();
 	}
 
 	@Override
-	public Rectangle getShape()
-	{
-		return (Rectangle)super.getShape();
+	public Rectangle getShape() {
+		return (Rectangle) super.getShape();
 	}
 
 	private boolean isInRoot() {
@@ -100,35 +94,33 @@ public class BeginActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultX()
-	{
-		return isInRoot()?50:0;
+	public double _getDefaultX() {
+		return isInRoot() ? 50 : 0;
 	}
 
 	/**
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultY()
-	{
-		return (getActivityNode().getParentPetriGraph().getIndexForBeginNode(getActivityNode()) * 80)+(isInRoot()?200:0)+DEFAULT_BEGIN_Y_OFFSET+10;
+	public double _getDefaultY() {
+		return (getActivityNode().getParentPetriGraph().getIndexForBeginNode(getActivityNode()) * 80) + (isInRoot() ? 200 : 0)
+				+ DEFAULT_BEGIN_Y_OFFSET + 10;
 	}
 
 	@Override
-	public double getDefaultLabelX() 
-	{
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+	public double getDefaultLabelX() {
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getX();
-		return getLeftBorder()+15;
+		}
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY() 
-	{
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+	public double getDefaultLabelY() {
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getY();
-		return getTopBorder()+40;
+		}
+		return getTopBorder() + 40;
 	}
-
 
 }

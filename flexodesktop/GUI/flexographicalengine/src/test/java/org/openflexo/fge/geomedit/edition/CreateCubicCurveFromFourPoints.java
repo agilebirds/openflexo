@@ -32,87 +32,77 @@ import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 
-
-
 public class CreateCubicCurveFromFourPoints extends Edition {
-	
+
 	public CreateCubicCurveFromFourPoints(GeomEditController controller) {
-		super("Create quadratic curve from three points",controller);
-		inputs.add(new ObtainPoint("Select start point",controller));
-		inputs.add(new ObtainPoint("Select end point",controller));
-		inputs.add(new ObtainPoint("Select control point 1",controller));
-		inputs.add(new ObtainPoint("Select control point 2",controller));
+		super("Create quadratic curve from three points", controller);
+		inputs.add(new ObtainPoint("Select start point", controller));
+		inputs.add(new ObtainPoint("Select end point", controller));
+		inputs.add(new ObtainPoint("Select control point 1", controller));
+		inputs.add(new ObtainPoint("Select control point 2", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainPoint p1 = (ObtainPoint)inputs.get(0);
-		ObtainPoint p2 = (ObtainPoint)inputs.get(1);
-		ObtainPoint p3 = (ObtainPoint)inputs.get(2);
-		ObtainPoint p4 = (ObtainPoint)inputs.get(3);
-		
-		addObject (new CubicCurve(
-				getController().getDrawing().getModel(),
-				new CubicCurveWithFourPointsConstruction(p1.getConstruction(),p3.getConstruction(),p4.getConstruction(),p2.getConstruction())));
+	public void performEdition() {
+		ObtainPoint p1 = (ObtainPoint) inputs.get(0);
+		ObtainPoint p2 = (ObtainPoint) inputs.get(1);
+		ObtainPoint p3 = (ObtainPoint) inputs.get(2);
+		ObtainPoint p4 = (ObtainPoint) inputs.get(3);
+
+		addObject(new CubicCurve(getController().getDrawing().getModel(), new CubicCurveWithFourPointsConstruction(p1.getConstruction(),
+				p3.getConstruction(), p4.getConstruction(), p2.getConstruction())));
 
 	}
-	
+
 	/*public void addObject(GeometricObject object)
 	{
 		getController().getDrawing().getModel().addToChilds(object);
 	}*/
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
-		}
-		else if (currentStep == 1) {
+		} else if (currentStep == 1) {
 			// Nothing to draw
-			FGEPoint p1 = ((ObtainPoint)inputs.get(0)).getInputData();
+			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGESegment(p1,lastMouseLocation)).paint(graphics);
-		}
-		else if (currentStep == 2) {
+			(new FGESegment(p1, lastMouseLocation)).paint(graphics);
+		} else if (currentStep == 2) {
 			// Draw construction
-			FGEPoint p1 = ((ObtainPoint)inputs.get(0)).getInputData();
-			FGEPoint p2 = ((ObtainPoint)inputs.get(1)).getInputData();
-			
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY,1,DashStyle.MEDIUM_DASHES));		
-			FGESegment line1 = new FGESegment(lastMouseLocation,p1);
+			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
+			FGEPoint p2 = ((ObtainPoint) inputs.get(1)).getInputData();
+
+			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
+			FGESegment line1 = new FGESegment(lastMouseLocation, p1);
 			line1.paint(graphics);
-			
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED,1));	
+
+			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1));
 			p1.paint(graphics);
 			p2.paint(graphics);
 			lastMouseLocation.paint(graphics);
 
-			(new FGEQuadCurve(p1,lastMouseLocation,p2)).paint(graphics);
-		}
-		else if (currentStep == 3) {
+			(new FGEQuadCurve(p1, lastMouseLocation, p2)).paint(graphics);
+		} else if (currentStep == 3) {
 			// Draw construction
-			FGEPoint p1 = ((ObtainPoint)inputs.get(0)).getInputData();
-			FGEPoint p2 = ((ObtainPoint)inputs.get(1)).getInputData();
-			FGEPoint cp1 = ((ObtainPoint)inputs.get(2)).getInputData();
-			
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY,1,DashStyle.MEDIUM_DASHES));		
-			FGESegment line1 = new FGESegment(p1,cp1);
-			FGESegment line2 = new FGESegment(p2,lastMouseLocation);
+			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
+			FGEPoint p2 = ((ObtainPoint) inputs.get(1)).getInputData();
+			FGEPoint cp1 = ((ObtainPoint) inputs.get(2)).getInputData();
+
+			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
+			FGESegment line1 = new FGESegment(p1, cp1);
+			FGESegment line2 = new FGESegment(p2, lastMouseLocation);
 			line1.paint(graphics);
 			line2.paint(graphics);
-			
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED,1));	
+
+			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1));
 			p1.paint(graphics);
 			p2.paint(graphics);
 			cp1.paint(graphics);
 			lastMouseLocation.paint(graphics);
 
-			(new FGECubicCurve(p1,cp1,lastMouseLocation,p2)).paint(graphics);
+			(new FGECubicCurve(p1, cp1, lastMouseLocation, p2)).paint(graphics);
 		}
 	}
 }
-
-

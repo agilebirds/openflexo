@@ -25,17 +25,13 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.JavaFile;
 import org.openflexo.generator.FlexoResourceGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 
+public class ComponentJavaFile extends JavaFile implements GenerationAvailableFile {
 
-public class ComponentJavaFile extends JavaFile implements GenerationAvailableFile
-{
+	protected static final Logger logger = FlexoLogger.getLogger(ComponentJavaFile.class.getPackage().getName());
 
-    protected static final Logger logger = FlexoLogger.getLogger(ComponentJavaFile.class.getPackage().getName());
-
-    public ComponentJavaFile(File f, ComponentJavaFileResource resource)
-	{
+	public ComponentJavaFile(File f, ComponentJavaFileResource resource) {
 		super(f);
 		try {
 			setFlexoResource(resource);
@@ -43,23 +39,20 @@ public class ComponentJavaFile extends JavaFile implements GenerationAvailableFi
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-  }
-
-    @Override
-	public ComponentJavaFileResource getFlexoResource()
-    {
-        return (ComponentJavaFileResource)super.getFlexoResource();
-    }
-
-	public ComponentJavaFile()
-	{
-		super();
-    }
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
-		return (FlexoResourceGenerator)getFlexoResource().getGenerator();
+	public ComponentJavaFileResource getFlexoResource() {
+		return (ComponentJavaFileResource) super.getFlexoResource();
 	}
-	
+
+	public ComponentJavaFile() {
+		super();
+	}
+
+	@Override
+	public FlexoResourceGenerator getGenerator() {
+		return (FlexoResourceGenerator) getFlexoResource().getGenerator();
+	}
+
 }

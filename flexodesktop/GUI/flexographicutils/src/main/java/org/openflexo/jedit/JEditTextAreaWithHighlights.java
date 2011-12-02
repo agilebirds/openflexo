@@ -23,19 +23,16 @@ import org.openflexo.jedit.TextAreaPainter.Highlight;
 
 public class JEditTextAreaWithHighlights extends JEditTextArea {
 
-	public JEditTextAreaWithHighlights()
-	{
+	public JEditTextAreaWithHighlights() {
 		super();
 		getPainter().setLineHighlightEnabled(false);
 	}
 
-	public void addCustomHighlight(Highlight highlight)
-	{
+	public void addCustomHighlight(Highlight highlight) {
 		getPainter().addCustomHighlight(highlight);
 	}
 
-	public void removeAllCustomHighlight()
-	{
+	public void removeAllCustomHighlight() {
 		getPainter().removeAllCustomHighlight();
 	}
 

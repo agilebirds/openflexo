@@ -28,41 +28,35 @@ import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public abstract class CGTemplateRepository extends CGTemplateObject {
 
 	private CGTemplates _templates;
 	private File _directory;
 	private CGDirectoryTemplateSet commonTemplates;
-	private Hashtable<TargetType,TargetSpecificCGTemplateSet> targetSpecificTemplates;
+	private Hashtable<TargetType, TargetSpecificCGTemplateSet> targetSpecificTemplates;
 	private Vector<TargetType> availableTargets;
 
-
-	public CGTemplateRepository(File directory, CGTemplates templates, Vector<TargetType> availableTargets)
-	{
+	public CGTemplateRepository(File directory, CGTemplates templates, Vector<TargetType> availableTargets) {
 		super();
 		_templates = templates;
 		_directory = directory;
 		this.availableTargets = availableTargets;
 		commonTemplates = makeCommonTemplateSet();
-		targetSpecificTemplates = new Hashtable<TargetType,TargetSpecificCGTemplateSet>();
+		targetSpecificTemplates = new Hashtable<TargetType, TargetSpecificCGTemplateSet>();
 		update();
 	}
 
-	public CGDirectoryTemplateSet makeCommonTemplateSet()
-	{
-		return new CommonCGTemplateSet(getDirectory(),this,false);
+	public CGDirectoryTemplateSet makeCommonTemplateSet() {
+		return new CommonCGTemplateSet(getDirectory(), this, false);
 	}
 
 	@Override
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return _templates.getProject();
 	}
 
 	@Override
-	public void update()
-	{
+	public void update() {
 		commonTemplates.update();
 		if (availableTargets != null) {
 			for (TargetType target : availableTargets) {
@@ -75,32 +69,29 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "template_repository";
 	}
 
-	public CGDirectoryTemplateSet getCommonTemplates()
-	{
+	public CGDirectoryTemplateSet getCommonTemplates() {
 		return commonTemplates;
 	}
 
-	public Enumeration<TargetSpecificCGTemplateSet> getTargetSpecificTemplates()
-	{
+	public Enumeration<TargetSpecificCGTemplateSet> getTargetSpecificTemplates() {
 		return targetSpecificTemplates.elements();
 	}
 
 	public CGTemplate getTemplateWithRelativePath(String relativePath) {
-		if (relativePath==null) {
+		if (relativePath == null) {
 			return null;
 		}
 		CGTemplateSet set = null;
 		String templateName = null;
-		if (relativePath.indexOf('/')>0) {
+		if (relativePath.indexOf('/') > 0) {
 			String setName = relativePath.substring(0, relativePath.indexOf('/'));
-			templateName = relativePath.substring(relativePath.indexOf('/')+1);
+			templateName = relativePath.substring(relativePath.indexOf('/') + 1);
 			set = getTemplateSetForName(setName);
-			if(set==null){
+			if (set == null) {
 				set = getCommonTemplates();
 				templateName = relativePath;
 			}
@@ -111,33 +102,30 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 		return set.getTemplate(templateName);
 	}
 
-	public TargetSpecificCGTemplateSet getTemplateSetForTarget(TargetType target, boolean createIfNonExistent)
-	{
+	public TargetSpecificCGTemplateSet getTemplateSetForTarget(TargetType target, boolean createIfNonExistent) {
 		TargetSpecificCGTemplateSet returned = targetSpecificTemplates.get(target);
 		if (returned == null) {
-			File targetDir = new File(_directory,target.getTemplateFolderName());
+			File targetDir = new File(_directory, target.getTemplateFolderName());
 			if (createIfNonExistent && !isApplicationRepository()) {
 				if (!targetDir.exists()) {
 					targetDir.mkdirs();
 				}
 			}
 			if (targetDir.exists()) {
-				returned = new TargetSpecificCGTemplateSet(targetDir,this,target,false);
+				returned = new TargetSpecificCGTemplateSet(targetDir, this, target, false);
 				targetSpecificTemplates.put(target, returned);
 				setChanged();
-				notifyObservers(new CGDataModification("templateSetForTarget",null,returned));
+				notifyObservers(new CGDataModification("templateSetForTarget", null, returned));
 			}
 		}
 		return returned;
 	}
 
-	public TargetSpecificCGTemplateSet getTemplateSetForTarget(TargetType target)
-	{
-		return getTemplateSetForTarget(target,false);
+	public TargetSpecificCGTemplateSet getTemplateSetForTarget(TargetType target) {
+		return getTemplateSetForTarget(target, false);
 	}
 
-	public TargetSpecificCGTemplateSet getTemplateSetForName(String name)
-	{
+	public TargetSpecificCGTemplateSet getTemplateSetForName(String name) {
 		for (TargetSpecificCGTemplateSet set : targetSpecificTemplates.values()) {
 			if (set.getTargetType().getName().equals(name)) {
 				return set;
@@ -149,12 +137,12 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 	public Vector<CGTemplate> getAllTemplateFiles() {
 		Vector<CGTemplate> v = new Vector<CGTemplate>();
 		Enumeration<CGTemplate> en = commonTemplates.getAllTemplates();
-		while(en.hasMoreElements()) {
+		while (en.hasMoreElements()) {
 			v.add(en.nextElement());
 		}
 		for (TargetSpecificCGTemplateSet set : targetSpecificTemplates.values()) {
 			en = set.getAllTemplates();
-			while(en.hasMoreElements()) {
+			while (en.hasMoreElements()) {
 				v.add(en.nextElement());
 			}
 		}
@@ -162,15 +150,13 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 	}
 
 	@Override
-	public CGTemplates getTemplates()
-	{
+	public CGTemplates getTemplates() {
 		return _templates;
 	}
 
 	public abstract boolean readOnly();
 
-	public File getDirectory()
-	{
+	public File getDirectory() {
 		return _directory;
 	}
 

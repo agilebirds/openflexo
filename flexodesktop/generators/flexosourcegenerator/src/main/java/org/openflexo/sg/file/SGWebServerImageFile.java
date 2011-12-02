@@ -27,7 +27,6 @@ import org.openflexo.foundation.sg.SourceRepository;
 import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class SGWebServerImageFile extends AbstractCGFile {
 
 	public SGWebServerImageFile(GeneratedSourcesBuilder builder) {

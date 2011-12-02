@@ -24,7 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.utils.FlexoIndexManager;
@@ -40,343 +39,314 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
 /**
- * A PortRegistery is attached to a FlexoProcess and contains all the ports used
- * in the context of SubProcesses
+ * A PortRegistery is attached to a FlexoProcess and contains all the ports used in the context of SubProcesses
  * 
  * @author sguerin
  * 
  */
-public final class PortRegistery extends WKFObject implements InspectableObject, LevelledObject, DeletableObject
-{
+public final class PortRegistery extends WKFObject implements InspectableObject, LevelledObject, DeletableObject {
 
-    private static final Logger logger = Logger.getLogger(PortRegistery.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(PortRegistery.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    private Vector<FlexoPort> _newPorts;
-    private Vector<FlexoPort> _deletePorts;
-    private Vector<FlexoPort> _inPorts;
-    private Vector<FlexoPort> _inOutPorts;
-    private Vector<FlexoPort> _outPorts;
+	private Vector<FlexoPort> _newPorts;
+	private Vector<FlexoPort> _deletePorts;
+	private Vector<FlexoPort> _inPorts;
+	private Vector<FlexoPort> _inOutPorts;
+	private Vector<FlexoPort> _outPorts;
 
-    //protected boolean _isVisible = false;
+	// protected boolean _isVisible = false;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public PortRegistery(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public PortRegistery(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public PortRegistery(FlexoProcess process)
-    {
-        super(process);
-        _newPorts = new Vector<FlexoPort>();
-        _deletePorts = new Vector<FlexoPort>();
-        _inPorts = new Vector<FlexoPort>();
-        _inOutPorts = new Vector<FlexoPort>();
-        _outPorts = new Vector<FlexoPort>();
-    }
+	/**
+	 * Default constructor
+	 */
+	public PortRegistery(FlexoProcess process) {
+		super(process);
+		_newPorts = new Vector<FlexoPort>();
+		_deletePorts = new Vector<FlexoPort>();
+		_inPorts = new Vector<FlexoPort>();
+		_inOutPorts = new Vector<FlexoPort>();
+		_outPorts = new Vector<FlexoPort>();
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getProcess().getFullyQualifiedName() + ".PORT_REGISTERY";
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return getProcess().getFullyQualifiedName() + ".PORT_REGISTERY";
+	}
 
-    @Override
-	public String getName(){
-    	return FlexoLocalization.localizedForKey("port_registery");
-    }
-    
-    /**
-     * Return a Vector of all embedded WKFObjects
-     * 
-     * @return a Vector of WKFObject instances
-     */
-    @Override
-	public Vector<WKFObject> getAllEmbeddedWKFObjects()
-    {
-        Vector<WKFObject> returned = new Vector<WKFObject>();
-        returned.add(this);
-        for (FlexoPort p : getAllPorts()) returned.addAll(p.getAllEmbeddedWKFObjects());
-        /*returned.addAll(getNewPorts());
-        returned.addAll(getDeletePorts());
-        returned.addAll(getInPorts());
-        returned.addAll(getInOutPorts());
-        returned.addAll(getOutPorts());*/
-        return returned;
-    }
+	@Override
+	public String getName() {
+		return FlexoLocalization.localizedForKey("port_registery");
+	}
 
-    public void addToPorts(FlexoPort aPort)
-    {
-        if (aPort instanceof NewPort) {
-            addToNewPorts((NewPort) aPort);
-        } else if (aPort instanceof DeletePort) {
-            addToDeletePorts((DeletePort) aPort);
-        } else if (aPort instanceof InPort) {
-            addToInPorts((InPort) aPort);
-        } else if (aPort instanceof InOutPort) {
-            addToInOutPorts((InOutPort) aPort);
-        } else if (aPort instanceof OutPort) {
-            addToOutPorts((OutPort) aPort);
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Unexpected value in addToPorts()");
-        }
-    }
+	/**
+	 * Return a Vector of all embedded WKFObjects
+	 * 
+	 * @return a Vector of WKFObject instances
+	 */
+	@Override
+	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
+		Vector<WKFObject> returned = new Vector<WKFObject>();
+		returned.add(this);
+		for (FlexoPort p : getAllPorts()) {
+			returned.addAll(p.getAllEmbeddedWKFObjects());
+		}
+		/*returned.addAll(getNewPorts());
+		returned.addAll(getDeletePorts());
+		returned.addAll(getInPorts());
+		returned.addAll(getInOutPorts());
+		returned.addAll(getOutPorts());*/
+		return returned;
+	}
 
-    public void removeFromPorts(FlexoPort aPort)
-    {
-        if (aPort instanceof NewPort) {
-            removeFromNewPorts((NewPort) aPort);
-        } else if (aPort instanceof DeletePort) {
-            removeFromDeletePorts((DeletePort) aPort);
-        } else if (aPort instanceof InPort) {
-            removeFromInPorts((InPort) aPort);
-        } else if (aPort instanceof InOutPort) {
-            removeFromInOutPorts((InOutPort) aPort);
-        } else if (aPort instanceof OutPort) {
-            removeFromOutPorts((OutPort) aPort);
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Unexpected value in removeFromPorts()");
-        }
-    }
+	public void addToPorts(FlexoPort aPort) {
+		if (aPort instanceof NewPort) {
+			addToNewPorts((NewPort) aPort);
+		} else if (aPort instanceof DeletePort) {
+			addToDeletePorts((DeletePort) aPort);
+		} else if (aPort instanceof InPort) {
+			addToInPorts((InPort) aPort);
+		} else if (aPort instanceof InOutPort) {
+			addToInOutPorts((InOutPort) aPort);
+		} else if (aPort instanceof OutPort) {
+			addToOutPorts((OutPort) aPort);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Unexpected value in addToPorts()");
+			}
+		}
+	}
 
-    private boolean insertPort(Vector<FlexoPort> portList, FlexoPort aPort)
-    {
-        if (!portList.contains(aPort)) {
-            portList.add(aPort);
-            aPort.setPortRegistery(this);
-            if (!isDeserializing()) {
-              //  aPort.setLocation(new Point((getAllPorts().size()-1) * 80 + 20, 20));
-            }
-            setChanged();
-            notifyObservers(new PortInserted(aPort));
-             if (getProcess()!=null)
-            	getProcess().clearCachedObjects();
-            return true;
-        } else {
-            return false;
-        }
-    }
+	public void removeFromPorts(FlexoPort aPort) {
+		if (aPort instanceof NewPort) {
+			removeFromNewPorts((NewPort) aPort);
+		} else if (aPort instanceof DeletePort) {
+			removeFromDeletePorts((DeletePort) aPort);
+		} else if (aPort instanceof InPort) {
+			removeFromInPorts((InPort) aPort);
+		} else if (aPort instanceof InOutPort) {
+			removeFromInOutPorts((InOutPort) aPort);
+		} else if (aPort instanceof OutPort) {
+			removeFromOutPorts((OutPort) aPort);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Unexpected value in removeFromPorts()");
+			}
+		}
+	}
 
-    private void removePort(Vector portList, FlexoPort aPort)
-    {
-        if (portList.contains(aPort)) {
-            portList.remove(aPort);
-            setChanged();
-            notifyObservers(new PortRemoved(aPort));
-            aPort.setPortRegistery(null);
-            if (getProcess()!=null)
-            	getProcess().clearCachedObjects();
-        }
-    }
+	private boolean insertPort(Vector<FlexoPort> portList, FlexoPort aPort) {
+		if (!portList.contains(aPort)) {
+			portList.add(aPort);
+			aPort.setPortRegistery(this);
+			if (!isDeserializing()) {
+				// aPort.setLocation(new Point((getAllPorts().size()-1) * 80 + 20, 20));
+			}
+			setChanged();
+			notifyObservers(new PortInserted(aPort));
+			if (getProcess() != null) {
+				getProcess().clearCachedObjects();
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    public Vector<FlexoPort> getDeletePorts()
-    {
-        return _deletePorts;
-    }
+	private void removePort(Vector portList, FlexoPort aPort) {
+		if (portList.contains(aPort)) {
+			portList.remove(aPort);
+			setChanged();
+			notifyObservers(new PortRemoved(aPort));
+			aPort.setPortRegistery(null);
+			if (getProcess() != null) {
+				getProcess().clearCachedObjects();
+			}
+		}
+	}
 
-    public void setDeletePorts(Vector<FlexoPort> ports)
-    {
-        _deletePorts = ports;
-    }
+	public Vector<FlexoPort> getDeletePorts() {
+		return _deletePorts;
+	}
 
-    public void addToDeletePorts(DeletePort aPort)
-    {
-        insertPort(_deletePorts, aPort);
-    }
+	public void setDeletePorts(Vector<FlexoPort> ports) {
+		_deletePorts = ports;
+	}
 
-    public void removeFromDeletePorts(DeletePort aPort)
-    {
-        removePort(_deletePorts, aPort);
-    }
+	public void addToDeletePorts(DeletePort aPort) {
+		insertPort(_deletePorts, aPort);
+	}
 
-    public Vector<FlexoPort> getInPorts()
-    {
-        return _inPorts;
-    }
+	public void removeFromDeletePorts(DeletePort aPort) {
+		removePort(_deletePorts, aPort);
+	}
 
-    public void setInPorts(Vector<FlexoPort> ports)
-    {
-        _inPorts = ports;
-    }
+	public Vector<FlexoPort> getInPorts() {
+		return _inPorts;
+	}
 
-    public void addToInPorts(InPort aPort)
-    {
-        insertPort(_inPorts, aPort);
-    }
+	public void setInPorts(Vector<FlexoPort> ports) {
+		_inPorts = ports;
+	}
 
-    public void removeFromInPorts(InPort aPort)
-    {
-        removePort(_inPorts, aPort);
-    }
+	public void addToInPorts(InPort aPort) {
+		insertPort(_inPorts, aPort);
+	}
 
-    public Vector<FlexoPort> getInOutPorts()
-    {
-        return _inOutPorts;
-    }
+	public void removeFromInPorts(InPort aPort) {
+		removePort(_inPorts, aPort);
+	}
 
-    public void setInOutPorts(Vector<FlexoPort> ports)
-    {
-        _inOutPorts = ports;
-    }
+	public Vector<FlexoPort> getInOutPorts() {
+		return _inOutPorts;
+	}
 
-    public void addToInOutPorts(InOutPort aPort)
-    {
-        insertPort(_inOutPorts, aPort);
-    }
+	public void setInOutPorts(Vector<FlexoPort> ports) {
+		_inOutPorts = ports;
+	}
 
-    public void removeFromInOutPorts(InOutPort aPort)
-    {
-        removePort(_inOutPorts, aPort);
-    }
+	public void addToInOutPorts(InOutPort aPort) {
+		insertPort(_inOutPorts, aPort);
+	}
 
-    public Vector<FlexoPort> getNewPorts()
-    {
-        return _newPorts;
-    }
+	public void removeFromInOutPorts(InOutPort aPort) {
+		removePort(_inOutPorts, aPort);
+	}
 
-    public void setNewPorts(Vector<FlexoPort> ports)
-    {
-        _newPorts = ports;
-    }
+	public Vector<FlexoPort> getNewPorts() {
+		return _newPorts;
+	}
 
-    public void addToNewPorts(NewPort aPort)
-    {
-        insertPort(_newPorts, aPort);
-    }
+	public void setNewPorts(Vector<FlexoPort> ports) {
+		_newPorts = ports;
+	}
 
-    public void removeFromNewPorts(NewPort aPort)
-    {
-        removePort(_newPorts, aPort);
-    }
+	public void addToNewPorts(NewPort aPort) {
+		insertPort(_newPorts, aPort);
+	}
 
-    public Vector<FlexoPort> getOutPorts()
-    {
-        return _outPorts;
-    }
+	public void removeFromNewPorts(NewPort aPort) {
+		removePort(_newPorts, aPort);
+	}
 
-    public void setOutPorts(Vector<FlexoPort> ports)
-    {
-        _outPorts = ports;
-    }
+	public Vector<FlexoPort> getOutPorts() {
+		return _outPorts;
+	}
 
-    public void addToOutPorts(OutPort aPort)
-    {
-        insertPort(_outPorts, aPort);
-    }
+	public void setOutPorts(Vector<FlexoPort> ports) {
+		_outPorts = ports;
+	}
 
-    public void removeFromOutPorts(OutPort aPort)
-    {
-        removePort(_outPorts, aPort);
-    }
+	public void addToOutPorts(OutPort aPort) {
+		insertPort(_outPorts, aPort);
+	}
 
-    public FlexoPort portWithName(String name)
-    {
-        for (Enumeration e = getNewPorts().elements(); e.hasMoreElements();) {
-            FlexoPort port = (FlexoPort) e.nextElement();
-            if (port.getName().equals(name)) {
-                return port;
-            }
-        }
-        for (Enumeration e = getDeletePorts().elements(); e.hasMoreElements();) {
-            FlexoPort port = (FlexoPort) e.nextElement();
-            if (port.getName().equals(name)) {
-                return port;
-            }
-        }
-        for (Enumeration e = getInPorts().elements(); e.hasMoreElements();) {
-            FlexoPort port = (FlexoPort) e.nextElement();
-            if (port.getName().equals(name)) {
-                return port;
-            }
-        }
-        for (Enumeration e = getInOutPorts().elements(); e.hasMoreElements();) {
-            FlexoPort port = (FlexoPort) e.nextElement();
-            if (port.getName().equals(name)) {
-                return port;
-            }
-        }
-        for (Enumeration e = getOutPorts().elements(); e.hasMoreElements();) {
-            FlexoPort port = (FlexoPort) e.nextElement();
-            if (port.getName().equals(name)) {
-                return port;
-            }
-        }
-        return null;
-    }
+	public void removeFromOutPorts(OutPort aPort) {
+		removePort(_outPorts, aPort);
+	}
 
-    /**
-     * Return all contained ports
-     * 
-     * @return a Vector of FlexoPort
-     */
-    public Vector<FlexoPort> getAllPorts()
-    {
-        Vector<FlexoPort> returned = new Vector<FlexoPort>();
-        returned.addAll(getNewPorts());
-        returned.addAll(getDeletePorts());
-        returned.addAll(getInPorts());
-        returned.addAll(getInOutPorts());
-        returned.addAll(getOutPorts());
-        return returned;
-    }
+	public FlexoPort portWithName(String name) {
+		for (Enumeration e = getNewPorts().elements(); e.hasMoreElements();) {
+			FlexoPort port = (FlexoPort) e.nextElement();
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		for (Enumeration e = getDeletePorts().elements(); e.hasMoreElements();) {
+			FlexoPort port = (FlexoPort) e.nextElement();
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		for (Enumeration e = getInPorts().elements(); e.hasMoreElements();) {
+			FlexoPort port = (FlexoPort) e.nextElement();
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		for (Enumeration e = getInOutPorts().elements(); e.hasMoreElements();) {
+			FlexoPort port = (FlexoPort) e.nextElement();
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		for (Enumeration e = getOutPorts().elements(); e.hasMoreElements();) {
+			FlexoPort port = (FlexoPort) e.nextElement();
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		return null;
+	}
 
-    public Enumeration<FlexoPort> getSortedPorts() {
-    	disableObserving();
-    	FlexoPort[]o = FlexoIndexManager.sortArray(getAllPorts().toArray(new FlexoPort[0]));
-    	enableObserving();
-        return ToolBox.getEnumeration(o);
-    }
-    
-    @Override
-    public final void delete() {
-    	super.delete();
-    	deleteObservers();
-    }
-        
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.WKF.PORT_REGISTERY_INSPECTOR;
-    }
+	/**
+	 * Return all contained ports
+	 * 
+	 * @return a Vector of FlexoPort
+	 */
+	public Vector<FlexoPort> getAllPorts() {
+		Vector<FlexoPort> returned = new Vector<FlexoPort>();
+		returned.addAll(getNewPorts());
+		returned.addAll(getDeletePorts());
+		returned.addAll(getInPorts());
+		returned.addAll(getInOutPorts());
+		returned.addAll(getOutPorts());
+		return returned;
+	}
 
-    @Override
-	public FlexoLevel getLevel()
-    {
-        return FlexoLevel.PORT;
-    }
+	public Enumeration<FlexoPort> getSortedPorts() {
+		disableObserving();
+		FlexoPort[] o = FlexoIndexManager.sortArray(getAllPorts().toArray(new FlexoPort[0]));
+		enableObserving();
+		return ToolBox.getEnumeration(o);
+	}
 
-    @Override
-	public Vector<WKFObject> getAllEmbeddedDeleted()
-    {
-        return getAllEmbeddedWKFObjects();
-    }
+	@Override
+	public final void delete() {
+		super.delete();
+		deleteObservers();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "port_registry";
-    }
-    
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WKF.PORT_REGISTERY_INSPECTOR;
+	}
+
+	@Override
+	public FlexoLevel getLevel() {
+		return FlexoLevel.PORT;
+	}
+
+	@Override
+	public Vector<WKFObject> getAllEmbeddedDeleted() {
+		return getAllEmbeddedWKFObjects();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "port_registry";
+	}
+
 }

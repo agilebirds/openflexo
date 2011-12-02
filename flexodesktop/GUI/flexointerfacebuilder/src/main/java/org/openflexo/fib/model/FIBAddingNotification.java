@@ -19,29 +19,22 @@
  */
 package org.openflexo.fib.model;
 
-
-public class FIBAddingNotification<T extends Object> extends FIBModelNotification<T>
-{
-	public FIBAddingNotification(Enum<?> parameterKey, T addedValue)
-	{
-		super(parameterKey.name(),null,addedValue);
+public class FIBAddingNotification<T extends Object> extends FIBModelNotification<T> {
+	public FIBAddingNotification(Enum<?> parameterKey, T addedValue) {
+		super(parameterKey.name(), null, addedValue);
 	}
-	
 
-	public FIBAddingNotification(String attributeName, T addedValue)
-	{
-		super(attributeName,null,addedValue);
+	public FIBAddingNotification(String attributeName, T addedValue) {
+		super(attributeName, null, addedValue);
 	}
-	
-	public T getAddedValue()
-	{
+
+	public T getAddedValue() {
 		return newValue();
 	}
-	
+
 	@Override
-	public String toString()
-	{
-		return "FIBAddingNotification of "+getClass().getSimpleName()+" "+getAttributeName()+" new: "+newValue();
+	public String toString() {
+		return "FIBAddingNotification of " + getClass().getSimpleName() + " " + getAttributeName() + " new: " + newValue();
 	}
-	
+
 }

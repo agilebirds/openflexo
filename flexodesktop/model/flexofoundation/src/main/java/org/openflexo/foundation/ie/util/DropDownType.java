@@ -30,149 +30,130 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
  * Represents type of dropdown (DROPDOWN,DOMAIN_KEY_VALUE)
  * 
  * @author sguerin
  * 
  */
-public abstract class DropDownType extends FlexoObject implements StringConvertable, ChoiceList
-{
+public abstract class DropDownType extends FlexoObject implements StringConvertable, ChoiceList {
 
-    private static final Logger logger = Logger.getLogger(DropDownType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DropDownType.class.getPackage().getName());
 
-    public static final DropDownType DROPDOWN = new NormalDropDownType();
+	public static final DropDownType DROPDOWN = new NormalDropDownType();
 
-    public static final DropDownType DOMAIN_KEY_VALUE = new DomainKeyValueType();
-    
-    public static final DropDownType STATUS_LIST_TYPE = new StatusListType();
+	public static final DropDownType DOMAIN_KEY_VALUE = new DomainKeyValueType();
 
-    public static final DropDownType DBOBJECTS_LIST_TYPE = new DBObjectsListType();
+	public static final DropDownType STATUS_LIST_TYPE = new StatusListType();
 
-    public static final StringEncoder.Converter<DropDownType> dropdownTypeConverter = new Converter<DropDownType>(DropDownType.class) {
+	public static final DropDownType DBOBJECTS_LIST_TYPE = new DBObjectsListType();
 
-        @Override
-		public DropDownType convertFromString(String value)
-        {
-            return get(value);
-        }
+	public static final StringEncoder.Converter<DropDownType> dropdownTypeConverter = new Converter<DropDownType>(DropDownType.class) {
 
-        @Override
-		public String convertToString(DropDownType value)
-        {
-            return value.getName();
-        }
+		@Override
+		public DropDownType convertFromString(String value) {
+			return get(value);
+		}
 
-    };
+		@Override
+		public String convertToString(DropDownType value) {
+			return value.getName();
+		}
 
-    public static class NormalDropDownType extends DropDownType
-    {
-        NormalDropDownType()
-        {
-        }
+	};
 
-        @Override
-		public String getName()
-        {
-            return "DropDown";
-        }
-    }
+	public static class NormalDropDownType extends DropDownType {
+		NormalDropDownType() {
+		}
 
-    public static class DomainKeyValueType extends DropDownType
-    {
-        DomainKeyValueType()
-        {
-        }
+		@Override
+		public String getName() {
+			return "DropDown";
+		}
+	}
 
-        @Override
-		public String getName()
-        {
-            return "DomainKeyValue";
-        }
-    }
-    
-    public static class StatusListType extends DropDownType
-    {
-    	StatusListType()
-        {
-        }
+	public static class DomainKeyValueType extends DropDownType {
+		DomainKeyValueType() {
+		}
 
-        @Override
-		public String getName()
-        {
-            return "StatusList";
-        }
-    }
-    
-    public static class DBObjectsListType extends DropDownType
-    {
-    	DBObjectsListType()
-        {
-        }
+		@Override
+		public String getName() {
+			return "DomainKeyValue";
+		}
+	}
 
-        @Override
-		public String getName()
-        {
-            return "List from DB";
-        }
-    }
+	public static class StatusListType extends DropDownType {
+		StatusListType() {
+		}
 
-    public abstract String getName();
+		@Override
+		public String getName() {
+			return "StatusList";
+		}
+	}
 
-    public static DropDownType get(String typeName)
-    {
-        for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
-            DropDownType temp = (DropDownType) e.nextElement();
-            if (temp.getName().equals(typeName)) {
-                return temp;
-            }
-        }
+	public static class DBObjectsListType extends DropDownType {
+		DBObjectsListType() {
+		}
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find ListType named " + typeName);
-        return null;
-    }
+		@Override
+		public String getName() {
+			return "List from DB";
+		}
+	}
 
-    public boolean isDBList() {
-    	return this == DBOBJECTS_LIST_TYPE;
-    }
-    
-    public boolean isDKV() {
-    	return this == DOMAIN_KEY_VALUE;
-    }
-    
-    public boolean isStatus() {
-    	return this == STATUS_LIST_TYPE;
-    }
-    
-    public boolean isNormal() {
-    	return this == DROPDOWN;
-    }
-    
-    private static final Vector<DropDownType> _availableValues = new Vector<DropDownType>();
+	public abstract String getName();
 
-    @Override
-	public Vector getAvailableValues()
-    {
-        if (_availableValues.size()==0) {
-            _availableValues.add(DROPDOWN);
-            _availableValues.add(DOMAIN_KEY_VALUE);
-            _availableValues.add(STATUS_LIST_TYPE);
-            _availableValues.add(DBOBJECTS_LIST_TYPE);
-        }
-        return _availableValues;
-    }
+	public static DropDownType get(String typeName) {
+		for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
+			DropDownType temp = (DropDownType) e.nextElement();
+			if (temp.getName().equals(typeName)) {
+				return temp;
+			}
+		}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return dropdownTypeConverter;
-    }
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Could not find ListType named " + typeName);
+		}
+		return null;
+	}
 
-    public static Vector availableValues()
-    {
-        return DROPDOWN.getAvailableValues();
-    }
+	public boolean isDBList() {
+		return this == DBOBJECTS_LIST_TYPE;
+	}
+
+	public boolean isDKV() {
+		return this == DOMAIN_KEY_VALUE;
+	}
+
+	public boolean isStatus() {
+		return this == STATUS_LIST_TYPE;
+	}
+
+	public boolean isNormal() {
+		return this == DROPDOWN;
+	}
+
+	private static final Vector<DropDownType> _availableValues = new Vector<DropDownType>();
+
+	@Override
+	public Vector getAvailableValues() {
+		if (_availableValues.size() == 0) {
+			_availableValues.add(DROPDOWN);
+			_availableValues.add(DOMAIN_KEY_VALUE);
+			_availableValues.add(STATUS_LIST_TYPE);
+			_availableValues.add(DBOBJECTS_LIST_TYPE);
+		}
+		return _availableValues;
+	}
+
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return dropdownTypeConverter;
+	}
+
+	public static Vector availableValues() {
+		return DROPDOWN.getAvailableValues();
+	}
 
 }

@@ -21,25 +21,22 @@ package org.openflexo.foundation.ie;
 
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 
-
 /**
- * Interface for objects that references a component instance.
- * Note that a component instance owner has 3 notifications to forward
- * to its component instance(s):
- * 1) When the owner changes of resource data--> updateDependancies()
- * 2) When the owner is deleted
- * 3) When the component instance is removed from the owner
+ * Interface for objects that references a component instance. Note that a component instance owner has 3 notifications to forward to its
+ * component instance(s): 1) When the owner changes of resource data--> updateDependancies() 2) When the owner is deleted 3) When the
+ * component instance is removed from the owner
+ * 
  * @author gpolet
- *
+ * 
  */
 public interface ComponentInstanceOwner {
 
-    public long getFlexoID();
-    
-    public void setChanged();
+	public long getFlexoID();
 
-    public String getFullyQualifiedName();
+	public void setChanged();
 
-    public abstract XMLStorageResourceData getXMLResourceData();
+	public String getFullyQualifiedName();
+
+	public abstract XMLStorageResourceData getXMLResourceData();
 
 }

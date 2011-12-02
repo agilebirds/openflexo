@@ -30,81 +30,77 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoReusableComponentResource;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  * @deprecated use ReusableComponent instead
  */
 @Deprecated
-public class SingleWidgetComponentDefinition extends PartialComponentDefinition implements Serializable
-{
-    private static final Logger logger = Logger.getLogger(TabComponentDefinition.class.getPackage().getName());
+public class SingleWidgetComponentDefinition extends PartialComponentDefinition implements Serializable {
+	private static final Logger logger = Logger.getLogger(TabComponentDefinition.class.getPackage().getName());
 
-    /**
-     * Constructor used during deserialization
-     * 
-     * @throws DuplicateResourceException
-     */
-    public SingleWidgetComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException
-    {
-        this(null, builder.componentLibrary, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 * 
+	 * @throws DuplicateResourceException
+	 */
+	public SingleWidgetComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException {
+		this(null, builder.componentLibrary, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public SingleWidgetComponentDefinition(FlexoComponentLibrary componentLibrary)
-    {
-        super(componentLibrary);
-    }
+	public SingleWidgetComponentDefinition(FlexoComponentLibrary componentLibrary) {
+		super(componentLibrary);
+	}
 
-    public SingleWidgetComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder, FlexoProject prj,
-            boolean checkUnicity) throws DuplicateResourceException
-    {
-        super(aComponentName, componentLibrary, aFolder, prj);
-        if (checkUnicity) {
-            String resourceIdentifier = FlexoReusableComponentResource.resourceIdentifierForName(aComponentName);
-            if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
-                aFolder.removeFromComponents(this);
-                throw new DuplicateResourceException(resourceIdentifier);
-            }
-        }
-    }
+	public SingleWidgetComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject prj, boolean checkUnicity) throws DuplicateResourceException {
+		super(aComponentName, componentLibrary, aFolder, prj);
+		if (checkUnicity) {
+			String resourceIdentifier = FlexoReusableComponentResource.resourceIdentifierForName(aComponentName);
+			if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
+				aFolder.removeFromComponents(this);
+				throw new DuplicateResourceException(resourceIdentifier);
+			}
+		}
+	}
 
-    public SingleWidgetComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder, FlexoProject prj)
-            throws DuplicateResourceException
-    {
-        this(aComponentName, componentLibrary, aFolder, prj, true);
-    }
+	public SingleWidgetComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject prj) throws DuplicateResourceException {
+		this(aComponentName, componentLibrary, aFolder, prj, true);
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "single_widget_component_definition";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "single_widget_component_definition";
+	}
 
 	@Override
 	public IEWOComponent createNewComponent() {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("SingleWigetComponentDefinition is deprecated");
+		}
 		return null;
 	}
 
 	@Override
 	public FlexoComponentResource getComponentResource(boolean createIfNotExists) {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("SingleWigetComponentDefinition is deprecated");
+		}
 		return null;
 	}
 
 	@Override
 	public String getInspectorName() {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("SingleWigetComponentDefinition is deprecated");
+		}
 		return null;
 	}
-    
+
 }

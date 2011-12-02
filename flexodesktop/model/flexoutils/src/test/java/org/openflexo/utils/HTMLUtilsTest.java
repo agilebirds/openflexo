@@ -19,29 +19,25 @@
  */
 package org.openflexo.utils;
 
-import org.openflexo.toolbox.HTMLUtils;
-
 import junit.framework.TestCase;
+
+import org.openflexo.toolbox.HTMLUtils;
 
 public class HTMLUtilsTest extends TestCase {
 
 	public void testEmptyParagraph() {
-		assertTrue(HTMLUtils.isEmtpyParagraph(" <p>\r\n" + 
-				"\r\n" + 
-				"</p>\r\n" + 
-				"\r\n" + 
-				""));
-		assertFalse(HTMLUtils.isEmtpyParagraph(" <p>a\r\n" + 
-				"\r\n" + 
-				"</p>\r\n" + 
-				"\r\n" + 
-		""));
+		assertTrue(HTMLUtils.isEmtpyParagraph(" <p>\r\n" + "\r\n" + "</p>\r\n" + "\r\n" + ""));
+		assertFalse(HTMLUtils.isEmtpyParagraph(" <p>a\r\n" + "\r\n" + "</p>\r\n" + "\r\n" + ""));
 	}
-	
+
 	public void testExtractSourceFromEmbedded() {
 		String src = "http://www.youtube.com/v/NmmELsWBscM&hl=en&fs=1";
-		String html = "<object width=\"425\" height=\"344\"><param name=\"movie\" value=\""+src+"\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\""+src+"\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"425\" height=\"344\"></embed></object>";
+		String html = "<object width=\"425\" height=\"344\"><param name=\"movie\" value=\""
+				+ src
+				+ "\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\""
+				+ src
+				+ "\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"425\" height=\"344\"></embed></object>";
 		assertEquals(src, HTMLUtils.extractSourceFromEmbeddedTag(html));
 	}
-	
+
 }

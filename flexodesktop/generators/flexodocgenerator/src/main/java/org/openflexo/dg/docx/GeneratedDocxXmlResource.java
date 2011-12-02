@@ -21,15 +21,12 @@ package org.openflexo.dg.docx;
 
 import org.openflexo.foundation.cg.generator.GeneratedCodeResult;
 
-public class GeneratedDocxXmlResource extends GeneratedCodeResult
-{
-	public GeneratedDocxXmlResource(String name)
-	{
+public class GeneratedDocxXmlResource extends GeneratedCodeResult {
+	public GeneratedDocxXmlResource(String name) {
 		super(name);
 	}
-	
-	public void addCode(DocxTemplatesEnum template, String content)
-	{
+
+	public void addCode(DocxTemplatesEnum template, String content) {
 		addCode(template.toString(), content);
 	}
 }

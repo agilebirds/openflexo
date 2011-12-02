@@ -29,23 +29,20 @@ import org.openflexo.logging.FlexoLogger;
 /**
  * Abstract class representing a component that can be embedded in a table
  * 
- * This class has no purpose anymore but is still kept for backward
- * compatibility and for controllers that still expect it. (note by GPO)
+ * This class has no purpose anymore but is still kept for backward compatibility and for controllers that still expect it. (note by GPO)
  * 
  * @author bmangez
  */
 public abstract class AbstractInnerTableWidget extends IEWidget {
-	
+
 	@SuppressWarnings("unused")
-	private static final Logger logger = FlexoLogger
-			.getLogger(AbstractInnerTableWidget.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(AbstractInnerTableWidget.class.getPackage().getName());
 
 	/**
 	 * @param parent
 	 * 
 	 */
-	public AbstractInnerTableWidget(IEWOComponent woComponent, IEObject parent,
-			FlexoProject prj) {
+	public AbstractInnerTableWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
 		super(woComponent, parent, prj);
 	}
 

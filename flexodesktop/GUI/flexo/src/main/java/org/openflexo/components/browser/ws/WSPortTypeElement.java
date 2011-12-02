@@ -19,46 +19,41 @@
  */
 package org.openflexo.components.browser.ws;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ws.WSPortType;
 
-
 /**
- * NOT USED FOR THE MOMENT. A portType is directly represented as a ServiceInterface;
- * in a ServiceInterfaceElement.
+ * NOT USED FOR THE MOMENT. A portType is directly represented as a ServiceInterface; in a ServiceInterfaceElement.
+ * 
  * @author dvanvyve
- *
+ * 
  */
-public class WSPortTypeElement extends BrowserElement
-{
+public class WSPortTypeElement extends BrowserElement {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public WSPortTypeElement(WSPortType object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.WS_PORTTYPE, browser, parent);
-    }
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public WSPortTypeElement(WSPortType object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.WS_PORTTYPE, browser, parent);
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
 
-    }
+	}
 
-    @Override
+	@Override
 	public String getName() {
-    	// TODO Auto-generated method stub
-    	return ((WSPortType)getObject()).getName();
-    }
+		// TODO Auto-generated method stub
+		return ((WSPortType) getObject()).getName();
+	}
 }

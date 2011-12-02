@@ -27,17 +27,15 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of FPSModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class FPSIconLibrary extends IconLibrary {
 
 	// Module icons
-	public static final ImageIcon FPS_ACTIVE_ICON = new ImageIconResource("Icons/FPS/FPS_A_Small.gif");
-	public static final ImageIcon FPS_UNACTIVE_ICON = new ImageIconResource("Icons/FPS/FPS_NA_Small.gif");
-	public static final ImageIcon FPS_SELECTED_ICON = new ImageIconResource("Icons/FPS/FPS_S_Small.gif");
-	public static final ImageIcon FPS_BIG_ACTIVE_ICON = new ImageIconResource("Icons/FPS/FPS_A.gif");
-	public static final ImageIcon FPS_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/FPS/FPS_NA.gif");
-	public static final ImageIcon FPS_BIG_SELECTED_ICON = new ImageIconResource("Icons/FPS/FPS_S.gif");
+	public static final ImageIcon FPS_SMALL_ICON = new ImageIconResource("Icons/FPS/module-fps-16.png");
+	public static final ImageIcon FPS_MEDIUM_ICON = new ImageIconResource("Icons/FPS/module-fps-32.png");
+	public static final ImageIcon FPS_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/FPS/module-fps-hover-32.png");
+	public static final ImageIcon FPS_BIG_ICON = new ImageIconResource("Icons/FPS/module-fps-hover-64.png");
 
 	// Editor icons
 	public static final ImageIcon FPS_MARK_AS_MERGED_ICON = new ImageIconResource("Icons/FPS/MarkAsMergedIcon.gif");

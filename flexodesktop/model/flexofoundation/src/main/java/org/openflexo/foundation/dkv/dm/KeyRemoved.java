@@ -19,23 +19,20 @@
  */
 package org.openflexo.foundation.dkv.dm;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class KeyRemoved extends DKVDataModification
-{
+public class KeyRemoved extends DKVDataModification {
 
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public KeyRemoved(Object oldValue)
-    {
-        super(-1, "keys", oldValue, null);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public KeyRemoved(Object oldValue) {
+		super(-1, "keys", oldValue, null);
+	}
 
 }

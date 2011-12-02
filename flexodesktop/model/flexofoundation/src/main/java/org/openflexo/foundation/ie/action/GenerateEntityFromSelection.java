@@ -34,105 +34,100 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.wizards.EntityFromWidgets;
 import org.openflexo.foundation.ie.wizards.PropertyProposal;
 
+public class GenerateEntityFromSelection extends FlexoAction<GenerateEntityFromSelection, FlexoModelObject, FlexoModelObject> {
 
-public class GenerateEntityFromSelection extends FlexoAction<GenerateEntityFromSelection,FlexoModelObject,FlexoModelObject>
-{
+	private static final Logger logger = Logger.getLogger(GenerateComponentScreenshot.class.getPackage().getName());
+	private boolean _useDMEOEntity;
 
-    private static final Logger logger = Logger.getLogger(GenerateComponentScreenshot.class.getPackage().getName());
-    private boolean _useDMEOEntity;
-	
-    public static FlexoActionType<GenerateEntityFromSelection,FlexoModelObject,FlexoModelObject> actionType = new FlexoActionType<GenerateEntityFromSelection,FlexoModelObject,FlexoModelObject> ("generate_entity",FlexoActionType.editGroup,FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<GenerateEntityFromSelection, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<GenerateEntityFromSelection, FlexoModelObject, FlexoModelObject>(
+			"generate_entity", FlexoActionType.editGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public GenerateEntityFromSelection makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new GenerateEntityFromSelection(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public GenerateEntityFromSelection makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new GenerateEntityFromSelection(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return object!=null;
-        }
-                
-    };
-    
-    private boolean _hasBeenRegenerated;
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object != null;
+		}
+
+	};
+
+	private boolean _hasBeenRegenerated;
 	private String _eoModelName;
 	private List<PropertyProposal> _selectedProposal;
 	private String _eoEntityName;
 	private String _projectDateBaseRepositoryName;
 
-    GenerateEntityFromSelection (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	GenerateEntityFromSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public List<FlexoModelObject> getSelection() 
-    {
-    	ArrayList<FlexoModelObject> reply = new ArrayList<FlexoModelObject>();
-    	if(getFocusedObject()!=null)reply.add(getFocusedObject());
-    	if(getGlobalSelection()!=null && getGlobalSelection().size()>0){
-    		reply.addAll(getGlobalSelection());
-    	}
-    	return reply;
-    }
-    
-    
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        if (getSelection().size()>0) {
-            try {
-				generator.justDoIt(getProjectDatabaseRepositoryName(), getEOModelName(), getEOEntityName(), getSelectedProposals(), getEditor());
+	public List<FlexoModelObject> getSelection() {
+		ArrayList<FlexoModelObject> reply = new ArrayList<FlexoModelObject>();
+		if (getFocusedObject() != null) {
+			reply.add(getFocusedObject());
+		}
+		if (getGlobalSelection() != null && getGlobalSelection().size() > 0) {
+			reply.addAll(getGlobalSelection());
+		}
+		return reply;
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		if (getSelection().size() > 0) {
+			try {
+				generator.justDoIt(getProjectDatabaseRepositoryName(), getEOModelName(), getEOEntityName(), getSelectedProposals(),
+						getEditor());
 			} catch (InvalidNameException e) {
 				e.printStackTrace();
 				throw new FlexoException(e.getMessage());
 			}
-        }
-        else {
-            logger.warning("Selection is empty !");
-        }
-    }
+		} else {
+			logger.warning("Selection is empty !");
+		}
+	}
 
-    public String getEOModelName() {
+	public String getEOModelName() {
 		return _eoModelName;
 	}
 
-    public List<PropertyProposal> getSelectedProposals() {
+	public List<PropertyProposal> getSelectedProposals() {
 		return _selectedProposal;
 	}
 
-    public String getEOEntityName() {
+	public String getEOEntityName() {
 		return _eoEntityName;
 	}
 
-    public String getProjectDatabaseRepositoryName() {
+	public String getProjectDatabaseRepositoryName() {
 		return _projectDateBaseRepositoryName;
 	}
-    
-    public void setEOModelName(String value) {
+
+	public void setEOModelName(String value) {
 		_eoModelName = value;
 	}
 
-    public void setSelectedProposals(List<PropertyProposal> value) {
+	public void setSelectedProposals(List<PropertyProposal> value) {
 		_selectedProposal = value;
 	}
 
-    public void setEOEntityName(String value) {
+	public void setEOEntityName(String value) {
 		_eoEntityName = value;
 	}
 
-    public void setProjectDatabaseRepositoryName(String value) {
+	public void setProjectDatabaseRepositoryName(String value) {
 		_projectDateBaseRepositoryName = value;
 	}
 
@@ -140,19 +135,22 @@ public class GenerateEntityFromSelection extends FlexoAction<GenerateEntityFromS
 		return _useDMEOEntity;
 	}
 
-    public void setUseDMEOEntity(boolean value){
-    	_useDMEOEntity = value;
-    }
-    private EntityFromWidgets generator;
-    public EntityFromWidgets getEntityFromWidgets(){
-    	return generator;
-    }
-    public void setEntityFromWidgets(EntityFromWidgets entityFromWidgets){
-    	generator = entityFromWidgets;
-    }
-	public boolean hasBeenRegenerated() 
-    {
-        return _hasBeenRegenerated;
-    }
+	public void setUseDMEOEntity(boolean value) {
+		_useDMEOEntity = value;
+	}
+
+	private EntityFromWidgets generator;
+
+	public EntityFromWidgets getEntityFromWidgets() {
+		return generator;
+	}
+
+	public void setEntityFromWidgets(EntityFromWidgets entityFromWidgets) {
+		generator = entityFromWidgets;
+	}
+
+	public boolean hasBeenRegenerated() {
+		return _hasBeenRegenerated;
+	}
 
 }

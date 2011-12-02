@@ -28,9 +28,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.DocType;
+import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
@@ -41,7 +41,6 @@ import org.openflexo.foundation.xml.FlexoTOCBuilder;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.XMLDecoder;
 
-
 public class TOCRepository extends TOCEntry {
 
 	private DocType docType;
@@ -50,51 +49,54 @@ public class TOCRepository extends TOCEntry {
 
 	private String docTitle;
 
-    private String customer;
+	private String customer;
 
-    private String version;
+	private String version;
 
-    private String author;
+	private String author;
 
-    private String reviewer;
+	private String reviewer;
 
-    private String systemName;
+	private String systemName;
 
-    private String systemVersion;
+	private String systemVersion;
 
-    private boolean useEmbeddedEvents = true;
+	private boolean useEmbeddedEvents = true;
 
-    private ImageFile logo;
+	private ImageFile logo;
 
 	public TOCRepository(TOCData data, DocType docType, TOCRepository tocTemplate) {
 		this(data);
-		this.docType = docType!=null?docType: data.getProject().getDocTypes().firstElement();
-		if(tocTemplate==null){
+		this.docType = docType != null ? docType : data.getProject().getDocTypes().get(0);
+		if (tocTemplate == null) {
 			TOCRepository defaultTocTemplate = null;
-			if(docType.getName().equals(DefaultDocType.Technical.name())){
+			if (docType.getName().equals(DefaultDocType.Technical.name())) {
 				defaultTocTemplate = loadTOCTemplate("SRS");
-			}else{
+			} else {
 				defaultTocTemplate = loadTOCTemplate("BRS");
 			}
 			createEntriesFromTemplate(defaultTocTemplate);
+		} else {
+			createEntriesFromTemplate(tocTemplate);
 		}
-		else createEntriesFromTemplate(tocTemplate);
 	}
-	
-	private TOCRepository loadTOCTemplate(String templateName){
-		String tocTemplateFileName = templateName+".xml";
-		File tocTemplateFile = new FileResource("Config/TOCTemplates/"+tocTemplateFileName);
+
+	private TOCRepository loadTOCTemplate(String templateName) {
+		String tocTemplateFileName = templateName + ".xml";
+		File tocTemplateFile = new FileResource("Config/TOCTemplates/" + tocTemplateFileName);
 		try {
-			TOCRepository tocTemplate = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile), new FileResource("Models/TOCModel/toc_template_0.1.xml"),new FlexoTOCBuilder(null));
+			TOCRepository tocTemplate = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile),
+					new FileResource("Models/TOCModel/toc_template_0.1.xml"), new FlexoTOCBuilder(null));
 			return tocTemplate;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
+
 	private void createEntriesFromTemplate(TOCRepository tocTemplate) {
 		Enumeration<TOCEntry> en = tocTemplate.getSortedTocEntries();
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			addToTocEntries(TOCEntry.cloneEntryFromTemplate(this, en.nextElement()));
 		}
 	}
@@ -135,63 +137,61 @@ public class TOCRepository extends TOCEntry {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "TOC-"+getTitle();
+		return "TOC-" + getTitle();
 	}
 
-	public DocType getDocType()
-    {
-        if (docType == null && getProject().getDocTypes().size() > 0)
-            docType = getProject().getDocTypes().get(0);
-        if (docTypeAsString!=null) {
-        	DocType dt = getProject().getDocTypeNamed(docTypeAsString);
-        	if (dt!=null) {
-        		docType = dt;
-        		docTypeAsString = null;
-        	}
-        }
-        return docType;
-    }
+	public DocType getDocType() {
+		if (docType == null && getProject().getDocTypes().size() > 0) {
+			docType = getProject().getDocTypes().get(0);
+		}
+		if (docTypeAsString != null) {
+			DocType dt = getProject().getDocTypeNamed(docTypeAsString);
+			if (dt != null) {
+				docType = dt;
+				docTypeAsString = null;
+			}
+		}
+		return docType;
+	}
 
-    public void setDocType(DocType docType)
-    {
-    	if (docType!=null) {
-    		this.docType = docType;
-    		setChanged();
-    		notifyObservers(new CGDataModification("docType", null, docType));
-    	}
-    }
+	public void setDocType(DocType docType) {
+		if (docType != null) {
+			this.docType = docType;
+			setChanged();
+			notifyObservers(new CGDataModification("docType", null, docType));
+		}
+	}
 
-    public String getDocTypeAsString()
-    {
-        if (getDocType()!=null)
-        	return getDocType().getName();
-        else
-        	return null;
-    }
+	public String getDocTypeAsString() {
+		if (getDocType() != null) {
+			return getDocType().getName();
+		} else {
+			return null;
+		}
+	}
 
-    public void setDocTypeAsString(String docType)
-    {
-        this.docTypeAsString = docType;
-    }
+	public void setDocTypeAsString(String docType) {
+		this.docTypeAsString = docType;
+	}
 
-    @Override
-    public String getInspectorName() {
-    	return Inspectors.DE.DE_TOC_REPOSITORY_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.DE.DE_TOC_REPOSITORY_INSPECTOR;
+	}
 
-    public void notifyDocumentChanged(TOCEntry cause) {
-    	setChanged();
-    	notifyObservers(new TOCModification(null, cause));
-    }
+	public void notifyDocumentChanged(TOCEntry cause) {
+		setChanged();
+		notifyObservers(new TOCModification(null, cause));
+	}
 
-    public String buildDocument() {
+	public String buildDocument() {
 		return buildDocument(null);
 	}
 
 	public String buildDocument(File cssFile) {
-    	StringBuilder sb = new StringBuilder("<HTML>");
-    	if (cssFile!=null) {
-    		try {
+		StringBuilder sb = new StringBuilder("<HTML>");
+		if (cssFile != null) {
+			try {
 				URL cssURL = cssFile.toURI().toURL();
 				sb.append("<HEAD>");
 				sb.append("<LINK REL=StyleSheet HREF=\"").append(cssURL).append("\" TITLE=\"Contemporary\" TYPE=\"text/css\">");
@@ -199,183 +199,171 @@ public class TOCRepository extends TOCEntry {
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
-    	}
-    	sb.append("<BODY>");
-    	Enumeration<TOCEntry> en = getSortedTocEntries();
-		while(en.hasMoreElements())
+		}
+		sb.append("<BODY>");
+		Enumeration<TOCEntry> en = getSortedTocEntries();
+		while (en.hasMoreElements()) {
 			en.nextElement().printHTML(sb);
-    	sb.append("</BODY></HTML>");
-    	return sb.toString();
-    }
+		}
+		sb.append("</BODY></HTML>");
+		return sb.toString();
+	}
 
 	public TOCEntry createObjectEntry(FlexoModelObject modelObject) {
-		TOCEntry reply = new TOCEntry(getData(),modelObject);
+		TOCEntry reply = new TOCEntry(getData(), modelObject);
 		return reply;
 	}
 
-	public TOCEntry createObjectEntry(FlexoModelObject modelObject,DocSection identifier) {
-		TOCEntry reply = new TOCEntry(getData(),modelObject,identifier);
+	public TOCEntry createObjectEntry(FlexoModelObject modelObject, DocSection identifier) {
+		TOCEntry reply = new TOCEntry(getData(), modelObject, identifier);
 		return reply;
 	}
 
 	public TOCEntry createDefaultEntry(DocSection identifier) {
-		TOCEntry entry = new TOCEntry(getData(),identifier);
-    	entry.setTitle(identifier.getTitle());
-    	entry.setIsReadOnly(identifier.getIsReadOnly());
+		TOCEntry entry = new TOCEntry(getData(), identifier);
+		entry.setTitle(identifier.getTitle());
+		entry.setIsReadOnly(identifier.getIsReadOnly());
 
-    	if(!entry.isReadOnly()){
-	    	try {
-	    		entry.setContent(identifier.getDefaultContent(getDocType().getName()));
+		if (!entry.isReadOnly()) {
+			try {
+				entry.setContent(identifier.getDefaultContent(getDocType().getName()));
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("This should not happen! It means somebody has moved the setIsReadOnly(true) above the setContent() call.");
+				}
 			}
 		}
 
-    	return entry;
+		return entry;
 	}
 
-//    private void createDefaultEntriesForRepository() {
-//		TOCEntry entry = createDefaultEntry(DocSection.PURPOSE);
-//    	addToTocEntries(entry);
-//
-//    	entry = createDefaultEntry(DocSection.PROJECT_CONTEXT);
-//    	addToTocEntries(entry);
-//
-//    	entry = createDefaultEntry(DocSection.OBJECTIVES);
-//    	addToTocEntries(entry);
-//
-//    	entry = createDefaultEntry(DocSection.SCOPE);
-//    	addToTocEntries(entry);
-//
-//    	entry = createDefaultEntry(DocSection.STAKEHOLDERS);
-//    	addToTocEntries(entry);
-//
-//    	entry = createDefaultEntry(DocSection.PROCESSES);
-//    	addToTocEntries(entry);
-//
-//    	TOCEntry subEntry = createDefaultEntry(DocSection.READERS_GUIDE);
-//    	entry.addToTocEntries(subEntry);
-//
-//    	if (getDocType()==null || !DocType.BUSINESS.equals(getDocType().getName())) {
-//    		entry = createDefaultEntry(DocSection.SCREENS);
-//        	addToTocEntries(entry);
-//
-//    		entry = createDefaultEntry(DocSection.DATA_MODEL);
-//        	addToTocEntries(entry);
-//    	}
-//
-//    	entry = createDefaultEntry(DocSection.DEFINITIONS);
-//    	addToTocEntries(entry);
-//
-//    	entry = createDefaultEntry(DocSection.NOTES_QUESTIONS);
-//    	addToTocEntries(entry);
-//    }
+	// private void createDefaultEntriesForRepository() {
+	// TOCEntry entry = createDefaultEntry(DocSection.PURPOSE);
+	// addToTocEntries(entry);
+	//
+	// entry = createDefaultEntry(DocSection.PROJECT_CONTEXT);
+	// addToTocEntries(entry);
+	//
+	// entry = createDefaultEntry(DocSection.OBJECTIVES);
+	// addToTocEntries(entry);
+	//
+	// entry = createDefaultEntry(DocSection.SCOPE);
+	// addToTocEntries(entry);
+	//
+	// entry = createDefaultEntry(DocSection.STAKEHOLDERS);
+	// addToTocEntries(entry);
+	//
+	// entry = createDefaultEntry(DocSection.PROCESSES);
+	// addToTocEntries(entry);
+	//
+	// TOCEntry subEntry = createDefaultEntry(DocSection.READERS_GUIDE);
+	// entry.addToTocEntries(subEntry);
+	//
+	// if (getDocType()==null || !DocType.BUSINESS.equals(getDocType().getName())) {
+	// entry = createDefaultEntry(DocSection.SCREENS);
+	// addToTocEntries(entry);
+	//
+	// entry = createDefaultEntry(DocSection.DATA_MODEL);
+	// addToTocEntries(entry);
+	// }
+	//
+	// entry = createDefaultEntry(DocSection.DEFINITIONS);
+	// addToTocEntries(entry);
+	//
+	// entry = createDefaultEntry(DocSection.NOTES_QUESTIONS);
+	// addToTocEntries(entry);
+	// }
 
-    public String getAuthor()
-    {
-        return author;
-    }
+	public String getAuthor() {
+		return author;
+	}
 
-    public void setAuthor(String author)
-    {
-        this.author = author;
-        setChanged();
-        notifyObservers(new CGDataModification("author", null, author));
-    }
+	public void setAuthor(String author) {
+		this.author = author;
+		setChanged();
+		notifyObservers(new CGDataModification("author", null, author));
+	}
 
-    public String getCustomer()
-    {
-        return customer;
-    }
+	public String getCustomer() {
+		return customer;
+	}
 
-    public void setCustomer(String customer)
-    {
-        this.customer = customer;
-        setChanged();
-        notifyObservers(new CGDataModification("customer", null, customer));
-    }
+	public void setCustomer(String customer) {
+		this.customer = customer;
+		setChanged();
+		notifyObservers(new CGDataModification("customer", null, customer));
+	}
 
-    public String getDocTitle()
-    {
-        return docTitle;
-    }
+	public String getDocTitle() {
+		return docTitle;
+	}
 
-    public void setDocTitle(String docTitle)
-    {
-        this.docTitle = docTitle;
-        setChanged();
-        notifyObservers(new CGDataModification("docTitle", null, docTitle));
-    }
+	public void setDocTitle(String docTitle) {
+		this.docTitle = docTitle;
+		setChanged();
+		notifyObservers(new CGDataModification("docTitle", null, docTitle));
+	}
 
-    public String getReviewer()
-    {
-        return reviewer;
-    }
+	public String getReviewer() {
+		return reviewer;
+	}
 
-    public void setReviewer(String reviewer)
-    {
-        String old = this.reviewer;
-        this.reviewer = reviewer;
-        setChanged();
-        notifyObservers(new CGDataModification("reviewer", old, reviewer));
-    }
+	public void setReviewer(String reviewer) {
+		String old = this.reviewer;
+		this.reviewer = reviewer;
+		setChanged();
+		notifyObservers(new CGDataModification("reviewer", old, reviewer));
+	}
 
-    public String getVersion()
-    {
-        return version;
-    }
+	public String getVersion() {
+		return version;
+	}
 
-    public void setVersion(String version)
-    {
-        String old = this.version;
-        this.version = version;
-        setChanged();
-        notifyObservers(new CGDataModification("version", old, version));
-    }
+	public void setVersion(String version) {
+		String old = this.version;
+		this.version = version;
+		setChanged();
+		notifyObservers(new CGDataModification("version", old, version));
+	}
 
-    public String getSystemName()
-    {
-        return systemName;
-    }
+	public String getSystemName() {
+		return systemName;
+	}
 
-    public void setSystemName(String systemName)
-    {
-        this.systemName = systemName;
-        setChanged();
-        notifyObservers(new CGDataModification("systemName", null, systemName));
-    }
+	public void setSystemName(String systemName) {
+		this.systemName = systemName;
+		setChanged();
+		notifyObservers(new CGDataModification("systemName", null, systemName));
+	}
 
-    public String getSystemVersion()
-    {
-        return systemVersion;
-    }
+	public String getSystemVersion() {
+		return systemVersion;
+	}
 
-    public void setSystemVersion(String systemVersion)
-    {
-        this.systemVersion = systemVersion;
-        setChanged();
-        notifyObservers(new CGDataModification("systemVersion", null, systemVersion));
-    }
+	public void setSystemVersion(String systemVersion) {
+		this.systemVersion = systemVersion;
+		setChanged();
+		notifyObservers(new CGDataModification("systemVersion", null, systemVersion));
+	}
 
-    public boolean getUseEmbeddedEvents() {
-    	return useEmbeddedEvents;
-    }
+	public boolean getUseEmbeddedEvents() {
+		return useEmbeddedEvents;
+	}
 
-    public void setUseEmbeddedEvents(boolean useEmbeddedEvents) {
-    	this.useEmbeddedEvents = useEmbeddedEvents;
-    	setChanged();
-    	notifyObservers(new CGDataModification("useEmbeddedEvents", null, useEmbeddedEvents));
-    }
+	public void setUseEmbeddedEvents(boolean useEmbeddedEvents) {
+		this.useEmbeddedEvents = useEmbeddedEvents;
+		setChanged();
+		notifyObservers(new CGDataModification("useEmbeddedEvents", null, useEmbeddedEvents));
+	}
 
-    public ImageFile getLogo() {
+	public ImageFile getLogo() {
 		return logo;
 	}
 
-    public void setLogo(ImageFile logo) {
+	public void setLogo(ImageFile logo) {
 		this.logo = logo;
-    	setChanged();
-    	notifyObservers(new CGDataModification("logo", null, logo));
+		setChanged();
+		notifyObservers(new CGDataModification("logo", null, logo));
 	}
 }

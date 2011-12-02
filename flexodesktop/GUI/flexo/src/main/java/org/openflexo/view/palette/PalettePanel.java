@@ -43,264 +43,255 @@ import org.openflexo.selection.SelectionListener;
 import org.openflexo.utils.DrawUtils;
 import org.openflexo.view.controller.SelectionManagingController;
 
-public abstract class PalettePanel extends JPanel implements SelectionListener
-{
+public abstract class PalettePanel extends JPanel implements SelectionListener {
 
-    protected static final Logger logger = Logger.getLogger(PalettePanel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(PalettePanel.class.getPackage().getName());
 
-    private boolean isEdited = false;
+	private boolean isEdited = false;
 
-    private Vector<PaletteElement> _paletteElements;
+	private Vector<PaletteElement> _paletteElements;
 
-    protected final FlexoPalette _palette;
+	protected final FlexoPalette _palette;
 
-    private String _name;
+	private String _name;
 
-    private Dimension prefSize;
+	private Dimension prefSize;
 
-    public PalettePanel(FlexoPalette palette)
-    {
-        super();
-        _palette = palette;
-        _paletteElements = new Vector<PaletteElement>();
-    }
+	public PalettePanel(FlexoPalette palette) {
+		super();
+		_palette = palette;
+		_paletteElements = new Vector<PaletteElement>();
+	}
 
-    public void addToPaletteElements(PaletteElement paletteElement)
-    {
-        _paletteElements.add(paletteElement);
-    }
+	public void addToPaletteElements(PaletteElement paletteElement) {
+		_paletteElements.add(paletteElement);
+	}
 
-    public PalettePanel delete(){
-    	((SelectionManagingController) _palette.getController()).getSelectionManager().removeFromSelectionListeners(this);
-    	return this;
-    }
-    public boolean isEdited()
-    {
-        return isEdited;
-    }
+	public PalettePanel delete() {
+		((SelectionManagingController) _palette.getController()).getSelectionManager().removeFromSelectionListeners(this);
+		return this;
+	}
 
-    public FlexoPalette getPalette(){
-    	return _palette;
-    }
-    private JTabbedPane getParentContainer()
-    {
-        if (getParent()!=null && getParent().getParent()!=null)
-            return (JTabbedPane) getParent().getParent().getParent();
-        else
-            return null;
-    }
+	public boolean isEdited() {
+		return isEdited;
+	}
 
-    private int getIndexForComponent()
-    {
-        return getParentContainer().indexOfComponent(this.getParent().getParent());
-    }
+	public FlexoPalette getPalette() {
+		return _palette;
+	}
 
-    protected void setTitle()
-    {
-        String title = _name;
-        if (isEdited())
-            title += " [" + FlexoLocalization.localizedForKey("edited") + "]";
-        if (getParentContainer()!=null)
-            getParentContainer().setTitleAt(getIndexForComponent(), title);
-    }
+	private JTabbedPane getParentContainer() {
+		if (getParent() != null && getParent().getParent() != null) {
+			return (JTabbedPane) getParent().getParent().getParent();
+		} else {
+			return null;
+		}
+	}
 
-    public void editPalette()
-    {
-        logger.info("EditPalette");
-        isEdited = true;
-        for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-            PaletteElement next = (PaletteElement) en.nextElement();
-            next.edit();
-        }
-        if (_palette.getController() instanceof SelectionManagingController) {
-            ((SelectionManagingController) _palette.getController()).getSelectionManager().addToSelectionListeners(this);
-        }
-        setTitle();
-        revalidate();
-        repaint();
-    }
+	private int getIndexForComponent() {
+		return getParentContainer().indexOfComponent(this.getParent().getParent());
+	}
 
-    public void closePaletteEdition()
-    {
-        logger.info("ClosePaletteEdition");
-        isEdited = false;
-        for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-            PaletteElement next = (PaletteElement) en.nextElement();
-            next.closeEdition();
-        }
-        if (_palette.getController() instanceof SelectionManagingController) {
-            ((SelectionManagingController) _palette.getController()).getSelectionManager().resetSelection();
-            ((SelectionManagingController) _palette.getController()).getSelectionManager().removeFromSelectionListeners(this);
-        }
+	protected void setTitle() {
+		String title = _name;
+		if (isEdited()) {
+			title += " [" + FlexoLocalization.localizedForKey("edited") + "]";
+		}
+		if (getParentContainer() != null) {
+			getParentContainer().setTitleAt(getIndexForComponent(), title);
+		}
+	}
 
-        setTitle();
-        revalidate();
-        repaint();
-    }
+	public void editPalette() {
+		logger.info("EditPalette");
+		isEdited = true;
+		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
+			PaletteElement next = (PaletteElement) en.nextElement();
+			next.edit();
+		}
+		if (_palette.getController() instanceof SelectionManagingController) {
+			((SelectionManagingController) _palette.getController()).getSelectionManager().addToSelectionListeners(this);
+		}
+		setTitle();
+		revalidate();
+		repaint();
+	}
 
-    public void savePalette()
-    {
-        logger.info("SavePalette");
-        for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-            PaletteElement next = (PaletteElement) en.nextElement();
-            if (next.isEdited()) {
-                next.save();
-            }
-        }
-    }
+	public void closePaletteEdition() {
+		logger.info("ClosePaletteEdition");
+		isEdited = false;
+		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
+			PaletteElement next = (PaletteElement) en.nextElement();
+			next.closeEdition();
+		}
+		if (_palette.getController() instanceof SelectionManagingController) {
+			((SelectionManagingController) _palette.getController()).getSelectionManager().resetSelection();
+			((SelectionManagingController) _palette.getController()).getSelectionManager().removeFromSelectionListeners(this);
+		}
 
-    @Override
-	public String getName()
-    {
-        return _name;
-    }
+		setTitle();
+		revalidate();
+		repaint();
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-        super.setName(aName);
-        _name = aName;
-        setTitle();
-    }
+	public void savePalette() {
+		logger.info("SavePalette");
+		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
+			PaletteElement next = (PaletteElement) en.nextElement();
+			if (next.isEdited()) {
+				next.save();
+			}
+		}
+	}
 
-    @Override
-	public void paint(Graphics g)
-    {
-        super.paint(g);
-        if (isEdited()) {
-            paintSelection(g);
-        }
-    }
+	@Override
+	public String getName() {
+		return _name;
+	}
 
-    public void paintSelection(Graphics g)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("Drawing selection");
-        Graphics2D g2 = (Graphics2D) g;
-        DrawUtils.turnOnAntiAlising(g2);
-        DrawUtils.setRenderQuality(g2);
-        DrawUtils.setColorRenderQuality(g2);
-        g2.setColor(Color.BLUE);
-        Rectangle selection;
+	@Override
+	public void setName(String aName) {
+		super.setName(aName);
+		_name = aName;
+		setTitle();
+	}
 
-        selection = new Rectangle();
-        selection.setSize(getSize());
-        selection.setLocation(0, 0);
-        g2.fillRect(selection.x, selection.y, 5, 5);
-        g2.fillRect(selection.x + selection.width - 5, selection.y, 5, 5);
-        g2.fillRect(selection.x, selection.y + selection.height - 5, 5, 5);
-        g2.fillRect(selection.x + selection.width - 5, selection.y + selection.height - 5, 5, 5);
-    }
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		if (isEdited()) {
+			paintSelection(g);
+		}
+	}
 
-    protected SelectableView selectableViewForObject(FlexoModelObject object)
-    {
-        for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-            PaletteElement next = (PaletteElement) en.nextElement();
-            if (next.getObject() == object)
-                return next.getView();
-        }
-        return null;
-    }
+	public void paintSelection(Graphics g) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.finer("Drawing selection");
+		}
+		Graphics2D g2 = (Graphics2D) g;
+		DrawUtils.turnOnAntiAlising(g2);
+		DrawUtils.setRenderQuality(g2);
+		DrawUtils.setColorRenderQuality(g2);
+		g2.setColor(Color.BLUE);
+		Rectangle selection;
 
-    /**
-     * Notified that supplied object has been added to selection
-     *
-     * @param object:
-     *            the object that has been added to selection
-     */
-    @Override
-	public void fireObjectSelected(FlexoModelObject object)
-    {
-        if (object != null) {
-            SelectableView view = selectableViewForObject(object);
-            if (view != null) {
-                view.setIsSelected(true);
-            }
-        }
-    }
+		selection = new Rectangle();
+		selection.setSize(getSize());
+		selection.setLocation(0, 0);
+		g2.fillRect(selection.x, selection.y, 5, 5);
+		g2.fillRect(selection.x + selection.width - 5, selection.y, 5, 5);
+		g2.fillRect(selection.x, selection.y + selection.height - 5, 5, 5);
+		g2.fillRect(selection.x + selection.width - 5, selection.y + selection.height - 5, 5, 5);
+	}
 
-    /**
-     * Notified that supplied object has been removed from selection
-     *
-     * @param object:
-     *            the object that has been removed from selection
-     */
-    @Override
-	public void fireObjectDeselected(FlexoModelObject object)
-    {
-        if (object != null) {
-            SelectableView view = selectableViewForObject(object);
-            if (view != null) {
-                view.setIsSelected(false);
-            }
-        }
-    }
+	protected SelectableView selectableViewForObject(FlexoModelObject object) {
+		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
+			PaletteElement next = (PaletteElement) en.nextElement();
+			if (next.getObject() == object) {
+				return next.getView();
+			}
+		}
+		return null;
+	}
 
-    /**
-     * Notified selection has been resetted
-     */
-    @Override
-	public void fireResetSelection()
-    {
-        for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
-            PaletteElement next = (PaletteElement) en.nextElement();
-            if (next.getView() != null)
-                next.getView().setIsSelected(false);
-        }
-    }
+	/**
+	 * Notified that supplied object has been added to selection
+	 * 
+	 * @param object
+	 *            : the object that has been added to selection
+	 */
+	@Override
+	public void fireObjectSelected(FlexoModelObject object) {
+		if (object != null) {
+			SelectableView view = selectableViewForObject(object);
+			if (view != null) {
+				view.setIsSelected(true);
+			}
+		}
+	}
 
-    /**
-     * Notified that the selection manager is performing a multiple selection
-     */
-    @Override
-	public void fireBeginMultipleSelection()
-    {
-    }
+	/**
+	 * Notified that supplied object has been removed from selection
+	 * 
+	 * @param object
+	 *            : the object that has been removed from selection
+	 */
+	@Override
+	public void fireObjectDeselected(FlexoModelObject object) {
+		if (object != null) {
+			SelectableView view = selectableViewForObject(object);
+			if (view != null) {
+				view.setIsSelected(false);
+			}
+		}
+	}
 
-    /**
-     * Notified that the selection manager has finished to perform a multiple
-     * selection
-     */
-    @Override
-	public void fireEndMultipleSelection()
-    {
-    }
+	/**
+	 * Notified selection has been resetted
+	 */
+	@Override
+	public void fireResetSelection() {
+		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
+			PaletteElement next = (PaletteElement) en.nextElement();
+			if (next.getView() != null) {
+				next.getView().setIsSelected(false);
+			}
+		}
+	}
 
-    /**
-     * Overrides getPreferredSize
-     * @see javax.swing.JComponent#getPreferredSize()
-     */
-    @Override
-    public Dimension getPreferredSize()
-    {
-        if (prefSize!=null)
-            return prefSize;
-        JScrollPane parent = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, this);
-        if (parent!=null) {
-            Dimension d = new Dimension();
-            d.width = parent.getWidth()-parent.getInsets().left-parent.getInsets().right;
-            if (parent.getVerticalScrollBar()!=null && parent.getVerticalScrollBar().isVisible())
-                d.width -= parent.getVerticalScrollBar().getWidth();
-            if (getComponentCount() > 1) {
-            	int gap = getLayout() instanceof FlowLayout?((FlowLayout)getLayout()).getVgap():4;
-                for (Component c:getComponents()) {
-                	d.height = Math.max(c.getY() + c.getHeight() + gap, d.height);
-                }
-            } else
-                d.height = super.getPreferredSize().height;
-            return d;
-        } else
-            return super.getPreferredSize();
-    }
+	/**
+	 * Notified that the selection manager is performing a multiple selection
+	 */
+	@Override
+	public void fireBeginMultipleSelection() {
+	}
 
-    /**
-     * Overrides setPreferredSize
-     * @see javax.swing.JComponent#setPreferredSize(java.awt.Dimension)
-     */
-    @Override
-    public void setPreferredSize(Dimension preferredSize)
-    {
-        super.setPreferredSize(preferredSize);
-        prefSize = preferredSize;
-    }
+	/**
+	 * Notified that the selection manager has finished to perform a multiple selection
+	 */
+	@Override
+	public void fireEndMultipleSelection() {
+	}
+
+	/**
+	 * Overrides getPreferredSize
+	 * 
+	 * @see javax.swing.JComponent#getPreferredSize()
+	 */
+	@Override
+	public Dimension getPreferredSize() {
+		if (prefSize != null) {
+			return prefSize;
+		}
+		JScrollPane parent = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, this);
+		if (parent != null) {
+			Dimension d = new Dimension();
+			d.width = parent.getWidth() - parent.getInsets().left - parent.getInsets().right;
+			if (parent.getVerticalScrollBar() != null && parent.getVerticalScrollBar().isVisible()) {
+				d.width -= parent.getVerticalScrollBar().getWidth();
+			}
+			if (getComponentCount() > 1) {
+				int gap = getLayout() instanceof FlowLayout ? ((FlowLayout) getLayout()).getVgap() : 4;
+				for (Component c : getComponents()) {
+					d.height = Math.max(c.getY() + c.getHeight() + gap, d.height);
+				}
+			} else {
+				d.height = super.getPreferredSize().height;
+			}
+			return d;
+		} else {
+			return super.getPreferredSize();
+		}
+	}
+
+	/**
+	 * Overrides setPreferredSize
+	 * 
+	 * @see javax.swing.JComponent#setPreferredSize(java.awt.Dimension)
+	 */
+	@Override
+	public void setPreferredSize(Dimension preferredSize) {
+		super.setPreferredSize(preferredSize);
+		prefSize = preferredSize;
+	}
 }

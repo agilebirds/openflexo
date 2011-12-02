@@ -34,57 +34,60 @@ import org.jdom.input.SAXBuilder;
 import org.xml.sax.SAXException;
 
 public class XMLDiffTest {
-	
-	public static Document docFromFile(File file) throws IOException, SAXException, ParserConfigurationException 
-    {
 
-        FileInputStream in = new FileInputStream(file);
-        try {
-        	SAXBuilder parser = new SAXBuilder();
-            return parser.build(in);
-        } catch (IOException e) {
-            throw e;
-        } catch (JDOMException e) {
+	public static Document docFromFile(File file) throws IOException, SAXException, ParserConfigurationException {
+
+		FileInputStream in = new FileInputStream(file);
+		try {
+			SAXBuilder parser = new SAXBuilder();
+			return parser.build(in);
+		} catch (IOException e) {
+			throw e;
+		} catch (JDOMException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return null;
-    }
-	
-	public static boolean areSame(Document d1, Document d2){
+		return null;
+	}
+
+	public static boolean areSame(Document d1, Document d2) {
 		return areSame(d1.getRootElement(), d2.getRootElement());
 	}
-	public static boolean areSame(Element e1,Element e2){
-		if(!e1.getName().equals(e2.getName())){
-			System.err.println("---------------------> "+e1.getName()+" VS "+e2.getName());
+
+	public static boolean areSame(Element e1, Element e2) {
+		if (!e1.getName().equals(e2.getName())) {
+			System.err.println("---------------------> " + e1.getName() + " VS " + e2.getName());
 			return false;
 		}
-		if(e1.getAttributes().size()!=e2.getAttributes().size()){
-			System.err.println("---------------------> "+e1.getName()+" VS "+e2.getName()+" attributes size");
+		if (e1.getAttributes().size() != e2.getAttributes().size()) {
+			System.err.println("---------------------> " + e1.getName() + " VS " + e2.getName() + " attributes size");
 			return false;
 		}
-		if(!e1.getText().trim().equals(e2.getText().trim())){
-			System.err.println("---------------------> "+e1.getName()+" VS "+e2.getName()+" inner text");
+		if (!e1.getText().trim().equals(e2.getText().trim())) {
+			System.err.println("---------------------> " + e1.getName() + " VS " + e2.getName() + " inner text");
 			return false;
 		}
 		Iterator<Attribute> it = e1.getAttributes().iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			Attribute att = it.next();
-			if(!att.getValue().equals(e2.getAttributeValue(att.getName()))){
-				System.err.println("---------------------> "+e1.getName()+" VS "+e2.getName()+" attribute value for "+att.getName());
+			if (!att.getValue().equals(e2.getAttributeValue(att.getName()))) {
+				System.err.println("---------------------> " + e1.getName() + " VS " + e2.getName() + " attribute value for "
+						+ att.getName());
 				return false;
 			}
 		}
-		if(e1.getChildren().size()!=e2.getChildren().size()){
-			System.err.println("---------------------> "+e1.getName()+" VS "+e2.getName()+" children size");
+		if (e1.getChildren().size() != e2.getChildren().size()) {
+			System.err.println("---------------------> " + e1.getName() + " VS " + e2.getName() + " children size");
 			return false;
 		}
 		Iterator<Element> it1 = e1.getChildren().iterator();
 		Iterator<Element> it2 = e1.getChildren().iterator();
-		while(it1.hasNext()){
-			if(!areSame(it1.next(), it2.next()))return false;
+		while (it1.hasNext()) {
+			if (!areSame(it1.next(), it2.next())) {
+				return false;
+			}
 		}
-		
+
 		return true;
 	}
 }

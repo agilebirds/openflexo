@@ -24,7 +24,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Vector;
 
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
@@ -40,24 +39,24 @@ import org.openflexo.toolbox.ZipUtils;
 
 public class GenerateZip extends GCAction<GenerateZip, GenerationRepository> {
 
-	public static final FlexoActionType<GenerateZip, GenerationRepository, CGObject> actionType = new FlexoActionType<GenerateZip, GenerationRepository, CGObject>("generate_zip",
-            GENERATE_MENU, WAR_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static final FlexoActionType<GenerateZip, GenerationRepository, CGObject> actionType = new FlexoActionType<GenerateZip, GenerationRepository, CGObject>(
+			"generate_zip", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-				@Override
-				protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
-					AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator(object);
-					return isVisibleForSelection(object, globalSelection) && pg!=null && pg.hasBeenInitialized();
-				}
+		@Override
+		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator(object);
+			return isVisibleForSelection(object, globalSelection) && pg != null && pg.hasBeenInitialized();
+		}
 
-				@Override
-				protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
-					return object instanceof DGRepository && ((DGRepository)object).getFormat()==Format.HTML;
-				}
+		@Override
+		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			return object instanceof DGRepository && ((DGRepository) object).getFormat() == Format.HTML;
+		}
 
-				@Override
-				public GenerateZip makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
-					return new GenerateZip(focusedObject,globalSelection,editor);
-				}
+		@Override
+		public GenerateZip makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new GenerateZip(focusedObject, globalSelection, editor);
+		}
 
 	};
 
@@ -73,11 +72,9 @@ public class GenerateZip extends GCAction<GenerateZip, GenerationRepository> {
 
 		@Override
 		public boolean accept(File pathname) {
-			return !pathname.equals(((DGRepository)getFocusedObject()).getPostBuildFile())
-				&& !pathname.getName().equals(".cvsignore")
-			    && !pathname.getName().equals(".history")
-			    && !pathname.getName().equalsIgnoreCase(".dstore")
-				&& !pathname.getName().equalsIgnoreCase(".DS_Store");
+			return !pathname.equals(((DGRepository) getFocusedObject()).getPostBuildFile()) && !pathname.getName().equals(".cvsignore")
+					&& !pathname.getName().equals(".history") && !pathname.getName().equalsIgnoreCase(".dstore")
+					&& !pathname.getName().equalsIgnoreCase(".DS_Store");
 		}
 
 	}
@@ -85,7 +82,12 @@ public class GenerateZip extends GCAction<GenerateZip, GenerationRepository> {
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		try {
-			ZipUtils.makeZip(((DGRepository)getFocusedObject()).getPostBuildFile(), getFocusedObject().getDirectory(), makeFlexoProgress(FlexoLocalization.localizedForKey("creating_zip_file")+" "+((DGRepository)getFocusedObject()).getPostProductName(), 1), new ZipFileFilter());
+			ZipUtils.makeZip(
+					((DGRepository) getFocusedObject()).getPostBuildFile(),
+					getFocusedObject().getDirectory(),
+					makeFlexoProgress(
+							FlexoLocalization.localizedForKey("creating_zip_file") + " "
+									+ ((DGRepository) getFocusedObject()).getPostProductName(), 1), new ZipFileFilter());
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new IOFlexoException(e);
@@ -93,7 +95,7 @@ public class GenerateZip extends GCAction<GenerateZip, GenerationRepository> {
 	}
 
 	public File getGeneratedZipFile() {
-		return ((DGRepository)getFocusedObject()).getPostBuildFile();
+		return ((DGRepository) getFocusedObject()).getPostBuildFile();
 	}
 
 }

@@ -18,49 +18,50 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents ModView object
- *
+ * 
  * @version $Id: ModView.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ModView extends QuiduView {
-  public ModView(PetalNode parent, Collection params) {
-    super(parent, "ModView", params, -1);
-  }
+	public ModView(PetalNode parent, Collection params) {
+		super(parent, "ModView", params, -1);
+	}
 
-  public ModView() {
-    super("ModView");
-  }
+	public ModView() {
+		super("ModView");
+	}
 
-  public void setTypeParameter(String o) {
-    params.set(1, o);
-  }
+	public void setTypeParameter(String o) {
+		params.set(1, o);
+	}
 
-  public String getTypeParameter() {
-    return (String)params.get(1);
-  }
+	public String getTypeParameter() {
+		return (String) params.get(1);
+	}
 
-  public void setSpecificationParameter(String o) {
-    params.set(2, o);
-  }
+	public void setSpecificationParameter(String o) {
+		params.set(2, o);
+	}
 
-  public String getSpecificationParameter() {
-    return (String)params.get(2);
-  }
+	public String getSpecificationParameter() {
+		return (String) params.get(2);
+	}
 
-  public ItemLabel getLabel() {
-    return (ItemLabel)getProperty("label");
-  }
+	public ItemLabel getLabel() {
+		return (ItemLabel) getProperty("label");
+	}
 
-  public void setLabel(ItemLabel o) {
-    defineProperty("label", o);
-  }
+	public void setLabel(ItemLabel o) {
+		defineProperty("label", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

@@ -24,30 +24,26 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
 
+public class WSLibraryElement extends BrowserElement {
 
-public class WSLibraryElement extends BrowserElement
-{
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public WSLibraryElement(FlexoWSLibrary object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.WS_LIBRARY, browser, parent);
+	}
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public WSLibraryElement(FlexoWSLibrary object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.WS_LIBRARY, browser, parent);
-    }
-
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        FlexoWSLibrary lib = (FlexoWSLibrary) getObject();
-        addToChilds(lib.getExternalWSFolder());
-        addToChilds(lib.getInternalWSFolder());
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		FlexoWSLibrary lib = (FlexoWSLibrary) getObject();
+		addToChilds(lib.getExternalWSFolder());
+		addToChilds(lib.getInternalWSFolder());
+	}
 }

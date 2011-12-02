@@ -19,7 +19,6 @@
  */
 package org.openflexo.inspector;
 
-public interface InspectorWidgetConfiguration
-{
+public interface InspectorWidgetConfiguration {
 	public boolean showViewSourceButtonInWysiwyg();
 }

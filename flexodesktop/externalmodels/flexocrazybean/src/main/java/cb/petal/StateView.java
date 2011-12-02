@@ -18,57 +18,58 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents StateView object
- *
+ * 
  * @version $Id: StateView.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class StateView extends QuiduView {
-  public StateView(PetalNode parent, Collection params, int tag) {
-    super(parent, "StateView", params, tag);
-  }
+	public StateView(PetalNode parent, Collection params, int tag) {
+		super(parent, "StateView", params, tag);
+	}
 
-  public StateView() {
-    super("StateView");
-  }
+	public StateView() {
+		super("StateView");
+	}
 
-  public void setIDParameter(String o) {
-    params.set(1, o);
-  }
+	public void setIDParameter(String o) {
+		params.set(1, o);
+	}
 
-  public String getIDParameter() {
-    return (String)params.get(1);
-  }
+	public String getIDParameter() {
+		return (String) params.get(1);
+	}
 
-  public ItemLabel getLabel() {
-    return (ItemLabel)getProperty("label");
-  }
+	public ItemLabel getLabel() {
+		return (ItemLabel) getProperty("label");
+	}
 
-  public void setLabel(ItemLabel o) {
-    defineProperty("label", o);
-  }
+	public void setLabel(ItemLabel o) {
+		defineProperty("label", o);
+	}
 
-  public Compartment getCompartment() {
-    return (Compartment)getProperty("compartment");
-  }
+	public Compartment getCompartment() {
+		return (Compartment) getProperty("compartment");
+	}
 
-  public void setCompartment(Compartment o) {
-    defineProperty("compartment", o);
-  }
+	public void setCompartment(Compartment o) {
+		defineProperty("compartment", o);
+	}
 
-  public Tag getParentView() {
-    return (Tag)getProperty("Parent_View");
-  }
+	public Tag getParentView() {
+		return (Tag) getProperty("Parent_View");
+	}
 
-  public void setParentView(Tag o) {
-    defineProperty("Parent_View", o);
-  }
+	public void setParentView(Tag o) {
+		defineProperty("Parent_View", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

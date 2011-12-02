@@ -22,13 +22,10 @@ package org.openflexo.dgmodule.controller;
 import org.openflexo.doceditor.controller.DEContextualMenuManager;
 import org.openflexo.foundation.FlexoEditor;
 
-
 public class DGContextualMenuManager extends DEContextualMenuManager {
 
-    
-    public DGContextualMenuManager(DGSelectionManager selectionManager, FlexoEditor editor, DGController controller)
-    {
-        super(selectionManager,editor,controller);
-    }
-    
+	public DGContextualMenuManager(DGSelectionManager selectionManager, FlexoEditor editor, DGController controller) {
+		super(selectionManager, editor, controller);
+	}
+
 }

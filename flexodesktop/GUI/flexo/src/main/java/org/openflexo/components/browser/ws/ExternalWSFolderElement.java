@@ -27,33 +27,29 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ws.ExternalWSFolder;
 import org.openflexo.foundation.ws.WSService;
 
+public class ExternalWSFolderElement extends BrowserElement {
 
-public class ExternalWSFolderElement extends BrowserElement
-{
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public ExternalWSFolderElement(ExternalWSFolder object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.EXTERNAL_WS_FOLDER, browser, parent);
+	}
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public ExternalWSFolderElement(ExternalWSFolder object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.EXTERNAL_WS_FOLDER, browser, parent);
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		ExternalWSFolder list = (ExternalWSFolder) getObject();
+		Enumeration en = list.getExternalWSServices().elements();
+		while (en.hasMoreElements()) {
+			addToChilds((WSService) en.nextElement());
+		}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-    	ExternalWSFolder list = (ExternalWSFolder) getObject();
-        Enumeration en = list.getExternalWSServices().elements();
-        while (en.hasMoreElements()) {
-            addToChilds((WSService) en.nextElement());
-        }
-
-    }
+	}
 }

@@ -23,80 +23,72 @@ import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ComponentLibraryStatistics extends FlexoStatistics<FlexoComponentLibrary>
-{
-    private int pageCount = -1;
-    
-    private int popupCount = -1;
-    
-    private int tabCount = -1;
-    
-    /**
+public class ComponentLibraryStatistics extends FlexoStatistics<FlexoComponentLibrary> {
+	private int pageCount = -1;
+
+	private int popupCount = -1;
+
+	private int tabCount = -1;
+
+	/**
      * 
      */
-    public ComponentLibraryStatistics(FlexoComponentLibrary library)
-    {
-        super(library);
-        refresh();
-    }
+	public ComponentLibraryStatistics(FlexoComponentLibrary library) {
+		super(library);
+		refresh();
+	}
 
-    public int getPageCount()
-    {
-        return pageCount;
-    }
+	public int getPageCount() {
+		return pageCount;
+	}
 
-    private void setPageCount(int pageCount)
-    {
-        int old = this.pageCount;
-        this.pageCount = pageCount;
-        if (old != pageCount) {
-            setChanged();
-            notifyObservers(new StatModification("pageCount", old, pageCount));
-        }
-    }
+	private void setPageCount(int pageCount) {
+		int old = this.pageCount;
+		this.pageCount = pageCount;
+		if (old != pageCount) {
+			setChanged();
+			notifyObservers(new StatModification("pageCount", old, pageCount));
+		}
+	}
 
-    public int getPopupCount()
-    {
-        return popupCount;
-    }
+	public int getPopupCount() {
+		return popupCount;
+	}
 
-    private void setPopupCount(int popupCount)
-    {
-        int old = this.popupCount;
-        this.popupCount = popupCount;
-        if (old != popupCount) {
-            setChanged();
-            notifyObservers(new StatModification("popupCount", old, popupCount));
-        }
-    }
+	private void setPopupCount(int popupCount) {
+		int old = this.popupCount;
+		this.popupCount = popupCount;
+		if (old != popupCount) {
+			setChanged();
+			notifyObservers(new StatModification("popupCount", old, popupCount));
+		}
+	}
 
-    public int getTabCount()
-    {
-        return tabCount;
-    }
+	public int getTabCount() {
+		return tabCount;
+	}
 
-    private void setTabCount(int tabCount)
-    {
-        int old = this.tabCount;
-        this.tabCount = tabCount;
-        if (old != tabCount) {
-            setChanged();
-            notifyObservers(new StatModification("tabCount", old, tabCount));
-        }
-    }
+	private void setTabCount(int tabCount) {
+		int old = this.tabCount;
+		this.tabCount = tabCount;
+		if (old != tabCount) {
+			setChanged();
+			notifyObservers(new StatModification("tabCount", old, tabCount));
+		}
+	}
 
-    /**
-     * Overrides refresh
-     * @see org.openflexo.foundation.stats.FlexoStatistics#refresh()
-     */
-    @Override
-    public void refresh()
-    {
-        setPageCount(getObject().getOperationsComponentList().size());
-        setPopupCount(getObject().getPopupsComponentList().size());
-        setTabCount(getObject().getTabComponentList().size());
-    }
+	/**
+	 * Overrides refresh
+	 * 
+	 * @see org.openflexo.foundation.stats.FlexoStatistics#refresh()
+	 */
+	@Override
+	public void refresh() {
+		setPageCount(getObject().getOperationsComponentList().size());
+		setPopupCount(getObject().getPopupsComponentList().size());
+		setTabCount(getObject().getTabComponentList().size());
+	}
 
 }

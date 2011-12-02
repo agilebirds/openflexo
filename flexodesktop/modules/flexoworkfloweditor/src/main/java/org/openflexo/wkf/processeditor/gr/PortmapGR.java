@@ -28,9 +28,9 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -51,7 +51,6 @@ import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
-
 
 public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 
@@ -108,7 +107,10 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 	@Override
 	public void update(Observable observable, Object dataModification) {
 		if (observable == observedContainer) {
-			if ((dataModification instanceof ObjectWillMove) || (dataModification instanceof ObjectWillResize) || (dataModification instanceof ObjectHasMoved) || (dataModification instanceof ObjectHasResized) || (dataModification instanceof ObjectMove) || (dataModification instanceof ObjectResized) || (dataModification instanceof ShapeChanged)) {
+			if ((dataModification instanceof ObjectWillMove) || (dataModification instanceof ObjectWillResize)
+					|| (dataModification instanceof ObjectHasMoved) || (dataModification instanceof ObjectHasResized)
+					|| (dataModification instanceof ObjectMove) || (dataModification instanceof ObjectResized)
+					|| (dataModification instanceof ShapeChanged)) {
 				updateLayout();
 			}
 		}
@@ -201,16 +203,16 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 
 	protected ImageIcon getImageIcon() {
 		if (layoutedAs == SimplifiedCardinalDirection.NORTH) {
-			return WKFIconLibrary.getImageIconForPortmap(getPortMap(),PortMapRegistery.NORTH);
+			return WKFIconLibrary.getImageIconForPortmap(getPortMap(), PortMapRegistery.NORTH);
 		}
 		if (layoutedAs == SimplifiedCardinalDirection.SOUTH) {
-			return WKFIconLibrary.getImageIconForPortmap(getPortMap(),PortMapRegistery.SOUTH);
+			return WKFIconLibrary.getImageIconForPortmap(getPortMap(), PortMapRegistery.SOUTH);
 		}
 		if (layoutedAs == SimplifiedCardinalDirection.EAST) {
-			return WKFIconLibrary.getImageIconForPortmap(getPortMap(),PortMapRegistery.EAST);
+			return WKFIconLibrary.getImageIconForPortmap(getPortMap(), PortMapRegistery.EAST);
 		}
 		if (layoutedAs == SimplifiedCardinalDirection.WEST) {
-			return WKFIconLibrary.getImageIconForPortmap(getPortMap(),PortMapRegistery.WEST);
+			return WKFIconLibrary.getImageIconForPortmap(getPortMap(), PortMapRegistery.WEST);
 		}
 		return WKFIconLibrary.getImageIconForPortmap(getPortMap());
 	}

@@ -24,29 +24,25 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.eo.DMEOAttribute;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMEOAttributeElement extends DMEOPropertyElement
-{
+public class DMEOAttributeElement extends DMEOPropertyElement {
 
-    public DMEOAttributeElement(DMEOAttribute attribute, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(attribute, BrowserElementType.DM_EOATTRIBUTE, browser,parent);
-    }
+	public DMEOAttributeElement(DMEOAttribute attribute, ProjectBrowser browser, BrowserElement parent) {
+		super(attribute, BrowserElementType.DM_EOATTRIBUTE, browser, parent);
+	}
 
-    protected DMEOAttribute getDMEOAttribute()
-    {
-        return (DMEOAttribute) getObject();
-    }
+	protected DMEOAttribute getDMEOAttribute() {
+		return (DMEOAttribute) getObject();
+	}
 
-    @Override
-	public boolean mustBeHighlighted(){
-    	return getDMEOAttribute().getIsPrimaryKeyAttribute();
-    }
+	@Override
+	public boolean mustBeHighlighted() {
+		return getDMEOAttribute().getIsPrimaryKeyAttribute();
+	}
 
 }

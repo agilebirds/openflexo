@@ -23,41 +23,36 @@ import java.util.Vector;
 
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class EnumDropDownParameter<E extends Enum<E>> extends ParameterDefinition<E> {
 
-    private Vector<E> _availableValues;
-    
-    public EnumDropDownParameter(String name,String label,E value, E[] values)
-    {
-        super(name,label,value);
-        addParameter("dynamiclist","params."+name+".availableValues");
-        _availableValues = new Vector<E>();
-        for (E e : values) {
-        	if (accept(e))
-        		_availableValues.add(e);
-        }
-    }
-    
-    @Override
-	public String getWidgetName() 
-   {
-        return DenaliWidget.DROPDOWN;
-    }
+	private Vector<E> _availableValues;
 
-    public void setShowReset(boolean showReset)
-    {
-    	addParameter("showReset",""+showReset);
-    }
-    
-   // Override this if list not defined in constructor
-   public Vector<E> getAvailableValues() 
-   {
-       return _availableValues;
-   }
-   
-   public boolean accept(E value) 
-   {
-	   return true;
-   }
+	public EnumDropDownParameter(String name, String label, E value, E[] values) {
+		super(name, label, value);
+		addParameter("dynamiclist", "params." + name + ".availableValues");
+		_availableValues = new Vector<E>();
+		for (E e : values) {
+			if (accept(e)) {
+				_availableValues.add(e);
+			}
+		}
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.DROPDOWN;
+	}
+
+	public void setShowReset(boolean showReset) {
+		addParameter("showReset", "" + showReset);
+	}
+
+	// Override this if list not defined in constructor
+	public Vector<E> getAvailableValues() {
+		return _availableValues;
+	}
+
+	public boolean accept(E value) {
+		return true;
+	}
 }

@@ -38,12 +38,10 @@ import org.openflexo.foundation.ie.widget.IERadioButtonWidget;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 
-
 /**
  * @author gpolet Created on 12 sept. 2005
  */
-public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadioButtonWidget>
-{
+public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadioButtonWidget> {
 
 	protected JRadioButton button;
 
@@ -57,9 +55,7 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 	 * @param ieController
 	 * @param model
 	 */
-	public IERadioButtonWidgetView(IEController ieController, IERadioButtonWidget model, boolean addDnDSupport,
-			IEWOComponentView view)
-	{
+	public IERadioButtonWidgetView(IEController ieController, IERadioButtonWidget model, boolean addDnDSupport, IEWOComponentView view) {
 		super(ieController, model, addDnDSupport, view);
 		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
 		// layout.setVgap(4);
@@ -69,8 +65,7 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 		button.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				getRadioButtonModel().setValue(button.isSelected());
 			}
 		});
@@ -102,21 +97,20 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 		setBackground(getBackgroundColor());
 	}
 
-	public IERadioButtonWidget getRadioButtonModel()
-	{
+	public IERadioButtonWidget getRadioButtonModel() {
 		return getModel();
 	}
 
 	/**
 	 * Overrides getPreferredSize
+	 * 
 	 * @see javax.swing.JComponent#getPreferredSize()
 	 */
 	@Override
-	public Dimension getPreferredSize()
-	{
-		if (getHoldsNextComputedPreferredSize()){
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if(storedSize!=null) {
+			if (storedSize != null) {
 				return storedSize;
 			}
 		}
@@ -134,8 +128,7 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 	 *      org.openflexo.foundation.DataModification)
 	 */
 	@Override
-	public void update(FlexoObservable o, DataModification modif)
-	{
+	public void update(FlexoObservable o, DataModification modif) {
 		if (modif.modificationType() == DataModification.ATTRIBUTE) {
 			if (modif.propertyName().equals(IERadioButtonWidget.ATTRIB_DEFAULTVALUE_NAME)) {
 				if (!isUpdatingModel) {
@@ -171,7 +164,8 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 					button.setText(null);
 				}
 			}
-		} if (modif instanceof SpanChanged) {
+		}
+		if (modif instanceof SpanChanged) {
 			if (getParent() != null) {
 				getParent().doLayout();
 				((JComponent) getParent()).repaint();

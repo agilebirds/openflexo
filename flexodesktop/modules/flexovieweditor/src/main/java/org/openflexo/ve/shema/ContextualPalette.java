@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -39,17 +38,15 @@ import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepres
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.action.DropSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ContextualPalette extends DrawingPalette {
@@ -57,40 +54,36 @@ public class ContextualPalette extends DrawingPalette {
 	private static final Logger logger = Logger.getLogger(ContextualPalette.class.getPackage().getName());
 
 	private ViewPointPalette _calcPalette;
-	
-	public ContextualPalette(ViewPointPalette viewPointPalette)
-	{
-		super((int)((DrawingGraphicalRepresentation)viewPointPalette.getGraphicalRepresentation()).getWidth(),
-				(int)((DrawingGraphicalRepresentation)viewPointPalette.getGraphicalRepresentation()).getHeight(),
-				viewPointPalette.getName());
-		
+
+	public ContextualPalette(ViewPointPalette viewPointPalette) {
+		super((int) ((DrawingGraphicalRepresentation) viewPointPalette.getGraphicalRepresentation()).getWidth(),
+				(int) ((DrawingGraphicalRepresentation) viewPointPalette.getGraphicalRepresentation()).getHeight(), viewPointPalette
+						.getName());
+
 		_calcPalette = viewPointPalette;
-		
+
 		for (ViewPointPaletteElement element : viewPointPalette.getElements()) {
 			addElement(makePaletteElement(element));
 		}
-		
+
 		makePalettePanel();
 		getPaletteView().revalidate();
 	}
-	
+
 	@Override
-	public VEShemaController getController()
-	{
-		return (VEShemaController)super.getController();
+	public VEShemaController getController() {
+		return (VEShemaController) super.getController();
 	}
-	
-	private Vector<DropScheme> getAvailableDropSchemes(EditionPattern pattern, GraphicalRepresentation target) 
-	{
+
+	private Vector<DropScheme> getAvailableDropSchemes(EditionPattern pattern, GraphicalRepresentation target) {
 		Vector<DropScheme> returned = new Vector<DropScheme>();
 		for (DropScheme dropScheme : pattern.getDropSchemes()) {
 			if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) {
 				returned.add(dropScheme);
 			}
 			if (target.getDrawable() instanceof ViewShape) {
-				ViewShape targetShape = (ViewShape)target.getDrawable();
-				AbstractOntologyObject targetObject = targetShape.getLinkedConcept();
-				if (targetObject instanceof OntologyObject && dropScheme.isValidTarget((OntologyObject)targetObject)) {
+				ViewShape targetShape = (ViewShape) target.getDrawable();
+				if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
 					returned.add(dropScheme);
 				}
 			}
@@ -98,142 +91,134 @@ public class ContextualPalette extends DrawingPalette {
 		return returned;
 	}
 
-	private boolean hasValidTarget(EditionPattern pattern, GraphicalRepresentation target) 
-	{
+	private boolean hasValidTarget(EditionPattern pattern, GraphicalRepresentation target) {
 		for (EditionScheme es : pattern.getEditionSchemes()) {
 			if (es instanceof DropScheme) {
-				DropScheme dropScheme = (DropScheme)es;
-				if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) return true;
+				DropScheme dropScheme = (DropScheme) es;
+				if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) {
+					return true;
+				}
 				if (target.getDrawable() instanceof ViewShape) {
-					ViewShape targetShape = (ViewShape)target.getDrawable();
-					AbstractOntologyObject targetObject = targetShape.getLinkedConcept();
-					if (targetObject instanceof OntologyObject 
-							&& dropScheme.isValidTarget((OntologyObject)targetObject)) return true;
+					ViewShape targetShape = (ViewShape) target.getDrawable();
+					if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
+						return true;
+					}
 				}
 			}
 		}
 		return false;
 	}
 
-
-
-	
-	private PaletteElement makePaletteElement(final ViewPointPaletteElement element) 
-	{
-		final PaletteElementGraphicalRepresentation gr 
-		= new PaletteElementGraphicalRepresentation((ShapeGraphicalRepresentation)element.getGraphicalRepresentation(),null,getPaletteDrawing());
+	private PaletteElement makePaletteElement(final ViewPointPaletteElement element) {
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(
+				(ShapeGraphicalRepresentation) element.getGraphicalRepresentation(), null, getPaletteDrawing());
 
 		gr.setText(element.getName());
-		
+
 		PaletteElement returned = new PaletteElement() {
 			@Override
-			public boolean acceptDragging(GraphicalRepresentation target)
-			{
+			public boolean acceptDragging(GraphicalRepresentation target) {
 				EditionPattern pattern = element.getEditionPattern();
 				if (pattern != null) {
 					return hasValidTarget(pattern, target);
 				}
 				return false;
 			}
-			
+
 			@Override
-			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation)
-			{
-				logger.info("Dragging "+getGraphicalRepresentation()+" with text "+getGraphicalRepresentation().getText());
+			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation) {
+				logger.info("Dragging " + getGraphicalRepresentation() + " with text " + getGraphicalRepresentation().getText());
 
 				if (containerGR.getDrawable() instanceof ViewObject) {
-					
-					final ViewObject container = (ViewObject)containerGR.getDrawable();
-					
-					//final ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
-					final ShapeGraphicalRepresentation<?> shapeGR = new VEShapeGR(null,null);
-					//boolean wasAllowedToLeaveBounds = getGraphicalRepresentation().getAllowToLeaveBounds();
-					//getGraphicalRepresentation().setAllowToLeaveBounds(true);
+
+					final ViewObject container = (ViewObject) containerGR.getDrawable();
+
+					// final ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
+					final ShapeGraphicalRepresentation<?> shapeGR = new VEShapeGR(null, null);
+					// boolean wasAllowedToLeaveBounds = getGraphicalRepresentation().getAllowToLeaveBounds();
+					// getGraphicalRepresentation().setAllowToLeaveBounds(true);
 					shapeGR.setsWith(getGraphicalRepresentation());
-					//if (!wasAllowedToLeaveBounds) getGraphicalRepresentation().setAllowToLeaveBounds(false);
+					// if (!wasAllowedToLeaveBounds) getGraphicalRepresentation().setAllowToLeaveBounds(false);
 					shapeGR.setIsSelectable(true);
 					shapeGR.setIsFocusable(true);
 					shapeGR.setIsReadOnly(false);
 					shapeGR.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
-					//if (applyForegroundStyle) shapeGR.setForeground(getController().getToolbox().currentForegroundStyle);
-					//if (applyBackgroundStyle) shapeGR.setBackground(getController().getToolbox().currentBackgroundStyle);
-					//if (applyShadowStyle) shapeGR.setShadowStyle(getController().getToolbox().currentShadowStyle);
-					//if (applyTextStyle) shapeGR.setTextStyle(getController().getToolbox().currentTextStyle);
+					// if (applyForegroundStyle) shapeGR.setForeground(getController().getToolbox().currentForegroundStyle);
+					// if (applyBackgroundStyle) shapeGR.setBackground(getController().getToolbox().currentBackgroundStyle);
+					// if (applyShadowStyle) shapeGR.setShadowStyle(getController().getToolbox().currentShadowStyle);
+					// if (applyTextStyle) shapeGR.setTextStyle(getController().getToolbox().currentTextStyle);
 					shapeGR.setLocation(dropLocation);
-					shapeGR.setLayer(containerGR.getLayer()+1);
+					shapeGR.setLayer(containerGR.getLayer() + 1);
 					shapeGR.setAllowToLeaveBounds(true);
 
-					logger.info("drop location = "+shapeGR.getLocation());
-					
+					logger.info("drop location = " + shapeGR.getLocation());
+
 					if (element.getEditionPattern() == null) {
 						// No associated edition pattern, just drop shape !
-						
+
 						AddShape action = AddShape.actionType.makeNewAction(container, null, getController().getOEController().getEditor());
 						action.setGraphicalRepresentation(shapeGR);
 						action.setNameSetToNull(false);
 						action.setNewShapeName(getGraphicalRepresentation().getText());
-						
+
 						action.doAction();
 						return action.hasActionExecutionSucceeded();
 					}
-					
+
 					else {
-						
-						Vector<DropScheme> availableDropPatterns = 
-							getAvailableDropSchemes(element.getEditionPattern(), containerGR);
-							
-						if (availableDropPatterns.size()>1) {
+
+						Vector<DropScheme> availableDropPatterns = getAvailableDropSchemes(element.getEditionPattern(), containerGR);
+
+						if (availableDropPatterns.size() > 1) {
 							JPopupMenu popup = new JPopupMenu();
 							for (final DropScheme dropScheme : availableDropPatterns) {
-								JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(dropScheme.getLabel()!=null?dropScheme.getLabel():dropScheme.getName()));
+								JMenuItem menuItem = new JMenuItem(
+										FlexoLocalization.localizedForKey(dropScheme.getLabel() != null ? dropScheme.getLabel()
+												: dropScheme.getName()));
 								menuItem.addActionListener(new ActionListener() {
 									@Override
-									public void actionPerformed(ActionEvent e)
-									{	
-										DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(
-												container, null, getController().getOEController().getEditor());
-										action.setDropScheme(dropScheme);	
-										action.setPaletteElement(element);		
+									public void actionPerformed(ActionEvent e) {
+										DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null,
+												getController().getOEController().getEditor());
+										action.setDropScheme(dropScheme);
+										action.setPaletteElement(element);
 										action.setOverridenGraphicalRepresentation(shapeGR);
 										action.doAction();
-								}
+									}
 								});
-								popup.add(menuItem);					
+								popup.add(menuItem);
 							}
 							DrawingView dw = getController().getDrawingView();
 							FGEView containerView = dw.viewForObject(containerGR);
-							
-							popup.show((Component)containerView, (int)dropLocation.x, (int)dropLocation.y);
+
+							popup.show((Component) containerView, (int) dropLocation.x, (int) dropLocation.y);
 							return true;
-						}
-						else if (availableDropPatterns.size() == 1) {
-							DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(
-									container, null, getController().getOEController().getEditor());
-							action.setDropScheme(availableDropPatterns.firstElement());	
-							action.setPaletteElement(element);		
+						} else if (availableDropPatterns.size() == 1) {
+							DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null, getController()
+									.getOEController().getEditor());
+							action.setDropScheme(availableDropPatterns.firstElement());
+							action.setPaletteElement(element);
 							action.setOverridenGraphicalRepresentation(shapeGR);
 							action.doAction();
 							return action.hasActionExecutionSucceeded();
 						}
 
 					}
-					
+
 				}
 				return false;
 			}
-			
+
 			@Override
-			public PaletteElementGraphicalRepresentation getGraphicalRepresentation()
-			{
+			public PaletteElementGraphicalRepresentation getGraphicalRepresentation() {
 				return gr;
-			}		
-			
+			}
+
 			@Override
-			public DrawingPalette getPalette()
-			{
+			public DrawingPalette getPalette() {
 				return ContextualPalette.this;
 			}
-			
+
 		};
 		gr.setDrawable(returned);
 		return returned;

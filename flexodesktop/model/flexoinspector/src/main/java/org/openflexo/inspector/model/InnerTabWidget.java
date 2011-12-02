@@ -21,9 +21,8 @@ package org.openflexo.inspector.model;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public interface InnerTabWidget
-{
-    public int getIndex();
+public interface InnerTabWidget {
+	public int getIndex();
 }

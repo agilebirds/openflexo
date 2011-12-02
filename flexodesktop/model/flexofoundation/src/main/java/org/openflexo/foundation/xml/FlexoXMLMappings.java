@@ -62,20 +62,17 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 import org.xml.sax.SAXException;
 
-
 /**
- * Utility class allowing to perform efficient access to XML mappings. This
- * class additionnaly handles versions of those mappings
- *
+ * Utility class allowing to perform efficient access to XML mappings. This class additionnaly handles versions of those mappings
+ * 
  * @author sguerin
- *
+ * 
  */
-public class FlexoXMLMappings
-{
+public class FlexoXMLMappings {
 
 	protected static final Logger logger = Logger.getLogger(FlexoXMLMappings.class.getPackage().getName());
 
-	//private boolean isInitialized = false;
+	// private boolean isInitialized = false;
 
 	private ModelVersions modelVersions = null;
 
@@ -85,89 +82,72 @@ public class FlexoXMLMappings
 
 	// Public API
 
-	public XMLMapping getRMMapping()
-	{
+	public XMLMapping getRMMapping() {
 		return getMappingForClass(FlexoProject.class);
 	}
 
-	public XMLMapping getLinksMapping()
-	{
+	public XMLMapping getLinksMapping() {
 		return getMappingForClass(FlexoLinks.class);
 	}
 
-	public XMLMapping getWKFMapping()
-	{
+	public XMLMapping getWKFMapping() {
 		return getMappingForClass(FlexoProcess.class);
 	}
 
-	public XMLMapping getWorkflowMapping()
-	{
+	public XMLMapping getWorkflowMapping() {
 		return getMappingForClass(FlexoWorkflow.class);
 	}
 
-	public XMLMapping getIEMapping()
-	{
+	public XMLMapping getIEMapping() {
 		return getMappingForClass(IEWOComponent.class);
 	}
 
-	public XMLMapping getDMMapping()
-	{
+	public XMLMapping getDMMapping() {
 		return getMappingForClass(DMModel.class);
 	}
 
-	public XMLMapping getComponentLibraryMapping()
-	{
+	public XMLMapping getComponentLibraryMapping() {
 		return getMappingForClass(FlexoComponentLibrary.class);
 	}
 
-	public XMLMapping getShemaLibraryMapping()
-	{
+	public XMLMapping getShemaLibraryMapping() {
 		return getMappingForClass(ViewLibrary.class);
 	}
 
-	public XMLMapping getShemaMapping()
-	{
+	public XMLMapping getShemaMapping() {
 		return getMappingForClass(View.class);
 	}
 
-	public XMLMapping getGeneratedCodeMapping()
-	{
+	public XMLMapping getGeneratedCodeMapping() {
 		return getMappingForClass(GeneratedOutput.class);
 	}
 
-	public XMLMapping getGeneratedSourcesMapping()
-	{
+	public XMLMapping getGeneratedSourcesMapping() {
 		return getMappingForClass(GeneratedSources.class);
 	}
 
-	public XMLMapping getImplementationModelMapping()
-	{
+	public XMLMapping getImplementationModelMapping() {
 		return getMappingForClass(ImplementationModel.class);
 	}
 
-	public XMLMapping getNavigationMenuMapping()
-	{
+	public XMLMapping getNavigationMenuMapping() {
 		return getMappingForClass(FlexoNavigationMenu.class);
 	}
 
-	public XMLMapping getTOCMapping()
-	{
+	public XMLMapping getTOCMapping() {
 		return getMappingForClass(TOCData.class);
 	}
 
-	public XMLMapping getWSMapping()
-	{
+	public XMLMapping getWSMapping() {
 		return getMappingForClass(FlexoWSLibrary.class);
 	}
 
 	/**
-	 * Returns all available versions for given class, ordered in ascendant
-	 * order
+	 * Returns all available versions for given class, ordered in ascendant order
 	 */
-	public FlexoVersion[] getAvailableVersionsForClass(Class aClass)
-	{
+	public FlexoVersion[] getAvailableVersionsForClass(Class aClass) {
 		if (modelVersions != null) {
-			ClassModels modelsForClass =  modelVersions.classModels.get(aClass.getName());
+			ClassModels modelsForClass = modelVersions.classModels.get(aClass.getName());
 			if (modelsForClass != null) {
 				return modelsForClass.getAvailableVersions();
 			}
@@ -178,13 +158,11 @@ public class FlexoXMLMappings
 		return null;
 	}
 
-	public XMLMapping getMappingForClass(Class aClass)
-	{
+	public XMLMapping getMappingForClass(Class aClass) {
 		return getMappingForClassAndVersion(aClass, getLatestVersionForClass(aClass));
 	}
 
-	public XMLMapping getMappingForClassAndVersion(Class aClass, FlexoVersion version)
-	{
+	public XMLMapping getMappingForClassAndVersion(Class aClass, FlexoVersion version) {
 		ClassModelVersion cmv = getClassModelVersion(aClass, version);
 		if (cmv != null) {
 			return cmv.getMapping();
@@ -195,13 +173,11 @@ public class FlexoXMLMappings
 		return null;
 	}
 
-	public ClassModels getModelsForClass(Class aClass)
-	{
+	public ClassModels getModelsForClass(Class aClass) {
 		return modelVersions.classModels.get(aClass.getName());
 	}
 
-	public ClassModelVersion getClassModelVersion(Class aClass, FlexoVersion version)
-	{
+	public ClassModelVersion getClassModelVersion(Class aClass, FlexoVersion version) {
 		if (modelVersions != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finest("Searching ClassModelFlexoVersion for class " + aClass.getName());
@@ -223,10 +199,9 @@ public class FlexoXMLMappings
 		return null;
 	}
 
-	public FlexoVersion getLatestVersionForClass(Class aClass)
-	{
+	public FlexoVersion getLatestVersionForClass(Class aClass) {
 		if (modelVersions != null && aClass != null) {
-			ClassModels modelsForClass =  modelVersions.classModels.get(aClass.getName());
+			ClassModels modelsForClass = modelVersions.classModels.get(aClass.getName());
 			if (modelsForClass != null) {
 				return modelsForClass.latestVersion;
 			}
@@ -234,8 +209,7 @@ public class FlexoXMLMappings
 		return null;
 	}
 
-	public FlexoVersion getVersionForClassAndRelease(Class aClass, FlexoVersion releaseVersion)
-	{
+	public FlexoVersion getVersionForClassAndRelease(Class aClass, FlexoVersion releaseVersion) {
 		if (modelVersions != null && aClass != null) {
 			ReleaseModels modelsForRelease = modelVersions.releaseModels.get(releaseVersion);
 			if (modelsForRelease != null) {
@@ -249,13 +223,12 @@ public class FlexoXMLMappings
 
 	private static final Vector<FlexoVersion> _releaseVersions = new Vector<FlexoVersion>();
 
-	public static Vector<FlexoVersion> getReleaseVersions()
-	{
-		if (_releaseVersions.size()==0) {
+	public static Vector<FlexoVersion> getReleaseVersions() {
+		if (_releaseVersions.size() == 0) {
 			for (ReleaseModels rm : new FlexoXMLMappings().modelVersions.releaseModels.values()) {
 				_releaseVersions.add(rm.identifier);
 			}
-			Collections.sort(_releaseVersions,FlexoVersion.comparator);
+			Collections.sort(_releaseVersions, FlexoVersion.comparator);
 		}
 		return _releaseVersions;
 	}
@@ -264,8 +237,7 @@ public class FlexoXMLMappings
 		return getReleaseVersions().lastElement();
 	}
 
-	private static XMLMapping getVersionningModel()
-	{
+	private static XMLMapping getVersionningModel() {
 		// File flexoFoundationDirectory = getFlexoFoundationDirectory();
 		// File versionningModelFile = new File (flexoFoundationDirectory,
 		// "Models/FlexoVersionningModel.xml");
@@ -300,8 +272,7 @@ public class FlexoXMLMappings
 		return null;
 	}
 
-	public void initialize()
-	{
+	public void initialize() {
 		// Register all declared string converters
 		FlexoObject.initialize();
 		// The next line ensure that the FlexoVersion converter is well registered by XMLCoDe
@@ -314,16 +285,16 @@ public class FlexoXMLMappings
 		try {
 			modelVersions = (ModelVersions) XMLDecoder.decodeObjectWithMapping(new FileInputStream(modelFlexoVersionFile),
 					getVersionningModel());
-			Iterator<ClassModels> i=modelVersions.classModels.values().iterator();
+			Iterator<ClassModels> i = modelVersions.classModels.values().iterator();
 			while (i.hasNext()) {
 				ClassModels cm = i.next();
-				if (cm.getAvailableVersions().length==0){
+				if (cm.getAvailableVersions().length == 0) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("There are no available versions for "+cm.name);
+						logger.warning("There are no available versions for " + cm.name);
 					}
 					continue;
 				}
-				FlexoVersion biggest=cm.getAvailableVersions()[0];
+				FlexoVersion biggest = cm.getAvailableVersions()[0];
 				for (int j = 0; j < cm.availableFlexoVersions.length; j++) {
 					FlexoVersion v = cm.availableFlexoVersions[j];
 					if (v.isGreaterThan(biggest)) {
@@ -332,7 +303,8 @@ public class FlexoXMLMappings
 				}
 				if (!cm.latestVersion.equals(biggest)) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("The latest version is "+cm.latestVersion+" but the greatest version is "+biggest+ " for class model named "+cm.name);
+						logger.warning("The latest version is " + cm.latestVersion + " but the greatest version is " + biggest
+								+ " for class model named " + cm.name);
 					}
 				}
 			}
@@ -378,49 +350,42 @@ public class FlexoXMLMappings
 
 		if (logger.isLoggable(Level.FINE)) {
 			for (ReleaseModels release : modelVersions.releaseModels.values()) {
-				logger.fine("Release "+release.identifier);
+				logger.fine("Release " + release.identifier);
 				for (ReleaseClassModel cm : release.classModels.values()) {
-					logger.fine("Class "+cm.name+" version: "+cm.version);
+					logger.fine("Class " + cm.name + " version: " + cm.version);
 				}
 			}
 		}
 	}
 
-	public static class ModelVersions implements XMLSerializable
-	{
+	public static class ModelVersions implements XMLSerializable {
 		/**
-		 * Hashtable where are stored ClassModels objects related to key
-		 * ClassModels.className
+		 * Hashtable where are stored ClassModels objects related to key ClassModels.className
 		 */
-		public Hashtable<String,ClassModels> classModels = new Hashtable<String, ClassModels>();
+		public Hashtable<String, ClassModels> classModels = new Hashtable<String, ClassModels>();
 
 		/**
-		 * Hashtable where are stored ClassModels objects related to key
-		 * ReleaseModels.identifier
+		 * Hashtable where are stored ClassModels objects related to key ReleaseModels.identifier
 		 */
-		public Hashtable<FlexoVersion,ReleaseModels> releaseModels = new Hashtable<FlexoVersion, ReleaseModels>();
+		public Hashtable<FlexoVersion, ReleaseModels> releaseModels = new Hashtable<FlexoVersion, ReleaseModels>();
 	}
 
-	public static class ReleaseModels implements XMLSerializable
-	{
+	public static class ReleaseModels implements XMLSerializable {
 		public FlexoVersion identifier;
 
 		/**
-		 * Hashtable where are stored ReleaseClassModel objects related to key
-		 * ReleaseClassModel.name
+		 * Hashtable where are stored ReleaseClassModel objects related to key ReleaseClassModel.name
 		 */
-		public Hashtable<String,ReleaseClassModel> classModels = new Hashtable<String, ReleaseClassModel>();
+		public Hashtable<String, ReleaseClassModel> classModels = new Hashtable<String, ReleaseClassModel>();
 	}
 
-	public static class ReleaseClassModel implements XMLSerializable
-	{
+	public static class ReleaseClassModel implements XMLSerializable {
 		public String name;
 
 		public FlexoVersion version;
 	}
 
-	public static class ClassModels implements XMLSerializable
-	{
+	public static class ClassModels implements XMLSerializable {
 		public String name;
 
 		public FlexoVersion latestVersion;
@@ -428,18 +393,16 @@ public class FlexoXMLMappings
 		protected FlexoVersion[] availableFlexoVersions;
 
 		/**
-		 * Hashtable where are stored ClassModelFlexoVersion objects related to key
-		 * ClassModelFlexoVersion.id
+		 * Hashtable where are stored ClassModelFlexoVersion objects related to key ClassModelFlexoVersion.id
 		 */
-		public Hashtable<String,ClassModelVersion> classModelVersions = new Hashtable<String,ClassModelVersion>();
+		public Hashtable<String, ClassModelVersion> classModelVersions = new Hashtable<String, ClassModelVersion>();
 
 		/**
 		 * Return all available versions, ordered in ascendant order
-		 *
+		 * 
 		 * @return
 		 */
-		public FlexoVersion[] getAvailableVersions()
-		{
+		public FlexoVersion[] getAvailableVersions() {
 			if (availableFlexoVersions == null) {
 				Vector<FlexoVersion> availableFlexoVersionsVector = new Vector<FlexoVersion>();
 				for (Enumeration<ClassModelVersion> e = classModelVersions.elements(); e.hasMoreElements();) {
@@ -449,7 +412,7 @@ public class FlexoXMLMappings
 				Collections.sort(availableFlexoVersionsVector, FlexoVersion.comparator);
 				availableFlexoVersions = new FlexoVersion[availableFlexoVersionsVector.size()];
 				for (int i = 0; i < availableFlexoVersionsVector.size(); i++) {
-					availableFlexoVersions[i] =  availableFlexoVersionsVector.elementAt(i);
+					availableFlexoVersions[i] = availableFlexoVersionsVector.elementAt(i);
 				}
 			}
 			return availableFlexoVersions;
@@ -457,8 +420,7 @@ public class FlexoXMLMappings
 
 	}
 
-	public static class ClassModelVersion implements XMLSerializable
-	{
+	public static class ClassModelVersion implements XMLSerializable {
 		public FlexoVersion version;
 
 		public File modelFile;
@@ -469,8 +431,7 @@ public class FlexoXMLMappings
 
 		private XMLMapping mapping = null;
 
-		protected File getModelFile()
-		{
+		protected File getModelFile() {
 			// return new
 			// File(getFlexoFoundationDirectory(),"Models"+File.separator+modelFile.getPath());
 			return new FileResource("Models/" + modelFile.getPath());
@@ -478,11 +439,10 @@ public class FlexoXMLMappings
 
 		@Override
 		public String toString() {
-			return "ClassModelVersion: file "+modelFile+" version "+version;
+			return "ClassModelVersion: file " + modelFile + " version " + version;
 		}
 
-		public XMLMapping getMapping()
-		{
+		public XMLMapping getMapping() {
 			if (mapping == null) {
 				if (getModelFile().exists() && !getModelFile().isDirectory()) {
 					try {
@@ -529,26 +489,22 @@ public class FlexoXMLMappings
 	/**
 	 * @return
 	 */
-	public XMLMapping getDKVMapping()
-	{
+	public XMLMapping getDKVMapping() {
 		return getMappingForClass(DKVModel.class);
 	}
 
 	private static final ClassModelVersion rmTSModelVersion = new ClassModelVersion() {
 		@Override
-		protected File getModelFile()
-		{
+		protected File getModelFile() {
 			return new FileResource("Models/RMModel/RMModel_TS.xml");
 		}
 	};
 
-	public static XMLMapping getRMTSMapping()
-	{
+	public static XMLMapping getRMTSMapping() {
 		return rmTSModelVersion.getMapping();
 	}
 
-	public static ClassModelVersion getRMTSModelVersion()
-	{
+	public static ClassModelVersion getRMTSModelVersion() {
 		return rmTSModelVersion;
 	}
 

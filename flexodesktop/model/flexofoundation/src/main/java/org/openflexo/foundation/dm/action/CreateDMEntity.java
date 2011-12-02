@@ -33,86 +33,74 @@ import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.ProcessInstanceRepository;
 import org.openflexo.foundation.dm.WORepository;
 
+public class CreateDMEntity extends FlexoAction {
 
-public class CreateDMEntity extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(CreateDMEntity.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDMEntity.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("add_entity", FlexoActionType.newMenu, FlexoActionType.defaultGroup,
+			FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("add_entity",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new CreateDMEntity(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMEntity(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DMPackage) && ((DMPackage) object).getRepository() != null)
+					&& (!(((DMPackage) object).getRepository() instanceof ComponentRepository))
+					&& (!(((DMPackage) object).getRepository() instanceof WORepository))
+					&& (!(((DMPackage) object).getRepository() instanceof ProcessInstanceRepository))
+					&& (!((DMPackage) object).getRepository().isReadOnly());
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DMPackage)
-                    && ((DMPackage)object).getRepository() != null)
-                    && (! (((DMPackage)object).getRepository() instanceof ComponentRepository))
-                    && (! (((DMPackage)object).getRepository() instanceof WORepository))
-                    && (! (((DMPackage)object).getRepository() instanceof ProcessInstanceRepository))
-                    && (!((DMPackage)object).getRepository().isReadOnly());
-        }
-                
-    };
-    
-    private DMPackage _package;
-    private String _newEntityName;
-    private DMEntity _newEntity;
-    
-    CreateDMEntity (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) 
-    {
-      logger.info ("CreateDMEntity");
-      if (getPackage() != null) {
-          _newEntityName = _package.getDMModel().getNextDefautEntityName(_package);
-          _newEntity = new DMEntity(_package.getDMModel(), _newEntityName, _package.getName(), _newEntityName, null);
-          getRepository().registerEntity(_newEntity);
-      }
-    }
+	private DMPackage _package;
+	private String _newEntityName;
+	private DMEntity _newEntity;
 
-   public String getNewEntityName()
-   {
-       return _newEntityName;
-   }
-   
-   public DMPackage getPackage()
-   {
-       if (_package == null) {
-           if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMPackage)) {
-               _package = (DMPackage)getFocusedObject();
-            }           
-       }
-       return _package;
-   }
+	CreateDMEntity(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public DMRepository getRepository()
-   {
-       return getPackage().getRepository();
-   }
-   
-   public DMEntity getNewEntity()
-   {
-       return _newEntity;
-   }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("CreateDMEntity");
+		if (getPackage() != null) {
+			_newEntityName = _package.getDMModel().getNextDefautEntityName(_package);
+			_newEntity = new DMEntity(_package.getDMModel(), _newEntityName, _package.getName(), _newEntityName, null);
+			getRepository().registerEntity(_newEntity);
+		}
+	}
+
+	public String getNewEntityName() {
+		return _newEntityName;
+	}
+
+	public DMPackage getPackage() {
+		if (_package == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMPackage)) {
+				_package = (DMPackage) getFocusedObject();
+			}
+		}
+		return _package;
+	}
+
+	public DMRepository getRepository() {
+		return getPackage().getRepository();
+	}
+
+	public DMEntity getNewEntity() {
+		return _newEntity;
+	}
 
 }

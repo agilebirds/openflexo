@@ -32,60 +32,54 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
-public class RegenerateAndOverride extends MultipleFileGCAction<RegenerateAndOverride>
-{
+public class RegenerateAndOverride extends MultipleFileGCAction<RegenerateAndOverride> {
 
 	private static final Logger logger = Logger.getLogger(RegenerateAndOverride.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<RegenerateAndOverride> actionType
-	= new MultipleFileGCActionType<RegenerateAndOverride> ("regenerate_and_override",
-			GENERATE_MENU, GENERATION_GROUP,FlexoActionType.NORMAL_ACTION_TYPE)
-	{
+	public static final MultipleFileGCActionType<RegenerateAndOverride> actionType = new MultipleFileGCActionType<RegenerateAndOverride>(
+			"regenerate_and_override", GENERATE_MENU, GENERATION_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public RegenerateAndOverride makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-        {
-            return new RegenerateAndOverride(focusedObject, globalSelection, editor);
-        }
+		 * Factory method
+		 */
+		@Override
+		public RegenerateAndOverride makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new RegenerateAndOverride(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean accept (AbstractCGFile file)
-        {
-      		return (file.getResource() != null);
-      }
+		@Override
+		protected boolean accept(AbstractCGFile file) {
+			return (file.getResource() != null);
+		}
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(RegenerateAndOverride.actionType, CGObject.class);
+	}
 
-    static {
-        FlexoModelObject.addActionForClass (RegenerateAndOverride.actionType, CGObject.class);
-    }
+	RegenerateAndOverride(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    RegenerateAndOverride (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	@Override
+	protected void doAction(Object context) throws SaveResourceException, FlexoException {
+		logger.info("Regenerate and override");
+		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
+		pg.setAction(this);
 
-    @Override
-	protected void doAction(Object context) throws SaveResourceException, FlexoException
-    {
-    	logger.info ("Regenerate and override");
-    	AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
-    	pg.setAction(this);
-
-    	ForceRegenerateSourceCode force = ForceRegenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(), this);
-    	force.doAction();
-    	WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(), this);
-    	if(write.getFilesToWrite().size()>0)
-    		write.doAction();
-     	hideFlexoProgress();
-    }
+		ForceRegenerateSourceCode force = ForceRegenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(),
+				getGlobalSelection(), this);
+		force.doAction();
+		WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewEmbeddedAction(getFocusedObject(),
+				getGlobalSelection(), this);
+		if (write.getFilesToWrite().size() > 0) {
+			write.doAction();
+		}
+		hideFlexoProgress();
+	}
 
 	public boolean requiresThreadPool() {
 		return false;
 	}
 
- }
+}

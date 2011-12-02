@@ -32,98 +32,87 @@ import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.swing.ColorSelector;
 
-public class FIBColorWidget extends FIBWidgetView<FIBColor,ColorSelector,Color> implements ColorSelectionModel
-{
+public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color> implements ColorSelectionModel {
 
-    private static final Logger logger = Logger.getLogger(FIBColorWidget.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FIBColorWidget.class.getPackage().getName());
 
-    //public static final Icon ARROW_DOWN = new ImageIconResource("Resources/ArrowDown.gif");
+	// public static final Icon ARROW_DOWN = new ImageIconResource("Resources/ArrowDown.gif");
 
-    protected ColorSelector _selector;
+	protected ColorSelector _selector;
 	private final Vector<ChangeListener> _listeners;
-	
-    public FIBColorWidget(FIBColor model, FIBController controller)
-    {
-        super(model,controller);
-        
-        _listeners = new Vector<ChangeListener>();
-        
-        _selector = new ColorSelector(this);
-        if (isReadOnly()) {
-        	_selector.getDownButton().setEnabled(false);
-        }
-        	        
-       getJComponent().addFocusListener(this);
 
-        updateFont();
-    }
+	public FIBColorWidget(FIBColor model, FIBController controller) {
+		super(model, controller);
 
-    @Override
-	public synchronized boolean updateWidgetFromModel()
-    {
-    	//if (notEquals(getValue(),getSelectedColor())) {
-    		widgetUpdating = true;
-    		setColor(getValue());
-    		widgetUpdating = false;
-    		return true;
-    		//}
-    		//return false;
-    }
+		_listeners = new Vector<ChangeListener>();
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized boolean updateModelFromWidget()
-    {
-    	if (notEquals(getValue(),getSelectedColor())) {
-    		if (isReadOnly()) {
-				return false;
-			}
-    		setValue(_selector.getEditedObject());
-    		return true;
-    	}
-    	return false;
-    }
+		_selector = new ColorSelector(this);
+		if (isReadOnly()) {
+			_selector.getDownButton().setEnabled(false);
+		}
 
-    @Override
-	public ColorSelector getJComponent()
-    {
-        return _selector;
-    }
+		getJComponent().addFocusListener(this);
+
+		updateFont();
+	}
 
 	@Override
-	public ColorSelector getDynamicJComponent()
-	{
+	public synchronized boolean updateWidgetFromModel() {
+		// if (notEquals(getValue(),getSelectedColor())) {
+		widgetUpdating = true;
+		setColor(getValue());
+		widgetUpdating = false;
+		return true;
+		// }
+		// return false;
+	}
+
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized boolean updateModelFromWidget() {
+		if (notEquals(getValue(), getSelectedColor())) {
+			if (isReadOnly()) {
+				return false;
+			}
+			setValue(_selector.getEditedObject());
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public ColorSelector getJComponent() {
 		return _selector;
 	}
 
-    protected void setColor(Color aColor)
-    {
-    	_selector.setEditedObject(aColor);
-    }
+	@Override
+	public ColorSelector getDynamicJComponent() {
+		return _selector;
+	}
+
+	protected void setColor(Color aColor) {
+		_selector.setEditedObject(aColor);
+	}
 
 	@Override
-	public Color getSelectedColor()
-	{
+	public Color getSelectedColor() {
 		return getValue();
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener listener)
-	{
+	public void addChangeListener(ChangeListener listener) {
 		_listeners.add(listener);
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener listener)
-	{
+	public void removeChangeListener(ChangeListener listener) {
 		_listeners.remove(listener);
 	}
 
 	@Override
-	public void setSelectedColor(Color color)
-	{
+	public void setSelectedColor(Color color) {
 		setValue(color);
 		for (ChangeListener l : _listeners) {
 			l.stateChanged(new ChangeEvent(this));

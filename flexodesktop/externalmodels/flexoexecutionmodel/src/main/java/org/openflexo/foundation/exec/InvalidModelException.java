@@ -21,8 +21,7 @@ package org.openflexo.foundation.exec;
 
 public class InvalidModelException extends Exception {
 
-	public InvalidModelException(String message)
-	{
+	public InvalidModelException(String message) {
 		super(message);
 	}
 

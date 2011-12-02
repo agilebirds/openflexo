@@ -28,47 +28,40 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class ImportWsdl extends CreateNewWebService {
 
-public class ImportWsdl extends CreateNewWebService 
-{
+	static final Logger logger = Logger.getLogger(ImportWsdl.class.getPackage().getName());
 
-    static final Logger logger = Logger.getLogger(ImportWsdl.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("import_wsdl", FlexoActionType.importMenu, FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("import_wsdl",FlexoActionType.importMenu,FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new ImportWsdl(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new ImportWsdl(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-         }
-                
-    };
-    
-    ImportWsdl (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
+	ImportWsdl(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
 	protected void doAction(Object context) throws FlexoException {
-    		super.doAction(context);
+		super.doAction(context);
 
-    }
- 
- 
+	}
+
 }

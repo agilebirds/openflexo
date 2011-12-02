@@ -21,13 +21,11 @@ package org.openflexo.generator.rm;
 
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.generator.FlexoComponentResourceGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
-
 
 public interface ComponentFileResource extends GenerationAvailableFileResource {
 
 	public ComponentDefinition getComponentDefinition();
-	
+
 	@Override
 	public FlexoComponentResourceGenerator getGenerator();
 

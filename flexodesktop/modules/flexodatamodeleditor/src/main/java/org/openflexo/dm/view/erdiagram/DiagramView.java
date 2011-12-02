@@ -28,63 +28,53 @@ import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.ModuleView;
 
-
 public class DiagramView extends DrawingView<ERDiagramRepresentation> implements ModuleView<ERDiagram> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DiagramView.class.getPackage().getName());
 
-	public DiagramView(ERDiagramRepresentation aDrawing,ERDiagramController controller)
-	{
-		super(aDrawing,controller);
+	public DiagramView(ERDiagramRepresentation aDrawing, ERDiagramController controller) {
+		super(aDrawing, controller);
 	}
 
 	@Override
-	public ERDiagramController getController() 
-	{
-		return (ERDiagramController)super.getController();
+	public ERDiagramController getController() {
+		return (ERDiagramController) super.getController();
 	}
-	
+
 	@Override
-	public void deleteModuleView() 
-	{
+	public void deleteModuleView() {
 		getController().delete();
 	}
 
 	@Override
-	public DiagramPerspective getPerspective() 
-	{
+	public DiagramPerspective getPerspective() {
 		return getController().getDMController().DIAGRAM_PERSPECTIVE;
 	}
 
-	public FlexoProject getProject() 
-	{
+	public FlexoProject getProject() {
 		return getRepresentedObject().getProject();
 	}
 
 	@Override
-	public ERDiagram getRepresentedObject() 
-	{
+	public ERDiagram getRepresentedObject() {
 		return getModel().getDiagram();
 	}
 
 	@Override
-	public boolean isAutoscrolled()
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
 
 	@Override
-	public void willHide() 
-	{
+	public void willHide() {
 	}
 
 	@Override
-	public void willShow() 
-	{
+	public void willShow() {
 		getPerspective().focusOnDiagram(getRepresentedObject());
 	}
-	
+
 	/*private DrawRoleSpecializationAction _drawRoleSpecializationAction;
 
 	public void  setDrawEdgeAction(DrawRoleSpecializationAction action) 
@@ -98,17 +88,13 @@ public class DiagramView extends DrawingView<ERDiagramRepresentation> implements
 		repaint();
 	}*/
 
-
-
 	@Override
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		// boolean isBuffering = isBuffering();
 		super.paint(g);
-	/*	if (_drawRoleSpecializationAction != null && !isBuffering) {
-			_drawRoleSpecializationAction.paint(g,getController());
-		}*/
+		/*	if (_drawRoleSpecializationAction != null && !isBuffering) {
+				_drawRoleSpecializationAction.paint(g,getController());
+			}*/
 	}
-	
 
 }

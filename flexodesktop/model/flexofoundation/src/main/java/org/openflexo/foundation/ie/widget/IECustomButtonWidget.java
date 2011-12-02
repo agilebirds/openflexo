@@ -30,21 +30,19 @@ public class IECustomButtonWidget extends IEHyperlinkWidget {
 	/**
      * 
      */
-    public static final String CUSTOM_BUTTON_WIDGET = "custom_button_widget";
+	public static final String CUSTOM_BUTTON_WIDGET = "custom_button_widget";
 
-    @Deprecated
+	@Deprecated
 	public IECustomButtonWidget(FlexoComponentBuilder builder) {
 		this(builder.woComponent, null, builder.getProject());
 		initializeDeserialization(builder);
 	}
-    @Deprecated
-	public IECustomButtonWidget(IEWOComponent woComponent, IEObject parent,
-            FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
 
-    
+	@Deprecated
+	public IECustomButtonWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
+
 	public String getCustomButtonValue() {
 		return getValue();
 	}
@@ -52,34 +50,34 @@ public class IECustomButtonWidget extends IEHyperlinkWidget {
 	public void setCustomButtonValue(String buttonValue) {
 		setValue(buttonValue);
 	}
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return CUSTOM_BUTTON_WIDGET;
-    }
-    
-    @Override
-    public void setInspectorName(String inspectorName) {
-    	// The inspector of custom buttons has been removed.
-    }
-    
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
 	@Override
-	public boolean isHyperlink(){
+	public String getClassNameKey() {
+		return CUSTOM_BUTTON_WIDGET;
+	}
+
+	@Override
+	public void setInspectorName(String inspectorName) {
+		// The inspector of custom buttons has been removed.
+	}
+
+	@Override
+	public boolean isHyperlink() {
 		return false;
 	}
-	
+
 	@Override
-	public boolean isCustomButton(){
+	public boolean isCustomButton() {
 		return true;
 	}
-	
+
 	@Override
-	public boolean isImageButton(){
+	public boolean isImageButton() {
 		return false;
 	}
 }

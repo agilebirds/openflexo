@@ -28,46 +28,40 @@ import org.openflexo.foundation.cg.version.action.ShowFileHistory;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class ShowFileHistoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ShowFileHistoryInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(ShowFileHistory.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<ShowFileHistory> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<ShowFileHistory>() {
-            @Override
-			public boolean run(ActionEvent e, ShowFileHistory action)
-            {
-               	return true;
-          }
-        };
+	ShowFileHistoryInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(ShowFileHistory.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<ShowFileHistory> getDefaultFinalizer() 
-	{
+	@Override
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<ShowFileHistory> getDefaultInitializer() {
+		return new FlexoActionInitializer<ShowFileHistory>() {
+			@Override
+			public boolean run(ActionEvent e, ShowFileHistory action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<ShowFileHistory> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowFileHistory>() {
-            @Override
-			public boolean run(ActionEvent e, ShowFileHistory action)
-            {
-       			getControllerActionInitializer().getGeneratorController().switchToPerspective(getControllerActionInitializer().getGeneratorController().VERSIONNING_PERSPECTIVE);
-    			getControllerActionInitializer().getGeneratorController().selectAndFocusObject(action.getFocusedObject());
-            	return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, ShowFileHistory action) {
+				getControllerActionInitializer().getGeneratorController().switchToPerspective(
+						getControllerActionInitializer().getGeneratorController().VERSIONNING_PERSPECTIVE);
+				getControllerActionInitializer().getGeneratorController().selectAndFocusObject(action.getFocusedObject());
+				return true;
+			}
+		};
 	}
 
 }

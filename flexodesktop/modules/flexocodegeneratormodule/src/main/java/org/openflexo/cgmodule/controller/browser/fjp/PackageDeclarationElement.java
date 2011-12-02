@@ -19,33 +19,29 @@
  */
 package org.openflexo.cgmodule.controller.browser.fjp;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.javaparser.FJPJavaSource.FJPPackageDeclaration;
 import org.openflexo.localization.FlexoLocalization;
 
-public class PackageDeclarationElement extends JavaBrowserElement
-{
-	public PackageDeclarationElement(FJPPackageDeclaration packageDeclaration, JavaParserBrowser browser, BrowserElement parent)
-	{
-		super(packageDeclaration, BrowserElementType.PACKAGE, browser,parent);
+public class PackageDeclarationElement extends JavaBrowserElement {
+	public PackageDeclarationElement(FJPPackageDeclaration packageDeclaration, JavaParserBrowser browser, BrowserElement parent) {
+		super(packageDeclaration, BrowserElementType.PACKAGE, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 	}
 
 	@Override
-	public String getName()
-	{
-		if (getPackageDeclaration().getPackage() == null) return FlexoLocalization.localizedForKey("default_package");
+	public String getName() {
+		if (getPackageDeclaration().getPackage() == null) {
+			return FlexoLocalization.localizedForKey("default_package");
+		}
 		return getPackageDeclaration().getPackage();
 	}
 
-	public FJPPackageDeclaration getPackageDeclaration()
-	{
-		return (FJPPackageDeclaration)getObject();
+	public FJPPackageDeclaration getPackageDeclaration() {
+		return (FJPPackageDeclaration) getObject();
 	}
 }

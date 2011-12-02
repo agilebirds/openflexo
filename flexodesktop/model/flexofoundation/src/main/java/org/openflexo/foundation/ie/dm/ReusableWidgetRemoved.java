@@ -21,11 +21,9 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
 
-public class ReusableWidgetRemoved extends IEDataModification
-{
+public class ReusableWidgetRemoved extends IEDataModification {
 
-    public ReusableWidgetRemoved(IEReusableWidget removedTable)
-    {
-        super(removedTable, null);
-    }
+	public ReusableWidgetRemoved(IEReusableWidget removedTable) {
+		super(removedTable, null);
+	}
 }

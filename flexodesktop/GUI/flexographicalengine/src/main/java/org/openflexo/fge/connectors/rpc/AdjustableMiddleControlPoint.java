@@ -25,33 +25,30 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEGeometricObject;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 
-
-public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPoint
-{
+public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPoint {
 	static final Logger logger = Logger.getLogger(AdjustableMiddleControlPoint.class.getPackage().getName());
 
-	public AdjustableMiddleControlPoint(FGEPoint point, RectPolylinConnector connector)
-	{
-		super(point,connector);
+	public AdjustableMiddleControlPoint(FGEPoint point, RectPolylinConnector connector) {
+		super(point, connector);
 	}
+
 	@Override
-	public FGEArea getDraggingAuthorizedArea()
-	{
+	public FGEArea getDraggingAuthorizedArea() {
 		return new FGEPlane();
 	}
 
 	@Override
-	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-	{
+	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event) {
 		FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 		if (pt == null) {
-			logger.warning("Cannot nearest point for point "+newRelativePoint+" and area "+getDraggingAuthorizedArea());
+			logger.warning("Cannot nearest point for point " + newRelativePoint + " and area " + getDraggingAuthorizedArea());
 			return false;
 		}
 		// Following little hack is used here to prevent some equalities that may
@@ -59,22 +56,20 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 		pt.x += FGEGeometricObject.EPSILON;
 		pt.y += FGEGeometricObject.EPSILON;
 		setPoint(pt);
-		getPolylin().updatePointAt(1,pt);
-		movedMiddleCP();				
+		getPolylin().updatePointAt(1, pt);
+		movedMiddleCP();
 		getConnector()._connectorChanged(true);
 		getGraphicalRepresentation().notifyConnectorChanged();
 		return true;
 	}
 
-	private void movedMiddleCP()
-	{
+	private void movedMiddleCP() {
 		FGEArea startArea = getConnector().retrieveAllowedStartArea(false);
 
 		Vector<SimplifiedCardinalDirection> allowedStartOrientations = getConnector().getPrimitiveAllowedStartOrientations();
 		Vector<SimplifiedCardinalDirection> allowedEndOrientations = getConnector().getPrimitiveAllowedEndOrientations();
 
-		if (getConnector().getIsStartingLocationFixed() 
-				&& !getConnector().getIsStartingLocationDraggable()) {
+		if (getConnector().getIsStartingLocationFixed() && !getConnector().getIsStartingLocationDraggable()) {
 			// If starting location is fixed and not draggable,
 			// Then retrieve start area itself (which is here a single point)
 			startArea = getConnector().retrieveStartArea();
@@ -83,8 +78,7 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 
 		FGEArea endArea = getConnector().retrieveAllowedEndArea(false);
 
-		if (getConnector().getIsEndingLocationFixed() 
-				&& !getConnector().getIsEndingLocationDraggable()) {
+		if (getConnector().getIsEndingLocationFixed() && !getConnector().getIsEndingLocationDraggable()) {
 			// If starting location is fixed and not draggable,
 			// Then retrieve start area itself (which is here a single point)
 			endArea = getConnector().retrieveEndArea();
@@ -96,50 +90,42 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 		System.out.println("allowedStartOrientations="+allowedStartOrientations);
 		System.out.println("allowedEndOrientations="+allowedEndOrientations);*/
 
-		
 		FGERectPolylin newPolylin;
-		
+
 		FGEPoint middleCPLocation = getPoint();
 
-			newPolylin = FGERectPolylin.makeRectPolylinCrossingPoint(
-				startArea, endArea, middleCPLocation, 
-				true, getConnector().getOverlapXResultingFromPixelOverlap(),getConnector().getOverlapYResultingFromPixelOverlap(),
-				SimplifiedCardinalDirection.allDirectionsExcept(allowedStartOrientations),SimplifiedCardinalDirection.allDirectionsExcept(allowedEndOrientations));
+		newPolylin = FGERectPolylin.makeRectPolylinCrossingPoint(startArea, endArea, middleCPLocation, true, getConnector()
+				.getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap(), SimplifiedCardinalDirection
+				.allDirectionsExcept(allowedStartOrientations), SimplifiedCardinalDirection.allDirectionsExcept(allowedEndOrientations));
 
-			if (newPolylin == null) {
-			logger.warning("Obtained null polylin allowedStartOrientations="+allowedStartOrientations);
+		if (newPolylin == null) {
+			logger.warning("Obtained null polylin allowedStartOrientations=" + allowedStartOrientations);
 			return;
-			}
+		}
 
-			if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
-				getConnector().setFixedStartLocation(
-						GraphicalRepresentation.convertNormalizedPoint(
-								getGraphicalRepresentation(), 
-								newPolylin.getFirstPoint(), 
-								getGraphicalRepresentation().getStartObject()));
-			}
-			if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
-				getConnector().setFixedEndLocation(
-						GraphicalRepresentation.convertNormalizedPoint(
-								getGraphicalRepresentation(), 
-								newPolylin.getLastPoint(), 
-								getGraphicalRepresentation().getEndObject()));
-			}
-
+		if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
+			getConnector().setFixedStartLocation(
+					GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getFirstPoint(),
+							getGraphicalRepresentation().getStartObject()));
+		}
+		if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
+			getConnector().setFixedEndLocation(
+					GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getLastPoint(),
+							getGraphicalRepresentation().getEndObject()));
+		}
 
 		if (newPolylin.isNormalized()) {
-			getConnector().updateWithNewPolylin(newPolylin,true,false);
-		}
-		else {
+			getConnector().updateWithNewPolylin(newPolylin, true, false);
+		} else {
 			logger.warning("Computed layout returned a non-normalized polylin. Please investigate");
-			getConnector().updateWithNewPolylin(newPolylin,false,false);
+			getConnector().updateWithNewPolylin(newPolylin, false, false);
 		}
 
 	}
 
 	/**
 	 * This method is internally called when first control point has been detected to be moved.
-	 *
+	 * 
 	 */
 	/*private void movedMiddleCP()
 	{
@@ -292,6 +278,6 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 		getConnector().updateWithNewPolylin(newPolylin,true);
 
 	}
-*/
+	*/
 
 }

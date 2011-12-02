@@ -25,20 +25,16 @@ package org.openflexo.foundation.validation;
  * @author sguerin
  * 
  */
-public class ValidationSecondaryInitNotification extends ValidationNotification
-{
+public class ValidationSecondaryInitNotification extends ValidationNotification {
 	private int _nbOfRulesToApply;
-	
-	public ValidationSecondaryInitNotification(Validable validatedObject, int nbOfRulesToApply)
-	{
+
+	public ValidationSecondaryInitNotification(Validable validatedObject, int nbOfRulesToApply) {
 		super(validatedObject);
 		_nbOfRulesToApply = nbOfRulesToApply;
 	}
 
-	public int getNbOfRulesToApply()
-	{
+	public int getNbOfRulesToApply() {
 		return _nbOfRulesToApply;
 	}
-
 
 }

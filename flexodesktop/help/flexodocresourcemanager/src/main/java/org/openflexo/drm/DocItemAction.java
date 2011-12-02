@@ -27,217 +27,197 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class DocItemAction extends DRMObject {
 
-    private DocItem item;
-    private String authorId;
-    private Date actionDate;
-    private ActionType actionType;
-    private DocItemVersion version;
-    private String note;
-   
-   public DocItemAction (DRMBuilder builder)
-    {
-        this(builder.docResourceCenter);
-        initializeDeserialization(builder);
-    }
+	private DocItem item;
+	private String authorId;
+	private Date actionDate;
+	private ActionType actionType;
+	private DocItemVersion version;
+	private String note;
 
-    public DocItemAction (DocResourceCenter docResourceCenter)
-    {
-        super(docResourceCenter);
-    }
+	public DocItemAction(DRMBuilder builder) {
+		this(builder.docResourceCenter);
+		initializeDeserialization(builder);
+	}
 
-   public static DocItemAction createSubmitAction (DocItemVersion version, Author author, DocResourceCenter docResourceCenter)
-    {
-        DocItemAction newAction = new DocItemAction(docResourceCenter);
-        newAction.item = version.getItem();
-        newAction.authorId = author.getIdentifier();
-        newAction.actionDate = new Date();
-        newAction.actionType = ActionType.SUBMITTED;
-        newAction.version = version;
-        return newAction;
-    }
+	public DocItemAction(DocResourceCenter docResourceCenter) {
+		super(docResourceCenter);
+	}
 
-   public static DocItemAction createReviewAction (DocItemVersion version, Author author, DocResourceCenter docResourceCenter)
-   {
-       DocItemAction newAction = new DocItemAction(docResourceCenter);
-       newAction.item = version.getItem();
-       newAction.authorId = author.getIdentifier();
-       newAction.actionDate = new Date();
-       newAction.actionType = ActionType.REVIEWED;
-       newAction.version = version;
-       return newAction;
-   }
+	public static DocItemAction createSubmitAction(DocItemVersion version, Author author, DocResourceCenter docResourceCenter) {
+		DocItemAction newAction = new DocItemAction(docResourceCenter);
+		newAction.item = version.getItem();
+		newAction.authorId = author.getIdentifier();
+		newAction.actionDate = new Date();
+		newAction.actionType = ActionType.SUBMITTED;
+		newAction.version = version;
+		return newAction;
+	}
 
-   public static DocItemAction createApproveAction (DocItemVersion version, Author author, DocResourceCenter docResourceCenter)
-   {
-       DocItemAction newAction = new DocItemAction(docResourceCenter);
-       newAction.item = version.getItem();
-       newAction.authorId = author.getIdentifier();
-       newAction.actionDate = new Date();
-       newAction.actionType = ActionType.APPROVED;
-       newAction.version = version;
-       return newAction;
-   }
+	public static DocItemAction createReviewAction(DocItemVersion version, Author author, DocResourceCenter docResourceCenter) {
+		DocItemAction newAction = new DocItemAction(docResourceCenter);
+		newAction.item = version.getItem();
+		newAction.authorId = author.getIdentifier();
+		newAction.actionDate = new Date();
+		newAction.actionType = ActionType.REVIEWED;
+		newAction.version = version;
+		return newAction;
+	}
 
-   public static DocItemAction createRefuseAction (DocItemVersion version, Author author, DocResourceCenter docResourceCenter)
-   {
-       DocItemAction newAction = new DocItemAction(docResourceCenter);
-       newAction.item = version.getItem();
-       newAction.authorId = author.getIdentifier();
-       newAction.actionDate = new Date();
-       newAction.actionType = ActionType.REFUSED;
-       newAction.version = version;
-       return newAction;
-   }
+	public static DocItemAction createApproveAction(DocItemVersion version, Author author, DocResourceCenter docResourceCenter) {
+		DocItemAction newAction = new DocItemAction(docResourceCenter);
+		newAction.item = version.getItem();
+		newAction.authorId = author.getIdentifier();
+		newAction.actionDate = new Date();
+		newAction.actionType = ActionType.APPROVED;
+		newAction.version = version;
+		return newAction;
+	}
 
-   public Date getActionDate() 
-    {
-        return actionDate;
-    }
+	public static DocItemAction createRefuseAction(DocItemVersion version, Author author, DocResourceCenter docResourceCenter) {
+		DocItemAction newAction = new DocItemAction(docResourceCenter);
+		newAction.item = version.getItem();
+		newAction.authorId = author.getIdentifier();
+		newAction.actionDate = new Date();
+		newAction.actionType = ActionType.REFUSED;
+		newAction.version = version;
+		return newAction;
+	}
 
-    public void setActionDate(Date actionDate) 
-    {
-        this.actionDate = actionDate;
-        setChanged();
- }
+	public Date getActionDate() {
+		return actionDate;
+	}
 
-    public ActionType getActionType() 
-    {
-        return actionType;
-    }
+	public void setActionDate(Date actionDate) {
+		this.actionDate = actionDate;
+		setChanged();
+	}
 
-    public void setActionType(ActionType actionType) 
-    {
-        this.actionType = actionType;
-        setChanged();
-  }
+	public ActionType getActionType() {
+		return actionType;
+	}
 
-    public String getAuthorId() 
-    {
-        return authorId;
-    }
+	public void setActionType(ActionType actionType) {
+		this.actionType = actionType;
+		setChanged();
+	}
 
-    public void setAuthorId(String authorId) 
-    {
-        this.authorId = authorId;
-        setChanged();
-   }
+	public String getAuthorId() {
+		return authorId;
+	}
 
-    public DocItem getItem() {
-        return item;
-    }
+	public void setAuthorId(String authorId) {
+		this.authorId = authorId;
+		setChanged();
+	}
 
-    public void setItem(DocItem item) 
-    {
-        this.item = item;
-        setChanged();
-   }
+	public DocItem getItem() {
+		return item;
+	}
 
-    public DocItemVersion getVersion() 
-    {
-        return version;
-    }
+	public void setItem(DocItem item) {
+		this.item = item;
+		setChanged();
+	}
 
-    public void setVersion(DocItemVersion version)
-    {
-        this.version = version;
-        setChanged();
-   }
+	public DocItemVersion getVersion() {
+		return version;
+	}
 
-    public String getNote() 
-    {
-        return note;
-    }
+	public void setVersion(DocItemVersion version) {
+		this.version = version;
+		setChanged();
+	}
 
-    public void setNote(String note)
-    {
-        this.note = note;
-        setChanged();
-   }
+	public String getNote() {
+		return note;
+	}
 
-    public String getLocalizedName() 
-    {
-        return FlexoLocalization.localizedForKeyWithParams("($version.version)/($version.languageId)_($localizedActionType)_on_($localizedSmallActionDate)_by_($authorId)_($statusName)",this);
-    }
-    
-    public String getLocalizedActionType()
-    {
-        return FlexoLocalization.localizedForKey(getActionType().getName());
-    }
+	public void setNote(String note) {
+		this.note = note;
+		setChanged();
+	}
 
-    public String getLocalizedSmallActionDate()
-    {
-        // Typically "dd/MM/yyyy" in french, "MM/dd, yyyy" in english
-        return (new SimpleDateFormat(FlexoLocalization.localizedForKey("doc_item_action_date_format_simple")).format(getActionDate()));
-    }
+	public String getLocalizedName() {
+		return FlexoLocalization
+				.localizedForKeyWithParams(
+						"($version.version)/($version.languageId)_($localizedActionType)_on_($localizedSmallActionDate)_by_($authorId)_($statusName)",
+						this);
+	}
 
-    public String getLocalizedFullActionDate()
-    {
-        // Typically "dd/MM/yyyy" in french, "MM/dd, yyyy" in english
-        return (new SimpleDateFormat(FlexoLocalization.localizedForKey("doc_item_action_date_format_extended")).format(getActionDate()));
-    }
+	public String getLocalizedActionType() {
+		return FlexoLocalization.localizedForKey(getActionType().getName());
+	}
 
-    public boolean isApproved()
-    {
-        for (Enumeration en=item.getActions().elements(); en.hasMoreElements();) {
-            DocItemAction next = (DocItemAction)en.nextElement();
-            if ((next.getVersion() == getVersion()) 
-                    && (next.getActionType() == ActionType.APPROVED)) {
-                return true;
-            }
-        }
-        return false;
-   }
- 
-    public boolean isPending()
-    {
-        if (isProposal()) {
-            return ((!isApproved()) && (!isRefused()));
-        }
-        return false;
-    }
- 
-    public boolean isProposal()
-    {
-        return ((getActionType() == ActionType.SUBMITTED) 
-                || (getActionType() == ActionType.REVIEWED));
-    }
- 
-   public boolean isRefused()
-    {
-        for (Enumeration en=item.getActions().elements(); en.hasMoreElements();) {
-            DocItemAction next = (DocItemAction)en.nextElement();
-            if ((next.getVersion() == getVersion()) 
-                    && (next.getActionType() == ActionType.REFUSED)) {
-                return true;
-            }
-        }
-        return false;
-    }
-   
-   public String getStatusName()
-   {
-       if (!isProposal()) return "";
-        if (isApproved()) return FlexoLocalization.localizedForKey("[approved]");
-       if (isRefused()) return FlexoLocalization.localizedForKey("[refused]");
-       if (isPending()) return FlexoLocalization.localizedForKey("[pending]");
-       return "";
-  }
- 
-   @Override
-public String getClassNameKey() 
-   {
-       return "doc_item_action";
-   }
+	public String getLocalizedSmallActionDate() {
+		// Typically "dd/MM/yyyy" in french, "MM/dd, yyyy" in english
+		return (new SimpleDateFormat(FlexoLocalization.localizedForKey("doc_item_action_date_format_simple")).format(getActionDate()));
+	}
 
-   /**
-     * Overrides getIdentifier
-     * 
-     * @see org.openflexo.drm.DRMObject#getIdentifier()
-     */
-    @Override
-    public String getIdentifier()
-    {
-        return getActionType().getName()+"_ON_"+getVersion().getIdentifier();
-    }
+	public String getLocalizedFullActionDate() {
+		// Typically "dd/MM/yyyy" in french, "MM/dd, yyyy" in english
+		return (new SimpleDateFormat(FlexoLocalization.localizedForKey("doc_item_action_date_format_extended")).format(getActionDate()));
+	}
+
+	public boolean isApproved() {
+		for (Enumeration en = item.getActions().elements(); en.hasMoreElements();) {
+			DocItemAction next = (DocItemAction) en.nextElement();
+			if ((next.getVersion() == getVersion()) && (next.getActionType() == ActionType.APPROVED)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isPending() {
+		if (isProposal()) {
+			return ((!isApproved()) && (!isRefused()));
+		}
+		return false;
+	}
+
+	public boolean isProposal() {
+		return ((getActionType() == ActionType.SUBMITTED) || (getActionType() == ActionType.REVIEWED));
+	}
+
+	public boolean isRefused() {
+		for (Enumeration en = item.getActions().elements(); en.hasMoreElements();) {
+			DocItemAction next = (DocItemAction) en.nextElement();
+			if ((next.getVersion() == getVersion()) && (next.getActionType() == ActionType.REFUSED)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public String getStatusName() {
+		if (!isProposal()) {
+			return "";
+		}
+		if (isApproved()) {
+			return FlexoLocalization.localizedForKey("[approved]");
+		}
+		if (isRefused()) {
+			return FlexoLocalization.localizedForKey("[refused]");
+		}
+		if (isPending()) {
+			return FlexoLocalization.localizedForKey("[pending]");
+		}
+		return "";
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "doc_item_action";
+	}
+
+	/**
+	 * Overrides getIdentifier
+	 * 
+	 * @see org.openflexo.drm.DRMObject#getIdentifier()
+	 */
+	@Override
+	public String getIdentifier() {
+		return getActionType().getName() + "_ON_" + getVersion().getIdentifier();
+	}
 
 }

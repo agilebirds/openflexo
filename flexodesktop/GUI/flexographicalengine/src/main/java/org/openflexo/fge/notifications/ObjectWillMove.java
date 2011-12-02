@@ -19,11 +19,9 @@
  */
 package org.openflexo.fge.notifications;
 
-
 public class ObjectWillMove extends FGENotification {
 
-	public ObjectWillMove()
-	{
-		super("location",null,null);
+	public ObjectWillMove() {
+		super("location", null, null);
 	}
 }

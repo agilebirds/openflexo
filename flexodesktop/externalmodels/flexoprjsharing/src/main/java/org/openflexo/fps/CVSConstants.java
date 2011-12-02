@@ -26,20 +26,22 @@ import org.netbeans.lib.cvsclient.util.DefaultIgnoreFileFilter;
 
 public class CVSConstants {
 
-	public static String[] binaryFilesPatterns = { "*.jar", "*.jpg", "*.png", "*.gif", "*.ico", "*.bmp", "*.tif", "*.tiff", "*.pdf", "*.zip", "*.war", "*.doc" };
-	
-    public static final long TIME_OUT = 60000; // 60 s.
-    
+	public static String[] binaryFilesPatterns = { "*.jar", "*.jpg", "*.png", "*.gif", "*.ico", "*.bmp", "*.tif", "*.tiff", "*.pdf",
+			"*.zip", "*.war", "*.doc" };
+
+	public static final long TIME_OUT = 60000; // 60 s.
+
 	private static DefaultIgnoreFileFilter binaryFileFilter;
-	
+
 	static {
 		Vector<String> binaryFilesPatternList = new Vector<String>();
-		for (String pattern : binaryFilesPatterns) binaryFilesPatternList.add(pattern);
+		for (String pattern : binaryFilesPatterns) {
+			binaryFilesPatternList.add(pattern);
+		}
 		binaryFileFilter = new DefaultIgnoreFileFilter(binaryFilesPatternList);
 	}
-	
-	public static boolean isBinaryFile(File file)
-	{
+
+	public static boolean isBinaryFile(File file) {
 		return binaryFileFilter.shouldBeIgnored(file.getParentFile(), file.getName());
 	}
 }

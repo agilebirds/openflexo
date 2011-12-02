@@ -3,7 +3,9 @@ package org.openflexo.builders;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -22,9 +24,9 @@ import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.fps.CVSFile;
@@ -45,9 +47,9 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 
 	protected static final Logger logger = FlexoLogger.getLogger(FlexoProjectMergeMain.class.getPackage().getName());
 
-	public static final int CONFLICTING_FILES  = -9;
+	public static final int CONFLICTING_FILES = -9;
 
-	public static final String FIRST_COMMIT_ARGUMENT= "-FirstCommit";
+	public static final String FIRST_COMMIT_ARGUMENT = "-FirstCommit";
 
 	public static final String PROJECT_DIRECTORY_ARGUMENT_PREFIX = "-Directory=";
 
@@ -128,7 +130,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 						moduleName = moduleName.substring(1);
 					}
 					if (moduleName.endsWith("\"")) {
-						moduleName = moduleName.substring(0,moduleName.length()-1);
+						moduleName = moduleName.substring(0, moduleName.length() - 1);
 					}
 				} else if (args[i].startsWith(TAG_ARGUMENT_PREFIX)) {
 					tag = args[i].substring(TAG_ARGUMENT_PREFIX.length());
@@ -136,7 +138,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 						tag = tag.substring(1);
 					}
 					if (tag.endsWith("\"")) {
-						tag = tag.substring(0,tag.length()-1);
+						tag = tag.substring(0, tag.length() - 1);
 					}
 				} else if (args[i].startsWith(COMMENT_ARGUMENT_PREFIX)) {
 					comment = args[i].substring(COMMENT_ARGUMENT_PREFIX.length());
@@ -144,7 +146,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 						comment = comment.substring(1);
 					}
 					if (comment.endsWith("\"")) {
-						comment = comment.substring(0,comment.length()-1);
+						comment = comment.substring(0, comment.length() - 1);
 					}
 				}
 			}
@@ -158,8 +160,8 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (tag!=null) {
-			tag = tag.replaceAll("[ \\$,\\.:;@|]", "_"); //Tags cannot contain those special chars.
+		if (tag != null) {
+			tag = tag.replaceAll("[ \\$,\\.:;@|]", "_"); // Tags cannot contain those special chars.
 		}
 		cvsRepository = new CVSRepository(cvsProperties);
 		repositories.addToCVSRepositories(cvsRepository);
@@ -172,11 +174,11 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 				}
 			}
 			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("Missing argument. Usage java " + FlexoProjectMergeMain.class.getName() + " "
-						+ RESOURCE_PATH_ARGUMENT_PREFIX + " " + CVS_REPOSITORY_FILE_ARGUMENT_PREFIX + " " + PROJECT_DIRECTORY_ARGUMENT_PREFIX + " "
-						+ TAG_ARGUMENT_PREFIX + " " + "\n" + (args.length > 0 ? sb.toString() : "No arguments !!!"));
+				logger.severe("Missing argument. Usage java " + FlexoProjectMergeMain.class.getName() + " " + RESOURCE_PATH_ARGUMENT_PREFIX
+						+ " " + CVS_REPOSITORY_FILE_ARGUMENT_PREFIX + " " + PROJECT_DIRECTORY_ARGUMENT_PREFIX + " " + TAG_ARGUMENT_PREFIX
+						+ " " + "\n" + (args.length > 0 ? sb.toString() : "No arguments !!!"));
 			}
-			if (moduleName==null) {
+			if (moduleName == null) {
 				throw new MissingArgumentException(MODULE_NAME_ARGUMENT_PREFIX);
 			} else {
 				throw new MissingArgumentException(CVS_REPOSITORY_FILE_ARGUMENT_PREFIX);
@@ -211,7 +213,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 					logger.info("Ready to commit " + (filesToCommit.size() + conflictingMergeableFiles.size()) + " files including "
 							+ conflictingMergeableFiles.size() + " automatically merged.");
 				}
-				if (conflictingMergeableFiles.size()>0) {
+				if (conflictingMergeableFiles.size() > 0) {
 					mergeFiles();
 				}
 			}
@@ -226,16 +228,16 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 	 */
 	protected void commitProject() {
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Starting to commit "+filesToCommit.size()+" files for "+moduleName);
+			logger.info("Starting to commit " + filesToCommit.size() + " files for " + moduleName);
 		}
 		CommitFiles commit = CommitFiles.actionType.makeNewAction(null, filesToCommit, EDITOR);
-		commit.setCommitMessage((comment!=null?comment+"\n":""));
+		commit.setCommitMessage(comment != null ? comment + "\n" : "");
 		commit.doAction();
 		if (!commit.hasActionExecutionSucceeded()) {
-			handleActionFailed(commit,projectDirectory);
+			handleActionFailed(commit, projectDirectory);
 		}
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Commit done for "+moduleName);
+			logger.info("Commit done for " + moduleName);
 		}
 	}
 
@@ -244,17 +246,19 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 	 */
 	private void updateProject() {
 		// at this point : all files that were trivially mergeable are merged on disk and mark as merged in CVS
-		// at this point : filesToCommit contains all files that were only locally modified + all files that where trivially mergeable (and physically merged)
+		// at this point : filesToCommit contains all files that were only locally modified + all files that where trivially mergeable (and
+		// physically merged)
 		// at this point : filesToUpdate contains all files that where only remotely modified.
-		if(filesToUpdate.size()>0){
-			if(logger.isLoggable(Level.INFO)){
+		if (filesToUpdate.size() > 0) {
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("It seems we are ready to commit, but there is some files to update.");
 			}
-			//now : what we want to do is to update all remotely modified files (i.e. : filesToUpdate) and check that the project can be opened.
+			// now : what we want to do is to update all remotely modified files (i.e. : filesToUpdate) and check that the project can be
+			// opened.
 			UpdateFiles updateFiles = UpdateFiles.actionType.makeNewAction(null, filesToUpdate, EDITOR);
 			updateFiles.doAction();
 			if (!updateFiles.hasActionExecutionSucceeded()) {
-				handleActionFailed(updateFiles,projectDirectory);
+				handleActionFailed(updateFiles, projectDirectory);
 			}
 
 		}
@@ -265,8 +269,8 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 	 */
 	private void prepareMergeFailed() throws MergeFailedException {
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Merge cannot be performed: " + conflictingFiles.size() + " are conflicting. Set logger named "
-					+ logger.getName() + " level to FINE to see files and to FINEST to see merge detail.");
+			logger.info("Merge cannot be performed: " + conflictingFiles.size() + " are conflicting. Set logger named " + logger.getName()
+					+ " level to FINE to see files and to FINEST to see merge detail.");
 		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Conflicting files:");
@@ -280,8 +284,8 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		File projectCopyDirectory = null;
 		FlexoEditor editor = null;
 		try {
-			Vector<FlexoStorageResource> conflictingResources=new Vector<FlexoStorageResource>();
-			projectCopyDirectory = FileUtils.createTempDirectory("Copy_", "_of_"+projectDirectory.getName());
+			List<FlexoStorageResource<? extends StorageResourceData>> conflictingResources = new ArrayList<FlexoStorageResource<? extends StorageResourceData>>();
+			projectCopyDirectory = FileUtils.createTempDirectory("Copy_", "_of_" + projectDirectory.getName());
 			FileUtils.copyContentDirToDir(projectDirectory, projectCopyDirectory);
 			editor = FlexoResourceManager.initializeExistingProject(projectCopyDirectory, new FlexoEditorFactory() {
 
@@ -290,26 +294,25 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 
 					return new FlexoBuilderEditor(project);
 				}
-			},null);
-			editor.getProject().getResources();
+			}, null);
 			for (CVSFile file : conflictingFiles) {
 				String fileName = file.getFile().getAbsolutePath();
-				for (FlexoResource r : editor.getProject().getResources().values()) {
-					if (r instanceof FlexoStorageResource && fileName.endsWith(((FlexoStorageResource)r).getResourceFile().getRelativePath())) {
-						conflictingResources.add((FlexoStorageResource) r);
+				for (FlexoStorageResource<? extends StorageResourceData> r : editor.getProject().getStorageResources()) {
+					if (fileName.endsWith(r.getResourceFile().getRelativePath())) {
+						conflictingResources.add(r);
 						break;
 					}
 				}
 			}
 			writeToConsole(FlexoBuilderListener.CONFLICTING_RESSOURCES_START_TAG);
-			for(FlexoStorageResource r: conflictingResources) {
+			for (FlexoStorageResource<? extends StorageResourceData> r : conflictingResources) {
 				writeToConsole(r.getResourceType().getLocalizedName() + " " + r.getName() + " is in conflict");
 			}
 			writeToConsole(FlexoBuilderListener.CONFLICTING_RESSOURCES_END_TAG);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if(editor!=null && editor.getProject()!=null) {
+			if (editor != null && editor.getProject() != null) {
 				editor.getProject().close();
 			}
 		}
@@ -325,14 +328,13 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 			MarkAsMergedFiles markAsMerged = MarkAsMergedFiles.actionType.makeNewAction(null, conflictingMergeableFiles, EDITOR);
 			markAsMerged.doAction();
 			if (!markAsMerged.hasActionExecutionSucceeded()) {
-				handleActionFailed(markAsMerged,projectDirectory);
+				handleActionFailed(markAsMerged, projectDirectory);
 			}
-			//now : all conflictingMergeableFiles are physically merge on disk
-			//see : CVSFile.markAsMerged()
-			for (FPSObject file : conflictingMergeableFiles) { //check that all files "mark as merged" aren't conflicting any more
-				if (((CVSFile) file).getStatus().isConflicting())
-				{
-					conflictingFiles.add((CVSFile) file); //a file that has been "mark as merged" is still conflicting... that's very bad
+			// now : all conflictingMergeableFiles are physically merge on disk
+			// see : CVSFile.markAsMerged()
+			for (FPSObject file : conflictingMergeableFiles) { // check that all files "mark as merged" aren't conflicting any more
+				if (((CVSFile) file).getStatus().isConflicting()) {
+					conflictingFiles.add((CVSFile) file); // a file that has been "mark as merged" is still conflicting... that's very bad
 				}
 			}
 			if (conflictingFiles.size() > 0) {
@@ -349,8 +351,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		if (filesToUpdate.size() > 0) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Something is not right. Project was supposed to be locked but there are " + filesToUpdate.size()
-						+ " files to update.\n"
-						+ "\tI will continue but checked-out project may be different from uploaded project");
+						+ " files to update.\n" + "\tI will continue but checked-out project may be different from uploaded project");
 			}
 		}
 		// If we don't care aboute conflicts and other problems
@@ -360,7 +361,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		OverrideAndCommitFiles overrideAndCommit = OverrideAndCommitFiles.actionType.makeNewAction(null, filesToOverride, EDITOR);
 		overrideAndCommit.doAction();
 		if (!overrideAndCommit.hasActionExecutionSucceeded()) {
-			handleActionFailed(overrideAndCommit,projectDirectory);
+			handleActionFailed(overrideAndCommit, projectDirectory);
 		}
 	}
 
@@ -372,13 +373,13 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		// status
 		// and the merges
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Launching project synchronization for "+moduleName);
+			logger.info("Launching project synchronization for " + moduleName);
 		}
-		SynchronizeWithRepository synchronize = SynchronizeWithRepository.actionType.makeNewAction(project, new Vector<FPSObject>(),
-				EDITOR);
+		SynchronizeWithRepository synchronize = SynchronizeWithRepository.actionType
+				.makeNewAction(project, new Vector<FPSObject>(), EDITOR);
 		synchronize.doAction();
 		if (!synchronize.hasActionExecutionSucceeded()) {
-			handleActionFailed(synchronize,projectDirectory);
+			handleActionFailed(synchronize, projectDirectory);
 		}
 
 		files = project.getAllCVSFiles();
@@ -405,7 +406,9 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 			}
 		}
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Synchronization done for "+moduleName+" with "+filesToCommit.size()+" file to commit, "+conflictingMergeableFiles.size()+ " conflicting mergeable files and "+conflictingFiles.size()+" really conflicting files.");
+			logger.info("Synchronization done for " + moduleName + " with " + filesToCommit.size() + " file to commit, "
+					+ conflictingMergeableFiles.size() + " conflicting mergeable files and " + conflictingFiles.size()
+					+ " really conflicting files.");
 		}
 	}
 
@@ -418,7 +421,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		// so we can try to load the project... and see if it's going right !!!
 		File projectCopyDirectory = null;
 		try {
-			projectCopyDirectory = FileUtils.createTempDirectory("Copy_", "_of_"+projectDirectory.getName());
+			projectCopyDirectory = FileUtils.createTempDirectory("Copy_", "_of_" + projectDirectory.getName());
 			FileUtils.copyContentDirToDir(projectDirectory, projectCopyDirectory);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -434,17 +437,19 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 
 					return new FlexoBuilderEditor(project);
 				}
-			},null);
+			}, null);
 
-			if(editor==null) {
+			if (editor == null) {
 				setExitCode(CORRUPTED_PROJECT_EXCEPTION);
-				throw new CorruptedProjectException("Try to open the merged project, but I got no editor, and the call to FlexoResourceManager.initializeExistingProject didn't throw any exception.");
+				throw new CorruptedProjectException(
+						"Try to open the merged project, but I got no editor, and the call to FlexoResourceManager.initializeExistingProject didn't throw any exception.");
 			}
-			if(editor.getProject()==null) {
+			if (editor.getProject() == null) {
 				setExitCode(CORRUPTED_PROJECT_EXCEPTION);
-				throw new CorruptedProjectException("Try to open the merged project, but I got no project, and the call to FlexoResourceManager.initializeExistingProject call didn't throw any exception.");
+				throw new CorruptedProjectException(
+						"Try to open the merged project, but I got no project, and the call to FlexoResourceManager.initializeExistingProject call didn't throw any exception.");
 			}
-			//printTOCRepositories(editor);
+			// printTOCRepositories(editor);
 		} catch (ProjectLoadingCancelledException e) {
 			setExitCode(CORRUPTED_PROJECT_EXCEPTION);
 			throw new CorruptedProjectException(e);
@@ -452,7 +457,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 			setExitCode(CORRUPTED_PROJECT_EXCEPTION);
 			throw new CorruptedProjectException(e);
 		} finally {
-			if(editor!=null && editor.getProject()!=null) {
+			if (editor != null && editor.getProject() != null) {
 				editor.getProject().close();
 			}
 		}
@@ -505,7 +510,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		shareProject.setVendorTag(tag);
 		shareProject.doAction();
 		if (!shareProject.hasActionExecutionSucceeded()) {
-			handleActionFailed(shareProject,projectDirectory);
+			handleActionFailed(shareProject, projectDirectory);
 		} else if (logger.isLoggable(Level.INFO)) {
 			logger.info("Project sharing succeeded");
 		}
@@ -514,7 +519,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 
 	@Override
 	protected void cleanUp() {
-		if (getExitCode()!=0) {
+		if (getExitCode() != 0) {
 			reportMessage(cvsConsole.getLogs().toString());
 		}
 		super.cleanUp();

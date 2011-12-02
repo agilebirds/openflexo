@@ -26,42 +26,37 @@ public class GenericArrayTypeImpl implements GenericArrayType {
 
 	private Type componentType;
 
-	public GenericArrayTypeImpl(Type componentType) 
-	{
+	public GenericArrayTypeImpl(Type componentType) {
 		this.componentType = componentType;
 	}
-	
+
 	@Override
-	public Type getGenericComponentType() 
-	{
+	public Type getGenericComponentType() {
 		return componentType;
 	}
-	
+
 	@Override
-	public String toString() 
-	{
-		return TypeUtils.simpleRepresentation(getGenericComponentType())+"[]";
+	public String toString() {
+		return TypeUtils.simpleRepresentation(getGenericComponentType()) + "[]";
 	}
-	
-	public String fullQualifiedRepresentation() 
-	{
-		return TypeUtils.fullQualifiedRepresentation(getGenericComponentType())+"[]";
+
+	public String fullQualifiedRepresentation() {
+		return TypeUtils.fullQualifiedRepresentation(getGenericComponentType()) + "[]";
 	}
-	
+
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return fullQualifiedRepresentation().hashCode();
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) 
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof GenericArrayType) {
-			return ((getGenericComponentType() == null && ((GenericArrayType)obj).getGenericComponentType() == null)
-					|| (getGenericComponentType() != null && getGenericComponentType().equals(((GenericArrayType)obj).getGenericComponentType())));
+			return ((getGenericComponentType() == null && ((GenericArrayType) obj).getGenericComponentType() == null) || (getGenericComponentType() != null && getGenericComponentType()
+					.equals(((GenericArrayType) obj).getGenericComponentType())));
+		} else {
+			return super.equals(obj);
 		}
-		else return super.equals(obj);
 	}
 
 }

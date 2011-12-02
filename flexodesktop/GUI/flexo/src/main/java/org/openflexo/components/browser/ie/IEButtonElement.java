@@ -24,37 +24,31 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEButtonWidget;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IEButtonElement extends IEElement
-{
+public class IEButtonElement extends IEElement {
 
-    public IEButtonElement(IEButtonWidget button, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(button, BrowserElementType.BUTTON, browser,parent);
-    }
+	public IEButtonElement(IEButtonWidget button, ProjectBrowser browser, BrowserElement parent) {
+		super(button, BrowserElementType.BUTTON, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getButton().getImageName() == null) {
-            return "Button";
-        }
-        return getButton().getImageName().substring(getButton().getImageName().lastIndexOf("_")+1,getButton().getImageName().length()-4);
-    }
+	@Override
+	public String getName() {
+		if (getButton().getImageName() == null) {
+			return "Button";
+		}
+		return getButton().getImageName().substring(getButton().getImageName().lastIndexOf("_") + 1,
+				getButton().getImageName().length() - 4);
+	}
 
-    protected IEButtonWidget getButton()
-    {
-        return (IEButtonWidget) getObject();
-    }
+	protected IEButtonWidget getButton() {
+		return (IEButtonWidget) getObject();
+	}
 
 }

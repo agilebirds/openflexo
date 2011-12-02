@@ -31,94 +31,93 @@ import org.openflexo.logging.FlexoLogger;
 
 public class WSPortTypeFolder extends WSObject {
 
-	 private static final Logger logger = FlexoLogger.getLogger(WSPortTypeFolder.class.getPackage()
-	            .getName());
+	private static final Logger logger = FlexoLogger.getLogger(WSPortTypeFolder.class.getPackage().getName());
 	private WSService parentService;
-	
-    /**
-     * @param dl
-     */
-    public WSPortTypeFolder(WSService group)
-    {
-        super(group.getWSLibrary());
-        parentService=group;
-    }
 
-    public Vector getWSPortTypes() {
-        return parentService.getWSPortTypes();
-    }
-    
-    
-    public WSService getWSService(){
-    		return parentService;
-    }
-    
-    /**
-     * Overrides getFullyQualifiedName
-     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-     */
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "WS_PORTTYPE_FOLDER";
-    }
-    
-    @Override
-	public String getName(){
-    		return "ws_process_folder";
-    }
-    @Override
-	public String getLocalizedName(){
+	/**
+	 * @param dl
+	 */
+	public WSPortTypeFolder(WSService group) {
+		super(group.getWSLibrary());
+		parentService = group;
+	}
+
+	public Vector getWSPortTypes() {
+		return parentService.getWSPortTypes();
+	}
+
+	public WSService getWSService() {
+		return parentService;
+	}
+
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "WS_PORTTYPE_FOLDER";
+	}
+
+	@Override
+	public String getName() {
+		return "ws_process_folder";
+	}
+
+	@Override
+	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey(getName());
-}
-    
-    @Override
-	public void delete(){
-    		if (logger.isLoggable(Level.FINE)) logger.fine("delete: WSPortTypeFolder "+getName());
-    		parentService=null;
-    		super.delete();
-    		deleteObservers();
-    }
-    // ==========================================================================
-    // ======================== TreeNode implementation
-    // =========================
-    // ==========================================================================
+	}
 
-    @Override
-	public TreeNode getParent()
-    {
-        return parentService;
-    }
+	@Override
+	public void delete() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("delete: WSPortTypeFolder " + getName());
+		}
+		parentService = null;
+		super.delete();
+		deleteObservers();
+	}
 
-    @Override
-	public boolean getAllowsChildren()
-    {
-        return true;
-    }
-    
-    @Override
-	public Vector getOrderedChildren(){
-    		Vector a = new Vector();
-    		Enumeration en=getWSPortTypes().elements();
-    		while (en.hasMoreElements()) {
-				WSPortType element = (WSPortType) en.nextElement();
-				a.add(element.getFlexoProcess());
-			}
-    		return a;
-    }
-    
-    // ==========================================================================
-    // ======================== Search WSPortType
-    // =========================
-    // ==========================================================================
-    
-    public WSPortType getWSPortTypeNamed(String name){
-    		return parentService.getWSPortTypeNamed(name);
-    }
-    
-    @Override
+	// ==========================================================================
+	// ======================== TreeNode implementation
+	// =========================
+	// ==========================================================================
+
+	@Override
+	public TreeNode getParent() {
+		return parentService;
+	}
+
+	@Override
+	public boolean getAllowsChildren() {
+		return true;
+	}
+
+	@Override
+	public Vector getOrderedChildren() {
+		Vector a = new Vector();
+		Enumeration en = getWSPortTypes().elements();
+		while (en.hasMoreElements()) {
+			WSPortType element = (WSPortType) en.nextElement();
+			a.add(element.getFlexoProcess());
+		}
+		return a;
+	}
+
+	// ==========================================================================
+	// ======================== Search WSPortType
+	// =========================
+	// ==========================================================================
+
+	public WSPortType getWSPortTypeNamed(String name) {
+		return parentService.getWSPortTypeNamed(name);
+	}
+
+	@Override
 	public String getClassNameKey() {
-    	// TODO Auto-generated method stub
-    	return "ws_port_type_folder";
-    }
+		// TODO Auto-generated method stub
+		return "ws_port_type_folder";
+	}
 }

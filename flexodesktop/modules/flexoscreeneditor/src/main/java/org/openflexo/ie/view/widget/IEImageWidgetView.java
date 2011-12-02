@@ -28,22 +28,21 @@ import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 
-
 public class IEImageWidgetView extends IEButtonWidgetView {
 
 	private static final Image image = SEIconLibrary.DEFAULT_IMAGE_ICON.getImage();
-	
+
 	public IEImageWidgetView(IEController ieController, IEDynamicImage model, boolean addDnDSupport, IEWOComponentView componentView) {
 		super(ieController, model, addDnDSupport, componentView);
 	}
 
-	public ImageIcon getIcon(){
+	public ImageIcon getIcon() {
 		return SEIconLibrary.DEFAULT_IMAGE_ICON;
 	}
-	
+
 	@Override
 	protected Image getImage() {
 		return image;
 	}
-	
+
 }

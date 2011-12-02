@@ -29,60 +29,52 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleRemoved;
 
-
-public class EditionPatternPreviewShemaGR extends DrawingGraphicalRepresentation<EditionPattern> implements GraphicalFlexoObserver, EditionPatternPreviewConstants {
+public class EditionPatternPreviewShemaGR extends DrawingGraphicalRepresentation<EditionPattern> implements GraphicalFlexoObserver,
+		EditionPatternPreviewConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewShemaGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public EditionPatternPreviewShemaGR()
-	{
+	public EditionPatternPreviewShemaGR() {
 		this(null);
 	}
 
-	public EditionPatternPreviewShemaGR(EditionPatternPreviewRepresentation aDrawing) 
-	{
+	public EditionPatternPreviewShemaGR(EditionPatternPreviewRepresentation aDrawing) {
 		super(aDrawing);
 
 		setWidth(WIDTH);
 		setHeight(HEIGHT);
 		setBackgroundColor(BACKGROUND_COLOR);
 		setDrawWorkingArea(false);
-		
-		if (aDrawing != null 
-				&& aDrawing.getEditionPattern() != null) { 	
+
+		if (aDrawing != null && aDrawing.getEditionPattern() != null) {
 			aDrawing.getEditionPattern().addObserver(this);
 		}
 
 	}
 
-
 	@Override
-	public EditionPatternPreviewRepresentation getDrawing() 
-	{
-		return (EditionPatternPreviewRepresentation)super.getDrawing();
+	public EditionPatternPreviewRepresentation getDrawing() {
+		return (EditionPatternPreviewRepresentation) super.getDrawing();
 	}
-	
-	public EditionPattern getEditionPattern()
-	{
-		if (getDrawing() != null)
+
+	public EditionPattern getEditionPattern() {
+		if (getDrawing() != null) {
 			return getDrawing().getEditionPattern();
+		}
 		return null;
 	}
 
-
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getEditionPattern()) {
-			logger.info("Notified "+dataModification);
-			if ((dataModification instanceof PatternRoleInserted)
-					|| (dataModification instanceof PatternRoleRemoved))
+			logger.info("Notified " + dataModification);
+			if ((dataModification instanceof PatternRoleInserted) || (dataModification instanceof PatternRoleRemoved)) {
 				getDrawing().updateGraphicalObjectsHierarchy();
+			}
 		}
 	}
 

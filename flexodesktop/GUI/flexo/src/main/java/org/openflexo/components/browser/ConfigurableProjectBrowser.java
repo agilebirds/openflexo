@@ -22,54 +22,47 @@ package org.openflexo.components.browser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 
-
 public class ConfigurableProjectBrowser extends ProjectBrowser {
 
-    private BrowserConfiguration _configuration;
-    
-     public ConfigurableProjectBrowser(BrowserConfiguration configuration)
-    {
-        this(configuration, null, true);
-    }
+	private BrowserConfiguration _configuration;
 
-    public ConfigurableProjectBrowser(BrowserConfiguration configuration, boolean initNow)
-    {
-        this(configuration, null, initNow);
-    }
+	public ConfigurableProjectBrowser(BrowserConfiguration configuration) {
+		this(configuration, null, true);
+	}
 
-    public ConfigurableProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager)
-    {
-        this(configuration, selectionManager, true);
-    }
+	public ConfigurableProjectBrowser(BrowserConfiguration configuration, boolean initNow) {
+		this(configuration, null, initNow);
+	}
 
-    public ConfigurableProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager, boolean initNow)
-    {
-        super(configuration,selectionManager,initNow);
-        _configuration = configuration;
-        if (initNow) {
-            init();
-        }
-    }
-    
-    @Override
-	public FlexoModelObject getDefaultRootObject() 
-    {
-        if (_configuration != null)
-            return _configuration.getDefaultRootObject();
-        return null;
-    }
+	public ConfigurableProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager) {
+		this(configuration, selectionManager, true);
+	}
 
-    @Override
-	public void configure()
-    {
-        if (_configuration != null)
-             _configuration.configure(this);
-    }
+	public ConfigurableProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager, boolean initNow) {
+		super(configuration, selectionManager, initNow);
+		_configuration = configuration;
+		if (initNow) {
+			init();
+		}
+	}
 
-    public BrowserConfiguration getConfiguration() 
-    {
-        return _configuration;
-    }
+	@Override
+	public FlexoModelObject getDefaultRootObject() {
+		if (_configuration != null) {
+			return _configuration.getDefaultRootObject();
+		}
+		return null;
+	}
 
+	@Override
+	public void configure() {
+		if (_configuration != null) {
+			_configuration.configure(this);
+		}
+	}
+
+	public BrowserConfiguration getConfiguration() {
+		return _configuration;
+	}
 
 }

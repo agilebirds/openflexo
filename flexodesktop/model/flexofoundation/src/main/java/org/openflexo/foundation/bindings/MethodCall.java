@@ -183,9 +183,10 @@ public class MethodCall extends FlexoModelObject implements Typed, BindingValue.
 		return _args;
 	}
 
-	/*
-	 * public AbstractBinding getBindingValueForParam (DMMethod.DMMethodParameter param) { return _args.get(param); }
-	 */
+	/*public AbstractBinding getBindingValueForParam (DMMethod.DMMethodParameter param)
+	{
+	    return _args.get(param);
+	}*/
 
 	public MethodCallArgument argumentForParam(DMMethodParameter param) {
 		for (MethodCallArgument arg : _args) {
@@ -224,10 +225,12 @@ public class MethodCall extends FlexoModelObject implements Typed, BindingValue.
 	 * 
 	 * @see org.openflexo.foundation.bindings.BindingValue.BindingPathElement#getCardinality()
 	 */
-	/*
-	 * public DMCardinality getCardinality() { if (getType()!=null && (getType().getName().equals("Vector") || getType().getName().equals("NSArray"))) return DMCardinality.VECTOR; return
-	 * DMCardinality.SINGLE; }
-	 */
+	/*public DMCardinality getCardinality()
+	{
+	    if (getType()!=null && (getType().getName().equals("Vector") || getType().getName().equals("NSArray")))
+	        return DMCardinality.VECTOR;
+	    return DMCardinality.SINGLE;
+	}*/
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {

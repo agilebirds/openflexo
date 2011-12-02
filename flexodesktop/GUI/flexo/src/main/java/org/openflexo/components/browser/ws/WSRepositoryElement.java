@@ -19,41 +19,35 @@
  */
 package org.openflexo.components.browser.ws;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ws.WSRepository;
 
+public class WSRepositoryElement extends BrowserElement {
 
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public WSRepositoryElement(WSRepository object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.WS_REPOSITORY, browser, parent);
+	}
 
-public class WSRepositoryElement extends BrowserElement
-{
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public WSRepositoryElement(WSRepository object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.WS_REPOSITORY, browser, parent);
-    }
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-
-    }
-
-    @Override
+	@Override
 	public String getName() {
-    	// TODO Auto-generated method stub
-    	return ((WSRepository)getObject()).getName();
-    }
+		// TODO Auto-generated method stub
+		return ((WSRepository) getObject()).getName();
+	}
 }

@@ -27,20 +27,17 @@ import org.openflexo.foundation.FlexoException;
  * @author sguerin
  * 
  */
-public class DuplicateRoleException extends FlexoException
-{
+public class DuplicateRoleException extends FlexoException {
 
-    private String name;
+	private String name;
 
-    public DuplicateRoleException(String aName)
-    {
-        super(null);
-        name = aName;
-    }
+	public DuplicateRoleException(String aName) {
+		super(null);
+		name = aName;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "DuplicateRoleException: a role with that name (" + name + ") already registered.";
-    }
+	@Override
+	public String getMessage() {
+		return "DuplicateRoleException: a role with that name (" + name + ") already registered.";
+	}
 }

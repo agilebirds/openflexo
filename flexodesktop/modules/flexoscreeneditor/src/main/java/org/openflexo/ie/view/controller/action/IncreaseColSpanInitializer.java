@@ -34,29 +34,24 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class IncreaseColSpanInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	IncreaseColSpanInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(IncreaseColSpan.actionType,actionInitializer);
+	IncreaseColSpanInitializer(IEControllerActionInitializer actionInitializer) {
+		super(IncreaseColSpan.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<IncreaseColSpan> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<IncreaseColSpan> getDefaultInitializer() {
 		return new FlexoActionInitializer<IncreaseColSpan>() {
 			@Override
-			public boolean run(ActionEvent e, IncreaseColSpan action)
-			{
+			public boolean run(ActionEvent e, IncreaseColSpan action) {
 				if (action.getInvoker() instanceof IETDWidgetView
 						&& ((IETDWidgetView) action.getInvoker()).getSequenceModel().getParent() instanceof IETDWidget) {
 					IETDWidgetView invoker = (IETDWidgetView) action.getInvoker();
@@ -72,8 +67,7 @@ public class IncreaseColSpanInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<IncreaseColSpan> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<IncreaseColSpan> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<IncreaseColSpan>() {
 			@Override
 			public boolean handleException(FlexoException exception, IncreaseColSpan action) {

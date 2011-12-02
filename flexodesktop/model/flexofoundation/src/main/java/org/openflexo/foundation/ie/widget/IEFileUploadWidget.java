@@ -27,74 +27,65 @@ import org.openflexo.foundation.ie.IObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
  * Represents a label widget
  * 
  * @author bmangez
  */
-public class IEFileUploadWidget extends IENonEditableTextWidget
-{
+public class IEFileUploadWidget extends IENonEditableTextWidget {
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
+	/**
      * 
      */
-    public static final String FILE_UPLOAD_WIDGET = "file_upload_widget";
+	public static final String FILE_UPLOAD_WIDGET = "file_upload_widget";
 
-    public IEFileUploadWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	public IEFileUploadWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public IEFileUploadWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	public IEFileUploadWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return "FileUpload.inspector";
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return "FileUpload.inspector";
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        return EMPTY_IOBJECT_VECTOR;
-    }
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		return EMPTY_IOBJECT_VECTOR;
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "FileUpload";
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "FileUpload";
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return FILE_UPLOAD_WIDGET;
-    }
-    
-    @Override
-	public boolean generateJavascriptID(){
-    	return true;
-    }
-    
-    
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return FILE_UPLOAD_WIDGET;
+	}
+
+	@Override
+	public boolean generateJavascriptID() {
+		return true;
+	}
+
 }

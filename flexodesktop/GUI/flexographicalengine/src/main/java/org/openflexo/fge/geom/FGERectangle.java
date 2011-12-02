@@ -39,31 +39,26 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEGraphics;
 
-
 public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObject<FGERectangle>, FGEShape<FGERectangle> {
 
 	private static final Logger logger = Logger.getLogger(FGERectangle.class.getPackage().getName());
 
 	protected Filling _filling;
 
-	public FGERectangle()
-	{
-		this(0,0,0,0,Filling.NOT_FILLED);
+	public FGERectangle() {
+		this(0, 0, 0, 0, Filling.NOT_FILLED);
 	}
 
-	public FGERectangle(Filling filling)
-	{
-		this(0,0,0,0,filling);
+	public FGERectangle(Filling filling) {
+		this(0, 0, 0, 0, filling);
 	}
 
-	public FGERectangle(double aX, double aY, double aWidth, double aHeight)
-	{
-		this(aX,aY,aWidth,aHeight,Filling.NOT_FILLED);
+	public FGERectangle(double aX, double aY, double aWidth, double aHeight) {
+		this(aX, aY, aWidth, aHeight, Filling.NOT_FILLED);
 	}
 
-	public FGERectangle(double aX, double aY, double aWidth, double aHeight, Filling filling)
-	{
-		super(aX,aY,aWidth,aHeight);
+	public FGERectangle(double aX, double aY, double aWidth, double aHeight, Filling filling) {
+		super(aX, aY, aWidth, aHeight);
 		if (aWidth < 0) {
 			x = x + aWidth;
 			aWidth = -aWidth;
@@ -75,160 +70,147 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		_filling = filling;
 	}
 
-	public FGERectangle(FGEPoint point, FGEDimension dimension, Filling filling)
-	{
-		this(point.x,point.y,dimension.width,dimension.height,filling);
+	public FGERectangle(FGEPoint point, FGEDimension dimension, Filling filling) {
+		this(point.x, point.y, dimension.width, dimension.height, filling);
 	}
 
-	public FGERectangle(FGEPoint p1, FGEPoint p2, Filling filling)
-	{
-		this(Math.min(p1.x,p2.x),Math.min(p1.y,p2.y),Math.abs(p1.x-p2.x),Math.abs(p1.y-p2.y),filling);
+	public FGERectangle(FGEPoint p1, FGEPoint p2, Filling filling) {
+		this(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y), Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y), filling);
 	}
 
 	public FGERectangle(Rectangle rect) {
-		this(rect.x,rect.y,rect.width,rect.height);
+		this(rect.x, rect.y, rect.width, rect.height);
 	}
 
 	@Override
-	public boolean getIsFilled()
-	{
+	public boolean getIsFilled() {
 		return _filling == Filling.FILLED;
 	}
 
 	@Override
-	public void setIsFilled(boolean filled)
-	{
-		_filling = (filled?Filling.FILLED:Filling.NOT_FILLED);
+	public void setIsFilled(boolean filled) {
+		_filling = (filled ? Filling.FILLED : Filling.NOT_FILLED);
 	}
 
 	@Override
-	public FGEPoint getCenter()
-	{
-		return new FGEPoint(getCenterX(),getCenterY());
+	public FGEPoint getCenter() {
+		return new FGEPoint(getCenterX(), getCenterY());
 	}
 
 	/**
-	 * Creates a new object of the same class and with the same
-	 * contents as this object.
-	 * @return     a clone of this instance.
-	 * @exception  OutOfMemoryError            if there is not enough memory.
-	 * @see        java.lang.Cloneable
-	 * @since      1.2
+	 * Creates a new object of the same class and with the same contents as this object.
+	 * 
+	 * @return a clone of this instance.
+	 * @exception OutOfMemoryError
+	 *                if there is not enough memory.
+	 * @see java.lang.Cloneable
+	 * @since 1.2
 	 */
 	@Override
 	public FGERectangle clone() {
-		return (FGERectangle)super.clone();
+		return (FGERectangle) super.clone();
 	}
 
 	/**
 	 * Return nearest point from point "from" following supplied orientation
-	 *
+	 * 
 	 * Returns null if no intersection was found
-	 *
-	 * @param from point from which we are coming to area
-	 * @param orientation orientation we are coming from
+	 * 
+	 * @param from
+	 *            point from which we are coming to area
+	 * @param orientation
+	 *            orientation we are coming from
 	 * @return
 	 */
 	@Override
-	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation)
-	{
+	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation) {
 		FGEHalfLine hl = FGEHalfLine.makeHalfLine(from, orientation);
 
 		FGEArea intersection = computeLineIntersection(hl);
 		if (intersection instanceof FGEEmptyArea) {
 			return null;
-		}
-		else if (intersection instanceof FGEPoint) return (FGEPoint)intersection;
-		else if (intersection instanceof FGEPoint) return (FGEPoint)intersection;
-		else if (intersection instanceof FGEUnionArea) {
+		} else if (intersection instanceof FGEPoint) {
+			return (FGEPoint) intersection;
+		} else if (intersection instanceof FGEPoint) {
+			return (FGEPoint) intersection;
+		} else if (intersection instanceof FGEUnionArea) {
 			FGEPoint returned = null;
 			double minimalDistanceSq = java.lang.Double.POSITIVE_INFINITY;
-			for (FGEArea a : ((FGEUnionArea)intersection).getObjects()) {
+			for (FGEArea a : ((FGEUnionArea) intersection).getObjects()) {
 				if (a instanceof FGEPoint) {
-					double distSq = FGEPoint.distanceSq(from,(FGEPoint)a);
+					double distSq = FGEPoint.distanceSq(from, (FGEPoint) a);
 					if (distSq < minimalDistanceSq) {
-						returned = (FGEPoint)a;
+						returned = (FGEPoint) a;
 						minimalDistanceSq = distSq;
 					}
 				}
 			}
 			return returned;
-		}
-		else if (intersection instanceof FGESegment) {
-			FGEPoint p1,p2;
-			p1 = ((FGESegment)intersection).getP1();
-			p2 = ((FGESegment)intersection).getP2();
-			if (FGEPoint.distanceSq(from,p1) < FGEPoint.distanceSq(from,p2)) return p1;
-			else return p2;
+		} else if (intersection instanceof FGESegment) {
+			FGEPoint p1, p2;
+			p1 = ((FGESegment) intersection).getP1();
+			p2 = ((FGESegment) intersection).getP2();
+			if (FGEPoint.distanceSq(from, p1) < FGEPoint.distanceSq(from, p2)) {
+				return p1;
+			} else {
+				return p2;
+			}
 		}
 
-		logger.warning("Unexpected area: "+intersection);
+		logger.warning("Unexpected area: " + intersection);
 
 		return null;
 	}
 
-	public FGEPoint getNorthWestPt()
-	{
+	public FGEPoint getNorthWestPt() {
 		return getNorth().getP1();
 	}
 
-	public FGEPoint getNorthPt()
-	{
+	public FGEPoint getNorthPt() {
 		return getNorth().getMiddle();
 	}
 
-	public FGEPoint getNorthEastPt()
-	{
+	public FGEPoint getNorthEastPt() {
 		return getNorth().getP2();
 	}
 
-	public FGEPoint getSouthWestPt()
-	{
+	public FGEPoint getSouthWestPt() {
 		return getSouth().getP1();
 	}
 
-	public FGEPoint getSouthPt()
-	{
+	public FGEPoint getSouthPt() {
 		return getSouth().getMiddle();
 	}
 
-	public FGEPoint getSouthEastPt()
-	{
+	public FGEPoint getSouthEastPt() {
 		return getSouth().getP2();
 	}
 
-	public FGEPoint getEastPt()
-	{
+	public FGEPoint getEastPt() {
 		return getEast().getMiddle();
 	}
 
-	public FGEPoint getWestPt()
-	{
+	public FGEPoint getWestPt() {
 		return getWest().getMiddle();
 	}
 
-	public FGESegment getNorth()
-	{
-		return new FGESegment(getX(),getY(),getX()+getWidth(),getY());
+	public FGESegment getNorth() {
+		return new FGESegment(getX(), getY(), getX() + getWidth(), getY());
 	}
 
-	public FGESegment getSouth()
-	{
-		return new FGESegment(getX(),getY()+getHeight(),getX()+getWidth(),getY()+getHeight());
+	public FGESegment getSouth() {
+		return new FGESegment(getX(), getY() + getHeight(), getX() + getWidth(), getY() + getHeight());
 	}
 
-	public FGESegment getEast()
-	{
-		return new FGESegment(getX()+getWidth(),getY(),getX()+getWidth(),getY()+getHeight());
+	public FGESegment getEast() {
+		return new FGESegment(getX() + getWidth(), getY(), getX() + getWidth(), getY() + getHeight());
 	}
 
-	public FGESegment getWest()
-	{
-		return new FGESegment(getX(),getY(),getX(),getY()+getHeight());
+	public FGESegment getWest() {
+		return new FGESegment(getX(), getY(), getX(), getY() + getHeight());
 	}
 
-	public List<FGESegment> getFrameSegments()
-	{
+	public List<FGESegment> getFrameSegments() {
 		Vector<FGESegment> returned = new Vector<FGESegment>();
 		returned.add(getNorth());
 		returned.add(getSouth());
@@ -238,46 +220,46 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 	}
 
 	@Override
-	public FGEPoint getNearestPoint(FGEPoint aPoint)
-	{
-		if (getIsFilled() && containsPoint(aPoint)) return aPoint.clone();
+	public FGEPoint getNearestPoint(FGEPoint aPoint) {
+		if (getIsFilled() && containsPoint(aPoint)) {
+			return aPoint.clone();
+		}
 		return nearestOutlinePoint(aPoint);
 	}
 
 	@Override
-	public FGEPoint nearestOutlinePoint(FGEPoint aPoint)
-	{
+	public FGEPoint nearestOutlinePoint(FGEPoint aPoint) {
 		FGEPoint returned = null;
 		double distSq, minimalDistanceSq = java.lang.Double.POSITIVE_INFINITY;
 
 		FGESegment north = getNorth();
 		FGESegment south = getSouth();
-		FGESegment east =  getEast();
-		FGESegment west =  getWest();
+		FGESegment east = getEast();
+		FGESegment west = getWest();
 
 		FGEPoint p = north.getNearestPointOnSegment(aPoint);
-		distSq = FGEPoint.distanceSq(p,aPoint);
+		distSq = FGEPoint.distanceSq(p, aPoint);
 		if (distSq < minimalDistanceSq) {
 			returned = p;
 			minimalDistanceSq = distSq;
 		}
 
 		p = south.getNearestPointOnSegment(aPoint);
-		distSq = FGEPoint.distanceSq(p,aPoint);
+		distSq = FGEPoint.distanceSq(p, aPoint);
 		if (distSq < minimalDistanceSq) {
 			returned = p;
 			minimalDistanceSq = distSq;
 		}
 
 		p = east.getNearestPointOnSegment(aPoint);
-		distSq = FGEPoint.distanceSq(p,aPoint);
+		distSq = FGEPoint.distanceSq(p, aPoint);
 		if (distSq < minimalDistanceSq) {
 			returned = p;
 			minimalDistanceSq = distSq;
 		}
 
 		p = west.getNearestPointOnSegment(aPoint);
-		distSq = FGEPoint.distanceSq(p,aPoint);
+		distSq = FGEPoint.distanceSq(p, aPoint);
 		if (distSq < minimalDistanceSq) {
 			returned = p;
 			minimalDistanceSq = distSq;
@@ -286,23 +268,26 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		return returned;
 	}
 
-	private FGEArea computeRectangleIntersection(FGERectangle rect)
-	{
+	private FGEArea computeRectangleIntersection(FGERectangle rect) {
 		if (!getIsFilled() && rect.getIsFilled()) {
 			return rect.computeRectangleIntersection(this);
 		}
 
-		if (rect.equals(this)) return clone();
+		if (rect.equals(this)) {
+			return clone();
+		}
 
 		double x1 = Math.max(getMinX(), rect.getMinX());
 		double y1 = Math.max(getMinY(), rect.getMinY());
 		double x2 = Math.min(getMaxX(), rect.getMaxX());
 		double y2 = Math.min(getMaxY(), rect.getMaxY());
 
-		if (y1 > y2 || x1 > x2) return new FGEEmptyArea();
+		if (y1 > y2 || x1 > x2) {
+			return new FGEEmptyArea();
+		}
 
 		// There is a common intersection
-		FGERectangle intersection = new FGERectangle(x1, y1, x2-x1, y2-y1);
+		FGERectangle intersection = new FGERectangle(x1, y1, x2 - x1, y2 - y1);
 
 		/*if (intersection.getWidth() == 0) {
 			if (FGEPoint.getSimplifiedOrientation(getCenter(), rect.getCenter()) == SimplifiedCardinalDirection.EAST) {
@@ -332,15 +317,18 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 			if (rect.getIsFilled()) {
 				intersection.setIsFilled(true);
 				return intersection;
-			}
-			else {
+			} else {
 				FGEUnionArea returned = new FGEUnionArea();
 				returned.addArea(computeLineIntersection(rect.getNorth()));
 				returned.addArea(computeLineIntersection(rect.getSouth()));
 				returned.addArea(computeLineIntersection(rect.getEast()));
 				returned.addArea(computeLineIntersection(rect.getWest()));
-				if (returned.getObjects().size() == 0) return new FGEEmptyArea();
-				if (returned.getObjects().size() == 1) return returned.getObjects().firstElement();
+				if (returned.getObjects().size() == 0) {
+					return new FGEEmptyArea();
+				}
+				if (returned.getObjects().size() == 1) {
+					return returned.getObjects().firstElement();
+				}
 				return returned;
 			}
 		}
@@ -365,8 +353,12 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		returned.addArea(getWest().intersect(rect.getEast()));
 		returned.addArea(getWest().intersect(rect.getWest()));
 
-		if (returned.getObjects().size() == 0) return new FGEEmptyArea();
-		if (returned.getObjects().size() == 1) return returned.getObjects().firstElement();
+		if (returned.getObjects().size() == 0) {
+			return new FGEEmptyArea();
+		}
+		if (returned.getObjects().size() == 1) {
+			return returned.getObjects().firstElement();
+		}
 		return returned;
 	}
 
@@ -434,38 +426,46 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		return new FGERectangle(minx,miny,maxx-minx,maxy-miny,Filling.FILLED);
 	}*/
 
-	private FGEArea computeHalfPlaneIntersection(FGEHalfPlane hp)
-	{
-		if (hp.containsArea(this)) return this.clone();
+	private FGEArea computeHalfPlaneIntersection(FGEHalfPlane hp) {
+		if (hp.containsArea(this)) {
+			return this.clone();
+		}
 		if (computeLineIntersection(hp.line) instanceof FGEEmptyArea) {
 			return new FGEEmptyArea();
-		}
-		else {
-			if (logger.isLoggable(Level.FINE))
+		} else {
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("computeHalfPlaneIntersection() for rectangle when halfplane cross rectangle");
+			}
 
 			if (getIsFilled()) {
 
 				FGEArea a = computeLineIntersection(hp.line);
 				Vector<FGEPoint> pts = new Vector<FGEPoint>();
-				if (a instanceof FGEUnionArea && ((FGEUnionArea)a).isUnionOfPoints() && ((FGEUnionArea)a).getObjects().size() == 2) {
-					pts.add((FGEPoint)((FGEUnionArea)a).getObjects().firstElement());
-					pts.add((FGEPoint)((FGEUnionArea)a).getObjects().elementAt(1));
+				if (a instanceof FGEUnionArea && ((FGEUnionArea) a).isUnionOfPoints() && ((FGEUnionArea) a).getObjects().size() == 2) {
+					pts.add((FGEPoint) ((FGEUnionArea) a).getObjects().firstElement());
+					pts.add((FGEPoint) ((FGEUnionArea) a).getObjects().elementAt(1));
+				} else if (a instanceof FGESegment) {
+					pts.add(((FGESegment) a).getP1());
+					pts.add(((FGESegment) a).getP2());
 				}
-				else if (a instanceof FGESegment) {
-					pts.add(((FGESegment)a).getP1());
-					pts.add(((FGESegment)a).getP2());
+				FGEPoint ne, nw, se, sw;
+				ne = new FGEPoint(x + width, y);
+				nw = new FGEPoint(x, y);
+				se = new FGEPoint(x + width, y + height);
+				sw = new FGEPoint(x, y + height);
+				if (hp.containsPoint(ne) && !pts.contains(ne)) {
+					pts.add(ne);
 				}
-				FGEPoint ne,nw,se,sw;
-				ne = new FGEPoint(x+width,y);
-				nw = new FGEPoint(x,y);
-				se = new FGEPoint(x+width,y+height);
-				sw = new FGEPoint(x,y+height);
-				if (hp.containsPoint(ne) && !pts.contains(ne)) pts.add(ne);
-				if (hp.containsPoint(nw) && !pts.contains(nw)) pts.add(nw);
-				if (hp.containsPoint(se) && !pts.contains(se)) pts.add(se);
-				if (hp.containsPoint(sw) && !pts.contains(sw)) pts.add(sw);
-				return FGEPolygon.makeArea(Filling.FILLED,pts);
+				if (hp.containsPoint(nw) && !pts.contains(nw)) {
+					pts.add(nw);
+				}
+				if (hp.containsPoint(se) && !pts.contains(se)) {
+					pts.add(se);
+				}
+				if (hp.containsPoint(sw) && !pts.contains(sw)) {
+					pts.add(sw);
+				}
+				return FGEPolygon.makeArea(Filling.FILLED, pts);
 			}
 
 			else { // open rectangle
@@ -481,59 +481,63 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		}
 	}
 
-	private FGEArea computeHalfBandIntersection(FGEHalfBand hb)
-	{
+	private FGEArea computeHalfBandIntersection(FGEHalfBand hb) {
 		FGEArea bandIntersection = computeBandIntersection(hb.embeddingBand);
 		FGEArea returned = bandIntersection.intersect(hb.halfPlane);
 		return returned;
 	}
 
-	private FGEArea computeBandIntersection(FGEBand band)
-	{
+	private FGEArea computeBandIntersection(FGEBand band) {
 		if (getIsFilled()) {
 
 			Vector<FGEPoint> pts = new Vector<FGEPoint>();
 
 			FGEArea a1 = intersect(new FGELine(band.line1));
 			if (a1 instanceof FGESegment) {
-				FGESegment s1 = (FGESegment)a1;
+				FGESegment s1 = (FGESegment) a1;
 				pts.add(s1.getP1());
 				pts.add(s1.getP2());
-			}
-			else if (a1 instanceof FGEPoint) {
-				pts.add((FGEPoint)a1);
-			}
-			else if (a1 instanceof FGEEmptyArea) {
-			}
-			else {
-				logger.warning("Unexpected intersection: "+a1);
+			} else if (a1 instanceof FGEPoint) {
+				pts.add((FGEPoint) a1);
+			} else if (a1 instanceof FGEEmptyArea) {
+			} else {
+				logger.warning("Unexpected intersection: " + a1);
 			}
 
 			FGEArea a2 = intersect(new FGELine(band.line2));
 			if (a2 instanceof FGESegment) {
-				FGESegment s2 = (FGESegment)a2;
+				FGESegment s2 = (FGESegment) a2;
 				pts.add(s2.getP1());
 				pts.add(s2.getP2());
-			}
-			else if (a2 instanceof FGEPoint) {
-				pts.add((FGEPoint)a2);
-			}
-			else if (a2 instanceof FGEEmptyArea) {
-			}
-			else {
-				logger.warning("Unexpected intersection: "+a2);
+			} else if (a2 instanceof FGEPoint) {
+				pts.add((FGEPoint) a2);
+			} else if (a2 instanceof FGEEmptyArea) {
+			} else {
+				logger.warning("Unexpected intersection: " + a2);
 			}
 
-			if (band.containsPoint(getNorthEastPt())) pts.add(getNorthEastPt());
-			if (band.containsPoint(getNorthWestPt())) pts.add(getNorthWestPt());
-			if (band.containsPoint(getSouthEastPt())) pts.add(getSouthEastPt());
-			if (band.containsPoint(getSouthWestPt())) pts.add(getSouthWestPt());
+			if (band.containsPoint(getNorthEastPt())) {
+				pts.add(getNorthEastPt());
+			}
+			if (band.containsPoint(getNorthWestPt())) {
+				pts.add(getNorthWestPt());
+			}
+			if (band.containsPoint(getSouthEastPt())) {
+				pts.add(getSouthEastPt());
+			}
+			if (band.containsPoint(getSouthWestPt())) {
+				pts.add(getSouthWestPt());
+			}
 
-			if (pts.size() == 0) return new FGEEmptyArea();
+			if (pts.size() == 0) {
+				return new FGEEmptyArea();
+			}
 
-			if (pts.size() == 1) return pts.firstElement().clone();
+			if (pts.size() == 1) {
+				return pts.firstElement().clone();
+			}
 
-			return FGEPolygon.makeArea(Filling.FILLED,pts);
+			return FGEPolygon.makeArea(Filling.FILLED, pts);
 		}
 
 		else { // Open rectangle
@@ -547,27 +551,38 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		}
 	}
 
-	private FGEArea computeLineIntersection(FGEAbstractLine line)
-	{
+	private FGEArea computeLineIntersection(FGEAbstractLine line) {
 
 		FGESegment north = getNorth();
 		FGESegment south = getSouth();
-		FGESegment east =  getEast();
-		FGESegment west =  getWest();
+		FGESegment east = getEast();
+		FGESegment west = getWest();
 
-		if (line == null) return new FGEEmptyArea();
+		if (line == null) {
+			return new FGEEmptyArea();
+		}
 
-		if (line.overlap(north)) return north.intersect(line);//north.clone();
-		if (line.overlap(south)) return south.intersect(line);//south.clone();
-		if (line.overlap(east)) return east.intersect(line);//east.clone();
-		if (line.overlap(west)) return west.intersect(line);//west.clone();
+		if (line.overlap(north)) {
+			return north.intersect(line);// north.clone();
+		}
+		if (line.overlap(south)) {
+			return south.intersect(line);// south.clone();
+		}
+		if (line.overlap(east)) {
+			return east.intersect(line);// east.clone();
+		}
+		if (line.overlap(west)) {
+			return west.intersect(line);// west.clone();
+		}
 
 		Vector<FGEPoint> crossed = new Vector<FGEPoint>();
 
 		try {
 			if (north.intersectsInsideSegment(line)) {
 				FGEPoint intersection = north.getLineIntersection(line);
-				if (line.contains(intersection) && !crossed.contains(intersection)) crossed.add(intersection);
+				if (line.contains(intersection) && !crossed.contains(intersection)) {
+					crossed.add(intersection);
+				}
 			}
 		} catch (ParallelLinesException e) {
 			// don't care
@@ -575,7 +590,9 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		try {
 			if (south.intersectsInsideSegment(line)) {
 				FGEPoint intersection = south.getLineIntersection(line);
-				if (line.contains(intersection) && !crossed.contains(intersection)) crossed.add(intersection);
+				if (line.contains(intersection) && !crossed.contains(intersection)) {
+					crossed.add(intersection);
+				}
 			}
 		} catch (ParallelLinesException e) {
 			// don't care
@@ -583,7 +600,9 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		try {
 			if (east.intersectsInsideSegment(line)) {
 				FGEPoint intersection = east.getLineIntersection(line);
-				if (line.contains(intersection) && !crossed.contains(intersection)) crossed.add(intersection);
+				if (line.contains(intersection) && !crossed.contains(intersection)) {
+					crossed.add(intersection);
+				}
 			}
 		} catch (ParallelLinesException e) {
 			// don't care
@@ -591,7 +610,9 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		try {
 			if (west.intersectsInsideSegment(line)) {
 				FGEPoint intersection = west.getLineIntersection(line);
-				if (line.contains(intersection) && !crossed.contains(intersection)) crossed.add(intersection);
+				if (line.contains(intersection) && !crossed.contains(intersection)) {
+					crossed.add(intersection);
+				}
 			}
 		} catch (ParallelLinesException e) {
 			// don't care
@@ -599,42 +620,53 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 
 		if (getIsFilled()) {
 			if (line instanceof FGEHalfLine) {
-				if (containsPoint(((FGEHalfLine)line).getLimit())) {
-					if (!crossed.contains(((FGEHalfLine)line).getLimit()))
-						crossed.add(((FGEHalfLine)line).getLimit());
+				if (containsPoint(((FGEHalfLine) line).getLimit())) {
+					if (!crossed.contains(((FGEHalfLine) line).getLimit())) {
+						crossed.add(((FGEHalfLine) line).getLimit());
+					}
 				}
-			}
-			else if (line instanceof FGESegment) {
-				if (containsPoint(((FGESegment)line).getP1()))
-					if (!crossed.contains(((FGESegment)line).getP1()))
-						crossed.add(((FGESegment)line).getP1());
-				if (containsPoint(((FGESegment)line).getP2()))
-					if (!crossed.contains(((FGESegment)line).getP2()))
-						crossed.add(((FGESegment)line).getP2());
+			} else if (line instanceof FGESegment) {
+				if (containsPoint(((FGESegment) line).getP1())) {
+					if (!crossed.contains(((FGESegment) line).getP1())) {
+						crossed.add(((FGESegment) line).getP1());
+					}
+				}
+				if (containsPoint(((FGESegment) line).getP2())) {
+					if (!crossed.contains(((FGESegment) line).getP2())) {
+						crossed.add(((FGESegment) line).getP2());
+					}
+				}
 			}
 		}
 
-		if (crossed.size() == 0) return new FGEEmptyArea();
+		if (crossed.size() == 0) {
+			return new FGEEmptyArea();
+		}
 
 		FGEArea returned;
 
-		if (crossed.size() == 1) returned = crossed.firstElement();
-
-		else if (crossed.size() == 2) {
+		if (crossed.size() == 1) {
+			returned = crossed.firstElement();
+		} else if (crossed.size() == 2) {
 			FGEPoint p1 = crossed.firstElement();
 			FGEPoint p2 = crossed.elementAt(1);
-			if (getIsFilled()) returned = new FGESegment(p1,p2);
-			else returned = FGEUnionArea.makeUnion(p1,p2);
-		}
-		else if (crossed.size() == 4) { // Crossed on edges
+			if (getIsFilled()) {
+				returned = new FGESegment(p1, p2);
+			} else {
+				returned = FGEUnionArea.makeUnion(p1, p2);
+			}
+		} else if (crossed.size() == 4) { // Crossed on edges
 			FGEPoint p1 = crossed.firstElement();
 			FGEPoint p2 = crossed.elementAt(1);
 			// Choose those because north and south tested at first (cannot intersect)
-			if (getIsFilled()) returned = new FGESegment(p1,p2);
-			else returned = FGEUnionArea.makeUnion(p1,p2);
-		}
-		else {
-			logger.warning("crossed.size()="+crossed.size()+" How is it possible ??? rectangle="+this+ " line="+line+"\ncrossed="+crossed);
+			if (getIsFilled()) {
+				returned = new FGESegment(p1, p2);
+			} else {
+				returned = FGEUnionArea.makeUnion(p1, p2);
+			}
+		} else {
+			logger.warning("crossed.size()=" + crossed.size() + " How is it possible ??? rectangle=" + this + " line=" + line
+					+ "\ncrossed=" + crossed);
 			return null;
 		}
 
@@ -642,65 +674,78 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 
 	}
 
-
-
 	@Override
-	public FGEArea exclusiveOr(FGEArea area)
-	{
-		return new FGEExclusiveOrArea(this,area);
+	public FGEArea exclusiveOr(FGEArea area) {
+		return new FGEExclusiveOrArea(this, area);
 	}
 
 	@Override
-	public FGEArea intersect(FGEArea area)
-	{
-		if (area.containsArea(this)) return this.clone();
+	public FGEArea intersect(FGEArea area) {
+		if (area.containsArea(this)) {
+			return this.clone();
+		}
 		if (containsArea(area)) {
 			return area.clone();
 		}
-		if (area instanceof FGEAbstractLine) return computeLineIntersection((FGEAbstractLine)area);
-		if (area instanceof FGERectangle) return computeRectangleIntersection((FGERectangle)area);
-		if (area instanceof FGEHalfPlane) return computeHalfPlaneIntersection((FGEHalfPlane)area);
-		if (area instanceof FGEBand) return computeBandIntersection((FGEBand)area);
-		if (area instanceof FGEHalfBand) return computeHalfBandIntersection((FGEHalfBand)area);
-		if (area instanceof FGEPolygon) return FGEShape.AreaComputation.computeShapeIntersection(this, (FGEPolygon)area);
+		if (area instanceof FGEAbstractLine) {
+			return computeLineIntersection((FGEAbstractLine) area);
+		}
+		if (area instanceof FGERectangle) {
+			return computeRectangleIntersection((FGERectangle) area);
+		}
+		if (area instanceof FGEHalfPlane) {
+			return computeHalfPlaneIntersection((FGEHalfPlane) area);
+		}
+		if (area instanceof FGEBand) {
+			return computeBandIntersection((FGEBand) area);
+		}
+		if (area instanceof FGEHalfBand) {
+			return computeHalfBandIntersection((FGEHalfBand) area);
+		}
+		if (area instanceof FGEPolygon) {
+			return FGEShape.AreaComputation.computeShapeIntersection(this, (FGEPolygon) area);
+		}
 
-		FGEIntersectionArea returned = new FGEIntersectionArea(this,area);
-		if (returned.isDevelopable()) return returned.makeDevelopped();
-		else return returned;
+		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
+		if (returned.isDevelopable()) {
+			return returned.makeDevelopped();
+		} else {
+			return returned;
+		}
 	}
 
 	@Override
-	public FGEArea substract(FGEArea area, boolean isStrict)
-	{
-		return new FGESubstractionArea(this,area,isStrict);
+	public FGEArea substract(FGEArea area, boolean isStrict) {
+		return new FGESubstractionArea(this, area, isStrict);
 	}
 
 	@Override
-	public final FGEArea union(FGEArea area)
-	{
-		if (containsArea(area)) return clone();
-		if (area.containsArea(this)) return area.clone();
+	public final FGEArea union(FGEArea area) {
+		if (containsArea(area)) {
+			return clone();
+		}
+		if (area.containsArea(this)) {
+			return area.clone();
+		}
 
-		if (area instanceof FGERectangle && ((FGERectangle)area).getIsFilled() == getIsFilled()) {
-			FGERectangle r = (FGERectangle)area;
-			if ((containsArea(r.getNorth()) && getWidth() == r.getWidth())
-					|| (containsArea(r.getSouth()) && getWidth() == r.getWidth())
+		if (area instanceof FGERectangle && ((FGERectangle) area).getIsFilled() == getIsFilled()) {
+			FGERectangle r = (FGERectangle) area;
+			if ((containsArea(r.getNorth()) && getWidth() == r.getWidth()) || (containsArea(r.getSouth()) && getWidth() == r.getWidth())
 					|| (containsArea(r.getEast()) && getHeight() == r.getHeight())
 					|| (containsArea(r.getWest()) && getHeight() == r.getHeight())) {
 				return rectangleUnion(r);
 			}
 		}
-		return new FGEUnionArea(this,area);
+		return new FGEUnionArea(this, area);
 	}
 
 	@Override
-	public List<FGEPoint> getControlPoints()
-	{
+	public List<FGEPoint> getControlPoints() {
 		Vector<FGEPoint> returned = new Vector<FGEPoint>();
-		returned.add(new FGEPoint(x,y));
-		returned.add(new FGEPoint(x+width,y));
-		returned.add(new FGEPoint(x,y+height));
-		returned.add(new FGEPoint(x+width,y+height));
+		returned.add(new FGEPoint(x, y));
+		returned.add(new FGEPoint(x + width, y));
+		returned.add(new FGEPoint(x, y + height));
+		returned.add(new FGEPoint(x + width, y + height));
 		returned.add(getNorth().getMiddle());
 		returned.add(getEast().getMiddle());
 		returned.add(getWest().getMiddle());
@@ -708,25 +753,17 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		return returned;
 	}
 
-
 	@Override
-	public boolean containsPoint(FGEPoint p)
-	{
-		if ((p.x >= getX()-EPSILON)
-				&& (p.x <=getX()+getWidth()+EPSILON)
-				&& (p.y >= getY()-EPSILON)
-				&& (p.y <= getY()+getHeight()+EPSILON)) {
+	public boolean containsPoint(FGEPoint p) {
+		if ((p.x >= getX() - EPSILON) && (p.x <= getX() + getWidth() + EPSILON) && (p.y >= getY() - EPSILON)
+				&& (p.y <= getY() + getHeight() + EPSILON)) {
 			if (!getIsFilled()) {
-				FGESegment north = new FGESegment(new FGEPoint(x,y),new FGEPoint(x+width,y));
-				FGESegment south = new FGESegment(new FGEPoint(x,y+height),new FGEPoint(x+width,y+height));
-				FGESegment west = new FGESegment(new FGEPoint(x,y),new FGEPoint(x,y+height));
-				FGESegment east = new FGESegment(new FGEPoint(x+width,y),new FGEPoint(x+width,y+height));
-				return (north.contains(p)
-						|| south.contains(p)
-						|| east.contains(p)
-						|| west.contains(p));
-			}
-			else {
+				FGESegment north = new FGESegment(new FGEPoint(x, y), new FGEPoint(x + width, y));
+				FGESegment south = new FGESegment(new FGEPoint(x, y + height), new FGEPoint(x + width, y + height));
+				FGESegment west = new FGESegment(new FGEPoint(x, y), new FGEPoint(x, y + height));
+				FGESegment east = new FGESegment(new FGEPoint(x + width, y), new FGEPoint(x + width, y + height));
+				return (north.contains(p) || south.contains(p) || east.contains(p) || west.contains(p));
+			} else {
 				return true;
 			}
 		}
@@ -734,9 +771,10 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l)
-	{
-		if (l instanceof FGEHalfLine) return false;
+	public boolean containsLine(FGEAbstractLine l) {
+		if (l instanceof FGEHalfLine) {
+			return false;
+		}
 		if (l instanceof FGESegment) {
 			return (containsPoint(l.getP1()) && containsPoint(l.getP2()));
 		}
@@ -744,26 +782,29 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 	}
 
 	@Override
-	public boolean containsArea(FGEArea a)
-	{
-		if (a instanceof FGEPoint) return containsPoint((FGEPoint)a);
-		if (a instanceof FGESegment && !(a instanceof FGEHalfLine)) return containsPoint(((FGESegment)a).getP1()) && containsPoint(((FGESegment)a).getP2());
-		if (a instanceof FGEShape) return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>)a, this);
+	public boolean containsArea(FGEArea a) {
+		if (a instanceof FGEPoint) {
+			return containsPoint((FGEPoint) a);
+		}
+		if (a instanceof FGESegment && !(a instanceof FGEHalfLine)) {
+			return containsPoint(((FGESegment) a).getP1()) && containsPoint(((FGESegment) a).getP2());
+		}
+		if (a instanceof FGEShape) {
+			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>) a, this);
+		}
 		return false;
 	}
 
-
 	@Override
-	public FGEArea transform(AffineTransform t)
-	{
+	public FGEArea transform(AffineTransform t) {
 		// Better implementation allowing rotations
 
-		FGEPoint p1 = (new FGEPoint(getX(),getY())).transform(t);
-		FGEPoint p2 = (new FGEPoint(getX()+getWidth(),getY())).transform(t);
-		FGEPoint p3 = (new FGEPoint(getX(),getY()+getHeight())).transform(t);
-		FGEPoint p4 = (new FGEPoint(getX()+getWidth(),getY()+getHeight())).transform(t);
+		FGEPoint p1 = (new FGEPoint(getX(), getY())).transform(t);
+		FGEPoint p2 = (new FGEPoint(getX() + getWidth(), getY())).transform(t);
+		FGEPoint p3 = (new FGEPoint(getX(), getY() + getHeight())).transform(t);
+		FGEPoint p4 = (new FGEPoint(getX() + getWidth(), getY() + getHeight())).transform(t);
 
-		return FGEPolygon.makeArea(_filling,p1,p2,p3,p4);
+		return FGEPolygon.makeArea(_filling, p1, p2, p3, p4);
 
 		// Old implementation follows (commented)
 
@@ -780,90 +821,76 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 	}
 
 	@Override
-	public void paint(FGEGraphics g)
-	{
+	public void paint(FGEGraphics g) {
 		if (getIsFilled()) {
 			g.useDefaultBackgroundStyle();
-			g.fillRect(getX(),getY(),getWidth(),getHeight());
+			g.fillRect(getX(), getY(), getWidth(), getHeight());
 		}
 		g.useDefaultForegroundStyle();
-		g.drawRect(getX(),getY(),getWidth(),getHeight());
+		g.drawRect(getX(), getY(), getWidth(), getHeight());
 	}
 
 	@Override
-	public String toString()
-	{
-		return "FGERectangle: ("+x+","+y+","+width+","+height+")";
+	public String toString() {
+		return "FGERectangle: (" + x + "," + y + "," + width + "," + height + ")";
 	}
 
 	@Override
-	public String getStringRepresentation()
-	{
+	public String getStringRepresentation() {
 		return toString();
 	}
 
 	@Override
-	public FGERectangle getBoundingBox()
-	{
+	public FGERectangle getBoundingBox() {
 		return clone();
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof FGERectangle) {
-			FGERectangle p = (FGERectangle)obj;
+			FGERectangle p = (FGERectangle) obj;
 			if (getIsFilled() != p.getIsFilled()) {
 				return false;
 			}
-			return ((Math.abs(getX()-p.getX()) <= EPSILON) &&
-					(Math.abs(getY()-p.getY()) <= EPSILON) &&
-					(Math.abs(getWidth()-p.getWidth()) <= EPSILON) &&
-					(Math.abs(getHeight()-p.getHeight()) <= EPSILON));
+			return ((Math.abs(getX() - p.getX()) <= EPSILON) && (Math.abs(getY() - p.getY()) <= EPSILON)
+					&& (Math.abs(getWidth() - p.getWidth()) <= EPSILON) && (Math.abs(getHeight() - p.getHeight()) <= EPSILON));
 		}
 		return super.equals(obj);
 	}
 
 	@Override
-	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation)
-	{
+	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation) {
 		return getAnchorAreaFrom(orientation).getOrthogonalPerspectiveArea(orientation);
 	}
 
 	@Override
-	public FGESegment getAnchorAreaFrom(SimplifiedCardinalDirection orientation)
-	{
+	public FGESegment getAnchorAreaFrom(SimplifiedCardinalDirection orientation) {
 		if (orientation == SimplifiedCardinalDirection.NORTH) {
 			return getNorth();
-		}
-		else if (orientation == SimplifiedCardinalDirection.SOUTH) {
+		} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 			return getSouth();
-		}
-		else if (orientation == SimplifiedCardinalDirection.EAST) {
+		} else if (orientation == SimplifiedCardinalDirection.EAST) {
 			return getEast();
-		}
-		else if (orientation == SimplifiedCardinalDirection.WEST) {
+		} else if (orientation == SimplifiedCardinalDirection.WEST) {
 			return getWest();
 		}
-		logger.warning("Unexpected: "+orientation);
+		logger.warning("Unexpected: " + orientation);
 		return null;
 	}
 
-	public FGERectangle rectangleUnion(FGERectangle r)
-	{
+	public FGERectangle rectangleUnion(FGERectangle r) {
 		double x1 = Math.min(x, r.x);
 		double x2 = Math.max(x + width, r.x + r.width);
 		double y1 = Math.min(y, r.y);
 		double y2 = Math.max(y + height, r.y + r.height);
-		return new FGERectangle(x1, y1, x2 - x1, y2 - y1,Filling.FILLED);
+		return new FGERectangle(x1, y1, x2 - x1, y2 - y1, Filling.FILLED);
 	}
 
 	/**
 	 * This area is finite, so always return true
 	 */
 	@Override
-	public final boolean isFinite()
-	{
+	public final boolean isFinite() {
 		return true;
 	}
 
@@ -871,19 +898,17 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 	 * This area is finite, so always return null
 	 */
 	@Override
-	public final FGERectangle getEmbeddingBounds()
-	{
-		return new FGERectangle(x,y,width,height,Filling.FILLED);
+	public final FGERectangle getEmbeddingBounds() {
+		return new FGERectangle(x, y, width, height, Filling.FILLED);
 	}
 
 	/**
 	 * Build and return new polylin representing outline
+	 * 
 	 * @return
 	 */
-	public FGEPolylin getOutline()
-	{
-		return new FGEPolylin(getNorthEastPt(),getSouthEastPt(),getSouthWestPt(),getNorthWestPt());
+	public FGEPolylin getOutline() {
+		return new FGEPolylin(getNorthEastPt(), getSouthEastPt(), getSouthWestPt(), getNorthWestPt());
 	}
-
 
 }

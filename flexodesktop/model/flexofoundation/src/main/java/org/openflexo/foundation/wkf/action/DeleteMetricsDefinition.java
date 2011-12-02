@@ -28,66 +28,62 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.MetricsDefinition;
 
+public class DeleteMetricsDefinition extends FlexoAction<DeleteMetricsDefinition, MetricsDefinition, MetricsDefinition> {
 
-public class DeleteMetricsDefinition extends FlexoAction<DeleteMetricsDefinition,MetricsDefinition,MetricsDefinition> 
-{
+	private static final Logger logger = Logger.getLogger(DeleteMetricsDefinition.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DeleteMetricsDefinition.class.getPackage().getName());
-    
-    public static FlexoActionType<DeleteMetricsDefinition,MetricsDefinition,MetricsDefinition> actionType 
-    = new FlexoActionType<DeleteMetricsDefinition,MetricsDefinition,MetricsDefinition> (
-    		"delete_metrics_definition",
-    		FlexoActionType.editGroup,
-    		FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType<DeleteMetricsDefinition, MetricsDefinition, MetricsDefinition> actionType = new FlexoActionType<DeleteMetricsDefinition, MetricsDefinition, MetricsDefinition>(
+			"delete_metrics_definition", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-    	/**
-         * Factory method
-         */
-        @Override
-		public DeleteMetricsDefinition makeNewAction(MetricsDefinition focusedObject, Vector<MetricsDefinition> globalSelection, FlexoEditor editor) 
-        {
-            return new DeleteMetricsDefinition(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public DeleteMetricsDefinition makeNewAction(MetricsDefinition focusedObject, Vector<MetricsDefinition> globalSelection,
+				FlexoEditor editor) {
+			return new DeleteMetricsDefinition(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(MetricsDefinition focusedObject, Vector<MetricsDefinition> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(MetricsDefinition focusedObject, Vector<MetricsDefinition> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(MetricsDefinition focusedObject, Vector<MetricsDefinition> globalSelection) 
-        {
-            return (focusedObject != null || (globalSelection != null && globalSelection.size() > 0));
-        }
-                
-    };
-    
-    static {
-    	FlexoModelObject.addActionForClass(actionType, MetricsDefinition.class);
-    }
-    
-    protected DeleteMetricsDefinition(MetricsDefinition focusedObject, Vector<MetricsDefinition> globalSelection, FlexoEditor editor) {
+		@Override
+		protected boolean isEnabledForSelection(MetricsDefinition focusedObject, Vector<MetricsDefinition> globalSelection) {
+			return (focusedObject != null || (globalSelection != null && globalSelection.size() > 0));
+		}
+
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, MetricsDefinition.class);
+	}
+
+	protected DeleteMetricsDefinition(MetricsDefinition focusedObject, Vector<MetricsDefinition> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Delete MetricsDefinition(s)");
-		for (MetricsDefinition metricsDefinition : getMetricsDefinitionToDelete())
+		for (MetricsDefinition metricsDefinition : getMetricsDefinitionToDelete()) {
 			metricsDefinition.delete();
+		}
 	}
 
 	public Vector<MetricsDefinition> getMetricsDefinitionToDelete() {
 		Vector<MetricsDefinition> metricsToDelete = new Vector<MetricsDefinition>();
 		if (getGlobalSelection() != null) {
 			for (FlexoModelObject o : getGlobalSelection()) {
-				if (o instanceof MetricsDefinition)
+				if (o instanceof MetricsDefinition) {
 					metricsToDelete.add((MetricsDefinition) o);
+				}
 			}
 		}
-		if (!metricsToDelete.contains(getFocusedObject()))
+		if (!metricsToDelete.contains(getFocusedObject())) {
 			metricsToDelete.add(getFocusedObject());
+		}
 		return metricsToDelete;
 	}
 

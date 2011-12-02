@@ -32,9 +32,7 @@ import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.IETRWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-
-public class ExportWidgetToPalette extends FlexoAction<ExportWidgetToPalette, IEWidget, IEWidget>
-{
+public class ExportWidgetToPalette extends FlexoAction<ExportWidgetToPalette, IEWidget, IEWidget> {
 
 	private String _widgetName;
 
@@ -45,20 +43,17 @@ public class ExportWidgetToPalette extends FlexoAction<ExportWidgetToPalette, IE
 		 * Factory method
 		 */
 		@Override
-		public ExportWidgetToPalette makeNewAction(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor)
-		{
-			return new ExportWidgetToPalette(focusedObject, globalSelection,editor);
+		public ExportWidgetToPalette makeNewAction(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
+			return new ExportWidgetToPalette(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection)
-		{
+		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection)
-		{
+		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return !(object instanceof IEReusableWidget)
 					&& !(object instanceof IESequenceTR)
 					&& !(object instanceof IETRWidget)
@@ -68,25 +63,24 @@ public class ExportWidgetToPalette extends FlexoAction<ExportWidgetToPalette, IE
 
 	};
 
-	ExportWidgetToPalette(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor)
-	{
+	ExportWidgetToPalette(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	private IEWidget widget=null;
+	private IEWidget widget = null;
 	private BufferedImage screenshot;
+
 	@Override
-	protected void doAction(Object context)
-	{
+	protected void doAction(Object context) {
 		getWidget().getProject().getCustomWidgetPalette().addNewWidgetToIEPaletteDirectory(getWidget(), getWidgetName(), getScreenshot());
 	}
 
-	public IEWidget getWidget(){
-		if (widget==null) {
+	public IEWidget getWidget() {
+		if (widget == null) {
 			if (getFocusedObject() instanceof IEOperator) {
-				widget = ((IEOperator)getFocusedObject()).getOperatedSequence();
+				widget = ((IEOperator) getFocusedObject()).getOperatedSequence();
 			} else if (getFocusedObject() instanceof IETDWidget) {
-				widget = ((IETDWidget)getFocusedObject()).getSequenceWidget();
+				widget = ((IETDWidget) getFocusedObject()).getSequenceWidget();
 			} else {
 				widget = getFocusedObject();
 			}
@@ -94,10 +88,11 @@ public class ExportWidgetToPalette extends FlexoAction<ExportWidgetToPalette, IE
 		return widget;
 	}
 
-	public void setWidgetName(String w){
+	public void setWidgetName(String w) {
 		_widgetName = w;
 	}
-	public String getWidgetName(){
+
+	public String getWidgetName() {
 		return _widgetName;
 	}
 

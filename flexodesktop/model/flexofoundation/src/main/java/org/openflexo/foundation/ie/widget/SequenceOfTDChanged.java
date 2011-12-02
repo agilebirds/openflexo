@@ -23,24 +23,23 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class SequenceOfTDChanged extends IEDataModification
-{
+public class SequenceOfTDChanged extends IEDataModification {
 
-    private IETDWidget td;
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public SequenceOfTDChanged(IETDWidget td)
-    {
-        super(null , td);
-        this.td = td;
-    }
-    
-    public IETDWidget getTD() {
-        return td;
-    }
+	private IETDWidget td;
+
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public SequenceOfTDChanged(IETDWidget td) {
+		super(null, td);
+		this.td = td;
+	}
+
+	public IETDWidget getTD() {
+		return td;
+	}
 
 }

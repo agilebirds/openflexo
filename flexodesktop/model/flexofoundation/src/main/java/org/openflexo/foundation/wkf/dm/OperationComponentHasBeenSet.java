@@ -28,31 +28,28 @@ import org.openflexo.foundation.wkf.node.OperationNode;
  * @author sguerin
  * 
  */
-public class OperationComponentHasBeenSet extends WKFDataModification
-{
+public class OperationComponentHasBeenSet extends WKFDataModification {
 
-    public OperationNode node;
+	public OperationNode node;
 
-    public OperationComponentHasBeenSet(ComponentDefinition component, OperationNode node)
-    {
-        super(null, component);
-        this.node = node;
-    }
+	public OperationComponentHasBeenSet(ComponentDefinition component, OperationNode node) {
+		super(null, component);
+		this.node = node;
+	}
 
-    public OperationComponentHasBeenSet(String propertyName, ComponentDefinition component, OperationNode node)
-    {
-        super(propertyName, component, null);
-        this.node = node;
-    }
-    
-    /**
-     * Overrides propertyName
-     * @see org.openflexo.foundation.DataModification#propertyName()
-     */
-    @Override
-	public String propertyName()
-    {
-        return super.propertyName();
-    }
+	public OperationComponentHasBeenSet(String propertyName, ComponentDefinition component, OperationNode node) {
+		super(propertyName, component, null);
+		this.node = node;
+	}
+
+	/**
+	 * Overrides propertyName
+	 * 
+	 * @see org.openflexo.foundation.DataModification#propertyName()
+	 */
+	@Override
+	public String propertyName() {
+		return super.propertyName();
+	}
 
 }

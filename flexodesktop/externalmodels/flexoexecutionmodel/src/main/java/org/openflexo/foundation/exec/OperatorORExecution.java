@@ -22,7 +22,6 @@ package org.openflexo.foundation.exec;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
 import org.openflexo.foundation.exec.inst.DestroyRemainingTokensForOperator;
@@ -36,22 +35,19 @@ public class OperatorORExecution extends OperatorNodeExecution {
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(OperatorORExecution.class.getPackage().getName());
 
-	protected OperatorORExecution(OROperator operatorNode)
-	{
+	protected OperatorORExecution(OROperator operatorNode) {
 		super(operatorNode);
 	}
-	
 
 	@Override
-	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException
-	{
+	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		ControlGraph DELETE_TOKENS = new DestroyRemainingTokensForOperator(getOperatorNode());
 		ControlGraph SEND_TOKENS_TO_OUTPUTS = null;
-		
+
 		Vector<ControlGraph> sendTokensStatements = new Vector<ControlGraph>();
 
 		for (FlexoPostCondition edge : getOperatorNode().getOutgoingPostConditions()) {
-			sendTokensStatements.add(SendToken.sendToken(edge,interprocedural));
+			sendTokensStatements.add(SendToken.sendToken(edge, interprocedural));
 		}
 
 		ControlGraph SEND_TOKENS = makeFlowControlGraph(sendTokensStatements);
@@ -60,27 +56,25 @@ public class OperatorORExecution extends OperatorNodeExecution {
 
 		for (FlexoPostCondition edge : getOperatorNode().getOutgoingPostConditions()) {
 			if (edge instanceof ExternalMessageInEdge) {
-				sendMessagesStatements.add(SendMessage.sendMessage((ExternalMessageInEdge)edge,interprocedural));
+				sendMessagesStatements.add(SendMessage.sendMessage((ExternalMessageInEdge) edge, interprocedural));
 			}
 		}
 
 		ControlGraph SEND_MESSAGES = makeFlowControlGraph(sendMessagesStatements);
 
-		SEND_TOKENS_TO_OUTPUTS = makeSequentialControlGraph(
-				SEND_MESSAGES,
-				SEND_TOKENS);
-		
-		if (SEND_TOKENS_TO_OUTPUTS instanceof Nop && !SEND_TOKENS_TO_OUTPUTS.hasComment()) SEND_TOKENS_TO_OUTPUTS.setInlineComment("nothing to do");
+		SEND_TOKENS_TO_OUTPUTS = makeSequentialControlGraph(SEND_MESSAGES, SEND_TOKENS);
 
-		return makeSequentialControlGraph(DELETE_TOKENS,SEND_TOKENS_TO_OUTPUTS);
-		
+		if (SEND_TOKENS_TO_OUTPUTS instanceof Nop && !SEND_TOKENS_TO_OUTPUTS.hasComment()) {
+			SEND_TOKENS_TO_OUTPUTS.setInlineComment("nothing to do");
+		}
+
+		return makeSequentialControlGraph(DELETE_TOKENS, SEND_TOKENS_TO_OUTPUTS);
+
 	}
 
 	@Override
-	public OROperator getOperatorNode() 
-	{
-		return (OROperator)super.getOperatorNode();
+	public OROperator getOperatorNode() {
+		return (OROperator) super.getOperatorNode();
 	}
-
 
 }

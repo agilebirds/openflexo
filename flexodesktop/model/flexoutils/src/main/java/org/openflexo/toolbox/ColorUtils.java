@@ -205,8 +205,8 @@ public class ColorUtils {
 					}
 				}
 			}
-			t = 1 - 0.17 * Math.cos(Math.toRadians(hPrime - 30)) + 0.24 * Math.cos(Math.toRadians(2 * hPrime)) + 0.32 * Math.cos(Math
-					.toRadians(3 * hPrime + 6)) - 0.2 * Math.cos(Math.toRadians(4 * hPrime - 63));
+			t = 1 - 0.17 * Math.cos(Math.toRadians(hPrime - 30)) + 0.24 * Math.cos(Math.toRadians(2 * hPrime)) + 0.32
+					* Math.cos(Math.toRadians(3 * hPrime + 6)) - 0.2 * Math.cos(Math.toRadians(4 * hPrime - 63));
 			deltaTheta = 30 * Math.exp(-Math.pow((hPrime - 275) / 25, 2));
 			double cPrimePower7 = Math.pow(cPrime, 7);
 			rc = 2 * Math.sqrt(cPrimePower7 / (cPrimePower7 + Math.pow(25, 7)));
@@ -215,8 +215,8 @@ public class ColorUtils {
 			sc = 1 + 0.045 * cPrime;
 			sh = 1 + 0.015 * cPrime * t;
 			rt = -Math.sin(2 * deltaTheta) * rc;
-			return Math.sqrt(Math.pow(deltaLPrime / (kl * sl), 2) + Math.pow(deltaCPrime / (kc * sc), 2) + Math.pow(
-					deltaHPrime / (kh * sh), 2) + rt * deltaCPrime * deltaHPrime / (kc * sc * kh * sh));
+			return Math.sqrt(Math.pow(deltaLPrime / (kl * sl), 2) + Math.pow(deltaCPrime / (kc * sc), 2)
+					+ Math.pow(deltaHPrime / (kh * sh), 2) + rt * deltaCPrime * deltaHPrime / (kc * sc * kh * sh));
 		}
 
 		private double computeHPrime(double aPrime1, double b) {

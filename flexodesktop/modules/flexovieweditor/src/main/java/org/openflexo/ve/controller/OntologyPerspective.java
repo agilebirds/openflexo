@@ -39,126 +39,110 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class OntologyPerspective extends FlexoPerspective<OntologyObject>
-{
+public class OntologyPerspective extends FlexoPerspective<OntologyObject> {
 
 	private final OEController _controller;
-	
+
 	private final OntologyPerspectiveBrowserView _ontologyPerspectiveBrowserView;
-	
+
 	private final JLabel infoLabel;
-	
+
 	private static final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
 	/**
-	 * @param controller TODO
+	 * @param controller
+	 *            TODO
 	 * @param name
 	 */
-	public OntologyPerspective(OEController controller)
-	{
+	public OntologyPerspective(OEController controller) {
 		super("ontology_perspective");
 		_controller = controller;
 		_ontologyPerspectiveBrowserView = new OntologyPerspectiveBrowserView(controller);
-		
+
 		infoLabel = new JLabel("Info label");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
 
 	/**
 	 * Overrides getIcon
-	 *
+	 * 
 	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
-	public ImageIcon getActiveIcon()
-	{
+	public ImageIcon getActiveIcon() {
 		return VEIconLibrary.VE_OP_ACTIVE_ICON;
 	}
 
 	/**
 	 * Overrides getSelectedIcon
-	 *
+	 * 
 	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
-	public ImageIcon getSelectedIcon()
-	{
+	public ImageIcon getSelectedIcon() {
 		return VEIconLibrary.VE_OP_SELECTED_ICON;
 	}
 
 	@Override
-	public FlexoOntology getDefaultObject(FlexoModelObject proposedObject) 
-	{
+	public FlexoOntology getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof FlexoOntology) {
-			return (FlexoOntology)proposedObject;
+			return (FlexoOntology) proposedObject;
 		}
 		return _controller.getProject().getProjectOntology();
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object)
-	{
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
 		return (object instanceof FlexoOntology);
 	}
 
-
 	@Override
-	public ModuleView<? extends OntologyObject> createModuleViewForObject(OntologyObject object, FlexoController controller)
-	{
+	public ModuleView<? extends OntologyObject> createModuleViewForObject(OntologyObject object, FlexoController controller) {
 		if (object instanceof FlexoOntology) {
-			((FlexoOntology)object).loadWhenUnloaded();
-			return new OntologyView((FlexoOntology)object,(OEController)controller,this);
+			((FlexoOntology) object).loadWhenUnloaded();
+			return new OntologyView((FlexoOntology) object, (OEController) controller, this);
 		}
-		return new EmptyPanel<OntologyObject>(controller,this,object);
+		return new EmptyPanel<OntologyObject>(controller, this, object);
 	}
 
 	@Override
-	public boolean doesPerspectiveControlLeftView() 
-	{
+	public boolean doesPerspectiveControlLeftView() {
 		return true;
 	}
-	
+
 	@Override
-	public JComponent getLeftView() 
-	{
+	public JComponent getLeftView() {
 		return _ontologyPerspectiveBrowserView;
 	}
 
 	@Override
-	public JComponent getFooter() 
-	{
+	public JComponent getFooter() {
 		return infoLabel;
 	}
 
-
 	@Override
-	public boolean doesPerspectiveControlRightView() 
-	{
+	public boolean doesPerspectiveControlRightView() {
 		return true;
 	}
 
 	@Override
-	public JComponent getRightView() 
-	{
+	public JComponent getRightView() {
 		return EMPTY_RIGHT_VIEW;
 	}
-	
+
 	@Override
-	public boolean isAlwaysVisible() 
-	{
+	public boolean isAlwaysVisible() {
 		return true;
 	}
 
-	public String getWindowTitleforObject(FlexoModelObject object) 
-	{
+	public String getWindowTitleforObject(FlexoModelObject object) {
 		if (object instanceof ProjectOntology) {
 			return FlexoLocalization.localizedForKey("project_ontology");
 		}
 		if (object instanceof ImportedOntology) {
-			return ((ImportedOntology)object).getName();
+			return ((ImportedOntology) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}
-	
 
 }

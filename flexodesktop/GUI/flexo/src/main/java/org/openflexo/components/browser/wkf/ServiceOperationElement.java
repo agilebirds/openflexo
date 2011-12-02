@@ -31,83 +31,70 @@ import org.openflexo.foundation.wkf.DuplicateWKFObjectException;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.icon.WKFIconLibrary;
 
-
 /**
  * Browser element representing a ServiceOperation
- *
+ * 
  * @author Denis VANVYVE
- *
+ * 
  */
-public class ServiceOperationElement extends BrowserElement
-{
+public class ServiceOperationElement extends BrowserElement {
 	private static final Logger logger = Logger.getLogger(ServiceOperationElement.class.getPackage().getName());
 
-    public ServiceOperationElement(ServiceOperation op, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(op, BrowserElementType.SERVICE_OPERATION, browser, parent);
-    }
+	public ServiceOperationElement(ServiceOperation op, ProjectBrowser browser, BrowserElement parent) {
+		super(op, BrowserElementType.SERVICE_OPERATION, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    		if(getOperation().isInOperation()){
-    			addToChilds(getOperation().getInputMessageDefinition());
-    		}
-    		else if(getOperation().isOutOperation()){
-    			addToChilds(getOperation().getOutputMessageDefinition());
-    		}
-    		else if(getOperation().isInOutOperation()){
-    			addToChilds(getOperation().getInputMessageDefinition());
-    			addToChilds(getOperation().getOutputMessageDefinition());
-    		}
-    		//TODO: Add Fault Message Definition
+	@Override
+	protected void buildChildrenVector() {
+		if (getOperation().isInOperation()) {
+			addToChilds(getOperation().getInputMessageDefinition());
+		} else if (getOperation().isOutOperation()) {
+			addToChilds(getOperation().getOutputMessageDefinition());
+		} else if (getOperation().isInOutOperation()) {
+			addToChilds(getOperation().getInputMessageDefinition());
+			addToChilds(getOperation().getOutputMessageDefinition());
+		}
+		// TODO: Add Fault Message Definition
 
-    }
+	}
 
-    @Override
-	public String getName()
-    {
-        return getOperation().getName();
-    }
+	@Override
+	public String getName() {
+		return getOperation().getName();
+	}
 
-    protected ServiceOperation getOperation()
-    {
-        return (ServiceOperation) getObject();
-    }
+	protected ServiceOperation getOperation() {
+		return (ServiceOperation) getObject();
+	}
 
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        // filtered element type should be PORT and not PORT_REGISTERY
-    		return BrowserElementType.SERVICE_OPERATION;
-    		//return BrowserElementType.PORT_REGISTERY;
-    }
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		// filtered element type should be PORT and not PORT_REGISTERY
+		return BrowserElementType.SERVICE_OPERATION;
+		// return BrowserElementType.PORT_REGISTERY;
+	}
 
-    @Override
-	public Icon getIcon()
-    {
+	@Override
+	public Icon getIcon() {
 		return decorateIcon(WKFIconLibrary.getSmallImageIconForServiceOperation(getOperation()));
-    }
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-    		try{
-        getOperation().setName(aName);
-    		}
-    		catch(DuplicateWKFObjectException e){
-    			if (logger.isLoggable(Level.WARNING)){
-    				logger.warning("Could not set name of ServiceOperation to:"+aName);
-    				e.printStackTrace();
-    			}
-    			//to do: display warning message.
-    		}
-    }
+	@Override
+	public void setName(String aName) {
+		try {
+			getOperation().setName(aName);
+		} catch (DuplicateWKFObjectException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not set name of ServiceOperation to:" + aName);
+				e.printStackTrace();
+			}
+			// to do: display warning message.
+		}
+	}
 
 }

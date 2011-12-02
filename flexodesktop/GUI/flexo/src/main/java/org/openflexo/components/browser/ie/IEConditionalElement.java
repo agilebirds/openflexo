@@ -28,39 +28,34 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.operator.ConditionalOperator;
 import org.openflexo.foundation.ie.widget.IESequence;
 
+public class IEConditionalElement extends IEElement {
 
-public class IEConditionalElement extends IEElement
-{
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEConditionalElement(ConditionalOperator op, ProjectBrowser browser, BrowserElement parent) {
+		super(op, BrowserElementType.CONDITIONAL, browser, parent);
+	}
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEConditionalElement(ConditionalOperator op, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(op, BrowserElementType.CONDITIONAL, browser,parent);
-    }
+	@Override
+	protected void buildChildrenVector() {
+		for (Enumeration e = getConditional().getOperatedSequence().elements(); e.hasMoreElements();) {
+			FlexoModelObject child = (FlexoModelObject) e.nextElement();
+			if (child instanceof IESequence) {
+				addToChilds(((IESequence) child).getOperator());
+			} else {
+				addToChilds(child);
+			}
+		}
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        for (Enumeration e = getConditional().getOperatedSequence().elements(); e.hasMoreElements();) {
-            FlexoModelObject child = (FlexoModelObject) e.nextElement();
-            if (child instanceof IESequence) {
-                addToChilds(((IESequence) child).getOperator());
-            } else
-                addToChilds(child);
-        }
-    }
+	@Override
+	public String getName() {
+		return "Conditional";
+	}
 
-    @Override
-	public String getName()
-    {
-        return "Conditional";
-    }
-
-    protected ConditionalOperator getConditional()
-    {
-        return (ConditionalOperator) getObject();
-    }
+	protected ConditionalOperator getConditional() {
+		return (ConditionalOperator) getObject();
+	}
 }

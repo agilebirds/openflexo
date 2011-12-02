@@ -29,52 +29,44 @@ import org.openflexo.foundation.ie.operator.RepetitionOperator;
 import org.openflexo.foundation.ie.widget.IESequence;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-
-public class UnwrapRepetition  extends FlexoAction 
-{
+public class UnwrapRepetition extends FlexoAction {
 
 	public RepetitionOperator repetition;
-    
-	public static FlexoActionType actionType = new FlexoActionType ("unwrap repetition content",FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new UnwrapRepetition(focusedObject, globalSelection,editor);
-        }
+	public static FlexoActionType actionType = new FlexoActionType("unwrap repetition content", FlexoActionType.defaultGroup) {
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return (object instanceof IEWidget && ((IEWidget) object).getParent() instanceof IESequence
-            && ((IESequence) ((IEWidget) object).getParent()).isRepetition()) || (object instanceof IESequence && ((IESequence)object).isRepetition());
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new UnwrapRepetition(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-        	return true;
-        }
-                
-    };
-    
-    UnwrapRepetition (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return (object instanceof IEWidget && ((IEWidget) object).getParent() instanceof IESequence && ((IESequence) ((IEWidget) object)
+					.getParent()).isRepetition()) || (object instanceof IESequence && ((IESequence) object).isRepetition());
+		}
 
-    @Override
-	protected void doAction(Object context) 
-    {
-    	if (getFocusedObject() instanceof IESequence && ((IESequence)getFocusedObject()).isRepetition())  {
-            ((IESequence)getFocusedObject()).getOperator().delete();
-        } else if (getFocusedObject() instanceof IEWidget) {
-            ((IESequence) ((IEWidget) getFocusedObject()).getParent()).getOperator().delete();
-        }
-    }
-    
- 
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
+
+	};
+
+	UnwrapRepetition(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		if (getFocusedObject() instanceof IESequence && ((IESequence) getFocusedObject()).isRepetition()) {
+			((IESequence) getFocusedObject()).getOperator().delete();
+		} else if (getFocusedObject() instanceof IEWidget) {
+			((IESequence) ((IEWidget) getFocusedObject()).getParent()).getOperator().delete();
+		}
+	}
+
 }

@@ -31,56 +31,47 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
-public class SaveCVSFileInitializer extends ActionInitializer { 
+public class SaveCVSFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	SaveCVSFileInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(SaveCVSFile.actionType,actionInitializer);
+	SaveCVSFileInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(SaveCVSFile.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<SaveCVSFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<SaveCVSFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<SaveCVSFile>() {
-            @Override
-			public boolean run(ActionEvent e, SaveCVSFile action)
-            {
-       			return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, SaveCVSFile action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<SaveCVSFile> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<SaveCVSFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SaveCVSFile>() {
-            @Override
-			public boolean run(ActionEvent e, SaveCVSFile action)
-            {
-       			getControllerActionInitializer().getFPSController().selectAndFocusObject(action.getFocusedObject());
-    			return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, SaveCVSFile action) {
+				getControllerActionInitializer().getFPSController().selectAndFocusObject(action.getFocusedObject());
+				return true;
+			}
+		};
 	}
 
-   	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.SAVE_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return IconLibrary.SAVE_DISABLED_ICON;
 	}
 

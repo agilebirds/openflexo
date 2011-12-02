@@ -29,7 +29,6 @@ import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class EndActionNodeGR extends AbstractActionNodeGR {
 
 	private ForegroundStyle foreground;
@@ -38,10 +37,8 @@ public class EndActionNodeGR extends AbstractActionNodeGR {
 	private ForegroundStyle painterForeground;
 	private BackgroundStyle painterBackground;
 
-
-	public EndActionNodeGR(ActionNode actionNode, SwimmingLaneRepresentation aDrawing,boolean isInPalet)
-	{
-		super(actionNode, aDrawing,isInPalet);
+	public EndActionNodeGR(ActionNode actionNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
+		super(actionNode, aDrawing, isInPalet);
 
 		// Important: width is different from height here to avoid connector blinking when editing layout
 		// This little difference allows a kind of hysteresis favourizing horizontal layout
@@ -63,8 +60,7 @@ public class EndActionNodeGR extends AbstractActionNodeGR {
 
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
+			public void paintShape(FGEShapeGraphics g) {
 				g.useBackgroundStyle(painterBackground);
 				g.fillCircle(0.2, 0.2, 0.6, 0.6);
 			}
@@ -75,8 +71,7 @@ public class EndActionNodeGR extends AbstractActionNodeGR {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultX()
-	{
+	public double _getDefaultX() {
 		return 250;
 	}
 
@@ -84,25 +79,24 @@ public class EndActionNodeGR extends AbstractActionNodeGR {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultY()
-	{
-		return (getActionNode().getParentPetriGraph().getIndexForEndNode(getActionNode()) * 50)+DEFAULT_BEGIN_Y_OFFSET;
+	public double _getDefaultY() {
+		return (getActionNode().getParentPetriGraph().getIndexForEndNode(getActionNode()) * 50) + DEFAULT_BEGIN_Y_OFFSET;
 	}
 
 	@Override
-	public double getDefaultLabelX() 
-	{
-		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
+	public double getDefaultLabelX() {
+		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getX();
-		return getLeftBorder()+15;
+		}
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY() 
-	{
-		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
+	public double getDefaultLabelY() {
+		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getY();
-		return getTopBorder()+40;
+		}
+		return getTopBorder() + 40;
 	}
 
 }

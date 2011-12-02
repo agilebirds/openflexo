@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" titleFont="Lucida Grande,0,13" darkLevel="0">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="border(location=center)" opaque="true" width="80" height="60">
+    <Panel layout="grid" hGap="0" vGap="0" cols="3" rows="3" flowAlignment="LEADING" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="flow(index=0)" backgroundColor="255,153,153">
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="2" constraints="grid(x=1;index=0;y=0)" name="Integer" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="2" constraints="grid(x=0;index=1;y=1)" name="Integer" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="2" constraints="grid(x=2;index=2;y=1)" name="Integer" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="2" constraints="grid(x=1;index=3;y=2)" name="Integer" localize="true" />
+      <Label label="border" align="center" localize="true" constraints="grid(x=1;index=4;y=1)">
+        <LocalizedDictionary />
+      </Label>
+    </Panel>
+  </Panel>
+  <LocalizedDictionary />
+</Panel>
+

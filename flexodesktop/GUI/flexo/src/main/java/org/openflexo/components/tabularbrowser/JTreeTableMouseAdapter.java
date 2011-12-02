@@ -27,69 +27,60 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
  * 
  * Default mouse adapter for a JTreeTable
  * 
  * @author sguerin
  */
-public class JTreeTableMouseAdapter extends MouseAdapter implements
-MouseMotionListener {
-    
-    private static final Logger logger = Logger.getLogger(JTreeTableMouseAdapter.class.getPackage().getName());
+public class JTreeTableMouseAdapter extends MouseAdapter implements MouseMotionListener {
 
-    private JTreeTable _table;
-    private TabularBrowserModel _model;
-   
-    public JTreeTableMouseAdapter(JTreeTable table)
-    {
-        super();
-        _table = table;
-        _model = table.getTreeTableModel();
-    }
-    
-    @Override
-	public void mouseClicked(MouseEvent e)
-    {
-        Point p = e.getPoint();
-        int col = _table.columnAtPoint(p);
-        int row = _table.rowAtPoint(p);
-        
-        FlexoModelObject selectedObject = _table.getObjectAt(row);
-        
-        /*logger.info("Click on row "+row+" and col "+col);
-        logger.info("Represented object is a "+selectedObject);
-        logger.info("Event is CONSUMED =  "+e.isConsumed());*/       
-        
-       /* if (!(e.isShiftDown() || e.isMetaDown()))
-            _table.fireResetSelection();
-        
-        _table.fireObjectSelected(selectedObject);*/
+	private static final Logger logger = Logger.getLogger(JTreeTableMouseAdapter.class.getPackage().getName());
 
-    }
-    @Override
-	public void mousePressed(MouseEvent e)
-    {
-        super.mousePressed(e);
-     }
-    
-    @Override
-	public void mouseReleased(MouseEvent e)
-    {
-        super.mouseReleased(e);
-    }
-    
-    @Override
-	public void mouseMoved(MouseEvent e)
-    {
-    }
-    
-    @Override
-	public void mouseDragged(MouseEvent e)
-    {
-    }
-    
+	private JTreeTable _table;
+	private TabularBrowserModel _model;
 
+	public JTreeTableMouseAdapter(JTreeTable table) {
+		super();
+		_table = table;
+		_model = table.getTreeTableModel();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Point p = e.getPoint();
+		int col = _table.columnAtPoint(p);
+		int row = _table.rowAtPoint(p);
+
+		FlexoModelObject selectedObject = _table.getObjectAt(row);
+
+		/*logger.info("Click on row "+row+" and col "+col);
+		logger.info("Represented object is a "+selectedObject);
+		logger.info("Event is CONSUMED =  "+e.isConsumed());*/
+
+		/* if (!(e.isShiftDown() || e.isMetaDown()))
+		     _table.fireResetSelection();
+		 
+		 _table.fireObjectSelected(selectedObject);*/
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		super.mousePressed(e);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		super.mouseReleased(e);
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+	}
 
 }

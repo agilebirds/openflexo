@@ -25,110 +25,107 @@ import java.io.StringWriter;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class WinRegistryAccess
-{
+public class WinRegistryAccess {
 
-    private static final String REGQUERY_UTIL = "reg query ";
+	private static final String REGQUERY_UTIL = "reg query ";
 
-    public static final String REG_SZ_TOKEN = "REG_SZ";
+	public static final String REG_SZ_TOKEN = "REG_SZ";
 
-    public static final String REG_BINARY = "REG_BINARY";
+	public static final String REG_BINARY = "REG_BINARY";
 
-    public static final String REG_DWORD_TOKEN = "REG_DWORD";
+	public static final String REG_DWORD_TOKEN = "REG_DWORD";
 
-    /**
-     * Returns the value for an attribute of the registry in Windows. If you
-     * want to now the processor speed of the machine, you will pass the
-     * following path: "HKLM\HARDWARE\DESCRIPTION\System\CentralProcessor\0" and
-     * the following attribute name: ~MHz
-     *
-     * @param path - the registry path to the desired value
-     * @param attributeName - the name of the attribute or null for the default
-     * @param attributeType - the type of attribute (DWORD/SZ/...) default is REG_SZ
-     * @return - the value for the attribute located in the given path
-     */
-    public static String getRegistryValue(String path, String attributeName, String attributeType)
-    {
-        if (attributeType==null)
-            attributeType = REG_SZ_TOKEN;
-        try {
-            if (!path.startsWith("\""))
-                path = "\""+path+"\"";
-            StringBuilder sb = new StringBuilder();
-            sb.append(REGQUERY_UTIL);
-            sb.append(path);
-            sb.append(' ');
-            if (attributeName!=null) {
-                sb.append("/v ");
-                sb.append(attributeName);
-            } else {
-                sb.append("/ve");
-            }
-            Process process = Runtime.getRuntime().exec(sb.toString());
-            ConsoleReader reader = new ConsoleReader(process.getInputStream());
-            reader.start();
-            process.waitFor();
-            reader.join();
-            String result = reader.getResult();
-            int p = result.indexOf(attributeType);
-            if (p == -1)
-                return null;
-            return  result.substring(p + attributeType.length()).trim();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+	/**
+	 * Returns the value for an attribute of the registry in Windows. If you want to now the processor speed of the machine, you will pass
+	 * the following path: "HKLM\HARDWARE\DESCRIPTION\System\CentralProcessor\0" and the following attribute name: ~MHz
+	 * 
+	 * @param path
+	 *            - the registry path to the desired value
+	 * @param attributeName
+	 *            - the name of the attribute or null for the default
+	 * @param attributeType
+	 *            - the type of attribute (DWORD/SZ/...) default is REG_SZ
+	 * @return - the value for the attribute located in the given path
+	 */
+	public static String getRegistryValue(String path, String attributeName, String attributeType) {
+		if (attributeType == null) {
+			attributeType = REG_SZ_TOKEN;
+		}
+		try {
+			if (!path.startsWith("\"")) {
+				path = "\"" + path + "\"";
+			}
+			StringBuilder sb = new StringBuilder();
+			sb.append(REGQUERY_UTIL);
+			sb.append(path);
+			sb.append(' ');
+			if (attributeName != null) {
+				sb.append("/v ");
+				sb.append(attributeName);
+			} else {
+				sb.append("/ve");
+			}
+			Process process = Runtime.getRuntime().exec(sb.toString());
+			ConsoleReader reader = new ConsoleReader(process.getInputStream());
+			reader.start();
+			process.waitFor();
+			reader.join();
+			String result = reader.getResult();
+			int p = result.indexOf(attributeType);
+			if (p == -1) {
+				return null;
+			}
+			return result.substring(p + attributeType.length()).trim();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
-    public static class ConsoleReader extends Thread
-    {
-        private InputStream is;
+	public static class ConsoleReader extends Thread {
+		private InputStream is;
 
-        private StringWriter sw;
+		private StringWriter sw;
 
-        ConsoleReader(InputStream is)
-        {
-            this.is = is;
-            sw = new StringWriter();
-        }
+		ConsoleReader(InputStream is) {
+			this.is = is;
+			sw = new StringWriter();
+		}
 
-        @Override
-		public void run()
-        {
-            try {
-                int c;
-                while ((c = is.read()) != -1)
-                    sw.write(c);
-            } catch (IOException e) {
-                ;
-            }
-        }
+		@Override
+		public void run() {
+			try {
+				int c;
+				while ((c = is.read()) != -1) {
+					sw.write(c);
+				}
+			} catch (IOException e) {
+				;
+			}
+		}
 
-        String getResult()
-        {
-            return sw.toString();
-        }
-    }
+		String getResult() {
+			return sw.toString();
+		}
+	}
 
-    public static String getJDKHome()
-    {
-        String key = "\"HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\"";
-        String currentVersionAtt = "CurrentVersion";
-        String javaHomeAtt = "JavaHome";
-        String res1 = getRegistryValue(key, currentVersionAtt, null);
-        String res2 = getRegistryValue(key+"\\"+res1, javaHomeAtt, null);
-        return res2;
-    }
+	public static String getJDKHome() {
+		String key = "\"HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\"";
+		String currentVersionAtt = "CurrentVersion";
+		String javaHomeAtt = "JavaHome";
+		String res1 = getRegistryValue(key, currentVersionAtt, null);
+		String res2 = getRegistryValue(key + "\\" + res1, javaHomeAtt, null);
+		return res2;
+	}
 
-    public static void main(String s[])
-    {
-        String key = "\"HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\"";
-        String currentVersionAtt = "CurrentVersion";
-        String javaHomeAtt = "JavaHome";
-        String res1 = getRegistryValue(key, currentVersionAtt, null);
-        String res2 = getRegistryValue(key+"\\"+res1, javaHomeAtt, null);
-        System.out.println("CurrentVersion '"+res1+"'");
-        System.out.println("JavaHome '"+res2+"'");
-    }
+	public static void main(String s[]) {
+		String key = "\"HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\"";
+		String currentVersionAtt = "CurrentVersion";
+		String javaHomeAtt = "JavaHome";
+		String res1 = getRegistryValue(key, currentVersionAtt, null);
+		String res2 = getRegistryValue(key + "\\" + res1, javaHomeAtt, null);
+		System.out.println("CurrentVersion '" + res1 + "'");
+		System.out.println("JavaHome '" + res2 + "'");
+	}
 }

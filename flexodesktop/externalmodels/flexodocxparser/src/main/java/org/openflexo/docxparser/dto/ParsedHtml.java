@@ -25,51 +25,44 @@ import java.util.List;
 import org.openflexo.docxparser.dto.api.IParsedHtml;
 import org.openflexo.docxparser.dto.api.IParsedHtmlResource;
 
-
-public class ParsedHtml implements IParsedHtml
-{
+public class ParsedHtml implements IParsedHtml {
 	private StringBuilder html;
 	private List<IParsedHtmlResource> neededResources;
-	
-	public ParsedHtml()
-	{
+
+	public ParsedHtml() {
 		this(null);
 	}
-	
-	public ParsedHtml(String html)
-	{
+
+	public ParsedHtml(String html) {
 		this.html = new StringBuilder();
-		if(html != null)
+		if (html != null) {
 			this.html.append(html);
+		}
 		this.neededResources = new ArrayList<IParsedHtmlResource>();
 	}
-	
+
 	@Override
-	public String getHtml()
-	{
+	public String getHtml() {
 		return html.toString();
 	}
-	
-	public void addNeededResource(IParsedHtmlResource resource)
-	{
+
+	public void addNeededResource(IParsedHtmlResource resource) {
 		neededResources.add(resource);
 	}
-	
+
 	@Override
-	public List<IParsedHtmlResource> getNeededResources()
-	{
+	public List<IParsedHtmlResource> getNeededResources() {
 		return neededResources;
 	}
-	
-	public void appendHtml(String html)
-	{
+
+	public void appendHtml(String html) {
 		this.html.append(html);
 	}
-	
-	public void append(ParsedHtml parsedHtml)
-	{
+
+	public void append(ParsedHtml parsedHtml) {
 		this.appendHtml(parsedHtml.getHtml());
-		for(IParsedHtmlResource resource : parsedHtml.getNeededResources())
+		for (IParsedHtmlResource resource : parsedHtml.getNeededResources()) {
 			this.neededResources.add(resource);
+		}
 	}
 }

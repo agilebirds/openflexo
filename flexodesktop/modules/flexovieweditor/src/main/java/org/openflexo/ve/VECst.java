@@ -23,39 +23,37 @@ import java.io.File;
 
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Constants used by the OE module.
  * 
  * @author sylvain
  */
-public class VECst
-{
+public class VECst {
 
-    public static final String DEFAULT_OE_BROWSER_WINDOW_TITLE = "ontology_browser";
+	public static final String DEFAULT_OE_BROWSER_WINDOW_TITLE = "ontology_browser";
 
-    public static final int DEFAULT_OE_BROWSER_WINDOW_WIDTH = 300;
+	public static final int DEFAULT_OE_BROWSER_WINDOW_WIDTH = 300;
 
-    public static final int DEFAULT_OE_BROWSER_WINDOW_HEIGHT = 250;
+	public static final int DEFAULT_OE_BROWSER_WINDOW_HEIGHT = 250;
 
-    public static final int DEFAULT_MAINFRAME_WIDTH = 850;
+	public static final int DEFAULT_MAINFRAME_WIDTH = 850;
 
-    public static final int DEFAULT_MAINFRAME_HEIGHT = 600;
+	public static final int DEFAULT_MAINFRAME_HEIGHT = 600;
 
-    public static final int PALETTE_DOC_SPLIT_LOCATION = 300;
-    
-    // General
-    public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
-    
-    // Shema edition
-    public static File ADD_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/AddViewDialog.fib");
-    public static File DELETE_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteViewElementsDialog.fib");
- 
-    // Ontology edition
-    public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");
-    public static File CREATE_ONTOLOGY_INDIVIDUAL_FIB = new FileResource("Fib/Dialog/CreateOntologyIndividualDialog.fib");
-    public static File DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteOntologyObjectsDialog.fib");
-    public static File CREATE_DATA_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDataPropertyDialog.fib");
-    public static File CREATE_OBJECT_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateObjectPropertyDialog.fib");
+	public static final int PALETTE_DOC_SPLIT_LOCATION = 300;
+
+	// General
+	public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
+
+	// Shema edition
+	public static File ADD_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/AddViewDialog.fib");
+	public static File DELETE_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteViewElementsDialog.fib");
+
+	// Ontology edition
+	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");
+	public static File CREATE_ONTOLOGY_INDIVIDUAL_FIB = new FileResource("Fib/Dialog/CreateOntologyIndividualDialog.fib");
+	public static File DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteOntologyObjectsDialog.fib");
+	public static File CREATE_DATA_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDataPropertyDialog.fib");
+	public static File CREATE_OBJECT_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateObjectPropertyDialog.fib");
 
 }

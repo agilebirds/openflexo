@@ -23,21 +23,19 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public interface FlexoXMLSerializable extends XMLSerializable
-{
+public interface FlexoXMLSerializable extends XMLSerializable {
 	public XMLStorageResourceData getXMLResourceData();
-	
-    public XMLMapping getXMLMapping();
 
-    public Object instanciateNewBuilder();
+	public XMLMapping getXMLMapping();
 
-    public FlexoXMLSerializable cloneUsingXMLMapping();
+	public Object instanciateNewBuilder();
+
+	public FlexoXMLSerializable cloneUsingXMLMapping();
 
 }

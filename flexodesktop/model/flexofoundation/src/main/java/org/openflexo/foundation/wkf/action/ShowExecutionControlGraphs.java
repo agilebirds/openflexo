@@ -34,52 +34,44 @@ import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.OperatorNode;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 
+public class ShowExecutionControlGraphs extends FlexoGUIAction<ShowExecutionControlGraphs, WKFObject, WKFObject> {
 
-public class ShowExecutionControlGraphs extends FlexoGUIAction<ShowExecutionControlGraphs,WKFObject,WKFObject> 
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShowExecutionControlGraphs.class.getPackage().getName());
 
-    public static FlexoActionType<ShowExecutionControlGraphs,WKFObject,WKFObject> actionType 
-    = new FlexoActionType<ShowExecutionControlGraphs,WKFObject,WKFObject> (
-    		"show_execution_control_graphs",FlexoActionType.executionModelMenu,FlexoActionType.defaultGroup) {
+	public static FlexoActionType<ShowExecutionControlGraphs, WKFObject, WKFObject> actionType = new FlexoActionType<ShowExecutionControlGraphs, WKFObject, WKFObject>(
+			"show_execution_control_graphs", FlexoActionType.executionModelMenu, FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ShowExecutionControlGraphs makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ShowExecutionControlGraphs(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ShowExecutionControlGraphs makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new ShowExecutionControlGraphs(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) 
-        {
-            return ((object != null) 
-                     && object instanceof ExecutableWorkflowElement) && !object.getProcess().isImported();
-        }
+		@Override
+		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return ((object != null) && object instanceof ExecutableWorkflowElement) && !object.getProcess().isImported();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) 
-        {
-            return isVisibleForSelection(object, globalSelection);
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (ShowExecutionControlGraphs.actionType, FlexoProcess.class);
-        FlexoModelObject.addActionForClass (ShowExecutionControlGraphs.actionType, PetriGraphNode.class);
-        FlexoModelObject.addActionForClass (ShowExecutionControlGraphs.actionType, OperatorNode.class);
-        FlexoModelObject.addActionForClass (ShowExecutionControlGraphs.actionType, FlexoPreCondition.class);
-        FlexoModelObject.addActionForClass (ShowExecutionControlGraphs.actionType, FlexoPostCondition.class);
-    }
-    
-    ShowExecutionControlGraphs (WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
+
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(ShowExecutionControlGraphs.actionType, FlexoProcess.class);
+		FlexoModelObject.addActionForClass(ShowExecutionControlGraphs.actionType, PetriGraphNode.class);
+		FlexoModelObject.addActionForClass(ShowExecutionControlGraphs.actionType, OperatorNode.class);
+		FlexoModelObject.addActionForClass(ShowExecutionControlGraphs.actionType, FlexoPreCondition.class);
+		FlexoModelObject.addActionForClass(ShowExecutionControlGraphs.actionType, FlexoPostCondition.class);
+	}
+
+	ShowExecutionControlGraphs(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 }

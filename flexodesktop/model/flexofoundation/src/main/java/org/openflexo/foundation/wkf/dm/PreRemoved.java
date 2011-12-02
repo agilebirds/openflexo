@@ -27,20 +27,17 @@ import org.openflexo.foundation.wkf.node.FlexoPreCondition;
  * @author sguerin
  * 
  */
-public class PreRemoved extends WKFDataModification
-{
+public class PreRemoved extends WKFDataModification {
 
-    protected FlexoPreCondition _removedPreCondition;
+	protected FlexoPreCondition _removedPreCondition;
 
-    public PreRemoved(FlexoPreCondition removedPreCondition)
-    {
-        super(removedPreCondition, null);
-        _removedPreCondition = removedPreCondition;
-    }
+	public PreRemoved(FlexoPreCondition removedPreCondition) {
+		super(removedPreCondition, null);
+		_removedPreCondition = removedPreCondition;
+	}
 
-    public FlexoPreCondition getRemovedPreCondition()
-    {
-        return _removedPreCondition;
-    }
+	public FlexoPreCondition getRemovedPreCondition() {
+		return _removedPreCondition;
+	}
 
 }

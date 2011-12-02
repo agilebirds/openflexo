@@ -26,48 +26,44 @@ import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.view.menu.ToolsMenu;
 
-
 /**
  * @author sguerin
  */
-public class GeneratorMenuBar extends FlexoMenuBar
-{
+public class GeneratorMenuBar extends FlexoMenuBar {
 
-    public GeneratorFileMenu _fileMenu;
-    
-    public GeneratorToolsMenu toolsMenu;
+	public GeneratorFileMenu _fileMenu;
 
-    public GeneratorMenuBar(GeneratorController controller)
-    {
-        super(controller, Module.CG_MODULE);
-     }
+	public GeneratorToolsMenu toolsMenu;
 
-    /**
-     * Build if required and return CG 'File' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a GeneratorFileMenu instance
-     */
-    @Override
-	public FileMenu getFileMenu(FlexoController controller)
-    {
-        if (_fileMenu == null) {
-            _fileMenu = new GeneratorFileMenu((GeneratorController)controller);
-        }
-        return _fileMenu;
-    }
+	public GeneratorMenuBar(GeneratorController controller) {
+		super(controller, Module.CG_MODULE);
+	}
 
-    /**
-     * Overrides getToolsMenu
-     * @see org.openflexo.view.menu.FlexoMenuBar#getToolsMenu(org.openflexo.view.controller.FlexoController)
-     */
-    @Override
-    public ToolsMenu getToolsMenu(FlexoController controller)
-    {
-        if (toolsMenu==null)
-            toolsMenu = new GeneratorToolsMenu(controller);
-        return toolsMenu;
-    }
+	/**
+	 * Build if required and return CG 'File' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a GeneratorFileMenu instance
+	 */
+	@Override
+	public FileMenu getFileMenu(FlexoController controller) {
+		if (_fileMenu == null) {
+			_fileMenu = new GeneratorFileMenu((GeneratorController) controller);
+		}
+		return _fileMenu;
+	}
+
+	/**
+	 * Overrides getToolsMenu
+	 * 
+	 * @see org.openflexo.view.menu.FlexoMenuBar#getToolsMenu(org.openflexo.view.controller.FlexoController)
+	 */
+	@Override
+	public ToolsMenu getToolsMenu(FlexoController controller) {
+		if (toolsMenu == null) {
+			toolsMenu = new GeneratorToolsMenu(controller);
+		}
+		return toolsMenu;
+	}
 
 }

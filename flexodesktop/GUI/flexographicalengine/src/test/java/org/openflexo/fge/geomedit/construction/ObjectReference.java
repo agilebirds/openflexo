@@ -24,37 +24,30 @@ import org.openflexo.fge.geom.area.FGEArea;
 public class ObjectReference<O extends FGEArea> extends GeometricConstruction<O> {
 
 	public GeometricConstruction<O> reference;
-	
-	public ObjectReference() 
-	{
+
+	public ObjectReference() {
 		super();
 	}
 
-	public ObjectReference(GeometricConstruction<O> aReference) 
-	{
+	public ObjectReference(GeometricConstruction<O> aReference) {
 		this();
 		this.reference = aReference;
 	}
 
-	
 	@Override
-	protected O computeData()
-	{
+	protected O computeData() {
 		return reference.getData();
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "ObjectReference["+reference.toString()+"]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public String toString() {
+		return "ObjectReference[" + reference.toString() + "]";
+	}
+
+	@Override
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { reference };
 		return returned;
 	}
-
 
 }

@@ -41,93 +41,83 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 
-
 /**
  * 'File' menu for this Module
  * 
  * @author yourname
  */
-public class FPSFileMenu extends FileMenu
-{
+public class FPSFileMenu extends FileMenu {
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected FPSController _fpsController;
-      private JMenu fpsRecentProjectItem;
-      
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	protected FPSController _fpsController;
+	private JMenu fpsRecentProjectItem;
 
-    public FPSFileMenu(FPSController controller)
-    {
-        super(controller,false);
-        _fpsController = controller;
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public FPSController getFPSController()
-    {
-        return _fpsController;
-    }
+	public FPSFileMenu(FPSController controller) {
+		super(controller, false);
+		_fpsController = controller;
+	}
 
-    @Override
-	public void addSpecificItems()
-    {
-    	add(new FlexoMenuItem(ShareProject.actionType, getController()) {
-    		@Override
-			public FlexoModelObject getFocusedObject() 
-    		{
-    			return _fpsController.getRepositories();
-    		}
-    	});
-    	add(new FlexoMenuItem(OpenSharedProject.actionType, getController()) {
-    		@Override
-			public FlexoModelObject getFocusedObject() 
-    		{
-    			return _fpsController.getRepositories();
-    		}
-    	});
+	public FPSController getFPSController() {
+		return _fpsController;
+	}
 
-    	add(fpsRecentProjectItem = new JMenu());
-    	fpsRecentProjectItem.setText(FlexoLocalization.localizedForKey("recent_projects", fpsRecentProjectItem));
-    	Enumeration<File> en = FPSPreferences.getLastOpenedProjects().elements();
-    	while (en.hasMoreElements()) {
-    		File f = en.nextElement();
-    		fpsRecentProjectItem.add(new RecentSharedProjectItem(f));
-    	}
+	@Override
+	public void addSpecificItems() {
+		add(new FlexoMenuItem(ShareProject.actionType, getController()) {
+			@Override
+			public FlexoModelObject getFocusedObject() {
+				return _fpsController.getRepositories();
+			}
+		});
+		add(new FlexoMenuItem(OpenSharedProject.actionType, getController()) {
+			@Override
+			public FlexoModelObject getFocusedObject() {
+				return _fpsController.getRepositories();
+			}
+		});
 
-    	addSeparator();
-    }
+		add(fpsRecentProjectItem = new JMenu());
+		fpsRecentProjectItem.setText(FlexoLocalization.localizedForKey("recent_projects", fpsRecentProjectItem));
+		Enumeration<File> en = FPSPreferences.getLastOpenedProjects().elements();
+		while (en.hasMoreElements()) {
+			File f = en.nextElement();
+			fpsRecentProjectItem.add(new RecentSharedProjectItem(f));
+		}
 
-    public class RecentSharedProjectItem extends FlexoMenuItem
-    {
-    	public RecentSharedProjectItem(File project)
-    	{
-    		super(new RecentSharedProjectAction(project), project.getName()+" - "+project.getParentFile().getAbsolutePath(), null, getController(), false);
-    	}
-    }
+		addSeparator();
+	}
 
-    public class RecentSharedProjectAction extends AbstractAction
-    {
-    	private File projectDirectory;
+	public class RecentSharedProjectItem extends FlexoMenuItem {
+		public RecentSharedProjectItem(File project) {
+			super(new RecentSharedProjectAction(project), project.getName() + " - " + project.getParentFile().getAbsolutePath(), null,
+					getController(), false);
+		}
+	}
 
-    	public RecentSharedProjectAction(File projectDirectory)
-    	{
-    		super();
-    		this.projectDirectory = projectDirectory;
-    	}
+	public class RecentSharedProjectAction extends AbstractAction {
+		private File projectDirectory;
 
-    	@Override
-		public void actionPerformed(ActionEvent arg0)
-    	{
-    		OpenSharedProject newAction = OpenSharedProject.actionType.makeNewAction(((FPSController)getController()).getRepositories(), null, getController().getEditor());
-    		newAction.setProjectDirectory(projectDirectory);
-    		newAction.doAction();
-    	}
-    }
+		public RecentSharedProjectAction(File projectDirectory) {
+			super();
+			this.projectDirectory = projectDirectory;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			OpenSharedProject newAction = OpenSharedProject.actionType.makeNewAction(((FPSController) getController()).getRepositories(),
+					null, getController().getEditor());
+			newAction.setProjectDirectory(projectDirectory);
+			newAction.doAction();
+		}
+	}
 
 }

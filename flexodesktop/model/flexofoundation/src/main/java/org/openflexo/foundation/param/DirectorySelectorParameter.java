@@ -23,19 +23,15 @@ import java.io.File;
 
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class DirectorySelectorParameter extends ParameterDefinition<File> {
 
-    public DirectorySelectorParameter(String name, String label, File defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.DIRECTORY;
-    }
+	public DirectorySelectorParameter(String name, String label, File defaultValue) {
+		super(name, label, defaultValue);
+	}
 
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.DIRECTORY;
+	}
 
 }

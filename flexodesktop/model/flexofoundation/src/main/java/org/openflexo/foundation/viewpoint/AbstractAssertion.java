@@ -19,71 +19,74 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Hashtable;
-
-import org.openflexo.antar.expr.DefaultExpressionParser;
-import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.antar.expr.UnresolvedExpressionException;
-import org.openflexo.antar.expr.parser.ParseException;
-
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public abstract class AbstractAssertion extends ViewPointObject {
 
 	private AddIndividual _action;
-	private String conditional;
-	private Expression condition;
 
-	public void setAction(AddIndividual action) 
-	{
+	public void setAction(AddIndividual action) {
 		_action = action;
 	}
 
-	public AddIndividual getAction() 
-	{
+	public AddIndividual getAction() {
 		return _action;
 	}
-	
-	public EditionScheme getScheme()
-	{
+
+	public EditionScheme getScheme() {
 		return getAction().getScheme();
 	}
-	
+
+	public EditionScheme getEditionScheme() {
+		return getScheme();
+	}
+
 	@Override
-	public ViewPoint getCalc() 
-	{
+	public ViewPoint getCalc() {
 		return getAction().getCalc();
 	}
-	
-	public String getConditional() 
-	{
+
+	public boolean evaluateCondition(EditionSchemeAction action) {
+		if (getConditional().isValid()) {
+			return (Boolean) getConditional().getBindingValue(action);
+		}
+		return true;
+	}
+
+	public EditionPattern getEditionPattern() {
+		return getScheme().getEditionPattern();
+	}
+
+	@Override
+	public BindingModel getBindingModel() {
+		return getEditionPattern().getBindingModel();
+	}
+
+	private ViewPointDataBinding conditional;
+
+	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+
+	public BindingDefinition getConditionalBindingDefinition() {
+		return CONDITIONAL;
+	}
+
+	public ViewPointDataBinding getConditional() {
+		if (conditional == null) {
+			conditional = new ViewPointDataBinding(this, EditionActionBindingAttribute.conditional, getConditionalBindingDefinition());
+		}
 		return conditional;
 	}
 
-	public void setConditional(String conditional) 
-	{
+	public void setConditional(ViewPointDataBinding conditional) {
+		conditional.setOwner(this);
+		conditional.setBindingAttribute(EditionActionBindingAttribute.conditional);
+		conditional.setBindingDefinition(getConditionalBindingDefinition());
 		this.conditional = conditional;
-		if (conditional != null) {
-			DefaultExpressionParser parser = new DefaultExpressionParser();
-			try {
-				condition = parser.parse(conditional);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public boolean evaluateCondition(final Hashtable<String,Object> parameterValues)
-	{
-		if (condition == null) return true;
-		try {
-			return condition.evaluateCondition(parameterValues);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (UnresolvedExpressionException e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 
 }

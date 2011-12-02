@@ -24,68 +24,60 @@ import java.io.FileNotFoundException;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class CustomTemplatesResource extends FlexoDirectoryResource
-{
+public class CustomTemplatesResource extends FlexoDirectoryResource {
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public CustomTemplatesResource(FlexoProjectBuilder builder)
-    {
-        super(builder.project);
-        builder.notifyResourceLoading(this);
-    }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public CustomTemplatesResource(FlexoProjectBuilder builder) {
+		super(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public CustomTemplatesResource(FlexoProject aProject, String name)
-    {
-        super(aProject);
-        setName(name);
-    }
+	public CustomTemplatesResource(FlexoProject aProject, String name) {
+		super(aProject);
+		setName(name);
+	}
 
-    public CustomTemplatesResource(FlexoProject aProject, String name, FlexoProjectFile directory) throws InvalidFileNameException
-    {
-        this(aProject,name);
-        setResourceFile(directory);
-    }
+	public CustomTemplatesResource(FlexoProject aProject, String name, FlexoProjectFile directory) throws InvalidFileNameException {
+		this(aProject, name);
+		setResourceFile(directory);
+	}
 
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.CUSTOM_TEMPLATES;
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.CUSTOM_TEMPLATES;
+	}
 
-    @Override
-	public String getName()
-    {
-        return _name;
-    }
+	@Override
+	public String getName() {
+		return _name;
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-    	_name = aName;
-    }
+	@Override
+	public void setName(String aName) {
+		_name = aName;
+	}
 
-    private String _name;
+	private String _name;
 
-    /**
-     * Overrides performUpdating
-     * @see org.openflexo.foundation.rm.FlexoResource#performUpdating(org.openflexo.foundation.rm.FlexoResourceTree)
-     */
-    @Override
-    protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	/**
+	 * Overrides performUpdating
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#performUpdating(org.openflexo.foundation.rm.FlexoResourceTree)
+	 */
+	@Override
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException,
+			FileNotFoundException, ProjectLoadingCancelledException {
+		// TODO Auto-generated method stub
+
+	}
 }

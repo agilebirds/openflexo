@@ -33,17 +33,16 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceStatus;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 
-
 public class TOCEntryElement extends DEBrowserElement {
 
 	public TOCEntryElement(TOCEntry entry, ProjectBrowser browser, BrowserElement parent) {
-		super(entry, BrowserElementType.TOC_ENTRY, browser,parent);
+		super(entry, BrowserElementType.TOC_ENTRY, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		Enumeration<TOCEntry> en = ((TOCEntry)getObject()).getSortedTocEntries(); 
-		while(en.hasMoreElements()) {
+		Enumeration<TOCEntry> en = ((TOCEntry) getObject()).getSortedTocEntries();
+		while (en.hasMoreElements()) {
 			addToChilds(en.nextElement());
 		}
 	}
@@ -52,19 +51,20 @@ public class TOCEntryElement extends DEBrowserElement {
 	public boolean isNameEditable() {
 		return true;
 	}
-	
+
 	@Override
 	public Icon getIcon() {
 		ImageIcon icon = getElementType().getIcon();
 		if (getEntry().isReadOnly()) {
 			icon = IconFactory.getDisabledIcon(icon);
 		}
-		if ((getEntry().getObjectReference()!=null) && (getEntry().getObjectReference().getStatus()!=ReferenceStatus.UNRESOLVED) && (getEntry().getObjectReference().getStatus()!=ReferenceStatus.RESOLVED)) {
+		if ((getEntry().getObjectReference() != null) && (getEntry().getObjectReference().getStatus() != ReferenceStatus.UNRESOLVED)
+				&& (getEntry().getObjectReference().getStatus() != ReferenceStatus.RESOLVED)) {
 			icon = IconFactory.getImageIcon(icon, IconLibrary.QUESTION);
 		}
 		return icon;
 	}
-	
+
 	@Override
 	public String getName() {
 		return getEntry().getTitle();
@@ -74,8 +74,8 @@ public class TOCEntryElement extends DEBrowserElement {
 	public void setName(String title) throws FlexoException {
 		getEntry().setTitle(title);
 	}
-	
+
 	public TOCEntry getEntry() {
-		return  ((TOCEntry)getObject());
+		return ((TOCEntry) getObject());
 	}
 }

@@ -25,7 +25,6 @@ package org.openflexo.wse.controller;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMObject;
@@ -52,13 +51,12 @@ import org.openflexo.wse.view.WSEMainPane;
 import org.openflexo.wse.view.listener.WSEKeyEventListener;
 import org.openflexo.wse.view.menu.WSEMenuBar;
 
-
 /**
  * Controller for this module
  * 
  * @author yourname
  */
-public class WSEController extends FlexoController implements SelectionManagingController{//, ConsistencyCheckingController {
+public class WSEController extends FlexoController implements SelectionManagingController {// , ConsistencyCheckingController {
 
 	static final Logger logger = Logger.getLogger(WSEController.class.getPackage().getName());
 
@@ -85,7 +83,7 @@ public class WSEController extends FlexoController implements SelectionManagingC
 		super(projectEditor, module);
 		addToPerspectives(WSE_PERSPECTIVE);
 		setDefaultPespective(WSE_PERSPECTIVE);
-		_WSEMenuBar = (WSEMenuBar)createAndRegisterNewMenuBar();
+		_WSEMenuBar = (WSEMenuBar) createAndRegisterNewMenuBar();
 		_WSEKeyEventListener = new WSEKeyEventListener(this);
 		_frame = new WSEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _WSEKeyEventListener, _WSEMenuBar);
 		init(_frame, _WSEKeyEventListener, _WSEMenuBar);
@@ -121,7 +119,7 @@ public class WSEController extends FlexoController implements SelectionManagingC
 	}
 
 	public void loadRelativeWindows() {
-	// Build eventual relative windows
+		// Build eventual relative windows
 	}
 
 	// ================================================
@@ -143,13 +141,13 @@ public class WSEController extends FlexoController implements SelectionManagingC
 
 	public void showBrowser() {
 		if (getMainPane() != null) {
-			((WSEMainPane)getMainPane()).showBrowser();
+			((WSEMainPane) getMainPane()).showBrowser();
 		}
 	}
 
 	public void hideBrowser() {
 		if (getMainPane() != null) {
-			((WSEMainPane)getMainPane()).hideBrowser();
+			((WSEMainPane) getMainPane()).hideBrowser();
 		}
 	}
 
@@ -158,7 +156,7 @@ public class WSEController extends FlexoController implements SelectionManagingC
 		return new WSEMainPane(getEmptyPanel(), getMainFrame(), this);
 	}
 
-  	public WSEBrowser getWSEBrowser() {
+	public WSEBrowser getWSEBrowser() {
 		return _browser;
 	}
 
@@ -180,10 +178,11 @@ public class WSEController extends FlexoController implements SelectionManagingC
 	}
 
 	/**
-	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object,
-	 * even if required view is not the current displayed view
+	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
+	 * is not the current displayed view
 	 * 
-	 * @param object: the object to focus on
+	 * @param object
+	 *            : the object to focus on
 	 */
 	@Override
 	public void selectAndFocusObject(FlexoModelObject object) {
@@ -200,35 +199,31 @@ public class WSEController extends FlexoController implements SelectionManagingC
 		// TODO: Handles here exceptions that may be thrown through the inspector
 		return super.handleException(inspectable, propertyName, value, exception);
 	}
-	
-	
+
 	// VIEWS
 	@Override
-	public Hashtable getLoadedViews(){
+	public Hashtable getLoadedViews() {
 		return super.getLoadedViews();
 	}
-	
+
 	@Override
-	public String getWindowTitleforObject (FlexoModelObject object)
-	{
-		if (object instanceof DMObject )
-			return ((DMObject)object).getLocalizedName();
-		else if(object instanceof WSObject)
-			return ((WSObject)object).getLocalizedName();
-		else if(object instanceof FlexoProcess)
-			return ((FlexoProcess)object).getName();
-		else if(object instanceof FlexoPort)
-			return ((FlexoPort)object).getName();
-		else if(object instanceof AbstractMessageDefinition) {
-			return ((AbstractMessageDefinition)object).getName();
-		}
-		else if (object instanceof ServiceInterface){
-			return ((ServiceInterface)object).getName();
-		}
-		else if (object instanceof ServiceOperation){
-			return ((ServiceOperation)object).getName();
+	public String getWindowTitleforObject(FlexoModelObject object) {
+		if (object instanceof DMObject) {
+			return ((DMObject) object).getLocalizedName();
+		} else if (object instanceof WSObject) {
+			return ((WSObject) object).getLocalizedName();
+		} else if (object instanceof FlexoProcess) {
+			return ((FlexoProcess) object).getName();
+		} else if (object instanceof FlexoPort) {
+			return ((FlexoPort) object).getName();
+		} else if (object instanceof AbstractMessageDefinition) {
+			return ((AbstractMessageDefinition) object).getName();
+		} else if (object instanceof ServiceInterface) {
+			return ((ServiceInterface) object).getName();
+		} else if (object instanceof ServiceOperation) {
+			return ((ServiceOperation) object).getName();
 		}
 		return null;
 	}
-	
+
 }

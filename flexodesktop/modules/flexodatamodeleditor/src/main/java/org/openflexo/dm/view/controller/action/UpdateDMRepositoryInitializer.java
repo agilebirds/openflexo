@@ -26,12 +26,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-
-
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.dm.view.popups.SelectClassesPopup;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -41,99 +35,93 @@ import org.openflexo.foundation.dm.ExternalRepository;
 import org.openflexo.foundation.dm.JDKRepository;
 import org.openflexo.foundation.dm.LoadableDMEntity;
 import org.openflexo.foundation.dm.action.UpdateDMRepository;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
 
 public class UpdateDMRepositoryInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	UpdateDMRepositoryInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(UpdateDMRepository.actionType,actionInitializer);
+	UpdateDMRepositoryInitializer(DMControllerActionInitializer actionInitializer) {
+		super(UpdateDMRepository.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<UpdateDMRepository> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<UpdateDMRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<UpdateDMRepository>() {
-            @Override
-			public boolean run(ActionEvent e, UpdateDMRepository action)
-            {
-                DMRepository repository = action.getRepository();
-                if (repository instanceof JDKRepository) {
-                    action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
-                    Vector<LoadableDMEntity> allEntities = new Vector<LoadableDMEntity>();
-                    for (Enumeration en = repository.getEntities().elements(); en.hasMoreElements();) {
-                        LoadableDMEntity entity = (LoadableDMEntity) en.nextElement();
-                        if (entity.getType() != null) {
-                            allEntities.add(entity);
-                        }
-                    }
-                    SelectClassesPopup popup = new SelectClassesPopup(FlexoLocalization.localizedForKey("update_jdk_repository"),
-                    		FlexoLocalization.localizedForKey("please_select_classes_to_update"),
-                            FlexoLocalization.localizedForKey("update_jdk_repository_description"), allEntities, getProject(),
-                            getControllerActionInitializer().getDMController(), action.getFlexoProgress());
-                    action.hideFlexoProgress();
-                    popup.setVisible(true);
-                    if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
-                        action.setUpdatedSet(popup.getDMSet());
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else if (repository instanceof ExternalRepository) {
-                    action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
-                    Vector<LoadableDMEntity> allEntities = new Vector<LoadableDMEntity>();
-                    for (Enumeration en = repository.getEntities().elements(); en.hasMoreElements();) {
-                        LoadableDMEntity entity = (LoadableDMEntity) en.nextElement();
-                        if (entity.getType() != null) {
-                            allEntities.add(entity);
-                        }
-                    }
-                    SelectClassesPopup popup = new SelectClassesPopup(
-                    		FlexoLocalization.localizedForKey("update_jar"), 
-                    		FlexoLocalization.localizedForKey("please_select_properties_and_methods_to_update"),
-                    		FlexoLocalization.localizedForKey("update_external_repository_description"), 
-                    		(ExternalRepository) repository, getProject(),
-                    		getControllerActionInitializer().getDMController(), action.getFlexoProgress());
-                    action.hideFlexoProgress();
-                    popup.setVisible(true);
-                    if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
-                        action.setUpdatedSet(popup.getDMSet());
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                return false;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, UpdateDMRepository action) {
+				DMRepository repository = action.getRepository();
+				if (repository instanceof JDKRepository) {
+					action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
+					Vector<LoadableDMEntity> allEntities = new Vector<LoadableDMEntity>();
+					for (Enumeration en = repository.getEntities().elements(); en.hasMoreElements();) {
+						LoadableDMEntity entity = (LoadableDMEntity) en.nextElement();
+						if (entity.getType() != null) {
+							allEntities.add(entity);
+						}
+					}
+					SelectClassesPopup popup = new SelectClassesPopup(FlexoLocalization.localizedForKey("update_jdk_repository"),
+							FlexoLocalization.localizedForKey("please_select_classes_to_update"),
+							FlexoLocalization.localizedForKey("update_jdk_repository_description"), allEntities, getProject(),
+							getControllerActionInitializer().getDMController(), action.getFlexoProgress());
+					action.hideFlexoProgress();
+					popup.setVisible(true);
+					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
+						action.setUpdatedSet(popup.getDMSet());
+						return true;
+					} else {
+						return false;
+					}
+				} else if (repository instanceof ExternalRepository) {
+					action.makeFlexoProgress(FlexoLocalization.localizedForKey("analysing"), 2);
+					Vector<LoadableDMEntity> allEntities = new Vector<LoadableDMEntity>();
+					for (Enumeration en = repository.getEntities().elements(); en.hasMoreElements();) {
+						LoadableDMEntity entity = (LoadableDMEntity) en.nextElement();
+						if (entity.getType() != null) {
+							allEntities.add(entity);
+						}
+					}
+					SelectClassesPopup popup = new SelectClassesPopup(FlexoLocalization.localizedForKey("update_jar"),
+							FlexoLocalization.localizedForKey("please_select_properties_and_methods_to_update"),
+							FlexoLocalization.localizedForKey("update_external_repository_description"), (ExternalRepository) repository,
+							getProject(), getControllerActionInitializer().getDMController(), action.getFlexoProgress());
+					action.hideFlexoProgress();
+					popup.setVisible(true);
+					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
+						action.setUpdatedSet(popup.getDMSet());
+						return true;
+					} else {
+						return false;
+					}
+				}
+				return false;
+			}
+		};
 	}
-
-     @Override
-	protected FlexoActionFinalizer<UpdateDMRepository> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<UpdateDMRepository>() {
-            @Override
-			public boolean run(ActionEvent e, UpdateDMRepository action)
-            {
-                 DMRepository repository = action.getRepository();
-                getControllerActionInitializer().getDMController().getSelectionManager().setSelectedObject(repository);
-                return true;
-          }
-        };
-	}
-
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<UpdateDMRepository> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<UpdateDMRepository>() {
+			@Override
+			public boolean run(ActionEvent e, UpdateDMRepository action) {
+				DMRepository repository = action.getRepository();
+				getControllerActionInitializer().getDMController().getSelectionManager().setSelectedObject(repository);
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.REFRESH_ICON;
 	}
 }

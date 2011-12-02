@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.jedit;
+
 /*
  * TokenMarker.java - Generic token marker
  * Copyright (C) 1998, 1999 Slava Pestov
@@ -32,48 +33,44 @@ import javax.swing.text.Segment;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
 /**
- * A token marker that splits lines of text into tokens. Each token carries
- * a length field and an indentification tag that can be mapped to a color
- * for painting that token.<p>
- *
- * For performance reasons, the linked list of tokens is reused after each
- * line is tokenized. Therefore, the return value of <code>markTokens</code>
- * should only be used for immediate painting. Notably, it cannot be
- * cached.
- *
+ * A token marker that splits lines of text into tokens. Each token carries a length field and an indentification tag that can be mapped to
+ * a color for painting that token.
+ * <p>
+ * 
+ * For performance reasons, the linked list of tokens is reused after each line is tokenized. Therefore, the return value of
+ * <code>markTokens</code> should only be used for immediate painting. Notably, it cannot be cached.
+ * 
  * @author Slava Pestov
  * @version $Id: TokenMarker.java,v 1.2 2011/09/12 11:47:11 gpolet Exp $
- *
+ * 
  * @see org.gjt.sp.jedit.syntax.Token
  */
-public abstract class TokenMarker
-{
+public abstract class TokenMarker {
 	/**
-	 * A wrapper for the lower-level <code>markTokensImpl</code> method
-	 * that is called to split a line up into tokens.
-	 * @param line The line
-	 * @param lineIndex The line number
+	 * A wrapper for the lower-level <code>markTokensImpl</code> method that is called to split a line up into tokens.
+	 * 
+	 * @param line
+	 *            The line
+	 * @param lineIndex
+	 *            The line number
 	 */
-	public Token markTokens(Segment line, int lineIndex)
-	{
-		if(lineIndex >= length)
-		{
-			throw new IllegalArgumentException("Tokenizing invalid line: "
-				+ lineIndex);
+	public Token markTokens(Segment line, int lineIndex) {
+		if (lineIndex >= length) {
+			throw new IllegalArgumentException("Tokenizing invalid line: " + lineIndex);
 		}
 
 		lastToken = null;
 
 		LineInfo info = lineInfo[lineIndex];
 		LineInfo prev;
-		if(lineIndex == 0)
+		if (lineIndex == 0) {
 			prev = null;
-		else
+		} else {
 			prev = lineInfo[lineIndex - 1];
+		}
 
 		byte oldToken = info.token;
-		byte token = markTokensImpl(prev == null ?
-			Token.NULL : prev.token,line,lineIndex);
+		byte token = markTokensImpl(prev == null ? Token.NULL : prev.token, line, lineIndex);
 
 		info.token = token;
 
@@ -115,132 +112,121 @@ public abstract class TokenMarker
 		 * all the relevant info down so that others wouldn't
 		 * duplicate it.
 		 */
-		 if(!(lastLine == lineIndex && nextLineRequested))
+		if (!(lastLine == lineIndex && nextLineRequested)) {
 			nextLineRequested = (oldToken != token);
+		}
 
 		lastLine = lineIndex;
 
-		addToken(0,Token.END);
+		addToken(0, Token.END);
 
 		return firstToken;
 	}
 
 	/**
-	 * An abstract method that splits a line up into tokens. It
-	 * should parse the line, and call <code>addToken()</code> to
-	 * add syntax tokens to the token list. Then, it should return
-	 * the initial token type for the next line.<p>
-	 *
-	 * For example if the current line contains the start of a 
-	 * multiline comment that doesn't end on that line, this method
-	 * should return the comment token type so that it continues on
-	 * the next line.
-	 *
-	 * @param token The initial token type for this line
-	 * @param line The line to be tokenized
-	 * @param lineIndex The index of the line in the document,
-	 * starting at 0
+	 * An abstract method that splits a line up into tokens. It should parse the line, and call <code>addToken()</code> to add syntax tokens
+	 * to the token list. Then, it should return the initial token type for the next line.
+	 * <p>
+	 * 
+	 * For example if the current line contains the start of a multiline comment that doesn't end on that line, this method should return
+	 * the comment token type so that it continues on the next line.
+	 * 
+	 * @param token
+	 *            The initial token type for this line
+	 * @param line
+	 *            The line to be tokenized
+	 * @param lineIndex
+	 *            The index of the line in the document, starting at 0
 	 * @return The initial token type for the next line
 	 */
-	protected abstract byte markTokensImpl(byte token, Segment line,
-		int lineIndex);
+	protected abstract byte markTokensImpl(byte token, Segment line, int lineIndex);
 
 	/**
-	 * Returns if the token marker supports tokens that span multiple
-	 * lines. If this is true, the object using this token marker is
-	 * required to pass all lines in the document to the
-	 * <code>markTokens()</code> method (in turn).<p>
-	 *
-	 * The default implementation returns true; it should be overridden
-	 * to return false on simpler token markers for increased speed.
+	 * Returns if the token marker supports tokens that span multiple lines. If this is true, the object using this token marker is required
+	 * to pass all lines in the document to the <code>markTokens()</code> method (in turn).
+	 * <p>
+	 * 
+	 * The default implementation returns true; it should be overridden to return false on simpler token markers for increased speed.
 	 */
-	public boolean supportsMultilineTokens()
-	{
+	public boolean supportsMultilineTokens() {
 		return true;
 	}
 
 	/**
-	 * Informs the token marker that lines have been inserted into
-	 * the document. This inserts a gap in the <code>lineInfo</code>
-	 * array.
-	 * @param index The first line number
-	 * @param lines The number of lines 
+	 * Informs the token marker that lines have been inserted into the document. This inserts a gap in the <code>lineInfo</code> array.
+	 * 
+	 * @param index
+	 *            The first line number
+	 * @param lines
+	 *            The number of lines
 	 */
-	public void insertLines(int index, int lines)
-	{
-		if(lines <= 0)
+	public void insertLines(int index, int lines) {
+		if (lines <= 0) {
 			return;
+		}
 		length += lines;
 		ensureCapacity(length);
 		int len = index + lines;
-		System.arraycopy(lineInfo,index,lineInfo,len,
-			lineInfo.length - len);
+		System.arraycopy(lineInfo, index, lineInfo, len, lineInfo.length - len);
 
-		for(int i = index + lines - 1; i >= index; i--)
-		{
+		for (int i = index + lines - 1; i >= index; i--) {
 			lineInfo[i] = new LineInfo();
 		}
 	}
-	
+
 	/**
-	 * Informs the token marker that line have been deleted from
-	 * the document. This removes the lines in question from the
+	 * Informs the token marker that line have been deleted from the document. This removes the lines in question from the
 	 * <code>lineInfo</code> array.
-	 * @param index The first line number
-	 * @param lines The number of lines
+	 * 
+	 * @param index
+	 *            The first line number
+	 * @param lines
+	 *            The number of lines
 	 */
-	public void deleteLines(int index, int lines)
-	{
-		if (lines <= 0)
+	public void deleteLines(int index, int lines) {
+		if (lines <= 0) {
 			return;
+		}
 		int len = index + lines;
 		length -= lines;
-		System.arraycopy(lineInfo,len,lineInfo,
-			index,lineInfo.length - len);
+		System.arraycopy(lineInfo, len, lineInfo, index, lineInfo.length - len);
 	}
 
 	/**
 	 * Returns the number of lines in this token marker.
 	 */
-	public int getLineCount()
-	{
+	public int getLineCount() {
 		return length;
 	}
 
 	/**
-	 * Returns true if the next line should be repainted. This
-	 * will return true after a line has been tokenized that starts
-	 * a multiline token that continues onto the next line.
+	 * Returns true if the next line should be repainted. This will return true after a line has been tokenized that starts a multiline
+	 * token that continues onto the next line.
 	 */
-	public boolean isNextLineRequested()
-	{
+	public boolean isNextLineRequested() {
 		return nextLineRequested;
 	}
 
 	// protected members
 
 	/**
-	 * The first token in the list. This should be used as the return
-	 * value from <code>markTokens()</code>.
+	 * The first token in the list. This should be used as the return value from <code>markTokens()</code>.
 	 */
 	protected Token firstToken;
 
 	/**
-	 * The last token in the list. New tokens are added here.
-	 * This should be set to null before a new line is to be tokenized.
+	 * The last token in the list. New tokens are added here. This should be set to null before a new line is to be tokenized.
 	 */
 	protected Token lastToken;
 
 	/**
-	 * An array for storing information about lines. It is enlarged and
-	 * shrunk automatically by the <code>insertLines()</code> and
+	 * An array for storing information about lines. It is enlarged and shrunk automatically by the <code>insertLines()</code> and
 	 * <code>deleteLines()</code> methods.
 	 */
 	protected LineInfo[] lineInfo;
 
 	/**
-	 * The number of lines in the model being tokenized. This can be
-	 * less than the length of the <code>lineInfo</code> array.
+	 * The number of lines in the model being tokenized. This can be less than the length of the <code>lineInfo</code> array.
 	 */
 	protected int length;
 
@@ -255,70 +241,62 @@ public abstract class TokenMarker
 	protected boolean nextLineRequested;
 
 	/**
-	 * Creates a new <code>TokenMarker</code>. This DOES NOT create
-	 * a lineInfo array; an initial call to <code>insertLines()</code>
-	 * does that.
+	 * Creates a new <code>TokenMarker</code>. This DOES NOT create a lineInfo array; an initial call to <code>insertLines()</code> does
+	 * that.
 	 */
-	protected TokenMarker()
-	{
+	protected TokenMarker() {
 		lastLine = -1;
 	}
 
 	/**
-	 * Ensures that the <code>lineInfo</code> array can contain the
-	 * specified index. This enlarges it if necessary. No action is
-	 * taken if the array is large enough already.<p>
-	 *
-	 * It should be unnecessary to call this under normal
-	 * circumstances; <code>insertLine()</code> should take care of
-	 * enlarging the line info array automatically.
-	 *
-	 * @param index The array index
+	 * Ensures that the <code>lineInfo</code> array can contain the specified index. This enlarges it if necessary. No action is taken if
+	 * the array is large enough already.
+	 * <p>
+	 * 
+	 * It should be unnecessary to call this under normal circumstances; <code>insertLine()</code> should take care of enlarging the line
+	 * info array automatically.
+	 * 
+	 * @param index
+	 *            The array index
 	 */
-	protected void ensureCapacity(int index)
-	{
-		if(lineInfo == null)
+	protected void ensureCapacity(int index) {
+		if (lineInfo == null) {
 			lineInfo = new LineInfo[index + 1];
-		else if(lineInfo.length <= index)
-		{
+		} else if (lineInfo.length <= index) {
 			LineInfo[] lineInfoN = new LineInfo[(index + 1) * 2];
-			System.arraycopy(lineInfo,0,lineInfoN,0,
-					 lineInfo.length);
+			System.arraycopy(lineInfo, 0, lineInfoN, 0, lineInfo.length);
 			lineInfo = lineInfoN;
 		}
 	}
 
 	/**
 	 * Adds a token to the token list.
-	 * @param length The length of the token
-	 * @param id The id of the token
+	 * 
+	 * @param length
+	 *            The length of the token
+	 * @param id
+	 *            The id of the token
 	 */
-	protected void addToken(int length, byte id)
-	{
-		if(id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
+	protected void addToken(int length, byte id) {
+		if (id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST) {
 			throw new InternalError("Invalid id: " + id);
-
-		if(length == 0 && id != Token.END)
-			return;
-
-		if(firstToken == null)
-		{
-			firstToken = new Token(length,id);
-			lastToken = firstToken;
 		}
-		else if(lastToken == null)
-		{
+
+		if (length == 0 && id != Token.END) {
+			return;
+		}
+
+		if (firstToken == null) {
+			firstToken = new Token(length, id);
+			lastToken = firstToken;
+		} else if (lastToken == null) {
 			lastToken = firstToken;
 			firstToken.length = length;
 			firstToken.id = id;
-		}
-		else if(lastToken.next == null)
-		{
-			lastToken.next = new Token(length,id);
+		} else if (lastToken.next == null) {
+			lastToken.next = new Token(length, id);
 			lastToken = lastToken.next;
-		}
-		else
-		{
+		} else {
 			lastToken = lastToken.next;
 			lastToken.length = length;
 			lastToken.id = id;
@@ -328,22 +306,17 @@ public abstract class TokenMarker
 	/**
 	 * Inner class for storing information about tokenized lines.
 	 */
-	public class LineInfo
-	{
+	public class LineInfo {
 		/**
-		 * Creates a new LineInfo object with token = Token.NULL
-		 * and obj = null.
+		 * Creates a new LineInfo object with token = Token.NULL and obj = null.
 		 */
-		public LineInfo()
-		{
+		public LineInfo() {
 		}
 
 		/**
-		 * Creates a new LineInfo object with the specified
-		 * parameters.
+		 * Creates a new LineInfo object with the specified parameters.
 		 */
-		public LineInfo(byte token, Object obj)
-		{
+		public LineInfo(byte token, Object obj) {
 			this.token = token;
 			this.obj = obj;
 		}
@@ -354,55 +327,54 @@ public abstract class TokenMarker
 		public byte token;
 
 		/**
-		 * This is for use by the token marker implementations
-		 * themselves. It can be used to store anything that
-		 * is an object and that needs to exist on a per-line
-		 * basis.
+		 * This is for use by the token marker implementations themselves. It can be used to store anything that is an object and that needs
+		 * to exist on a per-line basis.
 		 */
 		public Object obj;
 	}
-	
-	public static TokenMarker makeTokenMarker (TokenMarkerStyle tokenMarkerStyle)
-	{
-		if (tokenMarkerStyle == TokenMarkerStyle.BatchFile)
+
+	public static TokenMarker makeTokenMarker(TokenMarkerStyle tokenMarkerStyle) {
+		if (tokenMarkerStyle == TokenMarkerStyle.BatchFile) {
 			return new BatchFileTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.C)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.C) {
 			return new CTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.CC)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.CC) {
 			return new CCTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.IDL)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.IDL) {
 			return new IDLTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.JavaScript)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.JavaScript) {
 			return new JavaScriptTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Java)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Java) {
 			return new JavaTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Eiffel)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Eiffel) {
 			return new EiffelTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.HTML)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.HTML) {
 			return new HTMLTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Patch)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Patch) {
 			return new PatchTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Perl)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Perl) {
 			return new PerlTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.PHP)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.PHP) {
 			return new PHPTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Props)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Props) {
 			return new PropsTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Python)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Python) {
 			return new PythonTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.ShellScript)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.ShellScript) {
 			return new ShellScriptTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.SQL)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.SQL) {
 			return new SQLTokenMarker(null);
-		else if (tokenMarkerStyle == TokenMarkerStyle.TSQL)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.TSQL) {
 			return new TSQLTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.TeX)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.TeX) {
 			return new TeXTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.WOD)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.WOD) {
 			return new WODTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.XML)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.XML) {
 			return new XMLTokenMarker();
-		else return null;
+		} else {
+			return null;
+		}
 	}
-	 
+
 }

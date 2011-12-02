@@ -33,37 +33,31 @@ import org.openflexo.sgmodule.view.CGTemplateFileModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class EditCustomTemplateFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	EditCustomTemplateFileInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(EditCustomTemplateFile.actionType,actionInitializer);
+	EditCustomTemplateFileInitializer(SGControllerActionInitializer actionInitializer) {
+		super(EditCustomTemplateFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<EditCustomTemplateFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<EditCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditCustomTemplateFile action)
-			{
+			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
 				CGTemplateFileModuleView editor;
-				if ((action.getInvoker() != null) 
-						&& (action.getInvoker() instanceof CGTemplateFileModuleView)
-						&& (((CGTemplateFileModuleView)action.getInvoker()).isOpenedInSeparateWindow())) {
-					editor = (CGTemplateFileModuleView)action.getInvoker();
-				}
-				else {
-					editor = (CGTemplateFileModuleView) getControllerActionInitializer().getSGController().moduleViewForObject((CGTemplate) action.getFocusedObject());
+				if ((action.getInvoker() != null) && (action.getInvoker() instanceof CGTemplateFileModuleView)
+						&& (((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+					editor = (CGTemplateFileModuleView) action.getInvoker();
+				} else {
+					editor = (CGTemplateFileModuleView) getControllerActionInitializer().getSGController().moduleViewForObject(
+							(CGTemplate) action.getFocusedObject());
 				}
 				if (editor != null) {
 					action.setTemplateFileContentEditor(editor);
@@ -75,34 +69,28 @@ public class EditCustomTemplateFileInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<EditCustomTemplateFile> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<EditCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditCustomTemplateFile action)
-			{
-				if ((action.getInvoker() == null) 
-						|| !(action.getInvoker() instanceof CGTemplateFileModuleView)
-						|| !(((CGTemplateFileModuleView)action.getInvoker()).isOpenedInSeparateWindow())) {
+			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
+				if ((action.getInvoker() == null) || !(action.getInvoker() instanceof CGTemplateFileModuleView)
+						|| !(((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
 					getControllerActionInitializer().getSGController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
 					getControllerActionInitializer().getSGController().selectAndFocusObject(action.getFocusedObject());
 				}
-				return true;            	
+				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.EDIT_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.EDIT_DISABLED_ICON;
 	}
-
 
 }

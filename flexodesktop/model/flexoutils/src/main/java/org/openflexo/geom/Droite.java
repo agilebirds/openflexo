@@ -27,39 +27,35 @@ import java.awt.Point;
  * @author sguerin
  * 
  */
-public class Droite
-{
+public class Droite {
 
-    public float a;
+	public float a;
 
-    public float b;
+	public float b;
 
-    public float c;
+	public float c;
 
-    public Droite(Point p1, Point p2)
-    {
-        if (p1.x != p2.x) {
-            a = ((float) (p2.y - p1.y)) / ((float) (p1.x - p2.x));
-            c = (-p1.y - a * p1.x);
-            b = 1;
-        } else {
-            b = 0;
-            a = 1;
-            c = -p1.x;
-        }
-    }
+	public Droite(Point p1, Point p2) {
+		if (p1.x != p2.x) {
+			a = ((float) (p2.y - p1.y)) / ((float) (p1.x - p2.x));
+			c = (-p1.y - a * p1.x);
+			b = 1;
+		} else {
+			b = 0;
+			a = 1;
+			c = -p1.x;
+		}
+	}
 
-    public Droite(Droite perpendiculaire, Point p)
-    {
-        a = -perpendiculaire.b;
-        b = perpendiculaire.a;
-        c = -(a * p.x + b * p.y);
-    }
+	public Droite(Droite perpendiculaire, Point p) {
+		a = -perpendiculaire.b;
+		b = perpendiculaire.a;
+		c = -(a * p.x + b * p.y);
+	}
 
-    @Override
-	public String toString()
-    {
-        return "Droite: " + a + ".x+" + b + ".y+" + c + "=0";
-    }
+	@Override
+	public String toString() {
+		return "Droite: " + a + ".x+" + b + ".y+" + c + "=0";
+	}
 
 }

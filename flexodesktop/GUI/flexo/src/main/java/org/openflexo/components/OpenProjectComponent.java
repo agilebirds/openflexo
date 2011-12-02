@@ -31,52 +31,49 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * Component allowing to choose an existing flexo project
  * 
  * @author sguerin
  */
-public class OpenProjectComponent extends ProjectChooserComponent
-{
+public class OpenProjectComponent extends ProjectChooserComponent {
 
-    private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage().getName());
 
-    protected OpenProjectComponent(Frame owner)
-    {
-        super(owner);
-        logger.info("Build OpenProjectComponent");
-    }
+	protected OpenProjectComponent(Frame owner) {
+		super(owner);
+		logger.info("Build OpenProjectComponent");
+	}
 
-    public static File getProjectDirectory() throws ProjectLoadingCancelledException
-    {
-    	return getProjectDirectory(FlexoFrame.getActiveFrame());
-    }
-    
-     public static File getProjectDirectory(Frame owner) throws ProjectLoadingCancelledException
-    {
-        OpenProjectComponent chooser = new OpenProjectComponent(owner);
-        File returned = null;
-        int returnVal=-1;
-        boolean ok = false;
-        while (!ok) {
-            try {
-                returnVal = chooser.showOpenDialog();
-                ok=true;
-            } catch (ArrayIndexOutOfBoundsException e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Caught ArrayIndexOutOfBoundsException, hope this will stop");
-            }
-        }
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            returned = chooser.getSelectedFile();
-            AdvancedPrefs.setLastVisitedDirectory(returned.getParentFile());
-            FlexoPreferences.savePreferences(true);
-        } else {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("No project supplied");
-            throw new ProjectLoadingCancelledException();
-        }
-        return returned;
-    }
+	public static File getProjectDirectory() throws ProjectLoadingCancelledException {
+		return getProjectDirectory(FlexoFrame.getActiveFrame());
+	}
+
+	public static File getProjectDirectory(Frame owner) throws ProjectLoadingCancelledException {
+		OpenProjectComponent chooser = new OpenProjectComponent(owner);
+		File returned = null;
+		int returnVal = -1;
+		boolean ok = false;
+		while (!ok) {
+			try {
+				returnVal = chooser.showOpenDialog();
+				ok = true;
+			} catch (ArrayIndexOutOfBoundsException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Caught ArrayIndexOutOfBoundsException, hope this will stop");
+				}
+			}
+		}
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			returned = chooser.getSelectedFile();
+			AdvancedPrefs.setLastVisitedDirectory(returned.getParentFile());
+			FlexoPreferences.savePreferences(true);
+		} else {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("No project supplied");
+			}
+			throw new ProjectLoadingCancelledException();
+		}
+		return returned;
+	}
 }

@@ -22,7 +22,6 @@ package org.openflexo.dg.rm;
 import java.io.File;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -31,56 +30,51 @@ import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 
-public class LatexFile extends TextFile implements GenerationAvailableFile
-{
+public class LatexFile extends TextFile implements GenerationAvailableFile {
 
-    protected static final Logger logger = FlexoLogger.getLogger(LatexFile.class.getPackage().getName());
+	protected static final Logger logger = FlexoLogger.getLogger(LatexFile.class.getPackage().getName());
 
-    public LatexFile(File f, LatexFileResource resource)
-	{
+	public LatexFile(File f, LatexFileResource resource) {
 		super(f);
 		try {
 			setFlexoResource(resource);
 		} catch (DuplicateResourceException e) {
 			e.printStackTrace();
 		}
-    }
-
-	public LatexFile()
-	{
-		super();
-    }
-
-    @Override
-	public LatexFileResource getFlexoResource()
-    {
-        return (LatexFileResource)super.getFlexoResource();
-    }
-
-	@Override
-	public DGLatexGenerator getGenerator() 
-	{
-		return (DGLatexGenerator)getFlexoResource().getGenerator();
 	}
 
-    /**
-     * Overrides setFlexoResource
-     * @see org.openflexo.foundation.rm.FlexoResourceData#setFlexoResource(org.openflexo.foundation.rm.FlexoResource)
-     */
-    @Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException
-    {
-        
-    }
+	public LatexFile() {
+		super();
+	}
 
-    /**
-     * Overrides setProject
-     * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-     */
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        
-    }
-	
+	@Override
+	public LatexFileResource getFlexoResource() {
+		return (LatexFileResource) super.getFlexoResource();
+	}
+
+	@Override
+	public DGLatexGenerator getGenerator() {
+		return (DGLatexGenerator) getFlexoResource().getGenerator();
+	}
+
+	/**
+	 * Overrides setFlexoResource
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#setFlexoResource(org.openflexo.foundation.rm.FlexoResource)
+	 */
+	@Override
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+
+	}
+
+	/**
+	 * Overrides setProject
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
+	 */
+	@Override
+	public void setProject(FlexoProject aProject) {
+
+	}
+
 }

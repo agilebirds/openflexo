@@ -29,33 +29,31 @@ import java.util.logging.Logger;
  * 
  * @author sguerin
  */
-public class IEFocusListener implements FocusListener
-{
+public class IEFocusListener implements FocusListener {
 
-    private static final Logger logger = Logger.getLogger(IEFocusListener.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEFocusListener.class.getPackage().getName());
 
-    private static IEFocusListener _instance;
+	private static IEFocusListener _instance;
 
-    public static IEFocusListener instance()
-    {
-        if (_instance == null) {
-            _instance = new IEFocusListener();
-        }
-        return _instance;
-    }
+	public static IEFocusListener instance() {
+		if (_instance == null) {
+			_instance = new IEFocusListener();
+		}
+		return _instance;
+	}
 
-    @Override
-	public void focusGained(FocusEvent event)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("focusGained for component" + event.getComponent());
-    }
+	@Override
+	public void focusGained(FocusEvent event) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("focusGained for component" + event.getComponent());
+		}
+	}
 
-    @Override
-	public void focusLost(FocusEvent event)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("focusLost for component" + event.getComponent());
-    }
+	@Override
+	public void focusLost(FocusEvent event) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("focusLost for component" + event.getComponent());
+		}
+	}
 
 }

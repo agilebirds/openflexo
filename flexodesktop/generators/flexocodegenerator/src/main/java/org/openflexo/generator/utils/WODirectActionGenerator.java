@@ -25,35 +25,32 @@ import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-public class WODirectActionGenerator extends JavaClassGenerator
-{
+public class WODirectActionGenerator extends JavaClassGenerator {
 
-    private static final String TEMPLATE_NAME = "DirectAction.java.vm";
+	private static final String TEMPLATE_NAME = "DirectAction.java.vm";
 	private static final Logger logger = FlexoLogger.getLogger(WODirectActionGenerator.class.getPackage().getName());
 
-    public WODirectActionGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,projectGenerator.getProject().getDataModel().getWORepository().getCustomDirectActionEntity());
-    }
+	public WODirectActionGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, projectGenerator.getProject().getDataModel().getWORepository().getCustomDirectActionEntity());
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-        resource.addToDependantResources(getProject().getFlexoDKVResource());
-    }
-    
-    @Override
-    public String getTemplateName() {
-    	return TEMPLATE_NAME;
-    }
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
+		resource.addToDependantResources(getProject().getFlexoDKVResource());
+	}
+
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 }

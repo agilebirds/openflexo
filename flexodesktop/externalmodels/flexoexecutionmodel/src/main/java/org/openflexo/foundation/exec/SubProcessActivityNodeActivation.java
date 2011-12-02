@@ -24,22 +24,18 @@ import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 
-
 public class SubProcessActivityNodeActivation extends NodeActivation<SubProcessNode> {
 
-	public SubProcessActivityNodeActivation(SubProcessNode node, FlexoPreCondition pre)
-	{
-		super(node,pre);
+	public SubProcessActivityNodeActivation(SubProcessNode node, FlexoPreCondition pre) {
+		super(node, pre);
 	}
-	
-	public SubProcessActivityNodeActivation(SubProcessNode node)
-	{
+
+	public SubProcessActivityNodeActivation(SubProcessNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) {
 		return new Nop();
 	}
 

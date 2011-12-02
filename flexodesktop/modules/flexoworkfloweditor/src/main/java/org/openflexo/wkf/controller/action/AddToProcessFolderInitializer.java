@@ -30,55 +30,47 @@ import org.openflexo.foundation.wkf.action.AddToProcessFolder;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class AddToProcessFolderInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddToProcessFolderInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(AddToProcessFolder.actionType,actionInitializer);
+	AddToProcessFolderInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(AddToProcessFolder.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddToProcessFolder> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<AddToProcessFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddToProcessFolder>() {
-            @Override
-			public boolean run(ActionEvent e, AddToProcessFolder action)
-            {
-                return true;
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<AddToProcessFolder> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<AddToProcessFolder>() {
-            @Override
-			public boolean run(ActionEvent e, AddToProcessFolder action)
-            {
+			@Override
+			public boolean run(ActionEvent e, AddToProcessFolder action) {
 				return true;
-          }
-        };
+			}
+		};
 	}
 
-     @Override
- 	protected FlexoExceptionHandler<AddToProcessFolder> getDefaultExceptionHandler()
- 	{
- 		return new FlexoExceptionHandler<AddToProcessFolder>() {
- 			@Override
-			public boolean handleException(FlexoException exception, AddToProcessFolder action) {
-                return false;
+	@Override
+	protected FlexoActionFinalizer<AddToProcessFolder> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<AddToProcessFolder>() {
+			@Override
+			public boolean run(ActionEvent e, AddToProcessFolder action) {
+				return true;
 			}
-        };
- 	}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<AddToProcessFolder> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<AddToProcessFolder>() {
+			@Override
+			public boolean handleException(FlexoException exception, AddToProcessFolder action) {
+				return false;
+			}
+		};
+	}
 
 }

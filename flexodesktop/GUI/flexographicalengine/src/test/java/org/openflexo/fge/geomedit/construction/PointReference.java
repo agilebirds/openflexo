@@ -24,7 +24,7 @@ import org.openflexo.fge.geom.FGEPoint;
 public class PointReference extends PointConstruction {
 
 	public PointConstruction reference;
-	
+
 	public PointReference() {
 		super();
 	}
@@ -33,26 +33,21 @@ public class PointReference extends PointConstruction {
 		this();
 		this.reference = aReference;
 	}
-	
+
 	@Override
-	protected FGEPoint computeData()
-	{
+	protected FGEPoint computeData() {
 		return reference.getData();
 	}
 
 	@Override
-	public String toString()
-	{
-		return "PointReference["+reference.toString()+"]";
+	public String toString() {
+		return "PointReference[" + reference.toString() + "]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { reference };
 		return returned;
 	}
-
-
 
 }

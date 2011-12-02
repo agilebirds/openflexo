@@ -33,228 +33,209 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
  * Represents the implementation type of a property
  * 
  * @author sguerin
  * 
  */
-public abstract class DMEOAdaptorType implements StringConvertable, ChoiceList
-{
+public abstract class DMEOAdaptorType implements StringConvertable, ChoiceList {
 
-    private static final Logger logger = Logger.getLogger(DMEOAdaptorType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DMEOAdaptorType.class.getPackage().getName());
 
-    public static final DMEOAdaptorType JDBC = new JDBCAdaptorType();
+	public static final DMEOAdaptorType JDBC = new JDBCAdaptorType();
 
-    public static final DMEOAdaptorType LDAP = new LDAPAdaptorType();
+	public static final DMEOAdaptorType LDAP = new LDAPAdaptorType();
 
-    public static final DMEOAdaptorType JNDI = new JNDIAdaptorType();
+	public static final DMEOAdaptorType JNDI = new JNDIAdaptorType();
 
-    public static final StringEncoder.Converter<DMEOAdaptorType> adaptorTypeConverter = new Converter<DMEOAdaptorType>(DMEOAdaptorType.class) {
+	public static final StringEncoder.Converter<DMEOAdaptorType> adaptorTypeConverter = new Converter<DMEOAdaptorType>(
+			DMEOAdaptorType.class) {
 
-        @Override
-		public DMEOAdaptorType convertFromString(String value)
-        {
-            return get(value);
-        }
+		@Override
+		public DMEOAdaptorType convertFromString(String value) {
+			return get(value);
+		}
 
-        @Override
-		public String convertToString(DMEOAdaptorType value)
-        {
-            return value.getName();
-        }
+		@Override
+		public String convertToString(DMEOAdaptorType value) {
+			return value.getName();
+		}
 
-    };
+	};
 
-    private static class JDBCAdaptorType extends DMEOAdaptorType
-    {
+	private static class JDBCAdaptorType extends DMEOAdaptorType {
 
-        public JDBCAdaptorType()
-        {
-            super();
-        }
+		public JDBCAdaptorType() {
+			super();
+		}
 
-        @Override
-		public String getName()
-        {
-            return "JDBC";
-        }
+		@Override
+		public String getName() {
+			return "JDBC";
+		}
 
-        @Override
-		public FileResource getAdaptorInfoFile()
-        {
-            return new FileResource("Config/AdaptorInfo/JavaJDBCAdaptorInfo.plist");
-        }
+		@Override
+		public FileResource getAdaptorInfoFile() {
+			return new FileResource("Config/AdaptorInfo/JavaJDBCAdaptorInfo.plist");
+		}
 
-        @Override
+		@Override
 		@SuppressWarnings("unchecked")
-        public Map<String, Object> getCustomAdaptorInfo()
-        {
-            return (Map<String, Object>) getAdaptorInfo().get("OpenBaseJDBC");
-        }
+		public Map<String, Object> getCustomAdaptorInfo() {
+			return (Map<String, Object>) getAdaptorInfo().get("OpenBaseJDBC");
+		}
 
-        @Override
-		public String getCustomAdaptorInfoKey()
-        {
-            return "jdbc2Info";
-        }
-    }
+		@Override
+		public String getCustomAdaptorInfoKey() {
+			return "jdbc2Info";
+		}
+	}
 
-    private static class LDAPAdaptorType extends DMEOAdaptorType
-    {
-        public LDAPAdaptorType()
-        {
-            super();
-        }
+	private static class LDAPAdaptorType extends DMEOAdaptorType {
+		public LDAPAdaptorType() {
+			super();
+		}
 
-        @Override
-		public String getName()
-        {
-            return "LDAP";
-        }
+		@Override
+		public String getName() {
+			return "LDAP";
+		}
 
-        @Override
-		public FileResource getAdaptorInfoFile()
-        {
-            return null;
-        }
+		@Override
+		public FileResource getAdaptorInfoFile() {
+			return null;
+		}
 
-        @Override
-		public Map<String, Object> getCustomAdaptorInfo()
-        {
-            return null;
-        }
+		@Override
+		public Map<String, Object> getCustomAdaptorInfo() {
+			return null;
+		}
 
-        @Override
-		public String getCustomAdaptorInfoKey()
-        {
-            return null;
-        }
-    }
+		@Override
+		public String getCustomAdaptorInfoKey() {
+			return null;
+		}
+	}
 
-    private static class JNDIAdaptorType extends DMEOAdaptorType
-    {
+	private static class JNDIAdaptorType extends DMEOAdaptorType {
 
-        public JNDIAdaptorType()
-        {
-            super();
-        }
+		public JNDIAdaptorType() {
+			super();
+		}
 
-        @Override
-		public String getName()
-        {
-            return "JNDI";
-        }
+		@Override
+		public String getName() {
+			return "JNDI";
+		}
 
-        @Override
-		public FileResource getAdaptorInfoFile()
-        {
-            return new FileResource("Config/AdaptorInfo/JavaJNDIAdaptorInfo.plist");
-        }
+		@Override
+		public FileResource getAdaptorInfoFile() {
+			return new FileResource("Config/AdaptorInfo/JavaJNDIAdaptorInfo.plist");
+		}
 
-        @Override
-		public Map<String, Object> getCustomAdaptorInfo()
-        {
-            return null;
-        }
+		@Override
+		public Map<String, Object> getCustomAdaptorInfo() {
+			return null;
+		}
 
-        @Override
-		public String getCustomAdaptorInfoKey()
-        {
-            return null;
-        }
-    }
+		@Override
+		public String getCustomAdaptorInfoKey() {
+			return null;
+		}
+	}
 
-    public abstract String getName();
+	public abstract String getName();
 
-    public abstract FileResource getAdaptorInfoFile();
+	public abstract FileResource getAdaptorInfoFile();
 
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> getAdaptorInfo()
-    {
-        if (getAdaptorInfoFile() != null) {
-            try {
-                return (Map<String, Object>) PropertyListSerialization.propertyListFromFile(getAdaptorInfoFile());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getAdaptorInfo() {
+		if (getAdaptorInfoFile() != null) {
+			try {
+				return (Map<String, Object>) PropertyListSerialization.propertyListFromFile(getAdaptorInfoFile());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 
-    public abstract Map<String, Object> getCustomAdaptorInfo();
+	public abstract Map<String, Object> getCustomAdaptorInfo();
 
-    public abstract String getCustomAdaptorInfoKey();
+	public abstract String getCustomAdaptorInfoKey();
 
-    public static final String USERNAME = "username";
+	public static final String USERNAME = "username";
 
-    public static final String PASSWORD = "password";
+	public static final String PASSWORD = "password";
 
-    public static final String DATABASE_SERVER = "URL";
+	public static final String DATABASE_SERVER = "URL";
 
-    public static final String PLUGIN = "plugin";
+	public static final String PLUGIN = "plugin";
 
-    public static final String DRIVER = "driver";
+	public static final String DRIVER = "driver";
 
-    public Map<String, Object> getDefaultConnectionDictionary(String userName, String passwd, String databaseServer, String plugin,
-            String driver)
-    {
-        Map<String, Object> returned = new HashMap<String, Object>();
-        if (userName != null)
-            returned.put(USERNAME, userName);
-        if (passwd != null)
-            returned.put(PASSWORD, passwd);
-        if (databaseServer != null)
-            returned.put(DATABASE_SERVER, databaseServer);
-        if (plugin != null)
-            returned.put(PLUGIN, plugin);
-        if (driver != null)
-            returned.put(DRIVER, driver);
-        if (getCustomAdaptorInfo() != null)
-            returned.put(getCustomAdaptorInfoKey(), getCustomAdaptorInfo());
-        return returned;
-    }
+	public Map<String, Object> getDefaultConnectionDictionary(String userName, String passwd, String databaseServer, String plugin,
+			String driver) {
+		Map<String, Object> returned = new HashMap<String, Object>();
+		if (userName != null) {
+			returned.put(USERNAME, userName);
+		}
+		if (passwd != null) {
+			returned.put(PASSWORD, passwd);
+		}
+		if (databaseServer != null) {
+			returned.put(DATABASE_SERVER, databaseServer);
+		}
+		if (plugin != null) {
+			returned.put(PLUGIN, plugin);
+		}
+		if (driver != null) {
+			returned.put(DRIVER, driver);
+		}
+		if (getCustomAdaptorInfo() != null) {
+			returned.put(getCustomAdaptorInfoKey(), getCustomAdaptorInfo());
+		}
+		return returned;
+	}
 
-    public static DMEOAdaptorType get(String adaptorName)
-    {
-        if (adaptorName == null || adaptorName.equals("None"))
-            return null;
-        for (Enumeration e = JDBC.getAvailableValues().elements(); e.hasMoreElements();) {
-            DMEOAdaptorType temp = (DMEOAdaptorType) e.nextElement();
-            if (temp.getName().equals(adaptorName)) {
-                return temp;
-            }
-        }
+	public static DMEOAdaptorType get(String adaptorName) {
+		if (adaptorName == null || adaptorName.equals("None")) {
+			return null;
+		}
+		for (Enumeration e = JDBC.getAvailableValues().elements(); e.hasMoreElements();) {
+			DMEOAdaptorType temp = (DMEOAdaptorType) e.nextElement();
+			if (temp.getName().equals(adaptorName)) {
+				return temp;
+			}
+		}
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find AdaptorType named " + adaptorName);
-        return null;
-    }
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Could not find AdaptorType named " + adaptorName);
+		}
+		return null;
+	}
 
-    private Vector<DMEOAdaptorType> _availableValues = null;
+	private Vector<DMEOAdaptorType> _availableValues = null;
 
-    @Override
-	public Vector getAvailableValues()
-    {
-        if (_availableValues == null) {
-            _availableValues = new Vector<DMEOAdaptorType>();
-            _availableValues.add(JDBC);
-            _availableValues.add(LDAP);
-            _availableValues.add(JNDI);
-        }
-        return _availableValues;
-    }
+	@Override
+	public Vector getAvailableValues() {
+		if (_availableValues == null) {
+			_availableValues = new Vector<DMEOAdaptorType>();
+			_availableValues.add(JDBC);
+			_availableValues.add(LDAP);
+			_availableValues.add(JNDI);
+		}
+		return _availableValues;
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return adaptorTypeConverter;
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return adaptorTypeConverter;
+	}
 
-    public static Vector availableValues()
-    {
-        return JDBC.getAvailableValues();
-    }
+	public static Vector availableValues() {
+		return JDBC.getAvailableValues();
+	}
 
 }

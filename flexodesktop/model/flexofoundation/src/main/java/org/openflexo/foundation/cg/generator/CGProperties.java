@@ -30,145 +30,126 @@ import java.util.Set;
  * 
  * @author bmangez
  */
-public class CGProperties implements Map
-{
+public class CGProperties implements Map {
 
-    public CGProperties()
-    {
-        super();
-        _properties = new Properties();
-    }
+	public CGProperties() {
+		super();
+		_properties = new Properties();
+	}
 
-    public CGProperties(CGProperties prop)
-    {
-        super();
-        _properties = new Properties(prop._properties);
-    }
+	public CGProperties(CGProperties prop) {
+		super();
+		_properties = new Properties(prop._properties);
+	}
 
-    @Override
-	public Object clone()
-    {
-        CGProperties answer = new CGProperties();
-        answer._properties = (Properties) _properties.clone();
-        return answer;
-    }
+	@Override
+	public Object clone() {
+		CGProperties answer = new CGProperties();
+		answer._properties = (Properties) _properties.clone();
+		return answer;
+	}
 
-    public void put(String key, String value)
-    {
-        if (value == null)
-            _properties.remove(key);
-        else
-            _properties.put(key, value);
-    }
+	public void put(String key, String value) {
+		if (value == null) {
+			_properties.remove(key);
+		} else {
+			_properties.put(key, value);
+		}
+	}
 
-    public Object get(String key)
-    {
-        return _properties.get(key);
-    }
+	public Object get(String key) {
+		return _properties.get(key);
+	}
 
-    public Enumeration keys()
-    {
-        return _properties.keys();
-    }
+	public Enumeration keys() {
+		return _properties.keys();
+	}
 
-    public Enumeration elements()
-    {
-        return _properties.elements();
-    }
+	public Enumeration elements() {
+		return _properties.elements();
+	}
 
-    @Override
-	public void clear()
-    {
-        _properties.clear();
+	@Override
+	public void clear() {
+		_properties.clear();
 
-    }
+	}
 
-    @Override
-	public boolean containsKey(Object arg0)
-    {
-        return _properties.containsKey(arg0);
-    }
+	@Override
+	public boolean containsKey(Object arg0) {
+		return _properties.containsKey(arg0);
+	}
 
-    @Override
-	public boolean containsValue(Object arg0)
-    {
-        return _properties.containsValue(arg0);
-    }
+	@Override
+	public boolean containsValue(Object arg0) {
+		return _properties.containsValue(arg0);
+	}
 
-    @Override
-	public Set entrySet()
-    {
-        return _properties.entrySet();
-    }
+	@Override
+	public Set entrySet() {
+		return _properties.entrySet();
+	}
 
-    @Override
-	public Object get(Object arg0)
-    {
-        return _properties.get(arg0);
-    }
+	@Override
+	public Object get(Object arg0) {
+		return _properties.get(arg0);
+	}
 
-    @Override
-	public boolean isEmpty()
-    {
-        return _properties.isEmpty();
-    }
+	@Override
+	public boolean isEmpty() {
+		return _properties.isEmpty();
+	}
 
-    @Override
-	public Set keySet()
-    {
-        return _properties.keySet();
-    }
+	@Override
+	public Set keySet() {
+		return _properties.keySet();
+	}
 
-    @Override
-	public Object put(Object arg0, Object arg1)
-    {
-        return _properties.put(arg0, arg1);
-    }
+	@Override
+	public Object put(Object arg0, Object arg1) {
+		return _properties.put(arg0, arg1);
+	}
 
-    @Override
-	public void putAll(Map arg0)
-    {
-        _properties.putAll(arg0);
-    }
+	@Override
+	public void putAll(Map arg0) {
+		_properties.putAll(arg0);
+	}
 
-    @Override
-	public Object remove(Object arg0)
-    {
-        return _properties.remove(arg0);
-    }
+	@Override
+	public Object remove(Object arg0) {
+		return _properties.remove(arg0);
+	}
 
-    @Override
-	public int size()
-    {
-        return _properties.size();
-    }
+	@Override
+	public int size() {
+		return _properties.size();
+	}
 
-    @Override
-	public Collection values()
-    {
-        return _properties.values();
-    }
+	@Override
+	public Collection values() {
+		return _properties.values();
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-	public String toString()
-    {
-        StringBuffer sb = new StringBuffer();
-        sb.append("{");
-        Enumeration keys = keys();
-        while (keys.hasMoreElements()) {
-            Object o = keys.nextElement();
-            sb.append(o + "=" + get(o));
-            if (keys.hasMoreElements())
-                sb.append(" , ");
-        }
-        sb.append("}");
-        return sb.toString();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		Enumeration keys = keys();
+		while (keys.hasMoreElements()) {
+			Object o = keys.nextElement();
+			sb.append(o + "=" + get(o));
+			if (keys.hasMoreElements()) {
+				sb.append(" , ");
+			}
+		}
+		sb.append("}");
+		return sb.toString();
+	}
 
-    private Properties _properties;
+	private Properties _properties;
 }

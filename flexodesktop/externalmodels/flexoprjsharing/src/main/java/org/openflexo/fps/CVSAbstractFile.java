@@ -49,7 +49,6 @@ import org.netbeans.lib.cvsclient.event.TerminationEvent;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoRunnable;
 
-
 public abstract class CVSAbstractFile extends CVSObject {
 
 	protected static final Logger logger = Logger.getLogger(SharedProject.class.getPackage().getName());
@@ -57,74 +56,74 @@ public abstract class CVSAbstractFile extends CVSObject {
 	private File _localFile;
 	private CVSContainer _container;
 	protected SharedProject _sharedProject;
-	
-	public CVSAbstractFile (File localFile, SharedProject sharedProject)
-	{
+
+	public CVSAbstractFile(File localFile, SharedProject sharedProject) {
 		super();
 		_sharedProject = sharedProject;
 		try {
 			_localFile = localFile.getCanonicalFile();
-		}
-		catch (IOException e) {
-			logger.warning("Could not retrieve cannonical file for "+localFile);
+		} catch (IOException e) {
+			logger.warning("Could not retrieve cannonical file for " + localFile);
 			e.printStackTrace();
 			_localFile = localFile;
 		}
 	}
-	
-	public File getFile() 
-	{
+
+	public File getFile() {
 		return _localFile;
 	}
 
-	public String getFileName() 
-	{
-		if (_localFile != null) return _localFile.getName();
+	public String getFileName() {
+		if (_localFile != null) {
+			return _localFile.getName();
+		}
 		return "???";
 	}
 
-	public CVSAbstractFile getCVSAbstractFile(File aFile)
-	{
-		if (aFile.equals(getFile())) return this;
-		if (!FileUtils.isFileContainedIn(aFile, getFile())) return null;
+	public CVSAbstractFile getCVSAbstractFile(File aFile) {
+		if (aFile.equals(getFile())) {
+			return this;
+		}
+		if (!FileUtils.isFileContainedIn(aFile, getFile())) {
+			return null;
+		}
 		if (this instanceof CVSContainer) {
-		for (CVSFile f : ((CVSContainer)this).getFiles()) {
-			if (f.getFile().equals(aFile)) {
-				//logger.info("Return "+f);
-				return f;
+			for (CVSFile f : ((CVSContainer) this).getFiles()) {
+				if (f.getFile().equals(aFile)) {
+					// logger.info("Return "+f);
+					return f;
+				}
+			}
+			for (CVSDirectory d : ((CVSContainer) this).getDirectories()) {
+				CVSAbstractFile returned = d.getCVSAbstractFile(aFile);
+				if (returned != null) {
+					return returned;
+				}
 			}
 		}
-		for (CVSDirectory d : ((CVSContainer)this).getDirectories()) {
-			CVSAbstractFile returned = d.getCVSAbstractFile(aFile);
-			if (returned != null) return returned;
-		}
-		}
-		//logger.info("Return null");
+		// logger.info("Return null");
 		return null;
 	}
 
 	@Override
-	public String toString()
-	{
-		return getClass().getSimpleName()+":"+getFile().getAbsolutePath();
+	public String toString() {
+		return getClass().getSimpleName() + ":" + getFile().getAbsolutePath();
 	}
-	
+
 	private CVSStatus _derivedStatus = null;
-	
+
 	@Override
-	public CVSStatus getDerivedStatus()
-	{
+	public CVSStatus getDerivedStatus() {
 		if (_derivedStatus == null) {
 			_derivedStatus = computeDerivedStatus();
 		}
 		return _derivedStatus;
 	}
 
-	private CVSStatus computeDerivedStatus()
-	{
+	private CVSStatus computeDerivedStatus() {
 		CVSStatus returned = CVSStatus.UpToDate;
 		if (this instanceof CVSContainer) {
-			CVSContainer container = (CVSContainer)this;
+			CVSContainer container = (CVSContainer) this;
 			Vector<CVSAbstractFile> files = new Vector<CVSAbstractFile>();
 			files.addAll(container.getFiles());
 			files.addAll(container.getDirectories());
@@ -132,95 +131,83 @@ public abstract class CVSAbstractFile extends CVSObject {
 				CVSStatus status = f.getDerivedStatus();
 				if (status.isConflicting()) {
 					returned = CVSStatus.Conflicting;
-				}
-				else if (status.isLocallyModified()) {
+				} else if (status.isLocallyModified()) {
 					if (returned.isConflicting()) {
 						// OK, nothing to do
-					}
-					else if (returned.isRemotelyModified()) {
+					} else if (returned.isRemotelyModified()) {
 						returned = CVSStatus.Conflicting;
-					}
-					else if (returned.isLocallyModified()) {
+					} else if (returned.isLocallyModified()) {
 						if (returned != status) {
 							returned = CVSStatus.LocallyModified;
 						}
-					}
-					else if (returned.isUpToDate()) {
+					} else if (returned.isUpToDate()) {
 						returned = status;
 					}
-				}
-				else if (status.isRemotelyModified()) {
+				} else if (status.isRemotelyModified()) {
 					if (returned.isConflicting()) {
 						// OK, nothing to do
-					}
-					else if (returned.isRemotelyModified()) {
+					} else if (returned.isRemotelyModified()) {
 						if (returned != status) {
 							returned = CVSStatus.RemotelyModified;
 						}
-					}
-					else if (returned.isLocallyModified()) {
+					} else if (returned.isLocallyModified()) {
 						returned = CVSStatus.Conflicting;
-					}
-					else if (returned.isUpToDate()) {
+					} else if (returned.isUpToDate()) {
 						returned = status;
 					}
 				}
 			}
-		}
-		else if (this instanceof CVSFile) {
-			returned = ((CVSFile)this).getStatus();
+		} else if (this instanceof CVSFile) {
+			returned = ((CVSFile) this).getStatus();
 		}
 
 		return returned;
 	}
-	
-	public void notifyStatusChanged(CVSAbstractFile file)
-	{
+
+	public void notifyStatusChanged(CVSAbstractFile file) {
 		CVSStatus newDerivedStatus = computeDerivedStatus();
 		if (newDerivedStatus != _derivedStatus) {
 			_derivedStatus = newDerivedStatus;
 			setChanged();
-			if (getContainer() != null) getContainer().notifyStatusChanged(this);
+			if (getContainer() != null) {
+				getContainer().notifyStatusChanged(this);
+			}
 		}
 	}
 
-	public CVSContainer getContainer()
-	{
+	public CVSContainer getContainer() {
 		return _container;
 	}
 
-	public void setContainer(CVSContainer container)
-	{
+	public void setContainer(CVSContainer container) {
 		_container = container;
 	}
 
 	public SharedProject getSharedProject() {
 		return _sharedProject;
 	}
-	
+
 	@Override
-	public boolean isContainedIn(FPSObject obj) 
-	{
+	public boolean isContainedIn(FPSObject obj) {
 		if (obj instanceof CVSRepositoryList) {
 			return getSharedProject().getCVSRepository().isContainedIn(obj);
-		}
-		else if (obj instanceof CVSRepository) {
+		} else if (obj instanceof CVSRepository) {
 			return getSharedProject().getCVSRepository() == obj;
-		}
-		else if (obj instanceof CVSModule) {
+		} else if (obj instanceof CVSModule) {
 			return getSharedProject().getCVSModule() == obj;
-		}
-		else if (obj instanceof SharedProject) {
+		} else if (obj instanceof SharedProject) {
 			return getSharedProject() == obj;
-		}
-		else if (obj instanceof CVSAbstractFile) {
+		} else if (obj instanceof CVSAbstractFile) {
 			CVSAbstractFile current = this;
 			while (current != null) {
-				if (current == obj) return true;
-				if (current.getContainer() instanceof CVSAbstractFile) {
-					current = (CVSAbstractFile)current.getContainer();
+				if (current == obj) {
+					return true;
 				}
-				else current = null;
+				if (current.getContainer() instanceof CVSAbstractFile) {
+					current = (CVSAbstractFile) current.getContainer();
+				} else {
+					current = null;
+				}
 			}
 		}
 		return false;
@@ -230,128 +217,123 @@ public abstract class CVSAbstractFile extends CVSObject {
 	// **************************** Committing stuff *****************************
 	// ***************************************************************************
 
-	public interface CommitListener
-	{
-		public void notifyCommitFinished (CVSFile file, CommitStatus status);
+	public interface CommitListener {
+		public void notifyCommitFinished(CVSFile file, CommitStatus status);
 	}
-	
+
 	private CommitListener _commitListener;
-	
+
 	private CommittingThread _committingThread;
-	
-	public synchronized void commit(String commitMessage, CommitListener commitListener, CVSFile... files)
-	{
+
+	public synchronized void commit(String commitMessage, CommitListener commitListener, CVSFile... files) {
 		if (_committingThread == null) {
 			Vector<CVSFile> filesToCommit = new Vector<CVSFile>();
 			if (this instanceof CVSContainer) {
 				for (CVSFile f : files) {
-					if (((CVSContainer)this).getFiles().contains(f)) filesToCommit.add(f);
-					else logger.warning("Exclude "+f+" from files to commit since not belonging to current directory");
+					if (((CVSContainer) this).getFiles().contains(f)) {
+						filesToCommit.add(f);
+					} else {
+						logger.warning("Exclude " + f + " from files to commit since not belonging to current directory");
+					}
 				}
-			}
-			else if (this instanceof CVSFile
-					&& files.length == 1
-					&& files[0] == this) {
+			} else if (this instanceof CVSFile && files.length == 1 && files[0] == this) {
 				filesToCommit.add(files[0]);
 			}
-			logger.info("Committing "+filesToCommit+" in directory "+getFile());		
-			_committingThread = new CommittingThread(commitMessage,filesToCommit);
-            getSharedProject().addToThreadPool(_committingThread);
+			logger.info("Committing " + filesToCommit + " in directory " + getFile());
+			_committingThread = new CommittingThread(commitMessage, filesToCommit);
+			getSharedProject().addToThreadPool(_committingThread);
 			_commitListener = commitListener;
 		}
 	}
-	
-	private synchronized void notifyCommitFinished(CVSFile file, Entry entry)
-	{
+
+	private synchronized void notifyCommitFinished(CVSFile file, Entry entry) {
 		file.setEntry(entry);
-		if (this instanceof CVSContainer 
-				&& file.getStatus() == CVSStatus.LocallyRemoved) {
-			((CVSContainer)this).removeFromFiles(file);
+		if (this instanceof CVSContainer && file.getStatus() == CVSStatus.LocallyRemoved) {
+			((CVSContainer) this).removeFromFiles(file);
 		}
 		file.setStatus(CVSStatus.UpToDate);
-		if (_commitListener != null) _commitListener.notifyCommitFinished(file, CommitStatus.OK);
+		if (_commitListener != null) {
+			_commitListener.notifyCommitFinished(file, CommitStatus.OK);
+		}
 	}
-	
-	private synchronized void notifyCommitFailed(CVSFile file)
-	{
-		if (_commitListener != null) _commitListener.notifyCommitFinished(file, CommitStatus.Error);
+
+	private synchronized void notifyCommitFailed(CVSFile file) {
+		if (_commitListener != null) {
+			_commitListener.notifyCommitFinished(file, CommitStatus.Error);
+		}
 	}
-	
-	public synchronized boolean isCommitting()
-	{
+
+	public synchronized boolean isCommitting() {
 		return (_committingThread != null);
 	}
-	
-	public static enum CommitStatus
-	{
-		NotFinished{
-		    /**
-		     * Overrides toString
-		     * @see java.lang.Enum#toString()
-		     */
-		    @Override
-		    public String toString()
-		    {
-		        return "NotFinished";
-		    }
-        },
-		OK{
-            /**
-             * Overrides toString
-             * @see java.lang.Enum#toString()
-             */
-            @Override
-            public String toString()
-            {
-                return "OK";
-            }
-        },
-		Error{
-            /**
-             * Overrides toString
-             * @see java.lang.Enum#toString()
-             */
-            @Override
-            public String toString()
-            {
-                return "Error";
-            }
-        }
+
+	public static enum CommitStatus {
+		NotFinished {
+			/**
+			 * Overrides toString
+			 * 
+			 * @see java.lang.Enum#toString()
+			 */
+			@Override
+			public String toString() {
+				return "NotFinished";
+			}
+		},
+		OK {
+			/**
+			 * Overrides toString
+			 * 
+			 * @see java.lang.Enum#toString()
+			 */
+			@Override
+			public String toString() {
+				return "OK";
+			}
+		},
+		Error {
+			/**
+			 * Overrides toString
+			 * 
+			 * @see java.lang.Enum#toString()
+			 */
+			@Override
+			public String toString() {
+				return "Error";
+			}
+		}
 	}
-	
-	private class CommittingThread implements FlexoRunnable, CVSListener
-	{
+
+	private class CommittingThread implements FlexoRunnable, CVSListener {
 		private CommitStatus status;
 		private Vector<CVSFile> _filesToCommit;
 		private String _commitMessage;
-		
-		protected CommittingThread(String commitMessage, Vector<CVSFile> filesToCommit)
-		{
+
+		protected CommittingThread(String commitMessage, Vector<CVSFile> filesToCommit) {
 			_filesToCommit = filesToCommit;
 			_commitMessage = commitMessage;
 		}
-		
+
 		@Override
-		public void run() 
-		{
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Starting to commit "+_filesToCommit);
+		public void run() {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Starting to commit " + _filesToCommit);
+			}
 			status = CommitStatus.OK;
 
 			// Handle cases where the directory itself doesn't exist
 			if (CVSAbstractFile.this instanceof CVSDirectory) {
-				logger.fine("Committing in directory "+CVSAbstractFile.this.getFileName());
-				if (!((CVSDirectory)CVSAbstractFile.this).existsOnCVSRepository()) {
-					logger.fine("Add non-existing directory "+CVSAbstractFile.this.getFileName());
+				logger.fine("Committing in directory " + CVSAbstractFile.this.getFileName());
+				if (!((CVSDirectory) CVSAbstractFile.this).existsOnCVSRepository()) {
+					logger.fine("Add non-existing directory " + CVSAbstractFile.this.getFileName());
 					cvsAddDirectory();
 				}
 			}
-			
+
 			// Add required files if any
 			try {
 				cvsAddTextFiles();
 				cvsAddBinaryFiles();
-			} catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
@@ -364,10 +346,12 @@ public abstract class CVSAbstractFile extends CVSObject {
 				status = CommitStatus.NotFinished;
 				CommitCommand commitCommand = new CommitCommand();
 				File[] files = new File[_filesToCommit.size()];
-				for (int i=0; i<_filesToCommit.size(); i++) files[i] = _filesToCommit.get(i).getFile();
+				for (int i = 0; i < _filesToCommit.size(); i++) {
+					files[i] = _filesToCommit.get(i).getFile();
+				}
 				commitCommand.setFiles(files);
 				commitCommand.setMessage(_commitMessage);
-				
+
 				try {
 					connection = getSharedProject().openConnection();
 					connection.getClient().getEventManager().addCVSListener(this);
@@ -391,44 +375,45 @@ public abstract class CVSAbstractFile extends CVSObject {
 			if (status == CommitStatus.OK) {
 				for (CVSFile f : _filesToCommit) {
 					try {
-						notifyCommitFinished(f,connection.getClient().getEntry(f.getFile()));
+						notifyCommitFinished(f, connection.getClient().getEntry(f.getFile()));
 					} catch (IOException e) {
-						logger.warning("Unexpected exception "+e.getMessage());
+						logger.warning("Unexpected exception " + e.getMessage());
 						e.printStackTrace();
 						notifyCommitFailed(f);
 					}
 				}
-			}
-			else if (status == CommitStatus.Error) {
+			} else if (status == CommitStatus.Error) {
 				for (CVSFile f : _filesToCommit) {
 					notifyCommitFailed(f);
 				}
 			}
-            if (logger.isLoggable(Level.INFO))
-                logger.info("End of commit "+_filesToCommit+": "+status);
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("End of commit " + _filesToCommit + ": " + status);
+			}
 			_committingThread = null;
 		}
 
-		private void cvsAddTextFiles() 
-		{
+		private void cvsAddTextFiles() {
 			Vector<CVSFile> filesToAdd = new Vector<CVSFile>();
-			//logger.info("Add text files: ");
+			// logger.info("Add text files: ");
 			for (CVSFile f : _filesToCommit) {
 				if (f.getStatus() == CVSStatus.LocallyAdded && !f.isBinary()) {
 					filesToAdd.add(f);
-					//logger.info("TEXT file: "+f.getFileName());
+					// logger.info("TEXT file: "+f.getFileName());
 				}
 			}
 			if (filesToAdd.size() == 0) {
 				status = CommitStatus.OK;
 				return;
-			}			
+			}
 			status = CommitStatus.NotFinished;
 			AddCommand addCommand = new AddCommand();
 			File[] files = new File[filesToAdd.size()];
-			for (int i=0; i<filesToAdd.size(); i++) files[i] = filesToAdd.get(i).getFile();
+			for (int i = 0; i < filesToAdd.size(); i++) {
+				files[i] = filesToAdd.get(i).getFile();
+			}
 			addCommand.setFiles(files);
-			
+
 			try {
 				CVSConnection connection = getSharedProject().openConnection();
 				connection.getClient().getEventManager().addCVSListener(this);
@@ -449,27 +434,28 @@ public abstract class CVSAbstractFile extends CVSObject {
 			}
 		}
 
-		private void cvsAddBinaryFiles() 
-		{
+		private void cvsAddBinaryFiles() {
 			Vector<CVSFile> filesToAdd = new Vector<CVSFile>();
-			//logger.info("Add binary files: ");
+			// logger.info("Add binary files: ");
 			for (CVSFile f : _filesToCommit) {
 				if (f.getStatus() == CVSStatus.LocallyAdded && f.isBinary()) {
 					filesToAdd.add(f);
-					//logger.info("BINARY file: "+f.getFileName());
+					// logger.info("BINARY file: "+f.getFileName());
 				}
 			}
 			if (filesToAdd.size() == 0) {
 				status = CommitStatus.OK;
 				return;
-			}			
+			}
 			status = CommitStatus.NotFinished;
 			AddCommand addCommand = new AddCommand();
 			File[] files = new File[filesToAdd.size()];
-			for (int i=0; i<filesToAdd.size(); i++) files[i] = filesToAdd.get(i).getFile();
+			for (int i = 0; i < filesToAdd.size(); i++) {
+				files[i] = filesToAdd.get(i).getFile();
+			}
 			addCommand.setFiles(files);
 			addCommand.setKeywordSubst(KeywordSubstitutionOptions.BINARY);
-			
+
 			try {
 				CVSConnection connection = getSharedProject().openConnection();
 				connection.getClient().getEventManager().addCVSListener(this);
@@ -489,55 +475,54 @@ public abstract class CVSAbstractFile extends CVSObject {
 				status = CommitStatus.Error;
 			}
 		}
-		
-		private Vector<File> appendFiles(File dir,Vector<File> reply){
-			File[] files = dir.listFiles(new FileFilter(){
+
+		private Vector<File> appendFiles(File dir, Vector<File> reply) {
+			File[] files = dir.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File pathname) {
 					return pathname.isFile();
 				}
 			});
-			for(int i=0;i<files.length;i++){
+			for (int i = 0; i < files.length; i++) {
 				reply.add(files[i]);
 			}
 			return reply;
 		}
-		
-		private Vector<File> appendInnerDirectories(File dir,Vector<File> reply){
-			File[] dirs = dir.listFiles(new FileFilter(){
+
+		private Vector<File> appendInnerDirectories(File dir, Vector<File> reply) {
+			File[] dirs = dir.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File pathname) {
 					return pathname.isDirectory() && !pathname.getName().equals("CVS");
 				}
 			});
-			for(int i=0;i<dirs.length;i++){
+			for (int i = 0; i < dirs.length; i++) {
 				reply.add(dirs[i]);
 				appendInnerDirectories(dirs[i], reply);
 				appendFiles(dirs[i], reply);
 			}
 			return reply;
 		}
-		private void cvsAddDirectory() 
-		{			
+
+		private void cvsAddDirectory() {
 			status = CommitStatus.NotFinished;
 			AddCommand addCommand = new AddCommand();
-			
+
 			Vector<File> dirsToAdd = new Vector<File>();
 			dirsToAdd.add(getFile());
 			appendInnerDirectories(getFile(), dirsToAdd);
 			File[] files = new File[dirsToAdd.size()];
-			int i=0;
+			int i = 0;
 			Enumeration<File> en = dirsToAdd.elements();
-			while(en.hasMoreElements()){
+			while (en.hasMoreElements()) {
 				files[i] = en.nextElement();
 				i++;
 			}
-			
-			
-			//File[] files = new File[1];
-			//files[0] = getFile();
+
+			// File[] files = new File[1];
+			// files[0] = getFile();
 			addCommand.setFiles(files);
-			
+
 			try {
 				CVSConnection connection = getSharedProject().openConnection();
 				connection.getClient().getEventManager().addCVSListener(this);
@@ -558,8 +543,7 @@ public abstract class CVSAbstractFile extends CVSObject {
 			}
 		}
 
-		private void cvsRemove() 
-		{
+		private void cvsRemove() {
 			Vector<CVSFile> filesToRemove = new Vector<CVSFile>();
 			for (CVSFile f : _filesToCommit) {
 				if (f.getStatus() == CVSStatus.LocallyRemoved) {
@@ -569,13 +553,15 @@ public abstract class CVSAbstractFile extends CVSObject {
 			if (filesToRemove.size() == 0) {
 				status = CommitStatus.OK;
 				return;
-			}			
+			}
 			status = CommitStatus.NotFinished;
 			RemoveCommand removeCommand = new RemoveCommand();
 			File[] files = new File[filesToRemove.size()];
-			for (int i=0; i<filesToRemove.size(); i++) files[i] = filesToRemove.get(i).getFile();
+			for (int i = 0; i < filesToRemove.size(); i++) {
+				files[i] = filesToRemove.get(i).getFile();
+			}
 			removeCommand.setFiles(files);
-			
+
 			try {
 				CVSConnection connection = getSharedProject().openConnection();
 				connection.getClient().getEventManager().addCVSListener(this);
@@ -596,11 +582,9 @@ public abstract class CVSAbstractFile extends CVSObject {
 			}
 		}
 
-
 		@Override
-		public void commandTerminated(TerminationEvent e) 
-		{
-			status = (e.isError()?CommitStatus.Error:CommitStatus.OK);
+		public void commandTerminated(TerminationEvent e) {
+			status = (e.isError() ? CommitStatus.Error : CommitStatus.OK);
 		}
 
 		@Override
@@ -635,15 +619,15 @@ public abstract class CVSAbstractFile extends CVSObject {
 		public void moduleExpanded(ModuleExpansionEvent e) {
 		}
 
-        /**
-         * Overrides getName
-         * @see org.openflexo.toolbox.FlexoRunnable#getName()
-         */
-        @Override
-		public String getName()
-        {
-            return "Committing in "+getFile().getName();
-        }
+		/**
+		 * Overrides getName
+		 * 
+		 * @see org.openflexo.toolbox.FlexoRunnable#getName()
+		 */
+		@Override
+		public String getName() {
+			return "Committing in " + getFile().getName();
+		}
 
 	}
 
@@ -651,96 +635,94 @@ public abstract class CVSAbstractFile extends CVSObject {
 	// **************************** Updating stuff *****************************
 	// ***************************************************************************
 
-	public interface UpdateListener
-	{
-		public void notifyUpdateFinished (CVSFile file, UpdateStatus status);
+	public interface UpdateListener {
+		public void notifyUpdateFinished(CVSFile file, UpdateStatus status);
 	}
-	
+
 	private UpdateListener _updateListener;
-	
+
 	private UpdatingThread _updatingThread;
-	
+
 	// WARNING: override option (update -C) not implemented on CVS on MacOSX1.4 !!! :-(
-	public synchronized UpdatingThread update(UpdateListener updateListener, boolean override, CVSFile... files)
-	{
+	public synchronized UpdatingThread update(UpdateListener updateListener, boolean override, CVSFile... files) {
 		if (_updatingThread == null) {
 			Vector<CVSFile> filesToUpdate = new Vector<CVSFile>();
 			if (this instanceof CVSContainer) {
 				for (CVSFile f : files) {
-					if (((CVSContainer)this).getFiles().contains(f)) filesToUpdate.add(f);
-					else logger.warning("Exclude "+f+" from files to update since not belonging to current directory");
+					if (((CVSContainer) this).getFiles().contains(f)) {
+						filesToUpdate.add(f);
+					} else {
+						logger.warning("Exclude " + f + " from files to update since not belonging to current directory");
+					}
 				}
-			}
-			else if (this instanceof CVSFile
-					&& files.length == 1
-					&& files[0] == this) {
+			} else if (this instanceof CVSFile && files.length == 1 && files[0] == this) {
 				filesToUpdate.add(files[0]);
 			}
-			logger.info("Updating "+filesToUpdate+" in directory "+getFile());		
-			_updatingThread = new UpdatingThread(filesToUpdate,override);
-            getSharedProject().addToThreadPool(_updatingThread);
+			logger.info("Updating " + filesToUpdate + " in directory " + getFile());
+			_updatingThread = new UpdatingThread(filesToUpdate, override);
+			getSharedProject().addToThreadPool(_updatingThread);
 			_updateListener = updateListener;
 			return _updatingThread;
 		}
 		return null;
 	}
-	
-	private synchronized void notifyUpdateFinished(CVSFile file, Entry entry)
-	{
+
+	private synchronized void notifyUpdateFinished(CVSFile file, Entry entry) {
 		file.setEntry(entry);
 		/*if (this instanceof CVSContainer 
 				&& file.getStatus() == CVSStatus.RemotelyRemoved) {
 			((CVSContainer)this).removeFromFiles(file);
 		}
 		file.setStatus(CVSStatus.UpToDate);*/
-		if (_updateListener != null) _updateListener.notifyUpdateFinished(file, UpdateStatus.OK);
+		if (_updateListener != null) {
+			_updateListener.notifyUpdateFinished(file, UpdateStatus.OK);
+		}
 	}
-	
-	private synchronized void notifyUpdateFailed(CVSFile file)
-	{
-		if (_updateListener != null) _updateListener.notifyUpdateFinished(file, UpdateStatus.Error);
+
+	private synchronized void notifyUpdateFailed(CVSFile file) {
+		if (_updateListener != null) {
+			_updateListener.notifyUpdateFinished(file, UpdateStatus.Error);
+		}
 	}
-	
-	public synchronized boolean isUpdating()
-	{
+
+	public synchronized boolean isUpdating() {
 		return (_updatingThread != null);
 	}
-	
-	public static enum UpdateStatus
-	{
-		NotFinished,
-		OK,
-		Error
+
+	public static enum UpdateStatus {
+		NotFinished, OK, Error
 	}
-	
-	public class UpdatingThread implements CVSListener,FlexoRunnable
-	{
+
+	public class UpdatingThread implements CVSListener, FlexoRunnable {
 		private UpdateStatus status;
 		private Vector<CVSFile> _filesToUpdate;
 		private boolean _override;
 		private CVSConnection connection = null;
-		
-		protected UpdatingThread(Vector<CVSFile> filesToUpdate, boolean override)
-		{
+
+		protected UpdatingThread(Vector<CVSFile> filesToUpdate, boolean override) {
 			_filesToUpdate = filesToUpdate;
 			_override = override;
 		}
-		
-		public void abort(){
-			if(connection!=null && connection.getClient()!=null)
+
+		public void abort() {
+			if (connection != null && connection.getClient() != null) {
 				connection.getClient().abort();
+			}
 		}
+
 		@Override
-		public void run() 
-		{
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Starting to update "+_filesToUpdate);
+		public void run() {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Starting to update " + _filesToUpdate);
+			}
 			connection = null;
 
 			status = UpdateStatus.NotFinished;
 			UpdateCommand updateCommand = new UpdateCommand();
 			File[] files = new File[_filesToUpdate.size()];
-			for (int i=0; i<_filesToUpdate.size(); i++) files[i] = _filesToUpdate.get(i).getFile();
+			for (int i = 0; i < _filesToUpdate.size(); i++) {
+				files[i] = _filesToUpdate.get(i).getFile();
+			}
 			updateCommand.setFiles(files);
 			updateCommand.setCleanCopy(_override);
 
@@ -766,82 +748,80 @@ public abstract class CVSAbstractFile extends CVSObject {
 			if (status == UpdateStatus.OK) {
 				for (CVSFile f : _filesToUpdate) {
 					try {
-						notifyUpdateFinished(f,connection.getClient().getEntry(f.getFile()));
+						notifyUpdateFinished(f, connection.getClient().getEntry(f.getFile()));
 					} catch (IOException e) {
-						logger.warning("Unexpected exception "+e.getMessage());
+						logger.warning("Unexpected exception " + e.getMessage());
 						e.printStackTrace();
 						notifyUpdateFailed(f);
 					}
 				}
-			}
-			else if (status == UpdateStatus.Error) {
+			} else if (status == UpdateStatus.Error) {
 				for (CVSFile f : _filesToUpdate) {
 					notifyUpdateFailed(f);
 				}
 			}
-            if (logger.isLoggable(Level.INFO))
-                logger.info("End of commit "+_filesToUpdate+": "+status);
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("End of commit " + _filesToUpdate + ": " + status);
+			}
 			_updatingThread = null;
 
 		}
 
 		@Override
-		public void commandTerminated(TerminationEvent e) 
-		{
-			status = (e.isError()?UpdateStatus.Error:UpdateStatus.OK);
+		public void commandTerminated(TerminationEvent e) {
+			status = (e.isError() ? UpdateStatus.Error : UpdateStatus.OK);
 		}
 
 		@Override
 		public void fileAdded(FileAddedEvent e) {
-			//logger.info("fileAdded() "+e);
+			// logger.info("fileAdded() "+e);
 		}
 
 		@Override
 		public void fileInfoGenerated(FileInfoEvent e) {
-			//logger.info("fileInfoGenerated() "+e);
+			// logger.info("fileInfoGenerated() "+e);
 		}
 
 		@Override
 		public void fileRemoved(FileRemovedEvent e) {
-			//logger.info("fileRemoved() "+e);
+			// logger.info("fileRemoved() "+e);
 		}
 
 		@Override
 		public void fileToRemove(FileToRemoveEvent e) {
-			//logger.info("fileToRemove() "+e);
+			// logger.info("fileToRemove() "+e);
 		}
 
 		@Override
 		public void fileUpdated(FileUpdatedEvent e) {
-			//logger.info("fileUpdated() "+e);
+			// logger.info("fileUpdated() "+e);
 		}
 
 		@Override
 		public void messageSent(MessageEvent e) {
-			//logger.info("messageSent() "+e);
+			// logger.info("messageSent() "+e);
 		}
 
 		@Override
 		public void messageSent(BinaryMessageEvent e) {
-			//logger.info("messageSent() "+e);
+			// logger.info("messageSent() "+e);
 		}
 
 		@Override
 		public void moduleExpanded(ModuleExpansionEvent e) {
-			//logger.info("moduleExpanded() "+e);
+			// logger.info("moduleExpanded() "+e);
 		}
 
-        /**
-         * Overrides getName
-         * @see org.openflexo.toolbox.FlexoRunnable#getName()
-         */
-        @Override
-		public String getName()
-        {
-            return "Updating in "+getFile().getName();
-        }
+		/**
+		 * Overrides getName
+		 * 
+		 * @see org.openflexo.toolbox.FlexoRunnable#getName()
+		 */
+		@Override
+		public String getName() {
+			return "Updating in " + getFile().getName();
+		}
 
 	}
-
 
 }

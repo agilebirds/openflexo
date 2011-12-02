@@ -19,12 +19,10 @@
  */
 package org.openflexo.foundation.rm.cg;
 
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringRepresentable;
 
-import org.openflexo.localization.FlexoLocalization;
-
-public enum GenerationStatus implements StringRepresentable
-{
+public enum GenerationStatus implements StringRepresentable {
 	UpToDate,
 	GenerationModified,
 	GenerationAdded,
@@ -39,106 +37,70 @@ public enum GenerationStatus implements StringRepresentable
 	GenerationError,
 	NotGenerated,
 	Unknown;
-	
-    
-    
-	public boolean isGenerationAvailable() 
-	{
-		return ((this == UpToDate)
-				|| (this == GenerationModified)
-				|| (this == GenerationAdded)
-				|| (this == GenerationRemoved)
-				|| (this == OverrideScheduled)
-				|| (this == DiskModified)
-				|| (this == DiskRemoved)
-				|| (this == ConflictingUnMerged)
-				|| (this == ConflictingMarkedAsMerged));
-	}
-	
-	public boolean isAbnormal()
-	{
-		return ((this == CodeGenerationNotAvailable)
-				|| (this == NotGenerated)
-				|| (this == Unknown)
-                || (this == GenerationError));
-	}
-	
-	public boolean isGenerationModified()
-	{
-		return ((this == GenerationModified)
-				|| (this == GenerationAdded)
-				|| (this == GenerationRemoved)
-				|| (this == OverrideScheduled));
+
+	public boolean isGenerationAvailable() {
+		return ((this == UpToDate) || (this == GenerationModified) || (this == GenerationAdded) || (this == GenerationRemoved)
+				|| (this == OverrideScheduled) || (this == DiskModified) || (this == DiskRemoved) || (this == ConflictingUnMerged) || (this == ConflictingMarkedAsMerged));
 	}
 
-	public boolean isDiskModified()
-	{
-		return ((this == DiskModified)
-				|| (this == DiskRemoved));
+	public boolean isAbnormal() {
+		return ((this == CodeGenerationNotAvailable) || (this == NotGenerated) || (this == Unknown) || (this == GenerationError));
 	}
 
-	public boolean isConflicting()
-	{
-		return ((this == ConflictingUnMerged)
-				|| (this == ConflictingMarkedAsMerged));
+	public boolean isGenerationModified() {
+		return ((this == GenerationModified) || (this == GenerationAdded) || (this == GenerationRemoved) || (this == OverrideScheduled));
 	}
-	
-	public String getLocalizedStringRepresentation()
-	{
+
+	public boolean isDiskModified() {
+		return ((this == DiskModified) || (this == DiskRemoved));
+	}
+
+	public boolean isConflicting() {
+		return ((this == ConflictingUnMerged) || (this == ConflictingMarkedAsMerged));
+	}
+
+	public String getLocalizedStringRepresentation() {
 		return FlexoLocalization.localizedForKey(getLocalizationKey());
 	}
-	
-	public String getLocalizationKey()
-	{
+
+	public String getLocalizationKey() {
 		if (this == GenerationStatus.UpToDate) {
 			return "up_to_date_file";
-		}
-		else if (this == GenerationStatus.GenerationModified) {
+		} else if (this == GenerationStatus.GenerationModified) {
 			return "file_needs_to_be_rewritten";
-		}
-		else if (this == GenerationStatus.GenerationAdded) {
+		} else if (this == GenerationStatus.GenerationAdded) {
 			return "file_marked_for_addition";
-		}
-		else if (this == GenerationStatus.GenerationRemoved) {
+		} else if (this == GenerationStatus.GenerationRemoved) {
 			return "file_marked_for_removal";
-		}
-		else if (this == GenerationStatus.OverrideScheduled) {
+		} else if (this == GenerationStatus.OverrideScheduled) {
 			return "override_scheduled";
-		}
-		else if (this == GenerationStatus.DiskRemoved) {
+		} else if (this == GenerationStatus.DiskRemoved) {
 			return "file_removed_on_disk";
-		}
-		else if (this == GenerationStatus.DiskModified) {
+		} else if (this == GenerationStatus.DiskModified) {
 			return "file_modified_on_disk";
-		}
-		else if (this == GenerationStatus.ConflictingMarkedAsMerged) {
+		} else if (this == GenerationStatus.ConflictingMarkedAsMerged) {
 			return "conflicting_file_marked_as_merged";
-		}
-		else if (this == GenerationStatus.ConflictingUnMerged) {
+		} else if (this == GenerationStatus.ConflictingUnMerged) {
 			return "conflicting_file";
-		}
-		else if (this == GenerationStatus.CodeGenerationNotAvailable) {
+		} else if (this == GenerationStatus.CodeGenerationNotAvailable) {
 			return "code_generation_not_available";
-		}
-		else if (this == GenerationStatus.CodeGenerationNotSynchronized) {
+		} else if (this == GenerationStatus.CodeGenerationNotSynchronized) {
 			return "code_generation_not_synchronized";
-		}
-		else if (this == GenerationStatus.GenerationError) {
+		} else if (this == GenerationStatus.GenerationError) {
 			return "generation_error";
-		}
-		else if (this == GenerationStatus.NotGenerated) {
+		} else if (this == GenerationStatus.NotGenerated) {
 			return "file_not_generated_yet";
 		}
 		return "???";
 	}
 
-    /**
-     * Overrides toString
-     * @see java.lang.Enum#toString()
-     */
-    @Override
-    public String toString()
-    {
-        return getLocalizationKey();
-    }
+	/**
+	 * Overrides toString
+	 * 
+	 * @see java.lang.Enum#toString()
+	 */
+	@Override
+	public String toString() {
+		return getLocalizationKey();
+	}
 }

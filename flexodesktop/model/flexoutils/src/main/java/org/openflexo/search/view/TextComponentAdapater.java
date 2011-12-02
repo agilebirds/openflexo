@@ -25,17 +25,18 @@ import javax.swing.text.JTextComponent;
 
 /**
  * This class is a utility class to make a JTextComponent useable with the search.
+ * 
  * @author gpolet
- *
+ * 
  */
 public class TextComponentAdapater implements ITextComponent {
 
 	private JTextComponent textComponent;
-	
+
 	public TextComponentAdapater(JTextComponent component) {
 		this.textComponent = component;
 	}
-	
+
 	@Override
 	public void addCaretListener(CaretListener listener) {
 		textComponent.addCaretListener(listener);
@@ -60,7 +61,7 @@ public class TextComponentAdapater implements ITextComponent {
 	public void select(int start, int end) {
 		textComponent.select(start, end);
 	}
-	
+
 	@Override
 	public Document getDocument() {
 		return textComponent.getDocument();

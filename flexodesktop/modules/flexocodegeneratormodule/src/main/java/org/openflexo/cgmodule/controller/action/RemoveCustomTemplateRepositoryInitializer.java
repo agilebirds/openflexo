@@ -31,51 +31,42 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RemoveCustomTemplateRepositoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveCustomTemplateRepositoryInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(RemoveCustomTemplateRepository.actionType,actionInitializer);
+	RemoveCustomTemplateRepositoryInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(RemoveCustomTemplateRepository.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<RemoveCustomTemplateRepository> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveCustomTemplateRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveCustomTemplateRepository>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action)
-            {
-                return true;
-                           }
-        };
+			@Override
+			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<RemoveCustomTemplateRepository> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<RemoveCustomTemplateRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveCustomTemplateRepository>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action)
-            {
-                return true;
-                          }
-        };
+			@Override
+			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action) {
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
- 
- 
+
 }

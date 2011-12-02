@@ -26,17 +26,15 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
-public class AdditionalBindingDefinition extends FlexoModelObject implements InspectableObject{
+public class AdditionalBindingDefinition extends FlexoModelObject implements InspectableObject {
 
 	/**
 	 * Never use this constructor
 	 */
-	public AdditionalBindingDefinition()
-	{
+	public AdditionalBindingDefinition() {
 		super(null);
 	}
-	
+
 	public AdditionalBindingDefinition(FlexoProject project) {
 		super(project);
 		// TODO Auto-generated constructor stub
@@ -45,15 +43,16 @@ public class AdditionalBindingDefinition extends FlexoModelObject implements Ins
 	private String _variableName;
 	private String _value;
 	private IEWidget _owner;
-	
+
 	public String getValue() {
 		return _value;
 	}
 
 	public void setValue(String value) {
 		this._value = value;
-        if (_owner!=null)
-            _owner.setChanged();
+		if (_owner != null) {
+			_owner.setChanged();
+		}
 	}
 
 	public String getVariableName() {
@@ -62,70 +61,71 @@ public class AdditionalBindingDefinition extends FlexoModelObject implements Ins
 
 	public void setVariableName(String name) {
 		_variableName = name;
-        if (_owner!=null)
-            _owner.setChanged();
+		if (_owner != null) {
+			_owner.setChanged();
+		}
 	}
 
-	public void setOwner(IEWidget widget){
+	public void setOwner(IEWidget widget) {
 		_owner = widget;
 	}
-	
-	public IEWidget getOwner(){
+
+	public IEWidget getOwner() {
 		return _owner;
 	}
-    @Override
-	public XMLMapping getXMLMapping()
-    {
-        if (getOwner() != null) {
-            return getOwner().getXMLMapping();
-        }
-        return null;
-    }
 
-    @Override
-	public XMLStorageResourceData getXMLResourceData()
-    {
-        if (getOwner() != null) {
-            return getOwner().getXMLResourceData();
-        }
-        return null;
-    }
+	@Override
+	public XMLMapping getXMLMapping() {
+		if (getOwner() != null) {
+			return getOwner().getXMLMapping();
+		}
+		return null;
+	}
+
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		if (getOwner() != null) {
+			return getOwner().getXMLResourceData();
+		}
+		return null;
+	}
 
 	@Override
 	public String getInspectorName() {
 		return null;
 	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "additional_binding";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "additional_binding";
+	}
 
-    /**
-     * Overrides getFullyQualifiedName
-     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-     */
-    @Override
-    public String getFullyQualifiedName()
-    {
-        return "ADDITIONAL_BINDING_"+getFlexoID();
-    }
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "ADDITIONAL_BINDING_" + getFlexoID();
+	}
 
-    /**
-     * Overrides getProject
-     * @see org.openflexo.foundation.FlexoModelObject#getProject()
-     */
-    @Override
-    public FlexoProject getProject()
-    {
-        if (_owner!=null)
-            return _owner.getProject();
-        else
-            return null;
-    }
+	/**
+	 * Overrides getProject
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getProject()
+	 */
+	@Override
+	public FlexoProject getProject() {
+		if (_owner != null) {
+			return _owner.getProject();
+		} else {
+			return null;
+		}
+	}
 }

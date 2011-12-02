@@ -39,202 +39,185 @@ import org.openflexo.localization.FlexoLocalization;
  */
 public abstract class AbstractMessageDefinition extends WKFObject implements InspectableObject {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AbstractMessageDefinition.class.getPackage().getName());
 
-    //private FlexoPort _port;
-    private Vector<MessageEntry> _entries;
-    private String _name;
-    // input, output, or fault
-    private String _messageType;
-    
-    
+	// private FlexoPort _port;
+	private Vector<MessageEntry> _entries;
+	private String _name;
+	// input, output, or fault
+	private String _messageType;
 
-    /**
-     * Constructor used during deserialization
-     */
-    public AbstractMessageDefinition(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public AbstractMessageDefinition(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public AbstractMessageDefinition(FlexoProcess process)
-    {
-        super(process);
-        _entries = new Vector();
-    }
-    
-    
-    @Override
-	public String getInspectorName() 
-    {
-    	
-        // Never inspected by its own
-    	    // Inspected by WSEditor.see WSESelectionManager.
-        return null;
-    }
+	/**
+	 * Default constructor
+	 */
+	public AbstractMessageDefinition(FlexoProcess process) {
+		super(process);
+		_entries = new Vector();
+	}
 
-    public abstract WKFObject getFatherObject();
-    
-    @Override
-	public String getFullyQualifiedName() 
-    {
-        if (getFatherObject() != null)
-            return getFatherObject().getFullyQualifiedName()+".MESSAGE";
-        return null;
-    }
-    
-    
-    public String getDefaultName()
-    {
-    		if(isInputMessageDefinition()){
-    			return FlexoLocalization.localizedForKey("input_message_definition_name");
-    		}
-    		else if(isOutputMessageDefinition()){
-    			return FlexoLocalization.localizedForKey("output_message_definition_name");
-    		}
-    		else if(isFaultMessageDefinition()){
-    			return FlexoLocalization.localizedForKey("fault_message_definition_name"); 
-    		}
-        return getDefaultInitialName();
-    }
+	@Override
+	public String getInspectorName() {
 
-    public static String getDefaultInitialName()
-    {
-        return FlexoLocalization.localizedForKey("message_definition_name");
-    }
-    
-    public boolean isInputMessageDefinition(){
-    		return "input".equals(_messageType);
-    }
-    public boolean isOutputMessageDefinition(){
-    		return "output".equals(_messageType);
-    }
-    public boolean isFaultMessageDefinition(){
-    		return "fault".equals(_messageType);
-    }
-    public void setIsInputMessageDefinition(){
-    		_messageType="input";
-    }
-    public void setIsOutputMessageDefinition(){
-    		_messageType="output";
-    }
-    public void setIsFaultMessageDefinition(){
-    		_messageType="fault";
-    }
+		// Never inspected by its own
+		// Inspected by WSEditor.see WSESelectionManager.
+		return null;
+	}
 
-    @Override
-	public String getName(){
-    		return _name;
-    }
-    
-    @Override
-	public void setName(String n){
-    		_name = n;
-    }
-    
-    public Vector<MessageEntry> getEntries() 
-    {
-        return _entries;
-    }
+	public abstract WKFObject getFatherObject();
 
-    public void setEntries(Vector<MessageEntry> entries) 
-    {
-        _entries = entries;
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		if (getFatherObject() != null) {
+			return getFatherObject().getFullyQualifiedName() + ".MESSAGE";
+		}
+		return null;
+	}
 
-    public void addToEntries(MessageEntry entry) 
-    {
-        entry.setMessage(this);
-        _entries.add(entry);
-        setChanged();
-        notifyObservers(new BindingAdded(entry));
-    }
+	public String getDefaultName() {
+		if (isInputMessageDefinition()) {
+			return FlexoLocalization.localizedForKey("input_message_definition_name");
+		} else if (isOutputMessageDefinition()) {
+			return FlexoLocalization.localizedForKey("output_message_definition_name");
+		} else if (isFaultMessageDefinition()) {
+			return FlexoLocalization.localizedForKey("fault_message_definition_name");
+		}
+		return getDefaultInitialName();
+	}
 
-    public void removeFromEntries(MessageEntry entry) 
-    {
-        entry.setMessage(null);
-        _entries.remove(entry);
-        setChanged();
-        notifyObservers(new BindingRemoved(entry));
-   }
+	public static String getDefaultInitialName() {
+		return FlexoLocalization.localizedForKey("message_definition_name");
+	}
 
-    public MessageEntry entryWithName(String aName)
-    {
-        for (Enumeration e = getEntries().elements(); e.hasMoreElements();) {
-            MessageEntry temp = (MessageEntry) e.nextElement();
-            if (temp.getVariableName().equals(aName)) {
-                return temp;
-            }
-        }
-         return null;
-    }
+	public boolean isInputMessageDefinition() {
+		return "input".equals(_messageType);
+	}
 
-    public MessageEntry createNewMessageEntry()
-    {
-        String baseName = FlexoLocalization.localizedForKey("default_entry_name");
-        String newEntryName = baseName;
-        int inc = 0;
-        while (entryWithName(newEntryName) != null) {
-            inc++;
-            newEntryName = baseName + inc;
-        }
-        MessageEntry newMessageEntry = new MessageEntry(getProcess(), this);
-        newMessageEntry.setVariableName(newEntryName);
-        addToEntries(newMessageEntry);
-        return newMessageEntry;
-    }
+	public boolean isOutputMessageDefinition() {
+		return "output".equals(_messageType);
+	}
 
-    public void deleteMessageEntry(MessageEntry aMessageEntry)
-    {
-        removeFromEntries(aMessageEntry);
-    }
+	public boolean isFaultMessageDefinition() {
+		return "fault".equals(_messageType);
+	}
 
-    public boolean isMessageEntryDeletable(MessageEntry aMessageEntry)
-    {
-        return true;
-    }
+	public void setIsInputMessageDefinition() {
+		_messageType = "input";
+	}
 
-    /**
-     * Return a Vector of all embedded WKFObjects
-     * 
-     * @return a Vector of WKFObject instances
-     */
-    @Override
-	public Vector getAllEmbeddedWKFObjects()
-    {
-        Vector returned = new Vector();
-        returned.add(this);
-       returned.addAll(getEntries());
-        return returned;
-    }
+	public void setIsOutputMessageDefinition() {
+		_messageType = "output";
+	}
 
-    // ==========================================================================
-    // ================================= Delete ===============================
-    // ==========================================================================
+	public void setIsFaultMessageDefinition() {
+		_messageType = "fault";
+	}
 
-    @Override
-	public void delete()
-    {
-        _entries.clear();
-        super.delete();
-        deleteObservers();
-    }
+	@Override
+	public String getName() {
+		return _name;
+	}
 
-    /**
-     * Build and return a vector of all the objects that will be deleted during
-     * process deletion
-     * 
-     * @param aVector of DeletableObject
-     */
-    @Override
-	public Vector<WKFObject> getAllEmbeddedDeleted()
-    {
-        return getAllEmbeddedWKFObjects();
-    }
+	@Override
+	public void setName(String n) {
+		_name = n;
+	}
+
+	public Vector<MessageEntry> getEntries() {
+		return _entries;
+	}
+
+	public void setEntries(Vector<MessageEntry> entries) {
+		_entries = entries;
+	}
+
+	public void addToEntries(MessageEntry entry) {
+		entry.setMessage(this);
+		_entries.add(entry);
+		setChanged();
+		notifyObservers(new BindingAdded(entry));
+	}
+
+	public void removeFromEntries(MessageEntry entry) {
+		entry.setMessage(null);
+		_entries.remove(entry);
+		setChanged();
+		notifyObservers(new BindingRemoved(entry));
+	}
+
+	public MessageEntry entryWithName(String aName) {
+		for (Enumeration e = getEntries().elements(); e.hasMoreElements();) {
+			MessageEntry temp = (MessageEntry) e.nextElement();
+			if (temp.getVariableName().equals(aName)) {
+				return temp;
+			}
+		}
+		return null;
+	}
+
+	public MessageEntry createNewMessageEntry() {
+		String baseName = FlexoLocalization.localizedForKey("default_entry_name");
+		String newEntryName = baseName;
+		int inc = 0;
+		while (entryWithName(newEntryName) != null) {
+			inc++;
+			newEntryName = baseName + inc;
+		}
+		MessageEntry newMessageEntry = new MessageEntry(getProcess(), this);
+		newMessageEntry.setVariableName(newEntryName);
+		addToEntries(newMessageEntry);
+		return newMessageEntry;
+	}
+
+	public void deleteMessageEntry(MessageEntry aMessageEntry) {
+		removeFromEntries(aMessageEntry);
+	}
+
+	public boolean isMessageEntryDeletable(MessageEntry aMessageEntry) {
+		return true;
+	}
+
+	/**
+	 * Return a Vector of all embedded WKFObjects
+	 * 
+	 * @return a Vector of WKFObject instances
+	 */
+	@Override
+	public Vector getAllEmbeddedWKFObjects() {
+		Vector returned = new Vector();
+		returned.add(this);
+		returned.addAll(getEntries());
+		return returned;
+	}
+
+	// ==========================================================================
+	// ================================= Delete ===============================
+	// ==========================================================================
+
+	@Override
+	public void delete() {
+		_entries.clear();
+		super.delete();
+		deleteObservers();
+	}
+
+	/**
+	 * Build and return a vector of all the objects that will be deleted during process deletion
+	 * 
+	 * @param aVector
+	 *            of DeletableObject
+	 */
+	@Override
+	public Vector<WKFObject> getAllEmbeddedDeleted() {
+		return getAllEmbeddedWKFObjects();
+	}
 
 }

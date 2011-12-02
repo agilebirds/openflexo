@@ -2,3 +2,9 @@ target
 .project
 .classpath
 .settings
+*.helpset
+*.hprof
+*.iml
+*.ipr
+*.iws
+.DS_Store

@@ -28,57 +28,44 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.OntologyObject;
 
-
-public class AddAnnotationStatement extends FlexoAction<AddAnnotationStatement,OntologyObject,OntologyObject> 
-{
+public class AddAnnotationStatement extends FlexoAction<AddAnnotationStatement, OntologyObject, OntologyObject> {
 
 	private static final Logger logger = Logger.getLogger(AddAnnotationStatement.class.getPackage().getName());
 
-	public static FlexoActionType<AddAnnotationStatement,OntologyObject,OntologyObject> actionType 
-	= new FlexoActionType<AddAnnotationStatement,OntologyObject,OntologyObject> (
-			"add_annotation",
-			FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddAnnotationStatement, OntologyObject, OntologyObject> actionType = new FlexoActionType<AddAnnotationStatement, OntologyObject, OntologyObject>(
+			"add_annotation", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddAnnotationStatement makeNewAction(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) 
-		{
+		public AddAnnotationStatement makeNewAction(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) {
 			return new AddAnnotationStatement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
 			return object != null && !object.getIsReadOnly();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) 
-		{
+		protected boolean isEnabledForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
 			return object != null && !object.getIsReadOnly();
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddAnnotationStatement.actionType, OntologyObject.class);
+		FlexoModelObject.addActionForClass(AddAnnotationStatement.actionType, OntologyObject.class);
 	}
 
-
-	AddAnnotationStatement (OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor)
-	{
+	AddAnnotationStatement(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-
 	@Override
-	protected void doAction(Object context) 
-    {
-      logger.info ("AddAnnotationStatement on "+getFocusedObject());
-    }
+	protected void doAction(Object context) {
+		logger.info("AddAnnotationStatement on " + getFocusedObject());
+	}
 
- }
+}

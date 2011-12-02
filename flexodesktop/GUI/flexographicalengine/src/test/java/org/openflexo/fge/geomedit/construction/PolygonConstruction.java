@@ -24,22 +24,19 @@ import org.openflexo.fge.geom.FGEPolygon;
 public abstract class PolygonConstruction extends GeometricConstruction<FGEPolygon> {
 
 	private boolean isFilled;
-	
-	public final FGEPolygon getPolygon()
-	{
+
+	public final FGEPolygon getPolygon() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGEPolygon computeData();
 
-	public boolean getIsFilled()
-	{
+	public boolean getIsFilled() {
 		return isFilled;
 	}
 
-	public void setIsFilled(boolean isFilled)
-	{
+	public void setIsFilled(boolean isFilled) {
 		this.isFilled = isFilled;
 		setModified();
 	}

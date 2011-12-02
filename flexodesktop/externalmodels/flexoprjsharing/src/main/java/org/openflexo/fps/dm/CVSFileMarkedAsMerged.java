@@ -21,11 +21,8 @@ package org.openflexo.fps.dm;
 
 import org.openflexo.fps.CVSFile;
 
-
-public class CVSFileMarkedAsMerged extends FPSDataModification
-{
-    public CVSFileMarkedAsMerged(CVSFile file)
-    {
-        super(null,file);
-    }
+public class CVSFileMarkedAsMerged extends FPSDataModification {
+	public CVSFileMarkedAsMerged(CVSFile file) {
+		super(null, file);
+	}
 }

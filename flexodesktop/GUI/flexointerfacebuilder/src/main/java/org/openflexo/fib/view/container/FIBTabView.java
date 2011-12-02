@@ -24,36 +24,31 @@ import java.util.logging.Logger;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTab;
 
-
 public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 
 	private static final Logger logger = Logger.getLogger(FIBTabView.class.getPackage().getName());
 
 	private boolean wasSelected = false;
-	
-	public FIBTabView(C model, FIBController controller)
-	{
-		super(model,controller);
+
+	public FIBTabView(C model, FIBController controller) {
+		super(model, controller);
 	}
 
 	@Override
-	protected void performSetIsVisible (boolean isVisible)
-	{
+	protected void performSetIsVisible(boolean isVisible) {
 		super.performSetIsVisible(isVisible);
 		if (getParentView() instanceof FIBTabPanelView) {
-			FIBTabPanelView parent = (FIBTabPanelView)getParentView();
+			FIBTabPanelView parent = (FIBTabPanelView) getParentView();
 			if (isVisible) {
-				parent.getJComponent().add(getResultingJComponent(),getLocalized(getComponent().getTitle()),getComponent().getIndex());
+				parent.getJComponent().add(getResultingJComponent(), getLocalized(getComponent().getTitle()), getComponent().getIndex());
 				if (wasSelected) {
 					parent.getJComponent().setSelectedComponent(getResultingJComponent());
 				}
-			}
-			else {
+			} else {
 				wasSelected = (parent.getJComponent().getSelectedComponent() == getResultingJComponent());
 				parent.getJComponent().remove(getResultingJComponent());
 			}
 		}
 	}
-	
 
 }

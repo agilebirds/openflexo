@@ -28,47 +28,40 @@ import org.openflexo.generator.action.MarkAsUnmerged;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MarkAsUnmergedInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MarkAsUnmergedInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(MarkAsUnmerged.actionType,actionInitializer);
+	MarkAsUnmergedInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(MarkAsUnmerged.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<MarkAsUnmerged> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MarkAsUnmerged> getDefaultInitializer() {
 		return new FlexoActionInitializer<MarkAsUnmerged>() {
-            @Override
-			public boolean run(ActionEvent e, MarkAsUnmerged action)
-            {
-                action.getProjectGenerator().startHandleLogs();
-                return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, MarkAsUnmerged action) {
+				action.getProjectGenerator().startHandleLogs();
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<MarkAsUnmerged> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<MarkAsUnmerged> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MarkAsUnmerged>() {
-            @Override
-			public boolean run(ActionEvent e, MarkAsUnmerged action)
-            {
-                action.getProjectGenerator().stopHandleLogs();
-                action.getProjectGenerator().flushLogs();
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, MarkAsUnmerged action) {
+				action.getProjectGenerator().stopHandleLogs();
+				action.getProjectGenerator().flushLogs();
+				return true;
+			}
+		};
 	}
 
- }
+}

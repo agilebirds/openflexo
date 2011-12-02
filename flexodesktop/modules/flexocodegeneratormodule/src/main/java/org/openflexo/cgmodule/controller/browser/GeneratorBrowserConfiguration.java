@@ -25,9 +25,9 @@ import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.BrowserElementType;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFolder;
@@ -43,54 +43,46 @@ import org.openflexo.foundation.cg.version.CGFileIntermediateVersion;
 import org.openflexo.foundation.cg.version.CGFileReleaseVersion;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
 
-
-class GeneratorBrowserConfiguration implements BrowserConfiguration
-{
+class GeneratorBrowserConfiguration implements BrowserConfiguration {
 	private final GeneratedOutput _generatedCode;
 	private final GeneratorBrowserConfigurationElementFactory _factory;
 
-	protected GeneratorBrowserConfiguration(GeneratedOutput generatedCode)
-	{
+	protected GeneratorBrowserConfiguration(GeneratedOutput generatedCode) {
 		super();
 		_generatedCode = generatedCode;
 		_factory = new GeneratorBrowserConfigurationElementFactory();
 	}
 
 	@Override
-	public FlexoProject getProject() 
-	{
+	public FlexoProject getProject() {
 		if (_generatedCode != null) {
 			return _generatedCode.getProject();
 		}
 		return null;
 	}
-	
-	protected abstract class CGFileFilter extends CustomBrowserFilter
-	{
-	    public CGFileFilter(String name, Icon icon, GenerationStatus... status)
-	    {
-	        super(name,icon);
-	    }
+
+	protected abstract class CGFileFilter extends CustomBrowserFilter {
+		public CGFileFilter(String name, Icon icon, GenerationStatus... status) {
+			super(name, icon);
+		}
 
 		@Override
-		public boolean accept(FlexoModelObject object)
-		{
+		public boolean accept(FlexoModelObject object) {
 			if (object instanceof CGFile) {
-				return acceptFile((CGFile)object);
+				return acceptFile((CGFile) object);
 			}
 			if (object instanceof CGPathElement) {
-				return acceptCGPathElement((CGPathElement)object);
+				return acceptCGPathElement((CGPathElement) object);
 			}
 			return true;
 		}
-		
-		public boolean acceptCGPathElement(CGPathElement pathElement)
-		{
+
+		public boolean acceptCGPathElement(CGPathElement pathElement) {
 			for (CGFile file : pathElement.getFiles()) {
 				if (acceptFile(file)) {
 					return true;
@@ -103,27 +95,25 @@ class GeneratorBrowserConfiguration implements BrowserConfiguration
 			}
 			return false;
 		}
-		
+
 		public abstract boolean acceptFile(CGFile file);
-		
+
 	}
 
-    @Override
-	public void configure(ProjectBrowser aBrowser) 
-	{
-    	GeneratorBrowser browser = (GeneratorBrowser)aBrowser;
-    	
+	@Override
+	public void configure(ProjectBrowser aBrowser) {
+		GeneratorBrowser browser = (GeneratorBrowser) aBrowser;
+
 		// Custom filters
-		browser.setAllFilesAndDirectoryFilter(new CustomBrowserFilter("all_files_and_directories",null) {
+		browser.setAllFilesAndDirectoryFilter(new CustomBrowserFilter("all_files_and_directories", null) {
 			@Override
-			public boolean accept(FlexoModelObject object)
-			{
+			public boolean accept(FlexoModelObject object) {
 				return true;
 			}
 		});
 		browser.addToCustomFilters(browser.getAllFilesAndDirectoryFilter());
 
-		browser.setUpToDateFilesFilter(new CGFileFilter("up_to_date_files",FilesIconLibrary.SMALL_UNKNOWN_FILE_ICON) {
+		browser.setUpToDateFilesFilter(new CGFileFilter("up_to_date_files", FilesIconLibrary.SMALL_UNKNOWN_FILE_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.getGenerationStatus() == GenerationStatus.UpToDate;
@@ -131,7 +121,7 @@ class GeneratorBrowserConfiguration implements BrowserConfiguration
 		});
 		browser.addToCustomFilters(browser.getUpToDateFilesFilter());
 
-		browser.setNeedsGenerationFilter(new CGFileFilter("needs_generation",GeneratorIconLibrary.GENERATE_CODE_ICON) {
+		browser.setNeedsGenerationFilter(new CGFileFilter("needs_generation", GeneratorIconLibrary.GENERATE_CODE_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.needsMemoryGeneration();
@@ -139,7 +129,7 @@ class GeneratorBrowserConfiguration implements BrowserConfiguration
 		});
 		browser.addToCustomFilters(browser.getNeedsGenerationFilter());
 
-		browser.setGenerationErrorFilter(new CGFileFilter("generation_errors",CGIconLibrary.UNFIXABLE_ERROR_ICON) {
+		browser.setGenerationErrorFilter(new CGFileFilter("generation_errors", IconLibrary.UNFIXABLE_ERROR_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.getGenerationStatus() == GenerationStatus.GenerationError;
@@ -147,16 +137,15 @@ class GeneratorBrowserConfiguration implements BrowserConfiguration
 		});
 		browser.addToCustomFilters(browser.getGenerationErrorFilter());
 
-		browser.setGenerationModifiedFilter(new CGFileFilter("generation_modified",UtilsIconLibrary.LEFT_MODIFICATION_ICON) {
+		browser.setGenerationModifiedFilter(new CGFileFilter("generation_modified", UtilsIconLibrary.LEFT_MODIFICATION_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
-				return (file.getGenerationStatus().isGenerationModified() 
-						|| (file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged));
+				return (file.getGenerationStatus().isGenerationModified() || (file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged));
 			}
 		});
 		browser.addToCustomFilters(browser.getGenerationModifiedFilter());
 
-		browser.setDiskModifiedFilter(new CGFileFilter("disk_modified",UtilsIconLibrary.RIGHT_MODIFICATION_ICON) {
+		browser.setDiskModifiedFilter(new CGFileFilter("disk_modified", UtilsIconLibrary.RIGHT_MODIFICATION_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.getGenerationStatus().isDiskModified();
@@ -164,7 +153,7 @@ class GeneratorBrowserConfiguration implements BrowserConfiguration
 		});
 		browser.addToCustomFilters(browser.getDiskModifiedFilter());
 
-		browser.setUnresolvedConflictsFilter(new CGFileFilter("unresolved_conflicts",UtilsIconLibrary.CONFLICT_ICON) {
+		browser.setUnresolvedConflictsFilter(new CGFileFilter("unresolved_conflicts", UtilsIconLibrary.CONFLICT_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.getGenerationStatus() == GenerationStatus.ConflictingUnMerged;
@@ -172,7 +161,7 @@ class GeneratorBrowserConfiguration implements BrowserConfiguration
 		});
 		browser.addToCustomFilters(browser.getUnresolvedConflictsFilter());
 
-		browser.setNeedsReinjectingFilter(new CGFileFilter("needs_model_reinjection",GeneratorIconLibrary.NEEDS_MODEL_REINJECTION_ICON) {
+		browser.setNeedsReinjectingFilter(new CGFileFilter("needs_model_reinjection", GeneratorIconLibrary.NEEDS_MODEL_REINJECTION_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.needsModelReinjection();
@@ -180,28 +169,26 @@ class GeneratorBrowserConfiguration implements BrowserConfiguration
 		});
 		browser.addToCustomFilters(browser.getNeedsReinjectingFilter());
 
-		browser.setOtherFilesFilter(new CGFileFilter("other_files",CGIconLibrary.UNFIXABLE_WARNING_ICON) {
+		browser.setOtherFilesFilter(new CGFileFilter("other_files", IconLibrary.UNFIXABLE_WARNING_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.getGenerationStatus().isAbnormal();
 			}
 		});
 		browser.addToCustomFilters(browser.getOtherFilesFilter());
-		
+
 		// Element type filters
 		browser.setFilterStatus(BrowserElementType.FILE_RELEASE_VERSION, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject()
-	{
+	public FlexoModelObject getDefaultRootObject() {
 		return _generatedCode;
 	}
 
 	@Override
-	public BrowserElementFactory getBrowserElementFactory()
-	{
-		return _factory; 
+	public BrowserElementFactory getBrowserElementFactory() {
+		return _factory;
 	}
 
 	class GeneratorBrowserConfigurationElementFactory implements BrowserElementFactory {

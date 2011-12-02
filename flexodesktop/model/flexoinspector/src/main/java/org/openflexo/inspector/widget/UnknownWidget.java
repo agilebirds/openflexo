@@ -25,50 +25,42 @@ import javax.swing.JLabel;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 
-
 /**
  * @author bmangez
- *
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class UnknownWidget extends DenaliWidget
-{
+public class UnknownWidget extends DenaliWidget {
 
-    private JLabel _unknown;
+	private JLabel _unknown;
 
-    public UnknownWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        //setBackground(InspectorCst.BACK_COLOR);
-        _unknown = new JLabel(" UNKNOWNTYPE : " + model.getWidget());
-    }
+	public UnknownWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		// setBackground(InspectorCst.BACK_COLOR);
+		_unknown = new JLabel(" UNKNOWNTYPE : " + model.getWidget());
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        // interface
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		// interface
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-        // interface
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		// interface
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _unknown;
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return _unknown;
+	}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return null;
-    }
+	@Override
+	public Class getDefaultType() {
+		return null;
+	}
 
 }

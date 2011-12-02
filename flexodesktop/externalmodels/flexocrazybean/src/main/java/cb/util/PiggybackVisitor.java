@@ -25,27 +25,25 @@ import cb.petal.PetalObject;
 import cb.petal.Visitor;
 
 /**
- * Just take a visitor "piggy-backed" and apply it to all petal
- * objects during traversal. This useful when translating petal files
- * to other structures, e.g.,  a converter to Java. This class is
- * related to the Builder pattern; the piggy-backed visitor will
- * usually be a subclass of EmptyVisitor.
- *
+ * Just take a visitor "piggy-backed" and apply it to all petal objects during traversal. This useful when translating petal files to other
+ * structures, e.g., a converter to Java. This class is related to the Builder pattern; the piggy-backed visitor will usually be a subclass
+ * of EmptyVisitor.
+ * 
  * @see EmptyVisitor
- *
+ * 
  * @version $Id: PiggybackVisitor.java,v 1.3 2011/09/12 11:47:29 gpolet Exp $
  * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class PiggybackVisitor extends DescendingVisitor {
-  private Visitor v;
+	private Visitor v;
 
-  public PiggybackVisitor(Visitor v) {
-    this.v = v;
-  }
+	public PiggybackVisitor(Visitor v) {
+		this.v = v;
+	}
 
-  @Override
-public void visitObject(PetalObject obj) {
-    obj.accept(v);
-    super.visitObject(obj);
-  }
+	@Override
+	public void visitObject(PetalObject obj) {
+		obj.accept(v);
+		super.visitObject(obj);
+	}
 }

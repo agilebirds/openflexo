@@ -23,23 +23,20 @@ import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.GraphicalRepresentation;
 
-
-public class MultipleSelectionAction extends MouseClickControlAction
-{
+public class MultipleSelectionAction extends MouseClickControlAction {
 	@Override
-	public MouseClickControlActionType getActionType()
-	{
+	public MouseClickControlActionType getActionType() {
 		return MouseClickControlActionType.MULTIPLE_SELECTION;
 	}
 
 	@Override
-	public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-	{
+	public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
 		if (graphicalRepresentation.getIsSelectable()) {
-			MouseClickControlAction.logger.info("Multiple select "+graphicalRepresentation);
+			MouseClickControlAction.logger.info("Multiple select " + graphicalRepresentation);
 			controller.toogleSelection(graphicalRepresentation);
 			return true;
+		} else {
+			return false;
 		}
-		else return false;
 	}
 }

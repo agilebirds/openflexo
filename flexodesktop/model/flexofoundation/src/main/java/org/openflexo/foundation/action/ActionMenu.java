@@ -25,67 +25,56 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class ActionMenu {
 
-    private ActionGroup _actionGroup;
-    private String _actionMenuName;
-    private Icon _smallIcon;
-   
-    protected ActionMenu (String actionMenuName)
-    {
-        super();
-        _actionMenuName = actionMenuName;
-    }
-    
-    protected ActionMenu (String actionMenuName, Icon icon)
-    {
-        this(actionMenuName);
-        setSmallIcon(icon);
-    }
-    
-    public ActionMenu (String actionMenuName, ActionGroup actionGroup)
-    {
-        this(actionMenuName);
-        setActionGroup(actionGroup);
-    }
-    
-    protected ActionMenu (String actionMenuName, ActionGroup actionGroup, Icon icon)
-    {
-        this(actionMenuName,actionGroup);
-        setSmallIcon(icon);
-    }
-    
-   public String getUnlocalizedName ()
-    {
-        return _actionMenuName;
-    }
+	private ActionGroup _actionGroup;
+	private String _actionMenuName;
+	private Icon _smallIcon;
 
-    public String getLocalizedName ()
-    {
-        return FlexoLocalization.localizedForKey(_actionMenuName);
-    }
+	protected ActionMenu(String actionMenuName) {
+		super();
+		_actionMenuName = actionMenuName;
+	}
 
-    public String getLocalizedDescription ()
-    {
-        return FlexoLocalization.localizedForKey(_actionMenuName+"_description");
-    }
-    
-    public Icon getSmallIcon() 
-    {
-        return _smallIcon;
-    }
+	protected ActionMenu(String actionMenuName, Icon icon) {
+		this(actionMenuName);
+		setSmallIcon(icon);
+	}
 
-    public void setSmallIcon(Icon smallIcon) 
-    {
-        _smallIcon = smallIcon;
-    }
-    
-    public ActionGroup getActionGroup() 
-    {
-        return _actionGroup;
-    }
-    
-    public void setActionGroup(ActionGroup actionGroup) 
-    {
-        _actionGroup = actionGroup;
-    }
-    
+	public ActionMenu(String actionMenuName, ActionGroup actionGroup) {
+		this(actionMenuName);
+		setActionGroup(actionGroup);
+	}
+
+	protected ActionMenu(String actionMenuName, ActionGroup actionGroup, Icon icon) {
+		this(actionMenuName, actionGroup);
+		setSmallIcon(icon);
+	}
+
+	public String getUnlocalizedName() {
+		return _actionMenuName;
+	}
+
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(_actionMenuName);
+	}
+
+	public String getLocalizedDescription() {
+		return FlexoLocalization.localizedForKey(_actionMenuName + "_description");
+	}
+
+	public Icon getSmallIcon() {
+		return _smallIcon;
+	}
+
+	public void setSmallIcon(Icon smallIcon) {
+		_smallIcon = smallIcon;
+	}
+
+	public ActionGroup getActionGroup() {
+		return _actionGroup;
+	}
+
+	public void setActionGroup(ActionGroup actionGroup) {
+		_actionGroup = actionGroup;
+	}
+
 }

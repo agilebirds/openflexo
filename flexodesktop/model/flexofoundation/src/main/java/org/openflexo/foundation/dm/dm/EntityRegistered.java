@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMEntity;
  * 
  * @author sguerin
  */
-public class EntityRegistered extends DMDataModification
-{
+public class EntityRegistered extends DMDataModification {
 
-    public EntityRegistered(DMEntity entity)
-    {
-        super(null, entity);
-    }
+	public EntityRegistered(DMEntity entity) {
+		super(null, entity);
+	}
 }

@@ -23,20 +23,30 @@ import java.util.Vector;
 
 import org.openflexo.foundation.rm.FlexoProject;
 
-
-
 public enum Format {
+	DOCX {
+		@Override
+		public String getPostBuildFileExtension() {
+			return ".docx";
+		}
+
+		@Override
+		public String getPostBuildKey() {
+			return "DOCX";
+		}
+
+	},
 	HTML {
 		@Override
 		public String getPostBuildFileExtension() {
 			return ".zip";
 		}
-		
+
 		@Override
 		public String getPostBuildKey() {
 			return "ZIP";
 		}
-		
+
 	},
 	LATEX {
 		@Override
@@ -48,22 +58,10 @@ public enum Format {
 		public String getPostBuildKey() {
 			return "PDF";
 		}
-		
-	},
-	DOCX {
-		@Override
-		public String getPostBuildFileExtension() {
-			return ".docx";
-		}
 
-		@Override
-		public String getPostBuildKey() {
-			return "DOCX";
-		}
-		
 	},
 	WEBOBJECTS {
-		
+
 		@Override
 		public String getPostBuildFileExtension() {
 			return ".war";
@@ -75,7 +73,7 @@ public enum Format {
 		}
 	},
 	BPEL {
-		
+
 		@Override
 		public String getPostBuildFileExtension() {
 			return ".bpel";
@@ -86,21 +84,26 @@ public enum Format {
 			return "BPEL";
 		}
 	};
-	
+
 	private Format() {
 	}
+
 	public Vector<TargetType> getAvailableTargets(FlexoProject project) {
 		Vector<TargetType> v = new Vector<TargetType>();
-		for (DocType type: project.getDocTypes()){
-			if (type.getAvailableFormats().indexOf(this)>-1)
+		for (DocType type : project.getDocTypes()) {
+			if (type.getAvailableFormats().indexOf(this) > -1) {
 				v.add(type);
+			}
 		}
-		for (CodeType type: CodeType.availableValues()){
-			if (type.getAvailableFormats().indexOf(this)>-1)
+		for (CodeType type : CodeType.availableValues()) {
+			if (type.getAvailableFormats().indexOf(this) > -1) {
 				v.add(type);
+			}
 		}
 		return v;
 	}
+
 	public abstract String getPostBuildFileExtension();
+
 	public abstract String getPostBuildKey();
 }

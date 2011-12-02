@@ -25,56 +25,54 @@ import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
 
 import org.openflexo.fge.geom.FGEEllips;
-import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-
+import org.openflexo.fge.geom.FGERectangle;
 
 public class TestShape {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args)
-	{
-		FGERectangle rectangle = new FGERectangle(0,0,10,10);
+	public static void main(String[] args) {
+		FGERectangle rectangle = new FGERectangle(0, 0, 10, 10);
 		System.out.println("Le rectangle: ");
 		debugShape(rectangle);
 		Area rotatedRectangle = new Area(rectangle);
-		rotatedRectangle.transform(AffineTransform.getRotateInstance(Math.PI/4));
+		rotatedRectangle.transform(AffineTransform.getRotateInstance(Math.PI / 4));
 		System.out.println("Le rectangle qu'a tourne: ");
 		debugShape(rotatedRectangle);
-		FGEEllips circle = new FGEEllips(0,0,10,10,Filling.NOT_FILLED);
+		FGEEllips circle = new FGEEllips(0, 0, 10, 10, Filling.NOT_FILLED);
 		System.out.println("Le cercle: ");
 		debugShape(circle);
 	}
-	
-	private static void debugShape(Shape shape)
-	{
+
+	private static void debugShape(Shape shape) {
 		PathIterator pi = shape.getPathIterator(new AffineTransform());
 		while (!pi.isDone()) {
 			double[] coords = new double[6];
 			int i = pi.currentSegment(coords);
-			String pathType="";
+			String pathType = "";
 			switch (i) {
 			case PathIterator.SEG_LINETO:
-				pathType="SEG_LINETO";
+				pathType = "SEG_LINETO";
 				break;
 			case PathIterator.SEG_MOVETO:
-				pathType="SEG_MOVETO";
+				pathType = "SEG_MOVETO";
 				break;
 			case PathIterator.SEG_CUBICTO:
-				pathType="SEG_CUBICTO";
+				pathType = "SEG_CUBICTO";
 				break;
 			case PathIterator.SEG_QUADTO:
-				pathType="SEG_QUADTO";
+				pathType = "SEG_QUADTO";
 				break;
 			case PathIterator.SEG_CLOSE:
-				pathType="SEG_CLOSE";
+				pathType = "SEG_CLOSE";
 				break;
 			default:
 				break;
 			}
-			System.out.println(pathType+" "+coords[0]+" "+coords[1]+" "+coords[2]+" "+coords[3]+" "+coords[4]+" "+coords[5]);
+			System.out.println(pathType + " " + coords[0] + " " + coords[1] + " " + coords[2] + " " + coords[3] + " " + coords[4] + " "
+					+ coords[5]);
 			pi.next();
 		}
 	}

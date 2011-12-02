@@ -22,7 +22,6 @@ package org.openflexo.doceditor.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -44,71 +43,71 @@ public class RepairTocEntryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RepairTocEntryInitializer(DEControllerActionInitializer actionInitializer)
-	{
-		super(RepairTOCEntry.actionType,actionInitializer);
+	RepairTocEntryInitializer(DEControllerActionInitializer actionInitializer) {
+		super(RepairTOCEntry.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DEControllerActionInitializer)super.getControllerActionInitializer();
+	protected DEControllerActionInitializer getControllerActionInitializer() {
+		return (DEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RepairTOCEntry> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RepairTOCEntry> getDefaultInitializer() {
 		return new FlexoActionInitializer<RepairTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, RepairTOCEntry action)
-			{
+			public boolean run(ActionEvent e, RepairTOCEntry action) {
 				ParameterDefinition pd[] = new ParameterDefinition[4];
-				pd[0] = new RadioButtonListParameter<RepairTOCEntry.FixProposal>("choice","choose",FixProposal.DELETE,FixProposal.values());
-				int i=1;
+				pd[0] = new RadioButtonListParameter<RepairTOCEntry.FixProposal>("choice", "choose", FixProposal.DELETE,
+						FixProposal.values());
+				int i = 1;
 				String PROCESS = FlexoLocalization.localizedForKey("process");
 				String ENTITY = FlexoLocalization.localizedForKey("entity");
-				String[] radios = new String[]{
-						PROCESS,ENTITY
-				}; 
+				String[] radios = new String[] { PROCESS, ENTITY };
 				RadioButtonListParameter<String> radiosParameters = null;
-				if (action.getFocusedObject().getObjectReference()==null) {
-					radiosParameters = new RadioButtonListParameter<String>("object_type","choose_object_type",PROCESS,radios);
+				if (action.getFocusedObject().getObjectReference() == null) {
+					radiosParameters = new RadioButtonListParameter<String>("object_type", "choose_object_type", PROCESS, radios);
 					pd[i] = radiosParameters;
 					i++;
 				}
-				if (action.getFocusedObject().getObjectReference()==null || action.getFocusedObject().getObjectReference().getClassName().equals(FlexoProcess.class.getName())) {
-					pd[i] = new ProcessParameter("object","process",null);
+				if (action.getFocusedObject().getObjectReference() == null
+						|| action.getFocusedObject().getObjectReference().getClassName().equals(FlexoProcess.class.getName())) {
+					pd[i] = new ProcessParameter("object", "process", null);
 					pd[i].setDepends("choice");
-					pd[i].setConditional("choice="+FixProposal.CHOOSE_OTHER_OBJECT);
-					if (radiosParameters!=null) {
+					pd[i].setConditional("choice=" + FixProposal.CHOOSE_OTHER_OBJECT);
+					if (radiosParameters != null) {
 						pd[i].setDepends("object_type");
-						pd[i].setConditional("object_type="+PROCESS);
+						pd[i].setConditional("object_type=" + PROCESS);
 					}
 					i++;
 				}
-				if (action.getFocusedObject().getObjectReference()==null || action.getFocusedObject().getObjectReference()==null || action.getFocusedObject().getObjectReference().getClassName().equals(DMEOEntity.class.getName())) {
-					pd[i] = new DMEOEntityParameter("object","entity",null);
+				if (action.getFocusedObject().getObjectReference() == null || action.getFocusedObject().getObjectReference() == null
+						|| action.getFocusedObject().getObjectReference().getClassName().equals(DMEOEntity.class.getName())) {
+					pd[i] = new DMEOEntityParameter("object", "entity", null);
 					pd[i].setDepends("choice");
-					pd[i].setConditional("choice="+FixProposal.CHOOSE_OTHER_OBJECT);
-					if (radiosParameters!=null) {
+					pd[i].setConditional("choice=" + FixProposal.CHOOSE_OTHER_OBJECT);
+					if (radiosParameters != null) {
 						pd[i].setDepends("object_type");
-						pd[i].setConditional("object_type="+ENTITY);
+						pd[i].setConditional("object_type=" + ENTITY);
 					}
 					i++;
 				}
-				AskParametersDialog d = AskParametersDialog.createAskParametersDialog(getProject(),getController().getFlexoFrame(),FlexoLocalization.localizedForKey("repair_toc_entry"), FlexoLocalization.localizedForKey("choose_how_to_repair"), pd);
-				if (d.getStatus()==AskParametersDialog.VALIDATE) {
-					if (pd[0].getValue()==FixProposal.CHOOSE_OTHER_OBJECT && pd[1].getValue()==null) {
+				AskParametersDialog d = AskParametersDialog.createAskParametersDialog(getProject(), getController().getFlexoFrame(),
+						FlexoLocalization.localizedForKey("repair_toc_entry"), FlexoLocalization.localizedForKey("choose_how_to_repair"),
+						pd);
+				if (d.getStatus() == AskParametersDialog.VALIDATE) {
+					if (pd[0].getValue() == FixProposal.CHOOSE_OTHER_OBJECT && pd[1].getValue() == null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("you_must_choose_an_object"));
 						return false;
 					}
 					action.setChoice((FixProposal) pd[0].getValue());
-					if (pd[0].getValue()==FixProposal.CHOOSE_OTHER_OBJECT){
+					if (pd[0].getValue() == FixProposal.CHOOSE_OTHER_OBJECT) {
 						FlexoModelObject newObject = null;
-							for(int k=1;k<pd.length;k++){
-								if(pd[k]!=null && pd[k].getValue() instanceof FlexoModelObject)
-									newObject = (FlexoModelObject)pd[k].getValue();
+						for (int k = 1; k < pd.length; k++) {
+							if (pd[k] != null && pd[k].getValue() instanceof FlexoModelObject) {
+								newObject = (FlexoModelObject) pd[k].getValue();
 							}
+						}
 						action.setModelObject(newObject);
 					}
 					return true;
@@ -119,12 +118,10 @@ public class RepairTocEntryInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RepairTOCEntry> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RepairTOCEntry> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RepairTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, RepairTOCEntry action)
-			{
+			public boolean run(ActionEvent e, RepairTOCEntry action) {
 				return true;
 			}
 		};

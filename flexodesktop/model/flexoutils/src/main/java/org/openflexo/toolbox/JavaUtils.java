@@ -71,8 +71,8 @@ public class JavaUtils {
 
 	/**
 	 * Transform the specified <code>value</code> to be used as a java package name. <br>
-	 * Basically, it will replace all '/' or '\' by '.', remove all special/whiteSpace characters (except .), ensure it contains only lower
-	 * case and ensure each part doesn't start with a number.
+	 * Basically, it will remove all special/whiteSpace characters (except .), ensure it contains only lower case and ensure each part
+	 * doesn't start with a number.
 	 * 
 	 * @param value
 	 *            the string to transform, can be null, in such case null is returned

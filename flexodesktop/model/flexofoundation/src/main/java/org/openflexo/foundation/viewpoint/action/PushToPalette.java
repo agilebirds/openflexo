@@ -26,50 +26,43 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.toolbox.StringUtils;
 
+public class PushToPalette extends FlexoAction<PushToPalette, ExampleDrawingShape, ExampleDrawingObject> {
 
-public class PushToPalette extends FlexoAction<PushToPalette,ExampleDrawingShape,ExampleDrawingObject> 
-{
+	private static final Logger logger = Logger.getLogger(PushToPalette.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(PushToPalette.class.getPackage().getName());
-    
-    public static FlexoActionType<PushToPalette,ExampleDrawingShape,ExampleDrawingObject>  actionType 
-    = new FlexoActionType<PushToPalette,ExampleDrawingShape,ExampleDrawingObject> (
-    		"push_to_palette",
-			FlexoActionType.defaultGroup,
-			FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<PushToPalette, ExampleDrawingShape, ExampleDrawingObject> actionType = new FlexoActionType<PushToPalette, ExampleDrawingShape, ExampleDrawingObject>(
+			"push_to_palette", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public PushToPalette makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
-        {
-            return new PushToPalette(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public PushToPalette makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection,
+				FlexoEditor editor) {
+			return new PushToPalette(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) 
-        {
-            return (shape != null && shape.getCalc().getPalettes().size() > 0);
-        }
-                
-    };
-    
+		@Override
+		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+			return (shape != null && shape.getCalc().getPalettes().size() > 0);
+		}
+
+	};
+
 	static {
-		FlexoModelObject.addActionForClass (PushToPalette.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass(PushToPalette.actionType, ExampleDrawingShape.class);
 	}
 
 	public Object graphicalRepresentation;
@@ -79,33 +72,27 @@ public class PushToPalette extends FlexoAction<PushToPalette,ExampleDrawingShape
 
 	private ViewPointPaletteElement _newPaletteElement;
 
-	PushToPalette (ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	PushToPalette(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-     @Override
-	protected void doAction(Object context)
-     {
-    	 logger.info ("Push to palette");
-    	 if (getFocusedObject() != null 
-    			 && palette != null)  {
-    		 
-    		 _newPaletteElement = palette.addPaletteElement(newElementName, getFocusedObject().getGraphicalRepresentation());
-    		 _newPaletteElement.setEditionPattern(editionPattern);
-    	 }
-    	 else {
-    		 logger.warning("Focused role is null !");
-    	 }
-     }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Push to palette");
+		if (getFocusedObject() != null && palette != null) {
 
-    public ViewPointPaletteElement getNewPaletteElement()
-	{
+			_newPaletteElement = palette.addPaletteElement(newElementName, getFocusedObject().getGraphicalRepresentation());
+			_newPaletteElement.setEditionPattern(editionPattern);
+		} else {
+			logger.warning("Focused role is null !");
+		}
+	}
+
+	public ViewPointPaletteElement getNewPaletteElement() {
 		return _newPaletteElement;
 	}
-    
-    public boolean isValid()
-    {
-    	return StringUtils.isNotEmpty(newElementName) && palette != null && editionPattern != null;
-    }
+
+	public boolean isValid() {
+		return StringUtils.isNotEmpty(newElementName) && palette != null && editionPattern != null;
+	}
 }

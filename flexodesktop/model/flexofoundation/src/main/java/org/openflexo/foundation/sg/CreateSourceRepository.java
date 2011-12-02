@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
@@ -37,8 +36,7 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModelDefinition;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateSourceRepository extends AbstractGCAction<CreateSourceRepository, CGObject>
-{
+public class CreateSourceRepository extends AbstractGCAction<CreateSourceRepository, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateSourceRepository.class.getPackage().getName());
 
@@ -49,21 +47,18 @@ public class CreateSourceRepository extends AbstractGCAction<CreateSourceReposit
 		 * Factory method
 		 */
 		@Override
-		public CreateSourceRepository makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-		{
+		public CreateSourceRepository makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
 			return new CreateSourceRepository(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection)
-		{
+		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection)
-		{
-			return ((object != null) && (object.getGeneratedCode()  instanceof GeneratedSources));
+		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+			return ((object != null) && (object.getGeneratedCode() instanceof GeneratedSources));
 		}
 
 	};
@@ -74,26 +69,22 @@ public class CreateSourceRepository extends AbstractGCAction<CreateSourceReposit
 	public File newSourceRepositoryDirectory;
 	public ImplementationModelDefinition implementationModel;
 	public boolean createNewImplementationModel;
-    public String newImplementationModelName;
-    public String newImplementationModelDescription;
+	public String newImplementationModelName;
+	public String newImplementationModelDescription;
 
-	CreateSourceRepository(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-	{
+	CreateSourceRepository(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException, MissingReaderRepositoryException, InvalidReaderRepositoryException
-	{
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException, MissingReaderRepositoryException,
+			InvalidReaderRepositoryException {
 		logger.info("Add SourceRepository " + getFocusedObject());
-		if (getFocusedObject().getGeneratedCode() != null) 
-		{
+		if (getFocusedObject().getGeneratedCode() != null) {
 			GeneratedOutput gc = getFocusedObject().getGeneratedCode();
-			if (gc instanceof GeneratedSources) 
-			{
+			if (gc instanceof GeneratedSources) {
 				if (createNewImplementationModel) {
-					CreateImplementationModel createImplementationModel
-					= CreateImplementationModel.actionType.makeNewEmbeddedAction(
+					CreateImplementationModel createImplementationModel = CreateImplementationModel.actionType.makeNewEmbeddedAction(
 							(GeneratedSources) gc, null, this);
 					createImplementationModel.newModelName = newImplementationModelName;
 					createImplementationModel.newModelDescription = newImplementationModelDescription;
@@ -101,7 +92,7 @@ public class CreateSourceRepository extends AbstractGCAction<CreateSourceReposit
 					createImplementationModel.doAction();
 					implementationModel = createImplementationModel.getNewImplementationModelDefinition();
 				}
-				
+
 				_newSourceRepository = new SourceRepository((GeneratedSources) gc, newSourceRepositoryName, newSourceRepositoryDirectory);
 				_newSourceRepository.setImplementationModel(implementationModel.getImplementationModel());
 				getFocusedObject().getGeneratedCode().addToGeneratedRepositories(_newSourceRepository);
@@ -110,47 +101,44 @@ public class CreateSourceRepository extends AbstractGCAction<CreateSourceReposit
 		}
 	}
 
-	public Vector<ImplementationModelDefinition> getImplementationModels()
-	{
+	public Vector<ImplementationModelDefinition> getImplementationModels() {
 		return getFocusedObject().getProject().getGeneratedSources().getImplementationModels();
 	}
-	
-	public SourceRepository getNewSourceRepository()
-	{
+
+	public SourceRepository getNewSourceRepository() {
 		return _newSourceRepository;
 	}
-	
+
 	public String errorMessage;
-	
-	public boolean isValid()
-	{
-    	if (StringUtils.isEmpty(newSourceRepositoryName)) {
+
+	public boolean isValid() {
+		if (StringUtils.isEmpty(newSourceRepositoryName)) {
 			errorMessage = FlexoLocalization.localizedForKey("no_source_repository_name_defined");
 			return false;
 		}
-    	
-        if (getFocusedObject().getProject().getExternalRepositoryWithKey(newSourceRepositoryName) != null) {
+
+		if (getFocusedObject().getProject().getExternalRepositoryWithKey(newSourceRepositoryName) != null) {
 			errorMessage = FlexoLocalization.localizedForKey("a_source_repository_with_that_name_already_exists");
 			return false;
-       }
- 
-        if (newSourceRepositoryDirectory == null) {
+		}
+
+		if (newSourceRepositoryDirectory == null) {
 			errorMessage = FlexoLocalization.localizedForKey("no_directory_defined");
 			return false;
-        }
-        
-    	if (implementationModel == null) {
-    		if (createNewImplementationModel) {
-    			if (StringUtils.isEmpty(newImplementationModelName)) {
-    				errorMessage = FlexoLocalization.localizedForKey("no_implementation_model_name_defined");
-    				return false;
-    			}
-    			return true;
-    		}
-    		errorMessage = FlexoLocalization.localizedForKey("no_implementation_model_defined");
-    		return false;
 		}
-    	   	
+
+		if (implementationModel == null) {
+			if (createNewImplementationModel) {
+				if (StringUtils.isEmpty(newImplementationModelName)) {
+					errorMessage = FlexoLocalization.localizedForKey("no_implementation_model_name_defined");
+					return false;
+				}
+				return true;
+			}
+			errorMessage = FlexoLocalization.localizedForKey("no_implementation_model_defined");
+			return false;
+		}
+
 		return true;
 	}
 

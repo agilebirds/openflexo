@@ -24,8 +24,6 @@ import java.io.File;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.FlexoResourceGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFile;
-
 
 public class LocalizationFile extends TextFile implements GenerationAvailableFile {
 
@@ -43,14 +41,12 @@ public class LocalizationFile extends TextFile implements GenerationAvailableFil
 	}
 
 	@Override
-	public LocalizationFileResource getFlexoResource()
-    {
-        return (LocalizationFileResource)super.getFlexoResource();
-    }
+	public LocalizationFileResource getFlexoResource() {
+		return (LocalizationFileResource) super.getFlexoResource();
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
+	public FlexoResourceGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
 }

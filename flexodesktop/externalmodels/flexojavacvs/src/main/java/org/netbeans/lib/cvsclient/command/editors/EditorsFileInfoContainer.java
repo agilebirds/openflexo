@@ -27,36 +27,37 @@ import org.netbeans.lib.cvsclient.command.FileInfoContainer;
 
 /**
  * Data object created by parsing the output of the Editors command.
- * @author  Thomas Singer
+ * 
+ * @author Thomas Singer
  */
 public class EditorsFileInfoContainer extends FileInfoContainer {
 
-    private final String client;
-    private final Date date;
-    private final File file;
-    private final String user;
+	private final String client;
+	private final Date date;
+	private final File file;
+	private final String user;
 
-    EditorsFileInfoContainer(File file, String user, Date date, String client) {
-        this.file = file;
-        this.user = user;
-        this.date = date;
-        this.client = client;
-    }
+	EditorsFileInfoContainer(File file, String user, Date date, String client) {
+		this.file = file;
+		this.user = user;
+		this.date = date;
+		this.client = client;
+	}
 
-    @Override
+	@Override
 	public File getFile() {
-        return file;
-    }
+		return file;
+	}
 
-    public String getClient() {
-        return client;
-    }
+	public String getClient() {
+		return client;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public String getUser() {
-        return user;
-    }
+	public String getUser() {
+		return user;
+	}
 }

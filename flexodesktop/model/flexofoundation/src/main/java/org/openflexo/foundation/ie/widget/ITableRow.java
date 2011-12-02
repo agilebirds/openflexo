@@ -26,71 +26,67 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.operator.IEOperator;
 import org.openflexo.foundation.ie.util.TRCSSType;
 
+public interface ITableRow extends IWidget {
 
-public interface ITableRow extends IWidget
-{
-
-    @Override
+	@Override
 	public void setParent(IEObject object);
-    
-    public IEHTMLTableWidget htmlTable();
 
-    @Override
+	public IEHTMLTableWidget htmlTable();
+
+	@Override
 	public int getIndex();
 
-    @Override
+	@Override
 	public void setIndex(int i);
 
-    public Color getBackgroundColor();
+	public Color getBackgroundColor();
 
-    public TRCSSType getTRCssType();
+	public TRCSSType getTRCssType();
 
-    @Override
+	@Override
 	public void delete();
 
-    public IESequenceTR getSequenceTR();
-    
-    public IEOperator getOperator();
+	public IESequenceTR getSequenceTR();
 
-    public int getColCount();
+	public IEOperator getOperator();
 
-    public int getRowCount();
+	public int getColCount();
 
-    public IETRWidget getFirstTR();
+	public int getRowCount();
 
-    public IESequenceTR findNextRepeatedSequence();
+	public IETRWidget getFirstTR();
 
-    public Vector<IETDWidget> getAllTD();
+	public IESequenceTR findNextRepeatedSequence();
 
-    public Vector<IETRWidget> getAllTR();
+	public Vector<IETDWidget> getAllTD();
 
-    public boolean containsTD(IETDWidget widget);
-    
+	public Vector<IETRWidget> getAllTR();
+
+	public boolean containsTD(IETDWidget widget);
+
 	public Vector<IETextFieldWidget> getAllDateTextfields();
 
 	public int getSequenceDepth();
-    /**
-     * This methods sets an index (equivalent to the yLocation) on each TR of a
-     * table. Each time an IETRWidget is found, we set the currentIndex as its
-     * index and we increment the currendIndex. SequenceTR will call recursively
-     * this method on its children.
-     * 
-     * @param currentIndex
-     */
-    public void setTRRowIndex(Incrementer currentIndex);
 
-    /**
-     * This method is called at the end of deserialization of a table so that
-     * all the TD's located in this TR create and insert all the SpannedTD they
-     * require (according to their colspan/rowspan)
-     * 
-     */
-    public void insertSpannedTD();
-    
-    public void simplifySequenceTree();
-    
+	/**
+	 * This methods sets an index (equivalent to the yLocation) on each TR of a table. Each time an IETRWidget is found, we set the
+	 * currentIndex as its index and we increment the currendIndex. SequenceTR will call recursively this method on its children.
+	 * 
+	 * @param currentIndex
+	 */
+	public void setTRRowIndex(Incrementer currentIndex);
+
+	/**
+	 * This method is called at the end of deserialization of a table so that all the TD's located in this TR create and insert all the
+	 * SpannedTD they require (according to their colspan/rowspan)
+	 * 
+	 */
+	public void insertSpannedTD();
+
+	public void simplifySequenceTree();
+
 	public Vector<IESequenceTab> getAllTabContainers();
 
-	//public void setParentOfSingleWidgetComponentInstance(IEHTMLTableWidget htmlTable);
-	
+	// public void setParentOfSingleWidgetComponentInstance(IEHTMLTableWidget htmlTable);
+
 }

@@ -33,204 +33,178 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
  * Represents a label widget
  * 
  * @author bmangez
  */
-public class IELabelWidget extends IENonEditableTextWidget
-{
+public class IELabelWidget extends IENonEditableTextWidget {
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
+	/**
      * 
      */
-    public static final String LABEL_WIDGET = "label_widget";
+	public static final String LABEL_WIDGET = "label_widget";
 
-    public IELabelWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	public IELabelWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public IELabelWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-        this.setTextCSSClass(TextCSSClass.BLOC_BODY_TITLE);
-    }
+	public IELabelWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+		this.setTextCSSClass(TextCSSClass.BLOC_BODY_TITLE);
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return "Label.inspector";
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return "Label.inspector";
+	}
 
-    public boolean endsWidthSemiColon() {
-    	return getValue()!=null && getValue().trim().endsWith(":");
-    }
-    
-    @Override
+	public boolean endsWidthSemiColon() {
+		return getValue() != null && getValue().trim().endsWith(":");
+	}
+
+	@Override
 	public String getDefaultValue() {
 		return "Label: ";
 	}
-    
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        return EMPTY_IOBJECT_VECTOR;
-    }
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Label";
-    }
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		return EMPTY_IOBJECT_VECTOR;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return LABEL_WIDGET;
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "Label";
+	}
 
-    public static class LabelDontHaveDoubleDoubleDot extends ValidationRule
-    {
-        public LabelDontHaveDoubleDoubleDot()
-        {
-            super(IELabelWidget.class, "usually_labels_dont_have_double_double_dot");
-        }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return LABEL_WIDGET;
+	}
 
-        @Override
-		public ValidationIssue applyValidation(final Validable object)
-        {
-            final IELabelWidget label = (IELabelWidget) object;
-            if ((label.getValue() != null) && label.getValue().trim().endsWith(":")
-                    && label.getValue().indexOf(":") != label.getValue().lastIndexOf(":")) {
-                ValidationWarning error = new ValidationWarning(this, object, "usually_labels_dont_have_double_double_dot");
+	public static class LabelDontHaveDoubleDoubleDot extends ValidationRule {
+		public LabelDontHaveDoubleDoubleDot() {
+			super(IELabelWidget.class, "usually_labels_dont_have_double_double_dot");
+		}
 
-                error.addToFixProposals(new RemoveEndingDoubleDot(label));
-                return error;
-            }
-            return null;
-        }
+		@Override
+		public ValidationIssue applyValidation(final Validable object) {
+			final IELabelWidget label = (IELabelWidget) object;
+			if ((label.getValue() != null) && label.getValue().trim().endsWith(":")
+					&& label.getValue().indexOf(":") != label.getValue().lastIndexOf(":")) {
+				ValidationWarning error = new ValidationWarning(this, object, "usually_labels_dont_have_double_double_dot");
 
-    }
+				error.addToFixProposals(new RemoveEndingDoubleDot(label));
+				return error;
+			}
+			return null;
+		}
 
-    public static class RemoveEndingDoubleDot extends FixProposal
-    {
-        public IELabelWidget lab;
+	}
 
-        public RemoveEndingDoubleDot(IELabelWidget label)
-        {
-            super("remove_ending_double_dot");
-            lab = label;
+	public static class RemoveEndingDoubleDot extends FixProposal {
+		public IELabelWidget lab;
 
-        }
+		public RemoveEndingDoubleDot(IELabelWidget label) {
+			super("remove_ending_double_dot");
+			lab = label;
 
-        @Override
-		protected void fixAction()
-        {
-            lab.setValue(lab.getValue().trim().substring(0, lab.getValue().trim().length() - 1));
-        }
-    }
+		}
 
-    public static class LabelHaveAtLeastOneDoubleDot extends ValidationRule
-    {
-        public LabelHaveAtLeastOneDoubleDot()
-        {
-            super(IELabelWidget.class, "usually_labels_ends_with_double_dot");
-        }
+		@Override
+		protected void fixAction() {
+			lab.setValue(lab.getValue().trim().substring(0, lab.getValue().trim().length() - 1));
+		}
+	}
 
-        @Override
-		public ValidationIssue applyValidation(final Validable object)
-        {
-            final IELabelWidget label = (IELabelWidget) object;
-            if ((label.getValue() != null) && label.getValue().indexOf(":") == -1) {
-                ValidationWarning error = new ValidationWarning(this, object, "usually_labels_ends_with_double_dot");
+	public static class LabelHaveAtLeastOneDoubleDot extends ValidationRule {
+		public LabelHaveAtLeastOneDoubleDot() {
+			super(IELabelWidget.class, "usually_labels_ends_with_double_dot");
+		}
 
-                error.addToFixProposals(new AddingDoubleDot(label));
-                return error;
-            }
-            return null;
-        }
+		@Override
+		public ValidationIssue applyValidation(final Validable object) {
+			final IELabelWidget label = (IELabelWidget) object;
+			if ((label.getValue() != null) && label.getValue().indexOf(":") == -1) {
+				ValidationWarning error = new ValidationWarning(this, object, "usually_labels_ends_with_double_dot");
 
-    }
+				error.addToFixProposals(new AddingDoubleDot(label));
+				return error;
+			}
+			return null;
+		}
 
-    public static class AddingDoubleDot extends FixProposal
-    {
-        public IELabelWidget lab;
+	}
 
-        public AddingDoubleDot(IELabelWidget label)
-        {
-            super("adding_double_dot");
-            lab = label;
+	public static class AddingDoubleDot extends FixProposal {
+		public IELabelWidget lab;
 
-        }
+		public AddingDoubleDot(IELabelWidget label) {
+			super("adding_double_dot");
+			lab = label;
 
-        @Override
-		protected void fixAction()
-        {
-            if (lab.getValue().endsWith(" "))
-                lab.setValue(lab.getValue().trim() + ":");
-            else
-                lab.setValue(lab.getValue() + ":");
-        }
-    }
+		}
 
-    public static class NoWhiteSpaceBeforeDoubleDot extends ValidationRule
-    {
-        public NoWhiteSpaceBeforeDoubleDot()
-        {
-            super(IELabelWidget.class, "usually_labels_dont_have_white_space_before_double_dot");
-        }
+		@Override
+		protected void fixAction() {
+			if (lab.getValue().endsWith(" ")) {
+				lab.setValue(lab.getValue().trim() + ":");
+			} else {
+				lab.setValue(lab.getValue() + ":");
+			}
+		}
+	}
 
-        @Override
-		public ValidationIssue applyValidation(final Validable object)
-        {
-            final IELabelWidget label = (IELabelWidget) object;
-            if ((label.getValue() != null) && label.getValue().trim().endsWith(" :")) {
-                ValidationWarning error = new ValidationWarning(this, object, "usually_labels_dont_have_white_space_before_double_dot");
+	public static class NoWhiteSpaceBeforeDoubleDot extends ValidationRule {
+		public NoWhiteSpaceBeforeDoubleDot() {
+			super(IELabelWidget.class, "usually_labels_dont_have_white_space_before_double_dot");
+		}
 
-                error.addToFixProposals(new RemoveSpaceBeforeDoubleDot(label));
-                return error;
-            }
-            return null;
-        }
+		@Override
+		public ValidationIssue applyValidation(final Validable object) {
+			final IELabelWidget label = (IELabelWidget) object;
+			if ((label.getValue() != null) && label.getValue().trim().endsWith(" :")) {
+				ValidationWarning error = new ValidationWarning(this, object, "usually_labels_dont_have_white_space_before_double_dot");
 
-    }
+				error.addToFixProposals(new RemoveSpaceBeforeDoubleDot(label));
+				return error;
+			}
+			return null;
+		}
 
-    public static class RemoveSpaceBeforeDoubleDot extends FixProposal
-    {
-        public IELabelWidget lab;
+	}
 
-        public RemoveSpaceBeforeDoubleDot(IELabelWidget label)
-        {
-            super("remove_space_before_double_dot");
-            lab = label;
+	public static class RemoveSpaceBeforeDoubleDot extends FixProposal {
+		public IELabelWidget lab;
 
-        }
+		public RemoveSpaceBeforeDoubleDot(IELabelWidget label) {
+			super("remove_space_before_double_dot");
+			lab = label;
 
-        @Override
-		protected void fixAction()
-        {
-            String trimed = lab.getValue().trim();
-            lab.setValue(trimed.substring(0, trimed.length() - 2) + ":");
-        }
-    }
+		}
+
+		@Override
+		protected void fixAction() {
+			String trimed = lab.getValue().trim();
+			lab.setValue(trimed.substring(0, trimed.length() - 2) + ":");
+		}
+	}
 
 }

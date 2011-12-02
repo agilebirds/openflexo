@@ -25,12 +25,10 @@ package org.openflexo.foundation.validation;
  * @author sguerin
  * 
  */
-public class ValidationFinishedNotification extends ValidationNotification
-{
+public class ValidationFinishedNotification extends ValidationNotification {
 
-    public ValidationFinishedNotification(Validable rootObject)
-    {
-        super(rootObject);
-    }
+	public ValidationFinishedNotification(Validable rootObject) {
+		super(rootObject);
+	}
 
 }

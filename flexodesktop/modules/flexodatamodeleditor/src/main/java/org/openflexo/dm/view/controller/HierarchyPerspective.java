@@ -38,9 +38,7 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-
-class HierarchyPerspective extends DMPerspective<DMObject>
-{
+class HierarchyPerspective extends DMPerspective<DMObject> {
 
 	private final DMController _controller;
 
@@ -49,95 +47,87 @@ class HierarchyPerspective extends DMPerspective<DMObject>
 	private final DMBrowserView _browserView;
 	private final DMBrowserView propertiesBrowserView;
 	private final JPanel leftView;
-	
- 	/**
-	 * @param controller TODO
+
+	/**
+	 * @param controller
+	 *            TODO
 	 * @param name
 	 */
-	public HierarchyPerspective(DMController controller)
-	{
-		super("hierarchy_perspective",controller);
+	public HierarchyPerspective(DMController controller) {
+		super("hierarchy_perspective", controller);
 		_controller = controller;
 		_browser = new DMBrowser(controller);
 		_browser.setDMViewMode(DMViewMode.Hierarchy);
 		_browserView = new DMBrowserView(_browser, _controller) {
-   		    @Override
-			public void objectAddedToSelection(ObjectAddedToSelectionEvent event)
-		    {
-		    	if (event.getAddedObject() instanceof DMEntity) {
-		    		propertiesBrowser.deleteBrowserListener(this); 		            
-		    		propertiesBrowser.setRepresentedEntity((DMEntity)event.getAddedObject());
-		    		propertiesBrowser.update();
-		    		propertiesBrowser.addBrowserListener(this); 		            
-		    	}
-		    	super.objectAddedToSelection(event);
-		    }			
+			@Override
+			public void objectAddedToSelection(ObjectAddedToSelectionEvent event) {
+				if (event.getAddedObject() instanceof DMEntity) {
+					propertiesBrowser.deleteBrowserListener(this);
+					propertiesBrowser.setRepresentedEntity((DMEntity) event.getAddedObject());
+					propertiesBrowser.update();
+					propertiesBrowser.addBrowserListener(this);
+				}
+				super.objectAddedToSelection(event);
+			}
 		};
 		propertiesBrowser = new PropertiesBrowser(controller);
 		propertiesBrowserView = new DMBrowserView(propertiesBrowser, controller);
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,_browserView,propertiesBrowserView);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, propertiesBrowserView);
 		splitPane.setDividerLocation(0.7);
 		splitPane.setResizeWeight(0.7);
 		leftView = new JPanel(new BorderLayout());
-		leftView.add(splitPane,BorderLayout.CENTER);
-		leftView.add(searchPanel,BorderLayout.NORTH);
+		leftView.add(splitPane, BorderLayout.CENTER);
+		leftView.add(searchPanel, BorderLayout.NORTH);
 	}
 
-   	@Override
-	public boolean doesPerspectiveControlLeftView() 
-	{
+	@Override
+	public boolean doesPerspectiveControlLeftView() {
 		return true;
 	}
 
 	@Override
-	public JComponent getLeftView() 
-	{
+	public JComponent getLeftView() {
 		return leftView;
 	}
 
-    /**
-     * Overrides getIcon
-     * 
-     * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
-     */
-    @Override
-	public ImageIcon getActiveIcon()
-    {
-        return DMEIconLibrary.DME_HP_ACTIVE_ICON;
-    }
+	/**
+	 * Overrides getIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 */
+	@Override
+	public ImageIcon getActiveIcon() {
+		return DMEIconLibrary.DME_HP_ACTIVE_ICON;
+	}
 
-    /**
-     * Overrides getSelectedIcon
-     * 
-     * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-     */
-    @Override
-	public ImageIcon getSelectedIcon()
-    {
-        return DMEIconLibrary.DME_HP_SELECTED_ICON;
-    }
+	/**
+	 * Overrides getSelectedIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 */
+	@Override
+	public ImageIcon getSelectedIcon() {
+		return DMEIconLibrary.DME_HP_SELECTED_ICON;
+	}
 
-    @Override
-    public DMObject getDefaultObject(FlexoModelObject proposedObject) 
-    {
-    	if ((proposedObject instanceof DMObject) && hasModuleViewForObject(proposedObject)) {
-			return (DMObject)proposedObject;
+	@Override
+	public DMObject getDefaultObject(FlexoModelObject proposedObject) {
+		if ((proposedObject instanceof DMObject) && hasModuleViewForObject(proposedObject)) {
+			return (DMObject) proposedObject;
 		}
-    	return null;
-    }
-    
-    @Override
-    public boolean hasModuleViewForObject(FlexoModelObject object)
-    {
-    	// Only DMProperty or Diagrams objects have no module view representation
-    	return !(object instanceof DMProperty) && !(object instanceof ERDiagram);
-    }
+		return null;
+	}
 
-    @Override
-    public ModuleView<DMObject> createModuleViewForObject(DMObject object, FlexoController controller) 
-    {
-        return _controller.createDMView(object);
-    }
+	@Override
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
+		// Only DMProperty or Diagrams objects have no module view representation
+		return !(object instanceof DMProperty) && !(object instanceof ERDiagram);
+	}
+
+	@Override
+	public ModuleView<DMObject> createModuleViewForObject(DMObject object, FlexoController controller) {
+		return _controller.createDMView(object);
+	}
 
 	@Override
 	protected boolean browserMayRepresent(DMEntity entity) {
@@ -146,7 +136,7 @@ class HierarchyPerspective extends DMPerspective<DMObject>
 
 	@Override
 	protected void changeBrowserFiltersFor(DMEntity entity) {
-		
+
 	}
-    
- }
+
+}

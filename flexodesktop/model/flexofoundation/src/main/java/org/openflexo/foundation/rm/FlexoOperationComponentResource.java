@@ -30,135 +30,126 @@ import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class FlexoOperationComponentResource extends FlexoComponentResource implements Serializable
-{
+public class FlexoOperationComponentResource extends FlexoComponentResource implements Serializable {
 
 	private static final Logger logger = Logger.getLogger(FlexoOperationComponentResource.class.getPackage().getName());
-    
+
 	// Deprecated: kept for backward compatibility. Never use it !
-    protected Vector _thumbnailResources;
+	protected Vector _thumbnailResources;
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public FlexoOperationComponentResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-    }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public FlexoOperationComponentResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public FlexoOperationComponentResource(FlexoProject aProject)
-    {
-        super(aProject);
-        _thumbnailResources = new Vector();
-    }
+	public FlexoOperationComponentResource(FlexoProject aProject) {
+		super(aProject);
+		_thumbnailResources = new Vector();
+	}
 
-    public FlexoOperationComponentResource(FlexoProject aProject, String aName, FlexoComponentLibraryResource libResource, FlexoProjectFile componentFile) throws InvalidFileNameException
-    {
-        super(aProject, aName, libResource, componentFile);
-        _thumbnailResources = new Vector();
-    }
+	public FlexoOperationComponentResource(FlexoProject aProject, String aName, FlexoComponentLibraryResource libResource,
+			FlexoProjectFile componentFile) throws InvalidFileNameException {
+		super(aProject, aName, libResource, componentFile);
+		_thumbnailResources = new Vector();
+	}
 
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.OPERATION_COMPONENT;
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.OPERATION_COMPONENT;
+	}
 
-    public IEOperationComponent getIEOperationComponent()
-    {
-        return (IEOperationComponent) getResourceData();
-    }
+	public IEOperationComponent getIEOperationComponent() {
+		return (IEOperationComponent) getResourceData();
+	}
 
-    /**
-     * Deprecated: kept for backward compatibility. Never use it !
-     * 
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-	public Vector getThumbnailResources()
-    {
-        return _thumbnailResources;
-    }
+	/**
+	 * Deprecated: kept for backward compatibility. Never use it !
+	 * 
+	 * @deprecated
+	 * @return
+	 */
+	@Deprecated
+	public Vector getThumbnailResources() {
+		return _thumbnailResources;
+	}
 
-    /**
-     * Deprecated: kept for backward compatibility. Never use it !
-     * 
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-	public void setThumbnailResources(Vector resources)
-    {
-        _thumbnailResources = resources;
-    }
+	/**
+	 * Deprecated: kept for backward compatibility. Never use it !
+	 * 
+	 * @deprecated
+	 * @return
+	 */
+	@Deprecated
+	public void setThumbnailResources(Vector resources) {
+		_thumbnailResources = resources;
+	}
 
-    /**
-     * Deprecated: kept for backward compatibility. Never use it !
-     * 
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-	public void addToThumbnailResources(FlexoTabComponentResource thumbnailComponentResource)
-    {
-        _thumbnailResources.add(thumbnailComponentResource);
-        if (!getDependantResources().contains(thumbnailComponentResource)) {
-            addToDependantResources(thumbnailComponentResource);
-        }
-    }
+	/**
+	 * Deprecated: kept for backward compatibility. Never use it !
+	 * 
+	 * @deprecated
+	 * @return
+	 */
+	@Deprecated
+	public void addToThumbnailResources(FlexoTabComponentResource thumbnailComponentResource) {
+		_thumbnailResources.add(thumbnailComponentResource);
+		if (!getDependantResources().contains(thumbnailComponentResource)) {
+			addToDependantResources(thumbnailComponentResource);
+		}
+	}
 
-    /**
-     * Deprecated: kept for backward compatibility. Never use it !
-     * 
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-	public void removeFromThumbnailResources(FlexoTabComponentResource thumbnailComponentResource)
-    {
-        _thumbnailResources.remove(thumbnailComponentResource);
-    }
+	/**
+	 * Deprecated: kept for backward compatibility. Never use it !
+	 * 
+	 * @deprecated
+	 * @return
+	 */
+	@Deprecated
+	public void removeFromThumbnailResources(FlexoTabComponentResource thumbnailComponentResource) {
+		_thumbnailResources.remove(thumbnailComponentResource);
+	}
 
-    private OperationComponentDefinition _componentDefinition;
+	private OperationComponentDefinition _componentDefinition;
 
-    @Override
-	public OperationComponentDefinition getComponentDefinition()
-    {
-        if (_componentDefinition == null) {
-            // FlexoProcess process = getProcessResource().getFlexoProcess();
-            ComponentDefinition cd = getProject().getFlexoComponentLibrary().getComponentNamed(getName());
-            if (cd instanceof OperationComponentDefinition)
-                _componentDefinition = (OperationComponentDefinition) cd;
-            if (_componentDefinition == null) {
-                if (logger.isLoggable(Level.SEVERE))
-                    logger.severe("cant find an OperationComponentDefinition for operation: " + getName() + " in library");
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Trying to repair...");
-                FlexoComponentFolder rootFolder = getProject().getFlexoComponentLibrary().getRootFolder();
-                try {
-                    _componentDefinition = new OperationComponentDefinition(getName(), getProject().getFlexoComponentLibrary(), rootFolder, getProject(), false);
-                } catch (DuplicateResourceException e) {
-                }
-            }
-        }
+	@Override
+	public OperationComponentDefinition getComponentDefinition() {
+		if (_componentDefinition == null) {
+			// FlexoProcess process = getProcessResource().getFlexoProcess();
+			ComponentDefinition cd = getProject().getFlexoComponentLibrary().getComponentNamed(getName());
+			if (cd instanceof OperationComponentDefinition) {
+				_componentDefinition = (OperationComponentDefinition) cd;
+			}
+			if (_componentDefinition == null) {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("cant find an OperationComponentDefinition for operation: " + getName() + " in library");
+				}
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Trying to repair...");
+				}
+				FlexoComponentFolder rootFolder = getProject().getFlexoComponentLibrary().getRootFolder();
+				try {
+					_componentDefinition = new OperationComponentDefinition(getName(), getProject().getFlexoComponentLibrary(), rootFolder,
+							getProject(), false);
+				} catch (DuplicateResourceException e) {
+				}
+			}
+		}
 
-        return _componentDefinition;
-    }
+		return _componentDefinition;
+	}
 
-    public static String resourceIdentifierForName(String aComponentName)
-    {
-        return ResourceType.OPERATION_COMPONENT.getName() + "." + aComponentName;
-    }
+	public static String resourceIdentifierForName(String aComponentName) {
+		return ResourceType.OPERATION_COMPONENT.getName() + "." + aComponentName;
+	}
 }

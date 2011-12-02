@@ -21,74 +21,62 @@
 package org.openflexo.xmlcode.examples.example1;
 
 import java.util.Date;
-import java.util.Vector;
+import java.util.List;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * Class <code>Movie</code> is intented to represent a movie object in XML
- * coding/decoding example.
+ * Class <code>Movie</code> is intented to represent a movie object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Movie implements XMLSerializable
-{
+public class Movie implements XMLSerializable {
 
-    public String title;
+	public String title;
 
-    public String description;
+	public String description;
 
-    public Date dateReleased;
+	public Date dateReleased;
 
-    protected Vector roles;
+	protected List<Role> roles;
 
-    public String category;
+	public String category;
 
-    @Override
-	public String toString()
-    {
+	@Override
+	public String toString() {
 
-        String returnedString = "Movie (title=" + title + ", description=" + description + ", date=";
-        if (dateReleased != null) {
-            returnedString += dateReleased.toString();
-        } else {
-            returnedString += "null";
-        } // end of else
+		String returnedString = "Movie (title=" + title + ", description=" + description + ", date=";
+		if (dateReleased != null) {
+			returnedString += dateReleased.toString();
+		} else {
+			returnedString += "null";
+		} // end of else
 
-        returnedString += ", category=" + category + ") roles=(";
-        if (roles != null) {
-            for (int i = 0; i < roles.size(); i++) {
-                returnedString += " " + roles.elementAt(i).toString();
-            }
-        }
+		returnedString += ", category=" + category + ") roles=(";
+		if (roles != null) {
+			for (int i = 0; i < roles.size(); i++) {
+				returnedString += " " + roles.get(i).toString();
+			}
+		}
 
-        returnedString += ")";
-        return returnedString;
-    }
+		returnedString += ")";
+		return returnedString;
+	}
 
-    public Vector getRoles()
-    {
+	public List<Role> getRoles() {
+		return roles;
+	}
 
-        return roles;
-    }
+	public void setRoles(List<Role> values) {
+		roles = values;
+	}
 
-    public void setRoles(Vector values)
-    {
+	public void addToRoles(Role aRole) {
+		roles.add(aRole);
+	}
 
-        roles = values;
-    }
-
-    public void addToRoles(Role aRole)
-    {
-
-        roles.addElement(aRole);
-    }
-
-    public void removeFromRoles(Role aRole)
-    {
-
-        roles.removeElement(aRole);
-    }
+	public void removeFromRoles(Role aRole) {
+		roles.remove(aRole);
+	}
 
 }

@@ -45,273 +45,260 @@ import org.openflexo.logging.FlexoLogger;
  * 
  * @author bmangez
  */
-public class IEHeaderWidget extends IENonEditableTextWidget implements ExtensibleWidget
-{
+public class IEHeaderWidget extends IENonEditableTextWidget implements ExtensibleWidget {
 
 	/**
      * 
      */
-    public static final String HEADER_WIDGET = "header_widget";
+	public static final String HEADER_WIDGET = "header_widget";
 
-    private static final Logger logger = FlexoLogger.getLogger(IEHeaderWidget.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(IEHeaderWidget.class.getPackage().getName());
 
-    protected boolean isSortable = true;
+	protected boolean isSortable = true;
 
-    protected boolean isSorted = false;
+	protected boolean isSorted = false;
 
-    protected boolean caseSensitive = false;
+	protected boolean caseSensitive = false;
 
-    protected boolean defaultDescending = false;
+	protected boolean defaultDescending = false;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IEHeaderWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	public IEHeaderWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public IEHeaderWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	public IEHeaderWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return "Header.inspector";
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return "Header.inspector";
+	}
 
-    public boolean getDefaultDescending()
-    {
-        return defaultDescending;
-    }
-    
-    public boolean getDefaultAscending()
-    {
-        return !getDefaultDescending();
-    }
+	public boolean getDefaultDescending() {
+		return defaultDescending;
+	}
 
-    public void setDefaultDescending(boolean defaultDescending)
-    {
-        this.defaultDescending = defaultDescending;
-        setChanged();
-        notifyObservers(new IEDataModification("defaultDescending",null,new Boolean(defaultDescending)));
-    }
+	public boolean getDefaultAscending() {
+		return !getDefaultDescending();
+	}
 
-    public boolean getIsSortable()
-    {
-        return isSortable;
-    }
+	public void setDefaultDescending(boolean defaultDescending) {
+		this.defaultDescending = defaultDescending;
+		setChanged();
+		notifyObservers(new IEDataModification("defaultDescending", null, new Boolean(defaultDescending)));
+	}
 
-    public void setIsSortable(boolean isSortable)
-    {
-        this.isSortable = isSortable;
-        setChanged();
-        notifyObservers(new SortChanged());
-    }
+	public boolean getIsSortable() {
+		return isSortable;
+	}
 
-    public boolean getIsSorted()
-    {
-        return isSorted;
-    }
-    
-    public boolean getIsNotSorted()
-    {
-        return !getIsSorted();
-    }
+	public void setIsSortable(boolean isSortable) {
+		this.isSortable = isSortable;
+		setChanged();
+		notifyObservers(new SortChanged());
+	}
 
-    public void setIsSorted(boolean isSorted)
-    {
-        this.isSorted = isSorted;
-        setChanged();
-        notifyObservers(new SortChanged());
-    }
+	public boolean getIsSorted() {
+		return isSorted;
+	}
 
-    public boolean getCaseSensitive()
-    {
-        return caseSensitive;
-    }
+	public boolean getIsNotSorted() {
+		return !getIsSorted();
+	}
 
-    public void setCaseSensitive(boolean value)
-    {
-        this.caseSensitive = value;
-        setChanged();
-        notifyObservers(new IEDataModification("caseSensitive",null,new Boolean(caseSensitive)));
-    }
+	public void setIsSorted(boolean isSorted) {
+		this.isSorted = isSorted;
+		setChanged();
+		notifyObservers(new SortChanged());
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        return EMPTY_IOBJECT_VECTOR;
-    }
+	public boolean getCaseSensitive() {
+		return caseSensitive;
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Header";
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return HEADER_WIDGET;
-    }
+	public void setCaseSensitive(boolean value) {
+		this.caseSensitive = value;
+		setChanged();
+		notifyObservers(new IEDataModification("caseSensitive", null, new Boolean(caseSensitive)));
+	}
 
-    public RepetitionOperator relatedRepetitionOperator(){
-    	if(relatedRepeatedSequence()==null)return null;
-    	return (RepetitionOperator)relatedRepeatedSequence().getOperator();
-    }
-    
-    public IESequenceTR relatedRepeatedSequence(){
-    	if(getParent() instanceof IESequenceWidget && 
-				((IESequenceWidget)getParent()).getParent() instanceof IETDWidget){
-			IETDWidget td = (IETDWidget)((IESequenceWidget)getParent()).getParent();
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		return EMPTY_IOBJECT_VECTOR;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return "Header";
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return HEADER_WIDGET;
+	}
+
+	public RepetitionOperator relatedRepetitionOperator() {
+		if (relatedRepeatedSequence() == null) {
+			return null;
+		}
+		return (RepetitionOperator) relatedRepeatedSequence().getOperator();
+	}
+
+	public IESequenceTR relatedRepeatedSequence() {
+		if (getParent() instanceof IESequenceWidget && ((IESequenceWidget) getParent()).getParent() instanceof IETDWidget) {
+			IETDWidget td = (IETDWidget) ((IESequenceWidget) getParent()).getParent();
 			ITableRow tr = td.tr();
 			IESequenceTR repeatedSequence = tr.findNextRepeatedSequence();
-			if(repeatedSequence!=null){
+			if (repeatedSequence != null) {
 				return repeatedSequence;
-			}else{
-				logger.warning("cannot find a repeated sequence for Header with title: "+getValue());
+			} else {
+				logger.warning("cannot find a repeated sequence for Header with title: " + getValue());
 			}
 		}
 		return null;
-    }
-    
-    public ITableData tdContainer(){
-    	if(getParent() instanceof IESequenceWidget)return ((IESequenceWidget)getParent()).td();
-    	return null;
-    }
-    
-	public AbstractBinding relatedSortableBindingValueInRepetition() 
-	{
+	}
+
+	public ITableData tdContainer() {
+		if (getParent() instanceof IESequenceWidget) {
+			return ((IESequenceWidget) getParent()).td();
+		}
+		return null;
+	}
+
+	public AbstractBinding relatedSortableBindingValueInRepetition() {
 		IESequenceTR repeatedSequence = relatedRepeatedSequence();
-		if(repeatedSequence!=null){
+		if (repeatedSequence != null) {
 			int x = tdContainer().getIndex();
 			IETRWidget firstTR = repeatedSequence.getFirstTR();
 			IETDWidget relatedTD = firstTR.getTD(x);
-			if(relatedTD!=null){
-				if(relatedTD.getSequenceWidget().size()==0)return null;
+			if (relatedTD != null) {
+				if (relatedTD.getSequenceWidget().size() == 0) {
+					return null;
+				}
 				IEWidget candidate = null;
 				Enumeration en = relatedTD.getSequenceWidget().elements();
-				while(en.hasMoreElements()){
-					candidate = (IEWidget)en.nextElement();
-					if(candidate instanceof IENonEditableTextWidget){
-						return ((IENonEditableTextWidget)candidate).getBindingValue();
+				while (en.hasMoreElements()) {
+					candidate = (IEWidget) en.nextElement();
+					if (candidate instanceof IENonEditableTextWidget) {
+						return ((IENonEditableTextWidget) candidate).getBindingValue();
 					}
 				}
 				return null;
-			}else{
-				logger.warning("cannot find a td for col index: "+x);
+			} else {
+				logger.warning("cannot find a td for col index: " + x);
 			}
-		}	
+		}
 		return null;
 	}
 
 	public boolean hasRepetition() {
-		return relatedRepetitionOperator()!=null || getHTMLListDescriptor()!=null;
+		return relatedRepetitionOperator() != null || getHTMLListDescriptor() != null;
 	}
-	
+
 	public String getRepetitionName() {
 		RepetitionOperator repetition = relatedRepetitionOperator();
 		HTMLListDescriptor descriptor = getHTMLListDescriptor();
-		if (descriptor==null && repetition!=null)
+		if (descriptor == null && repetition != null) {
 			descriptor = repetition.getHTMLListDescriptor();
-		if(descriptor==null)
+		}
+		if (descriptor == null) {
 			return "norepetition";
+		}
 		return descriptor.getListName();
 	}
-    
-    public IEWidget getSortedWidget()
-    {
-        if (getIsSortable()) {
-            HTMLListDescriptor desc = getHTMLListDescriptor();
-            if (desc!=null) {
-                ITableRow sequenceTR = desc.getRepeatedSequenceTR();
-                if (sequenceTR!=null) {
-                    IETRWidget tr = sequenceTR.getAllTR().firstElement();
-                    IETDWidget td = tr.getTDatXLocation(findTDInParent().getXLocation());
-                    return (IEWidget) td.getSequenceWidget().firstObject();
-                } else
-                    return null;
-            } else
-                return null;
-        } else
-            return null;
-    }
-    
-    public static class HeaderMustBeInATableContainingARepetition extends ValidationRule
-    {
 
-        /**
-         * @author gpolet
-         *
-         */
-        public class DeleteHeader extends FixProposal
-        {
+	public IEWidget getSortedWidget() {
+		if (getIsSortable()) {
+			HTMLListDescriptor desc = getHTMLListDescriptor();
+			if (desc != null) {
+				ITableRow sequenceTR = desc.getRepeatedSequenceTR();
+				if (sequenceTR != null) {
+					IETRWidget tr = sequenceTR.getAllTR().firstElement();
+					IETDWidget td = tr.getTDatXLocation(findTDInParent().getXLocation());
+					return (IEWidget) td.getSequenceWidget().firstObject();
+				} else {
+					return null;
+				}
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
 
-            /**
-             * @param aMessage
-             */
-            public DeleteHeader()
-            {
-                super("delete_this_header");
-            }
+	public static class HeaderMustBeInATableContainingARepetition extends ValidationRule {
 
-            /**
-             * Overrides fixAction
-             * @see org.openflexo.foundation.validation.FixProposal#fixAction()
-             */
-            @Override
-            protected void fixAction()
-            {
-                ((IEHeaderWidget)getObject()).removeFromContainer();
-            }
+		/**
+		 * @author gpolet
+		 * 
+		 */
+		public class DeleteHeader extends FixProposal {
 
-        }
+			/**
+			 * @param aMessage
+			 */
+			public DeleteHeader() {
+				super("delete_this_header");
+			}
 
-        /**
-         * @param objectType
-         * @param ruleName
-         */
-        public HeaderMustBeInATableContainingARepetition()
-        {
-            super(IEHeaderWidget.class, "headers_must_be_in_a_table_containing_a_repetition");
-        }
+			/**
+			 * Overrides fixAction
+			 * 
+			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
+			 */
+			@Override
+			protected void fixAction() {
+				((IEHeaderWidget) getObject()).removeFromContainer();
+			}
 
-        /**
-         * Overrides applyValidation
-         * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-         */
-        @Override
-        public ValidationIssue applyValidation(Validable object)
-        {
-            IEHeaderWidget header = ((IEHeaderWidget)object);
-            HTMLListDescriptor desc = header.getHTMLListDescriptor();
-            if (desc==null) {
-                return new ValidationWarning(this,object,"headers_must_be_in_a_table_containing_a_repetition",new DeleteHeader());
-            }
-            return null;
-        }
-        
-    }
-    
-    @Override
-	public boolean generateJavascriptID(){
-    	return true;
-    }
-    
+		}
+
+		/**
+		 * @param objectType
+		 * @param ruleName
+		 */
+		public HeaderMustBeInATableContainingARepetition() {
+			super(IEHeaderWidget.class, "headers_must_be_in_a_table_containing_a_repetition");
+		}
+
+		/**
+		 * Overrides applyValidation
+		 * 
+		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		 */
+		@Override
+		public ValidationIssue applyValidation(Validable object) {
+			IEHeaderWidget header = ((IEHeaderWidget) object);
+			HTMLListDescriptor desc = header.getHTMLListDescriptor();
+			if (desc == null) {
+				return new ValidationWarning(this, object, "headers_must_be_in_a_table_containing_a_repetition", new DeleteHeader());
+			}
+			return null;
+		}
+
+	}
+
+	@Override
+	public boolean generateJavascriptID() {
+		return true;
+	}
+
 }

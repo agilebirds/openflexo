@@ -26,58 +26,52 @@ import org.openflexo.dre.view.menu.DREMenuBar;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 
-
 /**
  * Selection manager dedicated to this module
  * 
- * Note that we don't select the data, but the views representing data
- * This will be refactored, for FlexoModelObject instances to be managed,
- * instead of views (bad design)
+ * Note that we don't select the data, but the views representing data This will be refactored, for FlexoModelObject instances to be
+ * managed, instead of views (bad design)
  * 
  * @author yourname
  */
-public class DRESelectionManager extends SelectionManager
-{
+public class DRESelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(DRESelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DRESelectionManager.class.getPackage().getName());
 
-    public DRESelectionManager(DREController controller)
-    {
-        super(controller);
-        DREMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new DREClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        _contextualMenuManager = new DREContextualMenuManager(this,controller.getEditor());
-   }
+	public DRESelectionManager(DREController controller) {
+		super(controller);
+		DREMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new DREClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		_contextualMenuManager = new DREContextualMenuManager(this, controller.getEditor());
+	}
 
-    public DREController getDREController()
-    {
-        return (DREController) getController();
-    }
+	public DREController getDREController() {
+		return (DREController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in this module");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("'Select All' not implemented yet in this module");
+		}
+		return false;
+	}
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoModelObject
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getDREController().getCurrentDisplayedObjectAsModuleView();
-    }
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoModelObject
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getDREController().getCurrentDisplayedObjectAsModuleView();
+	}
 
-    @Override
-	public FlexoModelObject getPasteContext()
-    {
-        // TODO please implement this
-        return null;
-    }
+	@Override
+	public FlexoModelObject getPasteContext() {
+		// TODO please implement this
+		return null;
+	}
 
 }

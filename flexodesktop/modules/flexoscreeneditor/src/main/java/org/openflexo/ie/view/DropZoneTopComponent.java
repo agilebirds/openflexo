@@ -27,47 +27,44 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.widget.IESequenceWidgetWidgetView;
 
-
 /**
  * @author bmangez
- *
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class DropZoneTopComponent extends IESequenceWidgetWidgetView implements IEContainer, GraphicalFlexoObserver/* ,ComponentListener */
 {
 
-    private static final Logger logger = Logger.getLogger(DropZoneTopComponent.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DropZoneTopComponent.class.getPackage().getName());
 
-    public DropZoneTopComponent(IEController ieController, IESequenceWidget model,IEWOComponentView componentView)
-    {
-        super(ieController,model,model.isSubsequence(),componentView);
-    }
+	public DropZoneTopComponent(IEController ieController, IESequenceWidget model, IEWOComponentView componentView) {
+		super(ieController, model, model.isSubsequence(), componentView);
+	}
 
-    @Override
-    public int getVerticalGap() {
-    	return 5;
-    }
-    
-    @Override
+	@Override
+	public int getVerticalGap() {
+		return 5;
+	}
+
+	@Override
 	public int getAvailableWidth() {
-    	return getMaximumSize().width;
-    }
-    
-    @Override
-    protected void handleWidgetInserted(IEWidget widget) {
-    	super.handleWidgetInserted(widget);
-    	_componentView.validate();
-        _componentView.repaint();
-        _componentView.updatePreferredSize();
-    }
-    
-    @Override
-    protected void handleWidgetRemoved(IEWidget widget) {
-    	super.handleWidgetRemoved(widget);
-    	_componentView.validate();
-        _componentView.repaint();
-        _componentView.updatePreferredSize();
-    }
-    
+		return getMaximumSize().width;
+	}
+
+	@Override
+	protected void handleWidgetInserted(IEWidget widget) {
+		super.handleWidgetInserted(widget);
+		_componentView.validate();
+		_componentView.repaint();
+		_componentView.updatePreferredSize();
+	}
+
+	@Override
+	protected void handleWidgetRemoved(IEWidget widget) {
+		super.handleWidgetRemoved(widget);
+		_componentView.validate();
+		_componentView.repaint();
+		_componentView.updatePreferredSize();
+	}
+
 }

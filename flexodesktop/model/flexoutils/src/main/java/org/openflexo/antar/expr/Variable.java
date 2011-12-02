@@ -23,74 +23,69 @@ import java.util.Vector;
 
 import org.openflexo.antar.expr.parser.Word;
 
-
 public class Variable extends Expression {
 
 	private String name;
 
-	public Variable(String name) 
-	{
+	public Variable(String name) {
 		super();
 		this.name = name;
 	}
 
 	@Override
-	public int getDepth()
-	{
+	public int getDepth() {
 		return 0;
 	}
 
-	public String getName() 
-	{
+	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) 
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@Override
-	public Expression evaluate(EvaluationContext context) 
-	{
-		if (context != null) return context.getVariableFactory().makeVariable(new Word(getName()));
+	public Expression evaluate(EvaluationContext context) {
+		if (context != null) {
+			return context.getVariableFactory().makeVariable(new Word(getName()));
+		}
 		return this;
 	}
 
 	@Override
-	public EvaluationType getEvaluationType()
-	{
+	public EvaluationType getEvaluationType() {
 		return EvaluationType.LITERAL;
 	}
 
 	@Override
-	protected Vector<Expression> getChilds()
-	{
+	protected Vector<Expression> getChilds() {
 		return null;
 	}
 
-	public boolean isValid()
-	{
-		if (name.length() == 0) return false;
-		
+	public boolean isValid() {
+		if (name.length() == 0) {
+			return false;
+		}
+
 		boolean startingPathItem = true;
-		for (int i=0; i<name.length(); i++) {
+		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
-			if (c=='.') {
+			if (c == '.') {
 				startingPathItem = true;
-			}
-			else {
-				boolean isNormalChar = ((c>='A' && c<='Z')
-						|| (c>='a' && c<='z')
-						|| (c=='(' || c==')' || c=='_') // See Java authorized characters
-						|| (c>='0' && c<='9' && !startingPathItem));
-				if (!isNormalChar) return false;
+			} else {
+				boolean isNormalChar = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '(' || c == ')' || c == '_') // See Java
+																																// authorized
+																																// characters
+				|| (c >= '0' && c <= '9' && !startingPathItem));
+				if (!isNormalChar) {
+					return false;
+				}
 				startingPathItem = false;
 			}
 		}
 		return true;
 
 	}
-
 
 }

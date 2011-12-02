@@ -23,18 +23,15 @@ import java.io.File;
 
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class FileParameter extends ParameterDefinition<File> {
 
-    public FileParameter(String name, String label, File defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.FILE;
-    }
+	public FileParameter(String name, String label, File defaultValue) {
+		super(name, label, defaultValue);
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.FILE;
+	}
 
 }

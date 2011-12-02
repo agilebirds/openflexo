@@ -31,7 +31,6 @@ import org.netbeans.lib.cvsclient.command.CommandException;
 import org.netbeans.lib.cvsclient.connection.AuthenticationException;
 import org.netbeans.lib.cvsclient.event.CVSAdapter;
 import org.netbeans.lib.cvsclient.event.FileAddedEvent;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.IOFlexoException;
@@ -48,75 +47,63 @@ import org.openflexo.fps.SharedProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 
-public class CheckoutProject extends CVSAction<CheckoutProject,CVSModule>
-{
+public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 
 	protected static final Logger logger = Logger.getLogger(CheckoutProject.class.getPackage().getName());
 
-	public static FlexoActionType<CheckoutProject,CVSModule,FPSObject> actionType
-	= new FlexoActionType<CheckoutProject,CVSModule,FPSObject>
-	("checkout_project",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<CheckoutProject, CVSModule, FPSObject> actionType = new FlexoActionType<CheckoutProject, CVSModule, FPSObject>(
+			"checkout_project", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-        public CheckoutProject makeNewAction(CVSModule focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-		{
+		public CheckoutProject makeNewAction(CVSModule focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
 			return new CheckoutProject(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-        protected boolean isVisibleForSelection(CVSModule object, Vector<FPSObject> globalSelection)
-		{
+		protected boolean isVisibleForSelection(CVSModule object, Vector<FPSObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-        protected boolean isEnabledForSelection(CVSModule object, Vector<FPSObject> globalSelection)
-		{
+		protected boolean isEnabledForSelection(CVSModule object, Vector<FPSObject> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (actionType, CVSModule.class);
+		FlexoModelObject.addActionForClass(actionType, CVSModule.class);
 	}
 
 	@Override
-    public String getLocalizedName ()
-	{
-		if (getFocusedObject() != null && getFocusedObject().getModuleName().endsWith(".prj"))
+	public String getLocalizedName() {
+		if (getFocusedObject() != null && getFocusedObject().getModuleName().endsWith(".prj")) {
 			return FlexoLocalization.localizedForKey("checkout_project");
-		else return FlexoLocalization.localizedForKey("checkout_directory");
+		} else {
+			return FlexoLocalization.localizedForKey("checkout_directory");
+		}
 	}
 
 	private SharedProject _checkoutedProject;
 
-	CheckoutProject (CVSModule focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-	{
+	CheckoutProject(CVSModule focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-
-
 	@Override
-    protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException
-	{
+	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException {
 		CheckoutProgressController progressController = new CheckoutProgressController();
 
-		logger.info ("ProjectCheckout to "+getLocalDirectory());
+		logger.info("ProjectCheckout to " + getLocalDirectory());
 
 		progressController.start();
 
 		try {
-			_checkoutedProject = SharedProject.checkoutProject(
-					getFocusedObject().getCVSRepository(),
-					getFocusedObject(),
-					getLocalDirectory(),
-					getLocalName(),
-					progressController);
+			_checkoutedProject = SharedProject.checkoutProject(getFocusedObject().getCVSRepository(), getFocusedObject(),
+					getLocalDirectory(), getLocalName(), progressController);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (CommandException e) {
@@ -128,140 +115,136 @@ public class CheckoutProject extends CVSAction<CheckoutProject,CVSModule>
 		}
 	}
 
-	public SharedProject getCheckoutedProject()
-	{
+	public SharedProject getCheckoutedProject() {
 		return _checkoutedProject;
 	}
 
 	private File _localDirectory;
 	private String _localName;
 
-	public File getLocalDirectory()
-	{
+	public File getLocalDirectory() {
 		return _localDirectory;
 	}
 
-	public void setLocalDirectory(File localDirectory)
-	{
+	public void setLocalDirectory(File localDirectory) {
 		_localDirectory = localDirectory;
 	}
 
-	public String getLocalName()
-	{
-		if (_localName == null) _localName = getFocusedObject().getModuleName();
+	public String getLocalName() {
+		if (_localName == null) {
+			_localName = getFocusedObject().getModuleName();
+		}
 		return _localName;
 	}
 
-	public void setLocalName(String localName)
-	{
+	public void setLocalName(String localName) {
 		_localName = localName;
 	}
 
-	protected class CheckoutProgressController extends CVSAdapter
-	{
-		private Hashtable<FPSObject,Vector<FPSObject>> projectHierarchy;
+	protected class CheckoutProgressController extends CVSAdapter {
+		private Hashtable<FPSObject, Vector<FPSObject>> projectHierarchy;
 		private long lastReception;
-		private Hashtable<CVSModule,Boolean> _hierarchyHasBeenRetrieved;
+		private Hashtable<CVSModule, Boolean> _hierarchyHasBeenRetrieved;
 
-		protected CheckoutProgressController()
-		{
-			if (logger.isLoggable(Level.FINE))
-				logger.fine ("Retrieving project hierarchy...");
+		protected CheckoutProgressController() {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Retrieving project hierarchy...");
+			}
 
 			projectHierarchy = retrieveProjectHerarchy();
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				for (FPSObject o : projectHierarchy.keySet()) {
-				if (o instanceof CVSModule) {
-					logger.fine(((CVSModule)o).getFullQualifiedModuleName());
-					for (FPSObject o2 : projectHierarchy.get(o)) {
-						if (o2 instanceof CVSModule) {
-							logger.fine(((CVSModule)o2).getFullQualifiedModuleName());
+					if (o instanceof CVSModule) {
+						logger.fine(((CVSModule) o).getFullQualifiedModuleName());
+						for (FPSObject o2 : projectHierarchy.get(o)) {
+							if (o2 instanceof CVSModule) {
+								logger.fine(((CVSModule) o2).getFullQualifiedModuleName());
+							} else if (o2 instanceof CVSFile) {
+								logger.fine(((CVSModule) o).getFullQualifiedModuleName() + '/' + ((CVSFile) o2).getFileName());
+							}
 						}
-						else if (o2 instanceof CVSFile)
-							logger.fine(((CVSModule)o).getFullQualifiedModuleName()+'/'+((CVSFile)o2).getFileName());
+					} else if (o instanceof CVSFile) {
+						logger.fine(((CVSFile) o).getFileName());
 					}
 				}
-				else if (o instanceof CVSFile)
-					logger.fine(((CVSFile)o).getFileName());
 			}
 
-			if (logger.isLoggable(Level.FINE))
-				logger.fine ("Retrieving project hierarchy...Done");
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Retrieving project hierarchy...Done");
+			}
 
 		}
 
 		private FPSObject _currentCheckoutedObject = null;
 		private Vector<FPSObject> _alreadyCheckouted = new Vector<FPSObject>();
 
-		private FPSObject objectForString(String name)
-		{
+		private FPSObject objectForString(String name) {
 			for (FPSObject o : projectHierarchy.keySet()) {
-				if (o instanceof CVSModule && ((CVSModule)o).getModuleName().equals(name)) return o;
-				if (o instanceof CVSFile && ((CVSFile)o).getFileName().equals(name)) return o;
+				if (o instanceof CVSModule && ((CVSModule) o).getModuleName().equals(name)) {
+					return o;
+				}
+				if (o instanceof CVSFile && ((CVSFile) o).getFileName().equals(name)) {
+					return o;
+				}
 			}
 			return null;
 		}
 
 		@Override
-        public void fileAdded(FileAddedEvent e)
-		{
+		public void fileAdded(FileAddedEvent e) {
 			String relativePath;
 			try {
 				relativePath = FileUtils.makeFilePathRelativeToDir(new File(e.getFilePath()), getLocalDirectory());
-				if (logger.isLoggable(Level.FINE))
-					logger.fine ("FileAdded: "+e.getFilePath()+" relative path="+relativePath);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("FileAdded: " + e.getFilePath() + " relative path=" + relativePath);
+				}
 
-				StringTokenizer st = new StringTokenizer(relativePath,"/"+"\\");
-				if (st.hasMoreTokens()) st.nextToken(); // Skip root location
-				else return;
+				StringTokenizer st = new StringTokenizer(relativePath, "/" + "\\");
+				if (st.hasMoreTokens()) {
+					st.nextToken(); // Skip root location
+				} else {
+					return;
+				}
 
 				if (st.hasMoreTokens()) {
 					String current = st.nextToken();
 					FPSObject currentCheckoutedObject = objectForString(current);
 					if (currentCheckoutedObject != _currentCheckoutedObject) {
 						_currentCheckoutedObject = currentCheckoutedObject;
-						setProgress(FlexoLocalization.localizedForKeyWithParams("checkouting_($0)",current));
-						resetSecondaryProgress(projectHierarchy.get(currentCheckoutedObject).size()+1);
+						setProgress(FlexoLocalization.localizedForKeyWithParams("checkouting_($0)", current));
+						resetSecondaryProgress(projectHierarchy.get(currentCheckoutedObject).size() + 1);
+					} else {
+						setSecondaryProgress(FlexoLocalization.localizedForKeyWithParams("checkouting_($0)", relativePath));
 					}
-					else {
-						setSecondaryProgress(FlexoLocalization.localizedForKeyWithParams("checkouting_($0)",relativePath));
-					}
+				} else {
+					return;
 				}
-				else return;
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 
-
 		}
 
-		public void start()
-		{
-			makeFlexoProgress(
-					FlexoLocalization.localizedForKeyWithParams(
-							"checkouting_($0)_to_($1)",
-							getFocusedObject().getFullQualifiedModuleName(),
-							getLocalDirectory().getAbsolutePath()),
-							projectHierarchy.keySet().size()+1);
+		public void start() {
+			makeFlexoProgress(FlexoLocalization.localizedForKeyWithParams("checkouting_($0)_to_($1)", getFocusedObject()
+					.getFullQualifiedModuleName(), getLocalDirectory().getAbsolutePath()), projectHierarchy.keySet().size() + 1);
 			setProgress(FlexoLocalization.localizedForKey("sending_checkout_request"));
 		}
 
-		public void stop()
-		{
+		public void stop() {
 			hideFlexoProgress();
 		}
 
-		private Hashtable<FPSObject,Vector<FPSObject>> retrieveProjectHerarchy()
-		{
+		private Hashtable<FPSObject, Vector<FPSObject>> retrieveProjectHerarchy() {
 			makeFlexoProgress(FlexoLocalization.localizedForKey("preparing_checkout"), 4);
 			setProgress(FlexoLocalization.localizedForKey("explore_cvs_module"));
 
-			final Hashtable<FPSObject,Vector<FPSObject>> response = new Hashtable<FPSObject,Vector<FPSObject>>();
-			_hierarchyHasBeenRetrieved = new Hashtable<CVSModule,Boolean>();
+			final Hashtable<FPSObject, Vector<FPSObject>> response = new Hashtable<FPSObject, Vector<FPSObject>>();
+			_hierarchyHasBeenRetrieved = new Hashtable<CVSModule, Boolean>();
 
-			exploreModule(getFocusedObject(),response);
+			exploreModule(getFocusedObject(), response);
 
 			waitProjectHierarchyRetrievingResponses();
 
@@ -270,26 +253,29 @@ public class CheckoutProject extends CVSAction<CheckoutProject,CVSModule>
 			return response;
 		}
 
-		private void exploreModule (final CVSModule module, final Hashtable<FPSObject,Vector<FPSObject>> response)
-		{
-			if (logger.isLoggable(Level.FINE))
-				logger.fine ("Exploring module "+module.getFullyQualifiedName()+" parent="+module.getParent());
+		private void exploreModule(final CVSModule module, final Hashtable<FPSObject, Vector<FPSObject>> response) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Exploring module " + module.getFullyQualifiedName() + " parent=" + module.getParent());
+			}
 
 			_hierarchyHasBeenRetrieved.put(module, false);
 			module.exploreModule(new CVSExplorerListener() {
 				@Override
 				public void exploringFailed(CVSExplorable explorable, CVSExplorer explorer, Exception exception) {
 					lastReception = System.currentTimeMillis();
-					if (logger.isLoggable(Level.FINE))
-						logger.fine ("exploring FAILED");
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("exploring FAILED");
+					}
 					_hierarchyHasBeenRetrieved.put(module, true);
 				}
+
 				@Override
 				public void exploringSucceeded(CVSExplorable explorable, CVSExplorer explorer) {
 					lastReception = System.currentTimeMillis();
 					setProgress(FlexoLocalization.localizedForKey("explore_sub_modules"));
-					if (logger.isLoggable(Level.FINE))
-						logger.fine (module.getFullQualifiedModuleName()+" : exploring SUCCEEDED "+module.getCVSModules());
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine(module.getFullQualifiedModuleName() + " : exploring SUCCEEDED " + module.getCVSModules());
+					}
 					if (module == getFocusedObject()) {
 						modulesToNotify.add(module);
 						for (CVSFile f : module.getCVSFiles()) {
@@ -297,10 +283,9 @@ public class CheckoutProject extends CVSAction<CheckoutProject,CVSModule>
 						}
 						for (CVSModule m : module.getCVSModules()) {
 							response.put(m, new Vector<FPSObject>());
-							exploreModule(m,response);
+							exploreModule(m, response);
 						}
-					}
-					else if (response.get(module) != null) {
+					} else if (response.get(module) != null) {
 						for (CVSFile f : module.getCVSFiles()) {
 							response.get(module).add(f);
 						}
@@ -315,10 +300,11 @@ public class CheckoutProject extends CVSAction<CheckoutProject,CVSModule>
 
 		}
 
-		private boolean someModulesAreStillToWait()
-		{
+		private boolean someModulesAreStillToWait() {
 			for (Boolean receivedResponse : _hierarchyHasBeenRetrieved.values()) {
-				if (!receivedResponse) return true;
+				if (!receivedResponse) {
+					return true;
+				}
 			}
 			return false;
 		}
@@ -326,37 +312,35 @@ public class CheckoutProject extends CVSAction<CheckoutProject,CVSModule>
 		private static final long TIME_OUT = CVSConstants.TIME_OUT; // 60 s
 
 		protected Vector<CVSModule> modulesToNotify = new Vector<CVSModule>();
-		
-		private synchronized void waitProjectHierarchyRetrievingResponses()
-		{
+
+		private synchronized void waitProjectHierarchyRetrievingResponses() {
 			lastReception = System.currentTimeMillis();
 
-			while (someModulesAreStillToWait()
-					&& System.currentTimeMillis()-lastReception < TIME_OUT) {
-				synchronized(this) {
+			while (someModulesAreStillToWait() && System.currentTimeMillis() - lastReception < TIME_OUT) {
+				synchronized (this) {
 					try {
 						wait(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
-				while (modulesToNotify.size()>0) {
-	    			CVSModule module = modulesToNotify.firstElement();
-	    			modulesToNotify.removeElementAt(0);
-	    			if (module == getFocusedObject())
-	    				resetSecondaryProgress(module.getCVSModules().size()+1);
-	    			else
-	    				setSecondaryProgress(FlexoLocalization.localizedForKey("explored")+" "+module.getFullQualifiedModuleName());
+				while (modulesToNotify.size() > 0) {
+					CVSModule module = modulesToNotify.firstElement();
+					modulesToNotify.removeElementAt(0);
+					if (module == getFocusedObject()) {
+						resetSecondaryProgress(module.getCVSModules().size() + 1);
+					} else {
+						setSecondaryProgress(FlexoLocalization.localizedForKey("explored") + " " + module.getFullQualifiedModuleName());
+					}
 				}
 			}
 
 			if (someModulesAreStillToWait()) {
-				//timeOutReceived = true;
+				// timeOutReceived = true;
 				logger.warning("Module exploring finished with time-out expired");
 			}
 
 		}
 	}
-
 
 }

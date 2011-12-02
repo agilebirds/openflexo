@@ -29,48 +29,41 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class OpenFileInExplorerInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OpenFileInExplorerInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(OpenFileInExplorer.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<OpenFileInExplorer> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<OpenFileInExplorer>() {
-            @Override
-			public boolean run(ActionEvent e, OpenFileInExplorer action)
-            {
-            	if (action.getFocusedObject() instanceof CGFile && ((CGFile)action.getFocusedObject()).getResource()!=null) {
-            		action.setFileToOpen(((CGFile)action.getFocusedObject()).getResource().getFile());
-            		return true;
-            	}
-            	else
-            		return false;
-            }
-        };
+	OpenFileInExplorerInitializer(SGControllerActionInitializer actionInitializer) {
+		super(OpenFileInExplorer.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<OpenFileInExplorer> getDefaultFinalizer() 
-	{
+	@Override
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<OpenFileInExplorer> getDefaultInitializer() {
+		return new FlexoActionInitializer<OpenFileInExplorer>() {
+			@Override
+			public boolean run(ActionEvent e, OpenFileInExplorer action) {
+				if (action.getFocusedObject() instanceof CGFile && ((CGFile) action.getFocusedObject()).getResource() != null) {
+					action.setFileToOpen(((CGFile) action.getFocusedObject()).getResource().getFile());
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<OpenFileInExplorer> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenFileInExplorer>() {
-            @Override
-			public boolean run(ActionEvent e, OpenFileInExplorer action)
-            {
-            	return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, OpenFileInExplorer action) {
+				return true;
+			}
+		};
 	}
 }

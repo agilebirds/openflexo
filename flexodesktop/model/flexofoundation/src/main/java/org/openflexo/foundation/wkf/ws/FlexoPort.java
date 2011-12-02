@@ -36,14 +36,12 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
- * Abstract representation of a port associated to a PortRegistery associated to
- * a FlexoProcess
+ * Abstract representation of a port associated to a PortRegistery associated to a FlexoProcess
  * 
  * @author sguerin
  * 
  */
-public abstract class FlexoPort extends AbstractNode implements Sortable
-{
+public abstract class FlexoPort extends AbstractNode implements Sortable {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoPort.class.getPackage().getName());
@@ -55,7 +53,7 @@ public abstract class FlexoPort extends AbstractNode implements Sortable
 
 	private PortRegistery _registery;
 
-	private int index  = -1;
+	private int index = -1;
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -65,8 +63,7 @@ public abstract class FlexoPort extends AbstractNode implements Sortable
 	/**
 	 * Default constructor
 	 */
-	public FlexoPort(FlexoProcess process)
-	{
+	public FlexoPort(FlexoProcess process) {
 		super(process);
 	}
 
@@ -74,30 +71,25 @@ public abstract class FlexoPort extends AbstractNode implements Sortable
 	public abstract String getDefaultName();
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "FlexoPort.inspector";
 	}
 
 	@Override
-	public FlexoPort getNode()
-	{
+	public FlexoPort getNode() {
 		return this;
 	}
 
 	@Override
-	public FlexoLevel getLevel()
-	{
+	public FlexoLevel getLevel() {
 		return FlexoLevel.PORT;
 	}
 
-	public PortRegistery getPortRegistery()
-	{
+	public PortRegistery getPortRegistery() {
 		return _registery;
 	}
 
-	public void setPortRegistery(PortRegistery registery)
-	{
+	public void setPortRegistery(PortRegistery registery) {
 		_registery = registery;
 	}
 
@@ -106,8 +98,7 @@ public abstract class FlexoPort extends AbstractNode implements Sortable
 	 * 
 	 * @return
 	 */
-	public FlexoProcess getFather()
-	{
+	public FlexoProcess getFather() {
 		return getProcess();
 	}
 
@@ -116,37 +107,34 @@ public abstract class FlexoPort extends AbstractNode implements Sortable
 	public abstract boolean isOutPort();
 
 	@Override
-	public void setName(String aName)
-	{
+	public void setName(String aName) {
 		String oldValue = getName();
 		if ((oldValue == null) || (!oldValue.equals(aName))) {
 			super.setName(findNextName(aName));
 			if (stringHasChanged(aName, getName())) {
 				setChanged();
-				notifyObserversAsReentrantModification(new WKFAttributeDataModification("name",oldValue,getName()));
+				notifyObserversAsReentrantModification(new WKFAttributeDataModification("name", oldValue, getName()));
 			}
 		}
 	}
 
-	private String findNextName(String aName) 
-	{
+	private String findNextName(String aName) {
 		if (getPortRegistery() == null) {
 			return aName;
 		}
 		String base = aName;
 		int i = 1;
-		while ((getPortRegistery().portWithName(aName)!=null) && (getPortRegistery().portWithName(aName)!=this)) {
-			aName = base+"-"+i;
+		while ((getPortRegistery().portWithName(aName) != null) && (getPortRegistery().portWithName(aName) != this)) {
+			aName = base + "-" + i;
 			i++;
 		}
 		return aName;
 	}
-	
+
 	public abstract String getPrefixForFullQualifiedName();
 
 	@Override
-	public String getFullyQualifiedName()
-	{
+	public String getFullyQualifiedName() {
 		if (getFather() != null) {
 			return getFather().getFullyQualifiedName() + "." + getPrefixForFullQualifiedName() + "." + formattedString(getNodeName());
 		} else {
@@ -157,21 +145,19 @@ public abstract class FlexoPort extends AbstractNode implements Sortable
 	@Override
 	public boolean isContainedIn(WKFObject obj) {
 		if (obj instanceof PortRegistery) {
-			return ((PortRegistery)obj).getAllPorts().contains(this);
+			return ((PortRegistery) obj).getAllPorts().contains(this);
 		}
 		return super.isContainedIn(obj);
 	}
 
 	public abstract boolean isCorrectelyLinked();
 
-
 	// ==========================================================================
 	// ================================= Delete ===============================
 	// ==========================================================================
 
 	@Override
-	public final void delete()
-	{
+	public final void delete() {
 		getPortRegistery().removeFromPorts(this);
 		super.delete();
 		setChanged();
@@ -180,25 +166,22 @@ public abstract class FlexoPort extends AbstractNode implements Sortable
 	}
 
 	/**
-	 * Build and return a vector of all the objects that will be deleted during
-	 * this deletion
+	 * Build and return a vector of all the objects that will be deleted during this deletion
 	 * 
 	 * @param aVector
 	 *            of DeletableObject
 	 */
 	@Override
-	public Vector<WKFObject> getAllEmbeddedDeleted()
-	{
+	public Vector<WKFObject> getAllEmbeddedDeleted() {
 		return getAllEmbeddedWKFObjects();
 	}
 
 	@Override
-	public int getIndex()
-	{
+	public int getIndex() {
 		if (isBeingCloned()) {
 			return -1;
 		}
-		if ((index==-1) && (getCollection()!=null)) {
+		if ((index == -1) && (getCollection() != null)) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
@@ -206,37 +189,35 @@ public abstract class FlexoPort extends AbstractNode implements Sortable
 	}
 
 	@Override
-	public final void setIndex(int index)
-	{
+	public final void setIndex(int index) {
 		if (isDeserializing() || isCreatedByCloning()) {
 			setIndexValue(index);
 			return;
 		}
-		FlexoIndexManager.switchIndexForKey(this.index,index,this);
-		if (getIndex()!=index) {
+		FlexoIndexManager.switchIndexForKey(this.index, index, this);
+		if (getIndex() != index) {
 			setChanged();
-			AttributeDataModification dm = new AttributeDataModification("index",null,getIndex());
+			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
 			dm.setReentrant(true);
 			notifyObservers(dm);
 		}
 	}
 
 	@Override
-	public int getIndexValue()
-	{
+	public int getIndexValue() {
 		return getIndex();
 	}
 
 	@Override
 	public final void setIndexValue(int index) {
-		if(index==this.index) {
+		if (index == this.index) {
 			return;
 		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
 		notifyAttributeModification("index", old, index);
-		if (!isDeserializing() && (getPortRegistery()!=null)) { 
+		if (!isDeserializing() && (getPortRegistery() != null)) {
 			getPortRegistery().setChanged();
 			getPortRegistery().notifyObservers(new ChildrenOrderChanged());
 		}
@@ -244,33 +225,30 @@ public abstract class FlexoPort extends AbstractNode implements Sortable
 
 	/**
 	 * Overrides getCollection
+	 * 
 	 * @see org.openflexo.foundation.utils.Sortable#getCollection()
 	 */
 	@Override
-	public FlexoPort[] getCollection()
-	{
-		if (getPortRegistery()==null) {
+	public FlexoPort[] getCollection() {
+		if (getPortRegistery() == null) {
 			return null;
 		}
 		return getPortRegistery().getAllPorts().toArray(new FlexoPort[0]);
 	}
 
-	public static String getDefaultInitialName()
-	{
+	public static String getDefaultInitialName() {
 		return FlexoLocalization.localizedForKey("default_port_name");
 	}
 
-
 	public Vector<FlexoPortMap> getAllPortMaps() {
 		Vector<FlexoPortMap> portMaps = new Vector<FlexoPortMap>();
-		for(SubProcessNode node:getProcess().getSubProcessNodes()) {
+		for (SubProcessNode node : getProcess().getSubProcessNodes()) {
 			FlexoPortMap portMap = node.getPortMapRegistery().getPortMapForPort(this);
-			if (portMap!=null) {
+			if (portMap != null) {
 				portMaps.add(portMap);
 			}
 		}
 		return portMaps;
 	}
-
 
 }

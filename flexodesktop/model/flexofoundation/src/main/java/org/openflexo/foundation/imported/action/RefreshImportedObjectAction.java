@@ -27,16 +27,17 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.ws.client.PPMWebService.PPMWebService_PortType;
 
-
-public abstract class RefreshImportedObjectAction<A extends RefreshImportedObjectAction<?,T1,T2>, T1 extends FlexoModelObject,T2 extends FlexoModelObject> extends FlexoAction<A, T1, T2> {
+public abstract class RefreshImportedObjectAction<A extends RefreshImportedObjectAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject>
+		extends FlexoAction<A, T1, T2> {
 
 	private PPMWebService_PortType webService;
 	private String login;
 	private String md5Password;
 	private boolean isAutomaticAction = false;
 
-	public RefreshImportedObjectAction(FlexoActionType<A,T1,T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
-		super(actionType,focusedObject,globalSelection,editor);
+	public RefreshImportedObjectAction(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection,
+			FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	public boolean isAutomaticAction() {
@@ -70,5 +71,5 @@ public abstract class RefreshImportedObjectAction<A extends RefreshImportedObjec
 	public void setMd5Password(String md5Password) {
 		this.md5Password = md5Password;
 	}
-	
+
 }

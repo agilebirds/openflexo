@@ -24,17 +24,16 @@ package org.openflexo.wse;
  * 
  * @author yourname
  */
-public class WSECst
-{
+public class WSECst {
 
-    public static final String DEFAULT_WSE_BROWSER_WINDOW_TITLE = "process_browser";
+	public static final String DEFAULT_WSE_BROWSER_WINDOW_TITLE = "process_browser";
 
-    public static final int DEFAULT_WSE_BROWSER_WINDOW_WIDTH = 300;
+	public static final int DEFAULT_WSE_BROWSER_WINDOW_WIDTH = 300;
 
-    public static final int DEFAULT_WSE_BROWSER_WINDOW_HEIGHT = 250;
+	public static final int DEFAULT_WSE_BROWSER_WINDOW_HEIGHT = 250;
 
-    public static final int DEFAULT_MAINFRAME_WIDTH = 850;
+	public static final int DEFAULT_MAINFRAME_WIDTH = 850;
 
-    public static final int DEFAULT_MAINFRAME_HEIGHT = 600;
+	public static final int DEFAULT_MAINFRAME_HEIGHT = 600;
 
 }

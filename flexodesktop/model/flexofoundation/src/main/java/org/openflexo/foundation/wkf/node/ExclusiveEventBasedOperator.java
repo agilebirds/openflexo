@@ -33,8 +33,7 @@ public class ExclusiveEventBasedOperator extends CommonOutputOperatorNode {
 	/**
 	 * Constructor used during deserialization
 	 */
-	public ExclusiveEventBasedOperator(FlexoProcessBuilder builder)
-	{
+	public ExclusiveEventBasedOperator(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -42,14 +41,12 @@ public class ExclusiveEventBasedOperator extends CommonOutputOperatorNode {
 	/**
 	 * Default constructor
 	 */
-	public ExclusiveEventBasedOperator(FlexoProcess process)
-	{
+	public ExclusiveEventBasedOperator(FlexoProcess process) {
 		super(process);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.OPERATOR_EXCLUSIVE_EVENT_INSPECTOR;
 	}
 
@@ -58,30 +55,37 @@ public class ExclusiveEventBasedOperator extends CommonOutputOperatorNode {
 		return FlexoLocalization.localizedForKey("EVENT_BASED");
 	}
 
-	public static class NodeAfterEventBasedGatewayRules extends ValidationRule<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator> {
+	public static class NodeAfterEventBasedGatewayRules extends
+			ValidationRule<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator> {
 
 		public NodeAfterEventBasedGatewayRules() {
 			super(ExclusiveEventBasedOperator.class, "node_after_event_based_gateway_rules");
 		}
 
 		@Override
-		public ValidationIssue<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator> applyValidation(ExclusiveEventBasedOperator operator) {
+		public ValidationIssue<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator> applyValidation(
+				ExclusiveEventBasedOperator operator) {
 			boolean seenEvent = false;
 			boolean seenActivity = false;
 			boolean seenOthers = false;
-			for(FlexoPostCondition<AbstractNode,AbstractNode> post:operator.getOutgoingPostConditions()) {
+			for (FlexoPostCondition<AbstractNode, AbstractNode> post : operator.getOutgoingPostConditions()) {
 				if (post.getEndNode() instanceof EventNode) {
 					seenEvent = true;
-				} else if(post.getEndNode().getNode() instanceof FlexoNode && ((FlexoNode)post.getEndNode().getNode()).getAbstractActivityNode()!=null) {
+				} else if (post.getEndNode().getNode() instanceof FlexoNode
+						&& ((FlexoNode) post.getEndNode().getNode()).getAbstractActivityNode() != null) {
 					seenActivity = true;
 				} else {
 					seenOthers = true;
 				}
 			}
-			if (seenEvent && seenActivity)
-				return new ValidationError<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator>(this, operator, "event_gateway_output_must_be_either_intermediate_catching_events_or_activities_but_not_both");
-			if (seenOthers)
-				return new ValidationError<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator>(this, operator, "event_gateway_output_must_be_either_intermediate_catching_events_or_activities");
+			if (seenEvent && seenActivity) {
+				return new ValidationError<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator>(this, operator,
+						"event_gateway_output_must_be_either_intermediate_catching_events_or_activities_but_not_both");
+			}
+			if (seenOthers) {
+				return new ValidationError<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator>(this, operator,
+						"event_gateway_output_must_be_either_intermediate_catching_events_or_activities");
+			}
 			return null;
 		}
 

@@ -18,7 +18,6 @@
  *
  */
 
-
 package org.apache.cayenne.dba.h2;
 
 import java.sql.PreparedStatement;
@@ -38,229 +37,215 @@ import org.apache.cayenne.query.Query;
 import org.apache.cayenne.query.SQLAction;
 
 /**
- * DbAdapter implementation for the <a href="http://hsqldb.sourceforge.net/"> HSQLDB RDBMS
- * </a>. Sample <a target="_top"
- * href="../../../../../../../developerguide/unit-tests.html">connection settings </a> to
- * use with HSQLDB are shown below:
+ * DbAdapter implementation for the <a href="http://hsqldb.sourceforge.net/"> HSQLDB RDBMS </a>. Sample <a target="_top"
+ * href="../../../../../../../developerguide/unit-tests.html">connection settings </a> to use with HSQLDB are shown below:
  * 
  * <pre>
- *       
+ * 
  *        test-hsqldb.cayenne.adapter = org.apache.cayenne.dba.hsqldb.HSQLDBAdapter
  *        test-hsqldb.jdbc.username = test
  *        test-hsqldb.jdbc.password = secret
  *        test-hsqldb.jdbc.url = jdbc:hsqldb:hsql://serverhostname
  *        test-hsqldb.jdbc.driver = org.hsqldb.jdbcDriver
- *        
+ * 
  * </pre>
  * 
  * @author Holger Hoffstaette
  */
 public class H2DBAdapter extends JdbcAdapter {
 
-    @Override
+	@Override
 	protected void configureExtendedTypes(ExtendedTypeMap map) {
-        super.configureExtendedTypes(map);
-        map.registerType(new ShortType());
-        map.registerType(new ByteType());
-    }
+		super.configureExtendedTypes(map);
+		map.registerType(new ShortType());
+		map.registerType(new ByteType());
+	}
 
-    /**
-     * Generate fully-qualified name for 1.8 and on. Subclass generates unqualified name.
-     * 
-     * @since 1.2
-     */
-    protected String getTableName(DbEntity entity) {
-        return entity.getFullyQualifiedName();
-    }
+	/**
+	 * Generate fully-qualified name for 1.8 and on. Subclass generates unqualified name.
+	 * 
+	 * @since 1.2
+	 */
+	protected String getTableName(DbEntity entity) {
+		return entity.getFullyQualifiedName();
+	}
 
-    /**
-     * Generate fully-qualified name for 1.8 and on. Subclass generates unqualified name.
-     * 
-     * @since 1.2
-     */
-    protected String getSchemaName(DbEntity entity) {
-        if (entity.getSchema() != null && entity.getSchema().length() > 0) {
-            return entity.getSchema() + ".";
-        }
+	/**
+	 * Generate fully-qualified name for 1.8 and on. Subclass generates unqualified name.
+	 * 
+	 * @since 1.2
+	 */
+	protected String getSchemaName(DbEntity entity) {
+		if (entity.getSchema() != null && entity.getSchema().length() > 0) {
+			return entity.getSchema() + ".";
+		}
 
-        return "";
-    }
+		return "";
+	}
 
-    /**
-     * Uses special action builder to create the right action.
-     * 
-     * @since 1.2
-     */
-    @Override
+	/**
+	 * Uses special action builder to create the right action.
+	 * 
+	 * @since 1.2
+	 */
+	@Override
 	public SQLAction getAction(Query query, DataNode node) {
-        return query
-                .createSQLAction(new H2ActionBuilder(this, node.getEntityResolver()));
-    }
+		return query.createSQLAction(new H2ActionBuilder(this, node.getEntityResolver()));
+	}
 
-    /**
-     * Returns a DDL string to create a unique constraint over a set of columns.
-     * 
-     * @since 1.1
-     */
-    @Override
+	/**
+	 * Returns a DDL string to create a unique constraint over a set of columns.
+	 * 
+	 * @since 1.1
+	 */
+	@Override
 	public String createUniqueConstraint(DbEntity source, Collection columns) {
-        if (columns == null || columns.isEmpty()) {
-            throw new CayenneRuntimeException(
-                    "Can't create UNIQUE constraint - no columns specified.");
-        }
+		if (columns == null || columns.isEmpty()) {
+			throw new CayenneRuntimeException("Can't create UNIQUE constraint - no columns specified.");
+		}
 
-        String srcName = getTableName(source);
+		String srcName = getTableName(source);
 
-        StringBuffer buf = new StringBuffer();
+		StringBuffer buf = new StringBuffer();
 
-        buf.append("ALTER TABLE ").append(srcName);
-        buf.append(" ADD CONSTRAINT ");
+		buf.append("ALTER TABLE ").append(srcName);
+		buf.append(" ADD CONSTRAINT ");
 
-        buf.append(getSchemaName(source));
-        buf.append("U_");
-        buf.append(source.getName());
-        buf.append("_");
-        Iterator it0 = columns.iterator();
-        while(it0.hasNext()){
-        	DbAttribute next = (DbAttribute) it0.next();
-        	buf.append(next.getName());
-        	if(it0.hasNext())buf.append("_");
-        }
-        buf.append(" UNIQUE (");
+		buf.append(getSchemaName(source));
+		buf.append("U_");
+		buf.append(source.getName());
+		buf.append("_");
+		Iterator it0 = columns.iterator();
+		while (it0.hasNext()) {
+			DbAttribute next = (DbAttribute) it0.next();
+			buf.append(next.getName());
+			if (it0.hasNext()) {
+				buf.append("_");
+			}
+		}
+		buf.append(" UNIQUE (");
 
-        Iterator it = columns.iterator();
-        DbAttribute first = (DbAttribute) it.next();
-        buf.append(first.getName());
+		Iterator it = columns.iterator();
+		DbAttribute first = (DbAttribute) it.next();
+		buf.append(first.getName());
 
-        while (it.hasNext()) {
-            DbAttribute next = (DbAttribute) it.next();
-            buf.append(", ");
-            buf.append(next.getName());
-        }
+		while (it.hasNext()) {
+			DbAttribute next = (DbAttribute) it.next();
+			buf.append(", ");
+			buf.append(next.getName());
+		}
 
-        buf.append(")");
+		buf.append(")");
 
-        return buf.toString();
-    }
+		return buf.toString();
+	}
 
-    /**
-     * Adds an ADD CONSTRAINT clause to a relationship constraint.
-     * 
-     * @see JdbcAdapter#createFkConstraint(DbRelationship)
-     */
-    @Override
+	/**
+	 * Adds an ADD CONSTRAINT clause to a relationship constraint.
+	 * 
+	 * @see JdbcAdapter#createFkConstraint(DbRelationship)
+	 */
+	@Override
 	public String createFkConstraint(DbRelationship rel) {
-        StringBuffer buf = new StringBuffer();
-        StringBuffer refBuf = new StringBuffer();
+		StringBuffer buf = new StringBuffer();
+		StringBuffer refBuf = new StringBuffer();
 
-        String srcName = getTableName((DbEntity) rel.getSourceEntity());
-        String dstName = getTableName((DbEntity) rel.getTargetEntity());
+		String srcName = getTableName((DbEntity) rel.getSourceEntity());
+		String dstName = getTableName((DbEntity) rel.getTargetEntity());
 
-        buf.append("ALTER TABLE ");
-        buf.append(srcName);
+		buf.append("ALTER TABLE ");
+		buf.append(srcName);
 
-        // hsqldb requires the ADD CONSTRAINT statement
-        buf.append(" ADD CONSTRAINT ");
-        buf.append(getSchemaName((DbEntity) rel.getSourceEntity()));
-        buf.append("C_");
-        buf.append(rel.getSourceEntity().getName());
-        buf.append("_");
-        buf.append(rel.getName());
+		// hsqldb requires the ADD CONSTRAINT statement
+		buf.append(" ADD CONSTRAINT ");
+		buf.append(getSchemaName((DbEntity) rel.getSourceEntity()));
+		buf.append("C_");
+		buf.append(rel.getSourceEntity().getName());
+		buf.append("_");
+		buf.append(rel.getName());
 
-        buf.append(" FOREIGN KEY (");
+		buf.append(" FOREIGN KEY (");
 
-        Iterator jit = rel.getJoins().iterator();
-        boolean first = true;
-        while (jit.hasNext()) {
-            DbJoin join = (DbJoin) jit.next();
-            if (!first) {
-                buf.append(", ");
-                refBuf.append(", ");
-            }
-            else
-                first = false;
+		Iterator jit = rel.getJoins().iterator();
+		boolean first = true;
+		while (jit.hasNext()) {
+			DbJoin join = (DbJoin) jit.next();
+			if (!first) {
+				buf.append(", ");
+				refBuf.append(", ");
+			} else {
+				first = false;
+			}
 
-            buf.append(join.getSourceName());
-            refBuf.append(join.getTargetName());
-        }
+			buf.append(join.getSourceName());
+			refBuf.append(join.getTargetName());
+		}
 
-        buf.append(") REFERENCES ");
-        buf.append(dstName);
-        buf.append(" (");
-        buf.append(refBuf.toString());
-        buf.append(')');
+		buf.append(") REFERENCES ");
+		buf.append(dstName);
+		buf.append(" (");
+		buf.append(refBuf.toString());
+		buf.append(')');
 
-        // also make sure we delete dependent FKs
-        buf.append(" ON DELETE CASCADE");
+		// also make sure we delete dependent FKs
+		buf.append(" ON DELETE CASCADE");
 
-        return buf.toString();
-    }
+		return buf.toString();
+	}
 
-    /**
-     * Uses "CREATE CACHED TABLE" instead of "CREATE TABLE".
-     * 
-     * @since 1.2
-     */
-    @Override
+	/**
+	 * Uses "CREATE CACHED TABLE" instead of "CREATE TABLE".
+	 * 
+	 * @since 1.2
+	 */
+	@Override
 	public String createTable(DbEntity ent) {
-        // SET SCHEMA <schemaname>
+		// SET SCHEMA <schemaname>
 
-        String sql = super.createTable(ent);
+		String sql = super.createTable(ent);
 
-        if (sql != null && sql.toUpperCase().startsWith("CREATE TABLE ")) {
-            sql = "CREATE CACHED TABLE " + sql.substring("CREATE TABLE ".length());
-        }
+		if (sql != null && sql.toUpperCase().startsWith("CREATE TABLE ")) {
+			sql = "CREATE CACHED TABLE " + sql.substring("CREATE TABLE ".length());
+		}
 
-        return sql;
-    }
+		return sql;
+	}
 
-    final class ShortType extends DefaultType {
+	final class ShortType extends DefaultType {
 
-        ShortType() {
-            super(Short.class.getName());
-        }
+		ShortType() {
+			super(Short.class.getName());
+		}
 
-        @Override
-		public void setJdbcObject(
-                PreparedStatement st,
-                Object val,
-                int pos,
-                int type,
-                int precision) throws Exception {
+		@Override
+		public void setJdbcObject(PreparedStatement st, Object val, int pos, int type, int precision) throws Exception {
 
-            if (val == null) {
-                super.setJdbcObject(st, val, pos, type, precision);
-            }
-            else {
+			if (val == null) {
+				super.setJdbcObject(st, val, pos, type, precision);
+			} else {
 
-                short s = ((Number) val).shortValue();
-                st.setShort(pos, s);
-            }
-        }
-    }
-    
-    final class ByteType extends DefaultType {
+				short s = ((Number) val).shortValue();
+				st.setShort(pos, s);
+			}
+		}
+	}
 
-        ByteType() {
-            super(Byte.class.getName());
-        }
+	final class ByteType extends DefaultType {
 
-        @Override
-		public void setJdbcObject(
-                PreparedStatement st,
-                Object val,
-                int pos,
-                int type,
-                int precision) throws Exception {
+		ByteType() {
+			super(Byte.class.getName());
+		}
 
-            if (val == null) {
-                super.setJdbcObject(st, val, pos, type, precision);
-            }
-            else {
+		@Override
+		public void setJdbcObject(PreparedStatement st, Object val, int pos, int type, int precision) throws Exception {
 
-                byte b = ((Number) val).byteValue();
-                st.setByte(pos, b);
-            }
-        }
-    }
+			if (val == null) {
+				super.setJdbcObject(st, val, pos, type, precision);
+			} else {
+
+				byte b = ((Number) val).byteValue();
+				st.setByte(pos, b);
+			}
+		}
+	}
 }

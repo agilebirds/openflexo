@@ -25,26 +25,22 @@ import javax.swing.ImageIcon;
 
 /**
  * @author bmangez
-  */
-public class ImageIconResource extends ImageIcon
-{
+ */
+public class ImageIconResource extends ImageIcon {
 	private File resourceFile;
-	
-    public ImageIconResource(String relativePathName)
-    {
-        super(ResourceLocator.locateFile(relativePathName).getAbsolutePath());
-        resourceFile = ResourceLocator.locateFile(relativePathName);
-    }
 
-	public File getResourceFile() 
-	{
+	public ImageIconResource(String relativePathName) {
+		super(ResourceLocator.locateFile(relativePathName).getAbsolutePath());
+		resourceFile = ResourceLocator.locateFile(relativePathName);
+	}
+
+	public File getResourceFile() {
 		return resourceFile;
 	}
 
-	public String getHTMLImg()
-	{
+	public String getHTMLImg() {
 		try {
-			return "<img src=\"file:"+getResourceFile().getCanonicalPath()+"\">";
+			return "<img src=\"file:" + getResourceFile().getCanonicalPath() + "\">";
 		} catch (Throwable e) {
 			return "";
 		}

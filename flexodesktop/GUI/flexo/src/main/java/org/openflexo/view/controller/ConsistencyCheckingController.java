@@ -24,25 +24,23 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * Implemented by all the module controller implementing consistency checking
  * 
  * @author sguerin
  * 
  */
-public interface ConsistencyCheckingController
-{
+public interface ConsistencyCheckingController {
 
-    public ConsistencyCheckDialog getConsistencyCheckWindow();
-    
-    public FlexoFrame getFlexoFrame();
+	public ConsistencyCheckDialog getConsistencyCheckWindow();
 
-    public void consistencyCheck(Validable objectToValidate);
+	public FlexoFrame getFlexoFrame();
 
-    public ValidationModel getDefaultValidationModel();
-    
-    public void initializeValidationModel();
+	public void consistencyCheck(Validable objectToValidate);
 
-    public void cleanUpValidationModel();
+	public ValidationModel getDefaultValidationModel();
+
+	public void initializeValidationModel();
+
+	public void cleanUpValidationModel();
 }

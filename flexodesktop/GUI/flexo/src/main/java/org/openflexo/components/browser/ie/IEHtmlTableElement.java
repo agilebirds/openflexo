@@ -27,55 +27,50 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 
-
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class IEHtmlTableElement extends IEElement
-{
+public class IEHtmlTableElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEHtmlTableElement(IEHTMLTableWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.HTMLTABLE, browser,parent);
-        widget.getSequenceTR().addObserver(this);
-    }
-    /**
-     * Overrides delete
-     * @see org.openflexo.components.browser.BrowserElement#delete()
-     */
-    @Override
-    public void delete()
-    {
-        getHtmlTable().getSequenceTR().deleteObserver(this);
-        super.delete();
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEHtmlTableElement(IEHTMLTableWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.HTMLTABLE, browser, parent);
+		widget.getSequenceTR().addObserver(this);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        FlexoModelObject child = null;
-        for (Enumeration e = getHtmlTable().getSequenceTR().elements(); e.hasMoreElements();) {
-            child = (FlexoModelObject) e.nextElement();
-            addToChilds(child);
-        }
-    }
+	/**
+	 * Overrides delete
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#delete()
+	 */
+	@Override
+	public void delete() {
+		getHtmlTable().getSequenceTR().deleteObserver(this);
+		super.delete();
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getHtmlTable().getName() == null) {
-            return "HtmlTable";
-        }
-        return getHtmlTable().getName();
-    }
+	@Override
+	protected void buildChildrenVector() {
+		FlexoModelObject child = null;
+		for (Enumeration e = getHtmlTable().getSequenceTR().elements(); e.hasMoreElements();) {
+			child = (FlexoModelObject) e.nextElement();
+			addToChilds(child);
+		}
+	}
 
-    protected IEHTMLTableWidget getHtmlTable()
-    {
-        return (IEHTMLTableWidget) getObject();
-    }
+	@Override
+	public String getName() {
+		if (getHtmlTable().getName() == null) {
+			return "HtmlTable";
+		}
+		return getHtmlTable().getName();
+	}
+
+	protected IEHTMLTableWidget getHtmlTable() {
+		return (IEHTMLTableWidget) getObject();
+	}
 
 }

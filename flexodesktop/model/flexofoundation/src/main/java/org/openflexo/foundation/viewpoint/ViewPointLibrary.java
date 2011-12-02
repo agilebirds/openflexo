@@ -32,23 +32,22 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.xml.sax.SAXException;
 
-
 public class ViewPointLibrary extends ViewPointLibraryObject {
 
 	private static final Logger logger = Logger.getLogger(ViewPointLibrary.class.getPackage().getName());
 
-	//public static final File CALC_LIBRARY_DIR = new FileResource("Calcs");
+	// public static final File CALC_LIBRARY_DIR = new FileResource("Calcs");
 
 	private final OntologyLibrary ontologyLibrary;
 	private final Vector<ViewPoint> calcs;
-	private final Hashtable<String,ViewPoint> map;
+	private final Hashtable<String, ViewPoint> map;
 
 	private FlexoResourceCenter resourceCenter;
 
@@ -56,59 +55,52 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 
 	private final ViewPointFolder rootFolder;
 
-	public ViewPointLibrary(FlexoResourceCenter resourceCenter, OntologyLibrary anOntologyLibrary)
-	{
+	public ViewPointLibrary(FlexoResourceCenter resourceCenter, OntologyLibrary anOntologyLibrary) {
 		super();
-		
+
 		editionPatternConverter = new EditionPatternConverter(resourceCenter);
 		StringEncoder.getDefaultInstance()._addConverter(editionPatternConverter);
-		
+
 		this.resourceCenter = resourceCenter;
 		ontologyLibrary = anOntologyLibrary;
 		calcs = new Vector<ViewPoint>();
-		map = new Hashtable<String,ViewPoint>();
-		//findCalcs(CALC_LIBRARY_DIR);
+		map = new Hashtable<String, ViewPoint>();
+		// findCalcs(CALC_LIBRARY_DIR);
 		/*for (OntologyCalc calc : calcs.values()) {
 			calc.loadWhenUnloaded();
 		}*/
-		
-		rootFolder = new ViewPointFolder("root", null,this);
 
-		StringEncoder.getDefaultInstance()._addConverter(InspectorDataBinding.CONVERTER);
+		rootFolder = new ViewPointFolder("root", null, this);
+
+		StringEncoder.getDefaultInstance()._addConverter(ViewPointDataBinding.CONVERTER);
 		StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
 
 	}
 
-	public FlexoResourceCenter getResourceCenter()
-	{
+	public FlexoResourceCenter getResourceCenter() {
 		return resourceCenter;
 	}
 
-	public void setResourceCenter(FlexoResourceCenter resourceCenter)
-	{
+	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
 		this.resourceCenter = resourceCenter;
 	}
 
-	public ViewPoint getOntologyCalc(String ontologyCalcUri)
-	{
+	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
 		return map.get(ontologyCalcUri);
 	}
 
-	public Vector<ViewPoint> getViewPoints()
-	{
+	public Vector<ViewPoint> getViewPoints() {
 		return calcs;
 	}
-	
-	public ViewPoint importViewPoint(File calcDirectory, ViewPointFolder folder)
-	{
-		logger.info("Import view point "+calcDirectory.getAbsolutePath());
-		ViewPoint calc = ViewPoint.openViewPoint(calcDirectory,this,folder);
+
+	public ViewPoint importViewPoint(File calcDirectory, ViewPointFolder folder) {
+		logger.info("Import view point " + calcDirectory.getAbsolutePath());
+		ViewPoint calc = ViewPoint.openViewPoint(calcDirectory, this, folder);
 		registerViewPoint(calc);
 		return calc;
 	}
-	
-	public ViewPoint registerViewPoint(ViewPoint vp)
-	{
+
+	public ViewPoint registerViewPoint(ViewPoint vp) {
 		String uri = vp.getViewPointURI();
 		map.put(uri, vp);
 		calcs.add(vp);
@@ -116,17 +108,15 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		notifyObservers(new OntologyCalcCreated(vp));
 		return vp;
 	}
-	
+
 	@Override
-	public OntologyLibrary getOntologyLibrary()
-	{
+	public OntologyLibrary getOntologyLibrary() {
 		return ontologyLibrary;
 	}
 
 	private XMLMapping VIEW_POINT_MODEL;
 
-	protected XMLMapping get_VIEW_POINT_MODEL()
-	{
+	protected XMLMapping get_VIEW_POINT_MODEL() {
 		if (VIEW_POINT_MODEL == null) {
 			File viewPointModelFile = new FileResource("Models/ViewPointModel/ViewPointModel.xml");
 			try {
@@ -159,11 +149,10 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		}
 		return VIEW_POINT_MODEL;
 	}
-	
+
 	private XMLMapping VIEW_POINT_PALETTE_MODEL;
 
-	protected XMLMapping get_VIEW_POINT_PALETTE_MODEL()
-	{
+	protected XMLMapping get_VIEW_POINT_PALETTE_MODEL() {
 		if (VIEW_POINT_PALETTE_MODEL == null) {
 			File calcPaletteModelFile = new FileResource("Models/ViewPointModel/ViewPointPaletteModel.xml");
 			try {
@@ -196,11 +185,10 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		}
 		return VIEW_POINT_PALETTE_MODEL;
 	}
-	
+
 	private XMLMapping EXAMPLE_DRAWING_MODEL;
 
-	protected XMLMapping get_EXAMPLE_DRAWING_MODEL()
-	{
+	protected XMLMapping get_EXAMPLE_DRAWING_MODEL() {
 		if (EXAMPLE_DRAWING_MODEL == null) {
 			File calcDrawingModelFile = new FileResource("Models/ViewPointModel/ExampleDrawingModel.xml");
 			try {
@@ -233,23 +221,31 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		}
 		return EXAMPLE_DRAWING_MODEL;
 	}
-	
+
 	@Override
-	public ViewPointLibrary getViewPointLibrary()
-	{
+	public ViewPointLibrary getViewPointLibrary() {
 		return this;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.CALC_LIBRARY_INSPECTOR;
 	}
-	
-	public ViewPointFolder getRootFolder() 
-	{
+
+	public ViewPointFolder getRootFolder() {
 		return rootFolder;
 	}
-	
+
+	public EditionPattern getEditionPattern(String editionPatternURI) {
+		if (editionPatternURI.indexOf("#") > -1) {
+			String viewPointURI = editionPatternURI.substring(0, editionPatternURI.indexOf("#"));
+			ViewPoint vp = getOntologyCalc(viewPointURI);
+			if (vp != null) {
+				return vp.getEditionPattern(editionPatternURI.substring(editionPatternURI.indexOf("#") + 1));
+			}
+		}
+		logger.warning("Cannot find edition pattern:" + editionPatternURI);
+		return null;
+	}
 
 }

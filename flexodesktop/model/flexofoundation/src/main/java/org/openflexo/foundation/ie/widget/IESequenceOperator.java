@@ -34,54 +34,59 @@ public class IESequenceOperator extends IESequence<IEOperator> {
 
 	public IESequenceOperator(FlexoComponentBuilder builder) {
 		this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
+		initializeDeserialization(builder);
 	}
+
 	@Deprecated
 	public IESequenceOperator(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
 		super(woComponent, parent, prj);
 	}
 
 	@Override
-	public void addToInnerWidgets(IEOperator w){
-		//w.setSequenceOperator(this);
+	public void addToInnerWidgets(IEOperator w) {
+		// w.setSequenceOperator(this);
 		super.addToInnerWidgets(w);
 	}
-	
+
 	@Override
-	public void removeFromInnerWidgets(IEOperator w){
+	public void removeFromInnerWidgets(IEOperator w) {
 		super.removeFromInnerWidgets(w);
-		if(size()==0){
-			if(getOperatedSequence().isSubsequence()){
+		if (size() == 0) {
+			if (getOperatedSequence().isSubsequence()) {
 				getOperatedSequence().unwrap();
 			}
 		}
 	}
-	
-	public IESequence getOperatedSequence(){
-		return (IESequence)getParent();
+
+	public IESequence getOperatedSequence() {
+		return (IESequence) getParent();
 	}
-	
+
 	@Override
-	public boolean isSubsequence(){
-    	return false;
-    }
+	public boolean isSubsequence() {
+		return false;
+	}
 
 	public RepetitionOperator findFirstRepetitionOperator() {
 		Enumeration en = elements();
 		IEOperator temp = null;
-		while(en.hasMoreElements()){
-			temp = (IEOperator)en.nextElement();
-			if(temp instanceof RepetitionOperator)return (RepetitionOperator)temp;
+		while (en.hasMoreElements()) {
+			temp = (IEOperator) en.nextElement();
+			if (temp instanceof RepetitionOperator) {
+				return (RepetitionOperator) temp;
+			}
 		}
 		return null;
 	}
-	
+
 	public ConditionalOperator findFirstConditionalOperator() {
 		Enumeration en = elements();
 		IEOperator temp = null;
-		while(en.hasMoreElements()){
-			temp = (IEOperator)en.nextElement();
-			if(temp instanceof ConditionalOperator)return (ConditionalOperator)temp;
+		while (en.hasMoreElements()) {
+			temp = (IEOperator) en.nextElement();
+			if (temp instanceof ConditionalOperator) {
+				return (ConditionalOperator) temp;
+			}
 		}
 		return null;
 	}

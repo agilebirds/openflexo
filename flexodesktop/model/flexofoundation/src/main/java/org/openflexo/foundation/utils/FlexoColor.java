@@ -28,211 +28,140 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class FlexoColor extends Color implements StringConvertable
-{
+public class FlexoColor extends Color implements StringConvertable {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoColor.class.getPackage().getName());
 
-    public static final StringEncoder.Converter<FlexoColor> flexoColorConverter = new Converter<FlexoColor>(FlexoColor.class) {
+	public static final StringEncoder.Converter<FlexoColor> flexoColorConverter = new Converter<FlexoColor>(FlexoColor.class) {
 
-        @Override
-		public FlexoColor convertFromString(String value)
-        {
-            return stringToColor(value);
-        }
+		@Override
+		public FlexoColor convertFromString(String value) {
+			return stringToColor(value);
+		}
 
-        @Override
-		public String convertToString(FlexoColor value)
-        {
-            return value.toString();
-        }
+		@Override
+		public String convertToString(FlexoColor value) {
+			return value.toString();
+		}
 
-    };
+	};
 
-    private static final Vector<FlexoColor> COLOR_SET;
-	
-	public static final int RAW_COLOR_VALUES[] = {
-        255, 255, 255, 204, 255, 255, 204, 204, 255, 204, 
-        204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 
-        255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 
-        204, 204, 255, 255, 204, 255, 255, 204, 204, 255, 
-        204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 
-        204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 
-        255, 204, 204, 255, 255, 204, 204, 255, 204, 204, 
-        255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 
-        204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 
-        204, 255, 204, 204, 204, 204, 153, 255, 255, 153, 
-        204, 255, 153, 153, 255, 153, 153, 255, 153, 153, 
-        255, 153, 153, 255, 153, 153, 255, 153, 153, 255, 
-        153, 153, 255, 204, 153, 255, 255, 153, 255, 255, 
-        153, 204, 255, 153, 153, 255, 153, 153, 255, 153, 
-        153, 255, 153, 153, 255, 153, 153, 255, 153, 153, 
-        255, 153, 153, 255, 204, 153, 255, 255, 153, 204, 
-        255, 153, 153, 255, 153, 153, 255, 153, 153, 255, 
-        153, 153, 255, 153, 153, 255, 153, 153, 255, 153, 
-        153, 255, 153, 153, 255, 204, 204, 204, 204, 102, 
-        255, 255, 102, 204, 255, 102, 153, 255, 102, 102, 
-        255, 102, 102, 255, 102, 102, 255, 102, 102, 255, 
-        102, 102, 255, 153, 102, 255, 204, 102, 255, 255, 
-        102, 255, 255, 102, 204, 255, 102, 153, 255, 102, 
-        102, 255, 102, 102, 255, 102, 102, 255, 102, 102, 
-        255, 102, 102, 255, 153, 102, 255, 204, 102, 255, 
-        255, 102, 204, 255, 102, 153, 255, 102, 102, 255, 
-        102, 102, 255, 102, 102, 255, 102, 102, 255, 102, 
-        102, 255, 102, 102, 255, 153, 102, 255, 204, 153, 
-        153, 153, 51, 255, 255, 51, 204, 255, 51, 153, 
-        255, 51, 102, 255, 51, 51, 255, 51, 51, 255, 
-        51, 51, 255, 102, 51, 255, 153, 51, 255, 204, 
-        51, 255, 255, 51, 255, 255, 51, 204, 255, 51, 
-        153, 255, 51, 102, 255, 51, 51, 255, 51, 51, 
-        255, 51, 51, 255, 102, 51, 255, 153, 51, 255, 
-        204, 51, 255, 255, 51, 204, 255, 51, 153, 255, 
-        51, 102, 255, 51, 51, 255, 51, 51, 255, 51, 
-        51, 255, 51, 51, 255, 102, 51, 255, 153, 51, 
-        255, 204, 153, 153, 153, 0, 255, 255, 0, 204, 
-        255, 0, 153, 255, 0, 102, 255, 0, 51, 255, 
-        0, 0, 255, 51, 0, 255, 102, 0, 255, 153, 
-        0, 255, 204, 0, 255, 255, 0, 255, 255, 0, 
-        204, 255, 0, 153, 255, 0, 102, 255, 0, 51, 
-        255, 0, 0, 255, 51, 0, 255, 102, 0, 255, 
-        153, 0, 255, 204, 0, 255, 255, 0, 204, 255, 
-        0, 153, 255, 0, 102, 255, 0, 51, 255, 0, 
-        0, 255, 0, 0, 255, 51, 0, 255, 102, 0, 
-        255, 153, 0, 255, 204, 102, 102, 102, 0, 204, 
-        204, 0, 204, 204, 0, 153, 204, 0, 102, 204, 
-        0, 51, 204, 0, 0, 204, 51, 0, 204, 102, 
-        0, 204, 153, 0, 204, 204, 0, 204, 204, 0, 
-        204, 204, 0, 204, 204, 0, 153, 204, 0, 102, 
-        204, 0, 51, 204, 0, 0, 204, 51, 0, 204, 
-        102, 0, 204, 153, 0, 204, 204, 0, 204, 204, 
-        0, 204, 204, 0, 153, 204, 0, 102, 204, 0, 
-        51, 204, 0, 0, 204, 0, 0, 204, 51, 0, 
-        204, 102, 0, 204, 153, 0, 204, 204, 102, 102, 
-        102, 0, 153, 153, 0, 153, 153, 0, 153, 153, 
-        0, 102, 153, 0, 51, 153, 0, 0, 153, 51, 
-        0, 153, 102, 0, 153, 153, 0, 153, 153, 0, 
-        153, 153, 0, 153, 153, 0, 153, 153, 0, 153, 
-        153, 0, 102, 153, 0, 51, 153, 0, 0, 153, 
-        51, 0, 153, 102, 0, 153, 153, 0, 153, 153, 
-        0, 153, 153, 0, 153, 153, 0, 153, 153, 0, 
-        102, 153, 0, 51, 153, 0, 0, 153, 0, 0, 
-        153, 51, 0, 153, 102, 0, 153, 153, 0, 153, 
-        153, 51, 51, 51, 0, 102, 102, 0, 102, 102, 
-        0, 102, 102, 0, 102, 102, 0, 51, 102, 0, 
-        0, 102, 51, 0, 102, 102, 0, 102, 102, 0, 
-        102, 102, 0, 102, 102, 0, 102, 102, 0, 102, 
-        102, 0, 102, 102, 0, 102, 102, 0, 51, 102, 
-        0, 0, 102, 51, 0, 102, 102, 0, 102, 102, 
-        0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 
-        102, 102, 0, 102, 102, 0, 51, 102, 0, 0, 
-        102, 0, 0, 102, 51, 0, 102, 102, 0, 102, 
-        102, 0, 102, 102, 0, 0, 0, 0, 51, 51, 
-        0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 
-        51, 51, 0, 0, 51, 51, 0, 51, 51, 0, 
-        51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 
-        51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 
-        0, 51, 51, 0, 0, 51, 51, 0, 51, 51, 
-        0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 
-        51, 51, 0, 51, 51, 0, 51, 51, 0, 0, 
-        51, 0, 0, 51, 51, 0, 51, 51, 0, 51, 
-        51, 0, 51, 51, 51, 51, 51
-    };
-	
+	private static final Vector<FlexoColor> COLOR_SET;
+
+	public static final int RAW_COLOR_VALUES[] = { 255, 255, 255, 204, 255, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204,
+			255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 255, 204, 255, 255, 204, 204, 255, 204, 204,
+			255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 255, 204, 204,
+			255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255, 204, 204, 255,
+			204, 204, 204, 204, 153, 255, 255, 153, 204, 255, 153, 153, 255, 153, 153, 255, 153, 153, 255, 153, 153, 255, 153, 153, 255,
+			153, 153, 255, 153, 153, 255, 204, 153, 255, 255, 153, 255, 255, 153, 204, 255, 153, 153, 255, 153, 153, 255, 153, 153, 255,
+			153, 153, 255, 153, 153, 255, 153, 153, 255, 153, 153, 255, 204, 153, 255, 255, 153, 204, 255, 153, 153, 255, 153, 153, 255,
+			153, 153, 255, 153, 153, 255, 153, 153, 255, 153, 153, 255, 153, 153, 255, 153, 153, 255, 204, 204, 204, 204, 102, 255, 255,
+			102, 204, 255, 102, 153, 255, 102, 102, 255, 102, 102, 255, 102, 102, 255, 102, 102, 255, 102, 102, 255, 153, 102, 255, 204,
+			102, 255, 255, 102, 255, 255, 102, 204, 255, 102, 153, 255, 102, 102, 255, 102, 102, 255, 102, 102, 255, 102, 102, 255, 102,
+			102, 255, 153, 102, 255, 204, 102, 255, 255, 102, 204, 255, 102, 153, 255, 102, 102, 255, 102, 102, 255, 102, 102, 255, 102,
+			102, 255, 102, 102, 255, 102, 102, 255, 153, 102, 255, 204, 153, 153, 153, 51, 255, 255, 51, 204, 255, 51, 153, 255, 51, 102,
+			255, 51, 51, 255, 51, 51, 255, 51, 51, 255, 102, 51, 255, 153, 51, 255, 204, 51, 255, 255, 51, 255, 255, 51, 204, 255, 51, 153,
+			255, 51, 102, 255, 51, 51, 255, 51, 51, 255, 51, 51, 255, 102, 51, 255, 153, 51, 255, 204, 51, 255, 255, 51, 204, 255, 51, 153,
+			255, 51, 102, 255, 51, 51, 255, 51, 51, 255, 51, 51, 255, 51, 51, 255, 102, 51, 255, 153, 51, 255, 204, 153, 153, 153, 0, 255,
+			255, 0, 204, 255, 0, 153, 255, 0, 102, 255, 0, 51, 255, 0, 0, 255, 51, 0, 255, 102, 0, 255, 153, 0, 255, 204, 0, 255, 255, 0,
+			255, 255, 0, 204, 255, 0, 153, 255, 0, 102, 255, 0, 51, 255, 0, 0, 255, 51, 0, 255, 102, 0, 255, 153, 0, 255, 204, 0, 255, 255,
+			0, 204, 255, 0, 153, 255, 0, 102, 255, 0, 51, 255, 0, 0, 255, 0, 0, 255, 51, 0, 255, 102, 0, 255, 153, 0, 255, 204, 102, 102,
+			102, 0, 204, 204, 0, 204, 204, 0, 153, 204, 0, 102, 204, 0, 51, 204, 0, 0, 204, 51, 0, 204, 102, 0, 204, 153, 0, 204, 204, 0,
+			204, 204, 0, 204, 204, 0, 204, 204, 0, 153, 204, 0, 102, 204, 0, 51, 204, 0, 0, 204, 51, 0, 204, 102, 0, 204, 153, 0, 204, 204,
+			0, 204, 204, 0, 204, 204, 0, 153, 204, 0, 102, 204, 0, 51, 204, 0, 0, 204, 0, 0, 204, 51, 0, 204, 102, 0, 204, 153, 0, 204,
+			204, 102, 102, 102, 0, 153, 153, 0, 153, 153, 0, 153, 153, 0, 102, 153, 0, 51, 153, 0, 0, 153, 51, 0, 153, 102, 0, 153, 153, 0,
+			153, 153, 0, 153, 153, 0, 153, 153, 0, 153, 153, 0, 153, 153, 0, 102, 153, 0, 51, 153, 0, 0, 153, 51, 0, 153, 102, 0, 153, 153,
+			0, 153, 153, 0, 153, 153, 0, 153, 153, 0, 153, 153, 0, 102, 153, 0, 51, 153, 0, 0, 153, 0, 0, 153, 51, 0, 153, 102, 0, 153,
+			153, 0, 153, 153, 51, 51, 51, 0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 51, 102, 0, 0, 102, 51, 0, 102, 102, 0,
+			102, 102, 0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 51, 102, 0, 0, 102, 51, 0, 102, 102,
+			0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 102, 102, 0, 51, 102, 0, 0, 102, 0, 0, 102, 51, 0, 102,
+			102, 0, 102, 102, 0, 102, 102, 0, 0, 0, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 0, 51, 51, 0, 51, 51, 0, 51,
+			51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51,
+			0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 0, 51, 0, 0, 51, 51, 0, 51, 51, 0, 51, 51, 0, 51, 51, 51, 51, 51 };
+
 	static {
 		COLOR_SET = new Vector<FlexoColor>();
-        int i = RAW_COLOR_VALUES.length / 3;
-        for(int j = 0; j < i; j++)
-        	COLOR_SET.add(new FlexoColor(RAW_COLOR_VALUES[j * 3], RAW_COLOR_VALUES[j * 3 + 1], RAW_COLOR_VALUES[j * 3 + 2]));
+		int i = RAW_COLOR_VALUES.length / 3;
+		for (int j = 0; j < i; j++) {
+			COLOR_SET.add(new FlexoColor(RAW_COLOR_VALUES[j * 3], RAW_COLOR_VALUES[j * 3 + 1], RAW_COLOR_VALUES[j * 3 + 2]));
+		}
 	}
-    
-    public static final FlexoColor BLACK_COLOR = new FlexoColor(Color.BLACK);
 
-    public static final FlexoColor GRAY_COLOR = new FlexoColor(Color.GRAY);
+	public static final FlexoColor BLACK_COLOR = new FlexoColor(Color.BLACK);
 
-    public static final FlexoColor WHITE_COLOR = new FlexoColor(Color.WHITE);
+	public static final FlexoColor GRAY_COLOR = new FlexoColor(Color.GRAY);
 
-    public static final FlexoColor LIGHT_GRAY_COLOR = new FlexoColor(new Color(230,230,230)); 
-    
-    public FlexoColor(String s)
-    {
-        super(redFromString(s), greenFromString(s), blueFromString(s));
-    }
+	public static final FlexoColor WHITE_COLOR = new FlexoColor(Color.WHITE);
 
-    public FlexoColor(int r, int g, int b)
-    {
-        super(r, g, b);
-    }
+	public static final FlexoColor LIGHT_GRAY_COLOR = new FlexoColor(new Color(230, 230, 230));
 
-    public FlexoColor(Color aColor)
-    {
-        super(aColor.getRed(), aColor.getGreen(), aColor.getBlue());
-    }
-    
-    public int sum()
-    {
-    	return getRed()+getGreen()+getBlue();
-    }
+	public FlexoColor(String s) {
+		super(redFromString(s), greenFromString(s), blueFromString(s));
+	}
 
-    @Override
-	public String toString()
-    {
-        return getRed() + "," + getGreen() + "," + getBlue();
-    }
+	public FlexoColor(int r, int g, int b) {
+		super(r, g, b);
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return flexoColorConverter;
-    }
+	public FlexoColor(Color aColor) {
+		super(aColor.getRed(), aColor.getGreen(), aColor.getBlue());
+	}
 
-    public static FlexoColor stringToColor(String s)
-    {
-        return new FlexoColor(s);
-    }
+	public int sum() {
+		return getRed() + getGreen() + getBlue();
+	}
 
-    public static FlexoColor getRandomColor(Vector<Color> excludedColors)
-    {
-    	Vector<FlexoColor> colors = (Vector<FlexoColor>) COLOR_SET.clone();
-    	colors.removeAll(excludedColors);
-    	int i = new Random().nextInt(colors.size());
-    	return colors.get(i);
-    }
-    
-    public static FlexoColor getColor(int index)
-    {
-    	Vector<FlexoColor> colors = (Vector<FlexoColor>) COLOR_SET.clone();
-    	return colors.get(index);
-    }
-    
-    private static int redFromString(String s)
-    {
-        return Integer.parseInt(s.substring(0, s.indexOf(",")));
-    }
+	@Override
+	public String toString() {
+		return getRed() + "," + getGreen() + "," + getBlue();
+	}
 
-    private static int greenFromString(String s)
-    {
-        return Integer.parseInt(s.substring(s.indexOf(",") + 1, s.lastIndexOf(",")));
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return flexoColorConverter;
+	}
 
-    private static int blueFromString(String s)
-    {
-        return Integer.parseInt(s.substring(s.lastIndexOf(",") + 1));
-    }
+	public static FlexoColor stringToColor(String s) {
+		return new FlexoColor(s);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-    	if (obj instanceof Color) {
-    		Color o1 = (Color)obj; 
-    		return o1.getBlue()==getBlue() && o1.getRed()==getRed() && o1.getGreen()==getGreen();
-    	}
-    	return super.equals(obj);
-    }
+	public static FlexoColor getRandomColor(Vector<Color> excludedColors) {
+		Vector<FlexoColor> colors = (Vector<FlexoColor>) COLOR_SET.clone();
+		colors.removeAll(excludedColors);
+		int i = new Random().nextInt(colors.size());
+		return colors.get(i);
+	}
+
+	public static FlexoColor getColor(int index) {
+		Vector<FlexoColor> colors = (Vector<FlexoColor>) COLOR_SET.clone();
+		return colors.get(index);
+	}
+
+	private static int redFromString(String s) {
+		return Integer.parseInt(s.substring(0, s.indexOf(",")));
+	}
+
+	private static int greenFromString(String s) {
+		return Integer.parseInt(s.substring(s.indexOf(",") + 1, s.lastIndexOf(",")));
+	}
+
+	private static int blueFromString(String s) {
+		return Integer.parseInt(s.substring(s.lastIndexOf(",") + 1));
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Color) {
+			Color o1 = (Color) obj;
+			return o1.getBlue() == getBlue() && o1.getRed() == getRed() && o1.getGreen() == getGreen();
+		}
+		return super.equals(obj);
+	}
 }

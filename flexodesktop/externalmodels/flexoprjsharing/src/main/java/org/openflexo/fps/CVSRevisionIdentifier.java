@@ -28,16 +28,13 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
-public class CVSRevisionIdentifier extends FlexoObject implements StringConvertable, Cloneable
-{
+public class CVSRevisionIdentifier extends FlexoObject implements StringConvertable, Cloneable {
 	protected static final Logger logger = Logger.getLogger(CVSRevisionIdentifier.class.getPackage().getName());
 
 	private static Converter converter = StringEncoder.addConverter(new Converter(CVSRevisionIdentifier.class) {
 
 		@Override
-		public Object convertFromString(String value)
-		{
+		public Object convertFromString(String value) {
 			try {
 				return new CVSRevisionIdentifier(value);
 			} catch (InvalidVersionFormatException e) {
@@ -47,8 +44,7 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public String convertToString(Object value)
-		{
+		public String convertToString(Object value) {
 			return ((CVSRevisionIdentifier) value).toString();
 		}
 
@@ -62,27 +58,23 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 
 	public int minorPatch = 0;
 
-	public class InvalidVersionFormatException extends Exception
-	{
-		
+	public class InvalidVersionFormatException extends Exception {
+
 	}
 
-	public CVSRevisionIdentifier(String versionAsString) throws InvalidVersionFormatException
-	{
+	public CVSRevisionIdentifier(String versionAsString) throws InvalidVersionFormatException {
 		super();
 		if (versionAsString == null) {
 			// Means the last one
 			major = Integer.MAX_VALUE;
-		}
-		else {
+		} else {
 			StringTokenizer st = new StringTokenizer(versionAsString, ".");
 			if (st.hasMoreTokens()) {
 				String unparsed = st.nextToken();
 				try {
 					major = (new Integer(unparsed)).intValue();
-				}
-				catch (NumberFormatException e) {
-					logger.warning("Cannot parse "+unparsed);
+				} catch (NumberFormatException e) {
+					logger.warning("Cannot parse " + unparsed);
 					throw new InvalidVersionFormatException();
 				}
 			}
@@ -90,9 +82,8 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 				String unparsed = st.nextToken();
 				try {
 					minor = (new Integer(unparsed)).intValue();
-				}
-				catch (NumberFormatException e) {
-					logger.warning("Cannot parse "+unparsed);
+				} catch (NumberFormatException e) {
+					logger.warning("Cannot parse " + unparsed);
 					throw new InvalidVersionFormatException();
 				}
 			}
@@ -100,9 +91,8 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 				String unparsed = st.nextToken();
 				try {
 					patch = (new Integer(unparsed)).intValue();
-				}
-				catch (NumberFormatException e) {
-					logger.warning("Cannot parse "+unparsed);
+				} catch (NumberFormatException e) {
+					logger.warning("Cannot parse " + unparsed);
 					throw new InvalidVersionFormatException();
 				}
 			}
@@ -110,17 +100,15 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 				String unparsed = st.nextToken();
 				try {
 					minorPatch = (new Integer(unparsed)).intValue();
-				}
-				catch (NumberFormatException e) {
-					logger.warning("Cannot parse "+unparsed);
+				} catch (NumberFormatException e) {
+					logger.warning("Cannot parse " + unparsed);
 					throw new InvalidVersionFormatException();
 				}
 			}
 		}
 	}
 
-	public static CVSRevisionIdentifier DEFAULT_VERSION_ID() 
-	{
+	public static CVSRevisionIdentifier DEFAULT_VERSION_ID() {
 		try {
 			return new CVSRevisionIdentifier("1.0");
 		} catch (InvalidVersionFormatException e) {
@@ -129,44 +117,38 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 		}
 	}
 
-	public boolean isLast()
-	{
+	public boolean isLast() {
 		return (major == Integer.MAX_VALUE);
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return versionAsString();
 	}
 
-	public String versionAsString()
-	{
-		return "" + major + "." + minor + (patch>0?"."+patch+(minorPatch>0?"."+minorPatch:""):"");
+	public String versionAsString() {
+		return "" + major + "." + minor + (patch > 0 ? "." + patch + (minorPatch > 0 ? "." + minorPatch : "") : "");
 	}
 
 	// Take care here that kind (type) of version is ignored when testing equality
 	// (used in Hashtable to retrieve versions)
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return versionAsString().hashCode();
 	}
 
 	// (used in Hashtable to retrieve versions)
 	@Override
-	public boolean equals(Object anObject)
-	{
+	public boolean equals(Object anObject) {
 		if (anObject instanceof CVSRevisionIdentifier) {
-			return versionAsString().equals(((CVSRevisionIdentifier)anObject).versionAsString());
+			return versionAsString().equals(((CVSRevisionIdentifier) anObject).versionAsString());
 		} else {
 			return super.equals(anObject);
 		}
 	}
 
 	@Override
-	public CVSRevisionIdentifier clone()
-	{
+	public CVSRevisionIdentifier clone() {
 		try {
 			return new CVSRevisionIdentifier(toString());
 		} catch (InvalidVersionFormatException e) {
@@ -175,35 +157,29 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 		}
 	}
 
-	public boolean isLesserThan(CVSRevisionIdentifier version)
-	{
+	public boolean isLesserThan(CVSRevisionIdentifier version) {
 		return (COMPARATOR.compare(this, version) < 0);
 	}
 
-	public boolean isGreaterThan(CVSRevisionIdentifier version)
-	{
+	public boolean isGreaterThan(CVSRevisionIdentifier version) {
 		return (COMPARATOR.compare(this, version) > 0);
 	}
 
 	@Override
-	public StringEncoder.Converter getConverter()
-	{
+	public StringEncoder.Converter getConverter() {
 		return converter;
 	}
 
 	public static final VersionComparator COMPARATOR = new VersionComparator();
 
-	public static class VersionComparator implements Comparator<CVSRevisionIdentifier>
-	{
+	public static class VersionComparator implements Comparator<CVSRevisionIdentifier> {
 
-		private VersionComparator()
-		{
+		private VersionComparator() {
 			super();
 		}
 
 		@Override
-		public int compare(CVSRevisionIdentifier v1, CVSRevisionIdentifier v2)
-		{
+		public int compare(CVSRevisionIdentifier v1, CVSRevisionIdentifier v2) {
 			if (v1.major < v2.major) {
 				return -1;
 			} else if (v1.major > v2.major) {
@@ -234,21 +210,18 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 
 	}
 
-	public CVSRevisionIdentifier newVersionByIncrementingMajor()
-	{
+	public CVSRevisionIdentifier newVersionByIncrementingMajor() {
 		CVSRevisionIdentifier returned = clone();
 		returned.major++;
-		returned.minor=0;
-		returned.patch=0;
+		returned.minor = 0;
+		returned.patch = 0;
 		return returned;
 	}
 
-	public CVSRevisionIdentifier newVersionByIncrementingMinor()
-	{
+	public CVSRevisionIdentifier newVersionByIncrementingMinor() {
 		CVSRevisionIdentifier returned = clone();
 		returned.minor++;
-		returned.patch=0;
+		returned.patch = 0;
 		return returned;
 	}
 }
-

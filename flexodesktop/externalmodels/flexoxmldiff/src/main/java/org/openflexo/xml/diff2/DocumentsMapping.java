@@ -31,7 +31,6 @@ import org.jdom.Text;
 import org.jdom.filter.Filter;
 import org.openflexo.xml.diff3.XMLDiff3;
 
-
 public class DocumentsMapping {
 
 	private Document _src;
@@ -43,8 +42,8 @@ public class DocumentsMapping {
 	private Vector<Content> _removedFromTarget;
 	private Vector<Content> _addedInTarget;
 	private Hashtable<Content, ModifierFlags> _modifiersFlags;
-	
-	public DocumentsMapping(Document src, Document target){
+
+	public DocumentsMapping(Document src, Document target) {
 		super();
 		_src = src;
 		_target = target;
@@ -55,259 +54,291 @@ public class DocumentsMapping {
 		_movedElements = new Hashtable<Content, ParentReferences>();
 		_matchingXMLs = new Hashtable<Content, MatchingXML>();
 		_modifiersFlags = new Hashtable<Content, ModifierFlags>();
-		//first pass over src
+		// first pass over src
 		_srcTarget.put(_src.getRootElement(), _target.getRootElement());
-		_matchingXMLs.put(_src.getRootElement(), new MatchingElements(_src.getRootElement(),_target.getRootElement()));
+		_matchingXMLs.put(_src.getRootElement(), new MatchingElements(_src.getRootElement(), _target.getRootElement()));
 		processToMappingSrcTarget(_src.getRootElement());
-		//first pass over target
-		_targetSource.put(_target.getRootElement(),_src.getRootElement());
+		// first pass over target
+		_targetSource.put(_target.getRootElement(), _src.getRootElement());
 		processToMappingTargetSrc(_target.getRootElement());
 		checkMapping();
-		
+
 	}
-	public Document getTargetDocument(){
+
+	public Document getTargetDocument() {
 		return _target;
 	}
-	public Document getSourceDocument(){
+
+	public Document getSourceDocument() {
 		return _src;
 	}
-	public Vector<Content> getRemovedElements(){
+
+	public Vector<Content> getRemovedElements() {
 		return _removedFromTarget;
 	}
-	public Vector<Content> getAddedElements(){
+
+	public Vector<Content> getAddedElements() {
 		return _addedInTarget;
 	}
-	public Hashtable<Content,Integer> getAddedElementsInSourceRef(Element srcRef){
-		Hashtable<Content,Integer> reply = new Hashtable<Content,Integer>();
+
+	public Hashtable<Content, Integer> getAddedElementsInSourceRef(Element srcRef) {
+		Hashtable<Content, Integer> reply = new Hashtable<Content, Integer>();
 		Enumeration<Content> en = _addedInTarget.elements();
 		Content item = null;
 		Element parentOfItemInTarget = null;
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			item = en.nextElement();
 			parentOfItemInTarget = item.getParentElement();
-			Element parentOfItemInSrc = (Element)_targetSource.get(parentOfItemInTarget);
-			if(srcRef.equals(parentOfItemInSrc))
-				reply.put((Content)item.clone(),new Integer(indexOfElement(item)));
+			Element parentOfItemInSrc = (Element) _targetSource.get(parentOfItemInTarget);
+			if (srcRef.equals(parentOfItemInSrc)) {
+				reply.put((Content) item.clone(), new Integer(indexOfElement(item)));
+			}
 		}
 		return reply;
 	}
-	public static int indexOfElement(Content element){
+
+	public static int indexOfElement(Content element) {
 		int reply = 0;
 		Iterator<Content> it = element.getParentElement().getContent().iterator();
-		while(it.hasNext()){
-			if(it.next().equals(element))return reply;
+		while (it.hasNext()) {
+			if (it.next().equals(element)) {
+				return reply;
+			}
 			reply++;
 		}
 		return reply;
 	}
-	public Hashtable<Content, ParentReferences> getMovedElements(){
+
+	public Hashtable<Content, ParentReferences> getMovedElements() {
 		return _movedElements;
 	}
-	public MatchingXML getMatchingXMLForSourceContent(Content content){
+
+	public MatchingXML getMatchingXMLForSourceContent(Content content) {
 		return _matchingXMLs.get(content);
 	}
-	private void checkMapping(){
-		if(_srcTarget.size()!=_targetSource.size()){
-			System.err.println("Mapping aren't of the same size : srcTarget.size="+_srcTarget.size() + " targetSource.size="+_targetSource.size());
-		}else{
-			//System.out.println("Found mapping for : "+_targetSource.size()+" xml objects");
+
+	private void checkMapping() {
+		if (_srcTarget.size() != _targetSource.size()) {
+			System.err.println("Mapping aren't of the same size : srcTarget.size=" + _srcTarget.size() + " targetSource.size="
+					+ _targetSource.size());
+		} else {
+			// System.out.println("Found mapping for : "+_targetSource.size()+" xml objects");
 		}
 		Enumeration<Content> en = _srcTarget.keys();
 		Content itemKey = null;
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			itemKey = en.nextElement();
 			Content matchingTargetInSrcTarget = _srcTarget.get(itemKey);
 			Content matchingSourceInTargetSource = _targetSource.get(matchingTargetInSrcTarget);
-			if(matchingSourceInTargetSource==null){
-				System.err.println("Cannot find the pending of "+itemKey+","+matchingTargetInSrcTarget+" into targetSource");
-			}else{
-				if(!matchingSourceInTargetSource.equals(itemKey)){
-					System.err.println("mapping does'nt match :"+itemKey+","+matchingTargetInSrcTarget+","+matchingSourceInTargetSource);
+			if (matchingSourceInTargetSource == null) {
+				System.err.println("Cannot find the pending of " + itemKey + "," + matchingTargetInSrcTarget + " into targetSource");
+			} else {
+				if (!matchingSourceInTargetSource.equals(itemKey)) {
+					System.err.println("mapping does'nt match :" + itemKey + "," + matchingTargetInSrcTarget + ","
+							+ matchingSourceInTargetSource);
 				}
 			}
 		}
-		if(XMLDiff3.DEBUG){
-			System.out.println("xmlObjects removed from target : "+_removedFromTarget.size());
+		if (XMLDiff3.DEBUG) {
+			System.out.println("xmlObjects removed from target : " + _removedFromTarget.size());
 			print(_removedFromTarget);
-			System.out.println("xmlObjects added in target : "+_addedInTarget.size());
+			System.out.println("xmlObjects added in target : " + _addedInTarget.size());
 			print(_addedInTarget);
-			System.out.println("xmlObjects moved in target : "+_movedElements.size());
+			System.out.println("xmlObjects moved in target : " + _movedElements.size());
 			print(_movedElements);
 		}
 	}
-	
-	private void print(Vector<Content> v){
+
+	private void print(Vector<Content> v) {
 		Enumeration<Content> en = v.elements();
 		Content item = null;
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			item = en.nextElement();
-			//System.out.println("\t"+print(item));
+			// System.out.println("\t"+print(item));
 		}
 	}
-	
-	private void print(Hashtable<Content,ParentReferences> h){
+
+	private void print(Hashtable<Content, ParentReferences> h) {
 		Enumeration<Content> en = h.keys();
 		Content item = null;
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			item = en.nextElement();
-			System.out.println("\t"+item+"   "+print(item));
+			System.out.println("\t" + item + "   " + print(item));
 			System.out.println(h.get(item));
 			System.out.println("------");
 		}
 	}
-	
-	private String print(Content c){
-		if(c instanceof Element)return c+"   id="+((Element)c).getAttributeValue("id");
-		if(c instanceof Text)return c+"   text="+((Text)c).getText();
-		return c+"   unknown !!!";
+
+	private String print(Content c) {
+		if (c instanceof Element) {
+			return c + "   id=" + ((Element) c).getAttributeValue("id");
+		}
+		if (c instanceof Text) {
+			return c + "   text=" + ((Text) c).getText();
+		}
+		return c + "   unknown !!!";
 	}
-	private void processToMappingSrcTarget(Element e){
-		for(int i=0;i<e.getContentSize();i++){
+
+	private void processToMappingSrcTarget(Element e) {
+		for (int i = 0; i < e.getContentSize(); i++) {
 			Content content = e.getContent(i);
-			if(content instanceof Text){
-				if(((Text)content).getText().trim().length()==0){
+			if (content instanceof Text) {
+				if (((Text) content).getText().trim().length() == 0) {
 					continue;
 				}
 			}
 			Content matchingContent = getTargetContentForSource(content);
-			if(matchingContent==null){
+			if (matchingContent == null) {
 				_removedFromTarget.add(content);
-				registerModifier(content,false,true,false,false,false,false);
-				if(content instanceof Element){
-					processToMappingSrcTarget((Element)content);
+				registerModifier(content, false, true, false, false, false, false);
+				if (content instanceof Element) {
+					processToMappingSrcTarget((Element) content);
 				}
-			}else{
+			} else {
 				_srcTarget.put(content, matchingContent);
-				if(content instanceof Element){
-					MatchingElements match = new MatchingElements((Element)content,(Element)matchingContent);
-					if(!match.isUnchanged())registerModifier(content,false,false,true,false,false,false);
+				if (content instanceof Element) {
+					MatchingElements match = new MatchingElements((Element) content, (Element) matchingContent);
+					if (!match.isUnchanged()) {
+						registerModifier(content, false, false, true, false, false, false);
+					}
 					_matchingXMLs.put(content, match);
-				}else if(content instanceof Text){
-					MatchingTexts match = new MatchingTexts((Text)content,(Text)matchingContent);
-					if(!match.isUnchanged())registerModifier(content,false,false,false,false,false,true);
+				} else if (content instanceof Text) {
+					MatchingTexts match = new MatchingTexts((Text) content, (Text) matchingContent);
+					if (!match.isUnchanged()) {
+						registerModifier(content, false, false, false, false, false, true);
+					}
 					_matchingXMLs.put(content, match);
 				}
-				if(!content.getParentElement().equals(getSourceContentForTarget(matchingContent.getParentElement()))){
-					//element has moved
-					ParentReferences parentRefs = new ParentReferences(content.getParentElement(),matchingContent.getParentElement(),matchingContent);
+				if (!content.getParentElement().equals(getSourceContentForTarget(matchingContent.getParentElement()))) {
+					// element has moved
+					ParentReferences parentRefs = new ParentReferences(content.getParentElement(), matchingContent.getParentElement(),
+							matchingContent);
 					_movedElements.put(content, parentRefs);
-					registerModifier(content,false,false,false,false,true,false);
+					registerModifier(content, false, false, false, false, true, false);
 				}
-				if(content instanceof Element){
-					processToMappingSrcTarget((Element)content);
+				if (content instanceof Element) {
+					processToMappingSrcTarget((Element) content);
 				}
 			}
 		}
 	}
-	
-	private void processToMappingTargetSrc(Element e){
-		for(int i=0;i<e.getContentSize();i++){
+
+	private void processToMappingTargetSrc(Element e) {
+		for (int i = 0; i < e.getContentSize(); i++) {
 			Content content = e.getContent(i);
-			if(content instanceof Text){
-				if(((Text)content).getText().trim().length()==0){
+			if (content instanceof Text) {
+				if (((Text) content).getText().trim().length() == 0) {
 					continue;
 				}
 			}
 			Content matchingContent = getSourceContentForTarget(content);
-			if(matchingContent==null){
+			if (matchingContent == null) {
 				_addedInTarget.add(content);
-				if(_targetSource.get(e)!=null)registerModifier(_targetSource.get(e),true,false,false,false,false,false);
-				if(content instanceof Element){
-					processToMappingTargetSrc((Element)content);
+				if (_targetSource.get(e) != null) {
+					registerModifier(_targetSource.get(e), true, false, false, false, false, false);
 				}
-			}else{
+				if (content instanceof Element) {
+					processToMappingTargetSrc((Element) content);
+				}
+			} else {
 				_targetSource.put(content, matchingContent);
-				
-				if(!content.getParentElement().equals(getTargetContentForSource(matchingContent.getParentElement()))){
-					//element has moved
-					ParentReferences parentRefs = new ParentReferences(matchingContent.getParentElement(),content.getParentElement(),content);
-					if(_movedElements.get(matchingContent)==null){
+
+				if (!content.getParentElement().equals(getTargetContentForSource(matchingContent.getParentElement()))) {
+					// element has moved
+					ParentReferences parentRefs = new ParentReferences(matchingContent.getParentElement(), content.getParentElement(),
+							content);
+					if (_movedElements.get(matchingContent) == null) {
 						System.err.println("moved elements doesn't match in 2nd pass");
-					}else if(!_movedElements.get(matchingContent).equals(parentRefs)){
+					} else if (!_movedElements.get(matchingContent).equals(parentRefs)) {
 						System.err.println("parents of moved elements doesn't match");
 					}
-					
-					
-					//_movedElements.put(content, parentRefs);
+
+					// _movedElements.put(content, parentRefs);
 				}
-				
-				
-				if(content instanceof Element){
-					processToMappingTargetSrc((Element)content);
+
+				if (content instanceof Element) {
+					processToMappingTargetSrc((Element) content);
 				}
 			}
 		}
 	}
-	
-	public Content getTargetContentForSource(Content srcContent){
-		if(_src.getRootElement().equals(srcContent))return _target.getRootElement();
+
+	public Content getTargetContentForSource(Content srcContent) {
+		if (_src.getRootElement().equals(srcContent)) {
+			return _target.getRootElement();
+		}
 		if (srcContent instanceof Element) {
-			String idVal = ((Element)srcContent).getAttributeValue("id");
+			String idVal = ((Element) srcContent).getAttributeValue("id");
 			if (idVal != null) {
 				return findElementWithId(_target, idVal);
 			} else {
-				//shit we don't have an id !!!!
-				//let's try an idref
-				String idrefVal = ((Element)srcContent).getAttributeValue("idref");
-				if(idrefVal!=null){
+				// shit we don't have an id !!!!
+				// let's try an idref
+				String idrefVal = ((Element) srcContent).getAttributeValue("idref");
+				if (idrefVal != null) {
 					Content parentTargetElement = getTargetContentForSource(srcContent.getParentElement());
 					if (parentTargetElement != null) {
-						return findElementWithIdRef((Element)parentTargetElement,idrefVal);
+						return findElementWithIdRef((Element) parentTargetElement, idrefVal);
 					}
-				}else{
-					//shit nor an ID, nor an id ref
+				} else {
+					// shit nor an ID, nor an id ref
 					Content parentTargetElement = getTargetContentForSource(srcContent.getParentElement());
 					if (parentTargetElement != null) {
-						return ((Element)parentTargetElement).getChild(((Element)srcContent).getName());
+						return ((Element) parentTargetElement).getChild(((Element) srcContent).getName());
 					}
 				}
 			}
 			return null;
-		}else{
-			Element parentElement = (Element)getTargetContentForSource(srcContent.getParentElement());
-			if(parentElement!=null){
+		} else {
+			Element parentElement = (Element) getTargetContentForSource(srcContent.getParentElement());
+			if (parentElement != null) {
 				return getFirstNonEmptyChildText(parentElement);
 			}
 		}
 		return null;
 	}
-	
+
 	private Content findElementWithIdRef(Element parentTargetElement, String idrefVal) {
 		Iterator<Element> it = parentTargetElement.getChildren().iterator();
 		Element item = null;
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			item = it.next();
-			if(idrefVal.equals(item.getAttributeValue("idref")))return item;
+			if (idrefVal.equals(item.getAttributeValue("idref"))) {
+				return item;
+			}
 		}
 		return null;
 	}
-	public static Content getContentMatchingContent(Content srcContent, Document sourceDocument, Document targetDocument){
-		if(sourceDocument.getRootElement().equals(srcContent))return targetDocument.getRootElement();
+
+	public static Content getContentMatchingContent(Content srcContent, Document sourceDocument, Document targetDocument) {
+		if (sourceDocument.getRootElement().equals(srcContent)) {
+			return targetDocument.getRootElement();
+		}
 		if (srcContent instanceof Element) {
-			String idVal = ((Element)srcContent).getAttributeValue("id");
+			String idVal = ((Element) srcContent).getAttributeValue("id");
 			if (idVal != null) {
 				return findElementWithId(targetDocument, idVal);
 			} else {
-				Content parentTargetElement = getContentMatchingContent(srcContent.getParentElement(),sourceDocument,targetDocument);
+				Content parentTargetElement = getContentMatchingContent(srcContent.getParentElement(), sourceDocument, targetDocument);
 				if (parentTargetElement != null) {
-					return ((Element)parentTargetElement).getChild(((Element)srcContent).getName());
+					return ((Element) parentTargetElement).getChild(((Element) srcContent).getName());
 				}
 			}
 			return null;
-		}else{
-			Element parentElement = (Element)getContentMatchingContent(srcContent.getParentElement(),sourceDocument,targetDocument);
-			if(parentElement!=null){
+		} else {
+			Element parentElement = (Element) getContentMatchingContent(srcContent.getParentElement(), sourceDocument, targetDocument);
+			if (parentElement != null) {
 				return getFirstNonEmptyChildText(parentElement);
 			}
 		}
 		return null;
 	}
-	
+
 	private static Content getFirstNonEmptyChildText(Element parentElement) {
-		for(int i=0;i<parentElement.getContentSize();i++){
+		for (int i = 0; i < parentElement.getContentSize(); i++) {
 			Content content = parentElement.getContent(i);
-			if(content instanceof Text){
-				if(((Text)content).getText().trim().length()>0){
+			if (content instanceof Text) {
+				if (((Text) content).getText().trim().length() > 0) {
 					return content;
 				}
 			}
@@ -315,172 +346,230 @@ public class DocumentsMapping {
 		return null;
 	}
 
-	public Content getSourceContentForTarget(Content targetContent){
-		if(_target.getRootElement().equals(targetContent))return _src.getRootElement();
+	public Content getSourceContentForTarget(Content targetContent) {
+		if (_target.getRootElement().equals(targetContent)) {
+			return _src.getRootElement();
+		}
 		if (targetContent instanceof Element) {
-			String idVal = ((Element)targetContent).getAttributeValue("id");
+			String idVal = ((Element) targetContent).getAttributeValue("id");
 			if (idVal != null) {
 				return findElementWithId(_src, idVal);
 			} else {
 				Content parentTargetElement = getSourceContentForTarget(targetContent.getParentElement());
 				if (parentTargetElement != null) {
-					return ((Element)parentTargetElement).getChild(((Element)targetContent).getName());
+					return ((Element) parentTargetElement).getChild(((Element) targetContent).getName());
 				}
 			}
 			return null;
-		}else{
-			Element parentElement = (Element)getSourceContentForTarget(targetContent.getParentElement());
-			if(parentElement!=null){
+		} else {
+			Element parentElement = (Element) getSourceContentForTarget(targetContent.getParentElement());
+			if (parentElement != null) {
 				return getFirstNonEmptyChildText(parentElement);
 			}
 		}
 		return null;
 	}
-	
-	private static Element findElementWithId(Document document, String idRef)
-    {
-    	if(idRef==null)return null;
-    	Iterator it = document.getDescendants(new IDFilter(idRef));
-    	if (it.hasNext()) return (Element)it.next();
-    	return null;
-    }
-	
-	private static class IDFilter implements Filter{
 
-    	private String _searchedID;
-    	public IDFilter(String searchedID){
-    		super();
-    		_searchedID = searchedID;
-    	}
+	private static Element findElementWithId(Document document, String idRef) {
+		if (idRef == null) {
+			return null;
+		}
+		Iterator it = document.getDescendants(new IDFilter(idRef));
+		if (it.hasNext()) {
+			return (Element) it.next();
+		}
+		return null;
+	}
+
+	private static class IDFilter implements Filter {
+
+		private String _searchedID;
+
+		public IDFilter(String searchedID) {
+			super();
+			_searchedID = searchedID;
+		}
+
 		@Override
 		public boolean matches(Object arg0) {
-			if(arg0 instanceof Element){
-				return _searchedID.equals(((Element)arg0).getAttributeValue("id"));
+			if (arg0 instanceof Element) {
+				return _searchedID.equals(((Element) arg0).getAttributeValue("id"));
 			}
 			return false;
 		}
-    }
-	
-	public class MatchingTexts extends MatchingXML{
+	}
+
+	public class MatchingTexts extends MatchingXML {
 		private Text _srcText;
 		private Text _targetText;
-		public MatchingTexts(Text src, Text target){
+
+		public MatchingTexts(Text src, Text target) {
 			super();
 			_srcText = src;
 			_targetText = target;
 		}
-		public Text getSourceText(){
+
+		public Text getSourceText() {
 			return _srcText;
 		}
-		public Text getTargetText(){
+
+		public Text getTargetText() {
 			return _targetText;
 		}
+
 		@Override
-		public boolean equals(Object obj){
-			if(obj instanceof MatchingTexts){
-				return (getSourceText().equals(((MatchingTexts)obj).getSourceText()))
-						&& (getTargetText().equals(((MatchingTexts)obj).getTargetText()));
+		public boolean equals(Object obj) {
+			if (obj instanceof MatchingTexts) {
+				return getSourceText().equals(((MatchingTexts) obj).getSourceText())
+						&& getTargetText().equals(((MatchingTexts) obj).getTargetText());
 			}
 			return false;
 		}
+
 		@Override
-		public boolean isUnchanged(){
-			if(_srcText.getText()==null)return _targetText==null;
+		public int hashCode() {
+			return getSourceText().hashCode() + getTargetText().hashCode();
+		}
+
+		@Override
+		public boolean isUnchanged() {
+			if (_srcText.getText() == null) {
+				return _targetText == null;
+			}
 			return _srcText.getText().equals(_targetText.getText());
 		}
 	}
-	public class MatchingElements extends MatchingXML{
+
+	public class MatchingElements extends MatchingXML {
 		private Element _srcElement;
 		private Element _targetElement;
 		private AttributesDiff _attributesDiff;
-		public MatchingElements(Element src, Element target){
+
+		public MatchingElements(Element src, Element target) {
 			super();
 			_srcElement = src;
 			_targetElement = target;
-			_attributesDiff = new AttributesDiff(_srcElement,_targetElement,DocumentsMapping.this);
+			_attributesDiff = new AttributesDiff(_srcElement, _targetElement, DocumentsMapping.this);
 		}
-		public AttributesDiff getAttributesDiff(){
+
+		public AttributesDiff getAttributesDiff() {
 			return _attributesDiff;
 		}
-		public Element getSourceElement(){
+
+		public Element getSourceElement() {
 			return _srcElement;
 		}
-		public Element getTargetElement(){
+
+		public Element getTargetElement() {
 			return _targetElement;
 		}
+
 		@Override
-		public boolean isUnchanged(){
+		public boolean isUnchanged() {
 			return getAttributesDiff().isUnchanged();
 		}
+
 		@Override
-		public boolean equals(Object obj){
-			if(obj instanceof MatchingElements){
-				return (getSourceElement().equals(((MatchingElements)obj).getSourceElement()))
-						&& (getTargetElement().equals(((MatchingElements)obj).getTargetElement()));
+		public boolean equals(Object obj) {
+			if (obj instanceof MatchingElements) {
+				return getSourceElement().equals(((MatchingElements) obj).getSourceElement())
+						&& getTargetElement().equals(((MatchingElements) obj).getTargetElement());
 			}
 			return false;
 		}
+
+		@Override
+		public int hashCode() {
+			return getSourceElement().hashCode() + getTargetElement().hashCode();
+		}
 	}
-	
-	public abstract class MatchingXML{
-		public abstract boolean  isUnchanged();
+
+	public abstract class MatchingXML {
+		public abstract boolean isUnchanged();
 	}
-	public class ParentReferences{
-		
+
+	public class ParentReferences {
+
 		private Element _parentInSource;
 		private Element _parentInTarget;
 		private Content _contentInTarget;
-		public ParentReferences(Element parentInSource, Element parentInTarget, Content contentInTarget){
+
+		public ParentReferences(Element parentInSource, Element parentInTarget, Content contentInTarget) {
 			super();
 			_parentInSource = parentInSource;
 			_parentInTarget = parentInTarget;
 			_contentInTarget = contentInTarget;
 		}
-		public Content getContentInTarget(){
+
+		public Content getContentInTarget() {
 			return _contentInTarget;
 		}
+
 		public Element getParentInSource() {
 			return _parentInSource;
 		}
+
 		public Element getParentInTarget() {
 			return _parentInTarget;
 		}
-		
+
 		@Override
-		public String toString(){
-			return "\t\tParent in source : "+print(getParentInSource())+"\n\t\tParent in target : "+print(getParentInTarget());
-			
+		public String toString() {
+			return "\t\tParent in source : " + print(getParentInSource()) + "\n\t\tParent in target : " + print(getParentInTarget());
+
 		}
+
 		@Override
-		public boolean equals(Object obj){
-			if(obj instanceof ParentReferences){
-				return (getParentInSource().equals(((ParentReferences)obj).getParentInSource()))
-						&& (getParentInTarget().equals(((ParentReferences)obj).getParentInTarget()));
+		public boolean equals(Object obj) {
+			if (obj instanceof ParentReferences) {
+				return getParentInSource().equals(((ParentReferences) obj).getParentInSource())
+						&& getParentInTarget().equals(((ParentReferences) obj).getParentInTarget());
 			}
 			return false;
 		}
+
+		@Override
+		public int hashCode() {
+			return getParentInSource().hashCode() + getParentInTarget().hashCode();
+		}
 	}
+
 	public boolean containsUpdateOrModificationsUnder(Content srcContent) {
-		if(_modifiersFlags.get(srcContent)!=null && _modifiersFlags.get(srcContent).isModified())return true;
-		if(srcContent instanceof Text && _modifiersFlags.get(srcContent)==null) return false;
-		Iterator<Content> it = ((Element)srcContent).getContent().iterator();
-		while(it.hasNext()){
-			if(containsUpdateOrModificationsUnder(it.next()))return true;
+		if (_modifiersFlags.get(srcContent) != null && _modifiersFlags.get(srcContent).isModified()) {
+			return true;
+		}
+		if (srcContent instanceof Text && _modifiersFlags.get(srcContent) == null) {
+			return false;
+		}
+		Iterator<Content> it = ((Element) srcContent).getContent().iterator();
+		while (it.hasNext()) {
+			if (containsUpdateOrModificationsUnder(it.next())) {
+				return true;
+			}
 		}
 		return false;
 	}
-	
-	private void registerModifier(Content e,boolean hasNewChild, boolean hasRemovedChild, boolean hasAttributeModified,boolean hasReceivedChild, boolean hasSendChild, boolean hasTextChanged){
+
+	private void registerModifier(Content e, boolean hasNewChild, boolean hasRemovedChild, boolean hasAttributeModified,
+			boolean hasReceivedChild, boolean hasSendChild, boolean hasTextChanged) {
 		ModifierFlags flags = _modifiersFlags.get(e);
-		if(flags==null){
-			flags = new ModifierFlags(hasNewChild,hasRemovedChild,hasAttributeModified,hasAttributeModified,hasSendChild,hasTextChanged);
+		if (flags == null) {
+			flags = new ModifierFlags(hasNewChild, hasRemovedChild, hasAttributeModified, hasAttributeModified, hasSendChild,
+					hasTextChanged);
 			_modifiersFlags.put(e, flags);
-		}else{
-			if(hasNewChild)flags.setHasNewChild(true);
-			if(hasRemovedChild)flags.setHasRemovedChild(true);
-			if(hasAttributeModified)flags.setHasAttributeModified(true);
+		} else {
+			if (hasNewChild) {
+				flags.setHasNewChild(true);
+			}
+			if (hasRemovedChild) {
+				flags.setHasRemovedChild(true);
+			}
+			if (hasAttributeModified) {
+				flags.setHasAttributeModified(true);
+			}
 		}
 	}
+
 	private class ModifierFlags {
 		private boolean _hasNewChild;
 		private boolean _hasRemovedChild;
@@ -488,8 +577,9 @@ public class DocumentsMapping {
 		private boolean _hasTextChanged;
 		private boolean _hasReceveidChild;
 		private boolean _hasSendChild;
-		
-		public ModifierFlags(boolean hasNewChild, boolean hasRemovedChild, boolean hasAttributeModified,boolean hasReceivedChild, boolean hasSendChild, boolean hasTextChanged){
+
+		public ModifierFlags(boolean hasNewChild, boolean hasRemovedChild, boolean hasAttributeModified, boolean hasReceivedChild,
+				boolean hasSendChild, boolean hasTextChanged) {
 			super();
 			_hasAttributeModified = hasAttributeModified;
 			_hasNewChild = hasNewChild;
@@ -498,6 +588,7 @@ public class DocumentsMapping {
 			_hasSendChild = hasSendChild;
 			_hasTextChanged = hasTextChanged;
 		}
+
 		public void setHasTextChanged(boolean b) {
 			_hasTextChanged = b;
 		}
@@ -509,6 +600,7 @@ public class DocumentsMapping {
 		public void setHasReceivedChild(boolean b) {
 			_hasReceveidChild = b;
 		}
+
 		public void setHasAttributeModified(boolean b) {
 			_hasAttributeModified = b;
 		}
@@ -520,7 +612,8 @@ public class DocumentsMapping {
 		public void setHasNewChild(boolean b) {
 			_hasNewChild = b;
 		}
-		public boolean isModified(){
+
+		public boolean isModified() {
 			return _hasAttributeModified || _hasNewChild || _hasRemovedChild || _hasSendChild || _hasReceveidChild || _hasTextChanged;
 		}
 	}

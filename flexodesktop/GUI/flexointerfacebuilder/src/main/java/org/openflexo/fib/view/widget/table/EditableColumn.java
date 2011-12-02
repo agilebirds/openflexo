@@ -19,17 +19,15 @@
  */
 package org.openflexo.fib.view.widget.table;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public interface EditableColumn<T>
-{
+public interface EditableColumn<T> {
 
-    public boolean isCellEditableFor(Object object);
+	public boolean isCellEditableFor(Object object);
 
-    public void setValueFor(Object object, T value);
+	public void setValueFor(Object object, T value);
 }

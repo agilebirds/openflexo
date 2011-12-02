@@ -75,6 +75,17 @@
 					<Label label="expand_horizontally" constraints="twocols(location=right)"/>
 					<CheckBox data="TwoColsConstraints.data.expandVertically" constraints="twocols(location=left)"/>
 					<Label label="expand_vertically" constraints="twocols(location=right)"/>
+				    <Label label="Insets" constraints="twocols(location=left)"/>
+					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+				        <Label label="top"/>
+				        <Number name="twoColsConstraintsInsetsTop" numberType="IntegerType" data="TwoColsConstraints.data.insetsTop" columns="1"/>
+				        <Label label="left"/>
+				        <Number name="twoColsConstraintsInsetsLeft" numberType="IntegerType" data="TwoColsConstraints.data.insetsLeft" columns="1"/>
+				        <Label label="bottom"/>
+				        <Number name="twoColsConstraintsInsetsBottom" numberType="IntegerType" data="TwoColsConstraints.data.insetsBottom" columns="1"/>
+				        <Label label="right"/>
+				        <Number name="twoColsConstraintsInsetsRight" numberType="IntegerType" data="TwoColsConstraints.data.insetsRight" columns="1"/>
+					</Panel>
 				</Panel>
 
 				<Panel name="GridBagConstraints" border="titled" borderTitle="grid_bag_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='gridbag'"> 
@@ -129,13 +140,13 @@
 				    <Label label="Insets" constraints="twocols(location=left)"/>
 					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Label label="top"/>
-				        <Number name="gridBagConstraintsInsetsTop" numberType="IntegerType" data="GridBagConstraints.data.insetsTop" columns="2"/>
+				        <Number name="gridBagConstraintsInsetsTop" numberType="IntegerType" data="GridBagConstraints.data.insetsTop" columns="1"/>
 				        <Label label="left"/>
-				        <Number name="gridBagConstraintsInsetsLeft" numberType="IntegerType" data="GridBagConstraints.data.insetsLeft" columns="2"/>
+				        <Number name="gridBagConstraintsInsetsLeft" numberType="IntegerType" data="GridBagConstraints.data.insetsLeft" columns="1"/>
 				        <Label label="bottom"/>
-				        <Number name="gridBagConstraintsInsetsBottom" numberType="IntegerType" data="GridBagConstraints.data.insetsBottom" columns="2"/>
+				        <Number name="gridBagConstraintsInsetsBottom" numberType="IntegerType" data="GridBagConstraints.data.insetsBottom" columns="1"/>
 				        <Label label="right"/>
-				        <Number name="gridBagConstraintsInsetsRight" numberType="IntegerType" data="GridBagConstraints.data.insetsRight" columns="2"/>
+				        <Number name="gridBagConstraintsInsetsRight" numberType="IntegerType" data="GridBagConstraints.data.insetsRight" columns="1"/>
 					</Panel>
 				</Panel>
 
@@ -191,7 +202,9 @@
     		      <Color data="data.backgroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" enable="data.hasSpecificBackgroundColor"/>
     		      <CheckBox data="data.hasSpecificForegroundColor" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=8;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
      		     <Label label="foreground_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
-     		     <Color data="data.foregroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=10;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" enable="data.hasSpecificForegroundColor"/>
+     		     <Color data="data.foregroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=10;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" enable="data.hasSpecificForegroundColor"/>
+    		      <CheckBox data="data.opaque" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <Label label="opaque" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=12;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
     		    </Panel>
   		    </Panel>
   			    

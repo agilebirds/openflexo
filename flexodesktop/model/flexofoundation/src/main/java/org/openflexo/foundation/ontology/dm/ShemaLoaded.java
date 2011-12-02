@@ -26,15 +26,13 @@ import org.openflexo.foundation.view.ViewDefinition;
  * 
  * @author sguerin
  */
-public class ShemaLoaded extends OEDataModification
-{
+public class ShemaLoaded extends OEDataModification {
 
-    public ViewDefinition loadedShema;
+	public ViewDefinition loadedShema;
 
-    public ShemaLoaded(ViewDefinition shema)
-    {
-        super(shema, null);
-        loadedShema = shema;
-    }
+	public ShemaLoaded(ViewDefinition shema) {
+		super(shema, null);
+		loadedShema = shema;
+	}
 
 }

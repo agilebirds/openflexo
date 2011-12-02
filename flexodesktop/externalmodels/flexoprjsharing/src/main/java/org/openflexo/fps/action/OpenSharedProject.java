@@ -32,87 +32,74 @@ import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.SharedProject;
 
+public class OpenSharedProject extends CVSAction<OpenSharedProject, FPSObject> {
 
-public class OpenSharedProject extends CVSAction<OpenSharedProject,FPSObject> 
-{
+	private static final Logger logger = Logger.getLogger(OpenSharedProject.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(OpenSharedProject.class.getPackage().getName());
+	public static FlexoActionType<OpenSharedProject, FPSObject, FPSObject> actionType = new FlexoActionType<OpenSharedProject, FPSObject, FPSObject>(
+			"open_project", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<OpenSharedProject,FPSObject,FPSObject> actionType 
-    = new FlexoActionType<OpenSharedProject,FPSObject,FPSObject> 
-    ("open_project",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public OpenSharedProject makeNewAction(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new OpenSharedProject(getRepositoryList(focusedObject), globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public OpenSharedProject makeNewAction(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new OpenSharedProject(getRepositoryList(focusedObject), globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FPSObject object, Vector<FPSObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
+			return getRepositoryList(object) != null;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FPSObject object, Vector<FPSObject> globalSelection) 
-        {
-            return getRepositoryList(object)!=null;
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (actionType, CVSRepositoryList.class);
-        FlexoModelObject.addActionForClass (actionType, CVSRepository.class);
-        FlexoModelObject.addActionForClass (actionType, CVSModule.class);
-    }
- 
-    private SharedProject _newProject;
-    private File _projectDirectory = null;
-    private CVSRepository _repository;
-    
-    OpenSharedProject (CVSRepositoryList focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-    	super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context)
-    {
-    	if (_repository != null)
-    		_newProject = SharedProject.openProject(getRepositoryList(getFocusedObject()), _projectDirectory, _repository,getEditor());
-    	else 
-     		_newProject = SharedProject.openProject(getRepositoryList(getFocusedObject()), _projectDirectory,getEditor());
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, CVSRepositoryList.class);
+		FlexoModelObject.addActionForClass(actionType, CVSRepository.class);
+		FlexoModelObject.addActionForClass(actionType, CVSModule.class);
+	}
 
-	public SharedProject getNewProject() 
-	{
+	private SharedProject _newProject;
+	private File _projectDirectory = null;
+	private CVSRepository _repository;
+
+	OpenSharedProject(CVSRepositoryList focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		if (_repository != null) {
+			_newProject = SharedProject.openProject(getRepositoryList(getFocusedObject()), _projectDirectory, _repository, getEditor());
+		} else {
+			_newProject = SharedProject.openProject(getRepositoryList(getFocusedObject()), _projectDirectory, getEditor());
+		}
+	}
+
+	public SharedProject getNewProject() {
 		return _newProject;
 	}
 
-	public File getProjectDirectory()
-	{
+	public File getProjectDirectory() {
 		return _projectDirectory;
 	}
 
-	public void setProjectDirectory(File projectDirectory)
-	{
+	public void setProjectDirectory(File projectDirectory) {
 		_projectDirectory = projectDirectory;
 	}
 
-	public CVSRepository getRepository() 
-	{
+	public CVSRepository getRepository() {
 		return _repository;
 	}
 
-	public void setRepository(CVSRepository repository) 
-	{
+	public void setRepository(CVSRepository repository) {
 		_repository = repository;
 	}
 
-	
- }
+}

@@ -26,9 +26,8 @@ import java.util.logging.Logger;
 import javax.swing.JCheckBoxMenuItem;
 
 import org.openflexo.components.browser.BrowserFilter;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-
+import org.openflexo.components.browser.ProjectBrowser;
 
 /**
  * Please comment this class
@@ -36,33 +35,31 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
  * @author sguerin
  * 
  */
-public class BrowserFilterMenuItem extends JCheckBoxMenuItem implements ActionListener
-{
-    protected static final Logger logger = Logger.getLogger(BrowserFilterMenuItem.class.getPackage().getName());
+public class BrowserFilterMenuItem extends JCheckBoxMenuItem implements ActionListener {
+	protected static final Logger logger = Logger.getLogger(BrowserFilterMenuItem.class.getPackage().getName());
 
-    protected BrowserFilter _filter;
+	protected BrowserFilter _filter;
 
-    protected ProjectBrowser _browser;
+	protected ProjectBrowser _browser;
 
-    public BrowserFilterMenuItem(ProjectBrowser browser, BrowserFilter filter)
-    {
-        super(filter.getLocalizedName(),filter.getIcon(),filter.getStatus() == BrowserFilterStatus.SHOW);
-        _filter = filter;
-        _browser = browser;
-        addActionListener(this);
-    }
+	public BrowserFilterMenuItem(ProjectBrowser browser, BrowserFilter filter) {
+		super(filter.getLocalizedName(), filter.getIcon(), filter.getStatus() == BrowserFilterStatus.SHOW);
+		_filter = filter;
+		_browser = browser;
+		addActionListener(this);
+	}
 
-    @Override
-	public void actionPerformed(ActionEvent e) 
-    {
-        if (_filter != null) {
-            _filter.setStatus((isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE));
-            if (_browser != null) _browser.update();    
-        }
-    }
-    
-    public void update()
-    {
-    	setSelected(_filter.getStatus() == BrowserFilterStatus.SHOW);
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (_filter != null) {
+			_filter.setStatus((isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE));
+			if (_browser != null) {
+				_browser.update();
+			}
+		}
+	}
+
+	public void update() {
+		setSelected(_filter.getStatus() == BrowserFilterStatus.SHOW);
+	}
 }

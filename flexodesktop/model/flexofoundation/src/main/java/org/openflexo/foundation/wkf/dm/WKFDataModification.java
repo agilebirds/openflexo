@@ -26,17 +26,14 @@ import org.openflexo.foundation.DataModification;
  * 
  * @author sguerin
  */
-public abstract class WKFDataModification extends DataModification
-{
+public abstract class WKFDataModification extends DataModification {
 
-    public WKFDataModification(Object oldValue, Object newValue)
-    {
-        super(DataModification.WKF_DM, oldValue, newValue);
-    }
+	public WKFDataModification(Object oldValue, Object newValue) {
+		super(DataModification.WKF_DM, oldValue, newValue);
+	}
 
-    public WKFDataModification(String propertyName, Object oldValue, Object newValue)
-    {
-        super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
-    }
+	public WKFDataModification(String propertyName, Object oldValue, Object newValue) {
+		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+	}
 
 }

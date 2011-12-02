@@ -24,24 +24,20 @@ import org.openflexo.foundation.exec.inst.SendMail;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class MailOutExecution extends EventNodeExecution<EventNode> {
 
-	public MailOutExecution(EventNode node)
-	{
+	public MailOutExecution(EventNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException {
 		return new SendMail(getEventNode());
 	}
-	
+
 	@Override
-	protected String getProcedureName()
-	{
-		return "mailOut_"+ToolBox.capitalize(ToolBox.getJavaName(getEventNode().getName()))+"_"+getEventNode().getFlexoID();
+	protected String getProcedureName() {
+		return "mailOut_" + ToolBox.capitalize(ToolBox.getJavaName(getEventNode().getName())) + "_" + getEventNode().getFlexoID();
 	}
 
 }

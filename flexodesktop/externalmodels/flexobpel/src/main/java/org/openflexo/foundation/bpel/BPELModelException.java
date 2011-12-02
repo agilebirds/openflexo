@@ -19,9 +19,8 @@
  */
 package org.openflexo.foundation.bpel;
 
-public class BPELModelException extends Exception{
-	public BPELModelException(String message)
-	{
+public class BPELModelException extends Exception {
+	public BPELModelException(String message) {
 		super(message);
 	}
 }

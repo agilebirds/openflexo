@@ -33,101 +33,103 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public class TopComponentReusableWidget extends IEReusableWidget<ReusableComponentDefinition,ReusableComponentInstance> implements IETopComponent
-{
-	
-	private static final Logger logger = FlexoLogger
-			.getLogger(TopComponentReusableWidget.class.getPackage().getName());
+public class TopComponentReusableWidget extends IEReusableWidget<ReusableComponentDefinition, ReusableComponentInstance> implements
+		IETopComponent {
 
-    public TopComponentReusableWidget(FlexoComponentBuilder builder)
-    {
-        super(builder.woComponent, null, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	private static final Logger logger = FlexoLogger.getLogger(TopComponentReusableWidget.class.getPackage().getName());
 
-    public TopComponentReusableWidget(IEWOComponent woComponent,  ReusableComponentDefinition def, IEWidget parent, FlexoProject prj)
-    {
-        super(woComponent, def, parent, prj);
-    }
-    
-    @Override
-    protected ReusableComponentInstance createComponentInstance(ReusableComponentDefinition componentDefinition, IEWOComponent woComponent) {
-    	return new ReusableComponentInstance(componentDefinition,woComponent);
-    }
+	public TopComponentReusableWidget(FlexoComponentBuilder builder) {
+		super(builder.woComponent, null, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    @Override
-    public boolean isTopComponent() {
-    	return true;
-    }
+	public TopComponentReusableWidget(IEWOComponent woComponent, ReusableComponentDefinition def, IEWidget parent, FlexoProject prj) {
+		super(woComponent, def, parent, prj);
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-	public String getFullyQualifiedName()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    /**
-     * Overrides getSpecificActionListForThatClass
-     * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-     */
-    @Override
-	protected Vector getSpecificActionListForThatClass()
-    {
-        Vector v= super.getSpecificActionListForThatClass();
-        v.add(TopComponentUp.actionType);
-        v.add(TopComponentDown.actionType);
-        return v;
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "top_component_reusable";
-    }
-    
-    @Override
-	public Vector<IESequenceTab> getAllTabContainers(){
-    	Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
-    	if(getRootObject()==null)return reply;
-    	if(getRootObject() instanceof IETopComponent)reply.addAll(((IETopComponent)getRootObject()).getAllTabContainers());
-    	return reply;
-    }
-    
 	@Override
-	public boolean areComponentInstancesValid() {
-		if (logger.isLoggable(Level.WARNING))
-			logger.warning("Implement me!!! please");
+	protected ReusableComponentInstance createComponentInstance(ReusableComponentDefinition componentDefinition, IEWOComponent woComponent) {
+		return new ReusableComponentInstance(componentDefinition, woComponent);
+	}
+
+	@Override
+	public boolean isTopComponent() {
 		return true;
 	}
 
 	@Override
-    public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.WARNING))
-			logger.warning("Implement me!!! please");
-    }
+	public String getDefaultInspectorName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    /**
-     * Overrides getTitle
-     * @see org.openflexo.foundation.ie.IETopComponent#getTitle()
-     */
-    @Override
-	public String getTitle()
-    {
-        if (getRootObject() instanceof IETopComponent)
-            return ((IETopComponent)getRootObject()).getTitle();
-        else
-            return getRootObject().getLabel();
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Overrides getSpecificActionListForThatClass
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
+	 */
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector v = super.getSpecificActionListForThatClass();
+		v.add(TopComponentUp.actionType);
+		v.add(TopComponentDown.actionType);
+		return v;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "top_component_reusable";
+	}
+
+	@Override
+	public Vector<IESequenceTab> getAllTabContainers() {
+		Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
+		if (getRootObject() == null) {
+			return reply;
+		}
+		if (getRootObject() instanceof IETopComponent) {
+			reply.addAll(((IETopComponent) getRootObject()).getAllTabContainers());
+		}
+		return reply;
+	}
+
+	@Override
+	public boolean areComponentInstancesValid() {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Implement me!!! please");
+		}
+		return true;
+	}
+
+	@Override
+	public void removeInvalidComponentInstances() {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Implement me!!! please");
+		}
+	}
+
+	/**
+	 * Overrides getTitle
+	 * 
+	 * @see org.openflexo.foundation.ie.IETopComponent#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		if (getRootObject() instanceof IETopComponent) {
+			return ((IETopComponent) getRootObject()).getTitle();
+		} else {
+			return getRootObject().getLabel();
+		}
+	}
 }
