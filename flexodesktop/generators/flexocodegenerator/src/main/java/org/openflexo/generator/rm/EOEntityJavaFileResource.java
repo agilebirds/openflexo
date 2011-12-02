@@ -44,7 +44,8 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class EOEntityJavaFileResource extends JavaFileResource<GenericRecordGenerator, CGJavaFile> implements GenerationAvailableFileResource, FlexoObserver {
+public class EOEntityJavaFileResource extends JavaFileResource<GenericRecordGenerator, CGJavaFile> implements
+		GenerationAvailableFileResource, FlexoObserver {
 	protected static final Logger logger = FlexoLogger.getLogger(EOEntityJavaFileResource.class.getPackage().getName());
 
 	/**
@@ -67,15 +68,17 @@ public class EOEntityJavaFileResource extends JavaFileResource<GenericRecordGene
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getEntity() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getEntity());
+			}
 			getEntity().addObserver(this);
 		}
 	}
 
 	public DMEOEntity getEntity() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getEOEntity();
+		}
 		return null;
 	}
 
@@ -122,7 +125,8 @@ public class EOEntityJavaFileResource extends JavaFileResource<GenericRecordGene
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this resource's dependant resources
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
 	 * 
 	 * @param resource
 	 * @param dependancyScheme
@@ -136,8 +140,9 @@ public class EOEntityJavaFileResource extends JavaFileResource<GenericRecordGene
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getEntity() != null) {
 				if (!requestDate.before(getEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for ENTITY " + getEntity().getName());
+					}
 					return false;
 				}
 			}

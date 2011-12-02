@@ -45,7 +45,8 @@ import org.openflexo.sg.generator.SGJavaClassGenerator;
  * @author sylvain
  * 
  */
-public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, SGJavaFile> implements GenerationAvailableFileResource, FlexoObserver {
+public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, SGJavaFile> implements GenerationAvailableFileResource,
+		FlexoObserver {
 	static final Logger logger = FlexoLogger.getLogger(SGJavaFileResource.class.getPackage().getName());
 
 	/**
@@ -63,8 +64,9 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 	}
 
 	public DMEntity getEntity() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getEntity();
+		}
 		return null;
 	}
 
@@ -74,8 +76,9 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getEntity() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getEntity());
+			}
 			getEntity().addObserver(this);
 		}
 	}
@@ -95,8 +98,9 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 		if (getEntity() != null) {
 			addToDependantResources(getProject().getFlexoDMResource());
 		}
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			getGenerator().rebuildDependanciesForResource(this);
+		}
 	}
 
 	@Override
@@ -105,7 +109,8 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this resource's dependant resources
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
 	 * 
 	 * @param resource
 	 * @param dependancyScheme
@@ -119,8 +124,9 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getEntity() != null) {
 				if (!requestDate.before(getEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for UTIL JAVA FILE " + getEntity().getName());
+					}
 					return false;
 				}
 			}

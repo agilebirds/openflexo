@@ -55,7 +55,8 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 	 * Build a new Hibernate implementation for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during unserialization.
 	 * 
-	 * @param builder the builder that will create this implementation
+	 * @param builder
+	 *            the builder that will create this implementation
 	 * @throws TechnologyModuleCompatibilityCheckException
 	 */
 	public HibernateImplementation(ImplementationModelBuilder builder) throws TechnologyModuleCompatibilityCheckException {
@@ -66,7 +67,8 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 	/**
 	 * Build a new Hibernate implementation for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Spring implementation
+	 * @param implementationModel
+	 *            the implementation model where to create this Spring implementation
 	 * @throws TechnologyModuleCompatibilityCheckException
 	 */
 	public HibernateImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
@@ -122,8 +124,9 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 	@Override
 	public void delete() {
 
-		for (HibernateModel hibernateModel : new Vector<HibernateModel>(getModels()))
+		for (HibernateModel hibernateModel : new Vector<HibernateModel>(getModels())) {
 			hibernateModel.delete();
+		}
 
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification<HibernateImplementation>(this));
@@ -138,8 +141,9 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 	 * @return the transformed name.
 	 */
 	public String getDbObjectName(String name) {
-		if (database != null && database instanceof DatabaseTechnologyModuleImplementation)
+		if (database != null && database instanceof DatabaseTechnologyModuleImplementation) {
 			return ((DatabaseTechnologyModuleImplementation) database).getDbObjectName(name);
+		}
 
 		// Default implementation is to set all lower case without spaces
 		return name == null ? null : DatabaseTechnologyModuleImplementation.escapeDbObjectName(name).toLowerCase();

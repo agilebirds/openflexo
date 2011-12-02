@@ -30,7 +30,8 @@ public class HibernateEnumValue extends TechnologyModelObject {
 	 * Build a new Hibernate enum value for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during deserialization.
 	 * 
-	 * @param builder the builder that will create this enum value
+	 * @param builder
+	 *            the builder that will create this enum value
 	 */
 	public HibernateEnumValue(ImplementationModelBuilder builder) {
 		this(builder.implementationModel);
@@ -40,7 +41,8 @@ public class HibernateEnumValue extends TechnologyModelObject {
 	/**
 	 * Build a new Hibernate enum value for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Hibernate enum value
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate enum value
 	 */
 	public HibernateEnumValue(ImplementationModel implementationModel) {
 		super(implementationModel);
@@ -84,8 +86,9 @@ public class HibernateEnumValue extends TechnologyModelObject {
 	@Override
 	public void delete() {
 
-		if (getHibernateEnum() != null)
+		if (getHibernateEnum() != null) {
 			getHibernateEnum().removeFromHibernateEnumValues(this);
+		}
 
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification<HibernateEnumValue>(this));

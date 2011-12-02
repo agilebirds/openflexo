@@ -64,7 +64,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	private static final String FLOAT_DEFAULT_CODE = "    //TODO: Implement this method" + StringUtils.LINE_SEPARATOR + "    return 0.0f;";
 	private static final String INT_DEFAULT_CODE = "    //TODO: Implement this method" + StringUtils.LINE_SEPARATOR + "    return 0;";
 	private static final String CHAR_DEFAULT_CODE = "    //TODO: Implement this method" + StringUtils.LINE_SEPARATOR + "    return ' ';";
-	private static final String BOOLEAN_DEFAULT_CODE = "    //TODO: Implement this method" + StringUtils.LINE_SEPARATOR + "    return false;";
+	private static final String BOOLEAN_DEFAULT_CODE = "    //TODO: Implement this method" + StringUtils.LINE_SEPARATOR
+			+ "    return false;";
 	private static final String DEFAULT_CODE = "    //TODO: Implement this method" + StringUtils.LINE_SEPARATOR + "    return null;";
 	private static final String COMPILED_CODE = "    /* compiled code not available */";
 	private static final String COMPILED_CODE_IN_JAVADOC = "< compiled code >";
@@ -137,12 +138,14 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	}
 
 	/**
-	 * Update this property given an other property. This method updates only data extracted from LoadableDMEntity features and exclude many properties such as description.
+	 * Update this property given an other property. This method updates only data extracted from LoadableDMEntity features and exclude many
+	 * properties such as description.
 	 * 
 	 * @throws DuplicateMethodSignatureException
 	 */
 	public void update(DMMethod method, boolean updateDescription) throws DuplicateMethodSignatureException {
-		if (getEntity() != null && getEntity().getMethod(method.getSignature()) != null && getEntity().getMethod(method.getSignature()) != this) {
+		if (getEntity() != null && getEntity().getMethod(method.getSignature()) != null
+				&& getEntity().getMethod(method.getSignature()) != this) {
 			throw new DuplicateMethodSignatureException(method.getSignature());
 		}
 
@@ -272,12 +275,14 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 		// Descriptions
 		if (updateDescription) {
-			if (getDescription() == null && method.getDescription() != null || getDescription() != null && !getDescription().equals(method.getDescription())) {
+			if (getDescription() == null && method.getDescription() != null || getDescription() != null
+					&& !getDescription().equals(method.getDescription())) {
 				setDescription(method.getDescription());
 			}
 			for (String descriptionKey : method.getSpecificDescriptions().keySet()) {
 				String description = method.getSpecificDescriptionForKey(descriptionKey);
-				if (description == null && getSpecificDescriptionForKey(descriptionKey) != null || description != null && !description.equals(getSpecificDescriptionForKey(descriptionKey))) {
+				if (description == null && getSpecificDescriptionForKey(descriptionKey) != null || description != null
+						&& !description.equals(getSpecificDescriptionForKey(descriptionKey))) {
 					setSpecificDescriptionsForKey(description, descriptionKey);
 				}
 			}
@@ -427,7 +432,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 					DMMethodParameter next = (DMMethodParameter) en.nextElement();
 					String typeName = "";
 					if (next.getType() != null) {
-						typeName = fullyQualified ? next.getType().getStringRepresentation() : next.getType().getSimplifiedStringRepresentation();
+						typeName = fullyQualified ? next.getType().getStringRepresentation() : next.getType()
+								.getSimplifiedStringRepresentation();
 					}
 					returned.append((isFirst ? "" : ",") + typeName);
 					isFirst = false;
@@ -682,6 +688,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 	private MethodSourceCode sourceCode;
 
+	@Override
 	public void resetSourceCode() throws ParserNotInstalledException, DuplicateMethodSignatureException {
 		if (sourceCode != null) {
 			sourceCode.setCode("");
@@ -693,7 +700,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			sourceCode = new MethodSourceCode(this/* ,"code","hasParseError","parseErrorWarning" */) {
 				@Override
 				public String makeComputedCode() {
-					return getJavadoc() + StringUtils.LINE_SEPARATOR + getMethodHeader() + " {" + StringUtils.LINE_SEPARATOR + getDefaultCoreCode() + StringUtils.LINE_SEPARATOR + "}";
+					return getJavadoc() + StringUtils.LINE_SEPARATOR + getMethodHeader() + " {" + StringUtils.LINE_SEPARATOR
+							+ getDefaultCoreCode() + StringUtils.LINE_SEPARATOR + "}";
 				}
 
 				@Override
@@ -705,13 +713,15 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 						if (!isResolvable()) {
 							setHasParseErrors(true);
-							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)") + " : " + getUnresolvedTypes() + "</font></html>");
+							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)")
+									+ " : " + getUnresolvedTypes() + "</font></html>");
 						}
 						DMMethod.this.setChanged();
 						DMMethod.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("code", null, getCode()));
 					} catch (DuplicateMethodSignatureException e) {
 						setHasParseErrors(true);
-						setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
+						setParseErrorWarning("<html><font color=\"red\">"
+								+ FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
 						throw e;
 					}
 				}
@@ -747,7 +757,9 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	 */
 	@Deprecated
 	public void setCoreCode(String someCoreCode) {
-		getSourceCode().updateComputedCode(getJavadoc() + StringUtils.LINE_SEPARATOR + getMethodHeader() + " { " + StringUtils.LINE_SEPARATOR + someCoreCode + StringUtils.LINE_SEPARATOR + "}");
+		getSourceCode().updateComputedCode(
+				getJavadoc() + StringUtils.LINE_SEPARATOR + getMethodHeader() + " { " + StringUtils.LINE_SEPARATOR + someCoreCode
+						+ StringUtils.LINE_SEPARATOR + "}");
 	}
 
 	public String getCode() {
@@ -761,8 +773,11 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	}
 
 	public String getModifiersAsString() {
-		return (getVisibilityModifier() != null ? (getVisibilityModifier() != DMVisibilityType.NONE ? getVisibilityModifier().getName() + " " : "") : "") + (getIsStatic() ? "static" + " " : "")
-				+ (getIsAbstract() ? "abstract" + " " : "") + (getIsSynchronized() ? "synchronized" + " " : "");
+		return (getVisibilityModifier() != null ? (getVisibilityModifier() != DMVisibilityType.NONE ? getVisibilityModifier().getName()
+				+ " " : "") : "")
+				+ (getIsStatic() ? "static" + " " : "")
+				+ (getIsAbstract() ? "abstract" + " " : "")
+				+ (getIsSynchronized() ? "synchronized" + " " : "");
 	}
 
 	public DMVisibilityType getVisibilityModifier() {
@@ -945,6 +960,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	 * 
 	 * @return a String value
 	 */
+	@Override
 	public String getInspectorName() {
 		if (getIsReadOnly()) {
 			return Inspectors.DM.DM_RO_METHOD_INSPECTOR;
@@ -1015,6 +1031,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		}
 	}
 
+	@Override
 	public DMEntity getEntity() {
 		return entity;
 	}
@@ -1034,10 +1051,12 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		return false;
 	}
 
+	@Override
 	public DMType getType() {
 		return getReturnType();
 	}
 
+	@Override
 	public void setType(DMType type) {
 		setReturnType(type, true);
 	}
@@ -1145,6 +1164,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		return false;
 	}
 
+	@Override
 	public Vector<DMTypeVariable> getTypeVariables() {
 		if (getEntity() != null) {
 			return getEntity().getTypeVariables();
@@ -1221,7 +1241,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			}
 
 			// Description
-			if (getDescription() == null && methodParameter.getDescription() != null || getDescription() != null && !getDescription().equals(methodParameter.getDescription())) {
+			if (getDescription() == null && methodParameter.getDescription() != null || getDescription() != null
+					&& !getDescription().equals(methodParameter.getDescription())) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update description");
 				}
@@ -1260,6 +1281,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			}
 		}
 
+		@Override
 		public Vector<DMTypeVariable> getTypeVariables() {
 			if (getMethod() != null) {
 				return getMethod().getTypeVariables();
@@ -1274,6 +1296,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 		// private String typeAsString;
 
+		@Override
 		public DMType getType() {
 			/*
 			 * if (_type==null && typeAsString!=null) { setType(getDMModel().getDmTypeConverter().convertFromString(typeAsString),false); typeAsString = null; }
@@ -1281,6 +1304,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			return _type;
 		}
 
+		@Override
 		public void setType(DMType type) {
 			setType(type, true);
 		}
@@ -1376,6 +1400,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		 * 
 		 * @return null
 		 */
+		@Override
 		public String getInspectorName() {
 			return null;
 		}
@@ -1420,7 +1445,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof DMEntityClassNameChanged && observable == getType().getBaseEntity()) {
 				// Handle class name changed
-				updateTypeClassNameChange((String) ((DMEntityClassNameChanged) dataModification).oldValue(), (String) ((DMEntityClassNameChanged) dataModification).newValue());
+				updateTypeClassNameChange((String) ((DMEntityClassNameChanged) dataModification).oldValue(),
+						(String) ((DMEntityClassNameChanged) dataModification).newValue());
 			} else if (dataModification instanceof DMObjectDeleted && observable == getType().getBaseEntity()) {
 				DMEntity parent = getType().getBaseEntity();
 				while (parent != null && parent.isDeleted()) {
@@ -1453,7 +1479,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 				_method.updateSignature();
 				_method.updateCode();
 				if (_method.getSourceCode().getCode() != null) {
-					_method.getSourceCode().setCode(ToolBox.replaceStringByStringInString(oldClassName, newClassName, _method.getSourceCode().getCode()));
+					_method.getSourceCode().setCode(
+							ToolBox.replaceStringByStringInString(oldClassName, newClassName, _method.getSourceCode().getCode()));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1556,7 +1583,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof DMEntityClassNameChanged && observable == getType().getBaseEntity()) {
 			// Handle class name changed
-			updateTypeClassNameChange((String) ((DMEntityClassNameChanged) dataModification).oldValue(), (String) ((DMEntityClassNameChanged) dataModification).newValue());
+			updateTypeClassNameChange((String) ((DMEntityClassNameChanged) dataModification).oldValue(),
+					(String) ((DMEntityClassNameChanged) dataModification).newValue());
 		} else if (dataModification instanceof DMObjectDeleted && observable == getType().getBaseEntity()) {
 			DMEntity parent = getType().getBaseEntity();
 			while (parent != null && parent.isDeleted()) {
@@ -1605,10 +1633,12 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		if (_isStaticallyDefinedInTemplate != isStaticallyDefinedInTemplate) {
 			_isStaticallyDefinedInTemplate = isStaticallyDefinedInTemplate;
 			setChanged();
-			notifyObservers(new DMAttributeDataModification("isStaticallyDefinedInTemplate", !isStaticallyDefinedInTemplate, isStaticallyDefinedInTemplate));
+			notifyObservers(new DMAttributeDataModification("isStaticallyDefinedInTemplate", !isStaticallyDefinedInTemplate,
+					isStaticallyDefinedInTemplate));
 		}
 	}
 
+	@Override
 	public boolean codeIsComputable() {
 		return true;
 	}

@@ -37,7 +37,8 @@ public class HibernateTechnologyDefinition extends TechnologyModuleDefinition {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
+	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel)
+			throws TechnologyModuleCompatibilityCheckException {
 		HibernateImplementation hibernateImplementation = new HibernateImplementation(implementationModel);
 		return hibernateImplementation;
 	}

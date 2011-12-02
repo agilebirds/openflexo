@@ -279,11 +279,14 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	/**
-	 * Build instanciated DMType considering supplied type is generic (contains TypeVariable definitions) Returns a clone of DMType where all references to TypeVariable are replaced by values defined
-	 * in context type. For example, given type=Enumeration<E> and context=Vector<String>, returns Enumeration<String> If supplied type is not generic, return type value (without cloning!)
+	 * Build instanciated DMType considering supplied type is generic (contains TypeVariable definitions) Returns a clone of DMType where
+	 * all references to TypeVariable are replaced by values defined in context type. For example, given type=Enumeration<E> and
+	 * context=Vector<String>, returns Enumeration<String> If supplied type is not generic, return type value (without cloning!)
 	 * 
-	 * @param type : type to instanciate
-	 * @param context : context used to instanciate type
+	 * @param type
+	 *            : type to instanciate
+	 * @param context
+	 *            : context used to instanciate type
 	 * @return
 	 */
 	public static DMType makeInstantiatedDMType(DMType type, DMType context) {
@@ -335,7 +338,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 					// And use this parent context to recursively call
 					return makeInstantiatedDMType(type, parentContext);
 				} else {
-					logger.warning("Unexpected situation (type generics not instanciated) encountered in makeInstantiatedDMType(" + type + "," + context + ")");
+					logger.warning("Unexpected situation (type generics not instanciated) encountered in makeInstantiatedDMType(" + type
+							+ "," + context + ")");
 					return makeObjectDMType(context.getProject());
 				}
 			}
@@ -642,14 +646,18 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	/**
-	 * Determines if the type represented by this <code>DMType</code> object is either the same as, or is a superclass or superinterface of, the type represented by the specified <code>DMType</code>
-	 * parameter. It returns <code>true</code> if so; otherwise it returns <code>false</code>.
+	 * Determines if the type represented by this <code>DMType</code> object is either the same as, or is a superclass or superinterface of,
+	 * the type represented by the specified <code>DMType</code> parameter. It returns <code>true</code> if so; otherwise it returns
+	 * <code>false</code>.
 	 * 
 	 * <p>
-	 * Specifically, this method tests whether the type represented by the specified <code>DMType</code> parameter can be converted to the type represented by this <code>DMType</code> object.
+	 * Specifically, this method tests whether the type represented by the specified <code>DMType</code> parameter can be converted to the
+	 * type represented by this <code>DMType</code> object.
 	 * 
-	 * @param type the <code>DMType</code> object to be checked
-	 * @return the <code>boolean</code> value indicating whether objects of the type <code>type</code> can be assigned to objects of this type
+	 * @param type
+	 *            the <code>DMType</code> object to be checked
+	 * @return the <code>boolean</code> value indicating whether objects of the type <code>type</code> can be assigned to objects of this
+	 *         type
 	 * 
 	 * @param type
 	 * @return
@@ -659,17 +667,22 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	/**
-	 * Determines if the type represented by this <code>DMType</code> object is either the same as, or is a superclass or superinterface of, the type represented by the specified <code>DMType</code>
-	 * parameter. It returns <code>true</code> if so; otherwise it returns <code>false</code>.
+	 * Determines if the type represented by this <code>DMType</code> object is either the same as, or is a superclass or superinterface of,
+	 * the type represented by the specified <code>DMType</code> parameter. It returns <code>true</code> if so; otherwise it returns
+	 * <code>false</code>.
 	 * 
 	 * <p>
-	 * Specifically, this method tests whether the type represented by the specified <code>DMType</code> parameter can be converted to the type represented by this <code>DMType</code> object.
-	 * 
-	 * @param type the <code>DMType</code> object to be checked
-	 * @return the <code>boolean</code> value indicating whether objects of the type <code>type</code> can be assigned to objects of this type
+	 * Specifically, this method tests whether the type represented by the specified <code>DMType</code> parameter can be converted to the
+	 * type represented by this <code>DMType</code> object.
 	 * 
 	 * @param type
-	 * @param permissive is a flag used to allow casts between primitives types (eg long casted to int). In this case, require an explicit cast
+	 *            the <code>DMType</code> object to be checked
+	 * @return the <code>boolean</code> value indicating whether objects of the type <code>type</code> can be assigned to objects of this
+	 *         type
+	 * 
+	 * @param type
+	 * @param permissive
+	 *            is a flag used to allow casts between primitives types (eg long casted to int). In this case, require an explicit cast
 	 * @return
 	 */
 	// Is this type a parent class or interface of type with compatible parameters ?
@@ -699,11 +712,13 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			}
 
 			if (isDouble()) {
-				return type.isDouble() || type.isFloat() || type.isLong() || type.isInteger() || type.isShort() || type.isChar() || type.isByte();
+				return type.isDouble() || type.isFloat() || type.isLong() || type.isInteger() || type.isShort() || type.isChar()
+						|| type.isByte();
 			}
 
 			if (isFloat()) {
-				return (type.isDouble() && permissive) || type.isFloat() || type.isLong() || type.isInteger() || type.isShort() || type.isChar() || type.isByte();
+				return (type.isDouble() && permissive) || type.isFloat() || type.isLong() || type.isInteger() || type.isShort()
+						|| type.isChar() || type.isByte();
 			}
 
 			if (isLong()) {
@@ -715,15 +730,18 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			}
 
 			if (isShort()) {
-				return (type.isLong() && permissive) || (type.isInteger() && permissive) || type.isShort() || type.isChar() || type.isByte();
+				return (type.isLong() && permissive) || (type.isInteger() && permissive) || type.isShort() || type.isChar()
+						|| type.isByte();
 			}
 
 			if (isChar()) {
-				return (type.isLong() && permissive) || (type.isInteger() && permissive) || (type.isShort() && permissive) || type.isChar() || (type.isShort() && permissive);
+				return (type.isLong() && permissive) || (type.isInteger() && permissive) || (type.isShort() && permissive) || type.isChar()
+						|| (type.isShort() && permissive);
 			}
 
 			if (isByte()) {
-				return (type.isLong() && permissive) || (type.isInteger() && permissive) || (type.isShort() && permissive) || (type.isChar() && permissive) || type.isByte();
+				return (type.isLong() && permissive) || (type.isInteger() && permissive) || (type.isShort() && permissive)
+						|| (type.isChar() && permissive) || type.isByte();
 			}
 
 			if (type.isBooleanPrimitive()) {
@@ -976,7 +994,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		}
 
 		else if ((getKindOfType() == KindOfType.RESOLVED) || (getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
-			if (((stringRepresentationCache == null) && !fullyQualified) || ((fullyQualifiedStringRepresentationCache == null) && fullyQualified)) {
+			if (((stringRepresentationCache == null) && !fullyQualified)
+					|| ((fullyQualifiedStringRepresentationCache == null) && fullyQualified)) {
 				StringBuilder returned = new StringBuilder();
 				returned.append(fullyQualified ? getBaseEntity().getFullQualifiedName() : getBaseEntity().getEntityClassName());
 				if (parameters.size() > 0) {
@@ -1019,7 +1038,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		}
 
 		else if (getKindOfType() == KindOfType.WILDCARD) {
-			if (((stringRepresentationCache == null) && !fullyQualified) || ((fullyQualifiedStringRepresentationCache == null) && fullyQualified)) {
+			if (((stringRepresentationCache == null) && !fullyQualified)
+					|| ((fullyQualifiedStringRepresentationCache == null) && fullyQualified)) {
 				StringBuilder returned = new StringBuilder();
 				returned.append("?");
 				if ((getUpperBounds() != null) && (getUpperBounds().size() > 0)) {
@@ -1058,8 +1078,9 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	/**
-	 * Return flag indicating if this type is considered as generic A generic type is a type that is parameterized with type variable(s). If this type is resolved but contains a type in it definition
-	 * containing itself a generic definition, then this type is also generic (this 'isGeneric' property is recursively transmissible).
+	 * Return flag indicating if this type is considered as generic A generic type is a type that is parameterized with type variable(s). If
+	 * this type is resolved but contains a type in it definition containing itself a generic definition, then this type is also generic
+	 * (this 'isGeneric' property is recursively transmissible).
 	 * 
 	 * @return a flag indicating whether this type is resolved or not
 	 */
@@ -1599,8 +1620,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 				type.notifyTypeResolved();
 			} else {
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Type " + type._pendingInformations + " is pending owner=" + type.getOwner() + "variableContext=" + type.getTypeVariableContext() + " "
-							+ Integer.toHexString(type.hashCode()));
+					logger.fine("Type " + type._pendingInformations + " is pending owner=" + type.getOwner() + "variableContext="
+							+ type.getTypeVariableContext() + " " + Integer.toHexString(type.hashCode()));
 				}
 			}
 			return returned;
@@ -1705,7 +1726,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	public boolean isBoolean() {
-		return _isBasicType() && (isBooleanPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Boolean.class)));
+		return _isBasicType()
+				&& (isBooleanPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Boolean.class)));
 	}
 
 	public boolean isBooleanPrimitive() {
@@ -1713,7 +1735,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	public boolean isInteger() {
-		return _isBasicType() && (isIntegerPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Integer.class)));
+		return _isBasicType()
+				&& (isIntegerPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Integer.class)));
 	}
 
 	public boolean isIntegerPrimitive() {
@@ -1729,7 +1752,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	public boolean isShort() {
-		return _isBasicType() && (isShortPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Short.class)));
+		return _isBasicType()
+				&& (isShortPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Short.class)));
 	}
 
 	public boolean isShortPrimitive() {
@@ -1737,7 +1761,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	public boolean isChar() {
-		return _isBasicType() && (isCharPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Character.class)));
+		return _isBasicType()
+				&& (isCharPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Character.class)));
 	}
 
 	public boolean isCharPrimitive() {
@@ -1753,7 +1778,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	public boolean isFloat() {
-		return _isBasicType() && (isFloatPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Float.class)));
+		return _isBasicType()
+				&& (isFloatPrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Float.class)));
 	}
 
 	public boolean isFloatPrimitive() {
@@ -1761,7 +1787,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	}
 
 	public boolean isDouble() {
-		return _isBasicType() && (isDoublePrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Double.class)));
+		return _isBasicType()
+				&& (isDoublePrimitive() || (getBaseEntity() == getBaseEntity().getDMModel().getDMEntity(java.lang.Double.class)));
 	}
 
 	public boolean isDoublePrimitive() {
@@ -1801,7 +1828,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 
 	@Override
 	public boolean isPrimitive() {
-		return isBooleanPrimitive() || isIntegerPrimitive() || isCharPrimitive() || isFloatPrimitive() || isDoublePrimitive() || isLongPrimitive() || isBytePrimitive() || isShortPrimitive();
+		return isBooleanPrimitive() || isIntegerPrimitive() || isCharPrimitive() || isFloatPrimitive() || isDoublePrimitive()
+				|| isLongPrimitive() || isBytePrimitive() || isShortPrimitive();
 
 	}
 

@@ -50,7 +50,8 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	 * Build a new Hibernate mode for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during unserialization.
 	 * 
-	 * @param builder the builder that will create this entity
+	 * @param builder
+	 *            the builder that will create this entity
 	 */
 	public HibernateModel(ImplementationModelBuilder builder) {
 		this(builder.implementationModel);
@@ -60,7 +61,8 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	/**
 	 * Build a new Hibernate model for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Hibernate entity
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate entity
 	 */
 	protected HibernateModel(ImplementationModel implementationModel) {
 		super(implementationModel);
@@ -69,7 +71,8 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	/**
 	 * Build a new Hibernate model for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Hibernate entity
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate entity
 	 */
 	protected HibernateModel(ImplementationModel implementationModel, DMRepository watchedRepository) {
 		super(implementationModel, watchedRepository);
@@ -122,17 +125,19 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 
 			Map<DMEntity, LinkableTechnologyModelObject<?>> alreadyCreatedChildren = new HashMap<DMEntity, LinkableTechnologyModelObject<?>>();
 			for (HibernateEntity hibernateEntity : this.entities) {
-				if (hibernateEntity.getLinkedFlexoModelObject() != null)
+				if (hibernateEntity.getLinkedFlexoModelObject() != null) {
 					alreadyCreatedChildren.put(hibernateEntity.getLinkedFlexoModelObject(), hibernateEntity);
-				else if (hibernateEntity.getWasLinkedAtLastDeserialization())
+				} else if (hibernateEntity.getWasLinkedAtLastDeserialization()) {
 					deletedChildren.add(hibernateEntity);
+				}
 			}
 
 			for (HibernateEnum hibernateEnum : getHibernateEnumContainer().getHibernateEnums()) {
-				if (hibernateEnum.getLinkedFlexoModelObject() != null)
+				if (hibernateEnum.getLinkedFlexoModelObject() != null) {
 					alreadyCreatedChildren.put(hibernateEnum.getLinkedFlexoModelObject(), hibernateEnum);
-				else if (hibernateEnum.getWasLinkedAtLastDeserialization())
+				} else if (hibernateEnum.getWasLinkedAtLastDeserialization()) {
 					deletedChildren.add(hibernateEnum);
+				}
 			}
 
 			// Create missing entities & enums and update existing ones
@@ -145,8 +150,9 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 			}
 
 			// Remove deleted entities & enums
-			for (LinkableTechnologyModelObject<?> hibernateObj : deletedChildren)
+			for (LinkableTechnologyModelObject<?> hibernateObj : deletedChildren) {
 				hibernateObj.delete();
+			}
 		}
 	}
 
@@ -154,8 +160,8 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	/* ====== Actions ====== */
 	/* ===================== */
 
-	public static HibernateModel createNewHibernateModel(String name, HibernateImplementation hibernateImplementation, DMRepository watchedRepository) throws DuplicateResourceException,
-			InvalidNameException {
+	public static HibernateModel createNewHibernateModel(String name, HibernateImplementation hibernateImplementation,
+			DMRepository watchedRepository) throws DuplicateResourceException, InvalidNameException {
 		HibernateModel newModel = new HibernateModel(hibernateImplementation.getImplementationModel(), watchedRepository);
 		newModel.setName(name);
 		hibernateImplementation.addToModels(newModel);
@@ -175,11 +181,13 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	@Override
 	public void delete() {
 
-		for (HibernateEntity hibernateEntity : new Vector<HibernateEntity>(getEntities()))
+		for (HibernateEntity hibernateEntity : new Vector<HibernateEntity>(getEntities())) {
 			hibernateEntity.delete();
+		}
 
-		if (getHibernateImplementation() != null)
+		if (getHibernateImplementation() != null) {
 			getHibernateImplementation().removeFromModels(this);
+		}
 
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification<HibernateModel>(this));
@@ -188,10 +196,12 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	}
 
 	/**
-	 * Add a new Hibernate Entity or Hibernate Enum to this model. The newly created hibernate object is based and linked to the specified DMEntity. <br>
+	 * Add a new Hibernate Entity or Hibernate Enum to this model. The newly created hibernate object is based and linked to the specified
+	 * DMEntity. <br>
 	 * If an Hibernate object was already existing for this DMEntity, nothing is performed.
 	 * 
-	 * @param dmEntity the DMEntity the newly created Hibernate object should be linked to.
+	 * @param dmEntity
+	 *            the DMEntity the newly created Hibernate object should be linked to.
 	 */
 	public void createHibernateObjectBasedOnDMEntity(DMEntity dmEntity) {
 		if (dmEntity.getIsEnumeration()) {
@@ -227,11 +237,13 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
 		if (observable == getLinkedFlexoModelObject()) {
-			if (dataModification instanceof EntityRegistered)
+			if (dataModification instanceof EntityRegistered) {
 				createHibernateObjectBasedOnDMEntity((DMEntity) dataModification.newValue());
+			}
 		}
-		if (dataModification instanceof NameChanged)
+		if (dataModification instanceof NameChanged) {
 			sortEntities();
+		}
 	}
 
 	/* ===================== */
@@ -251,13 +263,15 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 		if (requireChange(this.entities, entities)) {
 			Vector<HibernateEntity> oldValue = this.entities;
 
-			for (HibernateEntity entity : oldValue)
+			for (HibernateEntity entity : oldValue) {
 				entity.deleteObserver(this);
+			}
 
 			this.entities = entities;
 
-			for (HibernateEntity entity : entities)
+			for (HibernateEntity entity : entities) {
 				entity.addObserver(this);
+			}
 
 			sortEntities();
 			setChanged();
@@ -292,8 +306,9 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	 */
 	public HibernateEntity getEntity(String entityName) {
 		for (HibernateEntity entity : entities) {
-			if (entity.getName().equals(entityName))
+			if (entity.getName().equals(entityName)) {
 				return entity;
+			}
 		}
 
 		return null;
@@ -307,8 +322,9 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	 */
 	public HibernateEntity getEntity(DMEntity dmEntity) {
 		for (HibernateEntity entity : entities) {
-			if (entity.getLinkedFlexoModelObject() == dmEntity)
+			if (entity.getLinkedFlexoModelObject() == dmEntity) {
 				return entity;
+			}
 		}
 
 		return null;
@@ -329,11 +345,13 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	public void setHibernateEnumContainer(HibernateEnumContainer hibernateEnumContainer) {
 		if (requireChange(this.hibernateEnumContainer, hibernateEnumContainer)) {
 			HibernateEnumContainer oldValue = this.hibernateEnumContainer;
-			if (oldValue != null)
+			if (oldValue != null) {
 				hibernateEnumContainer.setHibernateModel(null);
+			}
 			this.hibernateEnumContainer = hibernateEnumContainer;
-			if (hibernateEnumContainer != null)
+			if (hibernateEnumContainer != null) {
 				hibernateEnumContainer.setHibernateModel(this);
+			}
 			setChanged();
 			notifyObservers(new SGAttributeModification("hibernateEnumContainer", oldValue, hibernateEnumContainer));
 		}

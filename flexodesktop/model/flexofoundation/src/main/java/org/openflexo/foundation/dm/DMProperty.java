@@ -72,7 +72,8 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public class DMProperty extends DMObject implements Typed, BindingValue.BindingPathElement, DMGenericDeclaration, DMTypeOwner, DMMember, SourceCodeOwner {
+public class DMProperty extends DMObject implements Typed, BindingValue.BindingPathElement, DMGenericDeclaration, DMTypeOwner, DMMember,
+		SourceCodeOwner {
 
 	static final Logger logger = Logger.getLogger(DMEntity.class.getPackage().getName());
 
@@ -130,7 +131,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	/**
 	 * Constructor used for dynamic creation
 	 */
-	public DMProperty(DMModel dmModel,/* DMEntity entity, */String name, DMType type, DMCardinality cardinality, boolean isReadOnly, boolean isSettable, DMPropertyImplementationType implementationType) {
+	public DMProperty(DMModel dmModel,/* DMEntity entity, */String name, DMType type, DMCardinality cardinality, boolean isReadOnly,
+			boolean isSettable, DMPropertyImplementationType implementationType) {
 		this(dmModel);
 		// this.entity = entity;
 		this.name = name;
@@ -150,8 +152,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			getEntity().unregisterProperty(this);
 		}
 
-		if (_type != null)
+		if (_type != null) {
 			_type.removeFromTypedWithThisType(this);
+		}
 		setChanged();
 		notifyObservers(new DMObjectDeleted<DMProperty>(this));
 		name = null;
@@ -165,8 +168,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	@Override
 	public boolean isDeletable() {
-		if (getEntity() == null)
+		if (getEntity() == null) {
 			return true;
+		}
 		return !getIsReadOnly();
 	}
 
@@ -190,6 +194,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		updateCode();
 	}
 
+	@Override
 	public String getSerializationRepresentation() {
 		return getName();
 	}
@@ -199,13 +204,16 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 * 
 	 * @return a String value
 	 */
+	@Override
 	public String getInspectorName() {
-		if (getIsReadOnly())
+		if (getIsReadOnly()) {
 			return Inspectors.DM.DM_RO_PROPERTY_INSPECTOR;
-		if (getDMRepository() == null || getDMRepository().isReadOnly())
+		}
+		if (getDMRepository() == null || getDMRepository().isReadOnly()) {
 			return Inspectors.DM.DM_RO_PROPERTY_INSPECTOR;
-		else
+		} else {
 			return Inspectors.DM.DM_PROPERTY_INSPECTOR;
+		}
 	}
 
 	/**
@@ -233,8 +241,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	@Override
 	public void setName(String newName) throws InvalidNameException, DuplicatePropertyNameException {
 		if ((name == null) || (!name.equals(newName))) {
-			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches()))
+			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 				throw new InvalidNameException("'" + newName + "' is not a valid name for property.");
+			}
 			DMEntity containerEntity = getEntity();
 			boolean isBindable = containerEntity instanceof ComponentDMEntity && ((ComponentDMEntity) containerEntity).isBindable(this);
 			boolean mandatory = containerEntity instanceof ComponentDMEntity && ((ComponentDMEntity) containerEntity).isMandatory(this);
@@ -243,8 +252,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 				if (containerEntity.getProperties().get(newName) != null) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("You are trying to redefine property " + newName + "(" + getType() + ") " + " but property " + newName + "("
-								+ containerEntity.getProperties().get(newName).getType() + ") is already existing");
+						logger.warning("You are trying to redefine property " + newName + "(" + getType() + ") " + " but property "
+								+ newName + "(" + containerEntity.getProperties().get(newName).getType() + ") is already existing");
 					}
 					throw new DuplicatePropertyNameException(newName);
 				}
@@ -253,10 +262,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			}
 			String oldName = name;
 			name = newName;
-			if (oldName == null && getFieldName() == null)
+			if (oldName == null && getFieldName() == null) {
 				setFieldName(newName);
-			else if (getFieldName() != null && getFieldName().equals(oldName))
+			} else if (getFieldName() != null && getFieldName().equals(oldName)) {
 				setFieldName(newName);
+			}
 			// logger.fine("Change "+oldName+" to "+newName);
 			if (containerEntity != null) {
 				containerEntity.registerProperty(this, false, isBindable);
@@ -286,6 +296,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		notifyObservers(new DMAttributeDataModification("cardinality", oldCardinality, cardinality));
 	}
 
+	@Override
 	public DMEntity getEntity() {
 		return entity;
 	}
@@ -296,10 +307,12 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public boolean getIsReadOnly() {
-		if (getIsStaticallyDefinedInTemplate())
+		if (getIsStaticallyDefinedInTemplate()) {
 			return true;
-		if (getEntity() != null && getEntity().getIsReadOnly())
+		}
+		if (getEntity() != null && getEntity().getIsReadOnly()) {
 			return true;
+		}
 		return _isReadOnly;
 	}
 
@@ -376,27 +389,32 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	private DMType _hashtableResultingType;
 
 	/**
-	 * Return resulting type of this property, which refer both to base type and cardinality If cardinality is SINGLE, resulting type equals type
+	 * Return resulting type of this property, which refer both to base type and cardinality If cardinality is SINGLE, resulting type equals
+	 * type
 	 * 
 	 * @return DMType, resulting type
 	 */
+	@Override
 	public DMType getResultingType() {
 		if (getCardinality() == DMCardinality.SINGLE) {
 			return getType();
 		} else if (getCardinality() == DMCardinality.VECTOR) {
 			if (_vectorResultingType == null && !isDeserializing()) {
 				_vectorResultingType = DMType.makeVectorDMType(getType(), getProject());
-				if (getType() != null)
+				if (getType() != null) {
 					_vectorResultingType.setParameterAtIndex(getType(), 0);
+				}
 			}
 			return _vectorResultingType;
 		} else if (getCardinality() == DMCardinality.HASHTABLE) {
 			if (_hashtableResultingType == null && !isDeserializing()) {
 				_hashtableResultingType = DMType.makeHashtableDMType(getKeyType(), getType(), getProject());
-				if (getKeyType() != null)
+				if (getKeyType() != null) {
 					_hashtableResultingType.setParameterAtIndex(getKeyType(), 0);
-				if (getType() != null)
+				}
+				if (getType() != null) {
 					_hashtableResultingType.setParameterAtIndex(getType(), 1);
+				}
 			}
 			return _hashtableResultingType;
 		}
@@ -404,10 +422,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public String getTypeStringRepresentation() {
-		if (getResultingType() == null)
+		if (getResultingType() == null) {
 			return FlexoLocalization.localizedForKey("no_type");
-		else
+		} else {
 			return getResultingType().getSimplifiedStringRepresentation();
+		}
 	}
 
 	// private String typeAsString;
@@ -415,6 +434,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	/**
 	 * Return type of this property
 	 */
+	@Override
 	public DMType getType() {
 		/*
 		 * if (_type==null && typeAsString!=null) { setType(getDMModel().getDmTypeConverter().convertFromString(typeAsString),false); typeAsString = null; }
@@ -422,13 +442,15 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		return _type;
 	}
 
+	@Override
 	public void setType(DMType type) {
 		setType(type, true);
 	}
 
 	public void setType(DMType type, boolean notify) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setType in " + name + " with " + type.getStringRepresentation());
+		}
 		if ((type == null && _type != null) || (type != null && !type.equals(_type))) {
 			DMType oldType = _type;
 			if (oldType != null) {
@@ -462,8 +484,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 */
 	@Deprecated
 	public DMEntity getTypeBaseEntity() {
-		if (getType() != null)
+		if (getType() != null) {
 			return getType().getBaseEntity();
+		}
 		return null;
 	}
 
@@ -477,8 +500,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public boolean overrides(DMProperty property) {
-		if ((property == null) || (property.getEntity() == null) || (property.getName() == null))
+		if ((property == null) || (property.getEntity() == null) || (property.getName() == null)) {
 			return false;
+		}
 		return (property.getEntity().isAncestorOf(getEntity()) && (property.getName().equals(getName())));
 	}
 
@@ -487,93 +511,112 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	/**
-	 * Update this property given an other property. This method updates only data extracted from LoadableDMEntity features and exclude many properties such as description.
+	 * Update this property given an other property. This method updates only data extracted from LoadableDMEntity features and exclude many
+	 * properties such as description.
 	 * 
 	 * @throws InvalidNameException
 	 * @throws DuplicatePropertyNameException
 	 */
 	public void update(DMProperty property, boolean updateDescription) throws InvalidNameException, DuplicatePropertyNameException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update " + getName() + " with " + property.getName());
+		}
 
 		// Name is supposed to be the same, but check anyway
 		if (!getName().equals(property.getName())) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update name");
+			}
 			setName(property.getName());
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Name is up-to-date");
+			}
 		}
 
 		// Cardinality
 		if (!getCardinality().equals(property.getCardinality())) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update cardinality");
+			}
 			setCardinality(property.getCardinality());
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Cardinality is up-to-date");
+			}
 		}
 		// Type
 		if ((getType() == null) || (!getType().equals(property.getType()))) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update type from " + getType() + " to " + property.getType());
+			}
 			setType(property.getType());
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Type is up-to-date");
+			}
 		}
 		// Key-Type
 		if ((getKeyType() == null) || (!getKeyType().equals(property.getKeyType()))) {
 			if (property.getKeyType() != null) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update key type from " + getKeyType() + " to " + property.getKeyType());
+				}
 				setKeyType(property.getKeyType(), true);
 			}
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Key-type is up-to-date");
+			}
 		}
 		// Read-only
 		if (getIsReadOnly() != property.getIsReadOnly()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update IsReadOnly");
+			}
 			setIsReadOnly(property.getIsReadOnly());
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("IsReadOnly is up-to-date");
+			}
 		}
 		// Settable
 		if (getIsSettable() != property.getIsSettable()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update IsSettable");
+			}
 			setIsSettable(property.getIsSettable());
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("IsSettable is up-to-date");
+			}
 		}
 		// Implementation type
 		if (getImplementationType() == null) {
-			if (property.getImplementationType() != null)
+			if (property.getImplementationType() != null) {
 				setImplementationType(property.getImplementationType());
+			}
 		} else if (!getImplementationType().equals(property.getImplementationType())) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update ImplementationType");
+			}
 			setImplementationType(property.getImplementationType());
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("ImplementationType is up-to-date");
+			}
 		}
 
 		// Descriptions
 		if (updateDescription) {
-			if ((getDescription() == null && property.getDescription() != null) || (getDescription() != null && !getDescription().equals(property.getDescription()))) {
+			if ((getDescription() == null && property.getDescription() != null)
+					|| (getDescription() != null && !getDescription().equals(property.getDescription()))) {
 				setDescription(property.getDescription());
 			}
 			for (String descriptionKey : property.getSpecificDescriptions().keySet()) {
 				String description = property.getSpecificDescriptionForKey(descriptionKey);
-				if ((description == null && getSpecificDescriptionForKey(descriptionKey) != null) || (description != null && !description.equals(getSpecificDescriptionForKey(descriptionKey)))) {
+				if ((description == null && getSpecificDescriptionForKey(descriptionKey) != null)
+						|| (description != null && !description.equals(getSpecificDescriptionForKey(descriptionKey)))) {
 					setSpecificDescriptionsForKey(description, descriptionKey);
 				}
 			}
@@ -585,10 +628,13 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 		if (getImplementationType().requiresField()) {
 			try {
-				if (getFieldSourceCode().getCode() == null && property.getFieldSourceCode().getCode() != null)
+				if (getFieldSourceCode().getCode() == null && property.getFieldSourceCode().getCode() != null) {
 					getFieldSourceCode().setCode(property.getFieldSourceCode().getCode());
-				if (getFieldSourceCode().getCode() != null && !getFieldSourceCode().getCode().equals(property.getFieldSourceCode().getCode()))
+				}
+				if (getFieldSourceCode().getCode() != null
+						&& !getFieldSourceCode().getCode().equals(property.getFieldSourceCode().getCode())) {
 					getFieldSourceCode().setCode(property.getFieldSourceCode().getCode());
+				}
 			} catch (ParserNotInstalledException e) {
 				e.printStackTrace();
 			} catch (DuplicateMethodSignatureException e) {
@@ -600,10 +646,13 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		if (getImplementationType().requiresAccessors()) {
 
 			try {
-				if (getGetterSourceCode().getCode() == null && property.getGetterSourceCode().getCode() != null)
+				if (getGetterSourceCode().getCode() == null && property.getGetterSourceCode().getCode() != null) {
 					getGetterSourceCode().setCode(property.getGetterSourceCode().getCode());
-				if (getGetterSourceCode().getCode() != null && !getGetterSourceCode().getCode().equals(property.getGetterSourceCode().getCode()))
+				}
+				if (getGetterSourceCode().getCode() != null
+						&& !getGetterSourceCode().getCode().equals(property.getGetterSourceCode().getCode())) {
 					getGetterSourceCode().setCode(property.getGetterSourceCode().getCode());
+				}
 			} catch (ParserNotInstalledException e) {
 				e.printStackTrace();
 			} catch (DuplicateMethodSignatureException e) {
@@ -613,31 +662,41 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 			if (getIsSettable()) {
 				try {
-					if (getSetterSourceCode().getCode() == null && property.getSetterSourceCode().getCode() != null)
+					if (getSetterSourceCode().getCode() == null && property.getSetterSourceCode().getCode() != null) {
 						getSetterSourceCode().setCode(property.getSetterSourceCode().getCode());
-					if (getSetterSourceCode().getCode() != null && !getSetterSourceCode().getCode().equals(property.getSetterSourceCode().getCode()))
+					}
+					if (getSetterSourceCode().getCode() != null
+							&& !getSetterSourceCode().getCode().equals(property.getSetterSourceCode().getCode())) {
 						getSetterSourceCode().setCode(property.getSetterSourceCode().getCode());
+					}
 				} catch (ParserNotInstalledException e) {
 					e.printStackTrace();
 				} catch (DuplicateMethodSignatureException e) {
 					logger.warning("Unexpected DuplicateMethodSignatureException");
 					e.printStackTrace();
 				}
-				if ((getSetterParamName() != null && property.getSetterParamName() == null) || (getSetterParamName() == null && property.getSetterParamName() != null)
-						|| (getSetterParamName() != null && !getSetterParamName().equals(property.getSetterParamName())))
+				if ((getSetterParamName() != null && property.getSetterParamName() == null)
+						|| (getSetterParamName() == null && property.getSetterParamName() != null)
+						|| (getSetterParamName() != null && !getSetterParamName().equals(property.getSetterParamName()))) {
 					setSetterParamName(property.getSetterParamName());
+				}
 			}
-			if ((getSetterParamName() != null && property.getSetterParamName() == null) || (getSetterParamName() == null && property.getSetterParamName() != null)
-					|| (getSetterParamName() != null && !getSetterParamName().equals(property.getSetterParamName())))
+			if ((getSetterParamName() != null && property.getSetterParamName() == null)
+					|| (getSetterParamName() == null && property.getSetterParamName() != null)
+					|| (getSetterParamName() != null && !getSetterParamName().equals(property.getSetterParamName()))) {
 				setSetterParamName(property.getSetterParamName());
+			}
 		}
 
 		if (getCardinality().isMultiple()) {
 			try {
-				if (getAdditionSourceCode().getCode() == null && property.getAdditionSourceCode().getCode() != null)
+				if (getAdditionSourceCode().getCode() == null && property.getAdditionSourceCode().getCode() != null) {
 					getAdditionSourceCode().setCode(property.getAdditionSourceCode().getCode());
-				if (getAdditionSourceCode().getCode() != null && !getAdditionSourceCode().getCode().equals(property.getAdditionSourceCode().getCode()))
+				}
+				if (getAdditionSourceCode().getCode() != null
+						&& !getAdditionSourceCode().getCode().equals(property.getAdditionSourceCode().getCode())) {
 					getAdditionSourceCode().setCode(property.getAdditionSourceCode().getCode());
+				}
 			} catch (ParserNotInstalledException e) {
 				e.printStackTrace();
 			} catch (DuplicateMethodSignatureException e) {
@@ -646,31 +705,42 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			}
 			if ((getAdditionAccessorParamName() != null && property.getAdditionAccessorParamName() == null)
 					|| (getAdditionAccessorParamName() == null && property.getAdditionAccessorParamName() != null)
-					|| (getAdditionAccessorParamName() != null && !getAdditionAccessorParamName().equals(property.getAdditionAccessorParamName())))
+					|| (getAdditionAccessorParamName() != null && !getAdditionAccessorParamName().equals(
+							property.getAdditionAccessorParamName()))) {
 				setAdditionAccessorParamName(property.getAdditionAccessorParamName());
+			}
 
 			try {
-				if (getRemovalSourceCode().getCode() == null && property.getRemovalSourceCode().getCode() != null)
+				if (getRemovalSourceCode().getCode() == null && property.getRemovalSourceCode().getCode() != null) {
 					getRemovalSourceCode().setCode(property.getRemovalSourceCode().getCode());
-				if (getRemovalSourceCode().getCode() != null && !getRemovalSourceCode().getCode().equals(property.getRemovalSourceCode().getCode()))
+				}
+				if (getRemovalSourceCode().getCode() != null
+						&& !getRemovalSourceCode().getCode().equals(property.getRemovalSourceCode().getCode())) {
 					getRemovalSourceCode().setCode(property.getRemovalSourceCode().getCode());
+				}
 			} catch (ParserNotInstalledException e) {
 				e.printStackTrace();
 			} catch (DuplicateMethodSignatureException e) {
 				logger.warning("Unexpected DuplicateMethodSignatureException");
 				e.printStackTrace();
 			}
-			if ((getRemovalAccessorParamName() != null && property.getRemovalAccessorParamName() == null) || (getRemovalAccessorParamName() == null && property.getRemovalAccessorParamName() != null)
-					|| (getRemovalAccessorParamName() != null && !getRemovalAccessorParamName().equals(property.getRemovalAccessorParamName())))
+			if ((getRemovalAccessorParamName() != null && property.getRemovalAccessorParamName() == null)
+					|| (getRemovalAccessorParamName() == null && property.getRemovalAccessorParamName() != null)
+					|| (getRemovalAccessorParamName() != null && !getRemovalAccessorParamName().equals(
+							property.getRemovalAccessorParamName()))) {
 				setRemovalAccessorParamName(property.getRemovalAccessorParamName());
+			}
 
 		}
-		if ((getRemovalAccessorParamName() != null && property.getRemovalAccessorParamName() == null) || (getRemovalAccessorParamName() == null && property.getRemovalAccessorParamName() != null)
-				|| (getRemovalAccessorParamName() != null && !getRemovalAccessorParamName().equals(property.getRemovalAccessorParamName())))
+		if ((getRemovalAccessorParamName() != null && property.getRemovalAccessorParamName() == null)
+				|| (getRemovalAccessorParamName() == null && property.getRemovalAccessorParamName() != null)
+				|| (getRemovalAccessorParamName() != null && !getRemovalAccessorParamName().equals(property.getRemovalAccessorParamName()))) {
 			setRemovalAccessorParamName(property.getRemovalAccessorParamName());
+		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update " + getName() + " with " + property.getName() + ": DONE");
+		}
 
 	}
 
@@ -679,14 +749,18 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	// ==========================================================
 
 	protected void updateCode() {
-		if (isDeserializing())
+		if (isDeserializing()) {
 			return;
-		if (!codeIsComputable())
+		}
+		if (!codeIsComputable()) {
 			return;
+		}
 
-		if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD) || (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
+		if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
+				|| (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
 				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) || (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
+				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
+				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
 			updateFieldCode();
 		}
 
@@ -723,7 +797,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	public void setIsUnderscoredAccessors(boolean underscoredAccessors) {
 		if (_underscoredAccessors != underscoredAccessors) {
 			_underscoredAccessors = underscoredAccessors;
-			if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD) || (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
+			if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
+					|| (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
 					|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
 				if (underscoredAccessors && getFieldName().indexOf("_") != 0) {
 					setFieldName("_" + getFieldName(), false);
@@ -755,8 +830,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	public void setFieldName(String fieldName, boolean updateCode, boolean notify) {
 		String oldFieldName = _fieldName;
 		_fieldName = fieldName;
-		if (updateCode)
+		if (updateCode) {
 			updateCode();
+		}
 		if (notify) {
 			setChanged();
 			notifyObservers(new DMAttributeDataModification("fieldName", oldFieldName, fieldName));
@@ -783,8 +859,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			 * if (oldType != null) { oldType.removeFromTypedWithThisType(this); }
 			 */
 			_keyType = keyType;
-			if (_keyType != null)
+			if (_keyType != null) {
 				_keyType.setOwner(this);
+			}
 			/*
 			 * if (keyType != null) { keyType.addToTypedWithThisType(this); }
 			 */
@@ -808,8 +885,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 */
 	@Deprecated
 	public DMEntity getKeyTypeBaseEntity() {
-		if (getKeyType() != null)
+		if (getKeyType() != null) {
 			return getKeyType().getBaseEntity();
+		}
 		return null;
 	}
 
@@ -907,11 +985,13 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (isDeleted)
+		if (isDeleted) {
 			return;
+		}
 		if (dataModification instanceof DMEntityClassNameChanged && observable == getType().getBaseEntity()) {
 			// Handle class name changed
-			updateTypeClassNameChange((String) ((DMEntityClassNameChanged) dataModification).oldValue(), (String) ((DMEntityClassNameChanged) dataModification).newValue());
+			updateTypeClassNameChange((String) ((DMEntityClassNameChanged) dataModification).oldValue(),
+					(String) ((DMEntityClassNameChanged) dataModification).newValue());
 		} else if (dataModification instanceof DMObjectDeleted && observable == getType().getBaseEntity()) {
 			setType(null);
 		} else {
@@ -947,24 +1027,26 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	protected String getFieldDefaultInitializationExpression() {
-		if (getEntity() instanceof LoadableDMEntity)
+		if (getEntity() instanceof LoadableDMEntity) {
 			return ";";
+		}
 		if (getType() == null || getType().isVoid()) {
 			return ";";
-		} else if (getType().isBoolean())
+		} else if (getType().isBoolean()) {
 			return " = false;";
-		else if (getType().isInteger())
+		} else if (getType().isInteger()) {
 			return " = 0;";
-		else if (getType().isLong())
+		} else if (getType().isLong()) {
 			return " = 0;";
-		else if (getType().isChar())
+		} else if (getType().isChar()) {
 			return " = ' ';";
-		else if (getType().isFloat())
+		} else if (getType().isFloat()) {
 			return " = 0.0f;";
-		else if (getType().isDouble())
+		} else if (getType().isDouble()) {
 			return " = 0.0;";
-		else
+		} else {
 			return ";";
+		}
 	}
 
 	protected String getGetterHeader() {
@@ -983,16 +1065,21 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	protected String getGetterDefaultCoreCode() {
-		if (getEntity() instanceof LoadableDMEntity)
+		if (getEntity() instanceof LoadableDMEntity) {
 			return COMPILED_CODE;
+		}
 		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY) {
-			if (getEntity() instanceof AutoGeneratedProcessBusinessDataDMEntity)
+			if (getEntity() instanceof AutoGeneratedProcessBusinessDataDMEntity) {
 				return AutoGeneratedProcessBusinessDataDMEntity.getGetterDefaultCoreCodeForProperty(this);
+			}
 
-			if (getType() != null && getType().isBooleanPrimitive())
-				return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR + "return false;" + StringUtils.LINE_SEPARATOR + "}";
-			else
-				return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR + "return null;" + StringUtils.LINE_SEPARATOR + "}";
+			if (getType() != null && getType().isBooleanPrimitive()) {
+				return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR
+						+ "return false;" + StringUtils.LINE_SEPARATOR + "}";
+			} else {
+				return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR
+						+ "return null;" + StringUtils.LINE_SEPARATOR + "}";
+			}
 		} else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
 				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)) {
 			return " { " + StringUtils.LINE_SEPARATOR + "  return " + getFieldName() + ";" + StringUtils.LINE_SEPARATOR + "}";
@@ -1024,7 +1111,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			javadoc.append("  *" + StringUtils.LINE_SEPARATOR);
 		}
 
-		javadoc.append("  * @return " + getAccessorTypeAsString() + " " + FlexoLocalization.localizedForKey("property_value") + StringUtils.LINE_SEPARATOR);
+		javadoc.append("  * @return " + getAccessorTypeAsString() + " " + FlexoLocalization.localizedForKey("property_value")
+				+ StringUtils.LINE_SEPARATOR);
 
 		javadoc.append("  */");
 
@@ -1044,8 +1132,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			if (isFirst) {
 				returned.append("  * @" + tag + " " + param + " " + st2.nextToken() + StringUtils.LINE_SEPARATOR);
 			} else {
-				if (indent == null)
+				if (indent == null) {
 					indent = StringUtils.buildWhiteSpaceIndentation(indentLength);
+				}
 				returned.append("  *" + indent + " " + st2.nextToken() + StringUtils.LINE_SEPARATOR);
 			}
 			isFirst = false;
@@ -1095,10 +1184,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 						for (String key : specificDescriptions.keySet()) {
 							String specificDescription = ToolBox.getJavaDocString(specificDescriptions.get(key));
 							ParsedJavadocItem jdi = jd.getTagByName("doc", key);
-							if (jdi != null)
+							if (jdi != null) {
 								jdi.setParameterValue(specificDescription);
-							else
+							} else {
 								jd.addTagForNameAndValue("doc", key, specificDescription, true);
+							}
 						}
 					}
 
@@ -1122,18 +1212,20 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	private String setterParamName = null;
 
 	public String getSetterParamName() {
-		if (setterParamName == null && getName() != null && !isSerializing())
+		if (setterParamName == null && getName() != null && !isSerializing()) {
 			return getNameAsMethodArgument();
+		}
 		return setterParamName;
 	}
 
 	public void setSetterParamName(String paramName) {
 		// logger.info("setSetterParamName with "+paramName);
 		String oldSetterParamName = setterParamName;
-		if (getNameAsMethodArgument().equals(paramName) && setterParamName != null)
+		if (getNameAsMethodArgument().equals(paramName) && setterParamName != null) {
 			setterParamName = null;
-		else
+		} else {
 			setterParamName = paramName;
+		}
 
 		String newSetterParamName = setterParamName;
 		if ((oldSetterParamName != null && newSetterParamName == null) || (oldSetterParamName == null && newSetterParamName != null)
@@ -1163,17 +1255,20 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	protected String getSetterDefaultCoreCode() {
-		if (getEntity() instanceof LoadableDMEntity)
+		if (getEntity() instanceof LoadableDMEntity) {
 			return COMPILED_CODE;
+		}
 		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY) {
 
-			if (getEntity() instanceof AutoGeneratedProcessBusinessDataDMEntity)
+			if (getEntity() instanceof AutoGeneratedProcessBusinessDataDMEntity) {
 				return AutoGeneratedProcessBusinessDataDMEntity.getSetterDefaultCoreCodeForProperty(this);
+			}
 
 			return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR + "}";
 		} else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
 				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)) {
-			return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + "=" + getNameAsMethodArgument() + ";" + StringUtils.LINE_SEPARATOR + "}";
+			return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + "=" + getNameAsMethodArgument() + ";"
+					+ StringUtils.LINE_SEPARATOR + "}";
 		}
 		return "???";
 	}
@@ -1181,11 +1276,13 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	protected String getSetterJavadoc() {
 		StringBuffer javadoc = new StringBuffer();
 		javadoc.append("/**" + StringUtils.LINE_SEPARATOR);
-		javadoc.append("  * " + FlexoLocalization.localizedForKey("setter_method_javadoc") + " '" + getName() + "'" + StringUtils.LINE_SEPARATOR);
+		javadoc.append("  * " + FlexoLocalization.localizedForKey("setter_method_javadoc") + " '" + getName() + "'"
+				+ StringUtils.LINE_SEPARATOR);
 
 		javadoc.append("  *" + StringUtils.LINE_SEPARATOR);
 
-		javadoc.append("  * @param " + getSetterParamName() + " " + FlexoLocalization.localizedForKey("value_to_set") + StringUtils.LINE_SEPARATOR);
+		javadoc.append("  * @param " + getSetterParamName() + " " + FlexoLocalization.localizedForKey("value_to_set")
+				+ StringUtils.LINE_SEPARATOR);
 
 		javadoc.append("  */");
 		return javadoc.toString();
@@ -1216,24 +1313,28 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	private String additionAccessorParamName = null;
 
 	public String getAdditionAccessorParamName() {
-		if (additionAccessorParamName == null && getName() != null && !isSerializing())
+		if (additionAccessorParamName == null && getName() != null && !isSerializing()) {
 			return getNameAsMethodArgument();
+		}
 		return additionAccessorParamName;
 	}
 
 	public void setAdditionAccessorParamName(String paramName) {
 		String oldAdditionAccessorParamName = additionAccessorParamName;
-		if (getNameAsMethodArgument().equals(paramName) && additionAccessorParamName != null)
+		if (getNameAsMethodArgument().equals(paramName) && additionAccessorParamName != null) {
 			additionAccessorParamName = null;
-		else
+		} else {
 			additionAccessorParamName = paramName;
+		}
 
 		String newAdditionAccessorParamName = additionAccessorParamName;
-		if ((oldAdditionAccessorParamName != null && newAdditionAccessorParamName == null) || (oldAdditionAccessorParamName == null && newAdditionAccessorParamName != null)
+		if ((oldAdditionAccessorParamName != null && newAdditionAccessorParamName == null)
+				|| (oldAdditionAccessorParamName == null && newAdditionAccessorParamName != null)
 				|| (oldAdditionAccessorParamName != null && !oldAdditionAccessorParamName.equals(newAdditionAccessorParamName))) {
 			updateCode();
 			setChanged();
-			notifyObservers(new DMAttributeDataModification("additionAccessorParamName", oldAdditionAccessorParamName, newAdditionAccessorParamName));
+			notifyObservers(new DMAttributeDataModification("additionAccessorParamName", oldAdditionAccessorParamName,
+					newAdditionAccessorParamName));
 		}
 	}
 
@@ -1277,17 +1378,19 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	protected String getAdditionAccessorDefaultCoreCode() {
-		if (getEntity() instanceof LoadableDMEntity)
+		if (getEntity() instanceof LoadableDMEntity) {
 			return COMPILED_CODE;
+		}
 		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY) {
 			return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR + "}";
 		} else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
 				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)) {
 			if (getCardinality() == DMCardinality.VECTOR) {
-				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".add(" + getNameAsMethodArgument() + ");" + StringUtils.LINE_SEPARATOR + "}";
+				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".add(" + getNameAsMethodArgument() + ");"
+						+ StringUtils.LINE_SEPARATOR + "}";
 			} else if (getCardinality() == DMCardinality.HASHTABLE) {
-				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".put(" + getNameAsMethodArgument("key") + "," + getNameAsMethodArgument() + ");" + StringUtils.LINE_SEPARATOR
-						+ "}";
+				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".put(" + getNameAsMethodArgument("key") + ","
+						+ getNameAsMethodArgument() + ");" + StringUtils.LINE_SEPARATOR + "}";
 			}
 		}
 		return "???";
@@ -1296,13 +1399,16 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	protected String getAdditionAccessorJavadoc() {
 		StringBuffer javadoc = new StringBuffer();
 		javadoc.append("/**" + StringUtils.LINE_SEPARATOR);
-		javadoc.append("  * " + FlexoLocalization.localizedForKey("addition_method_javadoc") + " '" + getName() + "'" + StringUtils.LINE_SEPARATOR);
+		javadoc.append("  * " + FlexoLocalization.localizedForKey("addition_method_javadoc") + " '" + getName() + "'"
+				+ StringUtils.LINE_SEPARATOR);
 
 		javadoc.append("  *" + StringUtils.LINE_SEPARATOR);
 
-		javadoc.append("  * @param " + getAdditionAccessorParamName() + " " + FlexoLocalization.localizedForKey("value_to_add") + StringUtils.LINE_SEPARATOR);
+		javadoc.append("  * @param " + getAdditionAccessorParamName() + " " + FlexoLocalization.localizedForKey("value_to_add")
+				+ StringUtils.LINE_SEPARATOR);
 		if (getCardinality() == DMCardinality.HASHTABLE) {
-			javadoc.append("  * @param " + getNameAsMethodArgument("key") + " " + FlexoLocalization.localizedForKey("key_to_use") + StringUtils.LINE_SEPARATOR);
+			javadoc.append("  * @param " + getNameAsMethodArgument("key") + " " + FlexoLocalization.localizedForKey("key_to_use")
+					+ StringUtils.LINE_SEPARATOR);
 		}
 		javadoc.append("  */");
 		return javadoc.toString();
@@ -1333,24 +1439,28 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	private String removalAccessorParamName = null;
 
 	public String getRemovalAccessorParamName() {
-		if (removalAccessorParamName == null && getName() != null && !isSerializing())
+		if (removalAccessorParamName == null && getName() != null && !isSerializing()) {
 			return getNameAsMethodArgument();
+		}
 		return removalAccessorParamName;
 	}
 
 	public void setRemovalAccessorParamName(String paramName) {
 		String oldRemovalAccessorParamName = removalAccessorParamName;
-		if (getNameAsMethodArgument().equals(paramName) && removalAccessorParamName != null)
+		if (getNameAsMethodArgument().equals(paramName) && removalAccessorParamName != null) {
 			removalAccessorParamName = null;
-		else
+		} else {
 			removalAccessorParamName = paramName;
+		}
 
 		String newRemovalAccessorParamName = removalAccessorParamName;
-		if ((oldRemovalAccessorParamName != null && newRemovalAccessorParamName == null) || (oldRemovalAccessorParamName == null && newRemovalAccessorParamName != null)
+		if ((oldRemovalAccessorParamName != null && newRemovalAccessorParamName == null)
+				|| (oldRemovalAccessorParamName == null && newRemovalAccessorParamName != null)
 				|| (oldRemovalAccessorParamName != null && !oldRemovalAccessorParamName.equals(newRemovalAccessorParamName))) {
 			updateCode();
 			setChanged();
-			notifyObservers(new DMAttributeDataModification("removalAccessorParamName", oldRemovalAccessorParamName, newRemovalAccessorParamName));
+			notifyObservers(new DMAttributeDataModification("removalAccessorParamName", oldRemovalAccessorParamName,
+					newRemovalAccessorParamName));
 		}
 	}
 
@@ -1396,16 +1506,19 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	protected String getRemovalAccessorDefaultCoreCode() {
-		if (getEntity() instanceof LoadableDMEntity)
+		if (getEntity() instanceof LoadableDMEntity) {
 			return COMPILED_CODE;
+		}
 		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY) {
 			return " { " + StringUtils.LINE_SEPARATOR + "    // TODO: Edit your code here" + StringUtils.LINE_SEPARATOR + "}";
 		} else if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
 				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)) {
 			if (getCardinality() == DMCardinality.VECTOR) {
-				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".remove(" + getNameAsMethodArgument() + ");" + StringUtils.LINE_SEPARATOR + "}";
+				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".remove(" + getNameAsMethodArgument() + ");"
+						+ StringUtils.LINE_SEPARATOR + "}";
 			} else if (getCardinality() == DMCardinality.HASHTABLE) {
-				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".remove(" + getNameAsMethodArgument("key") + ");" + StringUtils.LINE_SEPARATOR + "}";
+				return " { " + StringUtils.LINE_SEPARATOR + "  " + getFieldName() + ".remove(" + getNameAsMethodArgument("key") + ");"
+						+ StringUtils.LINE_SEPARATOR + "}";
 			}
 		}
 		return "???";
@@ -1414,14 +1527,17 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	protected String getRemovalAccessorJavadoc() {
 		StringBuffer javadoc = new StringBuffer();
 		javadoc.append("/**" + StringUtils.LINE_SEPARATOR);
-		javadoc.append("  * " + FlexoLocalization.localizedForKey("removal_method_javadoc") + " '" + getName() + "'" + StringUtils.LINE_SEPARATOR);
+		javadoc.append("  * " + FlexoLocalization.localizedForKey("removal_method_javadoc") + " '" + getName() + "'"
+				+ StringUtils.LINE_SEPARATOR);
 
 		javadoc.append("  *" + StringUtils.LINE_SEPARATOR);
 
 		if (getCardinality() == DMCardinality.VECTOR) {
-			javadoc.append("  * @param " + getRemovalAccessorParamName() + " " + FlexoLocalization.localizedForKey("value_to_remove") + StringUtils.LINE_SEPARATOR);
+			javadoc.append("  * @param " + getRemovalAccessorParamName() + " " + FlexoLocalization.localizedForKey("value_to_remove")
+					+ StringUtils.LINE_SEPARATOR);
 		} else if (getCardinality() == DMCardinality.HASHTABLE) {
-			javadoc.append("  * @param " + getNameAsMethodArgument("key") + " " + FlexoLocalization.localizedForKey("key_for_value_to_remove") + StringUtils.LINE_SEPARATOR);
+			javadoc.append("  * @param " + getNameAsMethodArgument("key") + " "
+					+ FlexoLocalization.localizedForKey("key_for_value_to_remove") + StringUtils.LINE_SEPARATOR);
 		}
 		javadoc.append("  */");
 		return javadoc.toString();
@@ -1450,14 +1566,16 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	private String getFieldModifier() {
-		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
+		if (getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD) {
 			return "public " + (getIsStatic() ? "static " : "");
-		else if (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD || getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
+		} else if (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD
+				|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) {
 			return "protected " + (getIsStatic() ? "static " : "");
-		else if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
+		} else if (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD) {
 			return "private " + (getIsStatic() ? "static " : "");
-		else if (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)
+		} else if (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD) {
 			return "public static final ";
+		}
 		return "??? ";
 	}
 
@@ -1542,9 +1660,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 * setRemovingAccessorCode(extractCore(qualifiedCode)); } }
 	 */
 
+	@Override
 	public Vector<DMTypeVariable> getTypeVariables() {
-		if (getEntity() != null)
+		if (getEntity() != null) {
 			return getEntity().getTypeVariables();
+		}
 		return null;
 	}
 
@@ -1577,40 +1697,48 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		return "dm_property";
 	}
 
+	@Override
 	public boolean isBindingValid() {
 		return true;
 	}
 
 	@Override
 	public void setIsModified() {
-		if (ignoreNotifications())
+		if (ignoreNotifications()) {
 			return;
+		}
 		super.setIsModified();
-		if (getEntity() != null)
+		if (getEntity() != null) {
 			getEntity().setIsModified();
+		}
 	}
 
 	public boolean isResolvable() {
-		if (getCardinality() == DMCardinality.HASHTABLE && getKeyType() != null && !getKeyType().isResolved())
+		if (getCardinality() == DMCardinality.HASHTABLE && getKeyType() != null && !getKeyType().isResolved()) {
 			return false;
-		if (getType() != null)
+		}
+		if (getType() != null) {
 			return getType().isResolved();
+		}
 		return false;
 	}
 
 	public Vector<DMType> getUnresolvedTypes() {
 		Vector<DMType> unresolvedTypes = new Vector<DMType>();
-		if (getCardinality() == DMCardinality.HASHTABLE && getKeyType() != null && !getKeyType().isResolved())
+		if (getCardinality() == DMCardinality.HASHTABLE && getKeyType() != null && !getKeyType().isResolved()) {
 			unresolvedTypes.add(getKeyType());
+		}
 		;
-		if (getType() != null && !getType().isResolved())
+		if (getType() != null && !getType().isResolved()) {
 			unresolvedTypes.add(getType());
+		}
 		return unresolvedTypes;
 	}
 
 	public boolean hasAccessors() {
 		return getImplementationType() != null
-				&& (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY || getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD || getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD);
+				&& (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY
+						|| getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD || getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD);
 	}
 
 	public boolean isBindingValueOfTextField() {
@@ -1620,8 +1748,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			IETextFieldWidget tf = null;
 			while (en.hasMoreElements()) {
 				tf = en.nextElement();
-				if (tf.getBindingValue() != null && (tf.getBindingValue()).isProperty(this))
+				if (tf.getBindingValue() != null && (tf.getBindingValue()).isProperty(this)) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -1634,8 +1763,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			IETextAreaWidget tf = null;
 			while (en.hasMoreElements()) {
 				tf = en.nextElement();
-				if (tf.getBindingValue() != null && (tf.getBindingValue()).isProperty(this))
+				if (tf.getBindingValue() != null && (tf.getBindingValue()).isProperty(this)) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -1648,8 +1778,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			IECheckBoxWidget tf = null;
 			while (en.hasMoreElements()) {
 				tf = en.nextElement();
-				if (tf.getBindingChecked() != null && tf.getBindingChecked().isProperty(this))
+				if (tf.getBindingChecked() != null && tf.getBindingChecked().isProperty(this)) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -1662,8 +1793,10 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			IEDropDownWidget tf = null;
 			while (en.hasMoreElements()) {
 				tf = en.nextElement();
-				if (tf.getBindingList() != null && tf.getBindingList() instanceof BindingValue && ((BindingValue) tf.getBindingList()).isProperty(this))
+				if (tf.getBindingList() != null && tf.getBindingList() instanceof BindingValue
+						&& ((BindingValue) tf.getBindingList()).isProperty(this)) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -1676,8 +1809,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			RepetitionOperator tf = null;
 			while (en.hasMoreElements()) {
 				tf = en.nextElement();
-				if (tf.getBindingItem() != null && tf.getBindingItem().isProperty(this))
+				if (tf.getBindingItem() != null && tf.getBindingItem().isProperty(this)) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -1690,8 +1824,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			IEDropDownWidget tf = null;
 			while (en.hasMoreElements()) {
 				tf = en.nextElement();
-				if (tf.getBindingItem() != null && tf.getBindingItem().isProperty(this))
+				if (tf.getBindingItem() != null && tf.getBindingItem().isProperty(this)) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -1709,7 +1844,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		if (_isStaticallyDefinedInTemplate != isStaticallyDefinedInTemplate) {
 			_isStaticallyDefinedInTemplate = isStaticallyDefinedInTemplate;
 			setChanged();
-			notifyObservers(new DMAttributeDataModification("isStaticallyDefinedInTemplate", !isStaticallyDefinedInTemplate, isStaticallyDefinedInTemplate));
+			notifyObservers(new DMAttributeDataModification("isStaticallyDefinedInTemplate", !isStaticallyDefinedInTemplate,
+					isStaticallyDefinedInTemplate));
 		}
 	}
 
@@ -1717,18 +1853,24 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	// ===================== Code management ==================
 	// ========================================================
 
+	@Override
 	public void resetSourceCode() {
 		try {
-			if (fieldSourceCode != null)
+			if (fieldSourceCode != null) {
 				fieldSourceCode.setCode("");
-			if (getterSourceCode != null)
+			}
+			if (getterSourceCode != null) {
 				getterSourceCode.setCode("");
-			if (setterSourceCode != null)
+			}
+			if (setterSourceCode != null) {
 				setterSourceCode.setCode("");
-			if (additionSourceCode != null)
+			}
+			if (additionSourceCode != null) {
 				additionSourceCode.setCode("");
-			if (removalSourceCode != null)
+			}
+			if (removalSourceCode != null) {
 				removalSourceCode.setCode("");
+			}
 		} catch (DuplicateMethodSignatureException e) {
 			e.printStackTrace();
 		} catch (ParserNotInstalledException e) {
@@ -1747,7 +1889,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			fieldSourceCode = new FieldSourceCode(this, "fieldSourceCode", "hasFieldParseError", "fieldParseErrorWarning") {
 				@Override
 				public String makeComputedCode() {
-					return getFieldJavadoc() + StringUtils.LINE_SEPARATOR + getFieldDeclaration() + getFieldDefaultInitializationExpression();
+					return getFieldJavadoc() + StringUtils.LINE_SEPARATOR + getFieldDeclaration()
+							+ getFieldDefaultInitializationExpression();
 				}
 
 				@Override
@@ -1758,7 +1901,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 					if (!isResolvable()) {
 						setHasParseErrors(true);
-						setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)") + " : " + getUnresolvedTypes() + "</font></html>");
+						setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)") + " : "
+								+ getUnresolvedTypes() + "</font></html>");
 					}
 					DMProperty.this.setChanged();
 					DMProperty.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("fieldCode", null, getCode()));
@@ -1778,14 +1922,16 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public boolean getIsBindable() {
-		if (isComponentProperty())
+		if (isComponentProperty()) {
 			return ((ComponentDMEntity) getEntity()).isBindable(this);
+		}
 		return false;
 	}
 
 	public void setIsBindable(boolean value) {
-		if (isComponentProperty())
+		if (isComponentProperty()) {
 			((ComponentDMEntity) getEntity()).setBindable(this, value);
+		}
 	}
 
 	public String getFieldParseErrorWarning() {
@@ -1793,9 +1939,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	public String getFieldCode() {
-		if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD) || (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
+		if ((getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
+				|| (getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
 				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
-				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD) || (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
+				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
+				|| (getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
 			return getFieldSourceCode().getCode();
 		}
 		return null;
@@ -1824,13 +1972,16 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 						if (!isResolvable()) {
 							setHasParseErrors(true);
-							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)") + " : " + getUnresolvedTypes() + "</font></html>");
+							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)")
+									+ " : " + getUnresolvedTypes() + "</font></html>");
 						}
 						DMProperty.this.setChanged();
-						DMProperty.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("getterCode", null, getCode()));
+						DMProperty.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("getterCode", null,
+								getCode()));
 					} catch (DuplicateMethodSignatureException e) {
 						setHasParseErrors(true);
-						setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
+						setParseErrorWarning("<html><font color=\"red\">"
+								+ FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
 						throw e;
 					}
 				}
@@ -1854,8 +2005,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 */
 	@Deprecated
 	public String getGetterCoreCode() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return null;
+		}
 		return getGetterSourceCode().getCoreCode();
 	}
 
@@ -1866,7 +2018,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	@Deprecated
 	public void setGetterCoreCode(String someCoreCode) {
 		getGetterSourceCode().updateComputedCode(
-				getGetterJavadoc() + StringUtils.LINE_SEPARATOR + getGetterHeader() + " { " + StringUtils.LINE_SEPARATOR + someCoreCode + StringUtils.LINE_SEPARATOR + "}");
+				getGetterJavadoc() + StringUtils.LINE_SEPARATOR + getGetterHeader() + " { " + StringUtils.LINE_SEPARATOR + someCoreCode
+						+ StringUtils.LINE_SEPARATOR + "}");
 	}
 
 	public String getGetterCode() {
@@ -1896,13 +2049,16 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 						if (!isResolvable()) {
 							setHasParseErrors(true);
-							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)") + " : " + getUnresolvedTypes() + "</font></html>");
+							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)")
+									+ " : " + getUnresolvedTypes() + "</font></html>");
 						}
 						DMProperty.this.setChanged();
-						DMProperty.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("setterCode", null, getCode()));
+						DMProperty.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("setterCode", null,
+								getCode()));
 					} catch (DuplicateMethodSignatureException e) {
 						setHasParseErrors(true);
-						setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
+						setParseErrorWarning("<html><font color=\"red\">"
+								+ FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
 						throw e;
 					}
 				}
@@ -1926,8 +2082,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 */
 	@Deprecated
 	public String getSetterCoreCode() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return null;
+		}
 		return getSetterSourceCode().getCoreCode();
 	}
 
@@ -1938,7 +2095,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	@Deprecated
 	public void setSetterCoreCode(String someCoreCode) {
 		getSetterSourceCode().updateComputedCode(
-				getSetterJavadoc() + StringUtils.LINE_SEPARATOR + getSetterHeader() + " { " + StringUtils.LINE_SEPARATOR + someCoreCode + StringUtils.LINE_SEPARATOR + "}");
+				getSetterJavadoc() + StringUtils.LINE_SEPARATOR + getSetterHeader() + " { " + StringUtils.LINE_SEPARATOR + someCoreCode
+						+ StringUtils.LINE_SEPARATOR + "}");
 	}
 
 	public String getSetterCode() {
@@ -1953,10 +2111,12 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	public MethodSourceCode getAdditionSourceCode() {
 		if (additionSourceCode == null) {
-			additionSourceCode = new MethodSourceCode(this, "additionSourceCode", "hasAdditionAccessorParseError", "additionAccessorParseErrorWarning") {
+			additionSourceCode = new MethodSourceCode(this, "additionSourceCode", "hasAdditionAccessorParseError",
+					"additionAccessorParseErrorWarning") {
 				@Override
 				public String makeComputedCode() {
-					return getAdditionAccessorJavadoc() + StringUtils.LINE_SEPARATOR + getAdditionAccessorHeader() + " " + getAdditionAccessorDefaultCoreCode();
+					return getAdditionAccessorJavadoc() + StringUtils.LINE_SEPARATOR + getAdditionAccessorHeader() + " "
+							+ getAdditionAccessorDefaultCoreCode();
 				}
 
 				@Override
@@ -1968,13 +2128,16 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 						if (!isResolvable()) {
 							setHasParseErrors(true);
-							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)") + " : " + getUnresolvedTypes() + "</font></html>");
+							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)")
+									+ " : " + getUnresolvedTypes() + "</font></html>");
 						}
 						DMProperty.this.setChanged();
-						DMProperty.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("additionCode", null, getCode()));
+						DMProperty.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("additionCode", null,
+								getCode()));
 					} catch (DuplicateMethodSignatureException e) {
 						setHasParseErrors(true);
-						setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
+						setParseErrorWarning("<html><font color=\"red\">"
+								+ FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
 						throw e;
 					}
 				}
@@ -1998,8 +2161,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 */
 	@Deprecated
 	public String getAdditionAccessorCoreCode() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return null;
+		}
 		return getAdditionSourceCode().getCoreCode();
 	}
 
@@ -2010,7 +2174,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	@Deprecated
 	public void setAdditionAccessorCoreCode(String someCoreCode) {
 		getAdditionSourceCode().updateComputedCode(
-				getAdditionAccessorJavadoc() + StringUtils.LINE_SEPARATOR + getAdditionAccessorHeader() + " { " + StringUtils.LINE_SEPARATOR + someCoreCode + StringUtils.LINE_SEPARATOR + "}");
+				getAdditionAccessorJavadoc() + StringUtils.LINE_SEPARATOR + getAdditionAccessorHeader() + " { "
+						+ StringUtils.LINE_SEPARATOR + someCoreCode + StringUtils.LINE_SEPARATOR + "}");
 	}
 
 	public String getAdditionCode() {
@@ -2028,10 +2193,12 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	public MethodSourceCode getRemovalSourceCode() {
 		if (removalSourceCode == null) {
-			removalSourceCode = new MethodSourceCode(this, "removalSourceCode", "hasRemovalAccessorParseError", "removalAccessorParseErrorWarning") {
+			removalSourceCode = new MethodSourceCode(this, "removalSourceCode", "hasRemovalAccessorParseError",
+					"removalAccessorParseErrorWarning") {
 				@Override
 				public String makeComputedCode() {
-					return getRemovalAccessorJavadoc() + StringUtils.LINE_SEPARATOR + getRemovalAccessorHeader() + " " + getRemovalAccessorDefaultCoreCode();
+					return getRemovalAccessorJavadoc() + StringUtils.LINE_SEPARATOR + getRemovalAccessorHeader() + " "
+							+ getRemovalAccessorDefaultCoreCode();
 				}
 
 				@Override
@@ -2043,14 +2210,17 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 						if (!isResolvable()) {
 							setHasParseErrors(true);
-							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)") + " : " + getUnresolvedTypes() + "</font></html>");
+							setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("unresolved_type(s)")
+									+ " : " + getUnresolvedTypes() + "</font></html>");
 						}
 
 						DMProperty.this.setChanged();
-						DMProperty.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("removalCode", null, getCode()));
+						DMProperty.this.notifyObserversAsReentrantModification(new DMAttributeDataModification("removalCode", null,
+								getCode()));
 					} catch (DuplicateMethodSignatureException e) {
 						setHasParseErrors(true);
-						setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
+						setParseErrorWarning("<html><font color=\"red\">"
+								+ FlexoLocalization.localizedForKey("duplicated_method_signature") + "</font></html>");
 						throw e;
 					}
 				}
@@ -2074,8 +2244,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 */
 	@Deprecated
 	public String getRemovalAccessorCoreCode() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return null;
+		}
 		return getRemovalSourceCode().getCoreCode();
 	}
 
@@ -2086,7 +2257,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	@Deprecated
 	public void setRemovalAccessorCoreCode(String someCoreCode) {
 		getRemovalSourceCode().updateComputedCode(
-				getRemovalAccessorJavadoc() + StringUtils.LINE_SEPARATOR + getRemovalAccessorHeader() + " { " + StringUtils.LINE_SEPARATOR + someCoreCode + StringUtils.LINE_SEPARATOR + "}");
+				getRemovalAccessorJavadoc() + StringUtils.LINE_SEPARATOR + getRemovalAccessorHeader() + " { " + StringUtils.LINE_SEPARATOR
+						+ someCoreCode + StringUtils.LINE_SEPARATOR + "}");
 	}
 
 	public String getRemovalCode() {
@@ -2112,8 +2284,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	 * @return
 	 */
 	public boolean isCodeGenerationApplicable() {
-		if (getEntity() != null)
+		if (getEntity() != null) {
 			return getEntity().isCodeGenerationApplicable();
+		}
 		return false;
 	}
 
@@ -2185,7 +2358,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		public ValidationIssue applyValidation(Validable object) {
 			DMProperty p = (DMProperty) object;
 			if (p.getType() == null
-					|| (p.getType().getKindOfType() == KindOfType.UNRESOLVED && (p.getType().getStringRepresentation() == null || p.getType().getStringRepresentation().equals("null")))) {
+					|| (p.getType().getKindOfType() == KindOfType.UNRESOLVED && (p.getType().getStringRepresentation() == null || p
+							.getType().getStringRepresentation().equals("null")))) {
 				Vector<FixProposal> fixes = new Vector<FixProposal>();
 				fixes.add(new SetType(DMType.makeResolvedDMType(p.getDMModel().getDMEntity(String.class))));
 				fixes.add(new SetType(DMType.makeResolvedDMType(p.getDMModel().getDMEntity(Boolean.class))));
@@ -2197,7 +2371,8 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	}
 
-	public static class PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters extends ValidationRule<PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters, DMProperty> {
+	public static class PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters extends
+			ValidationRule<PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters, DMProperty> {
 
 		public static class SetName extends FixProposal<PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters, DMProperty> {
 
@@ -2213,8 +2388,9 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			@Override
 			protected void fixAction() {
 				try {
-					if (ReservedKeyword.contains(newName))
+					if (ReservedKeyword.contains(newName)) {
 						throw new InvalidNameException(newName + " is a reserved keyword.");
+					}
 					property.setName(newName);
 				} catch (InvalidNameException e) {
 					e.printStackTrace();
@@ -2236,18 +2412,21 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		@Override
 		public ValidationIssue<PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters, DMProperty> applyValidation(DMProperty object) {
 			if (object.getName() == null || object.getName().trim().length() == 0) {
-				return new ValidationError<PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters, DMProperty>(this, object, "property_name_cannot_be_empty", new SetName(object.getDMModel()
-						.getNextDefautPropertyName(object.getEntity()), object));
+				return new ValidationError<PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters, DMProperty>(this, object,
+						"property_name_cannot_be_empty", new SetName(object.getDMModel().getNextDefautPropertyName(object.getEntity()),
+								object));
 			}
 			if (!DMRegExp.ENTITY_NAME_PATTERN.matcher(object.getName()).matches()) {
 				return new ValidationError<PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters, DMProperty>(this, object,
-						"property_name_must_start_with_a_letter_and_be_followed_by_digits_or_letters", new SetName(object.getDMModel().getNextDefautPropertyName(object.getEntity()), object));
+						"property_name_must_start_with_a_letter_and_be_followed_by_digits_or_letters", new SetName(object.getDMModel()
+								.getNextDefautPropertyName(object.getEntity()), object));
 			}
 			return null;
 		}
 
 	}
 
+	@Override
 	public boolean codeIsComputable() {
 		return true;
 	}

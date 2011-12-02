@@ -60,7 +60,8 @@ public abstract class TechnologyModelObject extends FlexoModelObject implements 
 	}
 
 	/**
-	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the implementation model
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * implementation model
 	 * 
 	 * @return the component library
 	 */
@@ -90,8 +91,9 @@ public abstract class TechnologyModelObject extends FlexoModelObject implements 
 	 */
 	@Override
 	public String getInspectorName() {
-		if (getHasInspector())
+		if (getHasInspector()) {
 			return this.getClass().getSimpleName() + ".inspector";
+		}
 		return null;
 	}
 

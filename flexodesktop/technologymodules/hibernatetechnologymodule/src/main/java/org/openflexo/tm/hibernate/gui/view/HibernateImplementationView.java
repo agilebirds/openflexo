@@ -41,7 +41,8 @@ public class HibernateImplementationView extends FIBModuleView<HibernateImplemen
 
 	private FlexoPerspective<? super HibernateImplementation> declaredPerspective;
 
-	public HibernateImplementationView(HibernateImplementation hibernateImplementation, SGController controller, FlexoPerspective<? super HibernateImplementation> perspective) {
+	public HibernateImplementationView(HibernateImplementation hibernateImplementation, SGController controller,
+			FlexoPerspective<? super HibernateImplementation> perspective) {
 		super(hibernateImplementation, controller, HIBERNATE_IMPLEMENTATION_VIEW_FIB_RESOURCE_PATH);
 		declaredPerspective = perspective;
 	}

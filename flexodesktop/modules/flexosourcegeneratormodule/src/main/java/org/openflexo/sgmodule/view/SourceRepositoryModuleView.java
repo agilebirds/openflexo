@@ -68,7 +68,8 @@ import org.openflexo.view.listener.FlexoActionButton;
  * 
  * @author sylvain
  */
-public class SourceRepositoryModuleView extends JPanel implements ModuleView<SourceRepository>, FlexoObserver, LogListener, FlexoActionSource {
+public class SourceRepositoryModuleView extends JPanel implements ModuleView<SourceRepository>, FlexoObserver, LogListener,
+		FlexoActionSource {
 
 	protected static final Logger logger = Logger.getLogger(SourceRepositoryModuleView.class.getPackage().getName());
 
@@ -278,7 +279,8 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 	}
 
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for you
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
@@ -352,7 +354,8 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 			 * icon = new JLabel(IconLibrary.BIG_SOURCE_REPOSITORY_ICON); icon.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); add(icon,BorderLayout.WEST);
 			 */
 			add(chooseFileButton, BorderLayout.WEST);
-			title = new JLabel(FlexoLocalization.localizedForKey("source_repository") + " " + getRepresentedObject().getName(), SwingConstants.LEFT);
+			title = new JLabel(FlexoLocalization.localizedForKey("source_repository") + " " + getRepresentedObject().getName(),
+					SwingConstants.LEFT);
 			// title.setVerticalAlignment(JLabel.BOTTOM);
 			title.setFont(SGCst.HEADER_FONT);
 			title.setForeground(Color.BLACK);
@@ -362,7 +365,8 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 			subTitle.setFont(SGCst.SUB_TITLE_FONT);
 			subTitle.setForeground(Color.GRAY);
 			subTitle.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
-			subTitle2 = new JLabel(FlexoLocalization.localizedForKey("implementation_model") + ": " + getRepresentedObject().getImplementationModel().getName(), SwingConstants.LEFT);
+			subTitle2 = new JLabel(FlexoLocalization.localizedForKey("implementation_model") + ": "
+					+ getRepresentedObject().getImplementationModel().getName(), SwingConstants.LEFT);
 			// title.setVerticalAlignment(JLabel.BOTTOM);
 			subTitle2.setFont(SGCst.NORMAL_FONT);
 			subTitle2.setForeground(Color.BLACK);
@@ -375,9 +379,12 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 			add(labelsPanel, BorderLayout.CENTER);
 
 			controlPanel = new JPanel(new FlowLayout());
-			FlexoActionButton synchronizeAction = new FlexoActionButton(SynchronizeRepositoryCodeGeneration.actionType, "synchronize", SourceRepositoryModuleView.this, controller.getEditor());
-			FlexoActionButton generateAction = new FlexoActionButton(GenerateSourceCode.actionType, "generate", SourceRepositoryModuleView.this, controller.getEditor());
-			FlexoActionButton writeAction = new FlexoActionButton(WriteModifiedGeneratedFiles.actionType, "write_files", SourceRepositoryModuleView.this, controller.getEditor());
+			FlexoActionButton synchronizeAction = new FlexoActionButton(SynchronizeRepositoryCodeGeneration.actionType, "synchronize",
+					SourceRepositoryModuleView.this, controller.getEditor());
+			FlexoActionButton generateAction = new FlexoActionButton(GenerateSourceCode.actionType, "generate",
+					SourceRepositoryModuleView.this, controller.getEditor());
+			FlexoActionButton writeAction = new FlexoActionButton(WriteModifiedGeneratedFiles.actionType, "write_files",
+					SourceRepositoryModuleView.this, controller.getEditor());
 			actionButtons.add(synchronizeAction);
 			actionButtons.add(generateAction);
 			actionButtons.add(writeAction);
@@ -393,7 +400,8 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 		protected void update() {
 			title.setText(FlexoLocalization.localizedForKey("source_repository") + " " + getRepresentedObject().getName());
 			subTitle.setText(getRepresentedObject().getDirectory().getAbsolutePath());
-			subTitle2.setText(FlexoLocalization.localizedForKey("implementation_model") + " " + getRepresentedObject().getImplementationModel().getName());
+			subTitle2.setText(FlexoLocalization.localizedForKey("implementation_model") + " "
+					+ getRepresentedObject().getImplementationModel().getName());
 
 			for (FlexoActionButton button : actionButtons) {
 				button.update();

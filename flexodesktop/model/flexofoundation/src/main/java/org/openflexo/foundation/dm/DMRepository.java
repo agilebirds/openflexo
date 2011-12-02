@@ -117,10 +117,11 @@ public abstract class DMRepository extends DMObject {
 	 */
 	@Override
 	public String getInspectorName() {
-		if (isReadOnly())
+		if (isReadOnly()) {
 			return Inspectors.DM.DM_RO_REPOSITORY_INSPECTOR;
-		else
+		} else {
 			return Inspectors.DM.DM_REPOSITORY_INSPECTOR;
+		}
 	}
 
 	/**
@@ -275,30 +276,35 @@ public abstract class DMRepository extends DMObject {
 
 	public void registerEntity(DMEntity entity) {
 		if ((entity.getEntityClassName() == null) || (entity.getEntityClassName().trim().equals(""))) {
-			if (logger.isLoggable(Level.WARNING))
-				logger.warning("Registering entity " + entity.getFullyQualifiedName() + ": className seems to be not correctely set. Doing it anyway.");
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Registering entity " + entity.getFullyQualifiedName()
+						+ ": className seems to be not correctely set. Doing it anyway.");
+			}
 		}
 		entity.setRepository(this);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Register Entity " + entity.getFullyQualifiedName());
+		}
 		if (entities.get(entity.getFullyQualifiedName()) == null) {
 			setEntityForKey(entity, entity.getFullyQualifiedName());
 			setChanged();
 			notifyObservers(new EntityRegistered(entity));
 		} else if (entity != entities.get(entity.getFullyQualifiedName())) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to redefine entity " + entity.getFullyQualifiedName() + ": operation not allowed !");
+			}
 		}
 	}
 
-	public final void unregisterEntity(DMEntity entity) {// GPO: This method is final. If you want to override it, override the 2-args method
+	public final void unregisterEntity(DMEntity entity) {// GPO: This method is final. If you want to override it, override the 2-args
+															// method
 		unregisterEntity(entity, true);
 	}
 
 	/**
-	 * Unregisters the given <code>entity</code> from this repository and from its package. A notification will be thrown if <code>notify</code> is true. The purpose of this flag is to avoid
-	 * notifications for temporary states: if you plan on registering this entity back in this same repository, then the unregister call can be invoked with false (the registration will notify the
-	 * observers).
+	 * Unregisters the given <code>entity</code> from this repository and from its package. A notification will be thrown if
+	 * <code>notify</code> is true. The purpose of this flag is to avoid notifications for temporary states: if you plan on registering this
+	 * entity back in this same repository, then the unregister call can be invoked with false (the registration will notify the observers).
 	 * 
 	 * @param entity
 	 * @param notify
@@ -368,8 +374,9 @@ public abstract class DMRepository extends DMObject {
 
 	public boolean hasDiagrams() {
 		for (ERDiagram diagram : getDMModel().getDiagrams()) {
-			if (diagram.getRepository() == this)
+			if (diagram.getRepository() == this) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -422,16 +429,19 @@ public abstract class DMRepository extends DMObject {
 		 */
 		@Override
 		public int compare(DMPackage o1, DMPackage o2) {
-			if (o1.isDefaultPackage())
+			if (o1.isDefaultPackage()) {
 				return -1;
-			if (o2.isDefaultPackage())
+			}
+			if (o2.isDefaultPackage()) {
 				return 1;
+			}
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null))
+			if ((s1 != null) && (s2 != null)) {
 				return Collator.getInstance().compare(s1, s2);
-			else
+			} else {
 				return 0;
+			}
 		}
 
 	}

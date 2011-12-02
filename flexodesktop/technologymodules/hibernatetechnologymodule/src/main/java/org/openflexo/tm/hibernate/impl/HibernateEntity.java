@@ -68,7 +68,8 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	protected HibernateModel hibernateModel;
 
 	/**
-	 * Returns the name of the table that will be used to store this entity in the storage system. If <code>null</code>, the name define the table name.
+	 * Returns the name of the table that will be used to store this entity in the storage system. If <code>null</code>, the name define the
+	 * table name.
 	 */
 	protected String tableName;
 	protected boolean isTableNameSynchronized;
@@ -96,7 +97,8 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 * Build a new Hibernate entity for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during unserialization.
 	 * 
-	 * @param builder the builder that will create this entity
+	 * @param builder
+	 *            the builder that will create this entity
 	 */
 	public HibernateEntity(ImplementationModelBuilder builder) {
 		this(builder.implementationModel);
@@ -106,7 +108,8 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	/**
 	 * Build a new Hibernate entity for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Hibernate entity
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate entity
 	 */
 	public HibernateEntity(ImplementationModel implementationModel) {
 		super(implementationModel);
@@ -114,14 +117,17 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	}
 
 	/**
-	 * @param implementationModel the implementation model where to create this Hibernate entity
-	 * @param linkedFlexoModelObject Can be null
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate entity
+	 * @param linkedFlexoModelObject
+	 *            Can be null
 	 */
 	public HibernateEntity(ImplementationModel implementationModel, DMEntity linkedFlexoModelObject) {
 		super(implementationModel, linkedFlexoModelObject);
 		createDefaultPrimaryKey();
-		if (linkedFlexoModelObject != null)
+		if (linkedFlexoModelObject != null) {
 			isTableNameSynchronized = true;
+		}
 	}
 
 	// =========== //
@@ -165,17 +171,19 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 
 			Map<DMProperty, LinkableTechnologyModelObject<?>> alreadyCreatedChildren = new HashMap<DMProperty, LinkableTechnologyModelObject<?>>();
 			for (HibernateAttribute hibernateAttribute : this.attributes) {
-				if (hibernateAttribute.getLinkedFlexoModelObject() != null)
+				if (hibernateAttribute.getLinkedFlexoModelObject() != null) {
 					alreadyCreatedChildren.put(hibernateAttribute.getLinkedFlexoModelObject(), hibernateAttribute);
-				else if (hibernateAttribute.getWasLinkedAtLastDeserialization())
+				} else if (hibernateAttribute.getWasLinkedAtLastDeserialization()) {
 					deletedChildren.add(hibernateAttribute);
+				}
 			}
 
 			for (HibernateRelationship hibernateRelationship : this.relationships) {
-				if (hibernateRelationship.getLinkedFlexoModelObject() != null)
+				if (hibernateRelationship.getLinkedFlexoModelObject() != null) {
 					alreadyCreatedChildren.put(hibernateRelationship.getLinkedFlexoModelObject(), hibernateRelationship);
-				else if (hibernateRelationship.getWasLinkedAtLastDeserialization())
+				} else if (hibernateRelationship.getWasLinkedAtLastDeserialization()) {
 					deletedChildren.add(hibernateRelationship);
+				}
 			}
 
 			// Create missing attributes & relationships and update existing ones
@@ -189,16 +197,19 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 			}
 
 			// Remove deleted entities & enums
-			for (LinkableTechnologyModelObject<?> hibernateObj : deletedChildren)
+			for (LinkableTechnologyModelObject<?> hibernateObj : deletedChildren) {
 				hibernateObj.delete();
+			}
 		}
 	}
 
 	/**
-	 * Add a new Hibernate Attribute or Hibernate Relationshp to this entity. The newly created Hibernate object is based and linked to the specified DMProperty. <br>
+	 * Add a new Hibernate Attribute or Hibernate Relationshp to this entity. The newly created Hibernate object is based and linked to the
+	 * specified DMProperty. <br>
 	 * If an Hibernate object was already existing for this DMProperty, nothing is performed.
 	 * 
-	 * @param dmProperty the DMProperty the newly created Hibernate object should be linked to.
+	 * @param dmProperty
+	 *            the DMProperty the newly created Hibernate object should be linked to.
 	 */
 	public void createHibernateObjectBasedOnDMProperty(DMProperty dmProperty) {
 		if (HibernateUtils.getIsHibernateAttributeRepresented(dmProperty)) {
@@ -217,7 +228,8 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	}
 
 	/**
-	 * Create a new default primary key attribute on this entity. If the default primary key attribute was already existing, nothing is performed
+	 * Create a new default primary key attribute on this entity. If the default primary key attribute was already existing, nothing is
+	 * performed
 	 */
 	public void createDefaultPrimaryKey() {
 		if (getAttribute("id") == null) {
@@ -231,8 +243,9 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 				attribute.setUnique(true);
 				addToAttributes(attribute);
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.log(Level.WARNING, "Cannot create default primary key on Hibernate entity " + getName(), e);
+				}
 			}
 		}
 	}
@@ -261,7 +274,8 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	public void updateIsTableNameSynchronized() {
 		if (!isDeserializing) {
 			String defaultTableName = getDefaultTableName();
-			setIsTableNameSynchronized(defaultTableName != null && (StringUtils.isEmpty(getTableName()) || StringUtils.equals(defaultTableName, getTableName())));
+			setIsTableNameSynchronized(defaultTableName != null
+					&& (StringUtils.isEmpty(getTableName()) || StringUtils.equals(defaultTableName, getTableName())));
 		}
 	}
 
@@ -269,10 +283,12 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 * Update the table name with this object name if necessary.
 	 */
 	public void updateTableNameIfNecessary() {
-		if (getIsTableNameSynchronized())
+		if (getIsTableNameSynchronized()) {
 			setTableName(getName());
-		else
-			updateIsTableNameSynchronized(); // Update this anyway in case the name is set to tableName. In this case synchronization is set back to true.
+		} else {
+			updateIsTableNameSynchronized(); // Update this anyway in case the name is set to tableName. In this case synchronization is set
+												// back to true.
+		}
 	}
 
 	/**
@@ -300,20 +316,25 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	@Override
 	public void delete() {
 
-		for (HibernateRelationship hibernateRelationship : new Vector<HibernateRelationship>(getRelationships()))
+		for (HibernateRelationship hibernateRelationship : new Vector<HibernateRelationship>(getRelationships())) {
 			hibernateRelationship.delete();
+		}
 
-		for (HibernateAttribute hibernateAttribute : new Vector<HibernateAttribute>(getAttributes()))
+		for (HibernateAttribute hibernateAttribute : new Vector<HibernateAttribute>(getAttributes())) {
 			hibernateAttribute.delete();
+		}
 
-		for (HibernateEntity hibernateEntity : new Vector<HibernateEntity>(getChildren()))
+		for (HibernateEntity hibernateEntity : new Vector<HibernateEntity>(getChildren())) {
 			hibernateEntity.delete();
+		}
 
-		if (getFather() != null)
+		if (getFather() != null) {
 			getFather().removeFromChildren(this);
+		}
 
-		if (getHibernateModel() != null)
+		if (getHibernateModel() != null) {
 			getHibernateModel().removeFromEntities(this);
+		}
 
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification<HibernateEntity>(this));
@@ -329,8 +350,9 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	public Vector<HibernateEntity> getEntitiesAllowedAsParent() {
 		Vector<HibernateEntity> result = new Vector<HibernateEntity>();
 		for (HibernateEntity entity : getHibernateModel().getEntities()) {
-			if (entity != this && entity.getFather() == null)
+			if (entity != this && entity.getFather() == null) {
 				result.add(entity);
+			}
 		}
 
 		return result;
@@ -349,10 +371,12 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 			 */
 			@Override
 			public int compare(HibernateAttribute o1, HibernateAttribute o2) {
-				if (o1.getPrimaryKey() && !o2.getPrimaryKey())
+				if (o1.getPrimaryKey() && !o2.getPrimaryKey()) {
 					return -1;
-				if (!o1.getPrimaryKey() && o2.getPrimaryKey())
+				}
+				if (!o1.getPrimaryKey() && o2.getPrimaryKey()) {
 					return 1;
+				}
 				return subComparator.compare(o1, o2);
 			}
 
@@ -377,19 +401,22 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
 		if (observable == getLinkedFlexoModelObject()) {
-			if (dataModification instanceof DMEntityNameChanged)
+			if (dataModification instanceof DMEntityNameChanged) {
 				updateNameIfNecessary();
-			else if (dataModification instanceof PropertyRegistered)
+			} else if (dataModification instanceof PropertyRegistered) {
 				createHibernateObjectBasedOnDMProperty((DMProperty) dataModification.newValue());
-			else if (dataModification instanceof DMAttributeDataModification && "isEnumeration".equals(dataModification.propertyName()))
+			} else if (dataModification instanceof DMAttributeDataModification && "isEnumeration".equals(dataModification.propertyName())) {
 				updateIsEnumIfNecessary();
+			}
 		}
 
 		if (dataModification instanceof NameChanged) {
-			if (observable instanceof HibernateAttribute)
+			if (observable instanceof HibernateAttribute) {
 				sortAttributes();
-			if (observable instanceof HibernateRelationship)
+			}
+			if (observable instanceof HibernateRelationship) {
 				sortRelationships();
+			}
 		}
 	}
 
@@ -405,8 +432,10 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 		if (linkedFlexoModelObject == null || !linkedFlexoModelObject.getIsEnumeration()) {
 			super.setLinkedFlexoModelObject(linkedFlexoModelObject);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
-				logger.log(Level.WARNING, "Cannot set linked object to Hibernate Entity with an enumeration DM Entity. DM Entity: " + linkedFlexoModelObject.getName());
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING, "Cannot set linked object to Hibernate Entity with an enumeration DM Entity. DM Entity: "
+						+ linkedFlexoModelObject.getName());
+			}
 		}
 	}
 
@@ -417,8 +446,9 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
 		name = escapeName(name);
 
-		if (StringUtils.isEmpty(name))
+		if (StringUtils.isEmpty(name)) {
 			name = getDefaultName();
+		}
 
 		if (requireChange(getName(), name)) {
 			super.setName(name);
@@ -433,8 +463,9 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	public void setTableName(String tableName) {
 		tableName = escapeTableName(tableName);
 
-		if (StringUtils.isEmpty(tableName))
+		if (StringUtils.isEmpty(tableName)) {
 			tableName = getDefaultTableName();
+		}
 
 		if (requireChange(getTableName(), tableName)) {
 			String oldValue = getTableName();
@@ -497,13 +528,15 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 		if (requireChange(this.attributes, attributes)) {
 			Vector<HibernateAttribute> oldValue = this.attributes;
 
-			for (HibernateAttribute attribute : oldValue)
+			for (HibernateAttribute attribute : oldValue) {
 				attribute.deleteObserver(this);
+			}
 
 			this.attributes = attributes;
 
-			for (HibernateAttribute attribute : attributes)
+			for (HibernateAttribute attribute : attributes) {
 				attribute.addObserver(this);
+			}
 
 			sortAttributes();
 			setChanged();
@@ -538,8 +571,9 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 */
 	public HibernateAttribute getAttribute(String attributeName) {
 		for (HibernateAttribute attribute : attributes) {
-			if (attribute.getName().equals(attributeName))
+			if (attribute.getName().equals(attributeName)) {
 				return attribute;
+			}
 		}
 
 		return null;
@@ -553,8 +587,9 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 */
 	public HibernateAttribute getAttribute(DMProperty dmProperty) {
 		for (HibernateAttribute attribute : attributes) {
-			if (attribute.getLinkedFlexoModelObject() == dmProperty)
+			if (attribute.getLinkedFlexoModelObject() == dmProperty) {
 				return attribute;
+			}
 		}
 
 		return null;
@@ -573,13 +608,15 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 		if (requireChange(this.relationships, relationships)) {
 			Vector<HibernateRelationship> oldValue = this.relationships;
 
-			for (HibernateRelationship relationship : oldValue)
+			for (HibernateRelationship relationship : oldValue) {
 				relationship.deleteObserver(this);
+			}
 
 			this.relationships = relationships;
 
-			for (HibernateRelationship relationship : relationships)
+			for (HibernateRelationship relationship : relationships) {
 				relationship.addObserver(this);
+			}
 
 			sortRelationships();
 			setChanged();
@@ -614,8 +651,9 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 */
 	public HibernateRelationship getRelationship(String relationshipName) {
 		for (HibernateRelationship relationship : relationships) {
-			if (relationship.getName().equals(relationshipName))
+			if (relationship.getName().equals(relationshipName)) {
 				return relationship;
+			}
 		}
 
 		return null;
@@ -629,8 +667,9 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 */
 	public HibernateRelationship getRelationship(DMProperty dmProperty) {
 		for (HibernateRelationship relationship : relationships) {
-			if (relationship.getLinkedFlexoModelObject() == dmProperty)
+			if (relationship.getLinkedFlexoModelObject() == dmProperty) {
 				return relationship;
+			}
 		}
 
 		return null;

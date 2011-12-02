@@ -48,7 +48,8 @@ public class CreateHibernateModelAction extends FlexoAction<CreateHibernateModel
 		 * Factory method
 		 */
 		@Override
-		public CreateHibernateModelAction makeNewAction(HibernateImplementation focusedObject, Vector<HibernateImplementation> globalSelection, FlexoEditor editor) {
+		public CreateHibernateModelAction makeNewAction(HibernateImplementation focusedObject,
+				Vector<HibernateImplementation> globalSelection, FlexoEditor editor) {
 			return new CreateHibernateModelAction(focusedObject, globalSelection, editor);
 		}
 
@@ -86,7 +87,8 @@ public class CreateHibernateModelAction extends FlexoAction<CreateHibernateModel
 		try {
 			HibernateModel.createNewHibernateModel(newModelName, getFocusedObject(), watchedRepository);
 
-			logger.info("Created hibernate model " + newModelName + " for implementation model " + getFocusedObject().getImplementationModel());
+			logger.info("Created hibernate model " + newModelName + " for implementation model "
+					+ getFocusedObject().getImplementationModel());
 		} catch (DuplicateResourceException e) {
 			throw new InvalidParametersException("duplicate_hibernate_model_name");
 		} catch (InvalidNameException e) {
@@ -95,8 +97,9 @@ public class CreateHibernateModelAction extends FlexoAction<CreateHibernateModel
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 }

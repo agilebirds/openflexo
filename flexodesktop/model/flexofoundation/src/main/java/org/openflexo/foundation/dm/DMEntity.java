@@ -257,7 +257,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public final String getFullQualifiedName() {
-		return ((getPackage() == null) || getPackage().isDefaultPackage() ? getEntityClassName() : getPackage().getName() + "." + getEntityClassName());
+		return ((getPackage() == null) || getPackage().isDefaultPackage() ? getEntityClassName() : getPackage().getName() + "."
+				+ getEntityClassName());
 	}
 
 	@Override
@@ -337,7 +338,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public boolean isInDefaultPackage() {
-		return (getEntityPackageName() != null) && getEntityPackageName().equals(getRepository().getDefaultPackage().getName()) && !isPrimitiveType();
+		return (getEntityPackageName() != null) && getEntityPackageName().equals(getRepository().getDefaultPackage().getName())
+				&& !isPrimitiveType();
 	}
 
 	public String getEntityPackageName() {
@@ -509,7 +511,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 				}
 				newParentEntity.addToChildEntities(this);
 			}
-		} else if ((dataModification instanceof DMObjectDeleted) && (getParentType() != null) && (observable == getParentType().getBaseEntity())) {
+		} else if ((dataModification instanceof DMObjectDeleted) && (getParentType() != null)
+				&& (observable == getParentType().getBaseEntity())) {
 			DMEntity parent = getParentBaseEntity();
 			while ((parent != null) && parent.isDeleted()) {
 				parent = parent.getParentBaseEntity();
@@ -573,7 +576,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	/**
-	 * Return a vector of accessible DMMethods. An accessible mehod is defined as a method defined in this entity of somewhere in an ancestor entity.
+	 * Return a vector of accessible DMMethods. An accessible mehod is defined as a method defined in this entity of somewhere in an
+	 * ancestor entity.
 	 * 
 	 * @return a Vector of DMMethod objects
 	 */
@@ -591,7 +595,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public void setMethodForKey(DMMethod method, String methodSignature) {
-		if ((method._getRegisteredWithSignature() != null) && !method._getRegisteredWithSignature().equals(methodSignature) && (methods.get(method._getRegisteredWithSignature()) != null)) {
+		if ((method._getRegisteredWithSignature() != null) && !method._getRegisteredWithSignature().equals(methodSignature)
+				&& (methods.get(method._getRegisteredWithSignature()) != null)) {
 			removeMethodWithKey(method._getRegisteredWithSignature());
 		}
 		method.setEntity(this);
@@ -620,7 +625,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Register method for this entity
 	 * 
-	 * @param method: the method to register
+	 * @param method
+	 *            : the method to register
 	 * @return true if method has been effectively registered, false otherwise
 	 */
 	public boolean registerMethod(DMMethod method) {
@@ -630,8 +636,10 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Register method for this entity
 	 * 
-	 * @param method: the method to register
-	 * @param notify: true if notification has to be forwarded
+	 * @param method
+	 *            : the method to register
+	 * @param notify
+	 *            : true if notification has to be forwarded
 	 * @return true if method has been effectively registered, false otherwise
 	 */
 	public boolean registerMethod(DMMethod method, boolean notify) {
@@ -658,7 +666,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Un-register method for this entity
 	 * 
-	 * @param method: the method to unregister
+	 * @param method
+	 *            : the method to unregister
 	 * @return true if method has been effectively un-registered, false otherwise
 	 */
 	public boolean unregisterMethod(DMMethod method) {
@@ -668,8 +677,10 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Un-register method for this entity
 	 * 
-	 * @param method: the method to unregister
-	 * @param notify: true if notification has to be forwarded
+	 * @param method
+	 *            : the method to unregister
+	 * @param notify
+	 *            : true if notification has to be forwarded
 	 * @return true if method has been effectively un-registered, false otherwise
 	 */
 	public boolean unregisterMethod(DMMethod method, boolean notify) {
@@ -697,7 +708,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	/**
-	 * Return method whose signature matches 'methodSignature' accessible from this entity. This method allows to access inherited methods from parent classes.
+	 * Return method whose signature matches 'methodSignature' accessible from this entity. This method allows to access inherited methods
+	 * from parent classes.
 	 * 
 	 * @param methodSignature
 	 * @return
@@ -751,8 +763,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	/**
-	 * Return a vector of accessible DMProperties An accessible property is defined as a property defined in this entity of somewhere in an ancestor entity. If this entity is a DMEOProperty, it must
-	 * be a class property.
+	 * Return a vector of accessible DMProperties An accessible property is defined as a property defined in this entity of somewhere in an
+	 * ancestor entity. If this entity is a DMEOProperty, it must be a class property.
 	 * 
 	 * @return
 	 */
@@ -789,7 +801,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Register property for this entity
 	 * 
-	 * @param property: the property to register
+	 * @param property
+	 *            : the property to register
 	 * @return true if property has been effectively registered, false otherwise
 	 */
 	public boolean registerProperty(DMProperty property, boolean isBindable) {
@@ -799,8 +812,10 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Register property for this entity
 	 * 
-	 * @param property: the property to register
-	 * @param notify: true if notification has to be forwarded
+	 * @param property
+	 *            : the property to register
+	 * @param notify
+	 *            : true if notification has to be forwarded
 	 * @return true if property has been effectively registered, false otherwise
 	 */
 	public boolean registerProperty(DMProperty property, boolean notify, boolean isBindable) {
@@ -821,8 +836,9 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 			return true;
 		} else if (property != properties.get(property.getName())) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("You are trying to redefine property " + property.getName() + "(" + property.getType() + ") " + " but property " + property.getName() + "("
-						+ properties.get(property.getName()).getType() + ") is already existing");
+				logger.warning("You are trying to redefine property " + property.getName() + "(" + property.getType() + ") "
+						+ " but property " + property.getName() + "(" + properties.get(property.getName()).getType()
+						+ ") is already existing");
 			}
 		}
 		return false;
@@ -831,7 +847,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Un-register property for this entity
 	 * 
-	 * @param property: the property to unregister
+	 * @param property
+	 *            : the property to unregister
 	 * @return true if property has been effectively un-registered, false otherwise
 	 */
 	public boolean unregisterProperty(DMProperty property) {
@@ -841,8 +858,10 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Un-register property for this entity
 	 * 
-	 * @param property: the property to unregister
-	 * @param notify: true if notification has to be forwarded
+	 * @param property
+	 *            : the property to unregister
+	 * @param notify
+	 *            : true if notification has to be forwarded
 	 * @return true if property has been effectively un-registered, false otherwise
 	 */
 	public boolean unregisterProperty(DMProperty property, boolean notify) {
@@ -869,7 +888,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	/**
-	 * Return property named 'propertyName' accessible from this entity. This method allows to access inherited properties from parent classes.
+	 * Return property named 'propertyName' accessible from this entity. This method allows to access inherited properties from parent
+	 * classes.
 	 * 
 	 * @param propertyName
 	 * @return
@@ -884,8 +904,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	/**
-	 * Returns boolean indicating if this entity is an ancestor of supplied entity. Returns true if entity equals this entity, or if this entity is a parent of supplied entity (parent class or parent
-	 * interface)
+	 * Returns boolean indicating if this entity is an ancestor of supplied entity. Returns true if entity equals this entity, or if this
+	 * entity is a parent of supplied entity (parent class or parent interface)
 	 * 
 	 * Note that both 'extends' and 'implements' schemes are implemented by this method
 	 * 
@@ -916,7 +936,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	/**
-	 * Returns most direct ancestor of supplied entity, on it's way to this type as ancestor, assuming this type is an ancestor of supplied entity
+	 * Returns most direct ancestor of supplied entity, on it's way to this type as ancestor, assuming this type is an ancestor of supplied
+	 * entity
 	 * 
 	 * @param entity
 	 * @return
@@ -1304,7 +1325,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	public DMProperty createDMProperty(String name, DMType type, DMPropertyImplementationType implementationType) {
-		DMProperty newProperty = new DMProperty(getProject().getDataModel(), name, type, DMCardinality.SINGLE, false, true, implementationType);
+		DMProperty newProperty = new DMProperty(getProject().getDataModel(), name, type, DMCardinality.SINGLE, false, true,
+				implementationType);
 		registerProperty(newProperty, true);
 		return newProperty;
 	}
@@ -1538,7 +1560,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 			}
 
 			// Description
-			if (((getDescription() == null) && (typeVariable.getDescription() != null)) || (!getDescription().equals(typeVariable.getDescription()))) {
+			if (((getDescription() == null) && (typeVariable.getDescription() != null))
+					|| (!getDescription().equals(typeVariable.getDescription()))) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update description");
 				}
@@ -1769,7 +1792,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		if (className.startsWith("java.lang")) {
 			return false;
 		}
-		return (getPackage() == null) || getPackage().isDefaultPackage() || !getPackage().getName().equals(className.substring(0, className.lastIndexOf('.')));
+		return (getPackage() == null) || getPackage().isDefaultPackage()
+				|| !getPackage().getName().equals(className.substring(0, className.lastIndexOf('.')));
 	}
 
 	private void appendParameters(List<DMType> types, List<String> imports) {
@@ -1840,7 +1864,8 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		return true;
 	}
 
-	public static class EntityInPackageCannotUseEntityOfTheDefaultPackage extends ValidationRule<EntityInPackageCannotUseEntityOfTheDefaultPackage, DMEntity> {
+	public static class EntityInPackageCannotUseEntityOfTheDefaultPackage extends
+			ValidationRule<EntityInPackageCannotUseEntityOfTheDefaultPackage, DMEntity> {
 
 		public EntityInPackageCannotUseEntityOfTheDefaultPackage() {
 			super(DMEntity.class, "entity_in_package_cannot_use_entity_of_the_default_package");
@@ -1880,13 +1905,14 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 				}
 			}
 			if (v.size() > 0) {
-				StringBuilder sb = new StringBuilder(FlexoLocalization.localizedForKey("the_following_entities_are_in_the_default_package_and_cannot_be_used_by") + " " + entity.getFullQualifiedName())
-						.append(": ");
+				StringBuilder sb = new StringBuilder(
+						FlexoLocalization.localizedForKey("the_following_entities_are_in_the_default_package_and_cannot_be_used_by") + " "
+								+ entity.getFullQualifiedName()).append(": ");
 				for (DMEntity e : v) {
 					sb.append(e.getName()).append(" ");
 				}
-				ValidationError<EntityInPackageCannotUseEntityOfTheDefaultPackage, DMEntity> vr = new ValidationError<EntityInPackageCannotUseEntityOfTheDefaultPackage, DMEntity>(this, entity,
-						sb.toString());
+				ValidationError<EntityInPackageCannotUseEntityOfTheDefaultPackage, DMEntity> vr = new ValidationError<EntityInPackageCannotUseEntityOfTheDefaultPackage, DMEntity>(
+						this, entity, sb.toString());
 				vr.setLocalized(true);
 				return vr;
 			}

@@ -40,7 +40,8 @@ public class HibernateEnumContainerView extends FIBModuleView<HibernateEnumConta
 
 	private FlexoPerspective<? super HibernateEnumContainer> declaredPerspective;
 
-	public HibernateEnumContainerView(HibernateEnumContainer hibernateEnumContainer, SGController controller, FlexoPerspective<? super HibernateEnumContainer> perspective) {
+	public HibernateEnumContainerView(HibernateEnumContainer hibernateEnumContainer, SGController controller,
+			FlexoPerspective<? super HibernateEnumContainer> perspective) {
 		super(hibernateEnumContainer, controller, HIBERNATE_ENUM_CONTAINER_VIEW_FIB_RESOURCE_PATH);
 		declaredPerspective = perspective;
 	}

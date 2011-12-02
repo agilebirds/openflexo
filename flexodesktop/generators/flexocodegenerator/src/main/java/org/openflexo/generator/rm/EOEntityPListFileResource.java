@@ -37,7 +37,8 @@ import org.openflexo.foundation.rm.cg.PListFileResource;
 import org.openflexo.generator.cg.CGPListFile;
 import org.openflexo.generator.dm.EOEntityPListGenerator;
 
-public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGenerator, CGPListFile> implements GenerationAvailableFileResource, FlexoObserver {
+public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGenerator, CGPListFile> implements
+		GenerationAvailableFileResource, FlexoObserver {
 
 	private boolean isObserverRegistered = false;
 
@@ -55,8 +56,9 @@ public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGe
 	}
 
 	public DMEOEntity getEntity() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getEntity();
+		}
 		return null;
 	}
 
@@ -70,7 +72,8 @@ public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGe
 	/**
 	 * Overrides update
 	 * 
-	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
@@ -112,7 +115,8 @@ public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGe
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this resource's dependant resources
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
 	 * 
 	 * @param resource
 	 * @param dependancyScheme
@@ -124,8 +128,9 @@ public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGe
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getEntity() != null) {
 				if (!requestDate.before(getEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for PLIST EOENTITY " + getEntity().getName());
+					}
 					return false;
 				}
 			}
@@ -148,8 +153,9 @@ public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGe
 	static String getDefaultFileName(DMEOEntity entity) {
 		String fullQualifiedName = entity.getFullyQualifiedName();
 		String basicName = fullQualifiedName;
-		if (fullQualifiedName.lastIndexOf(".") > -1)
+		if (fullQualifiedName.lastIndexOf(".") > -1) {
 			basicName = fullQualifiedName.substring(fullQualifiedName.lastIndexOf(".") + 1);
+		}
 		return basicName + ".plist";
 	}
 

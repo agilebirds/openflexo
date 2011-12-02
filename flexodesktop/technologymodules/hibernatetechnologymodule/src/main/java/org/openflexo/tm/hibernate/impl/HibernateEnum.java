@@ -46,7 +46,8 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
 	 * Build a new Hibernate enum for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during deserialization.
 	 * 
-	 * @param builder the builder that will create this enum
+	 * @param builder
+	 *            the builder that will create this enum
 	 */
 	public HibernateEnum(ImplementationModelBuilder builder) {
 		this(builder.implementationModel);
@@ -56,15 +57,18 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
 	/**
 	 * Build a new Hibernate enum for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Hibernate enum
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate enum
 	 */
 	public HibernateEnum(ImplementationModel implementationModel) {
 		super(implementationModel);
 	}
 
 	/**
-	 * @param implementationModel the implementation model where to create this Hibernate enum
-	 * @param linkedFlexoModelObject Can be null
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate enum
+	 * @param linkedFlexoModelObject
+	 *            Can be null
 	 */
 	public HibernateEnum(ImplementationModel implementationModel, DMEntity linkedFlexoModelObject) {
 		super(implementationModel, linkedFlexoModelObject);
@@ -139,8 +143,9 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
 	@Override
 	public void delete() {
 
-		if (getHibernateEnumContainer() != null)
+		if (getHibernateEnumContainer() != null) {
 			getHibernateEnumContainer().removeFromHibernateEnums(this);
+		}
 
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification<HibernateEnum>(this));
@@ -159,10 +164,11 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
 		if (observable == getLinkedFlexoModelObject()) {
-			if (dataModification instanceof DMEntityNameChanged)
+			if (dataModification instanceof DMEntityNameChanged) {
 				updateNameIfNecessary();
-			else if (dataModification instanceof DMAttributeDataModification && "isEnumeration".equals(dataModification.propertyName()))
+			} else if (dataModification instanceof DMAttributeDataModification && "isEnumeration".equals(dataModification.propertyName())) {
 				updateIsEnumIfNecessary();
+			}
 		}
 	}
 
@@ -178,8 +184,10 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
 		if (linkedFlexoModelObject == null || linkedFlexoModelObject.getIsEnumeration()) {
 			super.setLinkedFlexoModelObject(linkedFlexoModelObject);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
-				logger.log(Level.WARNING, "Cannot set linked object to Hibernate Enum with a non enumeration DM Entity. DM Entity: " + linkedFlexoModelObject.getName());
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING, "Cannot set linked object to Hibernate Enum with a non enumeration DM Entity. DM Entity: "
+						+ linkedFlexoModelObject.getName());
+			}
 		}
 
 	}
@@ -191,8 +199,9 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
 	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
 		name = escapeName(name);
 
-		if (StringUtils.isEmpty(name))
+		if (StringUtils.isEmpty(name)) {
 			name = getDefaultName();
+		}
 
 		super.setName(name);
 	}

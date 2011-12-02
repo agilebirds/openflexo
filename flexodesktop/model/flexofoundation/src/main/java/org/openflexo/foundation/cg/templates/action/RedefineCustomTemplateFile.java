@@ -48,7 +48,8 @@ public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTempla
 		 * Factory method
 		 */
 		@Override
-		public RedefineCustomTemplateFile makeNewAction(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+		public RedefineCustomTemplateFile makeNewAction(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection,
+				FlexoEditor editor) {
 			return new RedefineCustomTemplateFile(focusedObject, globalSelection, editor);
 		}
 

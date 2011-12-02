@@ -58,21 +58,27 @@ public class HibernateGUIFactory implements TechnologyModuleGUIFactory {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends TechnologyModelObject> TechnologyModuleBrowserElement<T> createBrowserElement(T object, ProjectBrowser browser, BrowserElement parent) {
-		if (object instanceof HibernateImplementation)
+	public <T extends TechnologyModelObject> TechnologyModuleBrowserElement<T> createBrowserElement(T object, ProjectBrowser browser,
+			BrowserElement parent) {
+		if (object instanceof HibernateImplementation) {
 			return (TechnologyModuleBrowserElement<T>) new HibernateImplementationElement((HibernateImplementation) object, browser, parent);
+		}
 
-		if (object instanceof HibernateModel)
+		if (object instanceof HibernateModel) {
 			return (TechnologyModuleBrowserElement<T>) new HibernateModelElement((HibernateModel) object, browser, parent);
+		}
 
-		if (object instanceof HibernateEntity)
+		if (object instanceof HibernateEntity) {
 			return (TechnologyModuleBrowserElement<T>) new HibernateEntityElement((HibernateEntity) object, browser, parent);
+		}
 
-		if (object instanceof HibernateEnumContainer)
+		if (object instanceof HibernateEnumContainer) {
 			return (TechnologyModuleBrowserElement<T>) new HibernateEnumContainerElement((HibernateEnumContainer) object, browser, parent);
+		}
 
-		if (object instanceof HibernateEnum)
+		if (object instanceof HibernateEnum) {
 			return (TechnologyModuleBrowserElement<T>) new HibernateEnumElement((HibernateEnum) object, browser, parent);
+		}
 
 		return null;
 	}
@@ -82,30 +88,44 @@ public class HibernateGUIFactory implements TechnologyModuleGUIFactory {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends TechnologyModelObject> ModuleView<T> createModelView(T object, SGController controller, CodeGenerationPerspective codeGenerationPerspective) {
-		if (object instanceof HibernateImplementation)
+	public <T extends TechnologyModelObject> ModuleView<T> createModelView(T object, SGController controller,
+			CodeGenerationPerspective codeGenerationPerspective) {
+		if (object instanceof HibernateImplementation) {
 			return (ModuleView<T>) new HibernateImplementationView((HibernateImplementation) object, controller, codeGenerationPerspective);
+		}
 
-		if (object instanceof HibernateModel)
+		if (object instanceof HibernateModel) {
 			return (ModuleView<T>) new HibernateModelView((HibernateModel) object, controller, codeGenerationPerspective);
+		}
 
-		if (object instanceof HibernateEntity)
-			return (ModuleView<T>) new HibernateModelView(((HibernateEntity) object).getHibernateModel(), controller, codeGenerationPerspective);
+		if (object instanceof HibernateEntity) {
+			return (ModuleView<T>) new HibernateModelView(((HibernateEntity) object).getHibernateModel(), controller,
+					codeGenerationPerspective);
+		}
 
-		if (object instanceof HibernateAttribute)
-			return (ModuleView<T>) new HibernateModelView(((HibernateAttribute) object).getHibernateEntity().getHibernateModel(), controller, codeGenerationPerspective);
+		if (object instanceof HibernateAttribute) {
+			return (ModuleView<T>) new HibernateModelView(((HibernateAttribute) object).getHibernateEntity().getHibernateModel(),
+					controller, codeGenerationPerspective);
+		}
 
-		if (object instanceof HibernateRelationship)
-			return (ModuleView<T>) new HibernateModelView(((HibernateRelationship) object).getHibernateEntity().getHibernateModel(), controller, codeGenerationPerspective);
+		if (object instanceof HibernateRelationship) {
+			return (ModuleView<T>) new HibernateModelView(((HibernateRelationship) object).getHibernateEntity().getHibernateModel(),
+					controller, codeGenerationPerspective);
+		}
 
-		if (object instanceof HibernateEnumContainer)
+		if (object instanceof HibernateEnumContainer) {
 			return (ModuleView<T>) new HibernateEnumContainerView((HibernateEnumContainer) object, controller, codeGenerationPerspective);
+		}
 
-		if (object instanceof HibernateEnum)
-			return (ModuleView<T>) new HibernateEnumContainerView(((HibernateEnum) object).getHibernateEnumContainer(), controller, codeGenerationPerspective);
+		if (object instanceof HibernateEnum) {
+			return (ModuleView<T>) new HibernateEnumContainerView(((HibernateEnum) object).getHibernateEnumContainer(), controller,
+					codeGenerationPerspective);
+		}
 
-		if (object instanceof HibernateEnumValue)
-			return (ModuleView<T>) new HibernateEnumContainerView(((HibernateEnumValue) object).getHibernateEnum().getHibernateEnumContainer(), controller, codeGenerationPerspective);
+		if (object instanceof HibernateEnumValue) {
+			return (ModuleView<T>) new HibernateEnumContainerView(((HibernateEnumValue) object).getHibernateEnum()
+					.getHibernateEnumContainer(), controller, codeGenerationPerspective);
+		}
 
 		return null;
 	}

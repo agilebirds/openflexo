@@ -85,31 +85,35 @@ public class MethodCall extends FlexoModelObject implements Typed, BindingValue.
 
 	@Override
 	public String getSerializationRepresentation() {
-		if (_method == null)
+		if (_method == null) {
 			return "null";
+		}
 		String returned = _method.getName();
 		returned += "(";
 		boolean isFirst = true;
-		if (_method.getParameters() != null)
+		if (_method.getParameters() != null) {
 			for (MethodCallArgument arg : _args) {
 				returned += (isFirst ? "" : ",") + (arg.getBinding() != null ? arg.getBinding().getStringRepresentation() : "");
 				isFirst = false;
 			}
+		}
 		returned += ")";
 		return returned;
 	}
 
 	public String getJavaCodeStringRepresentation() {
-		if (_method == null)
+		if (_method == null) {
 			return "null";
+		}
 		String returned = _method.getName();
 		returned += "(";
 		boolean isFirst = true;
-		if (_method.getParameters() != null)
+		if (_method.getParameters() != null) {
 			for (MethodCallArgument arg : _args) {
 				returned += (isFirst ? "" : ",") + (arg.getBinding() != null ? arg.getBinding().getJavaCodeStringRepresentation() : "");
 				isFirst = false;
 			}
+		}
 		returned += ")";
 		return returned;
 	}
@@ -153,22 +157,25 @@ public class MethodCall extends FlexoModelObject implements Typed, BindingValue.
 
 	@Override
 	public FlexoProject getProject() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getProject();
+		}
 		return null;
 	}
 
 	@Override
 	public XMLMapping getXMLMapping() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getXMLMapping();
+		}
 		return null;
 	}
 
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getXMLResourceData();
+		}
 		return null;
 	}
 
@@ -182,8 +189,9 @@ public class MethodCall extends FlexoModelObject implements Typed, BindingValue.
 
 	public MethodCallArgument argumentForParam(DMMethodParameter param) {
 		for (MethodCallArgument arg : _args) {
-			if (arg.getParam() == param)
+			if (arg.getParam() == param) {
 				return arg;
+			}
 		}
 		return null;
 	}
@@ -204,8 +212,9 @@ public class MethodCall extends FlexoModelObject implements Typed, BindingValue.
 	@Override
 	public boolean isBindingValid() {
 		for (MethodCallArgument arg : _args) {
-			if (arg.getBinding() == null || !arg.getBinding().isBindingValid())
+			if (arg.getBinding() == null || !arg.getBinding().isBindingValid()) {
 				return false;
+			}
 		}
 		return true;
 	}

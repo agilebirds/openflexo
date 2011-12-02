@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
@@ -38,30 +38,26 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class CreateTechnologyModuleImplementationInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateTechnologyModuleImplementationInitializer(SGControllerActionInitializer actionInitializer)
-	{
+	CreateTechnologyModuleImplementationInitializer(SGControllerActionInitializer actionInitializer) {
 		super(CreateTechnologyModuleImplementation.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateTechnologyModuleImplementation> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<CreateTechnologyModuleImplementation> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateTechnologyModuleImplementation>() {
 			@Override
-			public boolean run(ActionEvent e, CreateTechnologyModuleImplementation action)
-			{
-				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB, action, null, true);
+			public boolean run(ActionEvent e, CreateTechnologyModuleImplementation action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB, action, null,
+						true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
@@ -82,10 +78,8 @@ public class CreateTechnologyModuleImplementationInitializer extends ActionIniti
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SGIconLibrary.GENERATED_CODE_ICON;
 	}
-
 
 }
