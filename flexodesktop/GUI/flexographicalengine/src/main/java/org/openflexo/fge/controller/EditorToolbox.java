@@ -42,11 +42,13 @@ import org.openflexo.fge.controller.DrawingController.EditorTool;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
+import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 
 public class EditorToolbox {
 
-	private static final Logger logger = Logger.getLogger(EditorToolbox.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(EditorToolbox.class
+			.getPackage().getName());
 
 	private ToolPanel toolPanel;
 
@@ -55,6 +57,7 @@ public class EditorToolbox {
 	private FIBBackgroundStyleSelector backgroundSelector;
 	private FIBTextStyleSelector textStyleSelector;
 	private FIBShadowStyleSelector shadowStyleSelector;
+	private FIBShapeSelector shapeSelector;
 
 	private DrawingController<?> controller;
 
@@ -71,13 +74,18 @@ public class EditorToolbox {
 
 		public ToolPanel() {
 			super(new FlowLayout(FlowLayout.LEADING, 0, 0));
-			selectionToolButton = new ToolButton(EditorTool.SelectionTool, FGEIconLibrary.SELECTION_TOOL_ICON,
+			selectionToolButton = new ToolButton(EditorTool.SelectionTool,
+					FGEIconLibrary.SELECTION_TOOL_ICON,
 					FGEIconLibrary.SELECTION_TOOL_SELECTED_ICON);
-			drawShapeToolButton = new ToolButton(EditorTool.DrawShapeTool, FGEIconLibrary.DRAW_SHAPE_TOOL_ICON,
+			drawShapeToolButton = new ToolButton(EditorTool.DrawShapeTool,
+					FGEIconLibrary.DRAW_SHAPE_TOOL_ICON,
 					FGEIconLibrary.DRAW_SHAPE_TOOL_SELECTED_ICON);
-			drawConnectorToolButton = new ToolButton(EditorTool.DrawConnectorTool, FGEIconLibrary.DRAW_CONNECTOR_TOOL_ICON,
+			drawConnectorToolButton = new ToolButton(
+					EditorTool.DrawConnectorTool,
+					FGEIconLibrary.DRAW_CONNECTOR_TOOL_ICON,
 					FGEIconLibrary.DRAW_CONNECTOR_TOOL_SELECTED_ICON);
-			drawTextToolButton = new ToolButton(EditorTool.DrawTextTool, FGEIconLibrary.DRAW_TEXT_TOOL_ICON,
+			drawTextToolButton = new ToolButton(EditorTool.DrawTextTool,
+					FGEIconLibrary.DRAW_TEXT_TOOL_ICON,
 					FGEIconLibrary.DRAW_TEXT_TOOL_SELECTED_ICON);
 			add(new JLabel(FGEIconLibrary.TOOLBAR_LEFT_ICON));
 			add(selectionToolButton);
@@ -96,17 +104,22 @@ public class EditorToolbox {
 			updateButtons();
 		}
 
-		private void updateButtons() {
-			selectionToolButton.setSelected(controller.getCurrentTool() == EditorTool.SelectionTool);
-			drawShapeToolButton.setSelected(controller.getCurrentTool() == EditorTool.DrawShapeTool);
-			drawConnectorToolButton.setSelected(controller.getCurrentTool() == EditorTool.DrawConnectorTool);
-			drawTextToolButton.setSelected(controller.getCurrentTool() == EditorTool.DrawTextTool);
+		public void updateButtons() {
+			selectionToolButton
+					.setSelected(controller.getCurrentTool() == EditorTool.SelectionTool);
+			drawShapeToolButton
+					.setSelected(controller.getCurrentTool() == EditorTool.DrawShapeTool);
+			drawConnectorToolButton
+					.setSelected(controller.getCurrentTool() == EditorTool.DrawConnectorTool);
+			drawTextToolButton
+					.setSelected(controller.getCurrentTool() == EditorTool.DrawTextTool);
 		}
 
 		public class ToolButton extends JToggleButton {
 			private final EditorTool tool;
 
-			public ToolButton(final EditorTool tool, Icon icon, Icon selectedIcon) {
+			public ToolButton(final EditorTool tool, Icon icon,
+					Icon selectedIcon) {
 				super();
 				this.tool = tool;
 				setIcon(icon);
@@ -123,10 +136,17 @@ public class EditorToolbox {
 					}
 				});
 			}
+
+			@Override
+			public void setSelected(boolean b) {
+				if (isSelected() != b) {
+					super.setSelected(b);
+				}
+			}
 		}
 	}
 
-	public JPanel getToolPanel() {
+	public ToolPanel getToolPanel() {
 		if (toolPanel == null) {
 			toolPanel = new ToolPanel();
 		}
@@ -137,7 +157,8 @@ public class EditorToolbox {
 		if (stylesToolBar == null) {
 			stylesToolBar = new JToolBar();
 			stylesToolBar.setRollover(true);
-			foregroundSelector = new FIBForegroundStyleSelector(controller.getCurrentForegroundStyle()) {
+			foregroundSelector = new FIBForegroundStyleSelector(
+					controller.getCurrentForegroundStyle()) {
 				@Override
 				public void apply() {
 					super.apply();
@@ -149,11 +170,13 @@ public class EditorToolbox {
 							connector.setForeground(getEditedObject().clone());
 						}
 					} else {
-						controller.setCurrentForegroundStyle(getEditedObject().clone());
+						controller.setCurrentForegroundStyle(getEditedObject()
+								.clone());
 					}
 				}
 			};
-			backgroundSelector = new FIBBackgroundStyleSelector(controller.getCurrentBackgroundStyle()) {
+			backgroundSelector = new FIBBackgroundStyleSelector(
+					controller.getCurrentBackgroundStyle()) {
 				@Override
 				public void apply() {
 					super.apply();
@@ -162,11 +185,13 @@ public class EditorToolbox {
 							shape.setBackground(getEditedObject().clone());
 						}
 					} else {
-						controller.setCurrentBackgroundStyle(getEditedObject().clone());
+						controller.setCurrentBackgroundStyle(getEditedObject()
+								.clone());
 					}
 				}
 			};
-			textStyleSelector = new FIBTextStyleSelector(controller.getCurrentTextStyle()) {
+			textStyleSelector = new FIBTextStyleSelector(
+					controller.getCurrentTextStyle()) {
 				@Override
 				public void apply() {
 					super.apply();
@@ -175,11 +200,13 @@ public class EditorToolbox {
 							gr.setTextStyle(getEditedObject().clone());
 						}
 					} else {
-						controller.setCurrentTextStyle(getEditedObject().clone());
+						controller.setCurrentTextStyle(getEditedObject()
+								.clone());
 					}
 				}
 			};
-			shadowStyleSelector = new FIBShadowStyleSelector(controller.getCurrentShadowStyle()) {
+			shadowStyleSelector = new FIBShadowStyleSelector(
+					controller.getCurrentShadowStyle()) {
 				@Override
 				public void apply() {
 					super.apply();
@@ -188,7 +215,22 @@ public class EditorToolbox {
 							shape.setShadowStyle(getEditedObject().clone());
 						}
 					} else {
-						controller.setCurrentShadowStyle(getEditedObject().clone());
+						controller.setCurrentShadowStyle(getEditedObject()
+								.clone());
+					}
+				}
+			};
+			shapeSelector = new FIBShapeSelector(controller.getCurrentShape()) {
+				@Override
+				public void apply() {
+					super.apply();
+					if (selectedShapes.size() > 0) {
+						for (ShapeGraphicalRepresentation shape : selectedShapes) {
+							shape.setShape(getEditedObject().clone());
+						}
+
+					} else {
+						controller.setCurrentShape(getEditedObject().clone());
 					}
 				}
 			};
@@ -196,6 +238,7 @@ public class EditorToolbox {
 			stylesToolBar.addSeparator();
 			stylesToolBar.add(foregroundSelector);
 			stylesToolBar.add(backgroundSelector);
+			stylesToolBar.add(shapeSelector);
 			stylesToolBar.add(shadowStyleSelector);
 			stylesToolBar.add(textStyleSelector);
 			stylesToolBar.add(Box.createHorizontalGlue());
@@ -209,7 +252,10 @@ public class EditorToolbox {
 	private List<GraphicalRepresentation> selectedGR = new ArrayList<GraphicalRepresentation>();
 
 	public void update() {
-		logger.info("Updating EditorToolbox with selection: " + controller.getSelectedObjects());
+		/*
+		 * logger.info("Updating EditorToolbox with selection: " +
+		 * controller.getSelectedObjects());
+		 */
 		selectedShapes.clear();
 		selectedConnectors.clear();
 		selectedGR.clear();
@@ -228,20 +274,29 @@ public class EditorToolbox {
 		if (selectedGR.size() > 0) {
 			textStyleSelector.setEditedObject(selectedGR.get(0).getTextStyle());
 			if (selectedShapes.size() > 0) {
-				foregroundSelector.setEditedObject(selectedShapes.get(0).getForeground());
+				foregroundSelector.setEditedObject(selectedShapes.get(0)
+						.getForeground());
 			} else if (selectedConnectors.size() > 0) {
-				foregroundSelector.setEditedObject(selectedConnectors.get(0).getForeground());
+				foregroundSelector.setEditedObject(selectedConnectors.get(0)
+						.getForeground());
 			}
 		} else {
 			textStyleSelector.setEditedObject(controller.getCurrentTextStyle());
-			foregroundSelector.setEditedObject(controller.getCurrentForegroundStyle());
+			foregroundSelector.setEditedObject(controller
+					.getCurrentForegroundStyle());
 		}
 		if (selectedShapes.size() > 0) {
-			backgroundSelector.setEditedObject(selectedShapes.get(0).getBackground());
-			shadowStyleSelector.setEditedObject(selectedShapes.get(0).getShadowStyle());
+			shapeSelector.setEditedObject(selectedShapes.get(0).getShape());
+			backgroundSelector.setEditedObject(selectedShapes.get(0)
+					.getBackground());
+			shadowStyleSelector.setEditedObject(selectedShapes.get(0)
+					.getShadowStyle());
 		} else {
-			backgroundSelector.setEditedObject(controller.getCurrentBackgroundStyle());
-			shadowStyleSelector.setEditedObject(controller.getCurrentShadowStyle());
+			shapeSelector.setEditedObject(controller.getCurrentShape());
+			backgroundSelector.setEditedObject(controller
+					.getCurrentBackgroundStyle());
+			shadowStyleSelector.setEditedObject(controller
+					.getCurrentShadowStyle());
 		}
 	}
 }

@@ -17,13 +17,16 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.module;
+package org.openflexo.fge.controller;
 
-public class BusinessUserTypeClassPath extends AbstractModuleLoaderTest{
+import java.util.logging.Logger;
 
-    @Override
-    protected UserType definedUserType() {
-        return UserType.CUSTOMER;
-    }
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 
+public abstract class DrawShapeAction {
+	static final Logger logger = Logger.getLogger(DrawShapeAction.class.getPackage().getName());
+
+	public abstract void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
+			GraphicalRepresentation parentGraphicalRepresentation);
 }

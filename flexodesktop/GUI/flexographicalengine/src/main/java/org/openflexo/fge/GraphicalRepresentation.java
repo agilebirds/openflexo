@@ -554,6 +554,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public Vector<GraphicalRepresentation<?>> getContainedGraphicalRepresentations() {
+
 		if (getContainedObjects() == null) {
 			return null;
 		}
@@ -1527,11 +1528,17 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation<?> source, double scale) {
+		if (!isConnectedToDrawing() || !source.isConnectedToDrawing()) {
+			return new FGEPoint(p.x / scale, p.y / scale);
+		}
 		Point pointRelativeToCurrentView = convertPoint(source, p, this, scale);
 		return convertViewCoordinatesToNormalizedPoint(pointRelativeToCurrentView, scale);
 	}
 
 	public FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, GraphicalRepresentation<?> destination, double scale) {
+		if (!isConnectedToDrawing() || !destination.isConnectedToDrawing()) {
+			return new FGEPoint(p.x * scale, p.y * scale);
+		}
 		Point pointRelativeToRemoteView = convertPoint(this, p, destination, scale);
 		return destination.convertViewCoordinatesToNormalizedPoint(pointRelativeToRemoteView, scale);
 	}

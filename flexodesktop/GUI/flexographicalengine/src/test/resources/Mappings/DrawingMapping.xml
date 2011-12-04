@@ -148,7 +148,12 @@
      <description>Circle shape</description>
    </entity>
 	
-   <entity name="org.openflexo.fge.shapes.Polygon" xmlTag="PolygonShape">
+   <entity name="org.openflexo.fge.shapes.Polygon" xmlTag="CustomPolygon">
+     <description>Custom polygon shape</description>
+	 <property name="points" xmlTag="FGEPoint" type="vector" primary="yes"/>
+   </entity>
+	
+   <entity name="org.openflexo.fge.shapes.RegularPolygon" xmlTag="PolygonShape">
      <description>Regular polygon shape</description>
   	 <property name="nPoints" xmlTag="nPoints" attribute="YES"/>
   	 <property name="startAngle" xmlTag="startAngle" attribute="YES"/>

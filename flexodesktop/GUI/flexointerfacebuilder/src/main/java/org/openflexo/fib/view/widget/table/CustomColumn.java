@@ -53,8 +53,10 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public class CustomColumn<T extends Object> extends AbstractColumn<T> implements EditableColumn<T>, ApplyCancelListener {
-	private static final Logger logger = Logger.getLogger(CustomColumn.class.getPackage().getName());
+public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
+		EditableColumn<T>, ApplyCancelListener {
+	private static final Logger logger = Logger.getLogger(CustomColumn.class
+			.getPackage().getName());
 
 	private FIBCustomColumn _customColumn;
 
@@ -65,12 +67,17 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 	private boolean useCustomViewForCellRendering;
 	private boolean disableTerminateEditOnFocusLost;
 
-	public CustomColumn(FIBCustomColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public CustomColumn(FIBCustomColumn columnModel, FIBTableModel tableModel,
+			FIBController controller) {
 		super(columnModel, tableModel, controller);
 		_customColumn = columnModel;
-		_viewCustomWidget = makeCustomComponent((Class<FIBCustomComponent<T, ?>>) columnModel.getComponentClass(),
+		_viewCustomWidget = makeCustomComponent(
+				(Class<FIBCustomComponent<T, ?>>) columnModel
+						.getComponentClass(),
 				(Class<T>) columnModel.getDataClass());
-		_editCustomWidget = makeCustomComponent((Class<FIBCustomComponent<T, ?>>) columnModel.getComponentClass(),
+		_editCustomWidget = makeCustomComponent(
+				(Class<FIBCustomComponent<T, ?>>) columnModel
+						.getComponentClass(),
 				(Class<T>) columnModel.getDataClass());
 		if (_editCustomWidget != null) {
 			_editCustomWidget.addApplyCancelListener(this);
@@ -86,7 +93,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		return (FIBCustomColumn) super.getColumnModel();
 	}
 
-	private FIBCustomComponent<T, ?> makeCustomComponent(Class<FIBCustomComponent<T, ?>> customComponentClass, Class<T> dataClass) {
+	private FIBCustomComponent<T, ?> makeCustomComponent(
+			Class<FIBCustomComponent<T, ?>> customComponentClass,
+			Class<T> dataClass) {
 		Class[] types = new Class[1];
 		types[0] = dataClass;
 		try {
@@ -101,7 +110,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 				}
 			}
 			if (constructor == null) {
-				logger.warning("Cound not instanciate class " + customComponentClass + " : no valid constructor found");
+				logger.warning("Cound not instanciate class "
+						+ customComponentClass
+						+ " : no valid constructor found");
 				return null;
 			}
 			Object[] args = new Object[1];
@@ -133,7 +144,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 	@Override
 	public String toString() {
-		return "CustomColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
+		return "CustomColumn " + "[" + getTitle() + "]"
+				+ Integer.toHexString(hashCode());
 	}
 
 	// Returns true as cell renderer is required here
@@ -157,15 +169,19 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		}
 
 		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
 			Component c;
 			if (((isSelected) && (hasFocus)) || useCustomViewForCellRendering) {
 				c = getViewCustomWidget(elementAt(row)).getJComponent();
 				Color fg = null;
 				Color bg = null;
 				if (isSelected) {
-					c.setForeground(fg == null ? table.getSelectionForeground() : fg);
-					c.setBackground(bg == null ? table.getSelectionBackground() : bg);
+					c.setForeground(fg == null ? table.getSelectionForeground()
+							: fg);
+					c.setBackground(bg == null ? table.getSelectionBackground()
+							: bg);
 				} else {
 					c.setForeground(table.getForeground());
 					c.setBackground(table.getBackground());
@@ -175,14 +191,17 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 					if (hasFocus) {
 						Border border = null;
 						if (isSelected) {
-							border = UIManager.getBorder("Table.focusSelectedCellHighlightBorder");
+							border = UIManager
+									.getBorder("Table.focusSelectedCellHighlightBorder");
 						}
 						if (border == null) {
-							border = UIManager.getBorder("Table.focusCellHighlightBorder");
+							border = UIManager
+									.getBorder("Table.focusCellHighlightBorder");
 						}
 						((JComponent) c).setBorder(border);
 					}
-					if (hasFocus && !isSelected && table.isCellEditable(row, column)) {
+					if (hasFocus && !isSelected
+							&& table.isCellEditable(row, column)) {
 						Color col;
 						col = UIManager.getColor("Table.focusCellForeground");
 						if (col != null) {
@@ -195,7 +214,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 					}
 				}
 			} else {
-				Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				Component returned = super.getTableCellRendererComponent(table,
+						value, isSelected, hasFocus, row, column);
 				if (returned instanceof JLabel) {
 					((JLabel) returned).setText(renderValue((T) value));
 					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -223,7 +243,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 			T value = getValueFor(rowObject);
 			_viewCustomWidget.setEditedObject(value);
 			_viewCustomWidget.setRevertValue(value);
-			logger.fine("Return _viewCustomWidget for model rowObject=" + rowObject + " value=" + value);
+			logger.fine("Return _viewCustomWidget for model rowObject="
+					+ rowObject + " value=" + value);
 		}
 		return _viewCustomWidget;
 	}
@@ -233,7 +254,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 			T value = getValueFor(rowObject);
 			_editCustomWidget.setEditedObject(value);
 			_editCustomWidget.setRevertValue(value);
-			logger.fine("Return _editCustomWidget for model rowObject=" + rowObject + " value=" + value);
+			logger.fine("Return _editCustomWidget for model rowObject="
+					+ rowObject + " value=" + value);
 			// setEditedRowObject(value);
 		}
 		return _editCustomWidget;
@@ -254,7 +276,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 	private CustomCellEditor _customCellEditor;
 
-	protected class CustomCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
+	protected class CustomCellEditor extends AbstractCellEditor implements
+			TableCellEditor, ActionListener {
 		FIBCustomComponent<T, ?> _customWidget;
 
 		public CustomCellEditor() {
@@ -289,10 +312,12 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 		// Implement the one method defined by TableCellEditor.
 		@Override
-		public Component getTableCellEditorComponent(final JTable table, Object value, boolean isSelected, int row, int column) {
+		public Component getTableCellEditorComponent(final JTable table,
+				Object value, boolean isSelected, int row, int column) {
 			// logger.info("elementAt(row)="+elementAt(row));
 			if (disableTerminateEditOnFocusLost) {
-				table.putClientProperty("terminateEditOnFocusLost", Boolean.FALSE);
+				table.putClientProperty("terminateEditOnFocusLost",
+						Boolean.FALSE);
 			}
 			setEditedRowObject(elementAt(row));
 			_customWidget.setEditedObject(getValueFor(elementAt(row)));
@@ -301,12 +326,14 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 					@Override
 					public void fireApplyPerformed() {
-						table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+						table.putClientProperty("terminateEditOnFocusLost",
+								Boolean.TRUE);
 					}
 
 					@Override
 					public void fireCancelPerformed() {
-						table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+						table.putClientProperty("terminateEditOnFocusLost",
+								Boolean.TRUE);
 					}
 
 				});
@@ -353,7 +380,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 	public void fireApplyPerformed() {
 		logger.fine("fireApplyPerformed() for " + _editedRowObject);
 		setValueFor(_editedRowObject, _editCustomWidget.getEditedObject());
-		notifyValueChangedFor(_editedRowObject);
+		notifyValueChangedFor(_editedRowObject,
+				_editCustomWidget.getEditedObject());
 	}
 
 	@Override

@@ -36,9 +36,11 @@ import org.openflexo.fib.model.FIBTableColumn;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
 
-public abstract class AbstractColumn<T> implements BindingEvaluationContext, Observer {
+public abstract class AbstractColumn<T> implements BindingEvaluationContext,
+		Observer {
 
-	private static final Logger logger = Logger.getLogger(AbstractColumn.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AbstractColumn.class
+			.getPackage().getName());
 
 	private String title;
 	private int defaultWidth;
@@ -58,7 +60,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 	private DynamicFormatter formatter;
 
-	public AbstractColumn(FIBTableColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public AbstractColumn(FIBTableColumn columnModel, FIBTableModel tableModel,
+			FIBController controller) {
 		super();
 		this.controller = controller;
 		this.tableModel = tableModel;
@@ -94,7 +97,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.font
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.resizable
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.title) {
-				((FIBTableWidget) controller.viewForComponent(columnModel.getTable())).updateTable();
+				((FIBTableWidget) controller.viewForComponent(columnModel
+						.getTable())).updateTable();
 			}
 		}
 	}
@@ -105,7 +109,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 	public String getLocalized(String key) {
 		if (getController() != null) {
-			return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+			return FlexoLocalization.localizedForKey(getController()
+					.getLocalizer(), key);
 		} else {
 			logger.warning("Controller not defined");
 			return key;
@@ -159,10 +164,14 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 	public synchronized T getValueFor(final Object object) {
 		iteratorObject = object;
-		/*System.out.println("column: "+columnModel);
-		System.out.println("binding: "+columnModel.getData()+" valid: "+columnModel.getData().isValid());
-		System.out.println("iterator: "+iteratorObject);
-		System.out.println("return: "+columnModel.getData().getBindingValue(this));*/
+		/*
+		 * System.out.println("column: "+columnModel);
+		 * System.out.println("binding: "
+		 * +columnModel.getData()+" valid: "+columnModel.getData().isValid());
+		 * System.out.println("iterator: "+iteratorObject);
+		 * System.out.println("return: "
+		 * +columnModel.getData().getBindingValue(this));
+		 */
 		return (T) columnModel.getData().getBindingValue(this);
 		// return (T)FIBKeyValueCoder.getObjectValue(object, keyValuePath);
 	}
@@ -171,7 +180,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		iteratorObject = object;
 		columnModel.getData().setBindingValue(value, this);
 		// FIBKeyValueCoder.setObjectValue(object, value, keyValuePath);
-		notifyValueChangedFor(object);
+		notifyValueChangedFor(object, value);
 	}
 
 	protected Object iteratorObject;
@@ -223,8 +232,10 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	}
 
 	public String getTooltip(Object object) {
-		/*if (getModel()!=null && tooltipKey!=null)
-			return (String) object.objectForKey(tooltipKey);*/
+		/*
+		 * if (getModel()!=null && tooltipKey!=null) return (String)
+		 * object.objectForKey(tooltipKey);
+		 */
 		return null;
 	}
 
@@ -241,14 +252,22 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		return getTableModel().getPropertyListColumnWithTitle(title);
 	}
 
-	public void notifyValueChangedFor(Object object) {
+	public void notifyValueChangedFor(Object object, T value) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyValueChangedFor " + object);
 		}
-		// Following will force the whole row where object was modified to be updated
-		// (In case of some computed cells are to be updated according to ths new value)
-		getTableModel().fireTableRowsUpdated(getTableModel().indexOf(object), getTableModel().indexOf(object));
+		// Following will force the whole row where object was modified to be
+		// updated
+		// (In case of some computed cells are to be updated according to ths
+		// new value)
+		getTableModel().fireTableRowsUpdated(getTableModel().indexOf(object),
+				getTableModel().indexOf(object));
 		getTableModel().getTableWidget().notifyDynamicModelChanged();
+
+		if (getColumnModel().getValueChangedAction().isValid()) {
+			getColumnModel().getValueChangedAction().execute(getController());
+		}
+
 	}
 
 	public void setTooltipKey(String tooltipKey) {
@@ -269,7 +288,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		}
 		if (getColumnModel().getFormat().isValid()) {
 			formatter.setValue(value);
-			return (String) getColumnModel().getFormat().getBindingValue(formatter);
+			return (String) getColumnModel().getFormat().getBindingValue(
+					formatter);
 		}
 		return value.toString();
 	}

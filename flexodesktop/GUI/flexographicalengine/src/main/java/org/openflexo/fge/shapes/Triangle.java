@@ -21,7 +21,7 @@ package org.openflexo.fge.shapes;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
-public class Triangle extends Polygon {
+public class Triangle extends RegularPolygon {
 
 	// *******************************************************************************
 	// * Constructor *

@@ -241,6 +241,21 @@ public final class ModuleLoader implements IModuleLoader {
 		return returned;
 	}
 
+    /**
+     * @param module module to ignore while checking.
+     * @return if there is still a loaded module requiring project (ignoring moduleToIgnore)
+     */
+    public boolean isThereAnyLoadedModuleWithAProjectExcept(Module module){
+        for(Module m:_modules.keySet()){
+            if(!m.equals(module)){
+                if(m.requireProject()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 	/**
 	 * Return all loaded modules as a Vector of Module instances
 	 * 

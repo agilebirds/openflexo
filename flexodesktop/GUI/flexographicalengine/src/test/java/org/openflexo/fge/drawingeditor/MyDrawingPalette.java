@@ -54,11 +54,13 @@ public class MyDrawingPalette extends DrawingPalette {
 		int px = 0;
 		int py = 0;
 		for (ShapeType st : ShapeType.values()) {
-			addElement(makePaletteElement(st, px, py));
-			px = px + 1;
-			if (px == 3) {
-				px = 0;
-				py++;
+			if (st != ShapeType.CUSTOM_POLYGON) {
+				addElement(makePaletteElement(st, px, py));
+				px = px + 1;
+				if (px == 3) {
+					px = 0;
+					py++;
+				}
 			}
 		}
 

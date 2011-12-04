@@ -1,5 +1,5 @@
 #English
-#Tue Nov 15 22:28:33 CET 2011
+#Thu Nov 24 22:41:54 CET 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -2412,6 +2412,7 @@ fixed_automatically\:_flexo_id_must_be_unique_for_a_project=Fixed automatically\
 flash=<html>Flash &reg;</html>
 flat=Flat
 flatten=flatten
+flexo=flexo
 flexoID=OpenFlexo ID
 flexo_action=OpenFlexo Action
 flexo_action_($object.name)_must_send_token=flexoAction ($object.name) must send token
@@ -3599,6 +3600,7 @@ open_port_registery=Open port registery
 open_process_in_new_window=Open process in new window
 open_project=Open project
 open_workflow=Open WorkFlow...
+opening_fib_editor=opening_fib_editor
 operation=operation
 operationComponent=Operation component
 operation_($object.name)_defines_no_wo_component=Operation "($object.name)" defines no screen

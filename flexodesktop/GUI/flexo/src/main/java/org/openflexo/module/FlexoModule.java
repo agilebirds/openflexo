@@ -354,14 +354,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	 * a "return true"
 	 */
 	{
-		boolean isLastModule = false;
-		Enumeration en = getModuleLoader().loadedModules();
-		if (en.hasMoreElements()) {
-			en.nextElement();
-		}
-		if (!en.hasMoreElements()) {
-			isLastModule = true;
-		}
+		boolean isLastModule = !getModuleLoader().isThereAnyLoadedModuleWithAProjectExcept(getModule());
 		if (isLastModule) {
 			if (someResourcesNeedsSaving()) {
 				try {
@@ -399,36 +392,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 				}
 			}
 		} else { // There are still other modules left
-			/*if (someResourcesNeedsSaving()) {
-			    try {
-			        ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
-			        if (saveWithReview(ProgressWindow.instance())) {
-			            ProgressWindow.hideProgressWindow();
-			            closeWithoutConfirmation();
-			            return true;
-			        } else {
-			            ProgressWindow.hideProgressWindow();
-			            return false;
-			        }
-			    } catch (SaveResourcePermissionDeniedException e) {
-			        ProgressWindow.hideProgressWindow();
-			        if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-			                + FlexoLocalization.localizedForKey("would_you_like_to_close_anyway"))) {
-			            closeWithoutConfirmation();
-			            return true;
-			        } else
-			            return false;
-			    } catch (SaveResourceException e) {
-			        e.printStackTrace();
-			        ProgressWindow.hideProgressWindow();
-			        if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-			                + FlexoLocalization.localizedForKey("would_you_like_to_close_anyway"))) {
-			            closeWithoutConfirmation();
-			            return true;
-			        } else
-			            return false;
-			    }
-			} else {*/
 			closeWithoutConfirmation();// Unloads the module
 			return true; // Since there is nothing to save and that Flexo
 			// has other windows opened to access it, we
