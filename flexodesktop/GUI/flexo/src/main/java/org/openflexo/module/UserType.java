@@ -20,8 +20,9 @@
 package org.openflexo.module;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -44,14 +45,96 @@ import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
  */
 public abstract class UserType extends FlexoObject {
 
-	public static final String PRODUCT_NAME = "OPENFLEXO";
-
-	/*protected static final File CUSTOMER_LICENCE = new FileResource("License/Customer/License.pdf");
-	protected static final File ANALYST_LICENCE = new FileResource("License/Analyst/License.pdf");
-	protected static final File DEVELOPER_LICENCE = new FileResource("License/Developer/License.pdf");*/
-
 	private static final Logger logger = Logger.getLogger(Module.class.getPackage().getName());
 
+    private static UserType currentUserType = null;
+
+    public static final Developer DEVELOPER = new Developer();
+
+    public static final Analyst ANALYST = new Analyst();
+
+    public static final Customer CUSTOMER = new Customer();
+
+    public static final Maintainer MAINTAINER = new Maintainer();
+
+    private static final UserType[] knownUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER };
+
+    private Vector<DocItemFolder> documentationFolders = null;
+
+    /**
+     * @return the current UserType. Never return null.
+     * @throws IllegalStateException if the current userType is not set.
+     */
+    public static final UserType getCurrentUserType(){
+        if(currentUserType==null){
+            throw new IllegalStateException("currentUserType is null. Did you call setCurrentUserType.");
+        }
+        return currentUserType;
+    }
+
+    /**
+     * Define the global application parameter currentUserType.
+     * Once the userType is defined : it cannot be changed.
+     * @param userType : the userType to set. Cannot be null.
+     * @throws IllegalArgumentException if you pass a null userType.
+     * @throws IllegalStateException if you try to change the current userType.
+     */
+    public static final void setCurrentUserType(UserType userType){
+        if(userType==null){
+            throw new IllegalArgumentException("userType cannot be null.");
+        }
+        if(currentUserType!=null){
+            if(!currentUserType.equals(userType)){
+                throw new IllegalStateException("You cannot change userType. It was "+currentUserType.getName()
+                +" and you try to change it to "+userType.getName()+". Ignoring this change.");
+            }else{
+                logger.warning("Trying to set the currentUser "+userType.getName()+", but it was already set.");
+            }
+        }
+        currentUserType = userType;
+    }
+
+    /**
+     * @return if currentUserType is defined.
+     */
+    public static boolean isCurrentUserTypeDefined() {
+        return currentUserType!=null;
+    }
+
+    /**
+     * @return if currentUserType is Customer
+     */
+    public static boolean isCustomerRelease() {
+        return CUSTOMER == currentUserType;
+    }
+
+    /**
+     * @return if currentUserType is Analyst
+     */
+    public static boolean isAnalystRelease() {
+        return ANALYST == currentUserType;
+    }
+
+    /**
+     * @return if currentUserType is Developer
+     */
+    public static boolean isDevelopperRelease() {
+        return DEVELOPER == currentUserType;
+    }
+
+    /**
+     * @return if currentUserType is Maintainer
+     */
+    public static boolean isMaintainerRelease() {
+        return MAINTAINER == currentUserType;
+    }
+
+    /**
+     * Search a userType matching userTypeName. Make a case insensitive comparison against
+     * known userType name's and known userType id's. If there is no match it returns Maintainer user type.
+     * @param userTypeName a string matching either a userType's name, either a userType's id
+     * @return the userType matching userTypeName. Maintainer userType whenever there is no match.
+     */
 	public static UserType getUserTypeNamed(String userTypeName) {
 		if (MAINTAINER.getName().equalsIgnoreCase(userTypeName)) {
 			return MAINTAINER;
@@ -80,22 +163,12 @@ public abstract class UserType extends FlexoObject {
 		return MAINTAINER;
 	}
 
-	public static final Developer DEVELOPER = new Developer();
-
-	public static final Analyst ANALYST = new Analyst();
-
-	public static final Customer CUSTOMER = new Customer();
-
-	public static final Maintainer MAINTAINER = new Maintainer();
-
-	private Vector<DocItemFolder> documentationFolders = null;
-
 	public Vector<DocItemFolder> getDocumentationFolders() {
 		if (documentationFolders == null) {
 			documentationFolders = new Vector<DocItemFolder>();
 			documentationFolders.add(DocResourceManager.instance().getAbstractModuleItem().getFolder());
 			addModelItems();
-			for (Module module : ModuleLoader.allKnownModules()) {
+			for (Module module : getCurrentUserType().getModules()) {
 				if (module.getModuleClass() != null) {
 					addModuleItems(module);
 				}
@@ -103,6 +176,10 @@ public abstract class UserType extends FlexoObject {
 		}
 		return documentationFolders;
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	protected void addModelItems(InspectorGroup inspectorGroup) {
 		DocItemFolder inspectorGroupFolder;
@@ -131,7 +208,9 @@ public abstract class UserType extends FlexoObject {
 
 	public abstract ImageIcon getIconImage();
 
-	public static class Developer extends UserType {
+    public abstract List<Module> getModules();
+
+    public static class Developer extends UserType {
 
 		@Override
 		public String getName() {
@@ -143,7 +222,14 @@ public abstract class UserType extends FlexoObject {
 			return "DEVELOPER";
 		}
 
-		@Override
+        @Override
+        public List<Module> getModules() {
+            return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE,
+                                 Module.DM_MODULE, Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE,
+                                 Module.WSE_MODULE, Module.VE_MODULE, Module.FPS_MODULE, Module.VPM_MODULE);
+        }
+
+        @Override
 		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
 			addModelItems(Inspectors.WKF);
@@ -158,19 +244,9 @@ public abstract class UserType extends FlexoObject {
 		}
 
 		@Override
-		public String getBusinessName1() {
-			return PRODUCT_NAME;
-		}
-
-		@Override
 		public String getBusinessName2() {
 			return "Enterprise edition";
 		}
-
-		/*@Override
-		public File getLicenceFile() {
-			return DEVELOPER_LICENCE;
-		}*/
 
 		@Override
 		public ImageIcon getIconImage() {
@@ -191,6 +267,11 @@ public abstract class UserType extends FlexoObject {
 			return "ANALYST";
 		}
 
+        @Override
+        public List<Module> getModules() {
+            return Arrays.asList(Module.WKF_MODULE,Module.IE_MODULE,Module.DE_MODULE,Module.VE_MODULE,Module.DM_MODULE);
+        }
+
 		@Override
 		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
@@ -205,19 +286,9 @@ public abstract class UserType extends FlexoObject {
 		}
 
 		@Override
-		public String getBusinessName1() {
-			return PRODUCT_NAME;
-		}
-
-		@Override
 		public String getBusinessName2() {
 			return "Business+ edition";
 		}
-
-		/*@Override
-		public File getLicenceFile() {
-			return ANALYST_LICENCE;
-		}*/
 
 		@Override
 		public ImageIcon getIconImage() {
@@ -237,6 +308,11 @@ public abstract class UserType extends FlexoObject {
 			return "CUSTOMER";
 		}
 
+        @Override
+        public List<Module> getModules() {
+            return Arrays.asList(Module.WKF_MODULE,Module.IE_MODULE,Module.DE_MODULE,Module.VE_MODULE);
+        }
+
 		@Override
 		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
@@ -250,19 +326,9 @@ public abstract class UserType extends FlexoObject {
 		}
 
 		@Override
-		public String getBusinessName1() {
-			return PRODUCT_NAME;
-		}
-
-		@Override
 		public String getBusinessName2() {
 			return "Business edition";
 		}
-
-		/*@Override
-		public File getLicenceFile() {
-			return CUSTOMER_LICENCE;
-		}*/
 
 		@Override
 		public ImageIcon getIconImage() {
@@ -282,6 +348,14 @@ public abstract class UserType extends FlexoObject {
 			return "MAINTAINER";
 		}
 
+        @Override
+        public List<Module> getModules() {
+            return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE,
+                                 Module.DM_MODULE, Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE,
+                                 Module.WSE_MODULE, Module.VE_MODULE, Module.FPS_MODULE, Module.DRE_MODULE,
+                                 Module.VPM_MODULE);
+        }
+
 		@Override
 		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
@@ -298,19 +372,9 @@ public abstract class UserType extends FlexoObject {
 		}
 
 		@Override
-		public String getBusinessName1() {
-			return PRODUCT_NAME;
-		}
-
-		@Override
 		public String getBusinessName2() {
 			return "Enterprise edition";
 		}
-
-		/*@Override
-		public File getLicenceFile() {
-			return DEVELOPER_LICENCE;
-		}*/
 
 		@Override
 		public ImageIcon getIconImage() {
@@ -325,29 +389,14 @@ public abstract class UserType extends FlexoObject {
 
 	public abstract ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory);
 
-	public abstract String getBusinessName1();
-
 	public abstract String getBusinessName2();
-
-	// public abstract File getLicenceFile();
 
 	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey(getName());
 	}
 
-	private static final UserType[] knownsUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER };
-
 	public static Vector<UserType> allKnownUserType() {
-		Vector<UserType> returned = new Vector<UserType>();
-		for (int i = 0; i < knownsUserType.length; i++) {
-			returned.add(knownsUserType[i]);
-		}
-		if (returned.size() == 0) {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("No USERTYPE found.");
-			}
-		}
-		return returned;
+		return new Vector(Arrays.asList(knownUserType));
 	}
 
 }

@@ -33,6 +33,7 @@
         <dependency>
             <groupId>org.openflexo</groupId>
             <artifactId>flexodatamodeleditor</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.openflexo</groupId>

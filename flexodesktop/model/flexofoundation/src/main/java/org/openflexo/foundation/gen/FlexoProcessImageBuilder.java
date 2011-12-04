@@ -27,12 +27,14 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.module.external.IModuleLoader;
@@ -45,12 +47,22 @@ import org.openflexo.ws.client.PPMWebService.PPMWebService_PortType;
 
 public class FlexoProcessImageBuilder {
 
+    private static final Logger logger = Logger.getLogger(FlexoProcessImageBuilder.class.getPackage().getName());
+
 	private static BufferedImage generateImage(FlexoProcess process) {
 		if (process == null) {
 			return null;
 		}
-		ExternalWKFModule wkfModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
-				.getWKFModuleInstance() : null;
+        ExternalWKFModule wkfModule = null;
+        try {
+             wkfModule = ExternalModuleDelegater.getModuleLoader()
+                                          != null ? ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(process.getProject())
+                    : null;
+        } catch (ModuleLoadingException e) {
+            logger.warning("cannot load WKF module (and so can't create screenshot." + e.getMessage());
+            e.printStackTrace();
+        }
+
 		if (wkfModule == null) {
 			return null;
 		}
@@ -78,7 +90,14 @@ public class FlexoProcessImageBuilder {
 		if (!moduleLoader.isWKFLoaded()) {
 			return;
 		}
-		ExternalWKFModule wkfModule = moduleLoader.getWKFModuleInstance();
+		ExternalWKFModule wkfModule = null;
+        try{
+            wkfModule = moduleLoader.getWKFModuleInstance(process.getProject());
+        }catch(ModuleLoadingException e){
+             logger.warning("cannot load WKF module (and so can't create screenshot)." + e.getMessage());
+            e.printStackTrace();
+        }
+
 		if (wkfModule == null) {
 			return;
 		}

@@ -42,6 +42,9 @@ import org.openflexo.ws.client.PPMWebService.PPMRole;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebService_PortType;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 public class TestImportedProcesses extends FlexoTestCase {
 
 	private final class PPMWebServiceMock implements PPMWebService_PortType {
@@ -198,6 +201,20 @@ public class TestImportedProcesses extends FlexoTestCase {
 
 	public TestImportedProcesses() {
 		super("Test imported processes");
+	}
+     public TestImportedProcesses(String s) {
+		super(s);
+	}
+    public static Test suite() {
+		final TestSuite suite = new TestSuite("TestSuite for TestCG2");
+		suite.addTest(new TestImportedProcesses("test0CreateImportedProcessLibrary"));
+		suite.addTest(new TestImportedProcesses("test1ImportProcesses"));
+		suite.addTest(new TestImportedProcesses("test2RefreshImportedProcesses"));
+        suite.addTest(new TestImportedProcesses("test3ConvertProcessesIntoLocalProcesses"));
+        suite.addTest(new TestImportedProcesses("test4TestProcessHierarchyChanges"));
+        suite.addTest(new TestImportedProcesses("test5TestProcessHierarchyChanges"));
+        suite.addTest(new TestImportedProcesses("test6TestProcessHierarchyChanges"));
+		return suite;
 	}
 
 	public void test0CreateImportedProcessLibrary() {

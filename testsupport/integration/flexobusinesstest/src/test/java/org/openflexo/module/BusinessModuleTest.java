@@ -19,16 +19,17 @@
  */
 package org.openflexo.module;
 
-public class ModuleLoadingException extends Exception {
+/**
+ * Created by IntelliJ IDEA.
+ * User: bmangez
+ * Date: 1/12/11
+ * Time: 16:07
+ * To change this template use File | Settings | File Templates.
+ */
+public class BusinessModuleTest extends AbstractModuleLoaderTest{
 
-	private Module module;
-
-	public ModuleLoadingException(Module module) {
-		this.module = module;
-	}
-
-	public Module getModule() {
-		return module;
-	}
+    protected UserType definedUserType(){
+        return UserType.CUSTOMER;
+    }
 
 }

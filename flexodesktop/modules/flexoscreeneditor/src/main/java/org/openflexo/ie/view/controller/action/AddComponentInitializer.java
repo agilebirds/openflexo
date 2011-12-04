@@ -38,6 +38,7 @@ import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.view.popups.AskNewComponentDialog;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -92,8 +93,13 @@ public class AddComponentInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, AddComponent action) {
 				if (action.getNewComponent() != null) {
-					ExternalIEModule ieModule = ModuleLoader.getIEModule();
-					if (ieModule == null) {
+                    ExternalIEModule ieModule = null;
+                    try {
+                        ieModule = getModuleLoader().getIEModule(getProject());
+                    } catch (ModuleLoadingException e1) {
+                        logger.warning("Cannot load IE module."+e1.getMessage());
+                    }
+                    if (ieModule == null) {
 						return false;
 					}
 					ieModule.focusOn();

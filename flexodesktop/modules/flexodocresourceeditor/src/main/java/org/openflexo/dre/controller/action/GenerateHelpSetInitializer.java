@@ -36,7 +36,6 @@ import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -120,7 +119,7 @@ public class GenerateHelpSetInitializer extends ActionInitializer {
 					logger.info("Reload HelpSet...");
 					DRMHelpSet selected = null;
 					for (DRMHelpSet set : action.getVectorOfGeneratedHelpset()) {
-						if (set.getDistributionName().equals(ModuleLoader.getUserType().getIdentifier())
+						if (set.getDistributionName().equals(UserType.getCurrentUserType().getIdentifier())
 								&& FlexoLocalization.getCurrentLanguage().getIdentifier()
 										.equalsIgnoreCase(set.getLanguage().getIdentifier())) {
 							selected = set;

@@ -46,7 +46,6 @@ import org.openflexo.inspector.model.InspectorModel;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.inspector.selection.InspectorSelection;
 import org.openflexo.inspector.widget.DenaliWidget;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoInspectorController;
 import org.openflexo.xmlcode.XMLCoder;
@@ -327,7 +326,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 
 				@Override
 				public boolean showViewSourceButtonInWysiwyg() {
-					return ModuleLoader.getUserType() == UserType.DEVELOPER || ModuleLoader.getUserType() == UserType.MAINTAINER;
+					return UserType.isDevelopperRelease() || UserType.isMaintainerRelease();
 				}
 
 			};

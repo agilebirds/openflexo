@@ -29,7 +29,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 
@@ -67,7 +67,7 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 
 		JTabbedPane contentPanel = new JTabbedPane();
 		contentPanel.add(FlexoLocalization.localizedForKey("validation_report"), _validationReportEditor);
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			contentPanel.add(FlexoLocalization.localizedForKey("validation_model"), _validationModelViewer);
 		}
 

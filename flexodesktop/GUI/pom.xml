@@ -17,6 +17,6 @@
 		<module>flexographicutils</module>
 		<module>flexointerfacebuilder</module>
 		<module>flexowysiwyg</module>
-	</modules>
+    </modules>
 </project>
 

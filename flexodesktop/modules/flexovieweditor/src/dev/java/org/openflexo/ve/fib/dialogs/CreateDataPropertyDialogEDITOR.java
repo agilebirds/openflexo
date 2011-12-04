@@ -38,7 +38,7 @@ public class CreateDataPropertyDialogEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			public Object[] getData() 
 			{
-				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter();
+				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 				FlexoOntology ontology = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
 				CreateDataProperty action = CreateDataProperty.actionType.makeNewAction(ontology, null,null);
@@ -50,4 +50,14 @@ public class CreateDataPropertyDialogEDITOR {
 		};
 		editor.launch();
 	}
+
+    private static ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+
+    private static FlexoResourceCenterService getFlexoResourceCenterService(){
+        return FlexoResourceCenterService.instance();
+    }
 }
+
+

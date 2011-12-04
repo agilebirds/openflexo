@@ -41,6 +41,8 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.toolbox.ToolBox;
@@ -49,15 +51,6 @@ import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.controller.WKFSelectionManager;
 
 public class TestWKFController extends FlexoModuleTestCase {
-
-	@Override
-	protected void setUp() throws Exception {
-
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-	}
 
 	protected static final Logger logger = Logger.getLogger(TestWKFController.class.getPackage().getName());
 
@@ -106,18 +99,23 @@ public class TestWKFController extends FlexoModuleTestCase {
 		_project = _editor.getProject();
 
 		initModuleLoader(_projectDirectory, _project);
-		ModuleLoader.switchToModule(Module.WKF_MODULE);
+        WKFModule ie = null;
+        try {
+            ie = (WKFModule) getModuleLoader().switchToModule(Module.WKF_MODULE, _project);
+        } catch (ModuleLoadingException e) {
+            e.printStackTrace();
+            fail("Fail to load WKFModule."+e.getMessage());
+        }
 
-		WKFModule ie = (WKFModule) Module.WKF_MODULE.getInstance();
-		ie.focusOn();
-		assertTrue(ModuleLoader.isActive(Module.WKF_MODULE));
+        ie.focusOn();
+		assertTrue(getModuleLoader().isActive(Module.WKF_MODULE));
 		assertNotNull(ie);
 		WKFController ctrl = ie.getWKFController();
 		assertNotNull(ctrl);
 		WKFSelectionManager selectionManager = ctrl.getWKFSelectionManager();
 		assertNotNull(selectionManager);
 
-		assertEquals(_project, ModuleLoader.getProject());
+		assertEquals(_project, getModuleLoader().getProject());
 		FlexoProcess rootProcess = _project.getRootFlexoProcess();
 		assertNotNull(rootProcess);
 		AbstractActivityNode a250250 = FlexoTestCase.createActivityNode(rootProcess, 250, 250, "a250250", _editor);
@@ -126,7 +124,7 @@ public class TestWKFController extends FlexoModuleTestCase {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
-				ModuleLoader.closeCurrentProject();
+				ProjectLoader.instance().closeCurrentProject();
 			}
 		});
 
@@ -134,25 +132,29 @@ public class TestWKFController extends FlexoModuleTestCase {
 
 	/**
 	 * @param projectDirectory
-	 * @param flexoProject
+	 * @param project
 	 */
 	private void initModuleLoader(File projectDirectory, FlexoProject project) {
-		ModuleLoader.setAllowsDocSubmission(false);
+		getModuleLoader().setAllowsDocSubmission(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Init Module loader...");
 		}
 		if (GeneralPreferences.getFavoriteModuleName() == null) {
 			GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		}
-		ModuleLoader.fileNameToOpen = projectDirectory.getAbsolutePath();
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
-		ModuleLoader.setProject(project);
+		getModuleLoader().fileNameToOpen = projectDirectory.getAbsolutePath();
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");
-		} else if (ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance() == null) {
-			fail("WKF Module not on the classpath. Component screenshots cannot be generated");
-		}
-	}
+		} else
+            try {
+                if (ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(project) == null) {
+                    fail("WKF Module not on the classpath. Component screenshots cannot be generated");
+                }
+            } catch (ModuleLoadingException e) {
+                e.printStackTrace();
+                fail("Cannot load WKF module." + e.getMessage());
+            }
+    }
 
 	/**
 	 * Save the project

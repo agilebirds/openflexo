@@ -163,7 +163,7 @@ public class TestNewInspector {
 		FlexoLoggingManager.setLogCount(-1);
 
 		loadProject();
-		ModuleLoader.setProject(project);
+		//ModuleLoader.setProject(project);
 
 		editor.getController().getMainPane().setLeftView(retrieveBrowser(project));
 		editor.getActiveModule().focusOn();

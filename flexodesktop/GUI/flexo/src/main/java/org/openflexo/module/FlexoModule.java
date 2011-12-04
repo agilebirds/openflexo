@@ -20,6 +20,8 @@
 package org.openflexo.module;
 
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
@@ -267,9 +269,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	public void processFocusOn() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("processFocusOn() called:  ActiveModule=" + _activeModule);
-		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("processFocusOn() called:  this=" + this);
+            logger.fine("processFocusOn() called:  this=" + this);
 		}
 		if (_activeModule != null && _activeModule != this) {
 			desactivatingModule = _activeModule;
@@ -337,6 +337,10 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		super.finalize();
 	}
 
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+
 	/**
 	 * Close Module after asking confirmation Review unsaved and save Unload in module loader
 	 * 
@@ -351,7 +355,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	 */
 	{
 		boolean isLastModule = false;
-		Enumeration en = ModuleLoader.loadedModules();
+		Enumeration en = getModuleLoader().loadedModules();
 		if (en.hasMoreElements()) {
 			en.nextElement();
 		}
@@ -361,10 +365,10 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		if (isLastModule) {
 			if (someResourcesNeedsSaving()) {
 				try {
-					SaveDialog reviewer = new SaveDialog(getFlexoFrame(), ModuleLoader.getProject());
+					SaveDialog reviewer = new SaveDialog(getFlexoFrame());
 					if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
 						ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
-						reviewer.saveProject(ProgressWindow.instance());
+						_controller.getProject().save(ProgressWindow.instance());
 						ProgressWindow.hideProgressWindow();
 						closeWithoutConfirmation();
 						return true;
@@ -449,21 +453,30 @@ public abstract class FlexoModule implements DataFlexoObserver {
 			logger.warning("Called twice closeWithoutConfirmation on " + this);
 		}
 		_controller = null;
-		for (FlexoResource<? extends FlexoResourceData> r : usedResources.values()) {
+        Collection<FlexoResource<? extends FlexoResourceData>> temp = new ArrayList<FlexoResource<? extends
+                FlexoResourceData>>();
+        temp.addAll(usedResources.values());
+        for (FlexoResource<? extends FlexoResourceData> r : temp) {
 			releaseResource(r);
 		}
-		if (ModuleLoader.isLoaded(getModule())) {
-			ModuleLoader.unloadModule(getModule());
+        temp.clear();
+		if (getModuleLoader().isLoaded(getModule())) {
+			getModuleLoader().unloadModule(getModule());
 		}
 		// Is there some modules loaded ?
-		Enumeration<FlexoModule> leftModules = ModuleLoader.loadedModules();
+		Enumeration<FlexoModule> leftModules = getModuleLoader().loadedModules();
 		if (leftModules.hasMoreElements()) {
-			ModuleLoader.switchToModule(leftModules.nextElement().getModule());
+			try{
+                getModuleLoader().switchToModule(leftModules.nextElement().getModule(), null);
+            }catch(ModuleLoadingException e){
+                logger.severe("Module is loaded and so this exception CANNOT occurs. Please investigate and FIX.");
+                e.printStackTrace();
+            }
 		} else {
 			_activeModule = null;
 			if (quitIfNoModuleLeft) {
 				try {
-					ModuleLoader.quit(false);
+					getModuleLoader().quit(false);
 				} catch (ProjectExitingCancelledException e) {
 				}
 			}
@@ -475,7 +488,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	}
 
 	public Module getModule() {
-		return Module.getModule(getClass());
+		return getModuleLoader().getModule(getClass());
 	}
 
 	/**
@@ -536,16 +549,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	}
 
 	/**
-	 * Called to "tell" that this module is no more using this resource data, and that this corresponding resource can consequently be
-	 * released by this module
-	 * 
-	 * @param resourceData
-	 */
-	public void release(FlexoResourceData resourceData) {
-		releaseResource(resourceData.getFlexoResource());
-	}
-
-	/**
 	 * Return boolean indicating if some resources need saving
 	 */
 	protected boolean someResourcesNeedsSaving() {
@@ -553,14 +556,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 			return getProject().getUnsavedStorageResources(false).size() > 0;
 		}
 		return false;
-	}
-
-	/**
-	 * Returns hashtable where all the resources used by this module are stored, with associated key which is a String identifying the
-	 * resource (resourceIdentifier)
-	 */
-	public Map<String, FlexoResource<? extends FlexoResourceData>> getUsedResources() {
-		return usedResources;
 	}
 
 	@Override

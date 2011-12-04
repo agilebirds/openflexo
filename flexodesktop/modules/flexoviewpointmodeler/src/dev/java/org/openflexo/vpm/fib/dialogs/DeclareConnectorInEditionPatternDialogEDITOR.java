@@ -37,7 +37,7 @@ public class DeclareConnectorInEditionPatternDialogEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
+				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 				calc1.loadWhenUnloaded();
@@ -54,4 +54,12 @@ public class DeclareConnectorInEditionPatternDialogEDITOR {
 		};
 		editor.launch();
 	}
+
+    private static ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+
+    private static FlexoResourceCenterService getFlexoResourceCenterService(){
+        return FlexoResourceCenterService.instance();
+    }
 }

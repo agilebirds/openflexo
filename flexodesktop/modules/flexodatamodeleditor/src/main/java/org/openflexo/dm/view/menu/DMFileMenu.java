@@ -32,7 +32,7 @@ import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
 import org.openflexo.foundation.dm.action.ImportThesaurusDatabaseRepository;
 import org.openflexo.foundation.dm.action.ImportThesaurusRepository;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 
@@ -61,7 +61,7 @@ public class DMFileMenu extends FileMenu {
 		JMenu importMenu = new JMenu();
 		importMenu.setText(FlexoLocalization.localizedForKey("import", importMenu));
 		importMenu.add(new FlexoMenuItem(ImportExternalDatabaseRepository.actionType, getController()));
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			importMenu.add(new FlexoMenuItem(ImportJARFileRepository.actionType, getController()));
 			if (KnownDataImporter.RATIONAL_ROSE_IMPORTER.isAvailable()) {
 				importMenu.add(new FlexoMenuItem(ImportRationalRoseRepository.actionType, getController()));

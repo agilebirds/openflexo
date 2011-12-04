@@ -128,6 +128,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 		if (getGenerator() != null && getCGFile() != null) {
 			getGenerator().deleteObserver(getCGFile());
 		}
+        getProject().removeResourceWithKey(getResourceIdentifier());
 		super.delete(deleteFile);
 	}
 

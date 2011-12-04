@@ -35,6 +35,7 @@
         <module>flexodesktop</module>
         <module>flexoserver</module>
         <module>packaging</module>
+        <module>testsupport</module>
     </modules>
     <ciManagement>
         <system>Jenkins</system>
@@ -487,6 +488,11 @@
                 <groupId>org.openflexo</groupId>
                 <artifactId>flexoviewpointmodeler</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openflexo</groupId>
+                <artifactId>flexoviewpointmodeler</artifactId>
+                <version>${project.version}</version>
                 <classifier>resources</classifier>
                 <type>zip</type>
             </dependency>
@@ -565,11 +571,6 @@
                 <version>${project.version}</version>
                 <classifier>resources</classifier>
                 <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.openflexo</groupId>
-                <artifactId>flexodocresourceeditor</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openflexo</groupId>
@@ -651,7 +652,20 @@
                 <artifactId>springtechnologymodule</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.openflexo</groupId>
+                <artifactId>flexodocresourceeditor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openflexo</groupId>
+                <artifactId>flexodocresourceeditor</artifactId>
+                <version>${project.version}</version>
+                <classifier>resources</classifier>
+                <type>zip</type>
+            </dependency>
 
+            <!-- packaging -->
             <dependency>
                 <groupId>org.openflexo.packaging</groupId>
                 <artifactId>flexobusiness</artifactId>
@@ -670,7 +684,19 @@
                 <version>${project.version}</version>
                 <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>org.openflexo.packaging</groupId>
+                <artifactId>flexomaintainer</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+            </dependency>
 
+            <!-- tests -->
+            <dependency>
+                <groupId>org.openflexo.test</groupId>
+                <artifactId>flexointegrationtestsupport</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- third party -->
             <dependency>

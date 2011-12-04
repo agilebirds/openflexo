@@ -53,6 +53,11 @@
         </dependency>
         <dependency>
             <groupId>org.openflexo</groupId>
+            <artifactId>flexoviewpointmodeler</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
             <artifactId>flexosourcegeneratormodule</artifactId>
             <scope>runtime</scope>
         </dependency>
@@ -120,7 +125,7 @@
         <dependency>
             <groupId>org.openflexo</groupId>
             <artifactId>flexosourcegeneratormodule</artifactId>
-                <classifier>resources</classifier>
+            <classifier>resources</classifier>
             <type>zip</type>
         </dependency>
     </dependencies>

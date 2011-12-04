@@ -183,12 +183,13 @@ import org.openflexo.xmlcode.XMLMapping;
 /**
  * This class represents a Flexo project. A FlexoProject is composed of FlexoResources which are generally located in a project directory. A
  * FlexoProject is the entry point to navigate through the whole data of the project.
- * {@link org.openflexo.foundation.FlexoProject#getFlexoWorkflow()} give an access to all data related to processes.
- * {@link org.openflexo.foundation.FlexoProject#getDataModel()} give an access to all data related to the data model.
- * {@link org.openflexo.foundation.FlexoProject#getDKVModel()} give an access to all data related to the key values lists (defined in
- * Interface Editor). {@link org.openflexo.foundation.FlexoProject#getFlexoComponentLibrary()} give an access to all data related to the
- * screens. {@link org.openflexo.foundation.FlexoProject#getFlexoNavigationMenu()} give an access to all data related to the navigation
- * menus (defined in Interface Editor). {@link org.openflexo.foundation.FlexoProject#getFlexoWSLibrary()} give an access to all data related
+ * {@link FlexoProject#getFlexoWorkflow()} give an access to all data related to processes.
+ * {@link org.openflexo.foundation.rm.FlexoProject#getDataModel()} give an access to all data related to the data model.
+ * {@link FlexoProject#getDKVModel()} give an access to all data related to the key values lists (defined in
+ * Interface Editor). {@link org.openflexo.foundation.rm.FlexoProject#getFlexoComponentLibrary()} give an access to all data related to the
+ * screens. {@link org.openflexo.foundation.rm.FlexoProject#getFlexoNavigationMenu()} give an access to all data related to the navigation
+ * menus (defined in Interface Editor). {@link org.openflexo.foundation.rm.FlexoProject#getFlexoWSLibrary()} give an access to all data
+ * related
  * to the WebServices imported in this project.
  * 
  * @author sguerin

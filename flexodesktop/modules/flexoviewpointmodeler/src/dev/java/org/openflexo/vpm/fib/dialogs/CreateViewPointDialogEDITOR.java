@@ -38,7 +38,7 @@ public class CreateViewPointDialogEDITOR {
 			@Override
 			public Object[] getData() 
 			{
-				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
+				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 				CreateViewPoint action = CreateViewPoint.actionType.makeNewAction(calcLibrary, null,null);
 				return makeArray(action);
@@ -50,4 +50,12 @@ public class CreateViewPointDialogEDITOR {
 		};
 		editor.launch();
 	}
+
+    private static ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+
+    private static FlexoResourceCenterService getFlexoResourceCenterService(){
+        return FlexoResourceCenterService.instance();
+    }
 }

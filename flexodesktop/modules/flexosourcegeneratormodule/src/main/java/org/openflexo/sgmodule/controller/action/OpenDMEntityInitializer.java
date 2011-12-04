@@ -29,11 +29,13 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.sg.action.OpenDMEntity;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class OpenDMEntityInitializer extends ActionInitializer {
 
@@ -63,8 +65,13 @@ public class OpenDMEntityInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<OpenDMEntity>() {
 			@Override
 			public boolean run(ActionEvent e, OpenDMEntity action) {
-				ExternalDMModule dmModule = ModuleLoader.getDMModule();
-				if (dmModule == null) {
+                ExternalDMModule dmModule = null;
+                try {
+                    dmModule = getModuleLoader().getDMModule(getProject());
+                } catch (ModuleLoadingException e1) {
+                    FlexoController.notify("Cannot load DMModule."+e1.getMessage());
+                }
+                if (dmModule == null) {
 					return false;
 				}
 				dmModule.focusOn();
@@ -87,10 +94,16 @@ public class OpenDMEntityInitializer extends ActionInitializer {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Switching to DM");
 			}
-			ModuleLoader.switchToModule(Module.DM_MODULE);
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Switched to DM done!");
-			}
+            try {
+                getModuleLoader().switchToModule(Module.DM_MODULE, getController().getProject());
+                if (logger.isLoggable(Level.INFO)) {
+                    logger.info("Switched to DM done!");
+                }
+            } catch (ModuleLoadingException e) {
+                e.printStackTrace();
+                FlexoController.notify("Cannot load DM editor."+e.getMessage());
+            }
+
 		}
 	}
 

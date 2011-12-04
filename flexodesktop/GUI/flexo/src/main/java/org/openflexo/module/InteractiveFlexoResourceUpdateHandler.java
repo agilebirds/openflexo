@@ -41,6 +41,7 @@ import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.ImportedResourceData;
 import org.openflexo.foundation.rm.StorageResourceData;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 
@@ -54,7 +55,11 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 	protected static final Logger logger = Logger.getLogger(InteractiveFlexoResourceUpdateHandler.class.getPackage().getName());
 
-	@Override
+    public InteractiveFlexoResourceUpdateHandler() {
+        super();
+    }
+
+    @Override
 	protected OptionWhenStorageResourceFoundAsConflicting getOptionWhenStorageResourceFoundAsConflicting(
 			FlexoStorageResource storageResource) {
 		String[] options;
@@ -147,7 +152,11 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 						}
 						OptionWhenStorageResourceFoundAsConflicting choice = getOptionWhenStorageResourceFoundAsConflicting(storageResource);
 						if (choice == OptionWhenStorageResourceFoundAsConflicting.UpdateFromDisk) {
-							reloadProject(storageResource);
+							try{
+                                reloadProject(storageResource);
+                            } catch (FlexoException e) {
+								handleException("problem_when_trying_to_update_from_disk", e);
+							}
 						} else if (choice == OptionWhenStorageResourceFoundAsConflicting.OverwriteDiskChange) {
 							try {
 								storageResource.saveResourceData();
@@ -326,7 +335,7 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 				}
 			} else if (choice == OptionWhenStorageResourceFoundAsModifiedOnDisk.OverwriteDiskChange) {
-				FlexoProject project = ModuleLoader.getProject();
+				FlexoProject project = getModuleLoader().getProject();
 				DependancyAlgorithmScheme scheme = project.getDependancyScheme();
 				// Pessimistic dependancy scheme is cheaper and is not intended for this situation
 				project.setDependancyScheme(DependancyAlgorithmScheme.Pessimistic);
@@ -347,10 +356,16 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		if (conflictingStorageResource.size() > 0) {
 			OptionWhenStorageResourceFoundAsConflicting choice = getOptionWhenStorageResourceFoundAsConflicting(null);
 			if (choice == OptionWhenStorageResourceFoundAsConflicting.UpdateFromDisk) {
-				reloadProject(conflictingStorageResource);
+				try{
+                    reloadProject(conflictingStorageResource);
+                }catch (ProjectLoadingCancelledException e){
+                    //TODO handle this
+                }catch (ModuleLoadingException e){
+                    //TODO handle this
+                }
 			} else if (choice == OptionWhenStorageResourceFoundAsConflicting.OverwriteDiskChange) {
 				try {
-					FlexoProject project = ModuleLoader.getProject();
+					FlexoProject project = getModuleLoader().getProject();;
 					DependancyAlgorithmScheme scheme = project.getDependancyScheme();
 					// Pessimistic dependancy scheme is cheaper and is not intended for this situation
 					project.setDependancyScheme(DependancyAlgorithmScheme.Pessimistic);
@@ -368,18 +383,27 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		}
 	}
 
-	private void reloadProject(List<FlexoStorageResource<? extends StorageResourceData>> updatedStorageResource) {
+	private void reloadProject(List<FlexoStorageResource<? extends StorageResourceData>> updatedStorageResource)
+            throws ProjectLoadingCancelledException, ModuleLoadingException {
 		for (FlexoStorageResource<? extends StorageResourceData> flexoStorageResource : updatedStorageResource) {
 			flexoStorageResource.getResourceData().clearIsModified(true);
 		}
-		ModuleLoader.reloadProject();
+		getProjectLoader().reloadProject();
 	}
 
 	@Override
-	public void reloadProject(FlexoStorageResource fileResource) {
+	public void reloadProject(FlexoStorageResource fileResource) throws ProjectLoadingCancelledException,ModuleLoadingException {
 		(fileResource).getResourceData().clearIsModified(true);
-		ModuleLoader.reloadProject();
+		getProjectLoader().reloadProject();
 	}
+
+    private ModuleLoader getModuleLoader() {
+        return ModuleLoader.instance();
+    }
+
+    private ProjectLoader getProjectLoader() {
+        return ProjectLoader.instance();
+    }
 
 	@Override
 	protected void handleException(String unlocalizedMessage, FlexoException exception) {

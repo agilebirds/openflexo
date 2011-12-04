@@ -207,8 +207,8 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 			VelocityContext context = defaultContext();
 			if (getObject() instanceof FlexoProcess) {
 				if (ExternalModuleDelegater.getModuleLoader() != null
-						&& ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance() != null) {
-					context.put("processRepresentation", ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance()
+						&& ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(getObject().getProject()) != null) {
+					context.put("processRepresentation", ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(getObject().getProject())
 							.getProcessRepresentation((FlexoProcess) getObject(), true));
 				}
 			}

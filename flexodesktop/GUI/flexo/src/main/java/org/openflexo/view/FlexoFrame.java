@@ -77,44 +77,27 @@ import org.openflexo.view.menu.FlexoMenuBar;
 public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserver, FocusListener, FlexoActionSource {
 
 	private final class FlexoModuleWindowListener extends WindowAdapter {
-		/**
-		 * Overrides windowDeiconified
-		 * 
-		 * @see java.awt.event.WindowAdapter#windowDeiconified(java.awt.event.WindowEvent)
-		 */
+
 		@Override
 		public void windowDeiconified(WindowEvent e) {
-			if (!(e.getOppositeWindow() instanceof ProgressWindow) && ModuleLoader.isLoaded(_module.getModule())) {
-				ModuleLoader.notifyNewActiveModule(_module.getModule());
-			}
+			activateModuleIfPossible(e);
 		}
 
-		/**
-		 * Overrides windowGainedFocus
-		 * 
-		 * @see java.awt.event.WindowAdapter#windowGainedFocus(java.awt.event.WindowEvent)
-		 */
 		@Override
 		public void windowGainedFocus(WindowEvent e) {
-			if (!(e.getOppositeWindow() instanceof ProgressWindow) && ModuleLoader.isLoaded(_module.getModule())) {
-				ModuleLoader.notifyNewActiveModule(_module.getModule());
-			}
+			activateModuleIfPossible(e);
 		}
 
-		/**
-		 * Overrides windowActivated
-		 * 
-		 * @see java.awt.event.WindowAdapter#windowActivated(java.awt.event.WindowEvent)
-		 */
 		@Override
 		public void windowActivated(WindowEvent e) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Window activated for module " + getName());
-			}
-			if (!(e.getOppositeWindow() instanceof ProgressWindow) && ModuleLoader.isLoaded(_module.getModule())) {
-				ModuleLoader.notifyNewActiveModule(_module.getModule());
-			}
+			activateModuleIfPossible(e);
 		}
+
+        private void activateModuleIfPossible(WindowEvent e){
+            if (!(e.getOppositeWindow() instanceof ProgressWindow) && getModuleLoader().isLoaded(_module.getModule())) {
+				getModuleLoader().activateModule(_module.getModule());
+			}
+        }
 
 		@Override
 		public void windowClosing(WindowEvent event) {
@@ -123,6 +106,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			}
 		}
 	}
+
 
 	static final Logger logger = Logger.getLogger(FlexoFrame.class.getPackage().getName());
 
@@ -238,8 +222,8 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (ModuleLoader.isLoaded(_module.getModule())) {
-					ModuleLoader.notifyNewActiveModule(_module.getModule());
+				if (getModuleLoader().isLoaded(_module.getModule())) {
+					getModuleLoader().activateModule(_module.getModule());
 				}
 			}
 
@@ -517,8 +501,8 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 
 				@Override
 				public void componentShown(ComponentEvent e) {
-					if (ModuleLoader.isLoaded(_module.getModule())) {
-						ModuleLoader.notifyNewActiveModule(_module.getModule());
+					if (getModuleLoader().isLoaded(_module.getModule())) {
+						getModuleLoader().activateModule(_module.getModule());
 					}
 				}
 
@@ -526,6 +510,10 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			addComponentListener(windowResizeListener);
 		}
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	public void setRelativeVisible(boolean relativeWindowsAreVisible) {
 		if (logger.isLoggable(Level.FINE)) {

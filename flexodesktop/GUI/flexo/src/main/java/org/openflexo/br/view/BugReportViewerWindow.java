@@ -172,7 +172,9 @@ public class BugReportViewerWindow extends FlexoDialog {
 
 	private JButton saveButton;
 
-	// private JButton saveAllButton;
+	private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	protected JPanel buttonPanel() {
 		JPanel answer = new JPanel(new FlowLayout());
@@ -181,7 +183,7 @@ public class BugReportViewerWindow extends FlexoDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				if (ModuleLoader.getProject() == null) {
+				if (getModuleLoader().getProject() == null) {
 					System.exit(0);
 				}
 			}
