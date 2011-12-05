@@ -137,9 +137,17 @@ public class SGJavaClassGenerator extends SGGenerator<DMEntity, GeneratedTextRes
 		StringBuilder imports = new StringBuilder();
 		List<String> sortedImports = new ArrayList<String>(neededImports);
 		Collections.sort(sortedImports);
+
+		String previousImportGroup = null;
 		for (String neededImport : sortedImports) {
+			String neededImportGroup = neededImport.indexOf('.') != 1 ? neededImport.substring(0, neededImport.indexOf('.')) : null;
+			if (previousImportGroup != null && !previousImportGroup.equals(neededImportGroup)) {
+				imports.append("\n");
+			}
+
 			imports.append("import " + neededImport + ";");
 			imports.append("\n");
+			previousImportGroup = neededImportGroup;
 		}
 
 		return (!StringUtils.isEmpty(getClassPackage()) ? "package " + getClassPackage() + ";" : "") + imports + javaCode;
@@ -198,14 +206,14 @@ public class SGJavaClassGenerator extends SGGenerator<DMEntity, GeneratedTextRes
 	}
 
 	public void addImport(Class<?> neededImport) {
-		if (!neededImport.isPrimitive()) {
+		if (!neededImport.isPrimitive() && neededImport.getPackage() != Package.getPackage("java.lang")) {
 			addImport(neededImport.getName());
 		}
 	}
 
 	public void addImport(String neededImport) {
 
-		if (!StringUtils.isEmpty(neededImport)) {
+		if (!StringUtils.isEmpty(neededImport) && !neededImport.startsWith("java.lang")) {
 			if (!StringUtils.isEmpty(getClassPackage())) {
 				int lastDot = neededImport.lastIndexOf('.');
 				if (lastDot != -1 && neededImport.substring(0, lastDot).equals(getClassPackage())) {

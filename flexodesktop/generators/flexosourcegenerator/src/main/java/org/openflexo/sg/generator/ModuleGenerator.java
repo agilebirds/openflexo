@@ -344,8 +344,8 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 
 			generationResult = merge(getTemplateName(), defaultContext());
 
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("generationResult=" + generationResult);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("generationResult=" + generationResult);
 			}
 
 			GenerationDefinition generation = GenerationDefinition.retrieveGenerationDefinition(generationResult);

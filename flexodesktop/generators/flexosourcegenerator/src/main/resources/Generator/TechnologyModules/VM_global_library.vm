@@ -2,7 +2,9 @@
 
 #macro(addImport $import)#void(${generator.addImport($import)})#end
 
-#macro(testit)coucou2#end
+#macro(blanckLine)
+	@onereturn @end
+#end
 	
 	
 ## OLD MAcros -> to be cleaned
