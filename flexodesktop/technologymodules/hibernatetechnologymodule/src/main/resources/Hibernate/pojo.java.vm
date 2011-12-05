@@ -1,14 +1,58 @@
+#macro(renderAttributeAnnotations $attribute)
+	#if(${attribute.getPrimaryKey()})
+		#addJavaImport("javax.persistence.Id")
+		#addJavaImport("javax.persistence.SequenceGenerator")
+		@Id
+		@SequenceGenerator(name="SEQ_STORE", sequenceName="${entity.getTableName()}_${attribute.getColumnName()}_sequence")
+	#else
+    	#if(${attribute.getType()} == 'ENUM')
+    		#addJavaImport("javax.persistence.Enumerated")
+    		#addJavaImport("javax.persistence.EnumType")
+    		@Enumerated(EnumType.STRING)
+    	#elseif(${attribute.getType()} == 'DATE')
+    		#addJavaImport("javax.persistence.Temporal")
+    		#addJavaImport("javax.persistence.TemporalType")
+    		@Temporal(TemporalType.DATE)
+    	#elseif(${attribute.getType()} == 'BYTES' || ${attribute.getType()} == 'TEXT')
+    		#addJavaImport("javax.persistence.Lob")
+    		@Lob 
+    	#else
+    		#addJavaImport("javax.persistence.Basic")
+    		@Basic
+		#end
+		
+		#addJavaImport("javax.persistence.Column")
+    	@Column(
+    		name = "${attribute.getColumnName()}"
+    		#if(${attribute.getType()} == 'STRING'), length = ${attribute.getLength()}#end 
+    		#if(${attribute.getNotNull()}), nullable = false#end 
+    		#if(${attribute.getUnique()}), unique = true#end
+    		#if(!${attribute.getUpdate()}), updatable = false#end
+        )
+	#end
+#end
+
+#macro(renderRelationshipAnnotations $relationship)
+#end
+
+#addJavaImport("java.io.Serializable")
+#addJavaImport("javax.persistence.Entity")
+#addJavaImport("javax.persistence.Table")
+
 /**
  * $!{entity.getDescription()}
  * @author Open Flexo code generator
  */
-#addJavaImport("java.io.Serializable")
+@Entity
+@Table(name="${entity.getTableName()}")
 public class ${entity.getName()} implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private int hashCode;
-
+	private transient int hashCode;
+	#blanckLine()
 	#foreach($attribute in ${entity.getAttributes()})
+		#renderAttributeAnnotations($attribute)
+		
 		#if(${attribute.getType()} == 'ENUM')
 			private ${attribute.getHibernateEnum().getName()} ${attribute.getName()};
 			#addInternalJavaImport("${entity.getHibernateModel().getName()}.enums" ${attribute.getHibernateEnum().getName()})
@@ -16,6 +60,7 @@ public class ${entity.getName()} implements Serializable {
 			private ${attribute.getType().getAsClass().getSimpleName()} ${attribute.getName()};
 			#addJavaImport(${attribute.getType().getAsClass()})
 		#end
+		#blanckLine()
 	#end
 	
 	#if(!${entity.getRelationships().isEmpty()})
