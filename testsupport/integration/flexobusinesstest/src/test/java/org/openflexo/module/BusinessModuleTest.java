@@ -19,13 +19,6 @@
  */
 package org.openflexo.module;
 
-/**
- * Created by IntelliJ IDEA.
- * User: bmangez
- * Date: 1/12/11
- * Time: 16:07
- * To change this template use File | Settings | File Templates.
- */
 public class BusinessModuleTest extends AbstractModuleLoaderTest{
 
     protected UserType definedUserType(){

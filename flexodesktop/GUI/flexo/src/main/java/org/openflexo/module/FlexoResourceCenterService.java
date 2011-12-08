@@ -63,6 +63,13 @@ public class FlexoResourceCenterService {
         return ModuleLoader.instance();
     }
 
+    public FlexoResourceCenter createAndSetFlexoResourceCenter(File dir){
+        LocalResourceCenterImplementation rc = LocalResourceCenterImplementation
+                                    .instanciateNewLocalResourceCenterImplementation(dir);
+        installFlexoResourceCenter(rc);
+        return rc;
+    }
+
     public FlexoResourceCenter getFlexoResourceCenter(boolean createIfNotExist) {
         if (flexoResourceCenter == null && createIfNotExist) {
             if (GeneralPreferences.getLocalResourceCenterDirectory() == null
@@ -80,9 +87,7 @@ public class FlexoResourceCenterService {
                             if (!data.getLocalResourceDirectory().exists()) {
                                 break;
                             }
-                            LocalResourceCenterImplementation rc = LocalResourceCenterImplementation
-                                    .instanciateNewLocalResourceCenterImplementation(data.getLocalResourceDirectory());
-                            installFlexoResourceCenter(rc);
+                            createAndSetFlexoResourceCenter(data.getLocalResourceDirectory());
                             GeneralPreferences.setLocalResourceCenterDirectory(data.getLocalResourceDirectory());
                         }
                         break;

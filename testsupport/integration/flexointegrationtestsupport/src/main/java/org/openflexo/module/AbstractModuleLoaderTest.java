@@ -19,6 +19,7 @@
  */
 package org.openflexo.module;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -26,20 +27,25 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.toolbox.FileUtils;
 
 public abstract class AbstractModuleLoaderTest {
     abstract protected UserType definedUserType();
 
     private UserType userTypeBackUp = null;
+    private File resourceCenterDirectory;
 
     @Before
     public void setUp() throws Exception {
         userTypeBackUp = setUserTypeFieldByReflection(null);
+        resourceCenterDirectory = TestHelper.setupResourceCenter();
     }
 
     @After
     public void tearDown() throws Exception {
         setUserTypeFieldByReflection(userTypeBackUp);
+        FileUtils.deleteDir(resourceCenterDirectory);
     }
 
     @Test
@@ -94,6 +100,42 @@ public abstract class AbstractModuleLoaderTest {
         for(Module module:ModuleLoader.instance().availableModules()){
             if(module.requireProject()){
                 assertNotLoaded(module);
+            }
+        }
+    }
+
+
+    @Test
+    public void testModuleRequiringProjectCanBeLoadedWithEmptyProject(){
+        doInitModuleLoader();
+        ArrayList<Module> loadedModules = new ArrayList<Module>();
+        FlexoProject sampleEmptyProject = TestHelper.createSampleEmptyProject().getProject();
+        for(Module module:ModuleLoader.instance().availableModules()){
+            if(module.requireProject()){
+                loadedModules.add(module);
+                try {
+                    ModuleLoader.instance().getModuleInstance(module, sampleEmptyProject);
+                } catch (ModuleLoadingException e) {
+                    e.printStackTrace();
+                    Assert.fail("Not expecting a ModuleLoading exception." + e.getMessage());
+                }
+                assertIsLoaded(module);
+            }
+        }
+        //now that we have loaded all modules, check once again that they still all loaded.
+        for(Module module:loadedModules){
+            assertIsLoaded(module);
+        }
+        //check that none of the modules requiring a project are loaded
+        for(Module module:ModuleLoader.instance().availableModules()){
+            if(!module.requireProject()){
+                assertNotLoaded(module);
+            }
+        }
+
+        for(Module module:ModuleLoader.instance().availableModules()){
+            if(module.requireProject()){
+                assertIsLoaded(module);
             }
         }
 
@@ -155,11 +197,10 @@ public abstract class AbstractModuleLoaderTest {
              reply = (UserType)currentUserTypeField.get(UserType.class);
              currentUserTypeField.set(UserType.class,valueToSet);
          } catch(IllegalAccessException e){
-             junit.framework.Assert.fail("UserType.currentUserType should be accessible.");
+             Assert.fail("UserType.currentUserType should be accessible.");
          }finally {
              currentUserTypeField.setAccessible(isAccessible);
          }
          return reply;
-
      }
 }

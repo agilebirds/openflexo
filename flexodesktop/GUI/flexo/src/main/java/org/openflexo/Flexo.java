@@ -155,7 +155,7 @@ public class Flexo {
 			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
 		}
 		if (!noSplash) {
-			new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed, 10000);
+			new SplashWindow(null, userTypeNamed, 10000);
 		}
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;

@@ -420,29 +420,10 @@ public final class ProjectLoader {
 			if (project.getUnsavedStorageResources().size() > 0) {
 				if (!reviewUnsaved) {
 					try {
-						ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
-						project.save(ProgressWindow.instance());
-						ProgressWindow.hideProgressWindow();
+						doSaveProject(project);
 						return true;
 					} catch (SaveResourceException e) {
-						// Warns about the exception
-						ProgressWindow.hideProgressWindow();
-						if (e instanceof SaveResourcePermissionDeniedException) {
-							if (e.getFileResource().getFile().isDirectory()) {
-								FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
-										FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory")
-												+ "\n" + e.getFileResource().getFile().getAbsolutePath());
-							} else {
-								FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
-										FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
-												+ e.getFileResource().getFile().getAbsolutePath());
-							}
-						} else {
-							FlexoController.showError(FlexoLocalization.localizedForKey("error_during_saving"));
-						}
-						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-						logger.warning(e.getMessage());
-						e.printStackTrace();
+                        informUserAboutSaveResourceException(e);
 						return false;
 					}
 				} else {
@@ -456,47 +437,61 @@ public final class ProjectLoader {
 		return false;
 	}
 
+    static void doSaveProject(FlexoProject project) throws SaveResourceException {
+        try{
+            ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
+            project.save(ProgressWindow.instance());
+        }finally {
+            ProgressWindow.hideProgressWindow();
+        }
 
+    }
+
+    /**
+	 * Return boolean indicating if some resources need saving
+	 */
+	public static boolean someResourcesNeedsSaving(FlexoProject project) {
+		return project!=null && project.getUnsavedStorageResources(false).size()>0;
+	}
+
+    static void informUserAboutSaveResourceException(SaveResourceException e) {
+        if (e instanceof SaveResourcePermissionDeniedException) {
+            informUserAboutPermissionDeniedException((SaveResourcePermissionDeniedException)e);
+        } else {
+            FlexoController.showError(FlexoLocalization.localizedForKey("error_during_saving"));
+        }
+        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+        logger.warning(e.getMessage());
+        e.printStackTrace();
+    }
+
+    private static void informUserAboutPermissionDeniedException(SaveResourcePermissionDeniedException e){
+        if (e.getFileResource().getFile().isDirectory()) {
+                FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
+                        FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
+                        + e.getFileResource().getFile().getAbsolutePath());
+            } else {
+                FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
+                        FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
+                                + e.getFileResource().getFile().getAbsolutePath());
+            }
+    }
 
     private boolean openResourceReviewerDialog(FlexoProject project) {
         SaveDialog reviewer = new SaveDialog(FlexoController.getActiveFrame());
         if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
             try {
-                ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 2);
-                project.save(ProgressWindow.instance());
-                ProgressWindow.instance().setVisible(false);
-                if (logger.isLoggable(Level.INFO)) {
-                    logger.info("Saving project... DONE");
-                }
+                doSaveProject(project);
                 return true;
             } catch (SaveResourcePermissionDeniedException e) {
-                ProgressWindow.hideProgressWindow();
-                if (e.getFileResource().getFile().isDirectory()) {
-                    FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
-                            FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
-                                    + e.getFileResource().getFile().getAbsolutePath());
-                } else {
-                    FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
-                            FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
-                                    + e.getFileResource().getFile().getAbsolutePath());
-                }
+                informUserAboutPermissionDeniedException((SaveResourcePermissionDeniedException)e);
                 return false;
             } catch (SaveResourceException e) {
-                e.printStackTrace();
-                ProgressWindow.hideProgressWindow();
                 return FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
                         + FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"));
             }
-        } else if (reviewer.getRetval() == JOptionPane.NO_OPTION) {
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info("Saving project...NO");
-            }
-            return true;
-        } else { // CANCEL
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info("Saving project... CANCELLED");
-            }
-            return false;
+        } else {
+            return reviewer.getRetval() == JOptionPane.NO_OPTION;
         }
     }
 

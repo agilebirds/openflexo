@@ -446,23 +446,14 @@ public final class ModuleLoader implements IModuleLoader {
 			logger.info("Exiting FLEXO Application Suite...");
 		}
         FlexoProject currentProject = findCurrentProject();
-		if (currentProject != null && currentProject.getUnsavedStorageResources(false).size() > 0) {
+		if (ProjectLoader.someResourcesNeedsSaving(currentProject)) {
 			SaveDialog reviewer = new SaveDialog(FlexoController.getActiveFrame());
 			if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
 				try {
-					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
-					currentProject.save(ProgressWindow.instance());
-					ProgressWindow.hideProgressWindow();
-					proceedQuitWithoutConfirmation();
-				} catch (SaveResourcePermissionDeniedException e) {
-					ProgressWindow.hideProgressWindow();
-					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-							+ FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"))) {
-						proceedQuitWithoutConfirmation();
-					}
+					ProjectLoader.doSaveProject(currentProject);
+                    proceedQuitWithoutConfirmation();
 				} catch (SaveResourceException e) {
 					e.printStackTrace();
-					ProgressWindow.hideProgressWindow();
 					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
 							+ FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"))) {
 						proceedQuitWithoutConfirmation();
