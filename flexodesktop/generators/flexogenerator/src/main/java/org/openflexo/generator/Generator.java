@@ -446,7 +446,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	}
 
 	public void notifyTemplateRequired(CGTemplate templateFile) {
-		logger.info("notifyTemplateRequired " + templateFile.getRelativePath() + " for " + this);
+		//logger.info("notifyTemplateRequired " + templateFile.getRelativePath() + " for " + this);
 		if (!_usedTemplates.contains(templateFile)) {
 			_usedTemplates.add(templateFile);
 			templateFile.addObserver(this);
