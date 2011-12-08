@@ -372,7 +372,9 @@ public class ModelEntity<I> extends ProxyFactory {
 			}
 		}
 		for (ModelProperty<I> property : declaredModelProperties.values()) {
-			getModelFactory().importClass(property.getType());
+			if (property.getType().isAnnotationPresent(org.openflexo.model.annotations.ModelEntity.class)) {
+				getModelFactory().importClass(property.getType());
+			}
 		}
 	}
 
