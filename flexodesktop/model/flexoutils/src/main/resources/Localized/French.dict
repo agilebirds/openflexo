@@ -1,5 +1,5 @@
 #French
-#Tue Nov 15 22:28:33 CET 2011
+#Thu Dec 08 10:55:05 CET 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -2411,6 +2411,7 @@ fixed_automatically\:_flexo_id_must_be_unique_for_a_project=R\u00E9par\u00E9 aut
 flash=<html>Flash &reg;</html>
 flat=flat
 flatten=flatten
+flexo=flexo
 flexoID=Identifiant OpenFlexo
 flexo_action=Action OpenFlexo
 flexo_action_($object.name)_must_send_token=flexoAction ($object.name) doit envoyer un jeton

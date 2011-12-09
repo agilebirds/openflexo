@@ -1,5 +1,5 @@
 #English
-#Tue Nov 15 22:28:33 CET 2011
+#Thu Dec 08 10:55:05 CET 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -2412,6 +2412,7 @@ fixed_automatically\:_flexo_id_must_be_unique_for_a_project=Fixed automatically\
 flash=<html>Flash &reg;</html>
 flat=Flat
 flatten=flatten
+flexo=flexo
 flexoID=OpenFlexo ID
 flexo_action=OpenFlexo Action
 flexo_action_($object.name)_must_send_token=flexoAction ($object.name) must send token

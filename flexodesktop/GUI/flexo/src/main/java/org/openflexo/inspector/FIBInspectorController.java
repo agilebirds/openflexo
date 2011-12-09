@@ -39,7 +39,8 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 public class FIBInspectorController extends FlexoFIBController {
 
-	private static final Logger logger = FlexoLogger.getLogger(FIBInspectorController.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger
+			.getLogger(FIBInspectorController.class.getPackage().getName());
 
 	private InteractiveFlexoEditor editor;
 
@@ -48,8 +49,11 @@ public class FIBInspectorController extends FlexoFIBController {
 	}
 
 	public boolean displayInspectorTabForContext(String context) {
-		if (getEditor() != null && getEditor().getActiveModule() != null && getEditor().getActiveModule().getFlexoController() != null) {
-			return getEditor().getActiveModule().getFlexoController().displayInspectorTabForContext(context);
+		logger.info("What about context " + context + " ?");
+		if (getEditor() != null && getEditor().getActiveModule() != null
+				&& getEditor().getActiveModule().getFlexoController() != null) {
+			return getEditor().getActiveModule().getFlexoController()
+					.displayInspectorTabForContext(context);
 		}
 		logger.warning("No controller defined here !");
 		return false;
@@ -68,8 +72,10 @@ public class FIBInspectorController extends FlexoFIBController {
 	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionPatternInstancePathElement) {
 			if (getDataObject() instanceof FlexoModelObject) {
-				return ((FlexoModelObject) getDataObject()).getEditionPatternReferences()
-						.get(((EditionPatternInstancePathElement) variable).getIndex()).getEditionPatternInstance();
+				return ((FlexoModelObject) getDataObject())
+						.getEditionPatternReferences()
+						.get(((EditionPatternInstancePathElement) variable)
+								.getIndex()).getEditionPatternInstance();
 			}
 		}
 		return super.getValue(variable);
@@ -85,12 +91,16 @@ public class FIBInspectorController extends FlexoFIBController {
 				System.out.println("> " + inspectorFile);
 				if (inspectorFile.exists()) {
 					JMenuItem menuItem = new JMenuItem(inspectorFile.getName());
-					// We dont use existing inspector which is already aggregated !!!
-					final FIBInspector inspectorToOpen = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(inspectorFile, false);
+					// We dont use existing inspector which is already
+					// aggregated !!!
+					final FIBInspector inspectorToOpen = (FIBInspector) FIBLibrary
+							.instance().retrieveFIBComponent(inspectorFile,
+									false);
 					menuItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							FIBInspectorController.super.openFIBEditor(inspectorToOpen, event);
+							FIBInspectorController.super.openFIBEditor(
+									inspectorToOpen, event);
 						}
 					});
 					popup.add(menuItem);

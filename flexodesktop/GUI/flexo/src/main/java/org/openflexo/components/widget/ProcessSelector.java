@@ -59,7 +59,8 @@ public class ProcessSelector extends AbstractBrowserSelector<FlexoProcess> {
 		return EMPTY_STRING;
 	}
 
-	protected class ProcessSelectorPanel extends AbstractSelectorPanel<FlexoProcess> {
+	protected class ProcessSelectorPanel extends
+			AbstractSelectorPanel<FlexoProcess> {
 		protected ProcessSelectorPanel() {
 			super(ProcessSelector.this);
 		}
@@ -87,38 +88,66 @@ public class ProcessSelector extends AbstractBrowserSelector<FlexoProcess> {
 
 		@Override
 		public void configure() {
-			setFilterStatus(BrowserElementType.PRECONDITION, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.PRECONDITION,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.POSTCONDITION,
+					BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.STATUS, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.DEADLINE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.COMPONENT, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.ACTIVITY_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.ACTION_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OPERATION_NODE, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DEADLINE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.COMPONENT,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.ACTIVITY_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.ACTION_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OPERATION_NODE,
+					BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.BLOC, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.SUBPROCESS_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OPERATOR_AND_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OPERATOR_OR_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OPERATOR_IF_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OPERATOR_COMPLEX_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OPERATOR_EXCLUSIVE_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OPERATOR_INCLUSIVE_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OPERATOR_SWITCH_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OPERATOR_LOOP_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.EVENT_NODE, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.PORT_REGISTERY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.SERVICE_INTERFACE, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.SUBPROCESS_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OPERATOR_AND_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OPERATOR_OR_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OPERATOR_IF_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OPERATOR_COMPLEX_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OPERATOR_EXCLUSIVE_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OPERATOR_INCLUSIVE_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OPERATOR_SWITCH_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OPERATOR_LOOP_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.EVENT_NODE,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.PORT_REGISTERY,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.SERVICE_INTERFACE,
+					BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.GROUP, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.DM_MODEL, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.COMPONENT_LIBRARY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW, true);
+			setFilterStatus(BrowserElementType.DM_MODEL,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.COMPONENT_LIBRARY,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DKV_MODEL,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.MENU_ITEM,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.WS_LIBRARY,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.CALC_LIBRARY,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY,
+					BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.PROCESS_FOLDER,
+					BrowserFilterStatus.SHOW, true);
 		}
 
 		@Override

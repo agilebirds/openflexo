@@ -53,6 +53,7 @@ import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomAssignment;
+import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.model.FIBCustomColumn;
 import org.openflexo.fib.model.FIBDropDown;
 import org.openflexo.fib.model.FIBDropDownColumn;
@@ -126,8 +127,9 @@ public class FIBConverter {
 	}
 
 	/**
-	 * Usage FIBConverter -f file [-o output_file] -fib fib_class_name [package_prefix 1 [package_prefix 2] ... ] FIBConverter -d input_dir
-	 * -o output_dir -fib fib_class_name [package_prefix 1 [package_prefix 2] ... ]
+	 * Usage FIBConverter -f file [-o output_file] -fib fib_class_name
+	 * [package_prefix 1 [package_prefix 2] ... ] FIBConverter -d input_dir -o
+	 * output_dir -fib fib_class_name [package_prefix 1 [package_prefix 2] ... ]
 	 * 
 	 * @param args
 	 */
@@ -145,8 +147,10 @@ public class FIBConverter {
 					fibClassName = args[3];
 				}
 				File inputFile = new FileResource(inputFilePath);
-				File outputFile = (outputFilePath != null ? new FileResource(outputFilePath) : null);
-				convert(inputFile, outputFile, fibClassName, remaindingArgs(args, args[2].equals("-o") ? 6 : 4));
+				File outputFile = (outputFilePath != null ? new FileResource(
+						outputFilePath) : null);
+				convert(inputFile, outputFile, fibClassName,
+						remaindingArgs(args, args[2].equals("-o") ? 6 : 4));
 				exit(true);
 			} else if (args[0].equals("-d")) {
 				String inputDirPath = args[1];
@@ -155,7 +159,9 @@ public class FIBConverter {
 				String[] packagePrefixes = remaindingArgs(args, 6);
 				File inputDir = new FileResource(inputDirPath);
 				File outputDir = new FileResource(outputDirPath);
-				System.out.println("Convert directory " + inputDir.getAbsolutePath() + " to " + outputDir.getAbsolutePath());
+				System.out.println("Convert directory "
+						+ inputDir.getAbsolutePath() + " to "
+						+ outputDir.getAbsolutePath());
 				;
 				for (File inputFile : inputDir.listFiles(new FilenameFilter() {
 					@Override
@@ -165,52 +171,66 @@ public class FIBConverter {
 				})) {
 					File outputFile = new File(outputDir, inputFile.getName());
 					// System.out.println("Convert "+inputFile.getAbsolutePath()+" to "+outputFile.getAbsolutePath());
-					convert(inputFile, outputFile, fibClassName, packagePrefixes);
+					convert(inputFile, outputFile, fibClassName,
+							packagePrefixes);
 				}
 				exit(true);
 			}
 		}
-		System.out.println("Usage FIBConverter -f file [-o output_file] -fib fib_class_name [package_prefix 1 [package_prefix 2] ... ]");
-		System.out.println("      FIBConverter -d input_dir -o output_dir -fib fib_class_name [package_prefix 1 [package_prefix 2] ... ]");
+		System.out
+				.println("Usage FIBConverter -f file [-o output_file] -fib fib_class_name [package_prefix 1 [package_prefix 2] ... ]");
+		System.out
+				.println("      FIBConverter -d input_dir -o output_dir -fib fib_class_name [package_prefix 1 [package_prefix 2] ... ]");
 	}
 
 	// static int prout = 0;
 
-	public static void convert(File inputFile, File outputFile, String fibClassName, String... packagePrefixes) {
+	public static void convert(File inputFile, File outputFile,
+			String fibClassName, String... packagePrefixes) {
 
 		FIBPanel newInspector = null;
 
 		try {
-			/*prout++;
-			if (prout > 10) {
-				System.out.println("On s'arrete la");
-				exit(-1);
-			}*/
+			/*
+			 * prout++; if (prout > 10) { System.out.println("On s'arrete la");
+			 * exit(-1); }
+			 */
 			InspectorModel im = importInspectorFile(inputFile);
 			Class dataClass = null;
-			if (im.inspectedClassName != null && im.inspectedClassName.equals("ignore")) {
+			if (im.inspectedClassName != null
+					&& im.inspectedClassName.equals("ignore")) {
 				System.out.println("Ignore inspector " + inputFile.getName());
 				return;
-			} else if (im.inspectedClassName != null && !im.inspectedClassName.equals("ignore")) {
+			} else if (im.inspectedClassName != null
+					&& !im.inspectedClassName.equals("ignore")) {
 				try {
 					dataClass = Class.forName(im.inspectedClassName);
 				} catch (ClassNotFoundException e) {
-					System.out.println("Convert " + inputFile.getAbsolutePath() + " to "
-							+ (outputFile != null ? outputFile.getAbsolutePath() : "console"));
+					System.out.println("Convert "
+							+ inputFile.getAbsolutePath()
+							+ " to "
+							+ (outputFile != null ? outputFile
+									.getAbsolutePath() : "console"));
 					error("Not found class: " + im.inspectedClassName);
 					return;
 				}
 			} else {
 				dataClass = searchClass(inputFile, packagePrefixes);
 				if (dataClass == null) {
-					System.out.println("Convert " + inputFile.getAbsolutePath() + " to "
-							+ (outputFile != null ? outputFile.getAbsolutePath() : "console"));
+					System.out.println("Convert "
+							+ inputFile.getAbsolutePath()
+							+ " to "
+							+ (outputFile != null ? outputFile
+									.getAbsolutePath() : "console"));
 					error("Not found class for file: " + inputFile.getName());
 					return;
 				}
 			}
-			System.out.println("Convert " + inputFile.getAbsolutePath() + " to "
-					+ (outputFile != null ? outputFile.getAbsolutePath() : "console") + " for class " + dataClass);
+			System.out.println("Convert "
+					+ inputFile.getAbsolutePath()
+					+ " to "
+					+ (outputFile != null ? outputFile.getAbsolutePath()
+							: "console") + " for class " + dataClass);
 			inspectorName = inputFile.getName();
 			newInspector = makeFIB(im, fibClassName, dataClass);
 		} catch (FileNotFoundException e) {
@@ -221,7 +241,9 @@ public class FIBConverter {
 		if (outputFile != null) {
 			try {
 				FileOutputStream fos = new FileOutputStream(outputFile);
-				XMLCoder.encodeObjectWithMapping(newInspector, FIBLibrary.getFIBMapping(), fos, StringEncoder.getDefaultInstance());
+				XMLCoder.encodeObjectWithMapping(newInspector,
+						FIBLibrary.getFIBMapping(), fos,
+						StringEncoder.getDefaultInstance());
 				fos.close();
 			} catch (InvalidObjectSpecificationException e) {
 				// TODO Auto-generated catch block
@@ -246,7 +268,8 @@ public class FIBConverter {
 
 		else {
 			try {
-				System.out.println(XMLCoder.encodeObjectWithMapping(newInspector, FIBLibrary.getFIBMapping(),
+				System.out.println(XMLCoder.encodeObjectWithMapping(
+						newInspector, FIBLibrary.getFIBMapping(),
 						StringEncoder.getDefaultInstance()));
 			} catch (InvalidObjectSpecificationException e) {
 				// TODO Auto-generated catch block
@@ -266,7 +289,8 @@ public class FIBConverter {
 	}
 
 	private static Class searchClass(File inputFile, String... packagePrefixes) {
-		String className = inputFile.getName().substring(0, inputFile.getName().indexOf(".inspector"));
+		String className = inputFile.getName().substring(0,
+				inputFile.getName().indexOf(".inspector"));
 		// System.out.println("Search "+className);
 		for (String packagePrefix : packagePrefixes) {
 			// System.out.println("Prefix: "+packagePrefix);
@@ -280,32 +304,39 @@ public class FIBConverter {
 		return null;
 	}
 
-	private static FIBPanel makeFIB(InspectorModel im, String fibClassName, final Class dataClass) {
+	private static FIBPanel makeFIB(InspectorModel im, String fibClassName,
+			final Class dataClass) {
 		Vector<DataBinding> bindings = new Vector<DataBinding>();
 
 		Class fibClass;
 		FIBPanel newInspector;
 		try {
 			fibClass = Class.forName(fibClassName);
-			newInspector = (FIBPanel) fibClass.getDeclaredConstructors()[0].newInstance(null);
+			newInspector = (FIBPanel) fibClass.getDeclaredConstructors()[0]
+					.newInstance(null);
 		} catch (ClassNotFoundException e1) {
 			error("Not found class: " + fibClassName);
 			exit(false);
 			return null;
 		} catch (IllegalArgumentException e) {
-			error("IllegalArgumentException while instanciating class: " + fibClassName);
+			error("IllegalArgumentException while instanciating class: "
+					+ fibClassName);
 			return null;
 		} catch (SecurityException e) {
-			error("SecurityException while instanciating class: " + fibClassName);
+			error("SecurityException while instanciating class: "
+					+ fibClassName);
 			return null;
 		} catch (InstantiationException e) {
-			error("InstantiationException while instanciating class: " + fibClassName);
+			error("InstantiationException while instanciating class: "
+					+ fibClassName);
 			return null;
 		} catch (IllegalAccessException e) {
-			error("IllegalAccessException while instanciating class: " + fibClassName);
+			error("IllegalAccessException while instanciating class: "
+					+ fibClassName);
 			return null;
 		} catch (InvocationTargetException e) {
-			error("InvocationTargetException while instanciating class: " + fibClassName);
+			error("InvocationTargetException while instanciating class: "
+					+ fibClassName);
 			return null;
 		}
 
@@ -315,7 +346,8 @@ public class FIBConverter {
 		newInspector.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		newInspector.addToParameters(new FIBParameter("title", im.title));
 		try {
-			newInspector.setControllerClass(Class.forName("org.openflexo.inspector.FIBInspectorController"));
+			newInspector.setControllerClass(Class
+					.forName("org.openflexo.inspector.FIBInspectorController"));
 		} catch (ClassNotFoundException e1) {
 			error("Not found class: org.openflexo.inspector.FIBInspectorController");
 			// exit(false);
@@ -323,12 +355,15 @@ public class FIBConverter {
 
 		// Retrieve all localized
 		FlexoLocalization.localizedForKey("flexo");
-		newInspector.retrieveFIBLocalizedDictionary().beginSearchNewLocalizationEntries();
+		newInspector.retrieveFIBLocalizedDictionary()
+				.beginSearchNewLocalizationEntries();
 
 		FIBTabPanel tabPane = new FIBTabPanel();
 		tabPane.setName("Tab");
-		// tabPane.setConstraints(new BorderLayoutConstraints(BorderLayoutLocation.center));
-		newInspector.addToSubComponents(tabPane, new BorderLayoutConstraints(BorderLayoutLocation.center));
+		// tabPane.setConstraints(new
+		// BorderLayoutConstraints(BorderLayoutLocation.center));
+		newInspector.addToSubComponents(tabPane, new BorderLayoutConstraints(
+				BorderLayoutLocation.center));
 
 		for (int i : im.getTabs().keySet()) {
 			final TabModel tm = im.getTabs().get(i);
@@ -341,7 +376,9 @@ public class FIBConverter {
 			tabPane.addToSubComponents(tab);
 			searchLocalized(newInspector, tm.name);
 			if (StringUtils.isNotEmpty(tm.visibilityContext)) {
-				tab.setVisible(new DataBinding("controller.displayInspectorTabForContext('" + tm.visibilityContext + "')"));
+				tab.setVisible(new DataBinding(
+						"controller.displayInspectorTabForContext('"
+								+ tm.visibilityContext + "')"));
 				bindings.add(tab.getVisible());
 			}
 			int index = 0;
@@ -352,7 +389,8 @@ public class FIBConverter {
 				if (pm instanceof PropertyListModel) {
 
 					// Build table
-					widget = makeTable((PropertyListModel) pm, dataClass, bindings);
+					widget = makeTable((PropertyListModel) pm, dataClass,
+							bindings);
 
 				} else {
 					// Build "normal" widget
@@ -364,37 +402,55 @@ public class FIBConverter {
 
 					// Handle formatter
 					if (pm.hasValueForParameter("formatter")) {
-						KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(dataClass, pm.name);
-						if (kvp != null && kvp.getType() instanceof Class && ((Class) kvp.getType()).isEnum()) {
-							// In old inspector, enums were lowered cased and localized
-							widget.setFormat(new DataBinding("object." + pm.getValueForParameter("formatter") + ".toLowerCase"));
+						KeyValueProperty kvp = KeyValueLibrary
+								.getKeyValueProperty(dataClass, pm.name);
+						if (kvp != null && kvp.getType() instanceof Class
+								&& ((Class) kvp.getType()).isEnum()) {
+							// In old inspector, enums were lowered cased and
+							// localized
+							widget.setFormat(new DataBinding("object."
+									+ pm.getValueForParameter("formatter")
+									+ ".toLowerCase"));
 							bindings.add(widget.getFormat());
 							widget.setLocalize(true);
-							if (pm.getValueForParameter("formatter").equals("name")) {
-								for (Object c : ((Class) kvp.getType()).getEnumConstants()) {
-									searchLocalized(newInspector, ((Enum) c).name().toLowerCase());
+							if (pm.getValueForParameter("formatter").equals(
+									"name")) {
+								for (Object c : ((Class) kvp.getType())
+										.getEnumConstants()) {
+									searchLocalized(newInspector, ((Enum) c)
+											.name().toLowerCase());
 								}
 							}
 						} else {
-							widget.setFormat(new DataBinding("object." + pm.getValueForParameter("formatter")));
+							widget.setFormat(new DataBinding("object."
+									+ pm.getValueForParameter("formatter")));
 							bindings.add(widget.getFormat());
 						}
 					}
 					// Handle formatter (declared as format in some cases)
 					if (pm.hasValueForParameter("format")) {
-						KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(dataClass, pm.name);
-						if (kvp != null && kvp.getType() instanceof Class && ((Class) kvp.getType()).isEnum()) {
-							// In old inspector, enums were lowered cased and localized
-							widget.setFormat(new DataBinding("object." + pm.getValueForParameter("format") + ".toLowerCase"));
+						KeyValueProperty kvp = KeyValueLibrary
+								.getKeyValueProperty(dataClass, pm.name);
+						if (kvp != null && kvp.getType() instanceof Class
+								&& ((Class) kvp.getType()).isEnum()) {
+							// In old inspector, enums were lowered cased and
+							// localized
+							widget.setFormat(new DataBinding("object."
+									+ pm.getValueForParameter("format")
+									+ ".toLowerCase"));
 							bindings.add(widget.getFormat());
 							widget.setLocalize(true);
-							if (pm.getValueForParameter("format").equals("name")) {
-								for (Object c : ((Class) kvp.getType()).getEnumConstants()) {
-									searchLocalized(newInspector, ((Enum) c).name().toLowerCase());
+							if (pm.getValueForParameter("format")
+									.equals("name")) {
+								for (Object c : ((Class) kvp.getType())
+										.getEnumConstants()) {
+									searchLocalized(newInspector, ((Enum) c)
+											.name().toLowerCase());
 								}
 							}
 						} else {
-							widget.setFormat(new DataBinding("object." + pm.getValueForParameter("format")));
+							widget.setFormat(new DataBinding("object."
+									+ pm.getValueForParameter("format")));
 							bindings.add(widget.getFormat());
 						}
 					}
@@ -405,35 +461,62 @@ public class FIBConverter {
 						DefaultExpressionParser parser = new DefaultExpressionParser();
 						String hackDeLaMort = null;
 						try {
-							hackDeLaMort = ToolBox.replaceStringByStringInString(" OR ", " | ", pm.conditional);
-							hackDeLaMort = ToolBox.replaceStringByStringInString(" or ", " | ", hackDeLaMort);
-							hackDeLaMort = ToolBox.replaceStringByStringInString(" AND ", " & ", hackDeLaMort);
-							hackDeLaMort = ToolBox.replaceStringByStringInString(" and ", " & ", hackDeLaMort);
-							// hackDeLaMort = ToolBox.replaceStringByStringInString("!=", " != ", hackDeLaMort);
-							// hackDeLaMort = ToolBox.replaceStringByStringInString("=", " = ", hackDeLaMort);
+							hackDeLaMort = ToolBox
+									.replaceStringByStringInString(" OR ",
+											" | ", pm.conditional);
+							hackDeLaMort = ToolBox
+									.replaceStringByStringInString(" or ",
+											" | ", hackDeLaMort);
+							hackDeLaMort = ToolBox
+									.replaceStringByStringInString(" AND ",
+											" & ", hackDeLaMort);
+							hackDeLaMort = ToolBox
+									.replaceStringByStringInString(" and ",
+											" & ", hackDeLaMort);
+							// hackDeLaMort =
+							// ToolBox.replaceStringByStringInString("!=",
+							// " != ", hackDeLaMort);
+							// hackDeLaMort =
+							// ToolBox.replaceStringByStringInString("=", " = ",
+							// hackDeLaMort);
 							// System.out.println("Converted "+pm.conditional+" to "+hackDeLaMort);
 							Expression condition = parser.parse(hackDeLaMort);
 							// System.out.println("Expression="+condition);
-							conditional = condition.evaluate(new EvaluationContext(parser.getConstantFactory(),
-									new org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory() {
-										@Override
-										public Expression makeVariable(Word value) {
-											if (tm.getPropertyNamed(value.getValue()) != null)
-												return new Variable("data." + value.getValue());
-											else {
-												Type accessedType = getAccessedType(value.getValue(), dataClass);
-												// KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(dataClass,value.getValue());
-												// if (kvp != null) {
-												if (accessedType != null) {
-													return new Variable("data." + value.getValue());
-												} else
-													return new Variable('"' + value.getValue() + '"');
-											}
-										}
-									}, parser.getFunctionFactory()));
+							conditional = condition
+									.evaluate(new EvaluationContext(
+											parser.getConstantFactory(),
+											new org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory() {
+												@Override
+												public Expression makeVariable(
+														Word value) {
+													if (tm.getPropertyNamed(value
+															.getValue()) != null)
+														return new Variable(
+																"data."
+																		+ value.getValue());
+													else {
+														Type accessedType = getAccessedType(
+																value.getValue(),
+																dataClass);
+														// KeyValueProperty kvp
+														// =
+														// KeyValueLibrary.getKeyValueProperty(dataClass,value.getValue());
+														// if (kvp != null) {
+														if (accessedType != null) {
+															return new Variable(
+																	"data."
+																			+ value.getValue());
+														} else
+															return new Variable(
+																	'"' + value
+																			.getValue() + '"');
+													}
+												}
+											}, parser.getFunctionFactory()));
 							// System.out.println("conditional="+conditional);
 							// System.out.println("conditional="+conditional);
-							widget.setVisible(new DataBinding(conditional.toString()));
+							widget.setVisible(new DataBinding(conditional
+									.toString()));
 							bindings.add(widget.getVisible());
 						} catch (ParseException e) {
 							error("Cound not parse: " + hackDeLaMort);
@@ -447,7 +530,8 @@ public class FIBConverter {
 					// Handle display label
 					boolean displayLabel = true;
 					if (pm.hasValueForParameter(DenaliWidget.DISPLAY_LABEL)) {
-						displayLabel = pm.getBooleanValueForParameter(DenaliWidget.DISPLAY_LABEL);
+						displayLabel = pm
+								.getBooleanValueForParameter(DenaliWidget.DISPLAY_LABEL);
 					}
 					if (displayLabel && !(widget instanceof FIBLabel)) {
 						// Build label
@@ -458,15 +542,22 @@ public class FIBConverter {
 						// Search localized
 						searchLocalized(newInspector, pm.label);
 						if (conditional != null) {
-							label.setVisible(new DataBinding(conditional.toString()));
+							label.setVisible(new DataBinding(conditional
+									.toString()));
 							bindings.add(label.getVisible());
 						}
 
 						if (pm instanceof PropertyListModel) {
 							label.setAlign(org.openflexo.fib.model.FIBLabel.Align.center);
-							tab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false, index++));
+							tab.addToSubComponents(label,
+									new TwoColsLayoutConstraints(
+											TwoColsLayoutLocation.center, true,
+											false, index++));
 						} else {
-							tab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false, index++));
+							tab.addToSubComponents(label,
+									new TwoColsLayoutConstraints(
+											TwoColsLayoutLocation.left, false,
+											false, index++));
 						}
 						label.getConstraints().setIndex(pm.constraint * 2);
 					}
@@ -474,43 +565,64 @@ public class FIBConverter {
 					// Handle horizontal and vertical expansions
 					boolean expandHorizontally = false;
 					if (pm.hasValueForParameter(DenaliWidget.EXPAND_HORIZONTALLY)) {
-						expandHorizontally = pm.getBooleanValueForParameter(DenaliWidget.EXPAND_HORIZONTALLY);
+						expandHorizontally = pm
+								.getBooleanValueForParameter(DenaliWidget.EXPAND_HORIZONTALLY);
 					} else {
 						// Default widget to expand horizontally
 						if (pm instanceof PropertyListModel) {
 							expandHorizontally = true;
-						} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.TEXT_FIELD)
-								|| pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_TEXT_FIELD)
-								|| pm.getWidget().equalsIgnoreCase(DenaliWidget.TEXT_AREA)
-								|| pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_TEXT_AREA)
-								|| pm.getWidget().equalsIgnoreCase(DenaliWidget.LABEL)
-								|| (pm.getWidget().equalsIgnoreCase(DenaliWidget.CUSTOM)
-										&& !((FIBCustom) widget).getComponentClass().getName()
+						} else if (pm.getWidget().equalsIgnoreCase(
+								DenaliWidget.TEXT_FIELD)
+								|| pm.getWidget().equalsIgnoreCase(
+										DenaliWidget.READ_ONLY_TEXT_FIELD)
+								|| pm.getWidget().equalsIgnoreCase(
+										DenaliWidget.TEXT_AREA)
+								|| pm.getWidget().equalsIgnoreCase(
+										DenaliWidget.READ_ONLY_TEXT_AREA)
+								|| pm.getWidget().equalsIgnoreCase(
+										DenaliWidget.LABEL)
+								|| (pm.getWidget().equalsIgnoreCase(
+										DenaliWidget.CUSTOM)
+										&& !((FIBCustom) widget)
+												.getComponentClass()
+												.getName()
 												.equals("org.openflexo.fge.view.widget.FIBForegroundStyleSelector")
-										&& !((FIBCustom) widget).getComponentClass().getName()
+										&& !((FIBCustom) widget)
+												.getComponentClass()
+												.getName()
 												.equals("org.openflexo.fge.view.widget.FIBBackgroundStyleSelector")
-										&& !((FIBCustom) widget).getComponentClass().getName()
+										&& !((FIBCustom) widget)
+												.getComponentClass()
+												.getName()
 												.equals("org.openflexo.fge.view.widget.FIBTextStyleSelector") && !((FIBCustom) widget)
-										.getComponentClass().getName().equals("org.openflexo.fge.view.widget.FIBShadowStyleSelector"))) {
+										.getComponentClass()
+										.getName()
+										.equals("org.openflexo.fge.view.widget.FIBShadowStyleSelector"))) {
 							expandHorizontally = true;
 						}
 					}
 					boolean expandVertically = false;
 					if (pm.hasValueForParameter(DenaliWidget.EXPAND_VERTICALLY)) {
-						expandVertically = pm.getBooleanValueForParameter(DenaliWidget.EXPAND_VERTICALLY);
+						expandVertically = pm
+								.getBooleanValueForParameter(DenaliWidget.EXPAND_VERTICALLY);
 					} else {
 						// Default widget to expand vertically
 						if (pm instanceof PropertyListModel) {
 							expandVertically = true;
-						} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.TEXT_AREA)
-								|| pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_TEXT_AREA)) {
+						} else if (pm.getWidget().equalsIgnoreCase(
+								DenaliWidget.TEXT_AREA)
+								|| pm.getWidget().equalsIgnoreCase(
+										DenaliWidget.READ_ONLY_TEXT_AREA)) {
 							expandVertically = true;
 						}
 					}
 
 					// Finally append widget
-					tab.addToSubComponents(widget, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, expandHorizontally,
-							expandVertically, index++));
+					tab.addToSubComponents(widget,
+							new TwoColsLayoutConstraints(
+									TwoColsLayoutLocation.right,
+									expandHorizontally, expandVertically,
+									index++));
 
 					widget.getConstraints().setIndex(pm.constraint * 2 + 1);
 				}
@@ -518,7 +630,8 @@ public class FIBConverter {
 		}
 
 		// Retrieve all localized
-		newInspector.retrieveFIBLocalizedDictionary().endSearchNewLocalizationEntries();
+		newInspector.retrieveFIBLocalizedDictionary()
+				.endSearchNewLocalizationEntries();
 
 		// Check all widgets
 		for (FIBComponent component : newInspector.retrieveAllSubComponents()) {
@@ -527,9 +640,14 @@ public class FIBConverter {
 				Vector<FIBCustomAssignment> toRemove = new Vector<FIBCustomAssignment>();
 				for (FIBCustomAssignment a : custom.getAssignments()) {
 					if (a.isMandatory() && !a.getValue().isValid()) {
-						error("Custom component " + custom.getComponentClass().getSimpleName() + " does not define mandatory "
-								+ a.getVariable() + " assignment"
-								+ (!a.getValue().isSet() ? " (value not defined) " : " (invalid binding " + a.getValue() + ")"));
+						error("Custom component "
+								+ custom.getComponentClass().getSimpleName()
+								+ " does not define mandatory "
+								+ a.getVariable()
+								+ " assignment"
+								+ (!a.getValue().isSet() ? " (value not defined) "
+										: " (invalid binding " + a.getValue()
+												+ ")"));
 						if (a.getValue().isSet()) {
 							a.getValue().getBinding().debugIsBindingValid();
 						}
@@ -547,9 +665,12 @@ public class FIBConverter {
 					if (column instanceof FIBCustomColumn) {
 						FIBCustomColumn c = (FIBCustomColumn) column;
 						Vector<FIBCustomColumn.FIBCustomAssignment> toRemove = new Vector<FIBCustomColumn.FIBCustomAssignment>();
-						for (FIBCustomColumn.FIBCustomAssignment a : c.getAssignments()) {
+						for (FIBCustomColumn.FIBCustomAssignment a : c
+								.getAssignments()) {
 							if (a.isMandatory() && !a.getValue().isValid()) {
-								error("Custom column component " + c.getComponentClass().getSimpleName() + " does not define mandatory "
+								error("Custom column component "
+										+ c.getComponentClass().getSimpleName()
+										+ " does not define mandatory "
 										+ a.getVariable() + " assignment");
 							}
 							if (!a.isMandatory() && !a.getValue().isSet()) {
@@ -568,36 +689,46 @@ public class FIBConverter {
 		// Check all bindings
 		newInspector.updateBindingModel();
 		for (DataBinding binding : bindings) {
-			// Following cases are well known (inspector ShapeGraphicalRepresentation
+			// Following cases are well known (inspector
+			// ShapeGraphicalRepresentation
 			// and ConnectorGraphicalRepresentation have to be redesigned
 			if (binding.toString().startsWith("data.shape"))
 				continue;
 			if (binding.toString().startsWith("data.connector"))
 				continue;
 			if (!binding.isValid(true)) {
-				if (binding.getBinding(true) instanceof BindingValue && binding.getBindingDefinition() != null
-						&& binding.getBindingDefinition().getType().equals(String.class)
-						&& !binding.getBinding().getAccessedType().equals(String.class)) {
+				if (binding.getBinding(true) instanceof BindingValue
+						&& binding.getBindingDefinition() != null
+						&& binding.getBindingDefinition().getType()
+								.equals(String.class)
+						&& !binding.getBinding().getAccessedType()
+								.equals(String.class)) {
 					// Try to repair by adding a .toString
-					binding.setUnparsedBinding(binding.getBinding() + ".toString");
+					binding.setUnparsedBinding(binding.getBinding()
+							+ ".toString");
 				}
 			}
 			if (!binding.isValid()) {
-				error("INVALID binding " + binding.getBindingDefinition().getVariableName() + " values: " + binding + " owner="
+				error("INVALID binding "
+						+ binding.getBindingDefinition().getVariableName()
+						+ " values: " + binding + " owner="
 						+ binding.getOwner());
 				// binding.getBinding().debugIsBindingValid();
 			}
 		}
 
-		/*newInspector.retrieveFIBLocalizedDictionary();
-		Language currentLanguage = FlexoLocalization.getCurrentLanguage();
-		newInspector.retrieveFIBLocalizedDictionary().beginSearchNewLocalizationEntries();
-		for (Language language : Language.availableValues()) {
-			FlexoLocalization.setCurrentLanguage(language);
-		}
-		newInspector.retrieveFIBLocalizedDictionary().endSearchNewLocalizationEntries();
-		newInspector.retrieveFIBLocalizedDictionary().refresh();
-		FlexoLocalization.setCurrentLanguage(currentLanguage);*/
+		/*
+		 * newInspector.retrieveFIBLocalizedDictionary(); Language
+		 * currentLanguage = FlexoLocalization.getCurrentLanguage();
+		 * newInspector
+		 * .retrieveFIBLocalizedDictionary().beginSearchNewLocalizationEntries
+		 * (); for (Language language : Language.availableValues()) {
+		 * FlexoLocalization.setCurrentLanguage(language); }
+		 * newInspector.retrieveFIBLocalizedDictionary
+		 * ().endSearchNewLocalizationEntries();
+		 * newInspector.retrieveFIBLocalizedDictionary().refresh();
+		 * FlexoLocalization.setCurrentLanguage(currentLanguage);
+		 */
 
 		ValidationReport report = newInspector.validate();
 		for (ValidationError error : report.getErrors()) {
@@ -612,12 +743,14 @@ public class FIBConverter {
 		Language currentLanguage = FlexoLocalization.getCurrentLanguage();
 		for (Language language : Language.availableValues()) {
 			FlexoLocalization.setCurrentLanguage(language);
-			FlexoLocalization.localizedForKey(inspector.retrieveFIBLocalizedDictionary(), key);
+			FlexoLocalization.localizedForKey(
+					inspector.retrieveFIBLocalizedDictionary(), key);
 		}
 		FlexoLocalization.setCurrentLanguage(currentLanguage);
 	}
 
-	private static FIBWidget makeWidget(PropertyModel pm, Vector<DataBinding> bindings, Class dataClass) {
+	private static FIBWidget makeWidget(PropertyModel pm,
+			Vector<DataBinding> bindings, Class dataClass) {
 		FIBWidget returned = buildWidget(pm, bindings, dataClass);
 		if (returned == null)
 			return null;
@@ -629,29 +762,26 @@ public class FIBConverter {
 		bindings.add(returned.getData());
 
 		// Check that all custom component parameters are well set
-		/*if (returned instanceof FIBCustom) {
-			Vector<FIBCustomAssignment> toRemove = new Vector<FIBCustomAssignment>();
-			for (FIBCustomAssignment a : ((FIBCustom)returned).getAssignments()) {
-				if (a.isMandatory() && !a.getValue().isValid()) {
-					error("Custom component "
-							+((FIBCustom)returned).getComponentClass().getSimpleName()
-							+" does not define mandatory "+a.getVariable()+" assignment"
-							+(!a.getValue().isSet()?" (value not defined) ":" (invalid binding "+a.getValue()+")"));
-					if (a.getValue().isSet()) {
-						a.getValue().getBinding().debugIsBindingValid();
-					}
-				}
-				if (!a.isMandatory() && !a.getValue().isSet()) {
-					toRemove.add(a);
-				}
-			}
-			for (FIBCustomAssignment a : toRemove) {
-				((FIBCustom)returned).removeFromAssignments(a);
-			}
-		}*/
+		/*
+		 * if (returned instanceof FIBCustom) { Vector<FIBCustomAssignment>
+		 * toRemove = new Vector<FIBCustomAssignment>(); for
+		 * (FIBCustomAssignment a : ((FIBCustom)returned).getAssignments()) { if
+		 * (a.isMandatory() && !a.getValue().isValid()) {
+		 * error("Custom component "
+		 * +((FIBCustom)returned).getComponentClass().getSimpleName()
+		 * +" does not define mandatory "+a.getVariable()+" assignment"
+		 * +(!a.getValue
+		 * ().isSet()?" (value not defined) ":" (invalid binding "+a
+		 * .getValue()+")")); if (a.getValue().isSet()) {
+		 * a.getValue().getBinding().debugIsBindingValid(); } } if
+		 * (!a.isMandatory() && !a.getValue().isSet()) { toRemove.add(a); } }
+		 * for (FIBCustomAssignment a : toRemove) {
+		 * ((FIBCustom)returned).removeFromAssignments(a); } }
+		 */
 
 		if (pm.hasValueForParameter("visibleFor")) {
-			returned.addToParameters(new FIBParameter("visibleFor", pm.getValueForParameter("visibleFor")));
+			returned.addToParameters(new FIBParameter("visibleFor", pm
+					.getValueForParameter("visibleFor")));
 		}
 		if (StringUtils.isNotEmpty(pm.help)) {
 			returned.setTooltipText(pm.help);
@@ -665,7 +795,8 @@ public class FIBConverter {
 		return JavaUtils.getClassName(aString);
 	}
 
-	private static FIBWidget buildWidget(PropertyModel pm, Vector<DataBinding> bindings, Class dataClass) {
+	private static FIBWidget buildWidget(PropertyModel pm,
+			Vector<DataBinding> bindings, Class dataClass) {
 		Vector<String> unhandledParams = new Vector<String>();
 
 		for (String s : pm.parameters.keySet())
@@ -678,26 +809,33 @@ public class FIBConverter {
 			handleParam("visibleFor", unhandledParams);
 		}
 
-		if (pm.getWidget().equalsIgnoreCase(DenaliWidget.TEXT_FIELD) || pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_TEXT_FIELD)) {
+		if (pm.getWidget().equalsIgnoreCase(DenaliWidget.TEXT_FIELD)
+				|| pm.getWidget().equalsIgnoreCase(
+						DenaliWidget.READ_ONLY_TEXT_FIELD)) {
 			FIBTextField tf = new FIBTextField();
 			if (pm.hasValueForParameter(TextFieldWidget.COLUMNS_PARAM)) {
 				handleParam(TextFieldWidget.COLUMNS_PARAM, unhandledParams);
-				tf.columns = pm.getIntValueForParameter(TextFieldWidget.COLUMNS_PARAM);
+				tf.columns = pm
+						.getIntValueForParameter(TextFieldWidget.COLUMNS_PARAM);
 			}
 			if (pm.hasValueForParameter(TextFieldWidget.PASSWORD_PARAM)) {
 				handleParam(TextFieldWidget.PASSWORD_PARAM, unhandledParams);
-				tf.passwd = pm.getBooleanValueForParameter(TextFieldWidget.PASSWORD_PARAM);
+				tf.passwd = pm
+						.getBooleanValueForParameter(TextFieldWidget.PASSWORD_PARAM);
 			}
 			if (pm.hasValueForParameter(TextFieldWidget.VALIDATE_ON_RETURN)) {
 				handleParam(TextFieldWidget.VALIDATE_ON_RETURN, unhandledParams);
-				tf.validateOnReturn = pm.getBooleanValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN);
+				tf.validateOnReturn = pm
+						.getBooleanValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN);
 			}
-			if (pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_TEXT_FIELD))
+			if (pm.getWidget().equalsIgnoreCase(
+					DenaliWidget.READ_ONLY_TEXT_FIELD))
 				tf.setReadOnly(true);
 			checkUnhandledParams(pm, unhandledParams);
 			return tf;
 		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.TEXT_AREA)
-				|| pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_TEXT_AREA)) {
+				|| pm.getWidget().equalsIgnoreCase(
+						DenaliWidget.READ_ONLY_TEXT_AREA)) {
 			FIBTextArea ta = new FIBTextArea();
 			ta.setUseScrollBar(true);
 			if (pm.hasValueForParameter(TextAreaWidget.COLUMNS)) {
@@ -710,9 +848,11 @@ public class FIBConverter {
 			}
 			if (pm.hasValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN)) {
 				handleParam(TextAreaWidget.VALIDATE_ON_RETURN, unhandledParams);
-				ta.validateOnReturn = pm.getBooleanValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN);
+				ta.validateOnReturn = pm
+						.getBooleanValueForParameter(TextAreaWidget.VALIDATE_ON_RETURN);
 			}
-			if (pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_TEXT_AREA))
+			if (pm.getWidget().equalsIgnoreCase(
+					DenaliWidget.READ_ONLY_TEXT_AREA))
 				ta.setReadOnly(true);
 			checkUnhandledParams(pm, unhandledParams);
 			return ta;
@@ -720,11 +860,14 @@ public class FIBConverter {
 			FIBLabel label = new FIBLabel();
 			if (pm.hasValueForParameter(LabelWidget.ALIGN)) {
 				handleParam(LabelWidget.ALIGN, unhandledParams);
-				if (pm.getValueForParameter(LabelWidget.ALIGN).equalsIgnoreCase("center")) {
+				if (pm.getValueForParameter(LabelWidget.ALIGN)
+						.equalsIgnoreCase("center")) {
 					label.setAlign(Align.center);
-				} else if (pm.getValueForParameter(LabelWidget.ALIGN).equalsIgnoreCase("left")) {
+				} else if (pm.getValueForParameter(LabelWidget.ALIGN)
+						.equalsIgnoreCase("left")) {
 					label.setAlign(Align.left);
-				} else if (pm.getValueForParameter(LabelWidget.ALIGN).equalsIgnoreCase("right")) {
+				} else if (pm.getValueForParameter(LabelWidget.ALIGN)
+						.equalsIgnoreCase("right")) {
 					label.setAlign(Align.right);
 				}
 			}
@@ -739,9 +882,11 @@ public class FIBConverter {
 			checkUnhandledParams(pm, unhandledParams);
 			return label;
 		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.CHECKBOX)
-				|| pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_CHECKBOX)) {
+				|| pm.getWidget().equalsIgnoreCase(
+						DenaliWidget.READ_ONLY_CHECKBOX)) {
 			FIBCheckBox cb = new FIBCheckBox();
-			if (pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_CHECKBOX))
+			if (pm.getWidget()
+					.equalsIgnoreCase(DenaliWidget.READ_ONLY_CHECKBOX))
 				cb.setReadOnly(true);
 			handleParam("columns", unhandledParams); // Ignore this
 			checkUnhandledParams(pm, unhandledParams);
@@ -752,9 +897,11 @@ public class FIBConverter {
 			if (pm.hasValueForParameter("type")) {
 				handleParam("type", unhandledParams);
 				try {
-					dd.setIteratorClass(Class.forName(pm.getValueForParameter("type")));
+					dd.setIteratorClass(Class.forName(pm
+							.getValueForParameter("type")));
 				} catch (ClassNotFoundException e) {
-					error("Cannot find class " + pm.getValueForParameter("type"));
+					error("Cannot find class "
+							+ pm.getValueForParameter("type"));
 				}
 			} else {
 				Type accessedType = getAccessedType(pm.name, dataClass);
@@ -764,11 +911,13 @@ public class FIBConverter {
 			}
 			if (pm.hasValueForParameter(DropDownWidget.WIDTH_PARAM)) {
 				handleParam(DropDownWidget.WIDTH_PARAM, unhandledParams);
-				dd.setWidth(pm.getIntValueForParameter(DropDownWidget.WIDTH_PARAM));
+				dd.setWidth(pm
+						.getIntValueForParameter(DropDownWidget.WIDTH_PARAM));
 			}
 			if (pm.hasValueForParameter(DropDownWidget.HEIGHT_PARAM)) {
 				handleParam(DropDownWidget.HEIGHT_PARAM, unhandledParams);
-				dd.setHeight(pm.getIntValueForParameter(DropDownWidget.HEIGHT_PARAM));
+				dd.setHeight(pm
+						.getIntValueForParameter(DropDownWidget.HEIGHT_PARAM));
 			}
 			if (pm.hasValueForParameter("showReset")) {
 				handleParam("showReset", unhandledParams);
@@ -784,37 +933,49 @@ public class FIBConverter {
 			}
 			if (pm.hasValueForParameter("dynamiclist")) {
 				handleParam("dynamiclist", unhandledParams);
-				dd.setList(new DataBinding("data." + pm.getValueForParameter("dynamiclist")));
+				dd.setList(new DataBinding("data."
+						+ pm.getValueForParameter("dynamiclist")));
 				bindings.add(dd.getList());
 			} else {
-				KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(dataClass, pm.name);
-				if (kvp != null && kvp.getType() instanceof Class && TypeUtils.isClassAncestorOf(ChoiceList.class, (Class) kvp.getType())) {
-					dd.setList(new DataBinding("data." + pm.name + ".availableValues"));
+				KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(
+						dataClass, pm.name);
+				if (kvp != null
+						&& kvp.getType() instanceof Class
+						&& TypeUtils.isClassAncestorOf(ChoiceList.class,
+								(Class) kvp.getType())) {
+					dd.setList(new DataBinding("data." + pm.name
+							+ ".availableValues"));
 					bindings.add(dd.getList());
 				}
 			}
-			/*if (pm.hasValueForParameter("columns")) {
-				handleParam("columns",unhandledParams);
-				dd.setD
-			}*/
+			/*
+			 * if (pm.hasValueForParameter("columns")) {
+			 * handleParam("columns",unhandledParams); dd.setD }
+			 */
 			checkUnhandledParams(pm, unhandledParams);
 			return dd;
-		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.INTEGER) || pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_INTEGER)) {
+		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.INTEGER)
+				|| pm.getWidget().equalsIgnoreCase(
+						DenaliWidget.READ_ONLY_INTEGER)) {
 			FIBNumber n = new FIBNumber();
 			n.setNumberType(NumberType.IntegerType);
 			if (pm.getWidget().equalsIgnoreCase(DenaliWidget.READ_ONLY_INTEGER))
 				n.setReadOnly(true);
 			if (pm.hasValueForParameter(IntegerWidget.MIN_VALUE_PARAM)) {
 				handleParam(IntegerWidget.MIN_VALUE_PARAM, unhandledParams);
-				n.setMinValue(pm.getIntValueForParameter(IntegerWidget.MIN_VALUE_PARAM));
+				n.setMinValue(pm
+						.getIntValueForParameter(IntegerWidget.MIN_VALUE_PARAM));
 			}
 			if (pm.hasValueForParameter(IntegerWidget.MAX_VALUE_PARAM)) {
 				handleParam(IntegerWidget.MAX_VALUE_PARAM, unhandledParams);
-				n.setMaxValue(pm.getIntValueForParameter(IntegerWidget.MAX_VALUE_PARAM));
+				n.setMaxValue(pm
+						.getIntValueForParameter(IntegerWidget.MAX_VALUE_PARAM));
 			}
 			if (pm.hasValueForParameter(IntegerWidget.INCREMENT_VALUE_PARAM)) {
-				handleParam(IntegerWidget.INCREMENT_VALUE_PARAM, unhandledParams);
-				n.setIncrement(pm.getIntValueForParameter(IntegerWidget.INCREMENT_VALUE_PARAM));
+				handleParam(IntegerWidget.INCREMENT_VALUE_PARAM,
+						unhandledParams);
+				n.setIncrement(pm
+						.getIntValueForParameter(IntegerWidget.INCREMENT_VALUE_PARAM));
 			}
 			if (pm.hasValueForParameter("columns")) {
 				handleParam(TextAreaWidget.COLUMNS, unhandledParams);
@@ -827,15 +988,18 @@ public class FIBConverter {
 			n.setNumberType(NumberType.DoubleType);
 			if (pm.hasValueForParameter(IntegerWidget.MIN_VALUE_PARAM)) {
 				handleParam(DoubleWidget.MIN_VALUE_PARAM, unhandledParams);
-				n.setMinValue(pm.getDoubleValueForParameter(DoubleWidget.MIN_VALUE_PARAM));
+				n.setMinValue(pm
+						.getDoubleValueForParameter(DoubleWidget.MIN_VALUE_PARAM));
 			}
 			if (pm.hasValueForParameter(IntegerWidget.MAX_VALUE_PARAM)) {
 				handleParam(DoubleWidget.MAX_VALUE_PARAM, unhandledParams);
-				n.setMaxValue(pm.getDoubleValueForParameter(DoubleWidget.MAX_VALUE_PARAM));
+				n.setMaxValue(pm
+						.getDoubleValueForParameter(DoubleWidget.MAX_VALUE_PARAM));
 			}
 			if (pm.hasValueForParameter(IntegerWidget.INCREMENT_VALUE_PARAM)) {
 				handleParam(DoubleWidget.INCREMENT_VALUE_PARAM, unhandledParams);
-				n.setIncrement(pm.getDoubleValueForParameter(DoubleWidget.INCREMENT_VALUE_PARAM));
+				n.setIncrement(pm
+						.getDoubleValueForParameter(DoubleWidget.INCREMENT_VALUE_PARAM));
 			}
 			if (pm.hasValueForParameter("columns")) {
 				handleParam(TextAreaWidget.COLUMNS, unhandledParams);
@@ -865,93 +1029,130 @@ public class FIBConverter {
 		}
 	}
 
-	private static FIBCustom makeCustom(PropertyModel pm, Vector<DataBinding> bindings, Class dataClass, Vector<String> unhandledParams) {
+	private static FIBCustom makeCustom(PropertyModel pm,
+			Vector<DataBinding> bindings, Class dataClass,
+			Vector<String> unhandledParams) {
 		FIBCustom c = new FIBCustom();
 		if (pm.hasValueForParameter("className")) {
 			handleParam("className", unhandledParams);
 			String className = pm.getValueForParameter("className");
 			try {
-				if (className.equals("org.openflexo.fge.view.widget.ForegroundStyleInspectorWidget")) {
-					c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBForegroundStyleSelector"));
+				if (className
+						.equals("org.openflexo.fge.view.widget.ForegroundStyleInspectorWidget")) {
+					c.setComponentClass(Class
+							.forName("org.openflexo.fge.view.widget.FIBForegroundStyleSelector"));
 					checkUnhandledParams(pm, unhandledParams);
 					return c;
-				} else if (className.equals("org.openflexo.fge.view.widget.BackgroundStyleInspectorWidget")) {
-					c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBBackgroundStyleSelector"));
+				} else if (className
+						.equals("org.openflexo.fge.view.widget.BackgroundStyleInspectorWidget")) {
+					c.setComponentClass(Class
+							.forName("org.openflexo.fge.view.widget.FIBBackgroundStyleSelector"));
 					checkUnhandledParams(pm, unhandledParams);
 					return c;
-				} else if (className.equals("org.openflexo.fge.view.widget.TextStyleInspectorWidget")) {
-					c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBTextStyleSelector"));
+				} else if (className
+						.equals("org.openflexo.fge.view.widget.TextStyleInspectorWidget")) {
+					c.setComponentClass(Class
+							.forName("org.openflexo.fge.view.widget.FIBTextStyleSelector"));
 					checkUnhandledParams(pm, unhandledParams);
 					return c;
-				} else if (className.equals("org.openflexo.fge.view.widget.ShadowStyleInspectorWidget")) {
-					c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBShadowStyleSelector"));
+				} else if (className
+						.equals("org.openflexo.fge.view.widget.ShadowStyleInspectorWidget")) {
+					c.setComponentClass(Class
+							.forName("org.openflexo.fge.view.widget.FIBShadowStyleSelector"));
 					checkUnhandledParams(pm, unhandledParams);
 					return c;
-				} else if (className.equals("org.openflexo.components.widget.RoleInspectorWidget")) {
-					c.setComponentClass(Class.forName("org.openflexo.components.widget.FIBRoleSelector"));
+				} else if (className
+						.equals("org.openflexo.components.widget.RoleInspectorWidget")) {
+					c.setComponentClass(Class
+							.forName("org.openflexo.components.widget.FIBRoleSelector"));
 					DataBinding variable = new DataBinding("component.project");
 					DataBinding value = new DataBinding("data.project");
-					c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
+					c.addToAssignments(new FIBCustomAssignment(c, variable,
+							value, true));
 					bindings.add(variable);
 					bindings.add(value);
 					checkUnhandledParams(pm, unhandledParams);
 					return c;
-				} else if (className.equals("org.openflexo.components.widget.ProcessInspectorWidget")) {
-					c.setComponentClass(Class.forName("org.openflexo.components.widget.FIBProcessSelector"));
+				} else if (className
+						.equals("org.openflexo.components.widget.ProcessInspectorWidget")) {
+					c.setComponentClass(Class
+							.forName("org.openflexo.components.widget.FIBProcessSelector"));
 					if (pm.hasValueForParameter("isSelectable")) {
 						handleParam("isSelectable", unhandledParams);
-						DataBinding variable = new DataBinding("component.selectableCondition");
-						DataBinding value = new DataBinding('"' + "data." + pm.getValueForParameter("isSelectable") + "("
-								+ makeName(pm.name) + ".customComponent.candidateValue)" + '"');
-						c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
+						DataBinding variable = new DataBinding(
+								"component.selectableCondition");
+						DataBinding value = new DataBinding('"' + "data."
+								+ pm.getValueForParameter("isSelectable") + "("
+								+ makeName(pm.name)
+								+ ".customComponent.candidateValue)" + '"');
+						c.addToAssignments(new FIBCustomAssignment(c, variable,
+								value, true));
 						bindings.add(variable);
 						bindings.add(value);
 					}
 					DataBinding variable = new DataBinding("component.project");
 					DataBinding value = new DataBinding("data.project");
-					c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
+					c.addToAssignments(new FIBCustomAssignment(c, variable,
+							value, true));
 					bindings.add(variable);
 					bindings.add(value);
 					checkUnhandledParams(pm, unhandledParams);
 					return c;
-				} else if (className.equals("org.openflexo.components.widget.BindingSelectorInspectorWidget")) {
-					c.setComponentClass(Class.forName("org.openflexo.components.widget.binding.BindingSelector"));
+				} else if (className
+						.equals("org.openflexo.components.widget.BindingSelectorInspectorWidget")) {
+					c.setComponentClass(Class
+							.forName("org.openflexo.components.widget.binding.BindingSelector"));
 					if (pm.hasValueForParameter("binding_definition")) {
 						handleParam("binding_definition", unhandledParams);
-						DataBinding variable = new DataBinding("component.bindingDefinition");
-						DataBinding value = new DataBinding("data." + pm.getValueForParameter("binding_definition"));
-						c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
+						DataBinding variable = new DataBinding(
+								"component.bindingDefinition");
+						DataBinding value = new DataBinding("data."
+								+ pm.getValueForParameter("binding_definition"));
+						c.addToAssignments(new FIBCustomAssignment(c, variable,
+								value, true));
 						bindings.add(variable);
 						bindings.add(value);
 					}
 					if (pm.hasValueForParameter("activate_compound_bindings")) {
-						handleParam("activate_compound_bindings", unhandledParams);
-						DataBinding variable = new DataBinding("component.allowsCompoundBindings");
-						DataBinding value = new DataBinding("" + pm.getBooleanValueForParameter("activate_compound_bindings"));
-						c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
+						handleParam("activate_compound_bindings",
+								unhandledParams);
+						DataBinding variable = new DataBinding(
+								"component.allowsCompoundBindings");
+						DataBinding value = new DataBinding(
+								""
+										+ pm.getBooleanValueForParameter("activate_compound_bindings"));
+						c.addToAssignments(new FIBCustomAssignment(c, variable,
+								value, true));
 						bindings.add(variable);
 						bindings.add(value);
 					}
 					DataBinding variable = new DataBinding("component.bindable");
 					DataBinding value = new DataBinding("data");
-					c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
+					c.addToAssignments(new FIBCustomAssignment(c, variable,
+							value, true));
 					bindings.add(variable);
 					bindings.add(value);
 					checkUnhandledParams(pm, unhandledParams);
 					return c;
-				} else if (className.equals("org.openflexo.components.widget.DMTypeInspectorWidget")) {
-					c.setComponentClass(Class.forName("org.openflexo.components.widget.DMTypeSelector"));
+				} else if (className
+						.equals("org.openflexo.components.widget.DMTypeInspectorWidget")) {
+					c.setComponentClass(Class
+							.forName("org.openflexo.components.widget.DMTypeSelector"));
 					if (pm.hasValueForParameter("project")) {
 						handleParam("project", unhandledParams);
-						DataBinding variable = new DataBinding("component.project");
-						DataBinding value = new DataBinding("data." + pm.getValueForParameter("project"));
-						c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
+						DataBinding variable = new DataBinding(
+								"component.project");
+						DataBinding value = new DataBinding("data."
+								+ pm.getValueForParameter("project"));
+						c.addToAssignments(new FIBCustomAssignment(c, variable,
+								value, true));
 						bindings.add(variable);
 						bindings.add(value);
 					}
 					DataBinding variable = new DataBinding("component.owner");
 					DataBinding value = new DataBinding("data");
-					c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
+					c.addToAssignments(new FIBCustomAssignment(c, variable,
+							value, true));
 					bindings.add(variable);
 					bindings.add(value);
 					checkUnhandledParams(pm, unhandledParams);
@@ -959,8 +1160,20 @@ public class FIBConverter {
 				}
 
 				else {
-					error("Not handled: component class " + className);
-					return null;
+					try {
+						Class foundClass = Class.forName(className);
+						if (FIBCustomComponent.class
+								.isAssignableFrom(foundClass)) {
+							c.setComponentClass(foundClass);
+							return c;
+						}
+						error("Found component class " + className
+								+ " but does not implement FIBCustomComponent");
+						return null;
+					} catch (ClassNotFoundException e) {
+						error("Not found: component class " + className);
+						return null;
+					}
 				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -972,7 +1185,8 @@ public class FIBConverter {
 
 	}
 
-	private static FIBTable makeTable(PropertyListModel pl, Class dataClass, Vector<DataBinding> bindings) {
+	private static FIBTable makeTable(PropertyListModel pl, Class dataClass,
+			Vector<DataBinding> bindings) {
 		FIBTable returned = buildTable(pl, dataClass, bindings);
 		if (returned == null)
 			return null;
@@ -980,7 +1194,8 @@ public class FIBConverter {
 		bindings.add(returned.getData());
 
 		if (pl.hasValueForParameter("visibleFor")) {
-			returned.addToParameters(new FIBParameter("visibleFor", pl.getValueForParameter("visibleFor")));
+			returned.addToParameters(new FIBParameter("visibleFor", pl
+					.getValueForParameter("visibleFor")));
 		}
 		if (StringUtils.isNotEmpty(pl.help)) {
 			returned.setTooltipText(pl.help);
@@ -989,7 +1204,8 @@ public class FIBConverter {
 		return returned;
 	}
 
-	private static FIBTable buildTable(PropertyListModel pl, Class dataClass, Vector<DataBinding> bindings) {
+	private static FIBTable buildTable(PropertyListModel pl, Class dataClass,
+			Vector<DataBinding> bindings) {
 		Vector<String> unhandledParams = new Vector<String>();
 
 		for (String s : pl.parameters.keySet())
@@ -1011,25 +1227,31 @@ public class FIBConverter {
 
 		if (pl.hasValueForParameter(PropertyListModel.ROW_HEIGHT)) {
 			handleParam(PropertyListModel.ROW_HEIGHT, unhandledParams);
-			table.setRowHeight(pl.getIntValueForParameter(PropertyListModel.ROW_HEIGHT));
+			table.setRowHeight(pl
+					.getIntValueForParameter(PropertyListModel.ROW_HEIGHT));
 		}
 
 		if (pl.hasValueForParameter(PropertyListModel.VISIBLE_ROW_COUNT)) {
 			handleParam(PropertyListModel.VISIBLE_ROW_COUNT, unhandledParams);
-			table.setVisibleRowCount(pl.getIntValueForParameter(PropertyListModel.VISIBLE_ROW_COUNT));
+			table.setVisibleRowCount(pl
+					.getIntValueForParameter(PropertyListModel.VISIBLE_ROW_COUNT));
 		}
 
 		Class iteratorClass = null;
 		Type accessedType = getAccessedType(pl.name, dataClass);
-		if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
-			iteratorClass = TypeUtils.getBaseClass(((ParameterizedType) accessedType).getActualTypeArguments()[0]);
+		if (accessedType instanceof ParameterizedType
+				&& ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
+			iteratorClass = TypeUtils
+					.getBaseClass(((ParameterizedType) accessedType)
+							.getActualTypeArguments()[0]);
 			table.setIteratorClass(iteratorClass);
 		}
 
 		// System.out.println("Inspector "+inspectorName+" table "+pl.name+" has type: "+table.getIteratorClass());
 
 		for (PropertyListColumn plColumn : pl.getColumns()) {
-			FIBTableColumn column = buildTableColumn(plColumn, iteratorClass, bindings);
+			FIBTableColumn column = buildTableColumn(plColumn, iteratorClass,
+					bindings);
 			if (column != null)
 				table.addToColumns(column);
 		}
@@ -1051,16 +1273,19 @@ public class FIBConverter {
 		while (path.indexOf(".") > -1) {
 			String kv = path.substring(0, path.indexOf("."));
 			path = path.substring(path.indexOf(".") + 1);
-			KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(currentClass, kv);
+			KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(
+					currentClass, kv);
 			if (kvp != null) {
 				currentClass = TypeUtils.getBaseClass(kvp.getType());
 			} else {
-				error("Could not access KeyValueProperty " + kv + " for class " + currentClass);
+				error("Could not access KeyValueProperty " + kv + " for class "
+						+ currentClass);
 				currentClass = null;
 			}
 		}
 		if (currentClass != null) {
-			KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(currentClass, path);
+			KeyValueProperty kvp = KeyValueLibrary.getKeyValueProperty(
+					currentClass, path);
 			if (kvp != null) {
 				return kvp.getType();
 			}
@@ -1069,20 +1294,24 @@ public class FIBConverter {
 		return null;
 	}
 
-	private static FIBTableColumn buildTableColumn(PropertyListColumn plColumn, Class dataClass, Vector<DataBinding> bindings) {
+	private static FIBTableColumn buildTableColumn(PropertyListColumn plColumn,
+			Class dataClass, Vector<DataBinding> bindings) {
 		Vector<String> unhandledParams = new Vector<String>();
 		for (String s : plColumn.parameters.keySet())
 			unhandledParams.add(s);
 
 		FIBTableColumn returned = null;
 
-		if (plColumn.getWidget().equals(PropertyListColumn.READ_ONLY_TEXT_FIELD)) {
+		if (plColumn.getWidget()
+				.equals(PropertyListColumn.READ_ONLY_TEXT_FIELD)) {
 			returned = new FIBLabelColumn();
 		} else if (plColumn.getWidget().equals(PropertyListColumn.TEXT_FIELD)) {
 			returned = new FIBTextFieldColumn();
 			if (plColumn.hasValueForParameter("isEditable")) {
 				handleParam("isEditable", unhandledParams);
-				((FIBTextFieldColumn) returned).setIsEditable(new DataBinding("iterator." + plColumn.getValueForParameter("isEditable")));
+				((FIBTextFieldColumn) returned).setIsEditable(new DataBinding(
+						"iterator."
+								+ plColumn.getValueForParameter("isEditable")));
 				bindings.add(((FIBTextFieldColumn) returned).getIsEditable());
 			}
 		} else if (plColumn.getWidget().equals(PropertyListColumn.CHECKBOX)) {
@@ -1093,18 +1322,26 @@ public class FIBConverter {
 		} else if (plColumn.getWidget().equals(PropertyListColumn.DROPDOWN)) {
 			returned = new FIBDropDownColumn();
 			if (plColumn.getDynamicList() != null) {
-				Type accessedColumnType = getAccessedType(plColumn.name, dataClass);
-				Type accessedType = getAccessedType(plColumn.getDynamicList(), TypeUtils.getBaseClass(accessedColumnType));
-				if (accessedType instanceof Class && ((Class) accessedType).isArray()) {
-					((FIBDropDownColumn) returned).setArray(new DataBinding("iterator." + plColumn.name + "." + plColumn.getDynamicList()));
+				Type accessedColumnType = getAccessedType(plColumn.name,
+						dataClass);
+				Type accessedType = getAccessedType(plColumn.getDynamicList(),
+						TypeUtils.getBaseClass(accessedColumnType));
+				if (accessedType instanceof Class
+						&& ((Class) accessedType).isArray()) {
+					((FIBDropDownColumn) returned).setArray(new DataBinding(
+							"iterator." + plColumn.name + "."
+									+ plColumn.getDynamicList()));
 					bindings.add(((FIBDropDownColumn) returned).getArray());
 				} else {
-					((FIBDropDownColumn) returned).setList(new DataBinding("iterator." + plColumn.name + "." + plColumn.getDynamicList()));
+					((FIBDropDownColumn) returned).setList(new DataBinding(
+							"iterator." + plColumn.name + "."
+									+ plColumn.getDynamicList()));
 					bindings.add(((FIBDropDownColumn) returned).getList());
 				}
 			}
 		} else if (plColumn.getWidget().equals(PropertyListColumn.COLOR)) {
-			error("Not handled: column widget for COLOR " + plColumn.getWidget());
+			error("Not handled: column widget for COLOR "
+					+ plColumn.getWidget());
 			return null;
 		} else if (plColumn.getWidget().equals(PropertyListColumn.ICON)) {
 			returned = new FIBIconColumn();
@@ -1112,88 +1349,12 @@ public class FIBConverter {
 			returned = makeCustomColumn(plColumn, bindings, unhandledParams);
 			if (returned == null)
 				return null;
-			/*if (plColumn.hasValueForParameter("className")) {
-				handleParam("className",unhandledParams);
-				String className = plColumn.getValueForParameter("className");
-				try {
-					FIBCustomColumn c = new FIBCustomColumn();
-					if (className.equals("org.openflexo.fge.view.widget.ForegroundStyleInspectorWidget")) {
-						c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBForegroundStyleSelector"));
-						returned = c;
-					}
-					else if (className.equals("org.openflexo.fge.view.widget.BackgroundStyleInspectorWidget")) {
-						c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBBackgroundStyleSelector"));
-						returned = c;
-					}
-					else if (className.equals("org.openflexo.fge.view.widget.TextStyleInspectorWidget")) {
-						c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBTextStyleSelector"));
-						returned = c;
-					}
-					else if (className.equals("org.openflexo.fge.view.widget.ShadowStyleInspectorWidget")) {
-						c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBShadowStyleSelector"));
-						returned = c;
-					}
-					else if (className.equals("org.openflexo.components.widget.RoleInspectorWidget")) {
-						c.setComponentClass(Class.forName("org.openflexo.components.widget.FIBRoleSelector"));
-						DataBinding variable = new DataBinding("component.project");
-						DataBinding value = new DataBinding("iterator.project");
-						c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c,variable,value,true));
-						bindings.add(variable);
-						bindings.add(value);
-						returned = c;
-					}
-					else if (className.equals("org.openflexo.components.widget.BindingSelectorInspectorWidget")) {
-						c.setComponentClass(Class.forName("org.openflexo.components.widget.binding.BindingSelector"));
-						if (plColumn.hasValueForParameter("binding_definition")) {
-							handleParam("binding_definition",unhandledParams);
-							DataBinding variable = new DataBinding("component.bindingDefinition");
-							DataBinding value = new DataBinding("iterator."+plColumn.getValueForParameter("binding_definition"));
-							c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c,variable,value,true));
-							bindings.add(variable);
-							bindings.add(value);
-						}
-						DataBinding variable = new DataBinding("component.bindable");
-						DataBinding value = new DataBinding("iterator");
-						c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c,variable,value,true));
-						bindings.add(variable);
-						bindings.add(value);
-						returned = c;
-					}
-					else if (className.equals("org.openflexo.components.widget.DMTypeInspectorWidget")) {
-						c.setComponentClass(Class.forName("org.openflexo.components.widget.DMTypeSelector"));
-						if (plColumn.hasValueForParameter("project")) {
-							handleParam("project",unhandledParams);
-							DataBinding variable = new DataBinding("component.project");
-							DataBinding value = new DataBinding("iterator."+plColumn.getValueForParameter("project"));
-							c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c,variable,value,true));
-							bindings.add(variable);
-							bindings.add(value);
-						}
-						DataBinding variable = new DataBinding("component.owner");
-						DataBinding value = new DataBinding("iterator");
-						c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c,variable,value,true));
-						bindings.add(variable);
-						bindings.add(value);
-						returned = c;
-					}
-					
-					
-					else {
-						error("Not handled: component class "+className);
-						return null;
-					}
-					
-
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+			if (plColumn.hasValueForParameter("customRendering")) {
+				handleParam("customRendering", unhandledParams);
+				((FIBCustomColumn) returned).customRendering = plColumn
+						.getBooleanValueForParameter("customRendering");
 			}
-			else {
-				error("Not found: class name");
-				return null;
-			}*/
+
 		} else {
 			error("Not handled: column widget " + plColumn.getWidget());
 			return null;
@@ -1203,29 +1364,35 @@ public class FIBConverter {
 		returned.setTitle(plColumn.label);
 		if (plColumn.hasValueForParameter(PropertyListColumn.DISPLAY_TITLE)) {
 			handleParam(PropertyListColumn.DISPLAY_TITLE, unhandledParams);
-			returned.setDisplayTitle(plColumn.getBooleanValueForParameter(PropertyListColumn.DISPLAY_TITLE));
+			returned.setDisplayTitle(plColumn
+					.getBooleanValueForParameter(PropertyListColumn.DISPLAY_TITLE));
 		}
 		if (plColumn.hasValueForParameter(PropertyListColumn.COLUMN_WIDTH)) {
 			handleParam(PropertyListColumn.COLUMN_WIDTH, unhandledParams);
-			returned.setColumnWidth(plColumn.getIntValueForParameter(PropertyListColumn.COLUMN_WIDTH));
+			returned.setColumnWidth(plColumn
+					.getIntValueForParameter(PropertyListColumn.COLUMN_WIDTH));
 		}
 		if (plColumn.hasValueForParameter(PropertyListColumn.RESIZABLE)) {
 			handleParam(PropertyListColumn.RESIZABLE, unhandledParams);
-			returned.setResizable(plColumn.getBooleanValueForParameter(PropertyListColumn.RESIZABLE));
+			returned.setResizable(plColumn
+					.getBooleanValueForParameter(PropertyListColumn.RESIZABLE));
 		}
 		if (plColumn.hasValueForParameter(PropertyListColumn.FONT)) {
 			handleParam(PropertyListColumn.FONT, unhandledParams);
-			error("Tiens, regarde moi ce qui se passe ici, on a un parametre FONT pour " + plColumn);
+			error("Tiens, regarde moi ce qui se passe ici, on a un parametre FONT pour "
+					+ plColumn);
 		}
 		// Handle formatter
 		if (plColumn.hasValueForParameter(PropertyListColumn.FORMAT)) {
 			handleParam(PropertyListColumn.FORMAT, unhandledParams);
-			returned.setFormat(new DataBinding("object." + plColumn.getValueForParameter(PropertyListColumn.FORMAT)));
+			returned.setFormat(new DataBinding("object."
+					+ plColumn.getValueForParameter(PropertyListColumn.FORMAT)));
 			bindings.add(returned.getFormat());
 		}
 		if (plColumn.hasValueForParameter("tooltip")) {
 			handleParam("tooltip", unhandledParams);
-			returned.setTooltip(new DataBinding("iterator." + plColumn.getValueForParameter("tooltip")));
+			returned.setTooltip(new DataBinding("iterator."
+					+ plColumn.getValueForParameter("tooltip")));
 			bindings.add(returned.getTooltip());
 		}
 
@@ -1233,77 +1400,123 @@ public class FIBConverter {
 		return returned;
 	}
 
-	private static FIBCustomColumn makeCustomColumn(PropertyListColumn plColumn, Vector<DataBinding> bindings,
+	private static FIBCustomColumn makeCustomColumn(
+			PropertyListColumn plColumn, Vector<DataBinding> bindings,
 			Vector<String> unhandledParams) {
 		String className = plColumn.getValueForParameter("className");
 		handleParam("className", unhandledParams);
 		try {
 			FIBCustomColumn c = new FIBCustomColumn();
-			if (className.equals("org.openflexo.fge.view.widget.ForegroundStyleInspectorWidget")) {
-				c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBForegroundStyleSelector"));
+			if (className
+					.equals("org.openflexo.fge.view.widget.ForegroundStyleInspectorWidget")) {
+				c.setComponentClass(Class
+						.forName("org.openflexo.fge.view.widget.FIBForegroundStyleSelector"));
 				return c;
-			} else if (className.equals("org.openflexo.fge.view.widget.BackgroundStyleInspectorWidget")) {
-				c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBBackgroundStyleSelector"));
+			} else if (className
+					.equals("org.openflexo.fge.view.widget.BackgroundStyleInspectorWidget")) {
+				c.setComponentClass(Class
+						.forName("org.openflexo.fge.view.widget.FIBBackgroundStyleSelector"));
 				return c;
-			} else if (className.equals("org.openflexo.fge.view.widget.TextStyleInspectorWidget")) {
-				c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBTextStyleSelector"));
+			} else if (className
+					.equals("org.openflexo.fge.view.widget.TextStyleInspectorWidget")) {
+				c.setComponentClass(Class
+						.forName("org.openflexo.fge.view.widget.FIBTextStyleSelector"));
 				return c;
-			} else if (className.equals("org.openflexo.fge.view.widget.ShadowStyleInspectorWidget")) {
-				c.setComponentClass(Class.forName("org.openflexo.fge.view.widget.FIBShadowStyleSelector"));
+			} else if (className
+					.equals("org.openflexo.fge.view.widget.ShadowStyleInspectorWidget")) {
+				c.setComponentClass(Class
+						.forName("org.openflexo.fge.view.widget.FIBShadowStyleSelector"));
 				return c;
-			} else if (className.equals("org.openflexo.components.widget.RoleInspectorWidget")) {
-				c.setComponentClass(Class.forName("org.openflexo.components.widget.FIBRoleSelector"));
+			} else if (className
+					.equals("org.openflexo.components.widget.RoleInspectorWidget")) {
+				c.setComponentClass(Class
+						.forName("org.openflexo.components.widget.FIBRoleSelector"));
 				DataBinding variable = new DataBinding("component.project");
 				DataBinding value = new DataBinding("iterator.project");
-				c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c, variable, value, true));
+				c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c,
+						variable, value, true));
 				bindings.add(variable);
 				bindings.add(value);
 				return c;
-			} else if (className.equals("org.openflexo.components.widget.BindingSelectorInspectorWidget")) {
-				c.setComponentClass(Class.forName("org.openflexo.components.widget.binding.BindingSelector"));
+			} else if (className
+					.equals("org.openflexo.components.widget.BindingSelectorInspectorWidget")) {
+				c.setComponentClass(Class
+						.forName("org.openflexo.components.widget.binding.BindingSelector"));
 				if (plColumn.hasValueForParameter("binding_definition")) {
 					handleParam("binding_definition", unhandledParams);
-					DataBinding variable = new DataBinding("component.bindingDefinition");
-					DataBinding value = new DataBinding("iterator." + plColumn.getValueForParameter("binding_definition"));
-					c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c, variable, value, true));
+					DataBinding variable = new DataBinding(
+							"component.bindingDefinition");
+					DataBinding value = new DataBinding(
+							"iterator."
+									+ plColumn
+											.getValueForParameter("binding_definition"));
+					c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(
+							c, variable, value, true));
 					bindings.add(variable);
 					bindings.add(value);
 				}
 				if (plColumn.hasValueForParameter("activate_compound_bindings")) {
 					handleParam("activate_compound_bindings", unhandledParams);
-					DataBinding variable = new DataBinding("component.allowsCompoundBindings");
-					DataBinding value = new DataBinding("" + plColumn.getBooleanValueForParameter("activate_compound_bindings"));
-					c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c, variable, value, true));
+					DataBinding variable = new DataBinding(
+							"component.allowsCompoundBindings");
+					DataBinding value = new DataBinding(
+							""
+									+ plColumn
+											.getBooleanValueForParameter("activate_compound_bindings"));
+					c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(
+							c, variable, value, true));
 					bindings.add(variable);
 					bindings.add(value);
 				}
 				DataBinding variable = new DataBinding("component.bindable");
 				DataBinding value = new DataBinding("iterator");
-				c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c, variable, value, true));
+				c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c,
+						variable, value, true));
 				bindings.add(variable);
 				bindings.add(value);
 				return c;
-			} else if (className.equals("org.openflexo.components.widget.DMTypeInspectorWidget")) {
-				c.setComponentClass(Class.forName("org.openflexo.components.widget.DMTypeSelector"));
+			} else if (className
+					.equals("org.openflexo.components.widget.DMTypeInspectorWidget")) {
+				c.setComponentClass(Class
+						.forName("org.openflexo.components.widget.DMTypeSelector"));
 				if (plColumn.hasValueForParameter("project")) {
 					handleParam("project", unhandledParams);
 					DataBinding variable = new DataBinding("component.project");
-					DataBinding value = new DataBinding("iterator." + plColumn.getValueForParameter("project"));
-					c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c, variable, value, true));
+					DataBinding value = new DataBinding("iterator."
+							+ plColumn.getValueForParameter("project"));
+					c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(
+							c, variable, value, true));
 					bindings.add(variable);
 					bindings.add(value);
 				}
 				DataBinding variable = new DataBinding("component.owner");
 				DataBinding value = new DataBinding("iterator");
-				c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c, variable, value, true));
+				c.addToAssignments(new FIBCustomColumn.FIBCustomAssignment(c,
+						variable, value, true));
 				bindings.add(variable);
 				bindings.add(value);
+				return c;
+			} else if (className
+					.equals("org.openflexo.components.widget.MetricsValueInspectorWidget")) {
+				c.setComponentClass(Class
+						.forName("org.openflexo.components.widget.MetricsValueInspectorWidget"));
 				return c;
 			}
 
 			else {
-				error("Not handled: component class " + className);
-				return null;
+				try {
+					Class foundClass = Class.forName(className);
+					if (FIBCustomComponent.class.isAssignableFrom(foundClass)) {
+						c.setComponentClass(foundClass);
+						return c;
+					}
+					error("Found component class " + className
+							+ " but does not implement FIBCustomComponent");
+					return null;
+				} catch (ClassNotFoundException e) {
+					error("Not found: component class " + className);
+					return null;
+				}
 			}
 
 		} catch (ClassNotFoundException e) {
@@ -1314,7 +1527,8 @@ public class FIBConverter {
 
 	}
 
-	private static FIBTableAction buildTableAction(PropertyListAction plAction, Vector<DataBinding> bindings) {
+	private static FIBTableAction buildTableAction(PropertyListAction plAction,
+			Vector<DataBinding> bindings) {
 		Vector<String> unhandledParams = new Vector<String>();
 		for (String s : plAction.parameters.keySet())
 			unhandledParams.add(s);
@@ -1324,11 +1538,13 @@ public class FIBConverter {
 		if (plAction.type.equals(PropertyListAction.ADD_TYPE)) {
 			returned = new FIBAddAction();
 			if (plAction._getMethod() != null) {
-				returned.setMethod(new DataBinding("data." + plAction._getMethod()));
+				returned.setMethod(new DataBinding("data."
+						+ plAction._getMethod()));
 				bindings.add(returned.getMethod());
 			}
 			if (plAction._getIsAvailable() != null) {
-				returned.setIsAvailable(new DataBinding("data." + plAction._getIsAvailable()));
+				returned.setIsAvailable(new DataBinding("data."
+						+ plAction._getIsAvailable()));
 				bindings.add(returned.getIsAvailable());
 			}
 		} else if (plAction.type.equals(PropertyListAction.DELETE_TYPE)) {
@@ -1336,18 +1552,22 @@ public class FIBConverter {
 			if (plAction._getMethod() != null) {
 				if (plAction._getMethod().indexOf("(this)") > -1) {
 					returned.setMethod(new DataBinding("data."
-							+ ToolBox.replaceStringByStringInString("(this)", "(selected)", plAction._getMethod())));
+							+ ToolBox.replaceStringByStringInString("(this)",
+									"(selected)", plAction._getMethod())));
 				} else {
-					returned.setMethod(new DataBinding("data." + plAction._getMethod() + "(selected)"));
+					returned.setMethod(new DataBinding("data."
+							+ plAction._getMethod() + "(selected)"));
 				}
 				bindings.add(returned.getMethod());
 			}
 			if (plAction._getIsAvailable() != null) {
 				if (plAction._getIsAvailable().indexOf("(this)") > -1) {
 					returned.setIsAvailable(new DataBinding("data."
-							+ ToolBox.replaceStringByStringInString("(this)", "(selected)", plAction._getIsAvailable())));
+							+ ToolBox.replaceStringByStringInString("(this)",
+									"(selected)", plAction._getIsAvailable())));
 				} else {
-					returned.setIsAvailable(new DataBinding("data." + plAction._getIsAvailable() + "(selected)"));
+					returned.setIsAvailable(new DataBinding("data."
+							+ plAction._getIsAvailable() + "(selected)"));
 				}
 				bindings.add(returned.getIsAvailable());
 			}
@@ -1356,18 +1576,22 @@ public class FIBConverter {
 			if (plAction._getMethod() != null) {
 				if (plAction._getMethod().indexOf("(this)") > -1) {
 					returned.setMethod(new DataBinding("data."
-							+ ToolBox.replaceStringByStringInString("(this)", "(selected)", plAction._getMethod())));
+							+ ToolBox.replaceStringByStringInString("(this)",
+									"(selected)", plAction._getMethod())));
 				} else {
-					returned.setMethod(new DataBinding("data." + plAction._getMethod() + "(selected)"));
+					returned.setMethod(new DataBinding("data."
+							+ plAction._getMethod() + "(selected)"));
 				}
 				bindings.add(returned.getMethod());
 			}
 			if (plAction._getIsAvailable() != null) {
 				if (plAction._getIsAvailable().indexOf("(this)") > -1) {
 					returned.setIsAvailable(new DataBinding("data."
-							+ ToolBox.replaceStringByStringInString("(this)", "(selected)", plAction._getIsAvailable())));
+							+ ToolBox.replaceStringByStringInString("(this)",
+									"(selected)", plAction._getIsAvailable())));
 				} else {
-					returned.setIsAvailable(new DataBinding("data." + plAction._getIsAvailable() + "(selected)"));
+					returned.setIsAvailable(new DataBinding("data."
+							+ plAction._getIsAvailable() + "(selected)"));
 				}
 				bindings.add(returned.getIsAvailable());
 			}
@@ -1385,19 +1609,24 @@ public class FIBConverter {
 		return returned;
 	}
 
-	private static void checkUnhandledParams(PropertyModel pm, Vector<String> unhandledParams) {
+	private static void checkUnhandledParams(PropertyModel pm,
+			Vector<String> unhandledParams) {
 		for (String param : unhandledParams) {
-			error("Not handled: parameter " + param + " for property " + pm.name + " widget " + pm.getWidget());
+			error("Not handled: parameter " + param + " for property "
+					+ pm.name + " widget " + pm.getWidget());
 		}
 	}
 
-	private static void checkUnhandledParamsForColumn(PropertyListColumn pm, Vector<String> unhandledParams) {
+	private static void checkUnhandledParamsForColumn(PropertyListColumn pm,
+			Vector<String> unhandledParams) {
 		for (String param : unhandledParams) {
-			error("Not handled: parameter " + param + " for column " + pm.name + " widget " + pm.getWidget());
+			error("Not handled: parameter " + param + " for column " + pm.name
+					+ " widget " + pm.getWidget());
 		}
 	}
 
-	private static void checkUnhandledParamsForAction(PropertyListAction pm, Vector<String> unhandledParams) {
+	private static void checkUnhandledParamsForAction(PropertyListAction pm,
+			Vector<String> unhandledParams) {
 		for (String param : unhandledParams) {
 			error("Not handled: parameter " + param + " for action " + pm.name);
 		}
@@ -1407,7 +1636,8 @@ public class FIBConverter {
 		unhandledParams.remove(param);
 	}
 
-	private static InspectorModel importInspectorFile(File inspectorFile) throws FileNotFoundException {
+	private static InspectorModel importInspectorFile(File inspectorFile)
+			throws FileNotFoundException {
 		InputStream inputStream = null;
 		try {
 
@@ -1417,14 +1647,16 @@ public class FIBConverter {
 		} catch (FileNotFoundException e) {
 			throw e;
 		} catch (Exception e) {
-			error("Exception raised during inspector import: " + e + "\nFile path is: " + inspectorFile.getAbsolutePath());
+			error("Exception raised during inspector import: " + e
+					+ "\nFile path is: " + inspectorFile.getAbsolutePath());
 			e.printStackTrace();
 		} finally {
 			try {
 				if (inputStream != null)
 					inputStream.close();
 			} catch (IOException e) {
-				error("Cannot close inspector input stream '" + inspectorFile.getAbsolutePath() + "'");
+				error("Cannot close inspector input stream '"
+						+ inspectorFile.getAbsolutePath() + "'");
 				e.printStackTrace();
 			}
 		}
@@ -1435,13 +1667,16 @@ public class FIBConverter {
 	public static InspectorModel importInspector(String name, InputStream stream) {
 		try {
 			if (getInspectorMapping() != null) {
-				InspectorModel inspectorModel = (InspectorModel) XMLDecoder.decodeObjectWithMapping(stream, getInspectorMapping());
-				// error("Getting this " + XMLCoder.encodeObjectWithMapping(inspectorModel,
+				InspectorModel inspectorModel = (InspectorModel) XMLDecoder
+						.decodeObjectWithMapping(stream, getInspectorMapping());
+				// error("Getting this " +
+				// XMLCoder.encodeObjectWithMapping(inspectorModel,
 				// getInspectorMapping(),StringEncoder.getDefaultInstance()));
 				return inspectorModel;
 			}
 		} catch (Exception e) {
-			error("Exception raised during inspector import '" + name + "': " + e);
+			error("Exception raised during inspector import '" + name + "': "
+					+ e);
 			e.printStackTrace();
 		}
 
@@ -1462,11 +1697,14 @@ public class FIBConverter {
 				_inspectorMapping = new XMLMapping(mappingFile);
 			} catch (InvalidModelException e) {
 				// Warns about the exception
-				error("Exception raised: " + e + " for file " + mappingFile.getAbsolutePath() + ". See console for details.");
+				error("Exception raised: " + e + " for file "
+						+ mappingFile.getAbsolutePath()
+						+ ". See console for details.");
 				e.printStackTrace();
 			} catch (Exception e) {
 				// Warns about the exception
-				error("Exception raised: " + e.getClass().getName() + " for file " + mappingFile.getAbsolutePath()
+				error("Exception raised: " + e.getClass().getName()
+						+ " for file " + mappingFile.getAbsolutePath()
 						+ ". See console for details.");
 				e.printStackTrace();
 			}
@@ -1476,12 +1714,14 @@ public class FIBConverter {
 
 	private static void error(String message) {
 		errors++;
-		System.err.println("*** ERROR " + errors + ": " + inspectorName + " : " + message);
+		System.err.println("*** ERROR " + errors + ": " + inspectorName + " : "
+				+ message);
 		// if (errors == 5) System.exit(-1);
 	}
 
 	private static void exit(boolean normally) {
-		System.err.println(normally ? "Conversion exited normally" : "Conversion exited abnormally");
+		System.err.println(normally ? "Conversion exited normally"
+				: "Conversion exited abnormally");
 		System.err.println("" + errors + " errors found");
 		System.exit(normally ? 0 : -1);
 	}

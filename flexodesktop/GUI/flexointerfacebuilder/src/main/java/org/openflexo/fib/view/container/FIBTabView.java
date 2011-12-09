@@ -23,10 +23,12 @@ import java.util.logging.Logger;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTab;
+import org.openflexo.fib.view.FIBView;
 
 public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 
-	private static final Logger logger = Logger.getLogger(FIBTabView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FIBTabView.class
+			.getPackage().getName());
 
 	private boolean wasSelected = false;
 
@@ -36,19 +38,38 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 
 	@Override
 	protected void performSetIsVisible(boolean isVisible) {
+
+		logger.info("!!!!!!!! Attention pour le TabComponent "
+				+ getComponent().getTitle());
+		logger.info("Called performSetIsVisible " + isVisible);
+
 		super.performSetIsVisible(isVisible);
+
 		if (getParentView() instanceof FIBTabPanelView) {
 			FIBTabPanelView parent = (FIBTabPanelView) getParentView();
 			if (isVisible) {
-				parent.getJComponent().add(getResultingJComponent(), getLocalized(getComponent().getTitle()), getComponent().getIndex());
+				int newIndex = -1;
+				for (FIBView v : getParentView().getSubViews()) {
+					if (v instanceof FIBTabView && v.isComponentVisible()) {
+						if (getComponent().getIndex() > ((FIBTabView<?>) v)
+								.getComponent().getIndex()) {
+							newIndex = parent.getJComponent().indexOfComponent(
+									v.getResultingJComponent()) + 1;
+						}
+					}
+				}
+				parent.getJComponent().add(getResultingJComponent(),
+						getLocalized(getComponent().getTitle()), newIndex);
 				if (wasSelected) {
-					parent.getJComponent().setSelectedComponent(getResultingJComponent());
+					parent.getJComponent().setSelectedComponent(
+							getResultingJComponent());
 				}
 			} else {
 				wasSelected = (parent.getJComponent().getSelectedComponent() == getResultingJComponent());
 				parent.getJComponent().remove(getResultingJComponent());
 			}
 		}
+
 	}
 
 }
