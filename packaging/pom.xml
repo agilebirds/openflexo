@@ -14,7 +14,6 @@
 		<module>flexobuild</module>
 		<module>exec</module>
 		<module>server</module>
-        <module>flexotestsupport</module>
     </modules>
 	<build>
 		<pluginManagement>
