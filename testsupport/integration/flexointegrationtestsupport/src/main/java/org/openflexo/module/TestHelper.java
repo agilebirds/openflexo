@@ -60,5 +60,19 @@ public class TestHelper {
         return resourceCenterDirectory;
     }
 
+    public static File setupApplicationDataDirectory(){
+        File applicationDataDirectory = null;
 
+       try {
+            File tempFile = File.createTempFile("TestApplicationData", "");
+            applicationDataDirectory = new File(tempFile.getParentFile(), tempFile.getName() + "-appdata");
+            tempFile.delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail("Cannot create resource center :"+e.getMessage());
+        }
+
+        applicationDataDirectory.mkdirs();
+        return applicationDataDirectory;
+    }
 }

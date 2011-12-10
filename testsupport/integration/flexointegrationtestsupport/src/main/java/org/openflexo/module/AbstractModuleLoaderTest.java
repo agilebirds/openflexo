@@ -28,6 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.FileUtils;
 
 public abstract class AbstractModuleLoaderTest {
@@ -35,9 +36,12 @@ public abstract class AbstractModuleLoaderTest {
 
     private UserType userTypeBackUp = null;
     private File resourceCenterDirectory;
+    private File appDataDirectory;
 
     @Before
     public void setUp() throws Exception {
+        appDataDirectory = TestHelper.setupApplicationDataDirectory();
+        FlexoPreferences.setAppDataDirectory(appDataDirectory);
         userTypeBackUp = setUserTypeFieldByReflection(null);
         resourceCenterDirectory = TestHelper.setupResourceCenter();
     }
@@ -46,6 +50,8 @@ public abstract class AbstractModuleLoaderTest {
     public void tearDown() throws Exception {
         setUserTypeFieldByReflection(userTypeBackUp);
         FileUtils.deleteDir(resourceCenterDirectory);
+        FileUtils.deleteDir(appDataDirectory);
+        resetAppDataDirectoryByReflection();
     }
 
     @Test
@@ -202,5 +208,23 @@ public abstract class AbstractModuleLoaderTest {
              currentUserTypeField.setAccessible(isAccessible);
          }
          return reply;
+     }
+
+    private void resetAppDataDirectoryByReflection(){
+         Field appDataField = null;
+         try{
+             appDataField = FlexoPreferences.class.getDeclaredField("appDataDirectory");
+         }catch(NoSuchFieldException e){
+             junit.framework.Assert.fail("Class FlexoPreferences must have a static field named 'appDataDirectory'.");
+         }
+         boolean isAccessible = appDataField.isAccessible();
+         try{
+             appDataField.setAccessible(true);
+             appDataField.set(FlexoPreferences.class,null);
+         } catch(IllegalAccessException e){
+             Assert.fail("FlexoPreferences.appDataDirectory should be accessible.");
+         }finally {
+             appDataField.setAccessible(isAccessible);
+         }
      }
 }
