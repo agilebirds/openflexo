@@ -193,6 +193,10 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent>
 		return component.getData() != null && component.getData().isSet();
 	}
 
+	protected boolean isVisible() {
+		return visible;
+	}
+
 	private final void updateVisibility(boolean revalidateAndRepaint) {
 		if (isComponentVisible()) {
 			if (visible == false) {

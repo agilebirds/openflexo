@@ -36,19 +36,26 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 		super(model, controller);
 	}
 
+	/*
+	 * @Override public void updateDataObject(Object dataObject) {
+	 * System.out.println("Je suis le FIBTabView " + getComponent().getName());
+	 * System.out.println("J'etais visible " + isVisible() +
+	 * " et je deviens visible " + isComponentVisible());
+	 * super.updateDataObject(dataObject); }
+	 */
+
 	@Override
 	protected void performSetIsVisible(boolean isVisible) {
 
-		logger.info("!!!!!!!! Attention pour le TabComponent "
-				+ getComponent().getTitle());
-		logger.info("Called performSetIsVisible " + isVisible);
+		logger.info("Called performSetIsVisible " + isVisible
+				+ " on TabComponent " + getComponent().getTitle());
 
 		super.performSetIsVisible(isVisible);
 
 		if (getParentView() instanceof FIBTabPanelView) {
 			FIBTabPanelView parent = (FIBTabPanelView) getParentView();
 			if (isVisible) {
-				int newIndex = -1;
+				int newIndex = 0;
 				for (FIBView v : getParentView().getSubViews()) {
 					if (v instanceof FIBTabView && v.isComponentVisible()) {
 						if (getComponent().getIndex() > ((FIBTabView<?>) v)
@@ -58,6 +65,10 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 						}
 					}
 				}
+
+				logger.fine("********** Adding component "
+						+ getComponent().getTitle() + " at index " + newIndex);
+
 				parent.getJComponent().add(getResultingJComponent(),
 						getLocalized(getComponent().getTitle()), newIndex);
 				if (wasSelected) {
@@ -67,6 +78,8 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 			} else {
 				wasSelected = (parent.getJComponent().getSelectedComponent() == getResultingJComponent());
 				parent.getJComponent().remove(getResultingJComponent());
+				logger.fine("********** Removing component "
+						+ getComponent().getTitle());
 			}
 		}
 
