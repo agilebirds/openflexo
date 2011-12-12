@@ -28,9 +28,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 
-public class MethodCall extends Observable implements ComplexPathElement<Object> {
+public class MethodCall extends Observable implements
+		ComplexPathElement<Object> {
 
-	static final Logger logger = Logger.getLogger(MethodCall.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(MethodCall.class.getPackage()
+			.getName());
 
 	protected AbstractBinding _owner;
 	private Type _declaringType;
@@ -77,7 +79,9 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 		boolean isFirst = true;
 		if (_method.getGenericParameterTypes() != null) {
 			for (MethodCallArgument arg : _args) {
-				returned += (isFirst ? "" : ",") + (arg.getBinding() != null ? arg.getBinding().getStringRepresentation() : "");
+				returned += (isFirst ? "" : ",")
+						+ (arg.getBinding() != null ? arg.getBinding()
+								.getStringRepresentation() : "");
 				isFirst = false;
 			}
 		}
@@ -103,7 +107,8 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 			_args.clear();
 			int argNb = 0;
 			for (Type paramType : method.getGenericParameterTypes()) {
-				_args.add(new MethodCallArgument("arg" + argNb++, TypeUtils.makeInstantiatedType(paramType, _declaringType)));
+				_args.add(new MethodCallArgument("arg" + argNb++, TypeUtils
+						.makeInstantiatedType(paramType, _declaringType)));
 			}
 
 		}
@@ -138,11 +143,13 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 		return null;
 	}
 
-	public void setBindingValueForParam(AbstractBinding binding, String paramName) {
+	public void setBindingValueForParam(AbstractBinding binding,
+			String paramName) {
 		MethodCallArgument arg = argumentForParam(paramName);
 
 		if (arg == null) {
-			logger.warning("Could not find argument matching param " + paramName);
+			logger.warning("Could not find argument matching param "
+					+ paramName);
 			return;
 		} else {
 			binding.setOwner(_owner);
@@ -173,26 +180,29 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 
 	@Override
 	public boolean isSettable() {
-		// TODO MethodCall with all other params as constants are also settable !!!!
+		// TODO MethodCall with all other params as constants are also settable
+		// !!!!
 		return false;
 	}
 
 	@Override
-	public Object getBindingValue(Object target, BindingEvaluationContext context) {
+	public Object getBindingValue(Object target,
+			BindingEvaluationContext context) {
 		Object[] args = new Object[_args.size()];
 		int i = 0;
 		// System.out.println("Invoke method "+_method+" on class "+_method.getDeclaringClass());
 
 		for (MethodCallArgument a : _args) {
-			args[i] = TypeUtils.castTo(a.getBinding().getBindingValue(context), _method.getGenericParameterTypes()[i]);
+			args[i] = TypeUtils.castTo(a.getBinding().getBindingValue(context),
+					_method.getGenericParameterTypes()[i]);
 			// System.out.println("arg"+i+"="+args[i]+" of "+args[i].getClass().getSimpleName());
 			i++;
 		}
 		try {
 			return _method.invoke(target, args);
 		} catch (IllegalArgumentException e) {
-			logger.warning("While evaluating method " + _method + " exception occured: " + e.getMessage());
-			logger.info("object = " + target);
+			logger.warning("While evaluating method " + _method
+					+ " exception occured: " + e.getMessage());
 			for (i = 0; i < _args.size(); i++) {
 				logger.info("arg[" + i + "] = " + args[i]);
 			}
@@ -201,16 +211,24 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
+			logger.info("InvocationTargetException while evaluating method "
+					+ _method + " with args: ");
+			for (int j = 0; j < args.length; j++) {
+				logger.info("arg " + j + " = " + args[j]);
+			}
 			e.printStackTrace();
+			logger.info("Caused by:");
+			e.getTargetException().printStackTrace();
 		}
 		return null;
 
 	}
 
 	@Override
-	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
-		// TODO MethodCall with all other params as constants are also settable !!!!
+	public void setBindingValue(Object value, Object target,
+			BindingEvaluationContext context) {
+		// TODO MethodCall with all other params as constants are also settable
+		// !!!!
 		logger.warning("Please implement me !!!");
 	}
 
@@ -223,7 +241,8 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 		protected MethodCallArgument(String aName, Type aParamType) {
 			paramName = aName;
 			paramType = aParamType;
-			bindingDefinition = new MethodCallParamBindingDefinition(aName, aParamType);
+			bindingDefinition = new MethodCallParamBindingDefinition(aName,
+					aParamType);
 			binding = null;
 		}
 
@@ -253,7 +272,8 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 
 		@Override
 		public String toString() {
-			return "MethodCallArg:" + paramName + "/" + Integer.toHexString(hashCode());
+			return "MethodCallArg:" + paramName + "/"
+					+ Integer.toHexString(hashCode());
 		}
 	}
 

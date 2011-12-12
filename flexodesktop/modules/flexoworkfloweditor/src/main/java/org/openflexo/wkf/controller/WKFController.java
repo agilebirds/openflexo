@@ -224,6 +224,7 @@ public class WKFController extends FlexoController implements
 			addToPerspectives(DOCUMENTATION_PERSPECTIVE);
 		}
 		initWorkflowGraphicalPropertiesFromPrefs(getProject());
+		switchToPerspective(PROCESS_EDITOR_PERSPECTIVE);
 	}
 
 	private void initWorkflowGraphicalPropertiesFromPrefs(FlexoProject project) {
@@ -698,7 +699,10 @@ public class WKFController extends FlexoController implements
 		getWKFSelectionManager().setInspectionContext("BPE", true);
 		getWKFSelectionManager().removeInspectionContext("SWL");
 		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
-		getInspectorWindow().getContent().refresh();
+		if (getInspectorWindow() != null
+				&& getInspectorWindow().getContent() != null) {
+			getInspectorWindow().getContent().refresh();
+		}
 	}
 
 	@Deprecated
@@ -706,7 +710,10 @@ public class WKFController extends FlexoController implements
 		getWKFSelectionManager().setInspectionContext("ROLE_EDITOR", true);
 		getWKFSelectionManager().removeInspectionContext("BPE");
 		getWKFSelectionManager().removeInspectionContext("SWL");
-		getInspectorWindow().getContent().refresh();
+		if (getInspectorWindow() != null
+				&& getInspectorWindow().getContent() != null) {
+			getInspectorWindow().getContent().refresh();
+		}
 	}
 
 	@Deprecated
@@ -714,7 +721,10 @@ public class WKFController extends FlexoController implements
 		getWKFSelectionManager().setInspectionContext("SWL", true);
 		getWKFSelectionManager().removeInspectionContext("BPE");
 		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
-		getInspectorWindow().getContent().refresh();
+		if (getInspectorWindow() != null
+				&& getInspectorWindow().getContent() != null) {
+			getInspectorWindow().getContent().refresh();
+		}
 	}
 
 	@Override

@@ -58,6 +58,7 @@ import org.openflexo.fib.model.FIBCustomColumn;
 import org.openflexo.fib.model.FIBDropDown;
 import org.openflexo.fib.model.FIBDropDownColumn;
 import org.openflexo.fib.model.FIBFont;
+import org.openflexo.fib.model.FIBHtmlEditor;
 import org.openflexo.fib.model.FIBIconColumn;
 import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBLabel.Align;
@@ -754,30 +755,14 @@ public class FIBConverter {
 		FIBWidget returned = buildWidget(pm, bindings, dataClass);
 		if (returned == null)
 			return null;
-		if (returned instanceof FIBFont) {
-			returned.setData(new DataBinding("data." + pm.name + ".font"));
-		} else {
-			returned.setData(new DataBinding("data." + pm.name));
+		if (!returned.getData().isSet()) {
+			if (returned instanceof FIBFont) {
+				returned.setData(new DataBinding("data." + pm.name + ".font"));
+			} else {
+				returned.setData(new DataBinding("data." + pm.name));
+			}
+			bindings.add(returned.getData());
 		}
-		bindings.add(returned.getData());
-
-		// Check that all custom component parameters are well set
-		/*
-		 * if (returned instanceof FIBCustom) { Vector<FIBCustomAssignment>
-		 * toRemove = new Vector<FIBCustomAssignment>(); for
-		 * (FIBCustomAssignment a : ((FIBCustom)returned).getAssignments()) { if
-		 * (a.isMandatory() && !a.getValue().isValid()) {
-		 * error("Custom component "
-		 * +((FIBCustom)returned).getComponentClass().getSimpleName()
-		 * +" does not define mandatory "+a.getVariable()+" assignment"
-		 * +(!a.getValue
-		 * ().isSet()?" (value not defined) ":" (invalid binding "+a
-		 * .getValue()+")")); if (a.getValue().isSet()) {
-		 * a.getValue().getBinding().debugIsBindingValid(); } } if
-		 * (!a.isMandatory() && !a.getValue().isSet()) { toRemove.add(a); } }
-		 * for (FIBCustomAssignment a : toRemove) {
-		 * ((FIBCustom)returned).removeFromAssignments(a); } }
-		 */
 
 		if (pm.hasValueForParameter("visibleFor")) {
 			returned.addToParameters(new FIBParameter("visibleFor", pm
@@ -807,6 +792,18 @@ public class FIBConverter {
 			handleParam("formatter", unhandledParams);
 		if (pm.hasValueForParameter("visibleFor")) {
 			handleParam("visibleFor", unhandledParams);
+		}
+		if (pm.hasValueForParameter("width")) {
+			handleParam("width", unhandledParams);
+		}
+		if (pm.hasValueForParameter("height")) {
+			handleParam("height", unhandledParams);
+		}
+		if (pm.hasValueForParameter(DenaliWidget.EXPAND_HORIZONTALLY)) {
+			handleParam(DenaliWidget.EXPAND_HORIZONTALLY, unhandledParams);
+		}
+		if (pm.hasValueForParameter(DenaliWidget.EXPAND_VERTICALLY)) {
+			handleParam(DenaliWidget.EXPAND_VERTICALLY, unhandledParams);
 		}
 
 		if (pm.getWidget().equalsIgnoreCase(DenaliWidget.TEXT_FIELD)
@@ -888,6 +885,10 @@ public class FIBConverter {
 			if (pm.getWidget()
 					.equalsIgnoreCase(DenaliWidget.READ_ONLY_CHECKBOX))
 				cb.setReadOnly(true);
+			if (pm.hasValueForParameter("negate")) {
+				handleParam("negate", unhandledParams);
+				cb.setNegate(pm.getBooleanValueForParameter("negate"));
+			}
 			handleParam("columns", unhandledParams); // Ignore this
 			checkUnhandledParams(pm, unhandledParams);
 			return cb;
@@ -1023,6 +1024,33 @@ public class FIBConverter {
 			return c;
 		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.CUSTOM)) {
 			return makeCustom(pm, bindings, dataClass, unhandledParams);
+		} else if (pm.getWidget().equalsIgnoreCase(
+				DenaliWidget.WYSIWYG_ULTRA_LIGHT)) {
+			FIBHtmlEditor htmlEditor = new FIBHtmlEditor();
+			htmlEditor.makeUltraLightHtmlEditor();
+			if (pm.hasValueForParameter("readOnly")) {
+				// Ignore it
+				handleParam("readOnly", unhandledParams);
+			}
+			if (pm.hasValueForParameter("widgetLayout")) {
+				// Ignore it
+				handleParam("widgetLayout", unhandledParams);
+			}
+			if (pm.hasValueForParameter("align")) {
+				// Ignore it
+				handleParam("align", unhandledParams);
+			}
+			checkUnhandledParams(pm, unhandledParams);
+			return htmlEditor;
+		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.WYSIWYG_LIGHT)) {
+			FIBHtmlEditor htmlEditor = new FIBHtmlEditor();
+			htmlEditor.makeLightHtmlEditor();
+			if (pm.hasValueForParameter("readOnly")) {
+				// Ignore it
+				handleParam("readOnly", unhandledParams);
+			}
+			checkUnhandledParams(pm, unhandledParams);
+			return htmlEditor;
 		} else {
 			error("Not handled: widget " + pm.getWidget());
 			return null;
@@ -1155,6 +1183,21 @@ public class FIBConverter {
 							value, true));
 					bindings.add(variable);
 					bindings.add(value);
+					checkUnhandledParams(pm, unhandledParams);
+					return c;
+				} else if (className
+						.equals("org.openflexo.components.widget.DescriptionInspectorWidget")) {
+					c.setComponentClass(Class
+							.forName("org.openflexo.components.widget.FIBDescriptionWidget"));
+					c.setData(new DataBinding("data"));
+					bindings.add(c.getData());
+
+					// Ignore those params
+					handleParam("displayLabel", unhandledParams);
+					handleParam("widgetLayout", unhandledParams);
+					handleParam("useUltraLightWysiwyg", unhandledParams);
+					handleParam("rows", unhandledParams);
+					handleParam("align", unhandledParams);
 					checkUnhandledParams(pm, unhandledParams);
 					return c;
 				}
@@ -1597,7 +1640,28 @@ public class FIBConverter {
 			}
 		} else if (plAction.type.equals(PropertyListAction.STATIC_ACTION_TYPE)) {
 			returned = new FIBCustomAction();
-			error("Not handled: static action type " + plAction);
+			if (plAction._getMethod() != null) {
+				if (plAction._getMethod().indexOf("(this)") > -1) {
+					returned.setMethod(new DataBinding("data."
+							+ ToolBox.replaceStringByStringInString("(this)",
+									"(selected)", plAction._getMethod())));
+				} else {
+					returned.setMethod(new DataBinding("data."
+							+ plAction._getMethod()));
+				}
+				bindings.add(returned.getMethod());
+			}
+			if (plAction._getIsAvailable() != null) {
+				if (plAction._getIsAvailable().indexOf("(this)") > -1) {
+					returned.setIsAvailable(new DataBinding("data."
+							+ ToolBox.replaceStringByStringInString("(this)",
+									"(selected)", plAction._getIsAvailable())));
+				} else {
+					returned.setIsAvailable(new DataBinding("data."
+							+ plAction._getIsAvailable()));
+				}
+				bindings.add(returned.getIsAvailable());
+			}
 		} else {
 			error("Not handled: column action " + plAction.type);
 			return null;

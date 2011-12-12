@@ -64,7 +64,7 @@
 		</property>
 	</tab>
 	
-	<tab name="Activity Metrics" index="8" layout="DEFAULT" > <!--  visibilityContext="METRICS" -->
+	<tab name="Activity Metrics" index="8" layout="DEFAULT" visibilityContext="METRICS">
         <property_list name="metricsValues" label="metrics" constraint="0">
           <param name="visible_row_count" value="5"/>
           <param name="row_height" value="20"/>

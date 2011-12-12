@@ -1,15 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
-    <Tab index="0" title="Doc" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="DocTab">
-      <Label label="dont_generate" localize="true" name="DontGenerateLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" visible="(data.isDocEditable = true)" useScrollBar="false" />
-      <CheckBox selected="false" localize="true" name="DontGenerate" data="data.dontGenerate" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" visible="(data.isDocEditable = true)" useScrollBar="false" />
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DocTab">
+      <Label label="description" localize="true" name="DescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" visible="(data.isDocEditable = false)" />
+      <HTMLEditor data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)" visible="(data.isDocEditable = false)" name="Description" localize="true">
+        <Line1Option index="0" name="ParagraphFormatComboBox" />
+        <Line1Option index="1" name="TextEffectPanel" />
+        <Line1Option index="2" name="TextEffectPanel.BoldButton" />
+        <Line1Option index="3" name="TextEffectPanel.ItalicButton" />
+        <Line1Option index="4" name="TextEffectPanel.UnderlineButton" />
+        <Line1Option index="2" name="ColorPanel" />
+        <Line1Option index="6" name="ColorPanel.TextColorButton" />
+        <Line1Option index="7" name="ColorPanel.BackgroundColorButton" />
+        <Line1Option index="3" name="JustificationPanel" />
+        <Line1Option index="9" name="JustificationPanel.LeftJustifyButton" />
+        <Line1Option index="10" name="JustificationPanel.CenterJustifyButton" />
+        <Line1Option index="11" name="JustificationPanel.RightJustifyButton" />
+        <Line1Option index="12" name="JustificationPanel.BlockJustifyButton" />
+        <Line1Option index="4" name="LinkPanel" />
+        <Line1Option index="14" name="LinkPanel.LinkButton" />
+        <Line1Option index="15" name="LinkPanel.UnlinkButton" />
+        <Line1Option index="5" name="MiscPanel" />
+        <Line1Option index="17" name="MiscPanel.InsertImage" />
+      </HTMLEditor>
+      <Custom componentClassName="org.openflexo.components.widget.FIBDescriptionWidget" data="data" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" visible="(data.isDocEditable = true)" name="SpecificDescriptions" localize="true" manageDynamicModel="true" />
+      <Label label="business_description" localize="true" name="BusinessDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="((data.businessDescription != null) &amp; (data.isDocEditable = false))" />
+      <HTMLEditor data="data.businessDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;location=right)" visible="((data.businessDescription != null) &amp; (data.isDocEditable = false))" name="BusinessDescription" localize="true">
+        <Line1Option index="0" name="ParagraphFormatComboBox" />
+        <Line1Option index="1" name="TextEffectPanel" />
+        <Line1Option index="2" name="TextEffectPanel.BoldButton" />
+        <Line1Option index="3" name="TextEffectPanel.ItalicButton" />
+        <Line1Option index="4" name="TextEffectPanel.UnderlineButton" />
+        <Line1Option index="2" name="ColorPanel" />
+        <Line1Option index="6" name="ColorPanel.TextColorButton" />
+        <Line1Option index="7" name="ColorPanel.BackgroundColorButton" />
+        <Line1Option index="3" name="JustificationPanel" />
+        <Line1Option index="9" name="JustificationPanel.LeftJustifyButton" />
+        <Line1Option index="10" name="JustificationPanel.CenterJustifyButton" />
+        <Line1Option index="11" name="JustificationPanel.RightJustifyButton" />
+        <Line1Option index="12" name="JustificationPanel.BlockJustifyButton" />
+        <Line1Option index="4" name="LinkPanel" />
+        <Line1Option index="14" name="LinkPanel.LinkButton" />
+        <Line1Option index="15" name="LinkPanel.UnlinkButton" />
+        <Line1Option index="5" name="MiscPanel" />
+        <Line1Option index="17" name="MiscPanel.InsertImage" />
+      </HTMLEditor>
+      <Label label="dont_generate" localize="true" name="DontGenerateLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="(data.isDocEditable = true)" />
+      <CheckBox selected="false" localize="true" name="DontGenerate" data="data.dontGenerate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" visible="(data.isDocEditable = true)" />
+      <Label label="technical_description" localize="true" name="TechnicalDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="((data.technicalDescription != null) &amp; (data.isDocEditable = false))" />
+      <HTMLEditor data="data.technicalDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;location=right)" visible="((data.technicalDescription != null) &amp; (data.isDocEditable = false))" name="TechnicalDescription" localize="true">
+        <Line1Option index="0" name="ParagraphFormatComboBox" />
+        <Line1Option index="1" name="TextEffectPanel" />
+        <Line1Option index="2" name="TextEffectPanel.BoldButton" />
+        <Line1Option index="3" name="TextEffectPanel.ItalicButton" />
+        <Line1Option index="4" name="TextEffectPanel.UnderlineButton" />
+        <Line1Option index="2" name="ColorPanel" />
+        <Line1Option index="6" name="ColorPanel.TextColorButton" />
+        <Line1Option index="7" name="ColorPanel.BackgroundColorButton" />
+        <Line1Option index="3" name="JustificationPanel" />
+        <Line1Option index="9" name="JustificationPanel.LeftJustifyButton" />
+        <Line1Option index="10" name="JustificationPanel.CenterJustifyButton" />
+        <Line1Option index="11" name="JustificationPanel.RightJustifyButton" />
+        <Line1Option index="12" name="JustificationPanel.BlockJustifyButton" />
+        <Line1Option index="4" name="LinkPanel" />
+        <Line1Option index="14" name="LinkPanel.LinkButton" />
+        <Line1Option index="15" name="LinkPanel.UnlinkButton" />
+        <Line1Option index="5" name="MiscPanel" />
+        <Line1Option index="17" name="MiscPanel.InsertImage" />
+      </HTMLEditor>
+      <Label label="user_manual_description" localize="true" name="UserManualDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" visible="((data.userManualDescription != null) &amp; (data.isDocEditable = false))" />
+      <HTMLEditor data="data.userManualDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;location=right)" visible="((data.userManualDescription != null) &amp; (data.isDocEditable = false))" name="UserManualDescription" localize="true">
+        <Line1Option index="0" name="ParagraphFormatComboBox" />
+        <Line1Option index="1" name="TextEffectPanel" />
+        <Line1Option index="2" name="TextEffectPanel.BoldButton" />
+        <Line1Option index="3" name="TextEffectPanel.ItalicButton" />
+        <Line1Option index="4" name="TextEffectPanel.UnderlineButton" />
+        <Line1Option index="2" name="ColorPanel" />
+        <Line1Option index="6" name="ColorPanel.TextColorButton" />
+        <Line1Option index="7" name="ColorPanel.BackgroundColorButton" />
+        <Line1Option index="3" name="JustificationPanel" />
+        <Line1Option index="9" name="JustificationPanel.LeftJustifyButton" />
+        <Line1Option index="10" name="JustificationPanel.CenterJustifyButton" />
+        <Line1Option index="11" name="JustificationPanel.RightJustifyButton" />
+        <Line1Option index="12" name="JustificationPanel.BlockJustifyButton" />
+        <Line1Option index="4" name="LinkPanel" />
+        <Line1Option index="14" name="LinkPanel.LinkButton" />
+        <Line1Option index="15" name="LinkPanel.UnlinkButton" />
+        <Line1Option index="5" name="MiscPanel" />
+        <Line1Option index="17" name="MiscPanel.InsertImage" />
+      </HTMLEditor>
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="business_description" lang="English">business description</Localized>
+    <Localized key="business_description" lang="French">description métier</Localized>
+    <Localized key="business_description" lang="Dutch">business description</Localized>
     <Localized key="dont_generate" lang="English">Don't generate doc</Localized>
     <Localized key="dont_generate" lang="French">Ne pas générer</Localized>
     <Localized key="dont_generate" lang="Dutch">Don't generate doc</Localized>
+    <Localized key="technical_description" lang="English">Technical description</Localized>
+    <Localized key="technical_description" lang="French">Description technique</Localized>
+    <Localized key="technical_description" lang="Dutch">Technical description</Localized>
+    <Localized key="user_manual_description" lang="English">User manual description</Localized>
+    <Localized key="user_manual_description" lang="French">Description du manuel d'utilisation</Localized>
+    <Localized key="user_manual_description" lang="Dutch">User manual description</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="DocForModelObject" />
 </Panel>

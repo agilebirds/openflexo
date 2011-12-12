@@ -49,7 +49,6 @@ public class FIBInspectorController extends FlexoFIBController {
 	}
 
 	public boolean displayInspectorTabForContext(String context) {
-		logger.info("What about context " + context + " ?");
 		if (getEditor() != null && getEditor().getActiveModule() != null
 				&& getEditor().getActiveModule().getFlexoController() != null) {
 			return getEditor().getActiveModule().getFlexoController()
