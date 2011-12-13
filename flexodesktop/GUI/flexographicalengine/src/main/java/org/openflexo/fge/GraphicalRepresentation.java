@@ -496,7 +496,6 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		 * layer); if (notification != null) { this.layer = layer; hasChanged(notification); } } else { for (GraphicalRepresentation<?>
 		 * child : allGRInSameLayer) { child.proceedSetLayer(layer); } }
 		 */
-		System.err.println(this.layer + " to " + layer + " for " + this.getClass().getSimpleName() + " " + getDrawable() + "");
 		FGENotification notification = requireChange(Parameters.layer, layer);
 		if (notification != null) {
 			this.layer = layer;
