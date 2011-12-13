@@ -61,6 +61,7 @@ import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.controller.DrawingController.EditorTool;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.controller.RectangleSelectingAction;
 import org.openflexo.fge.cp.ControlArea;
@@ -558,11 +559,17 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			 * (getController().getFocusedFloatingLabel(), g); }
 			 */
 
+			if (getController().getCurrentTool() == EditorTool.DrawShapeTool) {
+				// logger.info("Painting current edited shape");
+				paintCurrentEditedShape(graphics);
+			}
+
 			graphics.releaseGraphics();
 
 			if (_rectangleSelectingAction != null) {
 				_rectangleSelectingAction.paint(g, getController());
 			}
+
 		}
 
 		// Do it once only !!!
@@ -603,7 +610,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 	}
 
-	protected void paintControlArea(ControlArea<?> ca, FGEDrawingGraphics graphics) {
+	public void paintControlArea(ControlArea<?> ca, FGEDrawingGraphics graphics) {
 		Rectangle invalidatedArea = ca.paint(graphics);
 		if (invalidatedArea != null) {
 			getPaintManager().addTemporaryRepaintArea(invalidatedArea, this);
@@ -668,6 +675,28 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 
 		graphics.releaseClonedGraphics(oldGraphics);
 
+	}
+
+	private void paintCurrentEditedShape(FGEDrawingGraphics graphics) {
+
+		// logger.info("Painting current edited shape");
+		/*GeometricGraphicalRepresentation<?> currentEditedShape = getController().getDrawShapeToolController().getCurrentEditedShapeGR();
+
+		if (currentEditedShape.isDeleted()) {
+			logger.warning("Cannot paint for a deleted GR");
+			return;
+		}*/
+
+		getController().getDrawShapeToolController().paintCurrentEditedShape(graphics);
+
+		Graphics2D oldGraphics = graphics.cloneGraphics();
+		graphics.setDefaultForeground(ForegroundStyle.makeStyle(getGraphicalRepresentation().getFocusColor()));
+
+		for (ControlArea ca : getController().getDrawShapeToolController().getControlAreas()) {
+			paintControlArea(ca, graphics);
+		}
+
+		graphics.releaseClonedGraphics(oldGraphics);
 	}
 
 	private void paintFocused(GraphicalRepresentation focused, FGEDrawingGraphics graphics) {

@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.controller;
 
-import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,9 +30,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -56,6 +55,8 @@ import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildStarted;
+import org.openflexo.fge.shapes.Shape;
+import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -75,10 +76,14 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 	private EditorTool currentTool;
 
+	private DrawShapeToolController drawShapeToolController;
+	private DrawShapeAction drawShapeAction;
+
 	private ForegroundStyle currentForegroundStyle;
 	private BackgroundStyle currentBackgroundStyle;
 	private TextStyle currentTextStyle;
 	private ShadowStyle currentShadowStyle;
+	private Shape currentShape;
 
 	private ScalePanel _scalePanel;
 	private EditorToolbox toolbox;
@@ -108,6 +113,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		currentBackgroundStyle = BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
 		currentTextStyle = TextStyle.makeDefault();
 		currentShadowStyle = ShadowStyle.makeDefault();
+		currentShape = Shape.makeShape(ShapeType.RECTANGLE, null);
 
 		toolbox = new EditorToolbox(this);
 
@@ -174,12 +180,43 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return new DrawingView<D>(drawing, this);
 	}
 
+	public DrawShapeToolController<?> getDrawShapeToolController() {
+		return drawShapeToolController;
+	}
+
 	public EditorTool getCurrentTool() {
 		return currentTool;
 	}
 
-	public void setCurrentTool(EditorTool currentTool) {
-		this.currentTool = currentTool;
+	public void setCurrentTool(EditorTool aTool) {
+		if (aTool != currentTool) {
+			logger.info("Switch to tool " + aTool);
+			switch (aTool) {
+			case SelectionTool:
+				if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {
+					drawShapeToolController.makeNewShape();
+				}
+				break;
+			case DrawShapeTool:
+				// if (drawShapeAction != null) {
+				drawShapeToolController = new DrawPolygonToolController(this, drawShapeAction);
+				// }
+				break;
+			case DrawConnectorTool:
+				break;
+			case DrawTextTool:
+				break;
+			default:
+				break;
+			}
+			currentTool = aTool;
+			if (getToolbox() != null) {
+				getToolbox().getToolPanel().updateButtons();
+			}
+			if (getPaintManager() != null) {
+				getPaintManager().repaint(getDrawingView());
+			}
+		}
 	}
 
 	public ForegroundStyle getCurrentForegroundStyle() {
@@ -214,6 +251,14 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		this.currentShadowStyle = currentShadowStyle;
 	}
 
+	public Shape getCurrentShape() {
+		return currentShape;
+	}
+
+	public void setCurrentShape(Shape currentShape) {
+		this.currentShape = currentShape;
+	}
+
 	public double getScale() {
 		return scale;
 	}
@@ -229,6 +274,14 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		drawingView.rescale();
 	}
 
+	public DrawShapeAction getDrawShapeAction() {
+		return drawShapeAction;
+	}
+
+	public void setDrawShapeAction(DrawShapeAction drawShapeAction) {
+		this.drawShapeAction = drawShapeAction;
+	}
+
 	public EditorToolbox getToolbox() {
 		return toolbox;
 	}
@@ -240,7 +293,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return _scalePanel;
 	}
 
-	public class ScalePanel extends JPanel {
+	public class ScalePanel extends JToolBar {
 
 		private static final int MAX_ZOOM_VALUE = 300;
 		protected JTextField scaleTF;
@@ -250,14 +303,14 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		protected ActionListener actionListener;
 
 		protected ScalePanel() {
-			super(new FlowLayout(FlowLayout.LEFT, 10, 0));
+			super(/* new FlowLayout(FlowLayout.LEFT, 10, 0) */);
 			scaleTF = new JTextField(5);
 			int currentScale = (int) (getScale() * 100);
 			scaleTF.setText("" + currentScale + "%");
 			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
 			slider.setMajorTickSpacing(100);
 			slider.setMinorTickSpacing(20);
-			slider.setPaintTicks(true);
+			slider.setPaintTicks(false/* true */);
 			slider.setPaintLabels(false);
 			slider.setBorder(BorderFactory.createEmptyBorder());
 			sliderChangeListener = new ChangeListener() {
@@ -307,7 +360,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			slider.addChangeListener(sliderChangeListener);
 			add(slider);
 			add(scaleTF);
-			setBorder(BorderFactory.createEmptyBorder());
+			// setBorder(BorderFactory.createEmptyBorder());
 		}
 	}
 
@@ -365,14 +418,12 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 				}
 			}
 			/*
-			if (aFocusedlabel == null) {
-				focusedFloatingLabel = null;
-				drawingView.getPaintManager().repaint(drawingView);
-			}
-			else if (focusedFloatingLabel != aFocusedlabel) {
-				focusedFloatingLabel = aFocusedlabel;
-				drawingView.getPaintManager().repaint(drawingView);
-			}*/
+			 * if (aFocusedlabel == null) { focusedFloatingLabel = null;
+			 * drawingView.getPaintManager().repaint(drawingView); } else if
+			 * (focusedFloatingLabel != aFocusedlabel) { focusedFloatingLabel =
+			 * aFocusedlabel;
+			 * drawingView.getPaintManager().repaint(drawingView); }
+			 */
 		}
 	}
 
@@ -606,7 +657,8 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		logger.fine("Register palette for " + this);
 		palettes.add(aPalette);
 		aPalette.registerController(this);
-		// if (getDrawingView() != null) getDrawingView().registerPalette(aPalette);
+		// if (getDrawingView() != null)
+		// getDrawingView().registerPalette(aPalette);
 	}
 
 	public void unregisterPalette(DrawingPalette aPalette) {
@@ -621,7 +673,10 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	}
 
 	public FGEPaintManager getPaintManager() {
-		return getDrawingView().getPaintManager();
+		if (getDrawingView() != null) {
+			return getDrawingView().getPaintManager();
+		}
+		return null;
 	}
 
 	public void enablePaintingCache() {

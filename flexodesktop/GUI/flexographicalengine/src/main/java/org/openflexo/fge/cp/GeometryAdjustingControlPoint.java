@@ -21,6 +21,7 @@ package org.openflexo.fge.cp;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
@@ -28,6 +29,8 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 
 public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends ControlPoint {
+
+	private static final Logger logger = Logger.getLogger(GeometryAdjustingControlPoint.class.getPackage().getName());
 
 	private String name;
 
@@ -70,4 +73,5 @@ public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends C
 	public String getName() {
 		return name;
 	}
+
 }

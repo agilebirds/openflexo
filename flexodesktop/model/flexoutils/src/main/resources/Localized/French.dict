@@ -1,5 +1,5 @@
 #French
-#Tue Nov 15 22:28:33 CET 2011
+#Thu Nov 24 22:41:54 CET 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -2411,6 +2411,7 @@ fixed_automatically\:_flexo_id_must_be_unique_for_a_project=R\u00E9par\u00E9 aut
 flash=<html>Flash &reg;</html>
 flat=flat
 flatten=flatten
+flexo=flexo
 flexoID=Identifiant OpenFlexo
 flexo_action=Action OpenFlexo
 flexo_action_($object.name)_must_send_token=flexoAction ($object.name) doit envoyer un jeton
@@ -3596,6 +3597,7 @@ open_port_registery=Ouvrir le registre des ports
 open_process_in_new_window=Ouvrir le processus dans une nouvelle fen\u00EAtre
 open_project=Ouvrir un projet
 open_workflow=Ouvrir un WorkFlow...
+opening_fib_editor=opening_fib_editor
 operation=op\u00E9ration
 operationComponent=Ecran
 operation_($object.name)_defines_no_wo_component=L'op\u00E9ration "($object.name)" ne d\u00E9finit aucun \u00E9cran 
