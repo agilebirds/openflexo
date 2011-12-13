@@ -67,7 +67,7 @@ public class FlexoJarResource extends FlexoImportedResource<JarLoader> {
 			e.printStackTrace();
 		}
 		if (dmResource != null) {
-			dmResource.addToDependantResources(this);
+			dmResource.addToDependentResources(this);
 		}
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Build new FlexoJarResource");
@@ -145,7 +145,7 @@ public class FlexoJarResource extends FlexoImportedResource<JarLoader> {
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		getProject().getFlexoDMResource().addToDependantResources(this);
+		getProject().getFlexoDMResource().addToDependentResources(this);
 	}
 
 	public ExternalRepository getJarRepository() {

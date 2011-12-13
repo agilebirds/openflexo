@@ -222,7 +222,7 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 				// Do the insertion
 				((IEBlocWidget) container).setContent((InnerBlocReusableWidget) newWidget);
 				// Now declare the resources dependancies
-				woComponent.getFlexoResource().addToDependantResources(partialComponent.getComponentResource());
+				woComponent.getFlexoResource().addToDependentResources(partialComponent.getComponentResource());
 				return true;
 			} catch (IndexOutOfBoundsException e) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
@@ -265,7 +265,7 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 				((IESequenceWidget) container).insertElementAt(newWidget, getIndex());
 				// Now declare the resources dependancies
 				((IESequenceWidget) container).getWOComponent().getFlexoResource()
-						.addToDependantResources(partialComponent.getComponentResource());
+						.addToDependentResources(partialComponent.getComponentResource());
 				return true;
 			} catch (IndexOutOfBoundsException e) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());

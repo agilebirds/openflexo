@@ -104,9 +104,9 @@ public class ProcessLatexFileResource extends LatexFileResource<DGLatexGenerator
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getTOCResource());
+		addToDependentResources(getProject().getTOCResource());
 		if (getProcess() != null) {
-			addToDependantResources(getProcess().getFlexoResource());
+			addToDependentResources(getProcess().getFlexoResource());
 		}
 	}
 

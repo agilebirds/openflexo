@@ -51,11 +51,11 @@
 
   <entity name="org.openflexo.foundation.rm.FlexoResource" abstract="YES">
   	<property name="userIdentifier" xmlTag="userID" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
-	<property name="dependantResources" xmlTag="DependantResources"/>
+	<property name="dependentResources" xmlTag="DependantResources"/>
 	<property name="synchronizedResources" xmlTag="SynchronizedResources"/>
   </entity>
   
-  <entity name="org.openflexo.foundation.rm.DependantResources" xmlTag="DependantResources">
+  <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">
 	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector"/>
   </entity>
   

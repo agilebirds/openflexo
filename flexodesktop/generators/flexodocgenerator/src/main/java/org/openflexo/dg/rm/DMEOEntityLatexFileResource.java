@@ -104,7 +104,7 @@ public class DMEOEntityLatexFileResource extends LatexFileResource<DGLatexGenera
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependentResources(getProject().getFlexoDMResource());
 	}
 
 	@Override

@@ -281,7 +281,7 @@ public class JarLoader implements ImportedResourceData {
 				} else if (searchInAllJarsInProject) {
 					// Search in dependant jars
 					if (getJarResource() != null) {
-						for (FlexoResource res : getJarResource().getDependantResources()) {
+						for (FlexoResource res : getJarResource().getDependentResources()) {
 							if (res instanceof FlexoJarResource) {
 								JarLoader jarLoader = ((FlexoJarResource) res).getJarLoader();
 								Class tryThis = jarLoader.getClassForName(className);
@@ -293,7 +293,7 @@ public class JarLoader implements ImportedResourceData {
 						}
 					}
 					if (getJarRepository() != null && getJarRepository().getJarResource() != null) {
-						for (FlexoResource res : getJarRepository().getJarResource().getDependantResources()) {
+						for (FlexoResource res : getJarRepository().getJarResource().getDependentResources()) {
 							if (res instanceof FlexoJarResource) {
 								JarLoader jarLoader = ((FlexoJarResource) res).getJarLoader();
 								Class tryThis = jarLoader.getClassForName(className);
@@ -323,7 +323,7 @@ public class JarLoader implements ImportedResourceData {
 										// Found a dependancy between resources
 										if (getJarRepository() != null && getJarRepository().getJarResource() != null
 												&& rep.getJarResource() != null) {
-											getJarRepository().getJarResource().addToDependantResources(rep.getJarResource());
+											getJarRepository().getJarResource().addToDependentResources(rep.getJarResource());
 										}
 										return tryThis;
 									}

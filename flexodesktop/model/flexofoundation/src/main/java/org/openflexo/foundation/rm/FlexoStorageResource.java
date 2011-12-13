@@ -372,7 +372,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	}
 
 	@Override
-	protected Date getRequestDateToBeUsedForOptimisticDependancyChecking(FlexoResource resource) {
+	protected Date getRequestDateToBeUsedForOptimisticDependencyChecking(FlexoResource resource) {
 		Date returned = getLastSynchronizedWithResource(resource);
 		if (returned.getTime() == 0) {
 			// If never synchronized, consider last update

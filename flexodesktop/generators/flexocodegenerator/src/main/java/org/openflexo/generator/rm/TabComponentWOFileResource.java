@@ -58,7 +58,7 @@ public class TabComponentWOFileResource extends ComponentWOFileResource<TabCompo
 		super.rebuildDependancies();
 		if (getGenerator() != null) {
 			for (OperationComponentInstance ci : getGenerator().getComponentDefinition().getAllOperationComponentInstances()) {
-				addToDependantResources(ci.getOperationNode().getProcess().getFlexoResource());
+				addToDependentResources(ci.getOperationNode().getProcess().getFlexoResource());
 			}
 		}
 	}

@@ -124,7 +124,7 @@ import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorRef
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
-import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
+import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
@@ -889,9 +889,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			}
 		}
 		if (sortResources) {
-			DependancyAlgorithmScheme scheme = _dependancyScheme;
+			DependencyAlgorithmScheme scheme = _dependancyScheme;
 			// Pessimistic dependancy scheme is cheaper and is not intended for this situation
-			setDependancyScheme(DependancyAlgorithmScheme.Pessimistic);
+			setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
 			FlexoResource.sortResourcesWithDependancies(returned);
 			setDependancyScheme(scheme);
 		}
@@ -1151,10 +1151,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			if (identifier != null) {
 				removeResourceWithKey(identifier);
 				for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getAlteredResources())) {
-					res.removeFromDependantResources(resource);
+					res.removeFromDependentResources(resource);
 				}
 				for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(
-						resource.getDependantResources())) {
+						resource.getDependentResources())) {
 					res.removeFromAlteredResources(resource);
 				}
 				for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(
@@ -1998,16 +1998,16 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	/**
-	 * Rebuild resource dependancies for project
+	 * Rebuild resource dependencies for project
 	 */
-	public void rebuildDependancies() {
-		rebuildDependancies(null);
+	public void rebuildDependencies() {
+		rebuildDependencies(null);
 	}
 
 	/**
 	 * Rebuild resource dependencies for project
 	 */
-	public void rebuildDependancies(FlexoProgress progress) {
+	public void rebuildDependencies(FlexoProgress progress) {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Rebuild resource dependancies for project " + getProjectName());
 		}
@@ -2016,30 +2016,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 		for (FlexoResource<? extends FlexoResourceData> resource : this) {
 			// Clear dependencies for that resource
-			resource.clearDependancies();
-		}
-		for (FlexoResource<? extends FlexoResourceData> resource : this) {
-			for (FlexoResource<FlexoResourceData> dep : resource.getDependantResources()) {
-				if (!isRegistered(dep)) {
-					if (logger.isLoggable(Level.INFO)) {
-						logger.info("Removing unregistered resource " + dep);
-					}
-				}
-			}
-			for (FlexoResource<FlexoResourceData> alt : resource.getAlteredResources()) {
-				if (!isRegistered(alt)) {
-					if (logger.isLoggable(Level.INFO)) {
-						logger.info("Removing unregistered resource " + alt);
-					}
-				}
-			}
-			for (FlexoResource<FlexoResourceData> sync : resource.getSynchronizedResources()) {
-				if (!isRegistered(sync)) {
-					if (logger.isLoggable(Level.INFO)) {
-						logger.info("Removing unregistered resource " + sync);
-					}
-				}
-			}
+			resource.clearDependencies();
 		}
 		for (FlexoResource<? extends FlexoResourceData> resource : this) {
 			if (progress != null) {
@@ -2066,7 +2043,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	public void notifyResourceStatusChanged(FlexoResource<? extends FlexoResourceData> resource) {
 		for (FlexoResource<? extends FlexoResourceData> res : this) {
-			res.getDependantResources().update();
+			res.getDependentResources().update();
 			res.getAlteredResources().update();
 			res.getSynchronizedResources().update();
 		}
@@ -2594,11 +2571,11 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return allRegisteredObjects;
 	}
 
-	public DependancyAlgorithmScheme getDependancyScheme() {
+	public DependencyAlgorithmScheme getDependancyScheme() {
 		return _dependancyScheme;
 	}
 
-	public void setDependancyScheme(DependancyAlgorithmScheme scheme) {
+	public void setDependancyScheme(DependencyAlgorithmScheme scheme) {
 		_dependancyScheme = scheme;
 	}
 
@@ -3136,7 +3113,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	private File _importedImagesDir;
 
-	private DependancyAlgorithmScheme _dependancyScheme = DependancyAlgorithmScheme.Optimistic;
+	private DependencyAlgorithmScheme _dependancyScheme = DependencyAlgorithmScheme.Optimistic;
 
 	public File getFrameworksToEmbedDirectory() {
 		return getProjectDirectoryWithName(FRAMEWORKS_DIRECTORY);
@@ -3352,7 +3329,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			p.checkResourceIntegrity();
 			boolean ok = true;
 			for (FlexoResource<? extends FlexoResourceData> r : p) {
-				for (FlexoResource<FlexoResourceData> dr : r.getDependantResources()) {
+				for (FlexoResource<FlexoResourceData> dr : r.getDependentResources()) {
 					if (p.getResources().get(dr.getResourceIdentifier()) == null) {
 						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Found a dependant resource not in project: " + dr.getResourceIdentifier());
@@ -3402,7 +3379,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			protected void fixAction() {
 				FlexoProject p = getObject();
 				for (FlexoResource<? extends FlexoResourceData> r : p) {
-					Iterator<FlexoResource<FlexoResourceData>> i = r.getDependantResources().iterator();
+					Iterator<FlexoResource<FlexoResourceData>> i = r.getDependentResources().iterator();
 					while (i.hasNext()) {
 						FlexoResource<FlexoResourceData> dr = i.next();
 						if (p.getResources().get(dr.getResourceIdentifier()) == null) {
@@ -3494,7 +3471,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 		@Override
 		public ValidationIssue<RebuildDependancies, FlexoProject> applyValidation(FlexoProject object) {
-			object.rebuildDependancies();
+			object.rebuildDependencies();
 			return new InformationIssue<RebuildDependancies, FlexoProject>(object, "resource_dependancies_have_been_rebuilt");
 		}
 	}
