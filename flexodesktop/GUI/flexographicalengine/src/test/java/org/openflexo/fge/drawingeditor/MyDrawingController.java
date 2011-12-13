@@ -113,7 +113,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.addToSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().firstElement(), null));
+			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -125,7 +125,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.removeFromSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().firstElement(), null));
+			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -157,14 +157,14 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 	public void copy() {
 		if (contextualMenuInvoker instanceof MyShapeGraphicalRepresentation) {
-			copiedShape = (MyShape) (((MyShapeGraphicalRepresentation) getFocusedObjects().firstElement()).getDrawable().clone());
+			copiedShape = (MyShape) ((MyShapeGraphicalRepresentation) getFocusedObjects().firstElement()).getDrawable().clone();
 			System.out.println("Copied: " + copiedShape);
 		}
 	}
 
 	public void paste() {
 		System.out.println("Paste in " + contextualMenuInvoker.getDrawable());
-		addNewShape((MyShape) (copiedShape.clone()), (MyDrawingElement) contextualMenuInvoker.getDrawable());
+		addNewShape((MyShape) copiedShape.clone(), (MyDrawingElement) contextualMenuInvoker.getDrawable());
 	}
 
 	public void cut() {

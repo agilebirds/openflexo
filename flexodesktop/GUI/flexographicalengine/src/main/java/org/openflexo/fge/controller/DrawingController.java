@@ -83,11 +83,11 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	private ScalePanel _scalePanel;
 	private EditorToolbox toolbox;
 
-	private GraphicalRepresentation focusedFloatingLabel;
+	private GraphicalRepresentation<?> focusedFloatingLabel;
 	// private GraphicalRepresentation focusedObject;
 
-	private Vector<GraphicalRepresentation> focusedObjects;
-	private Vector<GraphicalRepresentation> selectedObjects;
+	private Vector<GraphicalRepresentation<?>> focusedObjects;
+	private Vector<GraphicalRepresentation<?>> selectedObjects;
 
 	private LabelView<?> _currentlyEditedLabel;
 
@@ -116,8 +116,8 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			((DefaultDrawing<?>) drawing).addObserver(this);
 		}
 
-		focusedObjects = new Vector<GraphicalRepresentation>();
-		selectedObjects = new Vector<GraphicalRepresentation>();
+		focusedObjects = new Vector<GraphicalRepresentation<?>>();
+		selectedObjects = new Vector<GraphicalRepresentation<?>>();
 		palettes = new Vector<DrawingPalette>();
 		_buildDrawingView();
 		if (logger.isLoggable(Level.FINE)) {
@@ -264,7 +264,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					if (slider.getValue() > 0) {
-						setScale(((double) slider.getValue()) / 100);
+						setScale((double) slider.getValue() / 100);
 						scaleTF.removeActionListener(actionListener);
 						scaleTF.setText("" + (int) (getScale() * 100) + "%");
 						scaleTF.addActionListener(actionListener);
@@ -291,7 +291,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 								}
 							});
 						}
-						setScale(((double) newScale) / 100);
+						setScale((double) newScale / 100);
 					} catch (NumberFormatException exception) {
 						// Forget
 					}
@@ -385,7 +385,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return null;
 	}
 
-	public Vector<GraphicalRepresentation> getSelectedObjects() {
+	public List<GraphicalRepresentation<?>> getSelectedObjects() {
 		return selectedObjects;
 	}
 
@@ -398,7 +398,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 		if (!selectedObjects.equals(someSelectedObjects)) {
 			clearSelection();
-			for (GraphicalRepresentation d : someSelectedObjects) {
+			for (GraphicalRepresentation<?> d : someSelectedObjects) {
 				addToSelectedObjects(d);
 			}
 		}
@@ -452,13 +452,13 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	public void clearSelection() {
 		// logger.info("Clear selection");
 		stopEditionOfEditedLabelIfAny();
-		for (GraphicalRepresentation gr : selectedObjects) {
+		for (GraphicalRepresentation<?> gr : selectedObjects) {
 			gr.setIsSelected(false);
 		}
 		selectedObjects.clear();
 	}
 
-	public Vector<GraphicalRepresentation> getFocusedObjects() {
+	public Vector<GraphicalRepresentation<?>> getFocusedObjects() {
 		return focusedObjects;
 	}
 
@@ -584,7 +584,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 				return ca2;
 			}
 		}
-		return (ca1.getGraphicalRepresentation().getLayer() > ca2.getGraphicalRepresentation().getLayer() ? ca1 : ca2);
+		return ca1.getGraphicalRepresentation().getLayer() > ca2.getGraphicalRepresentation().getLayer() ? ca1 : ca2;
 	}
 
 	public ControlArea<?> getFocusedControlArea() {
