@@ -30,6 +30,7 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -148,13 +149,13 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		CENTER, LEFT, RIGHT
 	}
 
-	protected static class ConstraintDependancy {
+	protected static class ConstraintDependency {
 		GraphicalRepresentation requiringGR;
 		GRParameter requiringParameter;
 		GraphicalRepresentation requiredGR;
 		GRParameter requiredParameter;
 
-		public ConstraintDependancy(GraphicalRepresentation requiringGR, GRParameter requiringParameter,
+		public ConstraintDependency(GraphicalRepresentation requiringGR, GRParameter requiringParameter,
 				GraphicalRepresentation requiredGR, GRParameter requiredParameter) {
 			super();
 			this.requiringGR = requiringGR;
@@ -165,8 +166,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof ConstraintDependancy) {
-				ConstraintDependancy opposite = (ConstraintDependancy) obj;
+			if (obj instanceof ConstraintDependency) {
+				ConstraintDependency opposite = (ConstraintDependency) obj;
 				return requiredGR == opposite.requiredGR && requiringGR == opposite.requiringGR
 						&& requiringParameter == opposite.requiringParameter && requiredParameter == opposite.requiredParameter;
 			}
@@ -174,8 +175,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 	}
 
-	private Vector<ConstraintDependancy> dependancies;
-	private Vector<ConstraintDependancy> alterings;
+	private Vector<ConstraintDependency> dependancies;
+	private Vector<ConstraintDependency> alterings;
 
 	// *******************************************************************************
 	// * Static code *
@@ -287,8 +288,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		mouseClickControls = new Vector<MouseClickControl>();
 		mouseDragControls = new Vector<MouseDragControl>();
 
-		dependancies = new Vector<ConstraintDependancy>();
-		alterings = new Vector<ConstraintDependancy>();
+		dependancies = new Vector<ConstraintDependency>();
+		alterings = new Vector<ConstraintDependency>();
 
 	}
 
@@ -554,14 +555,17 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public Vector<GraphicalRepresentation<?>> getContainedGraphicalRepresentations() {
+		// Indirection added to separate callers that require an ordered list of contained GR and those who do not care. Wa may then later
+		// reimplement these methods to optimizer perfs.
+		return getOrderedContainedGraphicalRepresentations();
+	}
+
+	public Vector<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations() {
 		if (getContainedObjects() == null) {
 			return null;
 		}
 
-		Vector<GraphicalRepresentation<?>> toRemove = new Vector<GraphicalRepresentation<?>>();
-		for (GraphicalRepresentation<?> c : getOrderedContainedGR()) {
-			toRemove.add(c);
-		}
+		List<GraphicalRepresentation<?>> toRemove = new ArrayList<GraphicalRepresentation<?>>(getOrderedContainedGR());
 
 		for (Object o : getContainedObjects()) {
 			GraphicalRepresentation<Object> gr = getDrawing().getGraphicalRepresentation(o);
@@ -591,7 +595,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	private Vector<GraphicalRepresentation<?>> getOrderedContainedGR() {
 		if (orderedContainedGR == null) {
 			orderedContainedGR = new Vector<GraphicalRepresentation<?>>();
-			for (GraphicalRepresentation<?> c : getContainedGraphicalRepresentations()) {
+			for (GraphicalRepresentation<?> c : getOrderedContainedGraphicalRepresentations()) {
 				if (!orderedContainedGR.contains(c)) {
 					orderedContainedGR.add(c);
 				}
@@ -609,7 +613,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public int getOrder(GraphicalRepresentation child1, GraphicalRepresentation child2) {
-		Vector<GraphicalRepresentation<?>> orderedGRList = getContainedGraphicalRepresentations();
+		Vector<GraphicalRepresentation<?>> orderedGRList = getOrderedContainedGraphicalRepresentations();
 
 		// logger.info("getOrder: "+orderedGRList);
 		if (!orderedGRList.contains(child1)) {
@@ -632,7 +636,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (getParentGraphicalRepresentation() == null) {
 			return -1;
 		}
-		Vector<GraphicalRepresentation<?>> orderedGRList = getParentGraphicalRepresentation().getContainedGraphicalRepresentations();
+		Vector<GraphicalRepresentation<?>> orderedGRList = getParentGraphicalRepresentation().getOrderedContainedGraphicalRepresentations();
 		return orderedGRList.indexOf(this);
 	}
 
@@ -1985,16 +1989,16 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 	}
 
-	public Vector<ConstraintDependancy> getDependancies() {
+	public Vector<ConstraintDependency> getDependancies() {
 		return dependancies;
 	}
 
-	public Vector<ConstraintDependancy> getAlterings() {
+	public Vector<ConstraintDependency> getAlterings() {
 		return alterings;
 	}
 
 	public void declareDependantOf(GraphicalRepresentation aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
-			throws DependancyLoopException {
+			throws DependencyLoopException {
 		// logger.info("Component "+this+" depends of "+aComponent);
 		if (aComponent == this) {
 			logger.warning("Forbidden reflexive dependancies");
@@ -2004,13 +2008,13 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		try {
 			Vector<GraphicalRepresentation<?>> actualDependancies = new Vector<GraphicalRepresentation<?>>();
 			actualDependancies.add(aComponent);
-			searchLoopInDependanciesWith(aComponent, actualDependancies);
-		} catch (DependancyLoopException e) {
+			searchLoopInDependenciesWith(aComponent, actualDependancies);
+		} catch (DependencyLoopException e) {
 			logger.warning("Forbidden loop in dependancies: " + e.getMessage());
 			throw e;
 		}
 
-		ConstraintDependancy newDependancy = new ConstraintDependancy(this, requiringParameter, aComponent, requiredParameter);
+		ConstraintDependency newDependancy = new ConstraintDependency(this, requiringParameter, aComponent, requiredParameter);
 
 		if (!dependancies.contains(newDependancy)) {
 			dependancies.add(newDependancy);
@@ -2022,42 +2026,42 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 	}
 
-	private void searchLoopInDependanciesWith(GraphicalRepresentation<?> aComponent, Vector<GraphicalRepresentation<?>> actualDependancies)
-			throws DependancyLoopException {
-		for (ConstraintDependancy dependancy : aComponent.dependancies) {
+	private void searchLoopInDependenciesWith(GraphicalRepresentation<?> aComponent, Vector<GraphicalRepresentation<?>> actualDependancies)
+			throws DependencyLoopException {
+		for (ConstraintDependency dependancy : aComponent.dependancies) {
 			GraphicalRepresentation<?> c = dependancy.requiredGR;
 			if (c == this) {
-				throw new DependancyLoopException(actualDependancies);
+				throw new DependencyLoopException(actualDependancies);
 			}
 			Vector<GraphicalRepresentation<?>> newVector = new Vector<GraphicalRepresentation<?>>();
 			newVector.addAll(actualDependancies);
 			newVector.add(c);
-			searchLoopInDependanciesWith(c, newVector);
+			searchLoopInDependenciesWith(c, newVector);
 		}
 	}
 
-	protected static class DependancyLoopException extends Exception {
-		private Vector<GraphicalRepresentation<?>> dependancies;
+	protected static class DependencyLoopException extends Exception {
+		private Vector<GraphicalRepresentation<?>> dependencies;
 
-		public DependancyLoopException(Vector<GraphicalRepresentation<?>> dependancies) {
-			this.dependancies = dependancies;
+		public DependencyLoopException(Vector<GraphicalRepresentation<?>> dependancies) {
+			this.dependencies = dependancies;
 		}
 
 		@Override
 		public String getMessage() {
-			return "DependancyLoopException: " + dependancies;
+			return "DependencyLoopException: " + dependencies;
 		}
 	}
 
 	protected void propagateConstraintsAfterModification(GRParameter parameter) {
-		for (ConstraintDependancy dependancy : alterings) {
-			if (dependancy.requiredParameter == parameter) {
-				dependancy.requiringGR.computeNewConstraint(dependancy);
+		for (ConstraintDependency dependency : alterings) {
+			if (dependency.requiredParameter == parameter) {
+				dependency.requiringGR.computeNewConstraint(dependency);
 			}
 		}
 	}
 
-	protected void computeNewConstraint(ConstraintDependancy dependancy) {
+	protected void computeNewConstraint(ConstraintDependency dependency) {
 		// None known at this level
 	}
 

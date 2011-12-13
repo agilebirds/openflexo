@@ -410,7 +410,8 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	}
 
 	private void forcePaintObjects(GraphicalRepresentation<?> fatherGraphicalRepresentation, Graphics g, boolean temporaryObjectsOnly) {
-		List<? extends GraphicalRepresentation<?>> containedGR = fatherGraphicalRepresentation.getContainedGraphicalRepresentations();
+		List<? extends GraphicalRepresentation<?>> containedGR = fatherGraphicalRepresentation
+				.getOrderedContainedGraphicalRepresentations();
 		if (containedGR == null) {
 			return;
 		}
@@ -516,7 +517,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 
 		Vector<GeometricGraphicalRepresentation> geomList = new Vector<GeometricGraphicalRepresentation>();
-		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+		for (Object gr : getGraphicalRepresentation().getOrderedContainedGraphicalRepresentations()) {
 			if (gr instanceof GeometricGraphicalRepresentation) {
 				geomList.add((GeometricGraphicalRepresentation) gr);
 			}
