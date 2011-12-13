@@ -47,7 +47,7 @@ public class NewPackageConverter {
 			if (file.getName().endsWith(ProjectRestructuration.DM_EXTENSION)) {
 				content = convertDMContentToNewPackage(content);
 			} else if (file.getName().endsWith(ProjectRestructuration.SHEMA_EXTENSION)) {
-				content = content.replace("OESHEMA", "VESCHEMA").replace("OEShape", "VEShape").replace("OEConnector", "VEConnector");
+				content = content.replace("OEShema", "VEShema").replace("OEShape", "VEShape").replace("OEConnector", "VEConnector");
 			} else {
 				content = convertContentToNewPackage(content);
 			}
