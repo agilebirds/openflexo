@@ -226,7 +226,7 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getFlexoDKVResource());
+		addToDependentResources(getProject().getFlexoDKVResource());
 	}
 
 	/**

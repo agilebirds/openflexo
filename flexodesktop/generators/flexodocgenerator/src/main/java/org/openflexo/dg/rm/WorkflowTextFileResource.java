@@ -119,7 +119,7 @@ public class WorkflowTextFileResource extends TextFileResource<DGTextGenerator<F
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getFlexoWorkflowResource());
+		addToDependentResources(getProject().getFlexoWorkflowResource());
 	}
 
 	/**

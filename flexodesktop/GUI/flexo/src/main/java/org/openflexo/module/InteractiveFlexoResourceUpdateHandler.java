@@ -34,7 +34,7 @@ import org.openflexo.foundation.rm.FlexoGeneratedResource;
 import org.openflexo.foundation.rm.FlexoImportedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
+import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoResourceUpdateHandler;
 import org.openflexo.foundation.rm.FlexoStorageResource;
@@ -327,9 +327,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 				}
 			} else if (choice == OptionWhenStorageResourceFoundAsModifiedOnDisk.OverwriteDiskChange) {
 				FlexoProject project = ModuleLoader.getProject();
-				DependancyAlgorithmScheme scheme = project.getDependancyScheme();
+				DependencyAlgorithmScheme scheme = project.getDependancyScheme();
 				// Pessimistic dependancy scheme is cheaper and is not intended for this situation
-				project.setDependancyScheme(DependancyAlgorithmScheme.Pessimistic);
+				project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
 				FlexoResource.sortResourcesWithDependancies(updatedStorageResource);
 				project.setDependancyScheme(scheme);
 				for (FlexoStorageResource<? extends StorageResourceData> storageResource : updatedStorageResource) {
@@ -351,9 +351,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 			} else if (choice == OptionWhenStorageResourceFoundAsConflicting.OverwriteDiskChange) {
 				try {
 					FlexoProject project = ModuleLoader.getProject();
-					DependancyAlgorithmScheme scheme = project.getDependancyScheme();
+					DependencyAlgorithmScheme scheme = project.getDependancyScheme();
 					// Pessimistic dependancy scheme is cheaper and is not intended for this situation
-					project.setDependancyScheme(DependancyAlgorithmScheme.Pessimistic);
+					project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
 					FlexoResource.sortResourcesWithDependancies(conflictingStorageResource);
 					project.setDependancyScheme(scheme);
 					for (FlexoStorageResource<? extends StorageResourceData> flexoStorageResource : conflictingStorageResource) {

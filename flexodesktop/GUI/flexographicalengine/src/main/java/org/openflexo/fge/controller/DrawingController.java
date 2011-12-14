@@ -63,11 +63,9 @@ import org.openflexo.fge.view.FGEPaintManager;
 import org.openflexo.fge.view.LabelView;
 import org.openflexo.fge.view.ShapeView;
 
-public class DrawingController<D extends Drawing<?>> extends Observable
-		implements Observer {
+public class DrawingController<D extends Drawing<?>> extends Observable implements Observer {
 
-	private static final Logger logger = Logger
-			.getLogger(DrawingController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DrawingController.class.getPackage().getName());
 
 	private D drawing;
 	private DrawingView<D> drawingView;
@@ -90,11 +88,11 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 	private ScalePanel _scalePanel;
 	private EditorToolbox toolbox;
 
-	private GraphicalRepresentation focusedFloatingLabel;
+	private GraphicalRepresentation<?> focusedFloatingLabel;
 	// private GraphicalRepresentation focusedObject;
 
-	private Vector<GraphicalRepresentation> focusedObjects;
-	private Vector<GraphicalRepresentation> selectedObjects;
+	private Vector<GraphicalRepresentation<?>> focusedObjects;
+	private Vector<GraphicalRepresentation<?>> selectedObjects;
 
 	private LabelView<?> _currentlyEditedLabel;
 
@@ -112,8 +110,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 
 		setCurrentTool(EditorTool.SelectionTool);
 		currentForegroundStyle = ForegroundStyle.makeDefault();
-		currentBackgroundStyle = BackgroundStyle
-				.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+		currentBackgroundStyle = BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
 		currentTextStyle = TextStyle.makeDefault();
 		currentShadowStyle = ShadowStyle.makeDefault();
 		currentShape = Shape.makeShape(ShapeType.RECTANGLE, null);
@@ -125,8 +122,8 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 			((DefaultDrawing<?>) drawing).addObserver(this);
 		}
 
-		focusedObjects = new Vector<GraphicalRepresentation>();
-		selectedObjects = new Vector<GraphicalRepresentation>();
+		focusedObjects = new Vector<GraphicalRepresentation<?>>();
+		selectedObjects = new Vector<GraphicalRepresentation<?>>();
 		palettes = new Vector<DrawingPalette>();
 		_buildDrawingView();
 		if (logger.isLoggable(Level.FINE)) {
@@ -146,8 +143,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 		drawingView = makeDrawingView(drawing);
 		if (drawing.getContainedObjects(drawing.getModel()) != null) {
 			for (Object o : drawing.getContainedObjects(drawing.getModel())) {
-				GraphicalRepresentation<?> gr = drawing
-						.getGraphicalRepresentation(o);
+				GraphicalRepresentation<?> gr = drawing.getGraphicalRepresentation(o);
 				if (gr instanceof ShapeGraphicalRepresentation) {
 					ShapeView<?> v = _buildShapeView((ShapeGraphicalRepresentation<?>) gr);
 					drawingView.add(v);
@@ -161,13 +157,11 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 		return drawingView;
 	}
 
-	private <O> ShapeView<O> _buildShapeView(
-			ShapeGraphicalRepresentation<O> shapedGR) {
+	private <O> ShapeView<O> _buildShapeView(ShapeGraphicalRepresentation<O> shapedGR) {
 		ShapeView<O> returned = shapedGR.makeShapeView(this);
 		if (shapedGR.getContainedObjects() != null) {
 			for (Object o : shapedGR.getContainedObjects()) {
-				GraphicalRepresentation<?> gr = shapedGR.getDrawing()
-						.getGraphicalRepresentation(o);
+				GraphicalRepresentation<?> gr = shapedGR.getDrawing().getGraphicalRepresentation(o);
 				if (gr instanceof ShapeGraphicalRepresentation) {
 					ShapeView<?> v = _buildShapeView((ShapeGraphicalRepresentation<?>) gr);
 					returned.add(v);
@@ -199,15 +193,13 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 			logger.info("Switch to tool " + aTool);
 			switch (aTool) {
 			case SelectionTool:
-				if (currentTool == EditorTool.DrawShapeTool
-						&& drawShapeToolController != null) {
+				if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {
 					drawShapeToolController.makeNewShape();
 				}
 				break;
 			case DrawShapeTool:
 				// if (drawShapeAction != null) {
-				drawShapeToolController = new DrawPolygonToolController(this,
-						drawShapeAction);
+				drawShapeToolController = new DrawPolygonToolController(this, drawShapeAction);
 				// }
 				break;
 			case DrawConnectorTool:
@@ -315,8 +307,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 			scaleTF = new JTextField(5);
 			int currentScale = (int) (getScale() * 100);
 			scaleTF.setText("" + currentScale + "%");
-			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE,
-					currentScale);
+			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
 			slider.setMajorTickSpacing(100);
 			slider.setMinorTickSpacing(20);
 			slider.setPaintTicks(false/* true */);
@@ -326,7 +317,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					if (slider.getValue() > 0) {
-						setScale(((double) slider.getValue()) / 100);
+						setScale((double) slider.getValue() / 100);
 						scaleTF.removeActionListener(actionListener);
 						scaleTF.setText("" + (int) (getScale() * 100) + "%");
 						scaleTF.addActionListener(actionListener);
@@ -340,9 +331,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 						// logger.info("On fait avec "+scaleTF.getText()+" ce qui donne: "+(((double)Integer.decode(scaleTF.getText()))/100));
 						Integer newScale = null;
 						if (scaleTF.getText().indexOf("%") > -1) {
-							newScale = Integer.decode(scaleTF.getText()
-									.substring(0,
-											scaleTF.getText().indexOf("%")));
+							newScale = Integer.decode(scaleTF.getText().substring(0, scaleTF.getText().indexOf("%")));
 						} else {
 							newScale = Integer.decode(scaleTF.getText());
 						}
@@ -355,7 +344,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 								}
 							});
 						}
-						setScale(((double) newScale) / 100);
+						setScale((double) newScale / 100);
 					} catch (NumberFormatException exception) {
 						// Forget
 					}
@@ -419,11 +408,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 			if (aFocusedlabel == null || focusedFloatingLabel != aFocusedlabel) {
 				if (getPaintManager().isPaintingCacheEnabled()) {
 					// Just repaint old and eventual new connector
-					drawingView.getPaintManager().repaint(
-							oldFocusedFloatingLabel);
+					drawingView.getPaintManager().repaint(oldFocusedFloatingLabel);
 					if (aFocusedlabel != null) {
-						drawingView.getPaintManager().repaint(
-								focusedFloatingLabel);
+						drawingView.getPaintManager().repaint(focusedFloatingLabel);
 					}
 				} else {
 					// @brutal mode
@@ -449,12 +436,11 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 		return null;
 	}
 
-	public Vector<GraphicalRepresentation> getSelectedObjects() {
+	public List<GraphicalRepresentation<?>> getSelectedObjects() {
 		return selectedObjects;
 	}
 
-	public void setSelectedObjects(
-			List<? extends GraphicalRepresentation> someSelectedObjects) {
+	public void setSelectedObjects(List<? extends GraphicalRepresentation> someSelectedObjects) {
 		stopEditionOfEditedLabelIfAny();
 		if (someSelectedObjects == null) {
 			setSelectedObjects(new Vector<GraphicalRepresentation>());
@@ -463,14 +449,13 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 
 		if (!selectedObjects.equals(someSelectedObjects)) {
 			clearSelection();
-			for (GraphicalRepresentation d : someSelectedObjects) {
+			for (GraphicalRepresentation<?> d : someSelectedObjects) {
 				addToSelectedObjects(d);
 			}
 		}
 	}
 
-	public void setSelectedObject(
-			GraphicalRepresentation aGraphicalRepresentation) {
+	public void setSelectedObject(GraphicalRepresentation aGraphicalRepresentation) {
 		stopEditionOfEditedLabelIfAny();
 		Vector<GraphicalRepresentation> singleton = new Vector<GraphicalRepresentation>();
 		singleton.add(aGraphicalRepresentation);
@@ -478,8 +463,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 		getToolbox().update();
 	}
 
-	public void addToSelectedObjects(
-			GraphicalRepresentation aGraphicalRepresentation) {
+	public void addToSelectedObjects(GraphicalRepresentation aGraphicalRepresentation) {
 		stopEditionOfEditedLabelIfAny();
 		if (aGraphicalRepresentation == null) {
 			logger.warning("Cannot add null object");
@@ -492,8 +476,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 		getToolbox().update();
 	}
 
-	public void removeFromSelectedObjects(
-			GraphicalRepresentation aGraphicalRepresentation) {
+	public void removeFromSelectedObjects(GraphicalRepresentation aGraphicalRepresentation) {
 		stopEditionOfEditedLabelIfAny();
 		if (aGraphicalRepresentation == null) {
 			logger.warning("Cannot remove null object");
@@ -520,18 +503,17 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 	public void clearSelection() {
 		// logger.info("Clear selection");
 		stopEditionOfEditedLabelIfAny();
-		for (GraphicalRepresentation gr : selectedObjects) {
+		for (GraphicalRepresentation<?> gr : selectedObjects) {
 			gr.setIsSelected(false);
 		}
 		selectedObjects.clear();
 	}
 
-	public Vector<GraphicalRepresentation> getFocusedObjects() {
+	public Vector<GraphicalRepresentation<?>> getFocusedObjects() {
 		return focusedObjects;
 	}
 
-	public void setFocusedObjects(
-			List<? extends GraphicalRepresentation> someFocusedObjects) {
+	public void setFocusedObjects(List<? extends GraphicalRepresentation> someFocusedObjects) {
 		if (someFocusedObjects == null) {
 			setFocusedObjects(new Vector<GraphicalRepresentation>());
 			return;
@@ -545,8 +527,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 		}
 	}
 
-	public void setFocusedObject(
-			GraphicalRepresentation aGraphicalRepresentation) {
+	public void setFocusedObject(GraphicalRepresentation aGraphicalRepresentation) {
 		if (aGraphicalRepresentation == null) {
 			clearFocusSelection();
 			return;
@@ -556,8 +537,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 		setFocusedObjects(singleton);
 	}
 
-	public void addToFocusedObjects(
-			GraphicalRepresentation aGraphicalRepresentation) {
+	public void addToFocusedObjects(GraphicalRepresentation aGraphicalRepresentation) {
 		if (aGraphicalRepresentation == null) {
 			logger.warning("Cannot add null object");
 			return;
@@ -568,8 +548,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 		}
 	}
 
-	public void removeFromFocusedObjects(
-			GraphicalRepresentation aGraphicalRepresentation) {
+	public void removeFromFocusedObjects(GraphicalRepresentation aGraphicalRepresentation) {
 		if (aGraphicalRepresentation == null) {
 			logger.warning("Cannot remove null object");
 			return;
@@ -580,8 +559,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 		aGraphicalRepresentation.setIsFocused(false);
 	}
 
-	public void toogleFocusSelection(
-			GraphicalRepresentation aGraphicalRepresentation) {
+	public void toogleFocusSelection(GraphicalRepresentation aGraphicalRepresentation) {
 		if (aGraphicalRepresentation.getIsFocused()) {
 			removeFromFocusedObjects(aGraphicalRepresentation);
 		} else {
@@ -637,17 +615,14 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 	}
 
 	/**
-	 * Implements strategy to preferencially choose a control point or an other
-	 * during focus retrieving strategy
+	 * Implements strategy to preferencially choose a control point or an other during focus retrieving strategy
 	 * 
 	 * @param cp1
 	 * @param cp2
 	 * @return
 	 */
-	public ControlArea<?> preferredFocusedControlArea(ControlArea<?> ca1,
-			ControlArea<?> ca2) {
-		if (ca1.getGraphicalRepresentation().getLayer() == ca2
-				.getGraphicalRepresentation().getLayer()) {
+	public ControlArea<?> preferredFocusedControlArea(ControlArea<?> ca1, ControlArea<?> ca2) {
+		if (ca1.getGraphicalRepresentation().getLayer() == ca2.getGraphicalRepresentation().getLayer()) {
 			// ControlPoint have priority on other ControlArea
 			if (ca1 instanceof ConnectorAdjustingControlPoint) {
 				return ca1;
@@ -660,8 +635,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 				return ca2;
 			}
 		}
-		return (ca1.getGraphicalRepresentation().getLayer() > ca2
-				.getGraphicalRepresentation().getLayer() ? ca1 : ca2);
+		return ca1.getGraphicalRepresentation().getLayer() > ca2.getGraphicalRepresentation().getLayer() ? ca1 : ca2;
 	}
 
 	public ControlArea<?> getFocusedControlArea() {
@@ -699,8 +673,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 	}
 
 	public FGEPaintManager getPaintManager() {
-		if (getDrawingView() != null)
+		if (getDrawingView() != null) {
 			return getDrawingView().getPaintManager();
+		}
 		return null;
 	}
 
@@ -828,8 +803,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 	private KeyDrivenMovingSessionTimer keyDrivenMovingSessionTimer = null;
 
 	private synchronized boolean keyDrivenMove(int deltaX, int deltaY) {
-		if (keyDrivenMovingSessionTimer == null
-				&& getFirstSelectedShape() != null) {
+		if (keyDrivenMovingSessionTimer == null && getFirstSelectedShape() != null) {
 			// System.out.println("BEGIN to move with keyboard");
 			startKeyDrivenMovingSession();
 			doMoveInSession(deltaX, deltaY);
@@ -843,8 +817,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 
 	public void doMoveInSession(int deltaX, int deltaY) {
 		keyDrivenMovingSessionTimer.typed();
-		Point newLocation = keyDrivenMovingSession
-				.getCurrentLocationInDrawingView();
+		Point newLocation = keyDrivenMovingSession.getCurrentLocationInDrawingView();
 		newLocation.x += deltaX;
 		newLocation.y += deltaY;
 		keyDrivenMovingSession.moveTo(newLocation);

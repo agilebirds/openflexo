@@ -81,7 +81,7 @@ public class ProcessorJavaFileResource extends JavaFileResource<ControlGraphGene
 	public void rebuildDependancies() {
 		// super.rebuildDependancies();
 		if (getGenerator() != null) {
-			addToDependantResources(getGenerator().getProcess().getFlexoResource());
+			addToDependentResources(getGenerator().getProcess().getFlexoResource());
 		}
 	}
 

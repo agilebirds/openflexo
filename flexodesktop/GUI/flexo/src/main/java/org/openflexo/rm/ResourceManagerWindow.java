@@ -188,7 +188,7 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("rebuild_dependancies"), _project.getResources()
 							.size());
 				}
-				_project.rebuildDependancies(ProgressWindow.instance());
+				_project.rebuildDependencies(ProgressWindow.instance());
 				ProgressWindow.hideProgressWindow();
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();

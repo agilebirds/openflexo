@@ -60,7 +60,7 @@ public class FlexoCopyOfFileResource extends
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		if (getGenerator() != null && getGenerator().getSource() != null) {
-			addToDependantResources(FlexoFileResourceResource.getResource(getGenerator().getSource(), getProject()));
+			addToDependentResources(FlexoFileResourceResource.getResource(getGenerator().getSource(), getProject()));
 		}
 	}
 

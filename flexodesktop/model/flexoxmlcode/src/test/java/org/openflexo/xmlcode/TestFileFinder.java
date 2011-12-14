@@ -23,15 +23,16 @@ import java.io.File;
 
 public class TestFileFinder {
 
-	private static final String pathWorkspace = System.getProperty("user.dir") + "/../FlexoXMLCoDe/src/test/resources/";
-	private static final String pathHudson = "tmp/tests/FlexoResources/";
+	private static final String pathWorkspace = System.getProperty("user.dir") + "/../flexoxmlcode/src/test/resources/";
+
+	// private static final String pathHudson = "src/test/resources";
 
 	public static File findTestFile(String fileName) {
 		String fullPath1 = pathWorkspace + fileName;
 		File reply = new File(fullPath1);
-		if (reply.exists()) {
-			return reply;
+		if (!reply.exists()) {
+			System.err.println("Could not find resource : " + fileName + " user dir is " + System.getProperty("user.dir"));
 		}
-		return new File(pathHudson + fileName);
+		return reply;
 	}
 }

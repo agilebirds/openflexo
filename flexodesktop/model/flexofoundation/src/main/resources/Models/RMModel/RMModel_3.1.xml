@@ -16,12 +16,12 @@
   </entity> 
   
   <entity name="org.openflexo.foundation.rm.FlexoResource" abstract="YES">
-	<property name="dependantResources" xmlTag="DependantResources"/>
+	<property name="dependentResources" xmlTag="DependantResources"/>
 	<property name="synchronizedResources" xmlTag="SynchronizedResources"/>
 	<property name="lastSynchronizedForResources" xmlTag="LastSynchronizedWithResourceEntry" type="hashtable" key="resource"/>
   </entity>
   
-  <entity name="org.openflexo.foundation.rm.DependantResources" xmlTag="DependantResources">
+  <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">
 	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector"/>
   </entity>
   

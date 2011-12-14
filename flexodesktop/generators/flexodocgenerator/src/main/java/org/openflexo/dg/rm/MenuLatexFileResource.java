@@ -100,7 +100,7 @@ public class MenuLatexFileResource extends LatexFileResource<DGLatexGenerator<Fl
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getFlexoNavigationMenuResource());
+		addToDependentResources(getProject().getFlexoNavigationMenuResource());
 	}
 
 	@Override

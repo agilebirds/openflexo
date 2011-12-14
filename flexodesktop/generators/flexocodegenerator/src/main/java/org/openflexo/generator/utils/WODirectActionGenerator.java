@@ -46,7 +46,7 @@ public class WODirectActionGenerator extends JavaClassGenerator {
 	 */
 	@Override
 	public void rebuildDependanciesForResource(JavaFileResource resource) {
-		resource.addToDependantResources(getProject().getFlexoDKVResource());
+		resource.addToDependentResources(getProject().getFlexoDKVResource());
 	}
 
 	@Override

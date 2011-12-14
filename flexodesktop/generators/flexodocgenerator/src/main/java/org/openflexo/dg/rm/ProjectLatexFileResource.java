@@ -95,8 +95,8 @@ public class ProjectLatexFileResource extends LatexFileResource<DGLatexGenerator
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getTOCResource());
-		addToDependantResources(getProject().getGeneratedDocResource());
+		addToDependentResources(getProject().getTOCResource());
+		addToDependentResources(getProject().getGeneratedDocResource());
 	}
 
 	@Override

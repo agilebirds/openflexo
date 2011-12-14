@@ -96,7 +96,7 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 		super.rebuildDependancies();
 
 		if (getEntity() != null) {
-			addToDependantResources(getProject().getFlexoDMResource());
+			addToDependentResources(getProject().getFlexoDMResource());
 		}
 		if (getGenerator() != null) {
 			getGenerator().rebuildDependanciesForResource(this);

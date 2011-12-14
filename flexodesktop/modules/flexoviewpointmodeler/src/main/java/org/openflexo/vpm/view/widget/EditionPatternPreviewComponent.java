@@ -139,7 +139,7 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 				return null;
 			}
 			if (previewController.getSelectedObjects().size() > 0) {
-				return previewController.getSelectedObjects().firstElement().getDrawable();
+				return previewController.getSelectedObjects().get(0).getDrawable();
 			}
 			return null;
 		}
@@ -165,7 +165,7 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 
 	@Override
 	public boolean mayRepresent(Object o) {
-		return (o instanceof PatternRole && ((PatternRole) o).getEditionPattern() == editionPattern);
+		return o instanceof PatternRole && ((PatternRole) o).getEditionPattern() == editionPattern;
 	}
 
 	@Override

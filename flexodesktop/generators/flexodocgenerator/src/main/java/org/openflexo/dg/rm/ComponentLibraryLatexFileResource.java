@@ -83,7 +83,7 @@ public class ComponentLibraryLatexFileResource extends LatexFileResource<DGLatex
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getTOCResource());
-		addToDependantResources(getProject().getFlexoComponentLibraryResource());
+		addToDependentResources(getProject().getTOCResource());
+		addToDependentResources(getProject().getFlexoComponentLibraryResource());
 	}
 }

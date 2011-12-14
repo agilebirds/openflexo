@@ -104,8 +104,8 @@ public class FlexoOperationComponentResource extends FlexoComponentResource impl
 	@Deprecated
 	public void addToThumbnailResources(FlexoTabComponentResource thumbnailComponentResource) {
 		_thumbnailResources.add(thumbnailComponentResource);
-		if (!getDependantResources().contains(thumbnailComponentResource)) {
-			addToDependantResources(thumbnailComponentResource);
+		if (!getDependentResources().contains(thumbnailComponentResource)) {
+			addToDependentResources(thumbnailComponentResource);
 		}
 	}
 

@@ -100,7 +100,7 @@ public class DKVModelLatexFileResource extends LatexFileResource<DGLatexGenerato
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getFlexoDKVResource());
+		addToDependentResources(getProject().getFlexoDKVResource());
 	}
 
 	@Override

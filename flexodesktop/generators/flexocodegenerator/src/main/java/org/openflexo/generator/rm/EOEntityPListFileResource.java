@@ -146,7 +146,7 @@ public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGe
 		super.rebuildDependancies();
 
 		if (getEntity() != null) {
-			addToDependantResources(getProject().getFlexoDMResource());
+			addToDependentResources(getProject().getFlexoDMResource());
 		}
 	}
 

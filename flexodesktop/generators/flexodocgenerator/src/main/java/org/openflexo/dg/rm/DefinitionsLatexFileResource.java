@@ -70,7 +70,7 @@ public class DefinitionsLatexFileResource extends LatexFileResource<DGLatexGener
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getTOCResource());
+		addToDependentResources(getProject().getTOCResource());
 	}
 
 }

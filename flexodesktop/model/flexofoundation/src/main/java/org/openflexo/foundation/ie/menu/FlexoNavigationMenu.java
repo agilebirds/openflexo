@@ -586,12 +586,12 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	public void setUserProfileProcess(FlexoProcess displayProcess) {
 		FlexoProcess old = this.userProfileProcess;
 		if (old != null) {
-			getFlexoResource().removeFromDependantResources(old.getFlexoResource());
+			getFlexoResource().removeFromDependentResources(old.getFlexoResource());
 		}
 		this.userProfileProcess = displayProcess;
 		if (displayProcess != null) {
 			userProfileProcessFlexoID = displayProcess.getFlexoID();
-			getFlexoResource().addToDependantResources(displayProcess.getFlexoResource());
+			getFlexoResource().addToDependentResources(displayProcess.getFlexoResource());
 		} else {
 			userProfileProcessFlexoID = -1;
 		}

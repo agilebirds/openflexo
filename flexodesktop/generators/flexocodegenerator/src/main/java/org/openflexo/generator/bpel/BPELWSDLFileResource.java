@@ -145,8 +145,8 @@ public class BPELWSDLFileResource extends TextFileResource<BPELWSDLFileGenerator
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getFlexoDMResource());
-		addToDependantResources(getGenerator().getWebService().getFlexoResource());
+		addToDependentResources(getProject().getFlexoDMResource());
+		addToDependentResources(getGenerator().getWebService().getFlexoResource());
 	}
 
 	/**

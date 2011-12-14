@@ -55,7 +55,7 @@ public class FlexoWSDLResource extends FlexoImportedResource<WSDLResourceData> {
 	public FlexoWSDLResource(FlexoProject aProject, FlexoDMResource dmResource, FlexoProjectFile wsdlFile) throws InvalidFileNameException {
 		this(aProject);
 		setResourceFile(wsdlFile);
-		dmResource.addToDependantResources(this);
+		dmResource.addToDependentResources(this);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Build new FlexoWSDLResource");
 		}
@@ -125,7 +125,7 @@ public class FlexoWSDLResource extends FlexoImportedResource<WSDLResourceData> {
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		getProject().getFlexoDMResource().addToDependantResources(this);
+		getProject().getFlexoDMResource().addToDependentResources(this);
 	}
 
 }

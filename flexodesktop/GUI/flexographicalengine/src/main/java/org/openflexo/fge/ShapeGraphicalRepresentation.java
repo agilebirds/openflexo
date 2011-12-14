@@ -1364,7 +1364,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	@Override
-	protected void computeNewConstraint(ConstraintDependancy dependancy) {
+	protected void computeNewConstraint(ConstraintDependency dependancy) {
 		if (dependancy.requiringParameter == Parameters.xConstraints && xConstraints != null && xConstraints.isValid()) {
 			updateXPosition();
 		} else if (dependancy.requiringParameter == Parameters.yConstraints && yConstraints != null && yConstraints.isValid()) {

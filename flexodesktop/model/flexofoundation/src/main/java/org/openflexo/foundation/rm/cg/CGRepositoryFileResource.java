@@ -117,7 +117,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 				}
 				generator.setUsedTemplates(templates);
 				if (generator.getTemplateLocator() != null) {
-					addToDependantResources(generator.getTemplateLocator());
+					addToDependentResources(generator.getTemplateLocator());
 				}
 			}
 		}
@@ -351,7 +351,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	/**
 	 * Overrides addToDependantResources
 	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResource#addToDependantResources(org.openflexo.foundation.rm.FlexoResource)
+	 * @see org.openflexo.foundation.rm.FlexoResource#addToDependentResources(org.openflexo.foundation.rm.FlexoResource)
 	 */
 	/*    @Override
 	    public void addToDependantResources(FlexoResource aDependantResource)
@@ -465,11 +465,11 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 			// in the special case of "memory-needs-update" computation
 			// Hope you understand what i mean..
 			// 07/12/2006 / Sylvain
-			getDependantResources().update(); // Clears the dependancy cache
+			getDependentResources().update(); // Clears the dependancy cache
 			_memoryUpdateComputation = true;
 			boolean returned = needsUpdate();
 			_memoryUpdateComputation = false;
-			getDependantResources().update();// Clears the dependancy cache
+			getDependentResources().update();// Clears the dependancy cache
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Resource " + getFileName() + " lastTimeItWasGenerated="
 						+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(lastTimeItWasGenerated) + " returns " + returned + " reason "
@@ -493,7 +493,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	@Override
 	public boolean ensureGenerationIsUpToDate() throws FlexoException {
 		if (getGenerationException() == null) {
-			getDependantResources().update();
+			getDependentResources().update();
 			return super.ensureGenerationIsUpToDate();
 		}
 		return false;
@@ -617,7 +617,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 		try {
 			FlexoResourceTree updatedResources = performUpdateDependanciesModel(new Vector<FlexoResource<FlexoResourceData>>());
 			if (!updatedResources.isEmpty()) {
-				for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependantResources().elements(false,
+				for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependentResources().elements(false,
 						getProject().getDependancyScheme()); e.hasMoreElements();) {
 					FlexoResource<FlexoResourceData> resource = e.nextElement();
 					resource.update();
