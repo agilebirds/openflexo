@@ -110,11 +110,6 @@ public class JarLoader implements ImportedResourceData {
 		}
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
-		System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!JarLoader finalized");
-	}
-
 	public Hashtable<String, Class<?>> getContainedClasses() {
 		return classes;
 	}
