@@ -55,6 +55,7 @@ import org.openflexo.icon.IconMarker;
 import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * Widget allowing to select an object while browsing a relevant subset of objects in project
@@ -250,14 +251,14 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		}
 	}
 
-	protected CustomFIBController makeCustomFIBController(FIBComponent fibComponent) {
-		return new CustomFIBController(fibComponent, FIBModelObjectSelector.this);
+	protected SelectorFIBController makeCustomFIBController(FIBComponent fibComponent) {
+		return new SelectorFIBController(fibComponent, FIBModelObjectSelector.this);
 	}
 
 	public class SelectorDetailsPanel extends ResizablePanel {
 		private final FIBComponent fibComponent;
 		private final FIBView fibView;
-		private final CustomFIBController controller;
+		private final SelectorFIBController controller;
 
 		protected SelectorDetailsPanel(T anObject) {
 			super();
@@ -287,10 +288,10 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 
 	}
 
-	public static class CustomFIBController extends FIBController<FIBModelObjectSelector> {
+	public static class SelectorFIBController extends FlexoFIBController<FIBModelObjectSelector> {
 		private final FIBModelObjectSelector selector;
 
-		public CustomFIBController(FIBComponent component, FIBModelObjectSelector selector) {
+		public SelectorFIBController(FIBComponent component, FIBModelObjectSelector selector) {
 			super(component);
 			this.selector = selector;
 		}
@@ -352,12 +353,11 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 
 	}
 
-	/* @Override
-	 public void setEditedObject(BackgroundStyle object)
-	 {
-	 	logger.info("setEditedObject with "+object);
-	 	super.setEditedObject(object);
-	 }*/
+	/*
+	  @Override public void setEditedObject(BackgroundStyle object) {
+	  logger.info("setEditedObject with "+object);
+	  super.setEditedObject(object); }
+	 */
 
 	@Override
 	public void apply() {
@@ -386,10 +386,9 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		super.deletePopup();
 	}
 
-	/*protected void pointerLeavesPopup()
-	{
-	   cancel();
-	}*/
+	/*
+	 * protected void pointerLeavesPopup() { cancel(); }
+	 */
 
 	public SelectorDetailsPanel getSelectorPanel() {
 		return _selectorPanel;
@@ -468,72 +467,52 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		this.candidateValue = candidateValue;
 	}
 
-	/*public static void testSelector(final FIBModelObjectSelector selector)
-	{
-		final FlexoProject prj = loadProject();
-		selector.createCustomPanel(null);
-		selector.setProject(prj);
-		FIBAbstractEditor editor = new FIBAbstractEditor() { 
-			@Override
-			public Object[] getData() { 
-				return FIBAbstractEditor.makeArray(selector); 
-			} 
-			@Override
-			public File getFIBFile() { 
-				return selector.getFIBFile(); 
-			}
-			@Override
-			public FIBController getController()
-			{
-				return selector.getSelectorPanel().controller;
-			}
-			@Override
-			public FIBController makeNewController()
-			{
-				return selector.makeCustomFIBController(selector.getSelectorPanel().fibComponent);
-			}
-
-		};
-		 
-		editor.addAction("set_filtered_name",new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				selector.setFilteredName("T");
-				selector.updateMatchingValues();			
-			}
-		});
-		editor.launch();
-	}
-
-	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
-		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
-			return new DefaultFlexoEditor(project);
-		}
-	};
-
-	public static FileResource PRJ_FILE = new FileResource("Prj/TestBrowser.prj");
-
-	public static FlexoProject loadProject()
-	{
-		File projectFile = PRJ_FILE;
-		FlexoProject project = null;
-		FlexoEditor editor;
-		logger.info("Found project "+projectFile.getAbsolutePath());
-		try {
-			editor = FlexoResourceManager.initializeExistingProject(projectFile,EDITOR_FACTORY,null);
-			project = editor.getProject();
-		} catch (ProjectLoadingCancelledException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ProjectInitializerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		logger.info("Successfully loaded project "+projectFile.getAbsolutePath());
-
-		return project;
-	}
-
-	*/
+	/*
+	 * public static void testSelector(final FIBModelObjectSelector selector) {
+	 * final FlexoProject prj = loadProject(); selector.createCustomPanel(null);
+	 * selector.setProject(prj); FIBAbstractEditor editor = new
+	 * FIBAbstractEditor() {
+	 * 
+	 * @Override public Object[] getData() { return
+	 * FIBAbstractEditor.makeArray(selector); }
+	 * 
+	 * @Override public File getFIBFile() { return selector.getFIBFile(); }
+	 * 
+	 * @Override public FIBController getController() { return
+	 * selector.getSelectorPanel().controller; }
+	 * 
+	 * @Override public FIBController makeNewController() { return
+	 * selector.makeCustomFIBController
+	 * (selector.getSelectorPanel().fibComponent); }
+	 * 
+	 * };
+	 * 
+	 * editor.addAction("set_filtered_name",new ActionListener() {
+	 * 
+	 * @Override public void actionPerformed(ActionEvent e) {
+	 * selector.setFilteredName("T"); selector.updateMatchingValues(); } });
+	 * editor.launch(); }
+	 * 
+	 * protected static final FlexoEditorFactory EDITOR_FACTORY = new
+	 * FlexoEditorFactory() { public DefaultFlexoEditor
+	 * makeFlexoEditor(FlexoProject project) { return new
+	 * DefaultFlexoEditor(project); } };
+	 * 
+	 * public static FileResource PRJ_FILE = new
+	 * FileResource("Prj/TestBrowser.prj");
+	 * 
+	 * public static FlexoProject loadProject() { File projectFile = PRJ_FILE;
+	 * FlexoProject project = null; FlexoEditor editor;
+	 * logger.info("Found project "+projectFile.getAbsolutePath()); try { editor
+	 * =
+	 * FlexoResourceManager.initializeExistingProject(projectFile,EDITOR_FACTORY
+	 * ,null); project = editor.getProject(); } catch
+	 * (ProjectLoadingCancelledException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); } catch (ProjectInitializerException e) { // TODO
+	 * Auto-generated catch block e.printStackTrace(); }
+	 * logger.info("Successfully loaded project "
+	 * +projectFile.getAbsolutePath());
+	 * 
+	 * return project; }
+	 */
 }

@@ -86,7 +86,7 @@ public class FIBProcessSelector extends FIBModelObjectSelector<FlexoProcess> {
 		return "";
 	}
 
-	public static class CustomFIBController extends FIBModelObjectSelector.CustomFIBController {
+	public static class CustomFIBController extends FIBModelObjectSelector.SelectorFIBController {
 		public CustomFIBController(FIBComponent component, FIBProcessSelector selector) {
 			super(component, selector);
 		}
