@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.help;
 
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.openflexo.foundation.rm.FlexoProject;
 
@@ -36,7 +36,7 @@ public interface ApplicationHelpEntryPoint {
 
 	public boolean hasSpecificHelp(String key);
 
-	public Hashtable<String, String> getSpecificDescriptions();
+	public Map<String, String> getSpecificDescriptions();
 
 	public FlexoProject getProject();
 

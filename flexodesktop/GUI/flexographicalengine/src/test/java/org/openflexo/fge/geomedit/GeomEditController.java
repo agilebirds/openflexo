@@ -464,7 +464,7 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		super.addToSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().firstElement(), null));
+			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -480,7 +480,7 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 		super.removeFromSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().firstElement(), null));
+			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());

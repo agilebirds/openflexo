@@ -66,7 +66,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		setName(aName);
 		setResourceFile(componentFile);
 		addToSynchronizedResources(clResource);
-		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependentResources(getProject().getFlexoDMResource());
 	}
 
 	/**
@@ -203,7 +203,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		addToSynchronizedResources(getProject().getFlexoComponentLibraryResource());
-		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependentResources(getProject().getFlexoDMResource());
 
 		if (getWOComponent() != null) {
 
@@ -213,7 +213,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Found dependancy between " + this + " and " + ci.getComponentDefinition().getComponentResource());
 					}
-					addToDependantResources(ci.getComponentDefinition().getComponentResource());
+					addToDependentResources(ci.getComponentDefinition().getComponentResource());
 				} else {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Inconsistant data: ComponentInstance refers to an unknown ComponentDefinition "

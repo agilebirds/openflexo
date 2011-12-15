@@ -167,7 +167,7 @@ public class ResourceManagerPanel extends JPanel {
 	protected void setSelectedResource(FlexoResource resource) {
 		_selectedResource = resource;
 		synchronizedResourcesList.setModel(new ResourceListModel(resource.getSynchronizedResources()));
-		dependantResourcesList.setModel(new ResourceListModel(resource.getDependantResources()));
+		dependantResourcesList.setModel(new ResourceListModel(resource.getDependentResources()));
 		alteredResourcesList.setModel(new ResourceListModel(resource.getAlteredResources()));
 	}
 

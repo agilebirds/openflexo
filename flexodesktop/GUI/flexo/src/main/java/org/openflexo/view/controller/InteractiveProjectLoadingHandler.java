@@ -33,7 +33,7 @@ import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoRMResource;
 import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
+import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource.LoadXMLResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
@@ -78,9 +78,9 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 		progress.setProgress(FlexoLocalization.localizedForKey("converting_project"));
 		progress.resetSecondaryProgress(resourcesToConvert.size());
 		performingAutomaticConversion = true;
-		DependancyAlgorithmScheme scheme = project.getDependancyScheme();
+		DependencyAlgorithmScheme scheme = project.getDependancyScheme();
 		// Pessimistic dependancy scheme is cheaper and optimistic is not intended for this situation
-		project.setDependancyScheme(DependancyAlgorithmScheme.Pessimistic);
+		project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
 		FlexoResource.sortResourcesWithDependancies(resources);
 		for (FlexoXMLStorageResource<? extends XMLStorageResourceData> res : resources) {
 			progress.setSecondaryProgress(FlexoLocalization.localizedForKey("converting") + " " + res.getResourceIdentifier() + " "

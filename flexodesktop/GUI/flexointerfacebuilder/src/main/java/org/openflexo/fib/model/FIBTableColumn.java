@@ -32,21 +32,29 @@ import org.openflexo.antar.binding.BindingVariableImpl;
 
 public abstract class FIBTableColumn extends FIBModelObject {
 
-	private static final Logger logger = Logger.getLogger(FIBTableColumn.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FIBTableColumn.class
+			.getPackage().getName());
 
 	private FIBTable table;
 
 	public static enum Parameters implements FIBModelAttribute {
-		data, format, tooltip, title, tooltipText, columnWidth, resizable, displayTitle, font
+		data, format, tooltip, title, tooltipText, columnWidth, resizable, displayTitle, font, valueChangedAction
+
 	}
 
 	public static enum ColumnType {
 		CheckBox, Custom, DropDown, Icon, Label, Number, TextField
 	}
 
-	public static BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);
-	public static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, BindingDefinitionType.GET, false);
-	public static BindingDefinition FORMAT = new BindingDefinition("format", String.class, BindingDefinitionType.GET, false);
+	public static BindingDefinition DATA = new BindingDefinition("data",
+			Object.class, BindingDefinitionType.GET, false);
+	public static BindingDefinition TOOLTIP = new BindingDefinition("tooltip",
+			String.class, BindingDefinitionType.GET, false);
+	public static BindingDefinition FORMAT = new BindingDefinition("format",
+			String.class, BindingDefinitionType.GET, false);
+	public static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition(
+			"valueChangedAction", Void.class, BindingDefinitionType.EXECUTE,
+			false);
 
 	private DataBinding data;
 	private DataBinding format;
@@ -57,6 +65,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	private boolean resizable = true;
 	private boolean displayTitle = true;
 	private Font font;
+	private DataBinding valueChangedAction;
 
 	private final FIBFormatter formatter;
 
@@ -113,7 +122,8 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public Type getDataClass() {
-		if (getData() != null && getData().getBinding() != null && getData().getBinding() != null) {
+		if (getData() != null && getData().getBinding() != null
+				&& getData().getBinding() != null) {
 			return getData().getBinding().getAccessedType();
 		}
 		return getDefaultDataClass();
@@ -126,7 +136,8 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public void setTitle(String title) {
-		FIBAttributeNotification<String> notification = requireChange(Parameters.title, title);
+		FIBAttributeNotification<String> notification = requireChange(
+				Parameters.title, title);
 		if (notification != null) {
 			this.title = title;
 			hasChanged(notification);
@@ -138,7 +149,8 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public void setColumnWidth(Integer columnWidth) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.columnWidth, columnWidth);
+		FIBAttributeNotification<Integer> notification = requireChange(
+				Parameters.columnWidth, columnWidth);
 		if (notification != null) {
 			this.columnWidth = columnWidth;
 			hasChanged(notification);
@@ -150,7 +162,8 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public void setResizable(Boolean resizable) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.resizable, resizable);
+		FIBAttributeNotification<Boolean> notification = requireChange(
+				Parameters.resizable, resizable);
 		if (notification != null) {
 			this.resizable = resizable;
 			hasChanged(notification);
@@ -162,7 +175,8 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public void setDisplayTitle(Boolean displayTitle) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.displayTitle, displayTitle);
+		FIBAttributeNotification<Boolean> notification = requireChange(
+				Parameters.displayTitle, displayTitle);
 		if (notification != null) {
 			this.displayTitle = displayTitle;
 			hasChanged(notification);
@@ -181,7 +195,8 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public void setFont(Font font) {
-		FIBAttributeNotification<Font> notification = requireChange(Parameters.font, font);
+		FIBAttributeNotification<Font> notification = requireChange(
+				Parameters.font, font);
 		if (notification != null) {
 			this.font = font;
 			hasChanged(notification);
@@ -221,12 +236,14 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 		private void createFormatterBindingModel() {
 			formatterBindingModel = new BindingModel();
-			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "object", Object.class) {
-				@Override
-				public Type getType() {
-					return getDataClass();
-				}
-			});
+			formatterBindingModel
+					.addToBindingVariables(new BindingVariableImpl<Object>(
+							this, "object", Object.class) {
+						@Override
+						public Type getType() {
+							return getDataClass();
+						}
+					});
 		}
 
 		@Override
@@ -253,7 +270,8 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public void setTooltipText(String tooltipText) {
-		FIBAttributeNotification<String> notification = requireChange(Parameters.tooltipText, tooltipText);
+		FIBAttributeNotification<String> notification = requireChange(
+				Parameters.tooltipText, tooltipText);
 		if (notification != null) {
 			this.tooltipText = tooltipText;
 			hasChanged(notification);
@@ -272,6 +290,21 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		tooltip.setBindingAttribute(Parameters.tooltip);
 		tooltip.setBindingDefinition(TOOLTIP);
 		this.tooltip = tooltip;
+	}
+
+	public DataBinding getValueChangedAction() {
+		if (valueChangedAction == null) {
+			valueChangedAction = new DataBinding(this,
+					Parameters.valueChangedAction, VALUE_CHANGED_ACTION);
+		}
+		return valueChangedAction;
+	}
+
+	public void setValueChangedAction(DataBinding valueChangedAction) {
+		valueChangedAction.setOwner(this);
+		valueChangedAction.setBindingAttribute(Parameters.valueChangedAction);
+		valueChangedAction.setBindingDefinition(VALUE_CHANGED_ACTION);
+		this.valueChangedAction = valueChangedAction;
 	}
 
 	@Override

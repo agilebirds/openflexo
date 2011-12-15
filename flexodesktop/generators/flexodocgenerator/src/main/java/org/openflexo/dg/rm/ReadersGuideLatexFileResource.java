@@ -70,7 +70,7 @@ public class ReadersGuideLatexFileResource extends LatexFileResource<DGLatexGene
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getTOCResource());
+		addToDependentResources(getProject().getTOCResource());
 	}
 
 }

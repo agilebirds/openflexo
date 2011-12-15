@@ -83,8 +83,8 @@ public class WorkflowLatexFileResource extends LatexFileResource<DGLatexGenerato
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getTOCResource());
-		addToDependantResources(getProject().getFlexoWorkflowResource());
+		addToDependentResources(getProject().getTOCResource());
+		addToDependentResources(getProject().getFlexoWorkflowResource());
 	}
 
 }

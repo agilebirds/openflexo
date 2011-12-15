@@ -163,6 +163,8 @@ public class XMLSerializer {
 									}
 								}
 								break;
+							case MAP:
+								throw new UnsupportedOperationException("Cannot serialize maps for now");
 							default:
 								break;
 							}

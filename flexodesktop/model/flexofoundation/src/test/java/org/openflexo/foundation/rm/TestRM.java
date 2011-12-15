@@ -408,7 +408,7 @@ public class TestRM extends FlexoTestCase {
 		assertNotLoaded(_testOperationComponentResource2);
 		assertNotLoaded(_partialComponentResource);
 
-		for (FlexoResource dr : _testOperationComponentResource.getDependantResources()) {
+		for (FlexoResource dr : _testOperationComponentResource.getDependentResources()) {
 			logger.info("depends of " + dr + " dr.isLoaded()=" + ((FlexoStorageResource) dr).isLoaded());
 		}
 

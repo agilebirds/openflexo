@@ -27,7 +27,7 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.fge.GraphicalRepresentation.DependancyLoopException;
+import org.openflexo.fge.GraphicalRepresentation.DependencyLoopException;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
@@ -227,7 +227,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 					// logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+c);
 					try {
 						component.declareDependantOf(c, getBindingAttribute(), param);
-					} catch (DependancyLoopException e) {
+					} catch (DependencyLoopException e) {
 						logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
 								+ "in the context of binding: " + binding.getStringRepresentation() + " component: " + component
 								+ " dependancy: " + c + " identifier: " + c.getIdentifier() + " message: " + e.getMessage());

@@ -572,13 +572,13 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		if (getModelObject() != null && getModelObject().getXMLResourceData() != null
 				&& getModelObject().getXMLResourceData().getFlexoResource() != null) {
 			if (!(getModelObject() instanceof ComponentDefinition)) {
-				addToDependantResources(getModelObject().getXMLResourceData().getFlexoResource());
+				addToDependentResources(getModelObject().getXMLResourceData().getFlexoResource());
 			}
 		}
 		if (getModelObject() instanceof ComponentDefinition) {
 			FlexoComponentResource compRes = ((ComponentDefinition) getModelObject()).getComponentResource(false);
 			if (compRes != null) {
-				addToDependantResources(compRes);
+				addToDependentResources(compRes);
 			}
 		}
 	}

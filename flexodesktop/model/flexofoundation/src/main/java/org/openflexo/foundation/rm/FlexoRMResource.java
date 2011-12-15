@@ -169,7 +169,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			aProject.setFlexoResource(this);
 			aProject.registerResource(this);
 			for (FlexoResource<? extends FlexoResourceData> res : aProject) {
-				res.getDependantResources().update();
+				res.getDependentResources().update();
 				res.getAlteredResources().update();
 				res.getSynchronizedResources().update();
 			}
@@ -362,7 +362,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			}
 
 			if (requireDependanciesRebuild) {
-				getProject().rebuildDependancies();
+				getProject().rebuildDependencies();
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Dependancies rebuilding has been performed. Save RM file.");
 				}

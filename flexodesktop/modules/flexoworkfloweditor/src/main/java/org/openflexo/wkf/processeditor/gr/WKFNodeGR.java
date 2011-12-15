@@ -279,7 +279,7 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 			GraphicalRepresentation<?> gr = en.nextElement();
 			if (gr instanceof ConnectorGraphicalRepresentation<?>) {
 				ConnectorGraphicalRepresentation<?> connector = (ConnectorGraphicalRepresentation<?>) gr;
-				if (connector.getEndObject() == this && connector.getStartObject() instanceof WKFObjectGR) {
+				if (connector.getEndObject() == this && connector.getStartObject() instanceof WKFObjectGR<?>) {
 					findSiblingGRFromNodeAndAddToVector((WKFObjectGR<?>) connector.getStartObject(), v);
 				}
 			}
@@ -294,7 +294,7 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 			GraphicalRepresentation<?> gr = en.nextElement();
 			if (gr instanceof ConnectorGraphicalRepresentation<?>) {
 				ConnectorGraphicalRepresentation<?> connector = (ConnectorGraphicalRepresentation<?>) gr;
-				if (connector.getStartObject() == this && connector.getEndObject() instanceof WKFObjectGR) {
+				if (connector.getStartObject() == this && connector.getEndObject() instanceof WKFObjectGR<?>) {
 					findSiblingGRFromNodeAndAddToVector((WKFObjectGR<?>) connector.getEndObject(), v);
 				}
 			}

@@ -21,12 +21,12 @@ package org.openflexo.foundation.rm;
 
 import java.io.File;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.toolbox.FlexoProperties;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
@@ -39,7 +39,7 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 	private FlexoProject _project;
 	private String _identifier;
 	private File _directory;
-	private FlexoProperties directoriesForUser = new FlexoProperties();
+	private Map<String, String> directoriesForUser = new TreeMap<String, String>();
 
 	private static final String getUserName() {
 		return System.getProperty("user.name");
@@ -83,7 +83,7 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 
 	public File getDirectory() {
 		if (_directory == null) {
-			String s = (String) directoriesForUser.get(getUserName());
+			String s = directoriesForUser.get(getUserName());
 			if (s != null) {
 				_directory = new File(s);
 			}
@@ -159,12 +159,12 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 		return returned;
 	}
 
-	public Properties getDirectoriesForUser() {
+	public Map<String, String> getDirectoriesForUser() {
 		return directoriesForUser;
 	}
 
-	public void setDirectoriesForUser(Properties directoriesForUser) {
-		this.directoriesForUser = new FlexoProperties(directoriesForUser);
+	public void setDirectoriesForUser(Map<String, String> directoriesForUser) {
+		this.directoriesForUser = new TreeMap<String, String>(directoriesForUser);
 	}
 
 	public void setDirectoriesForUserForKey(String directory, String user) {
@@ -175,7 +175,4 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 		this.directoriesForUser.remove(key);
 	}
 
-	public void setSerializing(boolean isSerializing) {
-		directoriesForUser.setStoring(isSerializing);
-	}
 }

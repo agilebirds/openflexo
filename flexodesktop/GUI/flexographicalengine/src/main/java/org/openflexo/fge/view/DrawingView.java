@@ -61,6 +61,7 @@ import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.controller.DrawingController.EditorTool;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.controller.RectangleSelectingAction;
 import org.openflexo.fge.cp.ControlArea;
@@ -410,7 +411,8 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	}
 
 	private void forcePaintObjects(GraphicalRepresentation<?> fatherGraphicalRepresentation, Graphics g, boolean temporaryObjectsOnly) {
-		List<? extends GraphicalRepresentation<?>> containedGR = fatherGraphicalRepresentation.getContainedGraphicalRepresentations();
+		List<? extends GraphicalRepresentation<?>> containedGR = fatherGraphicalRepresentation
+				.getOrderedContainedGraphicalRepresentations();
 		if (containedGR == null) {
 			return;
 		}
@@ -516,7 +518,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 
 		Vector<GeometricGraphicalRepresentation> geomList = new Vector<GeometricGraphicalRepresentation>();
-		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+		for (Object gr : getGraphicalRepresentation().getOrderedContainedGraphicalRepresentations()) {
 			if (gr instanceof GeometricGraphicalRepresentation) {
 				geomList.add((GeometricGraphicalRepresentation) gr);
 			}
@@ -540,11 +542,11 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			graphics.createGraphics(g2, getController());
 
 			// Don't paint those things in case of buffering
-			for (GraphicalRepresentation o : new Vector<GraphicalRepresentation>(getController().getFocusedObjects())) {
+			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation>(getController().getFocusedObjects())) {
 				paintFocused(o, graphics);
 			}
 
-			for (GraphicalRepresentation o : new Vector<GraphicalRepresentation>(getController().getSelectedObjects())) {
+			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation>(getController().getSelectedObjects())) {
 				if (o.shouldBeDisplayed()) {
 					paintSelected(o, graphics);
 				}
@@ -557,11 +559,17 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			 * (getController().getFocusedFloatingLabel(), g); }
 			 */
 
+			if (getController().getCurrentTool() == EditorTool.DrawShapeTool) {
+				// logger.info("Painting current edited shape");
+				paintCurrentEditedShape(graphics);
+			}
+
 			graphics.releaseGraphics();
 
 			if (_rectangleSelectingAction != null) {
 				_rectangleSelectingAction.paint(g, getController());
 			}
+
 		}
 
 		// Do it once only !!!
@@ -602,7 +610,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 	}
 
-	protected void paintControlArea(ControlArea<?> ca, FGEDrawingGraphics graphics) {
+	public void paintControlArea(ControlArea<?> ca, FGEDrawingGraphics graphics) {
 		Rectangle invalidatedArea = ca.paint(graphics);
 		if (invalidatedArea != null) {
 			getPaintManager().addTemporaryRepaintArea(invalidatedArea, this);
@@ -667,6 +675,28 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 
 		graphics.releaseClonedGraphics(oldGraphics);
 
+	}
+
+	private void paintCurrentEditedShape(FGEDrawingGraphics graphics) {
+
+		// logger.info("Painting current edited shape");
+		/*GeometricGraphicalRepresentation<?> currentEditedShape = getController().getDrawShapeToolController().getCurrentEditedShapeGR();
+
+		if (currentEditedShape.isDeleted()) {
+			logger.warning("Cannot paint for a deleted GR");
+			return;
+		}*/
+
+		getController().getDrawShapeToolController().paintCurrentEditedShape(graphics);
+
+		Graphics2D oldGraphics = graphics.cloneGraphics();
+		graphics.setDefaultForeground(ForegroundStyle.makeStyle(getGraphicalRepresentation().getFocusColor()));
+
+		for (ControlArea ca : getController().getDrawShapeToolController().getControlAreas()) {
+			paintControlArea(ca, graphics);
+		}
+
+		graphics.releaseClonedGraphics(oldGraphics);
 	}
 
 	private void paintFocused(GraphicalRepresentation focused, FGEDrawingGraphics graphics) {
@@ -800,7 +830,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			return true;
 		}
 		if (((JComponent) view).getParent() != null && ((JComponent) view).getParent() instanceof FGEView) {
-			return contains(((FGEView) ((JComponent) view).getParent()));
+			return contains((FGEView) ((JComponent) view).getParent());
 		}
 		return false;
 	}

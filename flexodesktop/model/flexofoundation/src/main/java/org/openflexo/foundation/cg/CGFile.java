@@ -447,7 +447,7 @@ public class CGFile extends CGObject implements CGPathElement {
 			}
 			boolean updated = getResource().ensureGenerationIsUpToDate();
 			if (getResource().isForceRegenerate()
-					|| (!getResource().getDependantResources().elements(false, getProject().getDependancyScheme()).hasMoreElements() && !updated)
+					|| (!getResource().getDependentResources().elements(false, getProject().getDependancyScheme()).hasMoreElements() && !updated)
 					|| !getResource().doesGenerationKeepFileUnchanged() || !getResource().getFile().exists()) {
 				getResource().generate();
 			} else {

@@ -74,8 +74,10 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 
 	public FGEPolygon(Filling filling, List<FGEPoint> points) {
 		this(filling);
-		for (FGEPoint p : points) {
-			addToPoints(p);
+		if (points != null) {
+			for (FGEPoint p : points) {
+				addToPoints(p);
+			}
 		}
 	}
 
@@ -164,6 +166,10 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 
 	public FGEPoint getPointAt(int index) {
 		return _points.elementAt(index);
+	}
+
+	public void geometryChanged() {
+		reCalculateBounds();
 	}
 
 	private void reCalculateBounds() {

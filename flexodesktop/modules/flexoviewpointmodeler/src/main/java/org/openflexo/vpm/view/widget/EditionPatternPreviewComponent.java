@@ -38,13 +38,10 @@ import org.openflexo.selection.SelectionManager;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
 // TODO: this should inherit from DefaultFIBCustomComponent
-public class EditionPatternPreviewComponent extends JPanel implements
-		FIBCustomComponent<EditionPattern, JPanel>, FIBSelectable {
+public class EditionPatternPreviewComponent extends JPanel implements FIBCustomComponent<EditionPattern, JPanel>, FIBSelectable {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger
-			.getLogger(EditionPatternPreviewComponent.class.getPackage()
-					.getName());
+	private static final Logger logger = Logger.getLogger(EditionPatternPreviewComponent.class.getPackage().getName());
 
 	private EditionPattern editionPattern;
 
@@ -88,8 +85,7 @@ public class EditionPatternPreviewComponent extends JPanel implements
 				previewController = null;
 			}
 			if (object != null) {
-				previewController = new EditionPatternPreviewController(object,
-						selectionManager);
+				previewController = new EditionPatternPreviewController(object, selectionManager);
 				add(previewController.getDrawingView(), BorderLayout.CENTER);
 			}
 			revalidate();
@@ -144,8 +140,7 @@ public class EditionPatternPreviewComponent extends JPanel implements
 				return null;
 			}
 			if (previewController.getSelectedObjects().size() > 0) {
-				return previewController.getSelectedObjects().firstElement()
-						.getDrawable();
+				return previewController.getSelectedObjects().get(0).getDrawable();
 			}
 			return null;
 		}
@@ -161,8 +156,7 @@ public class EditionPatternPreviewComponent extends JPanel implements
 		}
 		if (previewController.getSelectedObjects().size() > 0) {
 			Vector<Object> returned = new Vector<Object>();
-			for (GraphicalRepresentation gr : previewController
-					.getSelectedObjects()) {
+			for (GraphicalRepresentation gr : previewController.getSelectedObjects()) {
 				returned.add(gr.getDrawable());
 			}
 			return returned;
@@ -172,8 +166,7 @@ public class EditionPatternPreviewComponent extends JPanel implements
 
 	@Override
 	public boolean mayRepresent(Object o) {
-		return (o instanceof PatternRole && ((PatternRole) o)
-				.getEditionPattern() == editionPattern);
+		return o instanceof PatternRole && ((PatternRole) o).getEditionPattern() == editionPattern;
 	}
 
 	@Override
@@ -200,16 +193,14 @@ public class EditionPatternPreviewComponent extends JPanel implements
 	@Override
 	public void addToSelection(Object o) {
 		if (previewController != null) {
-			previewController.addToSelectedObjects(previewController
-					.getDrawing().getGraphicalRepresentation(o));
+			previewController.addToSelectedObjects(previewController.getDrawing().getGraphicalRepresentation(o));
 		}
 	}
 
 	@Override
 	public void removeFromSelection(Object o) {
 		if (previewController != null) {
-			previewController.removeFromSelectedObjects(previewController
-					.getDrawing().getGraphicalRepresentation(o));
+			previewController.removeFromSelectedObjects(previewController.getDrawing().getGraphicalRepresentation(o));
 		}
 	}
 

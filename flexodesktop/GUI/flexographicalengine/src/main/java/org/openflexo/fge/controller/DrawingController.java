@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.controller;
 
-import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,9 +30,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -43,14 +42,21 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.graphics.ShadowStyle;
+import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildStarted;
+import org.openflexo.fge.shapes.Shape;
+import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -64,13 +70,29 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	private D drawing;
 	private DrawingView<D> drawingView;
 
-	private ScalePanel _scalePanel;
+	public enum EditorTool {
+		SelectionTool, DrawShapeTool, DrawConnectorTool, DrawTextTool
+	}
 
-	private GraphicalRepresentation focusedFloatingLabel;
+	private EditorTool currentTool;
+
+	private DrawShapeToolController drawShapeToolController;
+	private DrawShapeAction drawShapeAction;
+
+	private ForegroundStyle currentForegroundStyle;
+	private BackgroundStyle currentBackgroundStyle;
+	private TextStyle currentTextStyle;
+	private ShadowStyle currentShadowStyle;
+	private Shape currentShape;
+
+	private ScalePanel _scalePanel;
+	private EditorToolbox toolbox;
+
+	private GraphicalRepresentation<?> focusedFloatingLabel;
 	// private GraphicalRepresentation focusedObject;
 
-	private Vector<GraphicalRepresentation> focusedObjects;
-	private Vector<GraphicalRepresentation> selectedObjects;
+	private Vector<GraphicalRepresentation<?>> focusedObjects;
+	private Vector<GraphicalRepresentation<?>> selectedObjects;
 
 	private LabelView<?> _currentlyEditedLabel;
 
@@ -85,12 +107,23 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 	public DrawingController(D aDrawing) {
 		super();
+
+		setCurrentTool(EditorTool.SelectionTool);
+		currentForegroundStyle = ForegroundStyle.makeDefault();
+		currentBackgroundStyle = BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+		currentTextStyle = TextStyle.makeDefault();
+		currentShadowStyle = ShadowStyle.makeDefault();
+		currentShape = Shape.makeShape(ShapeType.RECTANGLE, null);
+
+		toolbox = new EditorToolbox(this);
+
 		drawing = aDrawing;
 		if (drawing instanceof DefaultDrawing<?>) {
 			((DefaultDrawing<?>) drawing).addObserver(this);
 		}
-		focusedObjects = new Vector<GraphicalRepresentation>();
-		selectedObjects = new Vector<GraphicalRepresentation>();
+
+		focusedObjects = new Vector<GraphicalRepresentation<?>>();
+		selectedObjects = new Vector<GraphicalRepresentation<?>>();
 		palettes = new Vector<DrawingPalette>();
 		_buildDrawingView();
 		if (logger.isLoggable(Level.FINE)) {
@@ -147,6 +180,85 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return new DrawingView<D>(drawing, this);
 	}
 
+	public DrawShapeToolController<?> getDrawShapeToolController() {
+		return drawShapeToolController;
+	}
+
+	public EditorTool getCurrentTool() {
+		return currentTool;
+	}
+
+	public void setCurrentTool(EditorTool aTool) {
+		if (aTool != currentTool) {
+			logger.info("Switch to tool " + aTool);
+			switch (aTool) {
+			case SelectionTool:
+				if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {
+					drawShapeToolController.makeNewShape();
+				}
+				break;
+			case DrawShapeTool:
+				// if (drawShapeAction != null) {
+				drawShapeToolController = new DrawPolygonToolController(this, drawShapeAction);
+				// }
+				break;
+			case DrawConnectorTool:
+				break;
+			case DrawTextTool:
+				break;
+			default:
+				break;
+			}
+			currentTool = aTool;
+			if (getToolbox() != null) {
+				getToolbox().getToolPanel().updateButtons();
+			}
+			if (getPaintManager() != null) {
+				getPaintManager().repaint(getDrawingView());
+			}
+		}
+	}
+
+	public ForegroundStyle getCurrentForegroundStyle() {
+		return currentForegroundStyle;
+	}
+
+	public void setCurrentForegroundStyle(ForegroundStyle currentForegroundStyle) {
+		this.currentForegroundStyle = currentForegroundStyle;
+	}
+
+	public BackgroundStyle getCurrentBackgroundStyle() {
+		return currentBackgroundStyle;
+	}
+
+	public void setCurrentBackgroundStyle(BackgroundStyle currentBackgroundStyle) {
+		this.currentBackgroundStyle = currentBackgroundStyle;
+	}
+
+	public TextStyle getCurrentTextStyle() {
+		return currentTextStyle;
+	}
+
+	public void setCurrentTextStyle(TextStyle currentTextStyle) {
+		this.currentTextStyle = currentTextStyle;
+	}
+
+	public ShadowStyle getCurrentShadowStyle() {
+		return currentShadowStyle;
+	}
+
+	public void setCurrentShadowStyle(ShadowStyle currentShadowStyle) {
+		this.currentShadowStyle = currentShadowStyle;
+	}
+
+	public Shape getCurrentShape() {
+		return currentShape;
+	}
+
+	public void setCurrentShape(Shape currentShape) {
+		this.currentShape = currentShape;
+	}
+
 	public double getScale() {
 		return scale;
 	}
@@ -162,6 +274,18 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		drawingView.rescale();
 	}
 
+	public DrawShapeAction getDrawShapeAction() {
+		return drawShapeAction;
+	}
+
+	public void setDrawShapeAction(DrawShapeAction drawShapeAction) {
+		this.drawShapeAction = drawShapeAction;
+	}
+
+	public EditorToolbox getToolbox() {
+		return toolbox;
+	}
+
 	public ScalePanel getScalePanel() {
 		if (_scalePanel == null) {
 			_scalePanel = new ScalePanel();
@@ -169,7 +293,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return _scalePanel;
 	}
 
-	public class ScalePanel extends JPanel {
+	public class ScalePanel extends JToolBar {
 
 		private static final int MAX_ZOOM_VALUE = 300;
 		protected JTextField scaleTF;
@@ -179,21 +303,21 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		protected ActionListener actionListener;
 
 		protected ScalePanel() {
-			super(new FlowLayout(FlowLayout.LEFT, 10, 0));
+			super(/* new FlowLayout(FlowLayout.LEFT, 10, 0) */);
 			scaleTF = new JTextField(5);
 			int currentScale = (int) (getScale() * 100);
 			scaleTF.setText("" + currentScale + "%");
 			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
 			slider.setMajorTickSpacing(100);
 			slider.setMinorTickSpacing(20);
-			slider.setPaintTicks(true);
+			slider.setPaintTicks(false/* true */);
 			slider.setPaintLabels(false);
 			slider.setBorder(BorderFactory.createEmptyBorder());
 			sliderChangeListener = new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					if (slider.getValue() > 0) {
-						setScale(((double) slider.getValue()) / 100);
+						setScale((double) slider.getValue() / 100);
 						scaleTF.removeActionListener(actionListener);
 						scaleTF.setText("" + (int) (getScale() * 100) + "%");
 						scaleTF.addActionListener(actionListener);
@@ -220,7 +344,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 								}
 							});
 						}
-						setScale(((double) newScale) / 100);
+						setScale((double) newScale / 100);
 					} catch (NumberFormatException exception) {
 						// Forget
 					}
@@ -236,7 +360,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			slider.addChangeListener(sliderChangeListener);
 			add(slider);
 			add(scaleTF);
-			setBorder(BorderFactory.createEmptyBorder());
+			// setBorder(BorderFactory.createEmptyBorder());
 		}
 	}
 
@@ -294,14 +418,12 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 				}
 			}
 			/*
-			if (aFocusedlabel == null) {
-				focusedFloatingLabel = null;
-				drawingView.getPaintManager().repaint(drawingView);
-			}
-			else if (focusedFloatingLabel != aFocusedlabel) {
-				focusedFloatingLabel = aFocusedlabel;
-				drawingView.getPaintManager().repaint(drawingView);
-			}*/
+			 * if (aFocusedlabel == null) { focusedFloatingLabel = null;
+			 * drawingView.getPaintManager().repaint(drawingView); } else if
+			 * (focusedFloatingLabel != aFocusedlabel) { focusedFloatingLabel =
+			 * aFocusedlabel;
+			 * drawingView.getPaintManager().repaint(drawingView); }
+			 */
 		}
 	}
 
@@ -314,7 +436,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return null;
 	}
 
-	public Vector<GraphicalRepresentation> getSelectedObjects() {
+	public List<GraphicalRepresentation<?>> getSelectedObjects() {
 		return selectedObjects;
 	}
 
@@ -327,7 +449,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 		if (!selectedObjects.equals(someSelectedObjects)) {
 			clearSelection();
-			for (GraphicalRepresentation d : someSelectedObjects) {
+			for (GraphicalRepresentation<?> d : someSelectedObjects) {
 				addToSelectedObjects(d);
 			}
 		}
@@ -338,6 +460,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		Vector<GraphicalRepresentation> singleton = new Vector<GraphicalRepresentation>();
 		singleton.add(aGraphicalRepresentation);
 		setSelectedObjects(singleton);
+		getToolbox().update();
 	}
 
 	public void addToSelectedObjects(GraphicalRepresentation aGraphicalRepresentation) {
@@ -350,6 +473,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			selectedObjects.add(aGraphicalRepresentation);
 			aGraphicalRepresentation.setIsSelected(true);
 		}
+		getToolbox().update();
 	}
 
 	public void removeFromSelectedObjects(GraphicalRepresentation aGraphicalRepresentation) {
@@ -362,6 +486,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			selectedObjects.remove(aGraphicalRepresentation);
 		}
 		aGraphicalRepresentation.setIsSelected(false);
+		getToolbox().update();
 	}
 
 	public void toogleSelection(GraphicalRepresentation aGraphicalRepresentation) {
@@ -378,13 +503,13 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	public void clearSelection() {
 		// logger.info("Clear selection");
 		stopEditionOfEditedLabelIfAny();
-		for (GraphicalRepresentation gr : selectedObjects) {
+		for (GraphicalRepresentation<?> gr : selectedObjects) {
 			gr.setIsSelected(false);
 		}
 		selectedObjects.clear();
 	}
 
-	public Vector<GraphicalRepresentation> getFocusedObjects() {
+	public Vector<GraphicalRepresentation<?>> getFocusedObjects() {
 		return focusedObjects;
 	}
 
@@ -510,7 +635,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 				return ca2;
 			}
 		}
-		return (ca1.getGraphicalRepresentation().getLayer() > ca2.getGraphicalRepresentation().getLayer() ? ca1 : ca2);
+		return ca1.getGraphicalRepresentation().getLayer() > ca2.getGraphicalRepresentation().getLayer() ? ca1 : ca2;
 	}
 
 	public ControlArea<?> getFocusedControlArea() {
@@ -532,7 +657,8 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		logger.fine("Register palette for " + this);
 		palettes.add(aPalette);
 		aPalette.registerController(this);
-		// if (getDrawingView() != null) getDrawingView().registerPalette(aPalette);
+		// if (getDrawingView() != null)
+		// getDrawingView().registerPalette(aPalette);
 	}
 
 	public void unregisterPalette(DrawingPalette aPalette) {
@@ -547,7 +673,10 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	}
 
 	public FGEPaintManager getPaintManager() {
-		return getDrawingView().getPaintManager();
+		if (getDrawingView() != null) {
+			return getDrawingView().getPaintManager();
+		}
+		return null;
 	}
 
 	public void enablePaintingCache() {

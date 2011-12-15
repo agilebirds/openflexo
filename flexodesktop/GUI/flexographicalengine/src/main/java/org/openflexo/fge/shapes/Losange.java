@@ -21,7 +21,7 @@ package org.openflexo.fge.shapes;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
-public class Losange extends Polygon {
+public class Losange extends RegularPolygon {
 
 	// *******************************************************************************
 	// * Constructor *

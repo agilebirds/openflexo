@@ -109,7 +109,7 @@ public class OperationLatexFileResource extends LatexFileResource<DGLatexGenerat
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		if (getOperation() != null) {
-			addToDependantResources(getOperation().getProcess().getFlexoResource());
+			addToDependentResources(getOperation().getProcess().getFlexoResource());
 		}
 	}
 

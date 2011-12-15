@@ -84,17 +84,17 @@ public class ProjectDocxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
 		super.rebuildDependancies();
 		if (getGenerator() != null && getGenerator().getDocxTemplateForResource(this).getIsFullProjectDependent()) {
 			for (FlexoProcess process : getProject().getAllLocalFlexoProcesses()) {
-				addToDependantResources(process.getFlexoResource());
+				addToDependentResources(process.getFlexoResource());
 			}
-			addToDependantResources(getProject().getWorkflow().getFlexoResource());
-			addToDependantResources(getProject().getDataModel().getFlexoResource());
+			addToDependentResources(getProject().getWorkflow().getFlexoResource());
+			addToDependentResources(getProject().getDataModel().getFlexoResource());
 			for (ComponentDefinition comp : getProject().getFlexoComponentLibrary().getAllComponentList()) {
-				addToDependantResources(comp.getComponentResource());
+				addToDependentResources(comp.getComponentResource());
 			}
-			addToDependantResources(getProject().getFlexoComponentLibraryResource().getFlexoResource());
-			addToDependantResources(getProject().getFlexoDKVResource());
+			addToDependentResources(getProject().getFlexoComponentLibraryResource().getFlexoResource());
+			addToDependentResources(getProject().getFlexoDKVResource());
 		}
-		addToDependantResources(getProject().getTOCResource());
+		addToDependentResources(getProject().getTOCResource());
 	}
 
 	@Override

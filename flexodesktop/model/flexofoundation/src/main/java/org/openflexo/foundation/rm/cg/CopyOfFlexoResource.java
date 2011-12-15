@@ -179,7 +179,7 @@ public class CopyOfFlexoResource<G extends IFlexoResourceGenerator, F extends CG
 		super.rebuildDependancies();
 		if (getResourceToCopy() != null) {
 			resourceToCopy.rebuildDependancies();
-			addToDependantResources(resourceToCopy);
+			addToDependentResources(resourceToCopy);
 		}
 	}
 

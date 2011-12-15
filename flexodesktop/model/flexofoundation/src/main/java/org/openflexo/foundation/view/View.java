@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.view;
 
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
@@ -146,7 +146,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	}
 
 	@Override
-	public Hashtable<String, String> getSpecificDescriptions() {
+	public Map<String, String> getSpecificDescriptions() {
 		if (isSerializing()) {
 			return null;
 		}

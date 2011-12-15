@@ -187,7 +187,7 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		// ComponentDefinitions depends of the ComponentEntity
-		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependentResources(getProject().getFlexoDMResource());
 	}
 
 	/**

@@ -16,10 +16,10 @@
 		<compiler.target>1.6</compiler.target>
 		<source.encoding>UTF-8</source.encoding>
 		<resource.encoding>UTF-8</resource.encoding>
-        <!-- need this so that sonar run properly.
-             don't know what the difference with source.encoding.
-             todo : investigate difference between source.encoding and project.build.sourceEncoding -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- need this so that sonar run properly. don't know what the difference 
+			with source.encoding. todo : investigate difference between source.encoding 
+			and project.build.sourceEncoding -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<product.name>OpenFlexo</product.name>
 		<organization.name>AgileBirds</organization.name>
 		<organization.url>http://www.agilebirds.com/</organization.url>
@@ -119,6 +119,14 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.7.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>2.0</version>
+					<configuration>
+					   <sonarHostURL>https://sonar.openflexo.com</sonarHostURL>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>

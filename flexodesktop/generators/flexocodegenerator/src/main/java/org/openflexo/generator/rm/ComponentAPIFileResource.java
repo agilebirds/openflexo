@@ -133,8 +133,8 @@ public abstract class ComponentAPIFileResource<G extends FlexoComponentResourceG
 
 		if (getComponentDefinition() != null) {
 
-			addToDependantResources(getProject().getFlexoDMResource());
-			addToDependantResources(getComponentDefinition().getComponentResource());
+			addToDependentResources(getProject().getFlexoDMResource());
+			addToDependentResources(getComponentDefinition().getComponentResource());
 
 			if (getComponentDefinition().getWOComponent() != null) {
 				for (Enumeration en = getComponentDefinition().getWOComponent().getAllComponentInstances().elements(); en.hasMoreElements();) {
@@ -143,7 +143,7 @@ public abstract class ComponentAPIFileResource<G extends FlexoComponentResourceG
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Found dependancy between " + this + " and " + ci.getComponentDefinition().getComponentResource());
 						}
-						addToDependantResources(ci.getComponentDefinition().getComponentResource());
+						addToDependentResources(ci.getComponentDefinition().getComponentResource());
 					} else {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Inconsistant data: ComponentInstance refers to an unknown ComponentDefinition "

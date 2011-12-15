@@ -147,7 +147,7 @@ public class BPELXSDFileResource extends TextFileResource<BPELXSDFileGenerator, 
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependentResources(getProject().getFlexoDMResource());
 	}
 
 	/**

@@ -95,7 +95,7 @@ public class ApplicationConfProdResource extends TextFileResource<ApplicationCon
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		if (getRepository() != null) {
-			addToDependantResources(getRepository().getGeneratedCode().getFlexoResource());
+			addToDependentResources(getRepository().getGeneratedCode().getFlexoResource());
 		}
 	}
 

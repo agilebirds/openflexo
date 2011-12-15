@@ -63,7 +63,7 @@ public class CustomComponentGenerator extends JavaClassGenerator {
 	@Override
 	public void rebuildDependanciesForResource(JavaFileResource resource) {
 		if (resource != null) {
-			resource.addToDependantResources(getProject().getFlexoDKVResource());
+			resource.addToDependentResources(getProject().getFlexoDKVResource());
 		}
 	}
 

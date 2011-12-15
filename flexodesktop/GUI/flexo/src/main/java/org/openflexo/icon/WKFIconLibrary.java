@@ -24,7 +24,13 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoWorkflow;
+import org.openflexo.foundation.wkf.ProcessFolder;
+import org.openflexo.foundation.wkf.Role;
+import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.foundation.wkf.WKFObject;
+import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
 import org.openflexo.foundation.wkf.ws.DeletePort;
@@ -512,14 +518,14 @@ public class WKFIconLibrary extends IconLibrary {
 	}
 
 	public static ImageIcon getImageIconForPortmap(FlexoPortMap portmap) {
-		if ((portmap.getOperation() != null) && (portmap.getOperation().getPort() != null)) {
+		if (portmap.getOperation() != null && portmap.getOperation().getPort() != null) {
 			return getSmallImageIconForFlexoPort(portmap.getOperation().getPort());
 		}
 		return null;
 	}
 
 	public static ImageIcon getImageIconForPortmap(FlexoPortMap portmap, int orientation) {
-		if ((portmap.getOperation() != null) && (portmap.getOperation().getPort() != null)) {
+		if (portmap.getOperation() != null && portmap.getOperation().getPort() != null) {
 			return getSmallImageIconForFlexoPort(portmap.getOperation().getPort(), orientation);
 		}
 		return null;
@@ -537,8 +543,25 @@ public class WKFIconLibrary extends IconLibrary {
 		}
 	}
 
+	public static ImageIcon iconForObject(WorkflowModelObject object) {
+		if (object instanceof FlexoWorkflow) {
+			return WORKFLOW_ICON;
+		} else if (object instanceof ProcessFolder) {
+			return PROCESS_FOLDER_ICON;
+		} else if (object instanceof RoleList) {
+			return ROLE_LIBRARY_ICON;
+		} else if (object instanceof Role) {
+			return ROLE_ICON;
+		}
+		logger.warning("iconForObject(WorkflowModelObject) not implemented yet");
+		return null;
+	}
+
 	public static ImageIcon iconForObject(WKFObject object) {
-		logger.warning("iconForObject(WKFObject) not implemented yet");
+		if (object instanceof FlexoProcess) {
+			return PROCESS_ICON;
+		}
+		logger.warning("iconForObject(WorkflowModelObject) not implemented yet");
 		return null;
 	}
 
