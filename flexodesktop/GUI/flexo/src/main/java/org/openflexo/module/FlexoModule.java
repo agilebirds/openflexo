@@ -20,6 +20,7 @@
 package org.openflexo.module;
 
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
@@ -284,7 +285,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		boolean selectDefaultObject = false;
 		if (getDefaultObjectToSelect() != null
 				&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
-				.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
+						.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
 			if (getFlexoController() instanceof SelectionManagingController) {
 				if (((SelectionManagingController) getFlexoController()).getSelectionManager().getFocusedObject() == null) {
 					selectDefaultObject = true;
@@ -300,9 +301,9 @@ public abstract class FlexoModule implements DataFlexoObserver {
 				logger.fine("Module " + getName() + " is loosing focus : reseting selection");
 			}
 			((SelectionManagingController) getFlexoController()).getSelectionManager()
-			.setSelectedObjects(
-					new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
-							.getSelection()));
+					.setSelectedObjects(
+							new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
+									.getSelection()));
 		}
 	}
 
@@ -449,7 +450,8 @@ public abstract class FlexoModule implements DataFlexoObserver {
 			logger.warning("Called twice closeWithoutConfirmation on " + this);
 		}
 		_controller = null;
-		for (FlexoResource<? extends FlexoResourceData> r : usedResources.values()) {
+		for (FlexoResource<? extends FlexoResourceData> r : new ArrayList<FlexoResource<? extends FlexoResourceData>>(
+				usedResources.values())) {
 			releaseResource(r);
 		}
 		if (ModuleLoader.isLoaded(getModule())) {
