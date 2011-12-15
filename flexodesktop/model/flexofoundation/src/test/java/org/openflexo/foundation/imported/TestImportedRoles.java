@@ -172,6 +172,7 @@ public class TestImportedRoles extends FlexoTestCase {
 	}
 
 	public void test0CreateImportedRoleLibrary() {
+		log("Test 0: create imported library");
 		editor = createProject("Test import roles");
 		FlexoProject project = editor.getProject();
 		projectDirectoryFile = project.getProjectDirectory();
@@ -180,6 +181,7 @@ public class TestImportedRoles extends FlexoTestCase {
 	}
 
 	public void test1ImportRoles() throws SaveResourceException {
+		log("Test 1: Import roles");
 		FlexoProject project = editor.getProject();
 		importedRoles = createPPMRoles(project);
 		ImportRolesAction importRoles = ImportRolesAction.actionType.makeNewAction(project.getImportedRoleList(), null, editor);
@@ -206,6 +208,7 @@ public class TestImportedRoles extends FlexoTestCase {
 	}
 
 	public void test2RefreshImportedRoles() throws SaveResourceException {
+		log("Test 2: Refresh imported roles");
 		FlexoProject project = editor.getProject();
 
 		// First we try without changing anything
@@ -305,6 +308,7 @@ public class TestImportedRoles extends FlexoTestCase {
 	}
 
 	public void test3ConvertRolesIntoLocalRoles() {
+		log("Test 3: Convert roles into local roles");
 		editor = reloadProject(projectDirectoryFile);
 		FlexoProject project = editor.getProject();
 		verifyImportedRoles(project, importedRoles);
