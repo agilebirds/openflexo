@@ -19,6 +19,9 @@
  */
 package org.openflexo.antar.expr.parser;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import junit.framework.TestCase;
 
 import org.openflexo.antar.expr.DefaultExpressionParser;
@@ -167,12 +170,18 @@ public class TestJavaExpressionParser extends TestCase {
 		tryToParse("test24 [ fdfd + 1", "", true);
 	}
 
-	public void test25() {
-		tryToParse("(([dd/MM/yy HH:mm,17/12/07 12:54] + [3h] ) + [1min])", "[dd/MM/yy HH:mm,17/12/07 15:55]", false);
+	public void test25() throws java.text.ParseException {
+		Date date = new SimpleDateFormat("dd/MM/yy HH:mm").parse("17/12/07 15:55");
+		SimpleDateFormat localeDateFormat = new SimpleDateFormat();
+		tryToParse("(([dd/MM/yy HH:mm,17/12/07 12:54] + [3h] ) + [1min])",
+				"[" + localeDateFormat.toPattern() + "," + localeDateFormat.format(date) + "]", false);
 	}
 
-	public void test26() {
-		tryToParse("([dd/MM/yy HH:mm,17/12/07 12:54] + ( [3h] + [1min]))", "[dd/MM/yy HH:mm,17/12/07 15:55]", false);
+	public void test26() throws java.text.ParseException {
+		Date date = new SimpleDateFormat("dd/MM/yy HH:mm").parse("17/12/07 15:55");
+		SimpleDateFormat localeDateFormat = new SimpleDateFormat();
+		tryToParse("([dd/MM/yy HH:mm,17/12/07 12:54] + ( [3h] + [1min]))",
+				"[" + localeDateFormat.toPattern() + "," + localeDateFormat.format(date) + "]", false);
 	}
 
 	/*public void test0()
