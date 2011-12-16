@@ -27,8 +27,8 @@
 			<param name="validateOnReturn" value="true"/>
 			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
 		</property>
-		<property name="businessDataType" label="variable_type" widget="CUSTOM" constraint="3">
-			<param name="className" value="org.openflexo.components.widget.DMEntityInspectorWidget"/>
+		<property name="businessDataVariableType" label="variable_type" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
 			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
 		</property>
 	</tab>

@@ -996,6 +996,12 @@ public class FIBConverter {
 						c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
 						bindings.add(variable);
 						bindings.add(value);
+					} else {
+						DataBinding variable = new DataBinding("component.project");
+						DataBinding value = new DataBinding("data.project");
+						c.addToAssignments(new FIBCustomAssignment(c, variable, value, true));
+						bindings.add(variable);
+						bindings.add(value);
 					}
 					DataBinding variable = new DataBinding("component.owner");
 					DataBinding value = new DataBinding("data");

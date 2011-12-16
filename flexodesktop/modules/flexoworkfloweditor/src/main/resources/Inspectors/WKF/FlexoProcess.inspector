@@ -60,6 +60,12 @@
       <TextField validateOnReturn="true" columns="10" passwd="false" data="data.businessDataVariableName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="BusinessDataVariableName" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </TextField>
+      <Label label="variable_type" localize="true" name="BusinessDataVariableTypeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
+      <Custom componentClassName="org.openflexo.components.widget.DMTypeSelector" data="data.businessDataVariableType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" name="BusinessDataVariableType" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.project" value="data.project" />
+        <Assignment variable="component.owner" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
     </Tab>
     <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
       <Label label="name" localize="true" name="NameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
@@ -123,6 +129,9 @@
     <Localized key="variable_name" lang="English">Variable name</Localized>
     <Localized key="variable_name" lang="French">Nom de la variable</Localized>
     <Localized key="variable_name" lang="Dutch">Variable name</Localized>
+    <Localized key="variable_type" lang="English">Variable type</Localized>
+    <Localized key="variable_type" lang="French">Type de la variable</Localized>
+    <Localized key="variable_type" lang="Dutch">Variable type</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="name" lang="French">Nom</Localized>

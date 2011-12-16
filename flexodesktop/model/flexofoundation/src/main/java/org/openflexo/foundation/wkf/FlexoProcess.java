@@ -1631,16 +1631,16 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		}
 	}
 
-	public DMEntity getBusinessDataType() {
+	public DMType getBusinessDataVariableType() {
 		if (getBusinessDataProperty() != null) {
-			return getBusinessDataProperty().getType().getBaseEntity();
+			return getBusinessDataProperty().getType();
 		}
 		return null;
 	}
 
-	public void setBusinessDataType(DMEntity aType) {
+	public void setBusinessDataVariableType(DMType aType) {
 		if (getBusinessDataProperty() != null) {
-			getBusinessDataProperty().setType(DMType.makeResolvedDMType(aType));
+			getBusinessDataProperty().setType(aType);
 		} else if (getProcessDMEntity() != null) {
 			getProcessDMEntity().createBusinessDataProperty(aType);
 			setChanged();
@@ -1648,6 +1648,23 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		}
 		setChanged();
 		notifyAttributeModification("businessDataType", null, aType);
+		setChanged();
+		notifyAttributeModification("businessDataVariableType", null, aType);
+	}
+
+	// TODO: access to DMType here !!!
+	@Deprecated
+	public DMEntity getBusinessDataType() {
+		if (getBusinessDataVariableType() != null) {
+			return getBusinessDataVariableType().getBaseEntity();
+		}
+		return null;
+	}
+
+	// TODO: access to DMType here !!!
+	@Deprecated
+	public void setBusinessDataType(DMEntity aType) {
+		setBusinessDataVariableType(DMType.makeResolvedDMType(aType));
 	}
 
 	@Override
