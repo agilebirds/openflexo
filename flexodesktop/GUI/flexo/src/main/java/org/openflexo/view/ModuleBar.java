@@ -33,10 +33,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.openflexo.components.OpenProjectComponent;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.ProjectLoader;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * @author gpolet
@@ -97,9 +101,7 @@ public class ModuleBar extends JPanel {
 		moduleButtons = new Hashtable<Module, ModuleButton>();
 		moduleBars.add(this);
 		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		Enumeration en = ModuleLoader.availableModules().elements();
-		while (en.hasMoreElements()) {
-			Module m = (Module) en.nextElement();
+		for(Module m:getModuleLoader().availableModules()) {
 			ModuleButton mb = new ModuleButton(m);
 			moduleButtons.put(m, mb);
 			add(mb);
@@ -107,6 +109,10 @@ public class ModuleBar extends JPanel {
 		validate();
 		repaint();
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	private void refresh() {
 		Enumeration<ModuleButton> en = moduleButtons.elements();
@@ -129,18 +135,25 @@ public class ModuleBar extends JPanel {
 				 */
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if (ModuleLoader.getProject() == null && module.requireProject()) {
+                    FlexoProject project = getModuleLoader().getProject();
+					if (project == null && module.requireProject()) {
 						File projectDirectory;
 						try {
 							projectDirectory = OpenProjectComponent.getProjectDirectory();
+                            project = getProjectLoader().loadProject(projectDirectory).getProject();
 						} catch (ProjectLoadingCancelledException e1) {
 							return;
 						}
-						ModuleLoader.loadProject(projectDirectory);
 					}
 
-					ModuleLoader.switchToModule(module);
-				}
+                    try {
+                        getModuleLoader().switchToModule(module, project);
+                    } catch (ModuleLoadingException e1) {
+                        logger.warning("Error while loading module :"+e1.getModule()+"."+e1.getMessage());
+                        e1.printStackTrace();
+                        FlexoController.notify("Error while loading module :"+e1.getModule()+"."+e1.getMessage());
+                    }
+                }
 
 				/**
 				 * Overrides mouseEntered
@@ -167,6 +180,13 @@ public class ModuleBar extends JPanel {
 			refresh();
 		}
 
+        private ModuleLoader getModuleLoader() {
+            return ModuleLoader.instance();
+        }
+
+        private ProjectLoader getProjectLoader() {
+            return ProjectLoader.instance();
+        }
 		protected void setAsActive() {
 			setIcon(module.getMediumIconWithHover());
 		}

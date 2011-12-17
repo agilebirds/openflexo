@@ -32,6 +32,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.axis.encoding.Base64;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.AutoSaveService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.FlexoPreferences;
@@ -259,12 +260,20 @@ public class AdvancedPrefs extends ContextPreferences {
 	}
 
 	public static String getAutoSaveDirectory() {
-		if (ModuleLoader.getAutoSaveDirectory() != null) {
-			return ModuleLoader.getAutoSaveDirectory().getAbsolutePath();
+		if (getAutoSaveService().getAutoSaveDirectory() != null) {
+			return getAutoSaveService().getAutoSaveDirectory().getAbsolutePath();
 		} else {
 			return FlexoLocalization.localizedForKey("time_traveling_is_disabled");
 		}
 	}
+
+    private static ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+
+    private static AutoSaveService getAutoSaveService() {
+        return AutoSaveService.instance();
+    }
 
 	public static void save() {
 		FlexoPreferences.savePreferences(true);

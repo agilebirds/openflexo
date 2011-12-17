@@ -84,7 +84,7 @@ import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.module.external.ExternalIEController;
 import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
@@ -201,7 +201,7 @@ public class IEController extends FlexoController implements SelectionManagingCo
 
 		addToPerspectives(COMPONENT_EDITOR_PERSPECTIVE = new ComponentPerspective(this));
 		EXAMPLE_VALUE_PERSPECTIVE = new DefaultValuePerspective(this);
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addToPerspectives(EXAMPLE_VALUE_PERSPECTIVE);
 		}
 		addToPerspectives(MENU_EDITOR_PERSPECTIVE = new MenuPerspective(this));

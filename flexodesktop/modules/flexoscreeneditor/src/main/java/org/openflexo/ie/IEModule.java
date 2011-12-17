@@ -59,20 +59,6 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.IE };
 	private IEWOComponentView componentView;
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application.
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Start Interface Editor stand-alone.");
-		}
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.IE_MODULE);
-	}
-
 	public IEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 		setFlexoController(new IEController(projectEditor, this));

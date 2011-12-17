@@ -736,7 +736,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		saveProject();
 		OperationComponentJavaFileResource generatedFile = (OperationComponentJavaFileResource) _project.resourceForKey(
 				ResourceType.JAVA_FILE, codeRepository.getName() + "." + OPERATION_COMPONENT_1);
-		assertNull("A generated resource of the deleted repository is supposed to be null after deletion", generatedFile);
+		assertNull("A generated resource of the deleted repository is supposed to be null after deletion: "+generatedFile, generatedFile);
 		assertFalse("The physical directory with Generated code data is supposed to be physically deleted after a delete and save",
 				new File(_projectDirectory, "GeneratedCode/GeneratedCode").exists());
 

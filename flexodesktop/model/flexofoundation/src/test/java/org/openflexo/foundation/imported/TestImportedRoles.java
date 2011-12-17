@@ -43,7 +43,14 @@ import org.openflexo.ws.client.PPMWebService.PPMRole;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebService_PortType;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 public class TestImportedRoles extends FlexoTestCase {
+
+    public TestImportedRoles(String arg0) {
+		super(arg0);
+	}
 
 	private final class PPMWebServiceMock implements PPMWebService_PortType {
 		public PPMWebServiceMock() {
@@ -169,6 +176,15 @@ public class TestImportedRoles extends FlexoTestCase {
 
 	public TestImportedRoles() {
 		super("Test imported roles");
+	}
+
+       public static Test suite() {
+		final TestSuite suite = new TestSuite("TestSuite for TestCG2");
+		suite.addTest(new TestImportedRoles("test0CreateImportedRoleLibrary"));
+		suite.addTest(new TestImportedRoles("test1ImportRoles"));
+		suite.addTest(new TestImportedRoles("test2RefreshImportedRoles"));
+		suite.addTest(new TestImportedRoles("test3ConvertRolesIntoLocalRoles"));
+		return suite;
 	}
 
 	public void test0CreateImportedRoleLibrary() {

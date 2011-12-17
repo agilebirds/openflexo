@@ -1,32 +1,32 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openflexo.packaging</groupId>
 		<artifactId>packaging</artifactId>
 		<version>1.4.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>server</artifactId>
-	<name>Flexo Server Packaging</name>
+	<name>Packaging :: FlexoServer</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexocodegenerator</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoscreeneditor</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoworkfloweditor</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoprjsharing</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
@@ -36,21 +36,18 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexocodegenerator</artifactId>
-			<version>${project.version}</version>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoscreeneditor</artifactId>
-			<version>${project.version}</version>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoworkfloweditor</artifactId>
-			<version>${project.version}</version>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>

@@ -19,32 +19,6 @@
  */
 package org.openflexo.ie.view.widget;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -60,12 +34,36 @@ import org.openflexo.foundation.ie.widget.ContentSizeChanged;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
 import org.openflexo.ie.view.DropZoneTopComponent;
 import org.openflexo.ie.view.IEContainer;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.listener.DoubleClickResponder;
 import org.openflexo.localization.FlexoLocalization;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author bmangez
@@ -368,34 +366,7 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		// _jLabelTextField.setForeground(getFlexoNode().getTextColor());
 		_jLabelTextField.setBounds(topTitleLabel().getBounds());
 		_jLabelTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				// ((IEBlocWidget)
-				// getModel()).setTitle(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				// ((IEBlocWidget)
-				// getModel()).setTitle(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				// ((IEBlocWidget)
-				// getModel()).setTitle(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			public void updateSize() {
-				// updateLabelBounds();
-				revalidate();
-				repaint();
-			}
-		});
+		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_topTitle.removeLabel(topTitleLabel());
 		_topTitle.addTextField(_jLabelTextField);
 		_jLabelTextField.addActionListener(new ActionListener() {

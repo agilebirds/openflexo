@@ -138,7 +138,7 @@ public class BugReportView extends JPanel {
 		tabbedPane.add("General", buildGeneralPanel());
 		JPanel technicalPanel = buildTechnicalPanel();
 		actionPanel = new BugReportActionsPanel();
-		if (!isNew || ModuleLoader.getUserType() == UserType.MAINTAINER || ModuleLoader.getUserType() == UserType.DEVELOPER) {
+		if (!isNew || UserType.isMaintainerRelease() || UserType.isDevelopperRelease()) {
 			tabbedPane.add("Technical", technicalPanel);
 			tabbedPane.add("Actions", actionPanel);
 		}
@@ -202,8 +202,8 @@ public class BugReportView extends JPanel {
 		addField(returned, gridbag, "severity", severity = new JComboBox(BugReport.getAvailableSeverity()), false, false);
 		addField(returned, gridbag, "impact", impact = new JComboBox(BugReport.getAvailableImpact()), false, false);
 		addField(returned, gridbag, "urgency", urgency = new JComboBox(BugReport.getAvailableUrgency()), false, false);
-		addField(returned, gridbag, "module", module = new JComboBox(ModuleLoader.availableModules()), false, false);
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		addField(returned, gridbag, "module", module = new JComboBox(getModuleLoader().availableModules().toArray()), false, false);
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addField(returned, gridbag, "type", incidentType = new JComboBox(IncidentType.values()), false, false);
 		}
 		addField(returned, gridbag, "status", status = new JComboBox(BugReport.getAvailableStatus()), false, false);
@@ -215,6 +215,10 @@ public class BugReportView extends JPanel {
 		returned.setMinimumSize(gridbag.minimumLayoutSize(returned));
 		return returned;
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	public JPanel buildTechnicalPanel() {
 		GridBagLayout gridbag;

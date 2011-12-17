@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.openflexo</groupId>
-		<artifactId>model</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>flexoutils</artifactId>
-	<name>FlexoUtils</name>
+        <groupId>org.openflexo</groupId>
+        <artifactId>model</artifactId>
+        <version>1.4.4-SNAPSHOT</version>
+    </parent>
+    <artifactId>flexoutils</artifactId>
+	<name>Model :: FlexoUtils</name>
 	<build>
 		<plugins>
 			<plugin>
@@ -21,17 +23,14 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoxmlcode</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>jalopy</groupId>
 			<artifactId>jalopy</artifactId>
-			<version>1.5rc3</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -88,7 +88,7 @@ import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.swing.SwingUtils;
 import org.openflexo.swing.TextFieldCustomPopup;
@@ -109,7 +109,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 	protected boolean _allowsEntryCreation = false;
 	protected boolean _allowsBindingExpressions = true;
-	protected boolean _allowsCompoundBindings = ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease();
+	protected boolean _allowsCompoundBindings = UserType.isDevelopperRelease() || UserType.isMaintainerRelease();
 	protected boolean _allowsStaticValues = true;
 	protected boolean _allowsTranstypers = true;
 

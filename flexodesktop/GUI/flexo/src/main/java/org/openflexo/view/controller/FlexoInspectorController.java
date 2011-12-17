@@ -63,7 +63,6 @@ import org.openflexo.inspector.model.PropertyListColumn;
 import org.openflexo.inspector.model.PropertyListModel;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 
 public abstract class FlexoInspectorController extends InspectorController {
@@ -73,7 +72,7 @@ public abstract class FlexoInspectorController extends InspectorController {
 
 		@Override
 		public boolean showViewSourceButtonInWysiwyg() {
-			return ModuleLoader.getUserType() == UserType.DEVELOPER || ModuleLoader.getUserType() == UserType.MAINTAINER;
+			return UserType.isDevelopperRelease() || UserType.isMaintainerRelease();
 		}
 
 	};
@@ -202,7 +201,7 @@ public abstract class FlexoInspectorController extends InspectorController {
 						}
 						cleanParameters(pla.parameters, p1);
 					}
-					if (parametersContainerIsDisplayable(pla, ModuleLoader.getUserType())) {
+					if (parametersContainerIsDisplayable(pla, UserType.getCurrentUserType())) {
 						// Let's keep it
 					} else {
 						i.remove();
@@ -219,14 +218,14 @@ public abstract class FlexoInspectorController extends InspectorController {
 						}
 						cleanParameters(plc.parameters, p1);
 					}
-					if (parametersContainerIsDisplayable(plc, ModuleLoader.getUserType())) {
+					if (parametersContainerIsDisplayable(plc, UserType.getCurrentUserType())) {
 						// Let's keep it
 					} else {
 						j.remove();
 					}
 				}
 			}
-			if (parametersContainerIsDisplayable(propertyModel, ModuleLoader.getUserType())) {
+			if (parametersContainerIsDisplayable(propertyModel, UserType.getCurrentUserType())) {
 				DocItem propertyModelItem = DocResourceManager.instance().getDocItemFor(propertyModel);
 				if (propertyModelItem != null) {
 					if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
@@ -258,7 +257,7 @@ public abstract class FlexoInspectorController extends InspectorController {
 			if (p.parameters.size() > 0) {
 				cleanParameters(paramModel.parameters, p);
 			}
-			if (parametersContainerIsDisplayable(paramModel, ModuleLoader.getUserType())) {
+			if (parametersContainerIsDisplayable(paramModel, UserType.getCurrentUserType())) {
 				// Let's keep it
 			} else {
 				parameters.remove(paramModel.name);

@@ -39,7 +39,7 @@ import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
 import org.openflexo.foundation.dm.action.ImportThesaurusDatabaseRepository;
 import org.openflexo.foundation.dm.action.ImportThesaurusRepository;
 import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -120,7 +120,7 @@ public class CreateDMRepositoryInitializer extends ActionInitializer {
 			}
 		}, getDefaultFinalizer(), getDefaultExceptionHandler(), null, null, null, DMEIconLibrary.DM_EOREPOSITORY_ICON, null);
 
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			initActionType(ImportJARFileRepository.actionType, new FlexoActionInitializer<CreateDMRepository>() {
 				@Override
 				public boolean run(ActionEvent e, CreateDMRepository action) {

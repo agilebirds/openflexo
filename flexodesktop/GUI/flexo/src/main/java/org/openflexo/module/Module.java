@@ -19,23 +19,16 @@
  */
 package org.openflexo.module;
 
-import java.io.File;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
 import org.openflexo.GeneralPreferences;
-import org.openflexo.ch.FCH;
-import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.DGIconLibrary;
@@ -92,26 +85,13 @@ public abstract class Module implements IModule {
 
 	public static final Module XXX_MODULE = new XXX();
 
-	private static final Module[] knownsModules = { WKF_MODULE, IE_MODULE, DE_MODULE, DM_MODULE, CG_MODULE, SG_MODULE, DG_MODULE,
-			WSE_MODULE, VE_MODULE, DRE_MODULE, FPS_MODULE, VPM_MODULE
-	/*
-	 * ,
-	 * XXX_MODULE
-	 */};
+    private Class _moduleClass;
 
-	private Class _moduleClass;
+    public Constructor getConstructor() {
+        return _constructor;
+    }
 
-	private String _moduleName;
-
-	private String _moduleShortName;
-
-	private String _moduleDescription;
-
-	private String _moduleVersion;
-
-	private File _directory;
-
-	protected static class WKF extends Module {
+    protected static class WKF extends Module {
 		@Override
 		protected String getRelativeDirectory() {
 			return "modules/flexoworkfloweditor";
@@ -930,59 +910,11 @@ public abstract class Module implements IModule {
 
 	public abstract boolean requireProject();
 
-	public File getDirectory() {
-		if (_directory == null) {
-			_directory = new File(ModuleLoader.getWorkspaceDirectory(), getRelativeDirectory());
-		}
-		return _directory;
-	}
-
 	protected Module() {
 		super();
 	}
 
-	public static Module getModule(Class moduleClass) {
-		for (int i = 0; i < knownsModules.length; i++) {
-			if ((knownsModules[i].getModuleClass() != null) && (knownsModules[i].getModuleClass().equals(moduleClass))) {
-				return knownsModules[i];
-			}
-		}
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning(("Cannot lookup Module for " + moduleClass.getName()));
-		}
-		return null;
-	}
-
-	public static Module getModule(String moduleName) {
-		for (int i = 0; i < knownsModules.length; i++) {
-			if (knownsModules[i].getName().equals(moduleName)) {
-				return knownsModules[i];
-			}
-		}
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning(("Cannot lookup Module for " + moduleName));
-		}
-		return null;
-	}
-
-	protected static Vector<Module> allKnownModules() {
-		Vector<Module> returned = new Vector<Module>();
-		for (int i = 0; i < knownsModules.length; i++) {
-			returned.add(knownsModules[i]);
-		}
-		if (returned.size() == 0) {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("No MODULES found. Stopping application.");
-			}
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Exiting application...");
-			}
-			System.exit(-1);
-		}
-		return returned;
-	}
-
-	/**
+    /**
 	 * @return
 	 */
 	public Class<?> getModuleClass() {
@@ -1008,14 +940,14 @@ public abstract class Module implements IModule {
 		return FlexoLocalization.localizedForKey(getDescription());
 	}
 
-	public FlexoModule getInstance() {
-		return ModuleLoader.getModuleInstance(this);
-	}
-
 	@Override
 	public boolean isLoaded() {
-		return ModuleLoader.isLoaded(this);
+		return getModuleLoader().isLoaded(this);
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	public enum ModuleAvailability {
 		AVAILABLE, SUBJECT_TO_RESTRICTIONS, NON_AVAILABLE;
@@ -1026,11 +958,11 @@ public abstract class Module implements IModule {
 	}
 
 	public boolean isActive() {
-		return ModuleLoader.isActive(this);
+		return getModuleLoader().isActive(this);
 	}
 
 	public boolean isAvailable() {
-		return ModuleLoader.isAvailable(this);
+		return getModuleLoader().isAvailable(this);
 	}
 
 	private boolean notFoundNotified = false;
@@ -1050,134 +982,17 @@ public abstract class Module implements IModule {
 
 	}
 
-	private String lookupName() {
-		if (getModuleClass() != null) {
-			try {
-				Method moduleNameMethod = getModuleClass().getDeclaredMethod("getModuleName");
-				return (String) moduleNameMethod.invoke(_moduleClass);
-			} catch (SecurityException e) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("SecurityException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-				}
-			} catch (NoSuchMethodException e) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("NoSuchMethodException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-				}
-			} catch (IllegalArgumentException e) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("IllegalArgumentException raised during module " + _moduleClass.getName()
-							+ " name extracting. Aborting.");
-				}
-			} catch (IllegalAccessException e) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("IllegalAccessException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-				}
-			} catch (InvocationTargetException e) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("InvocationTargetException raised during module " + _moduleClass.getName()
-							+ " name extracting. Aborting.");
-				}
-			}
-		}
-		return "UNNAMED";
-	}
-
-	private String lookupShortName() {
-		try {
-			Method moduleNameMethod = getModuleClass().getDeclaredMethod("getModuleShortName");
-			return (String) moduleNameMethod.invoke(_moduleClass);
-		} catch (SecurityException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("SecurityException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (NoSuchMethodException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("NoSuchMethodException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (IllegalArgumentException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("IllegalArgumentException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (IllegalAccessException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("IllegalAccessException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (InvocationTargetException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("InvocationTargetException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		}
-		return "UNNAMED";
-	}
-
-	private String lookupDescription() {
-		try {
-			Method moduleNameMethod = _moduleClass.getDeclaredMethod("getModuleDescription");
-			return (String) moduleNameMethod.invoke(_moduleClass);
-		} catch (SecurityException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("SecurityException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (NoSuchMethodException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("NoSuchMethodException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (IllegalArgumentException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("IllegalArgumentException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (IllegalAccessException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("IllegalAccessException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (InvocationTargetException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("InvocationTargetException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		}
-		return "Description not available";
-	}
-
-	private String lookupVersion() {
-		try {
-			Method moduleNameMethod = _moduleClass.getDeclaredMethod("getModuleVersion");
-			return (String) moduleNameMethod.invoke(_moduleClass);
-		} catch (SecurityException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("SecurityException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (NoSuchMethodException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("NoSuchMethodException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (IllegalArgumentException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("IllegalArgumentException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (IllegalAccessException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("IllegalAccessException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		} catch (InvocationTargetException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("InvocationTargetException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
-			}
-		}
-		return "N/V";
-	}
-
 	private Constructor _constructor;
 
 	public boolean register() {
 		_constructor = lookupConstructor();
-		return (_constructor == null ? false : true);
+        return _constructor!=null;
 	}
 
 	/**
 	 * Internally used to lookup constructor
-	 * 
-	 * @param moduleClass
-	 */
+	 *
+     */
 	private Constructor lookupConstructor() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Registering module '" + getName() + "'");
@@ -1207,73 +1022,6 @@ public abstract class Module implements IModule {
 		return null;
 	}
 
-	public FlexoModule load() throws ProjectLoadingCancelledException, ModuleLoadingException {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Loading module " + getName());
-		}
-		Object[] params;
-		if (requireProject()) {
-			params = new Object[1];
-			while (ModuleLoader.getProject() == null) {
-				File projectDirectory = OpenProjectComponent.getProjectDirectory();
-				// The following line is the default line to call when we want
-				// to open a project from a GUI (Interactive mode) so that
-				// resource update handling is properly initialized. Additional
-				// small stuffs can be performed in that call so that projects
-				// are always opened the same way.
-				ModuleLoader.loadProject(projectDirectory);
-			}
-			params[0] = ModuleLoader.getProject().getResourceManagerInstance().getEditor();
-		} else {
-			params = new Object[0];
-		}
-		FlexoModule returned = null;
-		try {
-			returned = (FlexoModule) _constructor.newInstance(params);
-			FCH.ensureHelpEntryForModuleHaveBeenCreated(returned);
-		} catch (IllegalArgumentException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Could not load module " + getName() + " : exception raised " + e.getClass().getName());
-			}
-			e.printStackTrace();
-			/*
-			 * if (logger.isLoggable(Level.INFO)) logger.info("Exiting application..."); System.exit(-1);
-			 */
-			throw new ModuleLoadingException(this);
-		} catch (InstantiationException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Could not load module " + getName() + " : exception raised " + e.getClass().getName());
-			}
-			e.printStackTrace();
-			/*
-			 * if (logger.isLoggable(Level.INFO)) logger.info("Exiting application..."); System.exit(-1);
-			 */
-			throw new ModuleLoadingException(this);
-		} catch (IllegalAccessException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Could not load module " + getName() + " : exception raised " + e.getClass().getName());
-			}
-			e.printStackTrace();
-			/*
-			 * if (logger.isLoggable(Level.INFO)) logger.info("Exiting application..."); System.exit(-1);
-			 */
-			throw new ModuleLoadingException(this);
-		} catch (InvocationTargetException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Could not load module " + getName() + " : exception raised " + e.getClass().getName());
-			}
-			if (logger.isLoggable(Level.WARNING) && (e.getCause() != null)) {
-				logger.warning("Caused by " + e.getCause().getClass().getName() + " " + e.getCause().getMessage());
-				e.getCause().printStackTrace();
-			}
-			e.printStackTrace();
-			/*
-			 * if (logger.isLoggable(Level.INFO)) logger.info("Exiting application..."); System.exit(-1);
-			 */
-			throw new ModuleLoadingException(this);
-		}
-		return returned;
-	}
 
 	@Override
 	public String toString() {

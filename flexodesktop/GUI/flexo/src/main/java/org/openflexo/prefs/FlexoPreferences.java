@@ -20,7 +20,6 @@
 package org.openflexo.prefs;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -29,7 +28,6 @@ import java.util.logging.Logger;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
@@ -42,6 +40,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 public class FlexoPreferences extends FlexoAbstractPreferences {
 
 	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
+    private static File appDataDirectory;
 
 	protected Vector<ContextPreferences> contextPreferencesVector;
 
@@ -66,9 +65,6 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 			e.printStackTrace();
 		}
 		if (!contextPreferencesVector.contains(cp)) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Registering context preferences " + cp.getName());
-			}
 			contextPreferencesVector.add(cp);
 			PreferencesController.register(cp);
 		}
@@ -81,37 +77,33 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 	}
 
 	public static File getApplicationDataDirectory() {
-		File prefDir = new File(new File(System.getProperty("user.home")), "Library/Flexo");
-		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-			String appData = System.getenv("APPDATA");
-			if (appData != null) {
-				File f = new File(appData);
-				if (f.isDirectory() && f.canWrite()) {
-					prefDir = new File(f, "OpenFlexo");
-				}
-			}
-		}
-		return prefDir;
+        if (appDataDirectory == null) {
+            File prefDir = new File(new File(System.getProperty("user.home")), "Library/Flexo");
+            if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+                String appData = System.getenv("APPDATA");
+                if (appData != null) {
+                    File f = new File(appData);
+                    if (f.isDirectory() && f.canWrite()) {
+                        prefDir = new File(f, "OpenFlexo");
+                    }
+                }
+            }
+            appDataDirectory = prefDir;
+        }
+        return appDataDirectory;
 	}
 
+    public static void setAppDataDirectory(File someDir){
+        if(appDataDirectory!=null && !appDataDirectory.getAbsoluteFile().equals(someDir.getAbsoluteFile())){
+            throw new IllegalStateException("Application Data Directory is already define in :"+appDataDirectory.getAbsolutePath());
+        }
+        if(appDataDirectory==null){
+            appDataDirectory = someDir;
+        }
+    }
+
 	public static File getPrefsFile() {
-		File applicationDataDirectory = getApplicationDataDirectory();
-		File prefFile = new File(applicationDataDirectory, "Flexo.prefs");
-		if (!prefFile.exists()) {
-			File oldPrefs = new File(System.getProperty("user.home"), "Library/Flexo/Flexo.prefs");
-			if (oldPrefs.exists()) {
-				if (!prefFile.getParentFile().exists()) {
-					prefFile.getParentFile().mkdirs();
-				}
-				try {
-					FileUtils.copyFileToFile(oldPrefs, prefFile);
-					oldPrefs.delete();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return prefFile;
+		return new File(getApplicationDataDirectory(), "Flexo.prefs");
 	}
 
 	@Override
@@ -146,37 +138,6 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 	 * Unique instance of FlexoPreferences
 	 */
 	private static FlexoPreferences _instance;
-
-	/*
-	 * public String valueForKey(String key) { if
-	 * (logger.isLoggable(Level.FINE)) logger.finer ("valueForKey for "+key);
-	 * try { return super.valueForKey(key); } catch
-	 * (InvalidObjectSpecificationException e) { if
-	 * (logger.isLoggable(Level.FINE)) logger.finer ("FAILED for this"); for
-	 * (Enumeration enum=contextPreferencesVector.elements();
-	 * enum.hasMoreElements();) { ContextPreferences next = null; try { next =
-	 * (ContextPreferences)enum.nextElement(); return next.valueForKey(key); }
-	 * catch (InvalidObjectSpecificationException e2) { if
-	 * (logger.isLoggable(Level.FINE)) logger.finer ("FAILED for
-	 * "+next.getName()); } } if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not find value for key "+key+" in
-	 * FlexoPreferences"); return null; } }
-	 *
-	 * public void setValueForKey(String valueAsString, String key) { if
-	 * (logger.isLoggable(Level.FINE)) logger.finer ("setValueForKey for "+key+"
-	 * value "+valueAsString); try { super.setValueForKey(valueAsString,key); }
-	 * catch (InvalidObjectSpecificationException e) { if
-	 * (logger.isLoggable(Level.FINE)) logger.finer ("FAILED for this"); for
-	 * (Enumeration enum=contextPreferencesVector.elements();
-	 * enum.hasMoreElements();) { ContextPreferences next = null; try { next =
-	 * (ContextPreferences)enum.nextElement();
-	 * next.setValueForKey(valueAsString,key); return; } catch
-	 * (InvalidObjectSpecificationException e2) { if
-	 * (logger.isLoggable(Level.FINE)) logger.finer ("FAILED for
-	 * "+next.getName()); } } if (logger.isLoggable(Level.WARNING))
-	 * logger.warning("Could not set value "+valueAsString+" for key "+key+" in
-	 * FlexoPreferences"); } }
-	 */
 
 	@Override
 	public Object objectForKey(String key) {
@@ -278,7 +239,6 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 
 	@Override
 	public Vector<TabModel> inspectionExtraTabs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

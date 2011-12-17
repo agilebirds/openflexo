@@ -19,6 +19,10 @@
  */
 package org.openflexo.module.external;
 
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.module.ModuleLoadingException;
+
 /**
  * @author gpolet
  * 
@@ -26,15 +30,15 @@ package org.openflexo.module.external;
 public interface IModuleLoader {
 	public IModule getActiveModule();
 
-	public ExternalIEModule getIEModuleInstance();
+	public ExternalIEModule getIEModuleInstance(FlexoProject project) throws ModuleLoadingException;
 
-	public ExternalDMModule getDMModuleInstance();
+	public ExternalDMModule getDMModuleInstance(FlexoProject project) throws ModuleLoadingException;
 
-	public ExternalWKFModule getWKFModuleInstance();
+	public ExternalWKFModule getWKFModuleInstance(FlexoProject project) throws ModuleLoadingException;
 
-	public ExternalCEDModule getCEDModuleInstance();
+	public ExternalCEDModule getCEDModuleInstance(FlexoProject project) throws ModuleLoadingException;
 
-	public ExternalOEModule getOEModuleInstance();
+	public ExternalOEModule getOEModuleInstance(FlexoProject project) throws ModuleLoadingException;
 
 	public boolean isWKFLoaded();
 

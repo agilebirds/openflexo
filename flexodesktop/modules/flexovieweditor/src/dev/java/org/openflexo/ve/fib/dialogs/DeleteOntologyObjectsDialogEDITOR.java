@@ -41,7 +41,7 @@ public class DeleteOntologyObjectsDialogEDITOR {
 			public Object[] getData() 
 			{
 				String URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl";
-				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter();
+				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 				FlexoOntology ontology = ontologyLibrary.getOntology(URI);
 				ontology.loadWhenUnloaded();
@@ -59,4 +59,12 @@ public class DeleteOntologyObjectsDialogEDITOR {
 		};
 		editor.launch();
 	}
+
+    private static ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+
+    private static FlexoResourceCenterService getFlexoResourceCenterService(){
+        return FlexoResourceCenterService.instance();
+    }
 }

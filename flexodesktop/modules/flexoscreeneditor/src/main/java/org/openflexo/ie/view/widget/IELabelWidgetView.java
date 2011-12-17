@@ -19,6 +19,22 @@
  */
 package org.openflexo.ie.view.widget;
 
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ie.dm.CSSChanged;
+import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
+import org.openflexo.foundation.ie.util.TextCSSClass;
+import org.openflexo.foundation.ie.widget.IELabelWidget;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
+import org.openflexo.ie.view.IEWOComponentView;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.ie.view.listener.DoubleClickResponder;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
@@ -28,24 +44,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ie.dm.CSSChanged;
-import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
-import org.openflexo.foundation.ie.util.TextCSSClass;
-import org.openflexo.foundation.ie.widget.IELabelWidget;
-import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.ie.view.listener.DoubleClickResponder;
 
 /**
  * 'Label' widget
@@ -173,30 +171,7 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 				finalizeEditIELabel();
 			}
 		});
-		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				// getLablelModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				// getLablelModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				// getLablelModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			public void updateSize() {
-				revalidate();
-				repaint();
-			}
-		});
+		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_jLabelTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {

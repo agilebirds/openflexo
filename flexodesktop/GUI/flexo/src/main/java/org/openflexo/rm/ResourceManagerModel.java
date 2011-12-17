@@ -117,7 +117,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 
 	protected String modulesRetainingResource(FlexoResource<? extends FlexoResourceData> resource) {
 		String returned = null;
-		Enumeration<FlexoModule> en = ModuleLoader.loadedModules();
+		Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
 		while (en.hasMoreElements()) {
 			FlexoModule module = en.nextElement();
 			if (module.isRetaining(resource)) {
@@ -133,6 +133,10 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 		}
 		return returned;
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	/**
 	 * Implements

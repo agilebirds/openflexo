@@ -37,13 +37,18 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * Automatic builded 'Windows' menu for modules
@@ -103,7 +108,7 @@ public class WindowMenu extends FlexoMenu {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build NEW module menu for " + module.getName());
 		}
-		for (Enumeration e = ModuleLoader.loadedModules(); e.hasMoreElements();) {
+		for (Enumeration e = getModuleLoader().loadedModules(); e.hasMoreElements();) {
 			Module next = ((FlexoModule) e.nextElement()).getModule();
 			createNewAvailableModuleItem(next, true);
 		}
@@ -113,8 +118,7 @@ public class WindowMenu extends FlexoMenu {
 		loadWindowMenu.setText(FlexoLocalization.localizedForKey("load_module", loadWindowMenu));
 		add(loadWindowMenu);
 
-		for (Enumeration e = ModuleLoader.unloadedButAvailableModules().elements(); e.hasMoreElements();) {
-			Module next = (Module) e.nextElement();
+		for (Module next : getModuleLoader().unloadedButAvailableModules()) {
 			createNewLoadModuleItem(next);
 		}
 		add(closeModuleItem = new CloseModuleItem());
@@ -159,6 +163,10 @@ public class WindowMenu extends FlexoMenu {
 
 		});
 	}
+
+    private static ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	protected void updateWindowState() {
 		if (getController().getInspectorWindow() != null) {
@@ -369,7 +377,12 @@ public class WindowMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ModuleLoader.switchToModule(_module);
+			try{
+                getModuleLoader().switchToModule(_module, null);
+            }catch(ModuleLoadingException e){
+                FlexoController.notify("Cannot load module."+e.getMessage());
+                return;
+            }
 			_menuItem.setState(ModuleLoader.instance().getActiveModule() == _module);
 			_menuItem.setIcon(_module.getSmallIcon());
 		}
@@ -389,9 +402,26 @@ public class WindowMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ModuleLoader.switchToModule(_module);
+            FlexoProject currentProject = getModuleLoader().getProject();
+            if(currentProject==null) {
+                try{
+                    InteractiveFlexoEditor editor = ProjectLoader.instance().askProjectDirectoryAndLoad();
+                    currentProject = editor.getProject();
+                }catch(ProjectLoadingCancelledException e){
+                    //user cancelled
+                    return;
+                }
+            }
+			try{
+                getModuleLoader().switchToModule(_module, null);
+            }catch(ModuleLoadingException e){
+                FlexoController.notify("Cannot load module."+e.getMessage());
+                return;
+            }
 		}
 	}
+
+
 
 	protected static Module getActiveModule() {
 		if (FlexoModule.getActiveModule() != null) {
@@ -422,8 +452,14 @@ public class WindowMenu extends FlexoMenu {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus OFF module " + getActiveModule());
 				}
-				getActiveModule().getInstance().focusOff();
-			}
+                try {
+                    getModuleLoader().getModuleInstance(getActiveModule(),getModuleLoader().getProject()).focusOff();
+                } catch (ModuleLoadingException e) {
+                    logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
+                                  + "PLEASE INVESTIGATE AND  FIX");
+                    e.printStackTrace();
+                }
+            }
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Updating menus for " + module);
 			}
@@ -569,7 +605,13 @@ public class WindowMenu extends FlexoMenu {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (getActiveModule() != null) {
-				getActiveModule().getInstance().close();
+				try{
+                    getModuleLoader().getModuleInstance(getActiveModule(),getModuleLoader().getProject()).close();
+                }catch(ModuleLoadingException e){
+                    logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
+                                  + "PLEASE INVESTIGATE AND  FIX");
+                    e.printStackTrace();
+                }
 			}
 		}
 	}

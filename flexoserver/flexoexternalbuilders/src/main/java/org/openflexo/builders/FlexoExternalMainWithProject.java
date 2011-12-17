@@ -71,7 +71,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		project = editor.getProject();
 		project.getGeneratedCode().setFactory(editor);
 		project.getGeneratedDoc().setFactory(editor);
-		ModuleLoader.setProject(project);
+		//ModuleLoader.setProject(project);
 	}
 
 	@Override

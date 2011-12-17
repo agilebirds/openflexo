@@ -45,17 +45,6 @@ public class GeneratorModule extends FlexoModule implements ExternalGeneratorMod
 	private static final Logger logger = Logger.getLogger(GeneratorModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.CG };
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.CG_MODULE);
-	}
-
 	public GeneratorModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 		setFlexoController(new GeneratorController(projectEditor, this));

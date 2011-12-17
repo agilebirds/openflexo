@@ -88,17 +88,6 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 
 	private static final Logger logger = FlexoLogger.getLogger(WKFModule.class.getPackage().getName());
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.WKF_MODULE);
-	}
-
 	public WKFModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		// super(project, new WKFController(project));
 		super(projectEditor);

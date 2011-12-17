@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.security.auth.login.FailedLoginException;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoModuleTestCase;
@@ -37,20 +38,13 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.toolbox.ToolBox;
 
 public class TestDMController extends FlexoModuleTestCase {
-
-	@Override
-	protected void setUp() throws Exception {
-
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-	}
 
 	protected static final Logger logger = Logger.getLogger(TestDMController.class.getPackage().getName());
 
@@ -95,11 +89,15 @@ public class TestDMController extends FlexoModuleTestCase {
 		_project = _editor.getProject();
 
 		initModuleLoader(_projectDirectory, _project);
-		ModuleLoader.switchToModule(Module.DM_MODULE);
+        DMModule ie = null;
+        try {
+            ie = (DMModule) getModuleLoader().switchToModule(Module.DM_MODULE, _project);
+        } catch (ModuleLoadingException e) {
+            fail("Fail to load DMModule."+e.getMessage());
+        }
 
-		DMModule ie = (DMModule) Module.DM_MODULE.getInstance();
-		ie.focusOn();
-		assertTrue(ModuleLoader.isActive(Module.DM_MODULE));
+        ie.focusOn();
+		assertTrue(getModuleLoader().isActive(Module.DM_MODULE));
 		assertNotNull(ie);
 		DMController ctrl = ie.getDMController();
 		assertNotNull(ctrl);
@@ -108,7 +106,7 @@ public class TestDMController extends FlexoModuleTestCase {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
-				ModuleLoader.closeCurrentProject();
+				ProjectLoader.instance().closeCurrentProject();
 			}
 		});
 
@@ -116,25 +114,29 @@ public class TestDMController extends FlexoModuleTestCase {
 
 	/**
 	 * @param projectDirectory
-	 * @param flexoProject
+	 * @param project
 	 */
 	private void initModuleLoader(File projectDirectory, FlexoProject project) {
-		ModuleLoader.setAllowsDocSubmission(false);
+		getModuleLoader().setAllowsDocSubmission(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Init Module loader...");
 		}
 		if (GeneralPreferences.getFavoriteModuleName() == null) {
 			GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		}
-		ModuleLoader.fileNameToOpen = projectDirectory.getAbsolutePath();
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
-		ModuleLoader.setProject(project);
+		getModuleLoader().fileNameToOpen = projectDirectory.getAbsolutePath();
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");
-		} else if (ExternalModuleDelegater.getModuleLoader().getDMModuleInstance() == null) {
-			fail("WKF Module not on the classpath. Component screenshots cannot be generated");
-		}
-	}
+		} else
+            try {
+                if (ExternalModuleDelegater.getModuleLoader().getDMModuleInstance(project) == null) {
+                    fail("WKF Module not on the classpath. Component screenshots cannot be generated");
+                }
+            } catch (ModuleLoadingException e) {
+                fail("Fail to load WKF module. Component screenshots cannot be generated"+e.getMessage());
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+    }
 
 	/**
 	 * Save the project

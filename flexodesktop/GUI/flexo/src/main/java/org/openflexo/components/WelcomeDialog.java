@@ -40,7 +40,7 @@ public class WelcomeDialog extends FIBDialog<ApplicationData> {
 	public static final FileResource FIB_FILE = new FileResource("Fib/WelcomePanel.fib");
 
 	public WelcomeDialog() {
-		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new ApplicationData(), FlexoFrame.getActiveFrame(), true);
+		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new ApplicationData(), null, true);
 		setResizable(false);
 		showDialog();
 	}

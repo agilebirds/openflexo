@@ -58,6 +58,7 @@ import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorObserver;
@@ -68,6 +69,7 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * @author gpolet
@@ -310,7 +312,7 @@ public class FlexoAutoSaveThread extends Thread {
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("closing_project"));
 		}
-		ModuleLoader.closeCurrentProject();
+		ProjectLoader.instance().closeCurrentProject();
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("deleting_project"));
 		}
@@ -322,8 +324,21 @@ public class FlexoAutoSaveThread extends Thread {
 		if (progress != null) {
 			progress.hideWindow();
 		}
-		ModuleLoader.openProjectWithModule(projectDirectory, module);
+		try{
+            InteractiveFlexoEditor editor = ProjectLoader.instance().loadProject(projectDirectory);
+            getModuleLoader().openProjectWithModule(editor, module);
+        } catch (ModuleLoadingException e) {
+            logger.severe("This shouldn't append since module is already loaded." + e.getMessage());
+            e.printStackTrace();
+            FlexoController.notify("This shouldn't append since module is already loaded." + e.getMessage());
+        } catch (ProjectLoadingCancelledException e){
+            return;
+        }
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	public FlexoProject getProject() {
 		return project;
@@ -494,8 +509,11 @@ public class FlexoAutoSaveThread extends Thread {
 		this.run = run;
 	}
 
+    private AutoSaveService getAutoSaveService(){
+            return AutoSaveService.instance();
+    }
 	public void showTimeTravelerDialog() {
-		ModuleLoader.stopAutoSaveThread();
+		getAutoSaveService().stopAutoSaveThread();
 		final FlexoDialog dialog = new FlexoDialog(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame()
 				: null, true);
 		final ParameterDefinition[] parameters = new ParameterDefinition[2];
@@ -530,7 +548,7 @@ public class FlexoAutoSaveThread extends Thread {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
-				ModuleLoader.startAutoSaveThread();
+				getAutoSaveService().startAutoSaveThread();
 			}
 		});
 		JButton ok = new JButton(FlexoLocalization.localizedForKey("restore"));
@@ -560,10 +578,10 @@ public class FlexoAutoSaveThread extends Thread {
 									+ project.getProjectDirectory().getAbsolutePath());
 						}
 					} else {
-						ModuleLoader.startAutoSaveThread();
+						getAutoSaveService().startAutoSaveThread();
 					}
 				} else {
-					ModuleLoader.startAutoSaveThread();
+					getAutoSaveService().startAutoSaveThread();
 				}
 
 			}
@@ -576,7 +594,7 @@ public class FlexoAutoSaveThread extends Thread {
 			 */
 			@Override
 			public void windowClosing(WindowEvent e) {
-				ModuleLoader.startAutoSaveThread();
+				getAutoSaveService().startAutoSaveThread();
 				super.windowClosing(e);
 			}
 		});

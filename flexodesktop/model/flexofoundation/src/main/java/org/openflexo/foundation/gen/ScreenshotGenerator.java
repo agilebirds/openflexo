@@ -47,6 +47,7 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.LOOPOperator;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.module.external.ExternalModule;
@@ -118,7 +119,7 @@ public class ScreenshotGenerator {
 	}
 
 	/**
-	 * @param definition
+	 * @param componentName
 	 * @return
 	 */
 	private static String getImageNameForComponent(String componentName) {
@@ -161,7 +162,7 @@ public class ScreenshotGenerator {
 	}
 
 	/**
-	 * @param node
+	 * @param operationName
 	 * @return
 	 */
 	private static String getImageNameForOperation(String operationName) {
@@ -177,7 +178,7 @@ public class ScreenshotGenerator {
 	}
 
 	/**
-	 * @param process
+	 * @param processName
 	 * @return
 	 */
 	private static String getImageNameForProcess(String processName) {
@@ -185,7 +186,7 @@ public class ScreenshotGenerator {
 	}
 
 	/**
-	 * @param process
+	 * @param shema
 	 * @return
 	 */
 	private static String getImageNameForShema(View shema) {
@@ -193,7 +194,7 @@ public class ScreenshotGenerator {
 	}
 
 	/**
-	 * @param process
+	 * @param shemaName
 	 * @return
 	 */
 	private static String getImageNameForShema(String shemaName) {
@@ -226,20 +227,25 @@ public class ScreenshotGenerator {
 		try {
 			BufferedImage bi = null;
 			JComponent c = null;
-			if (object instanceof AbstractActivityNode || object instanceof FlexoProcess || object instanceof LOOPOperator
-					|| object instanceof RoleList || object instanceof FlexoWorkflow) {
-				wkfModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
-						.getWKFModuleInstance() : null;
-			} else if (object instanceof IEWOComponent || object instanceof ComponentDefinition || object instanceof OperationNode) {
-				ieModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
-						.getIEModuleInstance() : null;
-			} else if (object instanceof ERDiagram) {
-				dmModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
-						.getDMModuleInstance() : null;
-			} else if (object instanceof View) {
-				oeModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
-						.getOEModuleInstance() : null;
-			}
+            try {
+                if (object instanceof AbstractActivityNode || object instanceof FlexoProcess || object instanceof LOOPOperator
+                    || object instanceof RoleList || object instanceof FlexoWorkflow) {
+                    wkfModule = ExternalModuleDelegater.getModuleLoader()
+                                != null ? ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(object.getProject()) : null;
+                } else if (object instanceof IEWOComponent || object instanceof ComponentDefinition || object instanceof OperationNode) {
+                    ieModule = ExternalModuleDelegater.getModuleLoader()
+                               != null ? ExternalModuleDelegater.getModuleLoader().getIEModuleInstance(object.getProject()) : null;
+                } else if (object instanceof ERDiagram) {
+                    dmModule = ExternalModuleDelegater.getModuleLoader()
+                               != null ? ExternalModuleDelegater.getModuleLoader().getDMModuleInstance(object.getProject()) : null;
+                } else if (object instanceof View) {
+                    oeModule = ExternalModuleDelegater.getModuleLoader()
+                               != null ? ExternalModuleDelegater.getModuleLoader().getOEModuleInstance(object.getProject()) : null;
+                }
+            } catch (ModuleLoadingException e) {
+                logger.warning("cannot load module (and so can't create screenshot)." + e.getMessage());
+                e.printStackTrace();
+            }
 			if (wkfModule != null || ieModule != null || dmModule != null || oeModule != null) {
 				ExternalModule module = ieModule != null ? ieModule : wkfModule != null ? wkfModule : dmModule != null ? dmModule
 						: oeModule;

@@ -43,18 +43,6 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 public class DREModule extends FlexoModule implements ExternalDREModule {
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DRE };
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		ToolBox.setPlatform();
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.DRE_MODULE);
-	}
-
 	public DREModule() throws Exception {
 		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
 		setFlexoController(new DREController(this));

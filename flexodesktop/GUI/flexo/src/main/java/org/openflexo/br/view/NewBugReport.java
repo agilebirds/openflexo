@@ -58,7 +58,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.LogRecord;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.ToolBox;
@@ -160,10 +159,10 @@ public class NewBugReport extends FlexoDialog {
 			}
 		});
 		controlPanel.add(cancelButton);
-		if (ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isMaintainerRelease()) {
 			controlPanel.add(saveToFileButton);
 		}
-		if (ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isMaintainerRelease()) {
 			controlPanel.add(registerButton);
 		}
 		controlPanel.add(sendButton);
@@ -515,7 +514,7 @@ public class NewBugReport extends FlexoDialog {
 
 	private static String getErrorMessage(RequestResponse response) {
 		return FlexoLocalization.localizedForKey("An error has occured !")
-				+ ((ModuleLoader.getUserType() == UserType.DEVELOPER || ModuleLoader.getUserType() == UserType.MAINTAINER) ? response.response
+				+ ((UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) ? response.response
 						: "");
 	}
 

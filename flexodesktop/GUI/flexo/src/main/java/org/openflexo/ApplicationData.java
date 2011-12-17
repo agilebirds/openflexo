@@ -20,6 +20,7 @@
 package org.openflexo;
 
 import java.io.File;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -40,9 +41,9 @@ public class ApplicationData {
 	private static final Logger logger = Logger.getLogger(ApplicationData.class.getPackage().getName());
 
 	public ApplicationData() {
-		if (ModuleLoader.instance() == null) {
+		if (!UserType.isCurrentUserTypeDefined()) {
 			logger.warning("ModuleLoader not initialized, initializing it with default values");
-			ModuleLoader.initializeModules(UserType.MAINTAINER/*, false*/);
+            UserType.setCurrentUserType(UserType.MAINTAINER);
 		}
 	}
 
@@ -50,12 +51,12 @@ public class ApplicationData {
 		return ModuleLoader.instance();
 	}
 
-	public Vector<Module> getAvailableModules() {
-		return ModuleLoader.availableModules();
+	public List<Module> getAvailableModules() {
+		return getModuleLoader().availableModules();
 	}
 
 	public UserType getUserType() {
-		return ModuleLoader.getUserType();
+		return UserType.getCurrentUserType();
 	}
 
 	public String getVersion() {
@@ -79,7 +80,7 @@ public class ApplicationData {
 	}
 
 	public Module getFavoriteModule() {
-		Module returned = Module.getModule(GeneralPreferences.getFavoriteModuleName());
+		Module returned = getModuleLoader().getModule(GeneralPreferences.getFavoriteModuleName());
 		if (returned == null) {
 			returned = Module.WKF_MODULE;
 		}

@@ -34,7 +34,7 @@ import javax.swing.SwingConstants;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoFrame;
 
@@ -61,7 +61,7 @@ public class AboutDialog extends JDialog {
 		getContentPane().add(flexoLabel);
 		flexoLabel.setBounds(319, 142, 231, 59);
 
-		JLabel businessLabel = new JLabel(ModuleLoader.getUserType().getBusinessName2(), SwingConstants.RIGHT);
+		JLabel businessLabel = new JLabel(UserType.getCurrentUserType().getBusinessName2(), SwingConstants.RIGHT);
 		businessLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		businessLabel.setFont(new Font("SansSerif", Font.ITALIC, 18));
 		getContentPane().add(businessLabel);

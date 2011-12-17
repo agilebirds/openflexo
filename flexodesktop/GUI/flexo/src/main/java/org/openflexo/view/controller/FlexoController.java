@@ -110,6 +110,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.factory.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.prefs.PreferencesController;
@@ -398,7 +399,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if (FlexoModule.getActiveModule() != null) {
 			return FlexoModule.getActiveModule().getFlexoFrame();
 		} else {
-			Enumeration<FlexoModule> en = ModuleLoader.loadedModules();
+			Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
 			while (en.hasMoreElements()) {
 				FlexoModule module = en.nextElement();
 				if (module.getFlexoFrame() != null && module.getFlexoFrame().isActive()) {
@@ -408,6 +409,10 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		}
 		return null;
 	}
+
+    private static ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	public static void showError(String msg) throws HeadlessException {
 		showError(FlexoLocalization.localizedForKey("error"), msg);
@@ -1695,7 +1700,9 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				}
 			}
 		}
-		getSharedInspectorController().getInspectorWindow().dispose();
+        if(useOldInspectorScheme()){
+		    getSharedInspectorController().getInspectorWindow().dispose();
+        }
 		_loadedViews.clear();
 		_perspectives.clear();
 		_keyStrokeActionTable.clear();
