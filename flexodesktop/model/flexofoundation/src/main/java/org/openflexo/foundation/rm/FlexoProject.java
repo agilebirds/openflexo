@@ -1149,24 +1149,22 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					}
 				}
 			}
-			if (identifier != null) {
-				removeResourceWithKey(identifier);
-				for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getAlteredResources())) {
-					res.removeFromDependentResources(resource);
-				}
-				for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(
-						resource.getDependentResources())) {
-					res.removeFromAlteredResources(resource);
-				}
-				for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(
-						resource.getSynchronizedResources())) {
-					res.removeFromSynchronizedResources(resource);
-				}
-			} else {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not remove resource " + resource.getResourceIdentifier()
-							+ " because this resource is not registered !");
-				}
+		}
+		if (identifier != null) {
+			removeResourceWithKey(identifier);
+			for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getAlteredResources())) {
+				res.removeFromDependentResources(resource);
+			}
+			for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getDependentResources())) {
+				res.removeFromAlteredResources(resource);
+			}
+			for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getSynchronizedResources())) {
+				res.removeFromSynchronizedResources(resource);
+			}
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not remove resource " + resource.getResourceIdentifier()
+						+ " because this resource is not registered !");
 			}
 		}
 	}
