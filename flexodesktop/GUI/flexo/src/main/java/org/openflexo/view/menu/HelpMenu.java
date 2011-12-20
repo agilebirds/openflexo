@@ -89,9 +89,9 @@ public class HelpMenu extends FlexoMenu implements Observer {
 		add(modelingHelp);
 
 		addSeparator();
-		modulesHelp = new JMenuItem[ModuleLoader.availableModules().size()];
-		for (int i = 0; i < ModuleLoader.availableModules().size(); i++) {
-			Module module = ModuleLoader.availableModules().elementAt(i);
+		modulesHelp = new JMenuItem[getModuleLoader().availableModules().size()];
+		for (int i = 0; i < getModuleLoader().availableModules().size(); i++) {
+			Module module = getModuleLoader().availableModules().get(i);
 			modulesHelp[i] = new JMenuItem();
 			modulesHelp[i].setText(FlexoLocalization.localizedForKey(module.getName(), modulesHelp[i]));
 			CSH.setHelpIDString(modulesHelp[i], module.getHelpTopic());
@@ -111,7 +111,7 @@ public class HelpMenu extends FlexoMenu implements Observer {
 		});
 		add(helpOn);
 
-		if (ModuleLoader.allowsDocSubmission()) {
+		if (getModuleLoader().allowsDocSubmission()) {
 			submitHelpFor = new JMenuItem();
 			submitHelpFor.setText(FlexoLocalization.localizedForKey("submit_help_for", submitHelpFor));
 			// helpOn.addActionListener(new CSH.DisplayHelpAfterTracking(FlexoHelp.getHelpBroker()));
@@ -141,6 +141,10 @@ public class HelpMenu extends FlexoMenu implements Observer {
 
 		FlexoHelp.instance.addObserver(this);
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	@Override
 	public void update(Observable observable, Object arg) {

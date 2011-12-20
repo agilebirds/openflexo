@@ -58,7 +58,7 @@ import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSucces
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.selection.SelectionManager;
@@ -195,7 +195,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		addToPerspectives(SWIMMING_LANE_PERSPECTIVE = new SwimmingLanePerspective(this));
 		addToPerspectives(ROLE_EDITOR_PERSPECTIVE = new RolePerspective(this));
 		DOCUMENTATION_PERSPECTIVE = new DocumentationPerspective(this, "documentation");
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addToPerspectives(DOCUMENTATION_PERSPECTIVE);
 		}
 		initWorkflowGraphicalPropertiesFromPrefs(getProject());

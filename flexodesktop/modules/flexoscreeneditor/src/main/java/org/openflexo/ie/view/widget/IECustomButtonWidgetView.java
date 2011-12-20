@@ -19,6 +19,22 @@
  */
 package org.openflexo.ie.view.widget;
 
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ie.dm.ButtonRemoved;
+import org.openflexo.foundation.ie.dm.CustomButtonValueChanged;
+import org.openflexo.foundation.ie.widget.IECustomButtonWidget;
+import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
+import org.openflexo.ie.view.IEWOComponentView;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.ie.view.listener.DoubleClickResponder;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -33,24 +49,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ie.dm.ButtonRemoved;
-import org.openflexo.foundation.ie.dm.CustomButtonValueChanged;
-import org.openflexo.foundation.ie.widget.IECustomButtonWidget;
-import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
-import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.ie.view.listener.DoubleClickResponder;
 
 public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget> implements DoubleClickResponder, LabeledWidget {
 	private static final int ROUNDED_BORDER_SIZE = 1;
@@ -197,27 +195,7 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 			}
 		});
 
-		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			public void updateSize() {
-				revalidate();
-				repaint();
-			}
-		});
+		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_jLabelTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {

@@ -19,6 +19,22 @@
  */
 package org.openflexo.ie.view.widget;
 
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
+import org.openflexo.foundation.ie.widget.IEEditableTextWidget;
+import org.openflexo.foundation.ie.widget.IETextAreaWidget;
+import org.openflexo.ie.IEPreferences;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
+import org.openflexo.ie.view.IEWOComponentView;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.logging.FlexoLogger;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.EtchedBorder;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -29,24 +45,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
-import org.openflexo.foundation.ie.widget.IEEditableTextWidget;
-import org.openflexo.foundation.ie.widget.IETextAreaWidget;
-import org.openflexo.ie.IEPreferences;
-import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author bmangez
@@ -325,26 +323,7 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 		_jLabelTextArea.setWrapStyleWord(true);
 		_jLabelTextArea.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		_jLabelTextArea.setRows(_jTextArea.getRows());
-		_jLabelTextArea.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				updateSize();
-			}
-
-			public void updateSize() {
-				repaint();
-			}
-		});
+		_jLabelTextArea.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_jLabelTextArea.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {

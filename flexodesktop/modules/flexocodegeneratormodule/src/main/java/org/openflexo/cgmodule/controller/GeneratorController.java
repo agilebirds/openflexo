@@ -80,6 +80,7 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.GeneratedResourceModifiedChoice;
 import org.openflexo.module.InteractiveFlexoResourceUpdateHandler.GeneratedResourceModifiedHook;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
@@ -139,9 +140,9 @@ public class GeneratorController extends FlexoController implements SelectionMan
 	public GeneratorController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
 		super(projectEditor, module);
 		_CGGeneratedResourceModifiedHook = new CGGeneratedResourceModifiedHook();
-		if (ModuleLoader.getFlexoResourceUpdateHandler() != null) {
+		if (ProjectLoader.instance().getFlexoResourceUpdateHandler() != null) {
 			logger.warning("Cette procedure n'est pas correcte, il faut passer par le ModuleLoader, remember me (sylvain)");
-			ModuleLoader.getFlexoResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
+			ProjectLoader.instance().getFlexoResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
 		}
 
 		createFooter();
@@ -161,6 +162,10 @@ public class GeneratorController extends FlexoController implements SelectionMan
 
 		_generatorPanels = new Hashtable();
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	/**
 	 * Creates a new instance of MenuBar for the module this controller refers to

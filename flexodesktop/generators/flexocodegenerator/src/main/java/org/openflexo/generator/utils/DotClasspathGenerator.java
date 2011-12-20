@@ -149,7 +149,7 @@ public class DotClasspathGenerator extends MetaFileGenerator {
 	 */
 	@Override
 	public void rebuildDependanciesForResource(ProjectTextFileResource resource) {
-		resource.addToDependantResources(getProject().getFlexoComponentLibraryResource());
+		resource.addToDependentResources(getProject().getFlexoComponentLibraryResource());
 	}
 
 }

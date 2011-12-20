@@ -19,15 +19,18 @@
  */
 package org.openflexo.module;
 
-public class ModuleLoadingException extends Exception {
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.module.external.IModule;
 
-	private Module module;
+public class ModuleLoadingException extends FlexoException {
 
-	public ModuleLoadingException(Module module) {
+	private IModule module;
+
+	public ModuleLoadingException(IModule module) {
 		this.module = module;
 	}
 
-	public Module getModule() {
+	public IModule getModule() {
 		return module;
 	}
 

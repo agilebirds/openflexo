@@ -59,13 +59,17 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 			logger.fine("handleQuit");
 		}
 		try {
-			ModuleLoader.quit();
+			getModuleLoader().quit(true);
 		} catch (ProjectExitingCancelledException e) {
 		}
 	}
 
 	public void handleOpenFile(ApplicationEvent arg0) {
-		ModuleLoader.fileNameToOpen = arg0.getFilename();
+		getModuleLoader().fileNameToOpen = arg0.getFilename();
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 }

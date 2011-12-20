@@ -36,7 +36,7 @@ public class OntologyViewEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter();
+				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 				FlexoOntology ontology1 = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
 				ontology1.loadWhenUnloaded();
@@ -55,4 +55,12 @@ public class OntologyViewEDITOR {
 		};
 		editor.launch();
 	}
+
+    private static ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+
+    private static FlexoResourceCenterService getFlexoResourceCenterService(){
+        return FlexoResourceCenterService.instance();
+    }
 }

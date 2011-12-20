@@ -41,7 +41,7 @@ public class PushToPaletteDialogEDITOR {
 			@Override
 			public Object[] getData() 
 			{
-				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
+				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
@@ -57,4 +57,12 @@ public class PushToPaletteDialogEDITOR {
 		};
 		editor.launch();
 	}
+
+    private static ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+
+    private static FlexoResourceCenterService getFlexoResourceCenterService(){
+        return FlexoResourceCenterService.instance();
+    }
 }

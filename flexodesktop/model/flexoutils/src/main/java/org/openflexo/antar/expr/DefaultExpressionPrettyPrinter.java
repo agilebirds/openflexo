@@ -36,7 +36,7 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 	private Duration.DurationStringConverter durationConverter = new Duration.DurationStringConverter();
 
 	public DefaultExpressionPrettyPrinter() {
-		super(new DefaultGrammar());
+		this(new DefaultGrammar());
 	}
 
 	protected DefaultExpressionPrettyPrinter(ExpressionGrammar grammar) {

@@ -20,6 +20,7 @@
 package org.openflexo.module;
 
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
@@ -30,7 +31,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveDialog;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
@@ -109,31 +109,15 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		_controller = controller;
 		_controller.setModule(this);
 		_frame = controller.getFlexoFrame();
-		// _frame.setTitle(getName() + " " + getVersion());
 		_frame.setModule(this);
 		_controller.initInspectors();
 	}
 
-	protected void setFlexoFrame(FlexoFrame frame) {
-		_frame = frame;
-		_frame.setModule(this);
-	}
-
 	public FlexoController getFlexoController() {
-		if (_controller == null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Module '" + getName() + "' NOT CORRECTELY LOADED !");
-			}
-		}
 		return _controller;
 	}
 
 	public FlexoFrame getFlexoFrame() {
-		if (_frame == null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Module '" + getName() + "' NOT CORRECTELY LOADED !");
-			}
-		}
 		return _frame;
 	}
 
@@ -164,20 +148,12 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	}
 
 	public void focusOn() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Module " + getName() + " receive focus ON");
-		}
 		processFocusOn();
 		int state = getFlexoFrame().getExtendedState();
 		state &= ~Frame.ICONIFIED;
 		getFlexoFrame().setExtendedState(state);
 		getFlexoFrame().setVisible(true);
 		SwingUtilities.invokeLater(new Runnable() {
-			/**
-			 * Overrides run
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
 			@Override
 			public void run() {
 				getFlexoFrame().toFront();
@@ -187,34 +163,21 @@ public abstract class FlexoModule implements DataFlexoObserver {
 
 	public void notifyFocusOn() {
 		if (!isActive()) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Module " + getName() + " receive notification for focus ON");
-			}
 			processFocusOn();
 			getFlexoFrame().setRelativeVisible(true);
 		}
 	}
 
 	public void notifyFocusGained() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("notifyFocusGained() for " + this + ": Transition is " + desactivatingModule + " to " + activatingModule);
-		}
 		if (ignoreFocusGainedNotifications) {
 			if (System.currentTimeMillis() - dateWhenFocusGainedWasLocked > 3000) {
 				// After 3 seconds, FocusGained locking time-out and is
 				// inconditionnaly reset
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("TIME-OUT expired: UNLOCKING FocusOn ignoring for " + this);
-				}
 				ignoreFocusGainedNotifications = false;
 			}
 		}
 		if (!ignoreFocusGainedNotifications) {
 			notifyFocusOn();
-		} else {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("IGNORING notifyFocusGained() for " + this);
-			}
 		}
 		tryToUnlock();
 	}
@@ -225,9 +188,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 
 	private void tryToUnlock() {
 		if (activatingModule == this) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("UNLOCKING FocusOn ignoring for " + desactivatingModule);
-			}
 			if (desactivatingModule != null) {
 				desactivatingModule.ignoreFocusGainedNotifications = false;
 			}
@@ -239,15 +199,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	boolean ignoreFocusGainedNotifications = false;
 
 	public void focusOff() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Module " + getName() + " receive focus OFF");
-		}
-		if (getFlexoController() instanceof SelectionManagingController) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Module " + getName() + " is loosing focus : reseting selection");
-				// ((SelectionManagingController) getFlexoController()).getSelectionManager().resetSelection();
-			}
-		}
 		_activeModule = null;
 		isActive = false;
 		ignoreFocusGainedNotifications = true;
@@ -265,17 +216,8 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	private long dateWhenFocusGainedWasLocked = 0;
 
 	public void processFocusOn() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("processFocusOn() called:  ActiveModule=" + _activeModule);
-		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("processFocusOn() called:  this=" + this);
-		}
 		if (_activeModule != null && _activeModule != this) {
 			desactivatingModule = _activeModule;
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine(this + ": desactivatingModule=" + desactivatingModule);
-			}
 			_activeModule.focusOff();
 		}
 		if (_activeModule != this) {
@@ -284,7 +226,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		boolean selectDefaultObject = false;
 		if (getDefaultObjectToSelect() != null
 				&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
-				.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
+						.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
 			if (getFlexoController() instanceof SelectionManagingController) {
 				if (((SelectionManagingController) getFlexoController()).getSelectionManager().getFocusedObject() == null) {
 					selectDefaultObject = true;
@@ -296,45 +238,27 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		if (selectDefaultObject) {
 			getFlexoController().setCurrentEditedObjectAsModuleView(getDefaultObjectToSelect());
 		} else if (getFlexoController() instanceof SelectionManagingController) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Module " + getName() + " is loosing focus : reseting selection");
-			}
 			((SelectionManagingController) getFlexoController()).getSelectionManager()
-			.setSelectedObjects(
-					new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
-							.getSelection()));
+					.setSelectedObjects(
+							new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
+									.getSelection()));
 		}
 	}
 
 	private void setAsActiveModule() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Module " + getName() + " receive focusOn");
-		}
 		WindowMenu.notifySwitchToModule(getModule());
 		ModuleBar.notifyStaticallySwitchToModule(getModule());
 		isActive = true;
 		_activeModule = this;
 		activatingModule = this;
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine(this + ": activatingModule=" + activatingModule);
-		}
 		if (getFlexoController() instanceof SelectionManagingController) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Module " + getName() + " receive focus ON, set inspected object in sync with selection");
-			}
-			// ((SelectionManagingController)
-			// getFlexoController()).getSelectionManager().updateInspectorManagement();
 			((SelectionManagingController) getFlexoController()).getSelectionManager().fireUpdateSelection();
 		}
 
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Finalizing Module " + getClass().getSimpleName());
-		}
-		super.finalize();
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 	/**
@@ -350,22 +274,13 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	 * a "return true"
 	 */
 	{
-		boolean isLastModule = false;
-		Enumeration en = ModuleLoader.loadedModules();
-		if (en.hasMoreElements()) {
-			en.nextElement();
-		}
-		if (!en.hasMoreElements()) {
-			isLastModule = true;
-		}
+		boolean isLastModule = !getModuleLoader().isThereAnyLoadedModuleWithAProjectExcept(getModule());
 		if (isLastModule) {
-			if (someResourcesNeedsSaving()) {
+			if (ProjectLoader.someResourcesNeedsSaving(getProject())) {
 				try {
-					SaveDialog reviewer = new SaveDialog(getFlexoFrame(), ModuleLoader.getProject());
+					SaveDialog reviewer = new SaveDialog(getFlexoFrame());
 					if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
-						ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
-						reviewer.saveProject(ProgressWindow.instance());
-						ProgressWindow.hideProgressWindow();
+						ProjectLoader.doSaveProject(_controller.getProject());
 						closeWithoutConfirmation();
 						return true;
 					} else if (reviewer.getRetval() == JOptionPane.NO_OPTION) {
@@ -377,7 +292,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 
 				} catch (SaveResourceException e) {
 					e.printStackTrace();
-					ProgressWindow.hideProgressWindow();
 					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
 							+ FlexoLocalization.localizedForKey("would_you_like_to_close_anyway"))) {
 						closeWithoutConfirmation();
@@ -395,36 +309,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 				}
 			}
 		} else { // There are still other modules left
-			/*if (someResourcesNeedsSaving()) {
-			    try {
-			        ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
-			        if (saveWithReview(ProgressWindow.instance())) {
-			            ProgressWindow.hideProgressWindow();
-			            closeWithoutConfirmation();
-			            return true;
-			        } else {
-			            ProgressWindow.hideProgressWindow();
-			            return false;
-			        }
-			    } catch (SaveResourcePermissionDeniedException e) {
-			        ProgressWindow.hideProgressWindow();
-			        if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-			                + FlexoLocalization.localizedForKey("would_you_like_to_close_anyway"))) {
-			            closeWithoutConfirmation();
-			            return true;
-			        } else
-			            return false;
-			    } catch (SaveResourceException e) {
-			        e.printStackTrace();
-			        ProgressWindow.hideProgressWindow();
-			        if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-			                + FlexoLocalization.localizedForKey("would_you_like_to_close_anyway"))) {
-			            closeWithoutConfirmation();
-			            return true;
-			        } else
-			            return false;
-			    }
-			} else {*/
 			closeWithoutConfirmation();// Unloads the module
 			return true; // Since there is nothing to save and that Flexo
 			// has other windows opened to access it, we
@@ -449,21 +333,27 @@ public abstract class FlexoModule implements DataFlexoObserver {
 			logger.warning("Called twice closeWithoutConfirmation on " + this);
 		}
 		_controller = null;
-		for (FlexoResource<? extends FlexoResourceData> r : usedResources.values()) {
+		for (FlexoResource<? extends FlexoResourceData> r : new ArrayList<FlexoResource<? extends FlexoResourceData>>(
+				usedResources.values())) {
 			releaseResource(r);
 		}
-		if (ModuleLoader.isLoaded(getModule())) {
-			ModuleLoader.unloadModule(getModule());
+		if (getModuleLoader().isLoaded(getModule())) {
+			getModuleLoader().unloadModule(getModule());
 		}
 		// Is there some modules loaded ?
-		Enumeration<FlexoModule> leftModules = ModuleLoader.loadedModules();
+		Enumeration<FlexoModule> leftModules = getModuleLoader().loadedModules();
 		if (leftModules.hasMoreElements()) {
-			ModuleLoader.switchToModule(leftModules.nextElement().getModule());
+			try {
+				getModuleLoader().switchToModule(leftModules.nextElement().getModule(), null);
+			} catch (ModuleLoadingException e) {
+				logger.severe("Module is loaded and so this exception CANNOT occurs. Please investigate and FIX.");
+				e.printStackTrace();
+			}
 		} else {
 			_activeModule = null;
 			if (quitIfNoModuleLeft) {
 				try {
-					ModuleLoader.quit(false);
+					getModuleLoader().quit(false);
 				} catch (ProjectExitingCancelledException e) {
 				}
 			}
@@ -475,7 +365,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	}
 
 	public Module getModule() {
-		return Module.getModule(getClass());
+		return getModuleLoader().getModule(getClass());
 	}
 
 	/**
@@ -533,34 +423,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 				logger.fine("Resource " + resource.getResourceIdentifier() + " has been released by module " + getName());
 			}
 		}
-	}
-
-	/**
-	 * Called to "tell" that this module is no more using this resource data, and that this corresponding resource can consequently be
-	 * released by this module
-	 * 
-	 * @param resourceData
-	 */
-	public void release(FlexoResourceData resourceData) {
-		releaseResource(resourceData.getFlexoResource());
-	}
-
-	/**
-	 * Return boolean indicating if some resources need saving
-	 */
-	protected boolean someResourcesNeedsSaving() {
-		if (getProject() != null) {
-			return getProject().getUnsavedStorageResources(false).size() > 0;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns hashtable where all the resources used by this module are stored, with associated key which is a String identifying the
-	 * resource (resourceIdentifier)
-	 */
-	public Map<String, FlexoResource<? extends FlexoResourceData>> getUsedResources() {
-		return usedResources;
 	}
 
 	@Override

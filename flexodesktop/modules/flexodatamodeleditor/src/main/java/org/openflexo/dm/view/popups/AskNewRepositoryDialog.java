@@ -45,7 +45,7 @@ import org.openflexo.foundation.dm.DMRegExp;
 import org.openflexo.foundation.dm.action.CreateDMRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.swing.FileSelector;
 import org.openflexo.swing.JRadioButtonWithIcon;
 import org.openflexo.toolbox.FileResource;
@@ -105,8 +105,8 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 	protected JButton cancelButton;
 	static File _lastVisitedJarDirectory = new FileResource("Library/JarLibraries");
 
-	private static final boolean isThesaurusCreationAllowed = ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease();
-	private static final boolean isRationalRoseCreationAllowed = true;/*ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease();*/
+	private static final boolean isThesaurusCreationAllowed = UserType.isDevelopperRelease() || UserType.isMaintainerRelease();
+	private static final boolean isRationalRoseCreationAllowed = true;
 	private String _preselectedType;
 
 	public AskNewRepositoryDialog(CreateDMRepository flexoAction, FlexoFrame owner) {

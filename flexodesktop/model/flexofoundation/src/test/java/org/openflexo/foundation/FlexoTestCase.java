@@ -263,7 +263,7 @@ public abstract class FlexoTestCase extends TestCase {
 	 */
 	protected void assertDepends(FlexoResource resource1, FlexoResource resource2) {
 		try {
-			assertTrue(resource1.getDependantResources().contains(resource2));
+			assertTrue(resource1.getDependentResources().contains(resource2));
 			assertTrue(resource2.getAlteredResources().contains(resource1));
 		} catch (AssertionFailedError e) {
 			logger.severe("RESOURCE synchonization problem: " + resource1 + " MUST depends on " + resource2);
@@ -279,7 +279,7 @@ public abstract class FlexoTestCase extends TestCase {
 	 */
 	protected void assertNotDepends(FlexoResource resource1, FlexoResource resource2) {
 		try {
-			assertFalse(resource1.getDependantResources().contains(resource2));
+			assertFalse(resource1.getDependentResources().contains(resource2));
 			assertFalse(resource2.getAlteredResources().contains(resource1));
 		} catch (AssertionFailedError e) {
 			logger.severe("RESOURCE synchonization problem: " + resource1 + " MUST depends on " + resource2);

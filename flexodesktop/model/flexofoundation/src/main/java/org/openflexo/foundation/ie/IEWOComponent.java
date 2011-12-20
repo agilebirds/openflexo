@@ -496,7 +496,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	public Vector<ComponentInstance> getAllComponentInstances() {
 		Vector allIEObjects = getAllEmbeddedIEObjects();
 		Vector<ComponentInstance> returned = new Vector<ComponentInstance>();
-		for (FlexoResource r : getFlexoResource().getDependantResources()) {
+		for (FlexoResource r : getFlexoResource().getDependentResources()) {
 			if (r instanceof FlexoComponentResource) {
 				for (ComponentInstance ci : ((FlexoComponentResource) r).getComponentDefinition().getComponentInstances()) {
 					if (ci.getXMLResourceData() == this) {

@@ -73,6 +73,9 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 public class TestCG2 extends CGTestCase {
 
 	public TestCG2(String arg0) {
@@ -90,6 +93,18 @@ public class TestCG2 extends CGTestCase {
 		super.reloadGeneratedResources();
 		applicationConfResource = (ProjectTextFileResource) _project.resourceForKey(ResourceType.TEXT_FILE,
 				GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, DefaultApplicationConfGenerator.IDENTIFIER));
+	}
+
+
+    public static Test suite() {
+		final TestSuite suite = new TestSuite("TestSuite for TestCG2");
+		suite.addTest(new TestCG2("test0CreateProject"));
+		suite.addTest(new TestCG2("test1InitializeCodeGeneration"));
+		suite.addTest(new TestCG2("test2TestRenamingComponentInsideSynchronization"));
+		suite.addTest(new TestCG2("test3TestRenamingComponentOutsideSynchronization"));
+		suite.addTest(new TestCG2("test4TestRemovingComponentInsideSynchronization"));
+		suite.addTest(new TestCG2("test5TestRemovingComponentOutsideSynchronization"));
+		return suite;
 	}
 
 	/**

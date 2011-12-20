@@ -138,7 +138,7 @@ public class FlexoNavigationMenuResource extends FlexoXMLStorageResource<FlexoNa
 	 */
 	private void rebuildDependancyForMenu(FlexoItemMenu menu) {
 		if (menu.getProcess() != null) {
-			addToDependantResources(menu.getProcess().getFlexoResource());
+			addToDependentResources(menu.getProcess().getFlexoResource());
 		}
 		Enumeration en = menu.getSubItems().elements();
 		while (en.hasMoreElements()) {

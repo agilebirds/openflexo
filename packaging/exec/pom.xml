@@ -1,32 +1,66 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.openflexo.packaging</groupId>
-		<artifactId>packaging</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
-	</parent>
-	<artifactId>exec</artifactId>
-	<packaging>pom</packaging>
-	<name>Flexo Exec</name>
-	<modules>
-		<module>flexobusiness</module>
-		<module>flexobusinessplus</module>
-		<module>flexoenterprise</module>
-	</modules>
-	<profiles>
-		<profile>
-			<id>mac-osx</id>
-			<activation>
-				<os>
-					<family>mac</family>
-				</os>
-			</activation>
-			<properties>
-			     <vm.args>-Xmx1G -Xdock:name=Flexo -Dapple.laf.useScreenMenuBar=true</vm.args>
-			</properties>
-		</profile>
-		<profile>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.openflexo.packaging</groupId>
+        <artifactId>packaging</artifactId>
+        <version>1.4.4-SNAPSHOT</version>
+    </parent>
+    <artifactId>exec</artifactId>
+    <packaging>pom</packaging>
+    <name>Executables</name>
+    <modules>
+        <module>flexobusiness</module>
+        <module>flexobusinessplus</module>
+        <module>flexoenterprise</module>
+        <module>flexomaintainer</module>
+    </modules>
+    <properties>
+        <main.class>org.openflexo.Flexo</main.class>
+        <vm.args>-Xmx512M</vm.args>
+        <logging.args>-Djava.util.logging.config.file=Config/logging.properties</logging.args>
+        <debug.args></debug.args>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <classpathScope>runtime</classpathScope>
+                    <executable>java</executable>
+                    <commandlineArgs>
+                        ${os.exec.args} ${logging.args} ${vm.args} ${debug.args} -classpath %classpath ${main.class} -userType ${userType}
+                    </commandlineArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>mac-osx</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <os.exec.args>
+                    -Xverify:all -Xdock:name=Flexo -Dapple.laf.useScreenMenuBar=true
+                </os.exec.args>
+            </properties>
+        </profile>
+        <profile>
             <id>windows</id>
             <activation>
                 <os>
@@ -34,35 +68,19 @@
                 </os>
             </activation>
             <properties>
-                 <vm.args>-Xmx1G -Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel</vm.args>
+                <os.exec.args>
+                    -Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel
+                </os.exec.args>
             </properties>
         </profile>
-	</profiles>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.1</version>
-					<executions>
-					<execution>
-            <id></id>
-            <phase>verify</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <inherited>false</inherited>
-            <configuration>
-            </configuration>
-          </execution>
-					</executions>
-					<configuration>
-						<mainClass>org.openflexo.Application</mainClass>
-                        
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+        <profile>
+            <id>debug</id>
+            <properties>
+                <debug.args>
+                    -Xdebug -Xrunjdwp:transport=dt_socket,address=8001,server=y,suspend=y
+                </debug.args>
+            </properties>
+        </profile>
+
+    </profiles>
 </project>

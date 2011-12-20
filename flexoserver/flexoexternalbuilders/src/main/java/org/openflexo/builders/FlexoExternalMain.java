@@ -91,6 +91,7 @@ public abstract class FlexoExternalMain {
 		if (!isDev) {
 			ResourceLocator.resetFlexoResourceLocation(new File(resourcePath));
 		}
+        UserType.setCurrentUserType(UserType.DEVELOPER);
 		FlexoProperties.load();
 		initializeLoggingManager();
 		if (!isDev) {
@@ -103,8 +104,11 @@ public abstract class FlexoExternalMain {
 			logger.info("Launching " + getName() + "...");
 		}
 		GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
 
 	protected abstract void run() throws FlexoRunException;
 

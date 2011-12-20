@@ -33,7 +33,7 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -58,7 +58,7 @@ public class EditMenu extends FlexoMenu {
 	public EditMenu(FlexoController controller) {
 		super("edit", controller);
 		_controller = controller;
-		if (ModuleLoader.isMaintainerRelease() || ModuleLoader.isDevelopperRelease()) {
+		if (UserType.isMaintainerRelease() || UserType.isDevelopperRelease()) {
 			add(undoItem = new UndoItem());
 			add(redoItem = new RedoItem());
 			undoItem.setEnabled(false);

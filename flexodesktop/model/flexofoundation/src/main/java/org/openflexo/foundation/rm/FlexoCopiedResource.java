@@ -265,7 +265,7 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		if (getResourceToCopy() != null) {
-			addToDependantResources(getResourceToCopy());
+			addToDependentResources(getResourceToCopy());
 		}
 	}
 

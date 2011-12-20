@@ -80,7 +80,6 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.SelectionManagingController;
@@ -497,7 +496,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 			}
 			File cssFile = getProject() != null ? getProject().getDocumentationCssResource().getFile() : null;
 			shortHTMLDescriptionEditor = new FlexoWysiwygHelpDocEditor(FlexoLocalization.localizedForKey("write_documentation_here"),
-					cssFile, ModuleLoader.getUserType() == UserType.DEVELOPER || ModuleLoader.getUserType() == UserType.MAINTAINER) {
+					cssFile, UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 				@Override
 				public void notifyTextChanged() {
 					getDocResourceManager().getEditedVersion(_docItem).setShortHTMLDescription(shortHTMLDescriptionEditor.getBodyContent());
@@ -506,7 +505,7 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 			shortHTMLDescriptionEditor.setPreferredSize(new Dimension(850, 250));
 
 			fullHTMLDescriptionEditor = new FlexoWysiwygHelpDocEditor(FlexoLocalization.localizedForKey("write_documentation_here"),
-					cssFile, ModuleLoader.getUserType() == UserType.DEVELOPER || ModuleLoader.getUserType() == UserType.MAINTAINER) {
+					cssFile, UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 				@Override
 				public void notifyTextChanged() {
 					getDocResourceManager().getEditedVersion(_docItem).setFullHTMLDescription(shortHTMLDescriptionEditor.getBodyContent());

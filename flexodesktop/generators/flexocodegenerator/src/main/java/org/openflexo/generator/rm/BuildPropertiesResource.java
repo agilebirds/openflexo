@@ -94,7 +94,7 @@ public class BuildPropertiesResource extends TextFileResource<BuildPropertiesGen
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		if (getRepository() != null) {
-			addToDependantResources(getRepository().getGeneratedCode().getFlexoResource());
+			addToDependentResources(getRepository().getGeneratedCode().getFlexoResource());
 		}
 	}
 

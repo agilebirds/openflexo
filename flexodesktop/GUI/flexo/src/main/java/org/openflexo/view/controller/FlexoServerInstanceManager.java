@@ -16,7 +16,6 @@ import org.openflexo.model.factory.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.model.xml.XMLDeserializer;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.FileUtils;
@@ -161,15 +160,19 @@ public class FlexoServerInstanceManager {
 	}
 
 	private void filterAddressBook(FlexoServerAddressBook book) {
-		if (ModuleLoader.getUserType() == null) {
-			return;
-		}
+		//conservative behavior. (see history, but is really relevant ?)
+        try{
+            UserType.getCurrentUserType();
+        }catch (IllegalStateException e){
+            return;
+        }
+
 		for (FlexoServerInstance instance : new ArrayList<FlexoServerInstance>(book.getInstances())) {
 			if (instance.getUserTypes().size() > 0) {
 				boolean keepIt = false;
 				for (String userType : instance.getUserTypes()) {
 					UserType u = UserType.getUserTypeNamed(userType);
-					if (ModuleLoader.getUserType().equals(u)) {
+					if (UserType.getCurrentUserType().equals(u)) {
 						keepIt = true;
 						break;
 					}

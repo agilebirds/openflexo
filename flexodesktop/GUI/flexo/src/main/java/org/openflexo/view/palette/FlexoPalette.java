@@ -39,7 +39,7 @@ import javax.swing.event.ChangeListener;
 
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -81,7 +81,7 @@ public abstract class FlexoPalette extends JPanel implements ChangeListener {
 		    	if (c.getPreferredSize().height > preferredSize.height) preferredSize.height=c.getPreferredSize().height;
 		 }*/
 
-		if (ModuleLoader.isMaintainerRelease() && handlesPaletteEdition()) {
+		if (UserType.isMaintainerRelease() && handlesPaletteEdition()) {
 			controlPanel = makeControlPanel();
 			add(controlPanel, BorderLayout.SOUTH);
 			// preferredSize.height += controlPanel.getPreferredSize().height;

@@ -53,9 +53,12 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.LoggingConfigurationWindow;
+import org.openflexo.module.AutoSaveService;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ProjectLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.controller.FlexoController;
 
@@ -94,33 +97,27 @@ public class ToolsMenu extends FlexoMenu {
 	public ToolsMenu(FlexoController controller) {
 		super("tools", controller);
 		addSpecificItems();
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
+		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
 			add(loggingItem = new LoggingItem());
-		}
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
-			add(localizedEditorItem = new LocalizedEditorItem());
-		}
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
-			add(rmItem = new ResourceManagerItem());
-		}
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
-			addSeparator();
+            add(localizedEditorItem = new LocalizedEditorItem());
+            add(rmItem = new ResourceManagerItem());
+            addSeparator();
 		}
 		add(submitBug = new SubmitBugItem());
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
+		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
 			add(brEditor = new BREditorItem());
 		}
-		if ((ModuleLoader.allowsDocSubmission()) && (!ModuleLoader.isAvailable(Module.DRE_MODULE))) {
+		if ((getModuleLoader().allowsDocSubmission()) && (!getModuleLoader().isAvailable(Module.DRE_MODULE))) {
 			addSeparator();
 			add(saveDocSubmissions = new SaveDocSubmissionItem());
 		}
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
+		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
 			addSeparator();
 			add(repairProject = new RepairProjectItem());
 		}
 		add(timeTraveler = new TimeTraveler());
-		addSeparator();
-		if (!ModuleLoader.isCustomerRelease() && !ModuleLoader.isAnalystRelease()) {
+        addSeparator();
+		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
 			add(logConfig = new LogConfiguratorItem());
 		}
 	}
@@ -232,11 +229,14 @@ public class ToolsMenu extends FlexoMenu {
 			if (getController().getProject() == null) {
 				return;
 			}
-			ModuleLoader.getRMWindow(getController().getProject()).show();
+			getProjectLoader().getRMWindow(getController().getProject()).show();
 		}
 
 	}
 
+    private ProjectLoader getProjectLoader(){
+        return ProjectLoader.instance();
+    }
 	// ==========================================================================
 	// ========================== Submit bug ==============================
 	// ==========================================================================
@@ -438,17 +438,23 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (ModuleLoader.isTimeTravelingAvailable()) {
-				ModuleLoader.showTimeTravelerDialog();
+			if (getAutoSaveService().isTimeTravelingAvailable()) {
+				getAutoSaveService().showTimeTravelerDialog();
 			} else {
 				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". "
 						+ FlexoLocalization.localizedForKey("would_you_like_to_activate_it_now?"))) {
 					GeneralPreferences.setAutoSaveEnabled(true);
 					FlexoPreferences.savePreferences(true);
-					ModuleLoader.showTimeTravelerDialog();
+					getAutoSaveService().showTimeTravelerDialog();
 				}
 			}
 		}
-
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+    private AutoSaveService getAutoSaveService() {
+        return AutoSaveService.instance();
+    }
 }

@@ -48,7 +48,7 @@ public class WorkflowComponentInstanceGenerator extends JavaClassGenerator {
 	 */
 	@Override
 	public void rebuildDependanciesForResource(JavaFileResource resource) {
-		resource.addToDependantResources(getProject().getFlexoComponentLibraryResource());
+		resource.addToDependentResources(getProject().getFlexoComponentLibraryResource());
 	}
 
 	@Override

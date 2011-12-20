@@ -49,6 +49,7 @@ import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoMainPane;
@@ -107,7 +108,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	public CEDController(FlexoModule module) throws Exception {
 		super(module.getEditor(), module);
 
-		resourceCenter = ModuleLoader.getFlexoResourceCenter();
+		resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 		baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 
@@ -134,6 +135,10 @@ public class CEDController extends FlexoController implements SelectionManagingC
 		});
 
 	}
+
+    protected FlexoResourceCenterService getFlexoResourceCenterService(){
+        return FlexoResourceCenterService.instance();
+    }
 
 	@Override
 	public ControllerActionInitializer createControllerActionInitializer() {

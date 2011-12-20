@@ -66,7 +66,7 @@ public class RMViewerRepresentation extends DefaultDrawing<FlexoProject> impleme
 		}
 
 		for (FlexoResource<? extends FlexoResourceData> r1 : getProject()) {
-			for (FlexoResource<FlexoResourceData> r2 : r1.getDependantResources()) {
+			for (FlexoResource<FlexoResourceData> r2 : r1.getDependentResources()) {
 				if (r2.isRegistered()) {
 					addDrawable(resourceDependancyBetween(r1, r2), getProject());
 				} else {

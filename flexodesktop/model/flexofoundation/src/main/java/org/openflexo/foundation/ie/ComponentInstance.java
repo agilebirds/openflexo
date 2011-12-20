@@ -151,7 +151,7 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 				}
 			}
 			if (removeDependancy) {
-				oldResourceData.getFlexoResource().removeFromDependantResources(cd.getComponentResource());
+				oldResourceData.getFlexoResource().removeFromDependentResources(cd.getComponentResource());
 			}
 		}
 		rebuildDependancy(newResourceData);
@@ -162,7 +162,7 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 	 */
 	private void rebuildDependancy(XMLStorageResourceData newResourceData) {
 		if (newResourceData != null && getComponentDefinition() != null) {
-			newResourceData.getFlexoResource().addToDependantResources(getComponentDefinition().getComponentResource());
+			newResourceData.getFlexoResource().addToDependentResources(getComponentDefinition().getComponentResource());
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not rebuid dependancy for resource data: " + newResourceData + " and component definition is "

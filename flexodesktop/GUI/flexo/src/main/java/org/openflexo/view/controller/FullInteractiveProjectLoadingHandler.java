@@ -32,6 +32,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.openflexo.components.AskParametersPanel;
+import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.param.LabelParameter;
 import org.openflexo.foundation.param.PropertyListParameter;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -93,6 +94,9 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 		} else if (choice == 2) { // DONT_CONVERT
 			return false;
 		} else {
+            if(ProgressWindow.hasInstance()){
+                ProgressWindow.instance().hideWindow();
+            }
 			throw new ProjectLoadingCancelledException();
 		}
 	}

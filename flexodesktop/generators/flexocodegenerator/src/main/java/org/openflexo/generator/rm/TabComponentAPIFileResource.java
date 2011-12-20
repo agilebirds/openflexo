@@ -47,7 +47,7 @@ public class TabComponentAPIFileResource extends ComponentAPIFileResource<TabCom
 		super.rebuildDependancies();
 		if (getGenerator() != null) {
 			for (OperationComponentInstance ci : getGenerator().getComponentDefinition().getAllOperationComponentInstances()) {
-				addToDependantResources(ci.getOperationNode().getProcess().getFlexoResource());
+				addToDependentResources(ci.getOperationNode().getProcess().getFlexoResource());
 			}
 		}
 	}

@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import org.openflexo.diff.ComputeDiff;
 import org.openflexo.diff.ComputeDiff.DiffReport;
 import org.openflexo.diff.DiffSource;
@@ -117,6 +119,22 @@ public class TestRoundTrip extends CGTestCase {
 	@Override
 	protected void reloadProject(boolean fullLoading) {
 		super.reloadProject(fullLoading);
+	}
+
+
+    public static Test suite() {
+		final TestSuite suite = new TestSuite("TestSuite for TestRoundTrip");
+		suite.addTest(new TestRoundTrip("test0CreateProject"));
+		suite.addTest(new TestRoundTrip("test1InitializeCodeGeneration"));
+		suite.addTest(new TestRoundTrip("test2CheckDependancyCheckingWithComponents"));
+		suite.addTest(new TestRoundTrip("test3CheckTemplateDependancies"));
+		suite.addTest(new TestRoundTrip("test4TestEditCustomTemplate"));
+		suite.addTest(new TestRoundTrip("test5TestEditGeneratedFileInFlexo"));
+		suite.addTest(new TestRoundTrip("test6TestEditGeneratedFileOutsideFlexo"));
+		suite.addTest(new TestRoundTrip("test7TestMergeWithoutConflict"));
+		suite.addTest(new TestRoundTrip("test8TestMergeWithGenerationConflict"));
+		suite.addTest(new TestRoundTrip("test9TestMergeWithConflict"));
+		return suite;
 	}
 
 	/**

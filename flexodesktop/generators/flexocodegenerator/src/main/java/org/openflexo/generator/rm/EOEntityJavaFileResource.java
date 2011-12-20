@@ -93,7 +93,7 @@ public class EOEntityJavaFileResource extends JavaFileResource<GenericRecordGene
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependentResources(getProject().getFlexoDMResource());
 	}
 
 	@Override

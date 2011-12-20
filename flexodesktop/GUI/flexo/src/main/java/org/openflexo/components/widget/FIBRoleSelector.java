@@ -96,7 +96,7 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 		return "";
 	}
 
-	public static class CustomFIBController extends FIBModelObjectSelector.CustomFIBController {
+	public static class CustomFIBController extends FIBModelObjectSelector.SelectorFIBController {
 		public CustomFIBController(FIBComponent component, FIBRoleSelector selector) {
 			super(component, selector);
 		}

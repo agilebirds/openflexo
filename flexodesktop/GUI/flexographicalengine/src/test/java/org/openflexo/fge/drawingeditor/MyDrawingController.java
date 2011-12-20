@@ -50,23 +50,15 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super(aDrawing);
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
-			public void performedDrawNewShape(
-					ShapeGraphicalRepresentation graphicalRepresentation,
+			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
 					GraphicalRepresentation parentGraphicalRepresentation) {
-				System.out.println("OK, perform draw new shape with "
-						+ graphicalRepresentation + " et parent: "
+				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
-				MyShape newShape = new MyShape(graphicalRepresentation,
-						graphicalRepresentation.getLocation(), getDrawing());
-				if (parentGraphicalRepresentation != null
-						&& parentGraphicalRepresentation.getDrawable() instanceof MyDrawingElement) {
-					addNewShape(newShape,
-							(MyDrawingElement) parentGraphicalRepresentation
-									.getDrawable());
+				MyShape newShape = new MyShape(graphicalRepresentation, graphicalRepresentation.getLocation(), getDrawing());
+				if (parentGraphicalRepresentation != null && parentGraphicalRepresentation.getDrawable() instanceof MyDrawingElement) {
+					addNewShape(newShape, (MyDrawingElement) parentGraphicalRepresentation.getDrawable());
 				} else {
-					addNewShape(newShape,
-							(MyDrawing) getDrawingGraphicalRepresentation()
-									.getDrawable());
+					addNewShape(newShape, (MyDrawing) getDrawingGraphicalRepresentation().getDrawable());
 				}
 			}
 		});
@@ -76,11 +68,8 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					MyShape newShape = new MyShape(st, new FGEPoint(
-							contextualMenuClickedPoint), getDrawing());
-					addNewShape(newShape,
-							(MyDrawingElement) contextualMenuInvoker
-									.getDrawable());
+					MyShape newShape = new MyShape(st, new FGEPoint(contextualMenuClickedPoint), getDrawing());
+					addNewShape(newShape, (MyDrawingElement) contextualMenuInvoker.getDrawable());
 				}
 			});
 			contextualMenu.add(menuItem);
@@ -122,14 +111,12 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 	public void addNewConnector(MyConnector aConnector) {
 		ShapeGraphicalRepresentation startObject = aConnector.getStartObject();
 		ShapeGraphicalRepresentation endObject = aConnector.getEndObject();
-		GraphicalRepresentation fatherGR = GraphicalRepresentation
-				.getFirstCommonAncestor(startObject, endObject);
+		GraphicalRepresentation fatherGR = GraphicalRepresentation.getFirstCommonAncestor(startObject, endObject);
 		((MyDrawingElement) fatherGR.getDrawable()).addToChilds(aConnector);
 		// getDrawing().addDrawable(aConnector, fatherGR.getDrawable());
 	}
 
-	public void showContextualMenu(GraphicalRepresentation gr, FGEView view,
-			Point p) {
+	public void showContextualMenu(GraphicalRepresentation gr, FGEView view, Point p) {
 		contextualMenuInvoker = gr;
 		contextualMenuClickedPoint = p;
 		contextualMenu.show((Component) view, p.x, p.y);
@@ -140,8 +127,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.addToSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects()
-					.firstElement(), null));
+			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -153,8 +139,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.removeFromSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects()
-					.firstElement(), null));
+			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -171,8 +156,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 	public void selectDrawing() {
 		super.selectDrawing();
 		setChanged();
-		notifyObservers(new UniqueSelection(
-				getDrawingGraphicalRepresentation(), null));
+		notifyObservers(new UniqueSelection(getDrawingGraphicalRepresentation(), null));
 	}
 
 	@Override
@@ -187,16 +171,14 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 	public void copy() {
 		if (contextualMenuInvoker instanceof MyShapeGraphicalRepresentation) {
-			copiedShape = (MyShape) (((MyShapeGraphicalRepresentation) getFocusedObjects()
-					.firstElement()).getDrawable().clone());
+			copiedShape = (MyShape) ((MyShapeGraphicalRepresentation) getFocusedObjects().firstElement()).getDrawable().clone();
 			System.out.println("Copied: " + copiedShape);
 		}
 	}
 
 	public void paste() {
 		System.out.println("Paste in " + contextualMenuInvoker.getDrawable());
-		addNewShape((MyShape) (copiedShape.clone()),
-				(MyDrawingElement) contextualMenuInvoker.getDrawable());
+		addNewShape((MyShape) copiedShape.clone(), (MyDrawingElement) contextualMenuInvoker.getDrawable());
 	}
 
 	public void cut() {

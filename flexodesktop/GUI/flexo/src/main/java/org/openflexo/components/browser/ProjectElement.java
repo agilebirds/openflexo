@@ -27,6 +27,7 @@ import org.openflexo.foundation.rm.ImportedProcessLibraryCreated;
 import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.rm.ResourceAdded;
 import org.openflexo.foundation.rm.ResourceRemoved;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 
 /**
@@ -66,9 +67,9 @@ public class ProjectElement extends BrowserElement {
 			addToChilds(getProject().getImportedProcessLibrary());
 		}
 
-		if (ModuleLoader.getFlexoResourceCenter(false) != null) {
-			addToChilds(ModuleLoader.getFlexoResourceCenter().retrieveBaseOntologyLibrary());
-			addToChilds(ModuleLoader.getFlexoResourceCenter().retrieveViewPointLibrary());
+		if (getFlexoResourceCenterService().getFlexoResourceCenter(false) != null) {
+			addToChilds(getFlexoResourceCenterService().getFlexoResourceCenter().retrieveBaseOntologyLibrary());
+			addToChilds(getFlexoResourceCenterService().getFlexoResourceCenter().retrieveViewPointLibrary());
 		}
 
 		/*if (getProject().getOntologyLibrary(false)!=null)
@@ -77,6 +78,14 @@ public class ProjectElement extends BrowserElement {
 			addToChilds(getProject().getCalcLibrary(false));*/
 
 	}
+
+    private ModuleLoader getModuleLoader(){
+        return ModuleLoader.instance();
+    }
+
+    private FlexoResourceCenterService getFlexoResourceCenterService(){
+        return FlexoResourceCenterService.instance();
+    }
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {

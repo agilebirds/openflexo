@@ -48,21 +48,16 @@ import org.openflexo.ie.IEModule;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
+import junit.framework.Assert;
+
 public class TestIEController extends FlexoModuleTestCase {
-
-	@Override
-	protected void setUp() throws Exception {
-
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-	}
 
 	protected static final Logger logger = Logger.getLogger(TestIEController.class.getPackage().getName());
 
@@ -202,11 +197,16 @@ public class TestIEController extends FlexoModuleTestCase {
 		_project = _editor.getProject();
 
 		initModuleLoader(_projectDirectory, _project);
-		ModuleLoader.switchToModule(Module.IE_MODULE);
+        IEModule ie = null;
+        try {
+            ie = (IEModule) getModuleLoader().switchToModule(Module.IE_MODULE, _project);
+        } catch (ModuleLoadingException e) {
+            Assert.fail("Fail to load IE module."+e.getMessage());
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
-		IEModule ie = (IEModule) Module.IE_MODULE.getInstance();
-		ie.focusOn();
-		assertTrue(ModuleLoader.isActive(Module.IE_MODULE));
+        ie.focusOn();
+		assertTrue(getModuleLoader().isActive(Module.IE_MODULE));
 		assertNotNull(ie);
 		IEController ctrl = ie.getIEController();
 		assertNotNull(ctrl);
@@ -228,7 +228,7 @@ public class TestIEController extends FlexoModuleTestCase {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
-				ModuleLoader.closeCurrentProject();
+				ProjectLoader.instance().closeCurrentProject();
 			}
 		});
 		FileUtils.deleteDir(_projectDirectory);
@@ -236,25 +236,28 @@ public class TestIEController extends FlexoModuleTestCase {
 
 	/**
 	 * @param projectDirectory
-	 * @param flexoProject
+	 * @param project
 	 */
 	private void initModuleLoader(File projectDirectory, FlexoProject project) {
-		ModuleLoader.setAllowsDocSubmission(false);
+		getModuleLoader().setAllowsDocSubmission(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Init Module loader...");
 		}
 		if (GeneralPreferences.getFavoriteModuleName() == null) {
 			GeneralPreferences.setFavoriteModuleName(Module.IE_MODULE.getName());
 		}
-		ModuleLoader.fileNameToOpen = projectDirectory.getAbsolutePath();
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
-		ModuleLoader.setProject(project);
+		getModuleLoader().fileNameToOpen = projectDirectory.getAbsolutePath();
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");
-		} else if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance() == null) {
-			fail("IE Module not on the classpath. Component screenshots cannot be generated");
-		}
-	}
+		} else
+            try {
+                if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance(project) == null) {
+                    fail("IE Module not on the classpath. Component screenshots cannot be generated");
+                }
+            } catch (ModuleLoadingException e) {
+                Assert.fail("Fail to load IE module."+e.getMessage());
+            }
+    }
 
 	/**
 	 * Save the project
