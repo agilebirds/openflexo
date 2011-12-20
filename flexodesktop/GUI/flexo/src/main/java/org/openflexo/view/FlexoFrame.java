@@ -377,63 +377,68 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	@Override
 	public void setVisible(boolean mainFrameIsVisible) {
 		boolean old = isVisible();
-		if (!old && mainFrameIsVisible
-				&& GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame") != null) {
-			if (windowResizeListener != null) {
-				removeComponentListener(windowResizeListener);
-			}
-			Rectangle bounds = GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame");
-
-			// In case we remove a screen (if you go from 3 to 2 screen, go to hell, that's all you deserve ;-))
-			if (GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length == 1) {
-				Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-				if (screen.width <= bounds.x) {
-					bounds.x = 0;
-				} else if (screen.height <= bounds.y) {
-					bounds.y = 0;
+		if (getController() != null) {
+			if (!old && mainFrameIsVisible
+					&& GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame") != null) {
+				if (windowResizeListener != null) {
+					removeComponentListener(windowResizeListener);
 				}
-			}
-			setBounds(bounds);
-			int state = GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame");
-			if (state != -1
-					&& ((state & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH || (state & Frame.MAXIMIZED_HORIZ) == Frame.MAXIMIZED_HORIZ || (state & Frame.MAXIMIZED_VERT) == Frame.MAXIMIZED_VERT)) {
-				setExtendedState(GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame"));
-			}
-			if (windowResizeListener != null) {
-				addComponentListener(windowResizeListener);
-			}
-		}
-		if (mainFrameIsVisible && getModule() != null && getModule().isActive() || !mainFrameIsVisible) {
-			setRelativeVisible(mainFrameIsVisible);
-			super.setVisible(mainFrameIsVisible);
-			if (mainFrameIsVisible) {
-				if (getModule() != null) {
-					getModule().notifyFocusOn();
-				}
-			}
-		}
-		if (windowResizeListener == null) {
-			windowResizeListener = new ComponentAdapter() {
+				Rectangle bounds = GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame");
 
-				@Override
-				public void componentMoved(ComponentEvent e) {
-					saveBoundsInPreferenceWhenPossible();
-				}
-
-				@Override
-				public void componentResized(ComponentEvent e) {
-					saveBoundsInPreferenceWhenPossible();
-				}
-
-				@Override
-				public void componentShown(ComponentEvent e) {
-					if (getModuleLoader().isLoaded(_module.getModule())) {
-						getModuleLoader().activateModule(_module.getModule());
+				// In case we remove a screen (if you go from 3 to 2 screen, go to hell, that's all you deserve ;-))
+				if (GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length == 1) {
+					Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+					if (screen.width <= bounds.x) {
+						bounds.x = 0;
+					} else if (screen.height <= bounds.y) {
+						bounds.y = 0;
 					}
 				}
+				setBounds(bounds);
+				int state = GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame");
+				if (state != -1
+						&& ((state & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH
+								|| (state & Frame.MAXIMIZED_HORIZ) == Frame.MAXIMIZED_HORIZ || (state & Frame.MAXIMIZED_VERT) == Frame.MAXIMIZED_VERT)) {
+					setExtendedState(GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame"));
+				}
+				if (windowResizeListener != null) {
+					addComponentListener(windowResizeListener);
+				}
+			}
+			if (mainFrameIsVisible && getModule() != null && getModule().isActive() || !mainFrameIsVisible) {
+				setRelativeVisible(mainFrameIsVisible);
+				super.setVisible(mainFrameIsVisible);
+				if (mainFrameIsVisible) {
+					if (getModule() != null) {
+						getModule().notifyFocusOn();
+					}
+				}
+			}
+			if (windowResizeListener == null) {
+				windowResizeListener = new ComponentAdapter() {
 
-			};
-			addComponentListener(windowResizeListener);
+					@Override
+					public void componentMoved(ComponentEvent e) {
+						saveBoundsInPreferenceWhenPossible();
+					}
+
+					@Override
+					public void componentResized(ComponentEvent e) {
+						saveBoundsInPreferenceWhenPossible();
+					}
+
+					@Override
+					public void componentShown(ComponentEvent e) {
+						if (getModuleLoader().isLoaded(_module.getModule())) {
+							getModuleLoader().activateModule(_module.getModule());
+						}
+					}
+
+				};
+				addComponentListener(windowResizeListener);
+			}
+		} else {
+			super.setVisible(mainFrameIsVisible);
 		}
 	}
 
