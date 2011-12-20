@@ -1040,7 +1040,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		notifyObservers(new ResourceAdded(resource));
 	}
 
-	public void removeResourceWithKey(String resourceIdentifier) {
+	public synchronized void removeResourceWithKey(String resourceIdentifier) {
 		if (resources.get(resourceIdentifier) != null) {
 			FlexoResource<? extends FlexoResourceData> resource = resources.get(resourceIdentifier);
 			resources.remove(resourceIdentifier);
@@ -1049,7 +1049,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 	}
 
-	public void registerResource(FlexoResource<? extends FlexoResourceData> resource) throws DuplicateResourceException {
+	public synchronized void registerResource(FlexoResource<? extends FlexoResourceData> resource) throws DuplicateResourceException {
 		if (resourceForKey(resource.getResourceIdentifier()) != null) {
 			throw new DuplicateResourceException(resource);
 		}
@@ -1059,7 +1059,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 	}
 
-	public void renameResource(FlexoResource<? extends FlexoResourceData> resource, String newName) throws DuplicateResourceException {
+	public synchronized void renameResource(FlexoResource<? extends FlexoResourceData> resource, String newName)
+			throws DuplicateResourceException {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("renameResource() " + resource.getResourceIdentifier() + " with " + newName);
 		}
@@ -2659,7 +2660,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends FlexoResource<? extends FlexoResourceData>> List<T> getResourcesOfClass(Class<T> resourceClass) {
+	public synchronized <T extends FlexoResource<? extends FlexoResourceData>> List<T> getResourcesOfClass(Class<T> resourceClass) {
 		List<T> reply = new Vector<T>();
 		for (FlexoResource<? extends FlexoResourceData> item : this) {
 			if (resourceClass.isInstance(item)) {
