@@ -453,11 +453,26 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	/**
-	 * @param selectedDMPackage
+	 * @param aPackage
 	 * @return
 	 */
 	public String getNextDefautEntityName(DMPackage aPackage) {
 		String baseName = FlexoLocalization.localizedForKeyAndLanguage("default_new_entity_name", Language.ENGLISH);
+		String testMe = baseName;
+		int test = 0;
+		while (entities.get(aPackage + "." + testMe) != null) {
+			test++;
+			testMe = baseName + test;
+		}
+		return testMe;
+	}
+
+    /**
+	 * @param aPackage
+	 * @return
+	 */
+	public String getNextDefautEnumName(DMPackage aPackage) {
+		String baseName = FlexoLocalization.localizedForKeyAndLanguage("default_new_enum_name", Language.ENGLISH);
 		String testMe = baseName;
 		int test = 0;
 		while (entities.get(aPackage + "." + testMe) != null) {

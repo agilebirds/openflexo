@@ -39,6 +39,7 @@ import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.action.CreateDMEntity;
+import org.openflexo.foundation.dm.action.CreateDMEntityEnum;
 import org.openflexo.foundation.dm.action.CreateDMMethod;
 import org.openflexo.foundation.dm.action.CreateDMProperty;
 import org.openflexo.foundation.dm.action.DMDelete;
@@ -63,6 +64,17 @@ public class DMPackageView extends DMView<DMPackage> {
 	public DMPackageView(DMPackage aPackage, DMController controller) {
 		super(aPackage, controller, "package_($localizedName)");
 		addAction(new TabularViewAction(CreateDMEntity.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
+
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getDMPackage();
+			}
+		});
+        addAction(new TabularViewAction(CreateDMEntityEnum.actionType, controller.getEditor()) {
 			@Override
 			protected Vector getGlobalSelection() {
 				return getViewSelection();

@@ -36,6 +36,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.action.CreateDMEntity;
+import org.openflexo.foundation.dm.action.CreateDMEntityEnum;
 import org.openflexo.foundation.dm.action.ImportJDKEntity;
 import org.openflexo.foundation.dm.action.UpdateLoadableDMEntity;
 import org.openflexo.foundation.dm.dm.DMObjectDeleted;
@@ -226,7 +227,8 @@ public class DMPackage extends DMObject {
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEntity.actionType);
+        returned.add(CreateDMEntity.actionType);
+        returned.add(CreateDMEntityEnum.actionType);
 		returned.add(ImportJDKEntity.actionType);
 		returned.add(UpdateLoadableDMEntity.actionType);
 		return returned;

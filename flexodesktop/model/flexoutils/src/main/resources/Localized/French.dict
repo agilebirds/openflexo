@@ -1,5 +1,5 @@
 #French
-#Fri Dec 02 15:56:09 CET 2011
+#Wed Dec 21 14:48:55 CET 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -805,6 +805,8 @@ add_embedding_child=Ajouter un \u00E9l\u00E9ment inclus
 add_entity=Ajouter une entit\u00E9
 add_entry=Ajouter une entr\u00E9e
 add_entry_and_set_($bindingName)_onto=Ajouter une entr\u00E9e et positionner le binding '($bindingName)' \u00E0 cette nouvelle valeur.
+add_enum=add_enum
+add_enumy=add_enumy
 add_eo_attribute=Ajouter un Attribut
 add_eo_entity=Ajouter une Entit\u00E9
 add_eo_relationship=Ajouter une Relation
@@ -1662,6 +1664,7 @@ default_grid_size=Taille par d\u00E9faut de la grille
 default_implementation=Impl\u00E9mentation par d\u00E9faut
 default_new_attribute_name=attribut
 default_new_entity_name=Entity
+default_new_enum_name=default_new_enum_name
 default_new_method_name=methode
 default_new_parameter_name=param
 default_new_property_name=propri\u00E9t\u00E9
