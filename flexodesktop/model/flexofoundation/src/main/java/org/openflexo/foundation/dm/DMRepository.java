@@ -23,7 +23,9 @@ import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +35,8 @@ import javax.swing.tree.TreeNode;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.data.FlexoEntity;
+import org.openflexo.foundation.data.FlexoEnum;
 import org.openflexo.foundation.dm.action.CreateDMPackage;
 import org.openflexo.foundation.dm.action.UpdateDMRepository;
 import org.openflexo.foundation.dm.dm.DMObjectDeleted;
@@ -100,6 +104,26 @@ public abstract class DMRepository extends DMObject {
 		entities = new DMEntityHashtable();
 		packages = new Hashtable<String, DMPackage>();
 	}
+
+    public Set<FlexoEntity> getFlexoEntities(){
+        HashSet<FlexoEntity> flexoEntities = new HashSet<FlexoEntity>();
+        for(DMEntity entity:entities.values()){
+            if(!entity.getIsEnumeration()){
+                flexoEntities.add(entity);
+            }
+        }
+        return flexoEntities;
+    }
+
+     public Set<FlexoEnum> getFlexoEnums(){
+        HashSet<FlexoEnum> flexoEntities = new HashSet<FlexoEnum>();
+        for(DMEntity entity:entities.values()){
+            if(!entity.getIsEnumeration()){
+                flexoEntities.add(entity);
+            }
+        }
+        return flexoEntities;
+    }
 
 	@Override
 	public String getFullyQualifiedName() {

@@ -20,13 +20,16 @@
 package org.openflexo.foundation.dm;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +41,9 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.data.FlexoAttribute;
+import org.openflexo.foundation.data.FlexoEntity;
+import org.openflexo.foundation.data.FlexoEnum;
 import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.DMType.DMTypeTokenizer;
 import org.openflexo.foundation.dm.action.CreateComponentFromEntity;
@@ -72,7 +78,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOwner, Typed {
+public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOwner, Typed, FlexoEntity, FlexoEnum {
 
 	private static final Logger logger = Logger.getLogger(DMEntity.class.getPackage().getName());
 
@@ -215,7 +221,30 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		setParentType(parentType, true);
 	}
 
-	@Override
+    @Override
+    public Set<FlexoAttribute> getFlexoAttributes() {
+        HashSet<FlexoAttribute> attributes = new HashSet<FlexoAttribute>();
+        attributes.addAll(getProperties().values());
+        return attributes;
+    }
+
+    /**
+     * @return the values in this iteration. Return null if this class is not an enumeration.
+     * Otherwise : the enum values are the property name's.
+     */
+    @Override
+    public List<String> getValues() {
+        if(!getIsEnumeration()){
+            return null;
+        }
+        ArrayList<String> values = new ArrayList<String>();
+        for(DMProperty p:getProperties().values()){
+            values.add(p.getName());
+        }
+        return values;
+    }
+
+    @Override
 	public String getFullyQualifiedName() {
 		return getEntityPackageName() + "." + getEntityClassName();
 	}
@@ -727,7 +756,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Return method whose signature matches 'methodSignature' explicitely declared in this entity
 	 * 
-	 * @param propertyName
+	 * @param methodSignature
 	 * @return
 	 */
 	public DMMethod getDeclaredMethod(String methodSignature) {
@@ -753,7 +782,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Return methods with name 'methodName'
 	 * 
-	 * @param methodSignature
+	 * @param methodName
 	 * @return a Vector of DMMethod objects
 	 */
 	public Vector<DMMethod> getDeclaredMethodNamed(String methodName) {

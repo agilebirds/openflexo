@@ -33,6 +33,9 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.bindings.BindingValue;
+import org.openflexo.foundation.data.FlexoAttribute;
+import org.openflexo.foundation.data.FlexoAttributeType;
+import org.openflexo.foundation.data.FlexoEntity;
 import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
 import org.openflexo.foundation.dm.DMType.KindOfType;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
@@ -73,7 +76,7 @@ import org.openflexo.toolbox.ToolBox;
  * 
  */
 public class DMProperty extends DMObject implements Typed, BindingValue.BindingPathElement, DMGenericDeclaration, DMTypeOwner, DMMember,
-		SourceCodeOwner {
+		SourceCodeOwner, FlexoAttribute {
 
 	static final Logger logger = Logger.getLogger(DMEntity.class.getPackage().getName());
 
@@ -144,7 +147,49 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		_implementationType = implementationType;
 	}
 
-	@Override
+    @Override
+    public boolean isMany() {
+        return (_cardinality!=null && !_cardinality.equals(DMCardinality.SINGLE)) || (_type.isList());
+    }
+
+    @Override
+    public FlexoEntity getFlexoEntity() {
+        return entity;
+    }
+
+    @Override
+    public FlexoAttributeType getAttributeType() {
+        if(_type==null){
+            return null;
+        }
+        if(_type.isString()){
+            return FlexoAttributeType.TEXT;
+        }
+        if (_type.isInteger() || _type.isIntegerPrimitive() ||
+                _type.isFloat() || _type.isFloatPrimitive() ||
+                _type.isDouble() || _type.isDoublePrimitive() ||
+                _type.isShort() || _type.isShortPrimitive() ||
+                _type.isLong() || _type.isLongPrimitive()) {
+            return FlexoAttributeType.NUMBER;
+        }
+        if(_type.isByte() || _type.isBytePrimitive()){
+            return FlexoAttributeType.IMAGE;
+        }
+
+        if(_type.isBoolean() || _type.isBooleanPrimitive()){
+            return FlexoAttributeType.BOOLEAN;
+        }
+
+        if(_type.isDate()){
+            return FlexoAttributeType.DATE;
+        }
+        if(_type.getBaseEntity().getIsEnumeration()){
+            return FlexoAttributeType.ENUM;
+        }
+        return null;
+    }
+
+    @Override
 	public void delete() {
 		// logger.info(">>> delete() called for property "+hashCode()+" (is "+_implementationType+")");
 
@@ -2136,7 +2181,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	/**
 	 * @deprecated
-	 * @param someCode
+	 * @param someCoreCode
 	 */
 	@Deprecated
 	public void setGetterCoreCode(String someCoreCode) {
@@ -2213,7 +2258,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	/**
 	 * @deprecated
-	 * @param someCode
+	 * @param someCoreCode
 	 */
 	@Deprecated
 	public void setSetterCoreCode(String someCoreCode) {
@@ -2292,7 +2337,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	/**
 	 * @deprecated
-	 * @param someCode
+	 * @param someCoreCode
 	 */
 	@Deprecated
 	public void setAdditionAccessorCoreCode(String someCoreCode) {
@@ -2375,7 +2420,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	/**
 	 * @deprecated
-	 * @param someCode
+	 * @param someCoreCode
 	 */
 	@Deprecated
 	public void setRemovalAccessorCoreCode(String someCoreCode) {
@@ -2441,7 +2486,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			private DMType type;
 
 			/**
-			 * @param aMessage
+			 * @param type
 			 */
 			public SetType(DMType type) {
 				super("set_type_to_($type)");
@@ -2464,10 +2509,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 		}
 
-		/**
-		 * @param objectType
-		 * @param ruleName
-		 */
+
 		public PropertyMustDefineType() {
 			super(DMProperty.class, "property_must_define_a_type");
 		}
