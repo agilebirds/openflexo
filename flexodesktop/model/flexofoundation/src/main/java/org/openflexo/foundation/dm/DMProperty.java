@@ -36,6 +36,8 @@ import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.data.FlexoAttribute;
 import org.openflexo.foundation.data.FlexoAttributeType;
 import org.openflexo.foundation.data.FlexoEntity;
+import org.openflexo.foundation.data.FlexoEnum;
+import org.openflexo.foundation.data.FlexoEnumValue;
 import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
 import org.openflexo.foundation.dm.DMType.KindOfType;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
@@ -76,7 +78,7 @@ import org.openflexo.toolbox.ToolBox;
  * 
  */
 public class DMProperty extends DMObject implements Typed, BindingValue.BindingPathElement, DMGenericDeclaration, DMTypeOwner, DMMember,
-		SourceCodeOwner, FlexoAttribute {
+		SourceCodeOwner, FlexoAttribute, FlexoEnumValue {
 
 	static final Logger logger = Logger.getLogger(DMEntity.class.getPackage().getName());
 
@@ -154,6 +156,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
     @Override
     public FlexoEntity getFlexoEntity() {
+        return entity;
+    }
+
+    @Override
+    public FlexoEnum getFlexoEnum() {
         return entity;
     }
 

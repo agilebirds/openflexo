@@ -5,9 +5,17 @@ package org.openflexo.tm.hibernate.impl;
 
 import javax.naming.InvalidNameException;
 
+import org.openflexo.foundation.AttributeDataModification;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.data.FlexoEnumValue;
+import org.openflexo.foundation.dm.DMProperty;
+import org.openflexo.foundation.dm.dm.DMEntityNameChanged;
+import org.openflexo.foundation.dm.dm.DMPropertyNameChanged;
+import org.openflexo.foundation.dm.dm.PropertyRegistered;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
-import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
+import org.openflexo.foundation.sg.implmodel.LinkableTechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.toolbox.JavaUtils;
@@ -16,7 +24,7 @@ import org.openflexo.toolbox.JavaUtils;
  * 
  * @author Nicolas Daniels
  */
-public class HibernateEnumValue extends TechnologyModelObject {
+public class HibernateEnumValue extends LinkableTechnologyModelObject<DMProperty> {
 
 	public static final String CLASS_NAME_KEY = "hibernate_enum_value";
 
@@ -48,6 +56,32 @@ public class HibernateEnumValue extends TechnologyModelObject {
 		super(implementationModel);
 	}
 
+    /**
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate enum
+	 * @param linkedFlexoModelObject
+	 *            Can be null
+	 */
+	public HibernateEnumValue(ImplementationModel implementationModel, DMProperty linkedFlexoModelObject) {
+		super(implementationModel, linkedFlexoModelObject);
+        setName(linkedFlexoModelObject.getName());
+	}
+
+
+     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(FlexoObservable observable, DataModification dataModification) {
+        super.update(observable, dataModification);
+        if (observable == getLinkedFlexoModelObject()) {
+            if (dataModification instanceof DMPropertyNameChanged) {
+                updateNameIfNecessary();
+            } else if (dataModification!=null && dataModification.propertyName().equals("description")) {
+                setDescription((String)dataModification.newValue());
+            }
+        }
+    }
 	// =========== //
 	// = Methods = //
 	// =========== //
@@ -76,6 +110,16 @@ public class HibernateEnumValue extends TechnologyModelObject {
 		return getHibernateEnum().getFullyQualifiedName() + "." + getName();
 	}
 
+    @Override
+    public void synchronizeWithLinkedFlexoModelObject() {
+		updateNameIfNecessary();
+        setDescription(getLinkedFlexoModelObject().getDescription());
+	}
+
+    @Override
+    public String getDefaultName() {
+		return getLinkedFlexoModelObject() != null ? escapeName(getLinkedFlexoModelObject().getName()).toUpperCase() : null;
+	}
 	/* ===================== */
 	/* ====== Actions ====== */
 	/* ===================== */
@@ -104,7 +148,7 @@ public class HibernateEnumValue extends TechnologyModelObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
+	public void setName(String name) {
 		name = JavaUtils.getConstantName(name);
 		super.setName(name);
 	}
@@ -116,7 +160,7 @@ public class HibernateEnumValue extends TechnologyModelObject {
 	/**
 	 * Called only from HibernateEnumat deserialisation or at entity creation
 	 * 
-	 * @param hibernateModel
+	 * @param hibernateEnum
 	 */
 	protected void setHibernateEnum(HibernateEnum hibernateEnum) {
 		this.hibernateEnum = hibernateEnum;

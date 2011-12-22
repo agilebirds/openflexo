@@ -44,6 +44,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.data.FlexoAttribute;
 import org.openflexo.foundation.data.FlexoEntity;
 import org.openflexo.foundation.data.FlexoEnum;
+import org.openflexo.foundation.data.FlexoEnumValue;
 import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.DMType.DMTypeTokenizer;
 import org.openflexo.foundation.dm.action.CreateComponentFromEntity;
@@ -233,14 +234,12 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
      * Otherwise : the enum values are the property name's.
      */
     @Override
-    public List<String> getValues() {
+    public List<FlexoEnumValue> getValues() {
         if(!getIsEnumeration()){
             return null;
         }
-        ArrayList<String> values = new ArrayList<String>();
-        for(DMProperty p:getProperties().values()){
-            values.add(p.getName());
-        }
+        ArrayList<FlexoEnumValue> values = new ArrayList<FlexoEnumValue>();
+        values.addAll(getProperties().values());
         return values;
     }
 

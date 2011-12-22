@@ -124,6 +124,8 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 			List<LinkableTechnologyModelObject<?>> deletedChildren = new ArrayList<LinkableTechnologyModelObject<?>>();
 
 			Map<DMEntity, LinkableTechnologyModelObject<?>> alreadyCreatedChildren = new HashMap<DMEntity, LinkableTechnologyModelObject<?>>();
+
+            //first : filling maps with deleted FlexoModelObject and already linked FlexoModelObject
 			for (HibernateEntity hibernateEntity : this.entities) {
 				if (hibernateEntity.getLinkedFlexoModelObject() != null) {
 					alreadyCreatedChildren.put(hibernateEntity.getLinkedFlexoModelObject(), hibernateEntity);

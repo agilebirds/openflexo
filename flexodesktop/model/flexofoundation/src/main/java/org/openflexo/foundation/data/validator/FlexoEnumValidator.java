@@ -1,6 +1,7 @@
 package org.openflexo.foundation.data.validator;
 
 import org.openflexo.foundation.data.FlexoEnum;
+import org.openflexo.foundation.data.FlexoEnumValue;
 import org.openflexo.toolbox.StringUtils;
 
 import java.util.HashSet;
@@ -26,14 +27,14 @@ public class FlexoEnumValidator {
             throw new FlexoDataValidationException("values cannot be null on flexoEnum " + flexoEnum.getName(), flexoEnum);
         }
         Set<String> existingValues = new HashSet<String>();
-        for (String value : flexoEnum.getValues()) {
+        for (FlexoEnumValue value : flexoEnum.getValues()) {
             if(value==null){
                 throw new FlexoDataValidationException("value in a FlexoEnum cannot be null.", flexoEnum);
             }
-            if(existingValues.contains(value)){
+            if(existingValues.contains(value.getName())){
                 throw new FlexoDataValidationException("FlexoEnum contains a duplicate value :"+value, flexoEnum);
             }
-            existingValues.add(value);
+            existingValues.add(value.getName());
         }
     }
 }

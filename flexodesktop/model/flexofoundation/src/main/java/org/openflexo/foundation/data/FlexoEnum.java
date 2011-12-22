@@ -17,6 +17,6 @@ public interface FlexoEnum extends FlexoDataObject {
      * Each value must be distinct. A value cannot be null.
      * @return list of values in this FlexoEnum
      */
-    public List<String> getValues();
+    public List<FlexoEnumValue> getValues();
 
 }

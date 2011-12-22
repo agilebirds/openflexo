@@ -443,7 +443,7 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
+	public void setName(String name) {
 		name = escapeName(name);
 
 		if (StringUtils.isEmpty(name)) {

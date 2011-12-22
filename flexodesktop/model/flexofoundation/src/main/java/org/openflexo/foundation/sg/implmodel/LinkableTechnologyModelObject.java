@@ -83,7 +83,7 @@ abstract public class LinkableTechnologyModelObject<T extends DMObject> extends 
 		if (getLinkedFlexoModelObject() != null) {
 			if (getIsNameSynchronizedWithLinkedObject()) {
 				try {
-					setName(getLinkedFlexoModelObject().getName());
+					setName(getDefaultName());
 				} catch (Exception e) {
 					if (logger.isLoggable(Level.WARNING))
 						logger.warning("Cannot propagate name from linked Flexo Model Object to " + this.getClass().getName() + ". " + e.getMessage());
@@ -129,7 +129,7 @@ abstract public class LinkableTechnologyModelObject<T extends DMObject> extends 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
+	public void setName(String name) {
 		super.setName(name);
 		updateIsNameSynchronizedWithLinkedObject();
 	}
