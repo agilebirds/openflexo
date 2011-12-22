@@ -131,6 +131,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		public abstract int getPolicy();
 	}
 
+	private int index = -1;
 	private DataBinding data;
 	private DataBinding visible;
 
@@ -739,6 +740,21 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.index, index);
+		if (notification != null) {
+			this.index = index;
+			hasChanged(notification);
+			if (getParent() != null) {
+				getParent().reorderComponents();
+			}
+		}
+	}
+
 	public DataBinding getData() {
 		if (data == null) {
 			data = new DataBinding(this, Parameters.data, getDataBindingDefinition());
@@ -769,8 +785,8 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + " ("
-				+ (getName() != null ? getName() : (getIdentifier() != null ? getIdentifier() : "unnamed")) + ")";
+		return getClass().getSimpleName() + " (" + (getName() != null ? getName() : getIdentifier() != null ? getIdentifier() : "unnamed")
+				+ ")";
 	}
 
 	public abstract String getIdentifier();
@@ -844,7 +860,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			if (!isRootComponent()) {
 				return getParent().retrieveValidFont();
 			} else {
-				return (new JLabel()).getFont(); // Use system default
+				return new JLabel().getFont(); // Use system default
 			}
 		}
 

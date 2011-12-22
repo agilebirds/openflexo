@@ -480,6 +480,7 @@ public class FIBConverter {
 							tab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false, index++));
 						}
 						label.getConstraints().setIndex(pm.constraint * 2);
+						label.setIndex(pm.constraint * 2);
 					}
 
 					// Handle horizontal and vertical expansions
@@ -525,6 +526,7 @@ public class FIBConverter {
 							expandVertically, index++));
 
 					widget.getConstraints().setIndex(pm.constraint * 2 + 1);
+					widget.setIndex(pm.constraint * 2 + 1);
 				}
 			}
 		}
