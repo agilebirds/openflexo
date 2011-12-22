@@ -61,6 +61,17 @@
             </properties>
         </profile>
         <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+            </activation>
+            <properties>
+                <os.exec.args></os.exec.args>
+            </properties>
+        </profile>
+        <profile>
             <id>windows</id>
             <activation>
                 <os>
