@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ActivityGroup" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" font="SansSerif,0,11" name="GraphicsTab">
+    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
       <Label label="background_color" localize="true" name="ColorLabel" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
       <Color index="13" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Color" localize="true" />
     </Tab>
@@ -11,7 +11,9 @@
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
-    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="Graphics_BPE" lang="English">Graphics</Localized>
+    <Localized key="Graphics_BPE" lang="French">Graphisme</Localized>
+    <Localized key="Graphics_BPE" lang="Dutch">Graphics</Localized>
     <Localized key="background_color" lang="English">Background color</Localized>
     <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
     <Localized key="background_color" lang="Dutch">Background color</Localized>

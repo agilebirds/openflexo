@@ -68,6 +68,7 @@ import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMPropertyImplementationType;
 import org.openflexo.foundation.dm.DMType;
+import org.openflexo.foundation.dm.DMTypeOwner;
 import org.openflexo.foundation.dm.DuplicatePropertyNameException;
 import org.openflexo.foundation.dm.ProcessDMEntity;
 import org.openflexo.foundation.dm.ProcessInstanceRepository;
@@ -194,7 +195,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit, sylvain
  */
 public final class FlexoProcess extends WKFObject implements FlexoImportableObject, ApplicationHelpEntryPoint, XMLStorageResourceData,
-		InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
+		InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject, DMTypeOwner {
 
 	static final Logger logger = Logger.getLogger(FlexoProcess.class.getPackage().getName());
 
@@ -2739,6 +2740,14 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		for (AbstractNode node : nodes) {
 			computeAndStoreNameForNode(node);
 		}
+	}
+
+	public Object getPreferredRepresentation() {
+		return _graphicalPropertyForKey("preferredRepresentation");
+	}
+
+	public void setPreferredRepresentation(Object aRepresentation) {
+		_setGraphicalPropertyForKey(aRepresentation, "preferredRepresentation");
 	}
 
 	// ============================================================

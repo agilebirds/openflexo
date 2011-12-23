@@ -96,6 +96,10 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				}
 			}
 
+			if (list == null && array == null && getWidget().getIteratorClass() != null && getWidget().getIteratorClass().isEnum()) {
+				array = getWidget().getIteratorClass().getEnumConstants();
+			}
+
 			if (list == null && array == null && StringUtils.isNotEmpty(getWidget().getStaticList())) {
 				list = new Vector();
 				StringTokenizer st = new StringTokenizer(getWidget().getStaticList(), ",");
@@ -118,7 +122,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			if (getWidget().getList() != null && getWidget().getList().isSet() && getDataObject() != null) {
 
 				Object accessedList = getWidget().getList().getBindingValue(getController());
-				return (accessedList != null && !accessedList.equals(list));
+				return accessedList != null && !accessedList.equals(list);
 
 			}
 

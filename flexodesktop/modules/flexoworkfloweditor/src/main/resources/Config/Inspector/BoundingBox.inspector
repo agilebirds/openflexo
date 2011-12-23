@@ -11,34 +11,34 @@
 		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
 	</tab>
 	
-	<tab name="Graphics" index="20" layout="DEFAULT">
-		<property name="textColor" label="text_color" widget="COLOR" constraint="0">
+	<tab name="Graphics_BPE" index="20" layout="DEFAULT" visibilityContext="BPE">
+		<property name="textColor" label="text_color" widget="COLOR" constraint="10">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="textFont" label="text_font" widget="FONT" constraint="1">
+		<property name="textFont" label="text_font" widget="FONT" constraint="11">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="textAlignment" label="text_alignment" widget="DROPDOWN" constraint="2">
+		<property name="textAlignment" label="text_alignment" widget="DROPDOWN" constraint="12">
 			<param name="formatter" value="name"/>
 			<param name="columns" value="10"/>
 			<param name="showReset" value="false"/>
 			<param name="type" value="org.openflexo.fge.GraphicalRepresentation$TextAlignment"/>
 		</property>
-		<property name="dashStyle" label="dash_style" widget="DROPDOWN" constraint="3">
+		<property name="dashStyle" label="dash_style" widget="DROPDOWN" constraint="13">
 			<param name="formatter" value="name"/>
 			<param name="columns" value="10"/>
 			<param name="showReset" value="false"/>
 			<param name="showIcon" value="true"/>
 			<param name="type" value="org.openflexo.fge.graphics.ForegroundStyle$DashStyle"/>
 		</property>
-		<property name="borderColor" label="border_color" widget="COLOR" constraint="4">
+		<property name="borderColor" label="border_color" widget="COLOR" constraint="14">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="isRounded" label="rounded_corners" widget="CHECKBOX" constraint="5">
+		<property name="isRounded" label="rounded_corners" widget="CHECKBOX" constraint="15">
 		</property>
-		<property name="isSolidBackground" label="solid_background" widget="CHECKBOX" constraint="6">
+		<property name="isSolidBackground" label="solid_background" widget="CHECKBOX" constraint="16">
 		</property>
-		<property name="backgroundColor" label="background_color" widget="COLOR" constraint="7">
+		<property name="backgroundColor" label="background_color" widget="COLOR" constraint="17">
 			<param name="columns" value="10"/>
 		</property>
 	</tab>

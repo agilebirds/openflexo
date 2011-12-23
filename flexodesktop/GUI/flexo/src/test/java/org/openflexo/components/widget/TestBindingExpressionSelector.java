@@ -32,6 +32,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import org.openflexo.components.widget.binding.BindingSelector;
+import org.openflexo.fib.utils.DurationSelector;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
@@ -52,7 +53,6 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.DateSelector;
-import org.openflexo.swing.DurationSelector;
 import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.Duration;
 import org.openflexo.toolbox.Duration.DurationUnit;

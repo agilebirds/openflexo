@@ -591,6 +591,27 @@ public class FIBConverter {
 			if (binding.toString().startsWith("data.connector")) {
 				continue;
 			}
+
+			// Those bindings are not correct either, but this wil be fixed later
+			if (inspectorName.equals("Artefact.inspector")) {
+				if (binding.toString().equals("data.textAlignment")) {
+					continue;
+				}
+			}
+			if (inspectorName.equals("BoundingBox.inspector")) {
+				if (binding.toString().equals("data.textAlignment")) {
+					continue;
+				}
+				if (binding.toString().equals("data.dashStyle")) {
+					continue;
+				}
+			}
+			if (inspectorName.equals("FlexoProcess.inspector")) {
+				if (binding.toString().equals("data.preferredRepresentation")) {
+					continue;
+				}
+			}
+
 			if (!binding.isValid(true)) {
 				if (binding.getBinding(true) instanceof BindingValue && binding.getBindingDefinition() != null
 						&& binding.getBindingDefinition().getType().equals(String.class)
@@ -754,6 +775,11 @@ public class FIBConverter {
 				handleParam(LabelWidget.HEIGHT, unhandledParams);
 				label.setHeight(pm.getIntValueForParameter(LabelWidget.HEIGHT));
 			}
+			checkUnhandledParams(pm, unhandledParams);
+			return label;
+		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.INFOLABEL)) {
+			FIBLabel label = new FIBLabel();
+			label.setLabel("InfoLabel");
 			checkUnhandledParams(pm, unhandledParams);
 			return label;
 		} else if (pm.getWidget().equalsIgnoreCase(DenaliWidget.CHECKBOX)
@@ -1023,6 +1049,10 @@ public class FIBConverter {
 					handleParam("useUltraLightWysiwyg", unhandledParams);
 					handleParam("rows", unhandledParams);
 					handleParam("align", unhandledParams);
+					checkUnhandledParams(pm, unhandledParams);
+					return c;
+				} else if (className.equals("org.openflexo.components.widget.DurationInspectorWidget")) {
+					c.setComponentClass(Class.forName("org.openflexo.fib.utils.DurationSelector"));
 					checkUnhandledParams(pm, unhandledParams);
 					return c;
 				}

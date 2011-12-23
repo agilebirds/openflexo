@@ -33,7 +33,7 @@
 		</property>
 	</tab>
 	<tab name="Doc" index="2">
-	    <property name="graphicalPropertyForKey('preferredRepresentation')" label="preferred_representation" widget="DROPDOWN" constraint="0">
+	    <property name="preferredRepresentation" label="preferred_representation" widget="DROPDOWN" constraint="0">
 	        <param name="type" value="org.openflexo.wkf.WKFModule$ProcessRepresentation"/>
 	    </property>
 		<property name="index" label="index" widget="INTEGER" constraint="1" depends="processNode.parentFolder" conditional="processNode.parentFolder=null"/>

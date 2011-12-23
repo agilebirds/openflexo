@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.edge.WKFEdge" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" font="SansSerif,0,11" name="GraphicsTab" />
     <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" />
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
@@ -10,7 +9,6 @@
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
-    <Localized key="Graphics" lang="French">Graphisme</Localized>
     <Localized key="Data" lang="French">Donnée</Localized>
     <Localized key="Advanced" lang="French">Avancé</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>

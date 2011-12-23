@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.WKFAnnotation" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" font="SansSerif,0,11" name="GraphicsTab">
-      <Label label="text_color" localize="true" name="TextColorLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <Color index="1" data="data.textColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="TextColor" localize="true" />
-      <Label label="text_font" localize="true" name="TextFontLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <Font sampleText="Sample for this font" index="3" data="data.textFont.font" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="TextFont" localize="true" />
-      <Label label="text_alignment" localize="true" name="TextAlignmentLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
-      <DropDown format="object.name" localize="true" name="TextAlignment" index="5" data="data.textAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" autoSelectFirstRow="false" />
-      <Label label="dash_style" localize="true" name="DashStyleLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
-      <DropDown format="object.name" localize="true" name="DashStyle" index="7" data="data.dashStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" width="150" showIcon="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$DashStyle" autoSelectFirstRow="false" />
-      <Label label="border_color" localize="true" name="BorderColorLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
-      <Color index="9" data="data.borderColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="BorderColor" localize="true" />
-      <Label label="rounded_corners" localize="true" name="IsRoundedLabel" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" />
-      <CheckBox selected="false" localize="true" name="IsRounded" index="11" data="data.isRounded" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" />
-      <Label label="solid_background" localize="true" name="IsSolidBackgroundLabel" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsTop=5;location=left)" />
-      <CheckBox selected="false" localize="true" name="IsSolidBackground" index="13" data="data.isSolidBackground" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" />
-      <Label label="background_color" localize="true" name="BackgroundColorLabel" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsTop=5;location=left)" />
-      <Color index="15" data="data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=15;location=right)" name="BackgroundColor" localize="true" />
+    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
+      <Label label="text_color" localize="true" name="TextColorLabel" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <Color index="21" data="data.textColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="TextColor" localize="true" />
+      <Label label="text_font" localize="true" name="TextFontLabel" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
+      <Font sampleText="Sample for this font" index="23" data="data.textFont.font" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="TextFont" localize="true" />
+      <Label label="text_alignment" localize="true" name="TextAlignmentLabel" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
+      <DropDown format="object.name" localize="true" name="TextAlignment" index="25" data="data.textAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" autoSelectFirstRow="false" />
+      <Label label="dash_style" localize="true" name="DashStyleLabel" index="26" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
+      <DropDown format="object.name" localize="true" name="DashStyle" index="27" data="data.dashStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" width="150" showIcon="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$DashStyle" autoSelectFirstRow="false" />
+      <Label label="border_color" localize="true" name="BorderColorLabel" index="28" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
+      <Color index="29" data="data.borderColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="BorderColor" localize="true" />
+      <Label label="rounded_corners" localize="true" name="IsRoundedLabel" index="30" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="IsRounded" index="31" data="data.isRounded" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" />
+      <Label label="solid_background" localize="true" name="IsSolidBackgroundLabel" index="32" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="IsSolidBackground" index="33" data="data.isSolidBackground" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" />
+      <Label label="background_color" localize="true" name="BackgroundColorLabel" index="34" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsTop=5;location=left)" />
+      <Color index="35" data="data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=15;location=right)" name="BackgroundColor" localize="true" />
     </Tab>
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
@@ -26,7 +26,9 @@
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
-    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="Graphics_BPE" lang="English">Graphics</Localized>
+    <Localized key="Graphics_BPE" lang="French">Graphisme</Localized>
+    <Localized key="Graphics_BPE" lang="Dutch">Graphics</Localized>
     <Localized key="text_color" lang="English">Text color</Localized>
     <Localized key="text_color" lang="French">Couleur du texte</Localized>
     <Localized key="text_color" lang="Dutch">Text color</Localized>
