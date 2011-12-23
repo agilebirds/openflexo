@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.RoleSpecialization" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="4" title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="GraphicsTab" />
-    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="annotation" localize="true" name="AnnotationLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" data="data.annotation" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Annotation" localize="true" />
-      <Label label="role" localize="true" name="RoleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <TextField passwd="false" data="data.role.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="Role" readOnly="true" format="object.name" localize="true" />
-      <Label label="specialize" localize="true" name="ParentRoleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
-      <TextField passwd="false" data="data.parentRole.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="ParentRole" readOnly="true" format="object.name" localize="true" />
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="GraphicsTab" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="annotation" localize="true" name="AnnotationLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" index="1" data="data.annotation" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Annotation" localize="true" />
+      <Label label="role" localize="true" name="RoleLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
+      <TextField passwd="false" index="3" data="data.role.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="Role" readOnly="true" format="object.name" localize="true" />
+      <Label label="specialize" localize="true" name="ParentRoleLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
+      <TextField passwd="false" index="5" data="data.parentRole.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="ParentRole" readOnly="true" format="object.name" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

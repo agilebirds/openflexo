@@ -1,6 +1,6 @@
 <inspector title="ModelObject" inspectedClassName="org.openflexo.foundation.FlexoModelObject">
 	<tab name="Doc" index="1" layout="DEFAULT">
-		<property name="specificDescriptions" label="specific_description" widget="CUSTOM" depends="project,hasSpecificDescriptions" constraint="3">
+		<property name="specificDescriptions" label="specific_description" widget="CUSTOM" depends="project,hasSpecificDescriptions" constraint="10">
 			<param name="className" value="org.openflexo.components.widget.DescriptionInspectorWidget"/>
 			<param name="expandHorizontally" value="true"/>     <!-- Available horizontal space is "taken" by the dynamic component, when possible -->
 			<param name="expandVertically" value="true"/>     <!-- Available vertical space is "taken" by the dynamic component, when possible -->
@@ -9,13 +9,13 @@
 <!--		<property name="docFormat" label="docFormat" widget="DROPDOWN" help="Select a specific language if you used it explicitly in your description, otherwise leave this unset" constraint="4">
 			<param name="format" value="name"/>
 		</property>-->
-		<property name="dontGenerate" label="dont_generate" widget="CHECKBOX" constraint="5"/>
+		<property name="dontGenerate" label="dont_generate" widget="CHECKBOX" constraint="11"/>
 	</tab>
 	<tab name="Advanced" index="2" layout="DEFAULT">
-		<property name="flexoID" label="flexo_id" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+		<property name="flexoID" label="flexo_id" widget="READ_ONLY_TEXT_FIELD" constraint="100">
 			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
 		</property>
-		<property_list name="customProperties" label="custom_properties" constraint="1">
+		<property_list name="customProperties" label="custom_properties" constraint="101">
           <param name="displayLabel" value="true"/>
           <param name="visible_row_count" value="3"/>
           <param name="row_height" value="20"/>

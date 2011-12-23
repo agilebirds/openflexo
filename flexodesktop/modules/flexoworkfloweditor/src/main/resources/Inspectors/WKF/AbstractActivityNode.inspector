@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.AbstractActivityNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="8" title="Activity Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ActivityMetricsTab">
-      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
+    <Tab title="Activity Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="8" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ActivityMetricsTab">
+      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" index="1" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
         <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
         <CustomColumn componentClassName="org.openflexo.components.widget.MetricsValueInspectorWidget" customRendering="true" disableTerminateEditOnFocusLost="false" data="iterator.this" format="object.value.toString" title="value" columnWidth="80" resizable="true" displayTitle="true" />
         <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
@@ -12,32 +12,32 @@
         <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
       </Table>
     </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="1" title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DocTab">
-      <Label label="acronym" localize="true" name="AcronymLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <TextField passwd="false" data="data.acronym" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="Acronym" localize="true">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
+      <Label label="acronym" localize="true" name="AcronymLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <TextField passwd="false" index="3" data="data.acronym" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Acronym" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
     </Tab>
-    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="roleR" localize="true" name="RoleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
-      <DropDown showReset="true" format="object.nameForInspector" localize="true" name="Role" data="data.role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
-      <Label label="roleA" localize="true" name="RoleALabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
-      <DropDown showReset="true" format="object.nameForInspector" localize="true" name="RoleA" data="data.roleA" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
-      <Label label="roleC" align="center" localize="true" name="ConsultedRolesLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;location=center)" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ConsultedRoles" data="data.consultedRoles" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;location=right)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="roleR" localize="true" name="RoleLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.nameForInspector" localize="true" name="Role" index="7" data="data.role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
+      <Label label="roleA" localize="true" name="RoleALabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.nameForInspector" localize="true" name="RoleA" index="9" data="data.roleA" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
+      <Label label="roleC" align="center" localize="true" name="ConsultedRolesLabel" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ConsultedRoles" index="11" data="data.consultedRoles" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;location=right)">
         <LabelColumn data="iterator.nameForInspector" title="role" columnWidth="100" resizable="true" displayTitle="true" />
         <AddAction method="data.addConsultedRole" name="add" />
         <RemoveAction method="data.removeConsultedRole(selected)" name="remove" />
       </Table>
-      <Label label="roleI" align="center" localize="true" name="InformedRolesLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;location=center)" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InformedRoles" data="data.informedRoles" constraints="twocols(expandHorizontally=true;expandVertically=true;index=13;location=right)">
+      <Label label="roleI" align="center" localize="true" name="InformedRolesLabel" index="12" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InformedRoles" index="13" data="data.informedRoles" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;location=right)">
         <LabelColumn data="iterator.nameForInspector" title="role" columnWidth="100" resizable="true" displayTitle="true" />
         <AddAction method="data.addInformedRole" name="add" />
         <RemoveAction method="data.removeInformedRole(selected)" name="remove" />
       </Table>
-      <Label label="css_sheet" localize="true" name="CssSheetLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsTop=5;location=left)" />
-      <DropDown showReset="true" format="object.name" localize="true" name="CssSheet" data="data.cssSheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=15;location=right)" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS" autoSelectFirstRow="false">
+      <Label label="css_sheet" localize="true" name="CssSheetLabel" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.name" localize="true" name="CssSheet" index="15" data="data.cssSheet" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS" autoSelectFirstRow="false">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </DropDown>
     </Tab>

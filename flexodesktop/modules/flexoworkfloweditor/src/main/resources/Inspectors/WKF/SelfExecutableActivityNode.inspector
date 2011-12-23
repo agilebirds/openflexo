@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.SelfExecutableActivityNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="3" title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DataTab">
-      <Label label="execution_primitive" localize="true" name="ExecutionPrimitiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
-      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.executionPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="ExecutionPrimitive" localize="true" manageDynamicModel="true">
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab">
+      <Label label="execution_primitive" localize="true" name="ExecutionPrimitiveLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" index="5" data="data.executionPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="ExecutionPrimitive" localize="true" manageDynamicModel="true">
         <Assignment variable="component.bindingDefinition" value="data.executionPrimitiveBindingDefinition" />
         <Assignment variable="component.allowsCompoundBindings" value="true" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Custom>
-      <Label label="assignments" align="center" localize="true" name="AssignmentsLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=center)" />
-      <Table iteratorClassName="org.openflexo.foundation.bindings.BindingAssignment" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Assignments" data="data.assignments" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;location=right)">
+      <Label label="assignments" align="center" localize="true" name="AssignmentsLabel" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.bindings.BindingAssignment" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Assignments" index="7" data="data.assignments" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;location=right)">
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.receiver" format="object.stringRepresentation" title="receiver" columnWidth="150" resizable="true" displayTitle="true">
           <ColumnAssignment variable="component.bindingDefinition" value="iterator.receiverBindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
@@ -26,8 +26,8 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Table>
     </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Data" lang="French">Donnée</Localized>

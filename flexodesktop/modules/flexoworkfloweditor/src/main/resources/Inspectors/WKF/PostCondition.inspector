@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.edge.FlexoPostCondition" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="20" title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="GraphicsTab">
-      <Label label="hide_when_induced" localize="true" name="HideWhenInducedLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsTop=5;location=left)" />
-      <CheckBox selected="false" localize="true" name="HideWhenInduced" data="data.hideWhenInduced" constraints="twocols(expandHorizontally=false;expandVertically=false;index=15;location=right)" />
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" font="SansSerif,0,11" name="GraphicsTab">
+      <Label label="hide_when_induced" localize="true" name="HideWhenInducedLabel" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="HideWhenInduced" index="15" data="data.hideWhenInduced" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" />
     </Tab>
-    <Tab index="6" title="Edge Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="EdgeMetricsTab">
-      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
+    <Tab title="Edge Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="EdgeMetricsTab">
+      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" index="1" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
         <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
         <CustomColumn componentClassName="org.openflexo.components.widget.MetricsValueInspectorWidget" customRendering="true" disableTerminateEditOnFocusLost="false" data="iterator.this" format="object.value.toString" title="value" columnWidth="80" resizable="true" displayTitle="true" />
         <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
@@ -16,27 +16,27 @@
         <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
       </Table>
     </Tab>
-    <Tab index="3" title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DataTab">
-      <Label label="condition" localize="true" name="ConditionPrimitiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="(data.isConditional = true)" />
-      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.conditionPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" visible="(data.isConditional = true)" name="ConditionPrimitive" localize="true" manageDynamicModel="true">
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab">
+      <Label label="condition" localize="true" name="ConditionPrimitiveLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" visible="(data.isConditional = true)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" index="5" data="data.conditionPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" visible="(data.isConditional = true)" name="ConditionPrimitive" localize="true" manageDynamicModel="true">
         <Assignment variable="component.bindingDefinition" value="data.conditionPrimitiveBindingDefinition" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Custom>
     </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="isGenericOutput" localize="true" name="IsGenericOutputLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <CheckBox selected="false" localize="true" name="IsGenericOutput" data="data.isGenericOutput" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="isGenericOutput" localize="true" name="IsGenericOutputLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="IsGenericOutput" index="3" data="data.isGenericOutput" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" />
     </Tab>
-    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="is_default_flow" localize="true" name="IsDefaultFlowLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="(data.canBeDefaultFlow = true)" />
-      <CheckBox selected="false" localize="true" name="IsDefaultFlow" data="data.isDefaultFlow" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" visible="(data.canBeDefaultFlow = true)" />
-      <Label label="has_condition" localize="true" name="IsImplicitConditionalLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" />
-      <CheckBox selected="false" localize="true" name="IsImplicitConditional" data="data.isImplicitConditional" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" />
-      <Label label="has_condition" localize="true" name="IsConditionalLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="(data.canBeConditional = true)" />
-      <CheckBox selected="false" localize="true" name="IsConditional" data="data.isConditional" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" visible="(data.canBeConditional = true)" />
-      <Label label="condition_description" localize="true" name="ConditionDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" visible="(((data.isConditional = true) &amp; (data.canBeConditional = true)) | ((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false)))" />
-      <HTMLEditor data="data.conditionDescription" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" visible="(((data.isConditional = true) &amp; (data.canBeConditional = true)) | ((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false)))" name="ConditionDescription" localize="true">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="is_default_flow" localize="true" name="IsDefaultFlowLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" visible="(data.canBeDefaultFlow = true)" />
+      <CheckBox selected="false" localize="true" name="IsDefaultFlow" index="7" data="data.isDefaultFlow" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" visible="(data.canBeDefaultFlow = true)" />
+      <Label label="has_condition" localize="true" name="IsImplicitConditionalLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" />
+      <Label label="has_condition" localize="true" name="IsConditionalLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsTop=5;location=left)" visible="(data.canBeConditional = true)" />
+      <CheckBox selected="false" localize="true" name="IsImplicitConditional" index="9" data="data.isImplicitConditional" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=right)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" />
+      <CheckBox selected="false" localize="true" name="IsConditional" index="9" data="data.isConditional" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" visible="(data.canBeConditional = true)" />
+      <Label label="condition_description" localize="true" name="ConditionDescriptionLabel" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="(((data.isConditional = true) &amp; (data.canBeConditional = true)) | ((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false)))" />
+      <HTMLEditor index="11" data="data.conditionDescription" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" visible="(((data.isConditional = true) &amp; (data.canBeConditional = true)) | ((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false)))" name="ConditionDescription" localize="true">
         <Line1Option index="0" name="ParagraphFormatComboBox" />
         <Line1Option index="1" name="TextEffectPanel" />
         <Line1Option index="2" name="TextEffectPanel.BoldButton" />
@@ -56,8 +56,8 @@
         <Line1Option index="5" name="MiscPanel" />
         <Line1Option index="17" name="MiscPanel.InsertImage" />
       </HTMLEditor>
-      <Label label="matches_positive_evaluation" localize="true" name="IsPositiveEvaluationLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsTop=5;location=left)" visible="(data.startOperatorIsIfNode = true)" />
-      <CheckBox selected="false" localize="true" name="IsPositiveEvaluation" data="data.isPositiveEvaluation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" visible="(data.startOperatorIsIfNode = true)" />
+      <Label label="matches_positive_evaluation" localize="true" name="IsPositiveEvaluationLabel" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="(data.startOperatorIsIfNode = true)" />
+      <CheckBox selected="false" localize="true" name="IsPositiveEvaluation" index="13" data="data.isPositiveEvaluation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" visible="(data.startOperatorIsIfNode = true)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
