@@ -265,7 +265,7 @@ public abstract class Module implements IModule {
 			return DMEIconLibrary.DME_BIG_ICON;
 		}
 
-		public static final String DM_MODULE_SHORT_NAME = "DM";
+		public static final String DM_MODULE_SHORT_NAME = "DME";
 
 		public static final String DM_MODULE_NAME = "data_model_editor";
 
@@ -943,12 +943,12 @@ public abstract class Module implements IModule {
 
 	public static Module getModule(Class moduleClass) {
 		for (int i = 0; i < knownsModules.length; i++) {
-			if ((knownsModules[i].getModuleClass() != null) && (knownsModules[i].getModuleClass().equals(moduleClass))) {
+			if (knownsModules[i].getModuleClass() != null && knownsModules[i].getModuleClass().equals(moduleClass)) {
 				return knownsModules[i];
 			}
 		}
 		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning(("Cannot lookup Module for " + moduleClass.getName()));
+			logger.warning("Cannot lookup Module for " + moduleClass.getName());
 		}
 		return null;
 	}
@@ -960,7 +960,7 @@ public abstract class Module implements IModule {
 			}
 		}
 		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning(("Cannot lookup Module for " + moduleName));
+			logger.warning("Cannot lookup Module for " + moduleName);
 		}
 		return null;
 	}
@@ -1021,7 +1021,7 @@ public abstract class Module implements IModule {
 		AVAILABLE, SUBJECT_TO_RESTRICTIONS, NON_AVAILABLE;
 
 		public boolean isAvailable() {
-			return ((this == AVAILABLE) || (this == SUBJECT_TO_RESTRICTIONS));
+			return this == AVAILABLE || this == SUBJECT_TO_RESTRICTIONS;
 		}
 	}
 
@@ -1170,7 +1170,7 @@ public abstract class Module implements IModule {
 
 	public boolean register() {
 		_constructor = lookupConstructor();
-		return (_constructor == null ? false : true);
+		return _constructor == null ? false : true;
 	}
 
 	/**
@@ -1262,7 +1262,7 @@ public abstract class Module implements IModule {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not load module " + getName() + " : exception raised " + e.getClass().getName());
 			}
-			if (logger.isLoggable(Level.WARNING) && (e.getCause() != null)) {
+			if (logger.isLoggable(Level.WARNING) && e.getCause() != null) {
 				logger.warning("Caused by " + e.getCause().getClass().getName() + " " + e.getCause().getMessage());
 				e.getCause().printStackTrace();
 			}

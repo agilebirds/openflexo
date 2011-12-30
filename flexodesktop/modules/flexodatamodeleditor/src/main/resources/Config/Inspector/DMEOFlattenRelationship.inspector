@@ -1,4 +1,4 @@
-<inspector title = "FlattenedEORelationship" inheritsfrom="DMEOProperty.inspector">
+<inspector title = "FlattenedEORelationship" inspectedClassName="org.openflexo.foundation.dm.DMEORelationship" inheritsfrom="DMEOProperty.inspector">
 	<tab name="Basic" index="0">
 		<property name="isToMany" label="is_to_many" widget="READ_ONLY_CHECKBOX" constraint="4" help="true if this is a to-many relationship"/>
 		<property name="flattenRelationshipDefinition" label="relationship_definition" widget="CUSTOM" constraint="5">

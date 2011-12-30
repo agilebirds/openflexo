@@ -93,6 +93,16 @@ public class DMController extends FlexoController implements SelectionManagingCo
 
 	private final DMSelectionManager _selectionManager;
 
+	@Override
+	public boolean useNewInspectorScheme() {
+		return true;
+	}
+
+	@Override
+	public boolean useOldInspectorScheme() {
+		return true;
+	}
+
 	/**
 	 * Default constructor
 	 * 
@@ -284,7 +294,6 @@ public class DMController extends FlexoController implements SelectionManagingCo
 		logger.warning("Implement view switching here");
 		getSelectionManager().setSelectedObject(object);
 	}
-
 
 	// ==========================================================================
 	// =================== Inspectable Exceptions handling
