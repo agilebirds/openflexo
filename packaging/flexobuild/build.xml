@@ -232,7 +232,7 @@
 	</target>
 
 	<target name="linux-packaging">
-		<tar destfile="${project.build.directory}/${product.name} ${productSuffix$} ${flexo_version$}.targ.gz" compression="gzip" basedir="${dist.dir}"/>
+		<tar destfile="${project.build.directory}/${product.name} ${productSuffix$} ${flexo_version$}.tar.gz" compression="gzip" basedir="${dist.dir}"/>
 	</target>
 
 	<target name="copyPackagesOnServer" if="deploy">
@@ -288,7 +288,7 @@
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Mac" />
 		<antcall target="createRemoteFolder"/>
 		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
-			<fileset dir="${project.build.directory}" id="pkg">
+			<fileset dir="${project.build.directory}">
 				<include name="*.dmg" />
 			</fileset>
 		</scp>
@@ -298,7 +298,7 @@
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Linux" />
 		<antcall target="createRemoteFolder"/>
 		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
-			<fileset dir="${project.build.directory}" id="pkg">
+			<fileset dir="${project.build.directory}">
 				<include name="*.tar.gz" />
 			</fileset>
 		</scp>
