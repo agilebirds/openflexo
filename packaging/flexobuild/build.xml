@@ -73,6 +73,7 @@
 		<antcall target="generateHelp" />
 		<antcall target="packageWindows" />
 		<antcall target="packageMacOSX" />
+		<antcall target="packageLinux" />
 	</target>
 
 	<target name="cleanTempDir">
@@ -228,7 +229,7 @@
 				<filtersfile file="${build.properties}" />
 			</filterset>
 		</copy>
-		<chmod perm="755" file="${start.script.file}"></chmod>
+		<chmod perm="755" file="${start.script.file}"/>
 	</target>
 
 	<target name="linux-packaging">
