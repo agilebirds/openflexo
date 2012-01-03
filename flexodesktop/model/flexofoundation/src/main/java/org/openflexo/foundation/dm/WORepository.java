@@ -32,7 +32,6 @@ import org.openflexo.foundation.param.DMEntityParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -151,19 +150,19 @@ public class WORepository extends DMRepository {
 		if (isDenaliCoreAvailable()) {
 			if (getCustomApplicationEntity() != null) {
 				getCustomApplicationEntity().setParentType(
-						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLApplication")), true);
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("be.denali.core.woapp.WDLApplication")), true);
 			}
 			if (getCustomSessionEntity() != null) {
 				getCustomSessionEntity().setParentType(
-						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.DLSession")), true);
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("be.denali.core.woapp.DLSession")), true);
 			}
 			if (getCustomDirectActionEntity() != null) {
 				getCustomDirectActionEntity().setParentType(
-						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLDirectAction")), true);
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("be.denali.core.woapp.WDLDirectAction")), true);
 			}
 			if (getCustomComponentEntity() != null) {
 				getCustomComponentEntity().setParentType(
-						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLComponent")), true);
+						DMType.makeResolvedDMType(getDMModel().getEntityNamed("be.denali.core.woapp.WDLComponent")), true);
 			}
 		} else if (isWebObjectsAvailable()) {
 			if (getCustomApplicationEntity() != null) {
@@ -193,11 +192,9 @@ public class WORepository extends DMRepository {
 				DMEntity applicationEntity = new DMEntity(dmModel, "Application", getDefaultPackage().getName(), "Application", null);
 				registerEntity(applicationEntity);
 				if (isDenaliCoreAvailable()) {
-					applicationEntity.setParentType(
-							DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.WDLApplication")), true);
+					applicationEntity.setParentType(getWDLApplication(dmModel), true);
 				} else if (isWebObjectsAvailable()) {
-					applicationEntity.setParentType(
-							DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOApplication")), true);
+					applicationEntity.setParentType(getWOApplicationType(dmModel), true);
 				}
 				setCustomApplicationEntity(applicationEntity);
 			}
@@ -206,11 +203,9 @@ public class WORepository extends DMRepository {
 				DMEntity directActionEntity = new DMEntity(dmModel, "DirectAction", getDefaultPackage().getName(), "DirectAction", null);
 				registerEntity(directActionEntity);
 				if (isDenaliCoreAvailable()) {
-					directActionEntity.setParentType(
-							DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.WDLDirectAction")), true);
+					directActionEntity.setParentType(getWDLDirectAction(dmModel), true);
 				} else if (isWebObjectsAvailable()) {
-					directActionEntity.setParentType(
-							DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WODirectAction")), true);
+					directActionEntity.setParentType(getWODirectAction(dmModel), true);
 				}
 				setCustomDirectActionEntity(directActionEntity);
 			}
@@ -219,11 +214,9 @@ public class WORepository extends DMRepository {
 				DMEntity sessionEntity = new DMEntity(dmModel, "Session", getDefaultPackage().getName(), "Session", null);
 				registerEntity(sessionEntity);
 				if (isDenaliCoreAvailable()) {
-					sessionEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.DLSession")),
-							true);
+					sessionEntity.setParentType(getDLSession(dmModel), true);
 				} else if (isWebObjectsAvailable()) {
-					sessionEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOSession")),
-							true);
+					sessionEntity.setParentType(getWOSession(dmModel), true);
 				}
 				setCustomSessionEntity(sessionEntity);
 			}
@@ -245,6 +238,7 @@ public class WORepository extends DMRepository {
 	@Override
 	public void finalizeDeserialization(Object builder) {
 		logger.fine("Finalizing WORepository deserialization");
+		DMModel dmModel = getDMModel();
 		DMEntity componentEntity = getCustomComponentEntity();
 		if (componentEntity != null) {
 			DMProperty session = componentEntity.getProperty("session");
@@ -284,7 +278,73 @@ public class WORepository extends DMRepository {
 				}
 			}
 		}
+		try {
+			if (getCustomApplicationEntity() != null) {
+				DMEntity applicationEntity = getCustomApplicationEntity();
+				if (isDenaliCoreAvailable() && getWOApplicationType(dmModel).equals(applicationEntity.getParentType())) {
+					applicationEntity.setParentType(getWDLApplication(dmModel), false);
+				}
+			}
+
+			if (getCustomDirectActionEntity() != null) {
+				DMEntity directActionEntity = getCustomDirectActionEntity();
+				if (isDenaliCoreAvailable() && getWODirectAction(dmModel).equals(directActionEntity.getParentType())) {
+					directActionEntity.setParentType(getWDLDirectAction(dmModel), false);
+				}
+			}
+
+			if (getCustomSessionEntity() != null) {
+				DMEntity sessionEntity = getCustomSessionEntity();
+				if (isDenaliCoreAvailable() && getWOSession(dmModel).equals(sessionEntity.getParentType())) {
+					sessionEntity.setParentType(getDLSession(dmModel), false);
+				}
+			}
+
+			if (componentEntity != null) {
+				if (isDenaliCoreAvailable() && getWOComponent(dmModel).equals(componentEntity.getParentType())) {
+					componentEntity.setParentType(getWDLComponent(dmModel), false);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception while initializing custom base entities : " + e.getMessage());
+			}
+		}
 		super.finalizeDeserialization(builder);
+	}
+
+	public DMType getWDLComponent(DMModel dmModel) {
+		return DMType.makeResolvedDMType(dmModel.getEntityNamed("be.denali.core.woapp.WDLComponent"));
+	}
+
+	public DMType getWOComponent(DMModel dmModel) {
+		return DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOComponent"));
+	}
+
+	public DMType getDLSession(DMModel dmModel) {
+		return DMType.makeResolvedDMType(dmModel.getEntityNamed("be.denali.core.woapp.DLSession"));
+	}
+
+	public DMType getWOSession(DMModel dmModel) {
+		return DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOSession"));
+	}
+
+	public DMType getWDLDirectAction(DMModel dmModel) {
+		return DMType.makeResolvedDMType(dmModel.getEntityNamed("be.denali.core.woapp.WDLDirectAction"));
+	}
+
+	public DMType getWODirectAction(DMModel dmModel) {
+		return DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WODirectAction"));
+	}
+
+	public DMType getWDLApplication(DMModel dmModel) {
+		return DMType.makeResolvedDMType(dmModel.getEntityNamed("be.denali.core.woapp.WDLApplication"));
+	}
+
+	public DMType getWOApplicationType(DMModel dmModel) {
+		return DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOApplication"));
 	}
 
 	DMEntity createCustomComponentEntity(String name) {
@@ -292,9 +352,9 @@ public class WORepository extends DMRepository {
 		DMEntity componentEntity = new DMEntity(dmModel, name, getDefaultPackage().getName(), name, null);
 		registerEntity(componentEntity);
 		if (isDenaliCoreAvailable()) {
-			componentEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("org.openflexo.core.woapp.WDLComponent")), true);
+			componentEntity.setParentType(getWDLComponent(dmModel), true);
 		} else if (isWebObjectsAvailable()) {
-			componentEntity.setParentType(DMType.makeResolvedDMType(dmModel.getEntityNamed("com.webobjects.appserver.WOComponent")), true);
+			componentEntity.setParentType(getWOComponent(dmModel), true);
 		}
 		DMProperty sessionProperty = new DMProperty(dmModel, "session", DMType.makeResolvedDMType(getCustomSessionEntity()),
 				DMCardinality.SINGLE, true, false, DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY);
@@ -323,7 +383,7 @@ public class WORepository extends DMRepository {
 	}
 
 	public boolean isDenaliCoreAvailable() {
-		return getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLComponent") != null;
+		return getDMModel().getEntityNamed("be.denali.core.woapp.WDLComponent") != null;
 	}
 
 	public boolean isWebObjectsAvailable() {
@@ -419,16 +479,12 @@ public class WORepository extends DMRepository {
 			}
 		}
 		if (getEntities().size() > 0) {
-			return getEntities().elements().nextElement();
+			return getEntities().values().iterator().next();
 		}
 		return null;
 	}
 
-	private boolean hasDefaultCustomComponentCandidate() {
-		return getDefaultCustomComponentCandidate() != null;
-	}
-
-	public static class ADefaultComponentEntityMustBeDeclared extends ValidationRule {
+	public static class ADefaultComponentEntityMustBeDeclared extends ValidationRule<ADefaultComponentEntityMustBeDeclared, WORepository> {
 
 		/**
 		 * @param objectType
@@ -444,10 +500,10 @@ public class WORepository extends DMRepository {
 		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
 		 */
 		@Override
-		public ValidationIssue applyValidation(Validable object) {
-			WORepository o = (WORepository) object;
+		public ValidationIssue<ADefaultComponentEntityMustBeDeclared, WORepository> applyValidation(WORepository o) {
 			if (o.getCustomComponentEntity() == null) {
-				ValidationError err = new ValidationError(this, o, "no_component_entity_declared");
+				ValidationError<ADefaultComponentEntityMustBeDeclared, WORepository> err = new ValidationError<WORepository.ADefaultComponentEntityMustBeDeclared, WORepository>(
+						this, o, "no_component_entity_declared");
 				err.addToFixProposals(new ChooseEntityProposal());
 				err.addToFixProposals(new CreateEntityProposal());
 				return err;
@@ -465,7 +521,7 @@ public class WORepository extends DMRepository {
 			return null;
 		}
 
-		public static class ChooseEntityProposal extends ParameteredFixProposal {
+		public static class ChooseEntityProposal extends ParameteredFixProposal<ADefaultComponentEntityMustBeDeclared, WORepository> {
 
 			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new DMEntityParameter("componentEntity",
 					"component_entity", null) };
@@ -486,7 +542,7 @@ public class WORepository extends DMRepository {
 			protected void fixAction() {
 				DMEntity e = (DMEntity) getValueForParameter("componentEntity");
 				if (e != null) {
-					SetPropertyAction action = SetPropertyAction.actionType.makeNewAction(((WORepository) getObject()), null);
+					SetPropertyAction action = SetPropertyAction.actionType.makeNewAction(getObject(), null);
 					action.setKey(CUSTOM_COMPONENT_ENTITY_KEY);
 					action.setValue(e);
 					action.doAction();
@@ -495,13 +551,13 @@ public class WORepository extends DMRepository {
 
 			@Override
 			public void updateBeforeApply() {
-				WORepository woRep = ((WORepository) getObject());
+				WORepository woRep = getObject();
 				parameters[0].setValue(woRep.getDefaultCustomComponentCandidate());
 			}
 
 		}
 
-		public static class CreateEntityProposal extends ParameteredFixProposal {
+		public static class CreateEntityProposal extends ParameteredFixProposal<ADefaultComponentEntityMustBeDeclared, WORepository> {
 
 			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new TextFieldParameter("name", "name", null) };
 
@@ -520,10 +576,10 @@ public class WORepository extends DMRepository {
 			@Override
 			protected void fixAction() {
 				String name = (String) getValueForParameter("name");
-				WORepository woRep = ((WORepository) getObject());
+				WORepository woRep = getObject();
 				DMEntity e = woRep.createCustomComponentEntity(name);
 				if (e != null) {
-					SetPropertyAction action = SetPropertyAction.actionType.makeNewAction(((WORepository) getObject()), null);
+					SetPropertyAction action = SetPropertyAction.actionType.makeNewAction(getObject(), null);
 					action.setKey(CUSTOM_COMPONENT_ENTITY_KEY);
 					action.setValue(e);
 					action.doAction();
@@ -532,7 +588,7 @@ public class WORepository extends DMRepository {
 
 			@Override
 			public void updateBeforeApply() {
-				WORepository woRep = ((WORepository) getObject());
+				WORepository woRep = getObject();
 				String prefix = getProject().getPrefix() == null ? "Project" : getProject().getPrefix();
 				parameters[0]
 						.setValue(getProject().getDataModel().getNextDefautEntityName(woRep.getDefaultPackage(), prefix + "Component"));

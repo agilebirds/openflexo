@@ -413,8 +413,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		en = getDMEORepositories().elements();
 		while (en.hasMoreElements()) {
 			DMEORepository dmEORepository = (DMEORepository) en.nextElement();
-			for (Enumeration en2 = dmEORepository.getEntities().elements(); en2.hasMoreElements();) {
-				DMEntity next = (DMEntity) en2.nextElement();
+			for (DMEntity next : dmEORepository.getEntities().values()) {
 				if (next instanceof DMEOEntity) {
 					DMEOEntity dmEOEntity = (DMEOEntity) next;
 					dmEORepository.internallyRegisterDMEOEntity(dmEOEntity);
@@ -576,7 +575,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return (getProject() != null ? getProject().getProjectName() + ".DMMODEL" : "DMMODEL");
+		return getProject() != null ? getProject().getProjectName() + ".DMMODEL" : "DMMODEL";
 	}
 
 	@Override
@@ -1155,7 +1154,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	public DMEOEntity getDMEOEntity(EOEntity eoEntity) {
 		for (Enumeration<DMRepository> en = repositories.elements(); en.hasMoreElements();) {
 			DMRepository next = en.nextElement();
-			if ((next instanceof DMEORepository) && (((DMEORepository) next).getDMEOEntity(eoEntity) != null)) {
+			if (next instanceof DMEORepository && ((DMEORepository) next).getDMEOEntity(eoEntity) != null) {
 				return ((DMEORepository) next).getDMEOEntity(eoEntity);
 			}
 		}
@@ -1267,12 +1266,12 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			if (rep1.getOrder() != rep2.getOrder()) {
 				return rep1.getOrder() - rep2.getOrder();
 			} else { // Same king, order relating to name
-				if ((rep1.getName() == null) || (rep2.getName() == null)) {
+				if (rep1.getName() == null || rep2.getName() == null) {
 					return 0;
 				} else {
 					String s1 = rep1.getName();
 					String s2 = rep2.getName();
-					if ((s1 != null) && (s2 != null)) {
+					if (s1 != null && s2 != null) {
 						return Collator.getInstance().compare(s1, s2);
 					} else {
 						return 0;
@@ -1322,7 +1321,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 							jarFile = st.nextToken();
 							classesToImport = new Vector<String>();
 						}
-					} else if ((jarFile != null) && (classesToImport != null)) {
+					} else if (jarFile != null && classesToImport != null) {
 						classesToImport.add(next);
 					}
 				}
@@ -1668,7 +1667,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	private boolean _EOCodeGenerationActivated = false;
 
 	public boolean getEOCodeGenerationAvailable() {
-		return (eoEntityCodeGenerator != null);
+		return eoEntityCodeGenerator != null;
 	}
 
 	public boolean getEOCodeGenerationActivated() {

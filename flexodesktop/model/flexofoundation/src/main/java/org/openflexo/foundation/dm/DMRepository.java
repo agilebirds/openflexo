@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,39 +55,10 @@ public abstract class DMRepository extends DMObject {
 	private String name;
 
 	// List of all entities declared in this repository (hashtable of DMEntity)
-	protected DMEntityHashtable entities;
+	protected Map<String, DMEntity> entities;
 
 	// List of all packages declared in this repository (hashtable of DMPackage)
 	protected Hashtable<String, DMPackage> packages;
-
-	private class DMEntityHashtable extends Hashtable<String, DMEntity> {
-		public DMEntityHashtable() {
-			super();
-		}
-
-		public DMEntityHashtable(Hashtable<String, DMEntity> ht) {
-			super(ht);
-		}
-
-		@Override
-		public Enumeration<String> keys() {
-			if (isSerializing()) {
-				// Order keys in this case
-				Vector<String> orderedKeys = new Vector<String>();
-				for (Enumeration<String> en = super.keys(); en.hasMoreElements();) {
-					orderedKeys.add(en.nextElement());
-				}
-				Collections.sort(orderedKeys, new Comparator<String>() {
-					@Override
-					public int compare(String o1, String o2) {
-						return Collator.getInstance().compare(o1, o2);
-					}
-				});
-				return orderedKeys.elements();
-			}
-			return super.keys();
-		}
-	}
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -97,7 +70,7 @@ public abstract class DMRepository extends DMObject {
 	 */
 	public DMRepository(DMModel dmModel) {
 		super(dmModel);
-		entities = new DMEntityHashtable();
+		entities = new TreeMap<String, DMEntity>();
 		packages = new Hashtable<String, DMPackage>();
 	}
 
@@ -243,13 +216,13 @@ public abstract class DMRepository extends DMObject {
 		notifyObservers(new PackageDeleted(aPackage));
 	}
 
-	public Hashtable<String, DMEntity> getEntities() {
+	public Map<String, DMEntity> getEntities() {
 		return entities;
 	}
 
-	public void setEntities(Hashtable<String, DMEntity> someEntities) {
+	public void setEntities(Map<String, DMEntity> someEntities) {
 		// Transtype to DMEntityHashtable
-		entities = new DMEntityHashtable(someEntities);
+		entities = new TreeMap<String, DMEntity>(someEntities);
 		needsReordering = true;
 		setChanged();
 	}
@@ -277,7 +250,7 @@ public abstract class DMRepository extends DMObject {
 	}
 
 	public void registerEntity(DMEntity entity) {
-		if ((entity.getEntityClassName() == null) || (entity.getEntityClassName().trim().equals(""))) {
+		if (entity.getEntityClassName() == null || entity.getEntityClassName().trim().equals("")) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Registering entity " + entity.getFullyQualifiedName()
 						+ ": className seems to be not correctely set. Doing it anyway.");
@@ -335,8 +308,7 @@ public abstract class DMRepository extends DMObject {
 
 	public String getStringRepresentation() {
 		String returned = "DMRepository\n";
-		for (Enumeration e = entities.elements(); e.hasMoreElements();) {
-			DMEntity entity = (DMEntity) e.nextElement();
+		for (DMEntity entity : entities.values()) {
 			returned += entity.getStringRepresentation();
 		}
 		return returned;
@@ -439,7 +411,7 @@ public abstract class DMRepository extends DMObject {
 			}
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;
