@@ -20,6 +20,7 @@
 package org.openflexo.velocity;
 
 import java.io.FileInputStream;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,6 +88,16 @@ public class FlexoVelocity {
 			// not handle properly "\ " as value " ")
 			Properties p = new Properties();
 			p.load(new FileInputStream(new FileResource("Config/velocity.properties")));
+			for (Entry<Object, Object> e : p.entrySet()) {
+				String value = e.getValue().toString();
+				if (value.indexOf("${") > -1) {
+					for (Entry<Object, Object> sp : System.getProperties().entrySet()) {
+						value = value.replace("${" + sp.getKey() + "}", sp.getValue().toString());
+					}
+					p.setProperty(e.getKey().toString(), value);
+				}
+
+			}
 			// 2. We convert properties to extended properties (this conversion only handles values of type String (i.e., a VelocityLogger
 			// cannot be set directly in the Properties, see 3.)
 			ExtendedProperties ep = ExtendedProperties.convertProperties(p);
