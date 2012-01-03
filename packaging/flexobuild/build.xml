@@ -230,6 +230,7 @@
 			</filterset>
 		</copy>
 		<chmod perm="755" file="${start.script.file}"/>
+		<antcall target="linux-packaging" />
 	</target>
 
 	<target name="linux-packaging">
