@@ -77,6 +77,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 					values.add(Format.HTML);
 					values.add(Format.LATEX);
 					values.add(Format.DOCX);
+					values.add(Format.PPTX);
 					final GeneratedOutput gc = action.getFocusedObject().getGeneratedCode();
 					final DynamicDropDownParameter<Format> format = new DynamicDropDownParameter<Format>("format","format",Format.HTML);
 					format.setAvailableValues(values);

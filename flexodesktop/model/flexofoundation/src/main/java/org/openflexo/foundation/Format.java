@@ -36,8 +36,23 @@ public enum Format {
 		public String getPostBuildKey() {
 			return "DOCX";
 		}
+	},
+
+	//MOS
+	PPTX {
+		@Override
+		public String getPostBuildFileExtension() {
+			return ".pptx";
+		}
+
+		@Override
+		public String getPostBuildKey() {
+			return "PPTX";
+		}
 
 	},
+	//
+	
 	HTML {
 		@Override
 		public String getPostBuildFileExtension() {
