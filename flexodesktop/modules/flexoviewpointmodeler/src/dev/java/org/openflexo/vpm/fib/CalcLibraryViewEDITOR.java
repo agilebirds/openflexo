@@ -24,14 +24,13 @@ import java.io.File;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
 
-
 public class CalcLibraryViewEDITOR {
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
@@ -39,6 +38,7 @@ public class CalcLibraryViewEDITOR {
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 				return makeArray(calcLibrary);
 			}
+
 			@Override
 			public File getFIBFile() {
 				return CEDCst.CALC_LIBRARY_VIEW_FIB;
@@ -47,11 +47,11 @@ public class CalcLibraryViewEDITOR {
 		editor.launch();
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private static FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
 }

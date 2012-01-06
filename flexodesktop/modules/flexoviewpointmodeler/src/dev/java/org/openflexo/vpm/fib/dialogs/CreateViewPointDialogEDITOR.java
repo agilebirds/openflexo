@@ -25,6 +25,7 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
 

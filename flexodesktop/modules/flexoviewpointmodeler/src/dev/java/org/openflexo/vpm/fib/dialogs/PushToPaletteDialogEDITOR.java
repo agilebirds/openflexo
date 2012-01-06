@@ -28,6 +28,7 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.action.PushToPalette;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
 
