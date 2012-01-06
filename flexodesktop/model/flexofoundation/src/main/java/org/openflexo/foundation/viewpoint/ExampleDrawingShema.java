@@ -32,7 +32,6 @@ import org.jdom.JDOMException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.viewpoint.ViewPointPalette.RelativePathFileConverter;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
@@ -169,7 +168,7 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 			makeLocalCopy();
 			temporaryFile = File.createTempFile("temp", ".xml", dir);
 			saveToFile(temporaryFile);
-			temporaryFile.renameTo(_drawingFile);
+			FileUtils.rename(temporaryFile, _drawingFile);
 			clearIsModified(true);
 			buildAndSaveScreenshotImage();
 			logger.info("Saved shema to " + _drawingFile.getAbsolutePath() + ". Done.");
@@ -183,7 +182,7 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 	}
 
 	private void makeLocalCopy() throws IOException {
-		if ((_drawingFile != null) && (_drawingFile.exists())) {
+		if (_drawingFile != null && _drawingFile.exists()) {
 			String localCopyName = _drawingFile.getName() + "~";
 			File localCopy = new File(_drawingFile.getParentFile(), localCopyName);
 			FileUtils.copyFileToFile(_drawingFile, localCopy);
@@ -231,16 +230,16 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 	}
 
 	private ScreenshotImage buildAndSaveScreenshotImage() {
-        ExternalCEDModule cedModule = null;
-        try {
-            cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
-                    .getCEDModuleInstance(getProject()) : null;
-        } catch (ModuleLoadingException e) {
-            logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
-            e.printStackTrace();
-        }
+		ExternalCEDModule cedModule = null;
+		try {
+			cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader().getCEDModuleInstance(
+					getProject()) : null;
+		} catch (ModuleLoadingException e) {
+			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
+			e.printStackTrace();
+		}
 
-        if (cedModule == null) {
+		if (cedModule == null) {
 			return null;
 		}
 
@@ -281,7 +280,7 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 	}
 
 	public ScreenshotImage getScreenshotImage() {
-		if ((screenshotImage == null) || screenshotModified) {
+		if (screenshotImage == null || screenshotModified) {
 			if (screenshotModified) {
 				logger.info("Rebuilding screenshot for " + this + " because screenshot is modified");
 			}

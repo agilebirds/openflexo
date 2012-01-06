@@ -205,7 +205,7 @@ public class ViewPoint extends ViewPointObject {
 			makeLocalCopy();
 			temporaryFile = File.createTempFile("temp", ".xml", dir);
 			saveToFile(temporaryFile);
-			temporaryFile.renameTo(xmlFile);
+			FileUtils.rename(temporaryFile, xmlFile);
 			clearIsModified(true);
 			logger.info("Saved calc to " + xmlFile.getAbsolutePath() + ". Done.");
 		} catch (IOException e) {
@@ -218,7 +218,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	private void makeLocalCopy() throws IOException {
-		if ((xmlFile != null) && (xmlFile.exists())) {
+		if (xmlFile != null && xmlFile.exists()) {
 			String localCopyName = xmlFile.getName() + "~";
 			File localCopy = new File(xmlFile.getParentFile(), localCopyName);
 			FileUtils.copyFileToFile(xmlFile, localCopy);

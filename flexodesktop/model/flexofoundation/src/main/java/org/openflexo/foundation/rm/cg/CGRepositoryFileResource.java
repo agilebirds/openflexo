@@ -21,6 +21,7 @@ package org.openflexo.foundation.rm.cg;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -589,10 +590,12 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	/**
 	 * Overrides renameFileTo
 	 * 
+	 * @throws IOException
+	 * 
 	 * @see org.openflexo.foundation.rm.FlexoFileResource#renameFileTo(java.lang.String)
 	 */
 	@Override
-	public boolean renameFileTo(String name) throws InvalidFileNameException {
+	public boolean renameFileTo(String name) throws InvalidFileNameException, IOException {
 		String old = getFileName();
 		boolean succeed = super.renameFileTo(name);
 		if (succeed && getCGFile() != null) {

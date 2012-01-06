@@ -19,6 +19,7 @@
  */
 package org.openflexo.dg.rm;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,7 +76,7 @@ public class OperationLatexFileResource extends LatexFileResource<DGLatexGenerat
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getOperation() != null)) {
+		if (!isObserverRegistered && getOperation() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
@@ -162,6 +163,9 @@ public class OperationLatexFileResource extends LatexFileResource<DGLatexGenerat
 			try {
 				renameFileTo(DGLatexGenerator.nameForOperation(getOperation(), getGenerator().getRepository()));
 			} catch (InvalidFileNameException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
