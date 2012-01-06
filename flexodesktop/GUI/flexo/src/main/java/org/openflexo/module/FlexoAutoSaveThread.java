@@ -154,9 +154,8 @@ public class FlexoAutoSaveThread extends Thread {
 		try {
 			String content = FileUtils.fileContents(getAutoSafeFileInfo());
 			tempDirectory = new File(content.trim());
-			if (!tempDirectory.exists()
-					|| !content.startsWith(System.getProperty("java.io.tmpdir")) && !content.startsWith(new File(System
-							.getProperty("java.io.tmpdir")).getCanonicalPath())) {
+			if (!tempDirectory.exists() || !content.startsWith(System.getProperty("java.io.tmpdir"))
+					&& !content.startsWith(new File(System.getProperty("java.io.tmpdir")).getCanonicalPath())) {
 				tempDirectory = getNewTempDirectory();
 			}
 		} catch (IOException e) {
@@ -184,23 +183,23 @@ public class FlexoAutoSaveThread extends Thread {
 			}
 		}
 		Collections.sort(projects, new Comparator<FlexoAutoSaveFile>() { // This comparator will make oldest files first and newer ones last
-			// in the queue
-			/**
-			 * Overrides compare
-			 * 
-			 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-			 */
-			@Override
-			public int compare(FlexoAutoSaveFile o1, FlexoAutoSaveFile o2) {
-				if (o1.lastModified() < o2.lastModified()) {
-					return -1;
-				} else if (o1.lastModified() > o2.lastModified()) {
-					return 1;
-				} else {
-					return 0;
-				}
-			}
-		});
+					// in the queue
+					/**
+					 * Overrides compare
+					 * 
+					 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+					 */
+					@Override
+					public int compare(FlexoAutoSaveFile o1, FlexoAutoSaveFile o2) {
+						if (o1.lastModified() < o2.lastModified()) {
+							return -1;
+						} else if (o1.lastModified() > o2.lastModified()) {
+							return 1;
+						} else {
+							return 0;
+						}
+					}
+				});
 	}
 
 	/**
@@ -324,21 +323,21 @@ public class FlexoAutoSaveThread extends Thread {
 		if (progress != null) {
 			progress.hideWindow();
 		}
-		try{
-            InteractiveFlexoEditor editor = ProjectLoader.instance().loadProject(projectDirectory);
-            getModuleLoader().openProjectWithModule(editor, module);
-        } catch (ModuleLoadingException e) {
-            logger.severe("This shouldn't append since module is already loaded." + e.getMessage());
-            e.printStackTrace();
-            FlexoController.notify("This shouldn't append since module is already loaded." + e.getMessage());
-        } catch (ProjectLoadingCancelledException e){
-            return;
-        }
+		try {
+			InteractiveFlexoEditor editor = ProjectLoader.instance().loadProject(projectDirectory);
+			getModuleLoader().openProjectWithModule(editor, module);
+		} catch (ModuleLoadingException e) {
+			logger.severe("This shouldn't append since module is already loaded." + e.getMessage());
+			e.printStackTrace();
+			FlexoController.notify("This shouldn't append since module is already loaded." + e.getMessage());
+		} catch (ProjectLoadingCancelledException e) {
+			return;
+		}
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	public FlexoProject getProject() {
 		return project;
@@ -382,9 +381,9 @@ public class FlexoAutoSaveThread extends Thread {
 			FlexoController.showError(
 					FlexoLocalization.localizedForKey("auto_save_action_failed"),
 					FlexoLocalization.localizedForKey("auto_save_action_could_not_be_performed")
-					+ "\n"
-					+ FlexoLocalization
-					.localizedForKey("verify_that_your_disk_is_not_full_and_that_you_can_write_in_the_temp_directory."));
+							+ "\n"
+							+ FlexoLocalization
+									.localizedForKey("verify_that_your_disk_is_not_full_and_that_you_can_write_in_the_temp_directory."));
 		}
 	}
 
@@ -509,9 +508,10 @@ public class FlexoAutoSaveThread extends Thread {
 		this.run = run;
 	}
 
-    private AutoSaveService getAutoSaveService(){
-            return AutoSaveService.instance();
-    }
+	private AutoSaveService getAutoSaveService() {
+		return AutoSaveService.instance();
+	}
+
 	public void showTimeTravelerDialog() {
 		getAutoSaveService().stopAutoSaveThread();
 		final FlexoDialog dialog = new FlexoDialog(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame()

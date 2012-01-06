@@ -56,9 +56,9 @@ public abstract class ActionInitializer<A extends FlexoAction<?, T1, T2>, T1 ext
 		return getController().getEditor();
 	}
 
-    final protected ModuleLoader getModuleLoader(){
-      return ModuleLoader.instance();
-    }
+	final protected ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	public FlexoController getController() {
 		return _controllerActionInitializer.getController();

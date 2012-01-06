@@ -155,7 +155,7 @@ public abstract class PetalObject implements PetalNode {
 	@Override
 	public int hashCode() {
 		int h = 0;
-		for(String name:names) {
+		for (String name : names) {
 			h += name.hashCode();
 		}
 		for (PetalNode o : values) {

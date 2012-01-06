@@ -35,170 +35,167 @@ import org.openflexo.toolbox.FlexoVersion;
 
 public class FlexoProjectUtil {
 
-    private static final Logger logger = Logger.getLogger(FlexoProjectUtil.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoProjectUtil.class.getPackage().getName());
 
+	/**
+	 * @param projectDirectory
+	 * @return false whenever .version is less than 1.3 or project .version higher than current FlexoVersion.
+	 */
+	public static boolean isProjectOpenable(File projectDirectory) throws UnreadableProjectException {
+		FlexoVersion version = getVersion(projectDirectory);
+		if (version != null && version.major == 1 && version.minor < 3) {
+			throw new UnreadableProjectException(FlexoLocalization.localizedForKey("project_is_too_old_please_use_intermediary_versions"));
+		}
+		if (currentFlexoVersionIsSmallerThanLastVersion(projectDirectory)) {
+			throw new UnreadableProjectException(
+					FlexoLocalization.localizedForKey("current_flexo_version_is_smaller_than_last_used_to_open_this_project"));
+		}
+		return true;
+	}
 
-    /**
-     * @param projectDirectory
-     * @return false whenever .version is less than 1.3 or project .version higher than
-     * current FlexoVersion.
-     */
-    public static boolean isProjectOpenable(File projectDirectory) throws UnreadableProjectException {
-        FlexoVersion version = getVersion(projectDirectory);
-        if (version != null && version.major == 1 && version.minor < 3) {
-            throw new UnreadableProjectException(FlexoLocalization.localizedForKey("project_is_too_old_please_use_intermediary_versions")
-            );
-        }
-        if (currentFlexoVersionIsSmallerThanLastVersion(projectDirectory)) {
-            throw new UnreadableProjectException(FlexoLocalization.localizedForKey
-                    ("current_flexo_version_is_smaller_than_last_used_to_open_this_project"));
-        }
-        return true;
-    }
+	/**
+	 * @param projectDirectory
+	 *            some directory
+	 * @return the FlexoVersion for projectDirectory or null if the projectDirectory don't contains any .version file.
+	 */
+	public static FlexoVersion getVersion(File projectDirectory) {
+		File f = getVersionFile(projectDirectory);
+		StringBuilder sb = new StringBuilder();
+		byte[] b = new byte[512];
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(f);
+		} catch (FileNotFoundException e) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine(".version file not found in " + projectDirectory.getAbsolutePath());
+			}
+			return null;
+		}
+		int i = 0;
+		while (i > -1) {
+			try {
+				i = fis.read(b);
+				if (i > -1) {
+					sb.append(new String(b, 0, i, "UTF-8"));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				try {
+					fis.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				return null;
+			}
+		}
+		try {
+			fis.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return new FlexoVersion(sb.toString());
+	}
 
-    /**
-     * @param projectDirectory some directory
-     * @return the FlexoVersion for projectDirectory or null if the projectDirectory don't contains
-     * any .version file.
-     */
-    public static FlexoVersion getVersion(File projectDirectory) {
-        File f = getVersionFile(projectDirectory);
-        StringBuilder sb = new StringBuilder();
-        byte[] b = new byte[512];
-        FileInputStream fis;
-        try {
-            fis = new FileInputStream(f);
-        } catch (FileNotFoundException e) {
-            if(logger.isLoggable(Level.FINE)){
-                logger.fine(".version file not found in "+projectDirectory.getAbsolutePath());
-            }
-            return null;
-        }
-        int i = 0;
-        while (i > -1) {
-            try {
-                i = fis.read(b);
-                if (i > -1) {
-                    sb.append(new String(b, 0, i, "UTF-8"));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                try {
-                    fis.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                return null;
-            }
-        }
-        try {
-            fis.close();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return new FlexoVersion(sb.toString());
-    }
+	/**
+	 * @param projectDirectory
+	 *            the project directory
+	 * @return
+	 */
+	public static boolean currentFlexoVersionIsSmallerThanLastVersion(File projectDirectory) {
+		File f = getVersionFile(projectDirectory);
+		if (!f.exists()) {
+			createVersionFile(projectDirectory);
+			return false;
+		} else {
+			FlexoVersion v = getVersion(projectDirectory);
+			// bidouille so that Version will accept 1.0.1RC1 as bigger than
+			// 1.0.1beta
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Version is " + v);
+			}
+			boolean result = FlexoXMLMappings.latestRelease().isLesserThan(v);
+			if (!result) {
+				FlexoProjectUtil.createVersionFile(projectDirectory);
+			}
+			return result;
+		}
+	}
 
+	/**
+	 * @param projectDirectory
+	 * @return
+	 */
+	private static void createVersionFile(File projectDirectory) {
+		File f = getVersionFile(projectDirectory);
+		if (!f.exists()) {
+			boolean create = false;
+			try {
+				create = f.createNewFile();
+			} catch (IOException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("IOException in creation of version file: " + e.getMessage());
+				}
+				return;
+			}
+			if (!create) {
+				return;
+			}
+		}
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(f);
+		} catch (FileNotFoundException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("FileNotFoundException in creation of version file: " + e.getMessage());
+			}
+			if (f.exists()) {
+				FileUtils.unmakeFileHidden(f);
+			} else {
+				return;
+			}
+			try {
+				fos = new FileOutputStream(f);
+			} catch (FileNotFoundException e1) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("FileNotFoundException in creation of version file: " + e1.getMessage());
+				}
+				return;
+			}
+		}
+		try {
+			fos.write(FlexoXMLMappings.latestRelease().toString().getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("IOException in creation of version file: " + e.getMessage());
+			}
+		} finally {
+			try {
+				fos.flush();
+			} catch (IOException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("IOException in flushing of version file: " + e.getMessage());
+				}
+			}
+			try {
+				fos.close();
+			} catch (IOException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("IOException in closing of version file: " + e.getMessage());
+				}
+			}
+		}
+	}
 
-    /**
-     * @param projectDirectory  the project directory
-     * @return
-     */
-    public static boolean currentFlexoVersionIsSmallerThanLastVersion(File projectDirectory) {
-        File f = getVersionFile(projectDirectory);
-        if (!f.exists()) {
-            createVersionFile(projectDirectory);
-            return false;
-        } else {
-            FlexoVersion v = getVersion(projectDirectory);
-            // bidouille so that Version will accept 1.0.1RC1 as bigger than
-            // 1.0.1beta
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Version is " + v);
-            }
-            boolean result = FlexoXMLMappings.latestRelease().isLesserThan(v);
-            if (!result) {
-                FlexoProjectUtil.createVersionFile(projectDirectory);
-            }
-            return result;
-        }
-    }
-
-    /**
-     * @param projectDirectory
-     * @return
-     */
-    private static void createVersionFile(File projectDirectory) {
-        File f = getVersionFile(projectDirectory);
-        if (!f.exists()) {
-            boolean create = false;
-            try {
-                create = f.createNewFile();
-            } catch (IOException e) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning("IOException in creation of version file: " + e.getMessage());
-                }
-                return;
-            }
-            if (!create) {
-                return;
-            }
-        }
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(f);
-        } catch (FileNotFoundException e) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("FileNotFoundException in creation of version file: " + e.getMessage());
-            }
-            if (f.exists()) {
-                FileUtils.unmakeFileHidden(f);
-            } else {
-                return;
-            }
-            try {
-                fos = new FileOutputStream(f);
-            } catch (FileNotFoundException e1) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning("FileNotFoundException in creation of version file: " + e1.getMessage());
-                }
-                return;
-            }
-        }
-        try {
-            fos.write(FlexoXMLMappings.latestRelease().toString().getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("IOException in creation of version file: " + e.getMessage());
-            }
-        } finally {
-            try {
-                fos.flush();
-            } catch (IOException e) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning("IOException in flushing of version file: " + e.getMessage());
-                }
-            }
-            try {
-                fos.close();
-            } catch (IOException e) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning("IOException in closing of version file: " + e.getMessage());
-                }
-            }
-        }
-    }
-
-    /**
-     * @param projectDirectory
-     * @return
-     */
-    private static File getVersionFile(File projectDirectory) {
-        String versionFileName = ".version";
-        File f = new File(projectDirectory, versionFileName);
-        return f;
-    }
+	/**
+	 * @param projectDirectory
+	 * @return
+	 */
+	private static File getVersionFile(File projectDirectory) {
+		String versionFileName = ".version";
+		File f = new File(projectDirectory, versionFileName);
+		return f;
+	}
 
 }

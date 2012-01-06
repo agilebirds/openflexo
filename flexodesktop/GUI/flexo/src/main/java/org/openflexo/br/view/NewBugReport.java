@@ -514,8 +514,7 @@ public class NewBugReport extends FlexoDialog {
 
 	private static String getErrorMessage(RequestResponse response) {
 		return FlexoLocalization.localizedForKey("An error has occured !")
-				+ ((UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) ? response.response
-						: "");
+				+ ((UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) ? response.response : "");
 	}
 
 	public void disableButtons() {

@@ -285,7 +285,6 @@ public class DMController extends FlexoController implements SelectionManagingCo
 		getSelectionManager().setSelectedObject(object);
 	}
 
-
 	// ==========================================================================
 	// =================== Inspectable Exceptions handling
 	// ======================

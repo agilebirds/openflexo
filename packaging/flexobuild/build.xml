@@ -223,7 +223,7 @@
 	</target>
 
 	<target name="packageLinux">
-		<property name="start.script.file" value="${flexobuild.work.dir}/start.sh"/>
+		<property name="start.script.file" value="${dist.dir}/start.sh"/>
 		<copy file="Linux/start.sh.tpl" tofile="${start.script.file}" filtering="true" overwrite="true">
 			<filterset>
 				<filtersfile file="${build.properties}" />
@@ -234,7 +234,9 @@
 	</target>
 
 	<target name="linux-packaging">
-		<tar destfile="${project.build.directory}/${product.name} ${productSuffix} ${flexo_version}.tar.gz" compression="gzip" basedir="${dist.dir}"/>
+		<tar destfile="${project.build.directory}/${product.name} ${productSuffix} ${flexo_version}.tar.gz" compression="gzip" basedir="${dist.dir}">
+			<exclude name="*.exe"/>
+		</tar>
 	</target>
 
 	<target name="copyPackagesOnServer" if="deploy">

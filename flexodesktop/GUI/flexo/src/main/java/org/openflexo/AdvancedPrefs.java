@@ -267,13 +267,13 @@ public class AdvancedPrefs extends ContextPreferences {
 		}
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private static AutoSaveService getAutoSaveService() {
-        return AutoSaveService.instance();
-    }
+	private static AutoSaveService getAutoSaveService() {
+		return AutoSaveService.instance();
+	}
 
 	public static void save() {
 		FlexoPreferences.savePreferences(true);

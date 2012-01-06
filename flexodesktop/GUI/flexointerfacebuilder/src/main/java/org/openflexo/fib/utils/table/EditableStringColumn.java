@@ -36,8 +36,7 @@ import javax.swing.table.TableCellEditor;
  * @author sguerin
  * 
  */
-public abstract class EditableStringColumn<D extends Observable> extends
-		StringColumn<D> implements EditableColumn<D, String> {
+public abstract class EditableStringColumn<D extends Observable> extends StringColumn<D> implements EditableColumn<D, String> {
 
 	DefaultCellEditor editor;
 
@@ -55,13 +54,9 @@ public abstract class EditableStringColumn<D extends Observable> extends
 		if (editor == null) {
 			editor = new DefaultCellEditor(new JTextField()) {
 				@Override
-				public Component getTableCellEditorComponent(JTable table,
-						Object value, boolean isSelected, int row, int column) {
-					final JTextField textfield = (JTextField) super
-							.getTableCellEditorComponent(table, value,
-									isSelected, row, column);
-					textfield.setBorder(BorderFactory.createLineBorder(
-							Color.BLACK, 1));
+				public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+					final JTextField textfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+					textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
@@ -90,7 +85,6 @@ public abstract class EditableStringColumn<D extends Observable> extends
 
 	@Override
 	public String toString() {
-		return "EditableStringColumn " + "[" + getTitle() + "]"
-				+ Integer.toHexString(hashCode());
+		return "EditableStringColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
 	}
 }

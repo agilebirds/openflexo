@@ -85,13 +85,13 @@ public abstract class Module implements IModule {
 
 	public static final Module XXX_MODULE = new XXX();
 
-    private Class _moduleClass;
+	private Class _moduleClass;
 
-    public Constructor getConstructor() {
-        return _constructor;
-    }
+	public Constructor getConstructor() {
+		return _constructor;
+	}
 
-    protected static class WKF extends Module {
+	protected static class WKF extends Module {
 		@Override
 		protected String getRelativeDirectory() {
 			return "modules/flexoworkfloweditor";
@@ -914,7 +914,7 @@ public abstract class Module implements IModule {
 		super();
 	}
 
-    /**
+	/**
 	 * @return
 	 */
 	public Class<?> getModuleClass() {
@@ -945,9 +945,9 @@ public abstract class Module implements IModule {
 		return getModuleLoader().isLoaded(this);
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	public enum ModuleAvailability {
 		AVAILABLE, SUBJECT_TO_RESTRICTIONS, NON_AVAILABLE;
@@ -986,13 +986,13 @@ public abstract class Module implements IModule {
 
 	public boolean register() {
 		_constructor = lookupConstructor();
-        return _constructor!=null;
+		return _constructor != null;
 	}
 
 	/**
 	 * Internally used to lookup constructor
-	 *
-     */
+	 * 
+	 */
 	private Constructor lookupConstructor() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Registering module '" + getName() + "'");
@@ -1021,7 +1021,6 @@ public abstract class Module implements IModule {
 		}
 		return null;
 	}
-
 
 	@Override
 	public String toString() {

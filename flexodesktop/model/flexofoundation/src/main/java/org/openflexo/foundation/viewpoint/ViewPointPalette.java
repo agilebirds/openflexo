@@ -270,7 +270,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 			makeLocalCopy();
 			temporaryFile = File.createTempFile("temp", ".xml", dir);
 			saveToFile(temporaryFile);
-			temporaryFile.renameTo(_paletteFile);
+			FileUtils.rename(temporaryFile, _paletteFile);
 			clearIsModified(true);
 			buildAndSaveScreenshotImage();
 			logger.info("Saved palette to " + _paletteFile.getAbsolutePath() + ". Done.");
@@ -284,7 +284,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	private void makeLocalCopy() throws IOException {
-		if ((_paletteFile != null) && (_paletteFile.exists())) {
+		if (_paletteFile != null && _paletteFile.exists()) {
 			String localCopyName = _paletteFile.getName() + "~";
 			File localCopy = new File(_paletteFile.getParentFile(), localCopyName);
 			FileUtils.copyFileToFile(_paletteFile, localCopy);
@@ -346,13 +346,13 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	private ScreenshotImage buildAndSaveScreenshotImage() {
 		ExternalCEDModule cedModule = null;
-        try {
-            cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
-                    .getCEDModuleInstance(getProject()) : null;
-        } catch (ModuleLoadingException e) {
-            logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
-            e.printStackTrace();
-        }
+		try {
+			cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader().getCEDModuleInstance(
+					getProject()) : null;
+		} catch (ModuleLoadingException e) {
+			logger.warning("cannot load CED module (and so can't create screenshoot." + e.getMessage());
+			e.printStackTrace();
+		}
 
 		if (cedModule == null) {
 			return null;
@@ -395,7 +395,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 
 	public ScreenshotImage getScreenshotImage() {
-		if ((screenshotImage == null) || screenshotModified) {
+		if (screenshotImage == null || screenshotModified) {
 			if (screenshotModified) {
 				logger.info("Rebuilding screenshot for " + this + " because screenshot is modified");
 			}

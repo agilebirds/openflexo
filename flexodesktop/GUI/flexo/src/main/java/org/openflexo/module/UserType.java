@@ -39,15 +39,13 @@ import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
 
 /**
- * Represents a user type, and is used to determine configuration of Flexo
- * Application Suite, which is also called a package set
+ * Represents a user type, and is used to determine configuration of Flexo Application Suite, which is also called a package set
  * 
  * @author sguerin
  */
 public abstract class UserType extends FlexoObject {
 
-	private static final Logger logger = Logger.getLogger(Module.class
-			.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(Module.class.getPackage().getName());
 
 	private static UserType currentUserType = null;
 
@@ -59,8 +57,7 @@ public abstract class UserType extends FlexoObject {
 
 	public static final Maintainer MAINTAINER = new Maintainer();
 
-	private static final UserType[] knownUserType = { CUSTOMER, ANALYST,
-			DEVELOPER, MAINTAINER };
+	private static final UserType[] knownUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER };
 
 	private Vector<DocItemFolder> documentationFolders = null;
 
@@ -71,15 +68,13 @@ public abstract class UserType extends FlexoObject {
 	 */
 	public static final UserType getCurrentUserType() {
 		if (currentUserType == null) {
-			throw new IllegalStateException(
-					"currentUserType is null. Did you call setCurrentUserType.");
+			throw new IllegalStateException("currentUserType is null. Did you call setCurrentUserType.");
 		}
 		return currentUserType;
 	}
 
 	/**
-	 * Define the global application parameter currentUserType. Once the
-	 * userType is defined : it cannot be changed.
+	 * Define the global application parameter currentUserType. Once the userType is defined : it cannot be changed.
 	 * 
 	 * @param userType
 	 *            : the userType to set. Cannot be null.
@@ -94,15 +89,10 @@ public abstract class UserType extends FlexoObject {
 		}
 		if (currentUserType != null) {
 			if (!currentUserType.equals(userType)) {
-				throw new IllegalStateException(
-						"You cannot change userType. It was "
-								+ currentUserType.getName()
-								+ " and you try to change it to "
-								+ userType.getName()
-								+ ". Ignoring this change.");
+				throw new IllegalStateException("You cannot change userType. It was " + currentUserType.getName()
+						+ " and you try to change it to " + userType.getName() + ". Ignoring this change.");
 			} else {
-				logger.warning("Trying to set the currentUser "
-						+ userType.getName() + ", but it was already set.");
+				logger.warning("Trying to set the currentUser " + userType.getName() + ", but it was already set.");
 			}
 		}
 		currentUserType = userType;
@@ -144,15 +134,12 @@ public abstract class UserType extends FlexoObject {
 	}
 
 	/**
-	 * Search a userType matching userTypeName. Make a case insensitive
-	 * comparison against known userType name's and known userType id's. If
+	 * Search a userType matching userTypeName. Make a case insensitive comparison against known userType name's and known userType id's. If
 	 * there is no match it returns Maintainer user type.
 	 * 
 	 * @param userTypeName
-	 *            a string matching either a userType's name, either a
-	 *            userType's id
-	 * @return the userType matching userTypeName. Maintainer userType whenever
-	 *         there is no match.
+	 *            a string matching either a userType's name, either a userType's id
+	 * @return the userType matching userTypeName. Maintainer userType whenever there is no match
 	 */
 	public static UserType getUserTypeNamed(String userTypeName) {
 		if (MAINTAINER.getName().equalsIgnoreCase(userTypeName)) {
@@ -185,10 +172,9 @@ public abstract class UserType extends FlexoObject {
 	public Vector<DocItemFolder> getDocumentationFolders() {
 		if (documentationFolders == null) {
 			documentationFolders = new Vector<DocItemFolder>();
-			documentationFolders.add(DocResourceManager.instance()
-					.getAbstractModuleItem().getFolder());
+			documentationFolders.add(DocResourceManager.instance().getAbstractModuleItem().getFolder());
 			addModelItems();
-			for (Module module : getCurrentUserType().getModules()) {
+			for (Module module : getModules()) {
 				if (module.getModuleClass() != null) {
 					addModuleItems(module);
 				}
@@ -203,29 +189,24 @@ public abstract class UserType extends FlexoObject {
 
 	protected void addModelItems(InspectorGroup inspectorGroup) {
 		DocItemFolder inspectorGroupFolder;
-		DocItemFolder modelFolder = DocResourceManager.instance()
-				.getDocResourceCenter().getModelFolder();
+		DocItemFolder modelFolder = DocResourceManager.instance().getDocResourceCenter().getModelFolder();
 		String inspectorGroupName = inspectorGroup.getName();
-		inspectorGroupFolder = modelFolder
-				.getItemFolderNamed(inspectorGroupName);
+		inspectorGroupFolder = modelFolder.getItemFolderNamed(inspectorGroupName);
 		if (inspectorGroupFolder != null) {
 			documentationFolders.add(inspectorGroupFolder);
 		} else {
-			logger.warning("Unable to find DocItemFolder for "
-					+ inspectorGroupName);
+			logger.warning("Unable to find DocItemFolder for " + inspectorGroupName);
 		}
 	}
 
 	protected void addModuleItems(Module module) {
 		DocItemFolder moduleItemFolder;
-		DocItemFolder ftsFolder = DocResourceManager.instance()
-				.getDocResourceCenter().getFTSFolder();
+		DocItemFolder ftsFolder = DocResourceManager.instance().getDocResourceCenter().getFTSFolder();
 		moduleItemFolder = ftsFolder.getItemFolderNamed(module.getHelpTopic());
 		if (moduleItemFolder != null) {
 			documentationFolders.add(moduleItemFolder);
 		} else {
-			logger.warning("Unable to find DocItemFolder for "
-					+ module.getHelpTopic());
+			logger.warning("Unable to find DocItemFolder for " + module.getHelpTopic());
 		}
 	}
 
@@ -249,10 +230,8 @@ public abstract class UserType extends FlexoObject {
 
 		@Override
 		public List<Module> getModules() {
-			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE,
-					Module.DE_MODULE, Module.VE_MODULE, Module.DM_MODULE,
-					Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE,
-					Module.WSE_MODULE, Module.FPS_MODULE, Module.VPM_MODULE);
+			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE, Module.DM_MODULE,
+					Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE, Module.WSE_MODULE, Module.FPS_MODULE, Module.VPM_MODULE);
 		}
 
 		@Override
@@ -265,8 +244,7 @@ public abstract class UserType extends FlexoObject {
 		}
 
 		@Override
-		public ProjectLoadingHandler getDefaultLoadingHandler(
-				File projectDirectory) {
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
 			return new FullInteractiveProjectLoadingHandler(projectDirectory);
 		}
 
@@ -296,8 +274,7 @@ public abstract class UserType extends FlexoObject {
 
 		@Override
 		public List<Module> getModules() {
-			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE,
-					Module.DM_MODULE, Module.DE_MODULE, Module.VE_MODULE);
+			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DM_MODULE, Module.DE_MODULE, Module.VE_MODULE);
 		}
 
 		@Override
@@ -309,8 +286,7 @@ public abstract class UserType extends FlexoObject {
 		}
 
 		@Override
-		public ProjectLoadingHandler getDefaultLoadingHandler(
-				File projectDirectory) {
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
 			return new BasicInteractiveProjectLoadingHandler(projectDirectory);
 		}
 
@@ -339,8 +315,7 @@ public abstract class UserType extends FlexoObject {
 
 		@Override
 		public List<Module> getModules() {
-			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE,
-					Module.DE_MODULE, Module.VE_MODULE);
+			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE);
 		}
 
 		@Override
@@ -351,8 +326,7 @@ public abstract class UserType extends FlexoObject {
 		}
 
 		@Override
-		public ProjectLoadingHandler getDefaultLoadingHandler(
-				File projectDirectory) {
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
 			return new BasicInteractiveProjectLoadingHandler(projectDirectory);
 		}
 
@@ -381,10 +355,8 @@ public abstract class UserType extends FlexoObject {
 
 		@Override
 		public List<Module> getModules() {
-			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE,
-					Module.DE_MODULE, Module.VE_MODULE, Module.DM_MODULE,
-					Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE,
-					Module.WSE_MODULE, Module.FPS_MODULE, Module.DRE_MODULE,
+			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE, Module.DM_MODULE,
+					Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE, Module.WSE_MODULE, Module.FPS_MODULE, Module.DRE_MODULE,
 					Module.VPM_MODULE);
 		}
 
@@ -399,8 +371,7 @@ public abstract class UserType extends FlexoObject {
 		}
 
 		@Override
-		public ProjectLoadingHandler getDefaultLoadingHandler(
-				File projectDirectory) {
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
 			return new FullInteractiveProjectLoadingHandler(projectDirectory);
 		}
 
@@ -420,8 +391,7 @@ public abstract class UserType extends FlexoObject {
 
 	public abstract String getIdentifier();
 
-	public abstract ProjectLoadingHandler getDefaultLoadingHandler(
-			File projectDirectory);
+	public abstract ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory);
 
 	public abstract String getBusinessName2();
 

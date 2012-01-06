@@ -689,7 +689,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				logger.finer("Renaming temp file " + temporaryFile.getAbsolutePath() + " to " + getFile().getAbsolutePath());
 			}
 			// temporaryFile.renameTo(getFile());
-			rename(temporaryFile, getTSFile());
+			FileUtils.rename(temporaryFile, getTSFile());
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Succeeding to save RM/TS file");
 			}

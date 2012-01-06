@@ -89,15 +89,15 @@ public class WorkflowBrowserView extends BrowserView {
 
 			treeSingleClick(object);
 		} else if (object instanceof ComponentDefinition) {
-            ExternalIEModule ieModule = null;
-            try {
-                ieModule = getModuleLoader().getIEModule(object.getProject());
-            } catch (ModuleLoadingException e) {
-                FlexoController.notify("Cannot load Screen Editor. Exception : " + e.getMessage());
-                e.printStackTrace();
-            }
-            if (ieModule == null) {
-                return;
+			ExternalIEModule ieModule = null;
+			try {
+				ieModule = getModuleLoader().getIEModule(object.getProject());
+			} catch (ModuleLoadingException e) {
+				FlexoController.notify("Cannot load Screen Editor. Exception : " + e.getMessage());
+				e.printStackTrace();
+			}
+			if (ieModule == null) {
+				return;
 			}
 			ieModule.focusOn();
 			ieModule.showScreenInterface(((ComponentDefinition) object).getDummyComponentInstance());
@@ -106,7 +106,7 @@ public class WorkflowBrowserView extends BrowserView {
 		}
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 }

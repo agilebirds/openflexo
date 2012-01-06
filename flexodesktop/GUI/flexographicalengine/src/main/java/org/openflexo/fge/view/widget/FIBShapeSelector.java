@@ -58,14 +58,11 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author sguerin
  * 
  */
-public class FIBShapeSelector extends CustomPopup<Shape> implements
-		FIBCustomComponent<Shape, FIBShapeSelector> {
+public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomComponent<Shape, FIBShapeSelector> {
 
-	static final Logger logger = Logger.getLogger(FIBShapeSelector.class
-			.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBShapeSelector.class.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource(
-			"Fib/ShapeSelectorPanel.fib");
+	public static FileResource FIB_FILE = new FileResource("Fib/ShapeSelectorPanel.fib");
 
 	private static final Color DEFAULT_COLOR1 = Color.RED;
 	private static final Color DEFAULT_COLOR2 = Color.WHITE;
@@ -184,8 +181,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements
 				switch (shapeType) {
 				case RECTANGLE:
 					if (rectangle == null) {
-						rectangle = (Rectangle) Shape
-								.makeShape(shapeType, null);
+						rectangle = (Rectangle) Shape.makeShape(shapeType, null);
 					}
 					shape = rectangle;
 					break;
@@ -197,15 +193,13 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements
 					break;
 				case CUSTOM_POLYGON:
 					if (polygon == null) {
-						polygon = new Polygon(null, new FGEPoint(0.1, 0.1),
-								new FGEPoint(0.3, 0.9), new FGEPoint(0.9, 0.3));
+						polygon = new Polygon(null, new FGEPoint(0.1, 0.1), new FGEPoint(0.3, 0.9), new FGEPoint(0.9, 0.3));
 					}
 					shape = polygon;
 					break;
 				case POLYGON:
 					if (regularPolygon == null) {
-						regularPolygon = (RegularPolygon) Shape.makeShape(
-								shapeType, null);
+						regularPolygon = (RegularPolygon) Shape.makeShape(shapeType, null);
 					}
 					shape = regularPolygon;
 					break;
@@ -249,8 +243,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements
 					shape = Shape.makeShape(shapeType, null);
 				}
 
-				pcSupport.firePropertyChange("shapeType", oldShapeType,
-						getShapeType());
+				pcSupport.firePropertyChange("shapeType", oldShapeType, getShapeType());
 			}
 		}
 	}
@@ -284,8 +277,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements
 
 		@Override
 		public Dimension getDefaultSize() {
-			return new Dimension(fibComponent.getWidth(),
-					fibComponent.getHeight());
+			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
 		}
 
 		public void delete() {
@@ -310,14 +302,11 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements
 				getFrontComponent().setShape(shapeFactory.getShape());
 				// getFrontComponent().update();
 
-				FIBView previewComponent = viewForComponent(fibComponent
-						.getComponentNamed("PreviewPanel"));
+				FIBView previewComponent = viewForComponent(fibComponent.getComponentNamed("PreviewPanel"));
 				if (previewComponent instanceof FIBCustomWidget) {
-					JComponent customComponent = ((FIBCustomWidget) previewComponent)
-							.getJComponent();
+					JComponent customComponent = ((FIBCustomWidget) previewComponent).getJComponent();
 					if (customComponent instanceof ShapePreviewPanel) {
-						((ShapePreviewPanel) customComponent)
-								.setShape(shapeFactory.getShape());
+						((ShapePreviewPanel) customComponent).setShape(shapeFactory.getShape());
 						// ((ShapePreviewPanel) customComponent).update();
 					}
 				}
@@ -336,8 +325,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements
 
 	@Override
 	public void apply() {
-		setRevertValue(getEditedObject() != null ? getEditedObject().clone()
-				: null);
+		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : null);
 		closePopup();
 		super.apply();
 	}

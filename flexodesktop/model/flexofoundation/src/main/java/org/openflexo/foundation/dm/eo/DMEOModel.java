@@ -39,6 +39,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
 import javax.swing.tree.TreeNode;
 
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMModel;
@@ -252,7 +253,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 	public String getName() {
 		if (getEOModel() != null) {
 			return getEOModel().getName() + ".eomodeld";
-		} else if ((getEOModelFile() != null) && (getEOModelFile().getFile() != null)) {
+		} else if (getEOModelFile() != null && getEOModelFile().getFile() != null) {
 			return getEOModelFile().getFile().getName();
 		} else {
 			return "???";
@@ -272,7 +273,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 	public String getNameWithoutSuffix() {
 		if (getEOModel() != null) {
 			return getEOModel().getName();
-		} else if ((getEOModelFile() != null) && (getEOModelFile().getFile() != null)) {
+		} else if (getEOModelFile() != null && getEOModelFile().getFile() != null) {
 			String name = getEOModelFile().getFile().getName();
 			if (name.lastIndexOf(".eomodeld") > -1) {
 				name = name.substring(0, name.lastIndexOf(".eomodeld"));
@@ -304,14 +305,13 @@ public class DMEOModel extends DMObject implements DMEOObject {
 	}
 
 	@Override
-	public void setName(String aName) {
+	public void setName(String aName) throws FlexoException {
 		if (getEOModel() != null) {
 			String oldName = getEOModel().getName();
 			int ind = aName.lastIndexOf(".eomodeld");
 			if (ind > -1) {
 				aName = aName.substring(0, ind);
 			}
-			getEOModel().setName(aName);
 			if (!isDeserializing()) {
 				getRepository().renameEOModel(this, oldName, aName);
 				try {
@@ -322,12 +322,20 @@ public class DMEOModel extends DMObject implements DMEOObject {
 					e.printStackTrace();
 					logger.warning("Unexpected InvalidFileNameException raised when trying to rename EOModel from " + oldName + " to "
 							+ aName);
+					throw new FlexoException(FlexoLocalization.localizedForKey("invalid_name"), e);
 				} catch (DuplicateResourceException e) {
 					// TODO: gerer ca mieux un jour
 					e.printStackTrace();
 					logger.warning("Unexpected DuplicateResourceException raised when trying to rename EOModel from " + oldName + " to "
 							+ aName);
+					throw new FlexoException(FlexoLocalization.localizedForKey("duplicate_name"), e);
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new FlexoException(FlexoLocalization.localizedForKey("io_exception") + " " + e.getMessage(), e);
 				}
+			}
+			getEOModel().setName(aName);
+			if (!isDeserializing()) {
 				setChanged();
 				notifyObservers(new DMAttributeDataModification("name", oldName, aName));
 				setChanged();
@@ -403,7 +411,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 	}
 
 	public EOModel getEOModel() {
-		if ((getEOModelResource() != null) && (getEOModelResourceData() != null)) {
+		if (getEOModelResource() != null && getEOModelResourceData() != null) {
 			return getEOModelResourceData().getEOModel();
 		}
 		/*
@@ -428,70 +436,70 @@ public class DMEOModel extends DMObject implements DMEOObject {
 	}
 
 	public String getDatabaseServer() {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			return (String) getConnectionDictionary().get(DMEOAdaptorType.DATABASE_SERVER);
 		}
 		return null;
 	}
 
 	public void setDatabaseServer(String server) {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			getConnectionDictionary().put(DMEOAdaptorType.DATABASE_SERVER, server);
 			setChanged();
 		}
 	}
 
 	public String getUsername() {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			return (String) getConnectionDictionary().get(DMEOAdaptorType.USERNAME);
 		}
 		return null;
 	}
 
 	public void setUsername(String username) {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			getConnectionDictionary().put(DMEOAdaptorType.USERNAME, username);
 			setChanged();
 		}
 	}
 
 	public String getPasswd() {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			return (String) getConnectionDictionary().get(DMEOAdaptorType.PASSWORD);
 		}
 		return null;
 	}
 
 	public void setPasswd(String password) {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			getConnectionDictionary().put(DMEOAdaptorType.PASSWORD, password);
 			setChanged();
 		}
 	}
 
 	public String getPlugin() {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			return (String) getConnectionDictionary().get(DMEOAdaptorType.PLUGIN);
 		}
 		return null;
 	}
 
 	public void setPlugin(String plugin) {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			getConnectionDictionary().put(DMEOAdaptorType.PLUGIN, plugin);
 			setChanged();
 		}
 	}
 
 	public String getDriver() {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			return (String) getConnectionDictionary().get(DMEOAdaptorType.DRIVER);
 		}
 		return null;
 	}
 
 	public void setDriver(String driver) {
-		if ((getEOModel() != null) && (getConnectionDictionary() != null)) {
+		if (getEOModel() != null && getConnectionDictionary() != null) {
 			getConnectionDictionary().put(DMEOAdaptorType.DRIVER, driver);
 			setChanged();
 		}
@@ -555,7 +563,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 	}
 
 	public EOModel loadEOModel() throws InvalidEOModelFileException {
-		if ((_eoModelResource != null) && (_eoModelResource.getEOModelResourceData() != null)) {
+		if (_eoModelResource != null && _eoModelResource.getEOModelResourceData() != null) {
 			return _eoModelResource.getEOModelResourceData().getEOModel();
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -610,7 +618,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 			for (Iterator<EOEntity> i = getEOModel().getEntities().iterator(); i.hasNext();) {
 				EOEntity eoEntity = i.next();
 				DMEOEntity foundEntity = lookupDMEOEntityWithFullyQualifiedName(eoEntity);
-				if ((foundEntity != null) && (foundEntity.getDMEOModel() != this)) {
+				if (foundEntity != null && foundEntity.getDMEOModel() != this) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Lookup dereferenced EOEntity " + foundEntity.getName() + "! Trying to repair...");
 					}
@@ -624,7 +632,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 								+ "). Creates the related DMEOEntity.");
 					}
 					DMEOEntity newDMEOEntity = new DMEOEntity(getDMModel(), this, eoEntity,
-							(getRepository() instanceof EOPrototypeRepository));
+							getRepository() instanceof EOPrototypeRepository);
 					getRepository().registerEntity(newDMEOEntity);
 				} else {
 					if (logger.isLoggable(Level.FINE)) {
@@ -655,7 +663,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 
 	public DMEOEntity getDMEOEntity(EOEntity eoEntity) {
 		DMEOEntity returned = getRepository().getDMEOEntity(eoEntity);
-		if ((returned != null) && (returned.getDMEOModel() != this)) {
+		if (returned != null && returned.getDMEOModel() != this) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found DMEOEntity matching " + eoEntity.getClassName() + " but not in the expected DMEOModel !");
 			}
@@ -737,7 +745,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 		 */
 		@Override
 		public int compare(DMEOEntity o1, DMEOEntity o2) {
-			if ((o1 == null) || (o2 == null)) {
+			if (o1 == null || o2 == null) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Cannot compare null entities");
 				}
@@ -745,7 +753,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 			} else {
 				String s1 = o1.getName();
 				String s2 = o2.getName();
-				if ((s1 != null) && (s2 != null)) {
+				if (s1 != null && s2 != null) {
 					return Collator.getInstance().compare(s1, s2);
 				} else {
 					return 0;
@@ -778,7 +786,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 				if (ToolBox.getPLATFORM().equals(ToolBox.WINDOWS)) {
 					return f.isDirectory();
 				}
-				return (f.getName().endsWith(".eomodeld"));
+				return f.getName().endsWith(".eomodeld");
 			}
 			return false;
 		}
@@ -937,9 +945,8 @@ public class DMEOModel extends DMObject implements DMEOObject {
 		String baseName = FlexoLocalization.localizedForKey("default_new_entity_name");
 		String testMe = baseName;
 		int test = 0;
-		while ((entities.get(aPackage + "." + testMe) != null)
-				|| ((getEOModel() != null) && (getEOModel()._entityNamedIgnoreCase(testMe) != null))
-				|| ((getEOModel() != null) && (getEOModel().getModelGroup().entityNamedIgnoreCase(testMe) != null))) {
+		while (entities.get(aPackage + "." + testMe) != null || getEOModel() != null && getEOModel()._entityNamedIgnoreCase(testMe) != null
+				|| getEOModel() != null && getEOModel().getModelGroup().entityNamedIgnoreCase(testMe) != null) {
 			test++;
 			testMe = baseName + test;
 		}

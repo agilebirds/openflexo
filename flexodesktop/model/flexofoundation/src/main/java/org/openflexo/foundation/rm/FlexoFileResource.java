@@ -178,21 +178,14 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 		return getFile() != null ? getFile().getName() : null;
 	}
 
-	public boolean renameFileTo(String name) throws InvalidFileNameException {
+	public boolean renameFileTo(String name) throws InvalidFileNameException, IOException {
 		File newFile = new File(getFile().getParentFile(), name);
 		if (getFile().exists()) {
-			boolean b = getFile().renameTo(newFile);
-			if (!b) {
-				byte[] bytes = FileUtils.getBytes(getFile());
-				try {
-					FileUtils.saveToFile(newFile, bytes);
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				}
-				resetDiskLastModifiedDate();
+			FileUtils.rename(getFile(), newFile);
+			if (getFile().exists()) {
+				getFile().delete();
 			}
-			getFile().delete();
+			resetDiskLastModifiedDate();
 		}
 		if (getResourceFile().getExternalRepository() != null) {
 			String relPath = getResourceFile().getRelativePath();
@@ -237,8 +230,8 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_diskLastModifiedDate)
 							+ "]"
 							+ " > lastWrittenOnDisk["
-							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(new Date(_lastWrittenOnDisk.getTime()
-									+ ACCEPTABLE_FS_DELAY)) + "]");
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(new Date(_lastWrittenOnDisk.getTime() + ACCEPTABLE_FS_DELAY))
+							+ "]");
 				}
 				// Since we are in this block (diskLastModified was null see the top 'if'), we consider that it is some kind of bug in the
 				// FS

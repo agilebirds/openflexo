@@ -95,8 +95,7 @@ public class TestCG2 extends CGTestCase {
 				GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, DefaultApplicationConfGenerator.IDENTIFIER));
 	}
 
-
-    public static Test suite() {
+	public static Test suite() {
 		final TestSuite suite = new TestSuite("TestSuite for TestCG2");
 		suite.addTest(new TestCG2("test0CreateProject"));
 		suite.addTest(new TestCG2("test1InitializeCodeGeneration"));

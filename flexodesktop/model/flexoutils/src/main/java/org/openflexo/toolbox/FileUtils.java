@@ -19,6 +19,8 @@
  */
 package org.openflexo.toolbox;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -29,6 +31,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.Charset;
@@ -771,4 +774,87 @@ public class FileUtils {
 		}
 		return fileName;
 	}
+
+	/**
+	 * An extension to Java's API rename method. Will attempt Java's method of doing the rename, if this fails, this method will then
+	 * attempt to forcibly copy the old file to the new file name, and then delete the old file. (This in appearance makes it look like a
+	 * file rename has occurred.) The method will also attempt to preserve the new file's modification times and permissions to equal that
+	 * of the original file's.
+	 * 
+	 * @param source
+	 *            File
+	 * @param destination
+	 *            File
+	 * @return boolean
+	 * @throws IOException
+	 */
+	public static boolean rename(File source, File destination) throws IOException {
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+		try {
+			// First (very important on Windows) delete the destination if it exists (rename will fail on Windows if destination
+			// exists)
+			if (destination.exists()) {
+				destination.delete();
+			}
+			// Do a normal API rename attempt
+			if (source.renameTo(destination)) {
+				return true;
+			}
+			FileUtils.createNewFile(destination);
+			// API rename attempt failed, forcibly copy
+			bis = new BufferedInputStream(new FileInputStream(source));
+			bos = new BufferedOutputStream(new FileOutputStream(destination));
+
+			// Do the copy
+			pipeStreams(bos, bis);
+
+			// Close the files
+			bos.flush();
+
+			// Close the files
+			bis.close();
+			bos.close();
+
+			// Attempt to preserve file modification times
+			destination.setLastModified(source.lastModified());
+			if (!source.canWrite()) {
+				destination.setReadOnly();
+			}
+
+			// Delete the original
+			source.delete();
+
+			bis = null;
+			bos = null;
+			return true;
+		} finally {
+			try {
+				if (bis != null) {
+					bis.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (bos != null) {
+					bos.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void pipeStreams(OutputStream to, InputStream from) throws IOException {
+		BufferedInputStream in = new BufferedInputStream(from);
+		BufferedOutputStream out = new BufferedOutputStream(to);
+		byte[] buffer = new byte[8192];
+		int read;
+		while ((read = in.read(buffer, 0, 8192)) != -1) {
+			out.write(buffer, 0, read);
+		}
+		out.flush();
+	}
+
 }

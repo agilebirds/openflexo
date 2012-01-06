@@ -152,9 +152,9 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		_generatorPanels = new Hashtable();
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	@Override
 	protected DESelectionManager createSelectionManager() {

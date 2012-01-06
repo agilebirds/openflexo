@@ -191,28 +191,28 @@ public class Flexo {
 				if (getModuleLoader().fileNameToOpen == null) {
 					new WelcomeDialog();
 				} else {
-                    try{
-					    getProjectLoader().loadProject(new File(getModuleLoader().fileNameToOpen));
-                    }catch (ProjectLoadingCancelledException e){
-                        //project need a conversion, but user cancelled the conversion.
-                        new WelcomeDialog();
-                    }
+					try {
+						getProjectLoader().loadProject(new File(getModuleLoader().fileNameToOpen));
+					} catch (ProjectLoadingCancelledException e) {
+						// project need a conversion, but user cancelled the conversion.
+						new WelcomeDialog();
+					}
 				}
 			}
 		});
 	}
 
-    private static FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private static ProjectLoader getProjectLoader(){
-        return ProjectLoader.instance();
-    }
+	private static ProjectLoader getProjectLoader() {
+		return ProjectLoader.instance();
+	}
 
 	private static void initUILAF() {
 		try {

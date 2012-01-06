@@ -22,24 +22,23 @@ package org.openflexo.foundation.utils;
 import org.openflexo.foundation.FlexoException;
 
 /**
- * Must be thrown whenever the user or flexo choose to cancel <i>open project procedure</i>.
- * It can append whenever user choose it, or flexo itself detect (by version inspection)
- * that it cannot open the prj.
+ * Must be thrown whenever the user or flexo choose to cancel <i>open project procedure</i>. It can append whenever user choose it, or flexo
+ * itself detect (by version inspection) that it cannot open the prj.
  * <ul>
  * <li>user click on "cancel" in a fileChooser to select a prj file</li>
- * <li>user choose to not convert a project requiring conversion<li>
+ * <li>user choose to not convert a project requiring conversion
+ * <li>
  * <li>prj version is less than 1.3</li>
- * <li>prj version is higher than current flexo version (i.e. the prj has been modified
- * by a newer version of Flexo)</li>
+ * <li>prj version is higher than current flexo version (i.e. the prj has been modified by a newer version of Flexo)</li>
  * </ul>
  */
 public class ProjectLoadingCancelledException extends FlexoException {
 
-    public ProjectLoadingCancelledException(String message) {
-        super();
-    }
+	public ProjectLoadingCancelledException(String message) {
+		super();
+	}
 
-    public ProjectLoadingCancelledException() {
-        super();
-    }
+	public ProjectLoadingCancelledException() {
+		super();
+	}
 }

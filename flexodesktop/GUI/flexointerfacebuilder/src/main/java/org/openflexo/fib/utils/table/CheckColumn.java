@@ -27,8 +27,7 @@ import java.util.Observable;
  * @author sguerin
  * 
  */
-public abstract class CheckColumn<D extends Observable> extends
-		AbstractColumn<D, Boolean> implements EditableColumn<D, Boolean> {
+public abstract class CheckColumn<D extends Observable> extends AbstractColumn<D, Boolean> implements EditableColumn<D, Boolean> {
 
 	public CheckColumn(String title, int defaultWidth) {
 		super(title, defaultWidth, false);
@@ -55,8 +54,7 @@ public abstract class CheckColumn<D extends Observable> extends
 
 	@Override
 	public String toString() {
-		return "CheckColumn " + "[" + getTitle() + "]"
-				+ Integer.toHexString(hashCode());
+		return "CheckColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
 	}
 
 	/**

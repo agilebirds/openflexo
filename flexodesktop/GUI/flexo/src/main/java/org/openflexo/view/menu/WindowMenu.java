@@ -164,9 +164,9 @@ public class WindowMenu extends FlexoMenu {
 		});
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	protected void updateWindowState() {
 		if (getController().getInspectorWindow() != null) {
@@ -377,12 +377,12 @@ public class WindowMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			try{
-                getModuleLoader().switchToModule(_module, null);
-            }catch(ModuleLoadingException e){
-                FlexoController.notify("Cannot load module."+e.getMessage());
-                return;
-            }
+			try {
+				getModuleLoader().switchToModule(_module, null);
+			} catch (ModuleLoadingException e) {
+				FlexoController.notify("Cannot load module." + e.getMessage());
+				return;
+			}
 			_menuItem.setState(ModuleLoader.instance().getActiveModule() == _module);
 			_menuItem.setIcon(_module.getSmallIcon());
 		}
@@ -402,26 +402,24 @@ public class WindowMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-            FlexoProject currentProject = getModuleLoader().getProject();
-            if(currentProject==null) {
-                try{
-                    InteractiveFlexoEditor editor = ProjectLoader.instance().askProjectDirectoryAndLoad();
-                    currentProject = editor.getProject();
-                }catch(ProjectLoadingCancelledException e){
-                    //user cancelled
-                    return;
-                }
-            }
-			try{
-                getModuleLoader().switchToModule(_module, null);
-            }catch(ModuleLoadingException e){
-                FlexoController.notify("Cannot load module."+e.getMessage());
-                return;
-            }
+			FlexoProject currentProject = getModuleLoader().getProject();
+			if (currentProject == null) {
+				try {
+					InteractiveFlexoEditor editor = ProjectLoader.instance().askProjectDirectoryAndLoad();
+					currentProject = editor.getProject();
+				} catch (ProjectLoadingCancelledException e) {
+					// user cancelled
+					return;
+				}
+			}
+			try {
+				getModuleLoader().switchToModule(_module, null);
+			} catch (ModuleLoadingException e) {
+				FlexoController.notify("Cannot load module." + e.getMessage());
+				return;
+			}
 		}
 	}
-
-
 
 	protected static Module getActiveModule() {
 		if (FlexoModule.getActiveModule() != null) {
@@ -452,14 +450,14 @@ public class WindowMenu extends FlexoMenu {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus OFF module " + getActiveModule());
 				}
-                try {
-                    getModuleLoader().getModuleInstance(getActiveModule(),getModuleLoader().getProject()).focusOff();
-                } catch (ModuleLoadingException e) {
-                    logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
-                                  + "PLEASE INVESTIGATE AND  FIX");
-                    e.printStackTrace();
-                }
-            }
+				try {
+					getModuleLoader().getModuleInstance(getActiveModule(), getModuleLoader().getProject()).focusOff();
+				} catch (ModuleLoadingException e) {
+					logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
+							+ "PLEASE INVESTIGATE AND  FIX");
+					e.printStackTrace();
+				}
+			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Updating menus for " + module);
 			}
@@ -605,13 +603,13 @@ public class WindowMenu extends FlexoMenu {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (getActiveModule() != null) {
-				try{
-                    getModuleLoader().getModuleInstance(getActiveModule(),getModuleLoader().getProject()).close();
-                }catch(ModuleLoadingException e){
-                    logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
-                                  + "PLEASE INVESTIGATE AND  FIX");
-                    e.printStackTrace();
-                }
+				try {
+					getModuleLoader().getModuleInstance(getActiveModule(), getModuleLoader().getProject()).close();
+				} catch (ModuleLoadingException e) {
+					logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
+							+ "PLEASE INVESTIGATE AND  FIX");
+					e.printStackTrace();
+				}
 			}
 		}
 	}

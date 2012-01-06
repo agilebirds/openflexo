@@ -170,7 +170,7 @@ public final class GeneralPreferences extends ContextPreferences {
 		}
 	}
 
-    public static void updateModuleFrameTitles() {
+	public static void updateModuleFrameTitles() {
 		Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
 		while (en.hasMoreElements()) {
 			en.nextElement().getFlexoFrame().updateTitle();
@@ -324,13 +324,14 @@ public final class GeneralPreferences extends ContextPreferences {
 		}
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private static AutoSaveService getAutoSaveService(){
-        return AutoSaveService.instance();
-    }
+	private static AutoSaveService getAutoSaveService() {
+		return AutoSaveService.instance();
+	}
+
 	public static void addToLastOpenedProjects(File project) {
 		Vector<File> files = getLastOpenedProjects();
 		Enumeration<File> en = new Vector<File>(files).elements();

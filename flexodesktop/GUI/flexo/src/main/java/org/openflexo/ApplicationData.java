@@ -43,7 +43,7 @@ public class ApplicationData {
 	public ApplicationData() {
 		if (!UserType.isCurrentUserTypeDefined()) {
 			logger.warning("ModuleLoader not initialized, initializing it with default values");
-            UserType.setCurrentUserType(UserType.MAINTAINER);
+			UserType.setCurrentUserType(UserType.MAINTAINER);
 		}
 	}
 
