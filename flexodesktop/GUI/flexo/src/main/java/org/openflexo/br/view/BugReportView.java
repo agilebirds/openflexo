@@ -216,9 +216,9 @@ public class BugReportView extends JPanel {
 		return returned;
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	public JPanel buildTechnicalPanel() {
 		GridBagLayout gridbag;

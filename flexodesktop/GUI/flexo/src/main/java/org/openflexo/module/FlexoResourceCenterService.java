@@ -32,94 +32,93 @@ import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 
 public class FlexoResourceCenterService {
 
-    private static final Logger logger = Logger.getLogger(FlexoResourceCenterService.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoResourceCenterService.class.getPackage().getName());
 
-    private static FlexoResourceCenterService flexoResourceCenterService;
+	private static FlexoResourceCenterService flexoResourceCenterService;
 
-    private static final Object monitor = new Object();
+	private static final Object monitor = new Object();
 
-    public static FlexoResourceCenterService instance(){
-        if(flexoResourceCenterService==null){
-            synchronized (monitor){
-                if(flexoResourceCenterService==null){
-                    flexoResourceCenterService = new FlexoResourceCenterService();
-                }
-            }
-        }
-        return flexoResourceCenterService;
-    }
+	public static FlexoResourceCenterService instance() {
+		if (flexoResourceCenterService == null) {
+			synchronized (monitor) {
+				if (flexoResourceCenterService == null) {
+					flexoResourceCenterService = new FlexoResourceCenterService();
+				}
+			}
+		}
+		return flexoResourceCenterService;
+	}
 
-    private FlexoResourceCenter flexoResourceCenter;
+	private FlexoResourceCenter flexoResourceCenter;
 
-    private void installFlexoResourceCenter(FlexoResourceCenter aResourceCenter) {
-        flexoResourceCenter = aResourceCenter;
-    }
+	private void installFlexoResourceCenter(FlexoResourceCenter aResourceCenter) {
+		flexoResourceCenter = aResourceCenter;
+	}
 
-    public FlexoResourceCenter getFlexoResourceCenter() {
-        return getFlexoResourceCenter(true);
-    }
+	public FlexoResourceCenter getFlexoResourceCenter() {
+		return getFlexoResourceCenter(true);
+	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    public FlexoResourceCenter createAndSetFlexoResourceCenter(File dir){
-        LocalResourceCenterImplementation rc = LocalResourceCenterImplementation
-                                    .instanciateNewLocalResourceCenterImplementation(dir);
-        installFlexoResourceCenter(rc);
-        return rc;
-    }
+	public FlexoResourceCenter createAndSetFlexoResourceCenter(File dir) {
+		LocalResourceCenterImplementation rc = LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(dir);
+		installFlexoResourceCenter(rc);
+		return rc;
+	}
 
-    public FlexoResourceCenter getFlexoResourceCenter(boolean createIfNotExist) {
-        if (flexoResourceCenter == null && createIfNotExist) {
-            if (GeneralPreferences.getLocalResourceCenterDirectory() == null
-                    || !GeneralPreferences.getLocalResourceCenterDirectory().exists()) {
-                if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-                    AskLocalResourceCenterDirectory data = new AskLocalResourceCenterDirectory();
-                    data.setLocalResourceDirectory(FlexoProject.getResourceCenterFile());
-                    FIBDialog dialog = FIBDialog.instanciateComponent(AskLocalResourceCenterDirectory.FIB_FILE, data, null, true);
-                    switch (dialog.getStatus()) {
-                    case VALIDATED:
-                        if (data.getLocalResourceDirectory() != null) {
-                            if (!data.getLocalResourceDirectory().exists()) {
-                                data.getLocalResourceDirectory().mkdirs();
-                            }
-                            if (!data.getLocalResourceDirectory().exists()) {
-                                break;
-                            }
-                            createAndSetFlexoResourceCenter(data.getLocalResourceDirectory());
-                            GeneralPreferences.setLocalResourceCenterDirectory(data.getLocalResourceDirectory());
-                        }
-                        break;
-                    case CANCELED:
-                        break;
-                    case QUIT:
-                        try {
-                            getModuleLoader().quit(true);
-                        } catch (ProjectExitingCancelledException e) {
-                        }
-                        break;
-                    default:
-                        break;
-                    }
-                } else { // Otherwise, dont ask but create resource center in home directory if required
-                    File resourceCenterDirectory = FlexoProject.getResourceCenterFile();
-                    if (!resourceCenterDirectory.exists()) {
-                        logger.info("Create directory " + resourceCenterDirectory);
-                        resourceCenterDirectory.mkdirs();
-                        LocalResourceCenterImplementation rc = LocalResourceCenterImplementation
-                                .instanciateNewLocalResourceCenterImplementation(resourceCenterDirectory);
-                        installFlexoResourceCenter(rc);
-                        GeneralPreferences.setLocalResourceCenterDirectory(resourceCenterDirectory);
-                    } else {
-                        flexoResourceCenter = new LocalResourceCenterImplementation(resourceCenterDirectory);
-                    }
-                }
-            } else if (flexoResourceCenter == null) {
-                flexoResourceCenter = new LocalResourceCenterImplementation(GeneralPreferences.getLocalResourceCenterDirectory());
-            }
-        }
-        return flexoResourceCenter;
-    }
+	public FlexoResourceCenter getFlexoResourceCenter(boolean createIfNotExist) {
+		if (flexoResourceCenter == null && createIfNotExist) {
+			if (GeneralPreferences.getLocalResourceCenterDirectory() == null
+					|| !GeneralPreferences.getLocalResourceCenterDirectory().exists()) {
+				if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
+					AskLocalResourceCenterDirectory data = new AskLocalResourceCenterDirectory();
+					data.setLocalResourceDirectory(FlexoProject.getResourceCenterFile());
+					FIBDialog dialog = FIBDialog.instanciateComponent(AskLocalResourceCenterDirectory.FIB_FILE, data, null, true);
+					switch (dialog.getStatus()) {
+					case VALIDATED:
+						if (data.getLocalResourceDirectory() != null) {
+							if (!data.getLocalResourceDirectory().exists()) {
+								data.getLocalResourceDirectory().mkdirs();
+							}
+							if (!data.getLocalResourceDirectory().exists()) {
+								break;
+							}
+							createAndSetFlexoResourceCenter(data.getLocalResourceDirectory());
+							GeneralPreferences.setLocalResourceCenterDirectory(data.getLocalResourceDirectory());
+						}
+						break;
+					case CANCELED:
+						break;
+					case QUIT:
+						try {
+							getModuleLoader().quit(true);
+						} catch (ProjectExitingCancelledException e) {
+						}
+						break;
+					default:
+						break;
+					}
+				} else { // Otherwise, dont ask but create resource center in home directory if required
+					File resourceCenterDirectory = FlexoProject.getResourceCenterFile();
+					if (!resourceCenterDirectory.exists()) {
+						logger.info("Create directory " + resourceCenterDirectory);
+						resourceCenterDirectory.mkdirs();
+						LocalResourceCenterImplementation rc = LocalResourceCenterImplementation
+								.instanciateNewLocalResourceCenterImplementation(resourceCenterDirectory);
+						installFlexoResourceCenter(rc);
+						GeneralPreferences.setLocalResourceCenterDirectory(resourceCenterDirectory);
+					} else {
+						flexoResourceCenter = new LocalResourceCenterImplementation(resourceCenterDirectory);
+					}
+				}
+			} else if (flexoResourceCenter == null) {
+				flexoResourceCenter = new LocalResourceCenterImplementation(GeneralPreferences.getLocalResourceCenterDirectory());
+			}
+		}
+		return flexoResourceCenter;
+	}
 
 }

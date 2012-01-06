@@ -142,9 +142,9 @@ public class HelpMenu extends FlexoMenu implements Observer {
 		FlexoHelp.instance.addObserver(this);
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	@Override
 	public void update(Observable observable, Object arg) {

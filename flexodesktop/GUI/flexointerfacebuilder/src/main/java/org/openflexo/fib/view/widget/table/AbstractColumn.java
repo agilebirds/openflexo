@@ -36,11 +36,9 @@ import org.openflexo.fib.model.FIBTableColumn;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
 
-public abstract class AbstractColumn<T> implements BindingEvaluationContext,
-		Observer {
+public abstract class AbstractColumn<T> implements BindingEvaluationContext, Observer {
 
-	private static final Logger logger = Logger.getLogger(AbstractColumn.class
-			.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AbstractColumn.class.getPackage().getName());
 
 	private String title;
 	private int defaultWidth;
@@ -60,8 +58,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext,
 
 	private DynamicFormatter formatter;
 
-	public AbstractColumn(FIBTableColumn columnModel, FIBTableModel tableModel,
-			FIBController controller) {
+	public AbstractColumn(FIBTableColumn columnModel, FIBTableModel tableModel, FIBController controller) {
 		super();
 		this.controller = controller;
 		this.tableModel = tableModel;
@@ -97,8 +94,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext,
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.font
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.resizable
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.title) {
-				((FIBTableWidget) controller.viewForComponent(columnModel
-						.getTable())).updateTable();
+				((FIBTableWidget) controller.viewForComponent(columnModel.getTable())).updateTable();
 			}
 		}
 	}
@@ -109,8 +105,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext,
 
 	public String getLocalized(String key) {
 		if (getController() != null) {
-			return FlexoLocalization.localizedForKey(getController()
-					.getLocalizer(), key);
+			return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
 		} else {
 			logger.warning("Controller not defined");
 			return key;
@@ -260,8 +255,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext,
 		// updated
 		// (In case of some computed cells are to be updated according to ths
 		// new value)
-		getTableModel().fireTableRowsUpdated(getTableModel().indexOf(object),
-				getTableModel().indexOf(object));
+		getTableModel().fireTableRowsUpdated(getTableModel().indexOf(object), getTableModel().indexOf(object));
 		getTableModel().getTableWidget().notifyDynamicModelChanged();
 
 		if (getColumnModel().getValueChangedAction().isValid()) {
@@ -288,8 +282,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext,
 		}
 		if (getColumnModel().getFormat().isValid()) {
 			formatter.setValue(value);
-			return (String) getColumnModel().getFormat().getBindingValue(
-					formatter);
+			return (String) getColumnModel().getFormat().getBindingValue(formatter);
 		}
 		return value.toString();
 	}

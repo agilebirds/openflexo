@@ -121,8 +121,7 @@ public class TestRoundTrip extends CGTestCase {
 		super.reloadProject(fullLoading);
 	}
 
-
-    public static Test suite() {
+	public static Test suite() {
 		final TestSuite suite = new TestSuite("TestSuite for TestRoundTrip");
 		suite.addTest(new TestRoundTrip("test0CreateProject"));
 		suite.addTest(new TestRoundTrip("test1InitializeCodeGeneration"));

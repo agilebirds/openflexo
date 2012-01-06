@@ -161,16 +161,16 @@ public class ValidationReport {
 
 	public void addToValidationIssues(ValidationIssue issue) {
 		if (issue instanceof InformationIssue) {
-				_infosNb++;
-			}
-			if (issue instanceof ValidationWarning) {
-				_warningNb++;
-			}
-			if (issue instanceof ValidationError) {
-				_errorNb++;
-			}
-			_validationIssues.add(issue);
-			issue.setValidationReport(this);
+			_infosNb++;
+		}
+		if (issue instanceof ValidationWarning) {
+			_warningNb++;
+		}
+		if (issue instanceof ValidationError) {
+			_errorNb++;
+		}
+		_validationIssues.add(issue);
+		issue.setValidationReport(this);
 	}
 
 	public void removeFromValidationIssues(ValidationIssue issue) {

@@ -55,9 +55,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 	protected static final Logger logger = Logger.getLogger(InteractiveFlexoResourceUpdateHandler.class.getPackage().getName());
 
-    public InteractiveFlexoResourceUpdateHandler() {
-        super();
-    }
+	public InteractiveFlexoResourceUpdateHandler() {
+		super();
+	}
 
 	@Override
 	protected OptionWhenStorageResourceFoundAsConflicting getOptionWhenStorageResourceFoundAsConflicting(
@@ -152,9 +152,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 						}
 						OptionWhenStorageResourceFoundAsConflicting choice = getOptionWhenStorageResourceFoundAsConflicting(storageResource);
 						if (choice == OptionWhenStorageResourceFoundAsConflicting.UpdateFromDisk) {
-							try{
-							reloadProject(storageResource);
-                            } catch (FlexoException e) {
+							try {
+								reloadProject(storageResource);
+							} catch (FlexoException e) {
 								handleException("problem_when_trying_to_update_from_disk", e);
 							}
 						} else if (choice == OptionWhenStorageResourceFoundAsConflicting.OverwriteDiskChange) {
@@ -356,16 +356,17 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		if (conflictingStorageResource.size() > 0) {
 			OptionWhenStorageResourceFoundAsConflicting choice = getOptionWhenStorageResourceFoundAsConflicting(null);
 			if (choice == OptionWhenStorageResourceFoundAsConflicting.UpdateFromDisk) {
-				try{
-				reloadProject(conflictingStorageResource);
-                }catch (ProjectLoadingCancelledException e){
-                    //TODO handle this
-                }catch (ModuleLoadingException e){
-                    //TODO handle this
-                }
+				try {
+					reloadProject(conflictingStorageResource);
+				} catch (ProjectLoadingCancelledException e) {
+					// TODO handle this
+				} catch (ModuleLoadingException e) {
+					// TODO handle this
+				}
 			} else if (choice == OptionWhenStorageResourceFoundAsConflicting.OverwriteDiskChange) {
 				try {
-					FlexoProject project = getModuleLoader().getProject();;
+					FlexoProject project = getModuleLoader().getProject();
+					;
 					DependencyAlgorithmScheme scheme = project.getDependancyScheme();
 					// Pessimistic dependancy scheme is cheaper and is not intended for this situation
 					project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
@@ -384,7 +385,7 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 	}
 
 	private void reloadProject(List<FlexoStorageResource<? extends StorageResourceData>> updatedStorageResource)
-            throws ProjectLoadingCancelledException, ModuleLoadingException {
+			throws ProjectLoadingCancelledException, ModuleLoadingException {
 		for (FlexoStorageResource<? extends StorageResourceData> flexoStorageResource : updatedStorageResource) {
 			flexoStorageResource.getResourceData().clearIsModified(true);
 		}
@@ -392,17 +393,17 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 	}
 
 	@Override
-	public void reloadProject(FlexoStorageResource fileResource) throws ProjectLoadingCancelledException,ModuleLoadingException {
+	public void reloadProject(FlexoStorageResource fileResource) throws ProjectLoadingCancelledException, ModuleLoadingException {
 		(fileResource).getResourceData().clearIsModified(true);
 		getProjectLoader().reloadProject();
 	}
 
-    private ModuleLoader getModuleLoader() {
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private ProjectLoader getProjectLoader() {
-        return ProjectLoader.instance();
+	private ProjectLoader getProjectLoader() {
+		return ProjectLoader.instance();
 	}
 
 	@Override

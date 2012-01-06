@@ -208,8 +208,9 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 			if (getObject() instanceof FlexoProcess) {
 				if (ExternalModuleDelegater.getModuleLoader() != null
 						&& ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(getObject().getProject()) != null) {
-					context.put("processRepresentation", ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(getObject().getProject())
-							.getProcessRepresentation((FlexoProcess) getObject(), true));
+					context.put("processRepresentation",
+							ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(getObject().getProject())
+									.getProcessRepresentation((FlexoProcess) getObject(), true));
 				}
 			}
 			generatedCode = new GeneratedTextResource(getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName()

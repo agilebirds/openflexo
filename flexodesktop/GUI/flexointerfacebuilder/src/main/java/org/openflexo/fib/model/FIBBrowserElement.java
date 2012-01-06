@@ -642,7 +642,7 @@ public class FIBBrowserElement extends FIBModelObject {
 				return TypeUtils.getBaseClass(getAccessedType());
 			}
 		}
-		
+
 		@Override
 		public List<? extends FIBModelObject> getEmbeddedObjects() {
 			return null;

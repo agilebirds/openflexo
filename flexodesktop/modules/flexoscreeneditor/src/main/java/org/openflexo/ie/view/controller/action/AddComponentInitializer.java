@@ -93,13 +93,13 @@ public class AddComponentInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, AddComponent action) {
 				if (action.getNewComponent() != null) {
-                    ExternalIEModule ieModule = null;
-                    try {
-                        ieModule = getModuleLoader().getIEModule(getProject());
-                    } catch (ModuleLoadingException e1) {
-                        logger.warning("Cannot load IE module."+e1.getMessage());
-                    }
-                    if (ieModule == null) {
+					ExternalIEModule ieModule = null;
+					try {
+						ieModule = getModuleLoader().getIEModule(getProject());
+					} catch (ModuleLoadingException e1) {
+						logger.warning("Cannot load IE module." + e1.getMessage());
+					}
+					if (ieModule == null) {
 						return false;
 					}
 					ieModule.focusOn();

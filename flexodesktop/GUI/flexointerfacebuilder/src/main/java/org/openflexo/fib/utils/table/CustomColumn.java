@@ -43,8 +43,7 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public abstract class CustomColumn<D extends Observable, T> extends
-		AbstractColumn<D, T> implements EditableColumn<D, T> {
+public abstract class CustomColumn<D extends Observable, T> extends AbstractColumn<D, T> implements EditableColumn<D, T> {
 
 	public CustomColumn(String title, int defaultWidth) {
 		super(title, defaultWidth, true);
@@ -67,8 +66,7 @@ public abstract class CustomColumn<D extends Observable, T> extends
 
 	@Override
 	public String toString() {
-		return "SelectorColumn " + "[" + getTitle() + "]"
-				+ Integer.toHexString(hashCode());
+		return "SelectorColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
 	}
 
 	@Override
@@ -96,8 +94,7 @@ public abstract class CustomColumn<D extends Observable, T> extends
 		 * @param table
 		 *            the <code>JTable</code>
 		 * @param value
-		 *            the value to assign to the cell at
-		 *            <code>[row, column]</code>
+		 *            the value to assign to the cell at <code>[row, column]</code>
 		 * @param isSelected
 		 *            true if cell is selected
 		 * @param hasFocus
@@ -109,34 +106,27 @@ public abstract class CustomColumn<D extends Observable, T> extends
 		 * @return the default table cell renderer
 		 */
 		@Override
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column) {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			D rowObject = elementAt(row);
 			if ((isSelected) && (hasFocus)) {
 				CustomPopup<T> returned = getViewSelector(rowObject, (T) value);
 				if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-					setComponentBackground(returned, hasFocus, isSelected, row,
-							column);
+					setComponentBackground(returned, hasFocus, isSelected, row, column);
 				}
 				return returned;
 			} else {
-				Component returned = super.getTableCellRendererComponent(table,
-						value, isSelected, hasFocus, row, column);
+				Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				if (returned instanceof JLabel) {
-					((JLabel) returned).setText(getViewSelector(rowObject,
-							(T) value).renderedString((T) value));
+					((JLabel) returned).setText(getViewSelector(rowObject, (T) value).renderedString((T) value));
 				}
 				return returned;
 			}
 		}
 	}
 
-	protected abstract TextFieldCustomPopup<T> getViewSelector(D rowObject,
-			T value);
+	protected abstract TextFieldCustomPopup<T> getViewSelector(D rowObject, T value);
 
-	protected abstract TextFieldCustomPopup<T> getEditSelector(D rowObject,
-			T value);
+	protected abstract TextFieldCustomPopup<T> getEditSelector(D rowObject, T value);
 
 	/**
 	 * Must be overriden if required
@@ -160,8 +150,7 @@ public abstract class CustomColumn<D extends Observable, T> extends
 
 	protected SelectorCellEditor _selectorCellEditor;
 
-	protected class SelectorCellEditor extends AbstractCellEditor implements
-			TableCellEditor, ActionListener, ApplyCancelListener {
+	protected class SelectorCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener, ApplyCancelListener {
 		TextFieldCustomPopup<T> _selector;
 
 		public SelectorCellEditor() {
@@ -183,20 +172,17 @@ public abstract class CustomColumn<D extends Observable, T> extends
 
 		// Implement the one method defined by TableCellEditor.
 		@Override
-		public Component getTableCellEditorComponent(final JTable table,
-				Object value, boolean isSelected, int row, int column) {
+		public Component getTableCellEditorComponent(final JTable table, Object value, boolean isSelected, int row, int column) {
 			table.putClientProperty("terminateEditOnFocusLost", Boolean.FALSE);
 			addCellEditorListener(new CellEditorListener() {
 				@Override
 				public void editingCanceled(ChangeEvent e) {
-					table.putClientProperty("terminateEditOnFocusLost",
-							Boolean.TRUE);
+					table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 				}
 
 				@Override
 				public void editingStopped(ChangeEvent e) {
-					table.putClientProperty("terminateEditOnFocusLost",
-							Boolean.TRUE);
+					table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 				}
 			});
 			_selector.getTextField().setBorder(null);

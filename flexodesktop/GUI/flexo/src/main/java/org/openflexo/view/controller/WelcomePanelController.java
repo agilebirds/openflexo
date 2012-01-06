@@ -30,12 +30,12 @@ public class WelcomePanelController extends FlexoFIBController {
 
 	public void openModule(Module module) {
 		validateAndDispose();
-		try{
-            getModuleLoader().switchToModule(module, null);
-        }catch (ModuleLoadingException e){
-            FlexoController.notify("Cannot load module "+module);
-            new WelcomeDialog();
-        }
+		try {
+			getModuleLoader().switchToModule(module, null);
+		} catch (ModuleLoadingException e) {
+			FlexoController.notify("Cannot load module " + module);
+			new WelcomeDialog();
+		}
 	}
 
 	public void openProject(File projectDirectory, Module module) {
@@ -49,16 +49,16 @@ public class WelcomePanelController extends FlexoFIBController {
 
 		GeneralPreferences.addToLastOpenedProjects(projectDirectory);
 		validateAndDispose();
-		try{
-            FlexoEditor editor = getProjectLoader().loadProject(projectDirectory);
-            getModuleLoader().switchToModule(module, editor.getProject());
-        }catch (ModuleLoadingException e){
-            FlexoController.notify("Cannot load module "+module);
-            new WelcomeDialog();
-        }catch (ProjectLoadingCancelledException e){
-            //project need a conversion, but user cancelled the conversion.
-            new WelcomeDialog();
-        }
+		try {
+			FlexoEditor editor = getProjectLoader().loadProject(projectDirectory);
+			getModuleLoader().switchToModule(module, editor.getProject());
+		} catch (ModuleLoadingException e) {
+			FlexoController.notify("Cannot load module " + module);
+			new WelcomeDialog();
+		} catch (ProjectLoadingCancelledException e) {
+			// project need a conversion, but user cancelled the conversion.
+			new WelcomeDialog();
+		}
 	}
 
 	public void newProject(Module module) {
@@ -72,20 +72,20 @@ public class WelcomePanelController extends FlexoFIBController {
 		GeneralPreferences.addToLastOpenedProjects(project);
 		validateAndDispose();
 		FlexoEditor editor = getProjectLoader().newProject(project);
-		try{
-            getModuleLoader().switchToModule(module, editor.getProject());
-        }catch (ModuleLoadingException e){
-            FlexoController.notify("Cannot load module "+module);
-            new WelcomeDialog();
-        }
+		try {
+			getModuleLoader().switchToModule(module, editor.getProject());
+		} catch (ModuleLoadingException e) {
+			FlexoController.notify("Cannot load module " + module);
+			new WelcomeDialog();
+		}
 	}
 
-    private ModuleLoader getModuleLoader(){
-      return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private ProjectLoader getProjectLoader() {
-        return ProjectLoader.instance();
-    }
+	private ProjectLoader getProjectLoader() {
+		return ProjectLoader.instance();
+	}
 
 }

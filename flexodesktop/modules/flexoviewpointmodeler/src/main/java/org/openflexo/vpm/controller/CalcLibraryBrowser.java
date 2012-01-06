@@ -53,12 +53,12 @@ class CalcLibraryBrowser extends CEDBrowser {
 		return getFlexoResourceCenterService().getFlexoResourceCenter().retrieveViewPointLibrary();
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	private FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
 
 }

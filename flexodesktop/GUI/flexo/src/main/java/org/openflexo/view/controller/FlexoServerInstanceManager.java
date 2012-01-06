@@ -160,12 +160,12 @@ public class FlexoServerInstanceManager {
 	}
 
 	private void filterAddressBook(FlexoServerAddressBook book) {
-		//conservative behavior. (see history, but is really relevant ?)
-        try{
-            UserType.getCurrentUserType();
-        }catch (IllegalStateException e){
-            return;
-        }
+		// conservative behavior. (see history, but is really relevant ?)
+		try {
+			UserType.getCurrentUserType();
+		} catch (IllegalStateException e) {
+			return;
+		}
 
 		for (FlexoServerInstance instance : new ArrayList<FlexoServerInstance>(book.getInstances())) {
 			if (instance.getUserTypes().size() > 0) {

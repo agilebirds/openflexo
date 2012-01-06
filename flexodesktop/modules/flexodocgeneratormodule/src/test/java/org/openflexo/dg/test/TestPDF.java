@@ -184,9 +184,10 @@ public class TestPDF extends DGTestCase {
 		super.tearDown();
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
+
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
@@ -360,17 +361,17 @@ public class TestPDF extends DGTestCase {
 			GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		}
 		getModuleLoader().fileNameToOpen = projectDirectory.getAbsolutePath();
-        try {
-            if (ExternalModuleDelegater.getModuleLoader() == null) {
-                fail("Module loader is not there. Screenshots cannot be generated");
-            } else if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance(project) == null) {
-                fail("IE Module not on the classpath. Component screenshots cannot be generated");
-            } else if (ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(project) == null) {
-                fail("WKF Module not on the classpath. Process and activity screenshots cannot be generated");
-            }
-        } catch (ModuleLoadingException e) {
-            logger.warning("Module " + e.getModule() + " cannot be loaded. Screenshot cannot be generated." + e.getMessage());
-        }
+		try {
+			if (ExternalModuleDelegater.getModuleLoader() == null) {
+				fail("Module loader is not there. Screenshots cannot be generated");
+			} else if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance(project) == null) {
+				fail("IE Module not on the classpath. Component screenshots cannot be generated");
+			} else if (ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(project) == null) {
+				fail("WKF Module not on the classpath. Process and activity screenshots cannot be generated");
+			}
+		} catch (ModuleLoadingException e) {
+			logger.warning("Module " + e.getModule() + " cannot be loaded. Screenshot cannot be generated." + e.getMessage());
+		}
 
 	}
 }

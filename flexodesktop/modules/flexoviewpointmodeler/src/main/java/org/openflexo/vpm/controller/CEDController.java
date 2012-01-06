@@ -136,9 +136,9 @@ public class CEDController extends FlexoController implements SelectionManagingC
 
 	}
 
-    protected FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	protected FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
 
 	@Override
 	public ControllerActionInitializer createControllerActionInitializer() {

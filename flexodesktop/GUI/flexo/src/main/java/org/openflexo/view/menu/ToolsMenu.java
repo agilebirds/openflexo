@@ -99,9 +99,9 @@ public class ToolsMenu extends FlexoMenu {
 		addSpecificItems();
 		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
 			add(loggingItem = new LoggingItem());
-            add(localizedEditorItem = new LocalizedEditorItem());
-            add(rmItem = new ResourceManagerItem());
-            addSeparator();
+			add(localizedEditorItem = new LocalizedEditorItem());
+			add(rmItem = new ResourceManagerItem());
+			addSeparator();
 		}
 		add(submitBug = new SubmitBugItem());
 		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
@@ -116,7 +116,7 @@ public class ToolsMenu extends FlexoMenu {
 			add(repairProject = new RepairProjectItem());
 		}
 		add(timeTraveler = new TimeTraveler());
-        addSeparator();
+		addSeparator();
 		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
 			add(logConfig = new LogConfiguratorItem());
 		}
@@ -234,9 +234,10 @@ public class ToolsMenu extends FlexoMenu {
 
 	}
 
-    private ProjectLoader getProjectLoader(){
-        return ProjectLoader.instance();
-    }
+	private ProjectLoader getProjectLoader() {
+		return ProjectLoader.instance();
+	}
+
 	// ==========================================================================
 	// ========================== Submit bug ==============================
 	// ==========================================================================
@@ -451,10 +452,11 @@ public class ToolsMenu extends FlexoMenu {
 		}
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
-    private AutoSaveService getAutoSaveService() {
-        return AutoSaveService.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
+
+	private AutoSaveService getAutoSaveService() {
+		return AutoSaveService.instance();
+	}
 }

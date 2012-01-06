@@ -197,15 +197,15 @@ public class TestIEController extends FlexoModuleTestCase {
 		_project = _editor.getProject();
 
 		initModuleLoader(_projectDirectory, _project);
-        IEModule ie = null;
-        try {
-            ie = (IEModule) getModuleLoader().switchToModule(Module.IE_MODULE, _project);
-        } catch (ModuleLoadingException e) {
-            Assert.fail("Fail to load IE module."+e.getMessage());
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+		IEModule ie = null;
+		try {
+			ie = (IEModule) getModuleLoader().switchToModule(Module.IE_MODULE, _project);
+		} catch (ModuleLoadingException e) {
+			Assert.fail("Fail to load IE module." + e.getMessage());
+			e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
+		}
 
-        ie.focusOn();
+		ie.focusOn();
 		assertTrue(getModuleLoader().isActive(Module.IE_MODULE));
 		assertNotNull(ie);
 		IEController ctrl = ie.getIEController();
@@ -250,14 +250,14 @@ public class TestIEController extends FlexoModuleTestCase {
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");
 		} else
-            try {
-                if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance(project) == null) {
-                    fail("IE Module not on the classpath. Component screenshots cannot be generated");
-                }
-            } catch (ModuleLoadingException e) {
-                Assert.fail("Fail to load IE module."+e.getMessage());
-            }
-    }
+			try {
+				if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance(project) == null) {
+					fail("IE Module not on the classpath. Component screenshots cannot be generated");
+				}
+			} catch (ModuleLoadingException e) {
+				Assert.fail("Fail to load IE module." + e.getMessage());
+			}
+	}
 
 	/**
 	 * Save the project

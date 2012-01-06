@@ -68,8 +68,8 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 		getModuleLoader().fileNameToOpen = arg0.getFilename();
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 }
