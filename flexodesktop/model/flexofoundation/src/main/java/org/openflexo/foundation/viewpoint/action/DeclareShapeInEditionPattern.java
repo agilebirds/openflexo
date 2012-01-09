@@ -505,7 +505,9 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		public String getRange() {
 			if (property instanceof OntologyDataProperty) {
-				return ((OntologyDataProperty) property).getDataType().name();
+				if (((OntologyDataProperty) property).getDataType() != null)
+					return ((OntologyDataProperty) property).getDataType().name();
+				return "";
 			}
 			if (property.getRange() != null)
 				return property.getRange().getName();
