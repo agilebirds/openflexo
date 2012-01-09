@@ -23,9 +23,7 @@ import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
-import javax.swing.KeyStroke;
 
-import org.openflexo.FlexoCst;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -79,7 +77,7 @@ public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 		return IconLibrary.DELETE_ICON;
 	}
 
-	@Override
+	/*@Override
 	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
 	}
@@ -89,6 +87,6 @@ public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 		super.init();
 		getControllerActionInitializer().registerAction(DeleteOntologyObjects.actionType,
 				KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
-	}
+	}*/
 
 }
