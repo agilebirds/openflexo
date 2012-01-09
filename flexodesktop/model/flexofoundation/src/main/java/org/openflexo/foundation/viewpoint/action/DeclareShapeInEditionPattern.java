@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint.action;
 
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -44,6 +45,7 @@ import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.FloatParameter;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
@@ -102,14 +104,13 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	private String editionPatternName;
 	private OntologyClass concept;
 	private String individualPatternRoleName;
-	private String shapePatternRoleName;
 
 	public boolean isTopLevel = true;
 	public EditionPattern containerEditionPattern;
 	private String dropSchemeName;
 
 	private EditionPattern newEditionPattern;
-	private ShapePatternRole newShapePatternRole;
+	private Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
 
 	public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
@@ -148,19 +149,37 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						newEditionPattern.setPrimaryConceptRole(individualPatternRole);
 					}
 
-					// Create shape pattern role
-					newShapePatternRole = new ShapePatternRole();
-					newShapePatternRole.setPatternRoleName(getShapePatternRoleName());
-					if (mainPropertyDescriptor != null) {
-						newShapePatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
-								+ mainPropertyDescriptor.property.getName()));
-					} else {
-						newShapePatternRole.setReadOnlyLabel(true);
-						newShapePatternRole.setLabel(new ViewPointDataBinding("\"label\""));
+					// Create graphical elements pattern role
+
+					newGraphicalElementPatternRoles = new Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole>();
+
+					GraphicalElementPatternRole primaryRepresentationRole = null;
+					for (ExampleDrawingObjectEntry entry : drawingObjectEntries) {
+						if (entry.getSelectThis()) {
+							if (entry.graphicalObject instanceof ExampleDrawingShape) {
+								ShapePatternRole newShapePatternRole = new ShapePatternRole();
+								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
+								if (mainPropertyDescriptor != null && entry.isMainEntry()) {
+									newShapePatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
+											+ mainPropertyDescriptor.property.getName()));
+								} else {
+									newShapePatternRole.setReadOnlyLabel(true);
+									newShapePatternRole.setLabel(new ViewPointDataBinding("\"label\""));
+								}
+								newShapePatternRole.setGraphicalRepresentation(entry.graphicalObject.getGraphicalRepresentation());
+								newEditionPattern.addToPatternRoles(newShapePatternRole);
+								if (entry.getParentEntry() != null) {
+									newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles
+											.get(entry.getParentEntry()));
+								}
+								if (entry.isMainEntry()) {
+									primaryRepresentationRole = newShapePatternRole;
+								}
+								newGraphicalElementPatternRoles.put(entry, newShapePatternRole);
+							}
+						}
 					}
-					newShapePatternRole.setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
-					newEditionPattern.addToPatternRoles(newShapePatternRole);
-					newEditionPattern.setPrimaryRepresentationRole(newShapePatternRole);
+					newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);
 
 					// Create other individual roles
 					Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
@@ -280,16 +299,25 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						newDropScheme.addToActions(newAddIndividual);
 					}
 
-					// Add shape action
-					AddShape newAddShape = new AddShape();
-					newAddShape.setPatternRole(newShapePatternRole);
-					if (isTopLevel) {
-						newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
-					} else {
-						newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TARGET + "."
-								+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+					// Add shape/connector actions
+					boolean mainPatternRole = true;
+					for (GraphicalElementPatternRole graphicalElementPatternRole : newGraphicalElementPatternRoles.values()) {
+						if (graphicalElementPatternRole instanceof ShapePatternRole) {
+							// Add shape action
+							AddShape newAddShape = new AddShape();
+							newAddShape.setPatternRole((ShapePatternRole) graphicalElementPatternRole);
+							if (mainPatternRole) {
+								if (isTopLevel) {
+									newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
+								} else {
+									newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TARGET + "."
+											+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+								}
+							}
+							mainPatternRole = false;
+							newDropScheme.addToActions(newAddShape);
+						}
 					}
-					newDropScheme.addToActions(newAddShape);
 
 					// Add new drop scheme
 					newEditionPattern.addToEditionSchemes(newDropScheme);
@@ -370,10 +398,10 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 			switch (patternChoice) {
 			case MAP_SINGLE_INDIVIDUAL:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
-						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && StringUtils.isNotEmpty(getShapePatternRoleName())
+						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && getSelectedEntriesCount() > 0
 						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
 			case BLANK_EDITION_PATTERN:
-				return StringUtils.isNotEmpty(getEditionPatternName()) && StringUtils.isNotEmpty(getShapePatternRoleName())
+				return StringUtils.isNotEmpty(getEditionPatternName()) && getSelectedEntriesCount() > 0
 						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
 			default:
 				break;
@@ -386,9 +414,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	private ShapePatternRole patternRole;
 
 	@Override
-	public ShapePatternRole getPatternRole() {
-		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN)
-			return newShapePatternRole;
+	public GraphicalElementPatternRole getPatternRole() {
 		return patternRole;
 	}
 
@@ -439,7 +465,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		this.individualPatternRoleName = individualPatternRoleName;
 	}
 
-	public String getShapePatternRoleName() {
+	/*public String getShapePatternRoleName() {
 		if (StringUtils.isEmpty(shapePatternRoleName)) {
 			return "shape";
 		}
@@ -448,7 +474,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	public void setShapePatternRoleName(String shapePatternRoleName) {
 		this.shapePatternRoleName = shapePatternRoleName;
-	}
+	}*/
 
 	public String getDropSchemeName() {
 		if (StringUtils.isEmpty(dropSchemeName)) {
