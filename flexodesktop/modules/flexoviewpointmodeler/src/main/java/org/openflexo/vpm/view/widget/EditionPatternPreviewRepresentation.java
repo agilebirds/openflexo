@@ -98,7 +98,11 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 	protected void buildGraphicalObjectsHierarchy() {
 		for (PatternRole role : getEditionPattern().getPatternRoles()) {
 			if (role instanceof ShapePatternRole) {
-				addDrawable(role, getEditionPattern());
+				if (((ShapePatternRole) role).getTopLevelShape()) {
+					addDrawable(role, getEditionPattern());
+				} else {
+					addDrawable(role, ((ShapePatternRole) role).getParentShapePatternRole());
+				}
 			}
 		}
 		for (PatternRole role : getEditionPattern().getPatternRoles()) {

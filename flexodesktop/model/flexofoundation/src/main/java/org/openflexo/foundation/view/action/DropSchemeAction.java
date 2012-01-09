@@ -160,8 +160,12 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 	@Override
 	protected ViewShape performAddShape(AddShape action) {
-		_newShape = super.performAddShape(action);
-		return _newShape;
+		ViewShape returned = super.performAddShape(action);
+		if (action.getPatternRole().getTopLevelShape()) {
+			// Declare shape as new shape only if it is the top level shape of the EP
+			_newShape = returned;
+		}
+		return returned;
 	}
 
 	@Override

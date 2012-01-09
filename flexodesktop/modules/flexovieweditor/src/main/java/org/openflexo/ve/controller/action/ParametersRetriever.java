@@ -315,7 +315,7 @@ public class ParametersRetriever implements BindingEvaluationContext {
 		}
 
 		protected void buildDependancies() {
-			if (_parameter.getBaseURI() != null) {
+			if (_parameter.getBaseURI() != null && _parameter.getBaseURI().isValid()) {
 				DefaultExpressionParser parser = new DefaultExpressionParser();
 				try {
 					baseExpression = parser.parse(_parameter.getBaseURI().toString());
@@ -336,7 +336,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 		@Override
 		public void setValue(String value) {
 			super.setValue(value);
-			_action.getParameterValues().put(_parameter.getName(), value);
+			if (value != null) {
+				_action.getParameterValues().put(_parameter.getName(), value);
+			}
 			// System.out.println("Param URI "+_parameter+" (name="+_parameter.getName()+" takes value "+value);
 		}
 
