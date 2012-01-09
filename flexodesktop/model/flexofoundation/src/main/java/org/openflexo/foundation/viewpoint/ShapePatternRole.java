@@ -9,6 +9,8 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 	// But you can assert graphical representation is a org.openflexo.fge.ShapeGraphicalRepresentation.
 	private Object _graphicalRepresentation;
 
+	private ShapePatternRole parentShapePatternRole;
+
 	@Override
 	public PatternRoleType getType() {
 		return PatternRoleType.Shape;
@@ -53,6 +55,28 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 	@Override
 	public Class<?> getAccessedClass() {
 		return ViewShape.class;
+	}
+
+	public ShapePatternRole getParentShapePatternRole() {
+		return parentShapePatternRole;
+	}
+
+	public void setParentShapePatternRole(ShapePatternRole parentShapePatternRole) {
+		this.parentShapePatternRole = parentShapePatternRole;
+		setChanged();
+		notifyObservers();
+	}
+
+	public boolean getTopLevelShape() {
+		return getParentShapePatternRole() == null;
+	}
+
+	public void setTopLevelShape(boolean flag) {
+		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
+			setParentShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
+		} else {
+			setParentShapePatternRole(null);
+		}
 	}
 
 }

@@ -78,6 +78,12 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		FlexoModelObject.addActionForClass(CreateViewPoint.actionType, ViewPointFolder.class);
 	}
 
+	public static enum OntologicalScopeChoices {
+		IMPORT_EXISTING_ONTOLOGY, CREATES_NEW_ONTOLOGY
+	}
+
+	public OntologicalScopeChoices ontologicalScopeChoice = OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY;
+
 	private String _newCalcName;
 	private String _newCalcURI;
 	private String _newCalcDescription;
@@ -87,7 +93,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 
 	public Vector<ImportedOntology> importedOntologies = new Vector<ImportedOntology>();
 
-	private boolean createsOntology = false;
+	// private boolean createsOntology = false;
 
 	CreateViewPoint(ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -103,9 +109,9 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 
 		newCalcDir.mkdirs();
 
-		if (createsOntology) {
+		if (ontologicalScopeChoice == OntologicalScopeChoices.CREATES_NEW_ONTOLOGY) {
 			buildOntology();
-		} else {
+		} else if (ontologicalScopeChoice == OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY) {
 			try {
 				FileUtils.copyFileToDir(getOntologyFile(), newCalcDir);
 			} catch (IOException e) {
@@ -124,6 +130,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	}
 
 	private ImportedOntology buildOntology() {
+		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
 		ImportedOntology newOntology = ImportedOntology.createNewImportedOntology(getNewCalcURI(), _ontologyFile, getCalcFolder()
 				.getOntologyLibrary());
 		for (ImportedOntology importedOntology : importedOntologies) {
@@ -173,7 +180,6 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	}
 
 	public void setOntologyFile(File ontologyFile) {
-		createsOntology = false;
 		this._ontologyFile = ontologyFile;
 		if (ontologyFile != null) {
 			String ontologyURI = FlexoOntology.findOntologyURI(getOntologyFile());
@@ -233,7 +239,16 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	public String errorMessage;
 
 	public boolean isValid() {
-		return isNewCalcNameValid() && isNewCalcURIValid() && getOntologyFile() != null;
+		if (!isNewCalcNameValid()) {
+			return false;
+		}
+		if (!isNewCalcURIValid()) {
+			return false;
+		}
+		if (ontologicalScopeChoice == OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY) {
+			return (getOntologyFile() != null);
+		}
+		return true;
 	}
 
 	public ViewPoint getNewCalc() {
@@ -249,10 +264,10 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		return new File(getCalcFolder().getExpectedPath(), baseName + ".viewpoint");
 	}
 
-	public void createOntology() {
+	/*public void createOntology() {
 		createsOntology = true;
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
-	}
+	}*/
 
 	public void addToImportedOntologies(ImportedOntology ontology) {
 		System.out.println("import ontology " + ontology);
