@@ -482,7 +482,7 @@
 									#if ($button1.isInRepetition())
             							#set($listProcess = ${button1.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
             							#if($listProcess)
-                    						Integer itemId = new Integer(hiddenFieldValue.substring(#upNameForWidget($button1)).length()));
+                    						Integer itemId = Integer.valueOf(hiddenFieldValue.substring(#upNameForWidget($button1)).length()));
             								getBusinessDataStorage().setCurrentProcessBusinessData(WorkflowProcess.${listProcess.getProcessDictionaryKey()}, itemId);
             							#end
             						#end
@@ -544,7 +544,7 @@
 									#set($listProcess = ${button1.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
 									#if($listProcess)
 										#if(!$nextopProcessInstanceSet)
-											Integer itemId = new Integer(hiddenFieldValue.substring(($hidden).length()));
+											Integer itemId = Integer.valueOf(hiddenFieldValue.substring(($hidden).length()));
 											getBusinessDataStorage().setCurrentProcessBusinessData(WorkflowProcess.${listProcess.getProcessDictionaryKey()}, itemId);
 											#if($listProcess != ${nextop.getProcess()} && ${listProcess.isAncestorOf($nextop.getProcess())})
 												Vector<? extends ProcessBusinessData> children = getBusinessDataStorage().getBusinessDataSample(WorkflowProcess.${listProcess.getProcessDictionaryKey()}.getBusinessDataClass(), itemId).getDescendantsBusinessData(WorkflowProcess.${listProcess.getProcessDictionaryKey()}, WorkflowProcess.${nextop.getProcess().getProcessDictionaryKey()});
