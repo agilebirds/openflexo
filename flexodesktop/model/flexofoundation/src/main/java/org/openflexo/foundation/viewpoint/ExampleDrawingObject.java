@@ -61,7 +61,8 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 
 	@Override
 	public void delete() {
-		for (ExampleDrawingObject o : childs) {
+		Vector<ExampleDrawingObject> toRemove = new Vector<ExampleDrawingObject>(childs);
+		for (ExampleDrawingObject o : toRemove) {
 			o.delete();
 		}
 		super.delete();
