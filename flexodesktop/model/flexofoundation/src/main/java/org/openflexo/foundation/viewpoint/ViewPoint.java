@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import org.jdom.JDOMException;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
@@ -53,6 +54,11 @@ import org.openflexo.xmlcode.XMLMapping;
 public class ViewPoint extends ViewPointObject {
 
 	private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
+
+	// TODO: We must find a better solution
+	static {
+		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
+	}
 
 	private String name;
 	private String viewPointURI;

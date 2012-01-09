@@ -266,9 +266,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		ViewShape newShape = new ViewShape(retrieveOEShema());
 
 		// If an overriden graphical representation is defined, use it
-		if (getOverridenGraphicalRepresentation() != null) {
+		/*if (getOverridenGraphicalRepresentation() != null) {
 			newShape.setGraphicalRepresentation(getOverridenGraphicalRepresentation());
-		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
+		} else*/if (action.getPatternRole().getGraphicalRepresentation() != null) {
 			newShape.setGraphicalRepresentation(action.getPatternRole().getGraphicalRepresentation());
 		}
 
