@@ -81,8 +81,8 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 			@Override
 			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
 					GraphicalRepresentation parentGraphicalRepresentation) {
-				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
-						+ parentGraphicalRepresentation);
+				/*System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
+						+ parentGraphicalRepresentation);*/
 
 				AddExampleDrawingShape action = AddExampleDrawingShape.actionType.makeNewAction(getShema(), null, getCEDController()
 						.getEditor());
