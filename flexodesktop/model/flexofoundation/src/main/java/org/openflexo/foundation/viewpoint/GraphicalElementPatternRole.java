@@ -91,6 +91,10 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 		}
 	}
 
+	public boolean isIncludedInPrimaryRepresentationRole() {
+		return getIsPrimaryRepresentationRole();
+	}
+
 	@Override
 	public boolean getIsPrimaryRole() {
 		return getIsPrimaryRepresentationRole();

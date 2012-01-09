@@ -79,4 +79,12 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 		}
 	}
 
+	@Override
+	public boolean isIncludedInPrimaryRepresentationRole() {
+		if (getParentShapePatternRole() != null) {
+			return getParentShapePatternRole().isIncludedInPrimaryRepresentationRole();
+		}
+		return super.isIncludedInPrimaryRepresentationRole();
+	}
+
 }

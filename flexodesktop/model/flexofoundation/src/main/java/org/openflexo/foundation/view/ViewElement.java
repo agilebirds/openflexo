@@ -95,7 +95,8 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 
 	/**
 	 * Return a flag indicating if current graphical element is bound inside an edition pattern, ie if there is one edition pattern instance
-	 * where this element plays a role as primary representation
+	 * where this element plays a role as primary representation, or is included in an element declared as playing a role as primary
+	 * representation
 	 * 
 	 * @return
 	 */
@@ -141,7 +142,13 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 				EditionPatternReference returned = null;
 				for (EditionPatternReference r : getEditionPatternReferences()) {
 					if (r.getPatternRole() instanceof GraphicalElementPatternRole) {
-						if (((GraphicalElementPatternRole) r.getPatternRole()).getIsPrimaryRepresentationRole()) {
+						GraphicalElementPatternRole grPatternRole = (GraphicalElementPatternRole) r.getPatternRole();
+						if (grPatternRole.getIsPrimaryRepresentationRole()) {
+							if (returned != null) {
+								logger.warning("More than one edition pattern reference where element plays a primary role !!!!");
+							}
+							returned = r;
+						} else if (grPatternRole.isIncludedInPrimaryRepresentationRole()) {
 							if (returned != null) {
 								logger.warning("More than one edition pattern reference where element plays a primary role !!!!");
 							}
