@@ -77,7 +77,12 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 					values.add(Format.HTML);
 					values.add(Format.LATEX);
 					values.add(Format.DOCX);
+					/**
+					 * MOS
+					 * @author MOSTAFA
+					 */
 					values.add(Format.PPTX);
+					//
 					final GeneratedOutput gc = action.getFocusedObject().getGeneratedCode();
 					final DynamicDropDownParameter<Format> format = new DynamicDropDownParameter<Format>("format","format",Format.HTML);
 					format.setAvailableValues(values);
@@ -137,7 +142,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
                         dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization
                                 .localizedForKey("directory_seems_to_be_already_used"), FlexoLocalization
                                 .localizedForKey("confirm_source_directory_for_new_generated_doc"), paramDir);
-                    }
+						}
 					}
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						action.setFormat(format.getValue());

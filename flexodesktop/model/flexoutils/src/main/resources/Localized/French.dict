@@ -1,5 +1,5 @@
 #French
-#Wed Nov 09 13:55:36 CET 2011
+#Thu Jan 05 11:16:49 WET 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -3865,6 +3865,7 @@ post_condition_starting_point_should_be_explicitely_defined=Le point de d\u00E9p
 post_condition_starting_point_should_be_explicitely_defined_description=Le point de d\u00E9part des post-conditions doit \u00EAtre d\u00E9fini explicitement
 postcondition=Post-condition
 power=puissance
+pptx=pptx
 pre_condition_($0)=Pr\u00E9-condition ($0)
 pre_condition_has_no_incoming_edges=La pr\u00E9-condition n'a aucune ar\u00EAte entrante
 pre_condition_is_not_attached_to_a_node=La pr\u00E9-condition n'est attach\u00E9e \u00E0 aucun noeud OpenFlexo

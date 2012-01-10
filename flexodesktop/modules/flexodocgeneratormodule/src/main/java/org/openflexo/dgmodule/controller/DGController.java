@@ -325,6 +325,14 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 					case DOCX:
 						returned = new ProjectDocDocxGenerator(getProject(), repository);
 						break;
+					/**
+					 * MOS
+					 * @author MOSTAFA	
+					 */
+					case PPTX:
+						returned = new ProjectDocDocxGenerator(getProject(), repository);
+						break;
+					//
 				}
 			} catch (GenerationException e) {
 				showError(e.getLocalizedMessage());

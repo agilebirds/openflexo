@@ -1,5 +1,5 @@
 #English
-#Wed Nov 09 13:55:36 CET 2011
+#Thu Jan 05 11:16:49 WET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -3868,6 +3868,7 @@ post_condition_starting_point_should_be_explicitely_defined=Post condition start
 post_condition_starting_point_should_be_explicitely_defined_description=Post condition starting point should be explicitely defined
 postcondition=Post-condition
 power=power
+pptx=pptx
 pre_condition_($0)=Precondition ($0)
 pre_condition_has_no_incoming_edges=Pre-condition has no incoming edges
 pre_condition_is_not_attached_to_a_node=Pre-condition is not attached to a OpenFlexo node
@@ -5268,4 +5269,3 @@ zip_install_directory=Zip install directory
 zip_name=Zip name
 zipping_file=Zipping file
 zipping_project=Zipping project
-

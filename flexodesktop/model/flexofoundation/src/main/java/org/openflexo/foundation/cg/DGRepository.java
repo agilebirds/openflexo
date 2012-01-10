@@ -167,6 +167,8 @@ public class DGRepository extends GenerationRepository
 			return Inspectors.DG.DG_REPOSITORY_LATEX_INSPECTOR;
 		case DOCX:
 			return Inspectors.DG.DG_REPOSITORY_DOCX_INSPECTOR;
+		case PPTX:
+			return Inspectors.DG.DG_REPOSITORY_PPTX_INSPECTOR;
 		default:
 			return Inspectors.DG.DG_REPOSITORY_INSPECTOR;
 		}
@@ -186,7 +188,17 @@ public class DGRepository extends GenerationRepository
     {
     	return getSymbolicDirectoryNamed(CGSymbolicDirectory.DOCX);
     }
-
+    
+    /**
+     * MOS
+     * @author MOSTAFA
+     */
+    public CGSymbolicDirectory getPptxSymbolicDirectory()
+    {
+    	return getSymbolicDirectoryNamed(CGSymbolicDirectory.PPTX);
+    }
+    //
+    
     public CGSymbolicDirectory getJSSymbolicDirectory()
     {
     	return getSymbolicDirectoryNamed(CGSymbolicDirectory.JS_PROCESSES);

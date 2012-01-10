@@ -68,6 +68,12 @@ public class DocType extends TargetType implements ChoiceList, Serializable, Str
         availableFormats.add(Format.HTML);
         availableFormats.add(Format.LATEX);
         availableFormats.add(Format.DOCX);
+        /**
+         * MOS
+         * @author MOSTAFA
+         */
+        availableFormats.add(Format.PPTX);
+        //
         name = FileUtils.getValidFileName(name).replace(',', ' '); // Target name are used to build directory structure
         this.name = name;
     }

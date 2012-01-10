@@ -102,6 +102,9 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException, MissingReaderRepositoryException, InvalidReaderRepositoryException
 	{
 		logger.info("Add GeneratedCodeRepository " + getFocusedObject());
+		//SUPPR 
+		System.out.println("le focused object dans addGeneratedCodeRepository est de type:"+getFocusedObject().getName());
+		//
 		if (getFocusedObject().getGeneratedCode() != null) 
 		{
 			FlexoProject project = getFocusedObject().getProject();
@@ -194,6 +197,18 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 						createFiguresSymbolicDir(project, "/./word/media/figures/");
 						createResourcesSymbolicDir(project, srcSymbDirType, "/./word/media");
 						break;
+						/**
+						 * MOS
+						 * @author MOSTAFA
+						 */
+					case PPTX:
+						srcSymbDirType = CGSymbolicDirectory.PPTX;
+						//TODO_MOS
+						createFiguresSymbolicDir(project, "/./word/media/figures/");
+						createResourcesSymbolicDir(project, srcSymbDirType, "/./word/media");
+						//
+						break;
+						//
 				}
 				
 				if(srcSymbDirType != null)

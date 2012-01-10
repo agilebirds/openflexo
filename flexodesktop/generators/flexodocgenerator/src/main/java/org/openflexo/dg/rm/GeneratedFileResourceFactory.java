@@ -34,6 +34,8 @@ import org.openflexo.dg.html.DGJSGenerator;
 import org.openflexo.dg.html.DGTextGenerator;
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.dg.latex.StyleDocGenerator;
+import org.openflexo.dg.pptx.DGPptxXMLGenerator;
+import org.openflexo.dg.pptx.PptxTemplatesEnum;
 
 
 import org.openflexo.foundation.cg.CGFile;
@@ -661,6 +663,14 @@ public class GeneratedFileResourceFactory {
 		returned.rebuildDependancies();
 
 		return returned;
+	}
+
+	public static ProjectPptxXmlFileResource createNewProjectPptxXmlFileResource(
+			DGRepository repository,
+			DGPptxXMLGenerator<FlexoProject> generator,
+			PptxTemplatesEnum docxTemplate) {
+		// TODO_MOS Auto-generated method stub
+		return null;
 	}
 
 }

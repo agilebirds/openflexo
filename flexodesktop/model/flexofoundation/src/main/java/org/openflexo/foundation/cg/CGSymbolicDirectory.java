@@ -50,6 +50,12 @@ public class CGSymbolicDirectory extends CGObject implements CGPathElement {
 	public static final String LATEX = "Latex";
 	public static final String HTML = "HTML";
 	public static final String DOCX = "Docx";
+	/**
+	 * MOS
+	 * @author MOSTAFA
+	 */
+	public static final String PPTX = "Pptx";
+	//
 	public static final String JS_PROCESSES = "Processes";
 	public static final String CSS_RESOURCES = "Css";
 	public static final String IMG_RESOURCES = "Img";

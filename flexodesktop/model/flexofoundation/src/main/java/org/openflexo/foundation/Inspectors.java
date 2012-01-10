@@ -754,6 +754,13 @@ public class Inspectors {
 		public String DG_REPOSITORY_LATEX_INSPECTOR = "DGLatexRepository.inspector";
 		public String DG_REPOSITORY_HTML_INSPECTOR = "DGHTMLRepository.inspector";
 		public String DG_REPOSITORY_DOCX_INSPECTOR = "DGDocxRepository.inspector";
+		/**
+		 * MOS
+		 * @author MOSTAFA
+		 * TODO_MOS
+		 */
+		public String DG_REPOSITORY_PPTX_INSPECTOR = "DGPptxRepository.inspector";
+		//
 		public String DG_REPOSITORY_INSPECTOR = "DGRepository.inspector";
 		public String DG_APPLICATION_TEMPLATE_REPOSITORY = "DGApplicationTemplateRepository.inspector";
 
