@@ -771,11 +771,11 @@ public abstract class FlexoOntology extends OntologyObject {
 		// we have a local copy of flexo concept ontology
 		if (alternativeLocalFile != null) {
 			logger.fine("Alternative local file: " + alternativeLocalFile.getAbsolutePath());
-		}
-		try {
-			ontModel.getDocumentManager().addAltEntry(ontologyURI, alternativeLocalFile.toURL().toString());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			try {
+				ontModel.getDocumentManager().addAltEntry(ontologyURI, alternativeLocalFile.toURL().toString());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 		}
 
 		// read the source document

@@ -279,12 +279,21 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 
 		ViewObject container = action.getContainer(this);
 
+		if (container == null) {
+			logger.warning("When adding shape, cannot find container for action " + action.getPatternRole() + " container="
+					+ action.getContainer());
+			return null;
+		}
+
 		container.addToChilds(newShape);
 		logger.info("Added shape " + newShape + " under " + container);
 		return newShape;
 	}
 
 	protected ViewShape finalizePerformAddShape(org.openflexo.foundation.viewpoint.AddShape action, ViewShape newShape) {
+		// Be sure that location/size constraints are ok
+		// ((ShapeGraphicalRepresentation) newShape.getGraphicalRepresentation()).updateConstraints();
+
 		// We need to renotify here because if label is bound to a semantic. In this case,
 		// while beeing created, shape didn't have sufficient data to retrieve a label
 		// which was null. Now, we are sure that the shape is bound, and label can be
