@@ -636,6 +636,11 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 			return -1;
 		}
 		Vector<GraphicalRepresentation<?>> orderedGRList = getParentGraphicalRepresentation().getOrderedContainedGraphicalRepresentations();
+		/*System.out.println("Index of " + this + " inside parent " + getParentGraphicalRepresentation() + " is "
+				+ orderedGRList.indexOf(this));
+		for (GraphicalRepresentation gr : orderedGRList) {
+			System.out.println("> " + gr + " : is this=" + gr.equals(this));
+		}*/
 		return orderedGRList.indexOf(this);
 	}
 

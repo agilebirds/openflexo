@@ -462,7 +462,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				maxY = ((ShapeGraphicalRepresentation) getContainerGraphicalRepresentation()).getHeight();
 			}
 			if (maxY > 0 && y > maxY - getHeight()) {
-				// logger.info("Relocate y from "+y+" to "+(maxY-getHeight())+" maxY="+maxY+" height="+getHeight());
+				// logger.info("Relocate y from " + y + " to " + (maxY - getHeight()) + " maxY=" + maxY + " height=" + getHeight());
 				return maxY - getHeight();
 			}
 		}
@@ -1377,27 +1377,53 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	/*public void updateConstraints() {
+		System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
+				+ widthConstraints.isValid() + "," + heightConstraints.isValid());
+		logger.info("Called updateConstraints()");
+		if (xConstraints != null && xConstraints.isValid()) {
+			System.out.println("x was " + getX() + " constraint=" + xConstraints);
+			updateXPosition();
+			System.out.println("x is now " + getX());
+		}
+		if (yConstraints != null && yConstraints.isValid()) {
+			System.out.println("y was " + getY() + " constraint=" + yConstraints);
+			updateYPosition();
+			System.out.println("y is now " + getY());
+		}
+		if (widthConstraints != null && widthConstraints.isValid()) {
+			System.out.println("width was " + getWidth() + " constraint=" + widthConstraints);
+			updateWidthPosition();
+			System.out.println("width is now " + getWidth());
+		}
+		if (heightConstraints != null && heightConstraints.isValid()) {
+			System.out.println("height was " + getHeight() + " constraint=" + heightConstraints);
+			updateHeightPosition();
+			System.out.println("height is now " + getHeight());
+		}
+	}*/
+
 	private void updateXPosition() {
 		double newValue = ((Number) xConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for x is now: "+newValue);
+		// System.out.println("New value for x is now: " + newValue);
 		setX(newValue);
 	}
 
 	private void updateYPosition() {
 		double newValue = ((Number) yConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for y is now: "+newValue);
+		// System.out.println("New value for y is now: " + newValue);
 		setY(newValue);
 	}
 
 	private void updateWidthPosition() {
 		double newValue = ((Number) widthConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for width is now: "+newValue);
+		// System.out.println("New value for width is now: " + newValue);
 		setWidth(newValue);
 	}
 
 	private void updateHeightPosition() {
 		double newValue = ((Number) heightConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for height is now: "+newValue);
+		// System.out.println("New value for height is now: " + newValue);
 		setHeight(newValue);
 	}
 
