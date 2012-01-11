@@ -164,7 +164,10 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 											+ mainPropertyDescriptor.property.getName()));
 								} else {
 									newShapePatternRole.setReadOnlyLabel(true);
-									newShapePatternRole.setLabel(new ViewPointDataBinding("\"label\""));
+									if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
+										newShapePatternRole
+												.setLabel(new ViewPointDataBinding("\"" + entry.graphicalObject.getName() + "\""));
+									}
 								}
 								newShapePatternRole.setGraphicalRepresentation(entry.graphicalObject.getGraphicalRepresentation());
 								newEditionPattern.addToPatternRoles(newShapePatternRole);
@@ -414,7 +417,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	private ShapePatternRole patternRole;
 
 	@Override
-	public GraphicalElementPatternRole getPatternRole() {
+	public ShapePatternRole getPatternRole() {
 		return patternRole;
 	}
 
