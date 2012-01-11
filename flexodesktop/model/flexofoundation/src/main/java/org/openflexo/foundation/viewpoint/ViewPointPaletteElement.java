@@ -35,14 +35,19 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	private String _editionPatternId;
 	private EditionPattern editionPattern;
 	private Vector<PaletteElementPatternParameter> parameters;
+	private String patternRoleName;
 
 	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation here is a org.openflexo.fge.ShapeGraphicalRepresentation.
+	// But you can assert graphical representation here is a org.openflexo.fge.GraphicalRepresentation.
 	private Object graphicalRepresentation;
+
+	private ViewPointPaletteElement parent = null;
+	private Vector<ViewPointPaletteElement> childs;
 
 	private ViewPointPalette _palette;
 
 	public ViewPointPaletteElement() {
+		childs = new Vector<ViewPointPaletteElement>();
 		parameters = new Vector<PaletteElementPatternParameter>();
 	}
 
@@ -96,6 +101,33 @@ public class ViewPointPaletteElement extends ViewPointObject {
 
 	public void _setEditionPatternId(String editableConcept) {
 		_editionPatternId = editableConcept;
+	}
+
+	public ViewPointPaletteElement getParent() {
+		return parent;
+	}
+
+	public Vector<ViewPointPaletteElement> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(Vector<ViewPointPaletteElement> someChilds) {
+		childs.addAll(someChilds);
+	}
+
+	public void addToChilds(ViewPointPaletteElement aChild) {
+		childs.add(aChild);
+		aChild.parent = this;
+		setChanged();
+		notifyObservers();
+	}
+
+	public void removeFromChilds(ViewPointPaletteElement aChild) {
+		childs.remove(aChild);
+		aChild.parent = null;
+		setChanged();
+		setChanged();
+		notifyObservers();
 	}
 
 	public EditionPattern getEditionPattern() {
@@ -212,6 +244,14 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	@Override
 	public BindingModel getBindingModel() {
 		return getCalc().getBindingModel();
+	}
+
+	public String getPatternRoleName() {
+		return patternRoleName;
+	}
+
+	public void setPatternRoleName(String patternRoleName) {
+		this.patternRoleName = patternRoleName;
 	}
 
 }

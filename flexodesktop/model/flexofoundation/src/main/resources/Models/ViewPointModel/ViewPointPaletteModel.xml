@@ -12,12 +12,14 @@
    	<property name="graphicalRepresentation" contains="org.openflexo.fge.DrawingGraphicalRepresentation"/>
   </entity>
 
- <entity name="org.openflexo.foundation.viewpoint.ViewPointPaletteElement" xmlTag="PaletteElement"> 
+ <entity name="org.openflexo.foundation.viewpoint.ViewPointPaletteElement" xmlTag="PaletteElement" contexts="Contained"> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="description" xmlTag="description"/> 
     <property name="editionPatternId" xmlTag="editionPattern" attribute="YES"/> 
     <property name="parameters" type="vector" contains="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" primary="yes"/>
-    <property name="graphicalRepresentation" contains="org.openflexo.fge.ShapeGraphicalRepresentation"/>
+    <property name="graphicalRepresentation" contains="org.openflexo.fge.GraphicalRepresentation"/>
+    <property name="patternRoleName" xmlTag="patternRoleName" attribute="YES"/> 
+    <property name="childs" type="vector" contains="org.openflexo.foundation.viewpoint.ViewPointPaletteElement" primary="yes" context="Contained"/>
    </entity>
 
   <entity name="org.openflexo.foundation.viewpoint.PaletteElementPatternParameter" xmlTag="Parameter"> 
