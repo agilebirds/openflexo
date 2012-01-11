@@ -106,10 +106,10 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean getAllowToLeaveBounds() {
 		return false;
-	}
+	}*/
 
 	@Override
 	public String getText() {
