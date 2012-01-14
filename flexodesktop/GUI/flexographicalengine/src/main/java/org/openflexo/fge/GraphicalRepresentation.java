@@ -81,6 +81,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	private static BindingFactory BINDING_FACTORY = new GRBindingFactory();
 
+	private static Vector<Object> EMPTY_VECTOR = new Vector<Object>();
+	private static Vector<GraphicalRepresentation<?>> EMPTY_GR_VECTOR = new Vector<GraphicalRepresentation<?>>();
+
 	// *******************************************************************************
 	// * Parameters *
 	// *******************************************************************************
@@ -455,7 +458,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (getParentGraphicalRepresentation() == null) {
 			return "root";
 		} else {
-			int index = getParentGraphicalRepresentation().getContainedGraphicalRepresentations().indexOf(this);
+			// int index = getParentGraphicalRepresentation().getContainedGraphicalRepresentations().indexOf(this);
+			int index = getIndex();
 			if (getParentGraphicalRepresentation().getParentGraphicalRepresentation() == null) {
 				// logger.info("retrieveDefaultIdentifier return "+index);
 				return "object_" + index;
@@ -560,6 +564,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public Vector<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations() {
+		if (!isValidated())
+			return EMPTY_GR_VECTOR;
+
 		if (getContainedObjects() == null) {
 			return null;
 		}
@@ -592,6 +599,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	private Vector<GraphicalRepresentation<?>> orderedContainedGR = null;
 
 	private Vector<GraphicalRepresentation<?>> getOrderedContainedGR() {
+		if (!isValidated())
+			return EMPTY_GR_VECTOR;
 		if (orderedContainedGR == null) {
 			orderedContainedGR = new Vector<GraphicalRepresentation<?>>();
 			for (GraphicalRepresentation<?> c : getOrderedContainedGraphicalRepresentations()) {
@@ -632,6 +641,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public int getLayerOrder() {
+		if (!isValidated())
+			return -1;
 		if (getParentGraphicalRepresentation() == null) {
 			return -1;
 		}
@@ -659,6 +670,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public GraphicalRepresentation<?> getContainerGraphicalRepresentation() {
+		if (!isValidated())
+			return null;
 		Object container = getContainer();
 		if (container == null) {
 			// logger.warning("No container for "+this);
@@ -668,24 +681,32 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public GraphicalRepresentation<?> getParentGraphicalRepresentation() {
+		if (!isValidated())
+			return null;
 		return getContainerGraphicalRepresentation();
 	}
 
 	public boolean contains(GraphicalRepresentation<?> gr) {
+		if (!isValidated())
+			return false;
 		return getContainedGraphicalRepresentations().contains(gr);
 	}
 
 	public boolean contains(Object drawable) {
+		if (!isValidated())
+			return false;
 		return getContainedGraphicalRepresentations().contains(getGraphicalRepresentation(drawable));
 	}
 
-	private static Vector<Object> EMPTY_VECTOR = new Vector<Object>();
-
 	public Vector<Object> getAncestors() {
+		if (!isValidated())
+			return EMPTY_VECTOR;
 		return getAncestors(false);
 	}
 
 	public Vector<Object> getAncestors(boolean forceRecompute) {
+		if (!isValidated())
+			return EMPTY_VECTOR;
 		if (getDrawing() == null) {
 			return EMPTY_VECTOR;
 		}
@@ -707,6 +728,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public boolean isConnectedToDrawing() {
+		if (!isValidated())
+			return false;
 		Object current = getDrawable();
 		while (current != getDrawing().getModel()) {
 			Object container = drawing.getContainer(current);
@@ -719,6 +742,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public boolean isAncestorOf(GraphicalRepresentation<?> child) {
+		if (!isValidated())
+			return false;
 		GraphicalRepresentation<?> father = child.getContainerGraphicalRepresentation();
 		while (father != null) {
 			if (father == this) {
@@ -730,11 +755,19 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2) {
+		if (!child1.isValidated())
+			return null;
+		if (!child2.isValidated())
+			return null;
 		return getFirstCommonAncestor(child1, child2, false);
 	}
 
 	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2,
 			boolean includeCurrent) {
+		if (!child1.isValidated())
+			return null;
+		if (!child2.isValidated())
+			return null;
 		Vector<Object> ancestors1 = child1.getAncestors(true);
 		if (includeCurrent) {
 			ancestors1.insertElementAt(child1, 0);
@@ -753,6 +786,10 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public static boolean areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation<?> element1, GraphicalRepresentation<?> element2) {
+		if (!element1.isValidated())
+			return false;
+		if (!element2.isValidated())
+			return false;
 		if (element1 == null) {
 			return false;
 		}
@@ -822,7 +859,6 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		ShapeGraphicalRepresentation<?> topLevelShape = shapeHiding(p);
 
 		return topLevelShape == null;
-
 	}
 
 	public ShapeGraphicalRepresentation<?> shapeHiding(FGEPoint p) {
@@ -1920,9 +1956,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 		_bindingModel.addToBindingVariables(new ComponentsBindingVariable(this));
 
-		Iterator<GraphicalRepresentation> it = allContainedGRIterator();
+		Iterator<GraphicalRepresentation<?>> it = allContainedGRIterator();
 		while (it.hasNext()) {
-			GraphicalRepresentation subComponent = it.next();
+			GraphicalRepresentation<?> subComponent = it.next();
 			// _bindingModel.addToBindingVariables(new ComponentBindingVariable(subComponent));
 			subComponent.notifiedBindingModelRecreated();
 		}
@@ -1954,13 +1990,15 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		logger.fine("notifyBindingChanged() for " + binding);
 	}
 
-	public Vector<GraphicalRepresentation> retrieveAllContainedGR() {
-		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
+	public Vector<GraphicalRepresentation<?>> retrieveAllContainedGR() {
+		if (!isValidated())
+			return EMPTY_GR_VECTOR;
+		Vector<GraphicalRepresentation<?>> returned = new Vector<GraphicalRepresentation<?>>();
 		addAllContainedGR(this, returned);
 		return returned;
 	}
 
-	private void addAllContainedGR(GraphicalRepresentation<?> gr, Vector<GraphicalRepresentation> returned) {
+	private void addAllContainedGR(GraphicalRepresentation<?> gr, Vector<GraphicalRepresentation<?>> returned) {
 		if (gr.getContainedGraphicalRepresentations() == null) {
 			return;
 		}
@@ -1970,23 +2008,27 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 	}
 
-	public Iterator<GraphicalRepresentation> allGRIterator() {
-		Vector<GraphicalRepresentation> returned = getRootGraphicalRepresentation().retrieveAllContainedGR();
+	public Iterator<GraphicalRepresentation<?>> allGRIterator() {
+		Vector<GraphicalRepresentation<?>> returned = getRootGraphicalRepresentation().retrieveAllContainedGR();
+		if (!isValidated())
+			return returned.iterator();
 		returned.insertElementAt(getRootGraphicalRepresentation(), 0);
 		return returned.iterator();
 	}
 
-	public Iterator<GraphicalRepresentation> allContainedGRIterator() {
-		Vector<GraphicalRepresentation> allGR = retrieveAllContainedGR();
+	public Iterator<GraphicalRepresentation<?>> allContainedGRIterator() {
+		Vector<GraphicalRepresentation<?>> allGR = retrieveAllContainedGR();
+		if (!isValidated())
+			return allGR.iterator();
 		if (allGR == null) {
-			return new Iterator<GraphicalRepresentation>() {
+			return new Iterator<GraphicalRepresentation<?>>() {
 				@Override
 				public boolean hasNext() {
 					return false;
 				}
 
 				@Override
-				public GraphicalRepresentation next() {
+				public GraphicalRepresentation<?> next() {
 					return null;
 				}
 
@@ -2111,6 +2153,24 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public void deleteVariable(GRVariable v) {
 		removeFromVariables(v);
+	}
+
+	private boolean validated = true;
+
+	/**
+	 * Return boolean indicating if this graphical representation is validated. A validated graphical representation is a graphical
+	 * representation fully embedded in its graphical representation tree, which means that parent and child are set and correct, and that
+	 * start and end shapes are set for connectors
+	 * 
+	 * 
+	 * @return
+	 */
+	public boolean isValidated() {
+		return validated;
+	}
+
+	public void setValidated(boolean validated) {
+		this.validated = validated;
 	}
 
 }

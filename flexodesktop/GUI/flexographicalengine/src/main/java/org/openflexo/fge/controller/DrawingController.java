@@ -144,10 +144,10 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (drawing.getContainedObjects(drawing.getModel()) != null) {
 			for (Object o : drawing.getContainedObjects(drawing.getModel())) {
 				GraphicalRepresentation<?> gr = drawing.getGraphicalRepresentation(o);
-				if (gr instanceof ShapeGraphicalRepresentation) {
+				if (gr instanceof ShapeGraphicalRepresentation && gr.isValidated()) {
 					ShapeView<?> v = _buildShapeView((ShapeGraphicalRepresentation<?>) gr);
 					drawingView.add(v);
-				} else if (gr instanceof ConnectorGraphicalRepresentation) {
+				} else if (gr instanceof ConnectorGraphicalRepresentation && gr.isValidated()) {
 					ConnectorGraphicalRepresentation<?> connectorGR = (ConnectorGraphicalRepresentation<?>) gr;
 					ConnectorView<?> v = connectorGR.makeConnectorView(this);
 					drawingView.add(v);

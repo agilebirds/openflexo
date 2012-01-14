@@ -67,6 +67,7 @@ public interface PaletteElement extends Serializable {
 			super(shapeGR.getShapeType(), paletteElement, paletteDrawing);
 			// Copy parameters...
 			setsWith(shapeGR);
+			setValidated(true);
 		}
 
 		@Override
