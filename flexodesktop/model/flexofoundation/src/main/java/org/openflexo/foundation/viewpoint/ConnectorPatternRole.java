@@ -62,7 +62,58 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 		notifyObservers(new GraphicalRepresentationChanged(this, artifactToGraphicalRepresentation));
 	}
 
-	public ShapePatternRole getStartShape() {
+	private ShapePatternRole startShapePatternRole;
+	private ShapePatternRole endShapePatternRole;
+
+	public ShapePatternRole getStartShapePatternRole() {
+		return startShapePatternRole;
+	}
+
+	public void setStartShapePatternRole(ShapePatternRole startShapePatternRole) {
+		this.startShapePatternRole = startShapePatternRole;
+		setChanged();
+		notifyObservers(new GraphicalRepresentationChanged(this,
+				startShapePatternRole != null ? startShapePatternRole.getGraphicalRepresentation() : artifactFromGraphicalRepresentation));
+	}
+
+	public boolean getStartShapeAsDefinedInAction() {
+		return getStartShapePatternRole() == null;
+	}
+
+	public void setStartShapeAsDefinedInAction(boolean flag) {
+		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
+			setStartShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
+		} else {
+			System.out.println("setStartShapePatternRole with null");
+			setStartShapePatternRole(null);
+		}
+	}
+
+	public ShapePatternRole getEndShapePatternRole() {
+		return endShapePatternRole;
+	}
+
+	public void setEndShapePatternRole(ShapePatternRole endShapePatternRole) {
+		this.endShapePatternRole = endShapePatternRole;
+		setChanged();
+		notifyObservers(new GraphicalRepresentationChanged(this,
+				endShapePatternRole != null ? endShapePatternRole.getGraphicalRepresentation() : artifactToGraphicalRepresentation));
+	}
+
+	public boolean getEndShapeAsDefinedInAction() {
+		return getEndShapePatternRole() == null;
+	}
+
+	public void setEndShapeAsDefinedInAction(boolean flag) {
+		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
+			setEndShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
+		} else {
+			System.out.println("setEndShapePatternRole with null");
+			setEndShapePatternRole(null);
+		}
+	}
+
+	/*public ShapePatternRole getStartShape() {
 		for (EditionScheme es : getEditionPattern().getEditionSchemes()) {
 			for (EditionAction action : es.getActions()) {
 				if ((action.getPatternRole() == this) && (action instanceof AddConnector)) {
@@ -96,7 +147,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 		}
 
 		return null;
-	}
+	}*/
 
 	@Override
 	public Class<?> getAccessedClass() {

@@ -61,15 +61,13 @@
                 <LocalizedDictionary />
               </Label>
             </Panel>
-            <Label label="parent_shape" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=3;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-              <LocalizedDictionary />
-            </Label>
+            <Label label="parent_shape" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=3;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-              <DropDown localize="true" name="dropdown" data="ShapePatternRole.data.parentShapePatternRole" constraints="flow(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(!(TopLevelParentShapeCheckbox.data))" staticList="" list="data.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
+              <DropDown localize="true" name="dropdown" data="ShapePatternRole.data.parentShapePatternRole" constraints="flow(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(!(ParentShapeCheckbox.data))" staticList="" list="data.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
                 <LocalizedDictionary />
               </DropDown>
-              <CheckBox selected="true" localize="true" manageDynamicModel="true" name="TopLevelParentShapeCheckbox" data="ShapePatternRole.data.topLevelShape" constraints="flow(index=1)" />
-              <Label label="top_level" localize="true" constraints="flow(index=2)">
+              <CheckBox selected="true" localize="true" manageDynamicModel="true" name="ParentShapeCheckbox" data="ShapePatternRole.data.parentShapeAsDefinedInAction" constraints="flow(index=1)" />
+              <Label label="as_described_in_action" localize="true" constraints="flow(index=2)">
                 <LocalizedDictionary />
               </Label>
             </Panel>
@@ -91,6 +89,26 @@
               </Custom>
               <CheckBox selected="true" localize="true" name="checkbox" data="ConnectorPatternRole.data.readOnlyLabel" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
               <Label label="read_only" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+                <LocalizedDictionary />
+              </Label>
+            </Panel>
+            <Label label="from_shape" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=3;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+            <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+              <DropDown localize="true" name="dropdown" data="ConnectorPatternRole.data.startShapePatternRole" constraints="flow(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="((!(StartShapeCheckbox.data)) &amp; (data.shapePatternRoles.size &gt; 0))" staticList="" list="data.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
+                <LocalizedDictionary />
+              </DropDown>
+              <CheckBox selected="true" localize="true" manageDynamicModel="true" name="StartShapeCheckbox" data="ConnectorPatternRole.data.startShapeAsDefinedInAction" constraints="flow(index=1)" />
+              <Label label="as_described_in_action" localize="true" constraints="flow(index=2)">
+                <LocalizedDictionary />
+              </Label>
+            </Panel>
+            <Label label="to_shape" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=3;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+            <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+              <DropDown localize="true" name="dropdown" data="ConnectorPatternRole.data.endShapePatternRole" constraints="flow(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="((!(EndShapeCheckbox.data)) &amp; (data.shapePatternRoles.size &gt; 0))" staticList="" list="data.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
+                <LocalizedDictionary />
+              </DropDown>
+              <CheckBox selected="true" localize="true" manageDynamicModel="true" name="EndShapeCheckbox" data="ConnectorPatternRole.data.endShapeAsDefinedInAction" constraints="flow(index=1)" />
+              <Label label="as_described_in_action" localize="true" constraints="flow(index=2)">
                 <LocalizedDictionary />
               </Label>
             </Panel>
@@ -994,6 +1012,8 @@
     <Localized key="object_type" lang="English">Object type</Localized>
     <Localized key="parent_shape" lang="French">Forme parente</Localized>
     <Localized key="parent_shape" lang="English">Parent shape</Localized>
+    <Localized key="as_described_in_action" lang="French">décrit dans l'action</Localized>
+    <Localized key="as_described_in_action" lang="English">as described in action</Localized>
   </LocalizedDictionary>
 </Panel>
 

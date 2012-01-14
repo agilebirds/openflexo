@@ -67,14 +67,15 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 		notifyObservers();
 	}
 
-	public boolean getTopLevelShape() {
+	public boolean getParentShapeAsDefinedInAction() {
 		return getParentShapePatternRole() == null;
 	}
 
-	public void setTopLevelShape(boolean flag) {
+	public void setParentShapeAsDefinedInAction(boolean flag) {
 		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
 			setParentShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
 		} else {
+			System.out.println("setParentShapePatternRole with null");
 			setParentShapePatternRole(null);
 		}
 	}
