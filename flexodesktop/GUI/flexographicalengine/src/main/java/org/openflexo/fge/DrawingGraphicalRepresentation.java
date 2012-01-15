@@ -104,7 +104,7 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 	}
 
 	public DrawingGraphicalRepresentation(Drawing<M> aDrawing, boolean initBasicControls) {
-		super((aDrawing != null ? aDrawing.getModel() : null), aDrawing);
+		super(aDrawing != null ? aDrawing.getModel() : null, aDrawing);
 		graphics = new FGEDrawingGraphics(this);
 		if (initBasicControls) {
 			addToMouseClickControls(MouseClickControl.makeMouseClickControl("Drawing selection", MouseButton.LEFT, 1,
@@ -126,6 +126,15 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 			returned.add(allParams[i]);
 		}
 		return returned;
+	}
+
+	/**
+	 * Override parent behaviour by always returning true<br>
+	 * IMPORTANT: a drawing graphical representation MUST be always validated
+	 */
+	@Override
+	public final boolean isValidated() {
+		return true;
 	}
 
 	// ***************************************************************************

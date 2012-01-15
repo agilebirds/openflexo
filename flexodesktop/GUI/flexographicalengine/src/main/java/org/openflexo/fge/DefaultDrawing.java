@@ -143,7 +143,8 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 					graphicalRepresentationToNotifyAdding.add(getGraphicalRepresentation(aDrawable));
 				} else {
 					// Do it now
-					(getGraphicalRepresentation(aParentDrawable)).notifyDrawableAdded(getGraphicalRepresentation(aDrawable));
+					getGraphicalRepresentation(aDrawable).setValidated(true);
+					getGraphicalRepresentation(aParentDrawable).notifyDrawableAdded(getGraphicalRepresentation(aDrawable));
 				}
 			}
 		}
@@ -393,11 +394,20 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			logger.fine("Called endUpdateObjectHierarchy()");
 		}
 
-		// First validate all graphical representations
+		// First validate all shape graphical representations
 		Enumeration<GraphicalRepresentation> allGr = getAllSortedGraphicalRepresentations();
 		while (allGr.hasMoreElements()) {
 			GraphicalRepresentation next = allGr.nextElement();
-			if (next != null) {
+			if (next instanceof ShapeGraphicalRepresentation) {
+				next.setValidated(true);
+			}
+		}
+
+		// First validate all connector graphical representations
+		allGr = getAllSortedGraphicalRepresentations();
+		while (allGr.hasMoreElements()) {
+			GraphicalRepresentation next = allGr.nextElement();
+			if (next instanceof ConnectorGraphicalRepresentation) {
 				next.setValidated(true);
 			}
 		}
@@ -581,7 +591,7 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			// Invalidated nodes are to be removed rigth now
 			// (we are sure that we don't want to keep it)
 			if (childNodes != null) {
-				for (DrawingTreeNode n : (new Vector<DrawingTreeNode<?>>(childNodes))) {
+				for (DrawingTreeNode n : new Vector<DrawingTreeNode<?>>(childNodes)) {
 					if (n.isInvalidated) {
 						removeDrawable(n.drawable, drawable);
 					}

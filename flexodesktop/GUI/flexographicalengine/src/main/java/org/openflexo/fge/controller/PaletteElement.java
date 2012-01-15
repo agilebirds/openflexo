@@ -60,6 +60,7 @@ public interface PaletteElement extends Serializable {
 	public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentation<PaletteElement> {
 		public PaletteElementGraphicalRepresentation(ShapeType shapeType, PaletteElement paletteElement, PaletteDrawing paletteDrawing) {
 			super(shapeType, paletteElement, paletteDrawing);
+			// setValidated(true);
 		}
 
 		public PaletteElementGraphicalRepresentation(ShapeGraphicalRepresentation<?> shapeGR, PaletteElement paletteElement,
@@ -67,7 +68,7 @@ public interface PaletteElement extends Serializable {
 			super(shapeGR.getShapeType(), paletteElement, paletteDrawing);
 			// Copy parameters...
 			setsWith(shapeGR);
-			setValidated(true);
+			// setValidated(true);
 		}
 
 		@Override

@@ -152,6 +152,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 					ConnectorView<?> v = connectorGR.makeConnectorView(this);
 					drawingView.add(v);
 				}
+				if (!gr.isValidated()) {
+					logger.warning("DrawingView " + drawingView.getClass().getSimpleName() + " unvalidated GR found " + gr);
+				}
 			}
 		}
 		return drawingView;
@@ -190,7 +193,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 	public void setCurrentTool(EditorTool aTool) {
 		if (aTool != currentTool) {
-			logger.info("Switch to tool " + aTool);
+			logger.fine("Switch to tool " + aTool);
 			switch (aTool) {
 			case SelectionTool:
 				if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {

@@ -392,10 +392,9 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		super.update(observable, notification);
 
 		if (observeParentGRBecauseMyLocationReferToIt && observable == getContainerGraphicalRepresentation()) {
-			if ((notification instanceof ObjectWillMove) || (notification instanceof ObjectWillResize)
-					|| (notification instanceof ObjectHasMoved) || (notification instanceof ObjectHasResized)
-					|| (notification instanceof ObjectMove) || (notification instanceof ObjectResized)
-					|| (notification instanceof ShapeChanged)) {
+			if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
+					|| notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
+					|| notification instanceof ObjectMove || notification instanceof ObjectResized || notification instanceof ShapeChanged) {
 				checkAndUpdateLocationIfRequired();
 			}
 		}
@@ -753,9 +752,9 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	public boolean isParentLayoutedAsContainer() {
-		return (getContainerGraphicalRepresentation() != null
-				&& getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation && ((ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation())
-					.getDimensionConstraints() == DimensionConstraints.CONTAINER);
+		return getContainerGraphicalRepresentation() != null
+				&& getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation
+				&& ((ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).getDimensionConstraints() == DimensionConstraints.CONTAINER;
 	}
 
 	public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation) {
@@ -1603,7 +1602,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		aShape.setGraphicalRepresentation(this);
 		FGENotification notification = requireChange(Parameters.shape, aShape);
 		if (notification != null) {
-			ShapeType oldType = (aShape != null ? aShape.getShapeType() : null);
+			ShapeType oldType = aShape != null ? aShape.getShapeType() : null;
 			this.shape = aShape;
 			shape.rebuildControlPoints();
 			hasChanged(notification);
@@ -1927,7 +1926,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		if (FGEConstants.DEBUG) {
 			if (getBorder() != null) {
 				g2.setColor(Color.RED);
-				g2.drawRect(0, 0, (getViewWidth(controller.getScale())) - 1, (getViewHeight(controller.getScale())) - 1);
+				g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
 				g2.setColor(Color.BLUE);
 				g2.drawRect((int) (getBorder().left * controller.getScale()), (int) (getBorder().top * controller.getScale()),
 						(int) (getWidth() * controller.getScale()) - 1, (int) (getHeight() * controller.getScale()) - 1);

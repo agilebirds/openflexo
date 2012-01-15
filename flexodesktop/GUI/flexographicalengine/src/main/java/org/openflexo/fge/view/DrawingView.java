@@ -543,10 +543,12 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 
 			// Don't paint those things in case of buffering
 			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation>(getController().getFocusedObjects())) {
+				// logger.info("Paint focused " + o);
 				paintFocused(o, graphics);
 			}
 
 			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation>(getController().getSelectedObjects())) {
+				// logger.info("Paint selected " + o + "shouldBeDisplayed=" + o.shouldBeDisplayed());
 				if (o.shouldBeDisplayed()) {
 					paintSelected(o, graphics);
 				}
@@ -626,6 +628,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	}
 
 	private void paintSelected(GraphicalRepresentation selected, FGEDrawingGraphics graphics) {
+
 		if (selected.isDeleted()) {
 			logger.warning("Cannot paint for a deleted GR");
 			return;
@@ -637,18 +640,19 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
+		graphics.setDefaultForeground(ForegroundStyle.makeStyle(getGraphicalRepresentation().getSelectionColor()));
 
 		if (selected instanceof ShapeGraphicalRepresentation) {
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation) selected;
 			for (ControlArea ca : gr.getControlAreas()) {
 				if (selected.isConnectedToDrawing()) {
-					graphics.setDefaultForeground(ForegroundStyle.makeStyle(getGraphicalRepresentation().getSelectionColor()));
 					paintControlArea(ca, graphics);
 				}
 			}
 		}
 
 		else if (selected instanceof ConnectorGraphicalRepresentation) {
+
 			ConnectorGraphicalRepresentation<?> gr = (ConnectorGraphicalRepresentation) selected;
 			// g.setColor(getGraphicalRepresentation().getSelectionColor());
 
