@@ -100,6 +100,10 @@ public class FlexoActionButton extends JButton
 		public void actionPerformed(ActionEvent event)
 	    {
 	        FlexoAction action = _actionType.makeNewAction (getFocusedObject(),getGlobalSelection(), _editor);
+	        //SUPPR 
+	        System.out.println(getFocusedObject());
+	        
+	        //
 	        action.setInvoker(actionSource);
 	        action.actionPerformed(event);
 	    }

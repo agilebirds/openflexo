@@ -43,6 +43,7 @@ import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.docx.ProjectDocDocxGenerator;
 import org.openflexo.dg.html.ProjectDocHTMLGenerator;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
+import org.openflexo.dg.pptx.ProjectDocPptxGenerator;
 import org.openflexo.dgmodule.DGPreferences;
 import org.openflexo.dgmodule.controller.action.DGControllerActionInitializer;
 import org.openflexo.dgmodule.menu.DGMenuBar;
@@ -330,7 +331,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 					 * @author MOSTAFA	
 					 */
 					case PPTX:
-						returned = new ProjectDocDocxGenerator(getProject(), repository);
+						returned = new ProjectDocPptxGenerator(getProject(), repository);
 						break;
 					//
 				}

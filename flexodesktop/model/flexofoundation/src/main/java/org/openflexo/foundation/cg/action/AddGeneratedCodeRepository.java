@@ -103,7 +103,7 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 	{
 		logger.info("Add GeneratedCodeRepository " + getFocusedObject());
 		//SUPPR 
-		System.out.println("le focused object dans addGeneratedCodeRepository est de type:"+getFocusedObject().getName());
+		System.out.println("le focused object dans addGeneratedCodeRepository est de type:"+getFocusedObject());
 		//
 		if (getFocusedObject().getGeneratedCode() != null) 
 		{
@@ -181,6 +181,7 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 				getFocusedObject().getGeneratedCode().addToGeneratedRepositories(_newGeneratedCodeRepository);
 				
 				String srcSymbDirType = null;
+				
 				switch (getFormat()) {
 					case HTML:
 						srcSymbDirType = CGSymbolicDirectory.HTML;
@@ -203,12 +204,12 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 						 */
 					case PPTX:
 						srcSymbDirType = CGSymbolicDirectory.PPTX;
-						//TODO_MOS
-						createFiguresSymbolicDir(project, "/./word/media/figures/");
-						createResourcesSymbolicDir(project, srcSymbDirType, "/./word/media");
-						//
-						break;
-						//
+//						//TODO_MOS
+//						createFiguresSymbolicDir(project, "/./word/media/figures/");
+//						createResourcesSymbolicDir(project, srcSymbDirType, "/./word/media");
+//						//
+//						break;
+//						//
 				}
 				
 				if(srcSymbDirType != null)

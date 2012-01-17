@@ -246,6 +246,26 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
     	        postBuildButton2.setToolTipText(FlexoLocalization.localizedForKey("reinject_docx", postBuildButton2));
     	        
         		break;
+        		
+        		/**
+        		 * MOS
+        		 * TODO_MOS Have to personalize the pptx DGRpositoryModuleView 
+        		 * @author MOSTAFA
+        		 */
+        	case PPTX:
+        		postBuildButton = new FlexoActionButton(GenerateDocx.actionType, this, controller.getEditor());
+    	        postBuildButton.setIcon(DGIconLibrary.GENERATE_DOCX);
+    	        postBuildButton.setText(FlexoLocalization.localizedForKey("generate_pptx", postBuildButton));
+    	        postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_pptx", postBuildButton));
+    	        
+    	        postBuildButton2 = new FlexoActionButton(ReinjectDocx.actionType, this, controller.getEditor());
+    	        postBuildButton2.setIcon(DGIconLibrary.REINJECT_DOCX);
+    	        postBuildButton2.setText(FlexoLocalization.localizedForKey("reinject_pptx", postBuildButton2));
+    	        postBuildButton2.setToolTipText(FlexoLocalization.localizedForKey("reinject_docx", postBuildButton2));
+    	        
+        		break;
+        		
+        		//
         	case HTML:
         		postBuildButton = new FlexoActionButton(GenerateZip.actionType,this,controller.getEditor());
     	        postBuildButton.setIcon(DGIconLibrary.GENERATE_ZIP);

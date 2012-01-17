@@ -1,5 +1,5 @@
 #English
-#Thu Jan 05 11:16:49 WET 2012
+#Mon Jan 16 20:30:22 CET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -434,6 +434,7 @@ Multimedia=Multimedia
 Multiple=Multiple
 Multiple\nParallel=Multiple\nParallel
 Multiple\ sub-process\ instances=Multiple sub-process instances
+Must\ display\ first\ param\ here\ ($0)\ and\ second\ one\:\ ($1)\ and\ third\ one\:($2)\ then\ repeat\ second\ one\ ($1)=Must display first param here ($0) and second one\: ($1) and third one\:($2) then repeat second one ($1)
 NEW\ Port=NEW Port
 NEW\ PortMap=NEW PortMap
 NEXT_PAGE=NEXT
@@ -2528,6 +2529,7 @@ generate_core_only=Generate core only
 generate_datamodel=Generate doc for datamodel
 generate_doc_if_required=Generate doc if required
 generate_docx=Generate Docx
+generate_pptx=Generate Pptx
 generate_entity_class=Generate entity class
 generate_files=Generates all files
 generate_helpset=Generate HelpSet
@@ -4064,6 +4066,7 @@ register_new_release=Register new release
 regular_expression=Regular expression
 reinitialize=Reinitialize
 reinject_docx=Reinject Docx
+reinject_pptx=Reinject Pptx
 reinject_docx_failed=Reinject Docx failed
 reinject_docx_succeed=Reinject Docx succeed
 reinject_docx_warnings=Occured issues

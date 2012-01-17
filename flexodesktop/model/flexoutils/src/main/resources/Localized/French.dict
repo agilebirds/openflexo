@@ -1,5 +1,5 @@
 #French
-#Thu Jan 05 11:16:49 WET 2012
+#Mon Jan 16 20:30:22 CET 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -434,6 +434,7 @@ Multimedia=Multimedia
 Multiple=Multiple
 Multiple\nParallel=Multiple\nParallel
 Multiple\ sub-process\ instances=Sous-processus \u00E0 instances multiples
+Must\ display\ first\ param\ here\ ($0)\ and\ second\ one\:\ ($1)\ and\ third\ one\:($2)\ then\ repeat\ second\ one\ ($1)=Must display first param here ($0) and second one\: ($1) and third one\:($2) then repeat second one ($1)
 NEW\ Port=Port NEW
 NEW\ PortMap=PortMap NEW
 NEXT_PAGE=NEXT

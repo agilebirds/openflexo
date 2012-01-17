@@ -117,6 +117,7 @@ public class FlexoLocalization
     public static File getDictionaryFileForLanguage(Language language)
     {
         return new File(getLocalizedDirectory(), language.getName() + ".dict");
+        
     }
 
     private static File getLocalizedDirectory()
@@ -127,6 +128,7 @@ public class FlexoLocalization
             if (logger.isLoggable(Level.FINE))
                 logger.fine("Setting localized directory" + _localizedDirectory.getAbsolutePath());
         }
+        
         return _localizedDirectory;
     }
 
