@@ -39,11 +39,10 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 
 	public void updateGraphicalRepresentation(Object graphicalRepresentation) {
 		if (_graphicalRepresentation != null) {
-			System.out.println("OK, i update, what about notification ?");
 			((ConnectorGraphicalRepresentation) _graphicalRepresentation)
 					.setsWith((ConnectorGraphicalRepresentation) graphicalRepresentation);
 			setChanged();
-			notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
+			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
 		} else {
 			setGraphicalRepresentation(graphicalRepresentation);
 		}

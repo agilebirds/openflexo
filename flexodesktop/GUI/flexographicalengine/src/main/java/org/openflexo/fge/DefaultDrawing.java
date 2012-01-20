@@ -553,8 +553,11 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 				_hashMap.remove(drawable);
 			}
 
-			if (getGraphicalRepresentation() != null) {
+			/*if (getGraphicalRepresentation() != null) {
 				getGraphicalRepresentation().delete();
+			}*/
+			if (graphicalRepresentation != null) {
+				graphicalRepresentation.delete();
 			}
 
 			drawable = null;

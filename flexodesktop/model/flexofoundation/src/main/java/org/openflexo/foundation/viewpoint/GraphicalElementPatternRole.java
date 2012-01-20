@@ -1,5 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.util.logging.Logger;
+
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
@@ -9,6 +11,9 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public abstract class GraphicalElementPatternRole extends PatternRole implements Bindable {
+
+	@SuppressWarnings("unused")
+	private static final Logger logger = Logger.getLogger(GraphicalElementPatternRole.class.getPackage().getName());
 
 	private boolean readOnlyLabel;
 	private ViewPointDataBinding label;

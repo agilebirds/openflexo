@@ -38,7 +38,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 		if (_graphicalRepresentation != null) {
 			((ShapeGraphicalRepresentation) _graphicalRepresentation).setsWith((ShapeGraphicalRepresentation) graphicalRepresentation);
 			setChanged();
-			notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
+			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
 		} else {
 			setGraphicalRepresentation(graphicalRepresentation);
 		}

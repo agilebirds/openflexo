@@ -48,8 +48,8 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 	public EditionPatternPreviewConnectorGR(ConnectorPatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing) {
 		super(ConnectorType.LINE, aDrawing != null ? aDrawing.getStartShape(aPatternRole) : null, aDrawing != null ? aDrawing
 				.getEndShape(aPatternRole) : null, aPatternRole, aDrawing);
-		System.out.println("CREATED " + this + " for " + getPatternRole());
-		logger.info("CREATED " + this + " for " + getPatternRole());
+		// System.out.println("CREATED " + this + " for " + getPatternRole());
+		// logger.info("CREATED " + this + " for " + getPatternRole());
 		init(aPatternRole, aDrawing);
 
 	}
@@ -59,7 +59,7 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 
 	@Override
 	public ShapeGraphicalRepresentation<?> getStartObject() {
-		if (startObjectGR == null) {
+		if (startObjectGR == null && getDrawing() != null) {
 			startObjectGR = getDrawing().getStartShape(getPatternRole());
 			enableStartObjectObserving(startObjectGR);
 		}
@@ -68,7 +68,7 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 
 	@Override
 	public ShapeGraphicalRepresentation<?> getEndObject() {
-		if (endObjectGR == null) {
+		if (endObjectGR == null && getDrawing() != null) {
 			endObjectGR = getDrawing().getEndShape(getPatternRole());
 			enableEndObjectObserving(endObjectGR);
 		}
@@ -84,6 +84,7 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 	}
 
 	protected void dismissGraphicalRepresentation() {
+		// logger.info("*********** dismissGraphicalRepresentation()");
 		disableStartObjectObserving();
 		disableEndObjectObserving();
 		startObjectGR = null;
@@ -113,8 +114,7 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 
 	@Override
 	public void delete() {
-		System.out.println("DELETED " + this + " for " + getPatternRole());
-		logger.info("DELETED " + this + " for " + getPatternRole());
+		// logger.info("DELETED " + this + " for " + getPatternRole());
 		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
 		}

@@ -62,6 +62,7 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 
 	@Override
 	public void delete() {
+
 		if (graphicalRepresentation != null) {
 			graphicalRepresentation.delete();
 		}
