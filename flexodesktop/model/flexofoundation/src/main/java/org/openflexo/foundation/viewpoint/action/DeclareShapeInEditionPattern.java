@@ -86,7 +86,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		@Override
 		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
-			return (shape != null && shape.getCalc() != null);
+			return shape != null && shape.getCalc() != null;
 		}
 
 	};
@@ -120,12 +120,12 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Push to palette");
+		logger.info("Declare shape in edition pattern");
 		if (isValid()) {
 			switch (primaryChoice) {
 			case CHOOSE_EXISTING_EDITION_PATTERN:
 				if (getPatternRole() != null) {
-					getPatternRole().setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
+					getPatternRole().updateGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
 				}
 				break;
 			case CREATES_EDITION_PATTERN:
@@ -392,8 +392,9 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	@Override
 	public boolean isValid() {
-		if (getFocusedObject() == null)
+		if (getFocusedObject() == null) {
 			return false;
+		}
 		switch (primaryChoice) {
 		case CHOOSE_EXISTING_EDITION_PATTERN:
 			return getEditionPattern() != null && getPatternRole() != null;
@@ -482,7 +483,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	public String getDropSchemeName() {
 		if (StringUtils.isEmpty(dropSchemeName)) {
 			return "drop" + (StringUtils.isEmpty(getEditionPatternName()) ? "" : getEditionPatternName())
-					+ (isTopLevel ? "AtTopLevel" : (containerEditionPattern != null ? "In" + containerEditionPattern.getName() : ""));
+					+ (isTopLevel ? "AtTopLevel" : containerEditionPattern != null ? "In" + containerEditionPattern.getName() : "");
 		}
 		return dropSchemeName;
 	}
@@ -508,12 +509,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		public String getRange() {
 			if (property instanceof OntologyDataProperty) {
-				if (((OntologyDataProperty) property).getDataType() != null)
+				if (((OntologyDataProperty) property).getDataType() != null) {
 					return ((OntologyDataProperty) property).getDataType().name();
+				}
 				return "";
 			}
-			if (property.getRange() != null)
+			if (property.getRange() != null) {
 				return property.getRange().getName();
+			}
 			return "";
 		}
 	}

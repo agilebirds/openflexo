@@ -1819,6 +1819,12 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	 */
 	public Rectangle getViewBounds(GraphicalRepresentation<?> container, double scale) {
 		Rectangle bounds = getViewBounds(scale);
+		if (getContainerGraphicalRepresentation() == null) {
+			logger.warning("Container is null for " + this + " validated=" + isValidated());
+		}
+		if (container == null) {
+			logger.warning("Container is null for " + this + " validated=" + isValidated());
+		}
 		bounds = convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
 		return bounds;
 	}

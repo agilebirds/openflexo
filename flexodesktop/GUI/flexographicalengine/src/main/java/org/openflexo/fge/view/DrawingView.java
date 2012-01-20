@@ -290,7 +290,8 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 						getPaintManager().repaint(this);
 					} else {
-						logger.warning("Cannot find view for " + removedGR);
+						// That may happen, remove warning
+						// logger.warning("Cannot find view for " + removedGR);
 					}
 				} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
 					ConnectorView<?> view = connectorViewForObject((ConnectorGraphicalRepresentation<?>) removedGR);
@@ -300,7 +301,8 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 						getPaintManager().repaint(this);
 					} else {
-						logger.warning("Cannot find view for " + removedGR);
+						// That may happen, remove warning
+						// logger.warning("Cannot find view for " + removedGR);
 					}
 				} else if (removedGR instanceof GeometricGraphicalRepresentation) {
 					removedGR.deleteObserver(this);

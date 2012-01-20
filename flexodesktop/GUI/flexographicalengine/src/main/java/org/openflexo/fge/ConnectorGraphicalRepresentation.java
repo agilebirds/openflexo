@@ -464,6 +464,10 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 			return new Rectangle(0, 0, 1, 1);
 		}
 
+		if (getContainerGraphicalRepresentation() == null) {
+			logger.warning("getNormalizedBounds() called for GR " + this + " with containerGR=null, validated=" + isValidated());
+		}
+
 		Rectangle startBounds = getStartObject().getViewBounds(getContainerGraphicalRepresentation(), scale);
 		Rectangle endsBounds = getEndObject().getViewBounds(getContainerGraphicalRepresentation(), scale);
 
@@ -566,6 +570,21 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		}
 
 		if (connector != null) {
+
+			if (!isValidated()) {
+				logger.warning("paint connector requested for not validated connector graphical representation: " + this);
+				return;
+			}
+			if (getStartObject() == null || getStartObject().isDeleted() || !getStartObject().isValidated()) {
+				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
+						+ " start=" + getStartObject());
+				return;
+			}
+			if (getEndObject() == null || getEndObject().isDeleted() || !getEndObject().isValidated()) {
+				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
+						+ " end=" + getEndObject());
+				return;
+			}
 			connector.paintConnector(graphics);
 		}
 

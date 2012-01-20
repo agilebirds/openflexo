@@ -84,7 +84,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 		@Override
 		protected boolean isEnabledForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
-			return (connector != null && connector.getCalc().getEditionPatterns().size() > 0);
+			return connector != null && connector.getCalc().getEditionPatterns().size() > 0;
 		}
 
 	};
@@ -120,12 +120,14 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Push to palette");
+		logger.info("Declare connector in edition pattern");
 		if (isValid()) {
 			switch (primaryChoice) {
 			case CHOOSE_EXISTING_EDITION_PATTERN:
 				if (getPatternRole() != null) {
-					getPatternRole().setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
+					System.out.println("Connector representation updated");
+					// getPatternRole().setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
+					getPatternRole().updateGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
 				}
 				break;
 			case CREATES_EDITION_PATTERN:
@@ -359,8 +361,9 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 	@Override
 	public boolean isValid() {
-		if (getFocusedObject() == null)
+		if (getFocusedObject() == null) {
 			return false;
+		}
 		switch (primaryChoice) {
 		case CHOOSE_EXISTING_EDITION_PATTERN:
 			return getEditionPattern() != null && getPatternRole() != null;
@@ -369,10 +372,10 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 			case MAP_SINGLE_INDIVIDUAL:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
 						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && StringUtils.isNotEmpty(getConnectorPatternRoleName())
-						&& (fromEditionPattern != null) && (toEditionPattern != null) && StringUtils.isNotEmpty(getLinkSchemeName());
+						&& fromEditionPattern != null && toEditionPattern != null && StringUtils.isNotEmpty(getLinkSchemeName());
 			case BLANK_EDITION_PATTERN:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && StringUtils.isNotEmpty(getConnectorPatternRoleName())
-						&& (fromEditionPattern != null) && (toEditionPattern != null) && StringUtils.isNotEmpty(getLinkSchemeName());
+						&& fromEditionPattern != null && toEditionPattern != null && StringUtils.isNotEmpty(getLinkSchemeName());
 			default:
 				break;
 			}
@@ -385,8 +388,9 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 	@Override
 	public ConnectorPatternRole getPatternRole() {
-		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN)
+		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN) {
 			return newConnectorPatternRole;
+		}
 		return patternRole;
 	}
 
@@ -479,8 +483,9 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 			if (property instanceof OntologyDataProperty) {
 				return ((OntologyDataProperty) property).getDataType().name();
 			}
-			if (property.getRange() != null)
+			if (property.getRange() != null) {
 				return property.getRange().getName();
+			}
 			return "";
 		}
 	}

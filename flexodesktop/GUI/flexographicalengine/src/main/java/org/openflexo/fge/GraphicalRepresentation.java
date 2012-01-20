@@ -359,7 +359,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 						excepted = true;
 					}
 				}
-				if (p != Parameters.mouseClickControls && p != Parameters.mouseDragControls && !excepted) {
+				if (p != Parameters.mouseClickControls && p != Parameters.mouseDragControls && p != Parameters.identifier && !excepted) {
 					_setParameterValueWith(p, gr);
 				}
 			}
@@ -1502,6 +1502,10 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	public static AffineTransform convertFromDrawingToDrawableAT(GraphicalRepresentation<?> destination, double scale) {
 		double tx = 0;
 		double ty = 0;
+		if (destination == null) {
+			logger.warning("Called convertFromDrawingToDrawableAT() for null graphical representation (destination)");
+			return new AffineTransform();
+		}
 		Object current = destination.getDrawable();
 		while (current != destination.getDrawing().getModel()) {
 			if (destination.getDrawing().getContainer(current) == null) {

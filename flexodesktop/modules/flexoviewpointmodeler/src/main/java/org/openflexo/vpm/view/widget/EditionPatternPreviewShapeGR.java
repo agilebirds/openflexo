@@ -30,6 +30,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.viewpoint.GraphicalRepresentationChanged;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 
 public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<ShapePatternRole> implements GraphicalFlexoObserver,
@@ -48,6 +49,7 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 
 	public EditionPatternPreviewShapeGR(ShapePatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing) {
 		super(ShapeType.RECTANGLE, aPatternRole, aDrawing);
+		parentShape = aPatternRole.getParentShapePatternRole();
 		initWithDefaultValues();
 		init(aPatternRole, aDrawing);
 
@@ -81,7 +83,7 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 
 	@Override
 	public void delete() {
-		logger.info("Delete GR " + this);
+		// System.out.println("Deleted " + this + " for " + getPatternRole());
 		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
 		}
@@ -112,8 +114,12 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 				// logger.info("received NameChanged notification");
 				setText(getText());
 				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
+			} else if (dataModification instanceof GraphicalRepresentationChanged) {
+				logger.info("Handle GR change !!!");
+				setsWith((ShapeGraphicalRepresentation<?>) getPatternRole().getGraphicalRepresentation());
 			}
 		}
+
 	}
 
 	@Override
@@ -146,4 +152,14 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 		}
 	}
 
+	private ShapePatternRole parentShape;
+
+	@Override
+	public void notifyObjectHierarchyWillBeUpdated() {
+		super.notifyObjectHierarchyWillBeUpdated();
+		if (parentShape != getPatternRole().getParentShapePatternRole()) {
+			getDrawing().invalidateGraphicalObjectsHierarchy(getPatternRole());
+		}
+		parentShape = getPatternRole().getParentShapePatternRole();
+	}
 }

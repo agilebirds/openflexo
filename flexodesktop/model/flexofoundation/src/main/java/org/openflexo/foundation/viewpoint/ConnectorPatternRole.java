@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -34,6 +35,18 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 		_graphicalRepresentation = graphicalRepresentation;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
+	}
+
+	public void updateGraphicalRepresentation(Object graphicalRepresentation) {
+		if (_graphicalRepresentation != null) {
+			System.out.println("OK, i update, what about notification ?");
+			((ConnectorGraphicalRepresentation) _graphicalRepresentation)
+					.setsWith((ConnectorGraphicalRepresentation) graphicalRepresentation);
+			setChanged();
+			notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
+		} else {
+			setGraphicalRepresentation(graphicalRepresentation);
+		}
 	}
 
 	// No notification
@@ -84,7 +97,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
 			setStartShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
 		} else {
-			System.out.println("setStartShapePatternRole with null");
+			// System.out.println("setStartShapePatternRole with null");
 			setStartShapePatternRole(null);
 		}
 	}
@@ -108,7 +121,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
 			setEndShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
 		} else {
-			System.out.println("setEndShapePatternRole with null");
+			// System.out.println("setEndShapePatternRole with null");
 			setEndShapePatternRole(null);
 		}
 	}
