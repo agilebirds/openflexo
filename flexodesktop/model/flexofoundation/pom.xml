@@ -47,7 +47,6 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexographicalengine</artifactId>
-            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cayenne</groupId>
