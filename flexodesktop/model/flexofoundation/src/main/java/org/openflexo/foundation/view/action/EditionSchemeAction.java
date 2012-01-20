@@ -21,6 +21,7 @@ package org.openflexo.foundation.view.action;
 
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -286,7 +287,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		}
 
 		container.addToChilds(newShape);
-		logger.info("Added shape " + newShape + " under " + container);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Added shape " + newShape + " under " + container);
+		}
 		return newShape;
 	}
 
@@ -456,7 +459,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		// Register reference
 		newConnector.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
 
-		logger.info("Added connector " + newConnector + " under " + parent);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Added connector " + newConnector + " under " + parent);
+		}
 		return newConnector;
 	}
 

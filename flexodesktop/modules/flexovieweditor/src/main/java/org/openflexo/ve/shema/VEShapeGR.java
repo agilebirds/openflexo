@@ -65,7 +65,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 			aShape.addObserver(this);
 		}
 
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
+		//setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
 
 	}
 

@@ -110,4 +110,13 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 		setIsPrimaryRepresentationRole(isPrimary);
 	}
 
+	public boolean containsShapes() {
+		for (ShapePatternRole role : getEditionPattern().getShapePatternRoles()) {
+			if (role.getParentShapePatternRole() == this) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

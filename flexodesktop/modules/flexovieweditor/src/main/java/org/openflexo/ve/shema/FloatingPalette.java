@@ -465,12 +465,12 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		dropSchemeAction.escapeParameterRetrievingWhenValid = true;
 		dropSchemeAction.doAction();
 
-		if (dropSchemeAction.getNewShape() != null) {
+		if (dropSchemeAction.getPrimaryShape() != null) {
 
 			GraphicalRepresentation<?> targetGR = controller.getDrawing().getGraphicalRepresentation(target);
 
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) controller.getGraphicalRepresentation(dropSchemeAction
-					.getNewShape());
+					.getPrimaryShape());
 
 			double xOffset = 0;
 			double yOffset = 0;
@@ -486,7 +486,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			}
 
 		}
-		return dropSchemeAction.getNewShape();
+		return dropSchemeAction.getPrimaryShape();
 	}
 
 	private ViewConnector createNewConnector(ViewShape from, ViewShape to, LinkScheme linkScheme) {

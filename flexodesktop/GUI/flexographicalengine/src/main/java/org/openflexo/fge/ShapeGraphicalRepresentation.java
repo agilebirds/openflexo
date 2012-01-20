@@ -209,6 +209,14 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			this.right = right;
 		}
 
+		public ShapeBorder(ShapeBorder border) {
+			super();
+			this.top = border.top;
+			this.bottom = border.bottom;
+			this.left = border.left;
+			this.right = border.right;
+		}
+
 		@Override
 		public ShapeBorder clone() {
 			try {
