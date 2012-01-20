@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -72,6 +73,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DropSchemeAction action) {
 				ViewShape shape = action.getNewShape();
+				logger.info("border3 = " + ((ShapeGraphicalRepresentation<?>) shape.getGraphicalRepresentation()).getBorder());
 				if (shape.getParent() != action.getParent()) {
 					VEShapeGR parentGR = (VEShapeGR) shape.getParent().getGraphicalRepresentation();
 					VEShapeGR expectedGR = (VEShapeGR) action.getParent().getGraphicalRepresentation();
@@ -79,6 +81,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 					Point p = new Point((int) myGR.getX(), (int) myGR.getY());
 					Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentGR, 1.0);
 					myGR.setLocation(new FGEPoint(newP.x, newP.y));
+					logger.info("border4 = " + myGR.getBorder());
 					logger.info("Shape has been relocated");
 				}
 

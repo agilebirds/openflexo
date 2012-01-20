@@ -71,8 +71,6 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	private DropScheme _dropScheme;
 	private ViewShape _newShape;
 
-	private Object _graphicalRepresentation;
-
 	DropSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -129,15 +127,6 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		_paletteElement = paletteElement;
 	}
 
-	@Override
-	public Object getOverridenGraphicalRepresentation() {
-		return _graphicalRepresentation;
-	}
-
-	public void setOverridenGraphicalRepresentation(Object graphicalRepresentation) {
-		_graphicalRepresentation = graphicalRepresentation;
-	}
-
 	public ViewShape getNewShape() {
 		return _newShape;
 	}
@@ -161,8 +150,8 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	@Override
 	protected ViewShape performAddShape(AddShape action) {
 		ViewShape returned = super.performAddShape(action);
-		if (action.getPatternRole().getParentShapeAsDefinedInAction()) {
-			// Declare shape as new shape only if it is the top level shape of the EP
+		if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
+			// Declare shape as new shape only if it is the primary representation role of the EP
 			_newShape = returned;
 		}
 		return returned;

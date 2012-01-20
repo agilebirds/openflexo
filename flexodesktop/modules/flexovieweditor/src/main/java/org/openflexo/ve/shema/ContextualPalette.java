@@ -152,6 +152,8 @@ public class ContextualPalette extends DrawingPalette {
 					shapeGR.setAllowToLeaveBounds(true);
 
 					logger.info("drop location = " + shapeGR.getLocation());
+					logger.info("border1 = " + getGraphicalRepresentation().getBorder());
+					logger.info("border2 = " + shapeGR.getBorder());
 
 					if (element.getEditionPattern() == null) {
 						// No associated edition pattern, just drop shape !
@@ -182,7 +184,8 @@ public class ContextualPalette extends DrawingPalette {
 												getController().getOEController().getEditor());
 										action.setDropScheme(dropScheme);
 										action.setPaletteElement(element);
-										action.setOverridenGraphicalRepresentation(shapeGR);
+										action.setOverridenGraphicalRepresentation(dropScheme.getEditionPattern()
+												.getPrimaryRepresentationRole(), shapeGR);
 										action.doAction();
 									}
 								});
@@ -198,7 +201,8 @@ public class ContextualPalette extends DrawingPalette {
 									.getOEController().getEditor());
 							action.setDropScheme(availableDropPatterns.firstElement());
 							action.setPaletteElement(element);
-							action.setOverridenGraphicalRepresentation(shapeGR);
+							action.setOverridenGraphicalRepresentation(availableDropPatterns.firstElement().getEditionPattern()
+									.getPrimaryRepresentationRole(), shapeGR);
 							action.doAction();
 							return action.hasActionExecutionSucceeded();
 						}

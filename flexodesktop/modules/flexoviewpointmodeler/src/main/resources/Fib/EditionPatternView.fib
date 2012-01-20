@@ -470,8 +470,8 @@
                   <Assignment variable="component.bindable" value="AddShapePanel.data" />
                   <Assignment variable="component.bindingDefinition" value="AddShapePanel.data.conditionalBindingDefinition" />
                 </Custom>
-                <Label label="container" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="AddShapePanel.data.patternRole.topLevelShape" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddShapePanel.data.container.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="AddShapePanel.data.patternRole.topLevelShape" localize="true" manageDynamicModel="true">
+                <Label label="container" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="AddShapePanel.data.patternRole.parentShapeAsDefinedInAction" />
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddShapePanel.data.container.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="AddShapePanel.data.patternRole.parentShapeAsDefinedInAction" localize="true" manageDynamicModel="true">
                   <Assignment variable="component.bindable" value="AddShapePanel.data" />
                   <Assignment variable="component.bindingDefinition" value="AddShapePanel.data.containerBindingDefinition" />
                 </Custom>
@@ -488,13 +488,13 @@
                   <Assignment variable="component.bindable" value="AddConnectorPanel.data" />
                   <Assignment variable="component.bindingDefinition" value="AddConnectorPanel.data.conditionalBindingDefinition" />
                 </Custom>
-                <Label label="from_shape" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddConnectorPanel.data.fromShape.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+                <Label label="from_shape" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="AddConnectorPanel.data.patternRole.startShapeAsDefinedInAction" />
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddConnectorPanel.data.fromShape.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="AddConnectorPanel.data.patternRole.startShapeAsDefinedInAction" localize="true" manageDynamicModel="true">
                   <Assignment variable="component.bindable" value="AddConnectorPanel.data" />
                   <Assignment variable="component.bindingDefinition" value="AddConnectorPanel.data.fromShapeBindingDefinition" />
                 </Custom>
-                <Label label="to_shape" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddConnectorPanel.data.toShape.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+                <Label label="to_shape" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="AddConnectorPanel.data.patternRole.endShapeAsDefinedInAction" />
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddConnectorPanel.data.toShape.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="AddConnectorPanel.data.patternRole.endShapeAsDefinedInAction" localize="true" manageDynamicModel="true">
                   <Assignment variable="component.bindable" value="AddConnectorPanel.data" />
                   <Assignment variable="component.bindingDefinition" value="AddConnectorPanel.data.toShapeBindingDefinition" />
                 </Custom>
