@@ -49,7 +49,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 	public static final TextFileFormat UNKNOWN_ASCII_FILE = new TextFileFormat(null, null, TextSyntax.Plain);
 	public static final ImageFileFormat UNKNOWN_IMAGE_FILE = new ImageFileFormat(null, null);
 
-	public static final TextFileFormat TEXT, SYSTEM, XML, OWL, API, WSDL, BPEL, XSD, WOD, DOCXML, ANT, HTML, JS, JAVA, LATEX, PLIST, SQL,
+	public static final TextFileFormat TEXT, SYSTEM, XML, OWL, API, WSDL, BPEL, XSD, WOD, DOCXML, PPTXML, ANT, HTML, JS, JAVA, LATEX, PLIST, SQL,
 			CSS;
 	public static final BinaryFileFormat JAR, ZIP;
 	public static final ImageFileFormat GIF, JPG, PNG;
@@ -70,6 +70,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		XSD = registerTextFileFormat("XSD","text/xsd",TextSyntax.XML,"xsd");
 		WOD = registerTextFileFormat("WOD","text/wod",TextSyntax.XML,"wod");
 		DOCXML = registerTextFileFormat("DOCXML","text/docxml",TextSyntax.XML,"docx");
+		PPTXML = registerTextFileFormat("PPTXML","text/pptxml",TextSyntax.XML,"pptx");
 		ANT = registerTextFileFormat("ANT","text/ant",TextSyntax.XML,"ant");
 
 		HTML = registerTextFileFormat("HTML","text/html",TextSyntax.HTML,"html","htm");

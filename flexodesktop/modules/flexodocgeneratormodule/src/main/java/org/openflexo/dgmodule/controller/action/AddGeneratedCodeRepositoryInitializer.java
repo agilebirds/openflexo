@@ -150,9 +150,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 						action.setNewGeneratedCodeRepositoryName(paramName.getValue());
 						action.setNewGeneratedCodeRepositoryDirectory(paramDir.getValue());
 						
-						//SUPPR
-						System.out.println(paramDir.getValue().getPath());
-						//
+						
 						if (paramToc!=null) {
 							action.setTocRepository(paramToc.getValue());
 						}

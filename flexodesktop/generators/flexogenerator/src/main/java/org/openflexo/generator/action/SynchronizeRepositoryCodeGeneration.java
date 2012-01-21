@@ -102,7 +102,9 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		PlaySound.tryToPlayRandomSound();
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
 		pg.setAction(this);
-
+		
+		
+		
 		GenerationRepository repository = getRepository();
 		// Save if required
 		if (getSaveBeforeGenerating()) {
@@ -137,7 +139,7 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 				+ getFocusedObject().getProject().getPrefix() + "Application "
 				+ FlexoLocalization.localizedForKey("into")  +" "
 				+ getRepository().getDirectory().getAbsolutePath(), 15);
-
+		//TODO_MOS Synchronisation
 		pg.refreshConcernedResources();
 		GenerateSourceCode generateSourceCode = GenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(), this);
 		generateSourceCode.doAction();

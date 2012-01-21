@@ -32,6 +32,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.localization.FlexoLocalization;
 
 public class FlexoActionButton extends JButton 
@@ -100,10 +101,6 @@ public class FlexoActionButton extends JButton
 		public void actionPerformed(ActionEvent event)
 	    {
 	        FlexoAction action = _actionType.makeNewAction (getFocusedObject(),getGlobalSelection(), _editor);
-	        //SUPPR 
-	        System.out.println(getFocusedObject());
-	        
-	        //
 	        action.setInvoker(actionSource);
 	        action.actionPerformed(event);
 	    }

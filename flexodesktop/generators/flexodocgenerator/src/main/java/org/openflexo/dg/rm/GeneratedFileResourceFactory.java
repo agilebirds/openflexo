@@ -28,6 +28,7 @@ import org.openflexo.dg.file.DGDocxXmlFile;
 import org.openflexo.dg.file.DGHTMLFile;
 import org.openflexo.dg.file.DGJSFile;
 import org.openflexo.dg.file.DGLatexFile;
+import org.openflexo.dg.file.DGPptxXmlFile;
 import org.openflexo.dg.file.DGTextFile;
 import org.openflexo.dg.html.DGHTMLGenerator;
 import org.openflexo.dg.html.DGJSGenerator;
@@ -571,6 +572,46 @@ public class GeneratedFileResourceFactory {
 
 		return res;
 	}
+	
+	
+	/**
+	 *@author MOSTAFA
+	 *MOS
+	 *
+	 *
+	 */
+	public static ProjectPptxXmlFileResource createNewProjectPptXmlFileResource(DGRepository repository, DGPptxXMLGenerator<FlexoProject> generator, PptxTemplatesEnum pptxTemplate) {
+		FlexoProject project = generator.getProject();
+		ProjectPptxXmlFileResource res = (ProjectPptxXmlFileResource) project.resourceForKey(ResourceType.PPTXXML_FILE, ProjectPptxXmlFileResource.nameForRepositoryAndPptxTemplate(repository,
+				pptxTemplate));
+
+		if (res != null && res.getCGFile() == null) {
+			res.delete(false);
+			res = null;
+		}
+		if (res == null) {
+			res = new ProjectPptxXmlFileResource(generator, pptxTemplate);
+			res.setName(ProjectPptxXmlFileResource.nameForRepositoryAndPptxTemplate(repository, pptxTemplate));
+			DGPptxXmlFile cgFile = new DGPptxXmlFile(repository, res);
+
+			cgFile.setSymbolicDirectory(generator.getSymbolicDirectory(repository));
+			repository.addToFiles(cgFile);
+			res.setCGFile(cgFile);
+
+			registerDGFile(res, pptxTemplate.getFilePath());
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Created Project Pptx Xml resource " + res.getName());
+		} else {
+			res.setGenerator(generator);
+			generator.addPptxResource(res, pptxTemplate);
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Successfully retrieved project resource " + res.getName());
+		}
+
+		return res;
+	}
+	
+	//
 
 	private static void initCGFile(DGRepository repository, TextFileResource returned, CGFile cgFile) {
 		cgFile.setSymbolicDirectory(repository.getSrcSymbolicDirectory());

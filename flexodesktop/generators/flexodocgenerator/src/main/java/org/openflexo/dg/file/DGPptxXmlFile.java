@@ -26,7 +26,7 @@ public class DGPptxXmlFile extends AbstractCGFile {
 	        super(generatedCode);  
 	    }
 
-	    public DGPptxXmlFile(DGRepository repository, DocxXmlFileResource resource)
+	    public DGPptxXmlFile(DGRepository repository, PptxXmlFileResource resource)
 	    {
 	        super(repository,resource);
 	    }

@@ -60,6 +60,11 @@ public class DGModule extends FlexoModule
 	public DGModule(InteractiveFlexoEditor projectEditor) throws Exception
 	{
 		super(projectEditor);
+		
+		//SUPPR
+		System.out.println("Dans DGModule :"+projectEditor.getClass().getName());
+		//
+		
 		setFlexoController(new DGController(projectEditor, this));
 		DGPreferences.init(getDGController());
 		if (getProject().getGeneratedDoc().getGeneratedRepositories().size() == 0) {

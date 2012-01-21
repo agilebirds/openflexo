@@ -243,6 +243,12 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 	public static final ResourceType HTML_FILE = new HTMLFileResourceType();
 	public static final ResourceType JS_FILE = new JSFileResourceType();
 	public static final ResourceType DOCXXML_FILE = new DocxXmlFileResourceType();
+	/**
+	 * @author MOSTAFA
+	 * MOS
+	 */
+	public static final ResourceType PPTXXML_FILE = new PptxXmlFileResourceType();
+	//
 	public static final ResourceType PLIST_FILE = new PListResourceType();
 	public static final ResourceType JAVA_FILE = new JavaFileResourceType();
 	public static final ResourceType API_FILE = new APIFileResourceType();
@@ -1468,6 +1474,38 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 			return null;
 		}
 	}
+	
+	/**
+	 * MOS
+	 * @author MOSTAFA
+	 *
+	 */
+	private static class PptxXmlFileResourceType extends ResourceType {
+		PptxXmlFileResourceType() {
+			super();
+		}
+
+		@Override
+		public String getName() {
+			return "PPTXXML_FILE";
+		}
+
+		@Override
+		public FileFormat getFormat() {
+			return FileFormat.PPTXML;
+		}
+
+		@Override
+		public boolean isFlexoXMLStorageResource() {
+			return false;
+		}
+
+		@Override
+		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+			return null;
+		}
+	}
+	//
 
 	private static class APIFileResourceType extends ResourceType {
 		APIFileResourceType() {

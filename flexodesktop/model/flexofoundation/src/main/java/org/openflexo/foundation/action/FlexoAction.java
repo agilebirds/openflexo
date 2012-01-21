@@ -355,9 +355,7 @@ extends AbstractAction implements KeyValueCoding {
     		executionStatus = ExecutionStatus.EXECUTING_INITIALIZER;
     		confirmDoAction = getInitializer().run(e, (A)this);
     	}
-     	//SUPPR 
-     	System.out.println("confirDoAction = "+ confirmDoAction);
-     	//
+     	
      	String actionName = getLocalizedName();
     	if (confirmDoAction) {
     		if (getEditor() != null) {
@@ -369,9 +367,6 @@ extends AbstractAction implements KeyValueCoding {
     			}
     	   		executionStatus = ExecutionStatus.EXECUTING_CORE;
     	   		
-    	   		//SUPPR
-    	   		System.out.println("Action will be performed");
-    	   		//
     	   		
     			doAction(getContext());
     			if ((getEditor() != null) && (getEditor().getProject()!=null)) {

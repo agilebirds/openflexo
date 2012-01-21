@@ -102,9 +102,7 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException, MissingReaderRepositoryException, InvalidReaderRepositoryException
 	{
 		logger.info("Add GeneratedCodeRepository " + getFocusedObject());
-		//SUPPR 
-		System.out.println("le focused object dans addGeneratedCodeRepository est de type:"+getFocusedObject());
-		//
+		
 		if (getFocusedObject().getGeneratedCode() != null) 
 		{
 			FlexoProject project = getFocusedObject().getProject();

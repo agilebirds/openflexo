@@ -3,8 +3,9 @@ package org.openflexo.dg.rm;
 import java.util.Date;
 import java.util.logging.Level;
 
-import org.openflexo.dg.docx.DGDocxXMLGenerator;
-import org.openflexo.dg.docx.DocxTemplatesEnum;
+
+import org.openflexo.dg.pptx.DGPptxXMLGenerator;
+import org.openflexo.dg.pptx.PptxTemplatesEnum;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
@@ -23,7 +24,7 @@ import org.openflexo.foundation.wkf.FlexoProcess;
  * TODO_MOS
  */
 
-public class ProjectPptxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGenerator<FlexoProject>> implements FlexoObserver
+public class ProjectPptxXmlFileResource extends PptxXmlFileResource<DGPptxXMLGenerator<FlexoProject>> implements FlexoObserver
 {
 	private static final String RELS_SUFFIX = ".FILERELS";
 
@@ -34,19 +35,19 @@ public class ProjectPptxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
         super(builder);
     }
 
-	public ProjectPptxXmlFileResource(DGDocxXMLGenerator<FlexoProject> generator, DocxTemplatesEnum docxTemplate)
+	public ProjectPptxXmlFileResource(DGPptxXMLGenerator<FlexoProject> generator, PptxTemplatesEnum pptxTemplate)
 	{
 		super(generator.getProject());
 		setGenerator(generator);
-		generator.addDocxResource(this, docxTemplate);
+		generator.addPptxResource(this, pptxTemplate);
 		registerObserverWhenRequired();
 	}
 
 	@Override
 	public String getName()
 	{
-		if(super.getName() == null && getCGFile()!=null && getCGFile().getRepository() != null && getGenerator() != null && getGenerator().getDocxTemplateForResource(this) != null)
-			setName(nameForRepositoryAndDocxTemplate(getCGFile().getRepository(), getGenerator().getDocxTemplateForResource(this)));
+		if(super.getName() == null && getCGFile()!=null && getCGFile().getRepository() != null && getGenerator() != null && getGenerator().getPptxTemplateForResource(this) != null)
+			setName(nameForRepositoryAndPptxTemplate(getCGFile().getRepository(), getGenerator().getPptxTemplateForResource(this)));
 
 		return super.getName();
 	}
@@ -62,9 +63,9 @@ public class ProjectPptxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
 		}
 	}
 
-	public static String nameForRepositoryAndDocxTemplate(GenerationRepository repository, DocxTemplatesEnum docxTemplate)
+	public static String nameForRepositoryAndPptxTemplate(GenerationRepository repository, PptxTemplatesEnum pptxTemplate)
 	{
-		return repository.getName() + ".PROJECT_DOCX." + docxTemplate;
+		return repository.getName() + ".PROJECT_PPTX." + pptxTemplate;
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class ProjectPptxXmlFileResource extends DocxXmlFileResource<DGDocxXMLGen
 	public void rebuildDependancies()
 	{
 		super.rebuildDependancies();
-		if(getGenerator()!=null && getGenerator().getDocxTemplateForResource(this).getIsFullProjectDependent())
+		if(getGenerator()!=null && getGenerator().getPptxTemplateForResource(this).getIsFullProjectDependent())
 		{
 			for(FlexoProcess process : getProject().getAllLocalFlexoProcesses())
 				addToDependantResources(process.getFlexoResource());

@@ -116,6 +116,7 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 			DGDocxXMLGenerator<FlexoProject> generator = getGenerator(nameGenerator);
 			for (DocxTemplatesEnum docxTemplate : DocxTemplatesEnum.getOrderedTemplateListGroupedPerGenerator().get(nameGenerator)) {
 				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + docxTemplate.getFilePath(), false);
+				
 				ProjectDocxXmlFileResource res = GeneratedFileResourceFactory.createNewProjectDocxXmlFileResource(repository, generator,
 						docxTemplate);
 				resources.add(res);
