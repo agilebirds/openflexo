@@ -238,7 +238,10 @@ public class ViewPointPaletteElement extends ViewPointObject {
 	}
 
 	public Vector<EditionPattern> allAvailableEditionPatterns() {
-		return getCalc().getAllEditionPatternWithDropScheme();
+		if (getCalc() != null) {
+			return getCalc().getAllEditionPatternWithDropScheme();
+		}
+		return null;
 	}
 
 	@Override
