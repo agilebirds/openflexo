@@ -1454,6 +1454,10 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	public static AffineTransform convertFromDrawableToDrawingAT(GraphicalRepresentation<?> source, double scale) {
 		double tx = 0;
 		double ty = 0;
+		if (source == null) {
+			logger.warning("Called convertFromDrawableToDrawingAT() for null graphical representation (source)");
+			return new AffineTransform();
+		}
 		Object current = source.getDrawable();
 		while (current != source.getDrawing().getModel()) {
 			if (source.getDrawing().getGraphicalRepresentation(current) == null) {

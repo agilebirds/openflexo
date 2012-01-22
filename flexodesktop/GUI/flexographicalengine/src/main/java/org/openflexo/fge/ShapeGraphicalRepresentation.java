@@ -1384,7 +1384,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
-	/*public void updateConstraints() {
+	public void updateConstraints() {
 		System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
 				+ widthConstraints.isValid() + "," + heightConstraints.isValid());
 		logger.info("Called updateConstraints()");
@@ -1408,7 +1408,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			updateHeightPosition();
 			System.out.println("height is now " + getHeight());
 		}
-	}*/
+	}
 
 	private void updateXPosition() {
 		double newValue = ((Number) xConstraints.getBindingValue(this)).doubleValue();

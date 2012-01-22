@@ -162,7 +162,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 			_primaryShape = newShape;
 			gr.setLocation(dropLocation);
 			// Temporary comment this portion of code if child shapes are declared inside this shape
-			if (!action.getPatternRole().containsShapes()) {
+			if (!action.getPatternRole().containsShapes() && action.getContainer().toString().equals(EditionScheme.TOP_LEVEL)) {
 				ShapeBorder border = gr.getBorder();
 				ShapeBorder newBorder = new ShapeBorder(border);
 				boolean requireNewBorder = false;
@@ -200,6 +200,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 					.getPrimaryRepresentationRole().getGraphicalRepresentation();
 			gr.setLocation(new FGEPoint(dropLocation.x + gr.getX() - primaryGR.getX(), dropLocation.y + gr.getY() - primaryGR.getY()));
 		}
+		gr.updateConstraints();
 
 		return newShape;
 	}

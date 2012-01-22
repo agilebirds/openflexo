@@ -137,6 +137,7 @@ public abstract class FlexoOntology extends OntologyObject {
 				while (it.hasNext()) {
 					Attribute at = (Attribute) it.next();
 					if (at.getName().equals("base")) {
+						logger.fine("Returned " + at.getValue());
 						return at.getValue();
 					}
 				}
@@ -146,6 +147,7 @@ public abstract class FlexoOntology extends OntologyObject {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		logger.fine("Returned null");
 		return null;
 	}
 
@@ -779,7 +781,9 @@ public abstract class FlexoOntology extends OntologyObject {
 
 		// read the source document
 		try {
+			logger.info("BEGIN Read " + ontologyURI);
 			ontModel.read(ontologyURI);
+			logger.info("END read " + ontologyURI);
 		} catch (Exception e) {
 			logger.warning("Unexpected exception while reading ontology " + ontologyURI);
 			logger.warning("Exception " + e.getMessage() + ". See logs for details");
@@ -960,7 +964,7 @@ public abstract class FlexoOntology extends OntologyObject {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(aFile);
-			getOntModel().write(out, null, getOntologyURI());
+			getOntModel().write(out, "RDF/XML-ABBREV", getOntologyURI()); // "RDF/XML-ABBREV"
 			clearIsModified(true);
 			logger.info("Wrote " + aFile);
 		} catch (FileNotFoundException e) {

@@ -537,7 +537,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 				logger.warning("Sorry, shape pattern role is undefined");
 				return newShema;
 			}
-			logger.info("Shape pattern role: " + shapePatternRole);
+			// logger.info("Shape pattern role: " + shapePatternRole);
 			EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 			ViewShape newShape = new ViewShape(newShema);
 			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof ViewShape) {
