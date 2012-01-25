@@ -70,7 +70,12 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		XSD = registerTextFileFormat("XSD","text/xsd",TextSyntax.XML,"xsd");
 		WOD = registerTextFileFormat("WOD","text/wod",TextSyntax.XML,"wod");
 		DOCXML = registerTextFileFormat("DOCXML","text/docxml",TextSyntax.XML,"docx");
+		/**
+		 * @author MOSTAFA
+		 * MOS
+		 */
 		PPTXML = registerTextFileFormat("PPTXML","text/pptxml",TextSyntax.XML,"pptx");
+		//
 		ANT = registerTextFileFormat("ANT","text/ant",TextSyntax.XML,"ant");
 
 		HTML = registerTextFileFormat("HTML","text/html",TextSyntax.HTML,"html","htm");

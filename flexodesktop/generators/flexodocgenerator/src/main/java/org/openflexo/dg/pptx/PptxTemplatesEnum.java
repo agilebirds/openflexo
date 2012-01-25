@@ -22,7 +22,9 @@ package org.openflexo.dg.pptx;
 /**
  * MOS
  * @author MOSTAFA
- * TODO_MOS
+ * TODO_MOS Modify to fit the pptx structure
+ * 
+ * 
  */
 
 import java.util.ArrayList;

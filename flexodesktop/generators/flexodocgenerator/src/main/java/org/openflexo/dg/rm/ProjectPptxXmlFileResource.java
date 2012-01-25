@@ -74,7 +74,9 @@ public class ProjectPptxXmlFileResource extends PptxXmlFileResource<DGPptxXMLGen
 	@Override
 	public void rebuildDependancies()
 	{
+		//MARKER 1.5.1
 		super.rebuildDependancies();
+		
 		if(getGenerator()!=null && getGenerator().getPptxTemplateForResource(this).getIsFullProjectDependent())
 		{
 			for(FlexoProcess process : getProject().getAllLocalFlexoProcesses())
@@ -86,6 +88,8 @@ public class ProjectPptxXmlFileResource extends PptxXmlFileResource<DGPptxXMLGen
 			addToDependantResources(getProject().getFlexoComponentLibraryResource().getFlexoResource());
 			addToDependantResources(getProject().getFlexoDKVResource());
 		}
+		
+		//TODO_MOS must modify this to make it fit the pptx model
 		addToDependantResources(getProject().getTOCResource());
 	}
 

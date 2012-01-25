@@ -6,7 +6,7 @@ package org.openflexo.dg.file;
  * TODO_MOS
  */
 
-import org.openflexo.dg.rm.DocxXmlFileResource;
+
 import org.openflexo.dg.rm.PptxXmlFileResource;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GeneratedOutput;

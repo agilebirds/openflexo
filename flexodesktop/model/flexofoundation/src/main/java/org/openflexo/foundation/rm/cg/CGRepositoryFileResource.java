@@ -179,7 +179,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	}
 
     public FlexoProjectFile makeFlexoProjectFile (String relativePath, String name)
-    {
+    {	//MARKER xxx 1.3.2.1 
     	if (relativePath == null) {
 			relativePath = "";
 		}

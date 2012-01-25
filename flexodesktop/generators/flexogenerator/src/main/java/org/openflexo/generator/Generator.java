@@ -242,6 +242,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	public Vector<CGRepositoryFileResource> refreshConcernedResources(Vector<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> forResources)
 	{
 		Vector<CGRepositoryFileResource> oldConcernedResources = concernedResources;
+		//MARKER marker 1.1.1
 		concernedResources = buildGeneratedResourceListForRepository(getProjectGenerator().getRepository());
 		if (oldConcernedResources != null) {
 			for (CGRepositoryFileResource resource : oldConcernedResources) {
@@ -250,6 +251,11 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 				}
 			}
 		}
+		/**
+		 * The returned resources are ProjectPptxXmlFileResource instances.
+		 */
+		
+		//MARKER 1.5 resource.rebuildDependancies
 		for (CGRepositoryFileResource resource : concernedResources) {
 			resource.rebuildDependancies();
 		}

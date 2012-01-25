@@ -117,12 +117,22 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 	@Override
 	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		hasBeenInitialized = true;
-
+		//MARKER  1.2 getOrderedTemplateListGroupedPerGenerator
 		for (String nameGenerator : PptxTemplatesEnum.getOrderedTemplateListGroupedPerGenerator().keySet()) {
+			/**
+			 * getGenerator methode returns the corresponding DGPptxXMLGenerator instance from the generators list attribute, (it creates it if
+			 * not created.)
+			 */
 			DGPptxXMLGenerator<FlexoProject> generator = getGenerator(nameGenerator);
 			for (PptxTemplatesEnum pptxTemplate : PptxTemplatesEnum.getOrderedTemplateListGroupedPerGenerator().get(nameGenerator)) {
 				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + pptxTemplate.getFilePath(), false);
-				ProjectPptxXmlFileResource res = GeneratedFileResourceFactory.createNewProjectPptxXmlFileResource(repository, generator,
+				/**
+				 * GeneratedFileResourceFactory.createNewProjectPptXmlFileResource method returns the ProjectPptxXmlFileResource instance
+				 * corresponding to generator, repository and pptxTemplate. if not yet created it creates it.
+				 * 
+				 */
+				//MARKER 1.3 GeneratedFileResourceFactory.createNewProjectPptXmlFileResource
+				ProjectPptxXmlFileResource res = GeneratedFileResourceFactory.createNewProjectPptXmlFileResource(repository, generator,
 						pptxTemplate);
 				resources.add(res);
 			}
@@ -132,6 +142,7 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 		// Useless as they are copied in copyAdditionalFiles, should be used instead but the images imported in the wysiwyg are not in the
 		// resources currently (and thus not copied by buildResourcesAndSetGeneratorsForCopiedResources)
 		// buildResourcesAndSetGeneratorsForCopiedResources(resources);
+		//MARKER 1.4 screenshotsGenerator.buildResourcesAndSetGenerators
 		screenshotsGenerator.buildResourcesAndSetGenerators(repository, resources);
 	}
 

@@ -136,12 +136,17 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
     @Override
 	public Vector<CGRepositoryFileResource> refreshConcernedResources(Vector<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> forResources)
     {
+    	//MARKER marker 1.1 
         getRepository().disableObserving();
         Vector<CGRepositoryFileResource> returned = super.refreshConcernedResources(forResources);
         for (CGFile file : getRepository().getFiles()) {
             if (file.getResource() == null)
+            	
                 file.setMarkedForDeletion(true);
             else {
+            	//SUPPR
+            	System.out.println(file.getName()+" "+file.getResource().getName());
+            //
                 CGRepositoryFileResource resource = file.getResource();
                 if (!returned.contains(resource)) {
                     file.setMarkedForDeletion(true);

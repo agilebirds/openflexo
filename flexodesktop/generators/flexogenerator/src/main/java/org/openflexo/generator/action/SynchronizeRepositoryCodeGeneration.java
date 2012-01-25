@@ -103,11 +103,13 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
 		pg.setAction(this);
 		
-		
+		//SUPPR
+		System.out.println("dans synchronisation "+pg.getClass().getName());
 		
 		GenerationRepository repository = getRepository();
 		// Save if required
 		if (getSaveBeforeGenerating()) {
+			//MARKER 0
 			getRepository().getProject().save();
 		}
 

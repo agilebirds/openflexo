@@ -73,6 +73,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 	@Override
 	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources)
 	{
+		//MARKER 1.4.1
 		Hashtable<FlexoCopiedResource, CopiedResourceGenerator> newGenerators = new Hashtable<FlexoCopiedResource, CopiedResourceGenerator>();
 		// First Workflow
 		FlexoCopiedResource wCopy = getResourceForFlexoModelObject(getProject().getWorkflow(),true);

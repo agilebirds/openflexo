@@ -193,6 +193,12 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	private static final String FRAMEWORKS_DIRECTORY = "Frameworks";
 	private static final String HTML_DIRECTORY = "HTML";
 	private static final String DOCX_DIRECTORY = "Docx";
+	/**
+	 * MOS
+	 * @author MOSTAFA
+	 */
+	private static final String PPTX_DIRECTORY = "Pptx";
+	//
 	private static final String LATEX_DIRECTORY = "Latex";
 	public static final String PROCESS_SNAPSHOT_LOCAL_DIRECTORY = "ProcessSnapshotLocal";
 	private static final String PROCESS_SNAPSHOT_IMPORTED_DIRECTORY = "ProcessSnapshotImported";
@@ -517,6 +523,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project...");
 		}
+		//MARKER 0.0
 		saveModifiedResources(progress, true);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project... DONE");
@@ -836,6 +843,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 		for (FlexoStorageResource data : unsaved) {
 			if (progress != null) {
+				//MARKER 0.0.0
+				//SUPPR
+				System.out.println(data.getFileName()+" instanceOf "+data.getClass().getName());
+				
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + data.getName());
 			}
 			if (logger.isLoggable(Level.FINE)) {

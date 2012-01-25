@@ -10,8 +10,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.dg.docx.DGDocxXMLGenerator;
-import org.openflexo.dg.file.DGDocxXmlFile;
+
 import org.openflexo.dg.file.DGPptxXmlFile;
 import org.openflexo.dg.pptx.DGPptxXMLGenerator;
 import org.openflexo.foundation.DataModification;
@@ -74,9 +73,9 @@ public class PptxXmlFileResource<G extends DGPptxXMLGenerator<? extends FlexoMod
 	}
 
 	@Override
-	public DocxXmlFile getGeneratedResourceData()
+	public PptxXmlFile getGeneratedResourceData()
 	{
-		return (DocxXmlFile) super.getGeneratedResourceData();
+		return (PptxXmlFile) super.getGeneratedResourceData();
 	}
 
 	/**
@@ -117,7 +116,7 @@ public class PptxXmlFileResource<G extends DGPptxXMLGenerator<? extends FlexoMod
 	@Override
 	public ResourceType getResourceType()
 	{
-		return ResourceType.DOCXXML_FILE;
+		return ResourceType.PPTXXML_FILE;
 	}
 
 	/**
