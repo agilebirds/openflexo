@@ -99,6 +99,9 @@ public class GenerateSourceCode extends MultipleFileGCAction<GenerateSourceCode>
 
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
 		pg.setAction(this);
+		
+		//SUPPR 
+		System.out.println("Dans GenerateSourceCode "+pg.getClass().getName()+" "+pg.getDefaultTemplates() );
 
 		GenerationRepository repository = getRepository();
 		if (getSaveBeforeGenerating()) {

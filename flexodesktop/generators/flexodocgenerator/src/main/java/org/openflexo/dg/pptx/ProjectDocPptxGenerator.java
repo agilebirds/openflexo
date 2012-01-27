@@ -96,6 +96,7 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 
 	@Override
 	public CGTemplates getDefaultTemplates() {
+		
 		return getProject().getGeneratedDoc().getTemplates();
 	}
 
@@ -207,7 +208,7 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 	@Override
 	public void copyAdditionalFiles() throws IOException {
 		super.copyAdditionalFiles();
-		FileUtils.copyContentDirToDir(getProject().getImportedImagesDir(), new File(getRootOutputDirectory(), "word/media/" + getProject()
+		FileUtils.copyContentDirToDir(getProject().getImportedImagesDir(), new File(getRootOutputDirectory(), "ppt/media/" + getProject()
 				.getImportedImagesDir().getName()), CopyStrategy.REPLACE_OLD_ONLY);
 		FileUtils.copyContentDirToDir(getProject().getDocxToEmbedDirectory(), getRootOutputDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
 	}

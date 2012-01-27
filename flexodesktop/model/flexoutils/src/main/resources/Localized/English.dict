@@ -1,5 +1,5 @@
 #English
-#Mon Jan 16 20:30:22 CET 2012
+#Wed Jan 25 20:39:53 CET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -493,6 +493,7 @@ Operator\ edge=Operator edge
 PDF=PDF
 PDF_generation_is_based_on_code_generated_on_disk._Is_your_code_on_disk_ready_to_be_compiled?=PDF generation is based on code generated on disk. Is your code on disk ready to be compiled?
 POLYGON=POLYGON
+PPTX=PPTX
 PROTECTED_FIELD=Protected field
 PROTOTYPE=PROTOTYPE
 PUBLIC_ACCESSORS_ONLY=Public accessors only
@@ -2529,7 +2530,6 @@ generate_core_only=Generate core only
 generate_datamodel=Generate doc for datamodel
 generate_doc_if_required=Generate doc if required
 generate_docx=Generate Docx
-generate_pptx=Generate Pptx
 generate_entity_class=Generate entity class
 generate_files=Generates all files
 generate_helpset=Generate HelpSet
@@ -2542,6 +2542,7 @@ generate_operation_components=Generate operation screen
 generate_page_components=Generate page screen
 generate_pdf=Generate PDF
 generate_popups_components=Generate popup components
+generate_pptx=Generate Pptx
 generate_processes_business_data=Generate processes business data
 generate_processes_business_data_succeed=Processes business data generation succeeded \!
 generate_project=Generate project
@@ -4066,12 +4067,12 @@ register_new_release=Register new release
 regular_expression=Regular expression
 reinitialize=Reinitialize
 reinject_docx=Reinject Docx
-reinject_pptx=Reinject Pptx
 reinject_docx_failed=Reinject Docx failed
 reinject_docx_succeed=Reinject Docx succeed
 reinject_docx_warnings=Occured issues
 reinject_in_model=Reinject in model
 reinject_in_model_description=Following files have been edited by third-party software, which means that they might be not synchronized with OpenFlexo data model. Model reinjection may be performed by interpreting and updating OpenFlexo model according to parsed informations extracted from source code. Please select all the files whose modifications should be imported and reinjected in OpenFlexo model.
+reinject_pptx=Reinject Pptx
 reinjecting_content_in_model_for_tocentry=Reinjecting content in model for toc entry
 reinjecting_description_in_model_for_object=Reinjecting description in model for object
 reinjecting_docx_file=Reinjecting docx file

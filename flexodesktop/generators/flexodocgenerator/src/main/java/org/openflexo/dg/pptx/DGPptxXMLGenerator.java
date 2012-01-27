@@ -106,6 +106,8 @@ public class DGPptxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		getProjectGenerator().refreshConcernedResources();
 	}
 
+	
+	//MOS Generation
 	@Override
 	public void generate(boolean forceRegenerate)
 	{

@@ -1,5 +1,5 @@
 #French
-#Mon Jan 16 20:30:22 CET 2012
+#Wed Jan 25 20:39:54 CET 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -492,6 +492,7 @@ Operator\ edge=Ar\u00EAte op\u00E9rateur
 PDF=PDF
 PDF_generation_is_based_on_code_generated_on_disk._Is_your_code_on_disk_ready_to_be_compiled?=La g\u00E9n\u00E9ration de PDF est bas\u00E9e sur le contenu des fichiers \u00E9crits sur le disque. Est-ce que les fichiers sur le disque sont pr\u00EAts \u00E0 \u00EAtre compil\u00E9s?
 POLYGON=POLYGON
+PPTX=PPTX
 PROTECTED_FIELD=Champ prot\u00E9g\u00E9 (protected)
 PROTOTYPE=PROTOTYPE
 PUBLIC_ACCESSORS_ONLY=Accesseurs publics uniquement

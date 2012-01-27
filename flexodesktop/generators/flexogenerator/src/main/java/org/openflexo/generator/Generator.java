@@ -339,13 +339,14 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return new ArrayList<CGTemplate>();
 	}
 
+	//MARKER merge
 	public String merge(String templateRelativePath, VelocityContext velocityContext) throws GenerationException
 	{
 		StringWriter sw = new StringWriter();
 		try {
 			updateVelocityMacroIfRequired();
 			CGTemplate template = templateWithName(templateRelativePath);
-
+			
 			Velocity.setApplicationAttribute("templateLocator", getTemplateLocator());
 			Velocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
 			Velocity.setApplicationAttribute("templateLocator", null);
@@ -443,6 +444,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return templateName;
 	}
 
+	//MARKER templateWuthName method
 	public CGTemplate templateWithName(String templateRelativePath) throws TemplateNotFoundException
 	{
 		CGTemplate templateFile = getTemplateLocator().templateWithName(templateRelativePath);

@@ -61,9 +61,6 @@ public class DGModule extends FlexoModule
 	{
 		super(projectEditor);
 		
-		//SUPPR
-		System.out.println("Dans DGModule :"+projectEditor.getClass().getName());
-		//
 		
 		setFlexoController(new DGController(projectEditor, this));
 		DGPreferences.init(getDGController());

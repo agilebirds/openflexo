@@ -1,5 +1,5 @@
 #Dutch
-#Mon Jan 16 20:30:22 CET 2012
+#Wed Jan 25 20:39:54 CET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -493,6 +493,7 @@ Operator\ edge=Operator edge
 PDF=PDF
 PDF_generation_is_based_on_code_generated_on_disk._Is_your_code_on_disk_ready_to_be_compiled?=PDF generation is based on code generated on disk. Is your code on disk ready to be compiled?
 POLYGON=POLYGON
+PPTX=PPTX
 PROTECTED_FIELD=Protected field
 PROTOTYPE=PROTOTYPE
 PUBLIC_ACCESSORS_ONLY=Public accessors only

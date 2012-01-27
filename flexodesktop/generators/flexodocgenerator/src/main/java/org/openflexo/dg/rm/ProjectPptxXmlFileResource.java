@@ -60,6 +60,7 @@ public class ProjectPptxXmlFileResource extends PptxXmlFileResource<DGPptxXMLGen
 			if (logger.isLoggable(Level.FINE))
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
 			getProject().addObserver(this);
+			
 		}
 	}
 

@@ -98,6 +98,8 @@ public class TemplateLocator extends FlexoMemoryResource
 
 	public CGTemplate templateWithName(String templateRelativePath) throws TemplateNotFoundException
 	{
+		
+		
 		if (templateRelativePath.startsWith("/")) {
 			templateRelativePath = templateRelativePath.substring(1);
 		}
@@ -117,10 +119,14 @@ public class TemplateLocator extends FlexoMemoryResource
 	private CGTemplate searchForTemplate(String templateRelativePath) throws TemplateNotFoundException
 	{
 		Enumeration<CGTemplateSet> en = templateDirectories().elements();
+		
+		
 		CGTemplateSet set = null;
 		while (en.hasMoreElements()) {
 			set = en.nextElement();
-			//logger.info("search in "+set.getDirectory().getAbsolutePath());
+			//TODO_MOS comment the line above
+			logger.info("search in "+set.getName());
+			
 			CGTemplate answer = set.getTemplate(templateRelativePath);
 			if (answer != null) {
 				return answer;

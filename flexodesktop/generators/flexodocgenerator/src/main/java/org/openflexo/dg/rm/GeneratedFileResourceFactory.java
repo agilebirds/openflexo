@@ -546,10 +546,7 @@ public class GeneratedFileResourceFactory {
 		FlexoProject project = generator.getProject();
 		ProjectDocxXmlFileResource res = (ProjectDocxXmlFileResource) project.resourceForKey(ResourceType.DOCXXML_FILE, ProjectDocxXmlFileResource.nameForRepositoryAndDocxTemplate(repository,
 				docxTemplate));
-		//SUPPR
-		if(res!=null)
-		System.out.println("dans createNewProjectDocxXmlFileResource "+res.getName()+" "+res.getCGFile());
-		//
+		
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -585,8 +582,8 @@ public class GeneratedFileResourceFactory {
 	 */
 	public static ProjectPptxXmlFileResource createNewProjectPptXmlFileResource(DGRepository repository, DGPptxXMLGenerator<FlexoProject> generator, PptxTemplatesEnum pptxTemplate) {
 		FlexoProject project = generator.getProject();
-		ProjectPptxXmlFileResource res = (ProjectPptxXmlFileResource) project.resourceForKey(ResourceType.PPTXXML_FILE, ProjectPptxXmlFileResource.nameForRepositoryAndPptxTemplate(repository,
-				pptxTemplate));
+		ProjectPptxXmlFileResource res = (ProjectPptxXmlFileResource) project.resourceForKey(ResourceType.PPTXXML_FILE
+				, ProjectPptxXmlFileResource.nameForRepositoryAndPptxTemplate(repository,pptxTemplate));
 
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
@@ -645,9 +642,6 @@ public class GeneratedFileResourceFactory {
 
 	private static <DGLF extends CGRepositoryFileResource> DGLF registerDGFile(DGLF returned, String fileName) {
 		//MARKER 1.3.2
-		//SUPPR
-		System.out.println("1.3.2 "+returned.getClass().getName());
-		//
 		FlexoProjectFile file = returned.makeFlexoProjectFile("", fileName);
 		try {
 			returned.setResourceFile(file);
