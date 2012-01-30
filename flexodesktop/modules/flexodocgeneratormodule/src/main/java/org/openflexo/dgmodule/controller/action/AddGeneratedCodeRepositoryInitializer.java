@@ -98,7 +98,8 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 						paramToc = new DynamicDropDownParameter<TOCRepository>("toc","toc",getProject().getTOCData().getRepositories(),getProject().getTOCData().getRepositories().firstElement());
 						paramToc.setFormatter("title");
 						paramToc.setDepends("format");
-						paramToc.setConditional("format!=HTML");
+						//MOS
+						paramToc.setConditional("format!=HTML&&format!=PPTX");
 					}
 					final DirectoryParameter paramDir = new DirectoryParameter("directory", "source_directory", getParamDir(action, gc, targetType.getValue(), format.getValue(), paramName)) ;
 					format.addValueListener(new ValueListener<Format>() {

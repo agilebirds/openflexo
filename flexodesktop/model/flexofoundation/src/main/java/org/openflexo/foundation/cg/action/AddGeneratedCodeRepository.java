@@ -203,8 +203,8 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 					case PPTX:
 						srcSymbDirType = CGSymbolicDirectory.PPTX;
 //						//TODO_MOS
-						createFiguresSymbolicDir(project, "/./word/media/figures/");
-						createResourcesSymbolicDir(project, srcSymbDirType, "/./word/media");
+						createFiguresSymbolicDir(project, "/./ppt/media/figures/");
+						createResourcesSymbolicDir(project, srcSymbDirType, "/./ppt/media");
 						//
 						break;
 						//

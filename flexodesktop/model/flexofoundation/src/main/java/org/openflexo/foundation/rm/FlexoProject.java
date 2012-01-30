@@ -118,6 +118,7 @@ import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorRef
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
+import org.openflexo.foundation.ptoc.PTOCData;
 import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
@@ -1595,6 +1596,29 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 		return returned;
 	}
+	
+	/**
+	 * MOS
+	 */
+	public PTOCData getPTOCData() {
+		if (getTOCResource() == null) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Create TOC");
+			}
+			PTOCData.createNewPTOCData(this);
+		}
+		return getPTOCResource().getResourceData();
+	}
+
+	public FlexoPTOCResource getPTOCResource() {
+		FlexoPTOCResource returned = (FlexoPTOCResource) resourceForKey(ResourceType.PTOC, getProjectName());
+		if (returned == null) {
+			PTOCData.createNewPTOCData(this);
+			return getPTOCResource();
+		}
+		return returned;
+	}
+	//
 
 	public FlexoNavigationMenu getFlexoNavigationMenu() {
 		if (getFlexoNavigationMenuResource() == null) {

@@ -1,5 +1,5 @@
 #French
-#Wed Jan 25 20:39:54 CET 2012
+#Mon Jan 30 10:52:17 CET 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -1786,6 +1786,7 @@ description_OperationComponentDefinition=Description d'un composant d'une op\u00
 description_ProcessFolder=Sous section de description d'un dossier de FlexoProcess
 description_Role=Sous section de description d'un Role
 description_data_model=Description du mod\u00E8le de donn\u00E9es
+description_definitions=description_definitions
 description_er_diagram=Description du diagramme entit\u00E9/relation
 description_processes=Sous-section de description d'un processus
 description_raci=Sous-section  Matrice Raci

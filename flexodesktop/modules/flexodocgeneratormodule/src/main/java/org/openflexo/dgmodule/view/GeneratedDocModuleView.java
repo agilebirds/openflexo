@@ -35,6 +35,7 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
+import org.openflexo.foundation.ptoc.action.AddPTOCRepository;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
@@ -50,6 +51,9 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
 	private DGController _controller;
     private JComponent addDGRepositoryButton;
     private JComponent addTOCRepositoryButton;
+    //MOS
+    private JComponent addPTOCRepositoryButton;
+    //
     private JPanel panel;
     
     public GeneratedDocModuleView(GeneratedOutput gc, DGController controller)
@@ -72,6 +76,9 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
     		panel.remove(addDGRepositoryButton);
         panel.add(addTOCRepositoryButton = new FlexoActionButton(AddTOCRepository.actionType,this,_controller.getEditor()), BorderLayout.CENTER);
         panel.add(addDGRepositoryButton = new FlexoActionButton(AddGeneratedCodeRepository.actionType,this,_controller.getEditor()), BorderLayout.CENTER);
+        //MOS
+        panel.add(addPTOCRepositoryButton = new FlexoActionButton(AddPTOCRepository.actionType,this,_controller.getEditor()), BorderLayout.CENTER);
+        //
         panel.validate();
         panel.repaint();
     }

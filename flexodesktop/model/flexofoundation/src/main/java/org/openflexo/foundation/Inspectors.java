@@ -736,6 +736,14 @@ public class Inspectors {
 		public String DE_TOC_REPOSITORY_INSPECTOR = "TOCRepository.inspector";
 		public String DE_TOC_ENTRY_INSPECTOR = "TOCEntry.inspector";
 
+		/**
+		 * MOS
+		 * @author MOSTAFA
+		 */
+		public String DE_PTOC_REPOSITORY_INSPECTOR = "PTOCRepository.inspector";
+		public String DE_PTOC_ENTRY_INSPECTOR = "PTOCEntry.inspector";
+		
+		//
 		@Override
 		public String getName() {
 			return "DE";

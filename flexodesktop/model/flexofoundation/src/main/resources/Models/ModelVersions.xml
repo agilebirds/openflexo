@@ -141,6 +141,11 @@
     <version id="0.1" modelFile="TOCModel/toc_model_0.1.xml"/>
   </class>
   
+  <!--MOS-->
+  <class name="org.openflexo.foundation.ptoc.PTOCData" latestVersion="0.1">
+    <version id="0.1" modelFile="PTOCModel/toc_model_0.1.xml"/>
+  </class>
+  <!--EndMOS-->
   <class name="org.openflexo.foundation.FlexoLinks" latestVersion="0.1">
     <version id="0.1" modelFile="LinksModel/links_model_0.1.xml"/>
   </class>
@@ -267,6 +272,9 @@
 	  <release_class name="org.openflexo.foundation.cg.GeneratedCode" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.cg.GeneratedDoc" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.toc.TOCData" version="0.1"/>
+	  <!-- MOS-->
+	  <release_class name="org.openflexo.foundation.ptoc.PTOCData" version="0.1"/>
+	  <!-- EndMOS -->
 	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
   </release>
     <release identifier="1.3.6">
@@ -283,6 +291,9 @@
 	  <release_class name="org.openflexo.foundation.cg.GeneratedCode" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.cg.GeneratedDoc" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.toc.TOCData" version="0.1"/>
+	  <!-- MOS -->
+	  <release_class name="org.openflexo.foundation.ptoc.PTOCData" version="0.1"/>
+	  <!-- EndMOS -->
 	  <release_class name="org.openflexo.foundation.FlexoLinks" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
   </release>
@@ -304,6 +315,9 @@
 	  <release_class name="org.openflexo.foundation.view.View" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.cg.GeneratedDoc" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.toc.TOCData" version="0.1"/>
+	  <!-- MOS -->
+	  <release_class name="org.openflexo.foundation.ptoc.PTOCData" version="0.1"/>
+	  <!-- EndMOS -->
 	  <release_class name="org.openflexo.foundation.FlexoLinks" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
   </release>
@@ -325,6 +339,9 @@
 	  <release_class name="org.openflexo.foundation.view.View" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.cg.GeneratedDoc" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.toc.TOCData" version="0.1"/>
+	  <!-- MOS -->
+	  <release_class name="org.openflexo.foundation.ptoc.PTOCData" version="0.1"/>
+	  <!-- EndMOS -->
 	  <release_class name="org.openflexo.foundation.FlexoLinks" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
   </release>
@@ -346,6 +363,9 @@
 	  <release_class name="org.openflexo.foundation.view.View" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.cg.GeneratedDoc" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.toc.TOCData" version="0.1"/>
+	  <!-- MOS -->
+	  <release_class name="org.openflexo.foundation.ptoc.PTOCData" version="0.1"/>
+	  <!-- EndMOS -->
 	  <release_class name="org.openflexo.foundation.FlexoLinks" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
   </release>
@@ -367,6 +387,9 @@
 	  <release_class name="org.openflexo.foundation.ontology.shema.OEShema" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.cg.GeneratedDoc" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.toc.TOCData" version="0.1"/>
+	  <!-- MOS -->
+	  <release_class name="org.openflexo.foundation.ptoc.PTOCData" version="0.1"/>
+	  <!-- EndMOS -->
 	  <release_class name="org.openflexo.foundation.FlexoLinks" version="0.1"/>
 	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
   </release>

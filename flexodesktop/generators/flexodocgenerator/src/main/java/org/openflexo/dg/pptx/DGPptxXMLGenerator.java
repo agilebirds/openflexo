@@ -107,7 +107,7 @@ public class DGPptxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	}
 
 	
-	//MOS Generation
+	//MARKER Generate method
 	@Override
 	public void generate(boolean forceRegenerate)
 	{

@@ -54,7 +54,7 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 	
 	public static TextFileFormat RM_FORMAT,LINKS_FORMAT,WORKFLOW_FORMAT,COMPONENT_LIBRARY_FORMAT,NAVIGATION_MENU_FORMAT,
 						PROCESS_FORMAT,OPERATION_COMPONENT_FORMAT,TAB_COMPONENT_FORMAT,MONITORING_SCREEN_FORMAT,MONITORING_COMPONENT_FORMAT,
-						GENERATED_CODE_FORMAT,GENERATED_SOURCES_FORMAT,GENERATED_DOC_FORMAT,IMPLEMENTATION_MODEL_FORMAT,TOC_FORMAT,
+						GENERATED_CODE_FORMAT,GENERATED_SOURCES_FORMAT,GENERATED_DOC_FORMAT,IMPLEMENTATION_MODEL_FORMAT,TOC_FORMAT,PTOC_FORMAT,
 						REUSABLE_COMPONENT_FORMAT,POPUP_COMPONENT_FORMAT,DATA_MODEL_FORMAT,PROJECT_ONTOLOGY_FORMAT,IMPORTED_ONTOLOGY_FORMAT,
 						OE_SHEMA_LIBRARY_FORMAT,OE_SHEMA_FORMAT,DKV_FORMAT,WS_LIBRARY_FORMAT;
 	public static DirectoryFormat PALETTE_FORMAT, TEMPLATES_FORMAT, INSPECTORS_FORMAT;
@@ -77,6 +77,9 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 		GENERATED_SOURCES_FORMAT = FileFormat.registerTextFileFormat("GENERATED_SOURCES","application/openflexo/sg",TextSyntax.XML,"sg");
 		IMPLEMENTATION_MODEL_FORMAT = FileFormat.registerTextFileFormat("IMPLEMENTATION_MODEL","application/openflexo/implementation_model",TextSyntax.XML);
 		TOC_FORMAT = FileFormat.registerTextFileFormat("TOC","application/openflexo/toc",TextSyntax.XML,"toc");
+		//MOS
+		PTOC_FORMAT = FileFormat.registerTextFileFormat("PTOC","application/openflexo/ptoc",TextSyntax.XML,"ptoc");
+		//
 		DATA_MODEL_FORMAT = FileFormat.registerTextFileFormat("DATA_MODEL","application/openflexo/dm",TextSyntax.XML,"dm");
 		PROJECT_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("PROJECT_ONTOLOGY","application/openflexo/ontology",TextSyntax.XML,"owl");
 		IMPORTED_ONTOLOGY_FORMAT = FileFormat.registerTextFileFormat("IMPORTED_ONTOLOGY","application/openflexo/ontology",TextSyntax.XML,"owl");
@@ -136,6 +139,9 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 			_availableValues.add(GENERATED_CODE);
 			_availableValues.add(GENERATED_DOC);
 			_availableValues.add(TOC);
+			//MOS
+			_availableValues.add(PTOC);
+			//
 			_availableValues.add(REUSABLE_COMPONENT);
 			_availableValues.add(POPUP_COMPONENT);
 			_availableValues.add(CUSTOM_TEMPLATES);
@@ -209,6 +215,9 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 	public static final ResourceType GENERATED_DOC = new GeneratedDocResourceType();
 
 	public static final ResourceType TOC = new TOCResourceType();
+	
+	//MOS
+	public static final ResourceType PTOC = new PTOCResourceType();
 
 	public static final ResourceType REUSABLE_COMPONENT = new ReusableComponentResourceType();
 
@@ -480,6 +489,41 @@ public abstract class ResourceType extends FlexoObject implements StringConverta
 			return Color.MAGENTA;
 		}
 	}
+	
+	/**
+	 * MOS
+	 */
+	private static class PTOCResourceType extends ResourceType {
+		PTOCResourceType() {
+			super();
+		}
+
+		@Override
+		public String getName() {
+			return "PTOC_RESOURCE";
+		}
+
+		@Override
+		public FileFormat getFormat() {
+			return PTOC_FORMAT;
+		}
+
+		@Override
+		public boolean isFlexoXMLStorageResource() {
+			return true;
+		}
+
+		@Override
+		public XMLMapping getMapping(FlexoXMLMappings mappings) {
+			return mappings.getNavigationMenuMapping();
+		}
+
+		@Override
+		public Color getMainColor() {
+			return Color.MAGENTA;
+		}
+	}
+	//
 
 	private static class ProcessResourceType extends ResourceType {
 		ProcessResourceType() {

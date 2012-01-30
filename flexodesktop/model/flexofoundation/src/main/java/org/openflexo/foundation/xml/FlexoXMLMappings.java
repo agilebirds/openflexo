@@ -42,6 +42,7 @@ import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
+import org.openflexo.foundation.ptoc.PTOCData;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
@@ -154,6 +155,15 @@ public class FlexoXMLMappings
 	{
 		return getMappingForClass(TOCData.class);
 	}
+	/**
+	 * MOS
+	 * TODO_MOS
+	 */
+	public XMLMapping getPTOCMapping()
+	{
+		return getMappingForClass(PTOCData.class);
+	}
+	//
 
 	public XMLMapping getWSMapping()
 	{

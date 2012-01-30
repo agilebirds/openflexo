@@ -627,7 +627,7 @@ public class XMLDecoder
     public static XMLSerializable decodeObjectWithMappingFile(InputStream xmlStream, File modelFile, Object builder) throws InvalidXMLDataException,
             InvalidObjectSpecificationException, IOException, SAXException, ParserConfigurationException, InvalidModelException, AccessorInvocationException, JDOMException
     {
-
+    	//MARKER decodeObjectWithMappingFile
         XMLDecoder decoder = new XMLDecoder(modelFile, builder);
         return decoder.decodeObject(xmlStream);
 
@@ -702,7 +702,7 @@ public class XMLDecoder
         if (xmlMapping == null) {
             throw new InvalidModelException("No mapping specified.");
         }
-
+        //MARKER XMLDecoder.decodeObject
         XMLSerializable returned = buildObjectFromDocument(parseXMLData(xmlStream));
         delete();
         return returned;

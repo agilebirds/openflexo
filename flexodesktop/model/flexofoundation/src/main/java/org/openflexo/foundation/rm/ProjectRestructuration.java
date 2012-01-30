@@ -53,7 +53,11 @@ public class ProjectRestructuration {
 	public static final String MENU_EXTENSION = ".menu";
 
 	public static final String TOC_EXTENSION = ".toc";
-
+	
+	//MOS
+	public static final String PTOC_EXTENSION = ".ptoc";
+	//
+	
 	public static final String DG_EXTENSION = ".dg";
 
 	public static final String SG_EXTENSION = ".sg";
@@ -261,6 +265,12 @@ public class ProjectRestructuration {
 	public static String getTOCFileName(FlexoProject project) {
 		return project.getProjectName() + TOC_EXTENSION;
 	}
+	
+	//MOS
+	public static String getPTOCFileName(FlexoProject project) {
+		return project.getProjectName() + PTOC_EXTENSION;
+	}
+	//
 
 	public static File getExpectedGeneratedCodeFile(FlexoProject project) {
 		return new File(getExpectedGeneratedCodeDirectory(project.getProjectDirectory()), getGeneratedCodeFileName(project));
@@ -277,7 +287,11 @@ public class ProjectRestructuration {
 	public static File getExpectedTOCFile(FlexoProject project) {
 		return new File(getExpectedGeneratedDocDirectory(project.getProjectDirectory()), getTOCFileName(project));
 	}
-
+	//MOS
+	public static File getExpectedPTOCFile(FlexoProject project) {
+		return new File(getExpectedGeneratedDocDirectory(project.getProjectDirectory()), getPTOCFileName(project));
+	}
+	//
 	public static String getFlexoNavigationMenuFileName(FlexoProject project) {
 		return project.getProjectName() + MENU_EXTENSION;
 	}
