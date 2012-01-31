@@ -3,6 +3,7 @@
 import java.util.Date;
 import be.denali.flexo.commons.hcwo.IBusinessData;
 import java.lang.reflect.Method;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 #if(${projectGenerator.getWorkflowClassPackage()})
 	import ${projectGenerator.getWorkflowClassPackage()}.*;
@@ -12,7 +13,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  /**
  * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
  */
- public class ${entity.getName()} extends NSMutableDictionary implements IBusinessData{
+ public class ${entity.getName()} extends NSMutableDictionary implements IBusinessData, NSKeyValueCoding.ErrorHandling {
 
 	public static final String PROCESSINSTANCE_ID_KEY = "${projectGenerator.getPrototypeProcessInstance_Id_Key()}";
 	public static final String PROCESSINSTANCE_STATUS_KEY = "${projectGenerator.getPrototypeProcessInstance_Status_Key()}";
@@ -177,36 +178,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 	
 	@Override
     public Object valueForKey(String key) {
-    	String methodName = "get" + key.substring(0, 1).toUpperCase() + (key.length() > 1 ? key.substring(1) : "");
-    	Method method = null;
-    	try
-    	{
-    		method = this.getClass().getMethod(methodName);
-    	}
-    	catch(Exception e) {}
-    	
-    	if(method == null)
-    	{
-    		try
-        	{
-    			methodName = key.substring(0, 1).toLowerCase() + (key.length() > 1 ? key.substring(1) : "");
-        		method = this.getClass().getMethod(methodName);
-        	}
-    		catch(Exception e) {}
-    	}
-    	
-    	if(method != null)
-    	{
-			try
-			{
-				return method.invoke(this);
-			}
-			catch (Exception e)
-			{
-			}
-    	}
-    	
-        return objectForKey(key);
+    	return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
     }
 
 	@Override
@@ -221,38 +193,22 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 	
     @Override
     public void takeValueForKey(Object object, String key) {
-    	
-    	String methodName = "set" + key.substring(0, 1).toUpperCase() + (key.length() > 1 ? key.substring(1) : "");
-    	Method method = null;
-    	try
-    	{
-    		method = this.getClass().getMethod(methodName, object.getClass());
-    	}
-    	catch(Exception e) {}
-    	
-    	if(method == null)
-    	{
-    		try
-        	{
-    			methodName = key.substring(0, 1).toLowerCase() + (key.length() > 1 ? key.substring(1) : "");
-        		method = this.getClass().getMethod(methodName, object.getClass());
-        	}
-    		catch(Exception e) {}
-    	}
-    	
-    	if(method != null)
-    	{
-			try
-			{
-				method.invoke(this, object);
-				return;
-			}
-			catch (Exception e)
-			{
-			}
-    	}
-    	
-    	setObjectForKey(object, key);
+    	NSKeyValueCoding.DefaultImplementation.takeValueForKey(this, object, key);
+    }
+
+    @Override
+    public void unableToSetNullForKey(String key) {
+        // Does not happen since setObjectForKey has been overrode for that purpose
+    }
+    
+    @Override
+    public Object handleQueryWithUnboundKey(String key) {
+       return objectForKey(key);
+    }
+    
+    @Override
+    public void handleTakeValueForUnboundKey(Object object, String key) {
+        setObjectForKey(object, key);
     }
 
     @Override
