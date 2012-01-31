@@ -26,6 +26,7 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.action.CreateOntologyClass;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.ve.VECst;
 

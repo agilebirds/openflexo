@@ -418,6 +418,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			rectGR.setIsFocusable(false);
 			rectGR.setIsReadOnly(true);
 			rectGR.setBorder(new ShapeBorder(0, 0, 0, 0));
+			rectGR.setValidated(true);
 
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());

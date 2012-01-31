@@ -81,10 +81,18 @@ public class ApplicationData {
 
 	public Module getFavoriteModule() {
 		Module returned = getModuleLoader().getModule(GeneralPreferences.getFavoriteModuleName());
-		if (returned == null) {
-			returned = Module.WKF_MODULE;
+		if (returned != null && !returned.isAvailable()) {
+			returned = null;
 		}
-		return returned;
+		if (returned == null) {
+			if (getAvailableModules().size() > 0) {
+				return getAvailableModules().get(0);
+			}
+			logger.severe("No module found.");
+			return null;
+		} else {
+			return returned;
+		}
 	}
 
 	public void setFavoriteModule(Module aModule) {

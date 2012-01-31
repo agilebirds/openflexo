@@ -308,9 +308,9 @@ public class FocusRetriever {
 							if (nearestPoint != null) {
 								double distance = FGESegment.getLength(point, nearestPoint) * getScale();
 								if (distance < selectionDistance
-										&& ((distance < distanceToNearestGeometricObject
-												&& Math.abs(distance - distanceToNearestGeometricObject) > FGEGeometricObject.EPSILON && focusedCP == null) || (gr
-												.getLayer() > layerOfNearestGeometricObject))) {
+										&& (distance < distanceToNearestGeometricObject
+												&& Math.abs(distance - distanceToNearestGeometricObject) > FGEGeometricObject.EPSILON
+												&& focusedCP == null || gr.getLayer() > layerOfNearestGeometricObject)) {
 									distanceToNearestGeometricObject = distance;
 									layerOfNearestGeometricObject = gr.getLayer();
 									nearestGeometricObject = gr;
@@ -331,7 +331,7 @@ public class FocusRetriever {
 							// &&
 							// Math.abs(cpDistance-distanceToNearestGeometricObject)
 							// < selectionDistance
-									&& ((focusedCP == null) || (getController().preferredFocusedControlArea(focusedCP, cp) == cp))) {
+									&& (focusedCP == null || getController().preferredFocusedControlArea(focusedCP, cp) == cp)) {
 								distanceToNearestGeometricObject = cpDistance;
 								nearestGeometricObject = gr;
 								focused = true;
@@ -500,31 +500,32 @@ public class FocusRetriever {
 									}
 								} else if (graphicalRepresentation instanceof ConnectorGraphicalRepresentation) {
 									ConnectorGraphicalRepresentation<?> gr = (ConnectorGraphicalRepresentation<?>) graphicalRepresentation;
-									for (ControlArea ca : gr.getControlAreas()) {
-										// Point pt1 =
-										// gr.convertNormalizedPointToViewCoordinates(ca.getPoint(),
-										// getScale());
-										// Point pt2 =
-										// gr.convertNormalizedPointToViewCoordinates(p3,
-										// getScale());
-										// double cpDistance =
-										// Point2D.distance(pt1.x,pt1.y,pt2.x,pt2.y);
-										double cpDistance = ca.getDistanceToArea(p3, getScale());
-										if (cpDistance < selectionDistance && cpDistance < distanceToNearestConnector) {
-											// System.out.println("Detected control point2");
-											distanceToNearestConnector = cpDistance;
-											nearestConnector = gr;
+									if (gr.isValidated()) {
+										for (ControlArea ca : gr.getControlAreas()) {
+											// Point pt1 =
+											// gr.convertNormalizedPointToViewCoordinates(ca.getPoint(),
+											// getScale());
+											// Point pt2 =
+											// gr.convertNormalizedPointToViewCoordinates(p3,
+											// getScale());
+											// double cpDistance =
+											// Point2D.distance(pt1.x,pt1.y,pt2.x,pt2.y);
+											double cpDistance = ca.getDistanceToArea(p3, getScale());
+											if (cpDistance < selectionDistance && cpDistance < distanceToNearestConnector) {
+												// System.out.println("Detected control point2");
+												distanceToNearestConnector = cpDistance;
+												nearestConnector = gr;
+											}
 										}
-									}
-									if (gr.getConnector() != null && gr.getConnector().getMiddleSymbolLocation() != null) {
-										double cpDistance = gr.convertNormalizedPointToViewCoordinates(
-												gr.getConnector().getMiddleSymbolLocation(), getScale()).distance(p2);
-										if (cpDistance < selectionDistance && cpDistance < smallestDistanceToCPOfNearestConnector) {
-											distanceToNearestConnector = cpDistance;
-											nearestConnector = gr;
-											smallestDistanceToCPOfNearestConnector = cpDistance;
+										if (gr.getConnector() != null && gr.getConnector().getMiddleSymbolLocation() != null) {
+											double cpDistance = gr.convertNormalizedPointToViewCoordinates(
+													gr.getConnector().getMiddleSymbolLocation(), getScale()).distance(p2);
+											if (cpDistance < selectionDistance && cpDistance < smallestDistanceToCPOfNearestConnector) {
+												distanceToNearestConnector = cpDistance;
+												nearestConnector = gr;
+												smallestDistanceToCPOfNearestConnector = cpDistance;
+											}
 										}
-
 									}
 								}
 							}

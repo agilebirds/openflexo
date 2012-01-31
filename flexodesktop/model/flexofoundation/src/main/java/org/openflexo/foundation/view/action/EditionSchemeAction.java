@@ -21,6 +21,7 @@ package org.openflexo.foundation.view.action;
 
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -58,6 +59,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.GoToAction;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
@@ -75,10 +77,13 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 
 	public boolean escapeParameterRetrievingWhenValid = true;
 
+	private Hashtable<GraphicalElementPatternRole, Object> overridenGraphicalRepresentations;
+
 	public EditionSchemeAction(FlexoActionType<A, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject focusedObject,
 			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		parameterValues = new Hashtable<String, Object>();
+		overridenGraphicalRepresentations = new Hashtable<GraphicalElementPatternRole, Object>();
 	}
 
 	/**
@@ -136,8 +141,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	public abstract EditionPatternInstance getEditionPatternInstance();
 
 	protected abstract View retrieveOEShema();
-
-	protected abstract Object getOverridenGraphicalRepresentation();
 
 	protected void applyEditionActions() {
 		Hashtable<EditionAction, FlexoModelObject> performedActions = new Hashtable<EditionAction, FlexoModelObject>();
@@ -266,25 +269,34 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		ViewShape newShape = new ViewShape(retrieveOEShema());
 
 		// If an overriden graphical representation is defined, use it
-		/*if (getOverridenGraphicalRepresentation() != null) {
-			newShape.setGraphicalRepresentation(getOverridenGraphicalRepresentation());
-		} else*/if (action.getPatternRole().getGraphicalRepresentation() != null) {
+		if (getOverridenGraphicalRepresentation(action.getPatternRole()) != null) {
+			newShape.setGraphicalRepresentation(getOverridenGraphicalRepresentation(action.getPatternRole()));
+		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
 			newShape.setGraphicalRepresentation(action.getPatternRole().getGraphicalRepresentation());
 		}
 
 		// Register reference
 		newShape.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
 
-		// logger.info("container="+action.getContainer());
-
 		ViewObject container = action.getContainer(this);
 
+		if (container == null) {
+			logger.warning("When adding shape, cannot find container for action " + action.getPatternRole() + " container="
+					+ action.getContainer());
+			return null;
+		}
+
 		container.addToChilds(newShape);
-		logger.info("Added shape " + newShape + " under " + container);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Added shape " + newShape + " under " + container);
+		}
 		return newShape;
 	}
 
 	protected ViewShape finalizePerformAddShape(org.openflexo.foundation.viewpoint.AddShape action, ViewShape newShape) {
+		// Be sure that location/size constraints are ok
+		// ((ShapeGraphicalRepresentation) newShape.getGraphicalRepresentation()).updateConstraints();
+
 		// We need to renotify here because if label is bound to a semantic. In this case,
 		// while beeing created, shape didn't have sufficient data to retrieve a label
 		// which was null. Now, we are sure that the shape is bound, and label can be
@@ -426,6 +438,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	protected ViewConnector performAddConnector(org.openflexo.foundation.viewpoint.AddConnector action) {
+
 		ViewShape fromShape = action.getFromShape(this);
 		ViewShape toShape = action.getToShape(this);
 		ViewConnector newConnector = new ViewConnector(fromShape.getShema(), fromShape, toShape);
@@ -435,8 +448,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		}
 
 		// If an overriden graphical representation is defined, use it
-		if (getOverridenGraphicalRepresentation() != null) {
-			newConnector.setGraphicalRepresentation(getOverridenGraphicalRepresentation());
+		if (getOverridenGraphicalRepresentation(action.getPatternRole()) != null) {
+			newConnector.setGraphicalRepresentation(getOverridenGraphicalRepresentation(action.getPatternRole()));
 		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
 			newConnector.setGraphicalRepresentation(action.getPatternRole().getGraphicalRepresentation());
 		}
@@ -446,7 +459,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		// Register reference
 		newConnector.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
 
-		logger.info("Added connector " + newConnector + " under " + parent);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Added connector " + newConnector + " under " + parent);
+		}
 		return newConnector;
 	}
 
@@ -522,7 +537,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 				logger.warning("Sorry, shape pattern role is undefined");
 				return newShema;
 			}
-			logger.info("Shape pattern role: " + shapePatternRole);
+			// logger.info("Shape pattern role: " + shapePatternRole);
 			EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 			ViewShape newShape = new ViewShape(newShema);
 			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof ViewShape) {
@@ -573,4 +588,13 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		logger.warning("Unexpected variable requested in EditionSchemeAction " + variable);
 		return null;
 	}
+
+	public Object getOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+		return overridenGraphicalRepresentations.get(patternRole);
+	}
+
+	public void setOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole, Object graphicalRepresentation) {
+		overridenGraphicalRepresentations.put(patternRole, graphicalRepresentation);
+	}
+
 }

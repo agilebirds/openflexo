@@ -19,6 +19,7 @@
  */
 package org.openflexo.vpm.view.widget;
 
+import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.view.DrawingView;
@@ -30,13 +31,34 @@ public class EditionPatternPreviewController extends SelectionManagingDrawingCon
 
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewController.class.getPackage().getName());
 
+	// We share here instances of EditionPatternPreviewRepresentation because they can be accessed from multiple
+	// EditionPatternPreviewComponent
+	private static final Hashtable<EditionPattern, EditionPatternPreviewRepresentation> editionPatternPreviewRepresentations = new Hashtable<EditionPattern, EditionPatternPreviewRepresentation>();
+
+	/**
+	 * Obtain or build stored EditionPatternPreviewRepresentation (they are all shared because they can be accessed from multiple
+	 * EditionPatternPreviewComponent)
+	 * 
+	 * @param editionPattern
+	 * @return
+	 */
+	private static final EditionPatternPreviewRepresentation obtainEditionPatternPreviewRepresentations(EditionPattern editionPattern) {
+		EditionPatternPreviewRepresentation returned = editionPatternPreviewRepresentations.get(editionPattern);
+		if (returned == null) {
+			returned = new EditionPatternPreviewRepresentation(editionPattern);
+			editionPatternPreviewRepresentations.put(editionPattern, returned);
+		}
+		return returned;
+	}
+
 	public EditionPatternPreviewController(EditionPattern editionPattern, SelectionManager sm) {
-		super(new EditionPatternPreviewRepresentation(editionPattern), sm);
+		super(obtainEditionPatternPreviewRepresentations(editionPattern), sm);
 	}
 
 	@Override
 	public void delete() {
-		getDrawing().delete();
+		// Drawing is no more deleted since we keep all instances for sharing !!!!
+		// getDrawing().delete();
 		super.delete();
 	}
 

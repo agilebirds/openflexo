@@ -101,6 +101,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 			parentView.remove(this);
 			parentView.revalidate();
 			if (getPaintManager() != null) {
+				getPaintManager().invalidate(getGraphicalRepresentation());
 				getPaintManager().repaint(parentView);
 			}
 		}

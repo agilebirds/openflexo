@@ -57,6 +57,10 @@ public abstract class UserType extends FlexoObject {
 
 	public static final Maintainer MAINTAINER = new Maintainer();
 
+	public static final SemanticsUser SEMANTICS_USER = new SemanticsUser();
+
+	public static final SemanticsPlusUser SEMANTICS_PLUS_USER = new SemanticsPlusUser();
+
 	private static final UserType[] knownUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER };
 
 	private Vector<DocItemFolder> documentationFolders = null;
@@ -154,6 +158,12 @@ public abstract class UserType extends FlexoObject {
 		if (CUSTOMER.getName().equalsIgnoreCase(userTypeName)) {
 			return CUSTOMER;
 		}
+		if (SEMANTICS_USER.getName().equalsIgnoreCase(userTypeName)) {
+			return SEMANTICS_USER;
+		}
+		if (SEMANTICS_PLUS_USER.getName().equalsIgnoreCase(userTypeName)) {
+			return SEMANTICS_PLUS_USER;
+		}
 		if (MAINTAINER.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return MAINTAINER;
 		}
@@ -165,6 +175,12 @@ public abstract class UserType extends FlexoObject {
 		}
 		if (CUSTOMER.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return CUSTOMER;
+		}
+		if (SEMANTICS_USER.getIdentifier().equalsIgnoreCase(userTypeName)) {
+			return SEMANTICS_USER;
+		}
+		if (SEMANTICS_PLUS_USER.getIdentifier().equalsIgnoreCase(userTypeName)) {
+			return SEMANTICS_PLUS_USER;
 		}
 		return MAINTAINER;
 	}
@@ -241,6 +257,7 @@ public abstract class UserType extends FlexoObject {
 			addModelItems(Inspectors.IE);
 			addModelItems(Inspectors.DM);
 			addModelItems(Inspectors.WSE);
+			addModelItems(Inspectors.VE);
 		}
 
 		@Override
@@ -283,6 +300,7 @@ public abstract class UserType extends FlexoObject {
 			addModelItems(Inspectors.WKF);
 			addModelItems(Inspectors.IE);
 			addModelItems(Inspectors.DM);
+			addModelItems(Inspectors.VE);
 		}
 
 		@Override
@@ -323,6 +341,7 @@ public abstract class UserType extends FlexoObject {
 			addModelItems(Inspectors.COMMON);
 			addModelItems(Inspectors.WKF);
 			addModelItems(Inspectors.IE);
+			addModelItems(Inspectors.VE);
 		}
 
 		@Override
@@ -368,6 +387,7 @@ public abstract class UserType extends FlexoObject {
 			addModelItems(Inspectors.DM);
 			addModelItems(Inspectors.WSE);
 			addModelItems(Inspectors.DRE);
+			addModelItems(Inspectors.VE);
 		}
 
 		@Override
@@ -378,6 +398,85 @@ public abstract class UserType extends FlexoObject {
 		@Override
 		public String getBusinessName2() {
 			return "Enterprise edition";
+		}
+
+		@Override
+		public ImageIcon getIconImage() {
+			return IconLibrary.ENTERPRISE_32_ICON;
+		}
+
+	}
+
+	public static class SemanticsUser extends UserType {
+		@Override
+		public String getName() {
+			return "semantics_release";
+		}
+
+		@Override
+		public String getIdentifier() {
+			return "SEMANTICS";
+		}
+
+		@Override
+		public List<Module> getModules() {
+			return Arrays.asList(Module.VE_MODULE);
+		}
+
+		@Override
+		protected void addModelItems() {
+			addModelItems(Inspectors.COMMON);
+			addModelItems(Inspectors.VE);
+		}
+
+		@Override
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
+			return new FullInteractiveProjectLoadingHandler(projectDirectory);
+		}
+
+		@Override
+		public String getBusinessName2() {
+			return "Semantics edition";
+		}
+
+		@Override
+		public ImageIcon getIconImage() {
+			return IconLibrary.ENTERPRISE_32_ICON;
+		}
+
+	}
+
+	public static class SemanticsPlusUser extends UserType {
+		@Override
+		public String getName() {
+			return "semantics_plus_release";
+		}
+
+		@Override
+		public String getIdentifier() {
+			return "SEMANTICSPLUS";
+		}
+
+		@Override
+		public List<Module> getModules() {
+			return Arrays.asList(Module.VE_MODULE, Module.VPM_MODULE);
+		}
+
+		@Override
+		protected void addModelItems() {
+			addModelItems(Inspectors.COMMON);
+			addModelItems(Inspectors.VE);
+			addModelItems(Inspectors.VPM);
+		}
+
+		@Override
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
+			return new FullInteractiveProjectLoadingHandler(projectDirectory);
+		}
+
+		@Override
+		public String getBusinessName2() {
+			return "Semantics+ edition";
 		}
 
 		@Override

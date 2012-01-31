@@ -177,6 +177,12 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 					}
 				}
 
+				// This code was added to allow direct typing without opening selector panel (sic !)
+				// TODO:provide better implementation !!!
+				if (_selectorPanel == null) {
+					createCustomPanel(getEditedObject());
+				}
+
 				if (_selectorPanel != null) {
 
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
