@@ -25,6 +25,9 @@ import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ptoc.PSlide;
+import org.openflexo.foundation.ptoc.PTOCEntry;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -86,6 +89,13 @@ class DEBrowserConfiguration implements BrowserConfiguration
                 return new DocTypeElement(object,browser,parent);
             } else if (object instanceof TOCData) {
 				return new TOCDataElement((TOCData)object,browser,parent);
+			}//MOS
+            else if (object instanceof PTOCRepository) {
+				return new PTOCRepositoryElement((PTOCRepository) object, browser, parent);
+			} else if (object instanceof PTOCEntry) {
+				return new PTOCEntryElement((PTOCEntry) object, browser, parent);
+			} else if (object instanceof PSlide) {
+				return new PSlideElement((PSlide) object, browser, parent);
 			}
 			return null;
 		}

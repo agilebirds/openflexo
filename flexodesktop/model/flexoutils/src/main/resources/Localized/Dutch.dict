@@ -1,5 +1,5 @@
 #Dutch
-#Mon Jan 30 10:52:17 CET 2012
+#Wed Feb 01 21:04:02 CET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -496,6 +496,7 @@ POLYGON=POLYGON
 PPTX=PPTX
 PROTECTED_FIELD=Protected field
 PROTOTYPE=PROTOTYPE
+PTOCEntry=PTOCEntry
 PUBLIC_ACCESSORS_ONLY=Public accessors only
 PUBLIC_ACCESSORS_PRIVATE_FIELD=Public accessors, private field
 PUBLIC_ACCESSORS_PROTECTED_FIELD=Public accessors, protected field
@@ -1781,8 +1782,11 @@ desactivation_primitive=Desactivation primitive
 descending_sort=Descending sort
 description=Description
 description2=description2
+description_Business\ User\ =description_Business User 
+description_Child=description_Child
 description_DMEOEntity=Entity description
 description_FlexoProcess=FlexoProcess description subsection
+description_Objectives\ and\ Scopes=description_Objectives and Scopes
 description_OperationComponentDefinition=Operation Component description
 description_ProcessFolder=FlexoProcess folder description subsection
 description_Role=Role description subsection
@@ -3988,6 +3992,7 @@ prout=prout
 proxy_login=Proxy login
 proxy_password=Proxy password
 pserver=pserver
+ptoc_entry=ptoc_entry
 public=public
 public_modifier=<html><tt>public</tt></html>
 pure_generation=Pure generation

@@ -134,10 +134,12 @@ public class DGRepository extends GenerationRepository
     		getProject().removeFromExternalRepositories(getPostBuildRepository());
     	super.deleteExternalRepositories();
     }
+     
 
+     //MOS I have modified this to fit PPTX
     @Override
     public boolean isEnabled() {
-    	return super.isEnabled() && (getFormat()==Format.HTML || getTocRepository()!=null);
+    	return super.isEnabled() && (getFormat()==Format.HTML || (getFormat()!=Format.HTML && getFormat()!=Format.PPTX && getTocRepository()!=null) || (getFormat()==Format.PPTX && getPTocRepository()!=null));
     }
 
     /**

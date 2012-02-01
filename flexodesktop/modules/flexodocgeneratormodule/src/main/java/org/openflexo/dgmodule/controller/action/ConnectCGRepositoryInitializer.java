@@ -32,7 +32,9 @@ import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.action.ConnectCGRepository;
 import org.openflexo.foundation.param.DirectoryParameter;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
+import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -81,13 +83,37 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 				DynamicDropDownParameter<TOCRepository> repositoryParam = new DynamicDropDownParameter<TOCRepository>("repository","table_of_content",repository.getTocRepository());
 				repositoryParam.setAvailableValues(getProject().getTOCData().getRepositories());
 				repositoryParam.setFormatter("title");
+				//MOS				
+				repositoryParam.setDepends("format");
+				repositoryParam.setConditional("format!=HTML&&format!=PPTX");
+				
+				DynamicDropDownParameter<PTOCRepository> paramPToc = new DynamicDropDownParameter<PTOCRepository>("toc","toc",getProject().getPTOCData().getRepositories(),getProject().getPTOCData().getRepositories().firstElement());
+				paramPToc.setFormatter("title");
+				paramPToc.setDepends("format");
+				paramPToc.setConditional("format!=HTML&&format!=DOCX&&format!=LATEX&&format!=PDF");
+				
+				ParameterDefinition<?>[] pd = new ParameterDefinition<?>[5];
+				//
+				
+				pd[0] = paramName;
+				pd[1] = paramDir;
+				pd[2] = paramWarName;
+				pd[3] = paramWarDir;
+				pd[4] = repository.getFormat() == Format.PPTX?paramPToc:repositoryParam;
+				
+				
+				
 				AskParametersDialog dialog =AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization
 								        		.localizedForKey("connect_repository_to_local_file_system"), FlexoLocalization
-.localizedForKey("enter_parameters_for_connecting_repository_to_the_local_file_system"),
-						paramName, paramDir, paramWarName, paramWarDir,repositoryParam);
+								        		.localizedForKey("enter_parameters_for_connecting_repository_to_the_local_file_system"),
+								        		pd);
 				System.setProperty("apple.awt.fileDialogForDirectories", "false");
                 if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+                	if(repository.getFormat() == Format.PPTX){
+                		repository.setPTocRepository(paramPToc.getValue());
+                	}else{
                 	repository.setTocRepository(repositoryParam.getValue());
+                	}
 					//try {
 						repository.setDisplayName(paramName.getValue());
 						repository.setDirectory(paramDir.getValue());
@@ -102,7 +128,9 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 						FlexoController.notify(FlexoLocalization.localizedForKey("sorry_invalid_directory"));
 						return false;
 					}
-					if (repository.getFormat()!=Format.HTML && repository.getTocRepository()==null) {
+					
+					//MOS
+					if (!(repository.getFormat()==Format.HTML || (repository.getFormat()!=Format.HTML && repository.getFormat()!=Format.PPTX && repository.getTocRepository()!=null) || (repository.getFormat()==Format.PPTX && repository.getPTocRepository()!=null))) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("you_must_choose_a_toc"));
 						return false;
 					}

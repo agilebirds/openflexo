@@ -112,6 +112,7 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.ptoc.PSlide;
 import org.openflexo.foundation.ptoc.PTOCData;
 import org.openflexo.foundation.ptoc.PTOCEntry;
 import org.openflexo.foundation.ptoc.PTOCRepository;
@@ -356,7 +357,7 @@ public enum BrowserElementType {
 	PTOC_DATA("ptoc_data",PTOCData.class,DGIconLibrary.GENERATED_DOC_ICON),
 	PTOC_ENTRY("ptoc_entry",PTOCEntry.class,DEIconLibrary.TOC_ENTRY),
 	PTOC_REPOSITORY("ptoc_repository",PTOCRepository.class,DEIconLibrary.TOC_REPOSITORY),
-	PSLIDE("pslide",PTOCRepository.class,DEIconLibrary.TOC_ENTRY),
+	PSLIDE("pslide",PSlide.class,DEIconLibrary.TOC_ENTRY),
 	//
 	DOC_TYPE("doc_type",DocType.class,CGIconLibrary.TARGET_ICON),
 	TOC_ENTRY("toc_entry",TOCEntry.class,DEIconLibrary.TOC_ENTRY),

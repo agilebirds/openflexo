@@ -1,5 +1,5 @@
 #French
-#Mon Jan 30 10:52:17 CET 2012
+#Wed Feb 01 21:04:02 CET 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -495,6 +495,7 @@ POLYGON=POLYGON
 PPTX=PPTX
 PROTECTED_FIELD=Champ prot\u00E9g\u00E9 (protected)
 PROTOTYPE=PROTOTYPE
+PTOCEntry=PTOCEntry
 PUBLIC_ACCESSORS_ONLY=Accesseurs publics uniquement
 PUBLIC_ACCESSORS_PRIVATE_FIELD=Accesseurs publics, champ priv\u00E9
 PUBLIC_ACCESSORS_PROTECTED_FIELD=Accesseurs publics, champ proteg\u00E9
@@ -1780,8 +1781,11 @@ desactivation_primitive=Primitive de d\u00E9sactivation
 descending_sort=Tri descendant
 description=Description
 description2=description2
+description_Business\ User\ =description_Business User 
+description_Child=description_Child
 description_DMEOEntity=Description d'une entit\u00E9 du mod\u00E8le de donn\u00E9es
 description_FlexoProcess=Sous section de description d'un FlexoProcess
+description_Objectives\ and\ Scopes=description_Objectives and Scopes
 description_OperationComponentDefinition=Description d'un composant d'une op\u00E9ration
 description_ProcessFolder=Sous section de description d'un dossier de FlexoProcess
 description_Role=Sous section de description d'un Role
@@ -3988,6 +3992,7 @@ prout=prout (rhoooo)
 proxy_login=Login du  proxy
 proxy_password=Mot de passe du proxy
 pserver=pserver
+ptoc_entry=ptoc_entry
 public=Publique
 public_modifier=<html><tt>public</tt></html>
 pure_generation=G\u00E9n\u00E9ration brute

@@ -41,6 +41,7 @@ import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
+import org.openflexo.foundation.ptoc.PSlide;
 import org.openflexo.foundation.ptoc.PTOCData;
 import org.openflexo.foundation.ptoc.PTOCEntry;
 import org.openflexo.foundation.ptoc.PTOCRepository;
@@ -278,7 +279,11 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 		} else if (object instanceof PTOCEntry) {
 			PTOCEntry entry = (PTOCEntry) object;
 			return entry.getTitle() != null ? entry.getTitle() : FlexoLocalization.localizedForKey("untitled");
+		}else if (object instanceof PSlide) {
+			PSlide entry = (PSlide) object;
+			return entry.getTitle() != null ? entry.getTitle() : FlexoLocalization.localizedForKey("untitled");
 		}
+		
 
 		return null;
 	}

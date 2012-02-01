@@ -16,6 +16,7 @@ import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
 import org.openflexo.dgmodule.view.GeneratedDocModuleView;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.view.DEPRepositoryModuleView;
+import org.openflexo.doceditor.view.DEPSlideModuleView;
 import org.openflexo.doceditor.view.DEPTOCDataModuleView;
 import org.openflexo.doceditor.view.DEPTOCEntryModuleView;
 import org.openflexo.doceditor.view.DERepositoryModuleView;
@@ -28,6 +29,7 @@ import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.templates.CGTemplate;
+import org.openflexo.foundation.ptoc.PSlide;
 import org.openflexo.foundation.ptoc.PTOCData;
 import org.openflexo.foundation.ptoc.PTOCEntry;
 import org.openflexo.foundation.ptoc.PTOCRepository;
@@ -133,6 +135,10 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject>
 			return new DEPTOCDataModuleView((PTOCData) object, (DEController) controller);
 		} else if (object instanceof PTOCEntry) {
 			return new DEPTOCEntryModuleView((PTOCEntry) object, (DEController) controller, this);
+		} else if (object instanceof PSlide) {
+			return new DEPSlideModuleView((PSlide) object, (DEController) controller, this);
+		} else if (object instanceof PSlide) {
+			return new DEPSlideModuleView((PSlide) object, (DEController) controller, this);
 		}
 		//
 		
