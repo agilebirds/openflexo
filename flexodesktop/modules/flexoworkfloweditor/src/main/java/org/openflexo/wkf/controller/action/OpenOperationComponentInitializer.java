@@ -73,13 +73,14 @@ public class OpenOperationComponentInitializer extends ActionInitializer {
 				if (action.getFocusedObject() instanceof OperationNode) {
 					OperationNode operationNode = action.getFocusedObject();
 					if (operationNode.getComponentInstance().getComponentDefinition() != null) {
-                        ExternalIEModule ieModule = null;
-                        try {
-                            ieModule = getModuleLoader().getIEModule(getProject());
-                        } catch (ModuleLoadingException e1) {
-                            FlexoController.notify("Cannot load Screen Editor. Exception : " + e1.getMessage());
-                            e1.printStackTrace();                        }
-                        if (ieModule == null) {
+						ExternalIEModule ieModule = null;
+						try {
+							ieModule = getModuleLoader().getIEModule(getProject());
+						} catch (ModuleLoadingException e1) {
+							FlexoController.notify("Cannot load Screen Editor. Exception : " + e1.getMessage());
+							e1.printStackTrace();
+						}
+						if (ieModule == null) {
 							return false;
 						}
 						ieModule.focusOn();
@@ -104,13 +105,13 @@ public class OpenOperationComponentInitializer extends ActionInitializer {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Switching to IE");
 			}
-            try {
-                getModuleLoader().switchToModule(Module.IE_MODULE, getController().getProject());
-            } catch (ModuleLoadingException e) {
-                FlexoController.notify("Cannot load Screen Editor. Exception : "+e.getMessage());
-                e.printStackTrace();
-            }
-            if (logger.isLoggable(Level.INFO)) {
+			try {
+				getModuleLoader().switchToModule(Module.IE_MODULE, getController().getProject());
+			} catch (ModuleLoadingException e) {
+				FlexoController.notify("Cannot load Screen Editor. Exception : " + e.getMessage());
+				e.printStackTrace();
+			}
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Switched to IE done!");
 			}
 		}

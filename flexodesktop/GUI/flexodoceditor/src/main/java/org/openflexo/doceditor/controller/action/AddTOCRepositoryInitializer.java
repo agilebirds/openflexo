@@ -85,10 +85,10 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), getController().getFlexoFrame(),
 						FlexoLocalization.localizedForKey("enter_parameters"),
 						FlexoLocalization.localizedForKey("enter_parameters_for_table_of_content"), new ValidationCondition() {
-					@Override
-					public boolean isValid(ParametersModel model) {
-						boolean b = model.parameterForKey("name").getValue() != null
-								&& ((String) model.parameterForKey("name").getValue()).trim().length() > 0;
+							@Override
+							public boolean isValid(ParametersModel model) {
+								boolean b = model.parameterForKey("name").getValue() != null
+										&& ((String) model.parameterForKey("name").getValue()).trim().length() > 0;
 								if (!b) {
 									errorMessage = FlexoLocalization.localizedForKey("name_cannot_be_empty");
 								}
@@ -103,9 +103,9 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 									b = false;
 								}
 								return b;
-					}
+							}
 
-				}, def);
+						}, def);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					action.setRepositoryName((String) def[0].getValue());
 					action.setDocType((DocType) def[1].getValue());

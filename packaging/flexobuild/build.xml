@@ -73,6 +73,7 @@
 		<antcall target="generateHelp" />
 		<antcall target="packageWindows" />
 		<antcall target="packageMacOSX" />
+		<antcall target="packageLinux" />
 	</target>
 
 	<target name="cleanTempDir">
@@ -198,6 +199,7 @@
 			<fileset dir="${dist.dir}">
 				<exclude name="lib/*" />
 				<exclude name="*.exe" />
+				<exclude name="*.sh" />
 			</fileset>
 		</copy>
 		<antcall target="osx-packaging" />
@@ -220,11 +222,36 @@
 		</exec>
 	</target>
 
+	<target name="packageLinux">
+		<property name="start.script.file" value="${dist.dir}/start.sh"/>
+		<copy file="Linux/start.sh.tpl" tofile="${start.script.file}" filtering="true" overwrite="true">
+			<filterset>
+				<filtersfile file="${build.properties}" />
+			</filterset>
+		</copy>
+		<chmod perm="755" file="${start.script.file}"/>
+		<antcall target="linux-packaging" />
+	</target>
+
+	<target name="linux-packaging">
+		<tar destfile="${project.build.directory}/${product.name} ${productSuffix} ${flexo_version}.tar.gz" longfile="gnu" compression="gzip" basedir="${dist.dir}">
+			<exclude name="*.exe"/>
+			<tarfileset mode="755">
+				<include name="*.sh"/>
+			</tarfileset>
+			<tarfileset>
+				<exclude name="*.sh"/>
+			</tarfileset>
+		</tar>
+	</target>
+
 	<target name="copyPackagesOnServer" if="deploy">
 		<antcall target="copyOnServerWindowsRelease" />
 		<antcall target="copyOnServerMacRelease"/>
+		<antcall target="copyOnServerLinuxRelease"/>
 		<antcall target="copyOnServerWindowsNightly" />
 		<antcall target="copyOnServerMacNightly" />
+		<antcall target="copyOnServerLinuxNightly" />
 	</target>
 
 	<target name="copyOnServerWindowsRelease" unless="isNightly">
@@ -247,6 +274,16 @@
 		</scp>
 	</target>
 
+	<target name="copyOnServerLinuxRelease" unless="isNightly">
+		<property name="folder" value="${deployment.root.folder}/${flexo_version}/${daily_folder}/Linux" />
+		<antcall target="createRemoteFolder"/>
+		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+			<fileset dir="${project.build.directory}">
+				<include name="*.tar.gz" />
+			</fileset>
+		</scp>
+	</target>
+
 	<target name="copyOnServerWindowsNightly" if="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Windows" />
 		<antcall target="createRemoteFolder"/>
@@ -261,8 +298,18 @@
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Mac" />
 		<antcall target="createRemoteFolder"/>
 		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
-			<fileset dir="${project.build.directory}" id="pkg">
+			<fileset dir="${project.build.directory}">
 				<include name="*.dmg" />
+			</fileset>
+		</scp>
+	</target>
+
+	<target name="copyOnServerLinuxNightly" if="isNightly">
+		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Linux" />
+		<antcall target="createRemoteFolder"/>
+		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
+			<fileset dir="${project.build.directory}">
+				<include name="*.tar.gz" />
 			</fileset>
 		</scp>
 	</target>

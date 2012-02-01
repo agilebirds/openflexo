@@ -260,7 +260,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 			_deserializedReference = null;
 			if (_subProcess != null && !isCreatedByCloning()) {
 				if (getProcess() != null && getProcess() != _subProcess) {
-					getProcess().getFlexoResource().addToDependantResources(aSubProcess.getFlexoResource());
+					getProcess().getFlexoResource().addToDependentResources(aSubProcess.getFlexoResource());
 				}
 				aSubProcess.addToSubProcessNodes(this);
 			}
@@ -294,7 +294,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		super.setProcess(p);
 		if (getSubProcess() != null) {
 			if (getProcess() != null && getProcess() != getSubProcess()) {
-				getProcess().getFlexoResource().addToDependantResources(getSubProcess().getFlexoResource());
+				getProcess().getFlexoResource().addToDependentResources(getSubProcess().getFlexoResource());
 			}
 			getSubProcess().addToSubProcessNodes(this);
 		}

@@ -65,13 +65,13 @@ public class OpenDMEntityInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<OpenDMEntity>() {
 			@Override
 			public boolean run(ActionEvent e, OpenDMEntity action) {
-                ExternalDMModule dmModule = null;
-                try {
-                    dmModule = getModuleLoader().getDMModule(getProject());
-                } catch (ModuleLoadingException e1) {
-                    FlexoController.notify("Cannot load DMModule."+e1.getMessage());
-                }
-                if (dmModule == null) {
+				ExternalDMModule dmModule = null;
+				try {
+					dmModule = getModuleLoader().getDMModule(getProject());
+				} catch (ModuleLoadingException e1) {
+					FlexoController.notify("Cannot load DMModule." + e1.getMessage());
+				}
+				if (dmModule == null) {
 					return false;
 				}
 				dmModule.focusOn();
@@ -94,15 +94,15 @@ public class OpenDMEntityInitializer extends ActionInitializer {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Switching to DM");
 			}
-            try {
-                getModuleLoader().switchToModule(Module.DM_MODULE, getController().getProject());
-                if (logger.isLoggable(Level.INFO)) {
-                    logger.info("Switched to DM done!");
-                }
-            } catch (ModuleLoadingException e) {
-                e.printStackTrace();
-                FlexoController.notify("Cannot load DM editor."+e.getMessage());
-            }
+			try {
+				getModuleLoader().switchToModule(Module.DM_MODULE, getController().getProject());
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Switched to DM done!");
+				}
+			} catch (ModuleLoadingException e) {
+				e.printStackTrace();
+				FlexoController.notify("Cannot load DM editor." + e.getMessage());
+			}
 
 		}
 	}

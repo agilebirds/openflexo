@@ -4,33 +4,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.openflexo</groupId>
-    <artifactId>openflexo</artifactId>
+	<groupId>org.openflexo</groupId>
+	<artifactId>openflexo</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.4-SNAPSHOT</version>
-    <name>OpenFlexo</name>
-    <organization>
-        <name>${organization.name}</name>
-        <url>${organization.url}</url>
-    </organization>
-    <properties>
-        <compiler.source>1.6</compiler.source>
-        <compiler.target>1.6</compiler.target>
-        <source.encoding>UTF-8</source.encoding>
-        <resource.encoding>UTF-8</resource.encoding>
-        <!-- need this so that sonar run properly.
-             don't know what the difference with source.encoding.
-             todo : investigate difference between source.encoding and project.build.sourceEncoding -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <product.name>OpenFlexo</product.name>
-        <organization.name>AgileBirds</organization.name>
-        <organization.url>http://www.agilebirds.com/</organization.url>
-        <organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
-    </properties>
-    <scm>
-        <connection>scm:git:ssh://git@github.com:agilebirds/openflexo.git</connection>
-        <url>https://github.com/agilebirds/openflexo</url>
-    </scm>
+	<version>1.5-SNAPSHOT</version>
+	<name>OpenFlexo</name>
+	<organization>
+		<name>${organization.name}</name>
+		<url>${organization.url}</url>
+	</organization>
+	<properties>
+		<compiler.source>1.6</compiler.source>
+		<compiler.target>1.6</compiler.target>
+		<source.encoding>UTF-8</source.encoding>
+		<resource.encoding>UTF-8</resource.encoding>
+		<!-- need this so that sonar run properly. don't know what the difference 
+			with source.encoding. todo : investigate difference between source.encoding 
+			and project.build.sourceEncoding -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<product.name>OpenFlexo</product.name>
+		<organization.name>AgileBirds</organization.name>
+		<organization.url>http://www.agilebirds.com/</organization.url>
+		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
+	</properties>
+	<scm>
+		<connection>scm:git:ssh://git@github.com:agilebirds/openflexo.git</connection>
+		<url>https://github.com/agilebirds/openflexo</url>
+	</scm>
     <modules>
         <module>flexodesktop</module>
         <module>flexoserver</module>
@@ -45,149 +45,157 @@
     <description>Openflexo is the open source business architecture platform that supports collaborative agile missions by seamlessly
         transforming multi-facet enterprise models into business oriented deliverables.
     </description>
-    <repositories>
-        <repository>
-            <id>openflexo</id>
-            <url>https://maven.openflexo.com/artifactory/openflexo-deps/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-    <distributionManagement>
-        <repository>
-            <id>openflexo-release</id>
-            <name>Open Flexo Releases</name>
-            <url>https://maven.openflexo.com/artifactory/openflexo-release/</url>
-        </repository>
-        <snapshotRepository>
-            <id>openflexo-snapshot</id>
-            <name>Open Flexo Snapshots</name>
-            <url>https://maven.openflexo.com/artifactory/openflexo-snapshot/</url>
-        </snapshotRepository>
-    </distributionManagement>
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.4.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>2.3.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.5</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>2.0.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.6</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.2-beta-5</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>2.0</version>
-                </plugin>
-                <plugin>
+	<repositories>
+		<repository>
+			<id>openflexo</id>
+			<url>https://maven.openflexo.com/artifactory/openflexo-deps/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>openflexo-release</id>
+			<name>Open Flexo Releases</name>
+			<url>https://maven.openflexo.com/artifactory/openflexo-release/</url>
+		</repository>
+		<snapshotRepository>
+			<id>openflexo-snapshot</id>
+			<name>Open Flexo Snapshots</name>
+			<url>https://maven.openflexo.com/artifactory/openflexo-snapshot/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.4.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.3.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>2.0.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.6</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.2-beta-5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.0</version>
+				</plugin>
+				<plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>1.2</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>${compiler.source}</source>
-                        <target>${compiler.target}</target>
-                        <encoding>${source.encoding}</encoding>
-                        <fork>false</fork>
-                        <compilerId>jdt</compilerId>
-                    </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.eclipse.tycho</groupId>
-                            <artifactId>tycho-compiler-jdt</artifactId>
-                            <version>0.13.0</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.7.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-compiler-plugin</artifactId>
-                                        <versionRange>[2.0,)</versionRange>
-                                        <goals>
-                                            <goal>compile</goal>
-                                            <goal>testCompile</goal>
-                                        </goals>
-                                        <parameters>
-                                            <compilerId>jdt</compilerId>
-                                        </parameters>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <configurator>
-                                            <id>org.eclipse.m2e.jdt.javaConfigurator</id>
-                                        </configurator>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.3.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.5</version>
-                    <configuration>
-                        <encoding>${resource.encoding}</encoding>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-    <dependencyManagement>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>${compiler.source}</source>
+						<target>${compiler.target}</target>
+						<encoding>${source.encoding}</encoding>
+						<fork>false</fork>
+						<compilerId>jdt</compilerId>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>tycho-compiler-jdt</artifactId>
+							<version>0.13.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.7.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>2.0</version>
+					<configuration>
+					   <sonarHostURL>https://sonar.openflexo.com</sonarHostURL>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-compiler-plugin</artifactId>
+										<versionRange>[2.0,)</versionRange>
+										<goals>
+											<goal>compile</goal>
+											<goal>testCompile</goal>
+										</goals>
+										<parameters>
+											<compilerId>jdt</compilerId>
+										</parameters>
+									</pluginExecutionFilter>
+									<action>
+										<configurator>
+											<id>org.eclipse.m2e.jdt.javaConfigurator</id>
+										</configurator>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.3.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.5</version>
+					<configuration>
+						<encoding>${resource.encoding}</encoding>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<dependencyManagement>
         <dependencies>
             <!-- project modules -->
             <dependency>
@@ -890,6 +898,7 @@
                 <version>3.3.0-v20070426</version>
             </dependency>
         </dependencies>
-    </dependencyManagement>
+
+	</dependencyManagement>
 </project>
 

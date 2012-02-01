@@ -98,7 +98,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		resourceHasBeenSeen = true;
 		try {
 			int highOrder = -1;
-			for (Iterator<FlexoResource<FlexoResourceData>> iter = getDependantResources().iterator(); iter.hasNext();) {
+			for (Iterator<FlexoResource<FlexoResourceData>> iter = getDependentResources().iterator(); iter.hasNext();) {
 				FlexoResource<FlexoResourceData> r = iter.next();
 				if (r.resourceHasBeenSeen) {
 					throw new ResourceDependancyLoopException(r);
@@ -124,7 +124,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	/**
 	 * Vector of FlexoResource which this resource depends on
 	 */
-	protected DependantResources _dependantResources;
+	protected DependentResources _dependentResources;
 
 	/**
 	 * Vector of FlexoResource which depends on this resource
@@ -259,8 +259,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	/**
 	 * Clear resource dependancies for this resource
 	 */
-	public void clearDependancies() {
-		getDependantResources().clear();
+	public void clearDependencies() {
+		getDependentResources().clear();
 		getAlteredResources().clear();
 		getSynchronizedResources().clear();
 	}
@@ -275,11 +275,11 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @return Returns the dependantResources.
 	 */
-	public DependantResources getDependantResources() {
-		if (_dependantResources == null) {
-			_dependantResources = new DependantResources(this);
+	public DependentResources getDependentResources() {
+		if (_dependentResources == null) {
+			_dependentResources = new DependentResources(this);
 		}
-		return _dependantResources;
+		return _dependentResources;
 	}
 
 	/**
@@ -288,8 +288,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param dependantResources
 	 *            The dependantResources to set.
 	 */
-	public void setDependantResources(DependantResources resources) {
-		_dependantResources = resources;
+	public void setDependentResources(DependentResources resources) {
+		_dependentResources = resources;
 		resources.setRelatedResource(this);
 	}
 
@@ -299,8 +299,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param dependantResources
 	 *            The dependantResources to add.
 	 */
-	public void addToDependantResources(FlexoResource aDependantResource) {
-		getDependantResources().addToResources(aDependantResource);
+	public void addToDependentResources(FlexoResource aDependantResource) {
+		getDependentResources().addToResources(aDependantResource);
 	}
 
 	/**
@@ -309,8 +309,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param dependantResources
 	 *            The dependantResources to remove.
 	 */
-	public void removeFromDependantResources(FlexoResource aDependantResource) {
-		getDependantResources().removeFromResources(aDependantResource);
+	public void removeFromDependentResources(FlexoResource aDependantResource) {
+		getDependentResources().removeFromResources(aDependantResource);
 	}
 
 	// ==========================================================================
@@ -553,7 +553,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws LoadResourceException
 	 */
 	public final FlexoResourceTree update() throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException,
-	ProjectLoadingCancelledException, FlexoException {
+			ProjectLoadingCancelledException, FlexoException {
 		return _update(makeSingleton());
 	}
 
@@ -569,7 +569,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws LoadResourceException
 	 */
 	protected abstract void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException,
-	LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException;
+			LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException;
 
 	/**
 	 * Important method "telling" if a resource from which this resource depend is a state requiring this resource to be updated/processed
@@ -616,7 +616,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	private final FlexoResourceTree buildDependanciesTree(Vector<FlexoResource<FlexoResourceData>> processedResources)
 			throws ResourceDependancyLoopException {
 		FlexoResourceTreeImplementation returned = new FlexoResourceTreeImplementation(this);
-		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependantResources().elements(false, getProject().getDependancyScheme()); e
+		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependentResources().elements(false, getProject().getDependancyScheme()); e
 				.hasMoreElements();) {
 			FlexoResource<FlexoResourceData> resource = e.nextElement();
 			if (processedResources.contains(resource)) {
@@ -651,7 +651,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 			throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
 			FlexoException {
 		FlexoResourceTreeImplementation returned = new FlexoResourceTreeImplementation(this);
-		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependantResources().elements(false, getProject().getDependancyScheme()); e
+		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependentResources().elements(false, getProject().getDependancyScheme()); e
 				.hasMoreElements();) {
 			FlexoResource<FlexoResourceData> resource = e.nextElement();
 			if (processedResources.contains(resource)) {
@@ -911,7 +911,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		return !isActive();
 	}
 
-	public enum DependancyAlgorithmScheme {
+	public enum DependencyAlgorithmScheme {
 		Pessimistic, Optimistic
 	}
 
@@ -930,10 +930,10 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 			}
 			return true;
 		}
-		if (getDependantResources().contains(resource)) {
+		if (getDependentResources().contains(resource)) {
 			return true;
 		}
-		for (FlexoResource r : getDependantResources()) {
+		for (FlexoResource r : getDependentResources()) {
 			if (r == this) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.info("Loop dependancy found for resource " + r + " " + r.getFullyQualifiedName());
@@ -956,11 +956,11 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param dependancyScheme
 	 * @return
 	 */
-	protected final boolean dependsOf(FlexoResource resource, DependancyAlgorithmScheme dependancyScheme) {
-		if (dependancyScheme == DependancyAlgorithmScheme.Pessimistic) {
+	protected final boolean dependsOf(FlexoResource resource, DependencyAlgorithmScheme dependancyScheme) {
+		if (dependancyScheme == DependencyAlgorithmScheme.Pessimistic) {
 			return true;
-		} else if (dependancyScheme == DependancyAlgorithmScheme.Optimistic) {
-			Date requestDate = getRequestDateToBeUsedForOptimisticDependancyChecking(resource);
+		} else if (dependancyScheme == DependencyAlgorithmScheme.Optimistic) {
+			Date requestDate = getRequestDateToBeUsedForOptimisticDependencyChecking(resource);
 			return optimisticallyDependsOf(resource, requestDate);
 		}
 		return true;
@@ -988,7 +988,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param resource
 	 * @return
 	 */
-	protected Date getRequestDateToBeUsedForOptimisticDependancyChecking(FlexoResource resource) {
+	protected Date getRequestDateToBeUsedForOptimisticDependencyChecking(FlexoResource resource) {
 		return new Date();
 	}
 
@@ -1097,7 +1097,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @return
 	 */
 	public boolean deeplyDependsOfItSelf() {
-		for (FlexoResource r : getDependantResources()) {
+		for (FlexoResource r : getDependentResources()) {
 			if (r.deeplyDependsOf(this)) {
 				return true;
 			}
@@ -1109,7 +1109,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	public void notifyDependantResourceChange(FlexoResource origin) {
-		getDependantResources().update();
+		getDependentResources().update();
 	}
 
 	/**

@@ -29,49 +29,49 @@ import junit.framework.TestCase;
  */
 public abstract class AbstractGuiTest extends TestCase {
 
-    private UserType userTypeBackUp = null;
+	private UserType userTypeBackUp = null;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        userTypeBackUp = setUserTypeFieldByReflection(null);
-    }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		userTypeBackUp = setUserTypeFieldByReflection(null);
+	}
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        setUserTypeFieldByReflection(userTypeBackUp);
-    }
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		setUserTypeFieldByReflection(userTypeBackUp);
+	}
 
-    public void testUserTypeIsNullThrowIllegalStateException(){
-        try{
-            UserType.getCurrentUserType();
-            Assert.fail("Should have fail with an IllegalStateException.");
-        }catch (IllegalStateException e){
-            //that's expected.
-        }
-    }
+	public void testUserTypeIsNullThrowIllegalStateException() {
+		try {
+			UserType.getCurrentUserType();
+			Assert.fail("Should have fail with an IllegalStateException.");
+		} catch (IllegalStateException e) {
+			// that's expected.
+		}
+	}
 
-    private UserType setUserTypeFieldByReflection(UserType valueToSet){
-         Field currentUserTypeField = null;
-         try{
-             currentUserTypeField = UserType.class.getDeclaredField("currentUserType");
-         }catch(NoSuchFieldException e){
-             Assert.fail("Class UserType must have a static field named 'currentUserType'.");
-         }
-         UserType reply = null;
-         boolean isAccessible = currentUserTypeField.isAccessible();
-         try{
-             currentUserTypeField.setAccessible(true);
-             reply = (UserType)currentUserTypeField.get(UserType.class);
-             currentUserTypeField.set(UserType.class,valueToSet);
-         } catch(IllegalAccessException e){
-             Assert.fail("UserType.currentUserType should be accessible.");
-         }finally {
-             currentUserTypeField.setAccessible(isAccessible);
-         }
-         return reply;
+	private UserType setUserTypeFieldByReflection(UserType valueToSet) {
+		Field currentUserTypeField = null;
+		try {
+			currentUserTypeField = UserType.class.getDeclaredField("currentUserType");
+		} catch (NoSuchFieldException e) {
+			Assert.fail("Class UserType must have a static field named 'currentUserType'.");
+		}
+		UserType reply = null;
+		boolean isAccessible = currentUserTypeField.isAccessible();
+		try {
+			currentUserTypeField.setAccessible(true);
+			reply = (UserType) currentUserTypeField.get(UserType.class);
+			currentUserTypeField.set(UserType.class, valueToSet);
+		} catch (IllegalAccessException e) {
+			Assert.fail("UserType.currentUserType should be accessible.");
+		} finally {
+			currentUserTypeField.setAccessible(isAccessible);
+		}
+		return reply;
 
-     }
+	}
 
 }

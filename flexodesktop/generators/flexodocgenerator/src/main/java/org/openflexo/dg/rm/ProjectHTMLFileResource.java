@@ -89,7 +89,7 @@ public class ProjectHTMLFileResource extends HTMLFileResource<DGHTMLGenerator<Fl
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getWorkflow().getFlexoResource());
+		addToDependentResources(getProject().getWorkflow().getFlexoResource());
 	}
 
 	@Override

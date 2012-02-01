@@ -100,8 +100,8 @@ public class DMModelLatexFileResource extends LatexFileResource<DGLatexGenerator
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getTOCResource());
-		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependentResources(getProject().getTOCResource());
+		addToDependentResources(getProject().getFlexoDMResource());
 	}
 
 	@Override

@@ -591,33 +591,41 @@ ${project.getPrefix()}Constants.#capNameForNode(${_ci.getOperationNode().getProc
 #end
 
 
-#macro(_getGlobalVariable $key $defaultValue $returnValue)#if(!${globalVariableMap.containsKey($key)})#void(${globalVariableMap.put($key, $defaultValue)})#end#set($returnValue = ${globalVariableMap.get($key)})#end
+#macro(_getGlobalVariable $key $defaultValue $holder)#if(!${globalVariableMap.containsKey($key)})#void(${globalVariableMap.put($key, $defaultValue)})#end #void(${holder.set(${globalVariableMap.get($key)})})#end
 #macro(_setGlobalVariable $key $value)#void(${globalVariableMap.put($key, $value)})#end
 
-#macro(getMultiJavaSelectorVariableNameByRepetitionId $returnValue)#_getGlobalVariable("javaMultiSelectorVariableNameByRepetitionId" $generator.getNewHashtable() $returnValue)#end
+#macro(getMultiJavaSelectorVariableNameByRepetitionId $holder)#_getGlobalVariable("javaMultiSelectorVariableNameByRepetitionId" $generator.getNewHashtable() $holder)#end
 #macro(addMultiJavaSelectorVariableNameForRepetitionOp $repetitionOperator $variableName)
+    #set($javaMultiSelectorVariableNameByRepetitionId = ${generator.getNewHolder()})
 	#getMultiJavaSelectorVariableNameByRepetitionId($javaMultiSelectorVariableNameByRepetitionId)
+	#set($javaMultiSelectorVariableNameByRepetitionId = ${javaMultiSelectorVariableNameByRepetitionId.get()})
 	#if($repetitionOperator && !${javaMultiSelectorVariableNameByRepetitionId.containsKey(${repetitionOperator.getFlexoID()})})
 		#void($javaMultiSelectorVariableNameByRepetitionId.put(${repetitionOperator.getFlexoID()}, $variableName))
 	#end
 #end
-#macro(getMultiJavaSelectorVariableNameForRepetitionOp $repetitionOperator $returnValue)
+#macro(getMultiJavaSelectorVariableNameForRepetitionOp $repetitionOperator $holder)
+    #set($javaMultiSelectorVariableNameByRepetitionId = ${generator.getNewHolder()})
 	#getMultiJavaSelectorVariableNameByRepetitionId($javaMultiSelectorVariableNameByRepetitionId)
+	#set($javaMultiSelectorVariableNameByRepetitionId = ${javaMultiSelectorVariableNameByRepetitionId.get()})
 	#if($repetitionOperator && ${javaMultiSelectorVariableNameByRepetitionId.containsKey(${repetitionOperator.getFlexoID()})})
-		#set($returnValue = ${javaMultiSelectorVariableNameByRepetitionId.get(${repetitionOperator.getFlexoID()})})
+		#void(${holder.set(${javaMultiSelectorVariableNameByRepetitionId.get(${repetitionOperator.getFlexoID()})})})
 	#end
 #end
 
-#macro(getSingleJavaSelectorVariableNameByRepetitionId $returnValue)#_getGlobalVariable("javaSingleSelectorVariableNameByRepetitionId" $generator.getNewHashtable() $returnValue)#end
+#macro(getSingleJavaSelectorVariableNameByRepetitionId $holder)#_getGlobalVariable("javaSingleSelectorVariableNameByRepetitionId" $generator.getNewHashtable() $holder)#end
 #macro(addSingleJavaSelectorVariableNameForRepetitionOp $repetitionOperator $variableName)
+    #set($javaSingleSelectorVariableNameByRepetitionId = ${generator.getNewHolder()})
 	#getSingleJavaSelectorVariableNameByRepetitionId($javaSingleSelectorVariableNameByRepetitionId)
+	#set($javaSingleSelectorVariableNameByRepetitionId = ${javaSingleSelectorVariableNameByRepetitionId.get()})
 	#if($repetitionOperator && !${javaSingleSelectorVariableNameByRepetitionId.containsKey(${repetitionOperator.getFlexoID()})})
 		#void($javaSingleSelectorVariableNameByRepetitionId.put(${repetitionOperator.getFlexoID()}, $variableName))
 	#end
 #end
-#macro(getSingleJavaSelectorVariableNameForRepetitionOp $repetitionOperator $returnValue)
+#macro(getSingleJavaSelectorVariableNameForRepetitionOp $repetitionOperator $holder)
+    #set($javaSingleSelectorVariableNameByRepetitionId = ${generator.getNewHolder()})
 	#getSingleJavaSelectorVariableNameByRepetitionId($javaSingleSelectorVariableNameByRepetitionId)
+	#set($javaSingleSelectorVariableNameByRepetitionId = ${javaSingleSelectorVariableNameByRepetitionId.get()})
 	#if($repetitionOperator && ${javaSingleSelectorVariableNameByRepetitionId.containsKey(${repetitionOperator.getFlexoID()})})
-		#set($returnValue = ${javaSingleSelectorVariableNameByRepetitionId.get(${repetitionOperator.getFlexoID()})})
+		#void(${holder.set(${javaSingleSelectorVariableNameByRepetitionId.get(${repetitionOperator.getFlexoID()})})})
 	#end
 #end

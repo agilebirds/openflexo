@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>technologymodules</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>hibernatetechnologymodule</artifactId>
 	<name>Technology :: HibernateTechnologyModule</name>

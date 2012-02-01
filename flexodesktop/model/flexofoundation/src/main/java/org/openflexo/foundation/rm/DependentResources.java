@@ -25,7 +25,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
+import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -34,20 +34,20 @@ import org.openflexo.logging.FlexoLogger;
  * @author sguerin
  * 
  */
-public class DependantResources extends ResourceList {
+public class DependentResources extends ResourceList {
 
-	private static final Logger logger = FlexoLogger.getLogger(DependantResources.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(DependentResources.class.getPackage().getName());
 
-	public DependantResources() {
+	public DependentResources() {
 		super();
-		_resourceIncludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
-		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
+		_resourceIncludingInactive = new Hashtable<DependencyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
+		_resourceExcludingInactive = new Hashtable<DependencyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
 	}
 
-	public DependantResources(FlexoResource<? extends FlexoResourceData> relatedResource) {
+	public DependentResources(FlexoResource<? extends FlexoResourceData> relatedResource) {
 		super(relatedResource);
-		_resourceIncludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
-		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
+		_resourceIncludingInactive = new Hashtable<DependencyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
+		_resourceExcludingInactive = new Hashtable<DependencyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class DependantResources extends ResourceList {
 	}
 
 	public Enumeration<FlexoResource<FlexoResourceData>> elements(boolean includeInactiveResource,
-			DependancyAlgorithmScheme dependancyScheme) {
+			DependencyAlgorithmScheme dependancyScheme) {
 		return getResources(includeInactiveResource, dependancyScheme).elements();
 	}
 
@@ -138,7 +138,7 @@ public class DependantResources extends ResourceList {
 	}
 
 	private Vector<FlexoResource<FlexoResourceData>> buildResources(boolean includeInactiveResource,
-			DependancyAlgorithmScheme dependancyScheme) {
+			DependencyAlgorithmScheme dependancyScheme) {
 		Vector<FlexoResource<FlexoResourceData>> returned = new Vector<FlexoResource<FlexoResourceData>>();
 		for (FlexoResource<FlexoResourceData> resource : this) {
 			if (includeInactiveResource || resource.isActive()) {
@@ -150,8 +150,8 @@ public class DependantResources extends ResourceList {
 		return returned;
 	}
 
-	private Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>> _resourceIncludingInactive;
-	private Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>> _resourceExcludingInactive;
+	private Hashtable<DependencyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>> _resourceIncludingInactive;
+	private Hashtable<DependencyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>> _resourceExcludingInactive;
 
 	/**
 	 * Return list of resources with supplied options
@@ -164,7 +164,7 @@ public class DependantResources extends ResourceList {
 	 * @param dependancyScheme
 	 * @return
 	 */
-	public Vector<FlexoResource<FlexoResourceData>> getResources(boolean includeInactiveResource, DependancyAlgorithmScheme dependancyScheme) {
+	public Vector<FlexoResource<FlexoResourceData>> getResources(boolean includeInactiveResource, DependencyAlgorithmScheme dependancyScheme) {
 		Vector<FlexoResource<FlexoResourceData>> returned = null;
 		if (includeInactiveResource) {
 			returned = _resourceIncludingInactive.get(dependancyScheme);

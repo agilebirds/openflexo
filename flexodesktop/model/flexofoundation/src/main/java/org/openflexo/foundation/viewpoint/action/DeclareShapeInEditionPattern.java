@@ -84,7 +84,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		@Override
 		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
-			return (shape != null && shape.getCalc().getEditionPatterns().size() > 0);
+			return (shape != null && shape.getCalc() != null);
 		}
 
 	};

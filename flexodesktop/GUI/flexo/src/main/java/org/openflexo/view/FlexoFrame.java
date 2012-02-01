@@ -94,11 +94,11 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			activateModuleIfPossible(e);
 		}
 
-        private void activateModuleIfPossible(WindowEvent e){
-            if (!(e.getOppositeWindow() instanceof ProgressWindow) && getModuleLoader().isLoaded(_module.getModule())) {
+		private void activateModuleIfPossible(WindowEvent e) {
+			if (!(e.getOppositeWindow() instanceof ProgressWindow) && getModuleLoader().isLoaded(_module.getModule())) {
 				getModuleLoader().activateModule(_module.getModule());
 			}
-        }
+		}
 
 		@Override
 		public void windowClosing(WindowEvent event) {
@@ -107,7 +107,6 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			}
 		}
 	}
-
 
 	static final Logger logger = Logger.getLogger(FlexoFrame.class.getPackage().getName());
 
@@ -130,15 +129,64 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	private WindowListener windowListener;
 
 	public static FlexoFrame getActiveFrame() {
-		return FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame() : null;
+		return FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame() : getDefaultFrame();
 	}
 
 	public static Frame getOwner(Frame owner) {
 		return owner != null ? owner : getActiveFrame();
 	}
 
+	private static FlexoFrame defaultFrame;
+
+	private static FlexoFrame getDefaultFrame() {
+		if (defaultFrame == null) {
+			defaultFrame = new FlexoFrame() {
+
+			};
+			defaultFrame.setUndecorated(true);
+			defaultFrame.pack();
+			defaultFrame.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
+					Toolkit.getDefaultToolkit().getScreenSize().height / 2, 0, 0);
+			defaultFrame.setVisible(true);
+		}
+		return defaultFrame;
+	}
+
+	private static void disposeDefaultFrameWhenPossible() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				disposeDefaultFrame();
+			}
+		});
+	}
+
+	private static void disposeDefaultFrame() {
+		Frame f = defaultFrame;
+		if (f != null) {
+			boolean isDisposable = true;
+			for (Window w : f.getOwnedWindows()) {
+				isDisposable &= !w.isVisible();
+			}
+			if (isDisposable) {
+				f.dispose();
+				defaultFrame = null;
+			} else {
+				disposeDefaultFrameWhenPossible();
+			}
+		}
+	}
+
+	private FlexoFrame() {
+		super(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME);
+		setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
+	}
+
 	public FlexoFrame(String title, FlexoController controller, FlexoKeyEventListener keyEventListener, FlexoMenuBar menuBar) {
 		super(title);
+		if (defaultFrame != null) {
+			disposeDefaultFrameWhenPossible();
+		}
 		if (controller.getProject() != null) {
 			controller.getProject().addObserver(this);
 		}
@@ -329,69 +377,74 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	@Override
 	public void setVisible(boolean mainFrameIsVisible) {
 		boolean old = isVisible();
-		if (!old && mainFrameIsVisible
-				&& GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame") != null) {
-			if (windowResizeListener != null) {
-				removeComponentListener(windowResizeListener);
-			}
-			Rectangle bounds = GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame");
-
-			// In case we remove a screen (if you go from 3 to 2 screen, go to hell, that's all you deserve ;-))
-			if (GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length == 1) {
-				Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-				if (screen.width <= bounds.x) {
-					bounds.x = 0;
-				} else if (screen.height <= bounds.y) {
-					bounds.y = 0;
+		if (getController() != null) {
+			if (!old && mainFrameIsVisible
+					&& GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame") != null) {
+				if (windowResizeListener != null) {
+					removeComponentListener(windowResizeListener);
 				}
-			}
-			setBounds(bounds);
-			int state = GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame");
-			if (state != -1
-					&& ((state & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH || (state & Frame.MAXIMIZED_HORIZ) == Frame.MAXIMIZED_HORIZ || (state & Frame.MAXIMIZED_VERT) == Frame.MAXIMIZED_VERT)) {
-				setExtendedState(GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame"));
-			}
-			if (windowResizeListener != null) {
-				addComponentListener(windowResizeListener);
-			}
-		}
-		if (mainFrameIsVisible && getModule() != null && getModule().isActive() || !mainFrameIsVisible) {
-			setRelativeVisible(mainFrameIsVisible);
-			super.setVisible(mainFrameIsVisible);
-			if (mainFrameIsVisible) {
-				if (getModule() != null) {
-					getModule().notifyFocusOn();
-				}
-			}
-		}
-		if (windowResizeListener == null) {
-			windowResizeListener = new ComponentAdapter() {
+				Rectangle bounds = GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame");
 
-				@Override
-				public void componentMoved(ComponentEvent e) {
-					saveBoundsInPreferenceWhenPossible();
-				}
-
-				@Override
-				public void componentResized(ComponentEvent e) {
-					saveBoundsInPreferenceWhenPossible();
-				}
-
-				@Override
-				public void componentShown(ComponentEvent e) {
-					if (getModuleLoader().isLoaded(_module.getModule())) {
-						getModuleLoader().activateModule(_module.getModule());
+				// In case we remove a screen (if you go from 3 to 2 screen, go to hell, that's all you deserve ;-))
+				if (GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length == 1) {
+					Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+					if (screen.width <= bounds.x) {
+						bounds.x = 0;
+					} else if (screen.height <= bounds.y) {
+						bounds.y = 0;
 					}
 				}
+				setBounds(bounds);
+				int state = GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame");
+				if (state != -1
+						&& ((state & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH
+								|| (state & Frame.MAXIMIZED_HORIZ) == Frame.MAXIMIZED_HORIZ || (state & Frame.MAXIMIZED_VERT) == Frame.MAXIMIZED_VERT)) {
+					setExtendedState(GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame"));
+				}
+				if (windowResizeListener != null) {
+					addComponentListener(windowResizeListener);
+				}
+			}
+			if (mainFrameIsVisible && getModule() != null && getModule().isActive() || !mainFrameIsVisible) {
+				setRelativeVisible(mainFrameIsVisible);
+				super.setVisible(mainFrameIsVisible);
+				if (mainFrameIsVisible) {
+					if (getModule() != null) {
+						getModule().notifyFocusOn();
+					}
+				}
+			}
+			if (windowResizeListener == null) {
+				windowResizeListener = new ComponentAdapter() {
 
-			};
-			addComponentListener(windowResizeListener);
+					@Override
+					public void componentMoved(ComponentEvent e) {
+						saveBoundsInPreferenceWhenPossible();
+					}
+
+					@Override
+					public void componentResized(ComponentEvent e) {
+						saveBoundsInPreferenceWhenPossible();
+					}
+
+					@Override
+					public void componentShown(ComponentEvent e) {
+						if (getModuleLoader().isLoaded(_module.getModule())) {
+							getModuleLoader().activateModule(_module.getModule());
+						}
+					}
+
+				};
+				addComponentListener(windowResizeListener);
+			}
+		} else {
+			super.setVisible(mainFrameIsVisible);
 		}
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	public void setRelativeVisible(boolean relativeWindowsAreVisible) {
 		if (relativeWindowsAreVisible) {

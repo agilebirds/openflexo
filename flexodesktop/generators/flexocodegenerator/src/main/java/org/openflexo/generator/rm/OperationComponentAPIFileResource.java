@@ -54,7 +54,7 @@ public class OperationComponentAPIFileResource extends ComponentAPIFileResource<
 		if (getGenerator() != null) {
 			for (ComponentInstance ci : getComponentDefinition().getComponentInstances()) {
 				if (ci instanceof OperationComponentInstance) {
-					addToDependantResources(((OperationComponentInstance) ci).getOperationNode().getProcess().getFlexoResource());
+					addToDependentResources(((OperationComponentInstance) ci).getOperationNode().getProcess().getFlexoResource());
 				}
 			}
 		}

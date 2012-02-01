@@ -490,7 +490,7 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 			processFlexoID = -1;
 		}
 		setOperation(null);
-		getNavigationMenu().getFlexoResource().clearDependancies();
+		getNavigationMenu().getFlexoResource().clearDependencies();
 		getNavigationMenu().getFlexoResource().rebuildDependancies();
 		setChanged();
 		notifyObservers(new DisplayProcessSet(old, displayProcess));

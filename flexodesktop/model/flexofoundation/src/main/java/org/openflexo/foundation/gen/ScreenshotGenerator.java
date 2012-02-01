@@ -227,25 +227,25 @@ public class ScreenshotGenerator {
 		try {
 			BufferedImage bi = null;
 			JComponent c = null;
-            try {
-                if (object instanceof AbstractActivityNode || object instanceof FlexoProcess || object instanceof LOOPOperator
-                    || object instanceof RoleList || object instanceof FlexoWorkflow) {
-                    wkfModule = ExternalModuleDelegater.getModuleLoader()
-                                != null ? ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(object.getProject()) : null;
-                } else if (object instanceof IEWOComponent || object instanceof ComponentDefinition || object instanceof OperationNode) {
-                    ieModule = ExternalModuleDelegater.getModuleLoader()
-                               != null ? ExternalModuleDelegater.getModuleLoader().getIEModuleInstance(object.getProject()) : null;
-                } else if (object instanceof ERDiagram) {
-                    dmModule = ExternalModuleDelegater.getModuleLoader()
-                               != null ? ExternalModuleDelegater.getModuleLoader().getDMModuleInstance(object.getProject()) : null;
-                } else if (object instanceof View) {
-                    oeModule = ExternalModuleDelegater.getModuleLoader()
-                               != null ? ExternalModuleDelegater.getModuleLoader().getOEModuleInstance(object.getProject()) : null;
-                }
-            } catch (ModuleLoadingException e) {
-                logger.warning("cannot load module (and so can't create screenshot)." + e.getMessage());
-                e.printStackTrace();
-            }
+			try {
+				if (object instanceof AbstractActivityNode || object instanceof FlexoProcess || object instanceof LOOPOperator
+						|| object instanceof RoleList || object instanceof FlexoWorkflow) {
+					wkfModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
+							.getWKFModuleInstance(object.getProject()) : null;
+				} else if (object instanceof IEWOComponent || object instanceof ComponentDefinition || object instanceof OperationNode) {
+					ieModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
+							.getIEModuleInstance(object.getProject()) : null;
+				} else if (object instanceof ERDiagram) {
+					dmModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
+							.getDMModuleInstance(object.getProject()) : null;
+				} else if (object instanceof View) {
+					oeModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
+							.getOEModuleInstance(object.getProject()) : null;
+				}
+			} catch (ModuleLoadingException e) {
+				logger.warning("cannot load module (and so can't create screenshot)." + e.getMessage());
+				e.printStackTrace();
+			}
 			if (wkfModule != null || ieModule != null || dmModule != null || oeModule != null) {
 				ExternalModule module = ieModule != null ? ieModule : wkfModule != null ? wkfModule : dmModule != null ? dmModule
 						: oeModule;

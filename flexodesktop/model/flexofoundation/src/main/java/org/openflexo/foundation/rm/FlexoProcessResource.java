@@ -87,7 +87,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 		name = aName;
 		setResourceFile(processFile);
 		addToSynchronizedResources(workflowResource);
-		addToDependantResources(aProject.getFlexoDMResource());
+		addToDependentResources(aProject.getFlexoDMResource());
 		// addToDependantResources(aProject.getFlexoComponentLibraryResource());
 	}
 
@@ -221,7 +221,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 		super.rebuildDependancies();
 
 		addToSynchronizedResources(getProject().getFlexoWorkflowResource());
-		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependentResources(getProject().getFlexoDMResource());
 
 		/* GPO: the following line has been commented because it is unnecessary at this time
 		 * Indeed, process depends on components (through component instances) but they donnot
@@ -238,7 +238,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Found dependancy between " + this + " and " + node.getSubProcess().getFlexoResource());
 					}
-					addToDependantResources(node.getSubProcess().getFlexoResource());
+					addToDependentResources(node.getSubProcess().getFlexoResource());
 				}
 			}
 

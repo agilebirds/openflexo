@@ -103,10 +103,10 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		if (getProcess() != null) {
-			addToDependantResources(getProcess().getFlexoResource());
-			addToDependantResources(getProject().getScreenshotResource(getProcess(), true));
+			addToDependentResources(getProcess().getFlexoResource());
+			addToDependentResources(getProject().getScreenshotResource(getProcess(), true));
 			for (AbstractActivityNode activityNode : getProcess().getAllEmbeddedAbstractActivityNodes()) {
-				addToDependantResources(getProject().getScreenshotResource(activityNode, true));
+				addToDependentResources(getProject().getScreenshotResource(activityNode, true));
 			}
 		}
 	}

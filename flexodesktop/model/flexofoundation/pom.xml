@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>model</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexofoundation</artifactId>
 	<name>Model :: FlexoFoundation</name>
@@ -47,7 +47,6 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexographicalengine</artifactId>
-            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cayenne</groupId>

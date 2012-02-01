@@ -67,11 +67,11 @@ public class ConstantsGenerator extends JavaClassGenerator {
 	 */
 	@Override
 	public void rebuildDependanciesForResource(JavaFileResource resource) {
-		resource.addToDependantResources(getProject().getFlexoDKVResource());
-		resource.addToDependantResources(getProject().getFlexoWorkflowResource());
+		resource.addToDependentResources(getProject().getFlexoDKVResource());
+		resource.addToDependentResources(getProject().getFlexoWorkflowResource());
 		Enumeration<FlexoProcess> en = getProject().getAllLocalFlexoProcesses().elements();
 		while (en.hasMoreElements()) {
-			resource.addToDependantResources(en.nextElement().getFlexoResource());
+			resource.addToDependentResources(en.nextElement().getFlexoResource());
 		}
 	}
 

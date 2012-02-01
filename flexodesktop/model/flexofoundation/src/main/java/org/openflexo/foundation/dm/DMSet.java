@@ -75,16 +75,16 @@ public class DMSet extends TemporaryFlexoModelObject {
 	public DMSet(FlexoProject project, ExternalRepository externalRepository, boolean parseMethodsAndProperties, FlexoProgress progress) {
 		this(project);
 		_externalRepository = externalRepository;
-		for (Enumeration en = externalRepository.getJarLoader().getContainedClasses().elements(); en.hasMoreElements();) {
-			Class aClass = (Class) en.nextElement();
+		for (Enumeration<Class<?>> en = externalRepository.getJarLoader().getContainedClasses().elements(); en.hasMoreElements();) {
+			Class<?> aClass = en.nextElement();
 			String packageName = packageNameForClass(aClass);
 			if (_packages.get(packageName) == null) {
 				_packages.put(packageName, new PackageReference(packageName));
 			}
 			_packages.get(packageName).add(aClass, parseMethodsAndProperties);
 		}
-		for (Enumeration en = externalRepository.getEntities().elements(); en.hasMoreElements();) {
-			LoadableDMEntity entity = (LoadableDMEntity) en.nextElement();
+		for (DMEntity e : externalRepository.getEntities().values()) {
+			LoadableDMEntity entity = (LoadableDMEntity) e;
 			if (entity.getType() != null && entity.getJavaType() != null) {
 				ClassReference aClassReference = getClassReference(entity.getJavaType());
 				addToSelectedObjects(aClassReference.getPackageReference());
@@ -335,7 +335,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 								next.getCardinality(),
 								// (next.getType()!=null?next.getType().getName():next.getUnresolvedTypeName()+"<unloaded>"));
 								next.getType().getStringRepresentation(), next.getType().getSimplifiedStringRepresentation()
-								+ (next.getType().isResolved() ? "" : "<unloaded>"));
+										+ (next.getType().isResolved() ? "" : "<unloaded>"));
 						_properties.add(propertyReference);
 						if (entity != null && entity.getDMProperty(next.getName()) != null) {
 							addToSelectedObjects(propertyReference);
@@ -346,9 +346,9 @@ public class DMSet extends TemporaryFlexoModelObject {
 					for (Enumeration en = methods.elements(); en.hasMoreElements();) {
 						DMMethod next = (DMMethod) en.nextElement();
 						MethodReference methodReference = new MethodReference(next.getSignature(), next.getSimplifiedSignature(),
-								// (next.getReturnType()!=null?next.getReturnType().getName():next.getUnresolvedReturnType().getValue()+"<unloaded>"));
+						// (next.getReturnType()!=null?next.getReturnType().getName():next.getUnresolvedReturnType().getValue()+"<unloaded>"));
 								next.getReturnType().getStringRepresentation(), next.getReturnType().getSimplifiedStringRepresentation()
-								+ (next.getType().isResolved() ? "" : "<unloaded>"));
+										+ (next.getType().isResolved() ? "" : "<unloaded>"));
 						_methods.add(methodReference);
 						if (entity != null && entity.getDeclaredMethod(next.getSignature()) != null) {
 							addToSelectedObjects(methodReference);

@@ -73,8 +73,9 @@
 	</entity>
 
 
-	<entity name="org.openflexo.foundation.viewpoint.ShapePatternRole" xmlTag="ShapePatternRole">
+	<entity name="org.openflexo.foundation.viewpoint.ShapePatternRole" xmlTag="ShapePatternRole" contexts="Parent,From,To">
 		<property name="graphicalRepresentation" contains="org.openflexo.fge.GraphicalRepresentation" primary="yes" />
+		<property name="parentShapePatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole" context="Parent"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.ConnectorPatternRole" xmlTag="ConnectorPatternRole">

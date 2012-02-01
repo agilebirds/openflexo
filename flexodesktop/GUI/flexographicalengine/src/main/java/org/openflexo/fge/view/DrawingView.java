@@ -411,7 +411,8 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	}
 
 	private void forcePaintObjects(GraphicalRepresentation<?> fatherGraphicalRepresentation, Graphics g, boolean temporaryObjectsOnly) {
-		List<? extends GraphicalRepresentation<?>> containedGR = fatherGraphicalRepresentation.getContainedGraphicalRepresentations();
+		List<? extends GraphicalRepresentation<?>> containedGR = fatherGraphicalRepresentation
+				.getOrderedContainedGraphicalRepresentations();
 		if (containedGR == null) {
 			return;
 		}
@@ -517,7 +518,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 
 		Vector<GeometricGraphicalRepresentation> geomList = new Vector<GeometricGraphicalRepresentation>();
-		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+		for (Object gr : getGraphicalRepresentation().getOrderedContainedGraphicalRepresentations()) {
 			if (gr instanceof GeometricGraphicalRepresentation) {
 				geomList.add((GeometricGraphicalRepresentation) gr);
 			}
@@ -541,11 +542,11 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			graphics.createGraphics(g2, getController());
 
 			// Don't paint those things in case of buffering
-			for (GraphicalRepresentation o : new Vector<GraphicalRepresentation>(getController().getFocusedObjects())) {
+			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation>(getController().getFocusedObjects())) {
 				paintFocused(o, graphics);
 			}
 
-			for (GraphicalRepresentation o : new Vector<GraphicalRepresentation>(getController().getSelectedObjects())) {
+			for (GraphicalRepresentation<?> o : new ArrayList<GraphicalRepresentation>(getController().getSelectedObjects())) {
 				if (o.shouldBeDisplayed()) {
 					paintSelected(o, graphics);
 				}
@@ -829,7 +830,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			return true;
 		}
 		if (((JComponent) view).getParent() != null && ((JComponent) view).getParent() instanceof FGEView) {
-			return contains(((FGEView) ((JComponent) view).getParent()));
+			return contains((FGEView) ((JComponent) view).getParent());
 		}
 		return false;
 	}

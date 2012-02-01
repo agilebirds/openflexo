@@ -21,7 +21,6 @@ package org.openflexo.module;
 
 import java.awt.Frame;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
@@ -32,7 +31,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveDialog;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
@@ -228,7 +226,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		boolean selectDefaultObject = false;
 		if (getDefaultObjectToSelect() != null
 				&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
-				.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
+						.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
 			if (getFlexoController() instanceof SelectionManagingController) {
 				if (((SelectionManagingController) getFlexoController()).getSelectionManager().getFocusedObject() == null) {
 					selectDefaultObject = true;
@@ -241,9 +239,9 @@ public abstract class FlexoModule implements DataFlexoObserver {
 			getFlexoController().setCurrentEditedObjectAsModuleView(getDefaultObjectToSelect());
 		} else if (getFlexoController() instanceof SelectionManagingController) {
 			((SelectionManagingController) getFlexoController()).getSelectionManager()
-			.setSelectedObjects(
-					new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
-							.getSelection()));
+					.setSelectedObjects(
+							new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
+									.getSelection()));
 		}
 	}
 
@@ -259,9 +257,9 @@ public abstract class FlexoModule implements DataFlexoObserver {
 
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	/**
 	 * Close Module after asking confirmation Review unsaved and save Unload in module loader
@@ -335,25 +333,22 @@ public abstract class FlexoModule implements DataFlexoObserver {
 			logger.warning("Called twice closeWithoutConfirmation on " + this);
 		}
 		_controller = null;
-        Collection<FlexoResource<? extends FlexoResourceData>> temp = new ArrayList<FlexoResource<? extends
-                FlexoResourceData>>();
-        temp.addAll(usedResources.values());
-        for (FlexoResource<? extends FlexoResourceData> r : temp) {
+		for (FlexoResource<? extends FlexoResourceData> r : new ArrayList<FlexoResource<? extends FlexoResourceData>>(
+				usedResources.values())) {
 			releaseResource(r);
 		}
-        temp.clear();
 		if (getModuleLoader().isLoaded(getModule())) {
 			getModuleLoader().unloadModule(getModule());
 		}
 		// Is there some modules loaded ?
 		Enumeration<FlexoModule> leftModules = getModuleLoader().loadedModules();
 		if (leftModules.hasMoreElements()) {
-			try{
-                getModuleLoader().switchToModule(leftModules.nextElement().getModule(), null);
-            }catch(ModuleLoadingException e){
-                logger.severe("Module is loaded and so this exception CANNOT occurs. Please investigate and FIX.");
-                e.printStackTrace();
-            }
+			try {
+				getModuleLoader().switchToModule(leftModules.nextElement().getModule(), null);
+			} catch (ModuleLoadingException e) {
+				logger.severe("Module is loaded and so this exception CANNOT occurs. Please investigate and FIX.");
+				e.printStackTrace();
+			}
 		} else {
 			_activeModule = null;
 			if (quitIfNoModuleLeft) {

@@ -232,7 +232,7 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 	 */
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentJavaFileResource java) {
-		java.addToDependantResources(getProject().getFlexoNavigationMenuResource());
+		java.addToDependentResources(getProject().getFlexoNavigationMenuResource());
 	}
 
 	/**
@@ -242,7 +242,7 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 	 */
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentWOFileResource wo) {
-		wo.addToDependantResources(getProject().getFlexoNavigationMenuResource());
+		wo.addToDependentResources(getProject().getFlexoNavigationMenuResource());
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 	 */
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentAPIFileResource api) {
-		api.addToDependantResources(getProject().getFlexoNavigationMenuResource());
+		api.addToDependentResources(getProject().getFlexoNavigationMenuResource());
 	}
 
 }

@@ -23,45 +23,45 @@ import junit.framework.Assert;
 
 public class ModuleLoaderTest extends AbstractGuiTest {
 
-    public void testInitWithoutUserTypeFail(){
-        try{
-            Assert.assertFalse("currentUserType must be null when starting a AbstractGuiTest",UserType.isCurrentUserTypeDefined());
-            ModuleLoader.instance();
-            fail("ModuleLoader.instance() must fail when there is no user type.");
-        }catch(IllegalStateException e){
-            //that's expected
-        }
-    }
+	public void testInitWithoutUserTypeFail() {
+		try {
+			Assert.assertFalse("currentUserType must be null when starting a AbstractGuiTest", UserType.isCurrentUserTypeDefined());
+			ModuleLoader.instance();
+			fail("ModuleLoader.instance() must fail when there is no user type.");
+		} catch (IllegalStateException e) {
+			// that's expected
+		}
+	}
 
-    public void testInitWithUserTypeSuccess(){
-        doInitModuleLoader();
-    }
+	public void testInitWithUserTypeSuccess() {
+		doInitModuleLoader();
+	}
 
-    public void testNoModuleAvailable(){
-        doInitModuleLoader();
-        assertNoModuleAvailable();
-    }
+	public void testNoModuleAvailable() {
+		doInitModuleLoader();
+		assertNoModuleAvailable();
+	}
 
-    public void testNoModuleLoaded(){
-        doInitModuleLoader();
-        assertNoModuleLoaded();
-    }
+	public void testNoModuleLoaded() {
+		doInitModuleLoader();
+		assertNoModuleLoaded();
+	}
 
-    private void doInitModuleLoader(){
-        try{
-            Assert.assertFalse("currentUserType must be null when starting a AbstractGuiTest",UserType.isCurrentUserTypeDefined());
-            UserType.setCurrentUserType(UserType.CUSTOMER);
-            ModuleLoader.instance();
-        }catch(IllegalStateException e){
-            fail("ModuleLoader.instance() must not fail when there is a user type.");
-        }
-    }
+	private void doInitModuleLoader() {
+		try {
+			Assert.assertFalse("currentUserType must be null when starting a AbstractGuiTest", UserType.isCurrentUserTypeDefined());
+			UserType.setCurrentUserType(UserType.CUSTOMER);
+			ModuleLoader.instance();
+		} catch (IllegalStateException e) {
+			fail("ModuleLoader.instance() must not fail when there is a user type.");
+		}
+	}
 
-    private void assertNoModuleAvailable(){
-        assertTrue(ModuleLoader.instance().availableModules().size() == 0);
-    }
+	private void assertNoModuleAvailable() {
+		assertTrue(ModuleLoader.instance().availableModules().size() == 0);
+	}
 
-    private void assertNoModuleLoaded(){
-        assertFalse(ModuleLoader.instance().loadedModules().hasMoreElements());
-    }
+	private void assertNoModuleLoaded() {
+		assertFalse(ModuleLoader.instance().loadedModules().hasMoreElements());
+	}
 }

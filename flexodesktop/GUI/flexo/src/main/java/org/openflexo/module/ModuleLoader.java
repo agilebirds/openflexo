@@ -74,9 +74,9 @@ public final class ModuleLoader implements IModuleLoader {
 
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
-    private static ModuleLoader _instance = null;
+	private static ModuleLoader _instance = null;
 
-    private boolean allowsDocSubmission;
+	private boolean allowsDocSubmission;
 
 	private Module switchingToModule = null;
 
@@ -85,10 +85,9 @@ public final class ModuleLoader implements IModuleLoader {
 	public String fileNameToOpen = null;
 
 	/**
-	 * Hashtable where are stored Module instances (instance of
-	 * FlexoModule associated to a Module instance key.
+	 * Hashtable where are stored Module instances (instance of FlexoModule associated to a Module instance key.
 	 */
-    //TODO : make private
+	// TODO : make private
 	Hashtable<Module, FlexoModule> _modules = new Hashtable<Module, FlexoModule>();
 
 	/**
@@ -96,70 +95,69 @@ public final class ModuleLoader implements IModuleLoader {
 	 */
 	private ArrayList<Module> _availableModules = new ArrayList<Module>();
 
-    private ModuleLoader() {
-        super();
-        if(!UserType.isCurrentUserTypeDefined()){
-            throw new IllegalStateException("Cannot initialize ModuleLoader if UserType is not defined. "
-                                            + "Please call UserType.setCurrentUserType(<UserType>) before"
-                                            + " initializing the ModuleLoader.");
-        }
-        ExternalModuleDelegater.registerModuleLoader(this);
-        initialize();
-    }
+	private ModuleLoader() {
+		super();
+		if (!UserType.isCurrentUserTypeDefined()) {
+			throw new IllegalStateException("Cannot initialize ModuleLoader if UserType is not defined. "
+					+ "Please call UserType.setCurrentUserType(<UserType>) before" + " initializing the ModuleLoader.");
+		}
+		ExternalModuleDelegater.registerModuleLoader(this);
+		initialize();
+	}
 
-    private static final Object monitor = new Object();
+	private static final Object monitor = new Object();
 
-    public static ModuleLoader instance() {
-        if(_instance==null){
-            synchronized (monitor){
-                if(_instance==null){
-                    _instance = new ModuleLoader();
-                }
-            }
-        }
-        return _instance;
-    }
+	public static ModuleLoader instance() {
+		if (_instance == null) {
+			synchronized (monitor) {
+				if (_instance == null) {
+					_instance = new ModuleLoader();
+				}
+			}
+		}
+		return _instance;
+	}
 
-    /**
-     * @param moduleClass a module implementation class
-     * @return the Module definition for the given moduleImplementation class
-     * or null if the Module is not available for the currentUserType
-     */
-    public Module getModule(Class<? extends FlexoModule> moduleClass) {
-        for (Module candidate:UserType.getCurrentUserType().getModules()) {
-            if (moduleClass.equals(candidate.getModuleClass())) {
-                return candidate;
-            }
-        }
-        if (logger.isLoggable(Level.WARNING)) {
-            logger.warning(("Module for " + moduleClass.getName()+ " is not available in "
-                            +UserType.getCurrentUserType().getBusinessName2()));
-        }
-        return null;
-    }
+	/**
+	 * @param moduleClass
+	 *            a module implementation class
+	 * @return the Module definition for the given moduleImplementation class or null if the Module is not available for the currentUserType
+	 */
+	public Module getModule(Class<? extends FlexoModule> moduleClass) {
+		for (Module candidate : UserType.getCurrentUserType().getModules()) {
+			if (moduleClass.equals(candidate.getModuleClass())) {
+				return candidate;
+			}
+		}
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning(("Module for " + moduleClass.getName() + " is not available in " + UserType.getCurrentUserType()
+					.getBusinessName2()));
+		}
+		return null;
+	}
 
-    /**
-     * @param moduleName the name of a module
-     * @return the Module definition for the given moduleName or null
-     * if the Module is not available for the currentUserType or the module
-     * name is unknown.
-     * @see #isAvailable(Module)
-     * @see UserType
-     */
-    public Module getModule(String moduleName) {
-        for (Module candidate:UserType.getCurrentUserType().getModules()) {
-            if (candidate.getName().equals(moduleName)) {
-                return candidate.isAvailable()?candidate:null;
-            }
-        }
-        if (logger.isLoggable(Level.WARNING)) {
-            logger.warning("Module named " + moduleName+" is either unknown, either not available in "
-                            +UserType.getCurrentUserType().getBusinessName2());
-        }
-        return null;
-    }
+	/**
+	 * @param moduleName
+	 *            the name of a module
+	 * @return the Module definition for the given moduleName or null if the Module is not available for the currentUserType or the module
+	 *         name is unknown.
+	 * @see #isAvailable(Module)
+	 * @see UserType
+	 */
+	public Module getModule(String moduleName) {
+		for (Module candidate : UserType.getCurrentUserType().getModules()) {
+			if (candidate.getName().equals(moduleName)) {
+				return candidate.isAvailable() ? candidate : null;
+			}
+		}
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Module named " + moduleName + " is either unknown, either not available in "
+					+ UserType.getCurrentUserType().getBusinessName2());
+		}
+		return null;
+	}
 
-    public boolean allowsDocSubmission() {
+	public boolean allowsDocSubmission() {
 		return allowsDocSubmission;
 	}
 
@@ -183,7 +181,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 */
 	private void initialize() {
 		for (Module module : UserType.getCurrentUserType().getModules()) {
-            if (module.getModuleClass() != null) {
+			if (module.getModuleClass() != null) {
 				registerModule(module);
 			}
 		}
@@ -209,8 +207,9 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Internally used to register module with class name moduleClass
-	 *
-	 * @param module the module to register
+	 * 
+	 * @param module
+	 *            the module to register
 	 */
 	private void registerModule(Module module) {
 		if (module.register()) {
@@ -241,20 +240,21 @@ public final class ModuleLoader implements IModuleLoader {
 		return returned;
 	}
 
-    /**
-     * @param module module to ignore while checking.
-     * @return if there is still a loaded module requiring project (ignoring moduleToIgnore)
-     */
-    public boolean isThereAnyLoadedModuleWithAProjectExcept(Module module){
-        for(Module m:_modules.keySet()){
-            if(!m.equals(module)){
-                if(m.requireProject()){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+	/**
+	 * @param module
+	 *            module to ignore while checking.
+	 * @return if there is still a loaded module requiring project (ignoring moduleToIgnore)
+	 */
+	public boolean isThereAnyLoadedModuleWithAProjectExcept(Module module) {
+		for (Module m : _modules.keySet()) {
+			if (!m.equals(module)) {
+				if (m.requireProject()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Return all loaded modules as a Vector of Module instances
@@ -285,7 +285,7 @@ public final class ModuleLoader implements IModuleLoader {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName(), 8);
 		}
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName());
-		FlexoModule returned = doInternalLoadModule(module,project);
+		FlexoModule returned = doInternalLoadModule(module, project);
 		_modules.put(module, returned);
 		activeModule = module;
 		ProgressWindow.hideProgressWindow();
@@ -294,15 +294,14 @@ public final class ModuleLoader implements IModuleLoader {
 		return returned;
 	}
 
-    private FlexoModule doInternalLoadModule(Module module, FlexoProject project)
-            throws ModuleLoadingException {
+	private FlexoModule doInternalLoadModule(Module module, FlexoProject project) throws ModuleLoadingException {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Loading module " + module.getName());
 		}
 		Object[] params;
 		if (module.requireProject()) {
 			params = new Object[1];
-            params[0] = project.getResourceManagerInstance().getEditor();
+			params[0] = project.getResourceManagerInstance().getEditor();
 		} else {
 			params = new Object[0];
 		}
@@ -311,28 +310,28 @@ public final class ModuleLoader implements IModuleLoader {
 			returned = (FlexoModule) module.getConstructor().newInstance(params);
 			FCH.ensureHelpEntryForModuleHaveBeenCreated(returned);
 		} catch (IllegalArgumentException e) {
-            printAndWrap(e,module);
+			printAndWrap(e, module);
 		} catch (InstantiationException e) {
-            printAndWrap(e,module);
+			printAndWrap(e, module);
 		} catch (IllegalAccessException e) {
-            printAndWrap(e,module);
+			printAndWrap(e, module);
 		} catch (InvocationTargetException e) {
-			printAndWrap(e,module);
+			printAndWrap(e, module);
 		}
 		return returned;
 	}
 
-    private void printAndWrap(Throwable e, Module module) throws ModuleLoadingException {
-        if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Could not load module " + module.getName() + " : exception raised " + e.getClass().getName());
-			}
-			if (logger.isLoggable(Level.WARNING) && (e.getCause() != null)) {
-				logger.warning("Caused by " + e.getCause().getClass().getName() + " " + e.getCause().getMessage());
-				e.getCause().printStackTrace();
-			}
-			e.printStackTrace();
-			throw new ModuleLoadingException(module);
-    }
+	private void printAndWrap(Throwable e, Module module) throws ModuleLoadingException {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Could not load module " + module.getName() + " : exception raised " + e.getClass().getName());
+		}
+		if (logger.isLoggable(Level.WARNING) && (e.getCause() != null)) {
+			logger.warning("Caused by " + e.getCause().getClass().getName() + " " + e.getCause().getMessage());
+			e.getCause().printStackTrace();
+		}
+		e.printStackTrace();
+		throw new ModuleLoadingException(module);
+	}
 
 	public boolean isAvailable(Module module) {
 		return _availableModules.contains(module);
@@ -357,9 +356,9 @@ public final class ModuleLoader implements IModuleLoader {
 			if (isLoaded(module)) {
 				return _modules.get(module);
 			} else {
-                if(module.requireProject() && project==null){
-                    throw new IllegalArgumentException("Module "+module.getName()+" needs a project. project cannot be null");
-                }
+				if (module.requireProject() && project == null) {
+					throw new IllegalArgumentException("Module " + module.getName() + " needs a project. project cannot be null");
+				}
 				return loadModule(module, project);
 			}
 		} else {
@@ -370,7 +369,7 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 	}
 
-	public ExternalWKFModule getWKFModule(FlexoProject project) throws ModuleLoadingException{
+	public ExternalWKFModule getWKFModule(FlexoProject project) throws ModuleLoadingException {
 		return (ExternalWKFModule) getModuleInstance(Module.WKF_MODULE, project);
 	}
 
@@ -396,7 +395,7 @@ public final class ModuleLoader implements IModuleLoader {
 
 	public FlexoModule switchToModule(Module module, FlexoProject project) throws ModuleLoadingException {
 		logger.info("switchToModule: " + module);
-        //todo getting rid of this switchingToModule hack !
+		// todo getting rid of this switchingToModule hack !
 		if (switchingToModule != null) {
 			return null;
 		}
@@ -405,19 +404,19 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 		setSwitchingTo(module);
 		try {
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info("Switch to module " + module.getName());
-            }
-            FlexoModule moduleInstance = getModuleInstance(module, project);
-            if (moduleInstance != null) {
-                activeModule = module;
-                moduleInstance.focusOn();
-                return moduleInstance;
-            }
-            throw new ModuleLoadingException(module);
-        } finally {
-            setSwitchingTo(null);
-        }
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Switch to module " + module.getName());
+			}
+			FlexoModule moduleInstance = getModuleInstance(module, project);
+			if (moduleInstance != null) {
+				activeModule = module;
+				moduleInstance.focusOn();
+				return moduleInstance;
+			}
+			throw new ModuleLoadingException(module);
+		} finally {
+			setSwitchingTo(null);
+		}
 	}
 
 	public void activateModule(Module m) {
@@ -430,8 +429,10 @@ public final class ModuleLoader implements IModuleLoader {
 	/**
 	 * Called for quitting. Ask if saving must be performed, and exit on request.
 	 * 
-	 * @param askConfirmation if flexo must ask confirmation to the user
-	 * @throws ProjectExitingCancelledException whenever user decide to not quit
+	 * @param askConfirmation
+	 *            if flexo must ask confirmation to the user
+	 * @throws ProjectExitingCancelledException
+	 *             whenever user decide to not quit
 	 */
 	public void quit(boolean askConfirmation) throws ProjectExitingCancelledException {
 		if (askConfirmation) {
@@ -445,13 +446,13 @@ public final class ModuleLoader implements IModuleLoader {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Exiting FLEXO Application Suite...");
 		}
-        FlexoProject currentProject = findCurrentProject();
+		FlexoProject currentProject = findCurrentProject();
 		if (ProjectLoader.someResourcesNeedsSaving(currentProject)) {
 			SaveDialog reviewer = new SaveDialog(FlexoController.getActiveFrame());
 			if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
 				try {
 					ProjectLoader.doSaveProject(currentProject);
-                    proceedQuitWithoutConfirmation();
+					proceedQuitWithoutConfirmation();
 				} catch (SaveResourceException e) {
 					e.printStackTrace();
 					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
@@ -483,8 +484,7 @@ public final class ModuleLoader implements IModuleLoader {
 		for (Enumeration<FlexoModule> en = loadedModules(); en.hasMoreElements();) {
 			en.nextElement().moduleWillClose();
 		}
-		if (allowsDocSubmission() && !isAvailable(Module.DRE_MODULE)
-				&& DocResourceManager.instance().getSessionSubmissions().size() > 0) {
+		if (allowsDocSubmission() && !isAvailable(Module.DRE_MODULE) && DocResourceManager.instance().getSessionSubmissions().size() > 0) {
 			if (FlexoController.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report")
 					+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_save_your_submissions"))) {
 				new ToolsMenu.SaveDocSubmissionAction().actionPerformed(null);
@@ -508,13 +508,15 @@ public final class ModuleLoader implements IModuleLoader {
 	 * Loads the project located within <code>projectDirectory</code> and then switches automatically to the given module
 	 * <code> moduleToReload </code> or WKFModule if moduleToReload is null or not available.
 	 * 
-	 * @param editor the editor for the project. Cannot be null.
-	 * @param moduleToReload the module to reload. Can be null.
+	 * @param editor
+	 *            the editor for the project. Cannot be null.
+	 * @param moduleToReload
+	 *            the module to reload. Can be null.
 	 * @return the editor of the loaded project. (i.e. argument editor)
-     * @throws ModuleLoadingException when the module can't be loaded (various causes)
+	 * @throws ModuleLoadingException
+	 *             when the module can't be loaded (various causes)
 	 */
-	public InteractiveFlexoEditor openProjectWithModule(InteractiveFlexoEditor editor, Module moduleToReload)
-            throws ModuleLoadingException {
+	public InteractiveFlexoEditor openProjectWithModule(InteractiveFlexoEditor editor, Module moduleToReload) throws ModuleLoadingException {
 		if (editor == null) {
 			return null;
 		}
@@ -526,34 +528,35 @@ public final class ModuleLoader implements IModuleLoader {
 		return editor;
 	}
 
-    /**
-     * Loop over loaded modules and ask to the controller of each module if a project is loaded.
-     * Usage of this method is not recommended since it won't be available in a further release
-     * supporting multiple projects loaded at the same time.
-     * @return  the project currently loaded or null whenever there is no loaded project.
-     * @throws IllegalStateException whenever 2 distinct modules have 2 distinct projects loaded.
-     */
- 	public FlexoProject getProject() {
+	/**
+	 * Loop over loaded modules and ask to the controller of each module if a project is loaded. Usage of this method is not recommended
+	 * since it won't be available in a further release supporting multiple projects loaded at the same time.
+	 * 
+	 * @return the project currently loaded or null whenever there is no loaded project.
+	 * @throws IllegalStateException
+	 *             whenever 2 distinct modules have 2 distinct projects loaded.
+	 */
+	public FlexoProject getProject() {
 		return findCurrentProject();
 	}
 
-    private FlexoProject findCurrentProject(){
-        FlexoProject project = null;
+	private FlexoProject findCurrentProject() {
+		FlexoProject project = null;
 
-        for(FlexoModule flexoModule:_modules.values()){
-            if(flexoModule.getModule().requireProject()){
-                FlexoProject moduleProject = flexoModule.getProject();
-                if(project==null){
-                    project = moduleProject;
-                }else{
-                    if(!project.equals(moduleProject)){
-                        throw new IllegalStateException("Found distinct projects in modules.");
-                    }
-                }
-            }
-        }
-        return project;
-    }
+		for (FlexoModule flexoModule : _modules.values()) {
+			if (flexoModule.getModule().requireProject()) {
+				FlexoProject moduleProject = flexoModule.getProject();
+				if (project == null) {
+					project = moduleProject;
+				} else {
+					if (!project.equals(moduleProject)) {
+						throw new IllegalStateException("Found distinct projects in modules.");
+					}
+				}
+			}
+		}
+		return project;
+	}
 
 	@Override
 	public ExternalIEModule getIEModuleInstance(FlexoProject project) throws ModuleLoadingException {
@@ -581,26 +584,32 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	/**
-	 * @param value the look and feel identifier
-	 * @throws ClassNotFoundException - if the LookAndFeel class could not be found
-	 * @throws UnsupportedLookAndFeelException - if lnf.isSupportedLookAndFeel() is false
-	 * @throws IllegalAccessException - if the class or initializer isn't accessible
-	 * @throws InstantiationException - if a new instance of the class couldn't be created
-     * @throws ClassCastException - if className does not identify a class that extends LookAndFeel
+	 * @param value
+	 *            the look and feel identifier
+	 * @throws ClassNotFoundException
+	 *             - if the LookAndFeel class could not be found
+	 * @throws UnsupportedLookAndFeelException
+	 *             - if lnf.isSupportedLookAndFeel() is false
+	 * @throws IllegalAccessException
+	 *             - if the class or initializer isn't accessible
+	 * @throws InstantiationException
+	 *             - if a new instance of the class couldn't be created
+	 * @throws ClassCastException
+	 *             - if className does not identify a class that extends LookAndFeel
 	 */
-    //todo move this method somewhere else
-	public static void setLookAndFeel(String value)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+	// todo move this method somewhere else
+	public static void setLookAndFeel(String value) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
+			UnsupportedLookAndFeelException {
 		if (UIManager.getLookAndFeel().getClass().getName().equals(value)) {
 			return;
 		}
 		UIManager.setLookAndFeel(value);
-        for (Frame frame : Frame.getFrames()) {
-            for (Window window : frame.getOwnedWindows()) {
-                SwingUtilities.updateComponentTreeUI(window);
-            }
-            SwingUtilities.updateComponentTreeUI(frame);
-        }
+		for (Frame frame : Frame.getFrames()) {
+			for (Window window : frame.getOwnedWindows()) {
+				SwingUtilities.updateComponentTreeUI(window);
+			}
+			SwingUtilities.updateComponentTreeUI(frame);
+		}
 	}
 
 	@Override

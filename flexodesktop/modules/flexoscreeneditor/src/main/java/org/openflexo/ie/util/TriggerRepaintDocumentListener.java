@@ -24,38 +24,37 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 /**
- * A DocumentListener triggering revalidate() and repaint() (in that order) on targetComponent
- * whenever the Document content change.
+ * A DocumentListener triggering revalidate() and repaint() (in that order) on targetComponent whenever the Document content change.
  */
 public class TriggerRepaintDocumentListener implements DocumentListener {
 
-    private JComponent targetComponent;
+	private JComponent targetComponent;
 
-    public TriggerRepaintDocumentListener(JComponent targetComponent) {
-        super();
-        if(targetComponent==null){
-            throw new IllegalArgumentException("targetComponent cannot be null.");
-        }
-        this.targetComponent = targetComponent;
-    }
+	public TriggerRepaintDocumentListener(JComponent targetComponent) {
+		super();
+		if (targetComponent == null) {
+			throw new IllegalArgumentException("targetComponent cannot be null.");
+		}
+		this.targetComponent = targetComponent;
+	}
 
-    @Override
-    public void insertUpdate(DocumentEvent documentEvent) {
-        validateRepaint();
-    }
+	@Override
+	public void insertUpdate(DocumentEvent documentEvent) {
+		validateRepaint();
+	}
 
-    @Override
-    public void removeUpdate(DocumentEvent documentEvent) {
-        validateRepaint();
-    }
+	@Override
+	public void removeUpdate(DocumentEvent documentEvent) {
+		validateRepaint();
+	}
 
-    @Override
-    public void changedUpdate(DocumentEvent documentEvent) {
-        validateRepaint();
-    }
+	@Override
+	public void changedUpdate(DocumentEvent documentEvent) {
+		validateRepaint();
+	}
 
-    private void validateRepaint() {
-        targetComponent.revalidate();
-        targetComponent.repaint();
-    }
+	private void validateRepaint() {
+		targetComponent.revalidate();
+		targetComponent.repaint();
+	}
 }

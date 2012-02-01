@@ -65,7 +65,7 @@ public class ComponentLatexFileResource<T extends ComponentDefinition> extends L
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		if (getComponentDefinition() != null) {
-			addToDependantResources(getComponentDefinition().getComponentResource());
+			addToDependentResources(getComponentDefinition().getComponentResource());
 		}
 	}
 

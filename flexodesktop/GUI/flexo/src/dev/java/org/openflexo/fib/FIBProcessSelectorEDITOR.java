@@ -17,41 +17,37 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.fib;
+package org.openflexo.fib;
 
 import java.io.File;
 
+import org.openflexo.components.widget.FIBProcessSelector;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.toolbox.FileResource;
 
-public class CalcLibraryViewEDITOR {
+public class FIBProcessSelectorEDITOR extends ProjectDialogEDITOR {
 
 	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
-				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				return makeArray(calcLibrary);
+				FlexoEditor editor = loadProject(new FileResource(
+						"Prj/TestVE.prj"));
+				FlexoProject project = editor.getProject();
+				FIBProcessSelector selector = new FIBProcessSelector(
+						project.getRootFlexoProcess());
+				selector.setProject(project);
+				return makeArray(selector);
 			}
 
 			@Override
 			public File getFIBFile() {
-				return CEDCst.CALC_LIBRARY_VIEW_FIB;
+				return FIBProcessSelector.FIB_FILE;
 			}
 		};
 		editor.launch();
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-	}
 }

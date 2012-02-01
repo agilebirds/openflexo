@@ -104,7 +104,7 @@ public class HelpFileResource extends TextFileResource<HelpGenerator, CGTextFile
 		super.rebuildDependancies();
 		Enumeration<FlexoProcess> en = getProject().getAllLocalFlexoProcesses().elements();
 		while (en.hasMoreElements()) {
-			addToDependantResources(en.nextElement().getFlexoResource());
+			addToDependentResources(en.nextElement().getFlexoResource());
 		}
 	}
 

@@ -133,7 +133,7 @@ public class EOModelPListFileResource extends PListFileResource<EOModelPListGene
 		super.rebuildDependancies();
 
 		if (getDMEOModel() != null) {
-			addToDependantResources(getProject().getFlexoDMResource());
+			addToDependentResources(getProject().getFlexoDMResource());
 		}
 	}
 

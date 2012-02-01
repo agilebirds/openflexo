@@ -233,7 +233,7 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 	public MetaphaseEditorOption makeMetaphaseEditorOption(int line) {
 		return new MetaphaseEditorOption(getName(), index, line);
 	}
-	
+
 	@Override
 	public List<? extends FIBModelObject> getEmbeddedObjects() {
 		return null;

@@ -148,9 +148,9 @@ public class BPELFileResource extends TextFileResource<BPELFileGenerator, CGText
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependentResources(getProject().getFlexoDMResource());
 		for (FlexoProcess p : getProject().getAllLocalFlexoProcesses()) {
-			addToDependantResources(p.getFlexoResource());
+			addToDependentResources(p.getFlexoResource());
 		}
 	}
 

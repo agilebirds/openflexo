@@ -482,7 +482,7 @@
 									#if ($button1.isInRepetition())
             							#set($listProcess = ${button1.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
             							#if($listProcess)
-                    						Integer itemId = new Integer(hiddenFieldValue.substring(#upNameForWidget($button1)).length()));
+                    						Integer itemId = Integer.valueOf(hiddenFieldValue.substring(#upNameForWidget($button1)).length()));
             								getBusinessDataStorage().setCurrentProcessBusinessData(WorkflowProcess.${listProcess.getProcessDictionaryKey()}, itemId);
             							#end
             						#end
@@ -544,7 +544,7 @@
 									#set($listProcess = ${button1.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
 									#if($listProcess)
 										#if(!$nextopProcessInstanceSet)
-											Integer itemId = new Integer(hiddenFieldValue.substring(($hidden).length()));
+											Integer itemId = Integer.valueOf(hiddenFieldValue.substring(($hidden).length()));
 											getBusinessDataStorage().setCurrentProcessBusinessData(WorkflowProcess.${listProcess.getProcessDictionaryKey()}, itemId);
 											#if($listProcess != ${nextop.getProcess()} && ${listProcess.isAncestorOf($nextop.getProcess())})
 												Vector<? extends ProcessBusinessData> children = getBusinessDataStorage().getBusinessDataSample(WorkflowProcess.${listProcess.getProcessDictionaryKey()}.getBusinessDataClass(), itemId).getDescendantsBusinessData(WorkflowProcess.${listProcess.getProcessDictionaryKey()}, WorkflowProcess.${nextop.getProcess().getProcessDictionaryKey()});
@@ -557,8 +557,9 @@
 									#foreach($repetitionOperator in ${button1.getWOComponent().getAllRepetitionOperator()})
 										#set($repetitionProcess = ${repetitionOperator.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
 										#if($repetitionProcess && (${nextop.getProcess()} == $repetitionProcess || (${nextop.getProcess()} != ${ci.getOperationNode().getProcess()} && (${nextop.getProcess().isAncestorOf($repetitionProcess)} || ${repetitionProcess.isAncestorOf($nextop.getProcess())}))))
-											#set($selectorName = $null)
+											#set($selectorName = ${generator.getNewHolder()})
 											#getSingleJavaSelectorVariableNameForRepetitionOp($repetitionOperator $selectorName)
+											#set($selectorName = ${selectorName.get()})
 											#if($selectorName)
 												getBusinessDataStorage().setCurrentProcessBusinessData(WorkflowProcess.${repetitionProcess.getProcessDictionaryKey()}, (ProcessBusinessData)$selectorName);
 												#if($repetitionProcess != ${nextop.getProcess()} && ${repetitionProcess.isAncestorOf($nextop.getProcess())})
@@ -567,7 +568,9 @@
     													getBusinessDataStorage().setCurrentProcessBusinessData(WorkflowProcess.${nextop.getProcess().getProcessDictionaryKey()}, children.get(0));
     											#end
 											#else
+											    #set($selectorName = ${generator.getNewHolder()})
 												#getMultiJavaSelectorVariableNameForRepetitionOp($repetitionOperator $selectorName)
+												#set($selectorName = ${selectorName.get()})
 												#if($selectorName)
                                                     if(${selectorName}.objectEnumerator().hasMoreElements())
                                                     {
@@ -625,7 +628,9 @@
     												#set($repetitionProcess = ${repetitionOperator.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
     												#if($repetitionProcess && ${deletedProcess.isAncestorOf($repetitionProcess)})
 														#set($selectorName = $null)
+														#set($selectorName = ${generator.getNewHolder()})
         												#getMultiJavaSelectorVariableNameForRepetitionOp($repetitionOperator $selectorName)
+        												#set($selectorName = ${selectorName.get()})
         												#if($selectorName)
                                             				#if(!$hasEnDelete)Enumeration#end enDelete = ${selectorName}.objectEnumerator();
                                                             while(enDelete.hasMoreElements())
@@ -639,7 +644,9 @@
         													${repetitionOperator.getHTMLListDescriptor().getDisplayGroupName()} = null;
 															#set($hasEnDelete = $true)
 														#else
+														    #set($selectorName = ${generator.getNewHolder()})
 															#getSingleJavaSelectorVariableNameForRepetitionOp($repetitionOperator $selectorName)
+															#set($selectorName = ${selectorName.get()})
 															#if($selectorName)
 																#if($deletedProcess != $repetitionProcess)
 																	getBusinessDataStorage().deleteProcessBusinessData(WorkflowProcess.${deletedProcess.getProcessDictionaryKey()}.getBusinessDataClass(), ((ProcessBusinessData) ${selectorName}).getAncestorBusinessData(WorkflowProcess.${deletedProcess.getProcessDictionaryKey()}));
@@ -654,6 +661,7 @@
     										#end
 										#end
 									#else
+									// Caca boudin
 										//This operation should delete the current process instance but the next operation is still in this process !
             						#end
             					#end

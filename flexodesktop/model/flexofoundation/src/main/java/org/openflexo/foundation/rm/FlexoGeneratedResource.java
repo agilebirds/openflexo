@@ -151,7 +151,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 		// This is a little hack for resource that depends of nothing (which is wrong!!! a generated resource should always depend of
 		// something)
 		if (updatedResources.isEmpty() && !getFile().exists()) {
-			if (!getDependantResources().isEmpty()) {
+			if (!getDependentResources().isEmpty()) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("This is not normal, the generated file (" + getFileName()
 							+ ") does not exist but RM has not computed that it must be generated");
@@ -160,7 +160,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 			generate();
 		}
 		if (!updatedResources.isEmpty()) {
-			for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependantResources().elements(false,
+			for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependentResources().elements(false,
 					getProject().getDependancyScheme()); e.hasMoreElements();) {
 				FlexoResource<FlexoResourceData> resource = e.nextElement();
 				resource.update();
@@ -214,7 +214,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 		}
 	}
 
-    /**
+	/**
 	 * This method is intended to be overidden by sub-classes that need to free resources and data.
 	 * 
 	 */
@@ -259,7 +259,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 	public abstract GRD readGeneratedResourceData() throws FlexoException;
 
 	@Override
-	protected final Date getRequestDateToBeUsedForOptimisticDependancyChecking(FlexoResource resource) {
+	protected final Date getRequestDateToBeUsedForOptimisticDependencyChecking(FlexoResource resource) {
 		return getLastUpdate();
 	}
 

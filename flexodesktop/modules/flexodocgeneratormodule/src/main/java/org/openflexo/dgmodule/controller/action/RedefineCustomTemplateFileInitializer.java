@@ -77,7 +77,7 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 				String[] locationChoices = { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
 				RadioButtonListParameter<String> repositoryChoiceParam = new RadioButtonListParameter<String>("location", "location",
 						templates.getCustomDocRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY,
-								locationChoices);
+						locationChoices);
 				TextFieldParameter newRepositoryNameParam = new TextFieldParameter("name", "custom_template_repository_name",
 						templates.getNextGeneratedCodeRepositoryName());
 				newRepositoryNameParam.setDepends("location");

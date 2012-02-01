@@ -39,8 +39,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.ve.controller.OEController;
 
-public class VEShemaController extends
-		SelectionManagingDrawingController<VEShemaRepresentation> {
+public class VEShemaController extends SelectionManagingDrawingController<VEShemaRepresentation> {
 
 	private OEController _controller;
 	private CommonPalette _commonPalette;
@@ -48,8 +47,7 @@ public class VEShemaController extends
 	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
 	public VEShemaController(OEController controller, View shema) {
-		super(new VEShemaRepresentation(shema), controller
-				.getSelectionManager());
+		super(new VEShemaRepresentation(shema), controller.getSelectionManager());
 
 		_controller = controller;
 
@@ -60,8 +58,7 @@ public class VEShemaController extends
 		_contextualPalettes = new Hashtable<ViewPointPalette, ContextualPalette>();
 		if (shema.getCalc() != null) {
 			for (ViewPointPalette palette : shema.getCalc().getPalettes()) {
-				ContextualPalette contextualPalette = new ContextualPalette(
-						palette);
+				ContextualPalette contextualPalette = new ContextualPalette(palette);
 				_contextualPalettes.put(palette, contextualPalette);
 				registerPalette(contextualPalette);
 				activatePalette(contextualPalette);
@@ -70,15 +67,12 @@ public class VEShemaController extends
 
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
-			public void performedDrawNewShape(
-					ShapeGraphicalRepresentation graphicalRepresentation,
+			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
 					GraphicalRepresentation parentGraphicalRepresentation) {
-				System.out.println("OK, perform draw new shape with "
-						+ graphicalRepresentation + " et parent: "
+				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
 
-				AddShape action = AddShape.actionType.makeNewAction(getShema(),
-						null, getOEController().getEditor());
+				AddShape action = AddShape.actionType.makeNewAction(getShema(), null, getOEController().getEditor());
 				action.setGraphicalRepresentation(graphicalRepresentation);
 				action.setNameSetToNull(true);
 
@@ -101,8 +95,7 @@ public class VEShemaController extends
 	}
 
 	@Override
-	public DrawingView<VEShemaRepresentation> makeDrawingView(
-			VEShemaRepresentation drawing) {
+	public DrawingView<VEShemaRepresentation> makeDrawingView(VEShemaRepresentation drawing) {
 		return new VEShemaView(drawing, this);
 	}
 
@@ -133,32 +126,26 @@ public class VEShemaController extends
 	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane();
-			orderedPalettes = new Vector<ViewPointPalette>(
-					_contextualPalettes.keySet());
+			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
 			for (ViewPointPalette palette : orderedPalettes) {
-				paletteView.add(palette.getName(),
-						(_contextualPalettes.get(palette)).getPaletteView());
+				paletteView.add(palette.getName(), (_contextualPalettes.get(palette)).getPaletteView());
 			}
-			paletteView.add(FlexoLocalization.localizedForKey("Common",
-					getCommonPalette().getPaletteView()), getCommonPalette()
+			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
 					.getPaletteView());
 			paletteView.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					if (paletteView.getSelectedIndex() < orderedPalettes.size()) {
-						activatePalette(_contextualPalettes.get(orderedPalettes
-								.elementAt(paletteView.getSelectedIndex())));
-					} else if (paletteView.getSelectedIndex() == orderedPalettes
-							.size()) {
+						activatePalette(_contextualPalettes.get(orderedPalettes.elementAt(paletteView.getSelectedIndex())));
+					} else if (paletteView.getSelectedIndex() == orderedPalettes.size()) {
 						activatePalette(getCommonPalette());
 					}
 				}
 			});
 			paletteView.setSelectedIndex(0);
 			if (orderedPalettes.size() > 0) {
-				activatePalette(_contextualPalettes.get(orderedPalettes
-						.firstElement()));
+				activatePalette(_contextualPalettes.get(orderedPalettes.firstElement()));
 			} else {
 				activatePalette(getCommonPalette());
 			}
