@@ -46,6 +46,7 @@ import org.openflexo.foundation.dkv.dm.DKVDataModification;
 import org.openflexo.foundation.dm.dm.DMDataModification;
 import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.ptoc.PTOCModification;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.implmodel.event.SGDataModification;
 import org.openflexo.foundation.toc.TOCModification;
@@ -385,6 +386,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver
             		|| (dataModification instanceof SGDataModification)
             		|| (dataModification instanceof ObjectDeleted)
             		|| (dataModification instanceof TOCModification)
+            		//MOS
+            		|| (dataModification instanceof PTOCModification)
+            		//
             		|| (dataModification instanceof NameChanged))
             		&& (!(dataModification instanceof ObjectLocationChanged))
             		&& (!(dataModification instanceof ObjectSizeChanged))

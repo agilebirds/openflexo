@@ -90,6 +90,7 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 		newRepository = new TOCRepository(getData(), getDocType(), getTocTemplate());
 		newRepository.setTitle(attempt);
 		getData().addToRepositories(newRepository);
+
 	}
 
 	private TOCData getData() {

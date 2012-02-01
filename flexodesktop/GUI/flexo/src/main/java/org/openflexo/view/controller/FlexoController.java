@@ -1318,6 +1318,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	@SuppressWarnings("unchecked")
 	public <O extends FlexoModelObject> ModuleView<? extends O> moduleViewForObject(O object, boolean recalculateViewIfRequired)
 	{
+		
+		//MARKER
 		try {
 			if (object == null) {
 				return (ModuleView<O>)getEmptyPanel();
@@ -1428,7 +1430,10 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 */
 	public final ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object)
 	{
-		//logger.info("************** setCurrentEditedObjectAsModuleView "+object);
+		//MARKER FelxoController.setCurrentEditedObjectAsModuleView
+		//TODO_MOS Comment this
+		logger.info("************** setCurrentEditedObjectAsModuleView "+object);
+		//
 		if (getCurrentDisplayedObjectAsModuleView() != object && getMainPane() != null) {
 			// Little block to change the currentPerspective if the
 			if (!hasViewForObjectAndPerspective(object, getCurrentPerspective())) {
@@ -1444,11 +1449,13 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				}
 			}
 			ModuleView returned = moduleViewForObject(object);
-
+			
+			
 			if (returned != null) {
 				if (this instanceof SelectionManagingController) {
 					((SelectionManagingController) this).getSelectionManager().resetSelection();
 				}
+				
 				// _currentModuleView = returned;
 
 				// SGU: i exchanged order of following two lines in order to have the browser update AFTER

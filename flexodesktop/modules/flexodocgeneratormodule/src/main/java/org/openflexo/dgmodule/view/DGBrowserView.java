@@ -53,6 +53,7 @@ import org.openflexo.dgmodule.controller.browser.DGTreeDropTarget;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.ptoc.PTOCEntry;
 import org.openflexo.foundation.toc.TOCEntry;
 
 /**
@@ -304,6 +305,11 @@ public class DGBrowserView extends BrowserView
     	else if (object instanceof TOCEntry) {
     		controller.setCurrentEditedObjectAsModuleView(object);
     	}
+    	//MOS
+    	else if (object instanceof PTOCEntry) {
+    		controller.setCurrentEditedObjectAsModuleView(object);
+    	}
+    	//
       /*  if (object instanceof FlexoWorkflow || object instanceof FlexoProject || object instanceof DMEORepository || object instanceof DMEOModel || object instanceof DMEOEntity || object instanceof OperationNode)
             controller.setCurrentEditedObjectAsModuleView(object); */
     	if (object instanceof GenerationRepository) {

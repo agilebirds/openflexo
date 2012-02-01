@@ -29,6 +29,8 @@ import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.doceditor.controller.browser.DocTypeElement;
+import org.openflexo.doceditor.controller.browser.PTOCEntryElement;
+import org.openflexo.doceditor.controller.browser.PTOCRepositoryElement;
 import org.openflexo.doceditor.controller.browser.TOCEntryElement;
 import org.openflexo.doceditor.controller.browser.TOCRepositoryElement;
 import org.openflexo.foundation.DocType;
@@ -46,6 +48,8 @@ import org.openflexo.foundation.cg.templates.CGTemplateSet;
 import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.version.CGFileIntermediateVersion;
 import org.openflexo.foundation.cg.version.CGFileReleaseVersion;
+import org.openflexo.foundation.ptoc.PTOCEntry;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -252,6 +256,13 @@ class DGBrowserConfiguration implements BrowserConfiguration
 			} else if (object instanceof DocType) {
 				return new DocTypeElement(object, browser, parent);
 			}
+			//MOS
+			 else if (object instanceof PTOCRepository) {
+				return new PTOCRepositoryElement((PTOCRepository) object, browser, parent);
+			} else if (object instanceof PTOCEntry) {
+				return new PTOCEntryElement((PTOCEntry) object, browser, parent);
+			}
+			//
 			return null;
 		}
 

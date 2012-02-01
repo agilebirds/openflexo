@@ -112,6 +112,9 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.ptoc.PTOCData;
+import org.openflexo.foundation.ptoc.PTOCEntry;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.SourceRepository;
@@ -349,6 +352,12 @@ public enum BrowserElementType {
 	AVAILABLE_NEW_VERSION_PENDING_DOC_ITEM("available_new_version_pending_doc_item",null/*Used outside this scope*/,DREIconLibrary.AVAILABLE_NEW_VERSION_PENDING_DOC_ITEM_ICON),
 	UP_TO_DATE_DOC_ITEM("available_uptodate_doc_item",null/*Used outside this scope*/,DREIconLibrary.DOC_ITEM_ICON),
 	TOC_DATA("toc_data",TOCData.class,DGIconLibrary.GENERATED_DOC_ICON),
+	//MOS
+	PTOC_DATA("ptoc_data",PTOCData.class,DGIconLibrary.GENERATED_DOC_ICON),
+	PTOC_ENTRY("ptoc_entry",PTOCEntry.class,DEIconLibrary.TOC_ENTRY),
+	PTOC_REPOSITORY("ptoc_repository",PTOCRepository.class,DEIconLibrary.TOC_REPOSITORY),
+	PSLIDE("pslide",PTOCRepository.class,DEIconLibrary.TOC_ENTRY),
+	//
 	DOC_TYPE("doc_type",DocType.class,CGIconLibrary.TARGET_ICON),
 	TOC_ENTRY("toc_entry",TOCEntry.class,DEIconLibrary.TOC_ENTRY),
 	TOC_REPOSITORY("toc_repository",TOCRepository.class,DEIconLibrary.TOC_REPOSITORY),

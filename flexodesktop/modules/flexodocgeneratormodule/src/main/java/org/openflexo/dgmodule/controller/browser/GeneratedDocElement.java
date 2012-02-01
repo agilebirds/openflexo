@@ -31,6 +31,7 @@ import org.openflexo.foundation.cg.DocTypeAdded;
 import org.openflexo.foundation.cg.DocTypeRemoved;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.toc.TOCRepository;
 
 
@@ -41,12 +42,14 @@ public class GeneratedDocElement extends DGBrowserElement
 		super(generatedCode, BrowserElementType.GENERATED_DOC, browser,parent);
         generatedCode.getProject().addObserver(this);
         generatedCode.getProject().getTOCData().addObserver(this);
+        generatedCode.getProject().getPTOCData().addObserver(this);
 	}
 
 	@Override
 	public void delete() {
 		getGeneratedCode().getProject().deleteObserver(this);
 		getGeneratedCode().getProject().getTOCData().deleteObserver(this);
+		getGeneratedCode().getProject().getPTOCData().deleteObserver(this);
 		super.delete();
 	}
 	
@@ -60,6 +63,11 @@ public class GeneratedDocElement extends DGBrowserElement
 		for (TOCRepository rep : getProject().getTOCData().getRepositories()) {
 			addToChilds(rep);
 		}
+		//MOS
+		for (PTOCRepository rep : getProject().getPTOCData().getRepositories()) {
+			addToChilds(rep);
+		}
+		//
         for (DocType dt : getGeneratedCode().getProject().getDocTypes()) {
             addToChilds(dt);
         }

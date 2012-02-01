@@ -845,8 +845,6 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		for (FlexoStorageResource data : unsaved) {
 			if (progress != null) {
 				//MARKER 0.0.0
-				//SUPPR
-				System.out.println(data.getFileName()+" instanceOf "+data.getClass().getName());
 				
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + data.getName());
 			}

@@ -21,6 +21,7 @@ package org.openflexo.dgmodule.controller.browser;
 
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
+import org.openflexo.doceditor.controller.browser.PTOCTreeDropTarget;
 import org.openflexo.doceditor.controller.browser.TOCTreeDropTarget;
 
 

@@ -41,6 +41,7 @@ import org.openflexo.doceditor.controller.browser.DEBrowser;
 import org.openflexo.doceditor.controller.browser.TOCTreeDropTarget;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.ptoc.PTOCEntry;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -144,6 +145,10 @@ public class DEBrowserView extends BrowserView
         	controller.setCurrentEditedObjectAsModuleView(object);
     	}
     	else if (object instanceof TOCEntry) {
+    		controller.setCurrentEditedObjectAsModuleView(object);
+    	}
+    	//MOS
+    	else if (object instanceof PTOCEntry) {
     		controller.setCurrentEditedObjectAsModuleView(object);
     	}
     }

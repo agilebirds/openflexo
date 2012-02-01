@@ -144,9 +144,6 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
             	
                 file.setMarkedForDeletion(true);
             else {
-            	//SUPPR
-            	System.out.println(file.getName()+" "+file.getResource().getName());
-            //
                 CGRepositoryFileResource resource = file.getResource();
                 if (!returned.contains(resource)) {
                     file.setMarkedForDeletion(true);

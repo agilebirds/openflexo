@@ -285,6 +285,7 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
             	WeakReference<FlexoObserver> weakRef = arrLocal1[i];
             	if(weakRef!=null){
             		FlexoObserver o = arrLocal1[i].get();
+            		
             		if (o==null){
             			_flexoObservers.remove(arrLocal1[i]);
             			continue;
