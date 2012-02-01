@@ -149,7 +149,9 @@
   </entity>
 
   <entity name="org.openflexo.foundation.rm.FlexoTOCResource" xmlTag="TOCResource"/>
-
+  <!-- MOS -->
+  <entity name="org.openflexo.foundation.rm.FlexoPTOCResource" xmlTag="PTOCResource"/>
+ <!-- EndMOS -->
   <entity name="org.openflexo.foundation.rm.cg.CGRepositoryFileResource" abstract="yes" genericTypingStoredIn="resourceClassName">
  	<property name="name" xmlTag="name" attribute="YES"/>
  	<property name="lastAcceptingDate" xmlTag="lastAcceptingDate" attribute="YES"/>

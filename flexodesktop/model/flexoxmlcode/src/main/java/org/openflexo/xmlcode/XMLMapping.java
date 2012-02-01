@@ -534,6 +534,8 @@ public class XMLMapping
                     if ((tempNode.getChildNodes().getLength() == 1) && (tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE)) {
                         setDescription(tempNode.getFirstChild().getNodeValue());
                     }
+                    
+                    //MARKER
                 } else if (tempNode.getNodeName().equals(XMLMapping.entityLabel)) {
                     updateAndRegisterNewModelEntity(new ModelEntity(tempNode, this));
                 } else if (tempNode.getNodeName().equals(XMLMapping.mapIdLabel)) {

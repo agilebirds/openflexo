@@ -587,6 +587,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 				newActionList.addAll(_declaredActionsForClass.get(aClass));
 			}
 		}
+		//MARKER
 		newActionList.addAll(object.getSpecificActionListForThatClass());
 		_actionListForClass.put(object.getClass(), newActionList);
 		if (logger.isLoggable(Level.FINE)) {

@@ -42,6 +42,7 @@ import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.param.ParameterDefinition.ValueListener;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.rm.cg.FileHistory;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.icon.DGIconLibrary;
@@ -94,6 +95,11 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 									gc.getProject().getNextExternalRepositoryIdentifier(FlexoLocalization.localizedForKey("generated_doc")) :
 									action.getNewGeneratedCodeRepositoryName()));
 					DynamicDropDownParameter<TOCRepository> paramToc = null;
+					
+					//MOS
+					DynamicDropDownParameter<PTOCRepository> paramPToc = null;
+					//
+					
 					if (getProject().getTOCData().getRepositories().size()>0) {
 						paramToc = new DynamicDropDownParameter<TOCRepository>("toc","toc",getProject().getTOCData().getRepositories(),getProject().getTOCData().getRepositories().firstElement());
 						paramToc.setFormatter("title");
@@ -101,6 +107,15 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 						//MOS
 						paramToc.setConditional("format!=HTML&&format!=PPTX");
 					}
+					
+					
+					if (getProject().getPTOCData().getRepositories().size()>0) {
+						paramPToc = new DynamicDropDownParameter<PTOCRepository>("toc","toc",getProject().getPTOCData().getRepositories(),getProject().getPTOCData().getRepositories().firstElement());
+						paramPToc.setFormatter("title");
+						paramPToc.setDepends("format");
+						paramPToc.setConditional("format!=HTML&&format!=DOCX&&format!=LATEX&&format!=PDF");
+					}
+					
 					final DirectoryParameter paramDir = new DirectoryParameter("directory", "source_directory", getParamDir(action, gc, targetType.getValue(), format.getValue(), paramName)) ;
 					format.addValueListener(new ValueListener<Format>() {
 						@Override
@@ -121,14 +136,25 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 						}
 
 					});
-					ParameterDefinition<?>[] pd = new ParameterDefinition<?>[paramToc==null?4:5];
+					//MOS
+					ParameterDefinition<?>[] pd = new ParameterDefinition<?>[(paramPToc==null && paramToc==null)?4:5];
+					//
 					pd[0] = format;
 					pd[1] = targetType;
 					pd[2] = paramName;
 					pd[3] = paramToc!=null?paramToc:paramDir;
+					//MOS
+					pd[3] = paramPToc!=null?paramPToc:paramDir;
+					//
 					if (paramToc!=null) {
 						pd[4] = paramDir;
 					}
+					
+					//MOS
+					if (paramPToc!=null) {
+						pd[4] = paramDir;
+					}
+					//
 					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization
 									        		.localizedForKey("create_new_generated_doc_repository"), FlexoLocalization
 									        		.localizedForKey("enter_parameters_for_the_new_generated_doc_repository"), pd);
@@ -155,6 +181,13 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 						if (paramToc!=null) {
 							action.setTocRepository(paramToc.getValue());
 						}
+						
+						//MOS
+						if (paramPToc!=null) {
+							action.setPTocRepository(paramPToc.getValue());
+						}
+						//
+						
 						return true;
 					} else {
 						return false;

@@ -36,6 +36,8 @@ import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.PostBuildStart;
 import org.openflexo.foundation.cg.dm.PostBuildStop;
 import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
+import org.openflexo.foundation.ptoc.PTOCModification;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -80,10 +82,17 @@ public class DGRepository extends GenerationRepository
     private ProjectExternalRepository postBuildRepository;
 
     private TOCRepository tocRepository;
+    
+    //MOS
+    private PTOCRepository ptocRepository;
+    //
+    
 
     private Format format;
 
     private FlexoModelObjectReference<TOCRepository> tocRepositoryRef;
+    
+    private FlexoModelObjectReference<PTOCRepository> ptocRepositoryRef;
 
     private Vector<CGRepository> repositoriedUsingAsReader;
 
@@ -533,7 +542,49 @@ public class DGRepository extends GenerationRepository
 			notifyObservers(new CGRepositoryConnected(this));
 		}
 	}
+	
+	//MOS
+	public PTOCRepository getPTocRepository() {
+		if (ptocRepository==null && ptocRepositoryRef!=null) {
+			ptocRepository = ptocRepositoryRef.getObject(true);
+			if (ptocRepository!=null && !isSerializing()) {
+				setChanged();
+				notifyObservers(new CGRepositoryConnected(this));
+			}
+		}
+		return ptocRepository;
+	}
 
+	public void setPTocRepository(PTOCRepository tocRepository) {
+		if (tocRepository==this.ptocRepository)
+			return;
+		this.ptocRepository = tocRepository;
+		if (ptocRepositoryRef!=null) {
+			ptocRepositoryRef.delete();
+			ptocRepositoryRef = null;
+		}
+		if (tocRepository!=null)
+			ptocRepositoryRef = new FlexoModelObjectReference<PTOCRepository>(getProject(),tocRepository);
+		else
+			ptocRepositoryRef = null;
+		setChanged();
+		notifyObservers(new PTOCModification(null,tocRepository));
+		if (tocRepository!=null) {
+			setChanged();
+			notifyObservers(new CGRepositoryConnected(this));
+		}
+	}
+	
+	public FlexoModelObjectReference getPTocRepositoryRef() {
+		return ptocRepositoryRef;
+	}
+
+	public void setPTocRepositoryRef(FlexoModelObjectReference<PTOCRepository> tocRepositoryRef) {
+		this.ptocRepositoryRef = tocRepositoryRef;
+	}
+	
+	//	
+	
 	public FlexoModelObjectReference getTocRepositoryRef() {
 		return tocRepositoryRef;
 	}

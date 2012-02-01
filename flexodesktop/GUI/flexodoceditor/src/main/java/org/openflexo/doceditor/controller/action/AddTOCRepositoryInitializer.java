@@ -45,8 +45,13 @@ import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.ptoc.PTOCEntry;
+import org.openflexo.foundation.ptoc.PTOCRepository;
+import org.openflexo.foundation.ptoc.PTOCUnit;
+import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
+import org.openflexo.foundation.xml.FlexoPTOCBuilder;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
 public class AddTOCRepositoryInitializer extends ActionInitializer {
@@ -130,6 +135,42 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 				return false;
 			}
 		};
+	}
+	
+	
+	public static void main(String[] args){
+		
+//		File dir1 = new File (".");
+//	     File dir2 = new File ("..");
+//	     try {
+//	       System.out.println ("Current dir : " + dir1.getCanonicalPath());
+//	       System.out.println ("Parent  dir : " + dir2.getCanonicalPath());
+//	       }
+//	     catch(Exception e) {
+//	       e.printStackTrace();
+//	       }
+//	     
+		File tocTemplateFile = new File("C:/Users/MOSTAFA/Git/openflexo/flexodesktop/model/flexofoundation/src/main/resources/Config/TOCTemplates/BRS.xml");
+		
+		TOCRepository tocTemplate = null;
+		try {
+			tocTemplate = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(
+					tocTemplateFile), new File("C:/Users/MOSTAFA/Git/openflexo/flexodesktop/model/flexofoundation/src/main/resources/Models/TOCModel/toc_template_0.1.xml"), new FlexoTOCBuilder(null));
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+//			FlexoController.showError(e.getMessage());
+		}
+		
+		if(tocTemplate != null){
+			for(TOCEntry unit : tocTemplate.getTocEntries()){
+				System.out.println("Le titre "+unit.getTitle());
+			}
+			System.out.println("Template title "+tocTemplate.getTitle());
+		}
+		else
+			System.out.println("Error");
 	}
 
 	@Override

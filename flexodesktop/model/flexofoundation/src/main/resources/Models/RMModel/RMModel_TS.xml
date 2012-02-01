@@ -98,5 +98,8 @@
    </entity>
 	
 	<entity name="org.openflexo.foundation.rm.FlexoTOCResource" xmlTag="TOCResource"/>
+	<!-- MOS -->
+  <entity name="org.openflexo.foundation.rm.FlexoPTOCResource" xmlTag="PTOCResource"/>
+ <!-- EndMOS -->
 </model>
   

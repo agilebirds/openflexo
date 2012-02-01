@@ -39,6 +39,7 @@ import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.InvalidReaderRepositoryException;
 import org.openflexo.foundation.cg.MissingReaderRepositoryException;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -86,6 +87,10 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 	private File _newGeneratedCodeRepositoryDirectory;
 	
 	private TOCRepository tocRepository;
+	
+	//MOS
+	private PTOCRepository ptocRepository;
+	//
 	
 	private Format format;
 	
@@ -176,6 +181,9 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 				((DGRepository)_newGeneratedCodeRepository).setPostProductName(getNewGeneratedCodeRepositoryName());
 				if (tocRepository!=null)
 					((DGRepository)_newGeneratedCodeRepository).setTocRepository(tocRepository);
+				else if (ptocRepository!=null)
+					((DGRepository)_newGeneratedCodeRepository).setPTocRepository(ptocRepository);
+				
 				getFocusedObject().getGeneratedCode().addToGeneratedRepositories(_newGeneratedCodeRepository);
 				
 				String srcSymbDirType = null;
@@ -336,6 +344,11 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 
 	public void setReaderRepository(DGRepository readerRepository) {
 		this.readerRepository = readerRepository;
+	}
+
+	public void setPTocRepository(PTOCRepository value) {
+		this.ptocRepository = value;
+		
 	}
 
 }

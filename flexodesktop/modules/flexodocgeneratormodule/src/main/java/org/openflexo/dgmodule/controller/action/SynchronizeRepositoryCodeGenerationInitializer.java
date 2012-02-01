@@ -84,9 +84,9 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 			{
 				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
 				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().update();
-                if (DGPreferences.getAutomaticallyDismissUnchangedFiles())
-                    DismissUnchangedGeneratedFiles.actionType.makeNewAction(
-                            action.getFocusedObject(), action.getGlobalSelection(), action.getEditor()).doAction();
+                if (DGPreferences.getAutomaticallyDismissUnchangedFiles());
+//                    DismissUnchangedGeneratedFiles.actionType.makeNewAction(
+//                            action.getFocusedObject(), action.getGlobalSelection(), action.getEditor()).doAction();
 				return true;
 			}
 		};

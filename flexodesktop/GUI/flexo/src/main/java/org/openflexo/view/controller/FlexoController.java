@@ -1432,7 +1432,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	{
 		//MARKER FelxoController.setCurrentEditedObjectAsModuleView
 		//TODO_MOS Comment this
-		logger.info("************** setCurrentEditedObjectAsModuleView "+object);
+		logger.info("************** setCurrentEditedObjectAsModuleView "+object.getClass().getName());
 		//
 		if (getCurrentDisplayedObjectAsModuleView() != object && getMainPane() != null) {
 			// Little block to change the currentPerspective if the

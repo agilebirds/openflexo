@@ -124,8 +124,7 @@ public class TemplateLocator extends FlexoMemoryResource
 		CGTemplateSet set = null;
 		while (en.hasMoreElements()) {
 			set = en.nextElement();
-			//TODO_MOS comment the line above
-			logger.info("search in "+set.getName());
+			//logger.info("search in "+set.getName());
 			
 			CGTemplate answer = set.getTemplate(templateRelativePath);
 			if (answer != null) {

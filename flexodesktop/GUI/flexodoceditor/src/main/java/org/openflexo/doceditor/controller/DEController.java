@@ -41,6 +41,9 @@ import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
+import org.openflexo.foundation.ptoc.PTOCData;
+import org.openflexo.foundation.ptoc.PTOCEntry;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -265,6 +268,15 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 			return FlexoLocalization.localizedForKey("toc_data");
 		} else if (object instanceof TOCEntry) {
 			TOCEntry entry = (TOCEntry) object;
+			return entry.getTitle() != null ? entry.getTitle() : FlexoLocalization.localizedForKey("untitled");
+		//MOS
+			//TODO_MOS change localizedForKey
+		} else if (object instanceof PTOCRepository) {
+			return FlexoLocalization.localizedForKey("table_of_content" + ": ") + ((PTOCRepository) object).getTitle();
+		} else if (object instanceof PTOCData) {
+			return FlexoLocalization.localizedForKey("toc_data");
+		} else if (object instanceof PTOCEntry) {
+			PTOCEntry entry = (PTOCEntry) object;
 			return entry.getTitle() != null ? entry.getTitle() : FlexoLocalization.localizedForKey("untitled");
 		}
 
