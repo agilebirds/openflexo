@@ -11,7 +11,7 @@
         <version>1.4.4-SNAPSHOT</version>
     </parent>
     <artifactId>flexobusinessplus</artifactId>
-    <packaging>pom</packaging>
+<!--     <packaging>pom</packaging> -->
     <properties>
         <userType>analyst_release</userType>
     </properties>
@@ -27,7 +27,6 @@
         <dependency>
             <groupId>org.openflexo.packaging</groupId>
             <artifactId>flexobusiness</artifactId>
-            <type>pom</type>
             <scope>runtime</scope>
         </dependency>
         <dependency>
