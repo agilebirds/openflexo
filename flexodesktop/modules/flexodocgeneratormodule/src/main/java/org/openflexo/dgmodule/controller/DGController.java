@@ -57,12 +57,14 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.Format;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.gen.GenerationProgressNotification;
 import org.openflexo.foundation.param.CheckboxParameter;
@@ -72,6 +74,7 @@ import org.openflexo.foundation.rm.FlexoGeneratedResource;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.foundation.toc.TOCEntry;
+import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.action.AcceptDiskUpdate;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.icon.CGIconLibrary;
@@ -118,7 +121,9 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	public static FileResource flexoTemplatesDirectory = new FileResource(FileCst.GENERATOR_TEMPLATES_REL_PATH);
 
 	protected Hashtable<DGRepository, ProjectDocGenerator> _projectGenerators;
-
+	//MOS
+	protected Hashtable<PresentationRepository, ProjectDocPptxGenerator> _projectPresentationGenerators;
+	//
 	protected DGFooter _footer;
 
 	// ==========================================================================
@@ -306,7 +311,44 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			observable.deleteObserver(this);
 		}
 	}
+	
+	
+	//MOS
+	public AbstractProjectGenerator getProjectGenerator(GenerationRepository repository){
+		if (!repository.isConnected()) {
+			return null;
+		}
+		if(repository.getFormat() != Format.PPTX)
+			return getProjectGenerator((DGRepository) repository);
+		else{
+			return getProjectPresentationGenerator((PresentationRepository) repository);
+		}
+	}
+	
+	
 
+	private ProjectDocPptxGenerator getProjectPresentationGenerator(
+			PresentationRepository repository) {
+		if (!repository.isConnected()) {
+			return null;
+		}
+		ProjectDocPptxGenerator returned = _projectPresentationGenerators.get(repository);
+		if (returned == null) {
+			try {
+						returned = new ProjectDocPptxGenerator(getProject(), repository);
+				
+			} catch (GenerationException e) {
+				showError(e.getLocalizedMessage());
+				return null;
+			}
+			_projectPresentationGenerators.put(repository, returned);
+		}
+		return returned;
+	}
+
+	//MOS
+	
+	
 	public ProjectDocGenerator getProjectGenerator(DGRepository repository)
 	{
 		if (!repository.isConnected()) {

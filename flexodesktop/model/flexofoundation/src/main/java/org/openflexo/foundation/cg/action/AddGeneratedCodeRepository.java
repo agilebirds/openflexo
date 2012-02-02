@@ -39,6 +39,7 @@ import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.InvalidReaderRepositoryException;
 import org.openflexo.foundation.cg.MissingReaderRepositoryException;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -176,13 +177,20 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 				}
 
 			} else if (gc instanceof GeneratedDoc) {
-				_newGeneratedCodeRepository = new DGRepository((GeneratedDoc) gc, getNewGeneratedCodeRepositoryName(),getNewDocType(), getFormat(),
-						getNewGeneratedCodeRepositoryDirectory());
-				((DGRepository)_newGeneratedCodeRepository).setPostProductName(getNewGeneratedCodeRepositoryName());
-				if (tocRepository!=null)
-					((DGRepository)_newGeneratedCodeRepository).setTocRepository(tocRepository);
-				else if (ptocRepository!=null)
-					((DGRepository)_newGeneratedCodeRepository).setPTocRepository(ptocRepository);
+				if(getFormat() != Format.PPTX){
+					_newGeneratedCodeRepository = new DGRepository((GeneratedDoc) gc, getNewGeneratedCodeRepositoryName(),getNewDocType(), getFormat(),
+							getNewGeneratedCodeRepositoryDirectory());
+					((DGRepository)_newGeneratedCodeRepository).setPostProductName(getNewGeneratedCodeRepositoryName());
+					if (tocRepository!=null)
+						((DGRepository)_newGeneratedCodeRepository).setTocRepository(tocRepository);
+				}else{
+					_newGeneratedCodeRepository = new PresentationRepository((GeneratedDoc) gc, getNewGeneratedCodeRepositoryName(),getNewDocType(), 
+							getNewGeneratedCodeRepositoryDirectory());
+					((PresentationRepository)_newGeneratedCodeRepository).setPostProductName(getNewGeneratedCodeRepositoryName());					
+					if (ptocRepository!=null)
+						((PresentationRepository)_newGeneratedCodeRepository).setPTocRepository(ptocRepository);
+				}
+				
 				
 				getFocusedObject().getGeneratedCode().addToGeneratedRepositories(_newGeneratedCodeRepository);
 				

@@ -43,6 +43,7 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
@@ -580,7 +581,7 @@ public class GeneratedFileResourceFactory {
 	 *
 	 *
 	 */
-	public static ProjectPptxXmlFileResource createNewProjectPptXmlFileResource(DGRepository repository, DGPptxXMLGenerator<FlexoProject> generator, PptxTemplatesEnum pptxTemplate) {
+	public static ProjectPptxXmlFileResource createNewProjectPptXmlFileResource(PresentationRepository repository, DGPptxXMLGenerator<FlexoProject> generator, PptxTemplatesEnum pptxTemplate) {
 		FlexoProject project = generator.getProject();
 		ProjectPptxXmlFileResource res = (ProjectPptxXmlFileResource) project.resourceForKey(ResourceType.PPTXXML_FILE
 				, ProjectPptxXmlFileResource.nameForRepositoryAndPptxTemplate(repository,pptxTemplate));
@@ -610,6 +611,8 @@ public class GeneratedFileResourceFactory {
 
 		return res;
 	}
+	
+	
 	
 	//
 

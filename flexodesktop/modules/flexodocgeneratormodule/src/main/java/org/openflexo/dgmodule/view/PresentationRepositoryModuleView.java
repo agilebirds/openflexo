@@ -74,13 +74,13 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
- * MOS
- * @author MOSTAFA
+ *
+ * @author sylvain
  */
 public class PresentationRepositoryModuleView extends JPanel implements ModuleView<PresentationRepository>, FlexoObserver, LogListener, FlexoActionSource
 {
 
-    protected static final Logger logger = Logger.getLogger(PresentationRepositoryModuleView.class.getPackage().getName());
+    protected static final Logger logger = Logger.getLogger(DGRepositoryModuleView.class.getPackage().getName());
 
     protected DGController controller;
 
@@ -501,10 +501,9 @@ public class PresentationRepositoryModuleView extends JPanel implements ModuleVi
                 Enumeration<ProjectDocGenerator> en = controller.getProjectGenerators();
                 while (en.hasMoreElements() && projectGenerator == null) {
                     ProjectDocGenerator pdg = en.nextElement();
-                    //TODO_MOS see what to do with this
-//                    if (pdg.getRepository() == codeRepository) {
-//						projectGenerator = pdg;
-//					}
+                    if (pdg.getRepository() == codeRepository) {
+						projectGenerator = pdg;
+					}
                 }
             }
             if (projectGenerator != null) {

@@ -29,6 +29,7 @@ import org.openflexo.foundation.Format;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.cg.DGRepository;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.cg.action.ConnectCGRepository;
 import org.openflexo.foundation.param.DirectoryParameter;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
@@ -106,8 +107,8 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 								        		pd);
 				System.setProperty("apple.awt.fileDialogForDirectories", "false");
                 if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                	if(repository.getFormat() == Format.PPTX){
-                		repository.setPTocRepository(paramPToc.getValue());
+                	if(repository instanceof PresentationRepository){
+                		((PresentationRepository)repository).setPTocRepository(paramPToc.getValue());
                 	}else{
                 	repository.setTocRepository(repositoryParam.getValue());
                 	}
@@ -127,7 +128,13 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 					}
 					
 					//MOS
-					if (!(repository.getFormat()==Format.HTML || (repository.getFormat()!=Format.HTML && repository.getFormat()!=Format.PPTX && repository.getTocRepository()!=null) || (repository.getFormat()==Format.PPTX && repository.getPTocRepository()!=null))) {
+					if(repository.getFormat()==Format.PPTX)
+						try {
+							return ((PresentationRepository) repository).getPTocRepository()!=null; 
+						}catch(Exception exc){
+							return false;
+						}
+					if (!(repository.getFormat()==Format.HTML || (repository.getFormat()!=Format.HTML && repository.getTocRepository()!=null) )) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("you_must_choose_a_toc"));
 						return false;
 					}

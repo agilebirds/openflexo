@@ -78,7 +78,20 @@
     <property name="systemName" xmlTag="systemName" attribute="yes"/>
     <property name="systemVersion" xmlTag="systemVersion" attribute="yes"/>
     <property name="tocRepositoryRef" xmlTag="tocRepository" attribute="yes"/>
-    <property name="ptocRepositoryRef" xmlTag="tocRepository" attribute="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.cg.PresentationRepository" xmlTag="PresentationRepository">
+    <description>Structure of a generated code repository</description>
+    <property name="docTypeAsString" xmlTag="docTypeName" primary="no" description="Target type of the repository (business, analyst, developer)"/>
+    <property name="docTitle" xmlTag="docTitle" attribute="yes"/>
+    <property name="postProductName" xmlTag="pdfName" attribute="yes"/>
+    <property name="customer" xmlTag="customer" attribute="yes" description="Name of the customer that will appear in the generated documentation"/>
+    <property name="version" xmlTag="version" attribute="yes" description="Version of this document"/>
+    <property name="author" xmlTag="author" attribute="yes"/>
+    <property name="reviewer" xmlTag="reviewer" attribute="yes"/>
+    <property name="systemName" xmlTag="systemName" attribute="yes"/>
+    <property name="systemVersion" xmlTag="systemVersion" attribute="yes"/>
+    <property name="ptocRepositoryRef" xmlTag="ptocRepository" attribute="yes"/>
   </entity>
 	
   <entity name="org.openflexo.foundation.cg.CGSymbolicDirectory" xmlTag="CGSymbolicDirectory">
