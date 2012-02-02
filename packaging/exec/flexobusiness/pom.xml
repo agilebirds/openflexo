@@ -11,7 +11,7 @@
         <version>1.4.4-SNAPSHOT</version>
     </parent>
     <artifactId>flexobusiness</artifactId>
-    <packaging>pom</packaging>
+<!--     <packaging>pom</packaging> -->
     <properties>
         <userType>customer_release</userType>
     </properties>

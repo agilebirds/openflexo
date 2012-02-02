@@ -211,7 +211,8 @@
 #void($generator.sortVectorOfModelObject($componentInstances))
 
 #if($componentDefinition.getHasTabContainer())
-#set($tabContainerTitle = "#capNameForWidget($componentDefinition.getWOComponent().getAllTabContainers().firstElement())")
+#set($hasTabContainer = !$componentDefinition.getWOComponent().getAllTabContainers().isEmpty())
+
 #end
     /**
     * Returns <code>this</code> page initialized with arguments.
@@ -274,7 +275,7 @@
         long ciID = longValueForKey(directAction.request(),"ci");
         if (ciID == 0)
             return directAction.pageNotFound("Missing or invalid parameter");
-        #if(${tabContainerTitle})
+        #if(${hasTabContainer})
         String selectedTab = getStringValueForKey(directAction.request(), "tab");
         #end
         #getUrlParametersFromDA()
@@ -285,7 +286,7 @@
         #foreach($ci in $componentInstances)
         #set($operationName = "${generator.getJavaString($ci.getOperationNode().getName())}")
         #if($foreach.index>0)else#end if(ciID==#componentInstance($ci))
-            #if(${tabContainerTitle})
+            #if(${hasTabContainer})
             return createPageForOperation${generator.getJavaString($!{ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(directAction.context() #pageParametersCall($componentDefinition),selectedTab, null);
             #else
             return createPageForOperation${generator.getJavaString($!{ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(directAction.context() #pageParametersCall($componentDefinition), null);            
@@ -304,12 +305,12 @@
      * @param $bd.getVariableName() #if(${bd.getType().isEOEntity()})the current ${bd.getType().getName()}.#end
           
 #end
-     #if(${tabContainerTitle})
+     #if(${hasTabContainer})
      * @param selectedTab the key of the selected tab
      #end
      * @return a new instance of the page ${entity.getClassName()} correctly initialized.
      **/
-    #if(${tabContainerTitle})
+    #if(${hasTabContainer})
     public static ${entity.getClassName()} createPageForOperation${generator.getJavaString($!{ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition), String selectedTab, EOEditingContext ec) {
     #else
     public static ${entity.getClassName()} createPageForOperation${generator.getJavaString($!{ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition), EOEditingContext ec) {
@@ -324,9 +325,13 @@
         #end
     #end
         ${entity.getClassName()} nextPage = createPage(context #pageParametersCall($componentDefinition), #componentInstance($ci), ec);
-    #if(${tabContainerTitle})
+    #if(${hasTabContainer})
         if (selectedTab!=null)
-            nextPage.set${tabContainerTitle}SelectedTab(selectedTab);
+		{
+			#foreach($tabContainerTitle in $componentDefinition.getWOComponent().getAllTabContainers())
+				nextPage.set#capNameForWidget(${tabContainerTitle})SelectedTab(selectedTab);
+			#end
+        }
     #end
         return nextPage;
     }
@@ -339,20 +344,20 @@
      * @param $bd.getVariableName() #if(${bd.getType().isEOEntity()})the current ${bd.getType().getName()}.#end
      
 #end
-     #if(${tabContainerTitle})
+     #if(${hasTabContainer})
      * @param selectedTab the key of the selected tab
      #end
      * @param ciID the component instance ID of the selected operation
      * @return a new instance of the page ${entity.getClassName()} correctly initialized.
      **/
-    #if( ${tabContainerTitle} )
+    #if( ${hasTabContainer} )
     public static String getUrlForOperation(WOContext context #pageParameters($componentDefinition), String selectedTab, long ciID){
     #else
     public static String getUrlForOperation(WOContext context #pageParameters($componentDefinition), long ciID){
     #end
         #foreach($ci in $componentInstances)
         if(ciID==#componentInstance($ci)) // @single Equivalent to operation ${ci.getOperationNode().getName()}~@end
-            #if(${tabContainerTitle})
+            #if(${hasTabContainer})
             return getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(context #pageParametersCall($componentDefinition), selectedTab);
             #else
             return getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(context #pageParametersCall($componentDefinition));
@@ -368,14 +373,14 @@
     * ${generator.getJavaDocString(${ci.getOperationNode().getName()})}
     * @return the url that opens this page.
     */
-    #if( ${tabContainerTitle} )
+    #if( ${hasTabContainer} )
     public static String getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition), String selectedTab){
     #else
     public static String getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition)){
     #end
         NSMutableDictionary dic = new NSMutableDictionary();
         dic.setObjectForKey(#componentInstance($ci), "ci"); // @single Equivalent to operation ${ci.getOperationNode().getName()}~@end
-        #if(${tabContainerTitle})
+        #if(${hasTabContainer})
         if(selectedTab!=null) 
             dic.setObjectForKey(selectedTab,"tab");
         #end
@@ -466,8 +471,12 @@
 						
 						#if($generator.isPrototype()) 
     						#if(${workflowPathList.size()} > 1)
+								#set($prefix = "");
+								#if(!${button1.getWOComponent().equals(${ci.getComponentDefinition().getWOComponent()})})
+									#set($prefix = "${button1.getWOComponent().getName()}.")
+								#end
     							#if (!$button1.isInRepetition()) 
-    								#set($condition = "hiddenFieldValue.equals(#upNameForWidget($button1))")
+    								#set($condition = "hiddenFieldValue.equals(${prefix}#upNameForWidget($button1))")
     							#else
     								#foreach($workflowPath in $workflowPathList)
     									#set($nextop = ${workflowPath.getOperationNode()})
@@ -475,7 +484,7 @@
                         					#set($nextop = ${ci.getOperationNode()})
     									#end
     									#if($foreach.index)#set($condition = "$condition && ")#end
-    									#set($condition = "$condition !hiddenFieldValue.equals(#upNameForWidget($button1)+#componentInstance($nextop.getComponentInstance()))")
+    									#set($condition = "$condition !hiddenFieldValue.equals(${prefix}#upNameForWidget($button1)+#componentInstance($nextop.getComponentInstance()))")
     								#end
     							#end
     							if($condition) {
@@ -487,7 +496,7 @@
             							#end
             						#end
 								
-    								Map<String, String> availableOperations = getOperations#capNameForWidget($button1)();
+    								Map<String, String> availableOperations = #if(!${button1.getWOComponent().equals(${ci.getComponentDefinition().getWOComponent()})})((${button1.getWOComponent().getName()})__tabInstances.get(${button1.getWOComponent().getName()}.class)).#end getOperations#capNameForWidget($button1)(getOperationComponentInstanceID());
     								if(availableOperations.size() == 0)
     									return null;
     								if(availableOperations.size() > 1)
