@@ -677,25 +677,21 @@
                 <groupId>org.openflexo.packaging</groupId>
                 <artifactId>flexobusiness</artifactId>
                 <version>${project.version}</version>
-                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.openflexo.packaging</groupId>
                 <artifactId>flexobusinessplus</artifactId>
                 <version>${project.version}</version>
-                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.openflexo.packaging</groupId>
                 <artifactId>flexoenterprise</artifactId>
                 <version>${project.version}</version>
-                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.openflexo.packaging</groupId>
                 <artifactId>flexomaintainer</artifactId>
                 <version>${project.version}</version>
-                <type>pom</type>
             </dependency>
 
             <!-- tests -->
