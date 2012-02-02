@@ -9,7 +9,7 @@
     <parent>
         <artifactId>openflexo</artifactId>
         <groupId>org.openflexo</groupId>
-        <version>1.4.4-SNAPSHOT</version>
+        <version>1.5-SNAPSHOT</version>
     </parent>
 
     <groupId>org.openflexo.test</groupId>

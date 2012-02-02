@@ -164,10 +164,6 @@ public class GeneratorController extends FlexoController implements SelectionMan
 		return ModuleLoader.instance();
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
-
 	/**
 	 * Creates a new instance of MenuBar for the module this controller refers to
 	 * 
