@@ -11,7 +11,7 @@
         <version>1.5-SNAPSHOT</version>
     </parent>
     <artifactId>flexoenterprise</artifactId>
-    <packaging>pom</packaging>
+<!--     <packaging>pom</packaging> -->
     <properties>
         <userType>developer_release</userType>
         <vm.args>-Xmx1G</vm.args>
@@ -28,7 +28,6 @@
         <dependency>
             <groupId>org.openflexo.packaging</groupId>
             <artifactId>flexobusinessplus</artifactId>
-            <type>pom</type>
             <scope>runtime</scope>
         </dependency>
         <dependency>
