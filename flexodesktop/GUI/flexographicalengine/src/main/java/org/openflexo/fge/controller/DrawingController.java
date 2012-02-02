@@ -144,13 +144,16 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (drawing.getContainedObjects(drawing.getModel()) != null) {
 			for (Object o : drawing.getContainedObjects(drawing.getModel())) {
 				GraphicalRepresentation<?> gr = drawing.getGraphicalRepresentation(o);
-				if (gr instanceof ShapeGraphicalRepresentation) {
+				if (gr instanceof ShapeGraphicalRepresentation && gr.isValidated()) {
 					ShapeView<?> v = _buildShapeView((ShapeGraphicalRepresentation<?>) gr);
 					drawingView.add(v);
-				} else if (gr instanceof ConnectorGraphicalRepresentation) {
+				} else if (gr instanceof ConnectorGraphicalRepresentation && gr.isValidated()) {
 					ConnectorGraphicalRepresentation<?> connectorGR = (ConnectorGraphicalRepresentation<?>) gr;
 					ConnectorView<?> v = connectorGR.makeConnectorView(this);
 					drawingView.add(v);
+				}
+				if (!gr.isValidated()) {
+					logger.warning("DrawingView " + drawingView.getClass().getSimpleName() + " unvalidated GR found " + gr);
 				}
 			}
 		}
@@ -190,7 +193,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 	public void setCurrentTool(EditorTool aTool) {
 		if (aTool != currentTool) {
-			logger.info("Switch to tool " + aTool);
+			logger.fine("Switch to tool " + aTool);
 			switch (aTool) {
 			case SelectionTool:
 				if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {

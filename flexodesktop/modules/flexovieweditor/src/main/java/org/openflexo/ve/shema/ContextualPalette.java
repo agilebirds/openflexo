@@ -126,7 +126,7 @@ public class ContextualPalette extends DrawingPalette {
 			}
 
 			@Override
-			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation) {
+			public boolean elementDragged(GraphicalRepresentation containerGR, final FGEPoint dropLocation) {
 				logger.info("Dragging " + getGraphicalRepresentation() + " with text " + getGraphicalRepresentation().getText());
 
 				if (containerGR.getDrawable() instanceof ViewObject) {
@@ -150,8 +150,6 @@ public class ContextualPalette extends DrawingPalette {
 					shapeGR.setLocation(dropLocation);
 					shapeGR.setLayer(containerGR.getLayer() + 1);
 					shapeGR.setAllowToLeaveBounds(true);
-
-					logger.info("drop location = " + shapeGR.getLocation());
 
 					if (element.getEditionPattern() == null) {
 						// No associated edition pattern, just drop shape !
@@ -180,9 +178,11 @@ public class ContextualPalette extends DrawingPalette {
 									public void actionPerformed(ActionEvent e) {
 										DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null,
 												getController().getOEController().getEditor());
+										action.dropLocation = dropLocation;
 										action.setDropScheme(dropScheme);
 										action.setPaletteElement(element);
-										action.setOverridenGraphicalRepresentation(shapeGR);
+										action.setOverridenGraphicalRepresentation(dropScheme.getEditionPattern()
+												.getPrimaryRepresentationRole(), shapeGR);
 										action.doAction();
 									}
 								});
@@ -196,9 +196,11 @@ public class ContextualPalette extends DrawingPalette {
 						} else if (availableDropPatterns.size() == 1) {
 							DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null, getController()
 									.getOEController().getEditor());
+							action.dropLocation = dropLocation;
 							action.setDropScheme(availableDropPatterns.firstElement());
 							action.setPaletteElement(element);
-							action.setOverridenGraphicalRepresentation(shapeGR);
+							action.setOverridenGraphicalRepresentation(availableDropPatterns.firstElement().getEditionPattern()
+									.getPrimaryRepresentationRole(), shapeGR);
 							action.doAction();
 							return action.hasActionExecutionSucceeded();
 						}

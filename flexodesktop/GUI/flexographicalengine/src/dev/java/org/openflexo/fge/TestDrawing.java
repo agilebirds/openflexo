@@ -60,8 +60,7 @@ import org.openflexo.toolbox.FileResource;
 
 public class TestDrawing {
 
-	private static final Logger logger = FlexoLogger
-			.getLogger(TestDrawing.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(TestDrawing.class.getPackage().getName());
 
 	public static void main(String[] args) {
 		try {
@@ -79,8 +78,7 @@ public class TestDrawing {
 		showPanel();
 	}
 
-	public static class TestDrawingController extends
-			DrawingController<MyDrawing> {
+	public static class TestDrawingController extends DrawingController<MyDrawing> {
 		private JPopupMenu contextualMenu;
 
 		public TestDrawingController(MyDrawing aDrawing) {
@@ -94,8 +92,7 @@ public class TestDrawing {
 			super.addToSelectedObjects(anObject);
 			if (getSelectedObjects().size() == 1) {
 				setChanged();
-				notifyObservers(new UniqueSelection(
-						getSelectedObjects().get(0), null));
+				notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
 			} else {
 				setChanged();
 				notifyObservers(new MultipleSelection());
@@ -107,8 +104,7 @@ public class TestDrawing {
 			super.removeFromSelectedObjects(anObject);
 			if (getSelectedObjects().size() == 1) {
 				setChanged();
-				notifyObservers(new UniqueSelection(
-						getSelectedObjects().get(0), null));
+				notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
 			} else {
 				setChanged();
 				notifyObservers(new MultipleSelection());
@@ -125,8 +121,7 @@ public class TestDrawing {
 		public void selectDrawing() {
 			super.selectDrawing();
 			setChanged();
-			notifyObservers(new UniqueSelection(
-					getDrawingGraphicalRepresentation(), null));
+			notifyObservers(new UniqueSelection(getDrawingGraphicalRepresentation(), null));
 		}
 
 		@Override
@@ -135,8 +130,7 @@ public class TestDrawing {
 			returned.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					if (e.isPopupTrigger()
-							|| e.getButton() == MouseEvent.BUTTON3) {
+					if (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
 						logger.info("Display contextual menu");
 					}
 				}
@@ -189,15 +183,13 @@ public class TestDrawing {
 		screenshotButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final BufferedImage screenshot = dc.getPaintManager()
-						.getScreenshot(dc.getDrawingGraphicalRepresentation());
+				final BufferedImage screenshot = dc.getPaintManager().getScreenshot(dc.getDrawingGraphicalRepresentation());
 				JDialog screenshotDialog = new JDialog((Frame) null, false);
 				screenshotDialog.getContentPane().add(new JPanel() {
 					@Override
 					public void paint(java.awt.Graphics g) {
 						super.paint(g);
-						g.drawImage(screenshot, 0, 0, screenshot.getWidth(),
-								screenshot.getHeight(), null);
+						g.drawImage(screenshot, 0, 0, screenshot.getWidth(), screenshot.getHeight(), null);
 					}
 				});
 				screenshotDialog.setPreferredSize(new Dimension(400, 400));
@@ -288,8 +280,7 @@ public class TestDrawing {
 		}
 
 		@Override
-		public GraphicalRepresentation getGraphicalRepresentation(
-				Object aDrawable) {
+		public GraphicalRepresentation getGraphicalRepresentation(Object aDrawable) {
 			if (aDrawable == this)
 				return getDrawingGraphicalRepresentation();
 			if (aDrawable instanceof MyShape)
@@ -325,10 +316,8 @@ public class TestDrawing {
 			list2.add(circle);
 		}
 
-		public class MyShapeGraphicalRepresentation<O extends MyShape> extends
-				ShapeGraphicalRepresentation<O> {
-			public MyShapeGraphicalRepresentation(ShapeType shapeType,
-					O aDrawable, MyDrawing aDrawing) {
+		public class MyShapeGraphicalRepresentation<O extends MyShape> extends ShapeGraphicalRepresentation<O> {
+			public MyShapeGraphicalRepresentation(ShapeType shapeType, O aDrawable, MyDrawing aDrawing) {
 				super(shapeType, aDrawable, aDrawing);
 			}
 
@@ -338,11 +327,8 @@ public class TestDrawing {
 				returned.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseReleased(MouseEvent e) {
-						if (e.isPopupTrigger()
-								|| e.getButton() == MouseEvent.BUTTON3) {
-							System.out
-									.println("Affiche le menu contextuel depuis le composant "
-											+ getDrawable());
+						if (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
+							System.out.println("Affiche le menu contextuel depuis le composant " + getDrawable());
 						}
 					}
 				});
@@ -354,29 +340,20 @@ public class TestDrawing {
 			public abstract MyShapeGraphicalRepresentation<?> getGraphicalRepresentation();
 		}
 
-		public class MyConnectorGraphicalRepresentation<O extends MyConnector>
-				extends ConnectorGraphicalRepresentation<O> {
-			public MyConnectorGraphicalRepresentation(
-					ConnectorType aConnectorType,
-					MyShapeGraphicalRepresentation<?> aStartObject,
-					MyShapeGraphicalRepresentation<?> anEndObject, O aDrawable,
-					MyDrawing aDrawing) {
-				super(aConnectorType, aStartObject, anEndObject, aDrawable,
-						aDrawing);
+		public class MyConnectorGraphicalRepresentation<O extends MyConnector> extends ConnectorGraphicalRepresentation<O> {
+			public MyConnectorGraphicalRepresentation(ConnectorType aConnectorType, MyShapeGraphicalRepresentation<?> aStartObject,
+					MyShapeGraphicalRepresentation<?> anEndObject, O aDrawable, MyDrawing aDrawing) {
+				super(aConnectorType, aStartObject, anEndObject, aDrawable, aDrawing);
 			}
 
 			@Override
-			public ConnectorView<O> makeConnectorView(
-					DrawingController<?> controller) {
+			public ConnectorView<O> makeConnectorView(DrawingController<?> controller) {
 				ConnectorView<O> returned = super.makeConnectorView(controller);
 				returned.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseReleased(MouseEvent e) {
-						if (e.isPopupTrigger()
-								|| e.getButton() == MouseEvent.BUTTON3) {
-							System.out
-									.println("Affiche le menu contextuel depuis le connecteur "
-											+ getDrawable());
+						if (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
+							System.out.println("Affiche le menu contextuel depuis le connecteur " + getDrawable());
 						}
 					}
 				});
@@ -392,14 +369,12 @@ public class TestDrawing {
 			private MyShapeGraphicalRepresentation<MyRectangle> gr;
 
 			public MyRectangle() {
-				gr = new MyShapeGraphicalRepresentation<MyRectangle>(
-						ShapeType.RECTANGLE, this, MyDrawing.this);
+				gr = new MyShapeGraphicalRepresentation<MyRectangle>(ShapeType.RECTANGLE, this, MyDrawing.this);
 				gr.setWidth(200);
 				gr.setHeight(100);
 				gr.setX(300);
 				gr.setY(300);
-				gr.setBackground(BackgroundStyle
-						.makeColoredBackground(Color.LIGHT_GRAY));
+				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.LIGHT_GRAY));
 			}
 
 			@Override
@@ -412,17 +387,14 @@ public class TestDrawing {
 			private MyShapeGraphicalRepresentation<MyRoundedRectangle2> gr;
 
 			public MyRoundedRectangle2() {
-				gr = new MyShapeGraphicalRepresentation<MyRoundedRectangle2>(
-						ShapeType.RECTANGLE, this, MyDrawing.this);
+				gr = new MyShapeGraphicalRepresentation<MyRoundedRectangle2>(ShapeType.RECTANGLE, this, MyDrawing.this);
 				gr.setWidth(120);
 				gr.setHeight(200);
 				gr.setX(30);
 				gr.setY(300);
 				((Rectangle) gr.getShape()).setIsRounded(true);
-				gr.setBackground(BackgroundStyle
-						.makeColoredBackground(Color.ORANGE));
-				gr.setBorder(new ShapeGraphicalRepresentation.ShapeBorder(20,
-						20, 20, 20));
+				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.ORANGE));
+				gr.setBorder(new ShapeGraphicalRepresentation.ShapeBorder(20, 20, 20, 20));
 				circle = new MyCircle();
 			}
 
@@ -437,15 +409,13 @@ public class TestDrawing {
 			private MyShapeGraphicalRepresentation<MyCircle> gr;
 
 			public MyCircle() {
-				gr = new MyShapeGraphicalRepresentation<MyCircle>(
-						ShapeType.CIRCLE, this, MyDrawing.this);
+				gr = new MyShapeGraphicalRepresentation<MyCircle>(ShapeType.CIRCLE, this, MyDrawing.this);
 				gr.setWidth(50);
 				gr.setHeight(50);
 				gr.setX(30);
 				gr.setY(40);
 				gr.getForeground().setColor(Color.BLUE);
-				gr.setBackground(BackgroundStyle
-						.makeColoredBackground(Color.PINK));
+				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.PINK));
 			}
 
 			@Override
@@ -459,26 +429,21 @@ public class TestDrawing {
 			private MyShapeGraphicalRepresentation<MyPentagon> gr;
 
 			public MyPentagon() {
-				gr = new MyShapeGraphicalRepresentation<MyPentagon>(
-						ShapeType.POLYGON, this, MyDrawing.this);
+				gr = new MyShapeGraphicalRepresentation<MyPentagon>(ShapeType.POLYGON, this, MyDrawing.this);
 				gr.setWidth(100);
 				gr.setHeight(100);
 				gr.setX(100);
 				gr.setY(100);
 				gr.getForeground().setColor(Color.BLUE);
-				gr.setBackground(BackgroundStyle
-						.makeColoredBackground(Color.YELLOW));
-				gr.setBorder(new MyShapeGraphicalRepresentation.ShapeBorder(20,
-						10, 50, 0));
+				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.YELLOW));
+				gr.setBorder(new MyShapeGraphicalRepresentation.ShapeBorder(20, 10, 50, 0));
 				gr.setLayer(2);
 				gr.setDecorationPainter(new DecorationPainter() {
 					@Override
 					public void paintDecoration(FGEShapeDecorationGraphics g) {
-						g.setDefaultBackground(BackgroundStyle
-								.makeColoredBackground(Color.RED));
+						g.setDefaultBackground(BackgroundStyle.makeColoredBackground(Color.RED));
 						g.useDefaultBackgroundStyle();
-						g.drawRoundRect(0, 0, g.getWidth() - 1,
-								g.getHeight() - 1, 20, 20);
+						g.drawRoundRect(0, 0, g.getWidth() - 1, g.getHeight() - 1, 20, 20);
 					}
 
 					@Override
@@ -499,19 +464,15 @@ public class TestDrawing {
 			private MyShapeGraphicalRepresentation<MyImage> gr;
 
 			public MyImage() {
-				gr = new MyShapeGraphicalRepresentation<MyImage>(
-						ShapeType.RECTANGLE, this, MyDrawing.this);
+				gr = new MyShapeGraphicalRepresentation<MyImage>(ShapeType.RECTANGLE, this, MyDrawing.this);
 				gr.setWidth(100);
 				gr.setHeight(100);
 				gr.setX(250);
 				gr.setY(100);
 				gr.setLayer(3);
 				gr.getForeground().setColor(Color.BLUE);
-				gr.setBackground(BackgroundStyle
-						.makeImageBackground(new FileResource(
-								"Resources/WKF/IfOperator.gif")));
-				gr.setBorder(new MyShapeGraphicalRepresentation.ShapeBorder(20,
-						10, 50, 0));
+				gr.setBackground(BackgroundStyle.makeImageBackground(new FileResource("Resources/WKF/IfOperator.gif")));
+				gr.setBorder(new MyShapeGraphicalRepresentation.ShapeBorder(20, 10, 50, 0));
 			}
 
 			@Override
@@ -525,9 +486,7 @@ public class TestDrawing {
 			private MyConnectorGraphicalRepresentation<MyLineConnector> gr;
 
 			public MyLineConnector(MyShape d1, MyShape d2) {
-				gr = new MyConnectorGraphicalRepresentation<MyLineConnector>(
-						ConnectorType.RECT_POLYLIN,
-						d1.getGraphicalRepresentation(),
+				gr = new MyConnectorGraphicalRepresentation<MyLineConnector>(ConnectorType.RECT_POLYLIN, d1.getGraphicalRepresentation(),
 						d2.getGraphicalRepresentation(), this, MyDrawing.this);
 				gr.getForeground().setColor(Color.BLUE);
 				gr.getForeground().setLineWidth(1.5);

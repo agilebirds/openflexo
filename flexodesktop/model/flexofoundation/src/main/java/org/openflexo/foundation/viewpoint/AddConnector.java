@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -47,11 +48,21 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 	}
 
 	public ViewShape getFromShape(EditionSchemeAction action) {
-		return (ViewShape) getFromShape().getBindingValue(action);
+		if (getPatternRole().getStartShapeAsDefinedInAction()) {
+			return (ViewShape) getFromShape().getBindingValue(action);
+		} else {
+			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
+			return (ViewShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
+		}
 	}
 
 	public ViewShape getToShape(EditionSchemeAction action) {
-		return (ViewShape) getToShape().getBindingValue(action);
+		if (getPatternRole().getEndShapeAsDefinedInAction()) {
+			return (ViewShape) getToShape().getBindingValue(action);
+		} else {
+			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
+			return (ViewShape) action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
+		}
 	}
 
 	@Override

@@ -282,7 +282,9 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	public final void setStartObject(ShapeGraphicalRepresentation<?> aStartObject) {
 		startObject = aStartObject;
-		enableStartObjectObserving(startObject);
+		if (!enabledStartObjectObserving) {
+			enableStartObjectObserving(startObject);
+		}
 	}
 
 	private boolean enabledStartObjectObserving = false;
@@ -292,6 +294,11 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	private Vector<Observable> observedEndObjects = new Vector<Observable>();
 
 	protected void enableStartObjectObserving(ShapeGraphicalRepresentation<?> aStartObject) {
+
+		if (aStartObject == null || !aStartObject.isValidated()) {
+			return;
+		}
+
 		if (enabledStartObjectObserving) {
 			disableStartObjectObserving();
 		}
@@ -332,10 +339,17 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	public final void setEndObject(ShapeGraphicalRepresentation<?> anEndObject) {
 		endObject = anEndObject;
-		enableEndObjectObserving(endObject);
+		if (!enabledEndObjectObserving) {
+			enableEndObjectObserving(endObject);
+		}
 	}
 
 	protected void enableEndObjectObserving(ShapeGraphicalRepresentation<?> anEndObject) {
+
+		if (anEndObject == null || !anEndObject.isValidated()) {
+			return;
+		}
+
 		if (enabledEndObjectObserving) {
 			disableEndObjectObserving();
 		}
@@ -450,6 +464,10 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 			return new Rectangle(0, 0, 1, 1);
 		}
 
+		if (getContainerGraphicalRepresentation() == null) {
+			logger.warning("getNormalizedBounds() called for GR " + this + " with containerGR=null, validated=" + isValidated());
+		}
+
 		Rectangle startBounds = getStartObject().getViewBounds(getContainerGraphicalRepresentation(), scale);
 		Rectangle endsBounds = getEndObject().getViewBounds(getContainerGraphicalRepresentation(), scale);
 
@@ -552,6 +570,21 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		}
 
 		if (connector != null) {
+
+			if (!isValidated()) {
+				logger.warning("paint connector requested for not validated connector graphical representation: " + this);
+				return;
+			}
+			if (getStartObject() == null || getStartObject().isDeleted() || !getStartObject().isValidated()) {
+				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
+						+ " start=" + getStartObject());
+				return;
+			}
+			if (getEndObject() == null || getEndObject().isDeleted() || !getEndObject().isValidated()) {
+				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
+						+ " end=" + getEndObject());
+				return;
+			}
 			connector.paintConnector(graphics);
 		}
 
@@ -605,13 +638,13 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 			notifyAttributeChange(Parameters.foreground);
 		}
 
-		if ((notification instanceof ObjectWillMove) || (notification instanceof ObjectWillResize)) {
+		if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
 			connector.connectorWillBeModified();
 			// Propagate notification to views
 			setChanged();
 			notifyObservers(notification);
 		}
-		if ((notification instanceof ObjectHasMoved) || (notification instanceof ObjectHasResized)) {
+		if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized) {
 			connector.connectorHasBeenModified();
 			// Propagate notification to views
 			setChanged();
@@ -627,8 +660,8 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	protected boolean isConnectorConsistent() {
 		// if (true) return true;
-		return (getStartObject() != null && getEndObject() != null && !getStartObject().isDeleted() && !getEndObject().isDeleted() && GraphicalRepresentation
-				.areElementsConnectedInGraphicalHierarchy(getStartObject(), getEndObject()));
+		return getStartObject() != null && getEndObject() != null && !getStartObject().isDeleted() && !getEndObject().isDeleted()
+				&& GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(getStartObject(), getEndObject());
 	}
 
 	public void refreshConnector() {
@@ -790,6 +823,20 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	public List<? extends ControlArea> getControlAreas() {
 		return getConnector().getControlAreas();
+	}
+
+	/**
+	 * Override parent's behaviour by enabling start and end object observing
+	 */
+	@Override
+	public void setValidated(boolean validated) {
+		super.setValidated(validated);
+		if (!enabledStartObjectObserving) {
+			enableStartObjectObserving(startObject);
+		}
+		if (!enabledEndObjectObserving) {
+			enableEndObjectObserving(endObject);
+		}
 	}
 
 }

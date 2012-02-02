@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation;
 
+import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.cg.version.CGVersionIdentifier;
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMPropertyImplementationType;
@@ -115,6 +116,7 @@ public abstract class FlexoObject extends KVCObject {
 		encoder._addConverter(FlexoVersion.converter);
 		encoder._addConverter(CGVersionIdentifier.converter);
 		encoder._addConverter(Duration.converter);
+		encoder._addConverter(DataBinding.CONVERTER);
 	}
 
 	@Override

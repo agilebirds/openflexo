@@ -205,6 +205,9 @@ public class FIBInspector extends FIBPanel {
 		} else if (entry instanceof TextAreaInspectorEntry) {
 			FIBTextArea ta = new FIBTextArea();
 			ta.validateOnReturn = true; // Avoid to many ontologies manipulations
+			ta.setUseScrollBar(true);
+			ta.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			ta.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
 			newTab.addToSubComponents(ta, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true, index));
 			return ta;
 		} else if (entry instanceof CheckboxInspectorEntry) {

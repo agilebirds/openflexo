@@ -133,6 +133,9 @@ public class DrawingPalette {
 	}
 
 	protected void makePalettePanel() {
+		for (PaletteElement e : elements) {
+			e.getGraphicalRepresentation().setValidated(true);
+		}
 		_paletteController = new DrawingController<PaletteDrawing>(_paletteDrawing);
 		for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
@@ -248,7 +251,7 @@ public class DrawingPalette {
 		 * @return the chosen DataFlavor or null if none match
 		 */
 		private DataFlavor chooseDropFlavor(DropTargetDropEvent e) {
-			if ((e.isLocalTransfer() == true) && e.isDataFlavorSupported(PaletteElementTransferable.defaultFlavor())) {
+			if (e.isLocalTransfer() == true && e.isDataFlavorSupported(PaletteElementTransferable.defaultFlavor())) {
 				return PaletteElementTransferable.defaultFlavor();
 			}
 			return null;
@@ -434,8 +437,8 @@ public class DrawingPalette {
 								modelLocation.x -= ((TransferedPaletteElement) data).getOffset().x;
 								modelLocation.y -= ((TransferedPaletteElement) data).getOffset().y;
 							} else {
-								modelLocation.x -= (((TransferedPaletteElement) data).getOffset().x);
-								modelLocation.y -= (((TransferedPaletteElement) data).getOffset().y);
+								modelLocation.x -= ((TransferedPaletteElement) data).getOffset().x;
+								modelLocation.y -= ((TransferedPaletteElement) data).getOffset().y;
 							}
 							if (element.elementDragged(focused, modelLocation)) {
 								e.acceptDrop(acceptableActions);
@@ -478,7 +481,7 @@ public class DrawingPalette {
 
 		private FGEView getFGEView() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView) _dropContainer);
+				return (FGEView) _dropContainer;
 			}
 			return null;
 		}

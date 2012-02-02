@@ -209,6 +209,14 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			this.right = right;
 		}
 
+		public ShapeBorder(ShapeBorder border) {
+			super();
+			this.top = border.top;
+			this.bottom = border.bottom;
+			this.left = border.left;
+			this.right = border.right;
+		}
+
 		@Override
 		public ShapeBorder clone() {
 			try {
@@ -392,10 +400,9 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		super.update(observable, notification);
 
 		if (observeParentGRBecauseMyLocationReferToIt && observable == getContainerGraphicalRepresentation()) {
-			if ((notification instanceof ObjectWillMove) || (notification instanceof ObjectWillResize)
-					|| (notification instanceof ObjectHasMoved) || (notification instanceof ObjectHasResized)
-					|| (notification instanceof ObjectMove) || (notification instanceof ObjectResized)
-					|| (notification instanceof ShapeChanged)) {
+			if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
+					|| notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
+					|| notification instanceof ObjectMove || notification instanceof ObjectResized || notification instanceof ShapeChanged) {
 				checkAndUpdateLocationIfRequired();
 			}
 		}
@@ -462,7 +469,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				maxY = ((ShapeGraphicalRepresentation) getContainerGraphicalRepresentation()).getHeight();
 			}
 			if (maxY > 0 && y > maxY - getHeight()) {
-				// logger.info("Relocate y from "+y+" to "+(maxY-getHeight())+" maxY="+maxY+" height="+getHeight());
+				// logger.info("Relocate y from " + y + " to " + (maxY - getHeight()) + " maxY=" + maxY + " height=" + getHeight());
 				return maxY - getHeight();
 			}
 		}
@@ -753,9 +760,9 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	public boolean isParentLayoutedAsContainer() {
-		return (getContainerGraphicalRepresentation() != null
-				&& getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation && ((ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation())
-					.getDimensionConstraints() == DimensionConstraints.CONTAINER);
+		return getContainerGraphicalRepresentation() != null
+				&& getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation
+				&& ((ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).getDimensionConstraints() == DimensionConstraints.CONTAINER;
 	}
 
 	public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation) {
@@ -1377,27 +1384,53 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	public void updateConstraints() {
+		System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
+				+ widthConstraints.isValid() + "," + heightConstraints.isValid());
+		logger.info("Called updateConstraints()");
+		if (xConstraints != null && xConstraints.isValid()) {
+			System.out.println("x was " + getX() + " constraint=" + xConstraints);
+			updateXPosition();
+			System.out.println("x is now " + getX());
+		}
+		if (yConstraints != null && yConstraints.isValid()) {
+			System.out.println("y was " + getY() + " constraint=" + yConstraints);
+			updateYPosition();
+			System.out.println("y is now " + getY());
+		}
+		if (widthConstraints != null && widthConstraints.isValid()) {
+			System.out.println("width was " + getWidth() + " constraint=" + widthConstraints);
+			updateWidthPosition();
+			System.out.println("width is now " + getWidth());
+		}
+		if (heightConstraints != null && heightConstraints.isValid()) {
+			System.out.println("height was " + getHeight() + " constraint=" + heightConstraints);
+			updateHeightPosition();
+			System.out.println("height is now " + getHeight());
+		}
+	}
+
 	private void updateXPosition() {
 		double newValue = ((Number) xConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for x is now: "+newValue);
+		// System.out.println("New value for x is now: " + newValue);
 		setX(newValue);
 	}
 
 	private void updateYPosition() {
 		double newValue = ((Number) yConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for y is now: "+newValue);
+		// System.out.println("New value for y is now: " + newValue);
 		setY(newValue);
 	}
 
 	private void updateWidthPosition() {
 		double newValue = ((Number) widthConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for width is now: "+newValue);
+		// System.out.println("New value for width is now: " + newValue);
 		setWidth(newValue);
 	}
 
 	private void updateHeightPosition() {
 		double newValue = ((Number) heightConstraints.getBindingValue(this)).doubleValue();
-		// System.out.println("New value for height is now: "+newValue);
+		// System.out.println("New value for height is now: " + newValue);
 		setHeight(newValue);
 	}
 
@@ -1577,7 +1610,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		aShape.setGraphicalRepresentation(this);
 		FGENotification notification = requireChange(Parameters.shape, aShape);
 		if (notification != null) {
-			ShapeType oldType = (aShape != null ? aShape.getShapeType() : null);
+			ShapeType oldType = aShape != null ? aShape.getShapeType() : null;
 			this.shape = aShape;
 			shape.rebuildControlPoints();
 			hasChanged(notification);
@@ -1794,6 +1827,12 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	 */
 	public Rectangle getViewBounds(GraphicalRepresentation<?> container, double scale) {
 		Rectangle bounds = getViewBounds(scale);
+		if (getContainerGraphicalRepresentation() == null) {
+			logger.warning("Container is null for " + this + " validated=" + isValidated());
+		}
+		if (container == null) {
+			logger.warning("Container is null for " + this + " validated=" + isValidated());
+		}
 		bounds = convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
 		return bounds;
 	}
@@ -1901,7 +1940,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		if (FGEConstants.DEBUG) {
 			if (getBorder() != null) {
 				g2.setColor(Color.RED);
-				g2.drawRect(0, 0, (getViewWidth(controller.getScale())) - 1, (getViewHeight(controller.getScale())) - 1);
+				g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
 				g2.setColor(Color.BLUE);
 				g2.drawRect((int) (getBorder().left * controller.getScale()), (int) (getBorder().top * controller.getScale()),
 						(int) (getWidth() * controller.getScale()) - 1, (int) (getHeight() * controller.getScale()) - 1);

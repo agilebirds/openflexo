@@ -17,6 +17,8 @@
         <module>flexobusinessplus</module>
         <module>flexoenterprise</module>
         <module>flexomaintainer</module>
+        <module>flexosemantics</module>
+        <module>flexosemanticsplus</module>
     </modules>
     <properties>
         <main.class>org.openflexo.Flexo</main.class>

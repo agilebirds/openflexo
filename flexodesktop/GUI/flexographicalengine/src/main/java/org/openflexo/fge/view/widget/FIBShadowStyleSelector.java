@@ -297,6 +297,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			shapeGR.setIsFocusable(false);
 			shapeGR.setIsReadOnly(true);
 			shapeGR.setBorder(new ShapeBorder(20, 20, 20, 20));
+			shapeGR.setValidated(true);
 
 			update();
 

@@ -47,11 +47,10 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 	}
 
 	public ViewObject getContainer(EditionSchemeAction action) {
-		if (getPatternRole().getTopLevelShape()) {
+		if (getPatternRole().getParentShapeAsDefinedInAction()) {
 			return (ViewObject) getContainer().getBindingValue(action);
 		} else {
 			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
-			System.out.println("Tiens, je retourne " + returned);
 			return (ViewObject) action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
 		}
 	}

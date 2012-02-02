@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="650" height="550">
+<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="600" height="650">
   <Label label="declare_shape_in_edition_pattern" align="center" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" />
   <RadioButtonList format="object.name" localize="true" manageDynamicModel="true" name="PaletteRadioButtonList" data="data.primaryChoice" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" staticList="" iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareInEditionPattern$DeclareInEditionPatternChoices" autoSelectFirstRow="true">
     <LocalizedDictionary />
@@ -48,7 +48,7 @@
     <Label label="properties_to_handle" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)">
       <LocalizedDictionary />
     </Label>
-    <Table iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern$PropertyEntry" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="DataPropertyAssertionTable" data="data.propertyEntries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=8;insetsBottom=0;insetsLeft=4;insetsRight=4;insetsTop=2;location=right)" visible="(patternChoice.selectedIndex = 0)" font="LucidaGrande,0,11">
+    <Table iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern$PropertyEntry" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="DataPropertyAssertionTable" data="data.propertyEntries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=8;insetsBottom=0;insetsLeft=4;insetsRight=4;insetsTop=2;location=right)" visible="(patternChoice.selectedIndex = 0)" font="LucidaGrande,0,11">
       <CheckBoxColumn data="iterator.selectEntry" title="" columnWidth="25" resizable="false" displayTitle="false" name="checkbox" />
       <IconColumn data="controller.iconForObject(iterator.property)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
       <CustomColumn componentClassName="org.openflexo.components.widget.OntologyPropertySelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.property" format="object.name" title="property" columnWidth="80" resizable="true" displayTitle="true">
@@ -63,6 +63,7 @@
       <CustomAction method="data.selectAllProperties()" name="select_all" />
       <CustomAction method="data.selectNoneProperties()" name="select_none" />
       <Dependancy componentName="conceptSelector" />
+      <LocalizedDictionary />
     </Table>
     <Label label="individual_pattern_role_name" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)">
       <LocalizedDictionary />
@@ -70,10 +71,16 @@
     <TextField columns="7" passwd="false" text="TextField" data="data.individualPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="individualPatternRoleName" localize="true">
       <Dependancy componentName="conceptSelector" />
     </TextField>
-    <Label label="shape_pattern_role_name" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+    <Label label="graphical_elements" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />
     </Label>
-    <TextField columns="7" passwd="false" text="TextField" data="data.shapePatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="shapePatternRoleName" localize="true" />
+    <Table iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareInEditionPattern$ExampleDrawingObjectEntry" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="drawingObjectEntriesTable" data="data.drawingObjectEntries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+      <CheckBoxColumn data="iterator.selectThis" title="checkbox" columnWidth="20" resizable="false" displayTitle="false" name="checkbox" />
+      <TextFieldColumn data="iterator.patternRoleName" title="role_name" columnWidth="50" resizable="true" displayTitle="true" />
+      <LabelColumn data="iterator.parentEntry.patternRoleName" title="parent" columnWidth="50" resizable="true" displayTitle="true" name="label" />
+      <TextFieldColumn data="iterator.graphicalObject.graphicalRepresentation.toString" title="graphical_representation" columnWidth="300" resizable="true" displayTitle="true" />
+      <LocalizedDictionary />
+    </Table>
     <Label label="target" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
       <LocalizedDictionary />
     </Label>
@@ -102,7 +109,7 @@
       <Dependancy componentName="patternRoleDropDown" />
       <Dependancy componentName="newEditionPatternName" />
       <Dependancy componentName="individualPatternRoleName" />
-      <Dependancy componentName="shapePatternRoleName" />
+      <Dependancy componentName="drawingObjectEntriesTable" />
       <Dependancy componentName="conceptSelector" />
     </Button>
     <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true" />
@@ -190,6 +197,12 @@
     <Localized key="declare_shape_in_edition_pattern" lang="English">Declare shape in edition pattern</Localized>
     <Localized key="declare_shape_in_edition_pattern" lang="French">Déclarer la forme dans un Edition Pattern</Localized>
     <Localized key="declare_shape_in_edition_pattern" lang="Dutch">Declare in edition pattern</Localized>
+    <Localized key="graphical_elements" lang="French">Eléments graphiques</Localized>
+    <Localized key="graphical_representation" lang="French">Représentation graphique</Localized>
+    <Localized key="graphical_elements" lang="English">Graphical elements</Localized>
+    <Localized key="graphical_representation" lang="English">Graphical representation</Localized>
+    <Localized key="role_name" lang="French">Nom du rôle</Localized>
+    <Localized key="role_name" lang="English">Role name</Localized>
   </LocalizedDictionary>
 </Panel>
 

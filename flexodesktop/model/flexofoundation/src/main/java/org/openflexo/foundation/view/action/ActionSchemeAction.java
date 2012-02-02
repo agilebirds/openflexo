@@ -79,8 +79,4 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 		return null;
 	}
 
-	@Override
-	protected Object getOverridenGraphicalRepresentation() {
-		return null;
-	}
 }

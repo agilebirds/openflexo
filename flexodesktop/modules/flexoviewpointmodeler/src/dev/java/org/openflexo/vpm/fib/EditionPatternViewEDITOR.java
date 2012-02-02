@@ -40,7 +40,7 @@ public class EditionPatternViewEDITOR {
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 
-				Object[] returned = new Object[14];
+				Object[] returned = new Object[15];
 
 				ViewPoint calc1 = calcLibrary
 						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
@@ -83,6 +83,10 @@ public class EditionPatternViewEDITOR {
 				ViewPoint calc8 = calcLibrary.getOntologyCalc("http://TestEntityProperty.owl");
 				calc8.loadWhenUnloaded();
 				returned[13] = calc8.getEditionPattern("FlexoConcept");
+
+				ViewPoint calc9 = calcLibrary.getOntologyCalc("http://www.thalesgroup.com/ViewPoints/sepel-ng/MappingCapture.owl");
+				calc9.loadWhenUnloaded();
+				returned[14] = calc9.getEditionPattern("ConceptMapping");
 
 				return returned;
 			}

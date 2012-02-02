@@ -72,8 +72,6 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 
 	private LinkScheme _linkScheme;
 
-	private Object _graphicalRepresentation;
-
 	LinkSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -105,15 +103,6 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 	@Override
 	public EditionScheme getEditionScheme() {
 		return getLinkScheme();
-	}
-
-	@Override
-	public Object getOverridenGraphicalRepresentation() {
-		return _graphicalRepresentation;
-	}
-
-	public void setOverridenGraphicalRepresentation(Object graphicalRepresentation) {
-		_graphicalRepresentation = graphicalRepresentation;
 	}
 
 	public ViewConnector getNewConnector() {

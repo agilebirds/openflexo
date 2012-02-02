@@ -305,6 +305,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			textGR.setIsFocusable(false);
 			textGR.setIsReadOnly(true);
 			textGR.setBorder(new ShapeBorder(0, 0, 0, 0));
+			textGR.setValidated(true);
 
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
