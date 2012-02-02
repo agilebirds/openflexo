@@ -1,0 +1,46 @@
+<inspector title = "generated_doc_repository">
+	<tab name="Basic" index="0">
+		<property name="format" label="format" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="docType" label="doc_type" widget="DROPDOWN" constraint="8">
+			<param name="format" value="name"/>
+		</property>
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="9"/>
+		<property name="directory" label="source_directory" widget="DIRECTORY" constraint="10"/>
+		<property name="ptocRepository" label="table_of_content" widget="DROPDOWN" constraint="11">
+			<param name="dynamiclist" value="project.ptOCData.repositories"/>
+			<param name="format" value="title"/>
+		</property>
+		<property name="preferredTemplateRepository" label="templates_repository" widget="DROPDOWN" constraint="12">
+			<param name="dynamiclist" value="generatedCode.templates.customDocRepositoriesVector"/>
+			<param name="format" value="name"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	</tab>
+
+	<tab name="History" index="2">
+		<property name="manageHistory" label="manage_history" widget="CHECKBOX" constraint="0"/>
+		<property_list name="releases" label="releases" constraint="1" depends="manageHistory" conditional="manageHistory=true">
+		  <param name="visible_row_count" value="10"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="versionIdentifier" label="version" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="name" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="150"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="date" label="date" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="200"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="userId" label="user" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		</property_list>
+	</tab>
+	
+</inspector>
