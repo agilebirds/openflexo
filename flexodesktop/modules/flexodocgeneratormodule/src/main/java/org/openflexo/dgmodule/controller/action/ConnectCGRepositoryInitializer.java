@@ -91,17 +91,14 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 				paramPToc.setFormatter("title");
 				paramPToc.setDepends("format");
 				paramPToc.setConditional("format!=HTML&&format!=DOCX&&format!=LATEX&&format!=PDF");
-				
 				ParameterDefinition<?>[] pd = new ParameterDefinition<?>[5];
-				//
-				
 				pd[0] = paramName;
 				pd[1] = paramDir;
 				pd[2] = paramWarName;
 				pd[3] = paramWarDir;
 				pd[4] = repository.getFormat() == Format.PPTX?paramPToc:repositoryParam;
 				
-				
+				//
 				
 				AskParametersDialog dialog =AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization
 								        		.localizedForKey("connect_repository_to_local_file_system"), FlexoLocalization

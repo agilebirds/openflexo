@@ -38,6 +38,7 @@ import org.openflexo.foundation.cg.dm.PostBuildStop;
 import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
 import org.openflexo.foundation.ptoc.PTOCModification;
 import org.openflexo.foundation.ptoc.PTOCRepository;
+import org.openflexo.foundation.ptoc.action.AddPTOCEntry;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -139,7 +140,10 @@ public class DGRepository extends GenerationRepository
      //MOS I have modified this to fit PPTX
     @Override
     public boolean isEnabled() {
-    	return super.isEnabled() && (getFormat()==Format.HTML || (getFormat()!=Format.HTML && getFormat()!=Format.PPTX && getTocRepository()!=null) || (getFormat()==Format.PPTX && getPTocRepository()!=null));
+    	return super.isEnabled() 
+    			&& (getFormat()==Format.HTML 
+    			|| (getFormat()!=Format.HTML && getFormat()!=Format.PPTX && getTocRepository()!=null) 
+    			|| (getFormat()==Format.PPTX && getPTocRepository()!=null));
     }
 
     /**
@@ -243,7 +247,11 @@ public class DGRepository extends GenerationRepository
     {
     	Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
         v.add(AddGeneratedCodeRepository.actionType);
-    	v.add(AddTOCEntry.actionType);
+    	//MOS
+        if(getFormat() == Format.PPTX)
+    		v.add(AddPTOCEntry.actionType);
+    	else
+    		v.add(AddTOCEntry.actionType);
     	return v;
     }
 
@@ -384,9 +392,12 @@ public class DGRepository extends GenerationRepository
 
     public String getDocTitle()
     {
-    	if(getTocRepository()!=null){
+    	//MOS
+    	if(getTocRepository()!=null && getFormat()!= Format.PPTX){
     		return getTocRepository().getDocTitle();
-    	}
+    	}else if(getFormat()== Format.PPTX && getPTocRepository()!=null)
+    		return  getPTocRepository().getDocTitle();
+    	//
         return docTitle;
     }
 
@@ -565,23 +576,23 @@ public class DGRepository extends GenerationRepository
 			ptocRepositoryRef.delete();
 			ptocRepositoryRef = null;
 		}
-		if (tocRepository!=null)
+		if (ptocRepository!=null)
 			ptocRepositoryRef = new FlexoModelObjectReference<PTOCRepository>(getProject(),tocRepository);
 		else
 			ptocRepositoryRef = null;
 		setChanged();
 		notifyObservers(new PTOCModification(null,tocRepository));
-		if (tocRepository!=null) {
+		if (ptocRepository!=null) {
 			setChanged();
 			notifyObservers(new CGRepositoryConnected(this));
 		}
 	}
 	
-	public FlexoModelObjectReference getPTocRepositoryRef() {
+	public FlexoModelObjectReference getPtocRepositoryRef() {
 		return ptocRepositoryRef;
 	}
 
-	public void setPTocRepositoryRef(FlexoModelObjectReference<PTOCRepository> tocRepositoryRef) {
+	public void setPtocRepositoryRef(FlexoModelObjectReference<PTOCRepository> tocRepositoryRef) {
 		this.ptocRepositoryRef = tocRepositoryRef;
 	}
 	
