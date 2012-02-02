@@ -35,6 +35,7 @@
         <module>flexodesktop</module>
         <module>flexoserver</module>
         <module>packaging</module>
+        <module>testsupport</module>
     </modules>
     <ciManagement>
         <system>Jenkins</system>

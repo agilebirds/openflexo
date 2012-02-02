@@ -48,7 +48,7 @@ public abstract class FlexoResourceUpdateHandler implements ResourceUpdateHandle
 		UpdateFromDisk, Ignore
 	}
 
-	public abstract void reloadProject(FlexoStorageResource fileResource) throws FlexoException;
+	public abstract void reloadProject(FlexoStorageResource fileResource) throws FlexoException ;
 
 	protected abstract OptionWhenStorageResourceFoundAsConflicting getOptionWhenStorageResourceFoundAsConflicting(
 			FlexoStorageResource resource);

@@ -14,7 +14,7 @@
 		<module>flexobuild</module>
 		<module>exec</module>
 		<module>server</module>
-	</modules>
+    </modules>
 	<build>
 		<pluginManagement>
 			<plugins>

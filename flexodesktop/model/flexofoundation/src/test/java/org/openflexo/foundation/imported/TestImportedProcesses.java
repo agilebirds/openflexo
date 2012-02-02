@@ -202,20 +202,18 @@ public class TestImportedProcesses extends FlexoTestCase {
 	public TestImportedProcesses() {
 		super("Test imported processes");
 	}
-
-	public TestImportedProcesses(String s) {
+     public TestImportedProcesses(String s) {
 		super(s);
 	}
-
-	public static Test suite() {
+    public static Test suite() {
 		final TestSuite suite = new TestSuite("TestSuite for TestCG2");
 		suite.addTest(new TestImportedProcesses("test0CreateImportedProcessLibrary"));
 		suite.addTest(new TestImportedProcesses("test1ImportProcesses"));
 		suite.addTest(new TestImportedProcesses("test2RefreshImportedProcesses"));
-		suite.addTest(new TestImportedProcesses("test3ConvertProcessesIntoLocalProcesses"));
-		suite.addTest(new TestImportedProcesses("test4TestProcessHierarchyChanges"));
-		suite.addTest(new TestImportedProcesses("test5TestProcessHierarchyChanges"));
-		suite.addTest(new TestImportedProcesses("test6TestProcessHierarchyChanges"));
+        suite.addTest(new TestImportedProcesses("test3ConvertProcessesIntoLocalProcesses"));
+        suite.addTest(new TestImportedProcesses("test4TestProcessHierarchyChanges"));
+        suite.addTest(new TestImportedProcesses("test5TestProcessHierarchyChanges"));
+        suite.addTest(new TestImportedProcesses("test6TestProcessHierarchyChanges"));
 		return suite;
 	}
 
