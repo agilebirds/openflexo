@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -44,6 +45,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -686,6 +688,8 @@ public class FIBEditor implements FIBGenericEditor {
 					getInspector().setVisible(true);
 				}
 			});
+			inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? KeyEvent.CTRL_MASK
+					: KeyEvent.META_MASK));
 
 			logsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "logs"));
 			logsItem.addActionListener(new ActionListener() {
