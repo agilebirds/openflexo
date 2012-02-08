@@ -34,8 +34,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.Map;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -397,6 +401,10 @@ public class FileUtils {
 	}
 
 	public static int countFilesInDirectory(File directory, boolean recursive) {
+		return countFilesInDirectory(directory, recursive, null);
+	}
+
+	public static int countFilesInDirectory(File directory, boolean recursive, FileFilter fileFilter) {
 		if (!directory.isDirectory() || !directory.exists()) {
 			return -1;
 		}
@@ -404,6 +412,9 @@ public class FileUtils {
 		int count = 0;
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];
+			if (fileFilter != null && !fileFilter.accept(file)) {
+				continue;
+			}
 			if (file.isDirectory()) {
 				if (recursive) {
 					count += countFilesInDirectory(file, recursive);
@@ -855,6 +866,50 @@ public class FileUtils {
 			out.write(buffer, 0, read);
 		}
 		out.flush();
+	}
+
+	public static String createOrUpdateFileFromURL(URL url, File file) {
+		return createOrUpdateFileFromURL(url, file, null);
+	}
+
+	public static String createOrUpdateFileFromURL(URL url, File file, Map<String, String> headers) {
+		long lastModified = 0;
+		String fileContent = null;
+		if (file.exists()) {
+			lastModified = file.lastModified();
+			try {
+				fileContent = FileUtils.fileContents(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (url != null) {
+			try {
+				URLConnection c = url.openConnection();
+				if (headers != null) {
+					for (Map.Entry<String, String> h : headers.entrySet()) {
+						c.addRequestProperty(h.getKey(), h.getValue());
+					}
+				}
+				if (c instanceof HttpURLConnection) {
+					HttpURLConnection connection = (HttpURLConnection) c;
+					connection.setIfModifiedSince(lastModified);
+					connection.connect();
+					if (connection.getResponseCode() == 200) {
+						fileContent = FileUtils.fileContents(connection.getInputStream(), "UTF-8");
+						FileUtils.saveToFile(file, fileContent);
+					}
+				} else {
+					if (c.getDate() == 0 || c.getDate() > lastModified) {
+						fileContent = FileUtils.fileContents(c.getInputStream(), "UTF-8");
+						FileUtils.saveToFile(file, fileContent);
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return fileContent;
 	}
 
 }

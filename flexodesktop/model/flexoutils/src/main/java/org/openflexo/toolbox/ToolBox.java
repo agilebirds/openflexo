@@ -36,8 +36,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -979,7 +981,7 @@ public class ToolBox {
 	 * @return
 	 */
 	public static Frame getFrame(Frame owner) {
-		return owner == null ? (Frame.getFrames().length > 0 ? Frame.getFrames()[0] : JOptionPane.getRootFrame()) : owner;
+		return owner == null ? Frame.getFrames().length > 0 ? Frame.getFrames()[0] : JOptionPane.getRootFrame() : owner;
 	}
 
 	public static String getMd5Hash(String toHash) throws NoSuchAlgorithmException {
@@ -1052,4 +1054,33 @@ public class ToolBox {
 		return sb.toString();
 	}
 
+	public static String getSystemProperties() {
+		StringBuilder sb = new StringBuilder();
+		Iterator<Object> i = new TreeMap<Object, Object>(System.getProperties()).keySet().iterator();
+		while (i.hasNext()) {
+			String key = (String) i.next();
+			if ("line.separator".equals(key)) {
+				String nl = System.getProperty(key);
+				nl = nl.replace("\r", "\\r");
+				nl = nl.replace("\n", "\\n");
+				sb.append(key).append(" = ").append(nl).append('\n');
+			} else {
+				sb.append(key).append(" = ").append(System.getProperty(key)).append('\n');
+			}
+		}
+		return sb.toString();
+	}
+
+	public static String getStackTraceAsString(Throwable t) {
+		if (t == null) {
+			return null;
+		}
+		StringBuilder returned = new StringBuilder();
+		if (t.getStackTrace() != null) {
+			for (StackTraceElement ste : t.getStackTrace()) {
+				returned.append("\tat ").append(ste).append("\n");
+			}
+		}
+		return returned.toString();
+	}
 }
