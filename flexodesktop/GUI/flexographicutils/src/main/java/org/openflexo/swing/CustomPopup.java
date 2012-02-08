@@ -450,7 +450,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 					if (e.getOppositeWindow() != _popup) {
 						if (_popup.isChildOf(e.getOppositeWindow())) {
 							CustomPopup.CustomJPopupMenu w = _popup;
-							while (w != e.getOppositeWindow()) {
+							while (w != null && w != e.getOppositeWindow()) {
 								w.getCustomPopup().pointerLeavesPopup();
 								w = w.getParentPopupMenu();
 							}

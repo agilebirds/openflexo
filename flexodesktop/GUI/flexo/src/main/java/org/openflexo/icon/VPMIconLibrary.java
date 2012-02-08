@@ -133,22 +133,26 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof PaletteElementPatternParameter) {
 			return EDITION_PATTERN_PARAMETER_ICON;
 		} else if (object instanceof FlexoModelObjectPatternRole) {
-			switch (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType()) {
-			case Process:
-				return WKFIconLibrary.PROCESS_ICON;
-			case ProcessFolder:
-				return WKFIconLibrary.PROCESS_FOLDER_ICON;
-			case Role:
-				return WKFIconLibrary.ROLE_ICON;
-			case Activity:
-				return WKFIconLibrary.ACTIVITY_NODE_ICON;
-			case Operation:
-				return WKFIconLibrary.OPERATION_NODE_ICON;
-			case Action:
-				return WKFIconLibrary.ACTION_NODE_ICON;
-			case Event:
-				return WKFIconLibrary.EVENT_ICON;
-			default:
+			if (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType() != null) {
+				switch (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType()) {
+				case Process:
+					return WKFIconLibrary.PROCESS_ICON;
+				case ProcessFolder:
+					return WKFIconLibrary.PROCESS_FOLDER_ICON;
+				case Role:
+					return WKFIconLibrary.ROLE_ICON;
+				case Activity:
+					return WKFIconLibrary.ACTIVITY_NODE_ICON;
+				case Operation:
+					return WKFIconLibrary.OPERATION_NODE_ICON;
+				case Action:
+					return WKFIconLibrary.ACTION_NODE_ICON;
+				case Event:
+					return WKFIconLibrary.EVENT_ICON;
+				default:
+					return null;
+				}
+			} else {
 				return null;
 			}
 		} else if (object instanceof ConnectorPatternRole) {

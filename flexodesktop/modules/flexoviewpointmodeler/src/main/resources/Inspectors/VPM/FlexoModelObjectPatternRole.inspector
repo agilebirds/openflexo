@@ -3,8 +3,8 @@
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="flexo_model_object_type" localize="true" name="FlexoModelObjectTypeLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" visible="(data.type = &quot;FlexoModelObject&quot;)" />
-      <DropDown localize="true" name="FlexoModelObjectType" data="data.flexoModelObjectType" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" visible="(data.type = &quot;FlexoModelObject&quot;)" width="150" iteratorClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole$FlexoModelObjectType" />
+      <Label label="flexo_model_object_type" localize="true" name="FlexoModelObjectTypeLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(data.type = &quot;FlexoModelObject&quot;)" />
+      <DropDown localize="true" name="FlexoModelObjectType" data="data.flexoModelObjectType" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" visible="(data.type = &quot;FlexoModelObject&quot;)" width="150" iteratorClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole$FlexoModelObjectType" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
