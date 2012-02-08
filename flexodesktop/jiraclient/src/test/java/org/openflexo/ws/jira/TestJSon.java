@@ -56,7 +56,7 @@ public class TestJSon extends TestCase {
 		System.err.println("Sending one file");
 		client.attachFilesToIssue(issue, new File("D:\\My Documents\\Mes images\\2011-09-08\\005.JPG"));
 		System.err.println("Sending two files");
-		client.attachFilesToIssue(issue, new File("D:\\My Documents\\AVR130 Eng user manual.pdf"), new File(
+		client.attachFilesToIssue(issue, null, new File("D:\\My Documents\\AVR130 Eng user manual.pdf"), new File(
 				"C:\\Users\\Public\\Pictures\\Sample Pictures\\Penguins.jpg"));
 	}
 
