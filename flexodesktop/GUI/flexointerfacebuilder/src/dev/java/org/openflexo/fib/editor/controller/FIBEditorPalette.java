@@ -59,7 +59,7 @@ public class FIBEditorPalette extends JDialog {
 
 	//public FIBEditorController controller;
 
-	public DragSourceContext dragSourceContext;
+	private DragSourceContext dragSourceContext;
 
 	public FIBEditorPalette(JFrame frame)
 	{
@@ -109,6 +109,14 @@ public class FIBEditorPalette extends JDialog {
 	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, FIBEditorController controller)
 	{
 		return new PaletteDropListener(this, dropContainer,controller);
+	}
+
+	public DragSourceContext getDragSourceContext() {
+		return dragSourceContext;
+	}
+
+	public void setDragSourceContext(DragSourceContext dragSourceContext) {
+		this.dragSourceContext = dragSourceContext;
 	}
 
 

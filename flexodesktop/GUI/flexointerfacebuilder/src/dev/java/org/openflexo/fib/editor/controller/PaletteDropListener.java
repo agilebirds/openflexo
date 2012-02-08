@@ -141,7 +141,7 @@ public class PaletteDropListener implements DropTargetListener {
 	public void dragEnter(DropTargetDragEvent e) {
 		if (e.getSource() instanceof FIBDropTarget) {
 			FIBDropTarget dt = (FIBDropTarget) e.getSource();
-			PaletteElementDrag drag = (PaletteElementDrag) _fibEditorPalette.dragSourceContext
+			PaletteElementDrag drag = (PaletteElementDrag) _fibEditorPalette.getDragSourceContext()
 					.getTransferable();
 			drag.setController(dt.getFIBEditorController());
 			drag.enterComponent(dt.getFIBComponent(), dt.getPlaceHolder(), e.getLocation());
@@ -166,18 +166,18 @@ public class PaletteDropListener implements DropTargetListener {
 		 * (e,_controller.getDrawingView().getActivePalette().getPaletteView());
 		 */
 		if (!isDragOk(e)) {
-			if (_fibEditorPalette.dragSourceContext == null) {
+			if (_fibEditorPalette.getDragSourceContext() == null) {
 				logger.warning("dragSourceContext should NOT be null ");
 			} else {
-				_fibEditorPalette.dragSourceContext.setCursor(FIBEditorPalette.dropKO);
+				_fibEditorPalette.getDragSourceContext().setCursor(FIBEditorPalette.dropKO);
 			}
 			e.rejectDrag();
 			return;
 		}
-		if (_fibEditorPalette.dragSourceContext == null) {
+		if (_fibEditorPalette.getDragSourceContext() == null) {
 			logger.warning("dragSourceContext should NOT be null");
 		} else {
-			_fibEditorPalette.dragSourceContext.setCursor(FIBEditorPalette.dropOK);
+			_fibEditorPalette.getDragSourceContext().setCursor(FIBEditorPalette.dropOK);
 		}
 		e.acceptDrag(e.getDropAction());
 	}
@@ -193,7 +193,7 @@ public class PaletteDropListener implements DropTargetListener {
 	public void dragExit(DropTargetEvent e) {
 		if (e.getSource() instanceof FIBDropTarget) {
 			FIBDropTarget dt = (FIBDropTarget) e.getSource();
-			PaletteElementDrag drag = (PaletteElementDrag) _fibEditorPalette.dragSourceContext
+			PaletteElementDrag drag = (PaletteElementDrag) _fibEditorPalette.getDragSourceContext()
 					.getTransferable();
 			// System.out.println("dragExit() from "+dt+" focused="+drag.getCurrentlyFocusedComponent()+
 			// " isPlaceHolder="+dt.isPlaceHolder());
