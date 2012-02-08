@@ -20,7 +20,9 @@
 package org.openflexo;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
@@ -32,6 +34,7 @@ import java.net.ProxySelector;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.net.URL;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,6 +57,7 @@ import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
+import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.properties.FlexoProperties;
 import org.openflexo.ssl.DenaliSecurityProvider;
 import org.openflexo.toolbox.ResourceLocator;
@@ -72,6 +76,10 @@ public class Flexo {
 	private static final Logger logger = Logger.getLogger(Flexo.class.getPackage().getName());
 
 	public static boolean isDev = false;
+
+	private static File outLogFile;
+
+	private static File errLogFile;
 
 	private static String getResourcePath() {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -138,9 +146,7 @@ public class Flexo {
 			getResourcePath();
 		}
 
-		if (!isDev) {
-			remapStandardOuputs();
-		}
+		remapStandardOuputs(isDev);
 		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		try {
 			DenaliSecurityProvider.insertSecurityProvider();
@@ -154,8 +160,9 @@ public class Flexo {
 		if (ToolBox.getFrame(null) != null) {
 			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
 		}
+		SplashWindow splashWindow = null;
 		if (!noSplash) {
-			new SplashWindow(null, userTypeNamed, 10000);
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed, 10000);
 		}
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
@@ -179,7 +186,7 @@ public class Flexo {
 			logger.info("Launching FLEXO Application Suite version " + FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + "...");
 		}
 		getFlexoResourceCenterService().getFlexoResourceCenter();
-
+		final SplashWindow splashWindow2 = splashWindow;
 		SwingUtilities.invokeLater(new Runnable() {
 			/**
 			 * Overrides run
@@ -188,6 +195,8 @@ public class Flexo {
 			 */
 			@Override
 			public void run() {
+				splashWindow2.setVisible(false);
+				splashWindow2.dispose();
 				if (getModuleLoader().fileNameToOpen == null) {
 					new WelcomeDialog();
 				} else {
@@ -293,10 +302,10 @@ public class Flexo {
 	/**
 	 *
 	 */
-	private static void remapStandardOuputs() {
+	private static void remapStandardOuputs(boolean outputToConsole) {
 		try {
 			// First let's see if we will be able to write into the log directory
-			File outputDir = new File(System.getProperty("user.home") + "/Library/Logs/Flexo");
+			File outputDir = FlexoPreferences.getLogDirectory();
 			if (!outputDir.exists()) {
 				outputDir.mkdirs();
 			}
@@ -310,95 +319,103 @@ public class Flexo {
 					logger.severe("Can not write to " + outputDir.getAbsolutePath() + " because access is denied by the file system");
 				}
 			}
-			String outString = System.getProperty("user.home") + "/Library/Logs/Flexo/Flexo.out";
-			String errString = System.getProperty("user.home") + "/Library/Logs/Flexo/Flexo.err";
+			String outString = outputDir.getAbsolutePath() + "/Flexo.out";
+			String errString = outputDir.getAbsolutePath() + "/Flexo.err";
 
-			// Let's try to remap the standard output
-			int attempt = 0;
-			File out = null;
-			while (out == null && attempt < 100) {
-				// Get a file channel for the file
-				File file = new File(outString + (attempt == 0 ? "" : "." + attempt) + ".log");
-				File lock = new File(outString + (attempt == 0 ? "" : "." + attempt) + ".log.lck");
-				if (!file.exists()) {
-					try {
-						boolean done = file.createNewFile();
-						if (done) {
-							out = file;
-						}
-					} catch (RuntimeException e1) {
-						e1.printStackTrace();
-					}
-				}
-				if (!file.canWrite()) {
-					out = null;
-					attempt++;
-					continue;
-				}
-				if (lock.exists()) {
-					out = null;
-					attempt++;
-					continue;
-				} else {
-					try {
-						lock.createNewFile();
-						lock.deleteOnExit();
-					} catch (RuntimeException e) {
-						e.printStackTrace();
-					}
-				}
-				out = file;
-				attempt++;
-			}
-			if (out != null) {
-				System.setOut(new PrintStream(out));
+			outLogFile = getOutputFile(outString);
+			if (outLogFile != null) {
+				System.setOut(new PrintStream(new DoublePrintStream(new PrintStream(outLogFile), System.out)));
 			}
 
-			// Let's try to remap the standard error
-			attempt = 0;
-			File err = null;
-			while (err == null && attempt < 100) {
-				// Get a file channel for the file
-				File file = new File(errString + (attempt == 0 ? "" : "." + attempt) + ".log");
-				File lock = new File(errString + (attempt == 0 ? "" : "." + attempt) + ".log.lck");
-				if (!file.exists()) {
-					try {
-						boolean done = file.createNewFile();
-						if (done) {
-							err = file;
-						}
-					} catch (RuntimeException e1) {
-						e1.printStackTrace();
-					}
-				}
-				if (!file.canWrite()) {
-					err = null;
-					attempt++;
-					continue;
-				}
-				if (lock.exists()) {
-					err = null;
-					attempt++;
-					continue;
-				} else {
-					try {
-						lock.createNewFile();
-						lock.deleteOnExit();
-					} catch (RuntimeException e) {
-						e.printStackTrace();
-					}
-				}
-				err = file;
-				attempt++;
-			}
-			if (err != null) {
-				System.setErr(new PrintStream(err));
+			errLogFile = getOutputFile(errString);
+			if (errLogFile != null) {
+				System.setErr(new PrintStream(new DoublePrintStream(new PrintStream(errLogFile), System.err)));
 			}
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
+	}
+
+	public static File getErrLogFile() {
+		return errLogFile;
+	}
+
+	public static File getOutLogFile() {
+		return outLogFile;
+	}
+
+	private static class DoublePrintStream extends OutputStream {
+
+		private final PrintStream ps1;
+		private final PrintStream ps2;
+
+		public DoublePrintStream(PrintStream ps1, PrintStream ps2) {
+			this.ps1 = ps1;
+			this.ps2 = ps2;
+		}
+
+		@Override
+		public void write(int b) throws IOException {
+			ps1.print((char) b);
+			ps2.print((char) b);
+		}
+
+	}
+
+	private static File getOutputFile(String outString) throws IOException {
+		int attempt = 0;
+		File out = null;
+		while (out == null && attempt < 100) {
+			// Get a file channel for the file
+			File file = new File(outString + (attempt == 0 ? "" : "." + attempt) + ".log");
+			File lock = new File(outString + (attempt == 0 ? "" : "." + attempt) + ".log.lck");
+			if (!file.exists()) {
+				try {
+					boolean done = file.createNewFile();
+					if (done) {
+						out = file;
+					}
+				} catch (RuntimeException e1) {
+					e1.printStackTrace();
+				}
+			}
+			if (!file.canWrite()) {
+				out = null;
+				attempt++;
+				continue;
+			}
+			if (lock.exists()) {
+				lock.delete();
+			}
+			if (lock.exists()) {
+				out = null;
+				attempt++;
+				continue;
+			} else {
+				try {
+					lock.createNewFile();
+					boolean lockAcquired = false;
+					FileOutputStream fos = new FileOutputStream(lock);
+					try {
+						FileLock fileLock = fos.getChannel().lock();
+						lockAcquired = true;
+					} catch (IOException e) {
+					} finally {
+						if (!lockAcquired) {
+							fos.close();
+						}
+					}
+					lock.deleteOnExit();
+				} catch (RuntimeException e) {
+					e.printStackTrace();
+				}
+			}
+			out = file;
+			attempt++;
+		}
+		return out;
 	}
 
 	public static void initializeLoggingManager() {

@@ -1,5 +1,5 @@
 #Dutch
-#Thu Nov 24 22:41:54 CET 2011
+#Tue Feb 07 15:14:28 CET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -1130,6 +1130,8 @@ browserFont=Browser Font
 browser_font=Browser Font
 browser_widget=Browser widget
 bugReportDirectActionUrl=BugReport Application Url
+bug_report_password=bug_report_password
+bug_report_user=bug_report_user
 bug_reporting=Bug reporting
 bug_reports_editor=Bug reports editor
 bug_reports_viewer=Bug reports viewer

@@ -108,6 +108,8 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY = "localResourceCenterDirectory";
 
+	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY2 = "localResourceCenterDirectory2";
+
 	private static final FlexoObserver observer = new FlexoObserver() {
 
 		@Override
@@ -164,7 +166,7 @@ public final class GeneralPreferences extends ContextPreferences {
 		FlexoLocalization.setCurrentLanguage(language);
 		updateModuleFrameTitles();
 		FlexoLocalization.updateGUILocalized();
-		if ((language != null) && (UserType.getCurrentUserType() != null)) {
+		if (language != null && UserType.getCurrentUserType() != null) {
 			FlexoHelp.configure(language.getIdentifier(), UserType.getCurrentUserType().getIdentifier());
 			FlexoHelp.reloadHelpSet();
 		}
@@ -575,11 +577,14 @@ public final class GeneralPreferences extends ContextPreferences {
 	}
 
 	public static File getLocalResourceCenterDirectory() {
-		return getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY);
+		File file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2);
+		if (file == null) {
+			file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY);
+		}
+		return file;
 	}
 
 	public static void setLocalResourceCenterDirectory(File directory) {
-		getPreferences().setDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY, directory);
+		getPreferences().setDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2, directory);
 	}
-
 }

@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <tab layout="DEFAULT">
+    <property name="bugReportUrl" label="bugReportDirectActionUrl" widget="TEXT_FIELD" constraint="1">
+        <param name="validateOnReturn" value="true"/>
+    </property>
+    <property name="bugReportUser" label="bug_report_user" widget="TEXT_FIELD" constraint="2">
+        <param name="validateOnReturn" value="true"/>
+    </property>
+    <property name="bugReportPassword" label="bug_report_password" widget="TEXT_FIELD" constraint="3">
+        <param name="validateOnReturn" value="true"/>
+        <param name="password" value="true"/>
+    </property>
+
 	<property name="browserFont" label="browser_font" widget="FONT" constraint="4"/>
 	<property name="synchronizedBrowser" label="synchronized_browser" widget="CHECKBOX" constraint="5">
 		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
@@ -53,9 +64,6 @@
 	<property name="proxyPassword" label="proxy_password" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="22">
 	   <param name="validateOnReturn" value="true"/>
 	   <param name="password" value="true"/>
-	</property>
-	<property name="bugReportDirectActionUrl" label="bugReportDirectActionUrl" widget="TEXT_FIELD" constraint="1">
-		<param name="validateOnReturn" value="true"/>
 	</property>
 	<property name="webServiceUrl" label="web_service_url" widget="TEXT_FIELD" constraint="23">
 	   <param name="validateOnReturn" value="true"/>

@@ -21,7 +21,6 @@ package org.openflexo;
 
 import java.awt.Font;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +28,6 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.apache.axis.encoding.Base64;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.AutoSaveService;
@@ -40,13 +38,10 @@ import org.openflexo.swing.CustomPopup;
 import org.openflexo.swing.LookAndFeel;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ProxyUtils;
-import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.UndoManager;
 
 public class AdvancedPrefs extends ContextPreferences {
-
-	private static final String CHEESE = "l@iUh%gvwe@#{8ç]74562";
 
 	private static final Logger logger = Logger.getLogger(GeneralPreferences.class.getPackage().getName());
 
@@ -58,7 +53,9 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	protected static final String BROWSERFONT_KEY = "browser_font";
 
-	protected static final String BUG_REPORT_URL_KEY = "openFlexoBugReportURL";
+	protected static final String BUG_REPORT_URL_KEY = "bug_report_url";
+	protected static final String BUG_REPORT_USER = "bug_report_user";
+	protected static final String BUG_REPORT_PASWORD = "bug_report_password";
 
 	protected static final String WEB_SERVICE_INSTANCE = "webServiceInstance";
 	protected static final String WEB_SERVICE_URL_KEY = "webServiceUrl";
@@ -128,17 +125,36 @@ public class AdvancedPrefs extends ContextPreferences {
 		getPreferences().setDirectoryProperty(ECLIPSE_WORKSPACE_DIRECTORY_KEY, f, true);
 	}
 
-	public static String getBugReportDirectActionUrl() {
+	public static String getBugReportUrl() {
 		String answer = getPreferences().getProperty(BUG_REPORT_URL_KEY);
-		if (answer == null || answer.equals(String.valueOf(Boolean.TRUE))) {
-			setBugReportDirectActionUrl("https://support.openflexo.com/DLPM/WebObjects/DLPM.woa/wa/DirectReportDA/importFlexoBR");
-			return getBugReportDirectActionUrl();
+		if (answer == null) {
+			setBugReportUrl(answer = "https://bugs.openflexo.com");
 		}
 		return answer;
 	}
 
-	public static void setBugReportDirectActionUrl(String hasWebobjects) {
-		getPreferences().setProperty(BUG_REPORT_URL_KEY, hasWebobjects);
+	public static void setBugReportUrl(String bugReportURL) {
+		getPreferences().setProperty(BUG_REPORT_URL_KEY, bugReportURL);
+	}
+
+	public static String getBugReportPassword() {
+		String answer = getPreferences().getPasswordProperty(BUG_REPORT_PASWORD);
+		if (answer == null) {
+			setBugReportUrl(answer = "https://bugs.openflexo.com");
+		}
+		return answer;
+	}
+
+	public static void setBugReportPassword(String password) {
+		getPreferences().setPasswordProperty(BUG_REPORT_PASWORD, password);
+	}
+
+	public static String getBugReportUser() {
+		return getPreferences().getProperty(BUG_REPORT_USER);
+	}
+
+	public static void setBugReportUser(String user) {
+		getPreferences().setProperty(BUG_REPORT_USER, user);
 	}
 
 	public static boolean getSynchronizedBrowser() {
@@ -562,33 +578,11 @@ public class AdvancedPrefs extends ContextPreferences {
 	}
 
 	public static String getProxyPassword() {
-		String base64 = getPreferences().getProperty(PROXY_PASSWORD);
-		if (base64 != null) {
-			try {
-				String decoded = StringUtils.circularOffset(StringUtils.reverse(new String(Base64.decode(base64), "UTF-8")), -2);
-				if (decoded.length() < CHEESE.length()) {
-					return "";
-				}
-				return decoded.substring(CHEESE.length());
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return base64;
-			}
-		} else {
-			return null;
-		}
+		return getPreferences().getPasswordProperty(PROXY_PASSWORD);
 	}
 
 	public static void setProxyPassword(String proxyPassword) {
-		if (proxyPassword != null) {
-			try {
-				proxyPassword = new String(Base64.encode(StringUtils.reverse(StringUtils.circularOffset(CHEESE + proxyPassword, 2))
-						.getBytes("UTF-8")));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
-		getPreferences().setProperty(PROXY_PASSWORD, proxyPassword);
+		getPreferences().setPasswordProperty(PROXY_PASSWORD, proxyPassword);
 		applyProxySettings();
 	}
 

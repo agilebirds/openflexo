@@ -1,5 +1,5 @@
 #French
-#Thu Nov 24 22:41:54 CET 2011
+#Tue Feb 07 15:14:28 CET 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -1129,6 +1129,8 @@ browserFont=Police du navigateur
 browser_font=Police de l'arborescence
 browser_widget=El\u00E9ment graphique de s\u00E9lection multiple
 bugReportDirectActionUrl=Url de BugReporting
+bug_report_password=bug_report_password
+bug_report_user=bug_report_user
 bug_reporting=Edition d'un rapport d'anomalie
 bug_reports_editor=Editeur de rapports d'anomalie
 bug_reports_viewer=Editeur de rapports d'anomalie

@@ -33,8 +33,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.br.view.BugReportViewerWindow;
-import org.openflexo.br.view.NewBugReport;
+import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.validation.ConsistencyCheckDialog;
 import org.openflexo.drm.DocResourceManager;
@@ -84,8 +83,6 @@ public class ToolsMenu extends FlexoMenu {
 
 	public JMenuItem submitBug;
 
-	public JMenuItem brEditor;
-
 	public JMenuItem repairProject;
 
 	public JMenuItem timeTraveler;
@@ -104,10 +101,7 @@ public class ToolsMenu extends FlexoMenu {
 			addSeparator();
 		}
 		add(submitBug = new SubmitBugItem());
-		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
-			add(brEditor = new BREditorItem());
-		}
-		if ((getModuleLoader().allowsDocSubmission()) && (!getModuleLoader().isAvailable(Module.DRE_MODULE))) {
+		if (getModuleLoader().allowsDocSubmission() && !getModuleLoader().isAvailable(Module.DRE_MODULE)) {
 			addSeparator();
 			add(saveDocSubmissions = new SaveDocSubmissionItem());
 		}
@@ -257,40 +251,10 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			NewBugReport.newBugReport(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
+			JIRAIssueReportDialog.newBugReport(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
 		}
 
 	}
-
-	// ==========================================================================
-	// ========================== BugReport Editor
-	// ==============================
-	// ==========================================================================
-
-	public class BREditorItem extends FlexoMenuItem {
-
-		public BREditorItem() {
-			super(new BREditorAction(), "bug_reports_editor", null, getController(), true);
-		}
-
-	}
-
-	public class BREditorAction extends AbstractAction {
-		public BREditorAction() {
-			super();
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			new BugReportViewerWindow();
-		}
-
-	}
-
-	// ==========================================================================
-	// ========================== BugReport Editor
-	// ==============================
-	// ==========================================================================
 
 	public class SaveDocSubmissionItem extends FlexoMenuItem {
 
@@ -322,7 +286,7 @@ public class ToolsMenu extends FlexoMenu {
 				}
 
 			});
-			if ((chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) && (chooser.getSelectedFile() != null)) {
+			if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 				try {
 					File savedFile;
 					if (!chooser.getSelectedFile().getName().endsWith(".dsr")) {
