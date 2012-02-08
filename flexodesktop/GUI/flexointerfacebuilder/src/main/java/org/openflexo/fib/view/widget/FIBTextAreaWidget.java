@@ -19,12 +19,16 @@
  */
 package org.openflexo.fib.view.widget;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -32,6 +36,7 @@ import javax.swing.event.DocumentListener;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.view.FIBWidgetView;
+import org.openflexo.toolbox.ToolBox;
 
 /**
  * Represents a widget able to edit a Text (more than one line) object
@@ -45,52 +50,62 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	private static final int DEFAULT_COLUMNS = 30;
 	private static final int DEFAULT_ROWS = 5;
 
-	private final JTextArea _textArea;
+	private JPanel panel;
+	private final JTextArea textArea;
 	// private final JScrollPane pane;
 	boolean validateOnReturn;
 
 	public FIBTextAreaWidget(FIBTextArea model, FIBController controller) {
 		super(model, controller);
-		_textArea = new JTextArea();
+		textArea = new JTextArea();
+		panel = new JPanel(new BorderLayout());
+		panel.setOpaque(false);
+		panel.add(textArea, BorderLayout.CENTER);
 		validateOnReturn = model.validateOnReturn;
 		if (model.columns != null && model.columns > 0) {
-			_textArea.setColumns(model.columns);
+			textArea.setColumns(model.columns);
 		} else {
-			_textArea.setColumns(DEFAULT_COLUMNS);
+			textArea.setColumns(DEFAULT_COLUMNS);
 		}
 		if (model.rows != null && model.rows > 0) {
-			_textArea.setRows(model.rows);
+			textArea.setRows(model.rows);
 		} else {
-			_textArea.setRows(DEFAULT_ROWS);
+			textArea.setRows(DEFAULT_ROWS);
 		}
-		_textArea.setEditable(!isReadOnly());
-		if (model.text != null) {
-			_textArea.setText(model.text);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			panel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
+					RIGHT_COMPENSATING_BORDER));
+			textArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
 		}
 
-		_textArea.getDocument().addDocumentListener(new DocumentListener() {
+		textArea.setEditable(!isReadOnly());
+		if (model.text != null) {
+			textArea.setText(model.text);
+		}
+
+		textArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 		});
-		_textArea.addKeyListener(new KeyAdapter() {
+		textArea.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -98,12 +113,12 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 				}
 			}
 		});
-		_textArea.addFocusListener(this);
+		textArea.addFocusListener(this);
 
-		_textArea.setAutoscrolls(true);
-		_textArea.setLineWrap(true);
-		_textArea.setWrapStyleWord(true);
-		_textArea.setEnabled(true);
+		textArea.setAutoscrolls(true);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setEnabled(true);
 		/*pane = new JScrollPane(_textArea);
 		
 		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -117,26 +132,26 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	@Override
 	public void focusGained(FocusEvent event) {
 		super.focusGained(event);
-		_textArea.selectAll();
+		textArea.selectAll();
 	}
 
 	@Override
 	public void updateDataObject(Object aDataObject) {
 		super.updateDataObject(aDataObject);
-		_textArea.setEditable(!isReadOnly());
+		textArea.setEditable(!isReadOnly());
 	}
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (notEquals(getValue(), _textArea.getText())) {
+		if (notEquals(getValue(), textArea.getText())) {
 			if (modelUpdating) {
 				return false;
 			}
-			if (getValue() != null && (getValue() + "\n").equals(_textArea.getText())) {
+			if (getValue() != null && (getValue() + "\n").equals(textArea.getText())) {
 				return false;
 			}
 			widgetUpdating = true;
-			_textArea.setText(getValue());
+			textArea.setText(getValue());
 			widgetUpdating = false;
 			return true;
 		}
@@ -148,12 +163,12 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), _textArea.getText())) {
+		if (notEquals(getValue(), textArea.getText())) {
 			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget() in TextAreaWidget");
 			}
-			setValue(_textArea.getText());
+			setValue(textArea.getText());
 			modelUpdating = false;
 			return true;
 		}
@@ -161,20 +176,20 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	}
 
 	@Override
-	public JTextArea getJComponent() {
-		return _textArea;
+	public JPanel getJComponent() {
+		return panel;
 	}
 
 	@Override
 	public JTextArea getDynamicJComponent() {
-		return _textArea;
+		return textArea;
 	}
 
 	@Override
 	public void updateFont() {
 		super.updateFont();
 		if (getFont() != null) {
-			_textArea.setFont(getFont());
+			textArea.setFont(getFont());
 		}
 	}
 }
