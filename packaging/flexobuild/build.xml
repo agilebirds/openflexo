@@ -239,10 +239,10 @@
 	<target name="linux-packaging">
 		<tar destfile="${project.build.directory}/${product.name} ${productSuffix} ${flexo_version}.tar.gz" longfile="gnu" compression="gzip" basedir="${dist.dir}">
 			<exclude name="*.exe"/>
-			<tarfileset mode="755">
+			<tarfileset mode="755" dir="${dist.dir}">
 				<include name="*.sh"/>
 			</tarfileset>
-			<tarfileset>
+			<tarfileset dir="${dist.dir}">
 				<exclude name="*.sh"/>
 			</tarfileset>
 		</tar>
