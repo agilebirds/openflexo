@@ -655,7 +655,16 @@ public class ToolBox {
 	public static void openURL(String url) {
 		StringBuilder sb = new StringBuilder();
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-			String command = WindowsCommandRetriever.commandForExtension(".html");
+			String command = null;
+			String urlLC = url.toLowerCase();
+			if (urlLC.startsWith("https")) {
+				command = WindowsCommandRetriever.getCommandForFileType("https");
+			} else if (urlLC.startsWith("http")) {
+				command = WindowsCommandRetriever.getCommandForFileType("http");
+			}
+			if (command == null) {
+				command = WindowsCommandRetriever.commandForExtension(".html");
+			}
 			if (command.indexOf("%1") > -1) {
 				sb.append(command.substring(0, command.indexOf("%1")));
 				sb.append(url);
