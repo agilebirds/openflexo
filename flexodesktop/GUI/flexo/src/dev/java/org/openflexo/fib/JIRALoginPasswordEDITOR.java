@@ -17,31 +17,30 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.br.view;
+package org.openflexo.fib;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.File;
 
-import org.openflexo.Flexo;
-import org.openflexo.application.FlexoApplication;
+import org.openflexo.br.view.JIRAURLCredentialsDialog;
+import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.module.UserType;
 
-/**
- * Utility class allowing to launch a small application used to visualize bug reports of Flexo
- * 
- * @author sguerin
- */
-public class BugReportEditor {
-
-	private static final Logger logger = Logger.getLogger(BugReportEditor.class.getPackage().getName());
+public class JIRALoginPasswordEDITOR {
 
 	public static void main(String[] args) {
+		UserType.setCurrentUserType(UserType.MAINTAINER);
+		FIBAbstractEditor editor = new FIBAbstractEditor() {
+			@Override
+			public Object[] getData() {
+				JIRAURLCredentialsDialog o = new JIRAURLCredentialsDialog();
+				return FIBAbstractEditor.makeArray(o);
+			}
 
-		Flexo.initializeLoggingManager();
-		FlexoApplication.initialize();
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Starting BugReportsEditor");
-		}
-		BugReportViewerWindow w = new BugReportViewerWindow();
-		w.setVisible(true);
+			@Override
+			public File getFIBFile() {
+				return JIRAURLCredentialsDialog.URL_FIB_FILE;
+			}
+		};
+		editor.launch();
 	}
 }

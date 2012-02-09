@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.view.widget;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +27,8 @@ import java.awt.event.FocusEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -47,58 +50,65 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 
 	private static final int DEFAULT_COLUMNS = 10;
 
-	private JTextField _textField;
+	private JPanel panel;
+	private JTextField textField;
 
 	boolean validateOnReturn;
 
 	public FIBTextFieldWidget(FIBTextField model, FIBController controller) {
 		super(model, controller);
 		if (model.passwd) {
-			_textField = new JPasswordField() {
+			textField = new JPasswordField() {
 				@Override
 				public Dimension getMinimumSize() {
 					return MINIMUM_SIZE;
 				}
 			};
 		} else {
-			_textField = new JTextField() {
+			textField = new JTextField() {
 				@Override
 				public Dimension getMinimumSize() {
 					return MINIMUM_SIZE;
 				}
 			};
 		}
+		panel = new JPanel(new BorderLayout());
+		panel.setOpaque(false);
+		panel.add(textField, BorderLayout.CENTER);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			panel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
+					RIGHT_COMPENSATING_BORDER));
+		}
 
 		if (isReadOnly()) {
-			_textField.setEditable(false);
+			textField.setEditable(false);
 		}
 
 		validateOnReturn = model.validateOnReturn;
 		if (model.columns != null) {
-			_textField.setColumns(model.columns);
+			textField.setColumns(model.columns);
 		} else {
-			_textField.setColumns(DEFAULT_COLUMNS);
+			textField.setColumns(DEFAULT_COLUMNS);
 		}
 
 		if (model.text != null) {
-			_textField.setText(model.text);
+			textField.setText(model.text);
 		}
-
-		_textField.getDocument().addDocumentListener(new DocumentListener() {
+		textField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					try {
 						if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 							if (e.getLength() == 1) {
-								char c = _textField.getText().charAt(e.getOffset());
+								char c = textField.getText().charAt(e.getOffset());
 								if (c == '´' || c == 'ˆ' || c == '˜' || c == '`' || c == '¨') {
 									return;
 								}
@@ -113,18 +123,18 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating)) {
+				if (!validateOnReturn && !widgetUpdating) {
 					updateModelFromWidget();
 				}
 			}
 		});
-		_textField.addActionListener(new ActionListener() {
+		textField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				updateModelFromWidget();
 			}
 		});
-		_textField.addFocusListener(this);
+		textField.addFocusListener(this);
 
 		updateFont();
 	}
@@ -132,7 +142,7 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 	@Override
 	public void focusGained(FocusEvent arg0) {
 		super.focusGained(arg0);
-		_textField.selectAll();
+		textField.selectAll();
 	}
 
 	public Class getDefaultType() {
@@ -141,15 +151,15 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (notEquals(getValue(), _textField.getText())) {
+		if (notEquals(getValue(), textField.getText())) {
 			if (modelUpdating) {
 				return false;
 			}
 			widgetUpdating = true;
-			int caret = _textField.getCaretPosition();
-			_textField.setText(getValue());
-			if (caret > -1 && caret < _textField.getDocument().getLength()) {
-				_textField.setCaretPosition(caret);
+			int caret = textField.getCaretPosition();
+			textField.setText(getValue());
+			if (caret > -1 && caret < textField.getDocument().getLength()) {
+				textField.setCaretPosition(caret);
 			}
 			widgetUpdating = false;
 			return true;
@@ -162,13 +172,13 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), _textField.getText())) {
+		if (notEquals(getValue(), textField.getText())) {
 			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget() in TextFieldWidget");
 			}
 			// logger.info("setValue with "+_textField.getText());
-			setValue(_textField.getText());
+			setValue(textField.getText());
 			modelUpdating = false;
 			return true;
 		}
@@ -176,13 +186,13 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 	}
 
 	@Override
-	public JTextField getJComponent() {
-		return _textField;
+	public JPanel getJComponent() {
+		return panel;
 	}
 
 	@Override
 	public JTextField getDynamicJComponent() {
-		return _textField;
+		return textField;
 	}
 
 }

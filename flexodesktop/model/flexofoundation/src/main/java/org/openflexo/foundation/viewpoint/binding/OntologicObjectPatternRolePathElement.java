@@ -300,25 +300,27 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					// not relevant because not settable
 				}
 			};
-			value = new SimpleBindingPathElementImpl<Object>("value", DataPropertyStatement.class, aPatternRole.getDataProperty()
-					.getDataType().getAccessedType(), false, "object_of_statement") {
-				@Override
-				public Object getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof DataPropertyStatement) {
-						return ((DataPropertyStatement) target).getValue();
-					} else {
-						logger.warning("Unexpected: " + target);
-						return null;
-					}
-				}
-
-				@Override
-				public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
-					// not relevant because not settable
-				}
-			};
 			allProperties.add(predicate);
-			allProperties.add(value);
+			if (aPatternRole.getDataProperty() != null && aPatternRole.getDataProperty().getDataType() != null) {
+				value = new SimpleBindingPathElementImpl<Object>("value", DataPropertyStatement.class, aPatternRole.getDataProperty()
+						.getDataType().getAccessedType(), false, "object_of_statement") {
+					@Override
+					public Object getBindingValue(Object target, BindingEvaluationContext context) {
+						if (target instanceof DataPropertyStatement) {
+							return ((DataPropertyStatement) target).getValue();
+						} else {
+							logger.warning("Unexpected: " + target);
+							return null;
+						}
+					}
+
+					@Override
+					public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
+						// not relevant because not settable
+					}
+				};
+				allProperties.add(value);
+			}
 		}
 
 	}

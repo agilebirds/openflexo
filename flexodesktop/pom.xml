@@ -67,6 +67,7 @@
 		<module>model</module>
 		<module>modules</module>
 		<module>technologymodules</module>
+		<module>jiraclient</module>
 	</modules>
 </project>
 

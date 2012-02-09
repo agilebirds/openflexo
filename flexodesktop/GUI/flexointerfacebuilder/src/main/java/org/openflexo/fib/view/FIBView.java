@@ -42,6 +42,11 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 	private static final Logger logger = Logger.getLogger(FIBView.class.getPackage().getName());
 
+	protected static final int TOP_COMPENSATING_BORDER = 3;
+	protected static final int BOTTOM_COMPENSATING_BORDER = TOP_COMPENSATING_BORDER;
+	protected static final int LEFT_COMPENSATING_BORDER = 5;
+	protected static final int RIGHT_COMPENSATING_BORDER = LEFT_COMPENSATING_BORDER;
+
 	private M component;
 	private FIBController controller;
 	private final FIBComponentDynamicModel dynamicModel;
@@ -363,7 +368,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 			return true;
 		}
 		if (o1 == null) {
-			return (o2 == null);
+			return o2 == null;
 		} else {
 			return o1.equals(o2);
 		}

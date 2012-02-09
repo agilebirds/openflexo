@@ -73,7 +73,7 @@ public class ImportedOntology extends FlexoOntology {
 	@Override
 	public void save() throws SaveResourceException {
 		logger.warning("Imported ontologies are not supposed to be saved !!!");
-		// super.save();
+		super.save();
 	}
 
 }

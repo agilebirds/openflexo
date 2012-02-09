@@ -146,11 +146,12 @@
 	</target>
 
 	<target name="packageWindows">
+		<propertyregex property="normalized_version" input="${flexo_version}" regexp="([0-9]+)\.([0-9]+)\.([0-9]+)" select="\0" defaultvalue="${flexo_version}.0"/>
 		<antcall target="generateFlexoLauncher" />
 		<antcall target="generateInstallerScript" />
 		<antcall target="windowsPackaging" />
 	</target>
-
+	
 	<target name="windowsPackaging">
 		<exec executable="makensis" failonerror="true">
 			<arg value="${flexobuild.work.dir}/flexoinstaller.nsi" />

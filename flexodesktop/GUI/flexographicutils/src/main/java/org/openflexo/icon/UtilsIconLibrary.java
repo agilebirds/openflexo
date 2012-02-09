@@ -17,6 +17,9 @@ public class UtilsIconLibrary {
 	public static final ImageIcon CUSTOM_POPUP_DOWN = new ImageIconResource("Icons/CustomPopupDown.png");
 	public static final ImageIcon CUSTOM_POPUP_DOWN_DISABLED = new ImageIconResource("Icons/CustomPopupDownDisabled.png");
 
+	public static final ImageIcon CUSTOM_POPUP_BUTTON = new ImageIconResource("Icons/CustomPopupButton.png");
+	public static final ImageIcon CUSTOM_POPUP_OPEN_BUTTON = new ImageIconResource("Icons/CustomPopupOpenButton.png");
+
 	public static final ImageIcon ARROW_DOWN = new ImageIconResource("Icons/ArrowDown.gif");
 	public static final ImageIcon ARROW_UP = new ImageIconResource("Icons/ArrowUp.gif");
 	public static final ImageIcon ARROW_LEFT = new ImageIconResource("Icons/ArrowLeft.gif");

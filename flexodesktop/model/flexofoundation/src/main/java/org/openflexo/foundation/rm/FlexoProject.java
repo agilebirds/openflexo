@@ -1743,7 +1743,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			FlexoNavigationMenu.createNewFlexoNavigationMenu(project);
 			DKVModel.createNewDKVModel(project);
 			TOCData tocData = project.getTOCData();
-			tocData.addToRepositories(new TOCRepository(tocData, project.getDocTypes().get(0), null));
+			TOCRepository repository = new TOCRepository(tocData, project.getDocTypes().get(0), null);
+			repository.setTitle(project.getName());
+			tocData.addToRepositories(repository);
 			GeneratedDoc.createNewGeneratedDoc(project);
 			project.initJavaFormatter();
 			importInitialImages(project, editor);

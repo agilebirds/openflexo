@@ -313,7 +313,7 @@ public class PaletteElement
 		public void dragOver(DragSourceDragEvent e)
 		{
 			// interface
-			_palette.dragSourceContext = e.getDragSourceContext();
+			_palette.setDragSourceContext(e.getDragSourceContext());
 			DragSourceContext context = e.getDragSourceContext();
 			//System.out.println("dragOver() with "+context+" component="+e.getSource());
 		}
