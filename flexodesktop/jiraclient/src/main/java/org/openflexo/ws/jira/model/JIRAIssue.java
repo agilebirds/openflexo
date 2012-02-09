@@ -1,9 +1,11 @@
 package org.openflexo.ws.jira.model;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -159,9 +161,10 @@ public class JIRAIssue extends JIRAObject<JIRAIssue> {
 	private String summary;
 	private String description;
 	private IssueType issuetype;
-	private JIRAVersion version;
+	private List<JIRAVersion> versions;
 	private JIRAPriority priority;
 	private List<JIRAComponent> components;
+	private transient boolean membersHaveBeenReplaced;
 
 	public JIRAProject getProject() {
 		return project;
@@ -195,12 +198,28 @@ public class JIRAIssue extends JIRAObject<JIRAIssue> {
 		this.issuetype = issuetype;
 	}
 
+	public List<JIRAVersion> getVersions() {
+		return versions;
+	}
+
+	public void setVersions(List<JIRAVersion> versions) {
+		this.versions = versions;
+	}
+
 	public JIRAVersion getVersion() {
-		return version;
+		if (versions != null && versions.size() > 0) {
+			return versions.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	public void setVersion(JIRAVersion version) {
-		this.version = version;
+		if (version != null) {
+			setVersions(Arrays.asList(version));
+		} else {
+			setVersions(null);
+		}
 	}
 
 	public List<JIRAComponent> getComponents() {
@@ -220,7 +239,11 @@ public class JIRAIssue extends JIRAObject<JIRAIssue> {
 	}
 
 	public void setComponent(JIRAComponent component) {
-		setComponents(Arrays.asList(component));
+		if (component != null) {
+			setComponents(Arrays.asList(component));
+		} else {
+			setComponents(null);
+		}
 	}
 
 	public JIRAPriority getPriority() {
@@ -281,9 +304,14 @@ public class JIRAIssue extends JIRAObject<JIRAIssue> {
 			}
 			klass = klass.getSuperclass();
 		}
+		membersHaveBeenReplaced = true;
 	}
 
 	public <J extends JIRAObject<J>> void replaceMembersByOriginalMembers() {
+		if (!membersHaveBeenReplaced) {
+			return;
+		}
+
 		Class<?> klass = getClass();
 		while (klass != null) {
 			for (Field field : klass.getDeclaredFields()) {
@@ -325,6 +353,39 @@ public class JIRAIssue extends JIRAObject<JIRAIssue> {
 				}
 			}
 			klass = klass.getSuperclass();
+		}
+		membersHaveBeenReplaced = false;
+	}
+
+	public void makeValid() {
+		if (getIssuetype() != null) {
+			Class<?> klass = getClass();
+			while (klass != HashMap.class) {
+				for (Field field : klass.getDeclaredFields()) {
+					if (!getIssuetype().getFields().containsKey(field.getName())) {
+						if (Modifier.isFinal(field.getModifiers()) || Modifier.isStatic(field.getModifiers())
+								|| Modifier.isTransient(field.getModifiers())) {
+							continue;
+						}
+						field.setAccessible(true);
+						try {
+							field.set(this, null);
+						} catch (IllegalArgumentException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IllegalAccessException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				klass = klass.getSuperclass();
+			}
+			for (Map.Entry<String, Object> e : new HashMap<String, Object>(this).entrySet()) {
+				if (!getIssuetype().getFields().containsKey(e.getKey())) {
+					this.remove(e.getKey());
+				}
+			}
 		}
 	}
 

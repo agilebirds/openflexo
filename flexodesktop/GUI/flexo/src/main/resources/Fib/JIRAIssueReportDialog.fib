@@ -21,7 +21,7 @@
     <DropDown format="object.name" localize="true" name="priority" data="data.issue.priority" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.issue.issuetype.priorityField != null)" staticList="" list="data.issue.issuetype.priorityField.allowedValues" iteratorClassName="org.openflexo.ws.jira.model.JIRAPriority" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </DropDown>
-    <Label label="Module" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+    <Label label="Module" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.issue.issuetype.componentField != null)">
       <LocalizedDictionary />
     </Label>
     <DropDown format="object.name" localize="true" name="module" data="data.issue.component" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.issue.issuetype.componentField != null)" staticList="" list="data.availableModules" iteratorClassName="org.openflexo.ws.jira.model.JIRAComponent" autoSelectFirstRow="true">

@@ -67,12 +67,14 @@ public class JIRAClient {
 	public <A extends JIRAAction<R>, R extends JIRAResult> R submit(A submit, Method method, Progress progress) throws IOException {
 		URL url = new URL(jiraBaseURL, REST_API_ROOT + SUBMIT_ISSUE_REST_API);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setChunkedStreamingMode(4096);
 		connection.setDoOutput(true);
 		connection.setRequestMethod(method.name());
 		connection.addRequestProperty(BASIC_AUTH_HEADER, "Basic " + getBase64EncodedAuthentication());
 		connection.addRequestProperty(CONTENT_TYPE_HEADER, "application/json");
 		connection.connect();
 		String json = JIRAGson.getInstance().toJson(submit);
+		System.err.println(json);
 		byte[] bytes = json.getBytes("UTF-8");
 		for (int i = 0; i < bytes.length;) {
 			connection.getOutputStream().write(bytes, i, Math.min(4096, bytes.length - i));
@@ -85,7 +87,12 @@ public class JIRAClient {
 		case 401:
 			throw new UnauthorizedJIRAAccessException();
 		}
-		InputStream is = new BufferedInputStream(connection.getInputStream());
+		InputStream is;
+		if (connection.getResponseCode() > 399) {
+			is = new BufferedInputStream(connection.getErrorStream());
+		} else {
+			is = new BufferedInputStream(connection.getInputStream());
+		}
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			int read = -1;
@@ -93,7 +100,9 @@ public class JIRAClient {
 			while ((read = is.read(b)) > 0) {
 				baos.write(b, 0, read);
 			}
-			return JIRAGson.getInstance().fromJson(new String(baos.toByteArray(), "UTF-8"), submit.getResultClass());
+			String json2 = new String(baos.toByteArray(), "UTF-8");
+			System.err.println(json2);
+			return JIRAGson.getInstance().fromJson(json2, submit.getResultClass());
 		} finally {
 			is.close();
 		}
@@ -114,6 +123,7 @@ public class JIRAClient {
 		}
 		URL url = new URL(jiraBaseURL, REST_API_ROOT + SUBMIT_ISSUE_REST_API + "/" + idOrKey + SUBMIT_ISSUE_ATTACHMENT_REST_API);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setChunkedStreamingMode(4096);
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
 		connection.setRequestMethod(Method.POST.name());
