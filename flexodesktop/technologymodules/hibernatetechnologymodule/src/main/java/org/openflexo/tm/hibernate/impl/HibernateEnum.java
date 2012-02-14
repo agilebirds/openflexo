@@ -11,18 +11,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.InvalidNameException;
-
 import org.apache.commons.lang.StringUtils;
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMProperty;
-import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
-import org.openflexo.foundation.dm.dm.DMEntityNameChanged;
-import org.openflexo.foundation.dm.dm.PropertyRegistered;
-import org.openflexo.foundation.dm.dm.PropertyUnregistered;
-import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.sg.implmodel.metamodel.DerivedAttribute;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.LinkableTechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
@@ -113,7 +105,7 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
      */
     @Override
     public void synchronizeWithLinkedFlexoModelObject() {
-        updateNameIfNecessary();
+        super.synchronizeWithLinkedFlexoModelObject();
         if (getLinkedFlexoModelObject() != null) {
             List<LinkableTechnologyModelObject<?>> deletedChildren = new ArrayList<LinkableTechnologyModelObject<?>>();
 
@@ -219,27 +211,6 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
         deleteObservers();
     }
 
-    /* ============== */
-    /* == Observer == */
-    /* ============== */
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification) {
-        super.update(observable, dataModification);
-        if (observable == getLinkedFlexoModelObject()) {
-            if (dataModification instanceof DMEntityNameChanged) {
-                updateNameIfNecessary();
-            } else if (dataModification instanceof PropertyRegistered) {
-                DMProperty newProperty = (DMProperty) dataModification.newValue();
-                HibernateEnumValue newEnumValue = new HibernateEnumValue(getImplementationModel(), newProperty);
-                addToHibernateEnumValues(newEnumValue);
-            }
-        }
-    }
-
     /* ===================== */
     /* == Getter / Setter == */
     /* ===================== */
@@ -247,28 +218,13 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setLinkedFlexoModelObject(DMEntity linkedFlexoModelObject) {
-        if (linkedFlexoModelObject == null || linkedFlexoModelObject.getIsEnumeration()) {
-            super.setLinkedFlexoModelObject(linkedFlexoModelObject);
-        } else {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, "Cannot set linked object to Hibernate Enum with a non enumeration DM Entity. DM Entity: "
-                        + linkedFlexoModelObject.getName());
-            }
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @DerivedAttribute
     @Override
     public void setName(String name) {
         name = escapeName(name);
 
         if (StringUtils.isEmpty(name)) {
-            name = getDefaultName();
+            name = getDerivedName();
         }
 
         super.setName(name);

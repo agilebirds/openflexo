@@ -1,5 +1,5 @@
 #English
-#Wed Dec 21 17:05:28 CET 2011
+#Mon Jan 09 15:42:51 CET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -2830,6 +2830,8 @@ in_port_name=InPort
 in_service_operation=In service operation
 in_template_repository=In template repository
 inc_type_choice=Version increment
+includeLocalization=include localization
+includeMails=include mails
 include_begin_end=Include begin and end nodes
 include_in_generation=Include in generation
 include_log_records=Includes log records
@@ -3272,6 +3274,7 @@ mark_as_merged_all_trivially_mergable_files_description=All those files are triv
 mark_as_unmerged=Mark as NOT merged
 match=match
 matches_positive_evaluation=Matches positive evaluation
+maven_implementation=maven_implementation
 max=max
 maximum=Maximum
 medium_dashes=Medium dashes

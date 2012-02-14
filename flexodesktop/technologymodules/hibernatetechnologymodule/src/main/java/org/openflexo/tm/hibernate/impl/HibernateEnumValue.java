@@ -67,21 +67,6 @@ public class HibernateEnumValue extends LinkableTechnologyModelObject<DMProperty
         setName(linkedFlexoModelObject.getName());
 	}
 
-
-     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification) {
-        super.update(observable, dataModification);
-        if (observable == getLinkedFlexoModelObject()) {
-            if (dataModification instanceof DMPropertyNameChanged) {
-                updateNameIfNecessary();
-            } else if (dataModification!=null && dataModification.propertyName().equals("description")) {
-                setDescription((String)dataModification.newValue());
-            }
-        }
-    }
 	// =========== //
 	// = Methods = //
 	// =========== //
@@ -110,16 +95,9 @@ public class HibernateEnumValue extends LinkableTechnologyModelObject<DMProperty
 		return getHibernateEnum().getFullyQualifiedName() + "." + getName();
 	}
 
-    @Override
-    public void synchronizeWithLinkedFlexoModelObject() {
-		updateNameIfNecessary();
-        setDescription(getLinkedFlexoModelObject().getDescription());
-	}
-
-    @Override
-    public String getDefaultName() {
-		return getLinkedFlexoModelObject() != null ? escapeName(getLinkedFlexoModelObject().getName()).toUpperCase() : null;
-	}
+    public String getDerivedName() {
+        return getLinkedFlexoModelObject() != null ? escapeName(getLinkedFlexoModelObject().getName().toUpperCase()) : null;
+    }
 	/* ===================== */
 	/* ====== Actions ====== */
 	/* ===================== */

@@ -153,15 +153,6 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void synchronizeWithLinkedFlexoModelObject() {
-		updateDestinationIfNecessary();
-		updateNameIfNecessary();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	protected String escapeName(String name) {
 		return JavaUtils.getVariableName(name);
 	}
@@ -169,6 +160,7 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 	/**
 	 * Update the destination with the linked Flexo Model Object one if necessary.
 	 */
+    //todo ensure this is covered
 	public void updateDestinationIfNecessary() {
 		if (getLinkedFlexoModelObject() != null) {
 			DMProperty dmProperty = getLinkedFlexoModelObject();
@@ -307,11 +299,7 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getLinkedFlexoModelObject()) {
-			if (dataModification instanceof DMPropertyNameChanged) {
-				updateNameIfNecessary();
-			} else if (dataModification instanceof DMAttributeDataModification && "type".equals(dataModification.propertyName())) {
-				updateDestinationIfNecessary();
-			}
+			synchronizeWithLinkedFlexoModelObject();
 		}
 		if (observable == getDestination() && dataModification instanceof SGObjectDeletedModification) {
 			setDestination(null);
@@ -347,7 +335,7 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 		name = escapeName(name);
 
 		if (StringUtils.isEmpty(name)) {
-			name = getDefaultName();
+			name = getDerivedName();
 
 			if (StringUtils.isEmpty(name)) {
 				name = getAutomaticName();

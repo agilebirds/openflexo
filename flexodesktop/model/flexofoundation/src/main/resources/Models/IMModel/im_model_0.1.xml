@@ -44,7 +44,7 @@
    	<entity name="org.openflexo.foundation.sg.implmodel.LinkableTechnologyModelObject" abstract="yes">
     	<description>Abstract definition of an object part of technology module which can be linked to a Flexo Model Object</description>
     	<property name="linkedFlexoModelObjectReference" xmlTag="linkedFlexoModelObject" attribute="yes"/>
-    	<property name="isNameSynchronizedWithLinkedObject" xmlTag="isNameSynchronizedWithLinkedObject" attribute="yes"/>
+        <property name="derivedAttributeSynchronizationStatus" xmlTag="derivedAttributeSynchronizationStatus" type="hashtable" description="Hashtable(String,Boolean) that contains the if the attribute named by key is synchronized of not"/>
    	</entity>
 
    	<!-- ************************************** TODO ****************************************** -->   

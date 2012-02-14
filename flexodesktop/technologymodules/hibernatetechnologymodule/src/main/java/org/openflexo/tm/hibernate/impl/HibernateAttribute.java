@@ -148,16 +148,6 @@ public class HibernateAttribute extends LinkableTechnologyModelObject<DMProperty
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void synchronizeWithLinkedFlexoModelObject() {
-		updateTypeIfNecessary();
-		updateNameIfNecessary();
-		updateColumnNameIfNecessary();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	protected String escapeName(String name) {
 		return JavaUtils.getVariableName(name);
 	}
@@ -186,6 +176,7 @@ public class HibernateAttribute extends LinkableTechnologyModelObject<DMProperty
 	/**
 	 * Update the column name with this object name if necessary.
 	 */
+    //todo ensure this is covered
 	public void updateColumnNameIfNecessary() {
 		if (getIsColumnNameSynchronized()) {
 			setColumnName(getName());
@@ -198,6 +189,7 @@ public class HibernateAttribute extends LinkableTechnologyModelObject<DMProperty
 	/**
 	 * Update the type with the linked Flexo Model Object one if necessary.
 	 */
+    //todo ensure this is covered
 	public void updateTypeIfNecessary() {
 		if (getLinkedFlexoModelObject() != null) {
 			DMProperty dmProperty = getLinkedFlexoModelObject();
@@ -248,14 +240,6 @@ public class HibernateAttribute extends LinkableTechnologyModelObject<DMProperty
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
-		if (observable == getLinkedFlexoModelObject()) {
-			if (dataModification instanceof DMPropertyNameChanged) {
-				updateNameIfNecessary();
-			} else if (dataModification instanceof DMAttributeDataModification && "type".equals(dataModification.propertyName())) {
-				updateTypeIfNecessary();
-			}
-		}
-
 		if (observable == getHibernateEnum() && dataModification instanceof SGObjectDeletedModification) {
 			setHibernateEnum(null);
 			updateTypeIfNecessary();
@@ -290,7 +274,7 @@ public class HibernateAttribute extends LinkableTechnologyModelObject<DMProperty
 		name = escapeName(name);
 
 		if (StringUtils.isEmpty(name)) {
-			name = getDefaultName();
+			name = getDerivedName();
 		}
 
 		if (requireChange(getName(), name)) {

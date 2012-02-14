@@ -163,9 +163,8 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 */
 	@Override
 	public void synchronizeWithLinkedFlexoModelObject() {
+        super.synchronizeWithLinkedFlexoModelObject();
 		if (getLinkedFlexoModelObject() != null) {
-			updateNameIfNecessary();
-			updateTableNameIfNecessary();
 
 			List<LinkableTechnologyModelObject<?>> deletedChildren = new ArrayList<LinkableTechnologyModelObject<?>>();
 
@@ -282,27 +281,13 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	/**
 	 * Update the table name with this object name if necessary.
 	 */
+    //todo : ensure this is covered
 	public void updateTableNameIfNecessary() {
 		if (getIsTableNameSynchronized()) {
 			setTableName(getName());
 		} else {
 			updateIsTableNameSynchronized(); // Update this anyway in case the name is set to tableName. In this case synchronization is set
 												// back to true.
-		}
-	}
-
-	/**
-	 * Update the is enum with the linked Flexo Model Object one if necessary.
-	 */
-	public void updateIsEnumIfNecessary() {
-		if (getLinkedFlexoModelObject() != null) {
-			DMEntity dmEntity = getLinkedFlexoModelObject();
-			if (dmEntity.getIsEnumeration()) {
-				// Type is changed to an Enum one. Delete this entity and create a new Hibernate Enum
-				this.setLinkedFlexoModelObject(null);
-				getHibernateModel().createHibernateObjectBasedOnDMEntity(dmEntity);
-				this.delete();
-			}
 		}
 	}
 
@@ -400,15 +385,6 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
-		if (observable == getLinkedFlexoModelObject()) {
-			if (dataModification instanceof DMEntityNameChanged) {
-				updateNameIfNecessary();
-			} else if (dataModification instanceof PropertyRegistered) {
-				createHibernateObjectBasedOnDMProperty((DMProperty) dataModification.newValue());
-			} else if (dataModification instanceof DMAttributeDataModification && "isEnumeration".equals(dataModification.propertyName())) {
-				updateIsEnumIfNecessary();
-			}
-		}
 
 		if (dataModification instanceof NameChanged) {
 			if (observable instanceof HibernateAttribute) {
@@ -428,26 +404,11 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setLinkedFlexoModelObject(DMEntity linkedFlexoModelObject) {
-		if (linkedFlexoModelObject == null || !linkedFlexoModelObject.getIsEnumeration()) {
-			super.setLinkedFlexoModelObject(linkedFlexoModelObject);
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.log(Level.WARNING, "Cannot set linked object to Hibernate Entity with an enumeration DM Entity. DM Entity: "
-						+ linkedFlexoModelObject.getName());
-			}
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void setName(String name) {
 		name = escapeName(name);
 
 		if (StringUtils.isEmpty(name)) {
-			name = getDefaultName();
+			name = getDerivedName();
 		}
 
 		if (requireChange(getName(), name)) {

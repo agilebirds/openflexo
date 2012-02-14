@@ -361,14 +361,6 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setLinkedFlexoModelObject(DMRepository linkedFlexoModelObject) {
-		super.setLinkedFlexoModelObject(linkedFlexoModelObject);
-	}
-
 	public HibernateEnumContainer getHibernateEnumContainer() {
 		return hibernateEnumContainer;
 	}
