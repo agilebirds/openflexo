@@ -19,7 +19,7 @@
  */
 package org.openflexo.drm.helpset;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.Language;
@@ -27,11 +27,11 @@ import org.openflexo.drm.Language;
 public class HelpSetConfiguration {
 
 	private Language language;
-	private Vector<DocItemFolder> docItemFolders;
+	private List<DocItemFolder> docItemFolders;
 	private String title;
 	private String distributionName;
 
-	public HelpSetConfiguration(String aTitle, Language aLanguage, String aDistributionName, Vector<DocItemFolder> someDocItemFolders) {
+	public HelpSetConfiguration(String aTitle, Language aLanguage, String aDistributionName, List<DocItemFolder> someDocItemFolders) {
 		super();
 		title = aTitle;
 		language = aLanguage;
@@ -39,7 +39,7 @@ public class HelpSetConfiguration {
 		docItemFolders = someDocItemFolders;
 	}
 
-	public Vector<DocItemFolder> getDocItemFolders() {
+	public List<DocItemFolder> getDocItemFolders() {
 		return docItemFolders;
 	}
 

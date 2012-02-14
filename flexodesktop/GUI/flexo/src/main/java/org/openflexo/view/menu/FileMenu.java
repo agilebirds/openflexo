@@ -213,31 +213,30 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-            File projectDirectory = null;
-            try{
-               projectDirectory = NewProjectComponent.getProjectDirectory();
-            } catch (ProjectLoadingCancelledException e) {
-                //user cancelled
+			File projectDirectory = null;
+			try {
+				projectDirectory = NewProjectComponent.getProjectDirectory();
+			} catch (ProjectLoadingCancelledException e) {
+				// user cancelled
 			}
-            InteractiveFlexoEditor editor = getProjectLoader().newProject(projectDirectory);
+			InteractiveFlexoEditor editor = getProjectLoader().newProject(projectDirectory);
 
 			try {
-			    getModuleLoader().getModuleInstance((Module)getModuleLoader().getActiveModule(),editor.getProject());
+				getModuleLoader().getModuleInstance((Module) getModuleLoader().getActiveModule(), editor.getProject());
 			} catch (ModuleLoadingException e) {
-                FlexoController.notify("Cannot load module."+e.getMessage());
-                e.printStackTrace();
-            }
+				FlexoController.notify("Cannot load module." + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private ProjectLoader getProjectLoader(){
-        return ProjectLoader.instance();
-    }
-
+	private ProjectLoader getProjectLoader() {
+		return ProjectLoader.instance();
+	}
 
 	// ==========================================================================
 	// ============================= OpenProject ===============================
@@ -258,20 +257,20 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-            File projectDirectory = null;
-            InteractiveFlexoEditor editor = null;
-            try {
+			File projectDirectory = null;
+			InteractiveFlexoEditor editor = null;
+			try {
 				projectDirectory = OpenProjectComponent.getProjectDirectory();
-                editor = getProjectLoader().loadProject(projectDirectory);
+				editor = getProjectLoader().loadProject(projectDirectory);
 			} catch (ProjectLoadingCancelledException e1) {
-                //user abort
+				// user abort
 			}
-            try{
-                getModuleLoader().getModuleInstance((Module)getModuleLoader().getActiveModule(),editor.getProject());
-            }catch (ModuleLoadingException e){
-                FlexoController.notify("Cannot load module."+e.getMessage());
-                e.printStackTrace();
-            }
+			try {
+				getModuleLoader().getModuleInstance((Module) getModuleLoader().getActiveModule(), editor.getProject());
+			} catch (ModuleLoadingException e) {
+				FlexoController.notify("Cannot load module." + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -296,19 +295,19 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-            InteractiveFlexoEditor editor = null;
-            try{
-                editor = getProjectLoader().loadProject(projectDirectory);
-            }catch(ProjectLoadingCancelledException e){
-                return;
-            }
-            try {
-                getModuleLoader().openProjectWithModule(editor,(Module)getModuleLoader().getActiveModule());
-            } catch (ModuleLoadingException e) {
-                e.printStackTrace();
-                FlexoController.notify("Cannot load module."+e.getMessage());
-            }
-        }
+			InteractiveFlexoEditor editor = null;
+			try {
+				editor = getProjectLoader().loadProject(projectDirectory);
+			} catch (ProjectLoadingCancelledException e) {
+				return;
+			}
+			try {
+				getModuleLoader().openProjectWithModule(editor, (Module) getModuleLoader().getActiveModule());
+			} catch (ModuleLoadingException e) {
+				e.printStackTrace();
+				FlexoController.notify("Cannot load module." + e.getMessage());
+			}
+		}
 	}
 
 	// ==========================================================================
@@ -388,8 +387,8 @@ public class FileMenu extends FlexoMenu {
 				return;
 			}
 
-			UploadPrjAction refresh = UploadPrjAction.actionType
-					.makeNewAction(getController().getProject(), null, getController().getEditor());
+			UploadPrjAction refresh = UploadPrjAction.actionType.makeNewAction(getController().getProject(), null, getController()
+					.getEditor());
 			refresh.doAction();
 		}
 
@@ -545,15 +544,15 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-            try {
-                getProjectLoader().reloadProject();
-            } catch (ModuleLoadingException e) {
-                e.printStackTrace();
-                FlexoController.notify("Cannot load module."+e.getMessage());
-            } catch (ProjectLoadingCancelledException e) {
-                e.printStackTrace();
-                FlexoController.notify("Cannot reload project."+e.getMessage());
-            }
+			try {
+				getProjectLoader().reloadProject();
+			} catch (ModuleLoadingException e) {
+				e.printStackTrace();
+				FlexoController.notify("Cannot load module." + e.getMessage());
+			} catch (ProjectLoadingCancelledException e) {
+				e.printStackTrace();
+				FlexoController.notify("Cannot reload project." + e.getMessage());
+			}
 		}
 
 	}

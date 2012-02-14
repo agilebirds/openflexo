@@ -41,7 +41,7 @@ import org.openflexo.kvc.ChoiceList;
  * 
  */
 public abstract class ChoiceListColumn<D extends FlexoModelObject> extends AbstractColumn<D, ChoiceList> implements
-EditableColumn<D, ChoiceList> {
+		EditableColumn<D, ChoiceList> {
 
 	private ChoiceListCellRenderer _cellRenderer;
 

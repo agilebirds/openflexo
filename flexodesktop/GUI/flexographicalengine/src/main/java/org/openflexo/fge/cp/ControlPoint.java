@@ -51,6 +51,8 @@ public abstract class ControlPoint extends ControlArea<FGEPoint> {
 			logger.warning("Unexpected null GraphicalRepresentation");
 			return null;
 		}
+		// logger.info("paintControlPoint " + getPoint() + "style=" + graphics.getDefaultForeground() + " for " +
+		// getGraphicalRepresentation());
 		graphics.useDefaultForegroundStyle();
 		if (isEmbeddedInComponentHierarchy(graphics)) {
 			AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(getGraphicalRepresentation(),

@@ -49,20 +49,15 @@ public class RegularPolygon extends Polygon {
 		this(aGraphicalRepresentation, 5);
 	}
 
-	public RegularPolygon(
-			ShapeGraphicalRepresentation aGraphicalRepresentation,
-			List<FGEPoint> points) {
+	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
 		super(aGraphicalRepresentation);
 		this.points = new ArrayList<FGEPoint>(points);
 	}
 
-	public RegularPolygon(
-			ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
+	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
 		super(aGraphicalRepresentation);
 		if (pointsNb < 3) {
-			throw new IllegalArgumentException(
-					"Cannot build polygon with less then 3 points (" + pointsNb
-							+ ")");
+			throw new IllegalArgumentException("Cannot build polygon with less then 3 points (" + pointsNb + ")");
 		}
 		npoints = pointsNb;
 		updateShape();
@@ -73,8 +68,7 @@ public class RegularPolygon extends Polygon {
 		if (points != null) {
 			_polygon = new FGEPolygon(Filling.FILLED, points);
 		} else {
-			_polygon = new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED,
-					npoints, startAngle);
+			_polygon = new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);
 		}
 		rebuildControlPoints();
 		if (getGraphicalRepresentation() != null) {

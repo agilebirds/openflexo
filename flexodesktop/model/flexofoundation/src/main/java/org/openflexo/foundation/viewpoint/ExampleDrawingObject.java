@@ -61,7 +61,8 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 
 	@Override
 	public void delete() {
-		for (ExampleDrawingObject o : childs) {
+		Vector<ExampleDrawingObject> toRemove = new Vector<ExampleDrawingObject>(childs);
+		for (ExampleDrawingObject o : toRemove) {
 			o.delete();
 		}
 		super.delete();
@@ -146,6 +147,7 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	}
 
 	private Vector<ExampleDrawingObject> ancestors;
+	private Vector<ExampleDrawingObject> descendants;
 
 	public ExampleDrawingObject getParent() {
 		return parent;
@@ -161,6 +163,23 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 			}
 		}
 		return ancestors;
+	}
+
+	public Vector<ExampleDrawingObject> getDescendants() {
+		if (descendants == null) {
+			descendants = new Vector<ExampleDrawingObject>();
+			appendDescendants(this, descendants);
+		}
+		return descendants;
+	}
+
+	private void appendDescendants(ExampleDrawingObject current, Vector<ExampleDrawingObject> descendants) {
+		descendants.add(current);
+		for (ExampleDrawingObject child : current.getChilds()) {
+			if (child != current) {
+				appendDescendants(child, descendants);
+			}
+		}
 	}
 
 	public static ExampleDrawingObject getFirstCommonAncestor(ExampleDrawingObject child1, ExampleDrawingObject child2) {

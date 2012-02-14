@@ -9,7 +9,6 @@ import be.denali.core.woapp.WDLApplication;
 import be.denali.core.woapp.WDLSession;
 import be.denali.language.DLLanguageInterface;
 import be.denali.flexo.commons.hcwo.IFlexoComponent;
-import ${entity.getParentBaseEntity().getFullQualifiedName()};
 import java.util.logging.Level;
 import ${projectGenerator.getProcessBusinessDataBaseEntity().getFullQualifiedName()};
 #if(${projectGenerator.getWorkflowClassPackage()})

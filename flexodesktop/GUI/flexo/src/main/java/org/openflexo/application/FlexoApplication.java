@@ -39,7 +39,7 @@ import org.openflexo.AdvancedPrefs;
 import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.br.view.NewBugReport;
+import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.ch.DefaultHelpRetriever;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.drm.DocResourceManager;
@@ -266,8 +266,8 @@ public class FlexoApplication {
 						if (!testAndSetIsReportingBug()) {
 							try {
 								if (FlexoController.confirm(message)) {
-									NewBugReport.newBugReport((Exception) exception, FlexoModule.getActiveModule() != null ? FlexoModule
-											.getActiveModule().getModule() : null);
+									JIRAIssueReportDialog.newBugReport((Exception) exception,
+											FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
 								}
 							} catch (HeadlessException e1) {
 								e1.printStackTrace();

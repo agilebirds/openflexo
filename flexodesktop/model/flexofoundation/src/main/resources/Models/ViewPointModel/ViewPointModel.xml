@@ -73,14 +73,17 @@
 	</entity>
 
 
-	<entity name="org.openflexo.foundation.viewpoint.ShapePatternRole" xmlTag="ShapePatternRole">
+	<entity name="org.openflexo.foundation.viewpoint.ShapePatternRole" xmlTag="ShapePatternRole" contexts="Parent,From,To">
 		<property name="graphicalRepresentation" contains="org.openflexo.fge.GraphicalRepresentation" primary="yes" />
+		<property name="parentShapePatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole" context="Parent"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.ConnectorPatternRole" xmlTag="ConnectorPatternRole">
 		<property name="graphicalRepresentation" contains="org.openflexo.fge.GraphicalRepresentation" primary="yes" />
 		<property name="artifactFromGraphicalRepresentation" contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="ArtifactFrom" />
 		<property name="artifactToGraphicalRepresentation" contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="ArtifactTo" />
+		<property name="startShapePatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole" context="From"/>
+		<property name="endShapePatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole" context="To"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.ShemaPatternRole" xmlTag="ShemaPatternRole">

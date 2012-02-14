@@ -134,9 +134,9 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 		return returned;
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	/**
 	 * Implements

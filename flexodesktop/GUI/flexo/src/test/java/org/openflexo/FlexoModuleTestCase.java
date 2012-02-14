@@ -37,9 +37,9 @@ public abstract class FlexoModuleTestCase extends FlexoTestCase {
 		// TODO Auto-generated constructor stub
 	}
 
-    @Override
+	@Override
 	protected void setUp() throws Exception {
-        UserType.setCurrentUserType(UserType.DEVELOPER);
+		UserType.setCurrentUserType(UserType.DEVELOPER);
 	}
 
 	@Override
@@ -51,9 +51,9 @@ public abstract class FlexoModuleTestCase extends FlexoTestCase {
 				.size());
 	}
 
-    protected final ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	protected final ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	private static String printObservers(Vector allObservers) {
 		StringBuffer reply = new StringBuffer();

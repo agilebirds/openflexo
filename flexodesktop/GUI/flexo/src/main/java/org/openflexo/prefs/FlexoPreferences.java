@@ -40,7 +40,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 public class FlexoPreferences extends FlexoAbstractPreferences {
 
 	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
-    private static File appDataDirectory;
+	private static File appDataDirectory;
 
 	protected Vector<ContextPreferences> contextPreferencesVector;
 
@@ -77,30 +77,30 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 	}
 
 	public static File getApplicationDataDirectory() {
-        if (appDataDirectory == null) {
-            File prefDir = new File(new File(System.getProperty("user.home")), "Library/Flexo");
-            if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-                String appData = System.getenv("APPDATA");
-                if (appData != null) {
-                    File f = new File(appData);
-                    if (f.isDirectory() && f.canWrite()) {
-                        prefDir = new File(f, "OpenFlexo");
-                    }
-                }
-            }
-            appDataDirectory = prefDir;
-        }
-        return appDataDirectory;
+		if (appDataDirectory == null) {
+			File prefDir = new File(new File(System.getProperty("user.home")), "Library/Flexo");
+			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+				String appData = System.getenv("APPDATA");
+				if (appData != null) {
+					File f = new File(appData);
+					if (f.isDirectory() && f.canWrite()) {
+						prefDir = new File(f, "OpenFlexo");
+					}
+				}
+			}
+			appDataDirectory = prefDir;
+		}
+		return appDataDirectory;
 	}
 
-    public static void setAppDataDirectory(File someDir){
-        if(appDataDirectory!=null && !appDataDirectory.getAbsoluteFile().equals(someDir.getAbsoluteFile())){
-            throw new IllegalStateException("Application Data Directory is already define in :"+appDataDirectory.getAbsolutePath());
-        }
-        if(appDataDirectory==null){
-            appDataDirectory = someDir;
-        }
-    }
+	public static void setAppDataDirectory(File someDir) {
+		if (appDataDirectory != null && !appDataDirectory.getAbsoluteFile().equals(someDir.getAbsoluteFile())) {
+			throw new IllegalStateException("Application Data Directory is already define in :" + appDataDirectory.getAbsolutePath());
+		}
+		if (appDataDirectory == null) {
+			appDataDirectory = someDir;
+		}
+	}
 
 	public static File getPrefsFile() {
 		return new File(getApplicationDataDirectory(), "Flexo.prefs");
@@ -240,6 +240,20 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 	@Override
 	public Vector<TabModel> inspectionExtraTabs() {
 		return null;
+	}
+
+	public static File getLogDirectory() {
+		File outputDir = new File(System.getProperty("user.home") + "/Library/Logs/OpenFlexo");
+		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			String appData = System.getenv("LOCALAPPDATA");
+			if (appData != null) {
+				File f = new File(appData);
+				if (f.isDirectory() && f.canWrite()) {
+					outputDir = new File(f, "OpenFlexo/Logs");
+				}
+			}
+		}
+		return outputDir;
 	}
 
 }

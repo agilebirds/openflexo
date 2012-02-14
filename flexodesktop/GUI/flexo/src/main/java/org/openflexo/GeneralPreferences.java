@@ -108,6 +108,8 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY = "localResourceCenterDirectory";
 
+	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY2 = "localResourceCenterDirectory2";
+
 	private static final FlexoObserver observer = new FlexoObserver() {
 
 		@Override
@@ -164,13 +166,13 @@ public final class GeneralPreferences extends ContextPreferences {
 		FlexoLocalization.setCurrentLanguage(language);
 		updateModuleFrameTitles();
 		FlexoLocalization.updateGUILocalized();
-		if ((language != null) && (UserType.getCurrentUserType() != null)) {
+		if (language != null && UserType.getCurrentUserType() != null) {
 			FlexoHelp.configure(language.getIdentifier(), UserType.getCurrentUserType().getIdentifier());
 			FlexoHelp.reloadHelpSet();
 		}
 	}
 
-    public static void updateModuleFrameTitles() {
+	public static void updateModuleFrameTitles() {
 		Enumeration<FlexoModule> en = getModuleLoader().loadedModules();
 		while (en.hasMoreElements()) {
 			en.nextElement().getFlexoFrame().updateTitle();
@@ -324,13 +326,14 @@ public final class GeneralPreferences extends ContextPreferences {
 		}
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
-    private static AutoSaveService getAutoSaveService(){
-        return AutoSaveService.instance();
-    }
+	private static AutoSaveService getAutoSaveService() {
+		return AutoSaveService.instance();
+	}
+
 	public static void addToLastOpenedProjects(File project) {
 		Vector<File> files = getLastOpenedProjects();
 		Enumeration<File> en = new Vector<File>(files).elements();
@@ -574,11 +577,14 @@ public final class GeneralPreferences extends ContextPreferences {
 	}
 
 	public static File getLocalResourceCenterDirectory() {
-		return getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY);
+		File file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2);
+		if (file == null) {
+			file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY);
+		}
+		return file;
 	}
 
 	public static void setLocalResourceCenterDirectory(File directory) {
-		getPreferences().setDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY, directory);
+		getPreferences().setDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2, directory);
 	}
-
 }

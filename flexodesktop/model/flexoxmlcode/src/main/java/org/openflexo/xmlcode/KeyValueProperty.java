@@ -269,15 +269,21 @@ public abstract class KeyValueProperty {
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
 
-		String[] tries = new String[2];
-
 		Class<?> params[] = new Class[1];
 		params[0] = aType;
-
+		String[] tries;
+		if ((aType == Boolean.class || aType == boolean.class) && propertyName.startsWith("is")) {
+			tries = new String[4];
+			String propertyNameWithFirstCharToUpperCase2 = propertyName.substring(2);
+			tries[2] = "set" + propertyNameWithFirstCharToUpperCase2;
+			tries[3] = "_set" + propertyNameWithFirstCharToUpperCase2;
+		} else {
+			tries = new String[2];
+		}
 		tries[0] = "set" + propertyNameWithFirstCharToUpperCase;
 		tries[1] = "_set" + propertyNameWithFirstCharToUpperCase;
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < tries.length; i++) {
 			try {
 				return lastClass.getMethod(tries[i], params);
 			} catch (SecurityException err) {

@@ -165,6 +165,9 @@ public abstract class EditionScheme extends ViewPointObject {
 		parameter.setScheme(this);
 		parameters.add(parameter);
 		updateBindingModels();
+		for (EditionSchemeParameter p : parameters) {
+			p.notifyBindingModelChanged();
+		}
 	}
 
 	public void removeFromParameters(EditionSchemeParameter parameter) {
@@ -405,6 +408,7 @@ public abstract class EditionScheme extends ViewPointObject {
 	public void updateBindingModels() {
 		logger.fine("updateBindingModels()");
 		_bindingModel = null;
+		_parametersBindingModel = null;
 		createBindingModel();
 	}
 
@@ -419,9 +423,7 @@ public abstract class EditionScheme extends ViewPointObject {
 				_bindingModel.addToBindingVariables(newPathElement);
 			}
 		}
-		/*for (PatternRole role : getPatternRoles()) {
-			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role,this));
-		}	*/
+		notifyBindingModelChanged();
 	}
 
 	protected abstract void appendContextualBindingVariables(BindingModel bindingModel);

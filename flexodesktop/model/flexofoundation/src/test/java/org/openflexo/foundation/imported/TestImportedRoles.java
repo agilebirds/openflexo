@@ -48,7 +48,7 @@ import junit.framework.TestSuite;
 
 public class TestImportedRoles extends FlexoTestCase {
 
-    public TestImportedRoles(String arg0) {
+	public TestImportedRoles(String arg0) {
 		super(arg0);
 	}
 
@@ -178,7 +178,7 @@ public class TestImportedRoles extends FlexoTestCase {
 		super("Test imported roles");
 	}
 
-       public static Test suite() {
+	public static Test suite() {
 		final TestSuite suite = new TestSuite("TestSuite for TestCG2");
 		suite.addTest(new TestImportedRoles("test0CreateImportedRoleLibrary"));
 		suite.addTest(new TestImportedRoles("test1ImportRoles"));

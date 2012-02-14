@@ -44,6 +44,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.EventObject;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -58,6 +59,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.icon.UtilsIconLibrary;
+import org.openflexo.toolbox.ToolBox;
 
 /**
  * Abstract widget allowing to edit a complex object with a popup
@@ -117,18 +119,26 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		super();
 		_editedObject = editedObject;
 		setLayout(new BorderLayout());
-		add(_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_DOWN), BorderLayout.WEST);
-		_downButton.setDisabledIcon(UtilsIconLibrary.CUSTOM_POPUP_DOWN_DISABLED);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_BUTTON);
+		} else {
+			_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_DOWN);
+			_downButton.setDisabledIcon(UtilsIconLibrary.CUSTOM_POPUP_DOWN_DISABLED);
+		}
+		_downButton.addActionListener(this);
+		add(_downButton, BorderLayout.WEST);
 		/*Border border = getDownButtonBorder();
 		if (border != null) {
 			_downButton.setBorder(border);
 		}*/
 		setOpaque(false);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			setBorder(BorderFactory.createEmptyBorder(3, 5, 3, 5));
+		}
 		_downButton.setBorder(BorderFactory.createEmptyBorder());
 		_frontComponent = buildFrontComponent();
 		add(_frontComponent, BorderLayout.CENTER);
 
-		_downButton.addActionListener(this);
 		applyCancelListener = new Vector<ApplyCancelListener>();
 		setFocusTraversalPolicy(new FocusTraversalPolicy() {
 
@@ -197,7 +207,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		_customPanel = null;
 	}
 
-	public JButton getDownButton() {
+	public JComponent getDownButton() {
 		return _downButton;
 	}
 
@@ -401,6 +411,10 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	// This actionListener handles the next/prev month buttons.
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		onEvent(e);
+	}
+
+	private void onEvent(EventObject e) {
 		if (e.getSource() == _downButton) {
 			if (!popupIsShown()) {
 				openPopup();
@@ -410,7 +424,6 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		} else {
 			additionalActions();
 		}
-
 	}
 
 	private boolean closersAdded = false;
@@ -437,12 +450,18 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 					if (e.getOppositeWindow() != _popup) {
 						if (_popup.isChildOf(e.getOppositeWindow())) {
 							CustomPopup.CustomJPopupMenu w = _popup;
-							while (w != e.getOppositeWindow()) {
+							while (w != null && w != e.getOppositeWindow()) {
 								w.getCustomPopup().pointerLeavesPopup();
+								w = w.getParentPopupMenu();
 							}
 						} else if (e.getOppositeWindow() != parentWindow || FocusManager.getCurrentManager().getFocusOwner() != null
 								&& !_frontComponent.hasFocus()) {
-							// pointerLeavesPopup();
+							// This test is used to detect the case of the lost of focus is performed
+							// Because a child popup gained the focus: in this case, nothing should be performed
+							if (!(e.getOppositeWindow() instanceof CustomPopup.CustomJPopupMenu)
+									|| !((CustomPopup.CustomJPopupMenu) e.getOppositeWindow()).isChildOf(_popup)) {
+								pointerLeavesPopup();
+							}
 						}
 					}
 				}
@@ -592,6 +611,10 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			_popup.setLocation(position);
 			_popup.pack();
 			_popup.setVisible(true);
+			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+				_downButton.setIcon(UtilsIconLibrary.CUSTOM_POPUP_OPEN_BUTTON);
+			}
+
 			MouseAdapter mouseListener = new MouseAdapter() {
 
 				private Point previous;
@@ -658,6 +681,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			return;
 		}
 		_popup.setVisible(false);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			_downButton.setIcon(UtilsIconLibrary.CUSTOM_POPUP_BUTTON);
+		}
 		if (notifyObjectChanged) {
 			fireEditedObjectChanged();
 		}
@@ -741,6 +767,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 				}
 			}
 		}
+		onEvent(e);
 	}
 
 	@Override

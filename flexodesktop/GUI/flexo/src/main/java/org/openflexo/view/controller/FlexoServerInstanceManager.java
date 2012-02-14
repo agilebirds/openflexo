@@ -2,10 +2,8 @@ package org.openflexo.view.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,41 +90,14 @@ public class FlexoServerInstanceManager {
 
 	public FlexoServerAddressBook getAddressBook() {
 		if (addressBook == null) {
-			File serverInstanceFile = getFlexoServerInstanceFile();
-			long lastModified = 0;
-			String fileContent = null;
-			if (serverInstanceFile.exists()) {
-				lastModified = serverInstanceFile.lastModified();
-				try {
-					fileContent = FileUtils.fileContents(serverInstanceFile);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			URL url = null;
 			try {
-				URL url = new URL(AdvancedPrefs.getFlexoServerInstanceURL());
-				URLConnection c = url.openConnection();
-				if (c instanceof HttpURLConnection) {
-					HttpURLConnection connection = (HttpURLConnection) c;
-					connection.setIfModifiedSince(lastModified);
-					connection.connect();
-					if (connection.getResponseCode() == 200) {
-						fileContent = FileUtils.fileContents(connection.getInputStream(), "UTF-8");
-						FileUtils.saveToFile(serverInstanceFile, fileContent);
-					}
-				} else {
-					if (c.getDate() == 0 || c.getDate() > lastModified) {
-						fileContent = FileUtils.fileContents(c.getInputStream(), "UTF-8");
-						FileUtils.saveToFile(serverInstanceFile, fileContent);
-					}
-				}
-			} catch (MalformedURLException e) {
-				// Should never happen
-				e.printStackTrace(); // just in case
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				url = new URL(AdvancedPrefs.getFlexoServerInstanceURL());
+			} catch (MalformedURLException e1) {
+				e1.printStackTrace();
 			}
+			File serverInstanceFile = getFlexoServerInstanceFile();
+			String fileContent = FileUtils.createOrUpdateFileFromURL(url, serverInstanceFile);
 			if (fileContent != null) {
 				try {
 					addressBook = (FlexoServerAddressBook) new XMLDeserializer(factory).deserializeDocument(fileContent);
@@ -160,12 +131,12 @@ public class FlexoServerInstanceManager {
 	}
 
 	private void filterAddressBook(FlexoServerAddressBook book) {
-		//conservative behavior. (see history, but is really relevant ?)
-        try{
-            UserType.getCurrentUserType();
-        }catch (IllegalStateException e){
-            return;
-        }
+		// conservative behavior. (see history, but is really relevant ?)
+		try {
+			UserType.getCurrentUserType();
+		} catch (IllegalStateException e) {
+			return;
+		}
 
 		for (FlexoServerInstance instance : new ArrayList<FlexoServerInstance>(book.getInstances())) {
 			if (instance.getUserTypes().size() > 0) {

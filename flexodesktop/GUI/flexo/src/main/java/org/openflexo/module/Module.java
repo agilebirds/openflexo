@@ -85,836 +85,275 @@ public abstract class Module implements IModule {
 
 	public static final Module XXX_MODULE = new XXX();
 
-    private Class _moduleClass;
+	private Class _moduleClass;
 
-    public Constructor getConstructor() {
-        return _constructor;
-    }
+	public Constructor getConstructor() {
+		return _constructor;
+	}
 
-    protected static class WKF extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexoworkfloweditor";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.wkf.WKFModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "wkf";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return WKFIconLibrary.WKF_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return WKFIconLibrary.WKF_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return WKFIconLibrary.WKF_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return WKFIconLibrary.WKF_BIG_ICON;
-		}
-
+	protected static class WKF extends Module {
 		public static final String WKF_MODULE_SHORT_NAME = "WKF";
 
 		public static final String WKF_MODULE_NAME = "workflow_editor";
 
-		@Override
-		public String getName() {
-			return WKF_MODULE_NAME;
-		}
-
-		@Override
-		public String getShortName() {
-			return WKF_MODULE_SHORT_NAME;
+		protected WKF() {
+			super(WKF_MODULE_NAME, WKF_MODULE_SHORT_NAME, "org.openflexo.wkf.WKFModule", "modules/flexoworkfloweditor", "10000", "wkf",
+					WKFIconLibrary.WKF_SMALL_ICON, WKFIconLibrary.WKF_MEDIUM_ICON, WKFIconLibrary.WKF_MEDIUM_ICON_WITH_HOVER,
+					WKFIconLibrary.WKF_BIG_ICON, true);
 		}
 
 	}
 
 	protected static class IE extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexointerfaceeditor";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.ie.IEModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "ie";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return SEIconLibrary.SE_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return SEIconLibrary.SE_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return SEIconLibrary.SE_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return SEIconLibrary.SE_BIG_ICON;
-		}
-
 		public static final String IE_MODULE_SHORT_NAME = "IE";
 
 		public static final String IE_MODULE_NAME = "interface_editor";
 
-		@Override
-		public String getName() {
-			return IE_MODULE_NAME;
+		public IE() {
+			super(IE_MODULE_NAME, IE_MODULE_SHORT_NAME, "org.openflexo.ie.IEModule", "modules/flexointerfaceeditor", "10001", "ie",
+					SEIconLibrary.SE_SMALL_ICON, SEIconLibrary.SE_MEDIUM_ICON, SEIconLibrary.SE_MEDIUM_ICON_WITH_HOVER,
+					SEIconLibrary.SE_BIG_ICON, true);
 		}
 
-		@Override
-		public String getShortName() {
-			return IE_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class DM extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexodatamodeleditor";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.dm.DMModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "dm";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return DMEIconLibrary.DME_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return DMEIconLibrary.DME_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return DMEIconLibrary.DME_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return DMEIconLibrary.DME_BIG_ICON;
-		}
 
 		public static final String DM_MODULE_SHORT_NAME = "DM";
 
 		public static final String DM_MODULE_NAME = "data_model_editor";
 
-		@Override
-		public String getName() {
-			return DM_MODULE_NAME;
+		public DM() {
+			super(DM_MODULE_NAME, DM_MODULE_SHORT_NAME, "org.openflexo.dm.DMModule", "modules/flexodatamodeleditor", "10006", "dm",
+					DMEIconLibrary.DME_SMALL_ICON, DMEIconLibrary.DME_MEDIUM_ICON, DMEIconLibrary.DME_MEDIUM_ICON_WITH_HOVER,
+					DMEIconLibrary.DME_BIG_ICON, true);
 		}
 
-		@Override
-		public String getShortName() {
-			return DM_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class CG extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexocodegenerator";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.cgmodule.GeneratorModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "cg";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return CGIconLibrary.CG_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return CGIconLibrary.CG_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return CGIconLibrary.CG_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return CGIconLibrary.CG_BIG_ICON;
-		}
-
 		public static final String GENERATOR_MODULE_SHORT_NAME = "CG";
 
 		public static final String GENERATOR_MODULE_NAME = "code_generator";
 
-		@Override
-		public String getName() {
-			return GENERATOR_MODULE_NAME;
+		public CG() {
+			super(GENERATOR_MODULE_NAME, GENERATOR_MODULE_SHORT_NAME, "org.openflexo.cgmodule.GeneratorModule",
+					"modules/flexocodegenerator", "10002", "cg", CGIconLibrary.CG_SMALL_ICON, CGIconLibrary.CG_MEDIUM_ICON,
+					CGIconLibrary.CG_MEDIUM_ICON_WITH_HOVER, CGIconLibrary.CG_BIG_ICON, true);
 		}
 
-		@Override
-		public String getShortName() {
-			return GENERATOR_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class DG extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexodocgenerator";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.dgmodule.DGModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "dg";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return DGIconLibrary.DG_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return DGIconLibrary.DG_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return DGIconLibrary.DG_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return DGIconLibrary.DG_BIG_ICON;
-		}
-
 		public static final String DG_MODULE_SHORT_NAME = "DG";
 
 		public static final String DG_MODULE_NAME = "doc_generator";
 
-		@Override
-		public String getName() {
-			return DG_MODULE_NAME;
+		public DG() {
+			super(DG_MODULE_NAME, DG_MODULE_SHORT_NAME, "org.openflexo.dgmodule.DGModule", "modules/flexodocgenerator", "10004", "dg",
+					DGIconLibrary.DG_SMALL_ICON, DGIconLibrary.DG_MEDIUM_ICON, DGIconLibrary.DG_MEDIUM_ICON_WITH_HOVER,
+					DGIconLibrary.DG_BIG_ICON, true);
 		}
 
-		@Override
-		public String getShortName() {
-			return DG_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class SG extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexosourcegenerator";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.sgmodule.SGModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "SG";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return SGIconLibrary.SG_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return SGIconLibrary.SG_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return SGIconLibrary.SG_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return SGIconLibrary.SG_BIG_ICON;
-		}
 
 		public static final String SOURCE_GENERATOR_MODULE_SHORT_NAME = "SG";
 
 		public static final String SOURCE_GENERATOR_MODULE_NAME = "source_generator";
 
-		@Override
-		public String getName() {
-			return SOURCE_GENERATOR_MODULE_NAME;
+		public SG() {
+			super(SOURCE_GENERATOR_MODULE_NAME, SOURCE_GENERATOR_MODULE_SHORT_NAME, "org.openflexo.sgmodule.SGModule",
+					"modules/flexosourcegenerator", "10004", "sg", SGIconLibrary.SG_SMALL_ICON, SGIconLibrary.SG_MEDIUM_ICON,
+					SGIconLibrary.SG_MEDIUM_ICON_WITH_HOVER, SGIconLibrary.SG_BIG_ICON, true);
 		}
 
-		@Override
-		public String getShortName() {
-			return SOURCE_GENERATOR_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class DE extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexodoceditor";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.doceditormodule.DEModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "de";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return DEIconLibrary.DE_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return DEIconLibrary.DE_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return DEIconLibrary.DE_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return DEIconLibrary.DE_BIG_ICON;
-		}
 
 		public static final String DE_MODULE_SHORT_NAME = "DE";
 
 		public static final String DE_MODULE_NAME = "doc_editor";
 
-		@Override
-		public String getName() {
-			return DE_MODULE_NAME;
+		public DE() {
+			super(DE_MODULE_NAME, DE_MODULE_SHORT_NAME, "org.openflexo.doceditormodule.DEModule", "modules/flexodoceditor", "10005", "de",
+					DEIconLibrary.DE_SMALL_ICON, DEIconLibrary.DE_MEDIUM_ICON, DEIconLibrary.DE_MEDIUM_ICON_WITH_HOVER,
+					DEIconLibrary.DE_BIG_ICON, true);
 		}
 
-		@Override
-		public String getShortName() {
-			return DE_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class WSE extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexowebserviceeditor";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.wse.WSEModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "wse";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return WSEIconLibrary.WS_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return WSEIconLibrary.WS_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return WSEIconLibrary.WS_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return WSEIconLibrary.WS_BIG_ICON;
-		}
 
 		public static final String WSE_MODULE_SHORT_NAME = "WSE";
 
 		public static final String WSE_MODULE_NAME = "wse_module_name";
 
-		@Override
-		public String getName() {
-			return WSE_MODULE_NAME;
+		public WSE() {
+			super(WSE_MODULE_NAME, WSE_MODULE_SHORT_NAME, "org.openflexo.wse.WSEModule", "modules/flexowebserviceeditor", "10007", "wse",
+					WSEIconLibrary.WS_SMALL_ICON, WSEIconLibrary.WS_MEDIUM_ICON, WSEIconLibrary.WS_MEDIUM_ICON_WITH_HOVER,
+					WSEIconLibrary.WS_BIG_ICON, true);
 		}
 
-		@Override
-		public String getShortName() {
-			return WSE_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class VE extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexovieweditor";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.ve.VEModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "ve";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return VEIconLibrary.VE_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return VEIconLibrary.VE_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return VEIconLibrary.VE_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return VEIconLibrary.VE_BIG_ICON;
-		}
 
 		public static final String VE_MODULE_SHORT_NAME = "VE";
 
 		public static final String VE_MODULE_NAME = "ve_module_name";
 
-		@Override
-		public String getName() {
-			return VE_MODULE_NAME;
+		public VE() {
+			super(VE_MODULE_NAME, VE_MODULE_SHORT_NAME, "org.openflexo.ve.VEModule", "modules/flexovieweditor", "10008", "ve",
+					VEIconLibrary.VE_SMALL_ICON, VEIconLibrary.VE_MEDIUM_ICON, VEIconLibrary.VE_MEDIUM_ICON_WITH_HOVER,
+					VEIconLibrary.VE_BIG_ICON, true);
 		}
 
-		@Override
-		public String getShortName() {
-			return VE_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class DRE extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexodocresourceeditor";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.dre.DREModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "dre";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return false;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return DREIconLibrary.DRE_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return DREIconLibrary.DRE_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return DREIconLibrary.DRE_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return DREIconLibrary.DRE_BIG_ICON;
-		}
 
 		public static final String DRE_MODULE_SHORT_NAME = "DRE";
 
 		public static final String DRE_MODULE_NAME = "doc_resource_manager";
 
-		@Override
-		public String getName() {
-			return DRE_MODULE_NAME;
+		public DRE() {
+			super(DRE_MODULE_NAME, DRE_MODULE_SHORT_NAME, "org.openflexo.dre.DREModule", "modules/flexodocresourceeditor", "10010", "dre",
+					DREIconLibrary.DRE_SMALL_ICON, DREIconLibrary.DRE_MEDIUM_ICON, DREIconLibrary.DRE_MEDIUM_ICON_WITH_HOVER,
+					DREIconLibrary.DRE_BIG_ICON, false);
 		}
 
-		@Override
-		public String getShortName() {
-			return DRE_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class FPS extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexoprjsharingmodule";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.fps.FPSModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "fps";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return false;
-		}
-
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSmallIcon()
-		 */
-		@Override
-		public ImageIcon getSmallIcon() {
-			return FPSIconLibrary.FPS_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return FPSIconLibrary.FPS_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return FPSIconLibrary.FPS_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return FPSIconLibrary.FPS_BIG_ICON;
-		}
 
 		public static final String FPS_MODULE_SHORT_NAME = "FPS";
 
 		public static final String FPS_MODULE_NAME = "fps_module_name";
 
-		@Override
-		public String getName() {
-			return FPS_MODULE_NAME;
+		public FPS() {
+			super(FPS_MODULE_NAME, FPS_MODULE_SHORT_NAME, "org.openflexo.fps.FPSModule", "modules/flexoprjsharingmodule", "10011", "fps",
+					FPSIconLibrary.FPS_SMALL_ICON, FPSIconLibrary.FPS_MEDIUM_ICON, FPSIconLibrary.FPS_MEDIUM_ICON_WITH_HOVER,
+					FPSIconLibrary.FPS_BIG_ICON, false);
 		}
 
-		@Override
-		public String getShortName() {
-			return FPS_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class VPM extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexoviewpointmodeller";
-		}
-
-		@Override
-		public String getClassName() {
-			return "org.openflexo.vpm.VPMModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "vpm";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return false;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return VPMIconLibrary.VPM_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return VPMIconLibrary.VPM_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return VPMIconLibrary.VPM_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return VPMIconLibrary.VPM_BIG_ICON;
-		}
 
 		public static final String VPM_MODULE_SHORT_NAME = "VPM";
 
 		public static final String VPM_MODULE_NAME = "vpm_module_name";
 
-		@Override
-		public String getName() {
-			return VPM_MODULE_NAME;
+		public VPM() {
+			super(VPM_MODULE_NAME, VPM_MODULE_SHORT_NAME, "org.openflexo.vpm.VPMModule", "modules/flexoviewpointmodeller", "10009", "vpm",
+					VPMIconLibrary.VPM_SMALL_ICON, VPMIconLibrary.VPM_MEDIUM_ICON, VPMIconLibrary.VPM_MEDIUM_ICON_WITH_HOVER,
+					VPMIconLibrary.VPM_BIG_ICON, false);
 		}
 
-		@Override
-		public String getShortName() {
-			return VPM_MODULE_SHORT_NAME;
-		}
 	}
 
 	protected static class TEST extends Module {
 
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexoworkfloweditor";
+		public TEST() {
+			super("TestModule", "TEST", "org.openflexo.TestModule", "modules/flexoworkfloweditor", null, "test",
+					WKFIconLibrary.WKF_SMALL_ICON, WKFIconLibrary.WKF_MEDIUM_ICON, WKFIconLibrary.WKF_MEDIUM_ICON_WITH_HOVER,
+					WKFIconLibrary.WKF_BIG_ICON, true);
 		}
 
-		@Override
-		public String getClassName() {
-			return "org.openflexo.TestModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "test";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return true;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return WKFIconLibrary.WKF_SMALL_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return WKFIconLibrary.WKF_MEDIUM_ICON;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return WKFIconLibrary.WKF_MEDIUM_ICON_WITH_HOVER;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return WKFIconLibrary.WKF_BIG_ICON;
-		}
-
-		@Override
-		public String getName() {
-			return "TestModule";
-		}
-
-		@Override
-		public String getShortName() {
-			return "WKF";
-		}
 	}
 
 	protected static class XXX extends Module {
-		@Override
-		protected String getRelativeDirectory() {
-			return "modules/flexonewmodule";
+
+		public XXX() {
+			super("XXXModuleName", "xxx", "org.openflexo.xxx.XXXModule", "modules/flexonewmodule", null, "xx", null, null, null, null, true);
 		}
 
-		@Override
-		public String getClassName() {
-			return "org.openflexo.xxx.XXXModule";
-		}
-
-		@Override
-		public String getHelpTopic() {
-			return "xxx";
-		}
-
-		@Override
-		public boolean requireProject() {
-			return false;
-		}
-
-		@Override
-		public ImageIcon getSmallIcon() {
-			return null;
-		}
-
-		@Override
-		public ImageIcon getMediumIcon() {
-			return null;
-		}
-
-		@Override
-		public ImageIcon getMediumIconWithHover() {
-			return null;
-		}
-
-		@Override
-		public ImageIcon getBigIcon() {
-			return null;
-		}
-
-		@Override
-		public String getName() {
-			return null;
-		}
-
-		@Override
-		public String getShortName() {
-			return null;
-		}
 	}
 
-	protected abstract String getRelativeDirectory();
+	private String name;
+	private String shortName;
+	private String className;
+	private String relativeDirectory;
+	private String jiraComponentID;
+	private String helpTopic;
+	private ImageIcon smallIcon;
+	private ImageIcon mediumIcon;
+	private ImageIcon mediumIconWithHover;
+	private ImageIcon bigIcon;
+	private boolean requiresProject;
 
-	public abstract String getClassName();
-
-	public abstract String getHelpTopic();
-
-	/**
-	 * Return small icon for current module, as 20x20 pixels
-	 * 
-	 * @return
-	 */
-	public abstract ImageIcon getSmallIcon();
-
-	/**
-	 * Return medium icon for current module, as 32x32 pixels
-	 * 
-	 * @return
-	 */
-	public abstract ImageIcon getMediumIcon();
-
-	/**
-	 * Return medium icon for current module, as 32x32 pixels and with hover effect
-	 * 
-	 * @return
-	 */
-	public abstract ImageIcon getMediumIconWithHover();
-
-	/**
-	 * Return big icon for current module, as 64x64 pixels
-	 * 
-	 * @return
-	 */
-	public abstract ImageIcon getBigIcon();
-
-	public abstract boolean requireProject();
+	protected Module(String name, String shortName, String className, String relativeDirectory, String jiraComponentID, String helpTopic,
+			ImageIcon smallIcon, ImageIcon mediumIcon, ImageIcon mediumIconWithHover, ImageIcon bigIcon, boolean requiresProject) {
+		super();
+		this.name = name;
+		this.shortName = shortName;
+		this.className = className;
+		this.relativeDirectory = relativeDirectory;
+		this.jiraComponentID = jiraComponentID;
+		this.helpTopic = helpTopic;
+		this.smallIcon = smallIcon;
+		this.mediumIcon = mediumIcon;
+		this.mediumIconWithHover = mediumIconWithHover;
+		this.bigIcon = bigIcon;
+		this.requiresProject = requiresProject;
+	}
 
 	protected Module() {
 		super();
 	}
 
-    /**
+	public String getName() {
+		return name;
+	}
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	protected String getRelativeDirectory() {
+		return relativeDirectory;
+	}
+
+	public String getJiraComponentID() {
+		return jiraComponentID;
+	}
+
+	public String getHelpTopic() {
+		return helpTopic;
+	}
+
+	public ImageIcon getSmallIcon() {
+		return smallIcon;
+	}
+
+	public ImageIcon getMediumIcon() {
+		return mediumIcon;
+	}
+
+	public ImageIcon getMediumIconWithHover() {
+		return mediumIconWithHover;
+	}
+
+	public ImageIcon getBigIcon() {
+		return bigIcon;
+	}
+
+	public boolean requireProject() {
+		return requiresProject;
+	}
+
+	public boolean isNotFoundNotified() {
+		return notFoundNotified;
+	}
+
+	/**
 	 * @return
 	 */
 	public Class<?> getModuleClass() {
@@ -924,13 +363,9 @@ public abstract class Module implements IModule {
 		return _moduleClass;
 	}
 
-	public abstract String getName();
-
 	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey(getName());
 	}
-
-	public abstract String getShortName();
 
 	public final String getDescription() {
 		return getName() + "_description";
@@ -945,16 +380,8 @@ public abstract class Module implements IModule {
 		return getModuleLoader().isLoaded(this);
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
-
-	public enum ModuleAvailability {
-		AVAILABLE, SUBJECT_TO_RESTRICTIONS, NON_AVAILABLE;
-
-		public boolean isAvailable() {
-			return ((this == AVAILABLE) || (this == SUBJECT_TO_RESTRICTIONS));
-		}
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
 	}
 
 	public boolean isActive() {
@@ -986,13 +413,13 @@ public abstract class Module implements IModule {
 
 	public boolean register() {
 		_constructor = lookupConstructor();
-        return _constructor!=null;
+		return _constructor != null;
 	}
 
 	/**
 	 * Internally used to lookup constructor
-	 *
-     */
+	 * 
+	 */
 	private Constructor lookupConstructor() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Registering module '" + getName() + "'");
@@ -1021,7 +448,6 @@ public abstract class Module implements IModule {
 		}
 		return null;
 	}
-
 
 	@Override
 	public String toString() {

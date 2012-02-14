@@ -375,7 +375,7 @@ public class BusinessDataStorage {
                                 }
 
                                 if (value != null) {
-                                	processBusinessData.setObjectForKey(value, key);
+                                	processBusinessData.takeValueForKey(value, key);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

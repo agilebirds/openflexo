@@ -69,132 +69,133 @@ import org.openflexo.view.menu.WindowMenu;
 
 public final class ProjectLoader {
 
-    private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
-    private static final String FOR_FLEXO_SERVER = "_forFlexoServer_";
+	private static final String FOR_FLEXO_SERVER = "_forFlexoServer_";
 
-    private static ProjectLoader _instance;
+	private static ProjectLoader _instance;
 
-    private static final Object monitor = new Object();
+	private static final Object monitor = new Object();
 
-    private ResourceManagerWindow _rmWindow;
+	private ResourceManagerWindow _rmWindow;
 
-    private InteractiveFlexoResourceUpdateHandler resourceUpdateHandler;
+	private InteractiveFlexoResourceUpdateHandler resourceUpdateHandler;
 
-    public static ProjectLoader instance() {
-        if(_instance==null){
-            synchronized (monitor){
-                if(_instance==null){
-                    _instance = new ProjectLoader();
-                }
-            }
-        }
-        return _instance;
-    }
+	public static ProjectLoader instance() {
+		if (_instance == null) {
+			synchronized (monitor) {
+				if (_instance == null) {
+					_instance = new ProjectLoader();
+				}
+			}
+		}
+		return _instance;
+	}
 
-    public InteractiveFlexoEditor askProjectDirectoryAndLoad() throws ProjectLoadingCancelledException {
-        InteractiveFlexoEditor loadedProject = null;
-        while (loadedProject == null) {
-            File projectDirectory = OpenProjectComponent.getProjectDirectory();
-            // The following line is the default line to call when we want
-            // to open a project from a GUI (Interactive mode) so that
-            // resource update handling is properly initialized. Additional
-            // small stuffs can be performed in that call so that projects
-            // are always opened the same way.
-            loadedProject = loadProject(projectDirectory);
-        }
-        return loadedProject;
-    }
+	public InteractiveFlexoEditor askProjectDirectoryAndLoad() throws ProjectLoadingCancelledException {
+		InteractiveFlexoEditor loadedProject = null;
+		while (loadedProject == null) {
+			File projectDirectory = OpenProjectComponent.getProjectDirectory();
+			// The following line is the default line to call when we want
+			// to open a project from a GUI (Interactive mode) so that
+			// resource update handling is properly initialized. Additional
+			// small stuffs can be performed in that call so that projects
+			// are always opened the same way.
+			loadedProject = loadProject(projectDirectory);
+		}
+		return loadedProject;
+	}
 
-    /**
-     * Loads the project located withing <code> projectDirectory </code>. The following method is the default methode to call when opening a
-     * project from a GUI (Interactive mode) so that resource update handling is properly initialized. Additional small stuffs can be
-     * performed in that call so that projects are always opened the same way.
-     *
-     * @param projectDirectory  the project directory
-     * @return the {@link InteractiveFlexoEditor} editor if the opening succeeded else <code>null</code>
-     * @throws org.openflexo.foundation.utils.ProjectLoadingCancelledException whenever the load procedure is interrupted by the user or
-     * by Flexo.
-     */
-    public InteractiveFlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException {
-        if (projectDirectory == null || !projectDirectory.exists()) {
-            throw new IllegalArgumentException("Project directory cannot be null and must exists.");
-        }
-        FlexoVersion previousFlexoVersion = FlexoProjectUtil.getVersion(projectDirectory);
-        try{
-            FlexoProjectUtil.isProjectOpenable(projectDirectory);
-        }catch(UnreadableProjectException e){
-            FlexoController.notify(e.getMessage());
-            ProgressWindow.hideProgressWindow();
-            throw new ProjectLoadingCancelledException(e.getMessage());
-        }
+	/**
+	 * Loads the project located withing <code> projectDirectory </code>. The following method is the default methode to call when opening a
+	 * project from a GUI (Interactive mode) so that resource update handling is properly initialized. Additional small stuffs can be
+	 * performed in that call so that projects are always opened the same way.
+	 * 
+	 * @param projectDirectory
+	 *            the project directory
+	 * @return the {@link InteractiveFlexoEditor} editor if the opening succeeded else <code>null</code>
+	 * @throws org.openflexo.foundation.utils.ProjectLoadingCancelledException
+	 *             whenever the load procedure is interrupted by the user or by Flexo.
+	 */
+	public InteractiveFlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException {
+		if (projectDirectory == null || !projectDirectory.exists()) {
+			throw new IllegalArgumentException("Project directory cannot be null and must exists.");
+		}
+		FlexoVersion previousFlexoVersion = FlexoProjectUtil.getVersion(projectDirectory);
+		try {
+			FlexoProjectUtil.isProjectOpenable(projectDirectory);
+		} catch (UnreadableProjectException e) {
+			FlexoController.notify(e.getMessage());
+			ProgressWindow.hideProgressWindow();
+			throw new ProjectLoadingCancelledException(e.getMessage());
+		}
 
-        if (getAutoSaveService().hasAutoSaveThread()) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("Auto-save thread still running. Killing it now. Please ensure that auto-save thread is stopped before loading a project");
-            }
-            getAutoSaveService().stopAutoSaveThread();
-        }
-        if (ProgressWindow.hasInstance()) {
-            ProgressWindow.hideProgressWindow();
-        }
-        ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_project"), 14);
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Opening " + projectDirectory.getAbsolutePath());
-        }
-        preInitialization(projectDirectory);
-        final FlexoProject newProject;
-        final InteractiveFlexoEditor newEditor;
-        try {
-            newEditor = (InteractiveFlexoEditor) FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow
-                    .instance(), resourceUpdateHandler = new InteractiveFlexoResourceUpdateHandler(), InteractiveFlexoEditor.FACTORY,
-                    UserType.getCurrentUserType().getDefaultLoadingHandler(projectDirectory),
-                    getFlexoResourceCenterService().getFlexoResourceCenter());
-            newProject = newEditor.getProject();
-            checkExternalRepositories(newProject);
-            if (previousFlexoVersion != null && previousFlexoVersion.major == 1 && previousFlexoVersion.minor < 3) {
-                newProject.validate(); // Let's repair this project
-                try {
-                    newProject.save(ProgressWindow.instance());
-                } catch (SaveResourceException e) {
-                    if (logger.isLoggable(Level.WARNING)) {
-                        logger.warning("Could not save project after repairing it.");
-                    }
-                }
-            }
-        } catch (ProjectInitializerException e) {
-            e.printStackTrace();
-            FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
-                    + projectDirectory.getAbsolutePath());
-            ProgressWindow.hideProgressWindow();
-            return null;
-        }
-        getAutoSaveService().conditionalStartOfAutoSaveThread(newEditor.isAutoSaveEnabledByDefault());
-        ProgressWindow.hideProgressWindow();
-        return newEditor;
-    }
+		if (getAutoSaveService().hasAutoSaveThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Auto-save thread still running. Killing it now. Please ensure that auto-save thread is stopped before loading a project");
+			}
+			getAutoSaveService().stopAutoSaveThread();
+		}
+		if (ProgressWindow.hasInstance()) {
+			ProgressWindow.hideProgressWindow();
+		}
+		ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_project"), 14);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Opening " + projectDirectory.getAbsolutePath());
+		}
+		preInitialization(projectDirectory);
+		final FlexoProject newProject;
+		final InteractiveFlexoEditor newEditor;
+		try {
+			newEditor = (InteractiveFlexoEditor) FlexoResourceManager.initializeExistingProject(projectDirectory,
+					ProgressWindow.instance(), resourceUpdateHandler = new InteractiveFlexoResourceUpdateHandler(),
+					InteractiveFlexoEditor.FACTORY, UserType.getCurrentUserType().getDefaultLoadingHandler(projectDirectory),
+					getFlexoResourceCenterService().getFlexoResourceCenter());
+			newProject = newEditor.getProject();
+			checkExternalRepositories(newProject);
+			if (previousFlexoVersion != null && previousFlexoVersion.major == 1 && previousFlexoVersion.minor < 3) {
+				newProject.validate(); // Let's repair this project
+				try {
+					newProject.save(ProgressWindow.instance());
+				} catch (SaveResourceException e) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not save project after repairing it.");
+					}
+				}
+			}
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+					+ projectDirectory.getAbsolutePath());
+			ProgressWindow.hideProgressWindow();
+			return null;
+		}
+		getAutoSaveService().conditionalStartOfAutoSaveThread(newEditor.isAutoSaveEnabledByDefault());
+		ProgressWindow.hideProgressWindow();
+		return newEditor;
+	}
 
-    public InteractiveFlexoEditor newProject(File projectDirectory) {
-        if (!ProgressWindow.hasInstance()) {
-            ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("building_new_project"), 10);
-        } else {
-            ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("building_new_project"));
-        }
-        // This will just create the .version in the project
-        FlexoProjectUtil.currentFlexoVersionIsSmallerThanLastVersion(projectDirectory);
+	public InteractiveFlexoEditor newProject(File projectDirectory) {
+		if (!ProgressWindow.hasInstance()) {
+			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("building_new_project"), 10);
+		} else {
+			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("building_new_project"));
+		}
+		// This will just create the .version in the project
+		FlexoProjectUtil.currentFlexoVersionIsSmallerThanLastVersion(projectDirectory);
 
-        preInitialization(projectDirectory);
-        InteractiveFlexoEditor returned;
-        returned = (InteractiveFlexoEditor) FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(),
-                resourceUpdateHandler = new InteractiveFlexoResourceUpdateHandler(), InteractiveFlexoEditor.FACTORY,
-                getFlexoResourceCenterService().getFlexoResourceCenter());
-        getAutoSaveService().conditionalStartOfAutoSaveThread(returned.isAutoSaveEnabledByDefault());
-        //TODO : be carreful, I comment this line without knowing the effect !!!!
-        //activeModule = null;
-        return returned;
-    }
+		preInitialization(projectDirectory);
+		InteractiveFlexoEditor returned;
+		returned = (InteractiveFlexoEditor) FlexoResourceManager.initializeNewProject(projectDirectory, ProgressWindow.instance(),
+				resourceUpdateHandler = new InteractiveFlexoResourceUpdateHandler(), InteractiveFlexoEditor.FACTORY,
+				getFlexoResourceCenterService().getFlexoResourceCenter());
+		getAutoSaveService().conditionalStartOfAutoSaveThread(returned.isAutoSaveEnabledByDefault());
+		// TODO : be carreful, I comment this line without knowing the effect !!!!
+		// activeModule = null;
+		return returned;
+	}
 
-    public InteractiveFlexoEditor reloadProject() throws ModuleLoadingException, ProjectLoadingCancelledException {
+	public InteractiveFlexoEditor reloadProject() throws ModuleLoadingException, ProjectLoadingCancelledException {
 		Module moduleToReload = null;
 		if (ModuleLoader.instance().getProject() != null) {
 			moduleToReload = FlexoModule.getActiveModule().getModule();
@@ -213,40 +214,39 @@ public final class ProjectLoader {
 		return null;
 	}
 
-    public void closeCurrentProject() {
-        FlexoProject currentProject = ModuleLoader.instance().getProject();
+	public void closeCurrentProject() {
+		FlexoProject currentProject = ModuleLoader.instance().getProject();
 
-        if (currentProject != null) {
-            currentProject.close();
-        }
-        getAutoSaveService().stopAutoSaveThread();
-        if (_rmWindow != null) {
-            _rmWindow.dispose();
-            _rmWindow = null;
-        }
-        for (Enumeration<FlexoModule> e = new Hashtable<Module, FlexoModule>(ModuleLoader.instance()._modules).elements(); e
-                .hasMoreElements();) {
-            FlexoModule mod = e.nextElement();
-            mod.closeWithoutConfirmation(false);
-        }
-        FCH.clearComponentsHashtable();
-        FlexoHelp.instance.deleteObservers();
-        FlexoLocalization.clearStoredLocalizedForComponents();
-        WindowMenu.reset();
-        ModuleBar.reset();
-        FlexoProject.cleanUpActionizer();
-        System.gc();
-    }
+		if (currentProject != null) {
+			currentProject.close();
+		}
+		getAutoSaveService().stopAutoSaveThread();
+		if (_rmWindow != null) {
+			_rmWindow.dispose();
+			_rmWindow = null;
+		}
+		for (Enumeration<FlexoModule> e = new Hashtable<Module, FlexoModule>(ModuleLoader.instance()._modules).elements(); e
+				.hasMoreElements();) {
+			FlexoModule mod = e.nextElement();
+			mod.closeWithoutConfirmation(false);
+		}
+		FCH.clearComponentsHashtable();
+		FlexoHelp.instance.deleteObservers();
+		FlexoLocalization.clearStoredLocalizedForComponents();
+		WindowMenu.reset();
+		ModuleBar.reset();
+		FlexoProject.cleanUpActionizer();
+		System.gc();
+	}
 
-    public ResourceManagerWindow getRMWindow(FlexoProject project) {
+	public ResourceManagerWindow getRMWindow(FlexoProject project) {
 		if (_rmWindow == null) {
 			_rmWindow = new ResourceManagerWindow(project);
 		}
 		return _rmWindow;
 	}
 
-
-    public void saveProjectForServer(FlexoProject project) {
+	public void saveProjectForServer(FlexoProject project) {
 		final String zipFilename = project.getProjectDirectory().getName()
 				.substring(0, project.getProjectDirectory().getName().length() - 4);
 		String zipFileNameProposal = zipFilename + FOR_FLEXO_SERVER + new FlexoVersion(1, 0, 0, -1, false, false);
@@ -258,11 +258,11 @@ public final class ProjectLoader {
 		});
 		File previousVersion = null;
 		if (zips != null) {
-            for (File file : zips) {
-                if (previousVersion == null || previousVersion.lastModified() < file.lastModified()) {
-                    previousVersion = file;
-                }
-            }
+			for (File file : zips) {
+				if (previousVersion == null || previousVersion.lastModified() < file.lastModified()) {
+					previousVersion = file;
+				}
+			}
 		}
 		if (previousVersion != null && previousVersion.getName().indexOf(FOR_FLEXO_SERVER) > -1) {
 			String version = previousVersion.getName()
@@ -389,10 +389,10 @@ public final class ProjectLoader {
 			if (projectDirectory == null) {
 				return;
 			} else if (!projectDirectory.exists()) {
-				if(!projectDirectory.mkdirs()){
-                    FlexoController.notify(FlexoLocalization.localizedForKey("could_not_create_prj_directory"));
-				    return;
-                }
+				if (!projectDirectory.mkdirs()) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_create_prj_directory"));
+					return;
+				}
 			}
 			if (!projectDirectory.canWrite()) {
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_save_permission_denied"));
@@ -423,7 +423,7 @@ public final class ProjectLoader {
 						doSaveProject(project);
 						return true;
 					} catch (SaveResourceException e) {
-                        informUserAboutSaveResourceException(e);
+						informUserAboutSaveResourceException(e);
 						return false;
 					}
 				} else {
@@ -437,82 +437,83 @@ public final class ProjectLoader {
 		return false;
 	}
 
-    static void doSaveProject(FlexoProject project) throws SaveResourceException {
-        try{
-            ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
-            project.save(ProgressWindow.instance());
-        }finally {
-            ProgressWindow.hideProgressWindow();
-        }
+	static void doSaveProject(FlexoProject project) throws SaveResourceException {
+		try {
+			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
+			project.save(ProgressWindow.instance());
+		} finally {
+			ProgressWindow.hideProgressWindow();
+		}
 
-    }
+	}
 
-    /**
+	/**
 	 * Return boolean indicating if some resources need saving
 	 */
 	public static boolean someResourcesNeedsSaving(FlexoProject project) {
-		return project!=null && project.getUnsavedStorageResources(false).size()>0;
+		return project != null && project.getUnsavedStorageResources(false).size() > 0;
 	}
 
-    static void informUserAboutSaveResourceException(SaveResourceException e) {
-        if (e instanceof SaveResourcePermissionDeniedException) {
-            informUserAboutPermissionDeniedException((SaveResourcePermissionDeniedException)e);
-        } else {
-            FlexoController.showError(FlexoLocalization.localizedForKey("error_during_saving"));
-        }
-        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-        logger.warning(e.getMessage());
-        e.printStackTrace();
-    }
+	static void informUserAboutSaveResourceException(SaveResourceException e) {
+		if (e instanceof SaveResourcePermissionDeniedException) {
+			informUserAboutPermissionDeniedException((SaveResourcePermissionDeniedException) e);
+		} else {
+			FlexoController.showError(FlexoLocalization.localizedForKey("error_during_saving"));
+		}
+		logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+		logger.warning(e.getMessage());
+		e.printStackTrace();
+	}
 
-    private static void informUserAboutPermissionDeniedException(SaveResourcePermissionDeniedException e){
-        if (e.getFileResource().getFile().isDirectory()) {
-                FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
-                        FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
-                        + e.getFileResource().getFile().getAbsolutePath());
-            } else {
-                FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
-                        FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
-                                + e.getFileResource().getFile().getAbsolutePath());
-            }
-    }
+	private static void informUserAboutPermissionDeniedException(SaveResourcePermissionDeniedException e) {
+		if (e.getFileResource().getFile().isDirectory()) {
+			FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
+					FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
+							+ e.getFileResource().getFile().getAbsolutePath());
+		} else {
+			FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
+					FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
+							+ e.getFileResource().getFile().getAbsolutePath());
+		}
+	}
 
-    private boolean openResourceReviewerDialog(FlexoProject project) {
-        SaveDialog reviewer = new SaveDialog(FlexoController.getActiveFrame());
-        if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
-            try {
-                doSaveProject(project);
-                return true;
-            } catch (SaveResourcePermissionDeniedException e) {
-                informUserAboutPermissionDeniedException((SaveResourcePermissionDeniedException)e);
-                return false;
-            } catch (SaveResourceException e) {
-                return FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-                        + FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"));
-            }
-        } else {
-            return reviewer.getRetval() == JOptionPane.NO_OPTION;
-        }
-    }
+	private boolean openResourceReviewerDialog(FlexoProject project) {
+		SaveDialog reviewer = new SaveDialog(FlexoController.getActiveFrame());
+		if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
+			try {
+				doSaveProject(project);
+				return true;
+			} catch (SaveResourcePermissionDeniedException e) {
+				informUserAboutPermissionDeniedException((SaveResourcePermissionDeniedException) e);
+				return false;
+			} catch (SaveResourceException e) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
+						+ FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"));
+			}
+		} else {
+			return reviewer.getRetval() == JOptionPane.NO_OPTION;
+		}
+	}
 
-    private AutoSaveService getAutoSaveService(){
-        return AutoSaveService.instance();
-    }
+	private AutoSaveService getAutoSaveService() {
+		return AutoSaveService.instance();
+	}
 
-    private static void preInitialization(File projectDirectory) {
-        GeneralPreferences.addToLastOpenedProjects(projectDirectory);
-        FlexoPreferences.savePreferences(true);
-    }
+	private static void preInitialization(File projectDirectory) {
+		GeneralPreferences.addToLastOpenedProjects(projectDirectory);
+		FlexoPreferences.savePreferences(true);
+	}
 
-    private FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	private FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
 
-    /**
+	/**
 	 * Check if there is an external repository with some active resources connected In this case, explicitely ask what to do, connect or
 	 * let disconnected
-	 *
-	 * @param project  the project
+	 * 
+	 * @param project
+	 *            the project
 	 */
 	private void checkExternalRepositories(FlexoProject project) {
 		if (!UserType.isMaintainerRelease() && !UserType.isDevelopperRelease()) {
@@ -552,10 +553,10 @@ public final class ProjectLoader {
 											+ dirParam.getValue().getAbsolutePath() + " "
 											+ FlexoLocalization.localizedForKey("does_not_exist") + "\n"
 											+ FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
-										if(!dirParam.getValue().mkdirs()){
-                                            FlexoController.notify(FlexoLocalization.localizedForKey("cannot_create_directory"));
-                                            return;
-                                        }
+										if (!dirParam.getValue().mkdirs()) {
+											FlexoController.notify(FlexoLocalization.localizedForKey("cannot_create_directory"));
+											return;
+										}
 									}
 									repository.setDirectory(dirParam.getValue());
 								}
@@ -571,7 +572,7 @@ public final class ProjectLoader {
 		}
 	}
 
-    public InteractiveFlexoResourceUpdateHandler getFlexoResourceUpdateHandler() {
-        return resourceUpdateHandler;
-    }
+	public InteractiveFlexoResourceUpdateHandler getFlexoResourceUpdateHandler() {
+		return resourceUpdateHandler;
+	}
 }

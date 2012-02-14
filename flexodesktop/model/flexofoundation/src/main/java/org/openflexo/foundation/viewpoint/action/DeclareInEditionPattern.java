@@ -26,7 +26,9 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 
 public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<A, T1>, T1 extends ExampleDrawingObject> extends
@@ -39,6 +41,23 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	DeclareInEditionPattern(FlexoActionType<A, T1, ExampleDrawingObject> actionType, T1 focusedObject,
 			Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+		drawingObjectEntries = new Vector<DeclareInEditionPattern<A, T1>.ExampleDrawingObjectEntry>();
+		int shapeIndex = 1;
+		int connectorIndex = 1;
+		for (ExampleDrawingObject o : getFocusedObject().getDescendants()) {
+			if (o instanceof ExampleDrawingShape) {
+				ExampleDrawingShape shape = (ExampleDrawingShape) o;
+				String shapeRoleName = "shape" + (shapeIndex > 1 ? shapeIndex : "");
+				drawingObjectEntries.add(new ExampleDrawingObjectEntry(shape, shapeRoleName));
+				shapeIndex++;
+			}
+			if (o instanceof ExampleDrawingConnector) {
+				ExampleDrawingConnector connector = (ExampleDrawingConnector) o;
+				String connectorRoleName = "connector" + (connectorIndex > 1 ? connectorIndex : "");
+				drawingObjectEntries.add(new ExampleDrawingObjectEntry(connector, connectorRoleName));
+				connectorIndex++;
+			}
+		}
 	}
 
 	public static enum DeclareInEditionPatternChoices {
@@ -63,4 +82,57 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	public abstract GraphicalElementPatternRole getPatternRole();
 
 	public abstract void resetPatternRole();
+
+	public Vector<ExampleDrawingObjectEntry> drawingObjectEntries;
+
+	public class ExampleDrawingObjectEntry {
+		private boolean selectThis;
+		public ExampleDrawingObject graphicalObject;
+		public String patternRoleName;
+
+		public ExampleDrawingObjectEntry(ExampleDrawingObject graphicalObject, String patternRoleName) {
+			super();
+			this.graphicalObject = graphicalObject;
+			this.patternRoleName = patternRoleName;
+			this.selectThis = isMainEntry();
+		}
+
+		public boolean isMainEntry() {
+			return (graphicalObject == getFocusedObject());
+		}
+
+		public boolean getSelectThis() {
+			if (isMainEntry())
+				return true;
+			return selectThis;
+		}
+
+		public void setSelectThis(boolean aFlag) {
+			if (!isMainEntry()) {
+				selectThis = aFlag;
+			}
+		}
+
+		public ExampleDrawingObjectEntry getParentEntry() {
+			return getEntry(graphicalObject.getParent());
+		}
+	}
+
+	public int getSelectedEntriesCount() {
+		int returned = 0;
+		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
+			if (e.selectThis)
+				returned++;
+		}
+		return returned;
+	}
+
+	public ExampleDrawingObjectEntry getEntry(ExampleDrawingObject o) {
+		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
+			if (e.graphicalObject == o) {
+				return e;
+			}
+		}
+		return null;
+	}
 }

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -46,7 +47,12 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 	}
 
 	public ViewObject getContainer(EditionSchemeAction action) {
-		return (ViewObject) getContainer().getBindingValue(action);
+		if (getPatternRole().getParentShapeAsDefinedInAction()) {
+			return (ViewObject) getContainer().getBindingValue(action);
+		} else {
+			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
+			return (ViewObject) action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
+		}
 	}
 
 	@Override

@@ -17,10 +17,13 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import java.util.Arrays;
+
 import junit.framework.TestCase;
 
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.action.GenerateHelpSet;
+import org.openflexo.localization.FlexoLocalization;
 
 public class TestGenerateHelpSet extends TestCase {
 
@@ -35,8 +38,9 @@ public class TestGenerateHelpSet extends TestCase {
 	public void testGenerate() {
 		GenerateHelpSet action = GenerateHelpSet.actionType.makeNewAction(null, null, null);
 		// A refaire aussi
-		// action.setTitle(FlexoLocalization.localizedForKey("help_for_flexo_tool_set"));
-		// action.setLanguage((Language)DocResourceManager.instance().getDocResourceCenter().getLanguages().firstElement());
+		action.addToGeneration(FlexoLocalization.localizedForKey("help_for_flexo_tool_set"), DocResourceManager.instance()
+				.getDocResourceCenter().getLanguages().firstElement(), "Test",
+				Arrays.asList(DocResourceManager.instance().getDocResourceCenter().getModelFolder()));
 		action.setNote("none");
 		action.doAction();
 	}

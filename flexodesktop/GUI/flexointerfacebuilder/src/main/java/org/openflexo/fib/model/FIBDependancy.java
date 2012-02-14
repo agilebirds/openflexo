@@ -93,7 +93,7 @@ public class FIBDependancy extends FIBModelObject {
 		super.finalizeDeserialization();
 		setMasterComponent(getRootComponent().getComponentNamed(masterComponentName));
 	}
-	
+
 	@Override
 	public List<? extends FIBModelObject> getEmbeddedObjects() {
 		return null;

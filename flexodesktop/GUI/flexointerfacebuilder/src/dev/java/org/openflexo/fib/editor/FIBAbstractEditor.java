@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
@@ -35,6 +36,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -146,6 +148,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		palette.setVisible(true);
 
 		frame.setTitle("Flexo Interface Builder Editor");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// mainPanel = new JPanel();
 
 		JMenuBar mb = new JMenuBar();
@@ -272,6 +275,8 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 				inspector.setVisible(true);
 			}
 		});
+		inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? KeyEvent.CTRL_MASK
+				: KeyEvent.META_MASK));
 
 		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "logs"));
 		logsItem.addActionListener(new ActionListener() {

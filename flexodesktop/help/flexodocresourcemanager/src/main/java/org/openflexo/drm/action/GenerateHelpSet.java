@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -60,7 +61,7 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return ((object != null) && (object instanceof DocItemFolder) && (((DocItemFolder) object).isRootFolder()));
+			return object != null && object instanceof DocItemFolder && ((DocItemFolder) object).isRootFolder();
 		}
 
 	};
@@ -138,7 +139,7 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 		return _helpSetDirectory;
 	}
 
-	public void addToGeneration(String aTitle, Language aLanguage, String aDistributionName, Vector<DocItemFolder> someDocItemFolders) {
+	public void addToGeneration(String aTitle, Language aLanguage, String aDistributionName, List<DocItemFolder> someDocItemFolders) {
 		configurations.add(new HelpSetConfiguration(aTitle, aLanguage, aDistributionName, someDocItemFolders));
 	}
 

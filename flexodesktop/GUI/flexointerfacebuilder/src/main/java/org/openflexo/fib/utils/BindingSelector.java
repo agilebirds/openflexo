@@ -27,8 +27,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +48,7 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingDefinitionTypeChanged;
 import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingExpression.BindingValueConstant;
 import org.openflexo.antar.binding.BindingExpression.BindingValueFunction;
@@ -51,6 +56,7 @@ import org.openflexo.antar.binding.BindingExpression.BindingValueVariable;
 import org.openflexo.antar.binding.BindingExpressionFactory;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingValue;
 import org.openflexo.antar.binding.BindingVariable;
@@ -73,6 +79,7 @@ import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.swing.SwingUtils;
 import org.openflexo.swing.TextFieldCustomPopup;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -81,7 +88,8 @@ import org.openflexo.toolbox.StringUtils;
  * @author sguerin
  * 
  */
-public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> implements FIBCustomComponent<AbstractBinding, BindingSelector> {
+public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> implements FIBCustomComponent<AbstractBinding, BindingSelector>,
+		Observer, PropertyChangeListener {
 	static final Logger logger = Logger.getLogger(BindingSelector.class.getPackage().getName());
 
 	private AbstractBinding _revertBindingValue;
@@ -175,6 +183,12 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 							}
 						});
 					}
+				}
+
+				// This code was added to allow direct typing without opening selector panel (sic !)
+				// TODO:provide better implementation !!!
+				if (_selectorPanel == null) {
+					createCustomPanel(getEditedObject());
 				}
 
 				if (_selectorPanel != null) {
@@ -357,6 +371,9 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			if (object.getOwner() != null) {
 				setBindable(object.getOwner());
 			}
+		} else {
+			setBindingDefinition(null);
+			setBindable(null);
 		}
 	}
 
@@ -664,8 +681,13 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 	public void refreshBindingModel() {
 		if (_bindable != null && _selectorPanel != null) {
-			// _selectorPanel.setBindingModel(_bindable.getBindingModel());
 			_selectorPanel.update();
+		}
+	}
+
+	public void refreshBindingDefinitionType() {
+		if (_selectorPanel != null) {
+			_selectorPanel.fireBindingDefinitionChanged();
 		}
 	}
 
@@ -704,9 +726,23 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setBindable with " + bindable);
 		}
+		if (_bindable instanceof Observable) {
+			((Observable) _bindable).deleteObserver(this);
+		}
+		if (_bindable instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().removePropertyChangeListener(this);
+		}
 		_bindable = bindable;
 		if ((bindable != null) && (_selectorPanel != null)) {
 			_selectorPanel.fireBindableChanged();
+		}
+		if (bindable instanceof Observable) {
+			((Observable) bindable).addObserver(this);
+		}
+		if (bindable instanceof HasPropertyChangeSupport) {
+			// System.out.println("registering " + bindable + " for " + this);
+			((HasPropertyChangeSupport) bindable).getPropertyChangeSupport().addPropertyChangeListener(
+					BindingModelChanged.BINDING_MODEL_CHANGED, this);
 		}
 		// getCustomPanel().setBindingModel(bindable.getBindingModel());
 		updateTextFieldProgrammaticaly();
@@ -718,6 +754,34 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		if (!textIsEditing) {
 			super.updateTextFieldProgrammaticaly();
 		}
+	}
+
+	@Override
+	public void update(Observable observable, Object notification) {
+		if (observable == _bindable) {
+			if (notification instanceof BindingModelChanged) {
+				logger.fine("Refreshing Binding Model");
+				refreshBindingModel();
+			}
+		}
+		if (observable == _bindingDefinition) {
+			if (notification instanceof BindingDefinitionTypeChanged) {
+				logger.fine("Updating BindingDefinition type");
+				refreshBindingDefinitionType();
+			}
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(BindingModelChanged.BINDING_MODEL_CHANGED)) {
+			logger.fine("Refreshing Binding Model");
+			refreshBindingModel();
+		} else if (evt.getPropertyName().equals(BindingDefinitionTypeChanged.BINDING_DEFINITION_TYPE_CHANGED)) {
+			logger.fine("Updating BindingDefinition type");
+			refreshBindingDefinitionType();
+		}
+
 	}
 
 	/*public void setCustomBindingModel(BindingModel aBindingModel)
@@ -754,6 +818,12 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			logger.fine(toString() + "Setting new binding definition: " + bindingDefinition + " old: " + _bindingDefinition);
 		}
 		if (bindingDefinition != _bindingDefinition) {
+			if (_bindingDefinition instanceof Observable) {
+				((Observable) _bindingDefinition).deleteObserver(this);
+			}
+			if (_bindingDefinition instanceof HasPropertyChangeSupport) {
+				((HasPropertyChangeSupport) _bindingDefinition).getPropertyChangeSupport().removePropertyChangeListener(this);
+			}
 			_bindingDefinition = bindingDefinition;
 			AbstractBinding bindingValue = getEditedObject();
 			if (bindingValue != null) {
@@ -764,6 +834,16 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			}
 			if (_selectorPanel != null) {
 				_selectorPanel.fireBindingDefinitionChanged();
+			}
+			if (bindingDefinition instanceof Observable) {
+				((Observable) bindingDefinition).addObserver(this);
+			}
+			if (bindingDefinition instanceof HasPropertyChangeSupport) {
+				((HasPropertyChangeSupport) bindingDefinition).getPropertyChangeSupport().addPropertyChangeListener(
+						BindingDefinitionTypeChanged.BINDING_DEFINITION_TYPE_CHANGED, this);
+			}
+			if (bindingDefinition instanceof HasPropertyChangeSupport) {
+				((HasPropertyChangeSupport) bindingDefinition).getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 		}
 	}

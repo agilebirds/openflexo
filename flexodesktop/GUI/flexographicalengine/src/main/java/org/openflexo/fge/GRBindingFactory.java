@@ -171,9 +171,9 @@ public class GRBindingFactory extends DefaultBindingFactory {
 			super(owner, "components", new ParameterizedTypeImpl(Vector.class, GraphicalRepresentation.class));
 			this.owner = owner;
 			components = new Vector<GRBindingFactory.ComponentPathElement>();
-			Iterator<GraphicalRepresentation> it = owner.getRootGraphicalRepresentation().allContainedGRIterator();
+			Iterator<GraphicalRepresentation<?>> it = owner.getRootGraphicalRepresentation().allContainedGRIterator();
 			while (it.hasNext()) {
-				GraphicalRepresentation subComponent = it.next();
+				GraphicalRepresentation<?> subComponent = it.next();
 				components.add(new ComponentPathElement(subComponent.getIdentifier(), subComponent, owner));
 			}
 		}

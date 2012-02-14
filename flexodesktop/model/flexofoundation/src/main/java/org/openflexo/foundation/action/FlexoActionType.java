@@ -470,7 +470,8 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 					action = makeNewAction(source.getFocusedObject(), source.getGlobalSelection(), source.getEditor());
 					action.setInvoker(event.getSource());
 				} else {
-					logger.info("Action not enabled for this selection " + source.getFocusedObject() + " " + source.getGlobalSelection());
+					logger.info("Action not enabled for this selection " + source.getFocusedObject() + " " + source.getGlobalSelection()
+							+ " actionType=" + this);
 					logger.info("Reason: " + getDisabledReason(source.getFocusedObject(), source.getGlobalSelection(), source.getEditor()));
 					return;
 				}

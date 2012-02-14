@@ -17,31 +17,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.br.view;
+package org.openflexo.foundation.viewpoint;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.openflexo.foundation.ontology.dm.OEDataModification;
 
-import org.openflexo.Flexo;
-import org.openflexo.application.FlexoApplication;
+public class GraphicalRepresentationModified extends OEDataModification {
+	private PatternRole patternRole;
 
-/**
- * Utility class allowing to launch a small application used to visualize bug reports of Flexo
- * 
- * @author sguerin
- */
-public class BugReportEditor {
-
-	private static final Logger logger = Logger.getLogger(BugReportEditor.class.getPackage().getName());
-
-	public static void main(String[] args) {
-
-		Flexo.initializeLoggingManager();
-		FlexoApplication.initialize();
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Starting BugReportsEditor");
-		}
-		BugReportViewerWindow w = new BugReportViewerWindow();
-		w.setVisible(true);
+	public GraphicalRepresentationModified(PatternRole patternRole, Object graphicalRepresentation) {
+		super(null, graphicalRepresentation);
+		this.patternRole = patternRole;
 	}
+
+	public PatternRole getPatternRole() {
+		return patternRole;
+	}
+
 }

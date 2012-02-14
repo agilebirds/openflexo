@@ -84,7 +84,7 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getCalcDrawingShape()) {
-			logger.info("Notified " + dataModification);
+			// logger.info("Notified " + dataModification);
 			if ((dataModification instanceof CalcDrawingShapeInserted) || (dataModification instanceof CalcDrawingShapeRemoved)
 					|| (dataModification instanceof CalcDrawingConnectorInserted)
 					|| (dataModification instanceof CalcDrawingConnectorRemoved)) {

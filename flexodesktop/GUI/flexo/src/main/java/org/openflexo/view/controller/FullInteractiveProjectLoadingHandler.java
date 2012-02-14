@@ -94,9 +94,9 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 		} else if (choice == 2) { // DONT_CONVERT
 			return false;
 		} else {
-            if(ProgressWindow.hasInstance()){
-                ProgressWindow.instance().hideWindow();
-            }
+			if (ProgressWindow.hasInstance()) {
+				ProgressWindow.instance().hideWindow();
+			}
 			throw new ProjectLoadingCancelledException();
 		}
 	}

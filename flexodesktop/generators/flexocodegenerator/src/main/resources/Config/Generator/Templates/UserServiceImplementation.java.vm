@@ -1,10 +1,10 @@
-import org.openflexo.resource.user.DLUserInterface;
-import org.openflexo.service.DLServiceManager;
-import org.openflexo.service.DLServiceNotAvailableException;
-import org.openflexo.user.DenaliUserServiceInterface;
-import org.openflexo.user.InvalidPasswordException;
-import org.openflexo.user.NotAllowedToLoginException;
-import org.openflexo.user.UnknowLoginException;
+import be.denali.resource.user.DLUserInterface;
+import be.denali.service.DLServiceManager;
+import be.denali.service.DLServiceNotAvailableException;
+import be.denali.user.DenaliUserServiceInterface;
+import be.denali.user.InvalidPasswordException;
+import be.denali.user.NotAllowedToLoginException;
+import be.denali.user.UnknowLoginException;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSDictionary;
@@ -21,7 +21,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
     
     /**
      * Overrides getUser
-     * @see org.openflexo.user.DenaliUserServiceInterface${sharp}getUser(java.lang.String, com.webobjects.eocontrol.EOEditingContext)
+     * @see be.denali.user.DenaliUserServiceInterface${sharp}getUser(java.lang.String, com.webobjects.eocontrol.EOEditingContext)
      */
     public DLUserInterface getUser(String userLogin, EOEditingContext ec)
     {
@@ -30,7 +30,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
 
     /**
      * Overrides checkPassword
-     * @see org.openflexo.user.DenaliUserServiceInterface${sharp}checkPassword(java.lang.String, java.lang.String)
+     * @see be.denali.user.DenaliUserServiceInterface${sharp}checkPassword(java.lang.String, java.lang.String)
      */
     public void checkPassword(String userLogin, String userPassword) throws UnknowLoginException, InvalidPasswordException, NotAllowedToLoginException
     {
@@ -50,7 +50,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
 
     /**
      * Overrides serviceName
-     * @see org.openflexo.service.DLServiceInterface#serviceName()
+     * @see be.denali.service.DLServiceInterface#serviceName()
      */
     public String serviceName()
     {
@@ -59,7 +59,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
 
     /**
      * Overrides serviceVersion
-     * @see org.openflexo.service.DLServiceInterface#serviceVersion()
+     * @see be.denali.service.DLServiceInterface#serviceVersion()
      */
     public String serviceVersion()
     {
@@ -68,7 +68,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
 
     /**
      * Overrides testConfig
-     * @see org.openflexo.service.DLServiceInterface#testConfig()
+     * @see be.denali.service.DLServiceInterface#testConfig()
      */
     public void testConfig() throws DLServiceNotAvailableException
     {
@@ -77,7 +77,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
 
     /**
      * Overrides initService
-     * @see org.openflexo.service.DLServiceInterface#initService()
+     * @see be.denali.service.DLServiceInterface#initService()
      */
     public void initService()
     {
@@ -92,7 +92,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
         
         /**
          * Overrides login
-         * @see org.openflexo.resource.user.DLUserInterface#login()
+         * @see be.denali.resource.user.DLUserInterface#login()
          */
         public String login()
         {
@@ -101,7 +101,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
 
         /**
          * Overrides isSuperAdmin
-         * @see org.openflexo.resource.user.DLUserInterface#isSuperAdmin()
+         * @see be.denali.resource.user.DLUserInterface#isSuperAdmin()
          */
         public boolean isSuperAdmin()
         {
@@ -118,7 +118,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
 
         /**
          * Overrides isVisitor
-         * @see org.openflexo.resource.user.DLUserInterface#isVisitor()
+         * @see be.denali.resource.user.DLUserInterface#isVisitor()
          */
         public boolean isVisitor()
         {
@@ -127,7 +127,7 @@ public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceI
 
         /**
          * Overrides infoDictionary
-         * @see org.openflexo.resource.user.DLUserInterface#infoDictionary()
+         * @see be.denali.resource.user.DLUserInterface#infoDictionary()
          */
         public NSDictionary infoDictionary()
         {

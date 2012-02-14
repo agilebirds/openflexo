@@ -137,6 +137,7 @@ public abstract class FlexoOntology extends OntologyObject {
 				while (it.hasNext()) {
 					Attribute at = (Attribute) it.next();
 					if (at.getName().equals("base")) {
+						logger.fine("Returned " + at.getValue());
 						return at.getValue();
 					}
 				}
@@ -146,11 +147,12 @@ public abstract class FlexoOntology extends OntologyObject {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		logger.fine("Returned null");
 		return null;
 	}
 
 	public static String findOntologyName(File aFile) {
-		if ((aFile == null) || !aFile.exists() || (aFile.length() == 0)) {
+		if (aFile == null || !aFile.exists() || aFile.length() == 0) {
 			if (aFile.length() == 0) {
 				aFile.delete();
 			}
@@ -370,8 +372,8 @@ public abstract class FlexoOntology extends OntologyObject {
 		// I dont understand why, but on some ontologies, this is the only way to obtain those properties
 		for (Iterator i = ontModel.listAllOntProperties(); i.hasNext();) {
 			OntProperty ontProperty = (OntProperty) i.next();
-			if ((dataProperties.get(ontProperty.getURI()) == null) && (objectProperties.get(ontProperty.getURI()) == null)
-					&& (_library.getObjectProperty(ontProperty.getURI()) == null)) {
+			if (dataProperties.get(ontProperty.getURI()) == null && objectProperties.get(ontProperty.getURI()) == null
+					&& _library.getObjectProperty(ontProperty.getURI()) == null) {
 				// Property not yet known, assume that this concept is declared in this ontology
 				if (ontProperty.getURI().startsWith(getURI())) {
 					makeNewObjectProperty(ontProperty);
@@ -382,11 +384,10 @@ public abstract class FlexoOntology extends OntologyObject {
 		// I dont understand why, but on some ontologies, this is the only way to obtain those classes
 		for (NodeIterator i = ontModel.listObjects(); i.hasNext();) {
 			RDFNode node = i.nextNode();
-			if ((node instanceof Resource) && ((Resource) node).canAs(OntClass.class)) {
+			if (node instanceof Resource && ((Resource) node).canAs(OntClass.class)) {
 				OntClass aClass = (OntClass) ((Resource) node).as(OntClass.class);
 				// System.out.println("Class: "+aClass);
-				if ((aClass.getURI() != null) && (classes.get(aClass.getURI()) == null)
-						&& (_library.getObjectProperty(aClass.getURI()) == null)) {
+				if (aClass.getURI() != null && classes.get(aClass.getURI()) == null && _library.getObjectProperty(aClass.getURI()) == null) {
 					if (aClass.getURI().startsWith(getURI())) {
 						// Class not yet known, assume that this class is declared in this ontology
 						makeNewClass(aClass);
@@ -771,15 +772,23 @@ public abstract class FlexoOntology extends OntologyObject {
 		// we have a local copy of flexo concept ontology
 		if (alternativeLocalFile != null) {
 			logger.fine("Alternative local file: " + alternativeLocalFile.getAbsolutePath());
-		}
-		try {
-			ontModel.getDocumentManager().addAltEntry(ontologyURI, alternativeLocalFile.toURL().toString());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			try {
+				ontModel.getDocumentManager().addAltEntry(ontologyURI, alternativeLocalFile.toURL().toString());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 		}
 
 		// read the source document
-		ontModel.read(ontologyURI);
+		try {
+			logger.info("BEGIN Read " + ontologyURI);
+			ontModel.read(ontologyURI);
+			logger.info("END read " + ontologyURI);
+		} catch (Exception e) {
+			logger.warning("Unexpected exception while reading ontology " + ontologyURI);
+			logger.warning("Exception " + e.getMessage() + ". See logs for details");
+			e.printStackTrace();
+		}
 
 		// alternative:
 		/*FileInputStream fis;
@@ -955,7 +964,7 @@ public abstract class FlexoOntology extends OntologyObject {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(aFile);
-			getOntModel().write(out, null, getOntologyURI());
+			getOntModel().write(out, "RDF/XML-ABBREV", getOntologyURI()); // "RDF/XML-ABBREV"
 			clearIsModified(true);
 			logger.info("Wrote " + aFile);
 		} catch (FileNotFoundException e) {

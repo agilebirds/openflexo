@@ -68,7 +68,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		SpinnerNumberModel valueModel = makeSpinnerModel();
 		valueChooser = new JSpinner(valueModel);
 		valueChooser.setEditor(new JSpinner.NumberEditor(valueChooser /*, "#.##"*/));
-		valueChooser.setValue(1);
+		valueChooser.setValue(getDefaultValue());
 		valueChooser.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {

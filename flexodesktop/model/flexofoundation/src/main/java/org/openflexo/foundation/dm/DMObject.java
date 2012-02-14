@@ -250,10 +250,10 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 	public void setChanged() {
 		super.setChanged(propagateModified);
 		if (propagateModified) {
-			if ((!isDeserializing()) && (!isSerializing())) {
+			if (!isDeserializing() && !isSerializing()) {
 				if (this instanceof DMEOObject) {
 					DMEOModel dmEOModel = ((DMEOObject) this).getDMEOModel();
-					if ((dmEOModel != null) && (dmEOModel.getEOModelResourceData() != null)) {
+					if (dmEOModel != null && dmEOModel.getEOModelResourceData() != null) {
 						dmEOModel.getEOModelResourceData().setIsModified();
 					}
 				}
@@ -426,7 +426,7 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 	}
 
 	@Override
-	public Enumeration children() {
+	public Enumeration<? extends DMObject> children() {
 		return getOrderedChildren().elements();
 	}
 
@@ -473,7 +473,7 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 		return returned.toString();
 	}
 
-	public static class DataModelObjectNameMustBeValid extends ValidationRule {
+	public static class DataModelObjectNameMustBeValid extends ValidationRule<DataModelObjectNameMustBeValid, DMObject> {
 
 		/**
 		 * @param objectType
@@ -489,11 +489,10 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
 		 */
 		@Override
-		public ValidationIssue applyValidation(Validable object) {
-			DMObject o = (DMObject) object;
+		public ValidationIssue<DataModelObjectNameMustBeValid, DMObject> applyValidation(DMObject o) {
 			if (!o.isNameValid()) {
-				ValidationError err = new ValidationError(this, o,
-						"data_model_objects_can_contain_only_alphanumeric_characters_or_underscore_and_must_start_with_a_letter");
+				ValidationError<DataModelObjectNameMustBeValid, DMObject> err = new ValidationError<DataModelObjectNameMustBeValid, DMObject>(
+						this, o, "data_model_objects_can_contain_only_alphanumeric_characters_or_underscore_and_must_start_with_a_letter");
 				if (o.getName() != null) {
 					err.addToFixProposals(new CleanDataModelObjectName(ToolBox.cleanStringForJava(o.getName())));
 				}
@@ -503,7 +502,7 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 			return null;
 		}
 
-		public static class CleanDataModelObjectName extends FixProposal {
+		public static class CleanDataModelObjectName extends FixProposal<DataModelObjectNameMustBeValid, DMObject> {
 
 			private String newName;
 
@@ -530,7 +529,7 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 						if (ReservedKeyword.contains(attempt)) {
 							throw new InvalidNameException();
 						}
-						((DMObject) getObject()).setName(attempt);
+						getObject().setName(attempt);
 						ok = true;
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -548,7 +547,7 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 
 		}
 
-		public static class SetCustomName extends ParameteredFixProposal {
+		public static class SetCustomName extends ParameteredFixProposal<DataModelObjectNameMustBeValid, DMObject> {
 
 			/**
 			 * @param aMessage
@@ -569,7 +568,7 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 					if (ReservedKeyword.contains(s)) {
 						throw new InvalidNameException();
 					}
-					((DMObject) getObject()).setName(s);
+					getObject().setName(s);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

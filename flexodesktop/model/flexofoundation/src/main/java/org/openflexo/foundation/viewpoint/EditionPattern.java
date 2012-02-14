@@ -133,6 +133,9 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		patternRoles.add(aPatternRole);
 		setChanged();
 		notifyObservers(new PatternRoleInserted(aPatternRole, this));
+		if (_bindingModel != null) {
+			updateBindingModel();
+		}
 	}
 
 	public void removeFromPatternRoles(PatternRole aPatternRole) {
@@ -141,6 +144,9 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		patternRoles.remove(aPatternRole);
 		setChanged();
 		notifyObservers(new PatternRoleRemoved(aPatternRole, this));
+		if (_bindingModel != null) {
+			updateBindingModel();
+		}
 	}
 
 	public <R> List<R> getPatternRoles(Class<R> type) {
@@ -189,93 +195,103 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return availablePatternRoleNames;
 	}
 
+	public String getAvailableRoleName(String baseName) {
+		String testName = baseName;
+		int index = 2;
+		while ((getPatternRole(testName)) != null) {
+			testName = baseName + index;
+			index++;
+		}
+		return testName;
+	}
+
 	public PatternRole createShapePatternRole() {
 		ShapePatternRole newPatternRole = new ShapePatternRole();
-		newPatternRole.setPatternRoleName("shape");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("shape"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ConnectorPatternRole createConnectorPatternRole() {
 		ConnectorPatternRole newPatternRole = new ConnectorPatternRole();
-		newPatternRole.setPatternRoleName("connector");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("connector"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ShemaPatternRole createShemaPatternRole() {
 		ShemaPatternRole newPatternRole = new ShemaPatternRole();
-		newPatternRole.setPatternRoleName("shema");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("shema"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public FlexoModelObjectPatternRole createFlexoModelObjectPatternRole() {
 		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole();
-		newPatternRole.setPatternRoleName("flexoObject");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("flexoObject"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ClassPatternRole createClassPatternRole() {
 		ClassPatternRole newPatternRole = new ClassPatternRole();
-		newPatternRole.setPatternRoleName("class");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("class"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public IndividualPatternRole createIndividualPatternRole() {
 		IndividualPatternRole newPatternRole = new IndividualPatternRole();
-		newPatternRole.setPatternRoleName("individual");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("individual"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ObjectPropertyPatternRole createObjectPropertyPatternRole() {
 		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole();
-		newPatternRole.setPatternRoleName("property");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public DataPropertyPatternRole createDataPropertyPatternRole() {
 		DataPropertyPatternRole newPatternRole = new DataPropertyPatternRole();
-		newPatternRole.setPatternRoleName("property");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public IsAStatementPatternRole createIsAStatementPatternRole() {
 		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole();
-		newPatternRole.setPatternRoleName("fact");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ObjectPropertyStatementPatternRole createObjectPropertyStatementPatternRole() {
 		ObjectPropertyStatementPatternRole newPatternRole = new ObjectPropertyStatementPatternRole();
-		newPatternRole.setPatternRoleName("fact");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public DataPropertyStatementPatternRole createDataPropertyStatementPatternRole() {
 		DataPropertyStatementPatternRole newPatternRole = new DataPropertyStatementPatternRole();
-		newPatternRole.setPatternRoleName("fact");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public RestrictionStatementPatternRole createRestrictionStatementPatternRole() {
 		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole();
-		newPatternRole.setPatternRoleName("fact");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public PrimitivePatternRole createPrimitivePatternRole() {
 		PrimitivePatternRole newPatternRole = new PrimitivePatternRole();
-		newPatternRole.setPatternRoleName("primitive");
+		newPatternRole.setPatternRoleName(getAvailableRoleName("primitive"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
@@ -490,6 +506,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	}
 
 	public void finalizeEditionPatternDeserialization() {
+		createBindingModel();
 		for (EditionScheme es : getEditionSchemes()) {
 			es.finalizeEditionSchemeDeserialization();
 		}
@@ -520,6 +537,9 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		logger.fine("updateBindingModel()");
 		_bindingModel = null;
 		createBindingModel();
+		for (EditionScheme es : getEditionSchemes()) {
+			es.updateBindingModels();
+		}
 	}
 
 	private void createBindingModel() {
@@ -527,6 +547,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		for (PatternRole role : getPatternRoles()) {
 			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role, this));
 		}
+		notifyBindingModelChanged();
 	}
 
 	public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {

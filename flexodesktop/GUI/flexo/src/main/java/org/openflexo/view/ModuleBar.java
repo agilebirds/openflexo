@@ -101,7 +101,7 @@ public class ModuleBar extends JPanel {
 		moduleButtons = new Hashtable<Module, ModuleButton>();
 		moduleBars.add(this);
 		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		for(Module m:getModuleLoader().availableModules()) {
+		for (Module m : getModuleLoader().availableModules()) {
 			ModuleButton mb = new ModuleButton(m);
 			moduleButtons.put(m, mb);
 			add(mb);
@@ -110,9 +110,9 @@ public class ModuleBar extends JPanel {
 		repaint();
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	private void refresh() {
 		Enumeration<ModuleButton> en = moduleButtons.elements();
@@ -135,25 +135,25 @@ public class ModuleBar extends JPanel {
 				 */
 				@Override
 				public void mouseClicked(MouseEvent e) {
-                    FlexoProject project = getModuleLoader().getProject();
+					FlexoProject project = getModuleLoader().getProject();
 					if (project == null && module.requireProject()) {
 						File projectDirectory;
 						try {
 							projectDirectory = OpenProjectComponent.getProjectDirectory();
-                            project = getProjectLoader().loadProject(projectDirectory).getProject();
+							project = getProjectLoader().loadProject(projectDirectory).getProject();
 						} catch (ProjectLoadingCancelledException e1) {
 							return;
 						}
 					}
 
-                    try {
-                        getModuleLoader().switchToModule(module, project);
-                    } catch (ModuleLoadingException e1) {
-                        logger.warning("Error while loading module :"+e1.getModule()+"."+e1.getMessage());
-                        e1.printStackTrace();
-                        FlexoController.notify("Error while loading module :"+e1.getModule()+"."+e1.getMessage());
-                    }
-                }
+					try {
+						getModuleLoader().switchToModule(module, project);
+					} catch (ModuleLoadingException e1) {
+						logger.warning("Error while loading module :" + e1.getModule() + "." + e1.getMessage());
+						e1.printStackTrace();
+						FlexoController.notify("Error while loading module :" + e1.getModule() + "." + e1.getMessage());
+					}
+				}
 
 				/**
 				 * Overrides mouseEntered
@@ -180,13 +180,14 @@ public class ModuleBar extends JPanel {
 			refresh();
 		}
 
-        private ModuleLoader getModuleLoader() {
-            return ModuleLoader.instance();
-        }
+		private ModuleLoader getModuleLoader() {
+			return ModuleLoader.instance();
+		}
 
-        private ProjectLoader getProjectLoader() {
-            return ProjectLoader.instance();
-        }
+		private ProjectLoader getProjectLoader() {
+			return ProjectLoader.instance();
+		}
+
 		protected void setAsActive() {
 			setIcon(module.getMediumIconWithHover());
 		}

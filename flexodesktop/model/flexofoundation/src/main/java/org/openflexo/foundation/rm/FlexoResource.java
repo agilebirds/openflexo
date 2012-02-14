@@ -553,7 +553,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws LoadResourceException
 	 */
 	public final FlexoResourceTree update() throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException,
-	ProjectLoadingCancelledException, FlexoException {
+			ProjectLoadingCancelledException, FlexoException {
 		return _update(makeSingleton());
 	}
 
@@ -569,7 +569,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws LoadResourceException
 	 */
 	protected abstract void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException,
-	LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException;
+			LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException;
 
 	/**
 	 * Important method "telling" if a resource from which this resource depend is a state requiring this resource to be updated/processed

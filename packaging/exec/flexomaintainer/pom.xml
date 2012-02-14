@@ -5,14 +5,13 @@
 	<parent>
 		<groupId>org.openflexo.packaging</groupId>
 		<artifactId>exec</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexomaintainer</artifactId>
 	<dependencies>
 		<dependency>
             <groupId>org.openflexo.packaging</groupId>
             <artifactId>flexoenterprise</artifactId>
-            <type>pom</type>
             <scope>runtime</scope>
         </dependency>
 		<dependency>

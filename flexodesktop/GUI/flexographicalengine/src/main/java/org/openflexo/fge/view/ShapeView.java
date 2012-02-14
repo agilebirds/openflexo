@@ -147,6 +147,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			parentView.remove(this);
 			parentView.revalidate();
 			if (getPaintManager() != null) {
+				getPaintManager().invalidate(getGraphicalRepresentation());
 				getPaintManager().repaint(parentView);
 			}
 		}

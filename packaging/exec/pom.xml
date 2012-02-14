@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.openflexo.packaging</groupId>
         <artifactId>packaging</artifactId>
-        <version>1.4.4-SNAPSHOT</version>
+        <version>1.5-SNAPSHOT</version>
     </parent>
     <artifactId>exec</artifactId>
     <packaging>pom</packaging>
@@ -17,6 +17,8 @@
         <module>flexobusinessplus</module>
         <module>flexoenterprise</module>
         <module>flexomaintainer</module>
+        <module>flexosemantics</module>
+        <module>flexosemanticsplus</module>
     </modules>
     <properties>
         <main.class>org.openflexo.Flexo</main.class>
@@ -58,6 +60,17 @@
                 <os.exec.args>
                     -Xverify:all -Xdock:name=Flexo -Dapple.laf.useScreenMenuBar=true
                 </os.exec.args>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+            </activation>
+            <properties>
+                <os.exec.args></os.exec.args>
             </properties>
         </profile>
         <profile>

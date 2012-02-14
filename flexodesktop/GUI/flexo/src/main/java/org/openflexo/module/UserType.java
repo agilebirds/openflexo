@@ -47,94 +47,104 @@ public abstract class UserType extends FlexoObject {
 
 	private static final Logger logger = Logger.getLogger(Module.class.getPackage().getName());
 
-    private static UserType currentUserType = null;
+	private static UserType currentUserType = null;
 
-    public static final Developer DEVELOPER = new Developer();
+	public static final Developer DEVELOPER = new Developer();
 
-    public static final Analyst ANALYST = new Analyst();
+	public static final Analyst ANALYST = new Analyst();
 
-    public static final Customer CUSTOMER = new Customer();
+	public static final Customer CUSTOMER = new Customer();
 
-    public static final Maintainer MAINTAINER = new Maintainer();
+	public static final Maintainer MAINTAINER = new Maintainer();
 
-    private static final UserType[] knownUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER };
+	public static final SemanticsUser SEMANTICS_USER = new SemanticsUser();
 
-    private Vector<DocItemFolder> documentationFolders = null;
+	public static final SemanticsPlusUser SEMANTICS_PLUS_USER = new SemanticsPlusUser();
 
-    /**
-     * @return the current UserType. Never return null.
-     * @throws IllegalStateException if the current userType is not set.
-     */
-    public static final UserType getCurrentUserType(){
-        if(currentUserType==null){
-            throw new IllegalStateException("currentUserType is null. Did you call setCurrentUserType.");
-        }
-        return currentUserType;
-    }
+	private static final UserType[] knownUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER };
 
-    /**
-     * Define the global application parameter currentUserType.
-     * Once the userType is defined : it cannot be changed.
-     * @param userType : the userType to set. Cannot be null.
-     * @throws IllegalArgumentException if you pass a null userType.
-     * @throws IllegalStateException if you try to change the current userType.
-     */
-    public static final void setCurrentUserType(UserType userType){
-        if(userType==null){
-            throw new IllegalArgumentException("userType cannot be null.");
-        }
-        if(currentUserType!=null){
-            if(!currentUserType.equals(userType)){
-                throw new IllegalStateException("You cannot change userType. It was "+currentUserType.getName()
-                +" and you try to change it to "+userType.getName()+". Ignoring this change.");
-            }else{
-                logger.warning("Trying to set the currentUser "+userType.getName()+", but it was already set.");
-            }
-        }
-        currentUserType = userType;
-    }
+	private Vector<DocItemFolder> documentationFolders = null;
 
-    /**
-     * @return if currentUserType is defined.
-     */
-    public static boolean isCurrentUserTypeDefined() {
-        return currentUserType!=null;
-    }
+	/**
+	 * @return the current UserType. Never return null.
+	 * @throws IllegalStateException
+	 *             if the current userType is not set.
+	 */
+	public static final UserType getCurrentUserType() {
+		if (currentUserType == null) {
+			throw new IllegalStateException("currentUserType is null. Did you call setCurrentUserType.");
+		}
+		return currentUserType;
+	}
 
-    /**
-     * @return if currentUserType is Customer
-     */
-    public static boolean isCustomerRelease() {
-        return CUSTOMER == currentUserType;
-    }
+	/**
+	 * Define the global application parameter currentUserType. Once the userType is defined : it cannot be changed.
+	 * 
+	 * @param userType
+	 *            : the userType to set. Cannot be null.
+	 * @throws IllegalArgumentException
+	 *             if you pass a null userType.
+	 * @throws IllegalStateException
+	 *             if you try to change the current userType.
+	 */
+	public static final void setCurrentUserType(UserType userType) {
+		if (userType == null) {
+			throw new IllegalArgumentException("userType cannot be null.");
+		}
+		if (currentUserType != null) {
+			if (!currentUserType.equals(userType)) {
+				throw new IllegalStateException("You cannot change userType. It was " + currentUserType.getName()
+						+ " and you try to change it to " + userType.getName() + ". Ignoring this change.");
+			} else {
+				logger.warning("Trying to set the currentUser " + userType.getName() + ", but it was already set.");
+			}
+		}
+		currentUserType = userType;
+	}
 
-    /**
-     * @return if currentUserType is Analyst
-     */
-    public static boolean isAnalystRelease() {
-        return ANALYST == currentUserType;
-    }
+	/**
+	 * @return if currentUserType is defined.
+	 */
+	public static boolean isCurrentUserTypeDefined() {
+		return currentUserType != null;
+	}
 
-    /**
-     * @return if currentUserType is Developer
-     */
-    public static boolean isDevelopperRelease() {
-        return DEVELOPER == currentUserType;
-    }
+	/**
+	 * @return if currentUserType is Customer
+	 */
+	public static boolean isCustomerRelease() {
+		return CUSTOMER == currentUserType;
+	}
 
-    /**
-     * @return if currentUserType is Maintainer
-     */
-    public static boolean isMaintainerRelease() {
-        return MAINTAINER == currentUserType;
-    }
+	/**
+	 * @return if currentUserType is Analyst
+	 */
+	public static boolean isAnalystRelease() {
+		return ANALYST == currentUserType;
+	}
 
-    /**
-     * Search a userType matching userTypeName. Make a case insensitive comparison against
-     * known userType name's and known userType id's. If there is no match it returns Maintainer user type.
-     * @param userTypeName a string matching either a userType's name, either a userType's id
-     * @return the userType matching userTypeName. Maintainer userType whenever there is no match.
-     */
+	/**
+	 * @return if currentUserType is Developer
+	 */
+	public static boolean isDevelopperRelease() {
+		return DEVELOPER == currentUserType;
+	}
+
+	/**
+	 * @return if currentUserType is Maintainer
+	 */
+	public static boolean isMaintainerRelease() {
+		return MAINTAINER == currentUserType;
+	}
+
+	/**
+	 * Search a userType matching userTypeName. Make a case insensitive comparison against known userType name's and known userType id's. If
+	 * there is no match it returns Maintainer user type.
+	 * 
+	 * @param userTypeName
+	 *            a string matching either a userType's name, either a userType's id
+	 * @return the userType matching userTypeName. Maintainer userType whenever there is no match
+	 */
 	public static UserType getUserTypeNamed(String userTypeName) {
 		if (MAINTAINER.getName().equalsIgnoreCase(userTypeName)) {
 			return MAINTAINER;
@@ -148,6 +158,12 @@ public abstract class UserType extends FlexoObject {
 		if (CUSTOMER.getName().equalsIgnoreCase(userTypeName)) {
 			return CUSTOMER;
 		}
+		if (SEMANTICS_USER.getName().equalsIgnoreCase(userTypeName)) {
+			return SEMANTICS_USER;
+		}
+		if (SEMANTICS_PLUS_USER.getName().equalsIgnoreCase(userTypeName)) {
+			return SEMANTICS_PLUS_USER;
+		}
 		if (MAINTAINER.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return MAINTAINER;
 		}
@@ -160,6 +176,12 @@ public abstract class UserType extends FlexoObject {
 		if (CUSTOMER.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return CUSTOMER;
 		}
+		if (SEMANTICS_USER.getIdentifier().equalsIgnoreCase(userTypeName)) {
+			return SEMANTICS_USER;
+		}
+		if (SEMANTICS_PLUS_USER.getIdentifier().equalsIgnoreCase(userTypeName)) {
+			return SEMANTICS_PLUS_USER;
+		}
 		return MAINTAINER;
 	}
 
@@ -168,7 +190,7 @@ public abstract class UserType extends FlexoObject {
 			documentationFolders = new Vector<DocItemFolder>();
 			documentationFolders.add(DocResourceManager.instance().getAbstractModuleItem().getFolder());
 			addModelItems();
-			for (Module module : getCurrentUserType().getModules()) {
+			for (Module module : getModules()) {
 				if (module.getModuleClass() != null) {
 					addModuleItems(module);
 				}
@@ -177,9 +199,9 @@ public abstract class UserType extends FlexoObject {
 		return documentationFolders;
 	}
 
-    private ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	protected void addModelItems(InspectorGroup inspectorGroup) {
 		DocItemFolder inspectorGroupFolder;
@@ -208,9 +230,9 @@ public abstract class UserType extends FlexoObject {
 
 	public abstract ImageIcon getIconImage();
 
-    public abstract List<Module> getModules();
+	public abstract List<Module> getModules();
 
-    public static class Developer extends UserType {
+	public static class Developer extends UserType {
 
 		@Override
 		public String getName() {
@@ -222,20 +244,20 @@ public abstract class UserType extends FlexoObject {
 			return "DEVELOPER";
 		}
 
-        @Override
-        public List<Module> getModules() {
-            return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE,
-                                 Module.DM_MODULE, Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE,
-                                 Module.WSE_MODULE, Module.VE_MODULE, Module.FPS_MODULE, Module.VPM_MODULE);
-        }
+		@Override
+		public List<Module> getModules() {
+			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE, Module.DM_MODULE,
+					Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE, Module.WSE_MODULE, Module.FPS_MODULE, Module.VPM_MODULE);
+		}
 
-        @Override
+		@Override
 		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
 			addModelItems(Inspectors.WKF);
 			addModelItems(Inspectors.IE);
 			addModelItems(Inspectors.DM);
 			addModelItems(Inspectors.WSE);
+			addModelItems(Inspectors.VE);
 		}
 
 		@Override
@@ -267,10 +289,10 @@ public abstract class UserType extends FlexoObject {
 			return "ANALYST";
 		}
 
-        @Override
-        public List<Module> getModules() {
-            return Arrays.asList(Module.WKF_MODULE,Module.IE_MODULE,Module.DE_MODULE,Module.VE_MODULE,Module.DM_MODULE);
-        }
+		@Override
+		public List<Module> getModules() {
+			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DM_MODULE, Module.DE_MODULE, Module.VE_MODULE);
+		}
 
 		@Override
 		protected void addModelItems() {
@@ -278,6 +300,7 @@ public abstract class UserType extends FlexoObject {
 			addModelItems(Inspectors.WKF);
 			addModelItems(Inspectors.IE);
 			addModelItems(Inspectors.DM);
+			addModelItems(Inspectors.VE);
 		}
 
 		@Override
@@ -308,16 +331,17 @@ public abstract class UserType extends FlexoObject {
 			return "CUSTOMER";
 		}
 
-        @Override
-        public List<Module> getModules() {
-            return Arrays.asList(Module.WKF_MODULE,Module.IE_MODULE,Module.DE_MODULE,Module.VE_MODULE);
-        }
+		@Override
+		public List<Module> getModules() {
+			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE);
+		}
 
 		@Override
 		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
 			addModelItems(Inspectors.WKF);
 			addModelItems(Inspectors.IE);
+			addModelItems(Inspectors.VE);
 		}
 
 		@Override
@@ -348,13 +372,12 @@ public abstract class UserType extends FlexoObject {
 			return "MAINTAINER";
 		}
 
-        @Override
-        public List<Module> getModules() {
-            return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE,
-                                 Module.DM_MODULE, Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE,
-                                 Module.WSE_MODULE, Module.VE_MODULE, Module.FPS_MODULE, Module.DRE_MODULE,
-                                 Module.VPM_MODULE);
-        }
+		@Override
+		public List<Module> getModules() {
+			return Arrays.asList(Module.WKF_MODULE, Module.IE_MODULE, Module.DE_MODULE, Module.VE_MODULE, Module.DM_MODULE,
+					Module.CG_MODULE, Module.SG_MODULE, Module.DG_MODULE, Module.WSE_MODULE, Module.FPS_MODULE, Module.DRE_MODULE,
+					Module.VPM_MODULE);
+		}
 
 		@Override
 		protected void addModelItems() {
@@ -364,6 +387,7 @@ public abstract class UserType extends FlexoObject {
 			addModelItems(Inspectors.DM);
 			addModelItems(Inspectors.WSE);
 			addModelItems(Inspectors.DRE);
+			addModelItems(Inspectors.VE);
 		}
 
 		@Override
@@ -374,6 +398,85 @@ public abstract class UserType extends FlexoObject {
 		@Override
 		public String getBusinessName2() {
 			return "Enterprise edition";
+		}
+
+		@Override
+		public ImageIcon getIconImage() {
+			return IconLibrary.ENTERPRISE_32_ICON;
+		}
+
+	}
+
+	public static class SemanticsUser extends UserType {
+		@Override
+		public String getName() {
+			return "semantics_release";
+		}
+
+		@Override
+		public String getIdentifier() {
+			return "SEMANTICS";
+		}
+
+		@Override
+		public List<Module> getModules() {
+			return Arrays.asList(Module.VE_MODULE);
+		}
+
+		@Override
+		protected void addModelItems() {
+			addModelItems(Inspectors.COMMON);
+			addModelItems(Inspectors.VE);
+		}
+
+		@Override
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
+			return new FullInteractiveProjectLoadingHandler(projectDirectory);
+		}
+
+		@Override
+		public String getBusinessName2() {
+			return "Semantics edition";
+		}
+
+		@Override
+		public ImageIcon getIconImage() {
+			return IconLibrary.ENTERPRISE_32_ICON;
+		}
+
+	}
+
+	public static class SemanticsPlusUser extends UserType {
+		@Override
+		public String getName() {
+			return "semantics_plus_release";
+		}
+
+		@Override
+		public String getIdentifier() {
+			return "SEMANTICSPLUS";
+		}
+
+		@Override
+		public List<Module> getModules() {
+			return Arrays.asList(Module.VE_MODULE, Module.VPM_MODULE);
+		}
+
+		@Override
+		protected void addModelItems() {
+			addModelItems(Inspectors.COMMON);
+			addModelItems(Inspectors.VE);
+			addModelItems(Inspectors.VPM);
+		}
+
+		@Override
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
+			return new FullInteractiveProjectLoadingHandler(projectDirectory);
+		}
+
+		@Override
+		public String getBusinessName2() {
+			return "Semantics+ edition";
 		}
 
 		@Override

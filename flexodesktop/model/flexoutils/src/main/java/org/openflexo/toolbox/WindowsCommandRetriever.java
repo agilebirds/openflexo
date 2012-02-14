@@ -36,10 +36,10 @@ public class WindowsCommandRetriever {
 	 */
 	public static String commandForExtension(String extension) {
 		String regKey = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\" + extension;
-		String mimeType = WinRegistryAccess.getRegistryValue(regKey, "ProgID", WinRegistryAccess.REG_SZ_TOKEN);
-		if (mimeType == null) {
+		String fileType = WinRegistryAccess.getRegistryValue(regKey, "ProgID", WinRegistryAccess.REG_SZ_TOKEN);
+		if (fileType == null) {
 			StringBuilder sb = new StringBuilder("cmd /C assoc ");
-			sb.append((extension.startsWith(".") ? extension : ("." + extension)));
+			sb.append(extension.startsWith(".") ? extension : "." + extension);
 
 			ConsoleReader reader;
 			try {
@@ -57,13 +57,17 @@ public class WindowsCommandRetriever {
 			}
 			String result = reader.getResult();
 			if (result.indexOf("=") > -1) {
-				mimeType = result.substring(result.indexOf("=") + 1).trim();
+				fileType = result.substring(result.indexOf("=") + 1).trim();
 			}
 		}
-		if (mimeType == null) {
+		if (fileType == null) {
 			return null;
 		}
-		String path = "HKEY_CLASSES_ROOT\\" + mimeType + "\\shell\\open\\command";
+		return getCommandForFileType(fileType);
+	}
+
+	public static String getCommandForFileType(String fileType) {
+		String path = "HKEY_CLASSES_ROOT\\" + fileType + "\\shell\\open\\command";
 		return WinRegistryAccess.getRegistryValue(path, null, WinRegistryAccess.REG_SZ_TOKEN);
 	}
 }

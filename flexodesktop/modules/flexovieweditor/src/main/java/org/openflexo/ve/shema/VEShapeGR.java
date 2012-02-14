@@ -65,7 +65,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 			aShape.addObserver(this);
 		}
 
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
+		//setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
 
 	}
 
@@ -106,10 +106,10 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean getAllowToLeaveBounds() {
 		return false;
-	}
+	}*/
 
 	@Override
 	public String getText() {

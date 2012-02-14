@@ -410,9 +410,9 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		return null;
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	private static ModuleLoader getModuleLoader() {
+		return ModuleLoader.instance();
+	}
 
 	public static void showError(String msg) throws HeadlessException {
 		showError(FlexoLocalization.localizedForKey("error"), msg);
@@ -1700,9 +1700,9 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				}
 			}
 		}
-        if(useOldInspectorScheme()){
-		    getSharedInspectorController().getInspectorWindow().dispose();
-        }
+		if (useOldInspectorScheme()) {
+			getSharedInspectorController().getInspectorWindow().dispose();
+		}
 		_loadedViews.clear();
 		_perspectives.clear();
 		_keyStrokeActionTable.clear();

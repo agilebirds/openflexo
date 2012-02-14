@@ -89,14 +89,14 @@ public class TestDMController extends FlexoModuleTestCase {
 		_project = _editor.getProject();
 
 		initModuleLoader(_projectDirectory, _project);
-        DMModule ie = null;
-        try {
-            ie = (DMModule) getModuleLoader().switchToModule(Module.DM_MODULE, _project);
-        } catch (ModuleLoadingException e) {
-            fail("Fail to load DMModule."+e.getMessage());
-        }
+		DMModule ie = null;
+		try {
+			ie = (DMModule) getModuleLoader().switchToModule(Module.DM_MODULE, _project);
+		} catch (ModuleLoadingException e) {
+			fail("Fail to load DMModule." + e.getMessage());
+		}
 
-        ie.focusOn();
+		ie.focusOn();
 		assertTrue(getModuleLoader().isActive(Module.DM_MODULE));
 		assertNotNull(ie);
 		DMController ctrl = ie.getDMController();
@@ -128,15 +128,15 @@ public class TestDMController extends FlexoModuleTestCase {
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");
 		} else
-            try {
-                if (ExternalModuleDelegater.getModuleLoader().getDMModuleInstance(project) == null) {
-                    fail("WKF Module not on the classpath. Component screenshots cannot be generated");
-                }
-            } catch (ModuleLoadingException e) {
-                fail("Fail to load WKF module. Component screenshots cannot be generated"+e.getMessage());
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-    }
+			try {
+				if (ExternalModuleDelegater.getModuleLoader().getDMModuleInstance(project) == null) {
+					fail("WKF Module not on the classpath. Component screenshots cannot be generated");
+				}
+			} catch (ModuleLoadingException e) {
+				fail("Fail to load WKF module. Component screenshots cannot be generated" + e.getMessage());
+				e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
+			}
+	}
 
 	/**
 	 * Save the project

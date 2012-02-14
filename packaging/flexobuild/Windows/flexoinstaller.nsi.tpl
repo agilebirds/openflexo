@@ -66,7 +66,7 @@ InstallDir "$PROGRAMFILES\@product.name@\@productSuffix@\${VERSION}"
 CRCCheck on
 XPStyle on
 ShowInstDetails show
-VIProductVersion @flexo_version@.0
+VIProductVersion @normalized_version@.0
 VIAddVersionKey /LANG=${LANG_ENGLISH} ProductName @product.name@
 VIAddVersionKey /LANG=${LANG_ENGLISH} ProductVersion "${VERSION}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} CompanyName "${COMPANY}"

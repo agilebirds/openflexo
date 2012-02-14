@@ -307,6 +307,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 			lineGR.setIsFocusable(false);
 			lineGR.setIsReadOnly(true);
 			lineGR.setBorder(new ShapeBorder(10, 10, 10, 10));
+			lineGR.setValidated(true);
 
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
