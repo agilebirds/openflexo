@@ -35,45 +35,52 @@ public class TestJSon extends TestCase {
 		assertNotNull(submit.getFields().getIssuetype().getName());
 	}
 
-//	public void testSubmitIssue() throws IOException {
-//		JIRAClient client = getTestClient();
-//		SubmitIssue submit = new SubmitIssue();
-//		JIRAIssue issue = new JIRAIssue();
-//		submit.setFields(issue);
-//		issue.setDescription("Some quite long description that can come from a long textarea. On the next"
-//				+ " line we will try to put some HTML:\n\n\n" + "<b>bold</b> <i>italic</i><br/>" + "On a new line<br/>Another new line");
-//		IssueType issueType = new IssueType();
-//		issueType.setId(String.valueOf(1));
-//		issue.setIssuetype(issueType);
-//		issue.setSummary("Some test from a Java web client");
-//		JIRAProject project = new JIRAProject();
-//		project.setKey("OPENFLEXO");
-//		issue.setProject(project);
-//		JIRAResult response = client.submit(submit, Method.POST);
-//		issue.setId(response.getId());
-//		issue.setKey(response.getKey());
-//		issue.setKey("OPENFLEXO-12");
-//		System.err.println("Sending one file");
-//		client.attachFilesToIssue(issue, new File("D:\\My Documents\\Mes images\\2011-09-08\\005.JPG"));
-//		System.err.println("Sending two files");
-//		client.attachFilesToIssue(issue, null, new File("D:\\My Documents\\AVR130 Eng user manual.pdf"), new File(
-//				"C:\\Users\\Public\\Pictures\\Sample Pictures\\Penguins.jpg"));
-//	}
+	public void testSubmitIssue() throws IOException {
+		if (true) {
+			return;
+		}
+		JIRAClient client = getTestClient();
+		SubmitIssue submit = new SubmitIssue();
+		JIRAIssue issue = new JIRAIssue();
+		submit.setFields(issue);
+		issue.setDescription("Some quite long description that can come from a long textarea. On the next"
+				+ " line we will try to put some HTML:\n\n\n" + "<b>bold</b> <i>italic</i><br/>" + "On a new line<br/>Another new line");
+		IssueType issueType = new IssueType();
+		issueType.setId(String.valueOf(1));
+		issue.setIssuetype(issueType);
+		issue.setSummary("Some test from a Java web client");
+		JIRAProject project = new JIRAProject();
+		project.setKey("OPENFLEXO");
+		issue.setProject(project);
+		JIRAResult response = client.submit(submit, Method.POST);
+		issue.setId(response.getId());
+		issue.setKey(response.getKey());
+		issue.setKey("OPENFLEXO-12");
+		System.err.println("Sending one file");
+		client.attachFilesToIssue(issue, new File("D:\\My Documents\\Mes images\\2011-09-08\\005.JPG"));
+		System.err.println("Sending two files");
+		client.attachFilesToIssue(issue, null, new File("D:\\My Documents\\AVR130 Eng user manual.pdf"), new File(
+				"C:\\Users\\Public\\Pictures\\Sample Pictures\\Penguins.jpg"));
+	}
 
 	private JIRAClient getTestClient() throws MalformedURLException {
 		return new JIRAClient("https://bugs.openflexo.com", "", "");
 	}
 
-//	public void testSubmitFromString() throws IOException {
-//		JIRAClient client = getTestClient();
-//		SubmitIssue submit = JIRAGson
-//				.getInstance()
-//				.fromJson(
-//						"{\"fields\":{\"project\":{\"id\":\"10000\"},\"summary\":\"\\u0027te\\u0027te\",\"description\":\"e\\u0027reserg\",\"issuetype\":{\"id\":\"1\"}}}",
-//						SubmitIssue.class);
-//		JIRAResult result = client.submit(submit, Method.POST);
-//		System.err.println(result.getId() + " " + result.getKey());
-//	}
+	public void testSubmitFromString() throws IOException {
+		if (true) {
+			return;
+		}
+
+		JIRAClient client = getTestClient();
+		SubmitIssue submit = JIRAGson
+				.getInstance()
+				.fromJson(
+						"{\"fields\":{\"project\":{\"id\":\"10000\"},\"summary\":\"\\u0027te\\u0027te\",\"description\":\"e\\u0027reserg\",\"issuetype\":{\"id\":\"1\"}}}",
+						SubmitIssue.class);
+		JIRAResult result = client.submit(submit, Method.POST);
+		System.err.println(result.getId() + " " + result.getKey());
+	}
 
 	public void testProjectLoading() {
 		JIRAProjectList projects = JIRAGson.getInstance().fromJson(
