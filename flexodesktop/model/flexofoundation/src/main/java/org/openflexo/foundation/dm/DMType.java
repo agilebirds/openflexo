@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.dm;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -1817,6 +1818,10 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	public boolean isList() {
 		return _isBasicType() && getBaseEntity().getDMModel().getDMEntity(List.class).isAncestorOf(getBaseEntity());
 	}
+    
+    public boolean isCollection() {
+        return _isBasicType() && getBaseEntity().getDMModel().getDMEntity(Collection.class).isAncestorOf(getBaseEntity());
+    }
 
 	public boolean isEOEntity() {
 		return _isBasicType() && (getBaseEntity() instanceof DMEOEntity);
