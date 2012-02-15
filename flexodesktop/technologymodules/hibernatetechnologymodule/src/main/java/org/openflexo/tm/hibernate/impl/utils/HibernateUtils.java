@@ -41,7 +41,11 @@ public class HibernateUtils {
 
 		if (dmType.getBaseEntity() != null && dmType.getBaseEntity().getIsEnumeration())
 			return HibernateAttributeType.ENUM;
-
+        if (dmType.isCollection()){
+            if(dmType.getParameters().get(0).getBaseEntity().getIsEnumeration()){
+                return HibernateAttributeType.ENUM_SET;
+            }
+        }
 		return null;
 	}
 
@@ -55,7 +59,11 @@ public class HibernateUtils {
 
 		if (property.getType() == null)
 			return true;
-
+        if(property.getType().isCollection()){
+           if(property.getType().getParameters().get(0).getBaseEntity().getIsEnumeration()){
+               return true;
+           }
+        }
 		return getHibernateAttributeTypeFromDMType(property.getType()) != null;
 	}
 }

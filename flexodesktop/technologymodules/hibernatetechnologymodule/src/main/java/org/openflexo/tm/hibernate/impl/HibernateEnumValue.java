@@ -64,7 +64,9 @@ public class HibernateEnumValue extends LinkableTechnologyModelObject<DMProperty
 	 */
 	public HibernateEnumValue(ImplementationModel implementationModel, DMProperty linkedFlexoModelObject) {
 		super(implementationModel, linkedFlexoModelObject);
-        setName(linkedFlexoModelObject.getName());
+        synchronizeWithLinkedFlexoModelObject();
+
+//        setName(linkedFlexoModelObject.getName());
 	}
 
 	// =========== //

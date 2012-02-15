@@ -6,8 +6,10 @@ package org.openflexo.tm.hibernate.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.naming.InvalidNameException;
@@ -41,7 +43,7 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 
 	protected Vector<HibernateEntity> entities = new Vector<HibernateEntity>();
 	protected HibernateEnumContainer hibernateEnumContainer;
-
+    private Set<HibernateRelationship> sndPassRelationships;
 	// ================ //
 	// = Constructors = //
 	// ================ //
@@ -71,11 +73,29 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	/**
 	 * Build a new Hibernate model for the specified implementation model.
 	 * 
-	 * @param implementationModel
+	 * @param hibernateImplementation1
 	 *            the implementation model where to create this Hibernate entity
 	 */
-	protected HibernateModel(ImplementationModel implementationModel, DMRepository watchedRepository) {
-		super(implementationModel, watchedRepository);
+	protected HibernateModel(HibernateImplementation hibernateImplementation1, 
+                             DMRepository watchedRepository,
+                             String name) {
+		super(hibernateImplementation1.getImplementationModel(), watchedRepository);
+
+        setName(name);
+        hibernateImplementation1.addToModels(this);
+        hibernateImplementation = hibernateImplementation1;
+        HibernateEnumContainer hibernateEnumContainer = new HibernateEnumContainer(hibernateImplementation1.getImplementationModel());
+        hibernateEnumContainer.setName("Enums");
+        setHibernateEnumContainer(hibernateEnumContainer);
+        sndPassRelationships = new HashSet<HibernateRelationship>();
+        try{
+            synchronizeWithLinkedFlexoModelObject();
+            for(HibernateRelationship relationship:sndPassRelationships){
+                relationship.setDestination(relationship.getTargetHibernateEntity());
+            }
+        }finally {
+            sndPassRelationships = null;
+        }
 	}
 
 	// =========== //
@@ -126,13 +146,13 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 			Map<DMEntity, LinkableTechnologyModelObject<?>> alreadyCreatedChildren = new HashMap<DMEntity, LinkableTechnologyModelObject<?>>();
 
             //first : filling maps with deleted FlexoModelObject and already linked FlexoModelObject
-			for (HibernateEntity hibernateEntity : this.entities) {
-				if (hibernateEntity.getLinkedFlexoModelObject() != null) {
-					alreadyCreatedChildren.put(hibernateEntity.getLinkedFlexoModelObject(), hibernateEntity);
-				} else if (hibernateEntity.getWasLinkedAtLastDeserialization()) {
-					deletedChildren.add(hibernateEntity);
-				}
-			}
+            for (HibernateEntity hibernateEntity : this.entities) {
+                if (hibernateEntity.getLinkedFlexoModelObject() != null) {
+                    alreadyCreatedChildren.put(hibernateEntity.getLinkedFlexoModelObject(), hibernateEntity);
+                } else if (hibernateEntity.getWasLinkedAtLastDeserialization()) {
+                    deletedChildren.add(hibernateEntity);
+                }
+            }
 
 			for (HibernateEnum hibernateEnum : getHibernateEnumContainer().getHibernateEnums()) {
 				if (hibernateEnum.getLinkedFlexoModelObject() != null) {
@@ -170,17 +190,7 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 
 	public static HibernateModel createNewHibernateModel(String name, HibernateImplementation hibernateImplementation,
 			DMRepository watchedRepository) throws DuplicateResourceException, InvalidNameException {
-		HibernateModel newModel = new HibernateModel(hibernateImplementation.getImplementationModel(), watchedRepository);
-		newModel.setName(name);
-		hibernateImplementation.addToModels(newModel);
-
-		HibernateEnumContainer hibernateEnumContainer = new HibernateEnumContainer(hibernateImplementation.getImplementationModel());
-		hibernateEnumContainer.setName("Enums");
-		newModel.setHibernateEnumContainer(hibernateEnumContainer);
-
-		newModel.synchronizeWithLinkedFlexoModelObject();
-
-		return newModel;
+		return new HibernateModel(hibernateImplementation, watchedRepository, name);
 	}
 
 	/**
@@ -238,7 +248,7 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 			}
 		} else {
 			if (getEntity(dmEntity) == null) {
-				HibernateEntity entity = new HibernateEntity(getImplementationModel(), dmEntity);
+				HibernateEntity entity = new HibernateEntity(this, dmEntity);
 				addToEntities(entity);
 				if (synchronizeWithLinkedObject) {
 					entity.synchronizeWithLinkedFlexoModelObject();
@@ -298,7 +308,10 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 				entity.deleteObserver(this);
 			}
 
-			this.entities = entities;
+			this.entities.clear();
+            if(entities!=null){
+                this.entities.addAll(entities);
+            }
 
 			for (HibernateEntity entity : entities) {
 				entity.addObserver(this);
@@ -400,4 +413,12 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 	protected void setHibernateImplementation(HibernateImplementation hibernateImplementation) {
 		this.hibernateImplementation = hibernateImplementation;
 	}
+
+    public boolean registerRelationshipForSndPass(HibernateRelationship hibernateRelationship) {
+        if(sndPassRelationships!=null){
+            sndPassRelationships.add(hibernateRelationship);
+            return true;
+        }
+        return false;
+    }
 }

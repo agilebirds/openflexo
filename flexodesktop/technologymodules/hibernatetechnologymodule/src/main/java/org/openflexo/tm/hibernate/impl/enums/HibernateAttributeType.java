@@ -37,7 +37,9 @@ public enum HibernateAttributeType {
 	LONG,
 
 	/** Bytes type. */
-	BYTES;
+	BYTES,
+
+    ENUM_SET;
 
 	/**
 	 * Return the java class link to this type

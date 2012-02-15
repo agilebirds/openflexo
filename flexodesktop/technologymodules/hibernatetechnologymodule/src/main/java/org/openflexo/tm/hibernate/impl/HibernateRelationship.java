@@ -41,6 +41,7 @@ import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectAddedToListModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModification;
+import org.openflexo.foundation.sg.implmodel.metamodel.DerivedAttribute;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.tm.hibernate.impl.enums.HibernateCascade;
 import org.openflexo.tm.hibernate.impl.utils.HibernateUtils;
@@ -117,8 +118,10 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 	 * @param linkedFlexoModelObject
 	 *            Can be null
 	 */
-	public HibernateRelationship(ImplementationModel implementationModel, DMProperty linkedFlexoModelObject) {
+	public HibernateRelationship(ImplementationModel implementationModel, DMProperty linkedFlexoModelObject, HibernateEntity hibernateEntity1) {
 		super(implementationModel, linkedFlexoModelObject);
+        hibernateEntity1.addToRelationships(this);
+        synchronizeWithLinkedFlexoModelObject();
 	}
 
 	// =========== //
@@ -314,36 +317,36 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public void setLinkedFlexoModelObject(DMProperty linkedFlexoModelObject) {
-		if (linkedFlexoModelObject == null || !HibernateUtils.getIsHibernateAttributeRepresented(linkedFlexoModelObject)) {
-			super.setLinkedFlexoModelObject(linkedFlexoModelObject);
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.log(Level.WARNING,
-						"Cannot set linked object to Hibernate Relationships with an DM Property with basic type. DM Property: "
-								+ linkedFlexoModelObject.getName());
-			}
-		}
-	}
+//	@Override
+//	public void setLinkedFlexoModelObject(DMProperty linkedFlexoModelObject) {
+//		if (linkedFlexoModelObject == null || !HibernateUtils.getIsHibernateAttributeRepresented(linkedFlexoModelObject)) {
+//			super.setLinkedFlexoModelObject(linkedFlexoModelObject);
+//		} else {
+//			if (logger.isLoggable(Level.WARNING)) {
+//				logger.log(Level.WARNING,
+//						"Cannot set linked object to Hibernate Relationships with an DM Property with basic type. DM Property: "
+//								+ linkedFlexoModelObject.getName());
+//			}
+//		}
+//	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public void setName(String name) {
-		name = escapeName(name);
-
-		if (StringUtils.isEmpty(name)) {
-			name = getDerivedName();
-
-			if (StringUtils.isEmpty(name)) {
-				name = getAutomaticName();
-			}
-		}
-
-		super.setName(name);
-	}
+//	@Override
+//	public void setName(String name) {
+//		name = escapeName(name);
+//
+//		if (StringUtils.isEmpty(name)) {
+//			name = getDerivedName();
+//
+//			if (StringUtils.isEmpty(name)) {
+//				name = getAutomaticName();
+//			}
+//		}
+//
+//		super.setName(name);
+//	}
 
 	public Vector<HibernateCascade> getCascadeTypes() {
 		return cascadeTypes;
@@ -421,23 +424,10 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 
 	public void setToMany(boolean toMany) {
 		if (requireChange(this.toMany, toMany)) {
-
-			boolean wasAutomaticName = !isDeserializing() && getLinkedFlexoModelObject() == null && getAutomaticName().equals(getName());
-
 			Object oldValue = this.toMany;
 			this.toMany = toMany;
 			setChanged();
 			notifyObservers(new SGAttributeModification("toMany", oldValue, toMany));
-
-			if (wasAutomaticName) {
-				try {
-					setName(getAutomaticName());
-				} catch (Exception e) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.log(Level.WARNING, "Cannot update relationship name on to many property change.", e);
-					}
-				}
-			}
 		}
 	}
 
@@ -462,7 +452,15 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 		return getDestination() != null;
 	}
 
+    @DerivedAttribute
 	public void setDestination(HibernateEntity destination) {
+        if(destination==null && getHibernateEntity().getHibernateModel().registerRelationshipForSndPass(this)){
+            //we are currently building the model and so a null destination may be caused by an incomplete model.
+            //that's why we stop here and destination relationship registered in the hibernate model will be processed once
+            //all entities are created.
+            //see : HibernateModel constructor.
+            return;
+        }
 		if (requireChange(this.destination, destination)) {
 			HibernateEntity oldValue = this.destination;
 			if (oldValue != null) {
@@ -476,7 +474,7 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 			setChanged();
 			notifyObservers(new SGAttributeModification("destination", oldValue, destination));
 
-			if (!isDeserializing) {
+			if (!isDeserializing && getName()==null) {
 				try {
 					setName(getAutomaticName());
 				} catch (Exception e) {
@@ -487,6 +485,41 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 			}
 		}
 	}
+
+    HibernateEntity getTargetHibernateEntity(){
+        return getHibernateEntity().getHibernateModel().getEntity(getTargetDMEntity());
+    }
+    
+    private DMEntity getTargetDMEntity(){
+        DMType dmType = getLinkedFlexoModelObject().getType();
+
+        DMEntity targetEntity = null;
+        if (dmType.isCollection()) {
+            if (dmType.getParameters().size() == 1) {
+                targetEntity = dmType.getParameters().get(0).getBaseEntity();
+            }
+        } else {
+            targetEntity = getLinkedFlexoModelObject().getType().getBaseEntity();
+        }
+        return targetEntity;
+    }
+
+    public HibernateEntity getDerivedDestination() {
+        if (getLinkedFlexoModelObject() != null) {
+            if (!HibernateUtils.getIsHibernateAttributeRepresented(getLinkedFlexoModelObject())) {
+                DMEntity targetEntity = getTargetDMEntity();
+                setToMany(getLinkedFlexoModelObject().getType().isCollection());
+
+                if (targetEntity == null) {
+                    return null;
+                } else {
+                    return getHibernateEntity().getHibernateModel().getEntity(targetEntity);
+                }
+
+            }
+        }
+        return null;
+    }
 
 	public HibernateRelationship getInverse() {
 		return inverse;

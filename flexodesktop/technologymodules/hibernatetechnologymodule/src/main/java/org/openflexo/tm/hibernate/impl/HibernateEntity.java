@@ -48,6 +48,7 @@ import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectAddedToListModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModification;
+import org.openflexo.foundation.sg.implmodel.metamodel.DerivedAttribute;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.tm.hibernate.impl.comparator.HibernateLinkableObjectComparator;
 import org.openflexo.tm.hibernate.impl.enums.HibernateAttributeType;
@@ -122,8 +123,10 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 * @param linkedFlexoModelObject
 	 *            Can be null
 	 */
-	public HibernateEntity(ImplementationModel implementationModel, DMEntity linkedFlexoModelObject) {
-		super(implementationModel, linkedFlexoModelObject);
+	public HibernateEntity(HibernateModel hibernateModel1, DMEntity linkedFlexoModelObject) {
+		super(hibernateModel1.getImplementationModel(), linkedFlexoModelObject);
+        setHibernateModel(hibernateModel1);
+        synchronizeWithLinkedFlexoModelObject();
 		createDefaultPrimaryKey();
 		if (linkedFlexoModelObject != null) {
 			isTableNameSynchronized = true;
@@ -210,20 +213,17 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 * @param dmProperty
 	 *            the DMProperty the newly created Hibernate object should be linked to.
 	 */
-	public void createHibernateObjectBasedOnDMProperty(DMProperty dmProperty) {
+	public Object createHibernateObjectBasedOnDMProperty(DMProperty dmProperty) {
 		if (HibernateUtils.getIsHibernateAttributeRepresented(dmProperty)) {
 			if (getAttribute(dmProperty) == null) {
-				HibernateAttribute attribute = new HibernateAttribute(getImplementationModel(), dmProperty);
-				addToAttributes(attribute);
-				attribute.synchronizeWithLinkedFlexoModelObject();
+				return new HibernateAttribute(getImplementationModel(), dmProperty,this);
 			}
 		} else {
 			if (getRelationship(dmProperty) == null) {
-				HibernateRelationship relationship = new HibernateRelationship(getImplementationModel(), dmProperty);
-				addToRelationships(relationship);
-				relationship.synchronizeWithLinkedFlexoModelObject();
+				return new HibernateRelationship(getImplementationModel(), dmProperty, this);
 			}
 		}
+        return null;
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	 * 
 	 * @return the default table name to use for this entity.
 	 */
-	public String getDefaultTableName() {
+	public String getDerivedTableName() {
 		return escapeTableName(getName());
 	}
 
@@ -270,26 +270,26 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 		return getTechnologyModuleImplementation().getDbObjectName(tableName);
 	}
 
-	public void updateIsTableNameSynchronized() {
-		if (!isDeserializing) {
-			String defaultTableName = getDefaultTableName();
-			setIsTableNameSynchronized(defaultTableName != null
-					&& (StringUtils.isEmpty(getTableName()) || StringUtils.equals(defaultTableName, getTableName())));
-		}
-	}
+//	public void updateIsTableNameSynchronized() {
+//		if (!isDeserializing) {
+//			String defaultTableName = getDefaultTableName();
+//			setIsTableNameSynchronized(defaultTableName != null
+//					&& (StringUtils.isEmpty(getTableName()) || StringUtils.equals(defaultTableName, getTableName())));
+//		}
+//	}
 
 	/**
 	 * Update the table name with this object name if necessary.
 	 */
     //todo : ensure this is covered
-	public void updateTableNameIfNecessary() {
-		if (getIsTableNameSynchronized()) {
-			setTableName(getName());
-		} else {
-			updateIsTableNameSynchronized(); // Update this anyway in case the name is set to tableName. In this case synchronization is set
-												// back to true.
-		}
-	}
+//	public void updateTableNameIfNecessary() {
+//		if (getIsTableNameSynchronized()) {
+//			setTableName(getName());
+//		} else {
+//			updateIsTableNameSynchronized(); // Update this anyway in case the name is set to tableName. In this case synchronization is set
+//												// back to true.
+//		}
+//	}
 
 	/* ===================== */
 	/* ====== Actions ====== */
@@ -403,38 +403,39 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public void setName(String name) {
-		name = escapeName(name);
-
-		if (StringUtils.isEmpty(name)) {
-			name = getDerivedName();
-		}
-
-		if (requireChange(getName(), name)) {
-			super.setName(name);
-			updateTableNameIfNecessary();
-		}
-	}
+//	@Override
+//	public void setName(String name) {
+//		name = escapeName(name);
+//
+//		if (StringUtils.isEmpty(name)) {
+//			name = getDerivedName();
+//		}
+//
+//		if (requireChange(getName(), name)) {
+//			super.setName(name);
+//			updateTableNameIfNecessary();
+//		}
+//	}
 
 	public String getTableName() {
 		return tableName;
 	}
 
+    @DerivedAttribute
 	public void setTableName(String tableName) {
 		tableName = escapeTableName(tableName);
-
-		if (StringUtils.isEmpty(tableName)) {
-			tableName = getDefaultTableName();
-		}
-
-		if (requireChange(getTableName(), tableName)) {
-			String oldValue = getTableName();
-			this.tableName = tableName;
-			updateIsTableNameSynchronized();
-			setChanged();
-			notifyObservers(new SGAttributeModification("tableName", oldValue, tableName));
-		}
+        checkSynchronizationStatus("tableName",tableName);
+//		if (StringUtils.isEmpty(tableName)) {
+//			tableName = getDefaultTableName();
+//		}
+//
+//		if (requireChange(getTableName(), tableName)) {
+//			String oldValue = getTableName();
+//			this.tableName = tableName;
+//			updateIsTableNameSynchronized();
+//			setChanged();
+//			notifyObservers(new SGAttributeModification("tableName", oldValue, tableName));
+//		}
 	}
 
 	public boolean getIsTableNameSynchronized() {

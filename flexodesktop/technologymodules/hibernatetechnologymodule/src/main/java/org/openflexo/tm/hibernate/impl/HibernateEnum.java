@@ -66,6 +66,8 @@ public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
      */
     public HibernateEnum(ImplementationModel implementationModel, DMEntity linkedFlexoModelObject) {
         super(implementationModel, linkedFlexoModelObject);
+        synchronizeWithLinkedFlexoModelObject();
+
         for (DMProperty enumValue : linkedFlexoModelObject.getProperties().values()) {
             HibernateEnumValue newValue = new HibernateEnumValue(getImplementationModel(), enumValue);
             addToHibernateEnumValues(newValue);
