@@ -37,7 +37,7 @@ public abstract class FIBContainer extends FIBComponent {
 	private Vector<FIBComponent> subComponents;
 
 	public static enum Parameters implements FIBModelAttribute {
-		subComponents
+		subComponents;
 	}
 
 	public FIBContainer() {
@@ -80,7 +80,7 @@ public abstract class FIBContainer extends FIBComponent {
 			aComponent.getConstraints().ignoreNotif = false;
 		}
 		subComponents.add(aComponent);
-		if ((aComponent instanceof FIBWidget) && ((FIBWidget) aComponent).getManageDynamicModel()) {
+		if (aComponent instanceof FIBWidget && ((FIBWidget) aComponent).getManageDynamicModel()) {
 			if (deserializationPerformed) {
 				updateBindingModel();
 			}
@@ -150,9 +150,9 @@ public abstract class FIBContainer extends FIBComponent {
 		for (int i = container.getSubComponents().size() - 1; i >= 0; i--) {
 			FIBComponent c2 = container.getSubComponents().get(i);
 			boolean merged = false;
-			if (c2.getName() != null && (c2 instanceof FIBContainer)) {
+			if (c2.getName() != null && c2 instanceof FIBContainer) {
 				for (FIBComponent c1 : getSubComponents()) {
-					if (c2.getName().equals(c1.getName()) && (c1 instanceof FIBContainer)) {
+					if (c2.getName().equals(c1.getName()) && c1 instanceof FIBContainer) {
 						((FIBContainer) c1).append((FIBContainer) c2);
 						merged = true;
 						logger.fine("Merged " + c1 + " and " + c2);
