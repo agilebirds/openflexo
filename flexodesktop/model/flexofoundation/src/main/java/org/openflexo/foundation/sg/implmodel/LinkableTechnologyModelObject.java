@@ -51,7 +51,7 @@ abstract public class LinkableTechnologyModelObject<T extends DMObject> extends 
     /**
      * by default all attributes must be synchronized. This is called by the constructor.
      */
-    private void initAllSynchronizedAttributes(){
+    private final void initAllSynchronizedAttributes(){
         for(String attributeName:MetaModelHelper.getAllDerivableAttributes(this)){
             setDerivedAttributeSynchronizationStatusForKey(true,attributeName);
         }
@@ -156,7 +156,7 @@ abstract public class LinkableTechnologyModelObject<T extends DMObject> extends 
         return linkedFlexoModelObject;
     }
 
-    public void setLinkedFlexoModelObject(T linkedFlexoModelObject) {
+    public final void setLinkedFlexoModelObject(T linkedFlexoModelObject) {
         if (requireChange(this.linkedFlexoModelObject, linkedFlexoModelObject)) {
             T oldValue = this.linkedFlexoModelObject;
 
