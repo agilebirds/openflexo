@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class LinkableObjectMetaModelImpl<T extends LinkableTechnologyModelObject> implements LinkableObjectMetaModel<T>{
+
+    private static final Logger logger = Logger.getLogger(LinkableObjectMetaModelFactory.class.getPackage().getName());
 
     private final Map<String, Method> setters = new HashMap<String, Method>();
 
@@ -32,6 +35,7 @@ public class LinkableObjectMetaModelImpl<T extends LinkableTechnologyModelObject
         if(setters.containsKey(attributeName)){
             throw new IllegalArgumentException(attributeName+" already registred.");
         }
+        logger.info("registering : "+attributeName+" with setter "+setter.getName()+" and transformation method "+transaformationMethod.getName());
         setters.put(attributeName,setter);
         transaformationMethods.put(attributeName,transaformationMethod);
         derivableAttributes.add(attributeName);

@@ -50,9 +50,10 @@ public class LinkableObjectMetaModelFactory {
             try {
                 setter = findSetter(clazz, attributeName, valueType);
             } catch (NoSuchMethodException e) {
-                logger.info("Ignoring field "+attributeName+" since it don't have setter.");
+                logger.fine("Ignoring field "+clazz.getName()+"."+attributeName+" since it don't have setter.");
             }
             if (isDerivedAttribute(field, setter)) {
+                logger.info("field : "+clazz.getName()+"." +attributeName+" is a derived attribute.");
                 Method transformationMethod;
                 try {
                     transformationMethod = findTransformationMethod(clazz, attributeName);
