@@ -95,7 +95,6 @@
 	<entity name="org.openflexo.tm.hibernate.impl.HibernateAttribute" xmlTag="HibernateAttribute">
 	    <property name="primaryKey" xmlTag="primaryKey" attribute="yes"/>
 	    <property name="columnName" xmlTag="columnName" attribute="yes"/>
-	    <property name="isColumnNameSynchronized" xmlTag="isColumnNameSynchronized" attribute="yes"/>
 	    <property name="type" xmlTag="type" attribute="yes"/>
 	    <property name="hibernateEnum" contains="org.openflexo.tm.hibernate.impl.HibernateEnum" context="enumAttributeType" primary="no"/>
 	    <property name="notNull" xmlTag="notNull" attribute="yes"/>
