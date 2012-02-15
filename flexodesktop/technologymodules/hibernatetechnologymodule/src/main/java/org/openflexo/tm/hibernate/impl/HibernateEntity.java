@@ -118,8 +118,8 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	}
 
 	/**
-	 * @param implementationModel
-	 *            the implementation model where to create this Hibernate entity
+	 * @param hibernateModel1
+	 *            the hibernate model where to create this Hibernate entity
 	 * @param linkedFlexoModelObject
 	 *            Can be null
 	 */
@@ -236,6 +236,7 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 				// Create default primary key
 				HibernateAttribute attribute = new HibernateAttribute(getImplementationModel());
 				attribute.setName("id");
+                attribute.setColumnName("id");
 				attribute.setType(HibernateAttributeType.LONG);
 				attribute.setPrimaryKey(true);
 				attribute.setNotNull(true);
@@ -269,27 +270,6 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	private String escapeTableName(String tableName) {
 		return getTechnologyModuleImplementation().getDbObjectName(tableName);
 	}
-
-//	public void updateIsTableNameSynchronized() {
-//		if (!isDeserializing) {
-//			String defaultTableName = getDefaultTableName();
-//			setIsTableNameSynchronized(defaultTableName != null
-//					&& (StringUtils.isEmpty(getTableName()) || StringUtils.equals(defaultTableName, getTableName())));
-//		}
-//	}
-
-	/**
-	 * Update the table name with this object name if necessary.
-	 */
-    //todo : ensure this is covered
-//	public void updateTableNameIfNecessary() {
-//		if (getIsTableNameSynchronized()) {
-//			setTableName(getName());
-//		} else {
-//			updateIsTableNameSynchronized(); // Update this anyway in case the name is set to tableName. In this case synchronization is set
-//												// back to true.
-//		}
-//	}
 
 	/* ===================== */
 	/* ====== Actions ====== */
@@ -400,42 +380,14 @@ public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> imp
 	/* == Getter / Setter == */
 	/* ===================== */
 
-	/**
-	 * {@inheritDoc}
-	 */
-//	@Override
-//	public void setName(String name) {
-//		name = escapeName(name);
-//
-//		if (StringUtils.isEmpty(name)) {
-//			name = getDerivedName();
-//		}
-//
-//		if (requireChange(getName(), name)) {
-//			super.setName(name);
-//			updateTableNameIfNecessary();
-//		}
-//	}
-
 	public String getTableName() {
 		return tableName;
 	}
 
     @DerivedAttribute
 	public void setTableName(String tableName) {
-		tableName = escapeTableName(tableName);
+		this.tableName = escapeTableName(tableName);
         checkSynchronizationStatus("tableName",tableName);
-//		if (StringUtils.isEmpty(tableName)) {
-//			tableName = getDefaultTableName();
-//		}
-//
-//		if (requireChange(getTableName(), tableName)) {
-//			String oldValue = getTableName();
-//			this.tableName = tableName;
-//			updateIsTableNameSynchronized();
-//			setChanged();
-//			notifyObservers(new SGAttributeModification("tableName", oldValue, tableName));
-//		}
 	}
 
 	public boolean getIsTableNameSynchronized() {

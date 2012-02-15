@@ -25,8 +25,8 @@
 		#addJavaImport("javax.persistence.Column")
     	@Column(
     		name = "${attribute.getColumnName()}"
-    		#if(${attribute.getType()} == 'STRING'), length = ${attribute.getLength()}#end 
-    		#if(${attribute.getNotNull()}), nullable = false#end 
+    		#if(${attribute.getType()} == 'STRING'), length = ${attribute.getLength()}#end
+    		#if(${attribute.getNotNull()}), nullable = false#end
     		#if(${attribute.getUnique()}), unique = true#end
     		#if(!${attribute.getUpdate()}), updatable = false#end
         )
