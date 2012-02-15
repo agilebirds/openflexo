@@ -1,3 +1,4 @@
+#* @vtlmacrolibrary path="/Java/VM_global_library.vm" *#
 #macro(renderAttributeAnnotations $attribute)
 	#if(${attribute.getPrimaryKey()})
 		#addJavaImport("javax.persistence.Id")

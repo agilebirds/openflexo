@@ -1,3 +1,8 @@
+#* @vtlvariable name="quote" type="java.lang.String" *#
+#* @vtlmacrolibrary path="/Java/VM_global_library.vm" *#
+#* @vtlmacrolibrary path="/Spring/VM_global_library.vm" *#
+#* @vtlvariable name="hibernateImplementation" type="org.openflexo.tm.hibernate.impl.HibernateImplementation" *#
+#* @vtlvariable name="projectGenerator" type="org.openflexo.sg.generator.ProjectGenerator" *#
 <?xml version="1.0" encoding="UTF-8"?>
 <Generation timestamp="${projectGenerator.generateTimestamp()}">
 	<File name="applicationContext-Hibernate.xml" type="text" symbolicPath="webapp" relativePath="WEB-INF">
