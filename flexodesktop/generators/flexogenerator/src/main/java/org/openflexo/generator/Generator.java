@@ -207,6 +207,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			}
 		});
 		context.put("today", new Date());
+        context.put("apacheStringUtils", org.apache.commons.lang.StringUtils.class);
 		return context;
 	}
 
