@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.cg.templates;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -51,10 +53,21 @@ public abstract class CGTemplates extends CGTemplateObject {
 		_customRepositories = new Hashtable<CustomTemplatesResource, CustomCGTemplateRepository>();
 	}
 
+    public Collection<CGTemplate> getAllTemplateFile(){
+        ArrayList<CGTemplate> templateFiles = new ArrayList<CGTemplate>();
+        templateFiles.addAll(_applicationRepository.getAllTemplateFiles());
+        for(CustomCGTemplateRepository repository:_customRepositories.values()){
+            templateFiles.addAll(repository.getAllTemplateFiles());
+        }
+        return templateFiles;
+    }
 	public CustomCGTemplateRepository createNewCustomTemplatesRepository(CustomTemplatesResource resource) {
 		return new CustomCGTemplateRepository(this, resource, availableTargets);
 	}
 
+    public void update(boolean force){
+        getApplicationRepository().update(force);
+    }
 	@Override
 	public void update() {
 		boolean hasChanged = false;

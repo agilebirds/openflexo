@@ -87,6 +87,15 @@ public class TemplateLocator extends FlexoMemoryResource {
 		logger.info("********* Clear TemplateLocator cache !!!!!!!!!!! for " + getFullyQualifiedName());
 		_templateTable.clear();
 		_templateDirectories = null;
+
+        Enumeration<CGTemplateSet> en = templateDirectories().elements();
+        CGTemplateSet set = null;
+        while (en.hasMoreElements()) {
+            set = en.nextElement();
+            // logger.info("search in "+set.getDirectory().getAbsolutePath());
+            set.update();
+        }
+
 		lastUpdate = new Date();
 	}
 

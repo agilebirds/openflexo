@@ -79,6 +79,10 @@ public class CGTemplateFolder extends CGTemplateObject {
 	public void update() {
 	}
 
+    @Override
+    public void update(boolean force) {
+    }
+
 	@Override
 	public String getInspectorName() {
 		return Inspectors.GENERATORS.CG_FOLDER_INSPECTOR;

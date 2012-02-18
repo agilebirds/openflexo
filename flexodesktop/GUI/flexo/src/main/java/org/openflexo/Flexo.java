@@ -141,6 +141,7 @@ public class Flexo {
 				}
 			}
 		}
+        System.setProperty("org.openflexo.devmode","true");
 		ToolBox.setPlatform();
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();

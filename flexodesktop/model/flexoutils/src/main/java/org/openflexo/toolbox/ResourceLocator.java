@@ -124,6 +124,7 @@ public class ResourceLocator {
 			if (flexoDesktopDirectory != null) {
 				findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
 			}
+
 			directoriesSearchOrder.add(workingDirectory);
 		}
 		return directoriesSearchOrder;
@@ -145,7 +146,7 @@ public class ResourceLocator {
 		if (new File(dir, "pom.xml").exists()) {
 			files.add(dir);
 			for (File f : dir.listFiles()) {
-				if (f.getName().startsWith("flexo")) {
+				if (f.getName().startsWith("flexo") || f.getName().endsWith("technologymodule")) {
 					File file1 = new File(f.getAbsolutePath() + "/src/main/resources");
 					File file2 = new File(f.getAbsolutePath() + "/src/test/resources");
 					File file3 = new File(f.getAbsolutePath() + "/src/dev/resources");

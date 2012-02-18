@@ -28,6 +28,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
+import org.openflexo.foundation.cg.templates.CGTemplates;
 
 public class RefreshTemplates extends FlexoAction<RefreshTemplates, CGTemplateObject, CGTemplateObject> {
 
@@ -70,6 +71,9 @@ public class RefreshTemplates extends FlexoAction<RefreshTemplates, CGTemplateOb
 		if (getFocusedObject() != null) {
 			getFocusedObject().refresh();
 		}
+        if(getFocusedObject() instanceof CGTemplates){
+            getGlobalSelection().addAll(((CGTemplates)getFocusedObject()).getAllTemplateFile());
+        }
 		if ((getGlobalSelection() != null) && (getGlobalSelection().size() > 0)) {
 			for (CGTemplateObject o : getGlobalSelection()) {
 				o.refresh();
