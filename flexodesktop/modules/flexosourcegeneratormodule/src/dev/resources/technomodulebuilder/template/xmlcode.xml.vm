@@ -1,0 +1,2 @@
+<entity name="org.openflexo.tm.${moduleName.toLowerCase()}.impl.${moduleName}Implementation" xmlTag="${moduleName}Implementation">
+</entity>

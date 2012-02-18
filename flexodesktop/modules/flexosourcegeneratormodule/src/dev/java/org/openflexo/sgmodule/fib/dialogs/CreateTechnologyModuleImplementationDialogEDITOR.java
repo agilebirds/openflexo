@@ -25,8 +25,8 @@ import org.openflexo.fib.ProjectDialogEDITOR;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.sg.implmodel.CreateTechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
+import org.openflexo.sg.action.CreateTechnologyModuleImplementation;
 import org.openflexo.sgmodule.SGCst;
 import org.openflexo.toolbox.FileResource;
 
