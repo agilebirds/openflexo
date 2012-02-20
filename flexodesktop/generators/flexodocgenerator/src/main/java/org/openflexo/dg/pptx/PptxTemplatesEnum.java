@@ -32,6 +32,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+enum PptxTemplateType{
+	SLIDE_RELS,
+	SLIDE,
+	PRESENTATION,
+	OTHERS,
+	
+}
+
 public enum PptxTemplatesEnum
 {
 //	RELS("docx_.rels.vm", "_rels/.rels", false),
@@ -69,38 +77,38 @@ public enum PptxTemplatesEnum
 //	CONTENT_TYPES_XML("docx_content_types.xml.vm", "[Content_Types].xml", false);
 	
 	
-	RELS("pptx_.rels.vm", "_rels/.rels", false,false),
-	APP_XML("pptx_app.xml.vm", "docProps/app.xml", false,false),
-	CORE_XML("pptx_core.xml.vm", "docProps/core.xml", false,false),
-	PRESENTATION_XML("pptx_presentation.xml.vm", "ppt/presentation.xml", false,false),
-	PRESENTATION_XML_RELS("pptx_presentation.xml.rels.vm", "ppt/_rels/presentation.xml.rels", false,false),
-	PRESPROPS_XML("pptx_presProps.xml.vm", "ppt/presProps.xml", false,false),
-	TABLESTYLES_XML("pptx_tableStyles.xml.vm", "ppt/tableStyles.xml", false,false),
+	RELS("pptx_.rels.vm", "_rels/.rels", false,PptxTemplateType.PRESENTATION),
+	APP_XML("pptx_app.xml.vm", "docProps/app.xml", false,PptxTemplateType.OTHERS),
+	CORE_XML("pptx_core.xml.vm", "docProps/core.xml", false,PptxTemplateType.OTHERS),
+	PRESENTATION_XML("pptx_presentation.xml.vm", "ppt/presentation.xml", false,PptxTemplateType.PRESENTATION),
+	PRESENTATION_XML_RELS("pptx_presentation.xml.rels.vm", "ppt/_rels/presentation.xml.rels", false,PptxTemplateType.OTHERS),
+	PRESPROPS_XML("pptx_presProps.xml.vm", "ppt/presProps.xml", false,PptxTemplateType.OTHERS),
+	TABLESTYLES_XML("pptx_tableStyles.xml.vm", "ppt/tableStyles.xml", false,PptxTemplateType.OTHERS),
 	
 	
-	VIEWPROPS_XML("pptx_viewProps.xml.vm", "ppt/viewProps.xml.vm", false,false),
-	SLIDELAYOUT_XML("pptx_slideLayout1.xml.vm", "ppt/slideLayouts/slideLayout1.xml.vm", false,false),
-	SLIDELAYOUT_RELS("pptx_slideLayout1.xml.rels.vm", "ppt/slideLayouts/_rels/slideLayout1.xml.rels.vm", false,false),
-	SLIDEMASTER_RELS("pptx_slideMaster1.xml.rels.vm", "ppt/slideMasters/_rels/slideMaster1.xml.rels.vm", false,false),
-	SLIDEMASTER_XML("pptx_slideMaster1.xml.vm", "ppt/slideMasters/slideMaster1.xml.vm", false,false),
-	SLIDE_RELS("pptx_slide1.xml.rels.vm", "ppt/slides/_rels/slide1.xml.rels.vm", false,false),
-	SLIDE_XML("pptx_slide1.xml.vm", "ppt/slides/slide1.xml.vm", true,true),
-	THEME_XML("pptx_theme1.xml.vm", "ppt/theme/theme1.xml.vm", false,false),
-	CONTENT_TYPES_XML("pptx_[Content_Types].xml.vm", "[Content_Types].xml", false,false);
+	VIEWPROPS_XML("pptx_viewProps.xml.vm", "ppt/viewProps.xml", false,PptxTemplateType.OTHERS),
+	SLIDELAYOUT_XML("pptx_slideLayout1.xml.vm", "ppt/slideLayouts/slideLayout1.xml", false,PptxTemplateType.OTHERS),
+	SLIDELAYOUT_RELS("pptx_slideLayout1.xml.rels.vm", "ppt/slideLayouts/_rels/slideLayout1.xml.rels", false,PptxTemplateType.OTHERS),
+	SLIDEMASTER_RELS("pptx_slideMaster1.xml.rels.vm", "ppt/slideMasters/_rels/slideMaster1.xml.rels", false,PptxTemplateType.OTHERS),
+	SLIDEMASTER_XML("pptx_slideMaster1.xml.vm", "ppt/slideMasters/slideMaster1.xml", false,PptxTemplateType.OTHERS),
+	SLIDE_RELS("pptx_slide1.xml.rels.vm", "ppt/slides/_rels/slide", false,PptxTemplateType.SLIDE_RELS),
+	SLIDE_XML("pptx_slide1.xml.vm", "ppt/slides/slide", true,PptxTemplateType.SLIDE),
+	THEME_XML("pptx_theme1.xml.vm", "ppt/theme/theme1.xml", false,PptxTemplateType.OTHERS),
+	CONTENT_TYPES_XML("pptx_[Content_Types].xml.vm", "[Content_Types].xml", false,PptxTemplateType.OTHERS);
 
 	private static Map<String, List<PptxTemplatesEnum>> orderedTemplateListGroupedPerGenerator;
 
 	private String templatePath;
 	private String filePath;
 	private boolean isFullProjectDependent;
-	private boolean isSlide;
+	private PptxTemplateType templateType;
 
-	private PptxTemplatesEnum(String templatePath, String filePath, boolean isFullProjectDependent , boolean isSlide)
+	private PptxTemplatesEnum(String templatePath, String filePath, boolean isFullProjectDependent, PptxTemplateType type )
 	{
 		this.templatePath = templatePath;
 		this.filePath = filePath;
 		this.isFullProjectDependent = isFullProjectDependent;
-		this.isSlide = isSlide;
+		this.templateType = type;
 	}
 
 	public String getTemplatePath()
@@ -125,13 +133,26 @@ public enum PptxTemplatesEnum
 	
 	
 	
-	public boolean isSlide() {
-		return isSlide;
+	public PptxTemplateType getTemplateType() {
+		return templateType;
 	}
 
-	public void setSlide(boolean isSlide) {
-		this.isSlide = isSlide;
+	public void setTemplateType(PptxTemplateType templateType) {
+		this.templateType = templateType;
 	}
+
+	public boolean isSlide() {
+		return getTemplateType()==PptxTemplateType.SLIDE;
+	}
+	
+	public boolean isSlideRels(){
+		return getTemplateType()==PptxTemplateType.SLIDE_RELS;
+	}
+	
+	public boolean isPresentation(){
+		return getTemplateType()==PptxTemplateType.PRESENTATION;
+	}
+
 
 	public static Map<String, List<PptxTemplatesEnum>> getOrderedTemplateListGroupedPerGenerator()
 	{

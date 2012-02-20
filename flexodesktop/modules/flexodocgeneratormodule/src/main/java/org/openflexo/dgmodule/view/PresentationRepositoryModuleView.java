@@ -41,6 +41,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.action.GenerateDocx;
 import org.openflexo.dg.action.GeneratePDF;
+import org.openflexo.dg.action.GeneratePPTX;
 import org.openflexo.dg.action.ReinjectDocx;
 import org.openflexo.dgmodule.DGCst;
 import org.openflexo.dgmodule.DGPreferences;
@@ -227,34 +228,8 @@ public class PresentationRepositoryModuleView extends JPanel implements ModuleVi
             }
         });
         buttonPanel.add(chooseWarLocationButton);
-        switch(repository.getFormat())
-        {
-        	case LATEX:
-        		postBuildButton = new FlexoActionButton(GeneratePDF.actionType,this,controller.getEditor());
-    	        postBuildButton.setIcon(DGIconLibrary.GENERATE_PDF);
-    	        postBuildButton.setText(FlexoLocalization.localizedForKey("generate_PDF", postBuildButton));
-    	        postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_PDF", postBuildButton));
-        		break;
-        	case DOCX:
-        		postBuildButton = new FlexoActionButton(GenerateDocx.actionType, this, controller.getEditor());
-    	        postBuildButton.setIcon(DGIconLibrary.GENERATE_DOCX);
-    	        postBuildButton.setText(FlexoLocalization.localizedForKey("generate_docx", postBuildButton));
-    	        postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_docx", postBuildButton));
-    	        
-    	        postBuildButton2 = new FlexoActionButton(ReinjectDocx.actionType, this, controller.getEditor());
-    	        postBuildButton2.setIcon(DGIconLibrary.REINJECT_DOCX);
-    	        postBuildButton2.setText(FlexoLocalization.localizedForKey("reinject_docx", postBuildButton2));
-    	        postBuildButton2.setToolTipText(FlexoLocalization.localizedForKey("reinject_docx", postBuildButton2));
-    	        
-        		break;
-        		
-        		/**
-        		 * MOS
-        		 * TODO_MOS Have to personalize the pptx DGRpositoryModuleView 
-        		 * @author MOSTAFA
-        		 */
-        	case PPTX:
-        		postBuildButton = new FlexoActionButton(GenerateDocx.actionType, this, controller.getEditor());
+        
+        		postBuildButton = new FlexoActionButton(GeneratePPTX.actionType, this, controller.getEditor());
     	        postBuildButton.setIcon(DGIconLibrary.GENERATE_DOCX);
     	        postBuildButton.setText(FlexoLocalization.localizedForKey("generate_pptx", postBuildButton));
     	        postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_pptx", postBuildButton));
@@ -263,17 +238,7 @@ public class PresentationRepositoryModuleView extends JPanel implements ModuleVi
     	        postBuildButton2.setIcon(DGIconLibrary.REINJECT_DOCX);
     	        postBuildButton2.setText(FlexoLocalization.localizedForKey("reinject_pptx", postBuildButton2));
     	        postBuildButton2.setToolTipText(FlexoLocalization.localizedForKey("reinject_docx", postBuildButton2));
-    	        
-        		break;
-        		
-        		//
-        	case HTML:
-        		postBuildButton = new FlexoActionButton(GenerateZip.actionType,this,controller.getEditor());
-    	        postBuildButton.setIcon(DGIconLibrary.GENERATE_ZIP);
-    	        postBuildButton.setText(FlexoLocalization.localizedForKey("generate_zip", postBuildButton));
-    	        postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_zip", postBuildButton));
-        		break;
-        }
+    	      
 
         postBuildButton.setDisabledIcon(null);
         postBuildButton.setHorizontalTextPosition(SwingConstants.CENTER);

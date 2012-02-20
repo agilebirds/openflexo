@@ -17,6 +17,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ptoc.PSlide;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -30,7 +31,7 @@ import org.openflexo.toolbox.FileFormat;
 public class PptxXmlFileResource<G extends DGPptxXMLGenerator<? extends FlexoModelObject>> extends TextFileResource<G, DGPptxXmlFile> implements GenerationAvailableFileResource, FlexoObserver {
 
 	
-
+	protected PSlide slide;
 	protected static final Logger logger = FlexoLogger.getLogger(PptxXmlFileResource.class.getPackage().getName());
 
 	/**
@@ -64,6 +65,15 @@ public class PptxXmlFileResource<G extends DGPptxXMLGenerator<? extends FlexoMod
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	
+	public PSlide getSlide() {
+		return slide;
+	}
+
+	public void setSlide(PSlide slide) {
+		this.slide = slide;
 	}
 
 	@Override

@@ -121,9 +121,6 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	public static FileResource flexoTemplatesDirectory = new FileResource(FileCst.GENERATOR_TEMPLATES_REL_PATH);
 
 	protected Hashtable<DGRepository, ProjectDocGenerator> _projectGenerators;
-	//MOS
-	protected Hashtable<PresentationRepository, ProjectDocPptxGenerator> _projectPresentationGenerators;
-	//
 	protected DGFooter _footer;
 
 	// ==========================================================================
@@ -313,41 +310,6 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	}
 	
 	
-	//MOS
-	public AbstractProjectGenerator getProjectGenerator(GenerationRepository repository){
-		if (!repository.isConnected()) {
-			return null;
-		}
-		if(repository.getFormat() != Format.PPTX)
-			return getProjectGenerator((DGRepository) repository);
-		else{
-			return getProjectPresentationGenerator((PresentationRepository) repository);
-		}
-	}
-	
-	
-
-	private ProjectDocPptxGenerator getProjectPresentationGenerator(
-			PresentationRepository repository) {
-		if (!repository.isConnected()) {
-			return null;
-		}
-		ProjectDocPptxGenerator returned = _projectPresentationGenerators.get(repository);
-		if (returned == null) {
-			try {
-						returned = new ProjectDocPptxGenerator(getProject(), repository);
-				
-			} catch (GenerationException e) {
-				showError(e.getLocalizedMessage());
-				return null;
-			}
-			_projectPresentationGenerators.put(repository, returned);
-		}
-		return returned;
-	}
-
-	//MOS
-	
 	
 	public ProjectDocGenerator getProjectGenerator(DGRepository repository)
 	{
@@ -373,7 +335,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 					 * @author MOSTAFA	
 					 */
 					case PPTX:
-						returned = new ProjectDocPptxGenerator(getProject(), repository);
+						returned = new ProjectDocPptxGenerator(getProject(), (PresentationRepository)repository);
 						break;
 					//
 				}

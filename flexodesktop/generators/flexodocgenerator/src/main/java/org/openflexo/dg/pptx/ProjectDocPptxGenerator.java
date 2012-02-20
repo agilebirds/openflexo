@@ -53,6 +53,8 @@ import org.openflexo.foundation.cg.dm.CustomTemplateRepositoryChanged;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.TemplateFileNotification;
+import org.openflexo.foundation.ptoc.PSlide;
+import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
@@ -71,8 +73,8 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
 
 public class ProjectDocPptxGenerator extends ProjectDocGenerator {
-	private static final String DOCX_MACRO_LIBRARY_NAME = "docx_macro_library.vm";
-	public static final String DOCXEXTRA_DIRECTORY_NAME = "DocxExtras";
+	private static final String PPTX_MACRO_LIBRARY_NAME = "pptx_macro_library.vm";
+	public static final String PPTXEXTRA_DIRECTORY_NAME = "DocxExtras";
 
 	protected static final Logger logger = FlexoLogger.getLogger(ProjectDocPptxGenerator.class.getPackage().getName());
 
@@ -83,10 +85,10 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 	protected static final Vector<FileResource> fileResourceToCopy = new Vector<FileResource>();
 
 	static {
-		FileResource directory = new FileResource(DOCXEXTRA_DIRECTORY_NAME);
+		FileResource directory = new FileResource(PPTXEXTRA_DIRECTORY_NAME);
 		if (directory != null) {
 			for (String fileName : directory.list(FileUtils.CVSFileNameFilter)) {
-				fileResourceToCopy.add(new FileResource(DOCXEXTRA_DIRECTORY_NAME + "/" + fileName));
+				fileResourceToCopy.add(new FileResource(PPTXEXTRA_DIRECTORY_NAME + "/" + fileName));
 			}
 		}
 	}
@@ -116,7 +118,52 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 	 * 
 	 * @see org.openflexo.dg.DGGenerator#buildResourcesAndSetGenerators(DGRepository, java.util.Vector)
 	 */
-	@Override
+//	@Override
+//	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
+//		try{
+//			PresentationRepository prep = (PresentationRepository) repository;
+//			hasBeenInitialized = true;
+//			// MARKER 1.2 getOrderedTemplateListGroupedPerGenerator
+//			for (String nameGenerator : PptxTemplatesEnum
+//					.getOrderedTemplateListGroupedPerGenerator().keySet()) {
+//				/**
+//				 * getGenerator method returns the corresponding
+//				 * DGPptxXMLGenerator instance from the generators list
+//				 * attribute, (it creates it if not created.)
+//				 */
+//				DGPptxXMLGenerator<FlexoProject> generator = getGenerator(nameGenerator);
+//				for (PptxTemplatesEnum pptxTemplate : PptxTemplatesEnum.getOrderedTemplateListGroupedPerGenerator().get(nameGenerator)) {
+//					refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " " + pptxTemplate.getFilePath(), false);
+//					/**
+//					 * GeneratedFileResourceFactory.
+//					 * createNewProjectPptXmlFileResource method returns the
+//					 * ProjectPptxXmlFileResource instance corresponding to
+//					 * generator, repository and pptxTemplate. if not yet
+//					 * created it creates it.
+//					 * 
+//					 */
+//					// MARKER 1.3
+//					// GeneratedFileResourceFactory.createNewProjectPptXmlFileResource
+//					ProjectPptxXmlFileResource res = GeneratedFileResourceFactory.createNewProjectPptXmlFileResource(prep,generator, pptxTemplate);
+//					resources.add(res);
+//				}
+//			}
+//
+//			buildResourcesAndSetGeneratorsForCopyOfPackagedResources(resources);
+//			// Useless as they are copied in copyAdditionalFiles, should be used
+//			// instead but the images imported in the wysiwyg are not in the
+//			// resources currently (and thus not copied by
+//			// buildResourcesAndSetGeneratorsForCopiedResources)
+//			// buildResourcesAndSetGeneratorsForCopiedResources(resources);
+//			// MARKER 1.4 screenshotsGenerator.buildResourcesAndSetGenerators
+//			screenshotsGenerator.buildResourcesAndSetGenerators(repository,
+//					resources);
+//		}catch(Exception e ){
+//			//TODO_MOS Inform about exception 
+//		}
+//	}
+	
+	
 	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		try{
 			PresentationRepository prep = (PresentationRepository) repository;
@@ -140,10 +187,14 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 					 * created it creates it.
 					 * 
 					 */
-					// MARKER 1.3
-					// GeneratedFileResourceFactory.createNewProjectPptXmlFileResource
-					ProjectPptxXmlFileResource res = GeneratedFileResourceFactory.createNewProjectPptXmlFileResource(prep,generator, pptxTemplate);
-					resources.add(res);
+					
+					if(pptxTemplate.isSlide() || pptxTemplate.isSlideRels()){
+						buildSlidesResources(prep,resources,generator, pptxTemplate);
+					}else{
+						ProjectPptxXmlFileResource res = GeneratedFileResourceFactory.createNewProjectPptXmlFileResource(prep,generator, pptxTemplate);
+						resources.add(res);
+					}
+					
 				}
 			}
 
@@ -159,6 +210,23 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 		}catch(Exception e ){
 			//TODO_MOS Inform about exception 
 		}
+	}
+	
+
+	private void buildSlidesResources(PresentationRepository repository,
+			Vector<CGRepositoryFileResource> resources,
+			DGPptxXMLGenerator<FlexoProject> generator,
+			PptxTemplatesEnum pptxTemplate) {
+		
+		
+		PTOCRepository ptocRepository = repository.getPTocRepository();
+		int i = 1;
+		for(PSlide slide : ptocRepository.getOrderedSlides()){
+			ProjectPptxXmlFileResource res= GeneratedFileResourceFactory.createNewProjectSlidePptXmlFileResource(repository,generator, pptxTemplate, slide , i);
+			resources.add(res);
+			i++;
+		}
+		
 	}
 
 	private DGPptxXMLGenerator<FlexoProject> getGenerator(String nameGenerator) {
@@ -277,9 +345,9 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 	public List<CGTemplate> getVelocityMacroTemplates() {
 		List<CGTemplate> result = new ArrayList<CGTemplate>();
 		try {
-			result.add(templateWithName(DOCX_MACRO_LIBRARY_NAME));
+			result.add(templateWithName(PPTX_MACRO_LIBRARY_NAME));
 		} catch (TemplateNotFoundException e) {
-			logger.warning("Should include velocity macro template for project generator but template is not found '" + DOCX_MACRO_LIBRARY_NAME + "'");
+			logger.warning("Should include velocity macro template for project generator but template is not found '" + PPTX_MACRO_LIBRARY_NAME + "'");
 			e.printStackTrace();
 		}
 		return result;

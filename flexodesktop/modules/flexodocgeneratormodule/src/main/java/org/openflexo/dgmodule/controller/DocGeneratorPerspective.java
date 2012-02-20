@@ -14,6 +14,7 @@ import org.openflexo.dgmodule.view.DGFileModuleView;
 import org.openflexo.dgmodule.view.DGRepositoryModuleView;
 import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
 import org.openflexo.dgmodule.view.GeneratedDocModuleView;
+import org.openflexo.dgmodule.view.PresentationRepositoryModuleView;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.view.DEPRepositoryModuleView;
 import org.openflexo.doceditor.view.DEPSlideModuleView;
@@ -27,6 +28,7 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GeneratedDoc;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.ptoc.PSlide;
@@ -109,13 +111,17 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject>
 		return ((object instanceof GeneratedDoc) || (object instanceof DGRepository) || (object instanceof DGLatexFile) || (object instanceof DGScreenshotFile) || (object instanceof CGTemplate)
 				|| (object instanceof TOCEntry) || (object instanceof TOCRepository) || (object instanceof TOCData)
 				//MOS
-				|| (object instanceof PTOCRepository) || (object instanceof PTOCData) || (object instanceof PTOCEntry));
+				|| (object instanceof PTOCRepository) || (object instanceof PTOCData) || (object instanceof PTOCEntry)|| (object instanceof PresentationRepository));
 	}
 
 	@Override
 	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof GeneratedDoc) {
 			return new GeneratedDocModuleView((GeneratedDoc) object, (DGController) controller);
+		}else if ((object instanceof PresentationRepository)){
+			//MOS
+			return new PresentationRepositoryModuleView((PresentationRepository) object, (DGController) controller);
+			//
 		} else if (object instanceof DGRepository) {
 			return new DGRepositoryModuleView((DGRepository) object, (DGController) controller);
 		} else if (object instanceof CGFile) {

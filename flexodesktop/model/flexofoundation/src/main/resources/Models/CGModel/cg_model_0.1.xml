@@ -32,7 +32,7 @@
 
   <entity name="org.openflexo.foundation.cg.GeneratedOutput" abstract="YES">
     <description>Structure of all generated ouput</description>
-    <property name="generatedRepositories" xmlTag="CGRepository,DGRepository" type="vector" primary="yes" description="TODO"/> 
+    <property name="generatedRepositories" xmlTag="CGRepository,DGRepository,PresentationRepository" type="vector" primary="yes" description="TODO"/> 
   </entity>
 
   <entity name="org.openflexo.foundation.cg.GeneratedDoc" xmlTag="GeneratedDoc">
@@ -78,6 +78,11 @@
     <property name="systemName" xmlTag="systemName" attribute="yes"/>
     <property name="systemVersion" xmlTag="systemVersion" attribute="yes"/>
     <property name="tocRepositoryRef" xmlTag="tocRepository" attribute="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.cg.PresentationRepository" xmlTag="PresentationRepository">
+    <description>Structure of a generated code Presentation repository</description>
+    <property name="ptocRepositoryRef" xmlTag="ptocRepository" attribute="yes"/>
   </entity>
 	
   <entity name="org.openflexo.foundation.cg.CGSymbolicDirectory" xmlTag="CGSymbolicDirectory">

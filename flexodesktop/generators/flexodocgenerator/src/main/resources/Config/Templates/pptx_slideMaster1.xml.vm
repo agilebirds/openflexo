@@ -155,6 +155,7 @@
 					<a:p>
 						<a:fld id="{487FD7C5-9F58-4671-A429-9B151C1C0499}" type="datetimeFigureOut">
 							<a:rPr lang="fr-FR" smtClean="0" />
+							<a:pPr />
 							<a:t>25/01/2012</a:t>
 						</a:fld>
 						<a:endParaRPr lang="fr-FR" />
@@ -235,6 +236,7 @@
 					<a:p>
 						<a:fld id="{0A08C469-41D5-4CC3-A8DC-D171808C4ECA}" type="slidenum">
 							<a:rPr lang="fr-FR" smtClean="0" />
+							<a:pPr />
 							<a:t>‹N°›</a:t>
 						</a:fld>
 						<a:endParaRPr lang="fr-FR" />

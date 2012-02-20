@@ -1,5 +1,5 @@
 #Dutch
-#Wed Feb 01 21:04:02 CET 2012
+#Fri Feb 17 00:41:30 CET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -1790,10 +1790,12 @@ description_Objectives\ and\ Scopes=description_Objectives and Scopes
 description_OperationComponentDefinition=Operation Component description
 description_ProcessFolder=FlexoProcess folder description subsection
 description_Role=Role description subsection
+description_child=description_child
 description_data_model=Data Model description
 description_definitions=description_definitions
 description_er_diagram=Entity-relation Diagram description
 description_processes=Process description subsection
+description_puposes=description_puposes
 description_raci=Raci matrix subsection
 description_readers_guide=Readers guide
 description_roles=Role description subsection

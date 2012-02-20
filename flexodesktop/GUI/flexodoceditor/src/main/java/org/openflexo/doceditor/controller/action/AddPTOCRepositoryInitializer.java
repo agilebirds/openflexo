@@ -51,6 +51,7 @@ import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.ptoc.PSlide;
 import org.openflexo.foundation.ptoc.PTOCEntry;
 import org.openflexo.foundation.ptoc.PTOCRepository;
 import org.openflexo.foundation.ptoc.PTOCUnit;
@@ -174,6 +175,10 @@ public class AddPTOCRepositoryInitializer extends ActionInitializer {
 				}
 			}
 			System.out.println("Template title "+tocTemplate.getTitle());
+			
+			Vector<PSlide> v = tocTemplate.getOrderedSlides();
+			for(PSlide s : v)
+				System.out.println("Slide title "+s.getTitle());
 		}
 		else
 			System.out.println("Error");

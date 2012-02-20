@@ -10,6 +10,7 @@ package org.openflexo.dg.file;
 import org.openflexo.dg.rm.PptxXmlFileResource;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GeneratedOutput;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
@@ -26,7 +27,7 @@ public class DGPptxXmlFile extends AbstractCGFile {
 	        super(generatedCode);  
 	    }
 
-	    public DGPptxXmlFile(DGRepository repository, PptxXmlFileResource resource)
+	    public DGPptxXmlFile(PresentationRepository repository, PptxXmlFileResource resource)
 	    {
 	        super(repository,resource);
 	    }

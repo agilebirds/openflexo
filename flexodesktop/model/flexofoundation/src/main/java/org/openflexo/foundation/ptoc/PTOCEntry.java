@@ -46,6 +46,7 @@ import org.openflexo.foundation.cg.utils.DocConstants.ProcessDocSectionSubType;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
+import org.openflexo.foundation.ptoc.action.AddPTOCEntry;
 import org.openflexo.foundation.ptoc.action.MovePTOCEntry;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
@@ -149,7 +150,7 @@ public class PTOCEntry extends PTOCUnit {
 	@Override
     protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
     	Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-    	v.add(AddTOCEntry.actionType);
+    	v.add(AddPTOCEntry.actionType);
     	v.add(RemoveTOCEntry.actionType);
     	v.add(RepairTOCEntry.actionType);
     	v.add(MovePTOCEntry.actionType);
@@ -174,23 +175,10 @@ public class PTOCEntry extends PTOCUnit {
 	}
 
 	
-
-	
-
-
-	
-
-	
-
-	
-
 	public String getValidReference() {
 		return "PTOC-"+getLevel()+"-"+getTitle();
 	}
 
-	
-
-	
 	public Vector<PTOCUnit> getPtocUnits(){
 		return getPTocUnits();
 	}
@@ -279,15 +267,6 @@ public class PTOCEntry extends PTOCUnit {
 		return null;
 	}
 
-
-    /**
-     * Overrides getCollection
-     *
-     * @see org.openflexo.foundation.utils.Sortable#getCollection()
-     */
-    
-
-	
 
 	public boolean canHaveChildren() {
 		return getLevel()<MAXIMUM_DEPTH;
@@ -384,10 +363,6 @@ public class PTOCEntry extends PTOCUnit {
 		return includeStatusList;
 	}
 
-
-
-	
-
 	@Override
 	public void objectSerializationIdChanged(FlexoModelObjectReference reference) {
 		setChanged();
@@ -402,5 +377,15 @@ public class PTOCEntry extends PTOCUnit {
 			reply.addToPTocUnits(PTOCUnit.cloneUnitFromTemplate(reply, en.nextElement()));
 		}
 		return reply;
+	}
+	
+	public void DFSPath(Vector<PSlide> v ){
+		for (PTOCUnit unit : getPtocUnits()) {
+		    if(unit instanceof PSlide){
+		    	v.add((PSlide)unit);
+		    }
+		    else if(unit instanceof PTOCEntry)
+		    	((PTOCEntry)unit).DFSPath(v);
+		  }
 	}
 }

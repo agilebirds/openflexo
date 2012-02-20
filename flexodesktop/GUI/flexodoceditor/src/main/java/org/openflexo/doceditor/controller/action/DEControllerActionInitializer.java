@@ -67,6 +67,9 @@ public class DEControllerActionInitializer extends ControllerActionInitializer
         new AddPTOCRepositoryInitializer(this).init();
         //
         new AddTOCEntryInitializer(this).init();
+        //MOS
+        new AddPTOCEntryInitializer(this).init();
+        //
         new MoveTOCEntryInitializer(this).init();
         new AddDocTypeInitializer(this).init();
         new ImportTOCTemplateInitializer(this).init();

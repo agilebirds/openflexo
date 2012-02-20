@@ -50,10 +50,12 @@ public class GenerateDocx extends GCAction<GenerateDocx, GenerationRepository>
 
 	public static final FlexoActionType<GenerateDocx, GenerationRepository, CGObject> actionType = new FlexoActionType<GenerateDocx, GenerationRepository, CGObject>("generate_docx", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE)
 	{
+		
 
 		@Override
 		protected boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection)
 		{
+			
 			if (repository.getFormat()!=Format.DOCX || !(repository instanceof DGRepository))
     			return false;
 			ProjectDocDocxGenerator pg = (ProjectDocDocxGenerator) getProjectGenerator(repository);

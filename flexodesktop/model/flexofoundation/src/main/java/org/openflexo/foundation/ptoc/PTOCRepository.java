@@ -379,4 +379,10 @@ public class PTOCRepository extends PTOCEntry {
     	setChanged();
     	notifyObservers(new CGDataModification("logo", null, logo));
 	}
+
+	public Vector<PSlide> getOrderedSlides() {
+		Vector<PSlide> returned = new Vector<PSlide>();
+		DFSPath(returned);
+		return returned;
+	}
 }

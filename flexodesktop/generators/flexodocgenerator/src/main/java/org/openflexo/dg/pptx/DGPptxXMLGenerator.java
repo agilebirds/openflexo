@@ -36,9 +36,11 @@ import org.apache.velocity.VelocityContext;
 
 import org.openflexo.dg.latex.DocGeneratorConstants;
 import org.openflexo.dg.rm.PptxXmlFileResource;
+import org.openflexo.dg.rm.ProjectPptxXmlFileResource;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.DGRepository;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
 import org.openflexo.foundation.cg.utils.DocConstants;
 import org.openflexo.foundation.dkv.DKVModel;
@@ -118,10 +120,15 @@ public class DGPptxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		try
 		{
 			VelocityContext context = defaultContext();
-
+//			contecxt.put("repository", (PresentationRepository)getRepository());
 			generatedCode = new GeneratedPptxXmlResource(getIdentifier());
-			for(PptxXmlFileResource<DGPptxXMLGenerator<T>> resource : pptxResources.keySet())
+			for(PptxXmlFileResource<DGPptxXMLGenerator<T>> resource : pptxResources.keySet()){
+				//TODO_MOS Adapt it to fit the final model
+					if((resource).getSlide() !=null){
+						context.put("slideTitle", resource.getSlide().getTitle());
+					}
 				((GeneratedPptxXmlResource)generatedCode).addCode(getPptxTemplateForResource(resource), merge(getTemplateNameForResource(resource), context));
+			}
 		}
 		catch (GenerationException e)
 		{

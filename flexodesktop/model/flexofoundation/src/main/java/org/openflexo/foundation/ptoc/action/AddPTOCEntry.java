@@ -76,16 +76,16 @@ public class AddPTOCEntry extends FlexoAction<AddPTOCEntry, PTOCObject,PTOCObjec
 
     };
 
-    private String tocEntryTitle;
+    private String ptocEntryTitle;
 
     AddPTOCEntry(PTOCObject focusedObject, Vector<PTOCObject> globalSelection, FlexoEditor editor)
     {
         super(actionType, focusedObject, globalSelection, editor);
     }
 
-    private DocSection section;
-    private ProcessDocSectionSubType subType;
-    private FlexoModelObject modelObject;
+//    private DocSection section;
+//    private ProcessDocSectionSubType subType;
+//    private FlexoModelObject modelObject;
 
     public PTOCRepository getRepository() {
     	return ((PTOCEntry)getFocusedObject()).getRepository();
@@ -98,12 +98,12 @@ public class AddPTOCEntry extends FlexoAction<AddPTOCEntry, PTOCObject,PTOCObjec
 //    		if (getRepository().getPTOCEntryWithID(section)!=null && modelObject==null)
 //    			throw new DuplicateSectionException();
 //    	}
-//    	PTOCEntry entry;
+    	PTOCEntry entry;
 //    	if (section!=null || modelObject!=null) {
 //    		if(section!=null && modelObject!=null)
 //    			entry = getRepository().createObjectEntry(modelObject,section);
 //    		else if(section!=null)
-//    			entry = getRepository().createDefaultEntry(section);
+//    			entry = getRepository().createDefaultEntry(ptocEntryTitle);
 //    		else
 //    			entry = getRepository().createObjectEntry(modelObject);
 //    		entry.setTitle(getTocEntryTitle());
@@ -127,10 +127,10 @@ public class AddPTOCEntry extends FlexoAction<AddPTOCEntry, PTOCObject,PTOCObjec
 //    			}
 //    		}
 //    	} else {
-//    		entry = new PTOCEntry(getFocusedObject().getData());
-//    		if(subType!=null)entry.setSubType(subType);
-//			entry.setTitle(getTocEntryTitle());
-//			addEntryToFocusedObject(entry);
+    		entry = new PTOCEntry(getFocusedObject().getData());
+    		//if(subType!=null)entry.setSubType(subType);
+			entry.setTitle(getPTocEntryTitle());
+			addEntryToFocusedObject(entry);
 //    	}
     }
 
@@ -138,27 +138,27 @@ public class AddPTOCEntry extends FlexoAction<AddPTOCEntry, PTOCObject,PTOCObjec
    		((PTOCEntry)getFocusedObject()).addToPTocUnits(entry);
     }
     
-	public String getTocEntryTitle() {
-		return tocEntryTitle;
+	public String getPTocEntryTitle() {
+		return ptocEntryTitle;
 	}
 
-	public void setTocEntryTitle(String tocEntryTitle) {
-		this.tocEntryTitle = tocEntryTitle;
+	public void setPTocEntryTitle(String tocEntryTitle) {
+		this.ptocEntryTitle = tocEntryTitle;
 	}
 
-	public void setSection(DocSection section) {
-		this.section = section;
-	}
-	
-	public void setModelObject(FlexoModelObject modelObject) {
-		this.modelObject = modelObject;
-	}
-
-	public ProcessDocSectionSubType getSubType() {
-		return subType;
-	}
-
-	public void setSubType(ProcessDocSectionSubType subType) {
-		this.subType = subType;
-	}
+//	public void setSection(DocSection section) {
+//		this.section = section;
+//	}
+//	
+//	public void setModelObject(FlexoModelObject modelObject) {
+//		this.modelObject = modelObject;
+//	}
+//
+//	public ProcessDocSectionSubType getSubType() {
+//		return subType;
+//	}
+//
+//	public void setSubType(ProcessDocSectionSubType subType) {
+//		this.subType = subType;
+//	}
 }

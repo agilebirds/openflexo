@@ -50,6 +50,7 @@ import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
+import org.openflexo.foundation.ptoc.PSlide;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoFileResource;
@@ -598,7 +599,6 @@ public class GeneratedFileResourceFactory {
 			cgFile.setSymbolicDirectory(generator.getSymbolicDirectory(repository));
 			repository.addToFiles(cgFile);
 			res.setCGFile(cgFile);
-			//MARKER 1.3.1
 			registerDGFile(res, pptxTemplate.getFilePath());
 			if (logger.isLoggable(Level.FINE))
 				logger.fine("Created Project Pptx Xml resource " + res.getName());
@@ -611,6 +611,45 @@ public class GeneratedFileResourceFactory {
 
 		return res;
 	}
+	
+	
+	public static ProjectPptxXmlFileResource createNewProjectSlidePptXmlFileResource(PresentationRepository repository, DGPptxXMLGenerator<FlexoProject> generator, PptxTemplatesEnum pptxTemplate, PSlide slide, int slideNumber) {
+		FlexoProject project = generator.getProject();
+		ProjectPptxXmlFileResource res = (ProjectPptxXmlFileResource) project.resourceForKey(ResourceType.PPTXXML_FILE
+				, ProjectPptxXmlFileResource.nameForRepositoryAndPptxSlideTemplate(repository,pptxTemplate,slide,slideNumber));
+
+		if (res != null && res.getCGFile() == null) {
+			res.delete(false);
+			res = null;
+		}
+		if (res == null) {
+			res = new ProjectPptxXmlSlideResource(generator, pptxTemplate , slide);
+			res.setName(ProjectPptxXmlFileResource.nameForRepositoryAndPptxSlideTemplate(repository,pptxTemplate,slide,slideNumber));
+			DGPptxXmlFile cgFile = new DGPptxXmlFile(repository, res);
+
+			cgFile.setSymbolicDirectory(generator.getSymbolicDirectory(repository));
+			repository.addToFiles(cgFile);
+			res.setCGFile(cgFile);
+			//MARKER 1.3.1
+			String fileName = pptxTemplate.getFilePath();
+			if(pptxTemplate.isSlide())
+				fileName = pptxTemplate.getFilePath()+slideNumber+".xml";
+			else if(pptxTemplate.isSlideRels())
+				fileName = pptxTemplate.getFilePath()+slideNumber+".xml.rels";
+			registerDGFile(res, fileName);
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Created Project Pptx Xml resource " + res.getName());
+		} else {
+			res.setGenerator(generator);
+			generator.addPptxResource(res, pptxTemplate);
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Successfully retrieved project resource " + res.getName());
+		}
+
+		return res;
+	}
+	
+	
 	
 	
 	

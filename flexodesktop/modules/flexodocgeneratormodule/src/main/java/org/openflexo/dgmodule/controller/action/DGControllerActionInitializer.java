@@ -32,6 +32,7 @@ import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.action.OpenFileInExplorer;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.DGRepository;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
@@ -95,7 +96,7 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 			@Override
 			public ProjectDocGenerator generatorForRepository(GenerationRepository repository)
 			{
-				if (repository instanceof DGRepository) {
+				if ((repository instanceof DGRepository)|| (repository instanceof PresentationRepository)) {
 					return getDGController().getProjectGenerator((DGRepository) repository);
 				}
 				else {
@@ -152,6 +153,15 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 		// DOCX management
 		(new GenerateDocxInitializer(this)).init();
 		(new ReinjectDocxInitializer(this)).init();
+		
+		/**
+		 * MOS
+		 * @author MOSTAFA
+		 */
+		// PPTX management 
+		(new GeneratePPTXInitializer(this)).init();
+		//TODO_MOS Add Reinject Action
+		//(new ReinjectDocxInitializer(this)).init();
 		
 		// ZIP management
 		(new GenerateZipInitializer(this)).init();

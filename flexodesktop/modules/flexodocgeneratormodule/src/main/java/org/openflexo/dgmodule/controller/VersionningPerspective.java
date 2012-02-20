@@ -28,6 +28,7 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GeneratedDoc;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.ptoc.PSlide;
@@ -102,14 +103,14 @@ public class VersionningPerspective extends FlexoPerspective<FlexoModelObject>
 		return ((object instanceof GeneratedDoc) || (object instanceof DGRepository) || (object instanceof DGLatexFile) || (object instanceof DGScreenshotFile) || (object instanceof CGTemplate)
 				|| (object instanceof TOCEntry) || (object instanceof TOCRepository) || (object instanceof TOCData) 
 				//MOS
-				|| (object instanceof PTOCRepository) || (object instanceof PTOCData) || (object instanceof PTOCEntry));
+				|| (object instanceof PTOCRepository) || (object instanceof PTOCData) || (object instanceof PTOCEntry)|| (object instanceof PresentationRepository) );
 	}
 
 	@Override
 	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof GeneratedDoc) {
 			return new GeneratedDocModuleView((GeneratedDoc) object, (DGController) controller);
-		} else if (object instanceof DGRepository) {
+		} else if (object instanceof DGRepository || (object instanceof PresentationRepository)) {
 			return new DGRepositoryModuleView((DGRepository) object, (DGController) controller);
 		} else if (object instanceof CGFile) {
 			return new DGFileHistoryModuleView((CGFile) object, (DGController) controller);

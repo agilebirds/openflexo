@@ -524,7 +524,6 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project...");
 		}
-		//MARKER 0.0
 		saveModifiedResources(progress, true);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project... DONE");
@@ -844,8 +843,6 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 		for (FlexoStorageResource data : unsaved) {
 			if (progress != null) {
-				//MARKER 0.0.0
-				
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + data.getName());
 			}
 			if (logger.isLoggable(Level.FINE)) {
@@ -1078,6 +1075,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (resourceForKey(resource.getResourceIdentifier()) != null) {
 			throw new DuplicateResourceException(resource);
 		}
+		//MARKER
 		setResourceForKey(resource, resource.getResourceIdentifier());
 		if (resource instanceof FlexoFileResource && getFlexoRMResource() != null) {
 			resource.addToSynchronizedResources(getFlexoRMResource());
@@ -1601,7 +1599,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public PTOCData getPTOCData() {
 		if (getTOCResource() == null) {
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Create TOC");
+				logger.info("Create PTOC");
 			}
 			PTOCData.createNewPTOCData(this);
 		}

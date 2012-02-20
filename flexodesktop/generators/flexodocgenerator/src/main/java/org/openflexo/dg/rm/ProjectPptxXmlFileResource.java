@@ -10,7 +10,10 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.cg.PresentationRepository;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
+import org.openflexo.foundation.ptoc.PSlide;
+import org.openflexo.foundation.rm.FlexoPTOCResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -29,6 +32,8 @@ public class ProjectPptxXmlFileResource extends PptxXmlFileResource<DGPptxXMLGen
 	private static final String RELS_SUFFIX = ".FILERELS";
 
 	private boolean isObserverRegistered = false;
+	
+	
 
 	public ProjectPptxXmlFileResource(FlexoProjectBuilder builder)
     {
@@ -42,6 +47,15 @@ public class ProjectPptxXmlFileResource extends PptxXmlFileResource<DGPptxXMLGen
 		generator.addPptxResource(this, pptxTemplate);
 		registerObserverWhenRequired();
 	}
+	
+	public ProjectPptxXmlFileResource(DGPptxXMLGenerator<FlexoProject> generator, PptxTemplatesEnum pptxTemplate , PSlide slide)
+	{
+		this(generator , pptxTemplate );
+		setSlide(slide); 
+	}
+	
+	
+	
 
 	@Override
 	public String getName()
@@ -68,6 +82,12 @@ public class ProjectPptxXmlFileResource extends PptxXmlFileResource<DGPptxXMLGen
 	{
 		return repository.getName() + ".PROJECT_PPTX." + pptxTemplate;
 	}
+	
+	//TODO_MOS find a way to make name for a slideResource!!
+	public static String nameForRepositoryAndPptxSlideTemplate(GenerationRepository repository, PptxTemplatesEnum pptxTemplate, PSlide slide, int slideNumber)
+	{
+		return repository.getName() + ".PROJECT_PPTX." + pptxTemplate+slideNumber;
+	}
 
 	/**
 	 * Rebuild resource dependancies for this resource
@@ -90,8 +110,7 @@ public class ProjectPptxXmlFileResource extends PptxXmlFileResource<DGPptxXMLGen
 			addToDependantResources(getProject().getFlexoDKVResource());
 		}
 		
-		//TODO_MOS must modify this to make it fit the pptx model
-		addToDependantResources(getProject().getTOCResource());
+		addToDependantResources(getProject().getPTOCResource());
 	}
 
 	@Override
@@ -124,11 +143,11 @@ public class ProjectPptxXmlFileResource extends PptxXmlFileResource<DGPptxXMLGen
 				}
 			}
 		}
-		else if (resource instanceof FlexoTOCResource)
+		else if (resource instanceof FlexoPTOCResource)
 		{
-			if (getGenerator() != null && getGenerator().getRepository().getTocRepository() != null)
+			if (getGenerator() != null && ((PresentationRepository)(getGenerator().getRepository())).getPTocRepository() != null)
 			{
-				if (!requestDate.before(getGenerator().getRepository().getTocRepository().getLastUpdateDate()))
+				if (!requestDate.before(((PresentationRepository)(getGenerator().getRepository())).getPTocRepository().getLastUpdateDate()))
 				{
 					if (logger.isLoggable(Level.FINER))
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for TOC ENTRY " + getRepository());
