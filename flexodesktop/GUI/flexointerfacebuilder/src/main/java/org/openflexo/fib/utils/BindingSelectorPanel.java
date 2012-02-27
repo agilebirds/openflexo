@@ -1814,9 +1814,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
+
 		AbstractBinding bindingValue = _bindingSelector.getEditedObject();
 		if (bindingValue == null) {
 			if (_bindingSelector.getBindingDefinition() != null && _bindingSelector.getBindable() != null) {

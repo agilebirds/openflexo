@@ -371,10 +371,14 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			if (object.getOwner() != null) {
 				setBindable(object.getOwner());
 			}
-		} else {
+		}
+		// SGU: I suppress this code that was the cause for huge problems
+		// in BindingSelector, making it quite unusable
+		// I don't think this code was usefull, was it ?
+		/*else {
 			setBindingDefinition(null);
 			setBindable(null);
-		}
+			}*/
 	}
 
 	public void setEditedObject(AbstractBinding object, boolean updateBindingSelectionMode) {
