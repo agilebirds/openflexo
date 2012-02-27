@@ -27,7 +27,6 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -38,68 +37,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
 	public static enum WidgetType {
-		URI {
-			@Override
-			public Type getType() {
-				return String.class;
-			}
-		},
-		TEXT_FIELD {
-			@Override
-			public Type getType() {
-				return String.class;
-			}
-		},
-		LOCALIZED_TEXT_FIELD {
-			@Override
-			public Type getType() {
-				return String.class;
-			}
-		},
-		TEXT_AREA {
-			@Override
-			public Type getType() {
-				return String.class;
-			}
-		},
-		INTEGER {
-			@Override
-			public Type getType() {
-				return Integer.class;
-			}
-		},
-		FLOAT {
-			@Override
-			public Type getType() {
-				return Float.class;
-			}
-		},
-		CHECKBOX {
-			@Override
-			public Type getType() {
-				return Boolean.class;
-			}
-		},
-		DROPDOWN {
-			@Override
-			public Type getType() {
-				return Object.class;
-			}
-		},
-		INDIVIDUAL {
-			@Override
-			public Type getType() {
-				return OntologyIndividual.class;
-			}
-		},
-		FLEXO_OBJECT {
-			@Override
-			public Type getType() {
-				return OntologyIndividual.class;
-			}
-		};
-
-		public abstract Type getType();
+		URI, TEXT_FIELD, LOCALIZED_TEXT_FIELD, TEXT_AREA, INTEGER, FLOAT, CHECKBOX, DROPDOWN, INDIVIDUAL, CLASS, FLEXO_OBJECT;
 	}
 
 	private String name;
@@ -246,7 +184,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		this.defaultValue = defaultValue;
 	}
 
-	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) {
+	public Object getDefaultValue(EditionSchemeAction<?> action) {
 		ViewPointPaletteElement paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
 				: null);
 
@@ -255,7 +193,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 			return paletteElement.getName();
 		}
 		if (getDefaultValue().isValid()) {
-			return getDefaultValue().getBindingValue(parameterRetriever);
+			return getDefaultValue().getBindingValue(action);
 		}
 		return null;
 	}

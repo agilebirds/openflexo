@@ -34,6 +34,7 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
+import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.XMLMapping;
@@ -68,6 +69,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 	// Constructor used during deserialization
 	public EditionPatternReference(FlexoProcessBuilder builder) {
+		this(builder.getProject());
+		initializeDeserialization(builder);
+	}
+
+	// Constructor used during deserialization
+	public EditionPatternReference(FlexoWorkflowBuilder builder) {
 		this(builder.getProject());
 		initializeDeserialization(builder);
 	}
@@ -211,6 +218,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			initializeDeserialization(builder);
 		}
 
+		// Constructor used during deserialization
+		public ConceptActorReference(FlexoWorkflowBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
 		@Override
 		public String getClassNameKey() {
 			return "concept_actor_reference";
@@ -278,6 +291,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			initializeDeserialization(builder);
 		}
 
+		// Constructor used during deserialization
+		public ObjectPropertyStatementActorReference(FlexoWorkflowBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
 		@Override
 		public String getClassNameKey() {
 			return "object_property_statement_actor_reference";
@@ -333,6 +352,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			initializeDeserialization(builder);
 		}
 
+		// Constructor used during deserialization
+		public DataPropertyStatementActorReference(FlexoWorkflowBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
 		@Override
 		public String getClassNameKey() {
 			return "data_property_statement_actor_reference";
@@ -384,6 +409,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 		// Constructor used during deserialization
 		public RestrictionStatementActorReference(FlexoProcessBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
+		// Constructor used during deserialization
+		public RestrictionStatementActorReference(FlexoWorkflowBuilder builder) {
 			super(builder.getProject());
 			initializeDeserialization(builder);
 		}
@@ -444,6 +475,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			initializeDeserialization(builder);
 		}
 
+		// Constructor used during deserialization
+		public SubClassStatementActorReference(FlexoWorkflowBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
 		@Override
 		public String getClassNameKey() {
 			return "sub_class_statement_actor_reference";
@@ -491,6 +528,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 		// Constructor used during deserialization
 		public ModelObjectActorReference(FlexoProcessBuilder builder) {
+			super(builder.getProject());
+			initializeDeserialization(builder);
+		}
+
+		// Constructor used during deserialization
+		public ModelObjectActorReference(FlexoWorkflowBuilder builder) {
 			super(builder.getProject());
 			initializeDeserialization(builder);
 		}

@@ -10,6 +10,7 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
@@ -116,8 +117,8 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 	}
 
 	@Override
-	public boolean isSettable() {
-		return false;
+	public final boolean isSettable() {
+		return true;
 	}
 
 	@Override
@@ -143,7 +144,11 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 
 	@Override
 	public void setBindingValue(T value, Object target, BindingEvaluationContext context) {
-		// not settable
+		if (target instanceof EditionPatternInstance && (value instanceof FlexoModelObject)) {
+			((EditionPatternInstance) target).setPatternActor((FlexoModelObject) value, patternRole);
+		} else {
+			logger.warning("What to do with a " + target + " ?");
+		}
 	}
 
 	public List<BindingPathElement> getAllProperties() {
@@ -152,5 +157,10 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 
 	public PatternRole getPatternRole() {
 		return patternRole;
+	}
+
+	@Override
+	public String toString() {
+		return patternRole + "/" + getClass().getSimpleName();
 	}
 }

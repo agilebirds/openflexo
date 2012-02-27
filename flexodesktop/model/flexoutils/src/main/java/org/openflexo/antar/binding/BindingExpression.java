@@ -265,6 +265,8 @@ public class BindingExpression extends AbstractBinding {
 				factory.setWarnOnFailure(true);
 			}
 			if (bindingValue == null) {
+				// System.out.println("Cannot parse " + aVariable.getName());
+				// System.out.println("binding factory = " + bindable.getBindingFactory());
 				bindingValue = new BindingValue(null, bindable);
 				bindingValue.setUnparsableValue(aVariable.getName());
 			}
@@ -635,7 +637,7 @@ public class BindingExpression extends AbstractBinding {
 
 		for (Expression e : expression.getAllAtomicExpressions()) {
 			if (e instanceof BindingValueVariable && !((BindingValueVariable) e).isValid()) {
-				logger.info("Binding " + this + " not valid because invalid variable " + e);
+				logger.info("Binding " + this + " not valid because invalid part " + e);
 				((BindingValueVariable) e).getBindingValue().debugIsBindingValid();
 				return false;
 			}

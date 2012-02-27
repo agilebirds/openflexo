@@ -38,6 +38,7 @@ import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.wkf.WKFObject;
+import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
@@ -117,7 +118,9 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 	}
 
 	public ImageIcon iconForObject(FlexoModelObject object) {
-		if (object instanceof WKFObject) {
+		if (object instanceof WorkflowModelObject) {
+			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
+		} else if (object instanceof WKFObject) {
 			return WKFIconLibrary.iconForObject((WKFObject) object);
 		} else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject) object);
@@ -128,7 +131,7 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 		} else if (object instanceof AbstractOntologyObject) {
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
 		}
-		logger.warning("Sorry, no icon defined for " + object + (object != null ? object.getClass() : ""));
+		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
 	}
 

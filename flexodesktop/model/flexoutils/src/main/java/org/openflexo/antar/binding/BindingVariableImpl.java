@@ -39,11 +39,14 @@ public class BindingVariableImpl<T> extends Observable implements BindingVariabl
 
 	private Type type;
 
+	// public Exception exceptionRaisedAtCreation;
+
 	public BindingVariableImpl(Bindable container, String variableName, Type type) {
 		super();
 		this.container = container;
 		this.variableName = variableName;
 		this.type = type;
+		// exceptionRaisedAtCreation = (new Exception("Creation of BindingVariableImpl " + variableName + " for " + container));
 	}
 
 	@Override

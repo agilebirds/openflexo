@@ -122,7 +122,7 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	public TextFieldInspectorEntry createNewTextField() {
 		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
 		newEntry.setName("textfield");
-		newEntry.setLabel("textfield");
+		// newEntry.setLabel("textfield");
 		addToEntries(newEntry);
 		return newEntry;
 	}
@@ -130,7 +130,7 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	public TextAreaInspectorEntry createNewTextArea() {
 		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry();
 		newEntry.setName("textarea");
-		newEntry.setLabel("textarea");
+		// newEntry.setLabel("textarea");
 		addToEntries(newEntry);
 		return newEntry;
 	}
@@ -138,7 +138,7 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	public IntegerInspectorEntry createNewInteger() {
 		IntegerInspectorEntry newEntry = new IntegerInspectorEntry();
 		newEntry.setName("integer");
-		newEntry.setLabel("integer");
+		// newEntry.setLabel("integer");
 		addToEntries(newEntry);
 		return newEntry;
 	}
@@ -146,7 +146,31 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	public CheckboxInspectorEntry createNewCheckbox() {
 		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry();
 		newEntry.setName("checkbox");
-		newEntry.setLabel("checkbox");
+		// newEntry.setLabel("checkbox");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
+	public IndividualInspectorEntry createNewIndividual() {
+		IndividualInspectorEntry newEntry = new IndividualInspectorEntry();
+		newEntry.setName("individual");
+		// newEntry.setLabel("individual");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
+	public ClassInspectorEntry createNewClass() {
+		ClassInspectorEntry newEntry = new ClassInspectorEntry();
+		newEntry.setName("class");
+		// newEntry.setLabel("class");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
+	public FlexoObjectInspectorEntry createNewFlexoObject() {
+		FlexoObjectInspectorEntry newEntry = new FlexoObjectInspectorEntry();
+		newEntry.setName("flexoObject");
+		// newEntry.setLabel("flexoObject");
 		addToEntries(newEntry);
 		return newEntry;
 	}

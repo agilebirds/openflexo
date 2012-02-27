@@ -115,7 +115,7 @@ public class FIBDialog<T> extends JDialog {
 		}
 	}
 
-	private static <T> FIBDialog<T> instanciateComponent(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {
+	public static <T> FIBDialog<T> instanciateComponent(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {
 		FIBDialog<T> dialog = new FIBDialog<T>(fibComponent, data, frame, modal);
 		dialog.showDialog();
 		return dialog;

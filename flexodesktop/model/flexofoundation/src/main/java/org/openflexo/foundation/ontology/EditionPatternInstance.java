@@ -84,16 +84,34 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		return actors.get(patternRole.getPatternRoleName());
 	}
 
-	public FlexoProject getProject() {
-		return _project;
+	public void setPatternActor(FlexoModelObject object, PatternRole patternRole) {
+		setObjectForPatternRole(object, patternRole);
 	}
 
 	public void setObjectForPatternRole(FlexoModelObject object, PatternRole patternRole) {
 		// logger.info(">>>>>>>> For patternRole: "+patternRole+" set "+object);
-		actors.put(patternRole.getPatternRoleName(), object);
-		setChanged();
-		notifyObservers(new EditionPatternChanged(this));
-		// System.out.println("EditionPatternInstance "+Integer.toHexString(hashCode())+" setObjectForPatternRole() actors="+actors);
+		FlexoModelObject oldObject = getPatternActor(patternRole);
+		if (object != oldObject) {
+
+			// Un-register last reference
+			if (oldObject != null) {
+				oldObject.unregisterEditionPatternReference(this, patternRole);
+			}
+
+			// Un-register last reference
+			if (object != null) {
+				object.registerEditionPatternReference(this, patternRole);
+			}
+
+			actors.put(patternRole.getPatternRoleName(), object);
+			setChanged();
+			notifyObservers(new EditionPatternChanged(this));
+			// System.out.println("EditionPatternInstance "+Integer.toHexString(hashCode())+" setObjectForPatternRole() actors="+actors);
+		}
+	}
+
+	public FlexoProject getProject() {
+		return _project;
 	}
 
 	public String debug() {

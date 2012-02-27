@@ -358,7 +358,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			_addConverter(bindingAssignmentConverter);
 			_addConverter(objectReferenceConverter);
 			_addConverter(imageFileConverter);
-			// _addConverter(editionPatternConverter);
+			_addConverter(new EditionPatternConverter(getResourceCenter()));
 		}
 	}
 

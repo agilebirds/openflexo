@@ -70,6 +70,8 @@ public abstract class EditionScheme extends ViewPointObject {
 	}
 
 	public String getLabel() {
+		if (label == null)
+			return getName();
 		return label;
 	}
 
@@ -350,6 +352,14 @@ public abstract class EditionScheme extends ViewPointObject {
 
 	public EditionSchemeParameter createIndividualParameter() {
 		EditionSchemeParameter newParameter = new IndividualParameter();
+		newParameter.setName("newParameter");
+		newParameter.setLabel("label");
+		addToParameters(newParameter);
+		return newParameter;
+	}
+
+	public EditionSchemeParameter createClassParameter() {
+		EditionSchemeParameter newParameter = new ClassParameter();
 		newParameter.setName("newParameter");
 		newParameter.setLabel("label");
 		addToParameters(newParameter);

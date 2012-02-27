@@ -589,7 +589,6 @@ public class FileMenu extends FlexoMenu {
 			 * int state = controller.getInspectorWindow().getExtendedState(); state &= ~Frame.ICONIFIED;
 			 * controller.getInspectorWindow().setExtendedState(state);
 			 */
-			controller.getInspectorWindow().toFront();
 		}
 	}
 

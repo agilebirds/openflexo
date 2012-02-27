@@ -17,9 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
-
-import java.lang.reflect.Type;
+package org.openflexo.foundation.viewpoint.inspector;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -29,9 +27,15 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
-public class FlexoObjectParameter extends EditionSchemeParameter {
+/**
+ * Represents an inspector entry for a flexo object
+ * 
+ * @author sylvain
+ * 
+ */
+public class FlexoObjectInspectorEntry extends InspectorEntry {
 
-	// TODO: unify this this FlexoObjectType in FlexoObjectInspectorEntry and FlexoModelObjectPatternRole
+	// TODO: unify this this FlexoObjectType in FlexoObjectParameter and FlexoModelObjectPatternRole
 	public enum FlexoObjectType {
 		Process, ProcessFolder, Role, Activity, Operation, Action
 	}
@@ -39,7 +43,10 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 	private FlexoObjectType flexoObjectType;
 
 	@Override
-	public Type getType() {
+	public Class getDefaultDataClass() {
+		if (getFlexoObjectType() == null) {
+			return FlexoModelObject.class;
+		}
 		switch (getFlexoObjectType()) {
 		case Process:
 			return FlexoProcess.class;
@@ -58,11 +65,6 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 		}
 	};
 
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.FLEXO_OBJECT;
-	}
-
 	public FlexoObjectType getFlexoObjectType() {
 		return flexoObjectType;
 	}
@@ -71,4 +73,26 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 		this.flexoObjectType = flexoObjectType;
 	}
 
+	@Override
+	public String getWidgetName() {
+		if (getFlexoObjectType() == null) {
+			return "FlexoObjectSelector";
+		}
+		switch (getFlexoObjectType()) {
+		case Process:
+			return "ProcessSelector";
+		case ProcessFolder:
+			return "ProcessFolderSelector";
+		case Role:
+			return "RoleSelector";
+		case Activity:
+			return "ActivitySelector";
+		case Operation:
+			return "OperationSelector";
+		case Action:
+			return "ActionSelector";
+		default:
+			return "FlexoObjectSelector";
+		}
+	}
 }

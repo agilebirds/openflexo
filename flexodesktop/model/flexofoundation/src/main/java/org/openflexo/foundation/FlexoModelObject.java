@@ -1276,6 +1276,15 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return null;
 	}
 
+	public EditionPatternReference getEditionPatternReference(EditionPatternInstance epInstance) {
+		for (EditionPatternReference r : _editionPatternReferences) {
+			if (r.getEditionPatternInstance() == epInstance) {
+				return r;
+			}
+		}
+		return null;
+	}
+
 	// Return first one if many
 	public EditionPatternReference getEditionPatternReference(String editionPatternId) {
 		if (editionPatternId == null) {
@@ -1306,6 +1315,15 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		// TODO: check if not already registered !
 		EditionPatternReference newReference = new EditionPatternReference(editionPatternInstance, patternRole);
 		addToEditionPatternReferences(newReference);
+	}
+
+	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
+		EditionPatternReference referenceToRemove = getEditionPatternReference(editionPatternInstance);
+		if (referenceToRemove == null) {
+			logger.warning("Called for unregister EditionPatternReference for unexisting reference to edition pattern instance.");
+		} else {
+			removeFromEditionPatternReferences(referenceToRemove);
+		}
 	}
 
 	@Deprecated

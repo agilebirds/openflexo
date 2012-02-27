@@ -113,8 +113,23 @@ public class OntologyIndividualSelector extends AbstractBrowserSelector<Ontology
 		STRING_REPRESENTATION_WHEN_NULL = aString;
 	}
 
+	public OntologyClass getOntologyClass() {
+		if (getRootObject() instanceof OntologyClass) {
+			return (OntologyClass) getRootObject();
+		}
+		return null;
+	}
+
 	public void setOntologyClass(OntologyClass aClass) {
 		super.setRootObject(aClass);
+	}
+
+	@Override
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		if (project != null && getOntologyLibrary() == null) {
+			setOntologyLibrary(project.getProjectOntologyLibrary());
+		}
 	}
 
 }

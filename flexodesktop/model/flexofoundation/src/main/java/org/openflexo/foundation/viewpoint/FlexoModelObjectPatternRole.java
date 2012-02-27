@@ -11,6 +11,7 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class FlexoModelObjectPatternRole extends PatternRole {
 
+	// TODO: unify this this FlexoObjectType in FlexoObjectParameter and FlexoObjectInspectorEntry
 	public static enum FlexoModelObjectType {
 		Process, ProcessFolder, Role, Activity, Operation, Action, Event
 	}

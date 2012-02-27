@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
@@ -32,6 +33,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoFIBController;
@@ -68,8 +70,10 @@ public class FIBInspectorController extends FlexoFIBController {
 	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionPatternInstancePathElement) {
 			if (getDataObject() instanceof FlexoModelObject) {
-				return ((FlexoModelObject) getDataObject()).getEditionPatternReferences()
-						.get(((EditionPatternInstancePathElement) variable).getIndex()).getEditionPatternInstance();
+				Vector<EditionPatternReference> refs = ((FlexoModelObject) getDataObject()).getEditionPatternReferences();
+				if (((EditionPatternInstancePathElement) variable).getIndex() < refs.size()) {
+					return refs.get(((EditionPatternInstancePathElement) variable).getIndex()).getEditionPatternInstance();
+				}
 			}
 		}
 		return super.getValue(variable);

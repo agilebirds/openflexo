@@ -205,6 +205,10 @@ public class MainInspectorController implements Observer, ChangeListener {
 		}
 	}
 
+	public void resetInspector() {
+		switchToEmptyContent();
+	}
+
 	private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object) {
 		if (inspector.updateEditionPatternReferences(object)) {
 			FIBView view = viewForInspector(inspector);
