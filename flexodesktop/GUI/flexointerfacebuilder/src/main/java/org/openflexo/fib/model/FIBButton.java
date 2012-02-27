@@ -33,12 +33,13 @@ public class FIBButton extends FIBWidget {
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		action, buttonType, label
+		action, buttonType, label, isDefault;
 	}
 
 	private DataBinding action;
 	private ButtonType buttonType = ButtonType.Trigger;
 	private String label;
+	private Boolean isDefault;
 
 	public FIBButton() {
 	}
@@ -92,6 +93,18 @@ public class FIBButton extends FIBWidget {
 		FIBAttributeNotification<String> notification = requireChange(Parameters.label, label);
 		if (notification != null) {
 			this.label = label;
+			hasChanged(notification);
+		}
+	}
+
+	public Boolean isDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(Boolean isDefault) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.isDefault, isDefault);
+		if (notification != null) {
+			this.isDefault = isDefault;
 			hasChanged(notification);
 		}
 	}
