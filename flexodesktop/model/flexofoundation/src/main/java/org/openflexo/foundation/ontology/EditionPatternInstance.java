@@ -89,10 +89,9 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	}
 
 	public void setObjectForPatternRole(FlexoModelObject object, PatternRole patternRole) {
-		// logger.info(">>>>>>>> For patternRole: "+patternRole+" set "+object);
+		// logger.info(">>>>>>>> For patternRole: " + patternRole + " set " + object + " was " + getPatternActor(patternRole));
 		FlexoModelObject oldObject = getPatternActor(patternRole);
 		if (object != oldObject) {
-
 			// Un-register last reference
 			if (oldObject != null) {
 				oldObject.unregisterEditionPatternReference(this, patternRole);
@@ -117,7 +116,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	public String debug() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("EditionPattern: " + pattern.getName() + "\n");
-		sb.append("Instance: " + instanceId + "\n");
+		sb.append("Instance: " + instanceId + " hash=" + Integer.toHexString(hashCode()) + "\n");
 		for (String patternRole : actors.keySet()) {
 			FlexoModelObject object = actors.get(patternRole);
 			sb.append("Role: " + patternRole + " : " + object + "\n");

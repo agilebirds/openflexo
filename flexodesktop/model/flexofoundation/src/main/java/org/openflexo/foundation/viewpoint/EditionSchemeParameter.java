@@ -31,6 +31,7 @@ import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
+import org.openflexo.toolbox.StringUtils;
 
 public abstract class EditionSchemeParameter extends ViewPointObject {
 
@@ -88,6 +89,9 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	}
 
 	public String getLabel() {
+		if (label == null || StringUtils.isEmpty(label)) {
+			return getName();
+		}
 		return label;
 	}
 

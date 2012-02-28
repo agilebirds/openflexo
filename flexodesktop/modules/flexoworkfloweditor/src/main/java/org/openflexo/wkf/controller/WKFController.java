@@ -100,7 +100,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	private static final Logger logger = Logger.getLogger(WKFController.class.getPackage().getName());
 
-	@Override
+	/*@Override
 	public boolean useNewInspectorScheme() {
 		return true;
 	}
@@ -108,7 +108,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	@Override
 	public boolean useOldInspectorScheme() {
 		return false;
-	}
+	}*/
 
 	// ======================================================
 	// ================== Static variables ==================

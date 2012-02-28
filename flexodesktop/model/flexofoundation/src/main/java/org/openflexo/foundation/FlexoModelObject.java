@@ -1312,9 +1312,17 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
-		// TODO: check if not already registered !
-		EditionPatternReference newReference = new EditionPatternReference(editionPatternInstance, patternRole);
-		addToEditionPatternReferences(newReference);
+		EditionPatternReference existingReference = getEditionPatternReference(editionPatternInstance);
+		if (existingReference == null) {
+			// logger.info("registerEditionPatternReference for " + editionPatternInstance.debug());
+			EditionPatternReference newReference = new EditionPatternReference(editionPatternInstance, patternRole);
+			addToEditionPatternReferences(newReference);
+			setChanged();
+		} else {
+			if (existingReference.getPatternRole() != patternRole) {
+				logger.warning("Called for register a new EditionPatternReference with an already existing EditionPatternReference with a different PatternRole");
+			}
+		}
 	}
 
 	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
@@ -1323,6 +1331,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			logger.warning("Called for unregister EditionPatternReference for unexisting reference to edition pattern instance.");
 		} else {
 			removeFromEditionPatternReferences(referenceToRemove);
+			setChanged();
 		}
 	}
 

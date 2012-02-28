@@ -145,12 +145,18 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 						GraphicalElementPatternRole grPatternRole = (GraphicalElementPatternRole) r.getPatternRole();
 						if (grPatternRole.getIsPrimaryRepresentationRole()) {
 							if (returned != null) {
-								logger.warning("More than one edition pattern reference where element plays a primary role !!!!");
+								logger.warning("More than one edition pattern reference where element plays a primary role 1 !!!!");
+								for (EditionPatternReference r2 : getEditionPatternReferences()) {
+									logger.warning("> " + r2.getEditionPatternInstance().debug());
+								}
 							}
 							returned = r;
 						} else if (grPatternRole.isIncludedInPrimaryRepresentationRole()) {
 							if (returned != null) {
-								logger.warning("More than one edition pattern reference where element plays a primary role !!!!");
+								logger.warning("More than one edition pattern reference where element plays a primary role 2 !!!!");
+								for (EditionPatternReference r2 : getEditionPatternReferences()) {
+									logger.warning("> " + r2.getEditionPatternInstance().debug());
+								}
 							}
 							returned = r;
 						}

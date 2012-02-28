@@ -305,71 +305,71 @@ public abstract class EditionScheme extends ViewPointObject {
 	public EditionSchemeParameter createURIParameter() {
 		EditionSchemeParameter newParameter = new URIParameter();
 		newParameter.setName("uri");
-		newParameter.setLabel("uri");
+		// newParameter.setLabel("uri");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
 	public EditionSchemeParameter createTextFieldParameter() {
 		EditionSchemeParameter newParameter = new TextFieldParameter();
-		newParameter.setName("newParameter");
-		newParameter.setLabel("label");
+		newParameter.setName("textField");
+		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
 	public EditionSchemeParameter createTextAreaParameter() {
 		EditionSchemeParameter newParameter = new TextAreaParameter();
-		newParameter.setName("newParameter");
-		newParameter.setLabel("label");
+		newParameter.setName("textArea");
+		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
 	public EditionSchemeParameter createIntegerParameter() {
 		EditionSchemeParameter newParameter = new IntegerParameter();
-		newParameter.setName("newParameter");
-		newParameter.setLabel("label");
+		newParameter.setName("integer");
+		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
 	public EditionSchemeParameter createCheckBoxParameter() {
 		EditionSchemeParameter newParameter = new CheckboxParameter();
-		newParameter.setName("newParameter");
-		newParameter.setLabel("label");
+		newParameter.setName("checkbox");
+		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
 	public EditionSchemeParameter createDropDownParameter() {
 		EditionSchemeParameter newParameter = new DropDownParameter();
-		newParameter.setName("newParameter");
-		newParameter.setLabel("label");
+		newParameter.setName("dropdown");
+		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
 	public EditionSchemeParameter createIndividualParameter() {
 		EditionSchemeParameter newParameter = new IndividualParameter();
-		newParameter.setName("newParameter");
-		newParameter.setLabel("label");
+		newParameter.setName("individual");
+		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
 	public EditionSchemeParameter createClassParameter() {
 		EditionSchemeParameter newParameter = new ClassParameter();
-		newParameter.setName("newParameter");
-		newParameter.setLabel("label");
+		newParameter.setName("class");
+		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
 	public EditionSchemeParameter createFlexoObjectParameter() {
 		EditionSchemeParameter newParameter = new FlexoObjectParameter();
-		newParameter.setName("newParameter");
-		newParameter.setLabel("label");
+		newParameter.setName("flexoObject");
+		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
 	}

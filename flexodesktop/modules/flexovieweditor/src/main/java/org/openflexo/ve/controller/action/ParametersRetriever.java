@@ -204,6 +204,45 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				});
 				panel.addToSubComponents(roleSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 				return roleSelector;
+			case Activity:
+				FIBCustom activitySelector = new FIBCustom();
+				activitySelector.setComponentClass(org.openflexo.components.widget.ActivitySelector.class);
+				activitySelector.addToAssignments(new FIBCustomAssignment(activitySelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+				activitySelector.setData(new DataBinding("parameters." + parameter.getName()) {
+					@Override
+					public BindingFactory getBindingFactory() {
+						return parameter.getBindingFactory();
+					}
+				});
+				panel.addToSubComponents(activitySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				return activitySelector;
+			case Operation:
+				FIBCustom operationSelector = new FIBCustom();
+				operationSelector.setComponentClass(org.openflexo.components.widget.OperationSelector.class);
+				operationSelector.addToAssignments(new FIBCustomAssignment(operationSelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+				operationSelector.setData(new DataBinding("parameters." + parameter.getName()) {
+					@Override
+					public BindingFactory getBindingFactory() {
+						return parameter.getBindingFactory();
+					}
+				});
+				panel.addToSubComponents(operationSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				return operationSelector;
+			case Action:
+				FIBCustom actionSelector = new FIBCustom();
+				actionSelector.setComponentClass(org.openflexo.components.widget.ActionSelector.class);
+				actionSelector.addToAssignments(new FIBCustomAssignment(actionSelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+				actionSelector.setData(new DataBinding("parameters." + parameter.getName()) {
+					@Override
+					public BindingFactory getBindingFactory() {
+						return parameter.getBindingFactory();
+					}
+				});
+				panel.addToSubComponents(actionSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				return actionSelector;
 
 			default:
 				break;

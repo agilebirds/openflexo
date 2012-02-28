@@ -269,6 +269,27 @@ public class FIBInspector extends FIBPanel {
 						"data.project"), true));
 				newTab.addToSubComponents(roleSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 				return roleSelector;
+			case Activity:
+				FIBCustom activitySelector = new FIBCustom();
+				activitySelector.setComponentClass(org.openflexo.components.widget.ActivitySelector.class);
+				activitySelector.addToAssignments(new FIBCustomAssignment(activitySelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+				newTab.addToSubComponents(activitySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				return activitySelector;
+			case Operation:
+				FIBCustom operationSelector = new FIBCustom();
+				operationSelector.setComponentClass(org.openflexo.components.widget.OperationSelector.class);
+				operationSelector.addToAssignments(new FIBCustomAssignment(operationSelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+				newTab.addToSubComponents(operationSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				return operationSelector;
+			case Action:
+				FIBCustom actionSelector = new FIBCustom();
+				actionSelector.setComponentClass(org.openflexo.components.widget.ActionSelector.class);
+				actionSelector.addToAssignments(new FIBCustomAssignment(actionSelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+				newTab.addToSubComponents(actionSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+				return actionSelector;
 
 			default:
 				break;
