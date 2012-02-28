@@ -742,18 +742,18 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		}
 		alreadyDone.add(ontology);
 		for (OntologyProperty p : ontology.getObjectProperties()) {
-			if (p.getRange() != null && p.getRange().isSuperConceptOf(this)) {
+			if (p.getRange() != null && /*p.getRange().isSuperConceptOf(this)*/p.getRange() == this) {
 				rangeProperties.add(p);
 			}
-			if (p.getDomain() != null && p.getDomain().isSuperConceptOf(this)) {
+			if (p.getDomain() != null && /*p.getDomain().isSuperConceptOf(this)*/p.getDomain() == this) {
 				domainProperties.add(p);
 			}
 		}
 		for (OntologyProperty p : ontology.getDataProperties()) {
-			if (p.getRange() != null && p.getRange().isSuperConceptOf(this)) {
+			if (p.getRange() != null && /*p.getRange().isSuperConceptOf(this)*/p.getRange() == this) {
 				rangeProperties.add(p);
 			}
-			if (p.getDomain() != null && p.getDomain().isSuperConceptOf(this)) {
+			if (p.getDomain() != null && /*p.getDomain().isSuperConceptOf(this)*/p.getDomain() == this) {
 				domainProperties.add(p);
 			}
 		}
