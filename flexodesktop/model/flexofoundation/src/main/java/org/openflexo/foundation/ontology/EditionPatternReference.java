@@ -162,6 +162,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		private EditionPatternReference _patternReference;
 
 		protected ActorReference(FlexoProject project) {
+			super(project);
 			_project = project;
 		}
 
@@ -199,7 +200,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		private String objectURI;
 
 		public ConceptActorReference(OntologyObject o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			object = o;
@@ -270,7 +271,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String objectURI;
 
 		public ObjectPropertyStatementActorReference(ObjectPropertyStatement o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
@@ -331,7 +332,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String value;
 
 		public DataPropertyStatementActorReference(DataPropertyStatement o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
@@ -392,7 +393,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String objectURI;
 
 		public RestrictionStatementActorReference(ObjectRestrictionStatement o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
@@ -455,7 +456,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String parentURI;
 
 		public SubClassStatementActorReference(SubClassStatement o, String aPatternRole, EditionPatternReference ref) {
-			super(o.getProject());
+			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
@@ -566,6 +567,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			return _editionPatternInstance;
 		}
 		_editionPatternInstance = getProject().getEditionPatternInstance(this);
+
+		// Warning: this is really important to keep synchro between EPInstance and EPReference
+		_editionPatternInstance.addObserver(this);
 		return _editionPatternInstance;
 	}
 
