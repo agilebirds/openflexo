@@ -143,6 +143,8 @@ public class FIBInspector extends FIBPanel {
 	 * This method looks after object's EditionPattern references to know if we need to structurally change inspector by adding or removing
 	 * tabs, which all correspond to one and only one EditionPattern
 	 * 
+	 * Note: only object providing support as primary role are handled here
+	 * 
 	 * @param object
 	 * @return
 	 */
@@ -152,6 +154,11 @@ public class FIBInspector extends FIBPanel {
 		if (object.getEditionPatternReferences() == null) {
 			needsChanges = (currentEditionPatterns.size() > 0);
 		} else {
+			/*System.out.println("*********** Object " + object);
+			System.out.println("References: " + object.getEditionPatternReferences().size());
+			for (EditionPatternReference ref : object.getEditionPatternReferences()) {
+				System.out.println(">>>>>>>>> Reference \n" + ref.getEditionPatternInstance().debug());
+			}*/
 			if (currentEditionPatterns.size() != object.getEditionPatternReferences().size()) {
 				needsChanges = true;
 			} else {
@@ -163,6 +170,10 @@ public class FIBInspector extends FIBPanel {
 				}
 			}
 		}
+
+		/*if (object.providesSupportAsPrimaryRole() != previousObjectWasProvidingSupportAsPrimaryRole) {
+			needsChanges = true;
+		}*/
 
 		if (!needsChanges) {
 			// No changes detected, i can return
@@ -176,6 +187,7 @@ public class FIBInspector extends FIBPanel {
 		currentEditionPatterns.clear();
 		tabsForEP.clear();
 
+		// if (object.providesSupportAsPrimaryRole()) {
 		if (object.getEditionPatternReferences() != null) {
 			for (int refIndex = 0; refIndex < object.getEditionPatternReferences().size(); refIndex++) {
 				EditionPatternReference ref = object.getEditionPatternReferences().get(refIndex);
@@ -187,10 +199,15 @@ public class FIBInspector extends FIBPanel {
 			}
 			updateBindingModel();
 		}
+		// }
+
+		// previousObjectWasProvidingSupportAsPrimaryRole = object.providesSupportAsPrimaryRole();
 
 		return true;
 
 	}
+
+	// private boolean previousObjectWasProvidingSupportAsPrimaryRole = false;
 
 	@Override
 	protected void createBindingModel() {
