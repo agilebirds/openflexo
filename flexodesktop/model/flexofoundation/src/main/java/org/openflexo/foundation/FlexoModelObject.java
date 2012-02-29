@@ -1368,4 +1368,23 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public String makeReference() {
 		return FlexoModelObjectReference.getSerializationRepresentationForObject(this, true);
 	}
+
+	/**
+	 * Return true is this object is somewhere involved as a primary representation pattern role in any of its EditionPatternReferences
+	 * 
+	 * @return
+	 */
+	public boolean providesSupportAsPrimaryRole() {
+		if (getEditionPatternReferences() != null) {
+			if (getEditionPatternReferences().size() > 0) {
+				for (EditionPatternReference r : getEditionPatternReferences()) {
+					if (r.getPatternRole().getIsPrimaryRole()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 }
