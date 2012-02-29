@@ -23,6 +23,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -169,6 +170,8 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 												.setLabel(new ViewPointDataBinding("\"" + entry.graphicalObject.getName() + "\""));
 									}
 								}
+								newShapePatternRole.setExampleLabel(((ShapeGraphicalRepresentation) entry.graphicalObject
+										.getGraphicalRepresentation()).getText());
 								newShapePatternRole.setGraphicalRepresentation(entry.graphicalObject.getGraphicalRepresentation());
 								newEditionPattern.addToPatternRoles(newShapePatternRole);
 								if (entry.getParentEntry() != null) {

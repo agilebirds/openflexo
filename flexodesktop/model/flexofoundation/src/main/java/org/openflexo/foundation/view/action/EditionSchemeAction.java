@@ -140,6 +140,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}*/
 
 	public Object getParameterValue(EditionSchemeParameter parameter) {
+		/*System.out.println("On me demande la valeur du parametre " + parameter.getName() + " a priori c'est "
+				+ parameterValues.get(parameter));*/
 		if (parameter instanceof URIParameter) {
 			if (parameterValues.get(parameter) == null
 					|| (parameterValues.get(parameter) instanceof String && StringUtils.isEmpty((String) parameterValues.get(parameter)))) {
@@ -150,7 +152,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	public void setParameterValue(EditionSchemeParameter parameter, Object value) {
-		// System.out.println("setParameterValue " + value);
+		// System.out.println("setParameterValue " + value + " for parameter " + parameter.getName());
 		parameterValues.put(parameter, value);
 		/*for (EditionSchemeParameter p : getEditionScheme().getParameters()) {
 			if (p instanceof URIParameter) {
@@ -615,7 +617,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	public Object getOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
-		return overridenGraphicalRepresentations.get(patternRole);
+		// return overridenGraphicalRepresentations.get(patternRole);
+		// TODO temporary desactivate overriden GR
+		return null;
 	}
 
 	public void setOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole, Object graphicalRepresentation) {

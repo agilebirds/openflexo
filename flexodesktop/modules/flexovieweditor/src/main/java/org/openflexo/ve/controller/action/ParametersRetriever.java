@@ -157,21 +157,38 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		} else if (parameter instanceof TextAreaParameter) {
 			FIBTextArea ta = new FIBTextArea();
 			ta.setName(parameter.getName() + "TextArea");
+			ta.setData(new DataBinding("parameters." + parameter.getName()) {
+				@Override
+				public BindingFactory getBindingFactory() {
+					return parameter.getBindingFactory();
+				}
+			});
 			ta.validateOnReturn = true; // Avoid too many ontologies manipulations
 			ta.setUseScrollBar(true);
 			ta.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			ta.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
-			ta.setData(new DataBinding("data.getStringParameter(" + '"' + parameter.getName() + '"' + ")"));
 			panel.addToSubComponents(ta, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true, index));
 			return ta;
 		} else if (parameter instanceof CheckboxParameter) {
 			FIBCheckBox cb = new FIBCheckBox();
 			cb.setName(parameter.getName() + "CheckBox");
+			cb.setData(new DataBinding("parameters." + parameter.getName()) {
+				@Override
+				public BindingFactory getBindingFactory() {
+					return parameter.getBindingFactory();
+				}
+			});
 			panel.addToSubComponents(cb, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return cb;
 		} else if (parameter instanceof IntegerParameter) {
 			FIBNumber number = new FIBNumber();
 			number.setName(parameter.getName() + "Number");
+			number.setData(new DataBinding("parameters." + parameter.getName()) {
+				@Override
+				public BindingFactory getBindingFactory() {
+					return parameter.getBindingFactory();
+				}
+			});
 			number.setNumberType(NumberType.IntegerType);
 			panel.addToSubComponents(number, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return number;

@@ -21,6 +21,7 @@ package org.openflexo.vpm.view.widget;
 
 import java.util.logging.Logger;
 
+import org.apache.commons.lang.StringUtils;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
@@ -147,10 +148,9 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 	@Override
 	public String getText() {
 		if (getPatternRole() != null) {
-			if (getPatternRole().getLabel() != null) {
-				return getPatternRole().getLabel().toString();
+			if (StringUtils.isNotEmpty(getPatternRole().getExampleLabel())) {
+				return getPatternRole().getExampleLabel();
 			}
-			return getPatternRole().getPatternRoleName();
 		}
 		return null;
 	}

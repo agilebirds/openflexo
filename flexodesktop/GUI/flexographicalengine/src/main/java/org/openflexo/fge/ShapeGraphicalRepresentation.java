@@ -1046,7 +1046,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
-	public boolean getAllowToLeaveBounds() {
+	public final boolean getAllowToLeaveBounds() {
 		return allowToLeaveBounds;
 	}
 

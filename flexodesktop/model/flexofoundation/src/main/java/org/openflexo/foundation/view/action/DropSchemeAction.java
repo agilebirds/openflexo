@@ -161,6 +161,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 			_primaryShape = newShape;
 			gr.setLocation(dropLocation);
+
 			// Temporary comment this portion of code if child shapes are declared inside this shape
 			if (!action.getPatternRole().containsShapes() && action.getContainer().toString().equals(EditionScheme.TOP_LEVEL)) {
 				ShapeBorder border = gr.getBorder();

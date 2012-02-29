@@ -79,6 +79,7 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.GraphicalElementPatternRole" abstract="yes">
 		<property name="label" xmlTag="label" attribute="YES"/>
+		<property name="exampleLabel" xmlTag="exampleLabel" attribute="YES"/>
 		<property name="readOnlyLabel" xmlTag="readOnlyLabel" attribute="YES"/>
 	</entity>
 

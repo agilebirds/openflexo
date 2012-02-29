@@ -65,7 +65,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 			aShape.addObserver(this);
 		}
 
-		//setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
+		// setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
 
 	}
 
@@ -133,7 +133,8 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		if (controlAreas == null) {
 			controlAreas = new ConcatenedList<ControlArea>();
 			controlAreas.addElementList(super.getControlAreas());
-			if (getOEShape().getAvailableLinkSchemeFromThisShape() != null && getOEShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
+			if (getOEShape().providesSupportAsPrimaryRole() && getOEShape().getAvailableLinkSchemeFromThisShape() != null
+					&& getOEShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
 				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.EAST));
 				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.WEST));
 				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.NORTH));

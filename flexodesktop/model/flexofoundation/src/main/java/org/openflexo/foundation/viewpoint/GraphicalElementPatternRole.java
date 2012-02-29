@@ -18,6 +18,8 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	private boolean readOnlyLabel;
 	private ViewPointDataBinding label;
 
+	private String exampleLabel = "label";
+
 	public abstract Object getGraphicalRepresentation();
 
 	public abstract void setGraphicalRepresentation(Object graphicalRepresentation);
@@ -117,6 +119,14 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 			}
 		}
 		return false;
+	}
+
+	public String getExampleLabel() {
+		return exampleLabel;
+	}
+
+	public void setExampleLabel(String exampleLabel) {
+		this.exampleLabel = exampleLabel;
 	}
 
 }
