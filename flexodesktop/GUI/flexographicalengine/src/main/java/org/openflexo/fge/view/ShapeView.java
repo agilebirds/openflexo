@@ -265,7 +265,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		} else if (getGraphicalRepresentation().getHasText() && _labelView == null) {
 			_labelView = new LabelView<O>(getGraphicalRepresentation(), getController(), this);
 			if (getParentView() != null) {
-				getParentView().add(getLabelView());
+				getParentView().add(getLabelView(), getLayer(), -1);
 			}
 		}
 	}
