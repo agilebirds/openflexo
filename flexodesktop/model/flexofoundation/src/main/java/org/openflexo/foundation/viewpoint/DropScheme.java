@@ -104,7 +104,7 @@ public class DropScheme extends EditionScheme {
 	public boolean isValidTarget(EditionPattern aTarget, PatternRole contextRole) {
 		if (getTargetEditionPattern() == aTarget) {
 			if (targetHasMultipleRoles()) {
-				return getTargetPatternRole() == contextRole;
+				return getTargetPatternRole() == null || (getTargetPatternRole() == contextRole);
 			} else {
 				return true;
 			}
