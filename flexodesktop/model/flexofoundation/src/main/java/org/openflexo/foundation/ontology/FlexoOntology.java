@@ -771,7 +771,7 @@ public abstract class FlexoOntology extends OntologyObject {
 
 		// FIXES add strict to FALSE (XtoF)
 		// FIXES OPENFLEXO-39, OPENFLEXO-40, OPENFLEXO-41, OPENFLEXO-42, OPENFLEXO-43, OPENFLEXO-44
-		ontModel.setStrictMode(false);
+		// ontModel.setStrictMode(false);
 
 		// we have a local copy of flexo concept ontology
 		if (alternativeLocalFile != null) {
