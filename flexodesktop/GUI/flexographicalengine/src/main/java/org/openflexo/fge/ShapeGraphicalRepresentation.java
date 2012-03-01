@@ -1385,28 +1385,28 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	public void updateConstraints() {
-		System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
-				+ widthConstraints.isValid() + "," + heightConstraints.isValid());
+		// System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
+		// + widthConstraints.isValid() + "," + heightConstraints.isValid());
 		logger.info("Called updateConstraints()");
 		if (xConstraints != null && xConstraints.isValid()) {
-			System.out.println("x was " + getX() + " constraint=" + xConstraints);
+			// System.out.println("x was " + getX() + " constraint=" + xConstraints);
 			updateXPosition();
-			System.out.println("x is now " + getX());
+			// System.out.println("x is now " + getX());
 		}
 		if (yConstraints != null && yConstraints.isValid()) {
-			System.out.println("y was " + getY() + " constraint=" + yConstraints);
+			// System.out.println("y was " + getY() + " constraint=" + yConstraints);
 			updateYPosition();
-			System.out.println("y is now " + getY());
+			// System.out.println("y is now " + getY());
 		}
 		if (widthConstraints != null && widthConstraints.isValid()) {
-			System.out.println("width was " + getWidth() + " constraint=" + widthConstraints);
+			// System.out.println("width was " + getWidth() + " constraint=" + widthConstraints);
 			updateWidthPosition();
-			System.out.println("width is now " + getWidth());
+			// System.out.println("width is now " + getWidth());
 		}
 		if (heightConstraints != null && heightConstraints.isValid()) {
-			System.out.println("height was " + getHeight() + " constraint=" + heightConstraints);
+			// System.out.println("height was " + getHeight() + " constraint=" + heightConstraints);
 			updateHeightPosition();
-			System.out.println("height is now " + getHeight());
+			// System.out.println("height is now " + getHeight());
 		}
 	}
 

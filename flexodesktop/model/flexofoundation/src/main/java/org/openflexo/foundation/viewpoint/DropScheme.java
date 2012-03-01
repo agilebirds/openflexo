@@ -28,6 +28,7 @@ import org.openflexo.toolbox.StringUtils;
 public class DropScheme extends EditionScheme {
 
 	private String target;
+	private ShapePatternRole targetPatternRole;
 
 	public DropScheme() {
 		super();
@@ -88,9 +89,27 @@ public class DropScheme extends EditionScheme {
 		}
 	}
 
-	public boolean isValidTarget(EditionPattern aTarget) {
-		return getTargetEditionPattern() == aTarget;
+	public boolean targetHasMultipleRoles() {
+		return getTargetEditionPattern() != null && getTargetEditionPattern().getShapePatternRoles().size() > 1;
+	}
 
+	public ShapePatternRole getTargetPatternRole() {
+		return targetPatternRole;
+	}
+
+	public void setTargetPatternRole(ShapePatternRole targetPatternRole) {
+		this.targetPatternRole = targetPatternRole;
+	}
+
+	public boolean isValidTarget(EditionPattern aTarget, PatternRole contextRole) {
+		if (getTargetEditionPattern() == aTarget) {
+			if (targetHasMultipleRoles()) {
+				return getTargetPatternRole() == contextRole;
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

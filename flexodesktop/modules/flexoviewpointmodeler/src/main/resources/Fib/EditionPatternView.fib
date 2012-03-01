@@ -62,7 +62,7 @@
               </Label>
             </Panel>
             <Label label="example_label" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <TextField columns="6" passwd="false" text="ShapeExampleLabelTextField" data="ShapePatternRole.data.exampleLabel" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="false" localize="true" />
+            <TextField columns="6" passwd="false" text="ShapeExampleLabelTextField" data="ShapePatternRole.data.exampleLabel" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
             <Label label="parent_shape" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=3;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
               <DropDown localize="true" name="dropdown" data="ShapePatternRole.data.parentShapePatternRole" constraints="flow(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(!(ParentShapeCheckbox.data))" staticList="" list="data.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
@@ -95,7 +95,7 @@
               </Label>
             </Panel>
             <Label label="example_label" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <TextField columns="6" passwd="false" text="ConnectorExampleLabelTextField" data="ConnectorPatternRole.data.exampleLabel" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="false" localize="true" />         
+            <TextField columns="6" passwd="false" text="ConnectorExampleLabelTextField" data="ConnectorPatternRole.data.exampleLabel" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
             <Label label="from_shape" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=3;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
               <DropDown localize="true" name="dropdown" data="ConnectorPatternRole.data.startShapePatternRole" constraints="flow(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="((!(StartShapeCheckbox.data)) &amp; (data.shapePatternRoles.size &gt; 0))" staticList="" list="data.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
@@ -265,10 +265,18 @@
               <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
                 <CheckBox selected="true" localize="true" name="checkbox" data="DropSchemePanel.data.topTarget" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
                 <Label label="top_level" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.01;weightY=0.0)" />
-                <DropDown format="object.name" localize="true" name="dropdown" data="DropSchemePanel.data.targetEditionPattern" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(DropSchemePanel.data.topTarget))" list="data.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="false" />
+                <DropDown format="object.name" localize="true" name="TargetEditionPatternDropDown" data="DropSchemePanel.data.targetEditionPattern" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(DropSchemePanel.data.topTarget))" list="data.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="false" />
               </Panel>
-              <Label label="description" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-              <TextArea columns="6" rows="2" text="TextArea" data="DropSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" localize="true" />
+              <Label label="target_role" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="DropSchemePanel.data.targetHasMultipleRoles">
+                <Dependancy componentName="TargetEditionPatternDropDown" />
+                <LocalizedDictionary />
+              </Label>
+              <DropDown localize="true" name="dropdown" data="DropSchemePanel.data.targetPatternRole" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="DropSchemePanel.data.targetHasMultipleRoles" staticList="" list="DropSchemePanel.data.targetEditionPattern.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="true">
+                <Dependancy componentName="TargetEditionPatternDropDown" />
+                <LocalizedDictionary />
+              </DropDown>
+              <Label label="description" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+              <TextArea columns="6" rows="2" text="TextArea" data="DropSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" localize="true" />
             </Panel>
             <Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="LinkScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.LinkScheme" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionSchemeTable.selected.editionSchemeType = &quot;LinkScheme&quot;)" name="LinkSchemePanel">
               <Label label="link_scheme" align="right" localize="true" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -1037,6 +1045,11 @@
     <Localized key="parent_shape" lang="English">Parent shape</Localized>
     <Localized key="as_described_in_action" lang="French">décrit dans l'action</Localized>
     <Localized key="as_described_in_action" lang="English">as described in action</Localized>
+    <Localized key="bottom" lang="English">Bottom</Localized>
+    <Localized key="bottom" lang="French">Bas</Localized>
+    <Localized key="bottom" lang="Dutch">Bottom</Localized>
+    <Localized key="target_role" lang="French">Role cible</Localized>
+    <Localized key="target_role" lang="English">Target role</Localized>
   </LocalizedDictionary>
 </Panel>
 

@@ -38,6 +38,7 @@ import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepres
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
+import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.AddShape;
@@ -83,10 +84,13 @@ public class ContextualPalette extends DrawingPalette {
 			}
 			if (target.getDrawable() instanceof ViewShape) {
 				ViewShape targetShape = (ViewShape) target.getDrawable();
-				if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
-					returned.add(dropScheme);
+				for (EditionPatternReference ref : targetShape.getEditionPatternReferences()) {
+					if (dropScheme.isValidTarget(ref.getEditionPattern(), ref.getPatternRole())) {
+						returned.add(dropScheme);
+					}
 				}
 			}
+
 		}
 		return returned;
 	}
@@ -100,8 +104,10 @@ public class ContextualPalette extends DrawingPalette {
 				}
 				if (target.getDrawable() instanceof ViewShape) {
 					ViewShape targetShape = (ViewShape) target.getDrawable();
-					if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
-						return true;
+					for (EditionPatternReference ref : targetShape.getEditionPatternReferences()) {
+						if (dropScheme.isValidTarget(ref.getEditionPattern(), ref.getPatternRole())) {
+							return true;
+						}
 					}
 				}
 			}
