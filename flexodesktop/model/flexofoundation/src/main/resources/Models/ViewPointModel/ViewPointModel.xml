@@ -84,7 +84,7 @@
 	</entity>
 
 
-	<entity name="org.openflexo.foundation.viewpoint.ShapePatternRole" xmlTag="ShapePatternRole" contexts="Parent,From,To">
+	<entity name="org.openflexo.foundation.viewpoint.ShapePatternRole" xmlTag="ShapePatternRole" contexts="Parent,From,To,Context">
 		<property name="graphicalRepresentation" contains="org.openflexo.fge.GraphicalRepresentation" primary="yes" />
 		<property name="parentShapePatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole" context="Parent"/>
 	</entity>
@@ -158,6 +158,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.DropScheme"
 		xmlTag="DropScheme">
 		<property name="target" xmlTag="target" attribute="YES" />
+		<property name="targetPatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole" context="Context"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.LinkScheme"
