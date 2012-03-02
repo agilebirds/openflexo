@@ -4,7 +4,7 @@
 #macro(getJavaPackagePath $value)#set($p = "#getJavaPackage($value)")${p.replace(".", "/")}#end
 #macro(setPackage $package)#void(${generator.setClassPackage(${package})})#end
 #macro(addJavaImport $import)#void(${generator.addImport($import)})#end
-#macro(addInternalJavaImport $relativePackage $className)#set($package = ${javaUtils.getPackageName("${javaImplementation.getRootPackage()}.${relativePackage}")})#void(${generator.addImport("${package}.${className}")})#end
+#macro(addInternalJavaImport $relativePackage $className)#set($package = ${javaUtils.getPackageName("${javaImplementation.getRootPackage()}.model.${relativePackage}")})#void(${generator.addImport("${package}.${className}")})#end
 
 #macro(getterName $value)get${javaUtils.getClassName($value)}#end
 #macro(setterName $value)set${javaUtils.getClassName($value)}#end

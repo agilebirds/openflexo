@@ -1,0 +1,1 @@
+#macro(getDaoJavaPackage $value)${javaUtils.getPackageName("${javaImplementation.getRootPackage()}.dao.${value}")}#end

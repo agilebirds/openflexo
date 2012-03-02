@@ -1,0 +1,55 @@
+import eu.bluepimento.library.property.model.PropertyEnumInterface;
+
+/**
+ * This enumeration list all properties available for this application, with their descriptions and default values. .
+ *
+ * @author OpenFlexo Source Generator
+ */
+
+public enum PropertyEnum implements PropertyEnumInterface {
+
+    DB_URL("jdbc:postgresql://localhost/${model.name}", "The database connexion url"),
+    DB_USERNAME("${model.name}", "The database connexion username"),
+    DB_PASSWORD("${model.name}", "The database connexion password") ;
+
+    private String defaultValue;
+    private String description;
+
+    /* =============== */
+    /* = Constructor = */
+    /* =============== */
+
+    /**
+      * Construct a parameter.
+      *
+      * @param defaultValue the default value of this parameter
+      * @param description the description of this parameter
+      */
+    private PropertyEnum(String defaultValue, String description) {
+        this.defaultValue = defaultValue;
+        this.description = description;
+    }
+
+    /* =================== */
+    /* = Getter / Setter = */
+    /* =================== */
+
+    /**
+      * the default value of this property.
+      *
+      * @return the default value of this property
+      */
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    /**
+      * the description of this property.
+      *
+      * @return the description of this property
+      */
+    public String getDescription() {
+        return description;
+    }
+
+}

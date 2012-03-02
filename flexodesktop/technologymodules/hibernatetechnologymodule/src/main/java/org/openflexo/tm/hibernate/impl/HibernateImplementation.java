@@ -34,6 +34,7 @@ import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModifi
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 import org.openflexo.foundation.sg.implmodel.layer.DatabaseTechnologyModuleImplementation;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
+import org.openflexo.tm.persistence.impl.HibernateModel;
 
 /**
  * This class defines properties related to a Spring implementation.
@@ -43,9 +44,6 @@ import org.openflexo.foundation.xml.ImplementationModelBuilder;
 public class HibernateImplementation extends TechnologyModuleImplementation {
 
 	public static final String TECHNOLOGY_MODULE_NAME = "Hibernate";
-
-	protected TechnologyModuleImplementation database;
-	protected Vector<HibernateModel> models = new Vector<HibernateModel>();
 
 	// ================ //
 	// = Constructors = //
@@ -95,103 +93,4 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 		return true;
 	}
 
-	/**
-	 * Retrieve all repositories which can be watched.
-	 * 
-	 * @return the retrieved repositories
-	 */
-	public Vector<? extends DMRepository> getWatchableRepositories() {
-		return getProject().getDataModel().getProjectRepositories();
-	}
-
-	/**
-	 * Retrieve the instance of HibernateImplementation from the implementation model.
-	 * 
-	 * @param implementationModel
-	 * @return the retrieved instance if any, null otherwise.
-	 */
-	public static HibernateImplementation getHibernateImplementation(ImplementationModel implementationModel) {
-		return (HibernateImplementation) implementationModel.getTechnologyModule(TECHNOLOGY_MODULE_NAME);
-	}
-
-	/* ===================== */
-	/* ====== Actions ====== */
-	/* ===================== */
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void delete() {
-
-		for (HibernateModel hibernateModel : new Vector<HibernateModel>(getModels())) {
-			hibernateModel.delete();
-		}
-
-		setChanged();
-		notifyObservers(new SGObjectDeletedModification<HibernateImplementation>(this));
-		super.delete();
-		deleteObservers();
-	}
-
-	/**
-	 * Transform the specified name into a suitable name for the represented database.
-	 * 
-	 * @param name
-	 * @return the transformed name.
-	 */
-	public String getDbObjectName(String name) {
-		if (database != null && database instanceof DatabaseTechnologyModuleImplementation) {
-			return ((DatabaseTechnologyModuleImplementation) database).getDbObjectName(name);
-		}
-
-		// Default implementation is to set all lower case without spaces
-		return name == null ? null : DatabaseTechnologyModuleImplementation.escapeDbObjectName(name).toLowerCase();
-	}
-
-	/* ===================== */
-	/* == Getter / Setter == */
-	/* ===================== */
-
-	public TechnologyModuleImplementation getDatabase() {
-		return database;
-	}
-
-	public void setDatabase(TechnologyModuleImplementation database) {
-		if (requireChange(this.database, database)) {
-			TechnologyModuleImplementation oldValue = this.database;
-			this.database = database;
-			setChanged();
-			notifyObservers(new SGAttributeModification("database", oldValue, database));
-		}
-	}
-
-	public Vector<HibernateModel> getModels() {
-		return models;
-	}
-
-	public void setModels(Vector<HibernateModel> models) {
-		if (requireChange(this.models, models)) {
-			Object oldValue = this.models;
-			this.models = models;
-			Collections.sort(this.models, new FlexoModelObject.FlexoNameComparator<FlexoModelObject>());
-			setChanged();
-			notifyObservers(new SGAttributeModification("models", oldValue, models));
-		}
-	}
-
-	public void addToModels(HibernateModel model) {
-		model.setHibernateImplementation(this);
-		models.add(model);
-		Collections.sort(this.models, new FlexoModelObject.FlexoNameComparator<FlexoModelObject>());
-		setChanged();
-		notifyObservers(new SGObjectAddedToListModification<HibernateModel>("models", model));
-	}
-
-	public void removeFromModels(HibernateModel model) {
-		if (models.remove(model)) {
-			setChanged();
-			notifyObservers(new SGObjectRemovedFromListModification<HibernateModel>("models", model));
-		}
-	}
 }

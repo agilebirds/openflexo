@@ -90,6 +90,21 @@
             <artifactId>bpslibtechnologymodule</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>daotechnologymodule</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>daoimpltechnologymodule</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>persistencetechnologymodule</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.openflexo</groupId>

@@ -1,4 +1,8 @@
 <inspector title = "postgres_implementation" >
 	<tab name="Basic" index="0">
+        <property name="driverClassname" label="driver_classname" widget="TEXT_FIELD" constraint="0"/>
+        <property name="driverGroupId" label="driver_group_id" widget="TEXT_FIELD" constraint="0"/>
+        <property name="driverArtifactId" label="driver_artifact_id" widget="TEXT_FIELD" constraint="0"/>
+        <property name="driverVersion" label="driver_version" widget="TEXT_FIELD" constraint="0"/>
 	</tab>
 </inspector>

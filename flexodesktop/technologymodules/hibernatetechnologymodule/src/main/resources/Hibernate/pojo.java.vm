@@ -34,6 +34,7 @@
 #end
 
 #macro(renderRelationshipAnnotations $relationship)
+    @OneToMany
 #end
 
 #addJavaImport("java.io.Serializable")
@@ -213,7 +214,7 @@ public class ${entity.getName()} implements Serializable {
 			
 			#set($methodVariableName = ${javaUtils.getVariableName(${relation.getDestination().getName()})})
 			/**
-			 * Adds the specified ${stringUtils.firstLower(${relation.getDestination().getName()})} entity to the ${relation.getName()} entities.
+			 * Adds the specified ${apacheStringUtils.uncapitalize(${relation.getDestination().getName()})} entity to the ${relation.getName()} entities.
 			 *
 			 * @param $methodVariableName the ${relation.getDestination().getName()} to add.
 			 */
@@ -229,7 +230,7 @@ public class ${entity.getName()} implements Serializable {
 			}
 	
         	/**
-        	* Removes the specified ${stringUtils.firstLower(${relation.getDestination().getName()})} entity from the ${relation.getName()} entities.
+        	* Removes the specified ${apacheStringUtils.uncapitalize(${relation.getDestination().getName()})} entity from the ${relation.getName()} entities.
         	*
         	* @param $methodVariableName the ${relation.getDestination().getName()} to remove.
         	*/

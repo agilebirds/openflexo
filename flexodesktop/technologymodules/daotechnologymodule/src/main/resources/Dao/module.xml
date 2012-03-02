@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<technologyModule
+        name="Dao"
+        version="1.0"
+        layer="DAO">
+    <compatibleModule name="Daoimpl" />
+    <compatibleModule name="Hibernate" />
+
+    <requiredModule name="Persistence" />
+    <requiredModule name="Java" />
+    <description>
+        This module generate DAO implementation.
+    </description>
+</technologyModule>

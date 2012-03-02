@@ -3,7 +3,7 @@
 	<File name="applicationContext-Hibernate.xml" type="text" symbolicPath="webapp" relativePath="WEB-INF">
     	<Template templateFile="applicationContextHibernate.xml.vm"/>
     </File>
-    #foreach($model in ${hibernateImplementation.getModels()})
+    #foreach($model in ${persistenceImplementation.getModels()})
 		#foreach($enum in ${model.getHibernateEnumContainer().getHibernateEnums()})
         	<File name="${enum.getName()}.java" type="java" symbolicPath="sources" relativePath="#getPersistenceModelJavaPackage("${model.getName()}.enums")">
             	<Template templateFile="enum.java.vm">
@@ -18,5 +18,10 @@
             	</Template>
             </File>
 		#end
+        <File name="PropertyEnum.java" type="java" symbolicPath="sources" relativePath="#getPersistenceModelJavaPackage("${model.getName()}.enums")">
+            <Template templateFile="propertyEnum.java.vm">
+                <Context name="model" value="${model.makeReference()}"/>
+            </Template>
+        </File>
 	#end
 </Generation>	

@@ -26,9 +26,9 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
-import org.openflexo.tm.hibernate.gui.view.HibernateEnumContainerView;
+import org.openflexo.tm.persistence.gui.view.HibernateEnumContainerView;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
-import org.openflexo.tm.hibernate.impl.HibernateModel;
+import org.openflexo.tm.persistence.impl.HibernateModel;
 import org.openflexo.toolbox.FileResource;
 
 public class HibernateEnumContainerViewEDITOR extends ProjectDialogEDITOR {

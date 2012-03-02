@@ -16,7 +16,10 @@
 		<module>springtechnologymodule</module>
 		<module>postgrestechnologymodule</module>
 		<module>maventechnologymodule</module>
-		<module>bpslibtechnologymodule</module>
+        <module>bpslibtechnologymodule</module>
+        <module>daotechnologymodule</module>
+        <module>persistencetechnologymodule</module>
+        <module>daoimpltechnologymodule</module>
 	</modules>
 	<build>
 		<resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Generation timestamp="${projectGenerator.generateTimestamp()}">
 </Generation>	
-#addMavenDependency("eu.bluepimento" "bpslib" "2.0.0-SNAPSHOT")
+#addMavenDependency("eu.bluepimento" "bpslib" "2.0.1-SNAPSHOT")
 #addMavenRepository("bps-artifactory-releases" "Blue Pimento Artifactory" "http://artifactory.bluepimento.eu:8080/artifactory/libs-releases-local")
 #addMavenRepository("bps-artifactory-snapshots" "Blue Pimento Artifactory" "http://artifactory.bluepimento.eu:8080/artifactory/libs-snapshots-local" true)
 

@@ -23,9 +23,12 @@ import org.openflexo.foundation.sg.implmodel.CreateImplementationModel;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.ImplementationModelDefinition;
 import org.openflexo.foundation.sg.implmodel.LinkableTechnologyModelObject;
-import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.tm.persistence.impl.HibernateEnum;
+import org.openflexo.tm.persistence.impl.HibernateEnumValue;
+import org.openflexo.tm.persistence.impl.HibernateModel;
+import org.openflexo.tm.persistence.impl.PersistenceImplementation;
 import org.openflexo.toolbox.ToolBox;
 
 import javax.naming.InvalidNameException;
@@ -70,7 +73,7 @@ public class HibernateEnumTest {
         ImplementationModelDefinition implModelDef = createImplementationModelDefinition(generatedSources, "implModelTest");
 
         ImplementationModel implementationModel = new ImplementationModel(implModelDef, project);
-        HibernateImplementation hibernateImplementation = createHibernateImplementation(implementationModel);
+        PersistenceImplementation hibernateImplementation = createHibernateImplementation(implementationModel);
         HibernateModel hibernateModel = createHibernateModel("myHibernateModel", hibernateImplementation, nonPersistentRepository);
 
         //now ensure hibernateModel contains stuff derived from the repository
@@ -134,17 +137,17 @@ public class HibernateEnumTest {
 
         return createImplementationModel.getNewImplementationModelDefinition();
     }
-    private HibernateImplementation createHibernateImplementation(ImplementationModel implementationModel){
-         HibernateImplementation hibernateImplementation = null;
+    private PersistenceImplementation createHibernateImplementation(ImplementationModel implementationModel){
+         PersistenceImplementation hibernateImplementation = null;
         try {
-            hibernateImplementation = new HibernateImplementation(implementationModel);
+            hibernateImplementation = new PersistenceImplementation(implementationModel);
         } catch (TechnologyModuleCompatibilityCheckException e) {
            e.printStackTrace();
             fail("Fail to create HibernateImplementation " + e.getMessage());
         }
         return hibernateImplementation;
     }
-    private HibernateModel createHibernateModel(String hibernateModelName, HibernateImplementation hibernateImplementation, ProjectRepository watchedRepository) {
+    private HibernateModel createHibernateModel(String hibernateModelName, PersistenceImplementation hibernateImplementation, ProjectRepository watchedRepository) {
         HibernateModel hibernateModel = null;
         try {
             hibernateModel = HibernateModel.createNewHibernateModel(hibernateModelName, hibernateImplementation, watchedRepository);

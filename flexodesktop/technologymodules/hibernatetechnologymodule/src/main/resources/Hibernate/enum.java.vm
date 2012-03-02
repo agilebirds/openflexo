@@ -1,4 +1,4 @@
-#* @vtlvariable name="enum" type="org.openflexo.tm.hibernate.impl.HibernateEnum" *#
+#* @vtlvariable name="enum" type="org.openflexo.tm.persistence.impl.HibernateEnum" *#
 public enum ${enum.name} {
 	#foreach($value in ${enum.getHibernateEnumValues()})
 		${value.name}#if( $foreach.hasNext ),#else;#end

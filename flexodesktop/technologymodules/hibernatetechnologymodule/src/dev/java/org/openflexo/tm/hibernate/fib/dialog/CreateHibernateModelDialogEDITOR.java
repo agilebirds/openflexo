@@ -27,8 +27,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
-import org.openflexo.tm.hibernate.gui.action.CreateHibernateModelAction;
-import org.openflexo.tm.hibernate.gui.action.CreateHibernateModelActionInitializer;
+import org.openflexo.tm.persistence.gui.action.CreateHibernateModelAction;
+import org.openflexo.tm.persistence.gui.action.CreateHibernateModelActionInitializer;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.toolbox.FileResource;
 

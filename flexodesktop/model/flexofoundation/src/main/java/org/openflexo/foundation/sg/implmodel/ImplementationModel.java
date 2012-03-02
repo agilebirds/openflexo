@@ -22,9 +22,12 @@ package org.openflexo.foundation.sg.implmodel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -47,449 +50,496 @@ import org.openflexo.xmlcode.XMLMapping;
 
 public class ImplementationModel extends ImplModelObject implements XMLStorageResourceData {
 
-	private static final Logger logger = Logger.getLogger(ImplementationModel.class.getPackage().getName());
+    private static final Logger logger = Logger.getLogger(ImplementationModel.class.getPackage().getName());
 
-	private FlexoProject _project;
-	private ImplementationModelResource _resource;
-	private ImplementationModelDefinition _implModelDefinition;
-	private LinkedHashMap<String, TechnologyModuleImplementation> technologyModules = new LinkedHashMap<String, TechnologyModuleImplementation>(); // <Module
-																																					// definition
-	private boolean isAddingModule = false;
+    private FlexoProject _project;
+    private ImplementationModelResource _resource;
+    private ImplementationModelDefinition _implModelDefinition;
+    private LinkedHashMap<String, TechnologyModuleImplementation> technologyModules = new LinkedHashMap<String, TechnologyModuleImplementation>(); // <Module
+    private static Map<String, GenerationService> generationServiceMap = null;
+    private boolean isAddingModule = false;
 
-	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 * @param componentDefinition
-	 */
-	public ImplementationModel(ImplementationModelBuilder builder) {
-		this(builder.definition, builder.getProject());
-		builder.implementationModel = this;
-		initializeDeserialization(builder);
-	}
+    /**
+     * Constructor invoked during deserialization
+     *
+     * @param builder
+     */
+    public ImplementationModel(ImplementationModelBuilder builder) {
+        this(builder.definition, builder.getProject());
+        builder.implementationModel = this;
+        initializeDeserialization(builder);
+    }
 
-	/**
-	 * Default constructor for OEShema
-	 * 
-	 * @param shemaDefinition
-	 */
-	public ImplementationModel(ImplementationModelDefinition implModelDefinition, FlexoProject project) {
-		super(project);
-		logger.info("Created new implementation model for project " + project);
-		_project = project;
-		_implModelDefinition = implModelDefinition;
-		setImplementationModel(this);
-	}
+    /**
+     * Default constructor for OEShema
+     */
+    public ImplementationModel(ImplementationModelDefinition implModelDefinition, FlexoProject project) {
+        super(project);
+        logger.info("Created new implementation model for project " + project);
+        _project = project;
+        _implModelDefinition = implModelDefinition;
+        setImplementationModel(this);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void delete() {
-		for (TechnologyModuleImplementation technologyModuleImplementation : getTechnologyModules()) {
-			technologyModuleImplementation.delete();
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void delete() {
+        for (TechnologyModuleImplementation technologyModuleImplementation : getTechnologyModules()) {
+            technologyModuleImplementation.delete();
+        }
 
-		setChanged();
-		notifyObservers(new SGObjectDeletedModification<ImplementationModel>(this));
-		super.delete();
-		deleteObservers();
+        setChanged();
+        notifyObservers(new SGObjectDeletedModification<ImplementationModel>(this));
+        super.delete();
+        deleteObservers();
 
-		getImplementationModelDefinition().delete();
+        getImplementationModelDefinition().delete();
 
-	}
+    }
 
-	public ImplementationModelDefinition getImplementationModelDefinition() {
-		return _implModelDefinition;
-	}
+    public ImplementationModelDefinition getImplementationModelDefinition() {
+        return _implModelDefinition;
+    }
 
-	@Override
-	public ImplementationModelResource getFlexoResource() {
-		return _resource;
-	}
+    @Override
+    public ImplementationModelResource getFlexoResource() {
+        return _resource;
+    }
 
-	@Override
-	public ImplementationModelResource getFlexoXMLFileResource() {
-		return getFlexoResource();
-	}
+    @Override
+    public ImplementationModelResource getFlexoXMLFileResource() {
+        return getFlexoResource();
+    }
 
-	@Override
-	@SuppressWarnings("rawtypes")
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		_resource = (ImplementationModelResource) resource;
-	}
+    @Override
+    @SuppressWarnings("rawtypes")
+    public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+        _resource = (ImplementationModelResource) resource;
+    }
 
-	@Override
-	public void save() throws SaveResourceException {
-		getFlexoResource().saveResourceData();
-	}
+    @Override
+    public void save() throws SaveResourceException {
+        getFlexoResource().saveResourceData();
+    }
 
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
+    @Override
+    public FlexoProject getProject() {
+        return _project;
+    }
 
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
-	}
+    @Override
+    public void setProject(FlexoProject aProject) {
+        _project = aProject;
+    }
 
-	@Override
-	public String getClassNameKey() {
-		return "implementation_model";
-	}
+    @Override
+    public String getClassNameKey() {
+        return "implementation_model";
+    }
 
-	@Override
-	public String getName() {
-		if (getImplementationModelDefinition() != null) {
-			return getImplementationModelDefinition().getName();
-		}
-		return null;
-	}
+    @Override
+    public String getName() {
+        if (getImplementationModelDefinition() != null) {
+            return getImplementationModelDefinition().getName();
+        }
+        return null;
+    }
 
-	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
-		if (getImplementationModelDefinition() != null) {
-			getImplementationModelDefinition().setName(name);
-		}
-	}
+    @Override
+    public void setName(String name) throws DuplicateResourceException, InvalidNameException {
+        if (getImplementationModelDefinition() != null) {
+            getImplementationModelDefinition().setName(name);
+        }
+    }
 
-	@Override
-	public String getDescription() {
-		if (isSerializing()) {
-			return null;
-		}
-		if (getImplementationModelDefinition() != null) {
-			return getImplementationModelDefinition().getDescription();
-		}
-		return super.getDescription();
-	}
+    @Override
+    public String getDescription() {
+        if (isSerializing()) {
+            return null;
+        }
+        if (getImplementationModelDefinition() != null) {
+            return getImplementationModelDefinition().getDescription();
+        }
+        return super.getDescription();
+    }
 
-	@Override
-	public void setDescription(String description) {
-		if (getImplementationModelDefinition() != null) {
-			getImplementationModelDefinition().setDescription(description);
-		}
-		super.setDescription(description);
-	}
+    @Override
+    public void setDescription(String description) {
+        if (getImplementationModelDefinition() != null) {
+            getImplementationModelDefinition().setDescription(description);
+        }
+        super.setDescription(description);
+    }
 
-	@Override
-	public Map<String, String> getSpecificDescriptions() {
-		if (isSerializing()) {
-			return null;
-		}
-		if (getImplementationModelDefinition() != null) {
-			return getImplementationModelDefinition().getSpecificDescriptions();
-		}
-		return super.getSpecificDescriptions();
-	}
+    @Override
+    public Map<String, String> getSpecificDescriptions() {
+        if (isSerializing()) {
+            return null;
+        }
+        if (getImplementationModelDefinition() != null) {
+            return getImplementationModelDefinition().getSpecificDescriptions();
+        }
+        return super.getSpecificDescriptions();
+    }
 
-	@Override
-	public boolean getHasSpecificDescriptions() {
-		if (getImplementationModelDefinition() != null) {
-			return getImplementationModelDefinition().getHasSpecificDescriptions();
-		}
-		return super.getHasSpecificDescriptions();
-	}
+    @Override
+    public boolean getHasSpecificDescriptions() {
+        if (getImplementationModelDefinition() != null) {
+            return getImplementationModelDefinition().getHasSpecificDescriptions();
+        }
+        return super.getHasSpecificDescriptions();
+    }
 
-	@Override
-	public String getFullyQualifiedName() {
-		return getProject().getFullyQualifiedName() + "." + getImplementationModelDefinition().getName();
-	}
+    @Override
+    public String getFullyQualifiedName() {
+        return getProject().getFullyQualifiedName() + "." + getImplementationModelDefinition().getName();
+    }
 
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getImplementationModelMapping();
-	}
+    @Override
+    public XMLMapping getXMLMapping() {
+        return getProject().getXmlMappings().getImplementationModelMapping();
+    }
 
-	@Override
-	public String getInspectorName() {
-		return null;
-	}
+    @Override
+    public String getInspectorName() {
+        return null;
+    }
 
-	/**
-	 * Add the specified implementation and all its required module in the implementation model. <br>
-	 * If there is incompatibility with existing module, an TechnologyModuleCompatibilityCheckException is thrown and no module is added.
-	 * 
-	 * @param technologyModuleImplementation
-	 * @throws TechnologyModuleCompatibilityCheckException
-	 */
-	@SuppressWarnings("unchecked")
-	public void addToTechnologyModules(TechnologyModuleImplementation technologyModuleImplementation)
-			throws TechnologyModuleCompatibilityCheckException {
+    /**
+     * Add the specified implementation and all its required module in the implementation model. <br>
+     * If there is incompatibility with existing module, an TechnologyModuleCompatibilityCheckException is thrown and no module is added.
+     *
+     * @param technologyModuleImplementation
+     * @throws TechnologyModuleCompatibilityCheckException
+     *
+     */
+    @SuppressWarnings("unchecked")
+    public void addToTechnologyModules(TechnologyModuleImplementation technologyModuleImplementation)
+            throws TechnologyModuleCompatibilityCheckException {
 
-		if (containsTechnologyModule(technologyModuleImplementation.getTechnologyModuleDefinition())) {
-			return;
-		}
+        if (containsTechnologyModule(technologyModuleImplementation.getTechnologyModuleDefinition())) {
+            return;
+        }
 
-		// Clone the map to restore it in case of compatibility issue
-		LinkedHashMap<String, TechnologyModuleImplementation> clone = (LinkedHashMap<String, TechnologyModuleImplementation>) technologyModules
-				.clone();
+        // Clone the map to restore it in case of compatibility issue
+        LinkedHashMap<String, TechnologyModuleImplementation> clone = (LinkedHashMap<String, TechnologyModuleImplementation>) technologyModules
+                .clone();
 
-		boolean currentIsAddingModule = isAddingModule;
-		isAddingModule = true;
-		try {
-			// Add the required modules (addToTechnologyModules will be called at implementation creation)
-			for (TechnologyModuleDefinition requiredModule : technologyModuleImplementation.getTechnologyModuleDefinition()
-					.getRequiredModules()) {
-				try {
-					requiredModule.createNewImplementation(this);
-				} catch (TechnologyModuleCompatibilityCheckException e) {
-					e.prependMessage("Module '" + requiredModule.getName() + "' is required by module '"
-							+ technologyModuleImplementation.getTechnologyModuleDefinition().getName() + "'");
-					throw e;
-				}
-			}
+        boolean currentIsAddingModule = isAddingModule;
+        isAddingModule = true;
+        try {
+            // Add the required modules (addToTechnologyModules will be called at implementation creation)
+            for (TechnologyModuleDefinition requiredModule : technologyModuleImplementation.getTechnologyModuleDefinition()
+                    .getRequiredModules()) {
+                try {
+                    requiredModule.createNewImplementation(this);
+                } catch (TechnologyModuleCompatibilityCheckException e) {
+                    e.prependMessage("Module '" + requiredModule.getName() + "' is required by module '"
+                            + technologyModuleImplementation.getTechnologyModuleDefinition().getName() + "'");
+                    throw e;
+                }
+            }
 
-			// Add specified module
-			technologyModules.put(technologyModuleImplementation.getTechnologyModuleDefinition().getName(), technologyModuleImplementation);
+            // Add specified module
+            technologyModules.put(technologyModuleImplementation.getTechnologyModuleDefinition().getName(), technologyModuleImplementation);
 
-			// Checks compatibility
-			checkTechnologyModuleCompatibility();
-		} catch (TechnologyModuleCompatibilityCheckException e) {
-			technologyModules = clone;
-			throw e;
-		} finally {
-			isAddingModule = currentIsAddingModule;
-		}
+            // Checks compatibility
+            checkTechnologyModuleCompatibility();
+        } catch (TechnologyModuleCompatibilityCheckException e) {
+            technologyModules = clone;
+            throw e;
+        } finally {
+            isAddingModule = currentIsAddingModule;
+        }
 
-		if (!isAddingModule) {
-			setChanged();
-			notifyObservers(new SGObjectAddedToListModification<TechnologyModuleImplementation>("technologyModules",
-					technologyModuleImplementation));
-		}
-	}
+        if (!isAddingModule) {
+            setChanged();
+            notifyObservers(new SGObjectAddedToListModification<TechnologyModuleImplementation>("technologyModules",
+                    technologyModuleImplementation));
+        }
+    }
 
-	public void removeFromTechnologyModules(TechnologyModuleImplementation technologyModuleImplementation) {
-		if (technologyModules.remove(technologyModuleImplementation.getTechnologyModuleDefinition().getName()) != null) {
+    public void removeFromTechnologyModules(TechnologyModuleImplementation technologyModuleImplementation) {
+        if (technologyModules.remove(technologyModuleImplementation.getTechnologyModuleDefinition().getName()) != null) {
 
-			// Remove also all dependent modules
-			for (TechnologyModuleImplementation moduleImplementation : new ArrayList<TechnologyModuleImplementation>(
-					technologyModules.values())) {
-				if (moduleImplementation.getTechnologyModuleDefinition().getAllRequiredModules()
-						.contains(technologyModuleImplementation.getTechnologyModuleDefinition())) {
-					removeFromTechnologyModules(moduleImplementation);
-				}
-			}
+            // Remove also all dependent modules
+            for (TechnologyModuleImplementation moduleImplementation : new ArrayList<TechnologyModuleImplementation>(
+                    technologyModules.values())) {
+                if (moduleImplementation.getTechnologyModuleDefinition().getAllRequiredModules()
+                        .contains(technologyModuleImplementation.getTechnologyModuleDefinition())) {
+                    removeFromTechnologyModules(moduleImplementation);
+                }
+            }
 
-			setChanged();
-			notifyObservers(new SGObjectRemovedFromListModification<TechnologyModuleImplementation>("technologyModules",
-					technologyModuleImplementation));
-		}
-	}
+            setChanged();
+            notifyObservers(new SGObjectRemovedFromListModification<TechnologyModuleImplementation>("technologyModules",
+                    technologyModuleImplementation));
+        }
+    }
 
-	/**
-	 * Perform all necessary checks to ensure compatibility between available modules.
-	 * 
-	 * @throws TechnologyModuleCompatibilityCheckException
-	 *             if the check fails
-	 */
-	public void checkTechnologyModuleCompatibility() throws TechnologyModuleCompatibilityCheckException {
+    /**
+     * Perform all necessary checks to ensure compatibility between available modules.
+     *
+     * @throws TechnologyModuleCompatibilityCheckException
+     *          if the check fails
+     */
+    public void checkTechnologyModuleCompatibility() throws TechnologyModuleCompatibilityCheckException {
 
-		if (isDeserializing()) {
-			return; // No check while deserializing
-		}
+        if (isDeserializing()) {
+            return; // No check while deserializing
+        }
 
-		// 1. Build a map of TechnologyModuleDefinition by layers.
-		Map<TechnologyLayer, Set<TechnologyModuleDefinition>> layerModuleMap = new HashMap<TechnologyLayer, Set<TechnologyModuleDefinition>>();
-		for (TechnologyModuleImplementation technologyModuleImplementation : getTechnologyModules()) {
-			Set<TechnologyModuleDefinition> set = layerModuleMap.get(technologyModuleImplementation.getTechnologyModuleDefinition()
-					.getTechnologyLayer());
-			if (set == null) {
-				set = new HashSet<TechnologyModuleDefinition>();
-				layerModuleMap.put(technologyModuleImplementation.getTechnologyModuleDefinition().getTechnologyLayer(), set);
-			}
+        // 1. Build a map of TechnologyModuleDefinition by layers.
+        Map<TechnologyLayer, Set<TechnologyModuleDefinition>> layerModuleMap = new HashMap<TechnologyLayer, Set<TechnologyModuleDefinition>>();
+        for (TechnologyModuleImplementation technologyModuleImplementation : getTechnologyModules()) {
+            Set<TechnologyModuleDefinition> set = layerModuleMap.get(technologyModuleImplementation.getTechnologyModuleDefinition()
+                    .getTechnologyLayer());
+            if (set == null) {
+                set = new HashSet<TechnologyModuleDefinition>();
+                layerModuleMap.put(technologyModuleImplementation.getTechnologyModuleDefinition().getTechnologyLayer(), set);
+            }
 
-			set.add(technologyModuleImplementation.getTechnologyModuleDefinition());
-		}
+            set.add(technologyModuleImplementation.getTechnologyModuleDefinition());
+        }
 
-		// 2. Checks all technology implementation used.
-		for (TechnologyModuleImplementation implementation : technologyModules.values()) {
-			TechnologyModuleDefinition moduleDefinition = implementation.getTechnologyModuleDefinition();
-			Set<TechnologyModuleDefinition> possibleIncompatibleModules = moduleDefinition.getIncompatibleModules();
+        // 2. Checks all technology implementation used.
+        for (TechnologyModuleImplementation implementation : technologyModules.values()) {
+            TechnologyModuleDefinition moduleDefinition = implementation.getTechnologyModuleDefinition();
+            Set<TechnologyModuleDefinition> possibleIncompatibleModules = moduleDefinition.getIncompatibleModules();
 
-			if (moduleDefinition.getTechnologyLayer() != TechnologyLayer.MAIN
-					&& moduleDefinition.getTechnologyLayer() != TechnologyLayer.TRANSVERSAL) {
-				possibleIncompatibleModules.addAll(layerModuleMap.get(moduleDefinition.getTechnologyLayer()));
-			}
+            if (moduleDefinition.getTechnologyLayer() != TechnologyLayer.MAIN
+                    && moduleDefinition.getTechnologyLayer() != TechnologyLayer.TRANSVERSAL) {
+                possibleIncompatibleModules.addAll(layerModuleMap.get(moduleDefinition.getTechnologyLayer()));
+            }
 
-			for (TechnologyModuleDefinition incompatibleModule : possibleIncompatibleModules) {
-				if (incompatibleModule != moduleDefinition && !incompatibleModule.getCompatibleModules().contains(moduleDefinition)
-						&& !incompatibleModule.getRequiredModules().contains(moduleDefinition)
-						&& !moduleDefinition.getCompatibleModules().contains(incompatibleModule)
-						&& !moduleDefinition.getRequiredModules().contains(incompatibleModule)) {
-					throw new TechnologyModuleCompatibilityCheckException(moduleDefinition, incompatibleModule);
-				}
-			}
-		}
-	}
+            for (TechnologyModuleDefinition incompatibleModule : possibleIncompatibleModules) {
+                if (incompatibleModule != moduleDefinition && !incompatibleModule.getCompatibleModules().contains(moduleDefinition)
+                        && !incompatibleModule.getRequiredModules().contains(moduleDefinition)
+                        && !moduleDefinition.getCompatibleModules().contains(incompatibleModule)
+                        && !moduleDefinition.getRequiredModules().contains(incompatibleModule)) {
+                    throw new TechnologyModuleCompatibilityCheckException(moduleDefinition, incompatibleModule);
+                }
+            }
+        }
+    }
 
-	/* ===================== */
-	/* == Getter / Setter == */
-	/* ===================== */
+    /* ===================== */
+    /* == Getter / Setter == */
+    /* ===================== */
 
-	public Vector<TechnologyModuleImplementation> getTechnologyModules() {
-		return new Vector<TechnologyModuleImplementation>(technologyModules.values());
-	}
+    public Vector<TechnologyModuleImplementation> getTechnologyModules() {
+        return new Vector<TechnologyModuleImplementation>(technologyModules.values());
+    }
 
-	public void setTechnologyModules(Vector<TechnologyModuleImplementation> technologyModules) {
-		this.technologyModules = new LinkedHashMap<String, TechnologyModuleImplementation>();
-		for (TechnologyModuleImplementation implementation : technologyModules) {
-			this.technologyModules.put(implementation.getTechnologyModuleDefinition().getName(), implementation);
-		}
-	}
+    public void setTechnologyModules(Vector<TechnologyModuleImplementation> technologyModules) {
+        this.technologyModules = new LinkedHashMap<String, TechnologyModuleImplementation>();
+        for (TechnologyModuleImplementation implementation : technologyModules) {
+            this.technologyModules.put(implementation.getTechnologyModuleDefinition().getName(), implementation);
+        }
+    }
 
-	public boolean containsTechnologyModule(TechnologyModuleDefinition technologyModuleDefinition) {
-		return technologyModules.containsKey(technologyModuleDefinition.getName());
-	}
+    public boolean containsTechnologyModule(TechnologyModuleDefinition technologyModuleDefinition) {
+        return technologyModules.containsKey(technologyModuleDefinition.getName());
+    }
 
-	/**
-	 * Retrieve all the technology modules and sort them by their required/compatible module definition. <br>
-	 * In other words, for each module, its required and compatible modules will be before in the list. The required dependency is stronger
-	 * than the compatible with one, so if you require a module and this one is compatible with you, it will be before you in the list. <br>
-	 * In case of a loop in the dependency, order is unpredictable.
-	 * 
-	 * @return the retrieved technology modules in the appropriate order.
-	 */
-	public List<TechnologyModuleImplementation> getTechnologyModulesDependencyOrdered() {
-		/*
-		 * The idea is to build a map containing, for each module, all the required/compatible modules. Once this map is built, we iterates over each key to takes empty
-		 * modules and we remove those modules from the list of other modules. We do this again until no module is taken or until the map is empty.
-		 */
+    /**
+     * Retrieve all the technology modules and sort them by their required/compatible module definition. <br>
+     * In other words, for each module, its required and compatible modules will be before in the list. The required dependency is stronger
+     * than the compatible with one, so if you require a module and this one is compatible with you, it will be before you in the list. <br>
+     * In case of a loop in the dependency, order is unpredictable.
+     *
+     * @return the retrieved technology modules in the appropriate order.
+     */
+    public List<TechnologyModuleImplementation> getTechnologyModulesDependencyOrdered() {
+        /*
+           * The idea is to build a map containing, for each module, all the required/compatible modules. Once this map is built, we iterates over each key to takes empty
+           * modules and we remove those modules from the list of other modules. We do this again until no module is taken or until the map is empty.
+           */
 
-		// 1. Build the map and fill it
-		Map<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> requiredModuleMap = new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>();
-		Map<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> compatibleModuleMap = new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>();
-		for (TechnologyModuleImplementation moduleImplementation : getTechnologyModules()) {
-			requiredModuleMap.put(moduleImplementation.getTechnologyModuleDefinition(), moduleImplementation
-					.getTechnologyModuleDefinition().getRequiredModules());
-			compatibleModuleMap.put(moduleImplementation.getTechnologyModuleDefinition(), moduleImplementation
-					.getTechnologyModuleDefinition().getCompatibleModules());
-		}
+        // 1. Build the map and fill it
+        Map<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> requiredModuleMap = new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>();
+        Map<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> compatibleModuleMap = new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>();
+        for (TechnologyModuleImplementation moduleImplementation : getTechnologyModules()) {
+            requiredModuleMap.put(moduleImplementation.getTechnologyModuleDefinition(), moduleImplementation
+                    .getTechnologyModuleDefinition().getRequiredModules());
+            compatibleModuleMap.put(moduleImplementation.getTechnologyModuleDefinition(), moduleImplementation
+                    .getTechnologyModuleDefinition().getCompatibleModules());
+        }
 
-		// 2. Perform iteration
-		List<TechnologyModuleImplementation> result = new ArrayList<TechnologyModuleImplementation>();
-		boolean hasRemovedKey;
-		boolean takeCompatibleIntoAccount = true;
-		;
-		do {
-			hasRemovedKey = false;
-			for (Map.Entry<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> entry : new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>(
-					requiredModuleMap).entrySet()) {
-				if (entry.getValue().isEmpty() && (!takeCompatibleIntoAccount || compatibleModuleMap.get(entry.getKey()).isEmpty())) {
-					requiredModuleMap.remove(entry.getKey());
-					compatibleModuleMap.remove(entry.getKey());
-					for (Set<TechnologyModuleDefinition> set : requiredModuleMap.values()) {
-						set.remove(entry.getKey());
-					}
-					for (Set<TechnologyModuleDefinition> set : compatibleModuleMap.values()) {
-						set.remove(entry.getKey());
-					}
-					result.add(getTechnologyModule(entry.getKey()));
-					hasRemovedKey = true;
-				}
-			}
+        // 2. Perform iteration
+        List<TechnologyModuleImplementation> result = new ArrayList<TechnologyModuleImplementation>();
+        boolean hasRemovedKey;
+        boolean takeCompatibleIntoAccount = true;
+        ;
+        do {
+            hasRemovedKey = false;
+            for (Map.Entry<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> entry : new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>(
+                    requiredModuleMap).entrySet()) {
+                if (entry.getValue().isEmpty() && (!takeCompatibleIntoAccount || compatibleModuleMap.get(entry.getKey()).isEmpty())) {
+                    requiredModuleMap.remove(entry.getKey());
+                    compatibleModuleMap.remove(entry.getKey());
+                    for (Set<TechnologyModuleDefinition> set : requiredModuleMap.values()) {
+                        set.remove(entry.getKey());
+                    }
+                    for (Set<TechnologyModuleDefinition> set : compatibleModuleMap.values()) {
+                        set.remove(entry.getKey());
+                    }
+                    result.add(getTechnologyModule(entry.getKey()));
+                    hasRemovedKey = true;
+                }
+            }
 
-			if (!hasRemovedKey && takeCompatibleIntoAccount) {
-				takeCompatibleIntoAccount = false;
-				hasRemovedKey = true;
-			}
-		} while (!requiredModuleMap.isEmpty() && (hasRemovedKey || takeCompatibleIntoAccount));
+            if (!hasRemovedKey && takeCompatibleIntoAccount) {
+                takeCompatibleIntoAccount = false;
+                hasRemovedKey = true;
+            }
+        } while (!requiredModuleMap.isEmpty() && (hasRemovedKey || takeCompatibleIntoAccount));
 
-		for (TechnologyModuleDefinition notRemovedModule : requiredModuleMap.keySet()) {
-			result.add(getTechnologyModule(notRemovedModule));
-		}
+        for (TechnologyModuleDefinition notRemovedModule : requiredModuleMap.keySet()) {
+            result.add(getTechnologyModule(notRemovedModule));
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Retrieve the TechnologyModuleImplementation associated to this technologyModuleDefinition.
-	 * 
-	 * @param technologyModuleDefinition
-	 * @return the retrieved TechnologyModuleImplementation is any, null otherwise.
-	 */
-	public TechnologyModuleImplementation getTechnologyModule(TechnologyModuleDefinition technologyModuleDefinition) {
-		return technologyModules.get(technologyModuleDefinition.getName());
-	}
+    /**
+     * Retrieve the TechnologyModuleImplementation associated to this technologyModuleDefinition.
+     *
+     * @param technologyModuleDefinition
+     * @return the retrieved TechnologyModuleImplementation is any, null otherwise.
+     */
+    public TechnologyModuleImplementation getTechnologyModule(TechnologyModuleDefinition technologyModuleDefinition) {
+        return technologyModules.get(technologyModuleDefinition.getName());
+    }
 
-	/**
-	 * Retrieve the TechnologyModuleImplementation associated to this technologyModuleDefinitionName.
-	 * 
-	 * @param technologyModuleDefinitionName
-	 * @return the retrieved TechnologyModuleImplementation is any, null otherwise.
-	 */
-	public TechnologyModuleImplementation getTechnologyModule(String technologyModuleDefinitionName) {
-		return technologyModules.get(technologyModuleDefinitionName);
-	}
+    /**
+     * Retrieve the TechnologyModuleImplementation associated to this technologyModuleDefinitionName.
+     *
+     * @param technologyModuleDefinitionName
+     * @return the retrieved TechnologyModuleImplementation is any, null otherwise.
+     */
+    public TechnologyModuleImplementation getTechnologyModule(String technologyModuleDefinitionName) {
+        return technologyModules.get(technologyModuleDefinitionName);
+    }
 
-	/**
-	 * Retrieve all technology modules available for the specified layer.
-	 * 
-	 * @param technologyLayer
-	 * @return the retrieved technology modules.
-	 */
-	public List<TechnologyModuleImplementation> getTechnologyModules(TechnologyLayer technologyLayer) {
-		List<TechnologyModuleImplementation> result = new Vector<TechnologyModuleImplementation>();
-		for (TechnologyModuleImplementation technologyModuleImplementation : getTechnologyModules()) {
-			if (technologyModuleImplementation.getTechnologyModuleDefinition().getTechnologyLayer() == technologyLayer) {
-				result.add(technologyModuleImplementation);
-			}
-		}
+    /**
+     * Retrieve all technology modules available for the specified layer.
+     *
+     * @param technologyLayer
+     * @return the retrieved technology modules.
+     */
+    public List<TechnologyModuleImplementation> getTechnologyModules(TechnologyLayer technologyLayer) {
+        List<TechnologyModuleImplementation> result = new Vector<TechnologyModuleImplementation>();
+        for (TechnologyModuleImplementation technologyModuleImplementation : getTechnologyModules()) {
+            if (technologyModuleImplementation.getTechnologyModuleDefinition().getTechnologyLayer() == technologyLayer) {
+                result.add(technologyModuleImplementation);
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Retrieve all technology modules available for the GLOBAL layer.
-	 * 
-	 * @return the retrieved technology modules.
-	 */
-	public List<TechnologyModuleImplementation> getMainTechnologyModules() {
-		return getTechnologyModules(TechnologyLayer.MAIN);
-	}
+    /**
+     * Retrieve all technology modules available for the GLOBAL layer.
+     *
+     * @return the retrieved technology modules.
+     */
+    public List<TechnologyModuleImplementation> getMainTechnologyModules() {
+        return getTechnologyModules(TechnologyLayer.MAIN);
+    }
 
-	/**
-	 * // * Retrieve all technology modules available for the TRANSVERSAL layer.
-	 * 
-	 * @return the retrieved technology modules.
-	 */
-	public List<TechnologyModuleImplementation> getTransversalTechnologyModules() {
-		return getTechnologyModules(TechnologyLayer.TRANSVERSAL);
-	}
+    /**
+     * // * Retrieve all technology modules available for the TRANSVERSAL layer.
+     *
+     * @return the retrieved technology modules.
+     */
+    public List<TechnologyModuleImplementation> getTransversalTechnologyModules() {
+        return getTechnologyModules(TechnologyLayer.TRANSVERSAL);
+    }
 
-	/**
-	 * Retrieve all technology modules available for the GUI layer.
-	 * 
-	 * @return the retrieved technology modules.
-	 */
-	public List<TechnologyModuleImplementation> getGUITechnologyModules() {
-		return getTechnologyModules(TechnologyLayer.GUI);
-	}
+    /**
+     * Retrieve all technology modules available for the GUI layer.
+     *
+     * @return the retrieved technology modules.
+     */
+    public List<TechnologyModuleImplementation> getGUITechnologyModules() {
+        return getTechnologyModules(TechnologyLayer.GUI);
+    }
 
-	/**
-	 * Retrieve all technology modules available for the BUSINESS LOGIC layer.
-	 * 
-	 * @return the retrieved technology modules.
-	 */
-	public List<TechnologyModuleImplementation> getBusinessLogicTechnologyModules() {
-		return getTechnologyModules(TechnologyLayer.BUSINESS_LOGIC);
-	}
+    /**
+     * Retrieve all technology modules available for the BUSINESS LOGIC layer.
+     *
+     * @return the retrieved technology modules.
+     */
+    public List<TechnologyModuleImplementation> getBusinessLogicTechnologyModules() {
+        return getTechnologyModules(TechnologyLayer.BUSINESS_LOGIC);
+    }
 
-	/**
-	 * Retrieve all technology modules available for the DAO layer.
-	 * 
-	 * @return the retrieved technology modules.
-	 */
-	public List<TechnologyModuleImplementation> getDAOTechnologyModules() {
-		return getTechnologyModules(TechnologyLayer.DAO);
-	}
+    /**
+     * Retrieve all technology modules available for the DAO layer.
+     *
+     * @return the retrieved technology modules.
+     */
+    public List<TechnologyModuleImplementation> getDAOTechnologyModules() {
+        return getTechnologyModules(TechnologyLayer.DAO);
+    }
 
-	/**
-	 * Retrieve all technology modules available for the DATABASE layer.
-	 * 
-	 * @return the retrieved technology modules.
-	 */
-	public List<TechnologyModuleImplementation> getDatabaseTechnologyModules() {
-		return getTechnologyModules(TechnologyLayer.DATABASE);
-	}
+    /**
+     * Retrieve all technology modules available for the DATABASE layer.
+     *
+     * @return the retrieved technology modules.
+     */
+    public List<TechnologyModuleImplementation> getDatabaseTechnologyModules() {
+        return getTechnologyModules(TechnologyLayer.DATABASE);
+    }
+
+
+    public Map<String, GenerationService> getGenerationServices() {
+        if (generationServiceMap == null) {
+            try {
+                generationServiceMap = new Hashtable<String, GenerationService>();
+                for (TechnologyModuleImplementation loadedTechnologyModule : getTechnologyModules()) {
+                    for (String serviceAlias : loadedTechnologyModule.getTechnologyModuleDefinition().getRequiredServices().keySet()) {
+                        Class<? extends GenerationService> serviceInterface = loadedTechnologyModule.getTechnologyModuleDefinition().getRequiredServices().get(serviceAlias);
+                        ServiceLoader<? extends GenerationService> serviceLoader = ServiceLoader.load(serviceInterface);
+                        Iterator<? extends GenerationService> it = serviceLoader.iterator();
+                        boolean serviceFound = false;
+                        while (it.hasNext()) {
+                            GenerationService serviceImpl = it.next();
+                            //ok : we have an implementation for the service, but not sure this implementation is available through the current configuration.
+                            //so let's test if the technology module providing this implementation is loaded.
+                            if (getTechnologyModule(serviceImpl.getTechnologyModuleName()) != null) {
+                                //ok : the implementation is available since the technology module is loaded.
+                                if (serviceFound) {
+                                    //huh : there is already an implementation for this service...
+                                    throw new RuntimeException("Found multiple implementation for service : " + serviceInterface.getName() + ". And this is not supported... if you really need it submit a feature request.");
+                                }
+                                if (generationServiceMap.containsKey(serviceAlias)) {
+                                    if (!generationServiceMap.get(serviceAlias).equals(serviceImpl)) {
+                                        //hum... that's annoying : the same alias is used by 2 services
+                                        throw new RuntimeException("The alias " + serviceAlias + " is used by at least 2 services : " + serviceImpl.getClass().getName() + " and " + generationServiceMap.get(serviceAlias).getClass().getName());
+                                    }
+                                }
+                                serviceFound = true;
+                                logger.info("Initializing service : " + serviceImpl.getClass().getName() + " with alias " + serviceAlias);
+                                serviceImpl.init(this);
+                                generationServiceMap.put(serviceAlias, serviceImpl);
+                            }
+                        }
+                        if (!serviceFound) {
+                            throw new RuntimeException("Cannot find an implementation for service '" + serviceInterface.getName() + "' and it is required by module : " + loadedTechnologyModule.getName()
+                                    + "\nTo solve this you need to include another technology module providing this service in your implementation model");
+                        }
+
+                    }
+                }
+            } catch (RuntimeException e) {
+                generationServiceMap = null;
+                throw e;
+            }
+        }
+        return generationServiceMap;
+    }
 }

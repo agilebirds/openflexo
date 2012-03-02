@@ -60,8 +60,23 @@
 	
 	<entity name="org.openflexo.tm.spring.impl.SpringImplementation" xmlTag="SpringImplementation">
  	</entity>
+
+    <entity name="org.openflexo.tm.dao.impl.DaoImplementation" xmlTag="DaoImplementation">
+    </entity>
+
+    <entity name="org.openflexo.tm.daoimpl.impl.DaoimplImplementation" xmlTag="DaoimplImplementation">
+    </entity>
+
+    <entity name="org.openflexo.tm.persistence.impl.PersistenceImplementation" xmlTag="PersistenceImplementation">
+        <property name="database" contains="org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation" primary="no"/>
+        <property name="models" xmlTag="HibernateModel" type="vector" primary="yes"/>
+    </entity>
  	
  	<entity name="org.openflexo.tm.postgres.impl.PostgresImplementation" xmlTag="PostgresImplementation">
+         <property name="driverClassname" xmlTag="driverClassname" attribute="yes"/>
+         <property name="driverArtifactId" xmlTag="driverArtifactId" attribute="yes"/>
+         <property name="driverGroupId" xmlTag="driverGroupId" attribute="yes"/>
+         <property name="driverVersion" xmlTag="driverVersion" attribute="yes"/>
  	</entity>
  	
  	<entity name="org.openflexo.tm.maven.impl.MavenImplementation" xmlTag="MavenImplementation">
@@ -73,55 +88,53 @@
  	</entity>
  	
  	<entity name="org.openflexo.tm.hibernate.impl.HibernateImplementation" xmlTag="HibernateImplementation">
-    	<property name="database" contains="org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation" primary="no"/>
-    	<property name="models" xmlTag="HibernateModel" type="vector" primary="yes"/>
  	</entity>
  	
- 	<entity name="org.openflexo.tm.hibernate.impl.HibernateModel" xmlTag="HibernateModel">
+ 	<entity name="org.openflexo.tm.persistence.impl.HibernateModel" xmlTag="HibernateModel">
     	<property name="entities" xmlTag="HibernateEntity" type="vector" primary="yes"/>
     	<property name="hibernateEnumContainer" xmlTag="HibernateEnumContainer" primary="yes"/>
  	</entity>
 	
- 	<entity name="org.openflexo.tm.hibernate.impl.HibernateEntity" xmlTag="HibernateEntity" contexts="father,children,destination">
+ 	<entity name="org.openflexo.tm.persistence.impl.HibernateEntity" xmlTag="HibernateEntity" contexts="father,children,destination">
 		<property name="tableName" xmlTag="tableName" attribute="yes"/>
 		<property name="isTableNameSynchronized" xmlTag="isTableNameSynchronized" attribute="yes"/>
 		<property name="optimisticLocking" xmlTag="optimisticLocking" attribute="yes"/>
-		<property name="father" contains="org.openflexo.tm.hibernate.impl.HibernateEntity" context="father" primary="no"/>
-		<property name="children" contains="org.openflexo.tm.hibernate.impl.HibernateEntity" context="children" type="vector" primary="no"/>
+		<property name="father" contains="org.openflexo.tm.persistence.impl.HibernateEntity" context="father" primary="no"/>
+		<property name="children" contains="org.openflexo.tm.persistence.impl.HibernateEntity" context="children" type="vector" primary="no"/>
 		<property name="attributes" xmlTag="HibernateAttribute" type="vector" primary="yes"/>
 		<property name="relationships" xmlTag="HibernateRelationship" type="vector" primary="yes"/>
 	</entity>
 	
-	<entity name="org.openflexo.tm.hibernate.impl.HibernateAttribute" xmlTag="HibernateAttribute">
+	<entity name="org.openflexo.tm.persistence.impl.HibernateAttribute" xmlTag="HibernateAttribute">
 	    <property name="primaryKey" xmlTag="primaryKey" attribute="yes"/>
 	    <property name="columnName" xmlTag="columnName" attribute="yes"/>
 	    <property name="type" xmlTag="type" attribute="yes"/>
-	    <property name="hibernateEnum" contains="org.openflexo.tm.hibernate.impl.HibernateEnum" context="enumAttributeType" primary="no"/>
+	    <property name="hibernateEnum" contains="org.openflexo.tm.persistence.impl.HibernateEnum" context="enumAttributeType" primary="no"/>
 	    <property name="notNull" xmlTag="notNull" attribute="yes"/>
 	    <property name="unique" xmlTag="unique" attribute="yes"/>
 	    <property name="length" xmlTag="length" attribute="yes"/>
 	    <property name="update" xmlTag="update" attribute="yes"/>
 	</entity>
 	
-	<entity name="org.openflexo.tm.hibernate.impl.HibernateRelationship" xmlTag="HibernateRelationship" contexts="inverse">
+	<entity name="org.openflexo.tm.persistence.impl.HibernateRelationship" xmlTag="HibernateRelationship" contexts="inverse">
 	    <property name="lazy" xmlTag="lazy" attribute="yes"/>
 	    <property name="notNull" xmlTag="notNull" attribute="yes"/>
 	    <property name="isInverse" xmlTag="isInverse" attribute="yes"/>
 	    <property name="toMany" xmlTag="toMany" attribute="yes"/>
 	    <property name="indexColumnName" xmlTag="indexColumnName" attribute="yes"/>
 	    <property name="cascadeTypes" xmlTag="cascadeType" type="vector" primary="yes"/>
-	    <property name="destination" contains="org.openflexo.tm.hibernate.impl.HibernateEntity" context="destination" primary="no"/>
-	    <property name="inverse" contains="org.openflexo.tm.hibernate.impl.HibernateRelationship" context="inverse" primary="no"/>
+	    <property name="destination" contains="org.openflexo.tm.persistence.impl.HibernateEntity" context="destination" primary="no"/>
+	    <property name="inverse" contains="org.openflexo.tm.persistence.impl.HibernateRelationship" context="inverse" primary="no"/>
 	</entity>
 	
-	<entity name="org.openflexo.tm.hibernate.impl.HibernateEnumContainer" xmlTag="HibernateEnumContainer">
+	<entity name="org.openflexo.tm.persistence.impl.HibernateEnumContainer" xmlTag="HibernateEnumContainer">
 		<property name="hibernateEnums" xmlTag="HibernateEnum" type="vector" primary="yes"/>
 	</entity>
 	
-	<entity name="org.openflexo.tm.hibernate.impl.HibernateEnum" xmlTag="HibernateEnum" contexts="enumAttributeType">
+	<entity name="org.openflexo.tm.persistence.impl.HibernateEnum" xmlTag="HibernateEnum" contexts="enumAttributeType">
 		<property name="hibernateEnumValues" xmlTag="HibernateEnumValue" type="vector" primary="yes"/>
 	</entity>
 	
-	<entity name="org.openflexo.tm.hibernate.impl.HibernateEnumValue" xmlTag="HibernateEnumValue">
+	<entity name="org.openflexo.tm.persistence.impl.HibernateEnumValue" xmlTag="HibernateEnumValue">
 	</entity>
 </model>
