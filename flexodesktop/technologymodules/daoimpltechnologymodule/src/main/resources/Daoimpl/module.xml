@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<technologyModule
+        name="Daoimpl"
+        version="1.0"
+        layer="DAO">
+    <requiredModule name="Hibernate" />
+    <requiredModule name="Java" />
+    <description>
+        todo
+    </description>
+</technologyModule>
