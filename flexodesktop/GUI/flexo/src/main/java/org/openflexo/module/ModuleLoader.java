@@ -140,7 +140,8 @@ public final class ModuleLoader implements IModuleLoader {
 			if (projectDirectory == null) {
 				projectDirectory = NewProjectComponent.getProjectDirectory();
 			}
-			loadModuleWithProject(module, projectDirectory);
+			FlexoProject project = getProjectLoader().newProject(projectDirectory).getProject();
+			loadModuleWithProject(module, project);
 		}
 	}
 
@@ -149,14 +150,14 @@ public final class ModuleLoader implements IModuleLoader {
 			if (projectDirectory == null) {
 				projectDirectory = OpenProjectComponent.getProjectDirectory();
 			}
-			module = loadModuleWithProject(module, projectDirectory);
+			FlexoEditor editor = getProjectLoader().loadProject(projectDirectory);
+			FlexoProject project = editor.getProject();
+			module = loadModuleWithProject(module, project);
 		}
 	}
 
-	private Module loadModuleWithProject(Module module, File projectDirectory) throws ModuleLoadingException,
+	private Module loadModuleWithProject(Module module, FlexoProject project) throws ModuleLoadingException,
 			ProjectLoadingCancelledException {
-		FlexoEditor editor = getProjectLoader().loadProject(projectDirectory);
-		FlexoProject project = editor.getProject();
 		if (module == null) {
 			if (activeModule != null) {
 				module = activeModule;
