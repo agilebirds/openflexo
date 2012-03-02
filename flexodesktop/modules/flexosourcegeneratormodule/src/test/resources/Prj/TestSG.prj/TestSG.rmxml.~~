@@ -368,6 +368,6 @@
       <Process idref="SYL_PROCESS.TestSG" />
     </SynchronizedResources>
   </Workflow>
-  <DocType>Business,Technical,UserManual,Objectives</DocType>
+  <DocType>BusinessTechnical,UserManual,Objectives,</DocType>
 </Project>
 

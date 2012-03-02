@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang.StringUtils;
 import org.openflexo.foundation.cg.generator.GeneratedTextResource;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.javaparser.JavaParseException;
@@ -40,6 +41,7 @@ import org.openflexo.sg.exception.JavaAppendingException;
 import org.openflexo.sg.file.SGJavaFileResource;
 import org.openflexo.sg.generationdef.FileEntry;
 import org.openflexo.sg.utils.JavaCodeMerger;
+import org.openflexo.toolbox.JavaUtils;
 
 /**
  * @author sylvain
@@ -51,6 +53,7 @@ public class SGJavaClassGenerator extends SGGenerator<DMEntity, GeneratedTextRes
 
 	protected JavaAppendingException javaAppendingException;
 
+	private String classPackage;
 	private Set<String> neededImports = new HashSet<String>();
 
 	protected SGJavaClassGenerator(ModuleGenerator moduleGenerator, FileEntry fileEntry) {
@@ -120,16 +123,42 @@ public class SGJavaClassGenerator extends SGGenerator<DMEntity, GeneratedTextRes
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void startGeneration() {
+		super.startGeneration();
+		neededImports.clear();
+		initializeClassPackage();
+	}
+
 	private String addJavaImports(String javaCode) {
 		StringBuilder imports = new StringBuilder();
 		List<String> sortedImports = new ArrayList<String>(neededImports);
 		Collections.sort(sortedImports);
+
+		String previousImportGroup = null;
 		for (String neededImport : sortedImports) {
+			String neededImportGroup = neededImport.indexOf('.') != 1 ? neededImport.substring(0, neededImport.indexOf('.')) : null;
+			if (previousImportGroup != null && !previousImportGroup.equals(neededImportGroup)) {
+				imports.append("\n");
+			}
+
 			imports.append("import " + neededImport + ";");
 			imports.append("\n");
+			previousImportGroup = neededImportGroup;
 		}
 
-		return imports + javaCode;
+		return (!StringUtils.isEmpty(getClassPackage()) ? "package " + getClassPackage() + ";" : "") + imports + javaCode;
+	}
+
+	/**
+	 * Set the class package to a default value based on the file generation path. This can be overwritten by calling macro
+	 * #setPackage("a.b.c") in velocity template.
+	 */
+	private void initializeClassPackage() {
+		setClassPackage(getFileEntry().relativePath);
 	}
 
 	@Override
@@ -158,6 +187,7 @@ public class SGJavaClassGenerator extends SGGenerator<DMEntity, GeneratedTextRes
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public void buildResourcesAndSetGenerators(SourceRepository repository, Vector<CGRepositoryFileResource> resources) {
 		// Nothing to do, performed in ModuleGenerator
 	}
@@ -175,7 +205,31 @@ public class SGJavaClassGenerator extends SGGenerator<DMEntity, GeneratedTextRes
 		return (javaAppendingException != null);
 	}
 
+	public void addImport(Class<?> neededImport) {
+		if (!neededImport.isPrimitive() && neededImport.getPackage() != Package.getPackage("java.lang")) {
+			addImport(neededImport.getName());
+		}
+	}
+
 	public void addImport(String neededImport) {
-		this.neededImports.add(neededImport);
+
+		if (!StringUtils.isEmpty(neededImport) && !neededImport.startsWith("java.lang")) {
+			if (!StringUtils.isEmpty(getClassPackage())) {
+				int lastDot = neededImport.lastIndexOf('.');
+				if (lastDot != -1 && neededImport.substring(0, lastDot).equals(getClassPackage())) {
+					return; // Skip add import in the same package than this class.
+				}
+			}
+
+			this.neededImports.add(neededImport);
+		}
+	}
+
+	public String getClassPackage() {
+		return classPackage;
+	}
+
+	public void setClassPackage(String classPackage) {
+		this.classPackage = JavaUtils.getPackageName(classPackage);
 	}
 }

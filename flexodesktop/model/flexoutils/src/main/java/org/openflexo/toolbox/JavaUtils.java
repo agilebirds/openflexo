@@ -86,6 +86,8 @@ public class JavaUtils {
 			return value;
 		}
 
+		value = value.replaceAll("[/\\\\]", ".");
+
 		StringBuilder sb = new StringBuilder();
 		for (String s : value.split("\\.")) {
 			String part = getVariableName(s).toLowerCase();

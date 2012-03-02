@@ -36,6 +36,7 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.action.CreateDMEntity;
+import org.openflexo.foundation.dm.action.CreateDMEntityEnum;
 import org.openflexo.foundation.dm.action.CreateDMPackage;
 import org.openflexo.foundation.dm.action.DMDelete;
 
@@ -68,18 +69,29 @@ public class DMRepositoryView extends DMView<DMRepository> {
 				return getDMRepository();
 			}
 		});
-		addAction(new TabularViewAction(CreateDMEntity.actionType, controller.getEditor()) {
-			@Override
-			protected Vector getGlobalSelection() {
-				return getViewSelection();
-			}
+        addAction(new TabularViewAction(CreateDMEntity.actionType, controller.getEditor()) {
+            @Override
+            protected Vector getGlobalSelection() {
+                return getViewSelection();
+            }
 
-			@Override
-			protected FlexoModelObject getFocusedObject() {
-				return getSelectedDMPackage();
-			}
-		});
-		addAction(new TabularViewAction(DMDelete.actionType, controller.getEditor()) {
+            @Override
+            protected FlexoModelObject getFocusedObject() {
+                return getSelectedDMPackage();
+            }
+        });
+        addAction(new TabularViewAction(CreateDMEntityEnum.actionType, controller.getEditor()) {
+            @Override
+            protected Vector getGlobalSelection() {
+                return getViewSelection();
+            }
+
+            @Override
+            protected FlexoModelObject getFocusedObject() {
+                return getSelectedDMPackage();
+            }
+        });
+        addAction(new TabularViewAction(DMDelete.actionType, controller.getEditor()) {
 			@Override
 			protected Vector getGlobalSelection() {
 				return getViewSelection();

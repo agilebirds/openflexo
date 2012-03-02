@@ -25,6 +25,7 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
+import org.openflexo.tm.java.impl.enums.JavaIDEEnum;
 import org.openflexo.toolbox.JavaUtils;
 
 /**
@@ -43,6 +44,8 @@ public class JavaImplementation extends TechnologyModuleImplementation {
 	private String rootPackage;
 	/** The archive name i.e. we generate a flexo.war */
 	private String archiveName = getProject().getName().replace(" ", "_").toLowerCase();
+	/** The selected IDE to use for this java project. */
+	private JavaIDEEnum selectedIde;
 
 	// ================ //
 	// = Constructors = //
@@ -157,6 +160,19 @@ public class JavaImplementation extends TechnologyModuleImplementation {
 			this.archiveName = archiveName;
 			setChanged();
 			notifyObservers(new SGAttributeModification("archiveName", oldValue, archiveName));
+		}
+	}
+
+	public JavaIDEEnum getSelectedIde() {
+		return selectedIde;
+	}
+
+	public void setSelectedIde(JavaIDEEnum selectedIde) {
+		if (requireChange(this.selectedIde, selectedIde)) {
+			Object oldValue = this.selectedIde;
+			this.selectedIde = selectedIde;
+			setChanged();
+			notifyObservers(new SGAttributeModification("selectedIde", oldValue, selectedIde));
 		}
 	}
 

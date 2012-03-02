@@ -90,6 +90,34 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		controller = null;
 	}
 
+	public JComponent getJComponentForObject(FIBComponent component) {
+		if (getComponent() == component) {
+			return getJComponent();
+		} else {
+			for (FIBView v : getSubViews()) {
+				JComponent j = v.getJComponentForObject(component);
+				if (j != null) {
+					return j;
+				}
+			}
+		}
+		return null;
+	}
+
+	public JComponent geDynamicJComponentForObject(FIBComponent component) {
+		if (getComponent() == component) {
+			return getDynamicJComponent();
+		} else {
+			for (FIBView v : getSubViews()) {
+				JComponent j = v.geDynamicJComponentForObject(component);
+				if (j != null) {
+					return j;
+				}
+			}
+		}
+		return null;
+	}
+
 	public boolean isDeleted() {
 		return isDeleted;
 	}

@@ -1,0 +1,26 @@
+import org.springframework.stereotype.Repository;
+
+import #getPersistenceModelJavaPackage(${model.getName()}).${entity.getName()};
+import #getDaoJavaPackage(${model}).${entity.getName()}DAO;
+import eu.bluepimento.mcl.mclv4.dao.hibernate.base.AbstractAccountModelBaseImpl;
+
+/**
+ * Hibernate implementation for the ${entity.getName()} data access layer basic methods, mainly the CRUD methods (Create, Retreive, Update, Delete).
+ * Example of use:.
+ * DetachedCriteria criteria = createCriteria();.
+ *
+ * criteria.add(Restrictions.xxx);.
+ * return getSingleResult(criteria);.
+ *
+ * @author OpenFlexo SourceGenerator
+ */
+
+@Repository("${apacheStringUtils.uncapitalize(${entity.getName()})}")
+public class ${entity.getName()}DAOImpl} extends AbstractAccountModelBaseImpl<${entity.getName()}> implements ${entity.getName()}DAO {
+
+    // Keys
+#foreach($attribute in ${entity.getAttributes()})
+    public static final String KEY_${attribute.getName().toUpperCase()} = "${attribute.getName()}";
+#end
+
+}

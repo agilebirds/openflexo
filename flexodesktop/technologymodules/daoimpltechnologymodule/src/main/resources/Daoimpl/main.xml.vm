@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Generation timestamp="${projectGenerator.generateTimestamp()}">
+    #foreach($model in ${persistenceImplementation.getModels()})
+        #foreach($entity in ${model.getEntities()})
+            <File name="${entity.getName()}DAOImpl.java" type="java" symbolicPath="sources" relativePath="#getDaoJavaPackage(${model.getName()}).impl">
+                <Template templateFile="daoimpl.java.vm">
+                    <Context name="entity" value="${entity.makeReference()}"/>
+                </Template>
+            </File>
+        #end
+    #end
+</Generation>	

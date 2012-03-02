@@ -83,7 +83,7 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 	protected JConsole console;
 	private boolean listenerAdded = false;
 
-	protected JButton chooseFileButton;
+	// protected JButton chooseFileButton;
 	protected JButton chooseReaderFileButton;
 	protected JButton chooseWarLocationButton;
 	protected JButton generateButton;
@@ -236,8 +236,8 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("warDirectory")) {
 				// chooseWarLocationButton.setText(sourceRepository.getWarDirectory()!=null?sourceRepository.getWarDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
 			} else if (dataModification.propertyName() != null && dataModification.propertyName().equals("directory")) {
-				chooseFileButton.setText(sourceRepository.getDirectory() != null ? sourceRepository.getDirectory().getAbsolutePath()
-						: FlexoLocalization.localizedForKey("undefined"));
+				// chooseFileButton.setText(sourceRepository.getDirectory() != null ? sourceRepository.getDirectory().getAbsolutePath() :
+				// FlexoLocalization.localizedForKey("undefined"));
 			} else if (dataModification instanceof LogAdded) {
 				// console.setText(controller.getProjectGenerator(codeRepository).getLogs().toString());
 			} else if (dataModification instanceof CGRepositoryConnected) {
@@ -388,8 +388,10 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 			subTitle.setFont(SGCst.SUB_TITLE_FONT);
 			subTitle.setForeground(Color.GRAY);
 			subTitle.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
-			subTitle2 = new JLabel(FlexoLocalization.localizedForKey("implementation_model") + ": "
-					+ getRepresentedObject().getImplementationModel().getName(), SwingConstants.LEFT);
+			subTitle2 = new JLabel(FlexoLocalization.localizedForKey("implementation_model")
+					+ ": "
+					+ (getRepresentedObject().getImplementationModel() == null ? "-" : getRepresentedObject().getImplementationModel()
+							.getName()), SwingConstants.LEFT);
 			// title.setVerticalAlignment(JLabel.BOTTOM);
 			subTitle2.setFont(SGCst.NORMAL_FONT);
 			subTitle2.setForeground(Color.BLACK);
@@ -423,8 +425,10 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 		protected void update() {
 			title.setText(FlexoLocalization.localizedForKey("source_repository") + " " + getRepresentedObject().getName());
 			subTitle.setText(getRepresentedObject().getDirectory().getAbsolutePath());
-			subTitle2.setText(FlexoLocalization.localizedForKey("implementation_model") + " "
-					+ getRepresentedObject().getImplementationModel().getName());
+			subTitle2.setText(FlexoLocalization.localizedForKey("implementation_model")
+					+ " "
+					+ (getRepresentedObject().getImplementationModel() == null ? "-" : getRepresentedObject().getImplementationModel()
+							.getName()));
 
 			for (FlexoActionButton button : actionButtons) {
 				button.update();

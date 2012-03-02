@@ -1,53 +1,117 @@
-package #getJavaPackage(${entity.getHibernateModel().getName()});
+#* @vtlmacrolibrary path="/Java/VM_global_library.vm" *#
+#macro(renderAttributeAnnotations $attribute)
+	#if(${attribute.getPrimaryKey()})
+		#addJavaImport("javax.persistence.Id")
+		#addJavaImport("javax.persistence.SequenceGenerator")
+		@Id
+		@SequenceGenerator(name="SEQ_STORE", sequenceName="${entity.getTableName()}_${attribute.getColumnName()}_sequence")
+	#else
+    	#if(${attribute.getType()} == 'ENUM')
+    		#addJavaImport("javax.persistence.Enumerated")
+    		#addJavaImport("javax.persistence.EnumType")
+    		@Enumerated(EnumType.STRING)
+    	#elseif(${attribute.getType()} == 'DATE')
+    		#addJavaImport("javax.persistence.Temporal")
+    		#addJavaImport("javax.persistence.TemporalType")
+    		@Temporal(TemporalType.DATE)
+    	#elseif(${attribute.getType()} == 'BYTES' || ${attribute.getType()} == 'TEXT')
+    		#addJavaImport("javax.persistence.Lob")
+    		@Lob 
+    	#else
+    		#addJavaImport("javax.persistence.Basic")
+    		@Basic
+		#end
+		
+		#addJavaImport("javax.persistence.Column")
+    	@Column(
+    		name = "${attribute.getColumnName()}"
+    		#if(${attribute.getType()} == 'STRING'), length = ${attribute.getLength()}#end
+    		#if(${attribute.getNotNull()}), nullable = false#end
+    		#if(${attribute.getUnique()}), unique = true#end
+    		#if(!${attribute.getUpdate()}), updatable = false#end
+        )
+	#end
+#end
 
-import org.apache.commons.lang.builder.EqualsBuilder;
+#macro(renderRelationshipAnnotations $relationship)
+    @OneToMany
+#end
+
+#addJavaImport("java.io.Serializable")
+#addJavaImport("javax.persistence.Entity")
+#addJavaImport("javax.persistence.Table")
 
 /**
- * ${entity.getDescription()}
- *
- * @author ${project.getAuthor()}
+ * $!{entity.getDescription()}
+ * @author Open Flexo code generator
  */
+@Entity
+@Table(name="${entity.getTableName()}")
+public class ${entity.getName()} implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	private transient int hashCode;
+	#blanckLine()
+	#foreach($attribute in ${entity.getAttributes()})
+		#renderAttributeAnnotations($attribute)
+		
+		#if(${attribute.getType()} == 'ENUM')
+			private ${attribute.getHibernateEnum().getName()} ${attribute.getName()};
+			#addInternalJavaImport("${entity.getHibernateModel().getName()}.enums" ${attribute.getHibernateEnum().getName()})
+		#else
+			private ${attribute.getType().getAsClass().getSimpleName()} ${attribute.getName()};
+			#addJavaImport(${attribute.getType().getAsClass()})
+		#end
+		#blanckLine()
+	#end
+	
+	#if(!${entity.getRelationships().isEmpty()})
+		// === relationships === //
+		#foreach($relation in ${entity.getRelationships()})
+			#if(!${relation.getToMany()})
+				private ${relation.getDestination().getName()} ${relation.getName()};
+				#addInternalJavaImport("${entity.getHibernateModel().getName()}" ${relation.getDestination().getName()})
+			#else
+				private Set<${relation.getDestination().getName()}> ${relation.getName()} = new HashSet<${relation.getDestination().getName()}>();
+				#addInternalJavaImport("${entity.getHibernateModel().getName()}" ${relation.getDestination().getName()})
+				#addJavaImport("java.util.Set")
+				#addJavaImport("java.util.HashSet")
+			#end
+		#end
+	#end
 
-public class ${entity.getName()} {
-
-#foreach($attribute in ${entity.getAttributes()})
-	private ${attribute.getName()} ${attribute.getName()};
-#end
-#if(!${entity.getRelations().isEmpty()})
-	// === relationships === //
-
-#foreach($relation in ${entity.getRelations()})
-#if(!${relation.getToMany()})
-	private ${relation.getDestination().getName()} ${relation.getName()};
-#end#end
-#foreach($relation in ${entity.getRelations()})
-#if(${relation.getToMany()})
-	private ${template.getReturnType($relation)} ${relation.getName()} = new ${template.getNewInstance($relation)}();
-#end#end
-
-#end
-
-#addToSpringContext("<coucou${entity.getName()}56100 />")
 	/** 
 	 * @Override
 	 */
 	@Override
-	public boolean equals(Object value) {
-		if (value == this) 
+	public boolean equals(Object obj) {
+		if (obj == this) 
 			return true;
-		if (value == null || !(value instanceof ${entity.getName()}))
+		if (obj == null || !(obj instanceof ${entity.getName()}))
 			return false;
-		if (getId() != null && getId().equals(((${entity.getName()}) value).getId()))
+		if (getId() != null && getId().equals(((${entity.getName()}) obj).getId()))
 			return true;
 		return super.equals(obj);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		if (hashCode == 0) {
+			hashCode = (getId() == null) ? super.hashCode() : new HashCodeBuilder().append(getId()).toHashCode();
+			#addJavaImport("org.apache.commons.lang.builder.HashCodeBuilder")
+		}
+		return hashCode;
+	}
+	
 	/** 
 	 * @Override
 	 */
 	@Override
 	public String toString() {
-		return new StringBuilder("${entity.getName()}#").append(getId()).append("{")
+		return new StringBuilder(this.getClass().getSimpleName() + "#").append(getId()).append("{")
 #set($first='0')
 #foreach( $attribute in ${entity.getAttributes()})#if(!${attribute.getPrimaryKey()})
 #if($first=='0') #set($first='1')			#else			.append(",")#end
@@ -60,5 +124,122 @@ public class ${entity.getName()} {
 	/* =  Getter / Setter = */
 	/* ==================== */
 
-	//TODO
+	#foreach($attribute in ${entity.getAttributes()})
+		#if(${attribute.getType()} == 'ENUM')
+			#set($attributeType =  ${attribute.getHibernateEnum().getName()});
+		#else
+			#set($attributeType =   ${attribute.getType().getAsClass().getSimpleName()});
+		#end
+		
+		#if(${attribute.getDescription()})
+			/**	
+			 * ${attribute.getDescription()}
+        	 * @return ${attribute.getDescription()}
+        	 */
+		#end
+    	public ${attributeType} #getterName(${attribute.getName()})(){
+    		return ${attribute.getName()};
+    	}
+	
+		#if(${attribute.getDescription()})
+			/**	
+        	 * @param ${attribute.getName()} ${attribute.getDescription()}
+        	 */
+		#end
+    	public void #setterName(${attribute.getName()})(${attributeType} ${attribute.getName()}){
+    		this.${attribute.getName()} = ${attribute.getName()}; 
+    	}
+	
+        #if(${attributeType}=="String")
+        	/**
+        	 * Indicates if the field ${attribute.getName()} is not empty and not <code>null</code>.
+        	 *
+        	 * @return <code>true</code> if the field contains a non empty value.
+        	 */
+        	public boolean getHas${stringUtils.firstUpper(${attribute.getName()})}(){
+        		return ${attribute.getName()} != null && ${attribute.getName()}.trim().length() != 0; 
+        	}
+        	
+        #end
+	#end
+	
+	#foreach($relation in ${entity.getRelationships()})
+		#if(!${relation.getToMany()})
+    		#if(${relation.getDescription()})
+    			/**	
+    			 * ${relation.getDescription()}
+            	 * @return ${relation.getDescription()}
+            	 */
+    		#end
+        	public ${relation.getDestination().getName()} #getterName(${relation.getName()})() {
+        		return ${relation.getName()};
+        	}
+    		
+    		#if(${attribute.getDescription()})
+    			/**	
+            	 * @param ${attribute.getName()} ${attribute.getDescription()}
+            	 */
+    		#end
+        	public void #setterName(${relation.getName()})(${relation.getDestination().getName()} ${relation.getName()}){
+        		this.${relation.getName()} = ${relation.getName()}; 
+        	}
+    	
+        	/**
+        	 * Returns the ${relation.getName()} relation primary key.
+        	 *
+        	 * @return the value of the foreign key. 
+        	 */ 
+        	public Long get${stringUtils.firstUpper(${relation.getName()})}Id(){
+        		return  #getterName(${relation.getName()})() == null ? null : #getterName(${relation.getName()})().getId();
+        	}
+		#else
+			#if(${relation.getDescription()})
+    			/**	
+    			 * ${relation.getDescription()}
+            	 * @return ${relation.getDescription()}
+            	 */
+    		#end
+			public Set<${relation.getDestination().getName()}> #getterName(${relation.getName()})() {
+        		return ${relation.getName()};
+        	}
+			
+			#if(${attribute.getDescription()})
+    			/**	
+            	 * @param ${attribute.getName()} ${attribute.getDescription()}
+            	 */
+    		#end
+        	public void #setterName(${relation.getName()})(Set<${relation.getDestination().getName()}> ${relation.getName()}){
+        		this.${relation.getName()} = ${relation.getName()}; 
+        	}
+			
+			#set($methodVariableName = ${javaUtils.getVariableName(${relation.getDestination().getName()})})
+			/**
+			 * Adds the specified ${apacheStringUtils.uncapitalize(${relation.getDestination().getName()})} entity to the ${relation.getName()} entities.
+			 *
+			 * @param $methodVariableName the ${relation.getDestination().getName()} to add.
+			 */
+        	public boolean addTo${stringUtils.firstUpper(${relation.getName()})}(${relation.getDestination().getName()} $methodVariableName){
+				#if(${relation.getInverse()} && !${relation.getInverse().getToMany()})
+					$methodVariableName.#setterName(${relation.getInverse().getName()})(this);
+				#end		
+				return ${relation.getName()}.add($methodVariableName)
+					#if(${relation.getInverse()} && ${relation.getInverse().getToMany()}) 
+						&& $methodVariableName.#getterName(${relation.getInverse().getName()})().add(this)
+					#end
+				;
+			}
+	
+        	/**
+        	* Removes the specified ${apacheStringUtils.uncapitalize(${relation.getDestination().getName()})} entity from the ${relation.getName()} entities.
+        	*
+        	* @param $methodVariableName the ${relation.getDestination().getName()} to remove.
+        	*/
+			public boolean removeFrom${stringUtils.firstUpper(${relation.getName()})}(${relation.getDestination().getName()} $methodVariableName){
+				#if(${relation.getInverse()} && !${relation.getInverse().getToMany()})
+					$methodVariableName.#setterName(${relation.getInverse().getName()})(null);
+				#end	
+				return ${relation.getName()}.remove($methodVariableName);
+			}
+		#end
+	#end
 }

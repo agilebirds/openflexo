@@ -91,6 +91,9 @@ public abstract class CGTemplateSet extends CGTemplateObject {
 		return current;
 	}
 
+    public void update(boolean force){
+        update();
+    }
 	@Override
 	public void update() {
 		if (isUpdating) {

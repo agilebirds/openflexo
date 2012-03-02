@@ -42,11 +42,6 @@ public abstract class CGDirectoryTemplateSet extends CGTemplateSet {
 		_recursive = recursive;
 	}
 
-	@Override
-	public CGTemplateFile getTemplate(String templateRelativePath) {
-		return (CGTemplateFile) super.getTemplate(templateRelativePath);
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */

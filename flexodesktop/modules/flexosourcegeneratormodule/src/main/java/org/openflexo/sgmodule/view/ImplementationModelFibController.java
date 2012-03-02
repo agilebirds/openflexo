@@ -7,8 +7,8 @@ import java.util.Vector;
 
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.sg.implmodel.CreateTechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
+import org.openflexo.sg.action.CreateTechnologyModuleImplementation;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 

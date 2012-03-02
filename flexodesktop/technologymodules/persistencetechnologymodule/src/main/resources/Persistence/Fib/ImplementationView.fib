@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" dataClassName="org.openflexo.tm.persistence.impl.PersistenceImplementation" font="Lucida Grande,0,11" name="main">
+  <Button action="controller.performCreateModel()" buttonType="Trigger" label="Create new Persistence model" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true">
+    <LocalizedDictionary />
+  </Button>
+  <LocalizedDictionary />
+  <Parameter name="controllerClassName" value="org.openflexo.tm.persistence.gui.controller.PersistenceImplementationController" />
+</Panel>
+

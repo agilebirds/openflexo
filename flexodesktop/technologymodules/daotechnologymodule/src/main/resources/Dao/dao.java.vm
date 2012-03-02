@@ -1,0 +1,13 @@
+import eu.bluepimento.library.dao.AbstractDAO;
+
+import #getPersistenceModelJavaPackage(${model.getName()}).${entity.getName()};
+
+/**
+ * This interface specifies the ${entity.getName()} data access layer basic methods, mainly the CRUD methods (Create, Retreive, Update, Delete).
+ *
+ * @author Emmanuel Koch
+ */
+
+public interface ${entity.getName()}DAO extends AbstractDAO<${entity.getName()}> {
+
+}

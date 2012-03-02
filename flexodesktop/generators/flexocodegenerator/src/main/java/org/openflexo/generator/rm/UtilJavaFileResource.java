@@ -29,7 +29,7 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.rm.FlexoDMResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
@@ -38,7 +38,7 @@ import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.cg.CGJavaFile;
-import org.openflexo.generator.utils.JavaClassGenerator;
+import org.openflexo.generator.utils.JavaClassGenerator; 
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -144,7 +144,7 @@ public class UtilJavaFileResource extends JavaFileResource<JavaClassGenerator, C
 				getCGFile().setMarkedForDeletion(true);
 				generator.refreshConcernedResources();
 				generator.getRepository().refresh();
-			} else if (dataModification instanceof EntityDeleted) {
+			} else if (dataModification instanceof DMObjectDeleted) {
 				logger.info("Handle entity has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);

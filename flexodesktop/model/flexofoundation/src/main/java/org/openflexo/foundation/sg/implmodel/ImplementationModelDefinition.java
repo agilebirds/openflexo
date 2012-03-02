@@ -65,7 +65,7 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 		_name = modelName;
 
 		logger.info("Added new ImplementationModelDefinition");
-		_generatedSources.addToImplementationModels(this);
+		_generatedSources.addToImplementationModelDefinitions(this);
 
 		if (checkUnicity) {
 			String resourceIdentifier = ImplementationModelResource.resourceIdentifierForName(modelName);
@@ -73,6 +73,15 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 				throw new DuplicateResourceException(resourceIdentifier);
 			}
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void delete() {
+		super.delete();
+		_generatedSources.removeFromImplementationModelDefinitions(this);
 	}
 
 	@Override

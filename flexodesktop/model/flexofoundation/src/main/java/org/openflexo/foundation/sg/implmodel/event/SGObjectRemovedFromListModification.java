@@ -8,8 +8,17 @@ package org.openflexo.foundation.sg.implmodel.event;
  * 
  * @author Nicolas Daniels
  */
-public class SGObjectRemovedFromListModification extends SGDataModification {
-	public SGObjectRemovedFromListModification(String listName, Object object) {
+public class SGObjectRemovedFromListModification<T extends Object> extends SGDataModification {
+	public SGObjectRemovedFromListModification(String listName, T object) {
 		super(listName, object, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public T newValue() {
+		return (T) super.newValue();
 	}
 }

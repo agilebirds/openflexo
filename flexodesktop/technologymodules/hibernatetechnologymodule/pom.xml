@@ -15,6 +15,26 @@
 			<artifactId>flexosourcegeneratormodule</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>javatechnologymodule</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>springtechnologymodule</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>persistencetechnologymodule</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+        </dependency>
 	</dependencies>
 </project>
 

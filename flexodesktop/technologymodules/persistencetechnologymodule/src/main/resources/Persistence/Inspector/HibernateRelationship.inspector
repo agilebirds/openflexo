@@ -1,0 +1,54 @@
+<inspector title = "hibernate_relationship" >
+	<tab name="Basic" index="0">
+		<property name="name" label="propertyName" widget="TEXT_FIELD" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+		
+		<property name="destination" label="destination" widget="DROPDOWN" constraint="2">
+			<param name="dynamiclist" value="hibernateEntity.hibernateModel.entities"/>
+			<param name="showReset" value="false"/>
+			<param name="format" value="name"/>
+		</property>
+		
+		<property name="cascadeTypes" label="cascadeTypes" widget="CHECKBOX_LIST" constraint="3">
+			<param name="dynamiclist" value="allHibernateCascades"/>
+			<param name="format" value="name"/>
+		</property>
+		
+		<property name="toMany" label="toMany" widget="CHECKBOX" constraint="4" />
+		<property name="lazy" label="lazy" widget="CHECKBOX" constraint="5" />
+		<property name="notNull" label="notNull" widget="CHECKBOX" constraint="6" />
+		
+		<property name="indexColumnName" label="indexColumnName" widget="TEXT_FIELD" constraint="7">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+	
+	<tab name="Inverse" index="1">
+		<property name="hasInverse" label="hasInverse" widget="CHECKBOX" constraint="1" depends="destination" conditional="destination!=null"/>
+		<property name="isInverse" label="isInverse" widget="CHECKBOX" constraint="2" depends="inverse" conditional="inverse!=null"/>
+		
+		
+		<property name="inverse.nameOrBuiltAutomaticOne" label="inversePropertyName" widget="TEXT_FIELD" depends="inverse" conditional="inverse!=null" constraint="3">
+			<param name="columns" value="10"/>
+		</property>
+		
+		<property name="inverse.cascadeTypes" label="inverseCascadeTypes" widget="CHECKBOX_LIST" depends="inverse" conditional="inverse!=null" constraint="5">
+			<param name="dynamiclist" value="allHibernateCascades"/>
+			<param name="format" value="name"/>
+		</property>
+		
+		<property name="inverse.toMany" label="inverseToMany" widget="CHECKBOX" depends="inverse" conditional="inverse!=null" constraint="6" />
+		<property name="inverse.lazy" label="inverseLazy" widget="CHECKBOX" depends="inverse" conditional="inverse!=null" constraint="7" />
+		<property name="inverse.notNull" label="inverseNotNull" widget="CHECKBOX" depends="inverse" conditional="inverse!=null" constraint="8" />
+	</tab>
+	
+	<tab name="Doc" index="2" layout="DEFAULT">
+		<property name="specificDescriptions" label="specific_description" widget="CUSTOM" depends="project,hasSpecificDescriptions" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.DescriptionInspectorWidget"/>
+			<param name="expandHorizontally" value="true"/>     <!-- Available horizontal space is "taken" by the dynamic component, when possible -->
+			<param name="expandVertically" value="true"/>     <!-- Available vertical space is "taken" by the dynamic component, when possible -->
+			<param name="useUltraLightWysiwyg" value="false"/>
+		</property>
+	</tab>
+</inspector>

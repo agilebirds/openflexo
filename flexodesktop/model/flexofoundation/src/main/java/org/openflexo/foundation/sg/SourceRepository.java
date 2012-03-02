@@ -50,6 +50,8 @@ public class SourceRepository extends GenerationRepository implements ReferenceO
 	private static final Logger logger = FlexoLogger.getLogger(SourceRepository.class.getPackage().getName());
 
 	private CodeType target;
+	private String _implementationModelName;
+	private ImplementationModel _implementationModel = null;
 
 	/**
 	 * Create a new GeneratedCodeRepository.
@@ -210,9 +212,6 @@ public class SourceRepository extends GenerationRepository implements ReferenceO
 		return getGeneratedCode();
 	}
 
-	private String _implementationModelName;
-	private ImplementationModel _implementationModel = null;
-
 	// Serialization only
 	public String _getImplementationModelName() {
 		return _implementationModelName;
@@ -226,7 +225,7 @@ public class SourceRepository extends GenerationRepository implements ReferenceO
 
 	public ImplementationModel getImplementationModel() {
 		if (_implementationModel == null && StringUtils.isNotEmpty(_implementationModelName)) {
-			_implementationModel = getGeneratedSources().getImplementationModelNamed(_implementationModelName).getImplementationModel();
+			_implementationModel = getGeneratedSources().getImplementationModelNamed(_implementationModelName);
 		}
 		return _implementationModel;
 	}
@@ -235,5 +234,4 @@ public class SourceRepository extends GenerationRepository implements ReferenceO
 		_implementationModelName = anImplementationModel.getName();
 		_implementationModel = anImplementationModel;
 	}
-
 }

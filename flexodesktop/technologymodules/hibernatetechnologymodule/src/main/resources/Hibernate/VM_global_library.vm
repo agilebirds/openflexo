@@ -1,2 +1,3 @@
 #macro(testCommon)CommonHibernate#end
 #macro(testHibernate)Hibernate#end
+#macro(getPersistenceModelJavaPackage $value)${javaUtils.getPackageName("${javaImplementation.getRootPackage()}.model.${value}")}#end

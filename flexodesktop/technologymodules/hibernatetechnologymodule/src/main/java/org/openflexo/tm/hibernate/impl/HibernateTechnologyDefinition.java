@@ -25,7 +25,7 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleInitializationException;
 import org.openflexo.sgmodule.SGModule;
-import org.openflexo.tm.hibernate.gui.HibernateGUIFactory;
+import org.openflexo.tm.persistence.gui.PersistenceGUIFactory;
 
 /**
  * @author nid
@@ -40,22 +40,15 @@ public class HibernateTechnologyDefinition extends TechnologyModuleDefinition {
 	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel)
 			throws TechnologyModuleCompatibilityCheckException {
 		HibernateImplementation hibernateImplementation = new HibernateImplementation(implementationModel);
-
-		try {
-			HibernateModel.createNewHibernateModel("Model", hibernateImplementation);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
 		return hibernateImplementation;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void loadModule() throws TechnologyModuleInitializationException {
-		super.loadModule();
-		SGModule.recordTechnologyModuleGUIFactory(HibernateImplementation.class, new HibernateGUIFactory());
-	}
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	protected void loadModule() throws TechnologyModuleInitializationException {
+//		super.loadModule();
+//		SGModule.recordTechnologyModuleGUIFactory(HibernateImplementation.class, new PersistenceGUIFactory());
+//	}
 }

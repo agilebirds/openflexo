@@ -27,7 +27,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoDMResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -89,7 +89,7 @@ public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGe
 					observable.deleteObserver(this);
 					isObserverRegistered = false;
 				}
-			} else if (dataModification instanceof EntityDeleted) {
+			} else if (dataModification instanceof DMObjectDeleted) {
 				logger.info("Handle entity has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);

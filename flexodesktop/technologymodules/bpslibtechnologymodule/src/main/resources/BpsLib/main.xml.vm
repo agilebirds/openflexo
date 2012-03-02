@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Generation timestamp="${projectGenerator.generateTimestamp()}">
 </Generation>	
-#addMavenDependency("eu.bluepimento" "bpslib" "1.0.0-SNAPSHOT")
-#addMavenRepository("bps-artifactory-releases" "Blue Pimento Artifactory" "http://192.168.1.50:8080/artifactory/libs-releases-local")
-#addMavenRepository("bps-artifactory-snapshots" "Blue Pimento Artifactory" "http://192.168.1.50:8080/artifactory/libs-snapshots-local" true)
+#addMavenDependency("eu.bluepimento" "bpslib" "2.0.1-SNAPSHOT")
+#addMavenRepository("bps-artifactory-releases" "Blue Pimento Artifactory" "http://artifactory.bluepimento.eu:8080/artifactory/libs-releases-local")
+#addMavenRepository("bps-artifactory-snapshots" "Blue Pimento Artifactory" "http://artifactory.bluepimento.eu:8080/artifactory/libs-snapshots-local" true)
 
 #addToSpringContext("<import resource=${quote}classpath:bluepimentoLibraryContext.xml$quote />")
 #if(${bpsLibImplementation.getIncludeMails()})

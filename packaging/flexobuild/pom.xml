@@ -19,10 +19,9 @@
 		<profile>
 			<id>installer</id>
 			<activation>
-				<property>
-					<name>createPackage</name>
-					<value>true</value>
-				</property>
+				<os>
+					<family>Linux</family>
+				</os>
 			</activation>
 			<build>
 				<plugins>
@@ -32,21 +31,8 @@
 						<version>1.6</version>
 						<executions>
 							<execution>
-								<id>create-package</id>
+								<id>build</id>
 								<phase>package</phase>
-								<configuration>
-									<target>
-										<ant inheritRefs="true" inheritall="true" antfile="build.xml"
-											target="package" />
-									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>deploy-package</id>
-								<phase>deploy</phase>
 								<configuration>
 									<target>
 										<ant inheritRefs="true" inheritall="true" antfile="build.xml"

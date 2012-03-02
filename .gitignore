@@ -9,3 +9,5 @@ target
 *.iws
 *.log
 .DS_Store
+*~
+*~~

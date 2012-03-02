@@ -123,7 +123,8 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 
 	/**
 	 * This method is very important, because it is the way we must identify or build all resources involved in code generation. After this
-	 * list has been built, we just let ResourceManager do the work.
+	 * list has been built, we just let ResourceManager do the work. The order is important here because it defines the order the module
+	 * main.xml will be loaded. So required modules must be loaded first because it can defines symbolic directories needed in other module.
 	 * 
 	 * @param repository
 	 *            : repository where resources should be retrieved or built
@@ -137,7 +138,8 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 		logger.info("We go for first pass on Project Generator");
 
 		Map<TechnologyModuleDefinition, ModuleGenerator> newGenerators = new LinkedHashMap<TechnologyModuleDefinition, ModuleGenerator>();
-		for (TechnologyModuleImplementation technologyModuleImplementation : repository.getImplementationModel().getTechnologyModules()) {
+		for (TechnologyModuleImplementation technologyModuleImplementation : repository.getImplementationModel()
+				.getTechnologyModulesDependencyOrdered()) {
 			ModuleGenerator moduleGenerator = generators.get(technologyModuleImplementation.getTechnologyModuleDefinition());
 			if (moduleGenerator == null) {
 				moduleGenerator = new ModuleGenerator(this, technologyModuleImplementation);
@@ -165,8 +167,8 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	 * <li>Transversal layer modules</li>
 	 * <li>Main layer modules</li>
 	 * </ul>
-	 * In the same layer, modules which are compatible with or require another module will be before this other module (except loop exists,
-	 * in such case order is unpredictable)
+	 * In the same layer, modules which are compatible with or require another module will be before this other module, in case module A
+	 * require module B and module B is compatible with A, A will be before B. (If loop exists, order is unpredictable)
 	 * 
 	 * @param filesToGenerate
 	 *            the list of file which will be regenerated
@@ -221,37 +223,52 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 
 			// 1. Build the map with empty lists
 			Map<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> requiringModuleMap = new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>();
+			Map<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> compatibleModuleMap = new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>();
 			for (TechnologyModuleDefinition moduleDefinition : mapForLayer.keySet()) {
 				requiringModuleMap.put(moduleDefinition, new HashSet<TechnologyModuleDefinition>());
+				compatibleModuleMap.put(moduleDefinition, new HashSet<TechnologyModuleDefinition>());
 			}
 
 			// 2. Fill the map
 			for (TechnologyModuleDefinition definition : requiringModuleMap.keySet()) {
-				Set<TechnologyModuleDefinition> requiredModules = definition.getRequiredModules();
-				requiredModules.addAll(definition.getCompatibleModules());
-				for (TechnologyModuleDefinition requiredModule : requiredModules) {
+				for (TechnologyModuleDefinition requiredModule : definition.getRequiredModules()) {
 					if (requiringModuleMap.containsKey(requiredModule)) {
 						requiringModuleMap.get(requiredModule).add(definition);
+					}
+				}
+				for (TechnologyModuleDefinition requiredModule : definition.getCompatibleModules()) {
+					if (compatibleModuleMap.containsKey(requiredModule)) {
+						compatibleModuleMap.get(requiredModule).add(definition);
 					}
 				}
 			}
 
 			// 3. Perform iteration
 			boolean hasRemovedKey;
+			boolean takeCompatibleIntoAccount = true;
 			do {
 				hasRemovedKey = false;
 				for (Map.Entry<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> entry : new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>(
 						requiringModuleMap).entrySet()) {
-					if (entry.getValue().isEmpty()) {
+					if (entry.getValue().isEmpty() && (!takeCompatibleIntoAccount || compatibleModuleMap.get(entry.getKey()).isEmpty())) {
 						requiringModuleMap.remove(entry.getKey());
+						compatibleModuleMap.remove(entry.getKey());
 						for (Set<TechnologyModuleDefinition> set : requiringModuleMap.values()) {
+							set.remove(entry.getKey());
+						}
+						for (Set<TechnologyModuleDefinition> set : compatibleModuleMap.values()) {
 							set.remove(entry.getKey());
 						}
 						resources.addAll(mapForLayer.get(entry.getKey()));
 						hasRemovedKey = true;
 					}
 				}
-			} while (!requiringModuleMap.isEmpty() && hasRemovedKey);
+
+				if (!hasRemovedKey && takeCompatibleIntoAccount) {
+					takeCompatibleIntoAccount = false;
+					hasRemovedKey = true;
+				}
+			} while (!requiringModuleMap.isEmpty() && (hasRemovedKey || takeCompatibleIntoAccount));
 
 			for (TechnologyModuleDefinition notRemovedModule : requiringModuleMap.keySet()) {
 				resources.addAll(mapForLayer.get(notRemovedModule));

@@ -36,6 +36,7 @@ import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.SourceRepository;
+import org.openflexo.foundation.sg.implmodel.GenerationService;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinition;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
@@ -88,7 +89,6 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 	protected final VelocityContext defaultContext() {
 		VelocityContext returned = super.defaultContext();
 		returned.put("implementationModel", getRepository().getImplementationModel());
-
 		// Add the technology module and all its required modules in context
 		for (TechnologyModuleDefinition moduleDefinition : moduleGenerator.getTechnologyModule().getTechnologyModuleDefinition()
 				.getAllRequiredModules()) {
@@ -113,7 +113,13 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 				returned.put(ce.name, object);
 			}
 		}
-		return returned;
+
+        //add all services with their alias
+        Map<String,GenerationService> services = getRepository().getImplementationModel().getGenerationServices();
+        for(String serviceAlias:services.keySet()){
+            returned.put(serviceAlias,services.get(serviceAlias));
+        }
+        return returned;
 	}
 
 	/**

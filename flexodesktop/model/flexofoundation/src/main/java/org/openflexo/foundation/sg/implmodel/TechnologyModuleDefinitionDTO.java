@@ -31,14 +31,20 @@ import org.openflexo.xmlcode.XMLSerializable;
 public class TechnologyModuleDefinitionDTO implements XMLSerializable {
 
 	public TechnologyLayer technologyLayer;
-	public String name;
-	public String version;
-	public String description;
+    public String name;
+    public String description;
+    public String version;
 	public Vector<CompatibilityModule> compatibleModuleList;
 	public Vector<CompatibilityModule> incompatibleModuleList;
-	public Vector<CompatibilityModule> requiredModuleList;
+    public Vector<CompatibilityModule> requiredModuleList;
+    public Vector<RequiredService> requiredServiceList;
 
 	public static class CompatibilityModule implements XMLSerializable {
 		public String name;
 	}
+
+    public static class RequiredService implements XMLSerializable {
+        public String serviceInterface;
+        public String serviceAlias;
+    }
 }

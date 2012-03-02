@@ -32,6 +32,10 @@ public class PostgresImplementation extends DatabaseTechnologyModuleImplementati
 
 	public static final String TECHNOLOGY_MODULE_NAME = "Postgres";
 
+    private String driverClassname="org.postgresql.Driver";
+    private String driverArtifactId="postgresql";
+    private String driverVersion="8.4-702.jdbc3";
+    private String driverGroupId="postgresql";
 	// ================ //
 	// = Constructors = //
 	// ================ //
@@ -87,7 +91,40 @@ public class PostgresImplementation extends DatabaseTechnologyModuleImplementati
 		return false;
 	}
 
-	// =================== //
+    // =================== //
 	// = Getter / Setter = //
 	// =================== //
+
+
+    public String getDriverClassname() {
+        return driverClassname;
+    }
+
+    public void setDriverClassname(String driverClassname) {
+        this.driverClassname = driverClassname;
+    }
+
+    public String getDriverArtifactId() {
+        return driverArtifactId;
+    }
+
+    public void setDriverArtifactId(String driverArtifactId) {
+        this.driverArtifactId = driverArtifactId;
+    }
+
+    public String getDriverVersion() {
+        return driverVersion;
+    }
+
+    public void setDriverVersion(String driverVersion) {
+        this.driverVersion = driverVersion;
+    }
+
+    public String getDriverGroupId() {
+        return driverGroupId;
+    }
+
+    public void setDriverGroupId(String driverGroupId) {
+        this.driverGroupId = driverGroupId;
+    }
 }

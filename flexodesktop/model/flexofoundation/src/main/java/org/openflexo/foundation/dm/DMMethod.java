@@ -37,8 +37,7 @@ import org.openflexo.foundation.dm.action.DuplicateDMMethod;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.DMMethodNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
-import org.openflexo.foundation.dm.dm.MethodDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.javaparser.MethodSourceCode;
 import org.openflexo.foundation.dm.javaparser.ParsedJavaMethod;
 import org.openflexo.foundation.dm.javaparser.ParsedJavadoc;
@@ -337,7 +336,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		setReturnType(null, false);
 		getEntity().unregisterMethod(this);
 		setChanged();
-		notifyObservers(new MethodDeleted(this));
+		notifyObservers(new DMObjectDeleted<DMMethod>(this));
 		name = null;
 		entity = null;
 		_returnType = null;
@@ -722,7 +721,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 	public MethodSourceCode getSourceCode() {
 		if (sourceCode == null) {
-			sourceCode = new MethodSourceCode(this/*,"code","hasParseError","parseErrorWarning"*/) {
+			sourceCode = new MethodSourceCode(this/* ,"code","hasParseError","parseErrorWarning" */) {
 				@Override
 				public String makeComputedCode() {
 					return getJavadoc() + StringUtils.LINE_SEPARATOR + getMethodHeader() + " {" + StringUtils.LINE_SEPARATOR
@@ -1495,7 +1494,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 				// Handle class name changed
 				updateTypeClassNameChange((String) ((DMEntityClassNameChanged) dataModification).oldValue(),
 						(String) ((DMEntityClassNameChanged) dataModification).newValue());
-			} else if (dataModification instanceof EntityDeleted && observable == getType().getBaseEntity()) {
+			} else if (dataModification instanceof DMObjectDeleted && observable == getType().getBaseEntity()) {
 				DMEntity parent = getType().getBaseEntity();
 				while (parent != null && parent.isDeleted()) {
 					parent = parent.getParentBaseEntity();
@@ -1597,21 +1596,23 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 	// private Vector<DMType> _unresolvedTypes = new Vector<DMType>();
 
-	/*public boolean isResolvable()
-	{
-		return (_unresolvedTypes.size() == 0);
-	}
+	/*
+	 * public DMType getUnresolvedReturnType() { return _unresolvedReturnType; }
+	 * 
+	 * public void setUnresolvedReturnType(DMType unloadedReturnType) { _unresolvedReturnType = unloadedReturnType; }
+	 * 
+	 * public String getUnresolvedReturnTypeName() { if (_unresolvedReturnType != null) return _unresolvedReturnType.getValue(); return "???"; }
+	 */
 
-	public void addToUnresolvedTypes(DMType type)
-	{
-		logger.info(">>>> addToUnresolvedTypes() "+type);
-		_unresolvedTypes.add(type);
-	}
+	// private Vector<DMType> _unresolvedTypes = new Vector<DMType>();
 
-	public Vector<DMType> getUnresolvedTypes()
-	{
-		return _unresolvedTypes;
-	}*/
+	/*
+	 * public boolean isResolvable() { return (_unresolvedTypes.size() == 0); }
+	 * 
+	 * public void addToUnresolvedTypes(DMType type) { logger.info(">>>> addToUnresolvedTypes() "+type); _unresolvedTypes.add(type); }
+	 * 
+	 * public Vector<DMType> getUnresolvedTypes() { return _unresolvedTypes; }
+	 */
 
 	public boolean isResolvable() {
 		if (getReturnType() == null) {
@@ -1650,7 +1651,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			// Handle class name changed
 			updateTypeClassNameChange((String) ((DMEntityClassNameChanged) dataModification).oldValue(),
 					(String) ((DMEntityClassNameChanged) dataModification).newValue());
-		} else if (dataModification instanceof EntityDeleted && observable == getType().getBaseEntity()) {
+		} else if (dataModification instanceof DMObjectDeleted && observable == getType().getBaseEntity()) {
 			DMEntity parent = getType().getBaseEntity();
 			while (parent != null && parent.isDeleted()) {
 				parent = parent.getParentBaseEntity();

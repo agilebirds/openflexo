@@ -9,7 +9,6 @@
 	</entity>
 
 	<entity name="org.openflexo.sg.generationdef.SymbolicPathEntry" xmlTag="SymbolicPath">
-		<property name="kind" xmlTag="kind" attribute="YES" />
 		<property name="name" xmlTag="name" attribute="YES" />
 		<property name="path" xmlTag="path" attribute="YES" />
 	</entity>

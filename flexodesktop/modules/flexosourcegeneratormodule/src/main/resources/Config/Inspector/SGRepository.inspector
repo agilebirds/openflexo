@@ -6,6 +6,11 @@
 		<property name="displayName" label="name" widget="TEXT_FIELD" constraint="2">
 			<param name="columns" value="10"/>
 		</property>
+		<property name="implementationModel" label="implementation_model" widget="DROPDOWN" constraint="3">
+			<param name="dynamiclist" value="generatedSources.implementationModels"/>
+			<param name="format" value="name"/>
+			<param name="showReset" value="false"/>
+		</property>
 		<property name="directory" label="source_directory" widget="DIRECTORY" constraint="4">
 		</property>
 		<property name="preferredTemplateRepository" label="templates_repository" widget="DROPDOWN" constraint="6">

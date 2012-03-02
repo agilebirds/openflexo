@@ -29,7 +29,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
@@ -118,11 +118,11 @@ public class ProcessDMEntity extends DMEntity {
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof EntityDeleted) {
+		if (dataModification instanceof DMObjectDeleted && dataModification.oldValue() instanceof DMEntity) {
 			if (getBusinessDataProperty() != null
-					&& ((EntityDeleted) dataModification).getEntity().equals(getBusinessDataProperty().getType().getBaseEntity())) {
+					&& dataModification.oldValue().equals(getBusinessDataProperty().getType().getBaseEntity())) {
 				getBusinessDataProperty().delete();
-				((EntityDeleted) dataModification).getEntity().deleteObserver(this);
+				((DMEntity) dataModification.oldValue()).deleteObserver(this);
 			}
 		}
 		super.update(observable, dataModification);

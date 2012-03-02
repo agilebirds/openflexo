@@ -39,9 +39,8 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMType;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.dm.DMPropertyNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
-import org.openflexo.foundation.dm.dm.PropertyDeleted;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.ComponentDefinition.ComponentDefinitionBindingModel;
@@ -956,16 +955,15 @@ public class BindingValue extends AbstractBinding {
 			logger.fine("update in BindingValue " + getStringRepresentation() + " for " + dataModification.getClass().getName()
 					+ " owner is " + getOwner());
 		}
-		if ((dataModification instanceof EntityDeleted) && (getBindingVariable() != null)
-				&& (((EntityDeleted) dataModification).oldValue() == getBindingVariable().getType())) {
+		if (dataModification instanceof DMObjectDeleted && getBindingVariable() != null
+				&& dataModification.oldValue() == getBindingVariable().getType()) {
 			setBindingVariable(null);
 			setChanged();
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Handled entity deleted");
 			}
-		} else if (dataModification instanceof PropertyDeleted) {
-			PropertyDeleted propertyDeleted = (PropertyDeleted) dataModification;
-			if (getBindingPath().contains(propertyDeleted.oldValue())) {
+		} else if (dataModification instanceof DMObjectDeleted) {
+			if (getBindingPath().contains(dataModification.oldValue())) {
 				setBindingVariable(null);
 				// For me it is not consistant to keep a part of the binding if one previously selected part has been deleted, thus I prefer
 				// to delete the entire binding

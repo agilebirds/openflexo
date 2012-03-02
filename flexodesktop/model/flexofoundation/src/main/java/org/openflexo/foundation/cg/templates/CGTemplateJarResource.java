@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.cg.templates;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -27,6 +28,7 @@ import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.JavaResourceUtil;
 
@@ -71,7 +73,9 @@ public class CGTemplateJarResource extends CGTemplate {
 		if (content == null) {
 			InputStream inputStream = null;
 			try {
-				inputStream = getClass().getResourceAsStream(resourcePath);
+				inputStream = "true".equals(System.getProperty("org.openflexo.devmode"))?
+                    new FileInputStream(new FileResource(resourcePath))
+                    :getClass().getResourceAsStream(resourcePath);
 				content = FileUtils.fileContents(inputStream, null);
 			} catch (IOException e) {
 				throw new RuntimeException(e);

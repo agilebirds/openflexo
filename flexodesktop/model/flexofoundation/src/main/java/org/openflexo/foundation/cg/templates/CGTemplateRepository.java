@@ -55,7 +55,12 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 		return _templates.getProject();
 	}
 
-	@Override
+    @Override
+    public void update(boolean force) {
+        update();
+    }
+
+    @Override
 	public void update() {
 		commonTemplates.update();
 		if (availableTargets != null) {

@@ -22,13 +22,16 @@ package org.openflexo.fib.controller;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
+import java.util.List;
 import java.util.logging.Logger;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 
@@ -63,6 +66,13 @@ public class FIBDialog<T> extends JDialog {
 		super(frame, fibComponent.getParameter("title"), modal);
 		view = FIBController.makeView(fibComponent);
 		getContentPane().add(view.getResultingJComponent());
+		List<FIBButton> def = fibComponent.getDefaultButtons();
+		if (def.size() > 0) {
+			JButton button = (JButton) view.geDynamicJComponentForObject(def.get(0));
+			if (button != null) {
+				getRootPane().setDefaultButton(button);
+			}
+		}
 		validate();
 		pack();
 	}

@@ -54,7 +54,7 @@ public abstract class TechnologyModuleDefinition {
 	public static File MODULES_DIR = new FileResource("Generator/TechnologyModules");
 	private static XMLMapping MODULE_MODEL;
 
-	private static Map<String, TechnologyModuleDefinition> technologyModuleDefinitionMap = null;
+    private static Map<String, TechnologyModuleDefinition> technologyModuleDefinitionMap = null;
 
 	private TechnologyLayer technologyLayer;
 	private String name;
@@ -62,7 +62,8 @@ public abstract class TechnologyModuleDefinition {
 	private String description;
 	private LinkedHashSet<String> requiredModuleNames;
 	private LinkedHashSet<String> compatibleModuleNames;
-	private LinkedHashSet<String> incompatibleModuleNames;
+    private LinkedHashSet<String> incompatibleModuleNames;
+    private Map<String,Class<? extends GenerationService>> requiredServices;
 
 	public TechnologyModuleDefinition() throws TechnologyModuleInitializationException {
 		loadModule();
@@ -158,7 +159,8 @@ public abstract class TechnologyModuleDefinition {
 		this.version = dto.version;
 		this.requiredModuleNames = new LinkedHashSet<String>();
 		this.compatibleModuleNames = new LinkedHashSet<String>();
-		this.incompatibleModuleNames = new LinkedHashSet<String>();
+        this.incompatibleModuleNames = new LinkedHashSet<String>();
+        this.requiredServices = new HashMap<String,Class<? extends GenerationService>>();
 
 		for (TechnologyModuleDefinitionDTO.CompatibilityModule module : dto.requiredModuleList) {
 			this.requiredModuleNames.add(module.name);
@@ -173,6 +175,15 @@ public abstract class TechnologyModuleDefinition {
 				this.incompatibleModuleNames.add(module.name);
 			}
 		}
+        for (TechnologyModuleDefinitionDTO.RequiredService requiredService : dto.requiredServiceList) {
+            try {
+                this.requiredServices.put(requiredService.serviceAlias,(Class<? extends GenerationService>) Class.forName(requiredService.serviceInterface));
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("The interface "
+                        +requiredService.serviceInterface+" is required by technology module : "+name+
+                        "But this interface can not be found !",e);
+            }
+        }
 	}
 
 	/**
@@ -268,6 +279,7 @@ public abstract class TechnologyModuleDefinition {
 			}
 		}
 
+        
 		return technologyModuleDefinitionMap;
 	}
 
@@ -357,4 +369,8 @@ public abstract class TechnologyModuleDefinition {
 
 		return result;
 	}
+    
+    public Map<String, Class<? extends GenerationService>> getRequiredServices(){
+        return requiredServices;
+    }
 }

@@ -102,7 +102,7 @@ public class CreateSourceRepository extends AbstractGCAction<CreateSourceReposit
 	}
 
 	public Vector<ImplementationModelDefinition> getImplementationModels() {
-		return getFocusedObject().getProject().getGeneratedSources().getImplementationModels();
+		return getFocusedObject().getProject().getGeneratedSources().getImplementationModelDefinitions();
 	}
 
 	public SourceRepository getNewSourceRepository() {

@@ -33,13 +33,17 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.bindings.BindingValue;
+import org.openflexo.foundation.data.FlexoAttribute;
+import org.openflexo.foundation.data.FlexoAttributeType;
+import org.openflexo.foundation.data.FlexoEntity;
+import org.openflexo.foundation.data.FlexoEnum;
+import org.openflexo.foundation.data.FlexoEnumValue;
 import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
 import org.openflexo.foundation.dm.DMType.KindOfType;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.dm.DMPropertyNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
-import org.openflexo.foundation.dm.dm.PropertyDeleted;
 import org.openflexo.foundation.dm.eo.DMEOAttribute;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.javaparser.FieldSourceCode;
@@ -74,7 +78,7 @@ import org.openflexo.toolbox.ToolBox;
  * 
  */
 public class DMProperty extends DMObject implements Typed, BindingValue.BindingPathElement, DMGenericDeclaration, DMTypeOwner, DMMember,
-		SourceCodeOwner {
+		SourceCodeOwner, FlexoAttribute, FlexoEnumValue {
 
 	static final Logger logger = Logger.getLogger(DMEntity.class.getPackage().getName());
 
@@ -145,7 +149,54 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		_implementationType = implementationType;
 	}
 
-	@Override
+    @Override
+    public boolean isMany() {
+        return (_cardinality!=null && !_cardinality.equals(DMCardinality.SINGLE)) || (_type.isList());
+    }
+
+    @Override
+    public FlexoEntity getFlexoEntity() {
+        return entity;
+    }
+
+    @Override
+    public FlexoEnum getFlexoEnum() {
+        return entity;
+    }
+
+    @Override
+    public FlexoAttributeType getAttributeType() {
+        if(_type==null){
+            return null;
+        }
+        if(_type.isString()){
+            return FlexoAttributeType.TEXT;
+        }
+        if (_type.isInteger() || _type.isIntegerPrimitive() ||
+                _type.isFloat() || _type.isFloatPrimitive() ||
+                _type.isDouble() || _type.isDoublePrimitive() ||
+                _type.isShort() || _type.isShortPrimitive() ||
+                _type.isLong() || _type.isLongPrimitive()) {
+            return FlexoAttributeType.NUMBER;
+        }
+        if(_type.isByte() || _type.isBytePrimitive()){
+            return FlexoAttributeType.IMAGE;
+        }
+
+        if(_type.isBoolean() || _type.isBooleanPrimitive()){
+            return FlexoAttributeType.BOOLEAN;
+        }
+
+        if(_type.isDate()){
+            return FlexoAttributeType.DATE;
+        }
+        if(_type.getBaseEntity().getIsEnumeration()){
+            return FlexoAttributeType.ENUM;
+        }
+        return null;
+    }
+
+    @Override
 	public void delete() {
 		// logger.info(">>> delete() called for property "+hashCode()+" (is "+_implementationType+")");
 
@@ -157,7 +208,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			_type.removeFromTypedWithThisType(this);
 		}
 		setChanged();
-		notifyObservers(new PropertyDeleted(this));
+		notifyObservers(new DMObjectDeleted<DMProperty>(this));
 		name = null;
 		entity = null;
 		_type = null;
@@ -473,18 +524,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 	}
 
-	/*public String getTypeAsString()
-	{
-		if (getType()!=null)
-			return getDMModel().getDmTypeConverter().convertToString(getType());
-		else
-			return null;
-	}
-
-	public void setTypeAsString(String type)
-	{
-		this.typeAsString = type;
-	}*/
+	/*
+	 * public String getTypeAsString() { if (getType()!=null) return getDMModel().getDmTypeConverter().convertToString(getType()); else return null; }
+	 * 
+	 * public void setTypeAsString(String type) { this.typeAsString = type; }
+	 */
 
 	/**
 	 * @deprecated Use getType() instead, kept for backward compatibility in XML mappings
@@ -882,18 +926,11 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		}
 	}
 
-	/*public String getKeyTypeAsString()
-	{
-		if (getKeyType()!=null)
-			return getDMModel().getDmTypeConverter().convertToString(getKeyType());
-		else
-			return null;
-	}
-
-	public void setKeyTypeAsString(String keyType)
-	{
-		keyTypeAsString = keyType;
-	}*/
+	/*
+	 * public String getKeyTypeAsString() { if (getKeyType()!=null) return getDMModel().getDmTypeConverter().convertToString(getKeyType()); else return null; }
+	 * 
+	 * public void setKeyTypeAsString(String keyType) { keyTypeAsString = keyType; }
+	 */
 
 	/**
 	 * @deprecated Use getKeyType() instead, kept for backward compatibility in XML mappings
@@ -1056,7 +1093,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			// Handle class name changed
 			updateTypeClassNameChange((String) ((DMEntityClassNameChanged) dataModification).oldValue(),
 					(String) ((DMEntityClassNameChanged) dataModification).newValue());
-		} else if (dataModification instanceof EntityDeleted && observable == getType().getBaseEntity()) {
+		} else if (dataModification instanceof DMObjectDeleted && observable == getType().getBaseEntity()) {
 			setType(null);
 		} else {
 			super.update(observable, dataModification);
@@ -1065,25 +1102,14 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	private void updateTypeClassNameChange(String oldClassName, String newClassName) {
 		// TODO reimplement this later
-		/*	if(_getterHeader!=null){
-			_getterHeader = ToolBox.replaceStringByStringInString(oldClassName,newClassName,_getterHeader);
-		}
-		if(_setterHeader!=null){
-			_setterHeader = ToolBox.replaceStringByStringInString(oldClassName,newClassName,_setterHeader);
-		}
-		if(_additionAccessorCode!=null){
-			_additionAccessorCode = ToolBox.replaceStringByStringInString(oldClassName,newClassName,_additionAccessorCode);
-		}
-		if(_removingAccessorHeader!=null){
-			_removingAccessorHeader = ToolBox.replaceStringByStringInString(oldClassName,newClassName,_removingAccessorHeader);
-		}
-		if(_additionAccessorDefaultCode!=null){
-			_additionAccessorDefaultCode = ToolBox.replaceStringByStringInString(oldClassName,newClassName,_additionAccessorDefaultCode);
-		}
-		if(_removingAccessorDefaultCode!=null){
-			_removingAccessorDefaultCode = ToolBox.replaceStringByStringInString(oldClassName,newClassName,_removingAccessorDefaultCode);
-		}
-		setChanged(true);*/
+		/*
+		 * if(_getterHeader!=null){ _getterHeader = ToolBox.replaceStringByStringInString(oldClassName,newClassName,_getterHeader); } if(_setterHeader!=null){ _setterHeader =
+		 * ToolBox.replaceStringByStringInString(oldClassName,newClassName,_setterHeader); } if(_additionAccessorCode!=null){ _additionAccessorCode =
+		 * ToolBox.replaceStringByStringInString(oldClassName,newClassName,_additionAccessorCode); } if(_removingAccessorHeader!=null){ _removingAccessorHeader =
+		 * ToolBox.replaceStringByStringInString(oldClassName,newClassName,_removingAccessorHeader); } if(_additionAccessorDefaultCode!=null){ _additionAccessorDefaultCode =
+		 * ToolBox.replaceStringByStringInString(oldClassName,newClassName,_additionAccessorDefaultCode); } if(_removingAccessorDefaultCode!=null){ _removingAccessorDefaultCode =
+		 * ToolBox.replaceStringByStringInString(oldClassName,newClassName,_removingAccessorDefaultCode); } setChanged(true);
+		 */
 	}
 
 	protected String getFieldJavadoc() {
@@ -1170,20 +1196,10 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		} else if (getDescription() != null && getDescription().trim().length() > 0) {
 			javadoc.append("  * " + ToolBox.getJavaDocString(getDescription(), "  "));
 			/*
-			BufferedReader rdr = new BufferedReader(new StringReader(getDescription()));
-			boolean hasMoreLines = true;
-			while (hasMoreLines) {
-				String currentLine = null;
-				try {
-					currentLine = rdr.readLine();
-				}
-				catch (IOException e) {}
-				if (currentLine != null) {
-					currentLine = ToolBox.getJavaDocString(currentLine);
-					javadoc.append("  * "+currentLine+StringUtils.LINE_SEPARATOR);
-				}
-				hasMoreLines = (currentLine != null);
-			}*/
+			 * BufferedReader rdr = new BufferedReader(new StringReader(getDescription())); boolean hasMoreLines = true; while (hasMoreLines) { String currentLine = null; try { currentLine =
+			 * rdr.readLine(); } catch (IOException e) {} if (currentLine != null) { currentLine = ToolBox.getJavaDocString(currentLine); javadoc.append("  * "+currentLine+StringUtils.LINE_SEPARATOR);
+			 * } hasMoreLines = (currentLine != null); }
+			 */
 		}
 		javadoc.append("  *" + StringUtils.LINE_SEPARATOR);
 
@@ -1262,7 +1278,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 				if (jd != null) {
 
-					jd.setComment(/*ToolBox.getJavaDocString(getDescription())*/getDescription());
+					jd.setComment(/* ToolBox.getJavaDocString(getDescription()) */getDescription());
 
 					Map<String, String> specificDescriptions = getSpecificDescriptions();
 					if (specificDescriptions != null && specificDescriptions.size() > 0) {
@@ -2172,7 +2188,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	/**
 	 * @deprecated
-	 * @param someCode
+	 * @param someCoreCode
 	 */
 	@Deprecated
 	public void setGetterCoreCode(String someCoreCode) {
@@ -2249,7 +2265,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	/**
 	 * @deprecated
-	 * @param someCode
+	 * @param someCoreCode
 	 */
 	@Deprecated
 	public void setSetterCoreCode(String someCoreCode) {
@@ -2328,7 +2344,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	/**
 	 * @deprecated
-	 * @param someCode
+	 * @param someCoreCode
 	 */
 	@Deprecated
 	public void setAdditionAccessorCoreCode(String someCoreCode) {
@@ -2411,7 +2427,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 	/**
 	 * @deprecated
-	 * @param someCode
+	 * @param someCoreCode
 	 */
 	@Deprecated
 	public void setRemovalAccessorCoreCode(String someCoreCode) {
@@ -2477,7 +2493,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 			private DMType type;
 
 			/**
-			 * @param aMessage
+			 * @param type
 			 */
 			public SetType(DMType type) {
 				super("set_type_to_($type)");
@@ -2500,10 +2516,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 
 		}
 
-		/**
-		 * @param objectType
-		 * @param ruleName
-		 */
+
 		public PropertyMustDefineType() {
 			super(DMProperty.class, "property_must_define_a_type");
 		}

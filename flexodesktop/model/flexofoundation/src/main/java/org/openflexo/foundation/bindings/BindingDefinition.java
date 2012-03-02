@@ -33,7 +33,7 @@ import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.Typed;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.eo.DMEOAttribute;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -391,7 +391,7 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof DMEntityClassNameChanged && observable == getType().getBaseEntity()) {
 			// do nothing : no cached code
-		} else if (dataModification instanceof EntityDeleted && observable == getType().getBaseEntity()) {
+		} else if (dataModification instanceof DMObjectDeleted && observable == getType().getBaseEntity()) {
 			// do nothing : no cached code
 		}
 	}

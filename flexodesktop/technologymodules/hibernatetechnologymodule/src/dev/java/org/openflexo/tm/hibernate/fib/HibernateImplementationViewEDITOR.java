@@ -27,7 +27,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
-import org.openflexo.tm.hibernate.gui.view.HibernateImplementationView;
+import org.openflexo.tm.persistence.gui.view.PersistenceImplementationView;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.toolbox.FileResource;
 
@@ -56,7 +56,7 @@ public class HibernateImplementationViewEDITOR extends ProjectDialogEDITOR {
 
 			@Override
 			public File getFIBFile() {
-				return new FileResource("src/main/resources" + HibernateImplementationView.HIBERNATE_IMPLEMENTATION_VIEW_FIB_RESOURCE_PATH);
+				return new FileResource("src/main/resources" + PersistenceImplementationView.HIBERNATE_IMPLEMENTATION_VIEW_FIB_RESOURCE_PATH);
 			}
 		};
 		editor.launch();

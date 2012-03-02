@@ -239,7 +239,7 @@ public class StringUtils {
 		return returned;
 	}
 
-	public static final String LINE_SEPARATOR = "\n";/*System.getProperty("line.separator");*/
+	public static final String LINE_SEPARATOR = "\n";/* System.getProperty("line.separator"); */
 
 	public static String extractStringFromLine(String aString, int lineNb) {
 		StringBuilder sb = new StringBuilder();
@@ -378,7 +378,7 @@ public class StringUtils {
 
 	/**
 	 * Returns the specified string into "camel case" : each word are appended without white-spaces, but with a capital letter.<br/>
-	 * Note that, except for the first word, if the whole word is uppurcase, it will be converted into lowercase.
+	 * Note that, except for the first word, if the whole word is upper case, it will be converted into lower case.
 	 * 
 	 * Example : "Todo list" => "TodoList"; "DAO controller" => "daoController".
 	 * 
@@ -392,7 +392,7 @@ public class StringUtils {
 		if (string == null) {
 			return null;
 		}
-		String value = string.trim().replace('_', ' ');
+		String value = string.trim();
 		if (value.trim().length() == 0) {
 			return value;
 		}
@@ -401,8 +401,8 @@ public class StringUtils {
 		}
 		StringBuilder result = new StringBuilder(value.length());
 
-		String[] words = value.split(" ");
-
+		String[] words = value.split("[^a-zA-Z0-9]");
+		int index = 0;
 		// First word
 		if (words[0].equals(words[0].toUpperCase())) {
 			if (firstUpper) {
@@ -419,14 +419,21 @@ public class StringUtils {
 				result.append(firstsLower(words[0]));
 			}
 		}
+		index += words[0].length();
 
 		// Other words
 		for (int i = 1; i < words.length; i++) {
+			if (value.charAt(index) != ' ' && value.charAt(index) != '\t') {
+				result.append(value.charAt(index));
+			}
+
 			if (words[i].equals(words[i].toUpperCase())) {
 				result.append(words[i]);
 			} else {
 				result.append(firstUpper(words[i]));
 			}
+
+			index += words[i].length() + 1;
 		}
 
 		return result.toString();

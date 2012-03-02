@@ -233,7 +233,7 @@ public class JIRAIssueReportDialog {
 		sendScreenshots = false;
 		sendLogs = e != null;
 		if (e != null) {
-			issue.setStacktrace(ToolBox.getStackTraceAsString(e));
+			issue.setStacktrace(e.getMessage() + "\n" + ToolBox.getStackTraceAsString(e));
 		}
 	}
 

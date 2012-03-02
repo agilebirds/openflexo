@@ -99,7 +99,7 @@ public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTempla
 				throw new IOFlexoException(e);
 			}
 			_repository.refresh();
-			_newTemplateFile = set.getTemplate(relativePath);
+			_newTemplateFile = (CGTemplateFile) set.getTemplate(relativePath);
 		}
 	}
 

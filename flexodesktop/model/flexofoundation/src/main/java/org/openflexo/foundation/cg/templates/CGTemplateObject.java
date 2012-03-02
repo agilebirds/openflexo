@@ -37,10 +37,11 @@ public abstract class CGTemplateObject extends TemporaryFlexoModelObject impleme
 
 	public abstract CGTemplates getTemplates();
 
-	public abstract void update();
+    public abstract void update();
+    public abstract void update(boolean force);
 
 	public void refresh() {
-		update();
+		update(true);
 		setChanged();
 		notifyObservers(new CGStructureRefreshed());
 	}

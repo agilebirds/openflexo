@@ -27,7 +27,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoDMResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -113,7 +113,7 @@ public class EOEntityJavaFileResource extends JavaFileResource<GenericRecordGene
 				generator.getRepository().refresh();
 				observable.deleteObserver(this);
 				isObserverRegistered = false;
-			} else if (dataModification instanceof EntityDeleted) {
+			} else if (dataModification instanceof DMObjectDeleted) {
 				logger.info("Handle entity has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);

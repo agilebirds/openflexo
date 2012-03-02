@@ -9,7 +9,7 @@
 	<!-- * I.E. <requiredModule name="Java" />                                                                            -->
 	<requiredModule name="Maven" />
 	<requiredModule name="Spring" />
-	<requiredModule name="Hibernate" />
+	<requiredModule name="Persistence" />
 	
 	<!-- * To be compatible with another module means: I'm aware of this module existence, it needs some special behavior -->
     <!-- * when my own module is used and I will handle it correctly. It can also be used to override the default         -->

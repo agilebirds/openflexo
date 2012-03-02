@@ -29,7 +29,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoDMResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -119,7 +119,7 @@ public class DMEOEntityLatexFileResource extends LatexFileResource<DGLatexGenera
 				generator.getRepository().refresh();
 				observable.deleteObserver(this);
 				isObserverRegistered = false;
-			} else if (dataModification instanceof EntityDeleted && ((EntityDeleted) dataModification).getEntity() == getEntity()) {
+			} else if (dataModification instanceof DMObjectDeleted && dataModification.oldValue() == getEntity()) {
 				logger.info("Handle entity has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);

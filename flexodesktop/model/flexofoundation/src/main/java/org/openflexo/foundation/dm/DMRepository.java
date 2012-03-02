@@ -23,7 +23,9 @@ import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -35,416 +37,438 @@ import javax.swing.tree.TreeNode;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.data.FlexoEntity;
+import org.openflexo.foundation.data.FlexoEnum;
 import org.openflexo.foundation.dm.action.CreateDMPackage;
 import org.openflexo.foundation.dm.action.UpdateDMRepository;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.dm.EntityRegistered;
 import org.openflexo.foundation.dm.dm.EntityUnregistered;
 import org.openflexo.foundation.dm.dm.PackageCreated;
-import org.openflexo.foundation.dm.dm.PackageDeleted;
 
 /**
  * Represents logical group of DMEntity sharing the same implementation
- * 
+ *
  * @author sguerin
- * 
+ *
  */
 public abstract class DMRepository extends DMObject {
 
-	private static final Logger logger = Logger.getLogger(DMRepository.class.getPackage().getName());
+    private static final Logger logger = Logger.getLogger(DMRepository.class.getPackage().getName());
 
-	private String name;
+    private String name;
 
-	// List of all entities declared in this repository (hashtable of DMEntity)
-	protected Map<String, DMEntity> entities;
+    // List of all entities declared in this repository (hashtable of DMEntity)
+    protected Map<String, DMEntity> entities;
 
-	// List of all packages declared in this repository (hashtable of DMPackage)
-	protected Hashtable<String, DMPackage> packages;
+    // List of all packages declared in this repository (hashtable of DMPackage)
+    protected Hashtable<String, DMPackage> packages;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
+    // ==========================================================================
+    // ============================= Constructor
+    // ================================
+    // ==========================================================================
 
-	/**
-	 * Default constructor
-	 */
-	public DMRepository(DMModel dmModel) {
-		super(dmModel);
-		entities = new TreeMap<String, DMEntity>();
-		packages = new Hashtable<String, DMPackage>();
-	}
+    /**
+     * Default constructor
+     */
+    public DMRepository(DMModel dmModel) {
+        super(dmModel);
+        entities = new TreeMap<String, DMEntity>();
+        packages = new Hashtable<String, DMPackage>();
+    }
 
-	@Override
-	public String getFullyQualifiedName() {
-		return getDMModel().getFullyQualifiedName() + "." + name;
-	}
+    public Set<FlexoEntity> getFlexoEntities(){
+        HashSet<FlexoEntity> flexoEntities = new HashSet<FlexoEntity>();
+        for(DMEntity entity:entities.values()){
+            if(!entity.getIsEnumeration()){
+                flexoEntities.add(entity);
+            }
+        }
+        return flexoEntities;
+    }
 
-	public abstract boolean isReadOnly();
+    public Set<FlexoEnum> getFlexoEnums(){
+        HashSet<FlexoEnum> flexoEntities = new HashSet<FlexoEnum>();
+        for(DMEntity entity:entities.values()){
+            if(!entity.getIsEnumeration()){
+                flexoEntities.add(entity);
+            }
+        }
+        return flexoEntities;
+    }
 
-	public abstract int getOrder();
+    @Override
+    public String getFullyQualifiedName() {
+        return getDMModel().getFullyQualifiedName() + "." + name;
+    }
 
-	/**
-	 * Return String uniquely identifying inspector template which must be applied when trying to inspect this object
-	 * 
-	 * @return a String value
-	 */
-	@Override
-	public String getInspectorName() {
-		if (isReadOnly()) {
-			return Inspectors.DM.DM_RO_REPOSITORY_INSPECTOR;
-		} else {
-			return Inspectors.DM.DM_REPOSITORY_INSPECTOR;
-		}
-	}
+    public abstract boolean isReadOnly();
 
-	/**
-	 * Return a Vector of embedded DMObjects at this level.
-	 * 
-	 * @return a Vector of embedded DMPackage instances
-	 */
-	@Override
-	public Vector<DMObject> getEmbeddedDMObjects() {
-		Vector<DMObject> returned = new Vector<DMObject>();
-		returned.addAll(getOrderedChildren());
-		return returned;
-	}
+    public abstract int getOrder();
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    /**
+     * Return String uniquely identifying inspector template which must be applied when trying to inspect this object
+     *
+     * @return a String value
+     */
+    @Override
+    public String getInspectorName() {
+        if (isReadOnly()) {
+            return Inspectors.DM.DM_RO_REPOSITORY_INSPECTOR;
+        } else {
+            return Inspectors.DM.DM_REPOSITORY_INSPECTOR;
+        }
+    }
 
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		setChanged();
-		notifyObservers(new NameChanged(oldName, newName));
-		if (getRepositoryFolder() != null) {
-			getRepositoryFolder().notifyReordering(this);
-		}
-	}
+    /**
+     * Return a Vector of embedded DMObjects at this level.
+     *
+     * @return a Vector of embedded DMPackage instances
+     */
+    @Override
+    public Vector<DMObject> getEmbeddedDMObjects() {
+        Vector<DMObject> returned = new Vector<DMObject>();
+        returned.addAll(getOrderedChildren());
+        return returned;
+    }
 
-	/**
-	 * Overrides isNameValid
-	 * 
-	 * @see org.openflexo.foundation.dm.DMObject#isNameValid()
-	 */
-	@Override
-	public boolean isNameValid() {
-		return true;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMPackage.actionType);
-		returned.add(UpdateDMRepository.actionType);
-		return returned;
-	}
+    @Override
+    public void setName(String newName) {
+        String oldName = name;
+        name = newName;
+        setChanged();
+        notifyObservers(new NameChanged(oldName, newName));
+        if (getRepositoryFolder() != null) {
+            getRepositoryFolder().notifyReordering(this);
+        }
+    }
 
-	@Override
-	public boolean isDeletable() {
-		return !isReadOnly();
-	}
+    /**
+     * Overrides isNameValid
+     *
+     * @see org.openflexo.foundation.dm.DMObject#isNameValid()
+     */
+    @Override
+    public boolean isNameValid() {
+        return true;
+    }
 
-	public boolean isUpdatable() {
-		return false;
-	}
+    @Override
+    protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+        Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+        returned.add(CreateDMPackage.actionType);
+        returned.add(UpdateDMRepository.actionType);
+        return returned;
+    }
 
-	public abstract DMRepositoryFolder getRepositoryFolder();
+    @Override
+    public boolean isDeletable() {
+        return !isReadOnly();
+    }
 
-	public Hashtable<String, DMPackage> getPackages() {
-		return packages;
-	}
+    public boolean isUpdatable() {
+        return false;
+    }
 
-	public void setPackages(Hashtable<String, DMPackage> packages) {
-		this.packages = packages;
-		setChanged();
-	}
+    public abstract DMRepositoryFolder getRepositoryFolder();
 
-	public DMPackage packageForEntity(DMEntity entity) {
-		String packageName = entity.getEntityPackageName();
-		if (packageName == null) {
-			return getDefaultPackage();
-		} else {
-			return packageWithName(packageName);
-		}
-	}
+    public Hashtable<String, DMPackage> getPackages() {
+        return packages;
+    }
 
-	public DMPackage getDefaultPackage() {
-		/*
-		 * DMPackage defaultPackage = (DMPackage)packages.get("default"); if
-		 * (defaultPackage == null) { defaultPackage = new
-		 * DMPackage(getDMModel(),this,"default_package");
-		 * packages.put("default",defaultPackage); } return defaultPackage;
-		 */
-		return packageWithName(DMPackage.DEFAULT_PACKAGE_NAME);
-	}
+    public void setPackages(Hashtable<String, DMPackage> packages) {
+        this.packages = packages;
+        setChanged();
+    }
 
-	public DMPackage getPackageWithName(String name) {
-		return packageWithName(name);
-	}
+    public DMPackage packageForEntity(DMEntity entity) {
+        String packageName = entity.getEntityPackageName();
+        if (packageName == null) {
+            return getDefaultPackage();
+        } else {
+            return packageWithName(packageName);
+        }
+    }
 
-	public DMPackage packageWithName(String aPackageName) {
-		if (packages.get(aPackageName) == null) {
-			createPackage(aPackageName, false);
-		}
-		return packages.get(aPackageName);
-	}
+    public DMPackage getDefaultPackage() {
+        /*
+           * DMPackage defaultPackage = (DMPackage)packages.get("default"); if
+           * (defaultPackage == null) { defaultPackage = new
+           * DMPackage(getDMModel(),this,"default_package");
+           * packages.put("default",defaultPackage); } return defaultPackage;
+           */
+        return packageWithName(DMPackage.DEFAULT_PACKAGE_NAME);
+    }
 
-	public DMPackage createPackage(String aPackageName) {
-		return createPackage(aPackageName, true);
-	}
+    public DMPackage getPackageWithName(String name) {
+        return packageWithName(name);
+    }
 
-	public DMPackage createPackage(String aPackageName, boolean notify) {
-		// logger.info("Create package "+aPackageName+" for "+this);
-		DMPackage returned = new DMPackage(getDMModel(), this, aPackageName);
-		packages.put(aPackageName, returned);
-		needsReordering = true;
-		if (notify) {
-			setChanged();
-			notifyObservers(new PackageCreated(returned));
-		}
-		return returned;
-	}
+    public DMPackage packageWithName(String aPackageName) {
+        if (packages.get(aPackageName) == null) {
+            createPackage(aPackageName, false);
+        }
+        return packages.get(aPackageName);
+    }
 
-	public void deletePackage(DMPackage aPackage) {
-		packages.remove(aPackage.getName());
-		needsReordering = true;
-		setChanged();
-		notifyObservers(new PackageDeleted(aPackage));
-	}
+    public DMPackage createPackage(String aPackageName) {
+        return createPackage(aPackageName, true);
+    }
 
-	public Map<String, DMEntity> getEntities() {
-		return entities;
-	}
+    public DMPackage createPackage(String aPackageName, boolean notify) {
+        // logger.info("Create package "+aPackageName+" for "+this);
+        DMPackage returned = new DMPackage(getDMModel(), this, aPackageName);
+        packages.put(aPackageName, returned);
+        needsReordering = true;
+        if (notify) {
+            setChanged();
+            notifyObservers(new PackageCreated(returned));
+        }
+        return returned;
+    }
 
-	public void setEntities(Map<String, DMEntity> someEntities) {
-		// Transtype to DMEntityHashtable
-		entities = new TreeMap<String, DMEntity>(someEntities);
-		needsReordering = true;
-		setChanged();
-	}
+    public void deletePackage(DMPackage aPackage) {
+        packages.remove(aPackage.getName());
+        needsReordering = true;
+        setChanged();
+        notifyObservers(new DMObjectDeleted<DMPackage>(aPackage));
+    }
 
-	public void setEntityForKey(DMEntity entity, String entityName) {
-		entity.setRepository(this);
-		entities.put(entityName, entity);
-		getDMModel().registerEntity(entity);
-		packageForEntity(entity).registerEntity(entity);
-		needsReordering = true;
-		setChanged();
-	}
+    public Map<String, DMEntity> getEntities() {
+        return entities;
+    }
 
-	public void removeEntityWithKey(String entityName) {
-		removeEntityWithKey(entityName, true);
-	}
+    public void setEntities(Map<String, DMEntity> someEntities) {
+        // Transtype to DMEntityHashtable
+        entities = new TreeMap<String, DMEntity>(someEntities);
+        needsReordering = true;
+        setChanged();
+    }
 
-	public void removeEntityWithKey(String entityName, boolean notify) {
-		entities.remove(entityName);
-		getDMModel().unregisterEntity(entityName);
-		needsReordering = true;
-		if (notify) {
-			setChanged();
-		}
-	}
+    public void setEntityForKey(DMEntity entity, String entityName) {
+        entity.setRepository(this);
+        entities.put(entityName, entity);
+        getDMModel().registerEntity(entity);
+        packageForEntity(entity).registerEntity(entity);
+        needsReordering = true;
+        setChanged();
+    }
 
-	public void registerEntity(DMEntity entity) {
-		if (entity.getEntityClassName() == null || entity.getEntityClassName().trim().equals("")) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Registering entity " + entity.getFullyQualifiedName()
-						+ ": className seems to be not correctely set. Doing it anyway.");
-			}
-		}
-		entity.setRepository(this);
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Register Entity " + entity.getFullyQualifiedName());
-		}
-		if (entities.get(entity.getFullyQualifiedName()) == null) {
-			setEntityForKey(entity, entity.getFullyQualifiedName());
-			setChanged();
-			notifyObservers(new EntityRegistered(entity));
-		} else if (entity != entities.get(entity.getFullyQualifiedName())) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Trying to redefine entity " + entity.getFullyQualifiedName() + ": operation not allowed !");
-			}
-		}
-	}
+    public void removeEntityWithKey(String entityName) {
+        removeEntityWithKey(entityName, true);
+    }
 
-	public final void unregisterEntity(DMEntity entity) {// GPO: This method is final. If you want to override it, override the 2-args
-															// method
-		unregisterEntity(entity, true);
-	}
+    public void removeEntityWithKey(String entityName, boolean notify) {
+        entities.remove(entityName);
+        getDMModel().unregisterEntity(entityName);
+        needsReordering = true;
+        if (notify) {
+            setChanged();
+        }
+    }
 
-	/**
-	 * Unregisters the given <code>entity</code> from this repository and from its package. A notification will be thrown if
-	 * <code>notify</code> is true. The purpose of this flag is to avoid notifications for temporary states: if you plan on registering this
-	 * entity back in this same repository, then the unregister call can be invoked with false (the registration will notify the observers).
-	 * 
-	 * @param entity
-	 * @param notify
-	 */
-	public void unregisterEntity(DMEntity entity, boolean notify) {
-		entity.setRepository(null, notify);
-		removeEntityWithKey(entity.getFullyQualifiedName(), notify);
-		packageForEntity(entity).unregisterEntity(entity, notify);
-		if (notify) {
-			setChanged();
-			notifyObservers(new EntityUnregistered(entity));
-		}
-	}
+    public void registerEntity(DMEntity entity) {
+        if (entity.getEntityClassName() == null || entity.getEntityClassName().trim().equals("")) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("Registering entity " + entity.getFullyQualifiedName()
+                        + ": className seems to be not correctely set. Doing it anyway.");
+            }
+        }
+        entity.setRepository(this);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Register Entity " + entity.getFullyQualifiedName());
+        }
+        if (entities.get(entity.getFullyQualifiedName()) == null) {
+            setEntityForKey(entity, entity.getFullyQualifiedName());
+            setChanged();
+            notifyObservers(new EntityRegistered(entity));
+        } else if (entity != entities.get(entity.getFullyQualifiedName())) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("Trying to redefine entity " + entity.getFullyQualifiedName() + ": operation not allowed !");
+            }
+        }
+    }
 
-	public DMEntity getDMEntity(String packageName, String className) {
-		return getEntities().get(packageName + "." + className);
-	}
+    public final void unregisterEntity(DMEntity entity) {// GPO: This method is final. If you want to override it, override the 2-args
+        // method
+        unregisterEntity(entity, true);
+    }
 
-	public DMEntity getDMEntity(DMPackage aPackage, String className) {
-		return getDMEntity(aPackage.getName() + "." + className);
-	}
+    /**
+     * Unregisters the given <code>entity</code> from this repository and from its package. A notification will be thrown if
+     * <code>notify</code> is true. The purpose of this flag is to avoid notifications for temporary states: if you plan on registering this
+     * entity back in this same repository, then the unregister call can be invoked with false (the registration will notify the observers).
+     *
+     * @param entity
+     * @param notify
+     */
+    public void unregisterEntity(DMEntity entity, boolean notify) {
+        entity.setRepository(null, notify);
+        removeEntityWithKey(entity.getFullyQualifiedName(), notify);
+        packageForEntity(entity).unregisterEntity(entity, notify);
+        if (notify) {
+            setChanged();
+            notifyObservers(new EntityUnregistered(entity));
+        }
+    }
 
-	public DMEntity getDMEntity(String fullQualifiedName) {
-		return getEntities().get(fullQualifiedName);
-	}
+    public DMEntity getDMEntity(String packageName, String className) {
+        return getEntities().get(packageName + "." + className);
+    }
 
-	public String getStringRepresentation() {
-		String returned = "DMRepository\n";
-		for (DMEntity entity : entities.values()) {
-			returned += entity.getStringRepresentation();
-		}
-		return returned;
-	}
+    public DMEntity getDMEntity(DMPackage aPackage, String className) {
+        return getDMEntity(aPackage.getName() + "." + className);
+    }
 
-	/**
-	 * Delete this repository Take care because all observers are delete here !!!
-	 * 
-	 * Overrides @see org.openflexo.foundation.DeletableObject#delete()
-	 * 
-	 * @see org.openflexo.foundation.DeletableObject#delete()
-	 */
-	@Override
-	public void delete() {
-		Vector<DMObject> entitiesToDelete = new Vector<DMObject>();
-		entitiesToDelete.addAll(getEntities().values());
-		for (Enumeration en = entitiesToDelete.elements(); en.hasMoreElements();) {
-			DMEntity next = (DMEntity) en.nextElement();
-			next.delete();
-		}
-		Vector<DMObject> packagesToDelete = new Vector<DMObject>();
-		packagesToDelete.addAll(getPackages().values());
-		for (Enumeration en = packagesToDelete.elements(); en.hasMoreElements();) {
-			DMPackage next = (DMPackage) en.nextElement();
-			next.delete();
-		}
-		getDMModel().unregisterRepository(this);
-		needsReordering = false;
-		name = null;
-		entities.clear();
-		entities = null;
-		packages.clear();
-		packages = null;
-		super.delete();
-		deleteObservers();
-	}
+    public DMEntity getDMEntity(String fullQualifiedName) {
+        return getEntities().get(fullQualifiedName);
+    }
 
-	public boolean hasDiagrams() {
-		for (ERDiagram diagram : getDMModel().getDiagrams()) {
-			if (diagram.getRepository() == this) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public String getStringRepresentation() {
+        String returned = "DMRepository\n";
+        for (DMEntity entity : entities.values()) {
+            returned += entity.getStringRepresentation();
+        }
+        return returned;
+    }
 
-	// ==========================================================================
-	// ============================= Sorting stuff
-	// ==============================
-	// ==========================================================================
+    /**
+     * Delete this repository Take care because all observers are delete here !!!
+     *
+     * Overrides @see org.openflexo.foundation.DeletableObject#delete()
+     *
+     * @see org.openflexo.foundation.DeletableObject#delete()
+     */
+    @Override
+    public void delete() {
+        Vector<DMObject> entitiesToDelete = new Vector<DMObject>();
+        entitiesToDelete.addAll(getEntities().values());
+        for (Enumeration en = entitiesToDelete.elements(); en.hasMoreElements();) {
+            DMEntity next = (DMEntity) en.nextElement();
+            next.delete();
+        }
+        Vector<DMObject> packagesToDelete = new Vector<DMObject>();
+        packagesToDelete.addAll(getPackages().values());
+        for (Enumeration en = packagesToDelete.elements(); en.hasMoreElements();) {
+            DMPackage next = (DMPackage) en.nextElement();
+            next.delete();
+        }
+        getDMModel().unregisterRepository(this);
+        needsReordering = false;
+        name = null;
+        entities.clear();
+        entities = null;
+        packages.clear();
+        packages = null;
+        super.delete();
+        deleteObservers();
+    }
 
-	private Vector<DMPackage> orderedPackages;
+    public boolean hasDiagrams() {
+        for (ERDiagram diagram : getDMModel().getDiagrams()) {
+            if (diagram.getRepository() == this) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private boolean needsReordering = true;
+    // ==========================================================================
+    // ============================= Sorting stuff
+    // ==============================
+    // ==========================================================================
 
-	@Override
-	public synchronized Vector<? extends DMObject> getOrderedChildren() {
-		if (needsReordering) {
-			reorderPackages();
-		}
-		return orderedPackages;
-	}
+    private Vector<DMPackage> orderedPackages;
 
-	private synchronized void reorderPackages() {
-		if (needsReordering) {
-			if (orderedPackages != null) {
-				orderedPackages.removeAllElements();
-			} else {
-				orderedPackages = new Vector<DMPackage>();
-			}
-			orderedPackages.addAll(packages.values());
-			Collections.sort(orderedPackages, packageComparator);
-			needsReordering = false;
-		}
-	}
+    private boolean needsReordering = true;
 
-	protected static final PackageComparator packageComparator = new PackageComparator();
+    @Override
+    public synchronized Vector<? extends DMObject> getOrderedChildren() {
+        if (needsReordering) {
+            reorderPackages();
+        }
+        return orderedPackages;
+    }
 
-	/**
-	 * Used to sort entities according to name alphabetic ordering
-	 * 
-	 * @author sguerin
-	 * 
-	 */
-	static class PackageComparator implements Comparator<DMPackage> {
+    private synchronized void reorderPackages() {
+        if (needsReordering) {
+            if (orderedPackages != null) {
+                orderedPackages.removeAllElements();
+            } else {
+                orderedPackages = new Vector<DMPackage>();
+            }
+            orderedPackages.addAll(packages.values());
+            Collections.sort(orderedPackages, packageComparator);
+            needsReordering = false;
+        }
+    }
 
-		/**
-		 * Implements
-		 * 
-		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-		 */
-		@Override
-		public int compare(DMPackage o1, DMPackage o2) {
-			if (o1.isDefaultPackage()) {
-				return -1;
-			}
-			if (o2.isDefaultPackage()) {
-				return 1;
-			}
-			String s1 = o1.getName();
-			String s2 = o2.getName();
-			if (s1 != null && s2 != null) {
-				return Collator.getInstance().compare(s1, s2);
-			} else {
-				return 0;
-			}
-		}
+    protected static final PackageComparator packageComparator = new PackageComparator();
 
-	}
+    /**
+     * Used to sort entities according to name alphabetic ordering
+     *
+     * @author sguerin
+     *
+     */
+    static class PackageComparator implements Comparator<DMPackage> {
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
+        /**
+         * Implements
+         *
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
+        @Override
+        public int compare(DMPackage o1, DMPackage o2) {
+            if (o1.isDefaultPackage()) {
+                return -1;
+            }
+            if (o2.isDefaultPackage()) {
+                return 1;
+            }
+            String s1 = o1.getName();
+            String s2 = o2.getName();
+            if (s1 != null && s2 != null) {
+                return Collator.getInstance().compare(s1, s2);
+            } else {
+                return 0;
+            }
+        }
 
-	@Override
-	public TreeNode getParent() {
-		return getRepositoryFolder(); // getDMModel();
-	}
+    }
 
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
+    // ==========================================================================
+    // ======================== TreeNode implementation
+    // =========================
+    // ==========================================================================
 
-	@Override
-	public void notifyReordering(DMObject cause) {
-		needsReordering = true;
-		super.notifyReordering(cause);
-	}
+    @Override
+    public TreeNode getParent() {
+        return getRepositoryFolder(); // getDMModel();
+    }
 
-	public void changePackage(DMEntity entity, String oldFullyQualifiedName, String newFullyQualifiedName) {
-		entities.remove(oldFullyQualifiedName);
-		entities.put(newFullyQualifiedName, entity);
+    @Override
+    public boolean getAllowsChildren() {
+        return true;
+    }
 
-	}
+    @Override
+    public void notifyReordering(DMObject cause) {
+        needsReordering = true;
+        super.notifyReordering(cause);
+    }
+
+    public void changePackage(DMEntity entity, String oldFullyQualifiedName, String newFullyQualifiedName) {
+        entities.remove(oldFullyQualifiedName);
+        entities.put(newFullyQualifiedName, entity);
+
+    }
 
 }

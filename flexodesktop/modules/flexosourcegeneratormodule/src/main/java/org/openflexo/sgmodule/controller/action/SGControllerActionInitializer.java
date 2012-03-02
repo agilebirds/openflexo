@@ -89,6 +89,7 @@ public class SGControllerActionInitializer extends ControllerActionInitializer {
 
 		// Implementation model management
 		(new CreateImplementationModelInitializer(this)).init();
+		(new RemoveImplementionModelInitializer(this)).init();
 		(new CreateTechnologyModuleImplementationInitializer(this)).init();
 
 		// Validate project

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.dm;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -37,7 +38,7 @@ import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
@@ -314,8 +315,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 
 		else if (returned.getKindOfType() == KindOfType.TYPE_VARIABLE) {
 			/*
-			 * logger.info("context.getKindOfType()="+context.getKindOfType());
-			 * logger.info("context.getBaseEntity()="+context.getBaseEntity());
+			 * logger.info("context.getKindOfType()="+context.getKindOfType()); logger.info("context.getBaseEntity()="+context.getBaseEntity());
 			 * logger.info("returned.getTypeVariable().getEntity()="+returned.getTypeVariable().getEntity());
 			 */
 			if (context.getKindOfType() == DMType.KindOfType.RESOLVED) {
@@ -893,7 +893,7 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 				t.update(observable, dataModification);
 			}
 			clearStringRepresentationCache();
-		} else if ((dataModification instanceof EntityDeleted) && (observable == getBaseEntity())) {
+		} else if ((dataModification instanceof DMObjectDeleted) && (observable == getBaseEntity())) {
 			// TODO: handle entity deleted
 			// Then forward this notification to all Typed declared to have this type
 			Vector<Typed> typedWithThisTypeClone = (Vector<Typed>) typedWithThisType.clone();
@@ -1333,10 +1333,8 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 			} else {
 				setParameterAtIndex(aType, index);
 				/*
-				 * while(getParameters().size() <= index) { DMType newObjectType =
-				 * makeResolvedDMType(getBaseEntity().getDMModel().getDMEntity(Object.class)); newObjectType.setOwner(DMType.this);
-				 * getParameters().add(newObjectType); } getParameters().setElementAt(aType,index); aType.setOwner(DMType.this);
-				 * setChanged();
+				 * while(getParameters().size() <= index) { DMType newObjectType = makeResolvedDMType(getBaseEntity().getDMModel().getDMEntity(Object.class)); newObjectType.setOwner(DMType.this);
+				 * getParameters().add(newObjectType); } getParameters().setElementAt(aType,index); aType.setOwner(DMType.this); setChanged();
 				 */
 			}
 		}
@@ -1816,6 +1814,14 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 	public boolean isDate() {
 		return _isBasicType() && getBaseEntity().getDMModel().getDMEntity(Date.class).isAncestorOf(getBaseEntity());
 	}
+
+	public boolean isList() {
+		return _isBasicType() && getBaseEntity().getDMModel().getDMEntity(List.class).isAncestorOf(getBaseEntity());
+	}
+    
+    public boolean isCollection() {
+        return _isBasicType() && getBaseEntity().getDMModel().getDMEntity(Collection.class).isAncestorOf(getBaseEntity());
+    }
 
 	public boolean isEOEntity() {
 		return _isBasicType() && (getBaseEntity() instanceof DMEOEntity);

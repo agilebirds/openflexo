@@ -36,9 +36,10 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.action.CreateDMEntity;
+import org.openflexo.foundation.dm.action.CreateDMEntityEnum;
 import org.openflexo.foundation.dm.action.ImportJDKEntity;
 import org.openflexo.foundation.dm.action.UpdateLoadableDMEntity;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.dm.EntityRegistered;
 import org.openflexo.foundation.dm.dm.EntityUnregistered;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
@@ -226,7 +227,8 @@ public class DMPackage extends DMObject {
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEntity.actionType);
+        returned.add(CreateDMEntity.actionType);
+        returned.add(CreateDMEntityEnum.actionType);
 		returned.add(ImportJDKEntity.actionType);
 		returned.add(UpdateLoadableDMEntity.actionType);
 		return returned;
@@ -334,8 +336,8 @@ public class DMPackage extends DMObject {
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof EntityDeleted) {
-			unregisterEntity(((EntityDeleted) dataModification).getEntity());
+		if (dataModification instanceof DMObjectDeleted && dataModification.oldValue() instanceof DMEntity) {
+			unregisterEntity((DMEntity) dataModification.oldValue());
 		}
 		super.update(observable, dataModification);
 	}

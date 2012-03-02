@@ -57,7 +57,8 @@ public class DMControllerActionInitializer extends ControllerActionInitializer {
 		(new DMSelectAllInitializer(this)).init();
 		(new CreateDMRepositoryInitializer(this)).init();
 		(new CreateDMPackageInitializer(this)).init();
-		(new CreateDMEntityInitializer(this)).init();
+        (new CreateDMEntityInitializer(this)).init();
+        (new CreateDMEntityEnumInitializer(this)).init();
 		(new CreateDMPropertyInitializer(this)).init();
 		(new CreateDMMethodInitializer(this)).init();
 		(new CreateDMTranstyperInitializer(this)).init();

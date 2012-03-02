@@ -17,15 +17,18 @@
 		http://www.springframework.org/schema/context/spring-context-3.0.xsd" 
 	default-autowire="byName">
 
-	<bean id="dataSource" class="${template.getRootPackage()}.util.HibernateDataSource">
-		<property name="driverClassName"><value>${storage.getDriver()}</value></property>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"><value>${driverDefinitionProvider.getDriverClassname()}</value></property>
+        <property name="url" value="#{propertyController.getProperty(T(${javaImplementation.getRootPackage()}.model.enums.PropertyEnum).DB_URL)}"/>
+        <property name="username" value="#{propertyController.getProperty(T(${javaImplementation.getRootPackage()}.model.enums.PropertyEnum).DB_USERNAME)}"/>
+        <property name="password" value="#{propertyController.getProperty(T(${javaImplementation.getRootPackage()}.model.enums.PropertyEnum).DB_PASSWORD)}"/>
 	</bean>
 	
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
 		<property name="dataSource" ref="dataSource" />
 		<property name="changeLog" value="classpath:dbchangelogs/db.changelog-master.xml" />
 	</bean>
-	<bean id="sessionFactory" class="${template.getRootPackage()}.util.HibernateSessionFactory" depends-on="liquibase" >
+	<bean id="sessionFactory" class="${sessionFactoryProvider.getSessionFactoryClassname()}" depends-on="liquibase" >
 		<property name="dataSource"><ref bean="dataSource"/></property>
 		<property name="hibernateProperties">
 			<props>
@@ -35,16 +38,16 @@
 				<prop key="hibernate.format_sql">false</prop>
 			</props>
 		</property>
-		<property name="configLocation"><value>classpath:hibernate.cfg.xml</value></property>
+		<property name="packagesToScan" value="${javaUtils.getPackageName("${javaImplementation.getRootPackage()}")}.model.${persistenceImplementation.getModels().get(0).getName()}"/>
 		<property name="entityInterceptor" ref="databaseCacheInvalidator" />
-#if(${storage.getType()} == "POSTGRES")
+#if(${driverDefinitionProvider.getLobHandlerClassname()})
 		<property name="lobHandler">
 			<ref local="defaultLobHandler"/>
 		</property>
 #end
 	</bean>
-#if(${storage.getType()} == "POSTGRES")
-	<bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" autowire="byName">
+#if(${driverDefinitionProvider.getLobHandlerClassname()})
+	<bean id="defaultLobHandler" class="${driverDefinitionProvider.getLobHandlerClassname()}" autowire="byName">
 		<property name="wrapAsLob" value="true" />
 	</bean>
 #end

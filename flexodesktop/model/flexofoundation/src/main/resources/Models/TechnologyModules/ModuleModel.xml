@@ -9,10 +9,15 @@
 		<property name="description" xmlTag="description" />
 		<property name="compatibleModuleList" xmlTag="compatibleModule" type="vector" primary="yes" description="To be compatible with another module means: I'm aware of this module existence, it needs some special behaviour when my own module is used and I will handle it correctly. It can also be used to override the default incompatibility with another module of the same layer. Technically, the compatible module implementation and macro library will be added to the velocity context of all generation performed by this module."/>
 		<property name="incompatibleModuleList" xmlTag="incompatibleModule" type="vector" primary="yes" description="To be incompatible with another module means: If you use this module and the incompatible one, it will not work correctly. By default, a module is incompatible with all other module of the same laye EXCEPT if the layer is TRANSVERSAL."/>
-		<property name="requiredModuleList" xmlTag="requiredModule" type="vector" primary="yes" description="Requiring a module means: I cannot work without this module, add it automatically when I'm added. Technically, the required module (and all its required modules) implementation and macro library will be added to the velocity context of all generation performed by this module."/>
+        <property name="requiredModuleList" xmlTag="requiredModule" type="vector" primary="yes" description="Requiring a module means: I cannot work without this module, add it automatically when I'm added. Technically, the required module (and all its required modules) implementation and macro library will be added to the velocity context of all generation performed by this module."/>
+        <property name="requiredServiceList" xmlTag="requiredService" type="vector" primary="yes" description="This module requires the service defined by this interface."/>
 	</entity>
 	
 	<entity name="org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinitionDTO$CompatibilityModule" xmlTag="compatibleModule,incompatibleModule,requiredModule">
 		<property name="name" xmlTag="name" attribute="YES" />
 	</entity>
+    <entity name="org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinitionDTO$RequiredService" xmlTag="requiredService">
+        <property name="serviceInterface" xmlTag="serviceInterface" attribute="YES" />
+        <property name="serviceAlias" xmlTag="serviceAlias" attribute="YES" />
+    </entity>
 </model>

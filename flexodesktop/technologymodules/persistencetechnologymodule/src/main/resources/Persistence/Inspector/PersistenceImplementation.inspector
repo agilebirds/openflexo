@@ -1,0 +1,18 @@
+<inspector title = "persistence_implementation" >
+    <tab name="Basic" index="0">
+        <property name="database" label="database" widget="DROPDOWN" constraint="1">
+            <param name="dynamiclist" value="implementationModel.databaseTechnologyModules"/>
+            <param name="showReset" value="false"/>
+            <param name="format" value="name"/>
+        </property>
+    </tab>
+
+    <tab name="Doc" index="1" layout="DEFAULT">
+        <property name="specificDescriptions" label="specific_description" widget="CUSTOM" depends="project,hasSpecificDescriptions" constraint="3">
+            <param name="className" value="org.openflexo.components.widget.DescriptionInspectorWidget"/>
+            <param name="expandHorizontally" value="true"/>     <!-- Available horizontal space is "taken" by the dynamic component, when possible -->
+            <param name="expandVertically" value="true"/>     <!-- Available vertical space is "taken" by the dynamic component, when possible -->
+            <param name="useUltraLightWysiwyg" value="false"/>
+        </property>
+    </tab>
+</inspector>

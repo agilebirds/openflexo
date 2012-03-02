@@ -1,5 +1,5 @@
 #English
-#Thu Feb 09 08:34:13 CET 2012
+#Tue Feb 14 11:48:06 CET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -806,6 +806,7 @@ add_embedding_child=Add embedded child
 add_entity=Add entity
 add_entry=Add entry
 add_entry_and_set_($bindingName)_onto=Add entry and set binding '($bindingName)' to this newly created value.
+add_enum=add_enum
 add_eo_attribute=Add Attribute
 add_eo_entity=Add Entity
 add_eo_relationship=Add Relationship
@@ -1666,6 +1667,7 @@ default_grid_size=Default grid size
 default_implementation=Default implementation
 default_new_attribute_name=attribute
 default_new_entity_name=Entity
+default_new_enum_name=default_new_enum_name
 default_new_method_name=method
 default_new_parameter_name=param
 default_new_property_name=property

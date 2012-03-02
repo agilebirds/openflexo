@@ -76,7 +76,7 @@ public abstract class TechnologyModelObject extends FlexoModelObject implements 
 	}
 
 	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
+	public void setName(String name) {
 		if (requireChange(getName(), name)) {
 			try {
 				super.setName(name);

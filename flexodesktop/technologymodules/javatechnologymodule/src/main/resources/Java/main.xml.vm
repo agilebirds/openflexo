@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Generation timestamp="${projectGenerator.generateTimestamp()}">
-    <SymbolicPath name="root" kind="root" path="."/>
-    <SymbolicPath name="sources" kind="source" path="src/main/java"/>
-    <SymbolicPath name="resources" kind="resource" path="src/main/resources"/>
-    <SymbolicPath name="testsources" kind="testsource" path="src/test/java"/>
-    <SymbolicPath name="testresources" kind="testresource" path="src/test/resources"/>
-</Generation>	
+    <SymbolicPath name="root" path="."/>
+    <SymbolicPath name="sources" path="src/main/java"/>
+    <SymbolicPath name="resources" path="src/main/resources"/>
+    <SymbolicPath name="testsources" path="src/test/java"/>
+    <SymbolicPath name="testresources" path="src/test/resources"/>
+	#if(${javaImplementation.getSelectedIde()} == 'ECLIPSE')
+		<File name=".project" type="xml" symbolicPath="root">
+        	<Template templateFile="eclipse.project.vm" />
+        </File>
+		<File name=".classpath" type="xml" symbolicPath="root">
+        	<Template templateFile="eclipse.classpath.vm" />
+        </File>
+	#end
+</Generation>

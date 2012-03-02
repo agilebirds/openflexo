@@ -19,7 +19,7 @@
 	<context:component-scan base-package="#getRootPackage()" />
 	
 	<!--  Services -->
-	<bean id="applicationController" class="${template.getRootPackage()}.service.impl.ApplicationControllerImpl">
+	<bean id="applicationController" class="#getRootPackage().service.impl.ApplicationControllerImpl">
 		<property name="applicationVersionNumber" value="${project.version}" />
 		<property name="buildDate" value="${build.date}" />
 	</bean>

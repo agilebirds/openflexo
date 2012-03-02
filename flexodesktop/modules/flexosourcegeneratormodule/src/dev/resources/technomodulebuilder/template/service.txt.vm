@@ -1,0 +1,1 @@
+org.openflexo.tm.${moduleName.toLowerCase()}.impl.${moduleName}TechnologyDefinition

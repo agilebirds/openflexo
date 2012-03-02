@@ -20,13 +20,16 @@
 package org.openflexo.foundation.dm;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +41,10 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.data.FlexoAttribute;
+import org.openflexo.foundation.data.FlexoEntity;
+import org.openflexo.foundation.data.FlexoEnum;
+import org.openflexo.foundation.data.FlexoEnumValue;
 import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.DMType.DMTypeTokenizer;
 import org.openflexo.foundation.dm.action.CreateComponentFromEntity;
@@ -48,7 +55,7 @@ import org.openflexo.foundation.dm.action.ShowTypeHierarchyAction;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.DMEntityNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.dm.MethodRegistered;
 import org.openflexo.foundation.dm.dm.MethodUnregistered;
 import org.openflexo.foundation.dm.dm.PropertiesReordered;
@@ -72,7 +79,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOwner, Typed {
+public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOwner, Typed, FlexoEntity, FlexoEnum {
 
 	private static final Logger logger = Logger.getLogger(DMEntity.class.getPackage().getName());
 
@@ -215,7 +222,28 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		setParentType(parentType, true);
 	}
 
-	@Override
+    @Override
+    public Set<FlexoAttribute> getFlexoAttributes() {
+        HashSet<FlexoAttribute> attributes = new HashSet<FlexoAttribute>();
+        attributes.addAll(getProperties().values());
+        return attributes;
+    }
+
+    /**
+     * @return the values in this iteration. Return null if this class is not an enumeration.
+     * Otherwise : the enum values are the property name's.
+     */
+    @Override
+    public List<FlexoEnumValue> getValues() {
+        if(!getIsEnumeration()){
+            return null;
+        }
+        ArrayList<FlexoEnumValue> values = new ArrayList<FlexoEnumValue>();
+        values.addAll(getProperties().values());
+        return values;
+    }
+
+    @Override
 	public String getFullyQualifiedName() {
 		return getEntityPackageName() + "." + getEntityClassName();
 	}
@@ -538,7 +566,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 				}
 				newParentEntity.addToChildEntities(this);
 			}
-		} else if ((dataModification instanceof EntityDeleted) && (getParentType() != null)
+		} else if ((dataModification instanceof DMObjectDeleted) && (getParentType() != null)
 				&& (observable == getParentType().getBaseEntity())) {
 			DMEntity parent = getParentBaseEntity();
 			while ((parent != null) && parent.isDeleted()) {
@@ -727,7 +755,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Return method whose signature matches 'methodSignature' explicitely declared in this entity
 	 * 
-	 * @param propertyName
+	 * @param methodSignature
 	 * @return
 	 */
 	public DMMethod getDeclaredMethod(String methodSignature) {
@@ -753,7 +781,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	/**
 	 * Return methods with name 'methodName'
 	 * 
-	 * @param methodSignature
+	 * @param methodName
 	 * @return a Vector of DMMethod objects
 	 */
 	public Vector<DMMethod> getDeclaredMethodNamed(String methodName) {
@@ -1062,7 +1090,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 
 		super.delete();
 		setChanged();
-		notifyObservers(new EntityDeleted(this));
+		notifyObservers(new DMObjectDeleted<DMEntity>(this));
 		deleteObservers();
 		name = null;
 		entityPackageName = null;

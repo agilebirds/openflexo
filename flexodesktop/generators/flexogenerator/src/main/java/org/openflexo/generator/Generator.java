@@ -195,6 +195,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		context.put("trueValue", Boolean.TRUE);
 		context.put("falseValue", Boolean.FALSE);
 		context.put("toolbox", new ToolBox());
+		context.put("stringUtils", new StringUtils());
 		context.put("javaUtils", new JavaUtils());
 		context.put("globalVariableMap", new HashMap<String, Object>() {
 			@Override
@@ -206,6 +207,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			}
 		});
 		context.put("today", new Date());
+        context.put("apacheStringUtils", org.apache.commons.lang.StringUtils.class);
 		return context;
 	}
 
