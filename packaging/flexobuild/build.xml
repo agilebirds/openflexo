@@ -42,6 +42,8 @@
 		<delete dir="${mac.app.dir}" failonerror="false" />
 		<mkdir dir="${mac.app.dir}" />
 		<antcall target="packageCustomer" />
+		<antcall target="packageSemantics" />
+		<antcall target="packageSemanticsPlus" />
 		<antcall target="packageAnalyst" />
 		<antcall target="packageDeveloper" />
 	</target>
@@ -247,7 +249,7 @@
 	</target>
 
 	<target name="linux-packaging">
-		<tar destfile="${project.build.directory}/${product.name} ${productSuffix} ${flexo_version}.tar.gz" compression="gzip" basedir="${dist.dir}">
+		<tar destfile="${project.build.directory}/${product.name} ${productSuffix} ${flexo_version}.tar.gz" compression="gzip" basedir="${dist.dir}" longfile="gnu">
 			<exclude name="*.exe"/>
 			<tarfileset mode="755" dir="${dist.dir}">
 				<include name="*.sh"/>
