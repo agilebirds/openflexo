@@ -63,17 +63,19 @@ import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
+import org.openflexo.toolbox.StringUtils;
 
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> extends FlexoAction<A, FlexoModelObject, FlexoModelObject>
-		implements BindingEvaluationContext {
+		implements BindingEvaluationContext /*, BindingPathElement<Object>*/{
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
-	protected Hashtable<String, Object> parameterValues;
+	protected Hashtable<EditionSchemeParameter, Object> parameterValues;
 
 	public boolean escapeParameterRetrievingWhenValid = true;
 
@@ -82,7 +84,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	public EditionSchemeAction(FlexoActionType<A, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject focusedObject,
 			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		parameterValues = new Hashtable<String, Object>();
+		parameterValues = new Hashtable<EditionSchemeParameter, Object>();
 		overridenGraphicalRepresentations = new Hashtable<GraphicalElementPatternRole, Object>();
 	}
 
@@ -92,23 +94,14 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	 * 
 	 * @return
 	 */
+	// TODO: we must order this if dependancies are not resolved using basic sequence
 	public boolean retrieveDefaultParameters() {
 		boolean returned = true;
 		EditionScheme editionScheme = getEditionScheme();
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
-			Object defaultValue = parameter.getDefaultValue(this, new BindingEvaluationContext() {
-				@Override
-				public Object getValue(BindingVariable variable) {
-					if (variable instanceof EditionSchemeParameterPathElement) {
-						Object returned = parameterValues.get(((EditionSchemeParameterPathElement) variable).getParameter().getName());
-						return returned;
-					}
-					logger.warning("Unexpected " + variable);
-					return null;
-				}
-			});
-			if (defaultValue != null) {
-				parameterValues.put(parameter.getName(), defaultValue);
+			Object defaultValue = parameter.getDefaultValue(this);
+			if (defaultValue != null && !(parameter instanceof URIParameter)) {
+				parameterValues.put(parameter, defaultValue);
 			}
 			if (!parameter.isValid(this, defaultValue)) {
 				logger.info("Parameter " + parameter + " is not valid for value " + defaultValue);
@@ -132,8 +125,40 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		return null;
 	}
 
-	public Hashtable<String, Object> getParameterValues() {
+	/*public String getStringParameter(String parameterName) {
+		System.out.println("OK, on me demande le parametre " + parameterName + ", je retourne " + parameterValues.get(parameterName));
+		return (String) parameterValues.get(parameterName);
+	}
+
+	public String getURIParameter(String parameterName) {
+		System.out.println("OK, on me demande l'uri " + parameterName + ", je retourned " + parameterValues.get(parameterName));
+		return (String) parameterValues.get(parameterName);
+	}*/
+
+	/*public Hashtable<EditionSchemeParameter, Object> getParameterValues() {
 		return parameterValues;
+	}*/
+
+	public Object getParameterValue(EditionSchemeParameter parameter) {
+		/*System.out.println("On me demande la valeur du parametre " + parameter.getName() + " a priori c'est "
+				+ parameterValues.get(parameter));*/
+		if (parameter instanceof URIParameter) {
+			if (parameterValues.get(parameter) == null
+					|| (parameterValues.get(parameter) instanceof String && StringUtils.isEmpty((String) parameterValues.get(parameter)))) {
+				return ((URIParameter) parameter).getDefaultValue(this);
+			}
+		}
+		return parameterValues.get(parameter);
+	}
+
+	public void setParameterValue(EditionSchemeParameter parameter, Object value) {
+		// System.out.println("setParameterValue " + value + " for parameter " + parameter.getName());
+		parameterValues.put(parameter, value);
+		/*for (EditionSchemeParameter p : getEditionScheme().getParameters()) {
+			if (p instanceof URIParameter) {
+				// System.out.println("Hop, je recalcule l'uri, ici");
+			}
+		}*/
 	}
 
 	public abstract EditionScheme getEditionScheme();
@@ -577,7 +602,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionSchemeParameterListPathElement) {
-			return parameterValues;
+			return this;
+		} else if (variable instanceof EditionSchemeParameterPathElement) {
+			return getParameterValue(((EditionSchemeParameterPathElement) variable).getParameter());
 		} else if (variable instanceof ViewPathElement) {
 			if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) {
 				return retrieveOEShema();
@@ -590,11 +617,61 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	public Object getOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
-		return overridenGraphicalRepresentations.get(patternRole);
+		// return overridenGraphicalRepresentations.get(patternRole);
+		// TODO temporary desactivate overriden GR
+		return null;
 	}
 
 	public void setOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole, Object graphicalRepresentation) {
 		overridenGraphicalRepresentations.put(patternRole, graphicalRepresentation);
 	}
 
+	/*
+	@Override
+	public Class<?> getDeclaringClass() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Type getType() {
+		return getClass();
+	}
+
+	@Override
+	public String getSerializationRepresentation() {
+		return getEditionScheme().getName();
+	}
+
+	@Override
+	public boolean isBindingValid() {
+		return true;
+	}
+
+	@Override
+	public String getLabel() {
+		return getEditionScheme().getName();
+	}
+
+	@Override
+	public String getTooltipText(Type resultingType) {
+		return getEditionScheme().getDescription();
+	}
+
+	@Override
+	public boolean isSettable() {
+		return false;
+	}
+
+	@Override
+	public Object getBindingValue(Object target, BindingEvaluationContext context) {
+		System.out.println("On me demande la value pour " + target);
+		return null;
+	}
+
+	@Override
+	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
+		System.out.println("On set la value " + value + " pour " + target);
+	}
+	*/
 }

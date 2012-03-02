@@ -62,10 +62,10 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 	public static final FGEPoint WEST = new FGEPoint(0, 0.5);
 
 	public static enum ShapeType {
-		RECTANGLE, SQUARE, POLYGON, TRIANGLE, LOSANGE, OVAL, CIRCLE, STAR, ARC, CUSTOM_POLYGON/*
-																								* ,
-																								* CUSTOM_COMPLEX_SHAPE
-																								*/
+		RECTANGLE, SQUARE, RECTANGULAROCTOGON, POLYGON, TRIANGLE, LOSANGE, OVAL, CIRCLE, STAR, ARC, CUSTOM_POLYGON/*
+																													* ,
+																													* CUSTOM_COMPLEX_SHAPE
+																													*/
 	}
 
 	// *******************************************************************************
@@ -86,6 +86,8 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 			return new Triangle(aGraphicalRepresentation);
 		} else if (type == ShapeType.LOSANGE) {
 			return new Losange(aGraphicalRepresentation);
+		} else if (type == ShapeType.RECTANGULAROCTOGON) {
+			return new RectangularOctogon(aGraphicalRepresentation);
 		} else if (type == ShapeType.POLYGON) {
 			return new RegularPolygon(aGraphicalRepresentation);
 		} else if (type == ShapeType.CUSTOM_POLYGON) {

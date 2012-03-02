@@ -202,6 +202,27 @@ public class ViewPoint extends ViewPointObject {
 	public void save() {
 		logger.info("Saving calc to " + xmlFile.getAbsolutePath() + "...");
 
+		// Following was used to debug (display purpose only)
+		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
+		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
+		try {
+			System.out.println("File: " + XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), getStringEncoder()));
+		} catch (InvalidObjectSpecificationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AccessorInvocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DuplicateSerializationIdentifierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
+		 */
+
 		File dir = xmlFile.getParentFile();
 		if (!dir.exists()) {
 			dir.mkdirs();
@@ -213,10 +234,10 @@ public class ViewPoint extends ViewPointObject {
 			saveToFile(temporaryFile);
 			FileUtils.rename(temporaryFile, xmlFile);
 			clearIsModified(true);
-			logger.info("Saved calc to " + xmlFile.getAbsolutePath() + ". Done.");
+			logger.info("Saved ViewPoint to " + xmlFile.getAbsolutePath() + ". Done.");
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.severe("Could not save calc to " + xmlFile.getAbsolutePath());
+			logger.severe("Could not save ViewPoint to " + xmlFile.getAbsolutePath());
 			if (temporaryFile != null) {
 				temporaryFile.delete();
 			}

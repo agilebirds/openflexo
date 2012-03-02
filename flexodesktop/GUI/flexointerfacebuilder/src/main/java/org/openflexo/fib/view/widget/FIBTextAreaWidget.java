@@ -76,7 +76,13 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 			panel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
 					RIGHT_COMPENSATING_BORDER));
 			textArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+		} else {
+			panel.setBorder(BorderFactory.createEmptyBorder(2, 3, 2, 3));
+			textArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
 		}
+		/*else {
+				textArea.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+				}*/
 
 		textArea.setEditable(!isReadOnly());
 		if (model.text != null) {

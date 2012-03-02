@@ -1276,6 +1276,15 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return null;
 	}
 
+	public EditionPatternReference getEditionPatternReference(EditionPatternInstance epInstance) {
+		for (EditionPatternReference r : _editionPatternReferences) {
+			if (r.getEditionPatternInstance() == epInstance) {
+				return r;
+			}
+		}
+		return null;
+	}
+
 	// Return first one if many
 	public EditionPatternReference getEditionPatternReference(String editionPatternId) {
 		if (editionPatternId == null) {
@@ -1295,6 +1304,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			return null;
 		}
 		for (EditionPatternReference r : _editionPatternReferences) {
+			System.out.println("1: " + r.getEditionPattern().getName() + "  2: " + editionPattern.getName());
 			if (r.getEditionPattern().getName().equals(editionPattern.getName())) {
 				return r;
 			}
@@ -1303,9 +1313,27 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
-		// TODO: check if not already registered !
-		EditionPatternReference newReference = new EditionPatternReference(editionPatternInstance, patternRole);
-		addToEditionPatternReferences(newReference);
+		EditionPatternReference existingReference = getEditionPatternReference(editionPatternInstance);
+		if (existingReference == null) {
+			// logger.info("registerEditionPatternReference for " + editionPatternInstance.debug());
+			EditionPatternReference newReference = new EditionPatternReference(editionPatternInstance, patternRole);
+			addToEditionPatternReferences(newReference);
+			setChanged();
+		} else {
+			if (existingReference.getPatternRole() != patternRole) {
+				logger.warning("Called for register a new EditionPatternReference with an already existing EditionPatternReference with a different PatternRole");
+			}
+		}
+	}
+
+	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
+		EditionPatternReference referenceToRemove = getEditionPatternReference(editionPatternInstance);
+		if (referenceToRemove == null) {
+			logger.warning("Called for unregister EditionPatternReference for unexisting reference to edition pattern instance.");
+		} else {
+			removeFromEditionPatternReferences(referenceToRemove);
+			setChanged();
+		}
 	}
 
 	@Deprecated
@@ -1341,4 +1369,23 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public String makeReference() {
 		return FlexoModelObjectReference.getSerializationRepresentationForObject(this, true);
 	}
+
+	/**
+	 * Return true is this object is somewhere involved as a primary representation pattern role in any of its EditionPatternReferences
+	 * 
+	 * @return
+	 */
+	public boolean providesSupportAsPrimaryRole() {
+		if (getEditionPatternReferences() != null) {
+			if (getEditionPatternReferences().size() > 0) {
+				for (EditionPatternReference r : getEditionPatternReferences()) {
+					if (r.getPatternRole().getIsPrimaryRole()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 }

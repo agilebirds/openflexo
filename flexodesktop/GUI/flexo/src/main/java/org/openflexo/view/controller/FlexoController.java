@@ -528,6 +528,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			 */
 
 			getInspectorWindow().setVisible(true);
+			getInspectorWindow().toFront();
 		}
 
 		if (useNewInspectorScheme()) {
@@ -537,7 +538,12 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	}
 
 	public void resetInspector() {
-		getInspectorWindow().newSelection(new EmptySelection());
+
+		if (useOldInspectorScheme()) {
+			getInspectorWindow().newSelection(new EmptySelection());
+		} else {
+			getMainInspectorController().resetInspector();
+		}
 	}
 
 	public PreferencesWindow getPreferencesWindow() {
@@ -1918,7 +1924,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	}
 
 	public boolean displayInspectorTabForContext(String context) {
-		logger.info("Enquiring inspector tab display for context=" + context + "... Answering NO");
+		// logger.info("Enquiring inspector tab display for context=" + context + "... Answering NO");
 		return false;
 	}
 

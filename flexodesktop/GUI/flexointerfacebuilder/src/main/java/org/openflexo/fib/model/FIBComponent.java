@@ -514,6 +514,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
+	/**
+	 * Creates binding variable identified by "data"<br>
+	 * Default behaviour is to generate a binding variable with the java type identified by data class
+	 */
+	protected void createDataBindingVariable() {
+		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class));
+	}
+
 	protected void createBindingModel() {
 		_bindingModel = new BindingModel();
 
@@ -528,7 +536,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}*/
 		// if (dataClass == null) dataClass = Object.class;
 
-		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class));
+		createDataBindingVariable();
 
 		if (StringUtils.isNotEmpty(getName()) && getDynamicAccessType() != null) {
 			_bindingModel.addToBindingVariables(new BindingVariableImpl(this, getName(), getDynamicAccessType()));

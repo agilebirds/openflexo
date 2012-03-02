@@ -35,16 +35,16 @@ import org.openflexo.foundation.wkf.node.AbstractNode;
  * @author sguerin
  * 
  */
-public class NodeSelector extends AbstractBrowserSelector<AbstractNode> {
+public class NodeSelector<N extends AbstractNode> extends AbstractBrowserSelector<N> {
 
 	protected static final String EMPTY_STRING = "";
 
-	public NodeSelector(FlexoProject project, AbstractNode process) {
-		super(project, process, AbstractNode.class);
+	public NodeSelector(FlexoProject project, N process, Class<N> nodeClass) {
+		super(project, process, nodeClass);
 	}
 
-	public NodeSelector(FlexoProject project, AbstractNode process, int cols) {
-		super(project, process, AbstractNode.class, cols);
+	public NodeSelector(FlexoProject project, N process, int cols, Class<N> nodeClass) {
+		super(project, process, nodeClass, cols);
 	}
 
 	FlexoWorkflow getWorkflow() {
@@ -67,7 +67,7 @@ public class NodeSelector extends AbstractBrowserSelector<AbstractNode> {
 		return EMPTY_STRING;
 	}
 
-	protected class NodeSelectorPanel extends AbstractSelectorPanel<AbstractNode> {
+	protected class NodeSelectorPanel extends AbstractSelectorPanel<N> {
 		protected NodeSelectorPanel() {
 			super(NodeSelector.this);
 		}

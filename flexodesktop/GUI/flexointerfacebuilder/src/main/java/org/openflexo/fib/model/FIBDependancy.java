@@ -77,6 +77,11 @@ public class FIBDependancy extends FIBModelObject {
 		super();
 	}
 
+	public FIBDependancy(FIBComponent masterComponent) {
+		super();
+		this.masterComponent = masterComponent;
+	}
+
 	public String getMasterComponentName() {
 		if (getMasterComponent() != null) {
 			return getMasterComponent().getName();

@@ -132,6 +132,14 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 		return null;
 	}
 
+	/**
+	 * Return EditionPatternReference for that object<br>
+	 * 
+	 * If many EditionPatternReferences are defined for this object, return preferabely an EditionPatternReference where this object plays a
+	 * primary role
+	 * 
+	 * @return
+	 */
 	public EditionPatternReference getEditionPatternReference() {
 		// Default behaviour is to have only one EditionPattern where
 		// this graphical element plays a representation primitive role
@@ -145,12 +153,18 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 						GraphicalElementPatternRole grPatternRole = (GraphicalElementPatternRole) r.getPatternRole();
 						if (grPatternRole.getIsPrimaryRepresentationRole()) {
 							if (returned != null) {
-								logger.warning("More than one edition pattern reference where element plays a primary role !!!!");
+								logger.warning("More than one edition pattern reference where element plays a primary role 1 !!!!");
+								for (EditionPatternReference r2 : getEditionPatternReferences()) {
+									logger.warning("> " + r2.getEditionPatternInstance().debug());
+								}
 							}
 							returned = r;
 						} else if (grPatternRole.isIncludedInPrimaryRepresentationRole()) {
 							if (returned != null) {
-								logger.warning("More than one edition pattern reference where element plays a primary role !!!!");
+								logger.warning("More than one edition pattern reference where element plays a primary role 2 !!!!");
+								for (EditionPatternReference r2 : getEditionPatternReferences()) {
+									logger.warning("> " + r2.getEditionPatternInstance().debug());
+								}
 							}
 							returned = r;
 						}
@@ -161,12 +175,28 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 				}
 			}
 		}
+
+		if (getEditionPatternReferences().size() > 0) {
+			return getEditionPatternReferences().get(0);
+		}
+
 		return null;
 	}
 
+	/**
+	 * Return EditionPatternInstance for that object<br>
+	 * 
+	 * If many EditionPatternInstance are defined for this object, return preferabely an EditionPatternReference where this object plays a
+	 * primary role
+	 * 
+	 * @return
+	 */
 	public EditionPatternInstance getEditionPatternInstance() {
 		if (getEditionPatternReference() != null) {
 			return getEditionPatternReference().getEditionPatternInstance();
+		}
+		if (getEditionPatternReferences().size() > 0) {
+			return getEditionPatternReferences().get(0).getEditionPatternInstance();
 		}
 		return null;
 	}

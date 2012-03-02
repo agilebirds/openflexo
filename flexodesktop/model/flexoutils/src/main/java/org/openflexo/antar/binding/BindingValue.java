@@ -58,17 +58,22 @@ public class BindingValue extends AbstractBinding {
 		return false;
 	}
 
+	// public Exception creationException;
+
 	public BindingValue() {
 		super();
 		init();
+		// logger.info(">>>>>>>>>>>>> Make binding value");
 	}
 
 	public BindingValue(BindingDefinition bindingDefinition, Bindable owner) {
 		super(bindingDefinition, owner);
 		init();
+		// logger.info(">>>>>>>>>>>>> Make binding value for " + bindingDefinition);
 	}
 
 	private void init() {
+		// creationException = new Exception("Binding creation");
 		_bindingVariable = null;
 		_bindingPath = new BindingPath();
 		_isConnected = false;
@@ -156,12 +161,16 @@ public class BindingValue extends AbstractBinding {
 		}
 
 		if ((getBindingDefinition() != null) && (getBindingDefinition().getIsSettable())) {
-			if ((getBindingPathLastElement() == null)
-			/*|| (!(getBindingPathLastElement() instanceof KeyValueProperty))
-			|| (!((KeyValueProperty)getBindingPathLastElement()).isSettable())) {*/
-			|| (!(getBindingPathLastElement()).isSettable())) {
+			if (getBindingPath().size() == 0) {
+				if (!(_bindingVariable.isSettable())) {
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it (binding variable not settable)");
+					}
+					return false;
+				}
+			} else if ((getBindingPathLastElement() == null) || (!(getBindingPathLastElement()).isSettable())) {
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it");
+					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it (last binding path not settable)");
 				}
 				return false;
 			}
@@ -196,32 +205,40 @@ public class BindingValue extends AbstractBinding {
 		// logger.setLevel(Level.FINE);
 
 		logger.info("Is BindingValue " + this + " valid ?");
+		logger.info("BindingModel=" + getBindingModel());
+		logger.info("BindingFactory=" + getBindingFactory());
 
 		if (getAccessedType() == null) {
-			logger.info("Invalid binding because accessed type is null");
+			logger.info("Invalid binding " + this + " because accessed type is null path count=" + _bindingPath.size());
+			// creationException.printStackTrace();
+			for (BindingPathElement e : _bindingPath) {
+				logger.info("> Element " + e + " of " + e.getClass().getSimpleName() + " type=" + e.getType());
+			}
 			return false;
 		}
 
 		if (getBindingDefinition() == null) {
-			logger.info("Invalid binding because _bindingDefinition is null");
+			logger.info("Invalid binding " + this + " because _bindingDefinition is null");
 			return false;
 		}
 
 		if (_bindingVariable == null) {
-			logger.info("Invalid binding because _bindingVariable is null");
+			logger.info("Invalid binding " + this + " because _bindingVariable is null");
 			return false;
 		}
 		if (!_checkBindingPathValid()) {
-			logger.info("Invalid binding because binding path not valid");
+			logger.info("Invalid binding " + this + " because binding path not valid");
 			return false;
 		}
 
 		if ((getBindingDefinition() != null) && (getBindingDefinition().getIsSettable())) {
-			if ((getBindingPathLastElement() == null)
-			/*|| (!(getBindingPathLastElement() instanceof KeyValueProperty))
-			|| (!((KeyValueProperty)getBindingPathLastElement()).isSettable())) {*/
-			|| (!(getBindingPathLastElement()).isSettable())) {
-				logger.info("Invalid binding because binding definition declared as settable and definition cannot satisfy it");
+			if (getBindingPath().size() == 0) {
+				if (!(_bindingVariable.isSettable())) {
+					logger.info("Invalid binding because binding definition declared as settable and definition cannot satisfy it (binding variable not settable)");
+					return false;
+				}
+			} else if ((getBindingPathLastElement() == null) || (!(getBindingPathLastElement()).isSettable())) {
+				logger.info("Invalid binding because binding definition declared as settable and definition cannot satisfy it (last binding path not settable)");
 				return false;
 			}
 		}

@@ -961,7 +961,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		// Set connect button state
 		_connectButton.setEnabled(binding != null && binding.isBindingValid());
 		/*if (!binding.isBindingValid()) {
-			logger.info("Binding NOT valid: "+binding);
+			logger.info("Binding NOT valid: " + binding);
 			binding.debugIsBindingValid();
 		}*/
 		if (binding != null && binding.isBindingValid()) {
@@ -1814,9 +1814,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
+
 		AbstractBinding bindingValue = _bindingSelector.getEditedObject();
 		if (bindingValue == null) {
 			if (_bindingSelector.getBindingDefinition() != null && _bindingSelector.getBindable() != null) {

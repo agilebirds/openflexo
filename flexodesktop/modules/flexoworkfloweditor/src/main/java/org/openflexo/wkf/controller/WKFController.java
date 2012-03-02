@@ -100,6 +100,16 @@ public class WKFController extends FlexoController implements SelectionManagingC
 
 	private static final Logger logger = Logger.getLogger(WKFController.class.getPackage().getName());
 
+	/*@Override
+	public boolean useNewInspectorScheme() {
+		return true;
+	}
+
+	@Override
+	public boolean useOldInspectorScheme() {
+		return false;
+	}*/
+
 	// ======================================================
 	// ================== Static variables ==================
 	// ======================================================
@@ -256,10 +266,12 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		getWKFSelectionManager().addObserver(getSharedInspectorController());
-		getWKFSelectionManager().addObserver(getDocInspectorController());
-		notifyShowLeanTabHasChanged();
-		showBPEGraphicsInspectors();
+		if (useOldInspectorScheme()) {
+			getWKFSelectionManager().addObserver(getSharedInspectorController());
+			getWKFSelectionManager().addObserver(getDocInspectorController());
+			notifyShowLeanTabHasChanged();
+			showBPEGraphicsInspectors();
+		}
 	}
 
 	@Override
@@ -622,21 +634,27 @@ public class WKFController extends FlexoController implements SelectionManagingC
 		getWKFSelectionManager().setInspectionContext("BPE", true);
 		getWKFSelectionManager().removeInspectionContext("SWL");
 		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
-		getInspectorWindow().getContent().refresh();
+		if (getInspectorWindow() != null) {
+			getInspectorWindow().getContent().refresh();
+		}
 	}
 
 	private void showRoleEditorGraphicsInspectors() {
 		getWKFSelectionManager().setInspectionContext("ROLE_EDITOR", true);
 		getWKFSelectionManager().removeInspectionContext("BPE");
 		getWKFSelectionManager().removeInspectionContext("SWL");
-		getInspectorWindow().getContent().refresh();
+		if (getInspectorWindow() != null) {
+			getInspectorWindow().getContent().refresh();
+		}
 	}
 
 	private void showSWLGraphicsInspectors() {
 		getWKFSelectionManager().setInspectionContext("SWL", true);
 		getWKFSelectionManager().removeInspectionContext("BPE");
 		getWKFSelectionManager().removeInspectionContext("ROLE_EDITOR");
-		getInspectorWindow().getContent().refresh();
+		if (getInspectorWindow() != null) {
+			getInspectorWindow().getContent().refresh();
+		}
 	}
 
 	@Override
@@ -703,7 +721,9 @@ public class WKFController extends FlexoController implements SelectionManagingC
 			 * Inspectors.WKF.POST_CONDITION_INSPECTOR);
 			 */
 		}
-		getInspectorWindow().getContent().refresh();
+		if (getInspectorWindow() != null) {
+			getInspectorWindow().getContent().refresh();
+		}
 	}
 
 	public void notifyUseSimpleEventPaletteHasChanged() {

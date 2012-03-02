@@ -94,6 +94,8 @@
           </Panel>
           <Label label="is_visible" localize="true" name="IsVisibleLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
           <CheckBox selected="false" localize="true" name="IsVisible" data="GRTab.data.isVisible" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" />
+          <Label label="may_leave_bounds" localize="true" name="AllowToLeaveBoundsLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" />
+          <CheckBox selected="false" localize="true" name="AllowToLeaveBounds" data="GRTab.data.allowToLeaveBounds" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" />
         </Tab>
        </TabPanel>
     </Tab>

@@ -186,7 +186,8 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 				customComponent.setEditedObject(getValue());
 				customComponent.setRevertValue(getValue());
 			} catch (ClassCastException e) {
-				logger.warning("Unexpected exception in " + customComponent + ": " + e.getMessage());
+				logger.warning("Unexpected ClassCastException in " + customComponent + ": " + e.getMessage());
+				e.printStackTrace();
 			}
 
 			for (FIBCustomAssignment assign : getWidget().getAssignments()) {

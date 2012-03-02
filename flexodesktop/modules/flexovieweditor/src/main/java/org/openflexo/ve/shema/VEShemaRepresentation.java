@@ -196,7 +196,7 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			VEShapeGR graphicalRepresentation = new VEShapeGR(shape, this);
 			graphicalRepresentation.setsWith((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation(),
-					GraphicalRepresentation.Parameters.text, ShapeGraphicalRepresentation.Parameters.border);
+					GraphicalRepresentation.Parameters.text /*, ShapeGraphicalRepresentation.Parameters.border*/);
 			shape.setGraphicalRepresentation(graphicalRepresentation);
 			return graphicalRepresentation;
 		}

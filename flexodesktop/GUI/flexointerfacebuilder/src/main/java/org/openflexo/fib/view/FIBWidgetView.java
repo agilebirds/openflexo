@@ -475,7 +475,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	@Override
 	public void updateFont() {
 		if (getFont() != null) {
-			getJComponent().setFont(getFont());
+			getDynamicJComponent().setFont(getFont());
 		}
 	}
 

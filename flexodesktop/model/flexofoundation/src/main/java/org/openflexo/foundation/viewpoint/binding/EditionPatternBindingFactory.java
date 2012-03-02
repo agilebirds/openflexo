@@ -16,6 +16,8 @@ public final class EditionPatternBindingFactory extends DefaultBindingFactory {
 
 	@Override
 	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName) {
+		// logger.info("getBindingPathElement() for " + father + " propertyName=" + propertyName);
+		// logger.info("father is a " + father.getClass().getName());
 		if (father instanceof EditionPatternInstancePathElement) {
 			EditionPattern ep = ((EditionPatternInstancePathElement) father).getEditionPattern();
 			PatternRole pr = ep.getPatternRole(propertyName);

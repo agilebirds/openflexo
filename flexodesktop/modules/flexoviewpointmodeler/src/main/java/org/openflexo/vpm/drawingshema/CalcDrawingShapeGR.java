@@ -97,10 +97,10 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean getAllowToLeaveBounds() {
 		return false;
-	}
+	}*/
 
 	@Override
 	public String getText() {
@@ -121,7 +121,7 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
-				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null
+				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null && getCalcDrawingShape().getShema() != null
 				&& !getCalcDrawingShape().getShema().ignoreNotifications()) {
 			getCalcDrawingShape().setChanged();
 		}

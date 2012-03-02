@@ -742,20 +742,40 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		}
 		alreadyDone.add(ontology);
 		for (OntologyProperty p : ontology.getObjectProperties()) {
-			if (p.getRange() != null && p.getRange().isSuperConceptOf(this)) {
+			for (OntologyObject o : p.getRangeList()) {
+				if (o == this) {
+					rangeProperties.add(p);
+				}
+			}
+			for (OntologyObject o : p.getDomainList()) {
+				if (o == this) {
+					domainProperties.add(p);
+				}
+			}
+			/* if (p.getRange() != null && p.getRange() == this) {
 				rangeProperties.add(p);
 			}
-			if (p.getDomain() != null && p.getDomain().isSuperConceptOf(this)) {
+			if (p.getDomain() != null && p.getDomain() == this) {
 				domainProperties.add(p);
-			}
+			}*/
 		}
 		for (OntologyProperty p : ontology.getDataProperties()) {
-			if (p.getRange() != null && p.getRange().isSuperConceptOf(this)) {
+			for (OntologyObject o : p.getRangeList()) {
+				if (o == this) {
+					rangeProperties.add(p);
+				}
+			}
+			for (OntologyObject o : p.getDomainList()) {
+				if (o == this) {
+					domainProperties.add(p);
+				}
+			}
+			/*if (p.getRange() != null && p.getRange() == this) {
 				rangeProperties.add(p);
 			}
-			if (p.getDomain() != null && p.getDomain().isSuperConceptOf(this)) {
+			if (p.getDomain() != null && p.getDomain() == this) {
 				domainProperties.add(p);
-			}
+			}*/
 		}
 		for (FlexoOntology o : ontology.getImportedOntologies()) {
 			searchRangeAndDomains(rangeProperties, domainProperties, o, alreadyDone);

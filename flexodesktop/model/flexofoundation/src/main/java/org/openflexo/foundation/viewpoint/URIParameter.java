@@ -20,10 +20,14 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.Vector;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.antar.expr.Variable;
+import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.JavaUtils;
@@ -92,9 +96,9 @@ public class URIParameter extends EditionSchemeParameter {
 	}
 
 	@Override
-	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) {
+	public Object getDefaultValue(EditionSchemeAction<?> action) {
 		if (getBaseURI().isValid()) {
-			String baseProposal = (String) getBaseURI().getBindingValue(parameterRetriever);
+			String baseProposal = (String) getBaseURI().getBindingValue(action);
 			if (baseProposal == null) {
 				return null;
 			}
@@ -113,6 +117,30 @@ public class URIParameter extends EditionSchemeParameter {
 			return proposal;
 		}
 		return null;
+	}
+
+	public Vector<EditionSchemeParameter> getDependancies() {
+		if (getBaseURI().isSet() && getBaseURI().isValid()) {
+			Vector<EditionSchemeParameter> returned = new Vector<EditionSchemeParameter>();
+			try {
+				Vector<Variable> variables = Expression.extractVariables(getBaseURI().toString());
+				for (Variable v : variables) {
+					EditionSchemeParameter p = getScheme().getParameter(v.getName());
+					if (p != null) {
+						returned.add(p);
+					}
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return returned;
+		} else {
+			return null;
+		}
 	}
 
 }
