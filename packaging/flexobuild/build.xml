@@ -46,6 +46,16 @@
 		<antcall target="packageDeveloper" />
 	</target>
 
+	<target name="packageSemantics">
+		<loadproperties srcfile="semantics.properties" />
+		<antcall target="createPackage" />
+	</target>
+
+	<target name="packageSemanticsPlus">
+		<loadproperties srcfile="semanticsplus.properties" />
+		<antcall target="createPackage" />
+	</target>
+
 	<target name="packageCustomer">
 		<loadproperties srcfile="customer.properties" />
 		<antcall target="createPackage" />
