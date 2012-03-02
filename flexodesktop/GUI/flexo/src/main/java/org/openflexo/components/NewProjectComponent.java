@@ -55,9 +55,6 @@ public class NewProjectComponent extends ProjectChooserComponent {
 		NewProjectComponent chooser = new NewProjectComponent(owner);
 		File newProjectDir = null;
 		int returnVal = chooser.showSaveDialog();
-		if (returnVal == JFileChooser.CANCEL_OPTION) {
-			return null;
-		}
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if (isValidProjectName(chooser.getSelectedFile().getName())) {
 				newProjectDir = chooser.getSelectedFile();

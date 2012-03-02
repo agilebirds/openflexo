@@ -315,6 +315,20 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		getRootView().updateDataObject(dataObject);
 	}
 
+	public void show() {
+		Window w = retrieveWindow();
+		if (w != null) {
+			w.setVisible(true);
+		}
+	}
+
+	public void hide() {
+		Window w = retrieveWindow();
+		if (w != null) {
+			w.setVisible(false);
+		}
+	}
+
 	private Window retrieveWindow() {
 		Component c = SwingUtilities.getRoot(getRootView().getJComponent());
 		if (c instanceof Window) {

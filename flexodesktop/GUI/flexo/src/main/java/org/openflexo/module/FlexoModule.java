@@ -344,7 +344,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		Enumeration<FlexoModule> leftModules = getModuleLoader().loadedModules();
 		if (leftModules.hasMoreElements()) {
 			try {
-				getModuleLoader().switchToModule(leftModules.nextElement().getModule(), null);
+				getModuleLoader().switchToModule(leftModules.nextElement().getModule(), ModuleLoader.instance().getProject());
 			} catch (ModuleLoadingException e) {
 				logger.severe("Module is loaded and so this exception CANNOT occurs. Please investigate and FIX.");
 				e.printStackTrace();

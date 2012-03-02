@@ -24,7 +24,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -196,20 +195,13 @@ public final class ProjectLoader {
 	}
 
 	public InteractiveFlexoEditor reloadProject() throws ModuleLoadingException, ProjectLoadingCancelledException {
-		Module moduleToReload = null;
-		if (ModuleLoader.instance().getProject() != null) {
-			moduleToReload = FlexoModule.getActiveModule().getModule();
-			if (!saveProject(ModuleLoader.instance().getProject(), true)) {
-				return null;
-			}
-		}
 		File projectDirectory = ModuleLoader.instance().getProject().getProjectDirectory();
 		if (projectDirectory != null) {
 			closeCurrentProject();
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Chosen " + projectDirectory.getAbsolutePath());
 			}
-			return ModuleLoader.instance().openProjectWithModule(loadProject(projectDirectory), moduleToReload);
+			return loadProject(projectDirectory);
 		}
 		return null;
 	}
@@ -225,8 +217,7 @@ public final class ProjectLoader {
 			_rmWindow.dispose();
 			_rmWindow = null;
 		}
-		for (Enumeration<FlexoModule> e = new Hashtable<Module, FlexoModule>(ModuleLoader.instance()._modules).elements(); e
-				.hasMoreElements();) {
+		for (Enumeration<FlexoModule> e = ModuleLoader.instance().loadedModules(); e.hasMoreElements();) {
 			FlexoModule mod = e.nextElement();
 			mod.closeWithoutConfirmation(false);
 		}
@@ -484,7 +475,7 @@ public final class ProjectLoader {
 				doSaveProject(project);
 				return true;
 			} catch (SaveResourcePermissionDeniedException e) {
-				informUserAboutPermissionDeniedException((SaveResourcePermissionDeniedException) e);
+				informUserAboutPermissionDeniedException(e);
 				return false;
 			} catch (SaveResourceException e) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
