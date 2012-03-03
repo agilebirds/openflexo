@@ -249,12 +249,13 @@
 	</target>
 
 	<target name="linux-packaging">
-		<tar destfile="${project.build.directory}/${product.name} ${productSuffix} ${flexo_version}.tar.gz" compression="gzip" basedir="${dist.dir}" longfile="gnu">
-			<exclude name="*.exe"/>
+		<tar destfile="${project.build.directory}/${product.name} ${productSuffix} ${flexo_version}.tar.gz" compression="gzip" longfile="gnu">
 			<tarfileset mode="755" dir="${dist.dir}">
+    			<exclude name="*.exe"/>
 				<include name="*.sh"/>
 			</tarfileset>
 			<tarfileset dir="${dist.dir}">
+    			<exclude name="*.exe"/>
 				<exclude name="*.sh"/>
 			</tarfileset>
 		</tar>
