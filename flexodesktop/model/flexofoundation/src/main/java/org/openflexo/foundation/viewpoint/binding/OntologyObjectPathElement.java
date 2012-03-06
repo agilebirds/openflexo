@@ -168,7 +168,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 					StatementPathElement propertyPathElement = null;
 					if (property instanceof OntologyObjectProperty) {
 						propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
-								(OntologyObjectProperty) property);
+								(OntologyObjectProperty) property, true);
 					} else if (property instanceof OntologyDataProperty) {
 						propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
 					}

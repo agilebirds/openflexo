@@ -122,7 +122,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					StatementPathElement propertyPathElement = null;
 					if (property instanceof OntologyObjectProperty) {
 						propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
-								(OntologyObjectProperty) property);
+								(OntologyObjectProperty) property, true);
 					} else if (property instanceof OntologyDataProperty) {
 						propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
 					}
@@ -180,21 +180,62 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					// not relevant because not settable
 				}
 			};
-			subject = new OntologyObjectPathElement("subject", this) {
-				@Override
-				public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
-					if (target instanceof OntologyStatement) {
-						return ((OntologyStatement) target).getSubject();
+			OntologyClass subjectType = null;
+			if (aPatternRole instanceof DataPropertyStatementPatternRole
+					&& ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty() != null
+					&& ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty().getDomain() instanceof OntologyClass) {
+				subjectType = (OntologyClass) ((DataPropertyStatementPatternRole) aPatternRole).getDataProperty().getDomain();
+				subject = new OntologyIndividualPathElement("subject", subjectType, this) {
+					@Override
+					public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
+						if (target instanceof OntologyStatement) {
+							return (OntologyIndividual) ((OntologyStatement) target).getSubject();
+						}
+						logger.warning("Unexpected " + target);
+						return null;
 					}
-					logger.warning("Unexpected " + target);
-					return null;
-				}
 
-				@Override
-				public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
-					// not relevant because not settable
-				}
-			};
+					@Override
+					public void setBindingValue(OntologyIndividual value, Object target, BindingEvaluationContext context) {
+						// not relevant because not settable
+					}
+				};
+			} else if (aPatternRole instanceof ObjectPropertyStatementPatternRole
+					&& ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty() != null
+					&& ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty().getDomain() instanceof OntologyClass) {
+				subjectType = (OntologyClass) ((ObjectPropertyStatementPatternRole) aPatternRole).getObjectProperty().getDomain();
+				subject = new OntologyIndividualPathElement("subject", subjectType, this) {
+					@Override
+					public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
+						if (target instanceof OntologyStatement) {
+							return (OntologyIndividual) ((OntologyStatement) target).getSubject();
+						}
+						logger.warning("Unexpected " + target);
+						return null;
+					}
+
+					@Override
+					public void setBindingValue(OntologyIndividual value, Object target, BindingEvaluationContext context) {
+						// not relevant because not settable
+					}
+				};
+			} else {
+				subject = new OntologyObjectPathElement("subject", this) {
+					@Override
+					public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) {
+						if (target instanceof OntologyStatement) {
+							return ((OntologyStatement) target).getSubject();
+						}
+						logger.warning("Unexpected " + target);
+						return null;
+					}
+
+					@Override
+					public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
+						// not relevant because not settable
+					}
+				};
+			}
 			allProperties.add(displayableRepresentation);
 			allProperties.add(subject);
 		}
@@ -255,7 +296,11 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					// not relevant because not settable
 				}
 			};
-			object = new OntologyIndividualPathElement("object", this) {
+			OntologyClass objectType = null;
+			if (aPatternRole.getObjectProperty() != null && aPatternRole.getObjectProperty().getRange() instanceof OntologyClass) {
+				objectType = (OntologyClass) aPatternRole.getObjectProperty().getRange();
+			}
+			object = new OntologyIndividualPathElement("object", objectType, this) {
 				@Override
 				public OntologyIndividual getBindingValue(Object target, BindingEvaluationContext context) {
 					if (target instanceof ObjectPropertyStatement) {
