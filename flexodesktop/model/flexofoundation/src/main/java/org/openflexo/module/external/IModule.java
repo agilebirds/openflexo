@@ -27,4 +27,7 @@ public interface IModule {
 
 	public abstract boolean isLoaded();
 
+	@Override
+	public String toString();
+
 }

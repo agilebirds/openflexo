@@ -157,6 +157,7 @@ import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.foundation.wkf.Status;
+import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WKFValidationModel;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
@@ -1719,6 +1720,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	// ==========================================================================
 
 	public static FlexoEditor newProject(File rmFile, File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress) {
+		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
 		FlexoProject project = new FlexoProject(aProjectDirectory);
 		FlexoEditor editor = editorFactory.makeFlexoEditor(project);
 		project.setLastUniqueID(0);
@@ -3756,6 +3758,11 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	public static void cleanUpActionizer() {
+		// FlexoModelObject
+		FlexoModelObject.addFlexoPropertyActionizer = null;
+		FlexoModelObject.deleteFlexoPropertyActionizer = null;
+		FlexoModelObject.sortFlexoPropertiesActionizer = null;
+
 		// CGFile
 		CGFile.editCustomTemplateActionizer = null;
 		CGFile.redefineTemplateActionizer = null;
@@ -3769,9 +3776,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 		// FlexoWorkflow
 		FlexoWorkflow.addActivityMetricsDefinitionActionizer = null;
+		FlexoWorkflow.addArtefactMetricsDefinitionActionizer = null;
 		FlexoWorkflow.addEdgeMetricsDefinitionActionizer = null;
-		FlexoWorkflow.addProcessMetricsDefinitionActionizer = null;
 		FlexoWorkflow.addOperationMetricsDefinitionActionizer = null;
+		FlexoWorkflow.addProcessMetricsDefinitionActionizer = null;
 		FlexoWorkflow.deleteMetricsDefinitionActionizer = null;
 
 		// Role
@@ -3781,13 +3789,27 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		RoleList.addRoleActionizer = null;
 		RoleList.deleteRoleActionizer = null;
 
+		// WKFArtefact
+		WKFArtefact.addMetricsActionizer = null;
+		WKFArtefact.deleteMetricsActionizer = null;
+
 		// FlexoPostCondition
 		FlexoPostCondition.addMetricsActionizer = null;
 		FlexoPostCondition.deleteMetricsActionizer = null;
 
 		// AbstractActivityNode
+		AbstractActivityNode.addAccountableRoleActionizer = null;
+		AbstractActivityNode.addConsultedRoleActionizer = null;
+		AbstractActivityNode.addInformedRoleActionizer = null;
 		AbstractActivityNode.addMetricsActionizer = null;
+		AbstractActivityNode.addResponsibleRoleActionizer = null;
+
 		AbstractActivityNode.deleteMetricsActionizer = null;
+
+		AbstractActivityNode.removeFromAccountableRoleActionizer = null;
+		AbstractActivityNode.removeFromConsultedRoleActionizer = null;
+		AbstractActivityNode.removeFromInformedRoleActionizer = null;
+		AbstractActivityNode.removeFromResponsibleRoleActionizer = null;
 
 		// OperationNode
 		OperationNode.addMetricsActionizer = null;

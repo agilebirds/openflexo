@@ -68,6 +68,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.tree.TreeNode;
 import javax.xml.rpc.ServiceException;
 
 import org.openflexo.AdvancedPrefs;
@@ -84,6 +85,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.SetPropertyAction;
+import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
@@ -1375,6 +1377,13 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 					((SelectionManagingController) this).getSelectionManager().setSelectedObject(object);
 				}
 
+			} else {
+				if (object instanceof DMObject) {
+					TreeNode parent = ((DMObject) object).getParent();
+					if (parent instanceof DMObject) {
+						setCurrentEditedObjectAsModuleView((FlexoModelObject) parent);
+					}
+				}
 			}
 
 			return returned;
