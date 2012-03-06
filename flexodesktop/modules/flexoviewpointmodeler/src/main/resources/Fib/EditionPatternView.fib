@@ -739,7 +739,8 @@
       </Tab>
       <Tab index="1" title="inspector" layout="gridbag" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" width="80" height="60" name="InspectorTab">
         <Table iteratorClassName="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" visibleRowCount="7" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InspectorPropertyTable" data="InspectorTab.data.entries" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
-          <TextFieldColumn data="iterator.label" title="label" columnWidth="120" resizable="true" displayTitle="true" name="textfield" />
+          <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
+          <TextFieldColumn data="iterator.label" title="label" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
           <LabelColumn data="iterator.widgetName" title="widget" columnWidth="100" resizable="true" displayTitle="true" name="label" />
           <AddAction method="data.inspector.createNewTextField" name="add_textfield" />
           <AddAction method="data.inspector.createNewTableProperty" name="add_table" />

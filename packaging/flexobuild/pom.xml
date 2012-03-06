@@ -14,7 +14,7 @@
 	</properties>
 	<artifactId>flexobuild</artifactId>
 	<packaging>pom</packaging>
-	<name>Packaging :: Installers</name>
+	<name>Packaging :: Build Installers</name>
 	<profiles>
 		<profile>
 			<id>installer</id>
@@ -80,16 +80,31 @@
 			<groupId>org.openflexo.packaging</groupId>
 			<artifactId>flexobusiness</artifactId>
 			<version>${project.version}</version>
+			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo.packaging</groupId>
 			<artifactId>flexobusinessplus</artifactId>
 			<version>${project.version}</version>
+			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo.packaging</groupId>
 			<artifactId>flexoenterprise</artifactId>
 			<version>${project.version}</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo.packaging</groupId>
+			<artifactId>flexosemantics</artifactId>
+			<version>${project.version}</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo.packaging</groupId>
+			<artifactId>flexosemanticsplus</artifactId>
+			<version>${project.version}</version>
+			<type>pom</type>
 		</dependency>
 	</dependencies>
 </project>

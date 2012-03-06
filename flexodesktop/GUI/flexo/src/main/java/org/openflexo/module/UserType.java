@@ -61,7 +61,7 @@ public abstract class UserType extends FlexoObject {
 
 	public static final SemanticsPlusUser SEMANTICS_PLUS_USER = new SemanticsPlusUser();
 
-	private static final UserType[] knownUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER };
+	private static final UserType[] knownUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER, SEMANTICS_USER, SEMANTICS_PLUS_USER };
 
 	private Vector<DocItemFolder> documentationFolders = null;
 
