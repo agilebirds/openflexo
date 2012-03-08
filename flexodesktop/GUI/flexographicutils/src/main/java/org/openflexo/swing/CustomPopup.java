@@ -447,6 +447,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
+					if (_popup == null) {
+						return;
+					}
 					Window oppositeWindow = e.getOppositeWindow();
 					if (!(oppositeWindow instanceof CustomPopup.CustomJPopupMenu) && oppositeWindow != null
 							&& oppositeWindow.getOwner() instanceof CustomPopup.CustomJPopupMenu) {
