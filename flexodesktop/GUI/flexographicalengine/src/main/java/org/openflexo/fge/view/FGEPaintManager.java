@@ -20,6 +20,7 @@
 package org.openflexo.fge.view;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -229,7 +230,8 @@ public class FGEPaintManager {
 		// repaintManager.repaintTemporaryRepaintAreas((JComponent)view);
 
 		if (view instanceof ShapeView /*&& isPaintingCacheEnabled()*/) {
-			if (((Component) view).getParent() == null) {
+			Container parent = ((Component) view).getParent();
+			if (parent == null) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Parent view to repaint is null: "
 							+ (view.getGraphicalRepresentation() != null ? view.getModel() : view));
@@ -245,31 +247,31 @@ public class FGEPaintManager {
 			if (gr.getBorder().top * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
 						((Component) view).getWidth() + requiredControlPointSpace * 2, requiredControlPointSpace * 2);
-				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, ((Component) view).getParent());
-				((Component) view).getParent().repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
+				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
+				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
 			if (gr.getBorder().bottom * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, ((Component) view).getHeight()
 						- requiredControlPointSpace, ((Component) view).getWidth() + requiredControlPointSpace * 2,
 						requiredControlPointSpace * 2);
-				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, ((Component) view).getParent());
-				((Component) view).getParent().repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
+				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
+				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
 			if (gr.getBorder().left * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
 						requiredControlPointSpace * 2, ((Component) view).getHeight() + requiredControlPointSpace * 2);
-				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, ((Component) view).getParent());
-				((Component) view).getParent().repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
+				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
+				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
 			if (gr.getBorder().right * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(((Component) view).getWidth() - requiredControlPointSpace,
 						-requiredControlPointSpace, requiredControlPointSpace * 2, ((Component) view).getHeight()
 								+ requiredControlPointSpace * 2);
-				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, ((Component) view).getParent());
-				((Component) view).getParent().repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
+				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
+				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
 		}

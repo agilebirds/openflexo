@@ -367,7 +367,9 @@ public class FlexoAutoSaveThread extends Thread {
 		return (List<File>) projects.clone();
 	}
 
-	public static class AutoSaveActionFailed implements Runnable {
+	private boolean autoSaveFailedNotified = false;
+
+	private class AutoSaveActionFailed implements Runnable {
 		/**
 		 * Overrides run
 		 * 
@@ -375,12 +377,16 @@ public class FlexoAutoSaveThread extends Thread {
 		 */
 		@Override
 		public void run() {
+			if (autoSaveFailedNotified) {
+				return;
+			}
 			FlexoController.showError(
 					FlexoLocalization.localizedForKey("auto_save_action_failed"),
 					FlexoLocalization.localizedForKey("auto_save_action_could_not_be_performed")
 							+ "\n"
 							+ FlexoLocalization
 									.localizedForKey("verify_that_your_disk_is_not_full_and_that_you_can_write_in_the_temp_directory."));
+			autoSaveFailedNotified = true;
 		}
 	}
 
