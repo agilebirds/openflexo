@@ -69,7 +69,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * @author gpolet
@@ -296,7 +295,6 @@ public class FlexoAutoSaveThread extends Thread {
 	}
 
 	public void restoreAutoSaveProject(FlexoAutoSaveFile autoSaveFile, FlexoProgress progress) throws IOException {
-		Module module = FlexoModule.getActiveModule().getModule();
 		File projectDirectory = project.getProjectDirectory();
 		File dest = null;
 		int attempt = 0;
@@ -324,8 +322,7 @@ public class FlexoAutoSaveThread extends Thread {
 			progress.hideWindow();
 		}
 		try {
-			InteractiveFlexoEditor editor = ProjectLoader.instance().loadProject(projectDirectory);
-			getModuleLoader().openProjectWithModule(editor, module);
+			getModuleLoader().openProject(projectDirectory, null);
 		} catch (ModuleLoadingException e) {
 			logger.severe("This shouldn't append since module is already loaded." + e.getMessage());
 			e.printStackTrace();

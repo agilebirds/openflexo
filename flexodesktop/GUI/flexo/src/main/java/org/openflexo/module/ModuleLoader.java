@@ -66,7 +66,6 @@ import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.ModuleBar;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.view.menu.WindowMenu;
 
@@ -570,30 +569,6 @@ public final class ModuleLoader implements IModuleLoader {
 			logger.info("Exiting FLEXO Application Suite... DONE");
 		}
 		System.exit(0);
-	}
-
-	/**
-	 * Loads the project located within <code>projectDirectory</code> and then switches automatically to the given module
-	 * <code> moduleToReload </code> or WKFModule if moduleToReload is null or not available.
-	 * 
-	 * @param editor
-	 *            the editor for the project. Cannot be null.
-	 * @param moduleToReload
-	 *            the module to reload. Can be null.
-	 * @return the editor of the loaded project. (i.e. argument editor)
-	 * @throws ModuleLoadingException
-	 *             when the module can't be loaded (various causes)
-	 */
-	public InteractiveFlexoEditor openProjectWithModule(InteractiveFlexoEditor editor, Module moduleToReload) throws ModuleLoadingException {
-		if (editor == null) {
-			return null;
-		}
-		if (moduleToReload == null || !isAvailable(moduleToReload)) {
-			moduleToReload = Module.WKF_MODULE;
-		}
-		activeModule = null;
-		switchToModule(moduleToReload, editor.getProject());
-		return editor;
 	}
 
 	/**
