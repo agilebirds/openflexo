@@ -22,15 +22,12 @@ package org.openflexo.foundation.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 
 public class FlexoProjectUtil {
@@ -104,7 +101,6 @@ public class FlexoProjectUtil {
 	public static boolean currentFlexoVersionIsSmallerThanLastVersion(File projectDirectory) {
 		File f = getVersionFile(projectDirectory);
 		if (!f.exists()) {
-			createVersionFile(projectDirectory);
 			return false;
 		} else {
 			FlexoVersion v = getVersion(projectDirectory);
@@ -113,78 +109,7 @@ public class FlexoProjectUtil {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Version is " + v);
 			}
-			boolean result = FlexoXMLMappings.latestRelease().isLesserThan(v);
-			if (!result) {
-				FlexoProjectUtil.createVersionFile(projectDirectory);
-			}
-			return result;
-		}
-	}
-
-	/**
-	 * @param projectDirectory
-	 * @return
-	 */
-	private static void createVersionFile(File projectDirectory) {
-		File f = getVersionFile(projectDirectory);
-		if (!f.exists()) {
-			boolean create = false;
-			try {
-				create = f.createNewFile();
-			} catch (IOException e) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("IOException in creation of version file: " + e.getMessage());
-				}
-				return;
-			}
-			if (!create) {
-				return;
-			}
-		}
-		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream(f);
-		} catch (FileNotFoundException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("FileNotFoundException in creation of version file: " + e.getMessage());
-			}
-			if (f.exists()) {
-				FileUtils.unmakeFileHidden(f);
-			} else {
-				return;
-			}
-			try {
-				fos = new FileOutputStream(f);
-			} catch (FileNotFoundException e1) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("FileNotFoundException in creation of version file: " + e1.getMessage());
-				}
-				return;
-			}
-		}
-		try {
-			fos.write(FlexoXMLMappings.latestRelease().toString().getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("IOException in creation of version file: " + e.getMessage());
-			}
-		} finally {
-			try {
-				fos.flush();
-			} catch (IOException e) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("IOException in flushing of version file: " + e.getMessage());
-				}
-			}
-			try {
-				fos.close();
-			} catch (IOException e) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("IOException in closing of version file: " + e.getMessage());
-				}
-			}
+			return FlexoXMLMappings.latestRelease().isLesserThan(v);
 		}
 	}
 
