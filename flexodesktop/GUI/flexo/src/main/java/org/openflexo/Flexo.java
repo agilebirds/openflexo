@@ -157,6 +157,9 @@ public class Flexo {
 		}
 		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
 		UserType.setCurrentUserType(userTypeNamed);
+		FlexoProperties.load();
+		initializeLoggingManager();
+		FlexoApplication.initialize();
 		if (ToolBox.getFrame(null) != null) {
 			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
 		}
@@ -167,11 +170,8 @@ public class Flexo {
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
 		}
-		FlexoProperties.load();
 		initProxyManagement();
-		initializeLoggingManager();
 		initUILAF();
-		FlexoApplication.initialize();
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting on " + ToolBox.getPLATFORM() + "... JVM version is " + System.getProperty("java.version"));
 		}
