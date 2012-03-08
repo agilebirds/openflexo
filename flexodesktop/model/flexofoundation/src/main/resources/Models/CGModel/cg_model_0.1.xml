@@ -47,7 +47,7 @@
     <property name="name" xmlTag="srcRepositoryIdentifier" attribute="yes"/>
     <property name="displayName" xmlTag="name" attribute="yes"/>
     <property name="symbolicDirectories" xmlTag="CGSymbolicDirectory" type="hashtable" key="name" primary="yes"/> 
-    <property name="files" xmlTag="CGFile" type="vector" primary="yes"/> 
+    <property name="files" xmlTag="CGFile,DGPSlide" type="vector" primary="yes"/> 
     <property name="preferredTemplateRepositoryName" xmlTag="preferredTemplateRepository" attribute="yes"/> 
     <property name="releases" xmlTag="CGRelease" type="vector" primary="yes"/>
     <property name="format" xmlTag="format" attribute="yes" description="The target format (technology, language) of this repository"/>
@@ -79,12 +79,13 @@
     <property name="systemVersion" xmlTag="systemVersion" attribute="yes"/>
     <property name="tocRepositoryRef" xmlTag="tocRepository" attribute="yes"/>
   </entity>
-  
+  <!-- MOS -->
   <entity name="org.openflexo.foundation.cg.PresentationRepository" xmlTag="PresentationRepository">
     <description>Structure of a generated code Presentation repository</description>
     <property name="ptocRepositoryRef" xmlTag="ptocRepository" attribute="yes"/>
   </entity>
-	
+  <!-- End MOS -->
+  
   <entity name="org.openflexo.foundation.cg.CGSymbolicDirectory" xmlTag="CGSymbolicDirectory">
     <description>Symbolic directory</description>
     <property name="name" xmlTag="name" attribute="yes"/> 
@@ -98,6 +99,12 @@
     <property name="resourceName" xmlTag="resourceName" attribute="yes"/>
     <property name="usedTemplates" xmlTag="usedTemplates" type="vector"/> 
   </entity>
+  <!-- MOS -->
+  <entity name="org.openflexo.dg.file.DGPSlideXmlFile" xmlTag="DGPSlide">
+    <description>Structure of a generated  Xml Slide file</description>
+    <property name="pSlideRef" xmlTag="pslide" attribute="yes"/> 
+  </entity>
+	<!-- End MOS -->
 
   <entity name="org.openflexo.foundation.cg.version.CGRelease" xmlTag="CGRelease">
     <description>Generated code release</description>

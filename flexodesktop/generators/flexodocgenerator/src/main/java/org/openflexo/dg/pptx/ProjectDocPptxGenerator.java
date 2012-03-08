@@ -171,31 +171,19 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 			// MARKER 1.2 getOrderedTemplateListGroupedPerGenerator
 			for (String nameGenerator : PptxTemplatesEnum
 					.getOrderedTemplateListGroupedPerGenerator().keySet()) {
-				/**
-				 * getGenerator method returns the corresponding
-				 * DGPptxXMLGenerator instance from the generators list
-				 * attribute, (it creates it if not created.)
-				 */
-				DGPptxXMLGenerator<FlexoProject> generator = getGenerator(nameGenerator);
-				for (PptxTemplatesEnum pptxTemplate : PptxTemplatesEnum.getOrderedTemplateListGroupedPerGenerator().get(nameGenerator)) {
-					refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " " + pptxTemplate.getFilePath(), false);
+				if(nameGenerator.equals(PptxTemplatesEnum.SLIDE_XML.toString()))
+				{
 					/**
-					 * GeneratedFileResourceFactory.
-					 * createNewProjectPptXmlFileResource method returns the
-					 * ProjectPptxXmlFileResource instance corresponding to
-					 * generator, repository and pptxTemplate. if not yet
-					 * created it creates it.
-					 * 
+					 * if we use the slide template we must create a generator for every slide and slide_rels
+					 * Because generators have a hashTable called generatedCodeReuslt with templates names as keys 
+					 * and resulted code as values.
+					 * If we use only one generator to generate all slides, the resulted generatedCodeReuslt hashTable
+					 * will contain only the code of the last slide.
 					 */
-					
-					if(pptxTemplate.isSlide() || pptxTemplate.isSlideRels()){
-						buildSlidesResources(prep,resources,generator, pptxTemplate);
-					}else{
-						ProjectPptxXmlFileResource res = GeneratedFileResourceFactory.createNewProjectPptXmlFileResource(prep,generator, pptxTemplate);
-						resources.add(res);
-					}
-					
-				}
+					buildSlideResourcesAndSetGenerators(nameGenerator,prep,resources);
+				}else
+					buildResourcesAndSetGenerators(nameGenerator,prep, resources);
+				
 			}
 
 			buildResourcesAndSetGeneratorsForCopyOfPackagedResources(resources);
@@ -204,7 +192,6 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 			// resources currently (and thus not copied by
 			// buildResourcesAndSetGeneratorsForCopiedResources)
 			// buildResourcesAndSetGeneratorsForCopiedResources(resources);
-			// MARKER 1.4 screenshotsGenerator.buildResourcesAndSetGenerators
 			screenshotsGenerator.buildResourcesAndSetGenerators(repository,
 					resources);
 		}catch(Exception e ){
@@ -213,21 +200,55 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 	}
 	
 
-	private void buildSlidesResources(PresentationRepository repository,
-			Vector<CGRepositoryFileResource> resources,
-			DGPptxXMLGenerator<FlexoProject> generator,
-			PptxTemplatesEnum pptxTemplate) {
-		
-		
-		PTOCRepository ptocRepository = repository.getPTocRepository();
+	
+	private void buildResourcesAndSetGenerators(String nameGenerator , PresentationRepository prep , Vector<CGRepositoryFileResource> resources)
+	{
+		/**
+		 * getGenerator method returns the corresponding
+		 * DGPptxXMLGenerator instance from the generators list
+		 * attribute, (it creates it if not created.)
+		 */
+		DGPptxXMLGenerator<FlexoProject> generator = getGenerator(nameGenerator);
+		for (PptxTemplatesEnum pptxTemplate : PptxTemplatesEnum.getOrderedTemplateListGroupedPerGenerator().get(nameGenerator)) {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " " + pptxTemplate.getFilePath(), false);
+			/**
+			 * GeneratedFileResourceFactory.
+			 * createNewProjectPptXmlFileResource method returns the
+			 * ProjectPptxXmlFileResource instance corresponding to
+			 * generator, repository and pptxTemplate. if not yet
+			 * created it creates it.
+			 * 
+			 */
+				ProjectPptxXmlFileResource res = GeneratedFileResourceFactory.createNewProjectPptXmlFileResource(prep,generator, pptxTemplate);
+				resources.add(res);
+			
+			
+		}
+	}
+
+	private void buildSlideResourcesAndSetGenerators(String nameGenerator , PresentationRepository prep , Vector<CGRepositoryFileResource> resources){
+		PTOCRepository ptocRepository = prep.getPTocRepository();
 		int i = 1;
+		/**
+		 * We don't use the same generator to generate a slide and its rels file.
+		 * we must create a generator for every slide. Because the slides are built using the same template
+		 * If we use only one generator to generate slides, GeneratedCodeResult<templateName, generatedCode> will only
+		 * contain one key (SLIDE_XML which is the only slide template's name) and only one value (the generated code of the last slide).
+		 * So all the slides will contain the same generated code.
+		 * To know more about this, please analyze the generate method of the DGPptxXMLGenerator class. 
+		 */
 		for(PSlide slide : ptocRepository.getOrderedSlides()){
-			ProjectPptxXmlFileResource res= GeneratedFileResourceFactory.createNewProjectSlidePptXmlFileResource(repository,generator, pptxTemplate, slide , i);
-			resources.add(res);
+			DGPptxXMLGenerator<FlexoProject> generator = getGenerator(nameGenerator+i);
+			for (PptxTemplatesEnum pptxTemplate : PptxTemplatesEnum.getOrderedTemplateListGroupedPerGenerator().get(nameGenerator)) {
+				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " " + pptxTemplate.getFilePath(), false);
+									
+				ProjectPptxXmlFileResource res= GeneratedFileResourceFactory.createNewProjectSlidePptXmlFileResource(prep,generator, pptxTemplate, slide , i);
+				resources.add(res);
+			}
 			i++;
 		}
-		
 	}
+	
 
 	private DGPptxXMLGenerator<FlexoProject> getGenerator(String nameGenerator) {
 		DGPptxXMLGenerator<FlexoProject> returned = generators.get(nameGenerator);
@@ -417,9 +438,9 @@ public class ProjectDocPptxGenerator extends ProjectDocGenerator {
 
 	public String getMediaRelativePath(String filePath) {
 		filePath = filePath.replace('\\', '/');
-		int index = filePath.lastIndexOf("word/");
-		if ((index != -1) && (filePath.length() > index + "word/".length())) {
-			return filePath.substring(index + "word/".length());
+		int index = filePath.lastIndexOf("ppt/");
+		if ((index != -1) && (filePath.length() > index + "ppt/".length())) {
+			return filePath.substring(index + "ppt/".length());
 		}
 
 		return "media/" + filePath;

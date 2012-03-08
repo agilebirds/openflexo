@@ -1,5 +1,5 @@
 #Dutch
-#Fri Feb 17 00:41:30 CET 2012
+#Wed Feb 29 11:17:18 CET 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -3944,6 +3944,7 @@ process_time=Process time
 process_time_description=This is the actual time it takes to complete a process or a task
 process_to_bind=Process to bind
 processes=Processes
+processoutlook=processoutlook
 product=Software product
 profile_operation=profile operation
 profile_process=profile process
@@ -4810,6 +4811,8 @@ title_ENGLISH=ENGLISH title
 title_FRENCH=FRENCH title
 title_and_description_are_mandatory=Title and description are mandatory fields
 title_is_mandatory=Title is mandatory
+titleandcontent=titleandcontent
+titleonly=titleonly
 to=To
 to_avoid_damaging_the_project_flexo_will_exit=To avoid damaging the project, OpenFlexo will exit
 to_delete_a_component_select_it_separately_from_other_object.=To delete a component select it separately from other object.

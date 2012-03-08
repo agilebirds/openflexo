@@ -34,6 +34,8 @@ import java.util.regex.Pattern;
 import org.apache.velocity.VelocityContext;
 
 
+import org.openflexo.dg.file.DGPSlideXmlFile;
+import org.openflexo.dg.file.DGPptxXmlFile;
 import org.openflexo.dg.latex.DocGeneratorConstants;
 import org.openflexo.dg.rm.PptxXmlFileResource;
 import org.openflexo.dg.rm.ProjectPptxXmlFileResource;
@@ -50,6 +52,7 @@ import org.openflexo.foundation.ie.IEPageComponent;
 import org.openflexo.foundation.ie.IEPopupComponent;
 import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
+import org.openflexo.foundation.ptoc.PSlide;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
@@ -120,12 +123,17 @@ public class DGPptxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		try
 		{
 			VelocityContext context = defaultContext();
-//			contecxt.put("repository", (PresentationRepository)getRepository());
 			generatedCode = new GeneratedPptxXmlResource(getIdentifier());
 			for(PptxXmlFileResource<DGPptxXMLGenerator<T>> resource : pptxResources.keySet()){
 				//TODO_MOS Adapt it to fit the final model
-					if((resource).getSlide() !=null){
-						context.put("slideTitle", resource.getSlide().getTitle());
+				
+					if(resource.getCGFile() instanceof DGPSlideXmlFile){
+						DGPSlideXmlFile file =(DGPSlideXmlFile) resource.getCGFile();
+						PSlide slide = file.getPSlide();
+						PptxTemplatesEnum layoutTemplate = PptxTemplatesEnum.getTemplateLayoutForLayout(slide.getPslideLayout());
+						context.put("slide", slide);
+						if(layoutTemplate!=null)
+							context.put("Layoutpath", layoutTemplate.getFilePath());
 					}
 				((GeneratedPptxXmlResource)generatedCode).addCode(getPptxTemplateForResource(resource), merge(getTemplateNameForResource(resource), context));
 			}

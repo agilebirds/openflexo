@@ -130,7 +130,7 @@ public class AddPTOCRepositoryInitializer extends ActionInitializer {
 						
 						try {
 							PTOCRepository tocTemplate = (PTOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(
-									tocTemplateFile), new FileResource("Models/PTOCModel/toc_template_0.1.xml"), new FlexoPTOCBuilder(null));
+									tocTemplateFile), new FileResource("Models/PTOCModel/ptoc_template_0.1.xml"), new FlexoPTOCBuilder(null));
 							
 							action.setTocTemplate(tocTemplate);
 						} catch (Exception e) {

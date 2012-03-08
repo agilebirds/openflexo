@@ -146,7 +146,7 @@
   
   <!--MOS-->
   <class name="org.openflexo.foundation.ptoc.PTOCData" latestVersion="0.1">
-    <version id="0.1" modelFile="PTOCModel/toc_model_0.1.xml"/>
+    <version id="0.1" modelFile="PTOCModel/ptoc_model_0.1.xml"/>
   </class>
   <!--EndMOS-->
   <class name="org.openflexo.foundation.FlexoLinks" latestVersion="0.1">

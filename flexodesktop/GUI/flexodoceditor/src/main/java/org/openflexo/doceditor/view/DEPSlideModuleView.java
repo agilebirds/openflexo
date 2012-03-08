@@ -128,9 +128,10 @@ public class DEPSlideModuleView extends JPanel implements ModuleView<PSlide>, Fl
     		JTextArea textarea = new JTextArea();
     		textarea.setEditable(false);
     		textarea.setEnabled(false);
-    		String key = "description_"+(_slide.getIdentifier()!=null?_slide.getIdentifier().name().toLowerCase():(
-    				_slide.getObjectReference()!=null?_slide.getObjectReference().getKlass().getSimpleName():"unknown_section"));
-    		textarea.setText(FlexoLocalization.localizedForKey(key, textarea));
+    		//TODO_MOS modify this
+//    		String key = "description_"+(_slide.getIdentifier()!=null?_slide.getIdentifier().name().toLowerCase():(
+//    				_slide.getObjectReference()!=null?_slide.getObjectReference().getKlass().getSimpleName():"unknown_section"));
+//    		textarea.setText(FlexoLocalization.localizedForKey(key, textarea));
     		panel.add(textarea);
     		add(panel,BorderLayout.CENTER);
     	}

@@ -24,7 +24,9 @@ package org.openflexo.dg.pptx;
  * TODO_MOS
  */
 
+import org.openflexo.dg.rm.PptxXmlFileResource;
 import org.openflexo.foundation.cg.generator.GeneratedCodeResult;
+import org.openflexo.foundation.ptoc.PSlide;
 
 public class GeneratedPptxXmlResource extends GeneratedCodeResult
 {
@@ -36,5 +38,11 @@ public class GeneratedPptxXmlResource extends GeneratedCodeResult
 	public void addCode(PptxTemplatesEnum template, String content)
 	{
 		addCode(template.toString(), content);
+	}
+	
+	//SUPPR supprimer
+	public void addSlideCode(PptxTemplatesEnum template,PptxXmlFileResource resource, String content)
+	{
+		addCode(resource.getFileName(), content);
 	}
 }

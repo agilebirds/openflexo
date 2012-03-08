@@ -43,6 +43,8 @@ import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
+import org.openflexo.foundation.ptoc.action.RemovePTOCEntry;
+import org.openflexo.foundation.ptoc.action.RemovePTOCRepository;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.toc.action.RemoveTOCEntry;
 import org.openflexo.foundation.toc.action.RemoveTOCRepository;
@@ -99,7 +101,7 @@ public class PTOCRepository extends PTOCEntry {
 		String tocTemplateFileName = templateName+".xml";
 		File tocTemplateFile = new FileResource("Config/PTOCTemplates/"+tocTemplateFileName);
 		try {
-			PTOCRepository tocTemplate = (PTOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile), new FileResource("Models/PTOCModel/toc_template_0.1.xml"),new FlexoTOCBuilder(null));
+			PTOCRepository tocTemplate = (PTOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile), new FileResource("Models/PTOCModel/ptoc_template_0.1.xml"),new FlexoPTOCBuilder(null));
 			return tocTemplate;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,8 +139,8 @@ public class PTOCRepository extends PTOCEntry {
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.remove(RemoveTOCEntry.actionType);
-		v.add(RemoveTOCRepository.actionType);
+		v.remove(RemovePTOCEntry.actionType);
+		v.add(RemovePTOCRepository.actionType);
 		return v;
 	}
 
@@ -230,11 +232,16 @@ public class PTOCRepository extends PTOCEntry {
 		PTOCEntry reply = new PTOCEntry(getData(),modelObject);
 		return reply;
 	}
-
-	public PSlide createObjectSlide(FlexoModelObject modelObject,DocSection identifier) {
-		PSlide reply = new PSlide(getData(),modelObject,identifier);
+	
+	public PSlide createPSlide(FlexoModelObject modelObject , PSlideType type) {
+		PSlide reply = new PSlide(getData(),modelObject , type);
 		return reply;
 	}
+
+//	public PSlide createObjectSlide(FlexoModelObject modelObject,DocSection identifier) {
+//		PSlide reply = new PSlide(getData(),modelObject,identifier);
+//		return reply;
+//	}
 
 	public PTOCEntry createDefaultEntry(String title) {
 		PTOCEntry entry = new PTOCEntry(getData() );

@@ -140,7 +140,6 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 				+ getFocusedObject().getProject().getPrefix() + "Application "
 				+ FlexoLocalization.localizedForKey("into")  +" "
 				+ getRepository().getDirectory().getAbsolutePath(), 15);
-		//TODO_MOS Synchronisation
 		pg.refreshConcernedResources();
 		GenerateSourceCode generateSourceCode = GenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(), this);
 		generateSourceCode.doAction();

@@ -1,5 +1,5 @@
 #French
-#Fri Feb 17 00:41:30 CET 2012
+#Wed Feb 29 11:17:18 CET 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -3944,6 +3944,7 @@ process_time=Temps d'\u00E9x\u00E9cution
 process_time_description=C'est le temps n\u00E9cessaire pour ex\u00E9cuter un processus ou une t\u00E2che
 process_to_bind=Processus \u00E0 inclure
 processes=Processus
+processoutlook=processoutlook
 product=Produit logiciel
 profile_operation=Operation de profil
 profile_process=processu de profil
@@ -4810,6 +4811,8 @@ title_ENGLISH=Titre ANGLAIS
 title_FRENCH=Titre FRANCAIS
 title_and_description_are_mandatory=Le titre et la description sont des champs obligatoires
 title_is_mandatory=Titre est obligatoire
+titleandcontent=titleandcontent
+titleonly=titleonly
 to=\u00C0
 to_avoid_damaging_the_project_flexo_will_exit=Afin de ne pas endomager les donn\u00E9es du projet, OpenFlexo va quitter l'application
 to_delete_a_component_select_it_separately_from_other_object.=Pour supprimer un composant, s\u00E9lectionnez-le s\u00E9par\u00E9mment des autres objets

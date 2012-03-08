@@ -23,8 +23,11 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class PSlide extends PTOCUnit   {
 
-	private DocSection identifier;
-	private ProcessDocSectionSubType subType;
+//	private DocSection identifier;
+//	private ProcessDocSectionSubType subType;
+	private String slideLayout;
+	private PSlideLayout pslideLayout;
+	private PSlideType slideType;
 	private String content;
 	private boolean isReadOnly = false;
 	
@@ -47,16 +50,28 @@ public class PSlide extends PTOCUnit   {
 		isReadOnly = true;
 	}
 
-	public PSlide(PTOCData generatedCode, DocSection identifier) {
-		this(generatedCode);
-		this.identifier = identifier;
-	}
+    
+	public PSlide(PTOCData generatedCode, PSlideLayout layout) {
+	this(generatedCode);
+	this.pslideLayout = layout;
+}
 	
 	public PSlide(PTOCData data, FlexoModelObject modelObject,
-			DocSection identifier) {
-		this(data, modelObject);
-		this.identifier = identifier;
-	}
+	PSlideType type) {
+	this(data, modelObject);
+	this.setSlideType(type) ;
+}
+    
+//	public PSlide(PTOCData generatedCode, DocSection identifier) {
+//		this(generatedCode);
+//		this.identifier = identifier;
+//	}
+	
+//	public PSlide(PTOCData data, FlexoModelObject modelObject,
+//			DocSection identifier) {
+//		this(data, modelObject);
+//		this.identifier = identifier;
+//	}
 
 	public String getContent() {
 		return content;
@@ -90,28 +105,60 @@ public class PSlide extends PTOCUnit   {
 	}
 
 	
-	public boolean isProcessesSection(){
-		return identifier!=null && identifier==DocSection.PROCESSES;
+	
+//	public boolean isProcessesSection(){
+//		return identifier!=null && identifier==DocSection.PROCESSES;
+//	}
+//
+//	public DocSection getIdentifier() {
+//		return identifier;
+//	}
+//
+//	public void setIdentifier(DocSection identifier) {
+//		if (!isDeserializing())
+//			return;
+//		this.identifier = identifier;
+//	}
+//
+//	public ProcessDocSectionSubType getSubType() {
+//		return subType;
+//	}
+//
+//	public void setSubType(ProcessDocSectionSubType subType) {
+//		this.subType = subType;
+//	}
+	
+	//TODO_MOS Modify this: 
+	public String getSlideLayout() {
+		return slideLayout;
 	}
 
-	public DocSection getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(DocSection identifier) {
-		if (!isDeserializing())
-			return;
-		this.identifier = identifier;
-	}
-
-	public ProcessDocSectionSubType getSubType() {
-		return subType;
-	}
-
-	public void setSubType(ProcessDocSectionSubType subType) {
-		this.subType = subType;
+	public void setSlideLayout(String slideLayout) {
+		this.slideLayout = slideLayout;
+		if(this.slideLayout.equals("TitleOnly"))
+			setPslideLayout(PSlideLayout.TitleOnly);
+		else if(getSlideLayout().equals("TitleAndContent"))
+			setPslideLayout(PSlideLayout.TitleAndContent);
 	}
 	
+	public PSlideLayout getPslideLayout(){
+		return this.pslideLayout;
+	}
+	
+	public void setPslideLayout(PSlideLayout layout){
+		this.pslideLayout = layout;
+	}
+
+	public PSlideType getSlideType() {
+		return slideType;
+	}
+
+	public void setSlideType(PSlideType slideType) {
+		this.slideType = slideType;
+		if(slideType == PSlideType.ProcessOutLook)
+			setPslideLayout(PSlideLayout.TitleImageAndDescription);
+	}
+
 	public String getFullyQualifiedName() {
 		if (getRepository()==null)
 			return getTitle();
@@ -122,89 +169,104 @@ public class PSlide extends PTOCUnit   {
 	}
 	
 	
-	public boolean isDocSubType()
+	public boolean isTitleOnly()
 	{
-		return getSubType() == ProcessDocSectionSubType.Doc;
+		return getPslideLayout() == PSlideLayout.TitleOnly;
 	}
 
-	public boolean isRACISubType()
+	public boolean isTitleAndContent()
 	{
-		return getSubType() == ProcessDocSectionSubType.RaciMatrix;
+		return getPslideLayout() == PSlideLayout.TitleAndContent;
 	}
 
-	public boolean isSIPOC2SubType()
+	public boolean isTitleImageAndDescription()
 	{
-		return getSubType() == ProcessDocSectionSubType.SIPOCLevel2;
-	}
-
-	public boolean isSIPOC3SubType()
-	{
-		return getSubType() == ProcessDocSectionSubType.SIPOCLevel3;
-	}
-
-	public boolean isOperationTableSubType()
-	{
-		return getSubType() == ProcessDocSectionSubType.OperationTable;
-	}
-
-	public boolean isERDiagram()
-	{
-		return getIdentifier() == DocSection.ER_DIAGRAM;
-	}
-
-	public boolean isIndividualProcessOrProcessFolder()
-	{
-		return getIdentifier() == null && (getObject() instanceof FlexoProcess || getObject() instanceof ProcessFolder);
-	}
-
-	public boolean isIndividualProcess()
-	{
-		return getIdentifier() == null && getObject() instanceof FlexoProcess;
-	}
-
-	public boolean isIndividualProcessFolder()
-	{
-		return getIdentifier() == null && getObject() instanceof ProcessFolder;
-	}
-
-	public boolean isIndividualRole()
-	{
-		return getIdentifier() == null && getObject() instanceof Role;
-	}
-
-	public boolean isIndividualEntity()
-	{
-		return getIdentifier() == null && getObject() instanceof DMEOEntity;
-	}
-
-	public boolean isIndividualComponentDefinition()
-	{
-		return getIdentifier() == null && getObject() instanceof ComponentDefinition;
+		return getPslideLayout() == PSlideLayout.TitleImageAndDescription;
 	}
 	
-	public ERDiagram getDocumentedDiagram(){
-		if(isERDiagram())
-			 return (ERDiagram)getObject();
-		return null;
-	}
-
-	public Role getDocumentedRole(){
-		if(isIndividualRole())
-			 return (Role)getObject();
-		return null;
-	}
-
-	public DMEOEntity getDocumentedDMEOEntity(){
-		if(isIndividualEntity())
-			 return (DMEOEntity)getObject();
-		return null;
-	}
-
-	public ComponentDefinition getDocumentedComponentDefinition(){
-		if(isIndividualComponentDefinition())
-			 return (ComponentDefinition)getObject();
-		return null;
-	}
+//	public boolean isDocSubType()
+//	{
+//		return getSubType() == ProcessDocSectionSubType.Doc;
+//	}
+//
+//	public boolean isRACISubType()
+//	{
+//		return getSubType() == ProcessDocSectionSubType.RaciMatrix;
+//	}
+//
+//	public boolean isSIPOC2SubType()
+//	{
+//		return getSubType() == ProcessDocSectionSubType.SIPOCLevel2;
+//	}
+//
+//	public boolean isSIPOC3SubType()
+//	{
+//		return getSubType() == ProcessDocSectionSubType.SIPOCLevel3;
+//	}
+//
+//	public boolean isOperationTableSubType()
+//	{
+//		return getSubType() == ProcessDocSectionSubType.OperationTable;
+//	}
+//
+//	public boolean isERDiagram()
+//	{
+//		return getIdentifier() == DocSection.ER_DIAGRAM;
+//	}
+//
+//	public boolean isIndividualProcessOrProcessFolder()
+//	{
+//		return getIdentifier() == null && (getObject() instanceof FlexoProcess || getObject() instanceof ProcessFolder);
+//	}
+//
+//	public boolean isIndividualProcess()
+//	{
+//		return getIdentifier() == null && getObject() instanceof FlexoProcess;
+//	}
+//
+//	public boolean isIndividualProcessFolder()
+//	{
+//		return getIdentifier() == null && getObject() instanceof ProcessFolder;
+//	}
+//
+//	public boolean isIndividualRole()
+//	{
+//		return getIdentifier() == null && getObject() instanceof Role;
+//	}
+//
+//	public boolean isIndividualEntity()
+//	{
+//		return getIdentifier() == null && getObject() instanceof DMEOEntity;
+//	}
+//
+//	public boolean isIndividualComponentDefinition()
+//	{
+//		return getIdentifier() == null && getObject() instanceof ComponentDefinition;
+//	}
+	
+//	public ERDiagram getDocumentedDiagram(){
+//		if(isERDiagram())
+//			 return (ERDiagram)getObject();
+//		return null;
+//	}
+//
+//	public Role getDocumentedRole(){
+//		if(isIndividualRole())
+//			 return (Role)getObject();
+//		return null;
+//	}
+//
+//	public DMEOEntity getDocumentedDMEOEntity(){
+//		if(isIndividualEntity())
+//			 return (DMEOEntity)getObject();
+//		return null;
+//	}
+//
+//	public ComponentDefinition getDocumentedComponentDefinition(){
+//		if(isIndividualComponentDefinition())
+//			 return (ComponentDefinition)getObject();
+//		return null;
+//	}
 	
 	
 	public RepresentableFlexoModelObject getDocumentedFlexoProcess(){
@@ -330,10 +392,11 @@ public class PSlide extends PTOCUnit   {
 
 	public static PSlide cloneEntryFromTemplate(PTOCEntry father,
 			PSlide source) {
-		PSlide reply = new PSlide(father.getData(),source.getIdentifier());
+		PSlide reply = new PSlide(father.getData());//,source.getIdentifier());
 		reply.setTitle(source.getTitle());
 		reply.content = source.getContent();
 		reply.setIsReadOnly(source.isReadOnly());
+		reply.setPslideLayout(source.getPslideLayout());
 		father.addToPTocUnits(reply);
 		return reply;
 	}

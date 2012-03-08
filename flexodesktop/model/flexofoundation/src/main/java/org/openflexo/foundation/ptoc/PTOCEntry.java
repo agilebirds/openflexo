@@ -46,8 +46,10 @@ import org.openflexo.foundation.cg.utils.DocConstants.ProcessDocSectionSubType;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
+import org.openflexo.foundation.ptoc.action.AddPSlide;
 import org.openflexo.foundation.ptoc.action.AddPTOCEntry;
 import org.openflexo.foundation.ptoc.action.MovePTOCEntry;
+import org.openflexo.foundation.ptoc.action.RemovePTOCEntry;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
 import org.openflexo.foundation.toc.action.MoveTOCEntry;
@@ -72,16 +74,8 @@ public class PTOCEntry extends PTOCUnit {
 	public static final int MAXIMUM_DEPTH=10;
 
 	
-//	//TODO_MOS remove these properties 
-//	protected Vector<PTOCEntry> tocEntries;
-//	
-//	private boolean startOnANewPage = false;
-//	//
 	
-	
-	//TODO_MOS
 	protected Vector<PTOCUnit> ptocUnits;	
-	//
 	
 	
 	private boolean recursionEnabled = true;
@@ -102,8 +96,6 @@ public class PTOCEntry extends PTOCUnit {
 	public PTOCEntry(PTOCData data) {
 		super(data);
 		ptocUnits = new Vector<PTOCUnit>();
-		//TODO_MOS 
-		//tocEntries = new Vector<PTOCEntry>();
 	}
 
 	
@@ -116,7 +108,6 @@ public class PTOCEntry extends PTOCUnit {
 	}
 
 
-//TODO_MOS
 	
 
 	@Override
@@ -132,7 +123,6 @@ public class PTOCEntry extends PTOCUnit {
 			getRepository().removeFromPTocUnits(this);
 		deleteObservers();
 		repository = null;
-		//content = null;
 	}
 
 	
@@ -151,9 +141,10 @@ public class PTOCEntry extends PTOCUnit {
     protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
     	Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
     	v.add(AddPTOCEntry.actionType);
-    	v.add(RemoveTOCEntry.actionType);
-    	v.add(RepairTOCEntry.actionType);
+    	v.add(RemovePTOCEntry.actionType);
+    	//v.add(RepairTOCEntry.actionType);
     	v.add(MovePTOCEntry.actionType);
+    	v.add(AddPSlide.actionType);
     	return v;
     }
 

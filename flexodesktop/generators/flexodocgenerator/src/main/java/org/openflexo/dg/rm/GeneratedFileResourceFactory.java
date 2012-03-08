@@ -28,6 +28,7 @@ import org.openflexo.dg.file.DGDocxXmlFile;
 import org.openflexo.dg.file.DGHTMLFile;
 import org.openflexo.dg.file.DGJSFile;
 import org.openflexo.dg.file.DGLatexFile;
+import org.openflexo.dg.file.DGPSlideXmlFile;
 import org.openflexo.dg.file.DGPptxXmlFile;
 import org.openflexo.dg.file.DGTextFile;
 import org.openflexo.dg.html.DGHTMLGenerator;
@@ -623,9 +624,9 @@ public class GeneratedFileResourceFactory {
 			res = null;
 		}
 		if (res == null) {
-			res = new ProjectPptxXmlSlideResource(generator, pptxTemplate , slide);
+			res = new ProjectPptxXmlFileResource(generator, pptxTemplate , slide);
 			res.setName(ProjectPptxXmlFileResource.nameForRepositoryAndPptxSlideTemplate(repository,pptxTemplate,slide,slideNumber));
-			DGPptxXmlFile cgFile = new DGPptxXmlFile(repository, res);
+			DGPSlideXmlFile cgFile = new DGPSlideXmlFile(repository, res,slide);
 
 			cgFile.setSymbolicDirectory(generator.getSymbolicDirectory(repository));
 			repository.addToFiles(cgFile);
