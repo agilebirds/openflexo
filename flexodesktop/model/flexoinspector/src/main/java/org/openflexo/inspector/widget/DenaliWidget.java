@@ -527,7 +527,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	 * @param modification
 	 */
 	protected void updateImmediately(final InspectableObject inspectable, final InspectableModification modification) {
-		if ((!widgetUpdating) && (!modelUpdating) && willUpdateModel(inspectable, modification)) {
+		if (!widgetUpdating && !modelUpdating && willUpdateModel(inspectable, modification)) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("update in " + this.getClass().getName() + " with " + modification);
 			}
@@ -545,8 +545,10 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 
 	private boolean willUpdateModel(InspectableObject inspectable, InspectableModification modification) {
 		String propertyName = modification.propertyName();
-		return (inspectable == _model && propertyName != null && (propertyName.equals(getObservedPropertyName()) || propertyName
-				.regionMatches(0, getObservedPropertyName(), getObservedPropertyName().lastIndexOf('.') + 1, propertyName.length())));
+		return inspectable == _model
+				&& propertyName != null
+				&& (propertyName.equals(getObservedPropertyName()) || propertyName.regionMatches(0, getObservedPropertyName(),
+						getObservedPropertyName().lastIndexOf('.') + 1, propertyName.length()));
 	}
 
 	// ==========================================================================
@@ -581,7 +583,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	}
 
 	public String getDisplayStringRepresentation(Object object) {
-		if (object instanceof Enum && (_propertyModel.hasFormatter())) {
+		if (object instanceof Enum && _propertyModel.hasFormatter()) {
 
 			Method formatter;
 			try {
@@ -611,7 +613,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	public String getStringRepresentation(Object object) {
 		if (object instanceof String) {
 			return (String) object;
-		} else if ((object instanceof KeyValueCoding) && (_propertyModel.hasFormatter())) {
+		} else if (object instanceof KeyValueCoding && _propertyModel.hasFormatter()) {
 			return _propertyModel.getFormattedObject((KeyValueCoding) object);
 		} else if (object instanceof Enum) {
 			return FlexoLocalization.localizedForKey(((Enum) object).name().toLowerCase());
@@ -725,7 +727,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 
 	protected boolean typeIsString() {
 		if (getType() != null) {
-			return (String.class.isAssignableFrom(getType()));
+			return String.class.isAssignableFrom(getType());
 		} else {
 			return false;
 		}
@@ -748,7 +750,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 			return false;
 		}
 		if (getType() != null) {
-			return (ChoiceList.class.isAssignableFrom(getType()) || getType().getEnumConstants() != null);
+			return ChoiceList.class.isAssignableFrom(getType()) || getType().getEnumConstants() != null;
 		} else {
 			return false;
 		}
@@ -804,7 +806,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 			if (oldValue == null && newValue == null) {
 				return;
 			}
-			if ((newValue != null) && (oldValue != null) && (oldValue.equals(newValue))) {
+			if (newValue != null && oldValue != null && oldValue.equals(newValue)) {
 				return;
 			}
 			// logger.info("_propertyModel="+_propertyModel);
@@ -816,30 +818,30 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 				getController().getDelegate().setTarget(target);
 				getController().getDelegate().setKey(lastAccessor);
 				focusListenerEnabled = false;
-				boolean ok = getController().getDelegate().setObjectValue(newValue);
-				if (!ok) {
-					valueInError = true;
-					SwingUtilities.invokeLater(new UpdateFromModel());
-					if (_tab != null) {
-						_tab.valueChange(newValue, this);
+				boolean ok = false;
+				try {
+					ok = getController().getDelegate().setObjectValue(newValue);
+				} finally {
+					if (!ok) {
+						valueInError = true;
+						SwingUtilities.invokeLater(new UpdateFromModel());
+						if (_tab != null) {
+							_tab.valueChange(newValue, this);
+						}
+						modelUpdating = false;
 					}
-					modelUpdating = false;
-				}
-				focusListenerEnabled = true;
-				if (ok) {
-					notifyInspectedPropertyChanged(newValue);
+					focusListenerEnabled = true;
+					if (ok) {
+						notifyInspectedPropertyChanged(newValue);
+					}
 				}
 			}
 		} else {
 			try {
-
 				// Normal case here, just invoke this
-
 				_propertyModel.setObjectValue(getModel(), newValue);
 				notifyInspectedPropertyChanged(newValue);
-			}
-
-			catch (AccessorInvocationException e) {
+			} catch (AccessorInvocationException e) {
 				valueInError = true;
 				if (_controller != null) {
 					if (!_controller.handleException(getModel(), observedPropertyName(), newValue, e.getTargetException())) {
@@ -1295,7 +1297,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 			return false;
 		}
 		if (conditional != null) {
-			return (conditional.isVisible(getModel()));
+			return conditional.isVisible(getModel());
 		}
 		return true;
 	}
@@ -1497,7 +1499,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 
 	// Override this if you want
 	public boolean defaultDisplayLabel() {
-		return (getPropertyModel().label != null);
+		return getPropertyModel().label != null;
 	}
 
 	@Override

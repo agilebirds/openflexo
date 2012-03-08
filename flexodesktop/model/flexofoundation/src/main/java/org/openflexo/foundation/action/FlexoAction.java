@@ -95,15 +95,15 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 		FAILED_REDO_EXECUTION;
 
 		public boolean isExecuting() {
-			return ((this == EXECUTING_INITIALIZER) || (this == EXECUTING_CORE) || (this == EXECUTING_FINALIZER));
+			return this == EXECUTING_INITIALIZER || this == EXECUTING_CORE || this == EXECUTING_FINALIZER;
 		}
 
 		public boolean isExecutingUndo() {
-			return ((this == EXECUTING_UNDO_INITIALIZER) || (this == EXECUTING_UNDO_CORE) || (this == EXECUTING_UNDO_FINALIZER));
+			return this == EXECUTING_UNDO_INITIALIZER || this == EXECUTING_UNDO_CORE || this == EXECUTING_UNDO_FINALIZER;
 		}
 
 		public boolean isExecutingRedo() {
-			return ((this == EXECUTING_REDO_INITIALIZER) || (this == EXECUTING_REDO_CORE) || (this == EXECUTING_REDO_FINALIZER));
+			return this == EXECUTING_REDO_INITIALIZER || this == EXECUTING_REDO_CORE || this == EXECUTING_REDO_FINALIZER;
 		}
 
 		public boolean hasActionExecutionSucceeded() {
@@ -256,7 +256,7 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 		if (_focusedObject != null) {
 			return _focusedObject;
 		}
-		if ((_globalSelection != null) && (_globalSelection.size() > 0)) {
+		if (_globalSelection != null && _globalSelection.size() > 0) {
 			return (T1) _globalSelection.firstElement();
 		}
 		return null;
@@ -326,12 +326,12 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 				getEditor().actionWillBePerformed(this);
 			}
 			try {
-				if ((getEditor() != null) && (getEditor().getProject() != null)) {
+				if (getEditor() != null && getEditor().getProject() != null) {
 					getEditor().getProject().clearRecentlyCreatedObjects();
 				}
 				executionStatus = ExecutionStatus.EXECUTING_CORE;
 				doAction(getContext());
-				if ((getEditor() != null) && (getEditor().getProject() != null)) {
+				if (getEditor() != null && getEditor().getProject() != null) {
 					getEditor().getProject().notifyRecentlyCreatedObjects();
 				}
 				executionStatus = ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
@@ -340,6 +340,7 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 				}
 			} catch (FlexoException exception) {
 				executionStatus = ExecutionStatus.FAILED_EXECUTION;
+				thrownException = exception;
 				if (getEditor() != null) {
 					getEditor().actionHasBeenPerformed(this, false); // Action failed
 				}
@@ -349,7 +350,6 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 						// The exception has been handled, we may still have to execute finalizer, if any
 						executionStatus = ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
 					} else {
-						thrownException = exception;
 						throw exception;
 					}
 				} else {
@@ -357,10 +357,10 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 				}
 			}
 
-			if ((getFinalizer() != null) && (executionStatus == ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED)) {
+			if (getFinalizer() != null && executionStatus == ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED) {
 				executionStatus = ExecutionStatus.EXECUTING_FINALIZER;
-				executionStatus = (getFinalizer().run(e, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED
-						: ExecutionStatus.FAILED_EXECUTION);
+				executionStatus = getFinalizer().run(e, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED
+						: ExecutionStatus.FAILED_EXECUTION;
 			}
 		}
 		hideFlexoProgress();
@@ -462,7 +462,7 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 		if (globalSelection != null) {
 			v.addAll(globalSelection);
 		}
-		if ((focusedObject != null) && !v.contains(focusedObject)) {
+		if (focusedObject != null && !v.contains(focusedObject)) {
 			v.add(focusedObject);
 		}
 		return v;
@@ -483,7 +483,7 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 	}
 
 	public boolean isEmbedded() {
-		return (getOwnerAction() != null);
+		return getOwnerAction() != null;
 	}
 
 	public Vector<FlexoAction> getEmbbededActionsExecutedDuringCore() {

@@ -1625,7 +1625,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 					action.setValue(value);
 					action.setLocalizedPropertyName(localizedPropertyName);
 					action.doAction();
-					return action.hasActionExecutionSucceeded();
+					return action.hasActionExecutionSucceeded() && action.getThrownException() == null;
 				} else if (target != null) {
 					target.setObjectForKey(value, key);
 				} else {
