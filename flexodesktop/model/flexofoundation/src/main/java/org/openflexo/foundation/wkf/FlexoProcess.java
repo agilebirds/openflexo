@@ -1646,6 +1646,24 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			setChanged();
 			notifyAttributeModification("businessDataVariableName", null, getBusinessDataProperty());
 		}
+		if (aType != null && !aType.hasPropertyNamed("status")) {
+			if (aType instanceof DMEOEntity) {
+				DMEOAttribute statusAttribute;
+				try {
+					statusAttribute = DMEOAttribute.createsNewDMEOAttribute(aType.getDMModel(), (DMEOEntity) aType, "status", false, true,
+							DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+					statusAttribute.setPrototype(aType.getDMModel().getPrototypeNamed("str100"));
+					statusAttribute.setColumnName("PROCESS_STATUS");
+					((DMEOEntity) aType).registerProperty(statusAttribute);
+				} catch (EOAccessException e) {
+					// Ok this sucks.
+					logger.log(Level.SEVERE, "Could not create status attribute in business data class", e);
+				}
+			} else {
+				aType.createDMProperty("status", DMType.makeResolvedDMType(String.class, getProject()),
+						DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY);
+			}
+		}
 		setChanged();
 		notifyAttributeModification("businessDataType", null, aType);
 	}
@@ -2969,15 +2987,9 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 
 			if (process._processDMEntity != null) {
 				if (process.getBusinessDataType().getProperty("status") == null) {
-					if (process.getBusinessDataType() instanceof DMEOEntity) {
-						return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(this, process,
-								"business_data_class_must_have_status_property", process.getBusinessDataType().getIsReadOnly() ? null
-										: new AddPropertyStatus((DMEOEntity) process.getBusinessDataType()));
-					} else {
-						return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(this, process,
-								"business_data_class_must_have_status_property");
-					}
-
+					return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(this, process,
+							"business_data_class_must_have_status_property", process.getBusinessDataType().getIsReadOnly() ? null
+									: new AddPropertyStatus(process.getBusinessDataType()));
 				}
 			}
 			return null;
@@ -2995,12 +3007,12 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 
 		public static class AddPropertyStatus extends FixProposal<BusinessDataClassMustHaveStatusProperty, FlexoProcess> {
 
-			private DMEOEntity _businessDataClass;
+			private DMEntity _businessDataClass;
 
 			/**
 			 * @param aMessage
 			 */
-			public AddPropertyStatus(DMEOEntity businessDataClass) {
+			public AddPropertyStatus(DMEntity businessDataClass) {
 				super("create_status_property");
 				_businessDataClass = businessDataClass;
 			}
@@ -3012,17 +3024,23 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 			 */
 			@Override
 			protected void fixAction() {
-				try {
-					DMEOAttribute statusAttribute = DMEOAttribute.createsNewDMEOAttribute(_businessDataClass.getDMModel(),
-							_businessDataClass, "status", false, true, DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
-					statusAttribute.setPrototype(_businessDataClass.getDMModel().getPrototypeNamed("str100"));
-					statusAttribute.setColumnName("PROCESS_STATUS");
-					_businessDataClass.registerProperty(statusAttribute);
-				} catch (EOAccessException e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
+				if (_businessDataClass instanceof DMEOEntity) {
+					DMEOAttribute statusAttribute;
+					try {
+						statusAttribute = DMEOAttribute.createsNewDMEOAttribute(_businessDataClass.getDMModel(),
+								(DMEOEntity) _businessDataClass, "status", false, true,
+								DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+						statusAttribute.setPrototype(_businessDataClass.getDMModel().getPrototypeNamed("str100"));
+						statusAttribute.setColumnName("PROCESS_STATUS");
+						((DMEOEntity) _businessDataClass).registerProperty(statusAttribute);
+					} catch (EOAccessException e) {
+						// Ok this sucks.
+						throw new RuntimeException(e);
+					}
+				} else {
+					_businessDataClass.createDMProperty("status", DMType.makeResolvedDMType(String.class, getProject()),
+							DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY);
 				}
-
 			}
 
 		}
