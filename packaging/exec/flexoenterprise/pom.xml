@@ -13,8 +13,8 @@
     <artifactId>flexoenterprise</artifactId>
 <!--     <packaging>pom</packaging> -->
     <properties>
-        <userType>developer_release</userType>
-        <vm.args>-Xmx1G</vm.args>
+        <userType>maintainer_release</userType>
+        <vm.args>-Xmx1G -XX:MaxPermSize=256M</vm.args>
     </properties>
     <build>
         <plugins>

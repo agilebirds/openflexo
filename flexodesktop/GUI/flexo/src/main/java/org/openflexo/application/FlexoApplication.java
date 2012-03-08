@@ -344,6 +344,12 @@ public class FlexoApplication {
 		 * Determines if the message can be ignored. (Note: this code comes from Gnutella).
 		 */
 		private boolean isIgnorable(Throwable bug, String msg) {
+			// OutOfMemory error should definitely not be ignored. First, they can give a hint on where there is a problem. Secondly,
+			// if we ran out of memory, Flexo will not work anymore and bogus behaviour will appear everywhere. So definitely, no, we don't
+			// ignore.
+			if (bug instanceof OutOfMemoryError) {
+				return false;
+			}
 			// We are going to store 100 exceptions (although it is not going to hold a lot)
 			// and we ignore the ones with identical stacktraces
 			if (!exceptions.contains(msg)) {
@@ -353,13 +359,6 @@ public class FlexoApplication {
 				}
 			} else {
 				return true;
-			}
-
-			// OutOfMemory error should definitely not be ignored. First, they can give a hint on where there is a problem. Secondly,
-			// if we ran out of memory, Flexo will not work anymore and bogus behaviour will appear everywhere. So definitely, no, we don't
-			// ignore.
-			if (bug instanceof OutOfMemoryError) {
-				return false;
 			}
 
 			// no bug? kinda impossible, but shouldn't report.
