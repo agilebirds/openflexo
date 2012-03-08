@@ -3954,7 +3954,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public static File getResourceCenterFile() {
 		String base = "FlexoResourceCenter";
 		String attempt = base;
-		File root = new File(System.getProperty("user.home"), "Library/Flexo/");
+		File root = new File(System.getProperty("user.home"), "Library/OpenFlexo/");
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 			String appData = System.getenv("APPDATA");
 			if (appData != null) {
@@ -3963,6 +3963,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					root = new File(f, "OpenFlexo");
 				}
 			}
+		} else if (ToolBox.getPLATFORM()==ToolBox.LINUX) {
+			root = new File(System.getProperty("user.home"),".openflexo");
 		}
 		File file = null;
 		boolean ok = false;

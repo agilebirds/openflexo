@@ -2174,7 +2174,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		@Override
 		public Component getListCellRendererComponent(JList list, Object bce, int index, boolean isSelected, boolean cellHasFocus) {
-			Component returned = super.getListCellRendererComponent(list, bce, index, isSelected, cellHasFocus);
+			JComponent returned = (JComponent) super.getListCellRendererComponent(list, bce, index, isSelected, cellHasFocus);
 			if (returned instanceof JLabel) {
 				JLabel label = (JLabel) returned;
 				if (bce instanceof BindingColumnElement) {
@@ -2182,9 +2182,9 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					if ((columnElement.getElement() != null) && (columnElement.getElement() instanceof BindingVariable)) {
 						BindingVariable bv = (BindingVariable) columnElement.getElement();
 						label.setText(columnElement.getLabel());
-						setIcon(label, FIBIconLibrary.ARROW_RIGHT_ICON, list);
+						returned  = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 						if (bv.getType() != null) {
-							label.setToolTipText(columnElement.getTooltipText());
+							returned.setToolTipText(columnElement.getTooltipText());
 						} else {
 							label.setForeground(Color.GRAY);
 						}
@@ -2195,14 +2195,14 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 						if ((binding != null) && (binding instanceof BindingValue)) {
 							BindingValue bindingValue = (BindingValue) binding;
 							if (bindingValue.isConnected() && (bindingValue.isLastBindingPathElement(property, _lists.indexOf(list) - 1))) {
-								setIcon(label, FIBIconLibrary.CONNECTED_ICON, list);
+								returned  = getIconLabelComponent(label, FIBIconLibrary.CONNECTED_ICON);
 							} else if (columnElement.getResultingType() != null) {
 								if (columnElement.getResultingType().getKindOfType() == KindOfType.RESOLVED) {
 									if (columnElement.getResultingType().getBaseEntity() == null) {
 										BindingSelector.logger.warning("Unexpected type: " + property.getType() + " kind: "
 												+ property.getType().getKindOfType());
 									} else if (columnElement.getResultingType().getBaseEntity().getAccessibleProperties().size() > 0) {
-										setIcon(label, FIBIconLibrary.ARROW_RIGHT_ICON, list);
+										returned  = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 									} else {
 										if ((BindingSelectorPanel.this._bindingSelector.getBindingDefinition() != null)
 												&& (BindingSelectorPanel.this._bindingSelector.getBindingDefinition().getType() != null)
@@ -2220,7 +2220,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 							}
 						}
 						if (property != null) {
-							label.setToolTipText(columnElement.getTooltipText());
+							returned.setToolTipText(columnElement.getTooltipText());
 						}
 
 					} else if ((columnElement.getElement() != null) && (columnElement.getElement() instanceof DMMethod)) {
@@ -2240,12 +2240,12 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 							BindingPathElement bpe = bindingValue.getBindingPathElementAtIndex(_lists.indexOf(list) - 1);
 							if ((bindingValue.isConnected()) && (bindingValue.isLastBindingPathElement(bpe, _lists.indexOf(list) - 1))
 									&& ((bpe instanceof MethodCall) && (((MethodCall) bpe).getMethod() == method))) {
-								setIcon(label, FIBIconLibrary.CONNECTED_ICON, list);
+								returned  = getIconLabelComponent(label, FIBIconLibrary.CONNECTED_ICON);
 							} else if ((columnElement.getResultingType() != null)
 									&& (columnElement.getResultingType().getBaseEntity() != null)) {
 								if (columnElement.getResultingType().getBaseEntity().getAccessibleProperties().size()
 										+ columnElement.getResultingType().getBaseEntity().getAccessibleMethods().size() > 0) {
-									setIcon(label, FIBIconLibrary.ARROW_RIGHT_ICON, list);
+									returned  = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 								} else {
 									if ((BindingSelectorPanel.this._bindingSelector.getBindingDefinition() != null)
 											&& ((BindingSelectorPanel.this._bindingSelector.getBindingDefinition().getType() != null) && (BindingSelectorPanel.this._bindingSelector
@@ -2258,7 +2258,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 							}
 						}
 						if (method.getType() != null) {
-							label.setToolTipText(columnElement.getTooltipText());
+							returned.setToolTipText(columnElement.getTooltipText());
 						}
 					}
 				} else {
@@ -2274,14 +2274,25 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			return returned;
 		}
 
-		private void setIcon(JLabel label, Icon icon, JList list) {
+		private JComponent getIconLabelComponent(JLabel label , Icon icon) {
+			JPanel panel = new JPanel(new BorderLayout());
+			JLabel iconLabel = new JLabel(icon);
+			iconLabel.setOpaque(label.isOpaque());
+			iconLabel.setBackground(label.getBackground());
+			panel.add(iconLabel, BorderLayout.EAST);
+			panel.add(label);
+			return panel;
+		}
+		
+		/*private void setIcon(JLabel label, Icon icon, JList list) {
 			label.setIcon(icon);
 			label.setHorizontalAlignment(SwingConstants.LEFT);
 			label.setHorizontalTextPosition(SwingConstants.LEFT);
 			FontMetrics fm = label.getFontMetrics(label.getFont());
 			int labelLength = fm.stringWidth(label.getText() == null ? "" : label.getText());
+			System.err.println(label.getText()+" "+labelLength + " "+list.getWidth());
 			label.setIconTextGap(list.getWidth() - 20 - labelLength);
-		}
+		}*/
 	}
 
 	protected JPanel getControlPanel() {

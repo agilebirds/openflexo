@@ -160,6 +160,7 @@ public class Flexo {
 		FlexoProperties.load();
 		initializeLoggingManager();
 		FlexoApplication.initialize();
+		initUILAF();
 		if (ToolBox.getFrame(null) != null) {
 			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
 		}
@@ -171,7 +172,6 @@ public class Flexo {
 			FlexoLoggingFormatter.logDate = false;
 		}
 		initProxyManagement();
-		initUILAF();
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting on " + ToolBox.getPLATFORM() + "... JVM version is " + System.getProperty("java.version"));
 		}

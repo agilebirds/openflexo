@@ -207,7 +207,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	}
 
 	private void paintImmediately() {
-		if (ToolBox.getPLATFORM() != ToolBox.WINDOWS) {
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			paintImmediately((JComponent) getContentPane());
 			// paintImmediately(flexoLogo);
 			paintImmediately(label);
@@ -356,7 +356,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 			return;
 		}
 		try {
-			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 				/*
 				 * if ((Frame.getFrames().length < 2 || !backgroundIsPainted) && component != getContentPane()) {
 				 * mainPane.paintImmediately(mainPane.getBounds()); backgroundIsPainted = true; } else { }
