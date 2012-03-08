@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.HTMLListDescriptor;
+import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
 import org.openflexo.foundation.ie.SingleWidgetComponent;
@@ -44,8 +45,8 @@ import org.openflexo.foundation.ie.action.InsertColBefore;
 import org.openflexo.foundation.ie.action.InsertRowAfter;
 import org.openflexo.foundation.ie.action.InsertRowBefore;
 import org.openflexo.foundation.ie.dm.AlignementChanged;
-import org.openflexo.foundation.ie.dm.DisplayNeedUpdate;
 import org.openflexo.foundation.ie.dm.DisplayNeedsRefresh;
+import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.dm.VerticalAlignementChanged;
 import org.openflexo.foundation.ie.dm.table.ColSpanDecrease;
 import org.openflexo.foundation.ie.dm.table.WidgetInsertedInTD;
@@ -62,6 +63,14 @@ import org.openflexo.logging.FlexoLogger;
  * @author bmangez
  */
 public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData {
+
+	public static class TDConstraintModification extends IEDataModification {
+
+		public TDConstraintModification(TDConstraints newValue) {
+			super("constraints", null, newValue);
+		}
+
+	}
 
 	/**
      * 
@@ -139,6 +148,19 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 		super.performOnDeleteOperations();
 	}
 
+	@Override
+	public void setParent(IEObject parent) {
+		super.setParent(parent);
+		if (!isDeserializing()) {
+			IETRWidget tr = tr();
+			if (tr != null) {
+				constraints.gridy = tr.getIndex();
+				constraintsChange();
+			}
+		}
+
+	}
+
 	/**
 	 * When removing cells from a row or a column, this is the method to call.
 	 * 
@@ -153,10 +175,13 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 			td.replaceByNormalTD();
 		}
 		_sequenceWidget.delete();
-		if (notify) {
-			tr().removeFromCols(this);
-		} else {
-			tr().removeFromColsNoNotification(this);
+		IETRWidget tr = tr();
+		if (tr != null) {
+			if (notify) {
+				tr.removeFromCols(this);
+			} else {
+				tr.removeFromColsNoNotification(this);
+			}
 		}
 		super.delete();
 	}
@@ -359,7 +384,7 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 
 	public void constraintsChange() {
 		getSequenceWidget().setChanged();
-		getSequenceWidget().notifyObservers(new DisplayNeedUpdate());
+		getSequenceWidget().notifyObservers(new TDConstraintModification(constraints));
 	}
 
 	public void increaseColSpan() throws InvalidOperation {

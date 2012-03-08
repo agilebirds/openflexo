@@ -57,17 +57,6 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 	}
 
 	/**
-	 * Overrides delete
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#delete()
-	 */
-	@Override
-	public void delete() {
-		getModel().getTabComponent().getRootSequence().deleteObserver(this);
-		super.delete();
-	}
-
-	/**
 	 * Overrides doLayout
 	 * 
 	 * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
@@ -143,7 +132,7 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 				getParent().repaint();
 			}
 		} else if (modif instanceof TopComponentInserted) {
-			((IEObject) (((TopComponentInserted) modif).newValue())).addObserver(this);
+			new ObserverRegistation(this, (IEObject) ((TopComponentInserted) modif).newValue());
 			getReusableWidgetComponentView().validate();
 			getReusableWidgetComponentView().doLayout();
 			getReusableWidgetComponentView().repaint();
@@ -171,7 +160,7 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Building tab: " + getTabWidget().getTitle());
 			}
-			getModel().getTabComponent().getRootSequence().addObserver(this);
+			new ObserverRegistation(this, getModel().getTabComponent().getRootSequence());
 		}
 		if (!isVisible) {
 			if (logger.isLoggable(Level.INFO)) {
