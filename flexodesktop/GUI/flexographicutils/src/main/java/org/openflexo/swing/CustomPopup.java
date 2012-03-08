@@ -662,6 +662,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 				}
 
 				public Rectangle getResizeRectangle() {
+					if (_popup == null) {
+						return new Rectangle();
+					}
 					Rectangle r = _popup.getBounds();
 					int size = 3 * (BULLET_SIZE + BULLET_SPACING);
 					r.x = r.width - size;
