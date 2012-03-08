@@ -121,9 +121,9 @@ CASCADINGMENU : WDLJSMenu{
 }
 
 FOOTER: WDLFooter{
-	company = "www.flexobpm.com";
-	infoEmail = "support@flexobpm.com";
-	copyrightYear = 2010;
+	company = "www.openflexo.com";
+	infoEmail = "support@openflexo.com";
+	copyrightYear = 2012;
 	hideVersion = true;
 }
 
