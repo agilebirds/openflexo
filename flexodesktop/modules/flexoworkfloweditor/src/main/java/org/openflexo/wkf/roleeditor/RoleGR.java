@@ -53,15 +53,13 @@ import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.foundation.wkf.dm.RoleNameChange;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
+import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.toolbox.ConcatenedList;
-import org.openflexo.toolbox.FileResource;
 
 public class RoleGR extends ShapeGraphicalRepresentation<Role> implements GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RoleGR.class.getPackage().getName());
-	protected static final FileResource USER_ROLE_ICON = new FileResource("Resources/WKF/SmallRole.gif");
-	protected static final FileResource SYSTEM_ROLE_ICON = new FileResource("Resources/WKF/SmallSystemRole.gif");
 
 	public static final int WIDTH = 100;
 	public static final int HEIGHT = 40;
@@ -154,10 +152,10 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		private void updateDecorationBackground() {
 			if (role.getIsSystemRole()) {
 				isSystemRole = true;
-				decorationBackground = BackgroundStyle.makeImageBackground(SYSTEM_ROLE_ICON);
+				decorationBackground = BackgroundStyle.makeImageBackground(WKFIconLibrary.SYSTEM_ROLE_ICON);
 			} else {
 				isSystemRole = false;
-				decorationBackground = BackgroundStyle.makeImageBackground(USER_ROLE_ICON);
+				decorationBackground = BackgroundStyle.makeImageBackground(WKFIconLibrary.ROLE_ICON);
 			}
 
 			decorationBackground.setImageBackgroundType(ImageBackgroundType.OPAQUE);
@@ -347,14 +345,14 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getRole()) {
 			if (dataModification instanceof WKFAttributeDataModification) {
-				if ((((WKFAttributeDataModification) dataModification).getAttributeName().equals("posX"))
-						|| (((WKFAttributeDataModification) dataModification).getAttributeName().equals("posY"))) {
+				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("posX")
+						|| ((WKFAttributeDataModification) dataModification).getAttributeName().equals("posY")) {
 					if (!isUpdatingPosition) {
 						notifyObjectMoved();
 					}
 				} else if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("roleSpecializations")) {
 					if (getDrawing() instanceof RoleListRepresentation) {
-						(getDrawing()).updateGraphicalObjectsHierarchy();
+						getDrawing().updateGraphicalObjectsHierarchy();
 					}
 					// This might be not the case when used in palette !!!
 				} else if ("isSystemRole".equals(((WKFAttributeDataModification) dataModification).getAttributeName())) {
