@@ -87,6 +87,8 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 						prefDir = new File(f, "OpenFlexo");
 					}
 				}
+			} else if (ToolBox.getPLATFORM()==ToolBox.LINUX) {
+				prefDir = new File(System.getProperty("user.home"),".openflexo");
 			}
 			appDataDirectory = prefDir;
 		}
@@ -252,6 +254,8 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 					outputDir = new File(f, "OpenFlexo/Logs");
 				}
 			}
+		} else if (ToolBox.getPLATFORM()==ToolBox.LINUX) {
+			outputDir = new File("user.home",".openflexo/logs");
 		}
 		return outputDir;
 	}

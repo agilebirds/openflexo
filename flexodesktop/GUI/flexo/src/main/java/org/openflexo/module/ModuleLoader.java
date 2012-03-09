@@ -244,17 +244,6 @@ public final class ModuleLoader implements IModuleLoader {
 				registerModule(module);
 			}
 		}
-		try {
-			ModuleLoader.setLookAndFeel(AdvancedPrefs.getLookAndFeelString());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
 		if (GeneralPreferences.getLanguage() != null && GeneralPreferences.getLanguage().equals(Language.FRENCH)) {
 			Locale.setDefault(Locale.FRANCE);
 		} else {
