@@ -206,7 +206,6 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 				}
 			}
 			IEHTMLTableConstraints c = td().constraints;
-			System.err.println("Setting constraints: " + c.gridx + " " + c.gridy + " for " + td());
 			layout.setConstraints(this, c);
 		}
 	}

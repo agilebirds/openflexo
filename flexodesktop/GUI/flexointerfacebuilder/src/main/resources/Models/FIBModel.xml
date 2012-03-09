@@ -145,7 +145,7 @@
   <entity name="org.openflexo.fib.model.FIBTextField" xmlTag="TextField"> 
     <property name="validateOnReturn" xmlTag="validateOnReturn" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="columns" xmlTag="columns" attribute="YES"/> 
-    <property name="passwd" xmlTag="passwd" attribute="YES"/> 
+    <property name="passwd" xmlTag="passwd" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="text" xmlTag="text" attribute="YES"/> 
    </entity>
  

@@ -1928,11 +1928,16 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	private DateFormatType _dateFormat = DateFormatType.EUDEFAULT;
 
 	public DateFormatType getProjectDateFormat() {
+		if (_dateFormat == null) {
+			_dateFormat = DateFormatType.EUDEFAULT;
+		}
 		return _dateFormat;
 	}
 
 	public void setProjectDateFormat(DateFormatType value) {
-		_dateFormat = value;
+		if (value != null) {
+			_dateFormat = value;
+		}
 	}
 
 	// ==========================================================================

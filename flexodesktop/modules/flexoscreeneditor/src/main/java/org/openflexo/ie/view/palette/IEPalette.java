@@ -129,6 +129,10 @@ public class IEPalette extends FlexoPalette {
 		return birtPanel;
 	}
 
+	public boolean currentPaletteIsBasicPalette() {
+		return getCurrentPalettePanel() == getBasicPalette();
+	}
+
 	protected String currentCSSStyle;
 
 	public void setCurrentCSSStyle(String css) {

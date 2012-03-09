@@ -244,13 +244,13 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 	 * @param classeToMatch
 	 * @return a Vector of all embedded IEWidget matching the classe specified: recursive method (Note must include itself in this vector)
 	 */
-	public Vector<IEWidget> getAllEmbeddedIEWidgets(Class<? extends IEWidget> classeToMatch) {
-		Vector<IEWidget> reply = new Vector<IEWidget>();
+	public <T extends IEWidget> Vector<T> getAllEmbeddedIEWidgets(Class<T> classeToMatch) {
+		Vector<T> reply = new Vector<T>();
 		Enumeration en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
 			if (classeToMatch.isAssignableFrom(widget.getClass())) {
-				reply.add((IEWidget) widget);
+				reply.add((T) widget);
 			}
 		}
 		return reply;

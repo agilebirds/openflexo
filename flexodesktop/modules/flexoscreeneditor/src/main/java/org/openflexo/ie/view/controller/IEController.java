@@ -209,6 +209,10 @@ public class IEController extends FlexoController implements SelectionManagingCo
 
 	}
 
+	public boolean currentPaletteIsBasicPalette() {
+		return COMPONENT_EDITOR_PERSPECTIVE.getIEPalette().currentPaletteIsBasicPalette();
+	}
+
 	@Override
 	public void dispose() {
 		COMPONENT_EDITOR_PERSPECTIVE.getIEPalette().disposePalettes();
