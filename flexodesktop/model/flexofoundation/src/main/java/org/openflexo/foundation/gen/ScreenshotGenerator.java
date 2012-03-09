@@ -304,12 +304,9 @@ public class ScreenshotGenerator {
 					}
 				}
 			}
-		} catch (RuntimeException e) {
+		} catch (Throwable e) {
+			logger.severe("Failed to generate screenshot for " + object);
 			e.printStackTrace();
-		} catch (OutOfMemoryError mem) {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("I ran out of memory: I'm dead and cannot generate in memory screenshots!!!");
-			}
 		} finally {
 			if (frame != null) {
 				if (frame.getContentPane() != null) {
