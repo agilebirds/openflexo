@@ -1,0 +1,2188 @@
+#macro(pSlide $_slide)
+    #renderPSlideTitle($_slide)
+   	#renderPSlideContent($_slide)
+#end
+
+#macro(renderPSlideTitle $slide)
+    <p:sp>
+		<p:nvSpPr>
+		#set($title=${slide.getTitle()})
+			<p:cNvPr id="2" name="Titre 1" />
+			<p:cNvSpPr>
+				<a:spLocks noGrp="1" />
+			</p:cNvSpPr>
+			<p:nvPr>
+				<p:ph type="title" />
+			</p:nvPr>
+		</p:nvSpPr>
+		<p:spPr />
+		<p:txBody>
+			<a:bodyPr />
+			<a:lstStyle />
+			<a:p>
+				<a:r>
+					<a:rPr lang="fr-FR" dirty="0" smtClean="0" />
+					<a:t>$title</a:t>
+				</a:r>
+				<a:endParaRPr lang="fr-FR" dirty="0" />
+			</a:p>
+		</p:txBody>
+	</p:sp>
+#end
+
+
+#macro(renderPSlideContent $slide)
+	#if(${slide.isTitleAndContent()})
+		<p:sp>
+			<p:nvSpPr>
+				<p:cNvPr id="3" name="Espace réservé du contenu 2" />
+				<p:cNvSpPr>
+					<a:spLocks noGrp="1" />
+				</p:cNvSpPr>
+				<p:nvPr>
+					<p:ph idx="1" />
+				</p:nvPr>
+			</p:nvSpPr>
+			<p:spPr />
+			<p:txBody>
+				<a:bodyPr />
+				<a:lstStyle />
+				<a:p>
+					<a:r>
+						<a:rPr lang="fr-FR" dirty="0" smtClean="0" />
+						<a:t>Put your content here</a:t>
+					</a:r>
+					<a:endParaRPr lang="fr-FR" dirty="0" />
+				</a:p>
+			</p:txBody>
+		</p:sp>
+	#elseif(${slide.isTitleImageAndDescription()})
+			#renderScreenshotForSlide($slide)
+			<p:sp>
+				<p:nvSpPr>
+					<p:cNvPr id="4" name="Espace réservé du contenu 3" />
+					<p:cNvSpPr>
+						<a:spLocks noGrp="1" />
+					</p:cNvSpPr>
+					<p:nvPr>
+						<p:ph sz="half" idx="2" />
+					</p:nvPr>
+				</p:nvSpPr>
+				<p:spPr />
+				<p:txBody>
+					<a:bodyPr />
+					<a:lstStyle />
+					<a:p>
+						<a:r>
+							<a:rPr lang="fr-FR" dirty="0" smtClean="0" />
+							<a:t>put your Description here</a:t>
+						</a:r>
+						<a:endParaRPr lang="fr-FR" dirty="0" />
+					</a:p>
+				</p:txBody>
+			</p:sp>
+	#end
+#end
+
+#macro(renderScreenshotForSlide $slide)
+<!--Entering macro renderScreenshotForSlide -->
+	#set($_object = ${slide.getObject()})
+    #set($image = ${projectGenerator.getScreenshotImageIcon($_object)})
+    #set($rid = ${projectGenerator.getRIdForResource(${projectGenerator.getScreenshot($_object)})})
+    #set($imageWidth = $image.getIconWidth())
+    #set($imageHeight = $image.getIconHeight())
+    #if($imageWidth > 514)
+        #set($imageWidth = 514)
+        #set($imageHeight = $imageHeight * $imageWidth / $image.getIconWidth())
+    #end
+    #if($imageHeight > 734)
+        #set($imageHeight = 734)
+        #set($imageWidth = $image.getIconWidth() * $imageHeight / $image.getIconHeight())
+    #end
+        
+    #set($imageWidth = $imageWidth * 9525) ##Don't ask me why
+    #set($imageHeight = $imageHeight * 9525) ##Don't ask me why
+    <p:pic>
+		<p:nvPicPr>
+			<p:cNvPr id="6" name="Espace réservé du contenu 5" descr="80213_006_04.gif" />
+			<p:cNvPicPr>
+				<a:picLocks noGrp="1" noChangeAspect="1" />
+			</p:cNvPicPr>
+			<p:nvPr>
+				<p:ph sz="half" idx="1" />
+			</p:nvPr>
+		</p:nvPicPr>
+		<p:blipFill>
+			<a:blip r:embed="$rid" />
+			<a:stretch>
+				<a:fillRect />
+			</a:stretch>
+		</p:blipFill>
+		<p:spPr>
+			<a:xfrm>
+				<a:off x="457200" y="2424430" />
+				<a:ext cx="$imageWidth" cy="$imageHeight" />
+			</a:xfrm>
+		</p:spPr>
+	</p:pic>
+<!-- Exiting macro renderScreenshotForSlide -->
+#end
+
+#** 
+What is below is a copy of the docx_macro_library
+It was copied to  keep velocity syntax under my eyes. 
+*#
+
+
+#macro(mkbookMark $id $name)
+#set($key=${generator.getNewHolder()})
+#getCurrentUniqueId($key)#incrementCurrentUniqueId
+#set($key = ${key.get()})
+#set($xkey = (${key}*1000000+${id}))
+<w:bookmarkStart w:id="${xkey}" w:name="${name}"/>
+<w:bookmarkEnd w:id="${xkey}"/>
+#end
+
+#macro(render $_object $_level $templateName $_entry)
+<!--Entering macro render : $_object $_level $templateName $_entry -->
+    #set($_template = $generator.getTemplatePath($templateName.trim()))
+    #if($_template)
+        #if(!$objectStack)
+            #set($objectStack = $generator.getNewStack())
+        #end
+        #if(!$levelStack)
+            #set($levelStack = $generator.getNewStack())
+        #end
+        #void($objectStack.push($object))
+        #void($levelStack.push($level))
+        #if($_entry)
+            #setCurrentTocEntry($_entry)
+        #end
+        #set($object=$_object)
+        #set($level=$_level)
+        #parse($_template)
+        #set($object = $objectStack.pop())
+        #set($level = $levelStack.pop())
+    #end
+<!-- Exiting macro render -->
+#end
+
+#macro(renderButtonTable $cd)
+<!--Entering macro renderButtonTable -->
+    #set($buttonList = ${cd.getWOComponent().getAllButtonInterface()})
+            <w:tbl>
+            <w:tblPr>
+                <w:tblStyle w:val="ColorfulList-Accent1" />
+                <w:tblW w:w="4231" w:type="pct" />
+                <w:jc w:val="center" />
+                <w:tblLook w:val="04A0" />
+            </w:tblPr>
+            <w:tblGrid>
+                <w:gridCol w:w="1412" />
+                <w:gridCol w:w="731" />
+                <w:gridCol w:w="1724" />
+                <w:gridCol w:w="1986" />
+                <w:gridCol w:w="1353" />
+            </w:tblGrid>
+            <w:tr w:rsidR="003C1000">
+                <w:trPr>
+                    <w:cnfStyle w:val="100000000000" />
+                    <w:jc w:val="center" />
+                </w:trPr>
+                <w:tc>
+                    <w:tcPr>
+                        <w:cnfStyle w:val="001000000100" />
+                        <w:tcW w:w="1005" w:type="pct" />
+                        <w:noWrap />
+                    </w:tcPr>
+                    <w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+                        <w:pPr>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>Buttons</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="532" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="100000000000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>ID</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1221" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="100000000000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>Action</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1403" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="100000000000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>Behavior</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="839" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="100000000000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>Requirement</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+            </w:tr>
+#foreach($button in $buttonList)
+    #if(!$button.getDontGenerate())
+            <w:tr w:rsidR="003C1000">
+                <w:trPr>
+                    <w:cnfStyle w:val="000000100000" />
+                    <w:jc w:val="center" />
+                </w:trPr>
+                <w:tc>
+                    <w:tcPr>
+                        <w:cnfStyle w:val="001000000000" />
+                        <w:tcW w:w="1005" w:type="pct" />
+                        <w:noWrap />
+                    </w:tcPr>
+                    <w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00EF2D92">
+                        <w:pPr>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                            </w:rPr>
+                            <w:t>#escape(${button.getLabel()})</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="532" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="000000100000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                            </w:rPr>
+                            <w:t>${button.getFlexoID()}</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1221" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="000000100000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                            </w:rPr>
+                            <w:t>#if($button.getFuncName())${button.getFuncName()}#else-#end</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1403" w:type="pct" />
+                    </w:tcPr>
+                    #description($button)
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="839" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="000000100000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r w:rsidRPr="00172C68">
+                            <w:rPr>
+                            #requirementRPrStyles() 
+                            </w:rPr>
+                            #requirementName($button)
+                        </w:r>
+                    </w:p>
+                </w:tc>
+            </w:tr>
+        #end ##$!button.getDontGenerate
+    #end ##foreach button in buttonList
+        </w:tbl>
+<!-- Exiting macro renderButtonTable -->
+#end
+
+##styles to display requirement references
+#macro(requirementRPrStyles)<w:highlight w:val="green" /><w:rStyle w:val="Hyperlink"/>#end
+
+## render the name of a requirement plus an hyperlink to the requirement.
+#macro(requirementName $object)
+## in place of FOOBAR put ${generator.getReference($object.getRequirement())}
+<w:hyperlink w:anchor="FOOBAR" w:history="1">
+  <w:r>
+    <w:t xml:space="preserve">-<!--${object.getRequirementName()}--></w:t>
+  </w:r>
+</w:hyperlink>
+#end
+
+#macro(renderFieldTable $cd)
+<!--Entering macro renderFieldTable -->
+    #set($fieldList = $generator.getNewVector())
+    #void(${fieldList.addAll($cd.getWOComponent().getTextfields())})
+    #void(${fieldList.addAll($cd.getWOComponent().getTextareas())})
+            <w:tbl>
+            <w:tblPr>
+                <w:tblStyle w:val="ColorfulList-Accent1" />
+                <w:tblW w:w="4335" w:type="pct" />
+                <w:jc w:val="center" />
+                <w:tblLook w:val="04A0" />
+            </w:tblPr>
+            <w:tblGrid>
+                <w:gridCol w:w="1511" />
+                <w:gridCol w:w="833" />
+                <w:gridCol w:w="1512" />
+                <w:gridCol w:w="1726" />
+                <w:gridCol w:w="1801" />
+            </w:tblGrid>
+            <w:tr w:rsidR="00C6320A">
+                <w:trPr>
+                    <w:cnfStyle w:val="100000000000" />
+                    <w:jc w:val="center" />
+                </w:trPr>
+                <w:tc>
+                    <w:tcPr>
+                        <w:cnfStyle w:val="001000000100" />
+                        <w:tcW w:w="1023" w:type="pct" />
+                        <w:noWrap />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>Fields</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="564" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="100000000000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>ID</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1024" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="100000000000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>Type</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1169" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="100000000000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>Data</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1221" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="100000000000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                                <w:sz w:val="22" />
+                                <w:szCs w:val="22" />
+                                <w:b/>
+                            </w:rPr>
+                            <w:t>Validation &amp; rules</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+            </w:tr>
+            
+#foreach($field in $fieldList)
+    #if(!$button.getDontGenerate())
+            <w:tr w:rsidR="00C6320A">
+                <w:trPr>
+                    <w:cnfStyle w:val="000000100000" />
+                    <w:jc w:val="center" />
+                </w:trPr>
+                <w:tc>
+                    <w:tcPr>
+                        <w:cnfStyle w:val="001000000000" />
+                        <w:tcW w:w="1023" w:type="pct" />
+                        <w:noWrap />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                            <w:t>#escape(${field.getLabel()})</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="564" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="000000100000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                            <w:t>${field.getFlexoID()}</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1024" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="000000100000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:proofErr w:type="gramStart" />
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                            <w:t>{#if($field.isText()) #if($field.getFormatType())${field.getFormatType().getName()}#else Text#end #else ${field.getFieldType().getName()} #end}</w:t>
+                        </w:r>
+                        <w:proofErr w:type="gramEnd" />
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1169" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="000000100000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                            <w:t>-</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="1221" w:type="pct" />
+                    </w:tcPr>
+                    <w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+                        <w:pPr>
+                            <w:jc w:val="center" />
+                            <w:cnfStyle w:val="000000100000" />
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+                                <w:color w:val="auto" />
+                            </w:rPr>
+                            <w:t>#if(${field.getIsMandatory()})Mandatory#else - #end</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+            </w:tr>
+        #end ##$!field.getDontGenerate
+    #end ##foreach field in fieldList
+        </w:tbl>
+<!-- Exiting macro renderFieldTable -->
+#end
+
+#macro(debugMsg $msg)
+<w:p> <w:r> <w:t xml:space="preserve">*** DEBUG *** $msg </w:t> </w:r> </w:p>
+#end
+
+#** 
+Render a table of all operations found in a process. For each one, 
+if there is an associated screen make a hyperlink to the screen.
+*#
+#macro(renderOperationsTable $process)
+#set($activities = ${process.getSortedActivitiesAndOperators()})
+##L654
+#set($operations = $generator.getNewVector())
+#if(${activities.hasMoreElements()})
+    #foreach($a in $activities)
+    #if($a.mightHaveOperationPetriGraph())
+            ##collect operations
+        #foreach($operation in ${a.getSortedOperationNodes()})
+            #if(!$operation.getDontGenerate())
+            #void($operations.add($operation))
+            #end
+        #end##end of foreach operations
+            ## render each operation
+    #end##if
+    #end##foreach
+#end ##if
+#if(${operations.size()}>0)
+        <w:p>
+        <w:r>
+            <w:rPr>
+                <w:u w:val="single"/>
+                <w:b/>
+            </w:rPr>
+            <w:t xml:space="preserve">$process.getName() operations:</w:t>
+        </w:r>
+    </w:p>
+    <w:p>
+        <w:pPr>
+            <w:numPr>
+                <w:ilvl w:val="0" />
+                <w:numId w:val="98" />
+            </w:numPr>
+            <w:vanish/>
+        </w:pPr>
+        <w:r>
+            <w:t xml:space="preserve"></w:t>
+        </w:r>
+    </w:p>
+
+<w:tbl>
+    <w:tblPr>
+        <w:tblW w:w="0" w:type="auto" />
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblLook w:val="04A0" />
+    </w:tblPr>
+    <w:tblGrid>
+                <w:gridCol w:w="565" />
+                <w:gridCol w:w="3118" />
+                <w:gridCol w:w="5636" />
+    </w:tblGrid>
+    <w:tr>
+            <w:tc>  
+            <w:tcPr>
+                <w:tcW w:w="565" w:type="dxa" />
+            </w:tcPr>
+                <w:p>
+                    <w:r>
+                        <w:t>${sharp}</w:t>
+                    </w:r>
+                </w:p>
+            </w:tc>
+            <w:tc>  
+                <w:tcPr>
+                    <w:tcW w:w="3118" w:type="dxa" />
+                </w:tcPr>
+                <w:p>
+                    <w:r>
+                        <w:t>Name</w:t>
+                    </w:r>
+                </w:p>
+            </w:tc>
+            <w:tc>  
+                <w:tcPr>
+                    <w:tcW w:w="5636" w:type="dxa" />
+                </w:tcPr>
+                <w:p>
+                    <w:r>
+                        <w:t>Description</w:t>
+                    </w:r>
+                </w:p>
+            </w:tc>
+        </w:tr>    
+        #foreach($node in $operations)
+            <w:tr>
+            <w:tc>  
+                <w:tcPr>
+                    <w:tcW w:w="565" w:type="dxa" />
+                </w:tcPr>
+                <w:p>
+                    <w:pPr>
+                        <w:numPr>
+                            <w:ilvl w:val="1" />
+                            <w:numId w:val="98" />
+                        </w:numPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:t></w:t>
+                    </w:r>
+                </w:p>
+            </w:tc>
+            <w:tc>  
+                <w:tcPr>
+                    <w:tcW w:w="3118" w:type="dxa" />
+                </w:tcPr>
+                <w:p>#renderName($node)</w:p>
+            </w:tc>
+            <w:tc>  
+                <w:tcPr>
+                    <w:tcW w:w="5636" w:type="dxa" />
+                </w:tcPr>
+                #description($node)
+            </w:tc>
+        </w:tr>
+        #end##foreach
+</w:tbl>
+        #end##if
+#end
+
+#macro(void $arg)#set($none = $arg)#end
+
+#macro(tocEntry $_entry)
+<!--Entering macro tocEntry -->
+    #if(${_entry.getStartOnANewPage()})
+        <w:p>
+            <w:r>
+                <w:br w:type="page"/>
+            </w:r>
+        </w:p>
+    #end
+    #set($templateName = "#getTemplateNameForTocEntry($_entry)")
+    #set($templateType = "#getTemplateTypeForTocEntry($_entry)")
+    <w:p>
+        <w:pPr>
+            <w:keepNext/>
+            <w:pStyle w:val="Heading${_entry.getLevel()}"/>
+        </w:pPr>
+        #if(${_entry.getObject().getFlexoID()})
+           #mkbookMark(${_entry.getObject().getFlexoID()} ${generator.getReference($_entry.getObject())})
+        #end
+        #renderTocEntryTitle($_entry)
+    </w:p>
+    #renderTocEntryContent($_entry)
+    #if($templateName.trim().length()>0)
+        #set($newEntryLevel = $_entry.getLevel() + 1)
+        #render($_entry.getObject() $newEntryLevel $templateName $_entry)
+    #end
+    #subTocEntries($_entry)
+<!-- Exiting macro tocEntry -->
+#end
+
+#macro(subTocEntries $_entry)
+<!--Entering macro subTocEntries -->
+    #foreach($_subEntry in $_entry.getSortedTocEntries())
+        #tocEntry($_subEntry)
+    #end
+<!-- Exiting macro subTocEntries -->
+#end
+
+#** NOTE: 
+this macro cannot generate anything else in its output besides the
+name of the template corresponding to the specific toc_entry.
+!!!in particular, no debug info should be written out!!!!!
+*#
+#macro(getTemplateNameForTocEntry $_tocEntry)
+    #if(${_tocEntry.getIdentifier()} == $DocSection.PROCESSES)
+        docx_tocentry_processes.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.SCREENS)
+        docx_tocentry_screens.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.DATA_MODEL)
+        docx_tocentry_datamodel.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.DEFINITIONS)
+        docx_tocentry_definitions.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.ROLES)
+        docx_tocentry_roles.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.RACI)
+        docx_tocentry_raci_full.xml.vm
+    #elseif(${_tocEntry.isIndividualProcessFolder()})
+        docx_tocentry_processfolder.xml.vm
+    #elseif(${_tocEntry.isIndividualProcess()})
+        #getProcessTemplateNameForTocEntry($_tocEntry)
+    #elseif(${_tocEntry.isERDiagram()})
+        docx_tocentry_diagram.xml.vm
+    #elseif($_tocEntry.isIndividualEntity())
+        docx_tocentry_eoentity.xml.vm
+    #elseif($_tocEntry.isIndividualRole())
+        docx_tocentry_individualrole.xml.vm
+    #elseif($_tocEntry.isIndividualComponentDefinition())
+        docx_tocentry_screen.xml.vm
+    #end
+#end
+
+#macro(getProcessTemplateNameForTocEntry $_tocEntry)
+    #if(${_tocEntry.isSIPOC2SubType()})
+        docx_tocentry_sipoc2.xml.vm
+    #elseif(${_tocEntry.isSIPOC3SubType()})
+        docx_tocentry_sipoc3.xml.vm
+    #elseif(${_tocEntry.isRACISubType()})
+        docx_tocentry_raci.xml.vm
+    #elseif(${_tocEntry.isOperationTableSubType()})
+        docx_tocentry_operationtable.xml.vm
+    #else
+        docx_tocentry_process.xml.vm
+    #end
+#end
+
+#macro(getTemplateTypeForTocEntry $_tocEntry)
+    #if(${_tocEntry.getIdentifier()} == $DocSection.PROCESSES)
+        tocentry_processes
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.SCREENS)
+        tocentry_screens
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.DATA_MODEL)
+        tocentry_datamodel
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.DEFINITIONS)
+        tocentry_definitions
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.ROLES)
+        tocentry_roles
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.RACI)
+        tocentry_raci_full
+    #elseif(${_tocEntry.isIndividualProcessFolder()})
+        tocentry_processfolder
+    #elseif(${_tocEntry.isIndividualProcess()})
+        #if(${_tocEntry.isSIPOC2SubType()})
+            tocentry_sipoc2
+        #elseif(${_tocEntry.isSIPOC3SubType()})
+            tocentry_sipoc3
+        #elseif(${_tocEntry.isRACISubType()})
+            tocentry_raci
+        #elseif(${_tocEntry.isOperationTableSubType()})
+            tocentry_operationtable
+        #elseif($_tocEntry.isDocSubType())
+            tocentry_process
+        #end
+    #elseif(${_tocEntry.isERDiagram()})
+        tocentry_diagram
+    #elseif($_tocEntry.isIndividualEntity())
+        tocentry_eoentity
+    #elseif($_tocEntry.isIndividualRole())
+        tocentry_individualrole
+    #elseif($_tocEntry.isIndividualComponentDefinition())
+        tocentry_screen
+    #end
+#end
+
+#macro(addAdditionalRels $rels)
+<!--Entering macro addAdditionalRels -->
+    #set($additionalRels = ${generator.getNewHolder()})
+    #getAdditionalRels($additionalRels)
+    #set($additionalRels = ${additionalRels.get()})
+    #if(!${additionalRels.contains($rels)})
+        #void($additionalRels.add($rels))
+    #end
+<!-- Exiting macro addAdditionalRels -->
+#end
+
+#macro(renderAdditionalRels)
+<!--Entering macro renderAdditionalRels -->
+    #set($additionalRels = ${generator.getNewHolder()})
+    #getAdditionalRels($additionalRels)
+    #set($additionalRels = ${additionalRels.get()})
+    #foreach($rel in $additionalRels)
+        $rel
+    #end
+<!-- Exiting macro renderAdditionalRels -->
+#end
+
+#macro(addDataBinding $dataBinding)
+<!--Entering macro addDataBinding -->
+    #set($dataBindings = ${generator.getNewHolder()})
+    #getDataBindings($dataBindings)
+    #set($dataBindings = ${dataBindings.get()})
+    #if(!${dataBindings.contains($dataBinding)})
+        #void($dataBindings.add($dataBinding))
+    #end
+<!-- Exiting macro addDataBinding -->
+#end
+
+#macro(renderDataBindings)
+<!--Entering macro renderDataBindings -->
+    #set($dataBindings = ${generator.getNewHolder()})
+    #getDataBindings($dataBindings)
+    #set($dataBindings = ${dataBindings.get()})
+    #foreach($binding in $dataBindings)
+        $binding
+    #end
+<!-- Exiting macro renderDataBindings -->
+#end
+
+#macro(renderBullets $bulletWRList $bulletSectionID)
+<!--Entering macro renderBullets -->
+    #addNumberingId($bulletSectionID)
+    
+    #foreach($bulletItem in $bulletWRList)
+        <w:p w:rsidR="$bulletSectionID" w:rsidRDefault="$bulletSectionID" w:rsidP="$bulletSectionID">
+            <w:pPr>
+                    <w:pStyle w:val="ListParagraph" />
+                    <w:numPr>
+                        <w:ilvl w:val="0" />
+                        <w:numId w:val="$bulletSectionID" />
+                    </w:numPr>
+            </w:pPr>
+            $bulletItem
+        </w:p>
+    #end
+    
+<!-- Exiting macro renderBullets -->
+#end
+
+#macro(addNumberingId $numberingId)
+<!--Entering macro addNumberingId -->
+    #set($numberingIds = $generator.getNewHolder())
+    #getNumberingIds($numberingIds)
+    #set($numberingIds = ${numberingIds.get()})
+    #void($numberingIds.add($numberingId))
+<!-- Exiting macro addNumberingId -->
+#end
+
+#macro(addOrderedNumberingId $numberingId)
+<!--Entering macro addOrderedNumberingId -->
+    #set($orderedNumberingIds = $generator.getNewHolder())
+    #getOrderedNumberingIds($orderedNumberingIds)
+    #set($orderedNumberingIds = ${orderedNumberingIds.get()})
+    #void($orderedNumberingIds.add($numberingId))
+<!-- Exiting macro addOrderedNumberingId -->
+#end
+
+#macro(convertHTML2DocxVelocityXml $html)
+<!--Entering macro convertHTML2DocxVelocityXml -->
+    #set($currentUniqueId = $generator.getNewHolder())
+    #getCurrentUniqueId($currentUniqueId)
+    #set($currentUniqueId = ${currentUniqueId.get()})
+    #set($docxVelocityXmlFromHtml = ${projectGenerator.convertHTML2DocxVelocityXml($html, $currentUniqueId)})
+    #setCurrentUniqueId(${docxVelocityXmlFromHtml.getCurrentUniqueId()})
+    $!{docxVelocityXmlFromHtml.getDocxXmlString()}
+    #foreach($relationship in ${docxVelocityXmlFromHtml.getAdditionalRelationships()})
+        #addAdditionalRels($relationship)
+    #end
+    #foreach($bulletId in ${docxVelocityXmlFromHtml.getBulletsIds()})
+        #addNumberingId($bulletId)
+    #end
+    #foreach($bulletId in ${docxVelocityXmlFromHtml.getOrderedBulletsIds()})
+        #addOrderedNumberingId($bulletId)
+    #end
+<!-- Exiting macro convertHTML2DocxVelocityXml -->
+#end
+
+#*
+* $tocEntry must be a TocEntry object
+*#
+#macro(renderTocEntryTitle $tocEntry)
+    <w:sdt>
+        <w:sdtPr>
+            #if(!(${tocEntry.getTitle()} && ${tocEntry.getTitle().length()} > 0))
+                <w:showingPlcHdr/>
+            #end
+            <w:alias w:val="Title"/>
+            <w:tag w:val="#escape(${projectGenerator.getTocEntryTitleTag($tocEntry)})" />
+            <w:lock w:val="sdtLocked" />
+            <w:text />
+        </w:sdtPr>
+        <w:sdtContent>
+            <w:r>
+                #if(${tocEntry.getTitle()} && ${tocEntry.getTitle().length()} > 0)
+                    <w:t>#escape(${tocEntry.getTitle()})</w:t>
+                #else
+                    <w:rPr>
+                        <w:rStyle w:val="PlaceholderText"/>
+                        <w:rFonts w:eastAsiaTheme="majorEastAsia"/>
+                    </w:rPr>
+                    <w:t>Click here to fill the title</w:t>
+                #end
+            </w:r>
+        </w:sdtContent>
+    </w:sdt>
+#end
+
+#*
+* $tocEntry must be a TocEntry object
+*#
+#macro(renderTocEntryContent $tocEntry)
+    #if(!${tocEntry.isReadOnly()} || (${tocEntry.getContent()} && ${tocEntry.getContent().length()} > 0))
+        <w:sdt>
+            <w:sdtPr>
+                #if(!(${tocEntry.getContent()} && ${tocEntry.getContent().length()} > 0))
+                    <w:showingPlcHdr/>
+                #end
+                <w:alias w:val="Content"/>
+                <w:tag w:val="#escape(${projectGenerator.getTocEntryContentTag($tocEntry)})" />
+                <w:lock w:val="sdtLocked" />
+            </w:sdtPr>
+            <w:sdtContent>
+                #if(${tocEntry.getContent()} && ${tocEntry.getContent().length()} > 0)
+                    #convertHTML2DocxVelocityXml(${tocEntry.getContent()})
+                #else
+                    <w:p>
+                        <w:pPr>
+                            <w:pStyle w:val="NormalWeb"/>
+                        </w:pPr>
+                        <w:r w:rsidRPr="00F80A0F">
+                            <w:rPr>
+                                <w:rStyle w:val="PlaceholderText"/>
+                                <w:rFonts w:eastAsiaTheme="majorEastAsia"/>
+                            </w:rPr>
+                            <w:t>Click here to fill the content</w:t>
+                        </w:r>
+                    </w:p>
+                #end
+            </w:sdtContent>
+        </w:sdt>
+    #end
+#end
+
+#macro(renderName $_object)
+<!--Entering macro renderName -->
+    #renderNameWithRPrAndAdditionalText($_object $null $null)
+<!-- Exiting macro renderName -->
+#end
+
+#macro(renderNameWithRPr $_object $additionalRPr)
+<!--Entering macro renderNameWithRPr -->
+    #renderNameWithRPrAndAdditionalText($_object $additionalRPr $null)
+<!-- Exiting macro renderNameWithRPr -->
+#end
+
+#*
+* _object must be a FlexoModelObject
+*#
+#macro(renderNameWithRPrAndAdditionalText $_object $additionalRPr $additionalUnescapedText)
+<!--Entering macro renderNameWithRPrAndAdditionalText -->
+    <w:sdt>
+        <w:sdtPr>
+            #if($additionalRPr || !${_object.getName()})
+                <w:rPr>
+                    #if($additionalRPr)$additionalRPr#end
+                    #if(!${_object.getName()})
+                        <w:rStyle w:val="PlaceholderText"/>
+                        <w:rFonts w:eastAsiaTheme="majorEastAsia"/>
+                    #end
+                </w:rPr>
+            #end
+            <w:alias w:val="Name"/>
+            #if(!${_object.getName()})
+                <w:showingPlcHdr/>
+            #end
+            <w:tag w:val="#escape(${projectGenerator.getFlexoNameTag($_object)})" />
+            <w:lock w:val="sdtLocked" />
+            #if(${_object.getName()})
+                #set($flexoName = "flexoName${_object.getUserIdentifier()}${_object.getFlexoID()}")
+                #set($flexoName = "#escape($flexoName)")
+                <w:dataBinding w:xpath="/flexoNames/${flexoName}[1]"/>
+                #addDataBinding("<$flexoName>#escape(${_object.getName()})</$flexoName>")
+            #end
+            <w:text />
+        </w:sdtPr>
+        <w:sdtContent>
+            <w:r>
+                #if(${_object.getName()})
+                    <w:t>#escape(${_object.getName()})</w:t>
+                #else
+                    <w:t>Click here to fill the name</w:t>
+                #end
+            </w:r>
+        </w:sdtContent>
+    </w:sdt>
+    #if($additionalUnescapedText)
+        <w:r>
+            #if($additionalRPr)
+                <w:rPr>
+                    $additionalRPr
+                </w:rPr>
+            #end
+            <w:t>#escape($additionalUnescapedText)</w:t>
+        </w:r>
+    #end
+<!-- Exiting macro renderNameWithRPrAndAdditionalText -->
+#end
+
+#*
+* _object must be a FlexoModelObject
+* If the description has been set on the current object, it is ouput as
+* the description possibly concatenated with a specific description 
+* entered for the current Documentation type.
+*# 
+#macro(description $_object)
+<!--Entering macro description -->
+    #renderSpecificDescription($_object $null)
+    #if(${_object.getHasSpecificDescriptions()})
+        #renderSpecificDescription($_object ${repository.getDocType().getName()})
+    #end
+<!-- Exiting macro description -->
+#end
+
+#*
+* _object must be a FlexoModelObject
+* If the description has been set on the current object, it is ouput as
+* the description is not - concatenated with a specific description 
+* entered for the current Documentation type.
+*# 
+#macro(descriptionSimple $_object)
+<!--Entering macro description -->
+    #renderSpecificDescription($_object $null)
+<!-- Exiting macro description -->
+#end
+
+#*
+* Render the description of the specified FlecoModelObject, if usedTarget is not null 
+* it will render the specific description associated to this target for this object, 
+* otherwise it will render the general description of this object. 
+*#
+#macro(renderSpecificDescription $_object $usedTarget)
+<!--Entering macro renderSpecificDescription -->
+    <w:sdt>
+        <w:sdtPr>
+            #if($usedTarget)
+                <w:alias w:val="$usedTarget description"/>
+                #if(!${_object.hasSpecificDescriptionForKey($usedTarget)})
+                    <w:showingPlcHdr/>
+                #end
+            #else
+                <w:alias w:val="General description"/>
+                #if(!${_object.hasDescription()})
+                    <w:showingPlcHdr/>
+                #end
+            #end
+            <w:tag w:val="#escape(${projectGenerator.getFlexoDescriptionTag($_object, $usedTarget)})" />
+            <w:lock w:val="sdtLocked" />
+        </w:sdtPr>
+        <w:sdtEndPr />
+        <w:sdtContent>
+            #if($usedTarget && ${_object.hasSpecificDescriptionForKey($usedTarget)})
+                #convertHTML2DocxVelocityXml(${_object.getSpecificDescriptionForKey($usedTarget)})
+            #elseif(!$usedTarget && ${_object.hasDescription()})
+                #convertHTML2DocxVelocityXml(${_object.getDescription()})
+            #else
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="NormalWeb"/>
+                    </w:pPr>
+                    <w:r w:rsidRPr="00F80A0F">
+                        <w:rPr>
+                            <w:rStyle w:val="PlaceholderText"/>
+                            <w:rFonts w:eastAsiaTheme="majorEastAsia"/>
+                        </w:rPr>
+                        <w:t>Click here to fill the#if($usedTarget) #escape($usedTarget)#else general#end description</w:t>
+                    </w:r>
+                </w:p>
+            #end
+        </w:sdtContent>
+    </w:sdt>
+<!-- Exiting macro renderSpecificDescription -->
+#end
+
+#macro(renderProcessOrFolderChildren $processOrFolder $level)
+<!--Entering macro renderProcessOrFolderChildren -->
+    #set($currentTocEntry = ${generator.getNewHolder()})
+    #getCurrentTocEntry($currentTocEntry)
+    #set($currentTocEntry = ${currentTocEntry.get()})
+    #if(${currentTocEntry.getRecursionEnabled()})
+        #if(${processOrFolder.getClassNameKey()} == 'process_folder')
+            #set($subFolders = ${processOrFolder.getFolders()})
+            #set($subProcesses = ${processOrFolder.getProcesses()})
+        #else
+            #set($subFolders = ${processOrFolder.getProcessNode().getSortedFolders()})
+            #set($subProcesses = ${processOrFolder.getProcessNode().getSortedOrphanSubprocesses()})
+        #end
+        
+        #foreach($subFolder in $subFolders)
+            #renderProcessFolder($subFolder $level)
+        #end
+        
+        #foreach($subProcessNode in $subProcesses)
+            #set($subProcess = $subProcessNode.getProcess())
+            #renderProcess($subProcess $level)
+        #end
+    #end
+<!-- Exiting macro renderProcessOrFolderChildren -->
+#end
+
+#macro(renderProcessFolder $processFolder $level)
+<!--Entering macro renderProcessFolder -->
+ #if(!$processFolder.getDontGenerate())
+    <w:p>
+        <w:pPr>
+            <w:pStyle w:val="Heading$level"/>
+        </w:pPr>
+        #mkbookMark(${processFolder.getFlexoID()} ${generator.getReference($processFolder)})
+        <w:r>
+            <w:t xml:space="preserve">Macro-process: </w:t>
+        </w:r>
+        #renderName($processFolder)
+    </w:p>
+    #set($newEntryLevel = $level+1)
+    #render($processFolder $newEntryLevel "docx_tocentry_processfolder.xml.vm" $null)
+  #end 
+<!-- Exiting macro renderProcessFolder -->
+#end
+
+#macro(renderProcess $process $level)
+<!--Entering macro renderProcess -->
+ #set($oldLevel = $level-1)
+ #if(!$process.getDontGenerate())
+    <w:p>   
+    #if(!$process.isRootProcess())
+    
+        <w:pPr>
+            <w:pStyle w:val="Heading$level"/>
+        </w:pPr>
+        #mkbookMark(${process.getFlexoID()} ${generator.getReference($process)})
+        <w:r>
+            #if($process.isImported())
+                <w:t xml:space="preserve">Referenced Process: </w:t>
+            #else
+                <w:t xml:space="preserve">Process: </w:t>
+            #end
+    #else ## root process
+        <w:r>
+            <w:rPr>
+                <w:b/>
+                <w:u w:val="single"/>
+            </w:rPr>
+                <w:t xml:space="preserve">Project: </w:t>
+    #end        
+        </w:r>
+        #renderName($process)
+    </w:p>
+    #if($process.isImported())
+        #description($process)
+    #elseif($process.isRootProcess())
+        #set($currentTocEntry = ${generator.getNewHolder()})
+        #getCurrentTocEntry($currentTocEntry)
+        #set($currentTocEntry = ${currentTocEntry.get()})
+        #render($process $level "#getProcessTemplateNameForTocEntry($currentTocEntry)" $null)
+    #else
+        #set($newEntryLevel = $level+1)
+        #set($currentTocEntry = ${generator.getNewHolder()})
+        #getCurrentTocEntry($currentTocEntry)
+        #set($currentTocEntry = ${currentTocEntry.get()})
+        #render($process $newEntryLevel "#getProcessTemplateNameForTocEntry($currentTocEntry)" $null)
+    #end
+  #end 
+<!-- Exiting macro renderProcess -->
+#end
+
+#macro(renderEOEntity $eoentity $level)
+<!--Entering macro renderEOEntity -->
+ #if(!$eoentity.getDontGenerate() && !${eoentity.getRepository().getDontGenerate()})
+    <w:p>
+        <w:pPr>
+            <w:keepNext/>
+            <w:pStyle w:val="Heading$level"/>
+        </w:pPr>
+        #mkbookMark(${eoentity.getFlexoID()} ${generator.getReference($eoentity)})
+        <w:r>
+            <w:t xml:space="preserve">Entity: </w:t>
+        </w:r>
+        #renderName($eoentity)
+    </w:p>
+    
+    #set($newEntryLevel = $level+1)
+    #render($eoentity $newEntryLevel "docx_tocentry_eoentity.xml.vm" $null)
+ #end   
+<!-- Exiting macro renderEOEntity -->
+#end
+
+#macro(renderScreen $screen $level)
+<!--Entering macro renderScreen -->
+ #if(!$screen.getDontGenerate())
+    <w:p>
+        <w:pPr>
+            <w:keepNext/>
+            <w:pStyle w:val="Heading$level"/>
+        </w:pPr>
+        #mkbookMark(${screen.getFlexoID()} ${generator.getReference($screen)})
+        <w:r>
+            <w:t xml:space="preserve">Screen: </w:t>
+        </w:r>
+        #renderName($screen)
+    </w:p>
+    
+    #set($newEntryLevel = $level+1)
+    #render($screen $newEntryLevel "docx_tocentry_screen.xml.vm" $null)
+ #end   
+<!-- Exiting macro renderScreen -->
+#end
+
+#macro(escape $_text)${generator.escapeStringForXML($_text)}#end
+
+#macro(getUniqueId)#set($currentUniquerId=${generator.getNewHolder()})#getCurrentUniqueId($currentUniquerId)#incrementCurrentUniqueId()${currentUniquerId.get()}#end
+
+#macro(getXmlParagraphWithContent $notEscapedText $additionalRPr)
+<!--Entering macro getXmlParagraphWithContent -->
+    <w:p>
+        <w:r>
+            <w:rPr>
+                #if($additionalRPr)$additionalRPr#end
+            </w:rPr>
+            #if($notEscapedText)
+                <w:t xml:space="preserve">#escape($notEscapedText)</w:t>
+            #end
+        </w:r>
+    </w:p>
+<!-- Exiting macro getXmlParagraphWithContent -->
+#end
+            
+##Will render a docx table
+##headersArray: contains a list of string which will be used as headers
+##contents: contains a list of list of String which will be used to fill the table 
+#macro(renderDocxTable $headersArray $contents)
+<!--Entering macro renderDocxTable -->
+    <w:tbl>
+        <w:tblPr>
+            <w:tblStyle w:val="ColorfulList-Accent1"/>
+            <w:tblW w:w="0" w:type="auto"/>
+            <w:jc w:val="center"/>
+            <w:tblBorders>
+                <w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                <w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                <w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                <w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                <w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+            </w:tblBorders>
+            <w:tblCellMar>
+                <w:top w:w="57" w:type="dxa"/>
+                <w:bottom w:w="57" w:type="dxa"/>
+            </w:tblCellMar>
+            <w:tblLook w:val="04A0"/>
+        </w:tblPr>
+        <w:tblGrid>
+            <w:gridCol w:w="4450"/>
+            <w:gridCol w:w="4450"/>
+        </w:tblGrid>
+        <w:tr>
+            <w:trPr>
+                <w:cnfStyle w:val="100000000000"/>
+                <w:trHeight w:val="300"/>
+                <w:jc w:val="center"/>
+                <w:cantSplit/>
+            </w:trPr>
+            #foreach($header in $headersArray)
+                <w:tc>
+                    <w:tcPr>
+                        <w:cnfStyle w:val="001000000000"/>
+                        <w:tcW w:w="4450" w:type="dxa"/>
+                        <w:tcBorders>
+                            <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+                        </w:tcBorders>
+                    </w:tcPr>
+                    <w:p>
+                        <w:pPr>
+                            <w:keepNext/>
+                            <w:rPr>
+                                <w:sz w:val="24"/>
+                                <w:szCs w:val="24"/>
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r w:rsidRPr="006879F7">
+                            <w:rPr>
+                                <w:sz w:val="24"/>
+                                <w:szCs w:val="24"/>
+                            </w:rPr>
+                            <w:t>$header</w:t>
+                        </w:r>
+                    </w:p>
+                </w:tc>
+            #end
+        </w:tr>
+        #foreach($row in $contents)
+            <w:tr>
+                <w:trPr>
+                    <w:cantSplit/>
+                </w:trPr>
+                #foreach($column in $row)
+                    <w:tc>
+                        <w:tcPr>
+                            <w:tcBorders>
+                                <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+                            </w:tcBorders>
+                            #if($majorRows.contains($row))
+                            <w:shd w:val="clear" w:color="auto" w:fill="8588A1"
+                            w:themeFill="text2" w:themeFillTint="99" />
+                            #end
+                        </w:tcPr>
+                        #if($column.trim().length()>0)
+                            $column
+                        #else
+                            <w:p>
+                                <w:pPr><w:keepNext/></w:pPr>
+                                <w:r>
+                                    <w:t></w:t>
+                                </w:r>
+                            </w:p>
+                        #end
+                    </w:tc>
+                #end
+            </w:tr>
+        #end
+    </w:tbl>
+<!-- Exiting macro renderDocxTable -->
+#end
+
+#*
+* This macro outputs a table environment with the metrics, with an introduction text.
+* node: the node for which to print metrics (ProcessNode, ActivityNode or OperationNode).
+*# 
+#macro(metricsForNode $node)
+<!--Entering macro metricsForNode -->
+    #if(${node.getMetricsValues()} && !${node.getMetricsValues().isEmpty()})
+        <w:p>
+            <w:pPr>
+                <w:spacing w:before="120" w:after="120"/>
+            </w:pPr>
+            <w:r>
+                <w:t xml:space="preserve">This </w:t>
+            </w:r>
+            <w:r>
+                <w:t>
+                    #if(${node.getLevel()} == "PROCESS")
+                        process
+                    #elseif(${node.getLevel()} == "ACTIVITY")
+                        activity
+                    #elseif(${node.getLevel()} == "OPERATION")
+                        operation
+                    #else
+                        node
+                    #end
+                </w:t>
+            </w:r>
+            <w:r>
+                <w:t xml:space="preserve"> has the following metrics:</w:t>
+            </w:r>
+        </w:p>
+
+        #set($metricsTablesContents = $generator.getNewVector())
+        #foreach($metricValue in ${node.getMetricsValues()})
+            #if(${metricValue.getMetricsDefinition().getName()} && ${metricValue.getValue()})
+                #set($row = $generator.getNewVector())
+                #void($row.add("<w:p>#renderNameWithRPr(${metricValue.getMetricsDefinition()} '<w:b/>')</w:p>"))
+                
+                #set($metricValueString = ${metricValue.getValue().toString()})
+                #if(${metricValue.getUnit()})
+                    #set($metricValueString = $metricValueString + " " + ${metricValue.getUnit()})
+                #end
+                #void($row.add("#getXmlParagraphWithContent($metricValueString $null)"))
+                
+                #if(${metricValue.getDescription().trim().length()} > 0)
+                    #void($row.add("#getXmlParagraphWithContent(${metricValue.getDescription().trim()} $null)"))
+                #else
+                    #void($row.add("#getXmlParagraphWithContent($null $null)"))
+                #end
+                #void($metricsTablesContents.add($row))
+            #end
+        #end
+        
+        #renderDocxTable(["Name", "Value", "Additional information"] $metricsTablesContents)
+    #end
+<!-- Exiting macro metricsForNode -->
+#end
+
+#*
+* This macro outputs a table environment with the status, with an introduction text.
+* node: the node for which to print status (ProcessNode, ActivityNode or OperationNode).
+*# 
+#macro(statusesForNode $_node)
+<!--Entering macro statusesForNode -->
+    #if(${_node.hasAtLeastOneStatusToDocument()})
+        <w:p>
+            <w:r>
+                <w:rPr>
+                    <w:b/>
+                    <w:u w:val="single"/>
+                </w:rPr>
+                <w:t xml:space="preserve">Status list: </w:t>
+            </w:r>
+        </w:p>
+    
+        #set($statusTablesContents = $generator.getNewVector())
+        #foreach($status in ${process.getSortedStatuses()})
+            #set($row = $generator.getNewVector())
+            #void($row.add("<w:p>#renderNameWithRPr($status '<w:b/>')</w:p>"))
+            #void($row.add("#description($status)"))
+            #void($statusTablesContents.add($row))
+        #end
+        #renderDocxTable(["Status", "Description"] $statusTablesContents)
+    #end
+<!-- Exiting macro statusesForNode -->
+#end
+
+#*
+* print the roles of the workflow
+*
+*#
+#macro(RoleForWorkFlow $_workflow)
+<!--Entering macro RoleForWorkFlow -->
+
+    #if(${_workflow.getRoleList().getRoles().size()}>0 || ${_workflow.getImportedRoleList().getRoles().size()}>0)
+        <w:p>
+            <w:pPr>
+                <w:pStyle w:val="Heading$level"/>
+            </w:pPr>
+            <w:r>
+                <w:t xml:space="preserve">Roles: </w:t>
+            </w:r>
+##          #renderName(${workflow.getRootProcess()})
+        </w:p>
+        <w:p>
+            <w:r>
+                <w:t>The following roles are defined for this process:</w:t>
+            </w:r>
+        </w:p>
+    
+        #set($rolesTablesContents = $generator.getNewVector())
+        #foreach($role in ${_workflow.getSortedRoles()})
+            #set($row = $generator.getNewVector())
+            #void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
+            #void($row.add("#description($role)"))
+            #void($rolesTablesContents.add($row))
+        #end
+        #foreach($role in ${_workflow.getImportedRoleList().getSortedRoles()})
+            #set($row = $generator.getNewVector())
+            #void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
+            #void($row.add("#description($role)"))
+            #void($rolesTablesContents.add($row))
+        #end
+
+        #renderDocxTable(["Role", "Description"] $rolesTablesContents)
+    #end
+<!-- Exiting macro RoleForWorkFlow -->
+#end
+
+#*
+* print the process reference that this node uses
+*
+*#
+#macro(printUsedProcessRef $_node)
+<!--Entering macro printUsedProcessRef -->
+    #if($_node.isSubProcessNode())
+        #if($node.getSubProcess())
+          #if(!$_node.getSubProcess().getDontGenerate())
+            <w:p>
+                <w:r>
+                    <w:t xml:space="preserve">This node uses the following process </w:t>
+                </w:r>
+                <w:hyperlink w:anchor="${generator.getReference($_node.getSubProcess())}" w:history="1">
+                    #renderNameWithRPr(${_node.getSubProcess()} '<w:rStyle w:val="Hyperlink"/>')
+                    <w:r>
+                        <w:t xml:space="preserve">.</w:t>
+                    </w:r>
+                </w:hyperlink>
+            </w:p>
+          #end
+       #else    
+                    #getXmlParagraphWithContent("This node does not define which process it uses." $null)
+       #end
+    #end
+<!-- Exiting macro printUsedProcessRef -->
+#end
+
+#macro(renderScreenshotForObject $_object)
+<!--Entering macro renderScreenshotForObject -->
+    #set($image = ${projectGenerator.getScreenshotImageIcon($_object)})
+    #set($rid = ${projectGenerator.getRIdForResource(${projectGenerator.getScreenshot($_object)})})
+    #set($imageWidth = $image.getIconWidth())
+    #set($imageHeight = $image.getIconHeight())
+    #if($imageWidth > 514)
+        #set($imageWidth = 514)
+        #set($imageHeight = $imageHeight * $imageWidth / $image.getIconWidth())
+    #end
+    #if($imageHeight > 734)
+        #set($imageHeight = 734)
+        #set($imageWidth = $image.getIconWidth() * $imageHeight / $image.getIconHeight())
+    #end
+        
+    #set($imageWidth = $imageWidth * 9525) ##Don't ask me why
+    #set($imageHeight = $imageHeight * 9525) ##Don't ask me why
+    
+    <w:p>
+        <w:pPr>
+            <w:jc w:val="center"/>
+        </w:pPr>
+        <w:r>
+            <w:rPr>
+                <w:noProof/>
+            </w:rPr>
+            <w:drawing>
+                <wp:inline distT="0" distB="0" distL="0" distR="0">
+                    <wp:extent cx="$imageWidth" cy="$imageHeight"/>
+                    <wp:docPr id="#getUniqueId()" name="Picture"/>
+                    <wp:cNvGraphicFramePr>
+                        <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+                    </wp:cNvGraphicFramePr>
+                    <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                        <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                            <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                                <pic:nvPicPr>
+                                    <pic:cNvPr id="0" name=""/>
+                                    <pic:cNvPicPr/>
+                                </pic:nvPicPr>
+                                <pic:blipFill>
+                                    <a:blip r:embed="$rid"/>
+                                    <a:stretch>
+                                        <a:fillRect/>
+                                    </a:stretch>
+                                </pic:blipFill>
+                                <pic:spPr>
+                                    <a:xfrm>
+                                        <a:off x="0" y="0"/>
+                                        <a:ext cx="$imageWidth" cy="$imageHeight"/>
+                                    </a:xfrm>
+                                    <a:prstGeom prst="rect">
+                                        <a:avLst/>
+                                    </a:prstGeom>
+                                </pic:spPr>
+                            </pic:pic>
+                        </a:graphicData>
+                    </a:graphic>
+                </wp:inline>
+            </w:drawing>
+        </w:r>
+    </w:p>
+<!-- Exiting macro renderScreenshotForObject -->
+#end
+#macro(renderImportedImageFile $importedImagePath)
+    #renderImportedImageFileWithMaxSize($importedImagePath 514 734)
+#end
+
+#macro(renderImportedImageFileWithMaxSize $importedImagePath $maxWidthInPx $maxHeightInPx)
+    #renderImportedImageFileWithMaxSizeAndSpecificDrawingXml($importedImagePath $maxWidthInPx $maxHeightInP $null $null $null)
+#end
+
+## $importedImagePath must be relative to the importedimage directory
+#macro(renderImportedImageFileWithMaxSizeAndSpecificDrawingXml $importedImagePath $maxWidthInPx $maxHeightInPx $drawingXmlStart $drawingXmlAfterExtent $drawingXmlEnd)
+    
+    #if(!$drawingXmlStart)
+        #set($drawingXmlStart = "<wp:inline distT=${quote}0${quote} distB=${quote}0${quote} distL=${quote}0${quote} distR=${quote}0${quote}>")
+    #end
+    #if(!$drawingXmlEnd)
+        #set($drawingXmlEnd = "</wp:inline>")
+    #end
+    
+    #set($projectImageRelativePath = "${project.getImportedImagesDir().getName()}/${importedImagePath}")
+    #set($image = ${projectGenerator.getImageIconForImportedImageNamed($importedImagePath)})
+    #set($imageId = "#getUniqueId()")
+    #set($rid = ${projectGenerator.getRIdForString("${projectImageRelativePath}_${imageId}")})
+    #set($imageWidth = $image.getIconWidth())
+    #set($imageHeight = $image.getIconHeight())
+    #if($imageWidth > $maxWidthInPx)
+        #set($imageWidth = $maxWidthInPx)
+        #set($imageHeight = $imageHeight * $imageWidth / $image.getIconWidth())
+    #end
+    #if($imageHeight > $maxHeightInPx)
+        #set($imageHeight = $maxHeightInPx)
+        #set($imageWidth = $image.getIconWidth() * $imageHeight / $image.getIconHeight())
+    #end
+        
+    #set($imageWidth = $imageWidth * 9525) ##Don't ask me why
+    #set($imageHeight = $imageHeight * 9525) ##Don't ask me why
+    
+    <w:p>
+        <w:pPr>
+            <w:jc w:val="center"/>
+        </w:pPr>
+        <w:r>
+            <w:rPr>
+                <w:noProof/>
+            </w:rPr>
+            <w:drawing>
+                $drawingXmlStart
+                    <wp:extent cx="$imageWidth" cy="$imageHeight"/>
+                    #if($drawingXmlAfterExtent)
+                        $drawingXmlAfterExtent
+                    #end
+                    <wp:docPr id="$imageId" name="Picture"/>
+                    <wp:cNvGraphicFramePr>
+                        <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+                    </wp:cNvGraphicFramePr>
+                    <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                        <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                            <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                                <pic:nvPicPr>
+                                    <pic:cNvPr id="0" name=""/>
+                                    <pic:cNvPicPr/>
+                                </pic:nvPicPr>
+                                <pic:blipFill>
+                                    <a:blip r:embed="$rid"/>
+                                    <a:stretch>
+                                        <a:fillRect/>
+                                    </a:stretch>
+                                </pic:blipFill>
+                                <pic:spPr>
+                                    <a:xfrm>
+                                        <a:off x="0" y="0"/>
+                                        <a:ext cx="$imageWidth" cy="$imageHeight"/>
+                                    </a:xfrm>
+                                    <a:prstGeom prst="rect">
+                                        <a:avLst/>
+                                    </a:prstGeom>
+                                </pic:spPr>
+                            </pic:pic>
+                        </a:graphicData>
+                    </a:graphic>
+                $drawingXmlEnd
+            </w:drawing>
+        </w:r>
+    </w:p>
+    #addAdditionalRels("<Relationship Id=${quote}${rid}${quote} Type=${quote}http://schemas.openxmlformats.org/officeDocument/2006/relationships/image${quote} Target=${quote}${projectGenerator.getMediaRelativePath($projectImageRelativePath)}${quote}/>")
+#end
+
+
+#*
+* SIPOC macro: getting list of _froms node originating from _to node
+* getting suppliers from an Input or getting inputs from an activity
+* $_to has dontgenerate checkbox set to false
+*#
+#macro(getOriginNodes $_to $_froms)
+<!--Entering macro getOriginNodes -->
+            #foreach($association in ${_to.getIncomingAssociations()})
+                    #set($from = ${association.getStartNode()})
+                    #if(!$from.getDontGenerate())
+                        #if(!$_froms.contains($from))
+                            #void($_froms.add($from))
+##                          <w:p> <w:r> <w:t xml:space="preserve">*** DEBUG *** Add from ------ (${_to.getIncomingAssociations().size()}): #escape(${from.getName()}): </w:t> </w:r> </w:p>
+                        #end ## if _froms contain from
+                     #end ## if from getDontgenerate
+            #end ## foreach association
+<!-- Exiting macro getOriginNodes -->
+#end
+
+#*
+* SIPOC macro: getting list of _tos node originating from _from node
+* getting customers from an Output or getting outputs from an activity
+* $_from has dontgenerate checkbox set to false
+*#
+#macro(getDestinationNodes $_from $_tos)
+<!--Entering macro getDestinationNodes -->
+            #foreach($association in ${_from.getOutgoingAssociations()})
+                    #set($to = ${association.getEndNode()})
+                    #if(!$to.getDontGenerate())
+                        #if(!$_tos.contains($to))
+                            #void($_tos.add($to))
+##                          <w:p> <w:r> <w:t xml:space="preserve">*** DEBUG *** Add to --------(${_from.getOutgoingAssociations().size()}): #escape(${to.getName()}): </w:t> </w:r> </w:p>
+                        #end ## if _tos contain from
+                     #end ## if from getDontgenerate
+            #end ## foreach association
+<!-- Exiting macro getDestinationNodes -->
+#end
+
+#**
+  Units in the calculation belows are in 20th of point.
+*#
+
+#macro(raciTableHeader $roles $roleCount $process $colWidth $nbLine)
+<!-- Entering macro raciTableHeader -->
+#if($nbLine==0)
+    #set($nbLine = 1)
+#end
+#set($longestRoleName = 0)
+#foreach($role in $roles)
+     <!-- computing max length at role: $role -->
+    #if(${role.getName().length()}>$longestRoleName)
+        #set($longestRoleName = ${role.getName().length()})
+    #end
+#end
+
+#** DDW 
+  This makes strong hypothesis that long names can be split into some number of lines
+  but this is only the case if there are some blanks
+  Why 150???
+  I think it would be better to take 
+                max((longestWordInroleName*150),
+                    (longestRoleName*150)/$nbLine)
+  so that the longest word can fit!
+*#
+#set($trHeight = ($longestRoleName*180)/$nbLine)
+<!-- longestRoleName=$longestRoleName -->
+<w:tblPr>
+  <w:tblStyle w:val="ColorfulList-Accent1" />
+  <w:tblW w:w="0" w:type="auto" />
+  <w:jc w:val="center" />
+  <w:tblInd w:w="-656" w:type="dxa" />
+  <w:tblBorders>
+    <w:top w:val="single" w:sz="4" w:space="0" w:color="auto" />
+    <w:left w:val="single" w:sz="4" w:space="0" w:color="auto" />
+    <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto" />
+    <w:right w:val="single" w:sz="4" w:space="0" w:color="auto" />
+    <w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto" />
+    <w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto" />
+  </w:tblBorders>
+  <w:tblLayout w:type="fixed" />
+  <w:tblCellMar>
+    <w:top w:w="57" w:type="dxa" />
+    <w:bottom w:w="57" w:type="dxa" />
+  </w:tblCellMar>
+  <w:tblLook w:val="04A0" />
+</w:tblPr>
+<w:tblGrid>
+  <w:gridCol w:w="2620" />
+  #foreach($role in ${process.getProject().getFlexoWorkflow().getSortedRoles()})
+  <!-- colWidth at role $role -->  
+  <w:gridCol w:w="$colWidth" />
+  #end
+</w:tblGrid>
+<w:tr w:rsidR="00000A95" w:rsidRPr="00C343B9">
+  <w:trPr>
+    <w:cnfStyle w:val="100000000000" />
+    <w:cantSplit />
+    <w:noWrap/>
+    #if($trHeight)<w:trHeight w:val="$trHeight" />#end
+    <w:jc w:val="center" />
+  </w:trPr>
+  <w:tc>
+    <w:tcPr>
+      <w:cnfStyle w:val="001000000000" />
+      <w:tcW w:w="2620" w:type="dxa" />
+    </w:tcPr>
+    <w:p w:rsidR="00000A95" w:rsidRPr="00C343B9" w:rsidRDefault="00000A95">
+      <w:pPr>
+    <w:rPr>
+      <w:sz w:val="24" />
+      <w:szCs w:val="24" />
+      <w:lang w:val="en-GB" />
+    </w:rPr>
+      </w:pPr>
+    </w:p>
+  </w:tc>
+  ## Same comment as above
+  #foreach($role in ${process.getProject().getFlexoWorkflow().getSortedRoles()})
+  <!-- role cell at role:$role -->
+  <w:tc>
+    <w:tcPr>
+      <w:tcW w:w="$colWidth" w:type="dxa" />
+      <w:textDirection w:val="btLr" />
+      <w:vAlign w:val="center" />
+    </w:tcPr>
+    <w:p w:rsidR="00000A95" w:rsidRPr="00C343B9" w:rsidRDefault="00000A95"
+     w:rsidP="00000A95">
+      <w:pPr>
+    <w:tabs>
+      <w:tab w:val="left" w:pos="4200" />
+    </w:tabs>
+    <w:ind w:left="113" w:right="113" />
+    <w:jc w:val="center" />
+    <w:cnfStyle w:val="100000000000" />
+    <w:rPr>
+      <w:bCs w:val="0" />
+      <w:sz w:val="24" />
+      <w:szCs w:val="24" />
+      <w:lang w:val="en-GB" />
+    </w:rPr>
+      </w:pPr>
+      #renderNameWithRPr($role '<w:bCs w:val="0" /><w:sz w:val="24" /><w:szCs w:val="24" />')
+    </w:p>
+  </w:tc>
+  #end
+</w:tr>
+<!-- Exiting macro raciTableHeader -->
+#end
+
+#macro(raciTableNoHeader $process)
+<!-- Entering macro raciTableNoHeader -->
+#set($activities=$generator.getNewVector())
+#foreach($subProcessNode in ${process.getSortedMeaningFullActivitiesAndSubProcessNode()})
+    #void($activities.add($subProcessNode))
+    #if($subProcessNode.getSubProcess())
+    #foreach($a in $subProcessNode.getSubProcess().getSortedMeaningFullActivities())
+        #if(!${a.getDontGenerate()})#void($activities.add($a))#end
+    #end
+    #end
+#end
+#set($activities=${activities})
+##get roles in a vector so to loop on it several times
+#set($roles=$generator.getNewVector())
+#foreach($rrole in ${process.getProject().getFlexoWorkflow().getSortedRoles()})
+#void($roles.add($rrole))
+#end
+
+
+#foreach($activity in ${activities})
+<w:tr w:rsidR="00000A95" w:rsidRPr="00C343B9">
+    <w:trPr>
+        <w:cnfStyle w:val="000000100000" />
+        <w:trHeight w:val="264" />
+        <w:jc w:val="center" />
+    </w:trPr>
+    
+    <w:tc>
+        <w:tcPr>
+            <w:cnfStyle w:val="001000000000" />
+            <w:tcW w:w="2620" w:type="dxa" />
+            #if($activity.getProcess().equals($process))
+            <w:shd w:val="clear" w:color="auto" w:fill="8588A1"
+                w:themeFill="text2" w:themeFillTint="99" />
+            <w:vAlign w:val="center" /> 
+            #end
+        </w:tcPr>
+        <w:p w:rsidR="00000A95" w:rsidRPr="00C343B9" w:rsidRDefault="00000A95">
+            <w:pPr>
+                <w:rPr>
+                    <w:lang w:val="en-GB" />
+                </w:rPr>
+            </w:pPr>
+            #renderName($activity)
+            ##DDW: commented out this. Do not see what this 1 can be.
+            <!-- <w:r>
+                <w:rPr>
+                    <w:lang w:val="en-GB" />
+                </w:rPr>
+                <w:t xml:space="preserve"> 1</w:t>
+            </w:r>
+            -->
+        </w:p>
+    </w:tc>
+    
+    #foreach($role in $roles)       
+    <w:tc>
+        <w:tcPr>
+            <w:tcW w:type="dxa" />
+            <w:vAlign w:val="center" />
+            #if($activity.getProcess().equals($process))
+            <w:shd w:val="clear" w:color="auto" w:fill="8588A1"
+                w:themeFill="text2" w:themeFillTint="99" />
+            <w:vAlign w:val="center" /> 
+            #end
+        </w:tcPr>
+        <w:p w:rsidR="00000A95" w:rsidRPr="00C343B9" w:rsidRDefault="00000A95"
+            w:rsidP="00000A95">
+            <w:pPr>
+                <w:jc w:val="center" />
+                <w:cnfStyle w:val="000000100000" />
+                <w:rPr>
+                    <w:lang w:val="en-GB" />
+                </w:rPr>
+            </w:pPr>
+            <w:r>
+                <w:rPr>
+                    <w:lang w:val="en-GB" />
+                </w:rPr>
+                <w:t>${activity.getRACICodeForRole($role)}</w:t>
+            </w:r>
+        </w:p>
+    </w:tc>
+    #end
+</w:tr>
+#end ##foreach
+<!-- Exiting macro raciTableNoHeader -->
+#end ##macro
+
+#macro(raciTableSeparator $process)
+<!-- Entering macro raciTableSeparator -->
+<!-- Exiting macro raciTableSeparator -->
+#end
+
+#macro(renderRaciBody $process $level)
+    #_renderRaciBody($process $level $trueValue)
+#end
+
+#macro(_renderRaciBody $process $level $recurse)
+<!-- Entering macro renderRaciBody($process, $level) -->
+## Process current process
+#raciTableNoHeader($process)
+#raciTableSeparator($process)
+
+## then recurse into children
+#if($recurse)
+    #set($nextLevel=1+$level)
+    #foreach($subProcessNode in $process.getProcessNode().getSortedSubprocesses())
+        #if(!$subProcessNode.getDontGenerate())
+            #set($subProcess = $subProcessNode.getProcess())
+            #renderRaciBody($subProcess $nextLevel)
+        #end
+    #end
+#end
+<!-- Exiting macro renderRaciBody -->
+#end
+
+#macro(raciTable $process)
+<!--Entering macro raciTable -->
+#if(! $process && !$process.getDontGenerate() )
+    <w:p> <w:r> <w:t xml:space="preserve">*** DEBUG *** raciTable() process is null. </w:t> </w:r> </w:p>
+#else
+    #set($roles=${process.getProject().getFlexoWorkflow().getSortedRoles()})
+    #set($roleCount = ${process.getProject().getFlexoWorkflow().getRoleList().size()})
+    #if($roleCount > 0)
+        <w:tbl>
+        #set($colWidth = 6760/$roleCount)
+        #set($nbLine = $colWidth/340)
+        #raciTableHeader($roles $roleCount $process $colWidth $nbLine)
+        #_renderRaciBody($process $level $falseValue)
+        </w:tbl>
+    #end
+#end ##if
+<!--Exiting macro raciTable -->
+#end ##raciTable
+
+#macro(displayFormattedToday)#set($dateFormat = ${generator.getNewHolder()})#getDateFormat($dateFormat)#set($dateFormat = ${dateFormat.get()})${dateFormat.format($today)}#end
+
+##Global variables macro access ##
+##################################
+
+#macro(_getGlobalVariable $key $defaultValue $holder)#if(!${globalVariableMap.containsKey($key)})#void(${globalVariableMap.put($key, $defaultValue)})#end#void($holder.set(${globalVariableMap.get($key)}))#end
+#macro(_setGlobalVariable $key $value)#void(${globalVariableMap.put($key, $value)})#end
+
+#macro(getCurrentUniqueId $holder)#_getGlobalVariable("CURRENTUNIQUEID" 100 $holder)#end ##start at 100 not 0 because numbering doesn't like 0 as id and it allows modify templates and use id < 100
+#macro(setCurrentUniqueId $value)#_setGlobalVariable("CURRENTUNIQUEID" $value)#end
+#macro(incrementCurrentUniqueId)#set($value=${generator.getNewHolder()})#getCurrentUniqueId($value)#set($value = $value.get())#set($value = $value +1)#_setGlobalVariable("CURRENTUNIQUEID" $value)#end
+
+#macro(getCurrentTocEntry $holder)#_getGlobalVariable("currentTocEntry" $null $holder)#end
+#macro(setCurrentTocEntry $value)#_setGlobalVariable("currentTocEntry" $value)#end
+
+#macro(getAdditionalRels $holder)#_getGlobalVariable("additionalRels" $generator.getNewVector() $holder)#end
+#macro(getNumberingIds $holder)#_getGlobalVariable("numberingIds" $generator.getNewVector() $holder)#end
+#macro(getOrderedNumberingIds $holder)#_getGlobalVariable("orderedNumberingId" $generator.getNewVector() $holder)#end
+
+#macro(getDataBindings $holder)#_getGlobalVariable("dataBindings" $generator.getNewVector() $holder)#end
+
+#macro(getDateFormat $holder)#_getGlobalVariable("dateFormat" $generator.getDateFormat("dd/MM/yyyy") $holder)#end
