@@ -20,12 +20,14 @@
 package org.openflexo.velocity;
 
 import java.io.FileInputStream;
+import java.io.StringWriter;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.collections.ExtendedProperties;
+import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
@@ -36,6 +38,8 @@ import org.openflexo.generator.TemplateLocator;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
 
+import com.google.inject.Injector;
+
 /**
  * @author gpolet
  * 
@@ -45,6 +49,8 @@ public class FlexoVelocity {
 	private static boolean isInitialized = false;
 
 	private static FlexoVelocityResourceCache resourceCache;
+
+	private static Injector injector;
 
 	static {
 		try {
@@ -120,5 +126,9 @@ public class FlexoVelocity {
 			logger.info("Setting Velocity resource cache");
 		}
 		FlexoVelocity.resourceCache = resourceCache;
+	}
+
+	public static void mergeTemplate(String templateName, String encoding, VelocityContext context, StringWriter writer) {
+		Velocity.mergeTemplate(templateName, encoding, context, writer);
 	}
 }

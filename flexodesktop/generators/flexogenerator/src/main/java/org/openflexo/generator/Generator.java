@@ -330,7 +330,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			CGTemplate template = templateWithName(templateRelativePath);
 
 			Velocity.setApplicationAttribute("templateLocator", getTemplateLocator());
-			Velocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
+			FlexoVelocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
 			Velocity.setApplicationAttribute("templateLocator", null);
 
 		} catch (TemplateNotFoundException e) {
