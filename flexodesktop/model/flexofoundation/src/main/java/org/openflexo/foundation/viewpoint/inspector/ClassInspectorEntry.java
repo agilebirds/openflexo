@@ -29,6 +29,8 @@ import org.openflexo.foundation.ontology.OntologyClass;
  */
 public class ClassInspectorEntry extends InspectorEntry {
 
+	private String conceptURI;
+
 	@Override
 	public Class getDefaultDataClass() {
 		return OntologyClass.class;
@@ -38,4 +40,22 @@ public class ClassInspectorEntry extends InspectorEntry {
 	public String getWidgetName() {
 		return "OntologyClassSelector";
 	}
+
+	public String _getConceptURI() {
+		return conceptURI;
+	}
+
+	public void _setConceptURI(String conceptURI) {
+		this.conceptURI = conceptURI;
+	}
+
+	public OntologyClass getConcept() {
+		getCalc().loadWhenUnloaded();
+		return getOntologyLibrary().getClass(_getConceptURI());
+	}
+
+	public void setConcept(OntologyClass c) {
+		_setConceptURI(c != null ? c.getURI() : null);
+	}
+
 }

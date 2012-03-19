@@ -269,13 +269,14 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			individualSelector.setComponentClass(org.openflexo.components.widget.OntologyIndividualSelector.class);
 			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.project"),
 					new DataBinding("data.project"), true));
-			/*individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.ontologyClass"),
-					new DataBinding("parameters." + parameter.getName() + ".concept") {
+			// Quick and dirty hack to configure IndividualSelector: refactor this when new binding model will be in use
+			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.ontologyClassURI"),
+					new DataBinding('"' + ((IndividualParameter) parameter)._getConceptURI() + '"') {
 						@Override
 						public BindingFactory getBindingFactory() {
 							return parameter.getBindingFactory();
 						}
-					}, true));*/
+					}, true));
 			individualSelector.setData(new DataBinding("parameters." + parameter.getName()) {
 				@Override
 				public BindingFactory getBindingFactory() {
@@ -289,13 +290,14 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			classSelector.setComponentClass(org.openflexo.components.widget.OntologyClassSelector.class);
 			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.project"), new DataBinding(
 					"data.project"), true));
-			/*individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.ontologyClass"),
-					new DataBinding("parameters." + parameter.getName() + ".concept") {
+			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
+			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.parentClassURI"),
+					new DataBinding('"' + ((ClassParameter) parameter)._getConceptURI() + '"') {
 						@Override
 						public BindingFactory getBindingFactory() {
 							return parameter.getBindingFactory();
 						}
-					}, true));*/
+					}, true));
 			classSelector.setData(new DataBinding("parameters." + parameter.getName()) {
 				@Override
 				public BindingFactory getBindingFactory() {

@@ -63,9 +63,11 @@
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry" xmlTag="Individual">
+		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry" xmlTag="Class">
+		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry" xmlTag="FlexoObject">

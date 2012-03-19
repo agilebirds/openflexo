@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 
 /**
@@ -29,6 +30,8 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
  */
 public class IndividualInspectorEntry extends InspectorEntry {
 
+	private String conceptURI;
+
 	@Override
 	public Class getDefaultDataClass() {
 		return OntologyIndividual.class;
@@ -38,4 +41,22 @@ public class IndividualInspectorEntry extends InspectorEntry {
 	public String getWidgetName() {
 		return "OntologyIndividualSelector";
 	}
+
+	public String _getConceptURI() {
+		return conceptURI;
+	}
+
+	public void _setConceptURI(String conceptURI) {
+		this.conceptURI = conceptURI;
+	}
+
+	public OntologyClass getConcept() {
+		getCalc().loadWhenUnloaded();
+		return getOntologyLibrary().getClass(_getConceptURI());
+	}
+
+	public void setConcept(OntologyClass c) {
+		_setConceptURI(c != null ? c.getURI() : null);
+	}
+
 }
