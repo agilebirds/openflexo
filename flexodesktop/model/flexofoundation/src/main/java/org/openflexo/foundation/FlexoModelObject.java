@@ -1379,7 +1379,9 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (getEditionPatternReferences() != null) {
 			if (getEditionPatternReferences().size() > 0) {
 				for (EditionPatternReference r : getEditionPatternReferences()) {
-					if (r.getPatternRole().getIsPrimaryRole()) {
+					if (r.getPatternRole() == null) {
+						logger.warning("Found an EditionPatternReference with a null pattern role. Please investigate...");
+					} else if (r.getPatternRole().getIsPrimaryRole()) {
 						return true;
 					}
 				}

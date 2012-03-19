@@ -176,7 +176,7 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 			}
 		}
 
-		if (getEditionPatternReferences().size() > 0) {
+		if (getEditionPatternReferences() != null && getEditionPatternReferences().size() > 0) {
 			return getEditionPatternReferences().get(0);
 		}
 

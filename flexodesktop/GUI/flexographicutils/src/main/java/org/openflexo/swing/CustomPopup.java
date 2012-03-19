@@ -648,6 +648,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 				@Override
 				public void mouseMoved(MouseEvent e) {
+					if (_popup == null) {
+						return;
+					}
 					if (getResizeRectangle().contains(e.getPoint())) {
 						_popup.setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
 					} else {
