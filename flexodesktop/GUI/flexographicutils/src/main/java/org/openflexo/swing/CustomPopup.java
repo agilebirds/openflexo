@@ -116,9 +116,8 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	protected abstract JComponent buildFrontComponent();
 
 	public CustomPopup(T editedObject) {
-		super();
+		super(new BorderLayout());
 		_editedObject = editedObject;
-		setLayout(new BorderLayout());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_BUTTON);
 		} else {
