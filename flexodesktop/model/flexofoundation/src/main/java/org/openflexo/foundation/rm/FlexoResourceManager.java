@@ -197,13 +197,14 @@ public class FlexoResourceManager {
 		File rmFile = getExpectedResourceManagerFile(aProjectDirectory);
 		if (!rmFile.exists()) {
 			throw new ProjectInitializerException(
-					"There is no rmxml file in project. Cannot load project without one. Use previous versions of Flexo first and then load with this new version.");
+					"There is no rmxml file in project. Cannot load project without one. Use previous versions of Flexo first and then load with this new version.",
+					aProjectDirectory);
 		} else {
 			try {
 				FlexoProject.restoreJarsIfNeeded(aProjectDirectory);
 			} catch (IOException e) {
 				e.printStackTrace();
-				throw new ProjectInitializerException(e.getMessage());
+				throw new ProjectInitializerException(e.getMessage(), aProjectDirectory);
 			}
 			FlexoRMResource rmRes;
 			try {
@@ -211,7 +212,7 @@ public class FlexoResourceManager {
 				project = rmRes.loadProject(progress, loadingHandler);
 			} catch (RuntimeException e1) {
 				e1.printStackTrace();
-				throw new ProjectInitializerException(e1.getMessage());
+				throw new ProjectInitializerException(e1.getMessage(), aProjectDirectory);
 			}
 
 		}
