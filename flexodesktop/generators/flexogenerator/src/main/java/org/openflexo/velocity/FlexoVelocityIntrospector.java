@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.apache.velocity.util.introspection.Info;
 import org.apache.velocity.util.introspection.UberspectImpl;
 import org.apache.velocity.util.introspection.VelMethod;
+import org.apache.velocity.util.introspection.VelPropertyGet;
 import org.openflexo.logging.FlexoLogger;
 
 public class FlexoVelocityIntrospector extends UberspectImpl {
@@ -73,4 +74,31 @@ public class FlexoVelocityIntrospector extends UberspectImpl {
 		return m != null ? new VelMethodImpl(m) : null;
 	}
 
+	@Override
+	public VelPropertyGet getPropertyGet(Object obj, String identifier, Info i) throws Exception {
+		VelPropertyGet get = super.getPropertyGet(obj, identifier, i);
+		if (get == null) {
+			Class objClass = obj.getClass();
+			try {
+				try {
+					return new FlexoVelocityPropertyGet(objClass, identifier);
+				} catch (NoSuchFieldException e) {
+					if (objClass == Class.class) {
+						return new FlexoVelocityPropertyGet((Class) obj, identifier);
+					}
+				}
+			} catch (NoSuchFieldException e) {
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Field '" + identifier + "' could not be found on " + objClass.getName() + " called in "
+							+ i.getTemplateName() + " at line " + i.getLine() + " column " + i.getColumn());
+				}
+			} catch (SecurityException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.log(Level.WARNING, "Security exception for field: " + objClass + "." + identifier, e);
+				}
+			}
+		}
+
+		return get;
+	}
 }
