@@ -136,7 +136,7 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 					new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							if ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited()) {
+							if (_CGTemplate instanceof CGTemplateFile && ((CGTemplateFile) _CGTemplate).isEdited()) {
 								SaveCustomTemplateFile save = SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) _CGTemplate,
 										null, _controller.getEditor());
 								save.doAction();
@@ -188,10 +188,11 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 						DGTemplateFileModuleView.this, _controller.getEditor());
 				FlexoActionButton refreshAction = new FlexoActionButton(RefreshTemplates.actionType, "reload",
 						DGTemplateFileModuleView.this, _controller.getEditor());
-				actionButtons.add(editAction);
+				// actionButtons.add(editAction);
 				actionButtons.add(saveAction);
 				actionButtons.add(cancelAction);
 				actionButtons.add(refreshAction);
+				editAction.doClick();
 				controlPanel.add(editAction);
 				controlPanel.add(saveAction);
 				controlPanel.add(cancelAction);
@@ -219,7 +220,7 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 
 		protected void update() {
 			title.setText(_CGTemplate.getTemplateName()
-					+ ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited() ? "["
+					+ (_CGTemplate instanceof CGTemplateFile && ((CGTemplateFile) _CGTemplate).isEdited() ? "["
 							+ FlexoLocalization.localizedForKey("edited") + "]" : ""));
 			for (FlexoActionButton button : actionButtons) {
 				button.update();
@@ -245,13 +246,13 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 		} else if (dataModification instanceof TemplateFileChanged) {
 			_codeDisplayer.refresh();
 		} else if (dataModification instanceof TemplateFileSaved) {
-			_codeDisplayer.setEditable(false);
+			// _codeDisplayer.setEditable(false);
 		} else if (dataModification instanceof TemplateFileEditionCancelled) {
 			_codeDisplayer.setEditable(false);
 			_codeDisplayer.refresh();
 		}
 		updateView();
-		if ((previousDisplayContext != null) && (_codeDisplayer != null)) {
+		if (previousDisplayContext != null && _codeDisplayer != null) {
 			_codeDisplayer.applyDisplayContext(previousDisplayContext);
 		}
 

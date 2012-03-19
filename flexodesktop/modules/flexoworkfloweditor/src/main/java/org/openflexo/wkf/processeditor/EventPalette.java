@@ -115,7 +115,7 @@ public class EventPalette extends AbstractWKFPalette {
 	private static int deltaY = 39;
 
 	public EventPalette() {
-		super(WIDTH, !WKFPreferences.getUseSimpleEventPalette() ? 529 : (529 - (4 * deltaY)), "event");
+		super(WIDTH, !WKFPreferences.getUseSimpleEventPalette() ? 529 : 529 - 4 * deltaY, "event");
 		eventPaletteDecorationPainter = new EventPaletteDecorationPainter();
 
 		int y = TOP_Y;
@@ -200,29 +200,19 @@ public class EventPalette extends AbstractWKFPalette {
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			y = y + deltaY;
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.Start, true), START_X, y, "Esca-\nlation");
-			if (!WKFPreferences.getUseSimpleEventPalette()) {
-				makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
-			}
+			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
 					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
-			if (!WKFPreferences.getUseSimpleEventPalette()) {
-				makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y,
-						"", DROP_ON_ACTIVITY);
-			}
+			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "",
+					DROP_ON_ACTIVITY);
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.End, false), END_X, y, "");
-		}
-
-		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			y = y + deltaY;
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.Start, true), START_X, y, "Compen-\nsation");
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
 					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.End, false), END_X, y, "");
-		}
-
-		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			y = y + deltaY;
 
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.Start, true), START_X, y, "Multiple");
@@ -231,10 +221,8 @@ public class EventPalette extends AbstractWKFPalette {
 			}
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
 					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
-			if (!WKFPreferences.getUseSimpleEventPalette()) {
-				makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y,
-						"", DROP_ON_ACTIVITY);
-			}
+			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "",
+					DROP_ON_ACTIVITY);
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.End, false), END_X, y, "");
 

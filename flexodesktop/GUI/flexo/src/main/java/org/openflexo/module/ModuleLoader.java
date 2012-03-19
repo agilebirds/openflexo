@@ -37,7 +37,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.openflexo.AdvancedPrefs;
 import org.openflexo.ApplicationData;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.action.SubmitDocumentationAction;
@@ -51,6 +50,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
@@ -87,8 +87,6 @@ public final class ModuleLoader implements IModuleLoader {
 
 	private Module activeModule = null;
 
-	public String fileNameToOpen = null;
-
 	/**
 	 * Hashtable where are stored Module instances (instance of FlexoModule associated to a Module instance key.
 	 */
@@ -122,7 +120,7 @@ public final class ModuleLoader implements IModuleLoader {
 		return _instance;
 	}
 
-	public void reloadProject() throws ProjectLoadingCancelledException, ModuleLoadingException {
+	public void reloadProject() throws ProjectLoadingCancelledException, ModuleLoadingException, ProjectInitializerException {
 		if (getProject() == null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No project currently loaded. Returning.");
@@ -144,19 +142,19 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 	}
 
-	public void openProject(File projectDirectory, Module module) throws ProjectLoadingCancelledException, ModuleLoadingException {
+	public void openProject(File projectDirectory, Module module) throws ProjectLoadingCancelledException, ModuleLoadingException,
+			ProjectInitializerException {
 		if (getProject() == null || getProjectLoader().saveProject(getProject(), true)) {
 			if (projectDirectory == null) {
 				projectDirectory = OpenProjectComponent.getProjectDirectory();
 			}
 			FlexoEditor editor = getProjectLoader().loadProject(projectDirectory);
 			FlexoProject project = editor.getProject();
-			module = loadModuleWithProject(module, project);
+			loadModuleWithProject(module, project);
 		}
 	}
 
-	private Module loadModuleWithProject(Module module, FlexoProject project) throws ModuleLoadingException,
-			ProjectLoadingCancelledException {
+	private void loadModuleWithProject(Module module, FlexoProject project) throws ModuleLoadingException, ProjectLoadingCancelledException {
 		if (module == null) {
 			if (activeModule != null) {
 				module = activeModule;
@@ -170,7 +168,6 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 		switchToModule(module, project);
 		GeneralPreferences.addToLastOpenedProjects(project.getProjectDirectory());
-		return module;
 	}
 
 	private ProjectLoader getProjectLoader() {

@@ -29,6 +29,7 @@ import java.util.zip.ZipException;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.Flexo;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.application.FlexoApplication;
 import org.openflexo.dg.action.GeneratePDF;
@@ -59,7 +60,6 @@ import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
-import org.openflexo.module.UserType;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
@@ -360,7 +360,7 @@ public class TestPDF extends DGTestCase {
 		if (GeneralPreferences.getFavoriteModuleName() == null) {
 			GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		}
-		getModuleLoader().fileNameToOpen = projectDirectory.getAbsolutePath();
+		Flexo.setFileNameToOpen(projectDirectory.getAbsolutePath());
 		try {
 			if (ExternalModuleDelegater.getModuleLoader() == null) {
 				fail("Module loader is not there. Screenshots cannot be generated");

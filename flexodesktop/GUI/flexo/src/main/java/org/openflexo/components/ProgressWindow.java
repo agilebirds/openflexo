@@ -25,6 +25,8 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -129,6 +131,22 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		super(frameOwner = FlexoFrame.getOwner(frameOwner));
 		setUndecorated(true);
 		initOwner = frameOwner;
+		if (initOwner != null) {
+			initOwner.addComponentListener(new ComponentAdapter() {
+
+				@Override
+				public void componentMoved(ComponentEvent e) {
+					System.err.println("Move");
+					center();
+				}
+
+				@Override
+				public void componentResized(ComponentEvent e) {
+					System.err.println("Resize");
+					center();
+				}
+			});
+		}
 		// logger.info("Build progress max="+steps);
 		setFocusable(false);
 		mainProgress = 0;
@@ -186,13 +204,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		mainPane.setPreferredSize(new Dimension(600, 300));
 		getContentPane().add(mainPane);
 		setSize(600, 300);
-		Dimension dim = null;
-		if (getActiveModuleFrame() == null || !getActiveModuleFrame().isVisible()) {
-			dim = Toolkit.getDefaultToolkit().getScreenSize();
-			setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-		} else {
-			centerOnFrame(getActiveModuleFrame());
-		}
+		center();
 		pack();
 		setVisible(true);
 		toFront();
@@ -376,12 +388,14 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	/**
 	 * @param flexoFrame
 	 */
-	public void centerOnFrame(FlexoFrame frame) {
-		if (frame == null) {
-			return;
+	public void center() {
+		Dimension dim;
+		if (initOwner != null) {
+			dim = new Dimension(initOwner.getLocationOnScreen().x + initOwner.getWidth() / 2, initOwner.getLocationOnScreen().y
+					+ initOwner.getHeight() / 2);
+		} else {
+			dim = Toolkit.getDefaultToolkit().getScreenSize();
 		}
-		Dimension dim = new Dimension(frame.getLocationOnScreen().x + frame.getWidth() / 2, frame.getLocationOnScreen().y
-				+ frame.getHeight() / 2);
 		setLocation(dim.width - getSize().width / 2, dim.height - getSize().height / 2);
 	}
 }
