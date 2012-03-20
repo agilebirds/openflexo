@@ -38,7 +38,19 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
 	public static enum WidgetType {
-		URI, TEXT_FIELD, LOCALIZED_TEXT_FIELD, TEXT_AREA, INTEGER, FLOAT, CHECKBOX, DROPDOWN, INDIVIDUAL, CLASS, FLEXO_OBJECT;
+		URI,
+		TEXT_FIELD,
+		LOCALIZED_TEXT_FIELD,
+		TEXT_AREA,
+		INTEGER,
+		FLOAT,
+		CHECKBOX,
+		DROPDOWN,
+		INDIVIDUAL,
+		CLASS,
+		OBJECT_PROPERTY,
+		DATA_PROPERTY,
+		FLEXO_OBJECT;
 	}
 
 	private String name;

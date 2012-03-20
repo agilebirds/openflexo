@@ -64,6 +64,7 @@ import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FlexoObjectParameter;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
+import org.openflexo.foundation.viewpoint.PropertyParameter;
 import org.openflexo.foundation.viewpoint.TextAreaParameter;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
@@ -306,6 +307,27 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			});
 			panel.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return classSelector;
+		} else if (parameter instanceof PropertyParameter) {
+			FIBCustom propertySelector = new FIBCustom();
+			propertySelector.setComponentClass(org.openflexo.components.widget.OntologyPropertySelector.class);
+			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.project"),
+					new DataBinding("data.project"), true));
+			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
+			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
+					new DataBinding('"' + ((PropertyParameter) parameter)._getDomainURI() + '"') {
+						@Override
+						public BindingFactory getBindingFactory() {
+							return parameter.getBindingFactory();
+						}
+					}, true));
+			propertySelector.setData(new DataBinding("parameters." + parameter.getName()) {
+				@Override
+				public BindingFactory getBindingFactory() {
+					return parameter.getBindingFactory();
+				}
+			});
+			panel.addToSubComponents(propertySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			return propertySelector;
 		}
 
 		// Default

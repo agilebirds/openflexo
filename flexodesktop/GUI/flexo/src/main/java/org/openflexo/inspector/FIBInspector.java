@@ -51,6 +51,7 @@ import org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -279,6 +280,21 @@ public class FIBInspector extends FIBPanel {
 					}, true));
 			newTab.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return classSelector;
+		} else if (entry instanceof PropertyInspectorEntry) {
+			FIBCustom propertySelector = new FIBCustom();
+			propertySelector.setComponentClass(org.openflexo.components.widget.OntologyPropertySelector.class);
+			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.project"),
+					new DataBinding("data.project"), true));
+			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
+			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
+					new DataBinding('"' + ((PropertyInspectorEntry) entry)._getDomainURI() + '"') {
+						@Override
+						public BindingFactory getBindingFactory() {
+							return entry.getBindingFactory();
+						}
+					}, true));
+			newTab.addToSubComponents(propertySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			return propertySelector;
 		} else if (entry instanceof FlexoObjectInspectorEntry) {
 			FlexoObjectInspectorEntry foEntry = (FlexoObjectInspectorEntry) entry;
 			switch (foEntry.getFlexoObjectType()) {

@@ -366,6 +366,22 @@ public abstract class EditionScheme extends ViewPointObject {
 		return newParameter;
 	}
 
+	public EditionSchemeParameter createObjectPropertyParameter() {
+		EditionSchemeParameter newParameter = new ObjectPropertyParameter();
+		newParameter.setName("property");
+		// newParameter.setLabel("label");
+		addToParameters(newParameter);
+		return newParameter;
+	}
+
+	public EditionSchemeParameter createDataPropertyParameter() {
+		EditionSchemeParameter newParameter = new DataPropertyParameter();
+		newParameter.setName("property");
+		// newParameter.setLabel("label");
+		addToParameters(newParameter);
+		return newParameter;
+	}
+
 	public EditionSchemeParameter createFlexoObjectParameter() {
 		EditionSchemeParameter newParameter = new FlexoObjectParameter();
 		newParameter.setName("flexoObject");

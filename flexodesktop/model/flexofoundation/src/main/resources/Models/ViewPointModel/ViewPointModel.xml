@@ -70,6 +70,22 @@
 		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 	</entity>
 
+	<entity
+		name="org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry" abstract="yes">
+		<property name="parentPropertyURI" xmlTag="parentProperty" attribute="YES" />
+		<property name="domainURI" xmlTag="domain" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.inspector.ObjectPropertyInspectorEntry" xmlTag="ObjectProperty">
+		<property name="rangeURI" xmlTag="range" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.inspector.DataPropertyInspectorEntry" xmlTag="DataProperty">
+		<property name="dataType" xmlTag="dataType" attribute="YES" />
+	</entity>
+
 	<entity name="org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry" xmlTag="FlexoObject">
 		<property name="flexoObjectType" xmlTag="flexoObjectType" attribute="YES" />
 	</entity>
@@ -110,6 +126,8 @@
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.PropertyPatternRole" abstract="yes">
+		<property name="parentPropertyURI" xmlTag="parentProperty" attribute="YES" />
+		<property name="domainURI" xmlTag="domain" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.StatementPatternRole" abstract="yes">
@@ -123,9 +141,13 @@
 		<property name="conceptURI" xmlTag="ontologicType" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.DataPropertyPatternRole" xmlTag="DataPropertyPatternRole"/>
+	<entity name="org.openflexo.foundation.viewpoint.DataPropertyPatternRole" xmlTag="DataPropertyPatternRole">
+			<property name="dataType" xmlTag="dataType" attribute="YES" />
+	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole" xmlTag="ObjectPropertyPatternRole"/>
+	<entity name="org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole" xmlTag="ObjectPropertyPatternRole">
+			<property name="rangeURI" xmlTag="range" attribute="YES" />
+	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.IsAStatementPatternRole" xmlTag="IsAStatementPatternRole"/>
 
@@ -221,6 +243,23 @@
 		name="org.openflexo.foundation.viewpoint.ClassParameter" xmlTag="ClassParameter">
 		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.PropertyParameter" abstract="yes">
+		<property name="parentPropertyURI" xmlTag="parentProperty" attribute="YES" />
+		<property name="domainURI" xmlTag="domain" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.ObjectPropertyParameter" xmlTag="ObjectPropertyParameter">
+		<property name="rangeURI" xmlTag="range" attribute="YES" />
+	</entity>
+
+	<entity
+		name="org.openflexo.foundation.viewpoint.DataPropertyParameter" xmlTag="DataPropertyParameter">
+		<property name="dataType" xmlTag="dataType" attribute="YES" />
+	</entity>
+
 
 	<entity
 		name="org.openflexo.foundation.viewpoint.FlexoObjectParameter" xmlTag="FlexoObjectParameter">
