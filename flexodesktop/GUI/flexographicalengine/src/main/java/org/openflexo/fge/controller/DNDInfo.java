@@ -78,7 +78,7 @@ public class DNDInfo {
 	private DrawingController<?> _controller;
 	private ShapeGraphicalRepresentation<?> draggedObject;
 
-	private Hashtable<FGEView, DropTarget> dropTargets;
+	private Hashtable<FGEView<?>, DropTarget> dropTargets;
 
 	DNDInfo(MoveAction moveAction, ShapeGraphicalRepresentation<?> gr, DrawingController<?> controller, final MouseEvent initialEvent) {
 		_moveAction = moveAction;
@@ -137,10 +137,10 @@ public class DNDInfo {
 		if (dropTargets != null) {
 			dropTargets.clear();
 		}
-		dropTargets = new Hashtable<FGEView, DropTarget>();
+		dropTargets = new Hashtable<FGEView<?>, DropTarget>();
 
 		for (GraphicalRepresentation<?> gr : _controller.getDrawingView().getContents().keySet()) {
-			FGEView view = _controller.getDrawingView().getContents().get(gr);
+			FGEView<?> view = _controller.getDrawingView().getContents().get(gr);
 			if (((Component) view).getDropTarget() != null) {
 				dropTargets.put(view, ((Component) view).getDropTarget());
 			}
@@ -150,11 +150,11 @@ public class DNDInfo {
 	}
 
 	protected void disableDragging() {
-		for (FGEView v : dropTargets.keySet()) {
+		for (FGEView<?> v : dropTargets.keySet()) {
 			((Component) v).setDropTarget(dropTargets.get(v));
 		}
 		dgr.setComponent(null);
-		_moveAction.currentDND = null;
+		_moveAction.resetCurrentDND();
 	}
 
 	/**
@@ -355,7 +355,7 @@ public class DNDInfo {
 			}
 
 			try {
-				ShapeGraphicalRepresentation element = ((TransferedShapeGraphicalRepresentation) e.getTransferable().getTransferData(
+				ShapeGraphicalRepresentation<?> element = ((TransferedShapeGraphicalRepresentation) e.getTransferable().getTransferData(
 						ShapeGraphicalRepresentationTransferable.defaultFlavor())).getTransferedElement();
 				if (element == null) {
 					return false;
@@ -364,8 +364,8 @@ public class DNDInfo {
 				if (focused == null) {
 					return false;
 				}
-				return (focused instanceof ShapeGraphicalRepresentation && element
-						.isAllowedToBeDraggedOutsideParentContainerInsideContainer((ShapeGraphicalRepresentation) focused));
+				return focused instanceof ShapeGraphicalRepresentation
+						&& element.isAllowedToBeDraggedOutsideParentContainerInsideContainer((ShapeGraphicalRepresentation<?>) focused);
 
 			} catch (UnsupportedFlavorException e1) {
 				logger.warning("Unexpected: " + e1);
@@ -534,8 +534,8 @@ public class DNDInfo {
 								modelLocation.x -= ((TransferedShapeGraphicalRepresentation) data).getOffset().x;
 								modelLocation.y -= ((TransferedShapeGraphicalRepresentation) data).getOffset().y;
 							} else {
-								modelLocation.x -= (((TransferedShapeGraphicalRepresentation) data).getOffset().x);
-								modelLocation.y -= (((TransferedShapeGraphicalRepresentation) data).getOffset().y);
+								modelLocation.x -= ((TransferedShapeGraphicalRepresentation) data).getOffset().x;
+								modelLocation.y -= ((TransferedShapeGraphicalRepresentation) data).getOffset().y;
 							}
 							if (element.dragOutsideParentContainerInsideContainer((ShapeGraphicalRepresentation<?>) focused, modelLocation)) {
 								e.acceptDrop(acceptableActions);
@@ -570,21 +570,21 @@ public class DNDInfo {
 
 		private FocusRetriever getFocusRetriever() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView) _dropContainer).getDrawingView().getFocusRetriever();
+				return ((FGEView<?>) _dropContainer).getDrawingView().getFocusRetriever();
 			}
 			return null;
 		}
 
-		private FGEView getFGEView() {
+		private FGEView<?> getFGEView() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView) _dropContainer);
+				return (FGEView<?>) _dropContainer;
 			}
 			return null;
 		}
 
-		public GraphicalRepresentation getFocusedObject(DropTargetDragEvent event) {
+		public GraphicalRepresentation<?> getFocusedObject(DropTargetDragEvent event) {
 			if (getFocusRetriever() != null) {
-				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
+				GraphicalRepresentation<?> returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
 					return getFGEView().getGraphicalRepresentation().getDrawingGraphicalRepresentation();
@@ -595,9 +595,9 @@ public class DNDInfo {
 			return null;
 		}
 
-		public GraphicalRepresentation getFocusedObject(DropTargetDropEvent event) {
+		public GraphicalRepresentation<?> getFocusedObject(DropTargetDropEvent event) {
 			if (getFocusRetriever() != null) {
-				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
+				GraphicalRepresentation<?> returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
 					return getFGEView().getGraphicalRepresentation().getDrawingGraphicalRepresentation();

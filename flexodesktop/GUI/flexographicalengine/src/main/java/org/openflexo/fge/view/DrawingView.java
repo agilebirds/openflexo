@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.view;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -383,6 +382,8 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	private Graphics2D bufferingGraphics;
 	private boolean bufferingHasBeenStartedAgain = false;
 
+	private boolean paintTemporary;
+
 	/**
 	 * 
 	 * @param g
@@ -418,6 +419,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		if (containedGR == null) {
 			return;
 		}
+		paintTemporary = true;
 		for (GraphicalRepresentation<?> gr : new ArrayList<GraphicalRepresentation<?>>(containedGR)) {
 			if (gr.shouldBeDisplayed()
 					&& (!temporaryObjectsOnly || getPaintManager().isTemporaryObject(gr) || getPaintManager().containsTemporaryObject(gr))) {
@@ -439,15 +441,11 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 					}
 					if (labelView != null) {
 						Graphics labelGraphics = g.create(labelView.getX(), labelView.getY(), labelView.getWidth(), labelView.getHeight());
-						// Tricky area: if label is currently beeing edited,
+						// Tricky area: if label is currently being edited,
 						// call to paint is required here
 						// to paint text component above buffer image.
 						// Otherwise, just call doPaint to force paint label
-						if (labelView.isEditing()) {
-							labelView.paint(labelGraphics);
-						} else {
-							labelView.doPaint(labelGraphics);
-						}
+						labelView.paint(labelGraphics);
 						labelGraphics.dispose();
 					}
 					// do the job for childs
@@ -458,6 +456,11 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 				}
 			}
 		}
+		paintTemporary = false;
+	}
+
+	public boolean isPaintTemporary() {
+		return paintTemporary;
 	}
 
 	@Override
@@ -487,55 +490,14 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 					// Skip buffering and perform normal rendering
 					super.paint(g);
 				}
-				// Use buffer
-				/*
-				 * Image buffer = getPaintManager().getPaintBuffer(); Rectangle
-				 * r = g.getClipBounds(); Point p1 = r.getLocation(); Point p2 =
-				 * new Point(r.x+r.width,r.y+r.height); if ((p1.x < 0) || (p1.x
-				 * > buffer.getWidth(null)) || (p1.y < 0) || (p1.y >
-				 * buffer.getHeight(null)) || (p2.x < 0) || (p2.x >
-				 * buffer.getWidth(null)) || (p2.y < 0) || (p2.y >
-				 * buffer.getHeight(null))) { // We have here a request for
-				 * render outside cached image // We cannot do that, so skip
-				 * buffer use and do normal painting if
-				 * (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
-				 * FGEPaintManager.paintPrimitiveLogger.fine(
-				 * "DrawingView: request to render outside image buffer, use normal rendering clip="
-				 * +r);
-				 * getPaintManager().invalidate(getDrawingGraphicalRepresentation
-				 * ()); super.paint(g); } else { // OK, we are in our bounds if
-				 * (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
-				 * FGEPaintManager.paintPrimitiveLogger.fine(
-				 * "DrawingView: use image buffer, copy area "+r);
-				 * g.drawImage(buffer, p1.x,p1.y,p2.x,p2.y, p1.x,p1.y,p2.x,p2.y,
-				 * null); // Now, we still have to paint objects that are
-				 * declared // to be temporary and continuously to be redrawn
-				 * forcePaintTemporaryObjects
-				 * (getDrawingGraphicalRepresentation(),g); }
-				 */
+				paintCapturedNode(g);
 			}
 		} else {
 			// Normal painting
 			super.paint(g);
 		}
 
-		Vector<GeometricGraphicalRepresentation> geomList = new Vector<GeometricGraphicalRepresentation>();
-		for (Object gr : getGraphicalRepresentation().getOrderedContainedGraphicalRepresentations()) {
-			if (gr instanceof GeometricGraphicalRepresentation) {
-				geomList.add((GeometricGraphicalRepresentation) gr);
-			}
-		}
-		if (geomList.size() > 0) {
-			Collections.sort(geomList, new Comparator<GeometricGraphicalRepresentation>() {
-				@Override
-				public int compare(GeometricGraphicalRepresentation o1, GeometricGraphicalRepresentation o2) {
-					return o1.getLayer() - o2.getLayer();
-				}
-			});
-			for (GeometricGraphicalRepresentation gr : geomList) {
-				gr.paint(g, getController());
-			}
-		}
+		paintGeometricGraphicalRepresentation(g);
 
 		if (!isBuffering) {
 
@@ -587,6 +549,26 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		if (FGEPaintManager.paintStatsLogger.isLoggable(Level.FINE)) {
 			FGEPaintManager.paintStatsLogger.fine("PAINT " + getName() + " clip=" + g.getClip() + " time=" + (endTime - startTime)
 					+ "ms cumulatedRepaintTime=" + cumulatedRepaintTime + " ms");
+		}
+	}
+
+	private void paintGeometricGraphicalRepresentation(Graphics g) {
+		List<GeometricGraphicalRepresentation<?>> geomList = new ArrayList<GeometricGraphicalRepresentation<?>>();
+		for (Object gr : getGraphicalRepresentation().getOrderedContainedGraphicalRepresentations()) {
+			if (gr instanceof GeometricGraphicalRepresentation<?>) {
+				geomList.add((GeometricGraphicalRepresentation<?>) gr);
+			}
+		}
+		if (geomList.size() > 0) {
+			Collections.sort(geomList, new Comparator<GeometricGraphicalRepresentation<?>>() {
+				@Override
+				public int compare(GeometricGraphicalRepresentation<?> o1, GeometricGraphicalRepresentation<?> o2) {
+					return o1.getLayer() - o2.getLayer();
+				}
+			});
+			for (GeometricGraphicalRepresentation<?> gr : geomList) {
+				gr.paint(g, getController());
+			}
 		}
 	}
 
@@ -874,7 +856,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 
 	// This call is made on the edition drawing view
 	public final void paintDraggedNode(DropTargetDragEvent e, DrawingView source) {
-		Point pt = SwingUtilities.convertPoint(((DropTarget) e.getSource()).getComponent(), e.getLocation(), this);
+		capturedNodeLocation = SwingUtilities.convertPoint(((DropTarget) e.getSource()).getComponent(), e.getLocation(), this);
 		if (source != this) {
 			dragOver = activePalette.getPaletteView().dragOver; // transfer from
 																// the palette
@@ -884,43 +866,48 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		if (dragOver == null) {
 			return;
 		}
-		pt.x -= dragOver.x * getScale();
-		pt.y -= dragOver.y * getScale();
-		BufferedImage img = source.capturedDraggedNodeImage;
-		if (pt == null || img == null || drawnRectangle != null && pt.equals(drawnRectangle.getLocation())) {
+		capturedNodeLocation.x -= dragOver.x * getScale();
+		capturedNodeLocation.y -= dragOver.y * getScale();
+		capturedNodeToPaint = source.capturedDraggedNodeImage;
+		if (capturedNodeLocation == null || capturedNodeToPaint == null || drawnRectangle != null
+				&& capturedNodeLocation.equals(drawnRectangle.getLocation())) {
 			return;
 		}
-		paintImmediately(drawnRectangle.getBounds());
+		getPaintManager().repaint(this, drawnRectangle.getBounds());
 		// System.out.println("Paint: "+drawnRectangle.getBounds()+" isDoubleBuffered="+isDoubleBuffered());
-		int scaledWidth = (int) (img.getWidth() * getScale());
-		int scaledHeight = (int) (img.getHeight() * getScale());
-		drawnRectangle.setRect((int) pt.getX(), (int) pt.getY(), scaledWidth, scaledHeight);
-		Graphics2D g = (Graphics2D) this.getGraphics().create();
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.7f));
-		// g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-		// RenderingHints.VALUE_RENDER_QUALITY);
-		/*
-		 * g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
-		 * RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-		 */
-		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g.drawImage(img, (int) pt.getX(), (int) pt.getY(), scaledWidth, scaledHeight, this);
-		g.dispose();
+		int scaledWidth = (int) (capturedNodeToPaint.getWidth() * getScale());
+		int scaledHeight = (int) (capturedNodeToPaint.getHeight() * getScale());
+		drawnRectangle.setRect((int) capturedNodeLocation.getX(), (int) capturedNodeLocation.getY(), scaledWidth, scaledHeight);
+		getPaintManager().repaint(this, drawnRectangle.getBounds());
+	}
+
+	private void paintCapturedNode(Graphics g) {
+		if (capturedNodeToPaint != null && drawnRectangle != null) {
+			Graphics2D g2 = (Graphics2D) g;
+			// g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.7f));
+			g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g2.drawImage(capturedNodeToPaint, (int) capturedNodeLocation.getX(), (int) capturedNodeLocation.getY(),
+					(int) drawnRectangle.getWidth(), (int) drawnRectangle.getHeight(), this);
+		}
 	}
 
 	private Point dragOver;
 
 	// This call is made on the drawing view of the palette
-	public void captureDraggedNode(ShapeView<?> view, DragGestureEvent e) {
-		// logger.info("Dragged node has been captured !!!!!!!!!!!!!!!!");
+	public void captureDraggedNode(ShapeView<?> view, MouseEvent e) {
 		capturedDraggedNodeImage = view.getScreenshot();
-		dragOver = e.getDragOrigin();
+		dragOver = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view);
+	}
+
+	public void captureDraggedNode(ShapeView<?> view, DragGestureEvent e) {
+		capturedDraggedNodeImage = view.getScreenshot();
+		dragOver = SwingUtilities.convertPoint(e.getComponent(), e.getDragOrigin(), view);
 	}
 
 	public void resetCapturedNode() {
 		if (drawnRectangle != null) {
-			paintImmediately(drawnRectangle.getBounds());
-			// capturedDraggedNodeImage = null;
+			getPaintManager().repaint(this, drawnRectangle.getBounds());
+			capturedDraggedNodeImage = null;
 		}
 	}
 
@@ -929,6 +916,10 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	}
 
 	private static final int margin = 20;
+
+	private Point capturedNodeLocation;
+
+	private BufferedImage capturedNodeToPaint;
 
 	@Override
 	public void autoscroll(Point p) {

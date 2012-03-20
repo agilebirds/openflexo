@@ -20,6 +20,7 @@
 package org.openflexo.fge;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -589,6 +590,11 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		}
 
 		graphics.releaseGraphics();
+	}
+
+	@Override
+	public Point getLabelLocation(Dimension labelDimension, double scale) {
+		return getLabelViewCenter(scale);
 	}
 
 	/**

@@ -41,7 +41,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JLabel;
+import javax.swing.JTextPane;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
@@ -98,6 +98,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		hasText,
 		text,
 		isMultilineAllowed,
+		lineWrap,
 		continuousTextEditing,
 		textStyle,
 		relativeTextX,
@@ -125,6 +126,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	private TextStyle textStyle = TextStyle.makeDefault();
 	private String text;
 	private boolean multilineAllowed = false;
+	private boolean lineWrap = false;
 	private boolean continuousTextEditing = true;
 	private double relativeTextX = 0.5;
 	private double relativeTextY = 0.5;
@@ -886,7 +888,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 
 		if (this instanceof ShapeGraphicalRepresentation) {
-			// Be carefull, maybe this point is just on outline
+			// Be careful, maybe this point is just on outline
 			// So translate it to the center to be sure
 			FGEPoint center = ((ShapeGraphicalRepresentation) this).getShape().getShape().getCenter();
 			p.x = p.x + FGEGeometricObject.EPSILON * (center.x - p.x);
@@ -1084,6 +1086,18 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		}
 	}
 
+	public boolean getLineWrap() {
+		return lineWrap;
+	}
+
+	public void setLineWrap(boolean lineWrap) {
+		FGENotification notification = requireChange(Parameters.lineWrap, lineWrap);
+		if (notification != null) {
+			this.lineWrap = lineWrap;
+			hasChanged(notification);
+		}
+	}
+
 	public boolean getContinuousTextEditing() {
 		return continuousTextEditing;
 	}
@@ -1205,6 +1219,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		 */
 		return new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 	}
+
+	public abstract Point getLabelLocation(Dimension labelDimension, double scale);
 
 	/**
 	 * Return center of label, relative to container view
@@ -1734,20 +1750,13 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
-	private JLabel _labelUsedToComputedNormalizedLabelBounds;
+	private JTextPane _labelUsedToComputedNormalizedLabelBounds;
 
 	public Rectangle getNormalizedLabelBounds() {
 		if (_labelUsedToComputedNormalizedLabelBounds == null) {
-			_labelUsedToComputedNormalizedLabelBounds = new JLabel();
+			_labelUsedToComputedNormalizedLabelBounds = new JTextPane();
 		}
 		return getLabelBounds(_labelUsedToComputedNormalizedLabelBounds, 1);
-	}
-
-	public Rectangle getLabelBounds(double scale) {
-		if (_labelUsedToComputedNormalizedLabelBounds == null) {
-			_labelUsedToComputedNormalizedLabelBounds = new JLabel();
-		}
-		return getLabelBounds(_labelUsedToComputedNormalizedLabelBounds, scale);
 	}
 
 	public Rectangle getLabelBounds(Component component, double scale) {
@@ -1785,7 +1794,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public Dimension getNormalizedLabelSize() {
 		if (_labelUsedToComputedNormalizedLabelBounds == null) {
-			_labelUsedToComputedNormalizedLabelBounds = new JLabel();
+			_labelUsedToComputedNormalizedLabelBounds = new JTextPane();
 		}
 		return getLabelSize(_labelUsedToComputedNormalizedLabelBounds, 1);
 	}

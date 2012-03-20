@@ -75,7 +75,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void setSelectedObjects(List<? extends GraphicalRepresentation> someSelectedObjects) {
+	public void setSelectedObjects(List<? extends GraphicalRepresentation<?>> someSelectedObjects) {
 		if (_selectionManager != null) {
 			_selectionManager.resetSelection();
 		}

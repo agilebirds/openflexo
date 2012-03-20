@@ -24,12 +24,13 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
-import javax.swing.text.JTextComponent;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -231,16 +232,16 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		private boolean moveTo(Point newLocationInDrawingView, MouseEvent e) {
 
 			FGEPoint newAbsoluteLocation = new FGEPoint(startMovingPoint.x
-					+ ((newLocationInDrawingView.x - startMovingLocationInDrawingView.x)) / view.getScale(), startMovingPoint.y
-					+ ((newLocationInDrawingView.y - startMovingLocationInDrawingView.y)) / view.getScale());
+					+ (newLocationInDrawingView.x - startMovingLocationInDrawingView.x) / view.getScale(), startMovingPoint.y
+					+ (newLocationInDrawingView.y - startMovingLocationInDrawingView.y) / view.getScale());
 
 			FGEPoint newRelativeLocation = getGraphicalRepresentation().getDrawingGraphicalRepresentation()
 					.convertLocalViewCoordinatesToRemoteNormalizedPoint(newLocationInDrawingView, controlArea.getGraphicalRepresentation(),
 							view.getScale());
 
 			FGEPoint pointRelativeToInitialConfiguration = new FGEPoint(startMovingPoint.x
-					+ ((newLocationInDrawingView.x - startMovingLocationInDrawingView.x)) / initialWidth/* *view.getScale()*/,
-					startMovingPoint.y + ((newLocationInDrawingView.y - startMovingLocationInDrawingView.y)) / initialHeight/* *view.getScale()*/);
+					+ (newLocationInDrawingView.x - startMovingLocationInDrawingView.x) / initialWidth/* *view.getScale()*/,
+					startMovingPoint.y + (newLocationInDrawingView.y - startMovingLocationInDrawingView.y) / initialHeight/* *view.getScale()*/);
 			return controlArea.dragToPoint(newRelativeLocation, pointRelativeToInitialConfiguration, newAbsoluteLocation, startMovingPoint,
 					e);
 		}
@@ -298,7 +299,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		private void stopDragging() {
 			if (getPaintManager().isPaintingCacheEnabled()) {
-				getPaintManager().resetTemporaryObjects();
+				getPaintManager().removeFromTemporaryObjects(graphicalRepresentation);
 				getPaintManager().invalidate(graphicalRepresentation);
 				getPaintManager().repaint(view.getDrawingView());
 			}
@@ -346,7 +347,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
-		Vector<MouseDragControl> applicableMouseDragControls = new Vector<MouseDragControl>();
+		List<MouseDragControl> applicableMouseDragControls = new ArrayList<MouseDragControl>();
 		for (MouseDragControl mouseDragControl : focusedObject.getMouseDragControls()) {
 			if (mouseDragControl.isApplicable(focusedObject, getController(), e)) {
 				applicableMouseDragControls.add(mouseDragControl);
@@ -371,7 +372,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		// Apply applicable mouse drag control
-		MouseDragControl currentMouseDrag = applicableMouseDragControls.firstElement();
+		MouseDragControl currentMouseDrag = applicableMouseDragControls.get(0);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Applying " + currentMouseDrag);
 		}
@@ -441,7 +442,6 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (view.isDeleted()) {
 			return;
 		}
-
 		if (getController().hasEditedLabel()) {
 			GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
 			if (handleEventForEditedLabel(e, focusedObject)) {
@@ -519,6 +519,8 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 	}
 
+	private Stack<MouseEvent> eventStack;
+
 	/**
 	 * What happen here ? (SGU)
 	 * 
@@ -561,28 +563,29 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 				return false;
 			}
 			// Now retrieve the text component (which exists because editing)
-			JTextComponent textComponent = labelView.getTextComponent();
 
-			if (textComponent == null) {
-				logger.warning("Could not access textComponent for " + focusedObject);
-				return false;
-			}
+			Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), labelView);
 
-			Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), textComponent);
+			if (labelView.contains(pointRelativeToTextComponent) && labelView.isEditing()) {
+				if (eventStack == null || eventStack.isEmpty() || eventStack.peek() != e) {
+					// This event effectively concerns related text component
+					// I will retarget it !
 
-			if (textComponent.contains(pointRelativeToTextComponent)) {
-
-				// This event effectively concerns related text component
-				// I will retarget it !
-
-				MouseEvent newEvent = new MouseEvent(textComponent, e.getID(), e.getWhen(), e.getModifiers(),
-						pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
-				textComponent.dispatchEvent(newEvent);
-
-				// System.out.println("Redispatched event "+newEvent+" to "+textComponent);
-
-				e.consume();
-				return true;
+					MouseEvent newEvent = new MouseEvent(labelView, e.getID(), e.getWhen(), e.getModifiers(),
+							pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
+					if (eventStack == null) {
+						eventStack = new Stack<MouseEvent>();
+					}
+					eventStack.add(newEvent);
+					labelView.dispatchEvent(newEvent);
+					eventStack.pop();
+					if (eventStack.isEmpty()) {
+						eventStack = null;
+					}
+					System.err.println("Event handled");
+					e.consume();
+					return true;
+				}
 			}
 
 			return false;

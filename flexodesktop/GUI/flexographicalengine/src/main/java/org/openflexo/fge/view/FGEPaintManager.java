@@ -113,10 +113,6 @@ public class FGEPaintManager {
 		return _temporaryObjects;
 	}
 
-	public void resetTemporaryObjects() {
-		_temporaryObjects.clear();
-	}
-
 	public boolean containsTemporaryObject(GraphicalRepresentation<?> gr) {
 		if (gr == null) {
 			return false;
@@ -387,6 +383,7 @@ public class FGEPaintManager {
 			if (paintRequestLogger.isLoggable(Level.FINEST)) {
 				paintRequestLogger.finest("adding DirtyRegion: " + c.getName() + ", " + x + "," + y + " " + w + "x" + h);
 			}
+
 			// paintRequestLogger.warning("adding DirtyRegion: "+c.getName()+", "+x+","+y+" "+w+"x"+h);
 			super.addDirtyRegion(c, x, y, w, h);
 			/*if (MANAGE_DIRTY_REGIONS) {
@@ -483,8 +480,8 @@ public class FGEPaintManager {
 		Point sp2 = new Point(viewBoundsInDrawingView.x + viewBoundsInDrawingView.width, viewBoundsInDrawingView.y
 				+ viewBoundsInDrawingView.height);
 
-		if ((sp1.x < 0) || (sp1.x > buffer.getWidth()) || (sp1.y < 0) || (sp1.y > buffer.getHeight()) || (sp2.x < 0)
-				|| (sp2.x > buffer.getWidth()) || (sp2.y < 0) || (sp2.y > buffer.getHeight())) {
+		if (sp1.x < 0 || sp1.x > buffer.getWidth() || sp1.y < 0 || sp1.y > buffer.getHeight() || sp2.x < 0 || sp2.x > buffer.getWidth()
+				|| sp2.y < 0 || sp2.y > buffer.getHeight()) {
 			// We have here a request for render outside cached image
 			// We cannot do that, so skip buffer use and do normal painting
 			if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {

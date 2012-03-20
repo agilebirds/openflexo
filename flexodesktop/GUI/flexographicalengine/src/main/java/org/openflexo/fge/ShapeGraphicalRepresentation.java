@@ -20,6 +20,7 @@
 package org.openflexo.fge;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -464,9 +465,9 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			}
 			double maxY = 0;
 			if (getContainerGraphicalRepresentation() instanceof DrawingGraphicalRepresentation) {
-				maxY = ((DrawingGraphicalRepresentation) getContainerGraphicalRepresentation()).getHeight();
+				maxY = ((DrawingGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).getHeight();
 			} else if (getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-				maxY = ((ShapeGraphicalRepresentation) getContainerGraphicalRepresentation()).getHeight();
+				maxY = ((ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).getHeight();
 			}
 			if (maxY > 0 && y > maxY - getHeight()) {
 				// logger.info("Relocate y from " + y + " to " + (maxY - getHeight()) + " maxY=" + maxY + " height=" + getHeight());
@@ -681,31 +682,12 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			return newLocation;
 		}
 		if (getLocationConstraints() == LocationConstraints.FREELY_MOVABLE) {
-			FGEPoint returned = newLocation.clone();
-			GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
-			if (parent instanceof ShapeGraphicalRepresentation || parent instanceof DrawingGraphicalRepresentation) {
-				/*if (newLocation.x < 0) returned.x = 0;
-				if (newLocation.y < 0) returned.y = 0;*/
-				double containerWidth = 0;
-				double containerHeight = 0;
-				if (parent instanceof DrawingGraphicalRepresentation) {
-					DrawingGraphicalRepresentation<?> container = (DrawingGraphicalRepresentation) parent;
-					containerWidth = container.getWidth();
-					containerHeight = container.getHeight();
-				} else {
-					ShapeGraphicalRepresentation<?> container = (ShapeGraphicalRepresentation) parent;
-					containerWidth = container.getWidth();
-					containerHeight = container.getHeight();
-				}
-				/*if (newLocation.x > containerWidth-getWidth()) returned.x = containerWidth-getWidth();
-				if (newLocation.y > containerHeight-getHeight()) returned.y = containerHeight-getHeight();*/
-			}
-			return returned;
+			return newLocation.clone();
 		}
 		if (getLocationConstraints() == LocationConstraints.CONTAINED_IN_SHAPE) {
 			GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
 			if (parent instanceof ShapeGraphicalRepresentation) {
-				ShapeGraphicalRepresentation<?> container = (ShapeGraphicalRepresentation) parent;
+				ShapeGraphicalRepresentation<?> container = (ShapeGraphicalRepresentation<?>) parent;
 				FGEPoint center = new FGEPoint(container.getWidth() / 2, container.getHeight() / 2);
 				double authorizedRatio = getMoveAuthorizedRatio(newLocation, center);
 				return new FGEPoint(center.x + (newLocation.x - center.x) * authorizedRatio, center.y + (newLocation.y - center.y)
@@ -1713,9 +1695,9 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	 */
 	public void notifyObjectHasResized() {
 		isResizing = false;
-		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
-				((ShapeGraphicalRepresentation) gr).checkAndUpdateLocationIfRequired();
+				((ShapeGraphicalRepresentation<?>) gr).checkAndUpdateLocationIfRequired();
 			}
 		}
 		setChanged();
@@ -1973,6 +1955,19 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	@Override
+	public Point getLabelLocation(Dimension labelDimension, double scale) {
+		if (getIsFloatingLabel()) {
+			return new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
+		} else {
+			FGEPoint relativePosition = new FGEPoint(getRelativeTextX(), getRelativeTextY());
+			Point center = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getContainerGraphicalRepresentation(),
+					scale);
+			center.translate(-labelDimension.width / 2, -labelDimension.height / 2);
+			return center;
+		}
+	}
+
 	/**
 	 * Return center of label, relative to container view
 	 * 
@@ -1985,7 +1980,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			return new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
 		} else {
 			FGEPoint relativePosition = new FGEPoint(getRelativeTextX(), getRelativeTextY());
-			return convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getContainerGraphicalRepresentation(), scale);
+			return convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, this, scale);
 		}
 	}
 
@@ -2053,15 +2048,15 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	 * 
 	 * @return
 	 */
-	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(ShapeGraphicalRepresentation container) {
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container) {
 		return false;
 	}
 
 	/**
-	 * Override this if you want to use this feature Default implementation does nothing return boolean indicating if drag was sucessfully
+	 * Override this if you want to use this feature Default implementation does nothing return boolean indicating if drag was successfully
 	 * performed
 	 */
-	public boolean dragOutsideParentContainerInsideContainer(ShapeGraphicalRepresentation container, FGEPoint location) {
+	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container, FGEPoint location) {
 		return false;
 	}
 
