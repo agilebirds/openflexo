@@ -128,6 +128,11 @@ public class URIParameter extends EditionSchemeParameter {
 					EditionSchemeParameter p = getScheme().getParameter(v.getName());
 					if (p != null) {
 						returned.add(p);
+					} else {
+						p = getScheme().getParameter(v.getName().substring(0, v.getName().indexOf(".")));
+						if (p != null) {
+							returned.add(p);
+						}
 					}
 				}
 			} catch (ParseException e) {
