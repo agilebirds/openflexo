@@ -51,6 +51,7 @@ import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
 /**
@@ -211,7 +212,12 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			if (getDataObject() == null) {
 				return;
 			}
-			getWidget().getData().setBindingValue(aValue, getController());
+			try {
+				getWidget().getData().setBindingValue(aValue, getController());
+			} catch (AccessorInvocationException e) {
+				getController().handleException(e.getCause());
+			}
+
 		}
 
 		updateDependancies();

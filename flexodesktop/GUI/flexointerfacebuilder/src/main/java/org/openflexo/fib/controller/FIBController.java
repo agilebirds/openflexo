@@ -719,4 +719,16 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		this.mouseEvent = mouseEvent;
 	}
 
+	/**
+	 * Called when a throwable has been raised during model code invocation. Requires to be overriden, this base implementation just log
+	 * exception
+	 * 
+	 * @param t
+	 * @return true is exception was correctely handled
+	 */
+	public boolean handleException(Throwable t) {
+		logger.warning("Unexpected exception raised: " + t.getMessage());
+		t.printStackTrace();
+		return false;
+	}
 }

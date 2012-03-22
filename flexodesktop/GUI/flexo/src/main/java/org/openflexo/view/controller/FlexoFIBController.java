@@ -22,6 +22,7 @@ package org.openflexo.view.controller;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import javax.naming.InvalidNameException;
 import javax.swing.ImageIcon;
 
 import org.openflexo.Flexo;
@@ -146,4 +147,21 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 		super.openFIBEditor(component, event);
 		ProgressWindow.hideProgressWindow();
 	}
+
+	/**
+	 * Called when a throwable has been raised during model code invocation.
+	 * 
+	 * @param t
+	 * @return true is exception was correctely handled
+	 */
+	@Override
+	public boolean handleException(Throwable t) {
+		if (t instanceof InvalidNameException) {
+			FlexoController.showError(FlexoLocalization.localizedForKey("invalid_name") + " : "
+					+ ((InvalidNameException) t).getExplanation());
+			return true;
+		}
+		return super.handleException(t);
+	}
+
 }
