@@ -3924,6 +3924,13 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	public EditionPatternInstance getEditionPatternInstance(EditionPatternReference reference) {
+		if (reference == null) {
+			return null;
+		}
+		if (reference.getEditionPattern() == null) {
+			logger.warning("Found a reference to a null EP, please investigate");
+			return null;
+		}
 		if (_editionPatternInstances == null) {
 			_editionPatternInstances = new Hashtable<String, Map<Long, EditionPatternInstance>>();
 		}
