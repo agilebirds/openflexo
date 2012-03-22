@@ -270,26 +270,26 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 			dependingObjects.remove(o);
 			if (o.target instanceof HasPropertyChangeSupport) {
 				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
-				System.out.println("Element " + this + " remove property change listener: " + o.target + " property:" + o.propertyName);
+				// System.out.println("Element " + this + " remove property change listener: " + o.target + " property:" + o.propertyName);
 				pcSupport.removePropertyChangeListener(o.propertyName, this);
 			} else if (o.target instanceof Observable) {
-				System.out.println("Element " + this + " remove observable: " + o);
+				// System.out.println("Element " + this + " remove observable: " + o);
 				((Observable) o.target).deleteObserver(this);
 			} else {
-				System.out.println("Element " + this + " cannot observe: " + o);
+				logger.warning("Element " + this + " cannot stop observe: " + o);
 			}
 		}
 		for (TargetObject o : newDependingObjects) {
 			dependingObjects.add(o);
 			if (o.target instanceof HasPropertyChangeSupport) {
 				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
-				System.out.println("Element " + this + " add property change listener: " + o.target + " property:" + o.propertyName);
+				// System.out.println("Element " + this + " add property change listener: " + o.target + " property:" + o.propertyName);
 				pcSupport.addPropertyChangeListener(o.propertyName, this);
 			} else if (o.target instanceof Observable) {
-				System.out.println("Element " + this + " add observable: " + o);
+				// System.out.println("Element " + this + " add observable: " + o);
 				((Observable) o.target).addObserver(this);
 			} else {
-				System.out.println("Element " + this + " cannot observe: " + o);
+				logger.warning("Element " + this + " cannot observe: " + o);
 			}
 		}
 
@@ -320,13 +320,13 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("**************> ViewElement " + this + " : receive notification " + o);
+		// System.out.println("**************> ViewElement " + this + " : receive notification " + o);
 		update();
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("**************> ViewElement " + this + " : receive PropertyChangeEvent " + evt);
+		// System.out.println("**************> ViewElement " + this + " : receive PropertyChangeEvent " + evt);
 		update();
 	}
 
