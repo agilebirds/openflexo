@@ -117,7 +117,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 						+ crossBorder, closingBoxRect.y + closingBoxRect.height - crossBorder);
 
 				g.useTextStyle(TextStyle.makeTextStyle(Color.WHITE, FGEConstants.DEFAULT_TEXT_FONT));
-				g.drawString(getLabel(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT, TextAlignment.CENTER);
+				g.drawString(getLabel(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT, HorizontalTextAlignment.CENTER);
 
 				/*g.drawImage(IconLibrary.TRIANGLE_UP.getImage(), new FGEPoint(controls.upRect.getX()*g.getScale(),controls.upRect.getY()*g.getScale()));
 				g.drawImage(IconLibrary.TRIANGLE_DOWN.getImage(), new FGEPoint(controls.downRect.getX()*g.getScale(),controls.downRect.getY()*g.getScale()));
@@ -221,7 +221,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		// logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
 		if (observable == getModel()) {
-			if ((dataModification instanceof PortInserted) || (dataModification instanceof PortRemoved)) {
+			if (dataModification instanceof PortInserted || dataModification instanceof PortRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 				notifyShapeNeedsToBeRedrawn();
 				notifyObjectMoved();
@@ -372,13 +372,13 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	}
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		return concatenedList;
 	}
 
 	private FGEArea lanes;
-	private ControlArea lanesArea;
-	private ConcatenedList<ControlArea> concatenedList;
+	private ControlArea<?> lanesArea;
+	private ConcatenedList<ControlArea<?>> concatenedList;
 
 	private void updateControlArea() {
 		Vector<FGESegment> lines = new Vector<FGESegment>();
@@ -410,7 +410,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 			}
 		};
 		controlsArea = new SWLContainerControls(this);
-		concatenedList = new ConcatenedList<ControlArea>();
+		concatenedList = new ConcatenedList<ControlArea<?>>();
 		concatenedList.addElementList(getShape().getControlPoints());
 		concatenedList.addElement(lanesArea);
 		concatenedList.addElement(controlsArea);

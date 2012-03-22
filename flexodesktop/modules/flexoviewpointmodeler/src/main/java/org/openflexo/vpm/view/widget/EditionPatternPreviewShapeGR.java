@@ -22,6 +22,7 @@ package org.openflexo.vpm.view.widget;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
@@ -117,7 +118,7 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 			} else if (dataModification instanceof GraphicalRepresentationChanged) {
 				logger.info("Handle GR change !!!");
-				setsWith((ShapeGraphicalRepresentation<?>) getPatternRole().getGraphicalRepresentation());
+				setsWith((GraphicalRepresentation<?>) getPatternRole().getGraphicalRepresentation());
 			}
 		}
 

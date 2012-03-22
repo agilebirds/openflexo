@@ -173,7 +173,7 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 	private CalcDrawingShapeGR buildGraphicalRepresentation(ExampleDrawingShape shape) {
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			CalcDrawingShapeGR graphicalRepresentation = new CalcDrawingShapeGR(shape, this);
-			graphicalRepresentation.setsWith((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation(),
+			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) shape.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			if (!readOnly) {
 				shape.setGraphicalRepresentation(graphicalRepresentation);

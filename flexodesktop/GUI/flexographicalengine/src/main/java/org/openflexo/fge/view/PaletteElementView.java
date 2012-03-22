@@ -171,6 +171,7 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 		 */
 		@Override
 		public void dragDropEnd(DragSourceDropEvent e) {
+			// Resets the screenshot stored by the palette view.
 			getDrawingView().resetCapturedNode();
 			if (e.getDropSuccess() == false) {
 				if (logger.isLoggable(Level.INFO)) {

@@ -58,7 +58,6 @@ import org.openflexo.toolbox.ConcatenedList;
 
 public class RoleGR extends ShapeGraphicalRepresentation<Role> implements GraphicalFlexoObserver {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RoleGR.class.getPackage().getName());
 
 	public static final int WIDTH = 100;
@@ -84,7 +83,6 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		setIsMultilineAllowed(true);
 		setAdjustMinimalWidthToLabelWidth(true);
 		setAdjustMinimalHeightToLabelHeight(true);
-		setTextAlignment(TextAlignment.CENTER);
 
 		addToMouseClickControls(new RoleEditorController.ShowContextualMenuControl());
 		addToMouseDragControls(new DrawRoleSpecializationControl());
@@ -373,12 +371,12 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		}
 	}
 
-	private ConcatenedList<ControlArea> controlAreas;
+	private ConcatenedList<ControlArea<?>> controlAreas;
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		if (controlAreas == null) {
-			controlAreas = new ConcatenedList<ControlArea>();
+			controlAreas = new ConcatenedList<ControlArea<?>>();
 			controlAreas.addElementList(super.getControlAreas());
 			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(), SimplifiedCardinalDirection.EAST));
 			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(), SimplifiedCardinalDirection.WEST));

@@ -20,10 +20,8 @@
 package org.openflexo.fge;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -355,7 +353,7 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 		if (hasFloatingLabel()) {
 			graphics.useTextStyle(getTextStyle());
 			graphics.drawString(getText(), new FGEPoint(getLabelRelativePosition().x + getAbsoluteTextX(), getLabelRelativePosition().y
-					+ getAbsoluteTextY()), getTextAlignment());
+					+ getAbsoluteTextY()), getHorizontalTextAlignment());
 		}
 
 		graphics.releaseGraphics();
@@ -371,35 +369,6 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 			return ((FGEShape) getGeometricObject()).getCenter();
 		}
 		return new FGEPoint(0, 0);
-	}
-
-	/**
-	 * Return center of label, relative to container view
-	 * 
-	 * @param scale
-	 * @return
-	 */
-	@Override
-	public Point getLabelViewCenter(double scale) {
-		return new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
-	}
-
-	@Override
-	public Point getLabelLocation(Dimension labelDimension, double scale) {
-		return getLabelViewCenter(scale);
-	}
-
-	/**
-	 * Sets center of label, relative to container view
-	 * 
-	 * @param scale
-	 * @return
-	 */
-	@Override
-	public void setLabelViewCenter(Point aPoint, double scale) {
-		setAbsoluteTextX(((double) aPoint.x - (double) getViewX(scale)) / scale);
-		setAbsoluteTextY(((double) aPoint.y - (double) getViewY(scale)) / scale);
-
 	}
 
 	@Override

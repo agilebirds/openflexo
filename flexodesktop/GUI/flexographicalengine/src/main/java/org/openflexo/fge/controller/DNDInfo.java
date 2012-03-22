@@ -365,7 +365,7 @@ public class DNDInfo {
 					return false;
 				}
 				return focused instanceof ShapeGraphicalRepresentation
-						&& element.isAllowedToBeDraggedOutsideParentContainerInsideContainer((ShapeGraphicalRepresentation<?>) focused);
+						&& element.isAllowedToBeDraggedOutsideParentContainerInsideContainer(focused);
 
 			} catch (UnsupportedFlavorException e1) {
 				logger.warning("Unexpected: " + e1);
@@ -406,7 +406,7 @@ public class DNDInfo {
 		@Override
 		public void dragOver(DropTargetDragEvent e) {
 			if (isDragFlavorSupported(e)) {
-				_controller.getDrawingView().paintDraggedNode(e, _controller.getDrawingView());
+				_controller.getDrawingView().updateCapturedDraggedNodeImagePosition(e, _controller.getDrawingView());
 			}
 			if (!isDragOk(e)) {
 				if (dragSourceContext == null) {
@@ -511,7 +511,7 @@ public class DNDInfo {
 				if (data instanceof TransferedShapeGraphicalRepresentation) {
 
 					try {
-						ShapeGraphicalRepresentation element = ((TransferedShapeGraphicalRepresentation) data).getTransferedElement();
+						ShapeGraphicalRepresentation<?> element = ((TransferedShapeGraphicalRepresentation) data).getTransferedElement();
 						if (element == null) {
 							e.rejectDrop();
 							return;
@@ -522,7 +522,7 @@ public class DNDInfo {
 							return;
 						}
 						// OK, let's got for the drop
-						if (element.isAllowedToBeDraggedOutsideParentContainerInsideContainer((ShapeGraphicalRepresentation<?>) focused)) {
+						if (element.isAllowedToBeDraggedOutsideParentContainerInsideContainer(focused)) {
 							Component targetComponent = e.getDropTargetContext().getComponent();
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
@@ -537,7 +537,7 @@ public class DNDInfo {
 								modelLocation.x -= ((TransferedShapeGraphicalRepresentation) data).getOffset().x;
 								modelLocation.y -= ((TransferedShapeGraphicalRepresentation) data).getOffset().y;
 							}
-							if (element.dragOutsideParentContainerInsideContainer((ShapeGraphicalRepresentation<?>) focused, modelLocation)) {
+							if (element.dragOutsideParentContainerInsideContainer(focused, modelLocation)) {
 								e.acceptDrop(acceptableActions);
 								e.dropComplete(true);
 								return;

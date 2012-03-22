@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.view;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -29,6 +30,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.logging.Level;
@@ -46,19 +48,22 @@ import javax.swing.text.StyleConstants;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation.TextAlignment;
+import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
+import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.LabelHasMoved;
+import org.openflexo.fge.notifications.LabelWillMove;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.LabelViewMouseListener;
 
-public class LabelView<O> extends JTextPane implements FGEView<O> {
+public class LabelView<O> extends JTextPane implements FGEView<O>, LabelMetricsProvider {
 
 	private static final Logger logger = Logger.getLogger(LabelView.class.getPackage().getName());
 
@@ -67,6 +72,11 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 	private DrawingController<?> controller;
 	private FGEView<?> delegateView;
 	private boolean isEditing = false;
+
+	private List<MouseListener> disabledMouseListeners = new ArrayList<MouseListener>();
+	private List<MouseMotionListener> disabledMouseMotionListeners = new ArrayList<MouseMotionListener>();
+
+	private boolean textComponentMouseListenerEnabled = true;
 
 	private class TextComponentCaret extends DefaultCaret {
 
@@ -91,14 +101,17 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 	}
 
 	public LabelView(GraphicalRepresentation<O> graphicalRepresentation, DrawingController<?> controller, FGEView<?> delegateView) {
-		super(null);
+		super();
 		this.controller = controller;
 		this.graphicalRepresentation = graphicalRepresentation;
 		this.delegateView = delegateView;
 		this.mouseListener = new LabelViewMouseListener(graphicalRepresentation, this);
+		if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
+			((ShapeGraphicalRepresentation<O>) graphicalRepresentation).setLabelMetricsProvider(this);
+		}
+		setCaret(new TextComponentCaret());
 		setOpaque(false);
 		setEditable(false);
-		setCaret(new TextComponentCaret());
 		LabelDocumentListener listener = new LabelDocumentListener();
 		addKeyListener(listener);
 		getDocument().addDocumentListener(listener);
@@ -107,7 +120,6 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 		setFocusable(true);
 		updateFont();
 		updateText();
-		addFGEMouseListener();
 		getGraphicalRepresentation().addObserver(this);
 	}
 
@@ -124,10 +136,10 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 			logger.fine("Delete LabelView for " + getGraphicalRepresentation());
 		}
 		if (getController() != null && getController().getEditedLabel() == this) {
-			getController().resetEditedLabel();
+			getController().resetEditedLabel(this);
 		}
 		if (getParentView() != null) {
-			FGELayeredView parentView = getParentView();
+			FGELayeredView<?> parentView = getParentView();
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
 			parentView.revalidate();
@@ -137,6 +149,9 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 		}
 		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().deleteObserver(this);
+			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
+				((ShapeGraphicalRepresentation<O>) graphicalRepresentation).setLabelMetricsProvider(null);
+			}
 		}
 		controller = null;
 		mouseListener = null;
@@ -144,19 +159,20 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 		isDeleted = true;
 	}
 
-	private List<MouseListener> disabledMouseListeners = new ArrayList<MouseListener>();
-	private List<MouseMotionListener> disabledMouseMotionListeners = new ArrayList<MouseMotionListener>();
-
-	private boolean textComponentMouseListenerEnabled = true;
-
 	public void enableTextComponentMouseListeners() {
-		if (textComponentMouseListenerEnabled) {
+		if (textComponentMouseListenerEnabled || disabledMouseListeners == null) {
 			return;
 		}
 		for (MouseListener ml : disabledMouseListeners) {
+			if (ml == mouseListener) {
+				continue;
+			}
 			addMouseListener(ml);
 		}
 		for (MouseMotionListener mml : disabledMouseMotionListeners) {
+			if (mml == mouseListener) {
+				continue;
+			}
 			addMouseMotionListener(mml);
 		}
 		removeFGEMouseListener();
@@ -166,16 +182,22 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 	}
 
 	public void disableTextComponentMouseListeners() {
-		if (!textComponentMouseListenerEnabled) {
+		if (!textComponentMouseListenerEnabled || disabledMouseListeners == null) {
 			return;
 		}
 		disabledMouseListeners.clear();
 		disabledMouseMotionListeners.clear();
 		for (MouseListener ml : getMouseListeners()) {
+			if (ml == mouseListener) {
+				continue;
+			}
 			disabledMouseListeners.add(ml);
 			removeMouseListener(ml);
 		}
 		for (MouseMotionListener mml : getMouseMotionListeners()) {
+			if (mml == mouseListener) {
+				continue;
+			}
 			disabledMouseMotionListeners.add(mml);
 			removeMouseMotionListener(mml);
 		}
@@ -193,7 +215,7 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 	}
 
 	@Override
-	public DrawingView getDrawingView() {
+	public DrawingView<?> getDrawingView() {
 		if (getController() != null) {
 			return getController().getDrawingView();
 		}
@@ -201,11 +223,16 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 	}
 
 	@Override
-	public FGELayeredView getParent() {
-		return (FGELayeredView) super.getParent();
+	public LabelView<O> getLabelView() {
+		return this;
 	}
 
-	public FGELayeredView getParentView() {
+	@Override
+	public FGELayeredView<?> getParent() {
+		return (FGELayeredView<?>) super.getParent();
+	}
+
+	public FGELayeredView<?> getParentView() {
 		return getParent();
 	}
 
@@ -260,27 +287,39 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle) {
 				updateFont();
 				getPaintManager().repaint(this);
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.relativeTextX
-					|| notification.getParameter() == GraphicalRepresentation.Parameters.relativeTextY
+			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.paragraphAlignment) {
+				updateFont();
+				getPaintManager().repaint(this);
+			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.horizontalTextAlignment
+					|| notification.getParameter() == GraphicalRepresentation.Parameters.verticalTextAlignment) {
+				updateBounds();
+				getPaintManager().repaint(this);
+			} else if (notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextX
+					|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextY
 					|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextX
 					|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextY
 					|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.isFloatingLabel) {
 				updateBounds();
 				getPaintManager().repaint(this);
-			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.lineWrap) {
-
-			} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
+			} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
+					|| notification instanceof LabelWillMove) {
 				setDoubleBuffered(false);
-			} else if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized) {
+				if (notification instanceof LabelWillMove) {
+					getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+					getPaintManager().invalidate(getGraphicalRepresentation());
+				}
+			} else if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
+					|| notification instanceof LabelHasMoved) {
 				setDoubleBuffered(true);
+				if (notification instanceof LabelHasMoved) {
+					getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
+				}
 			}
 		}
 	}
 
 	protected void updateBounds() {
-		Rectangle bounds = new Rectangle(getPreferredSize());
-		bounds.setLocation(graphicalRepresentation.getLabelLocation(bounds.getSize(), getScale()));
-		bounds.width = Math.max(20, bounds.width + 7);
+		Rectangle bounds = graphicalRepresentation.getLabelBounds(getScale());
 		if (!bounds.equals(getBounds())) {
 			setBounds(bounds);
 		}
@@ -305,16 +344,19 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(ts.getOrientation())));
 		}
 		Font font = ts.getFont().deriveFont(at);
+		setFont(font);
 		SimpleAttributeSet set = new SimpleAttributeSet();
-		if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.CENTER) {
+		if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.CENTER) {
 			StyleConstants.setAlignment(set, StyleConstants.ALIGN_CENTER);
-		} else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.LEFT) {
+		} else if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.LEFT) {
 			StyleConstants.setAlignment(set, StyleConstants.ALIGN_LEFT);
-		} else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.RIGHT) {
+		} else if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.RIGHT) {
 			StyleConstants.setAlignment(set, StyleConstants.ALIGN_RIGHT);
+		} else if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.JUSTIFY) {
+			StyleConstants.setAlignment(set, StyleConstants.ALIGN_JUSTIFIED);
 		}
 		StyleConstants.setFontFamily(set, font.getFamily());
-		StyleConstants.setFontSize(set, (int) (font.getSize() * getScale()));
+		StyleConstants.setFontSize(set, (int) (ts.getFont().getSize() * getScale()));
 		if (font.isBold()) {
 			StyleConstants.setBold(set, true);
 		}
@@ -325,7 +367,7 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 			StyleConstants.setForeground(set, ts.getColor());
 		}
 		setParagraphAttributes(set, true);
-		setFont(font);
+		validate();
 		updateBounds();
 	}
 
@@ -342,13 +384,37 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 	}
 
 	public void addFGEMouseListener() {
-		addMouseListener(mouseListener);
-		addMouseMotionListener(mouseListener);
+		if (!Arrays.asList(getMouseListeners()).contains(mouseListener)) {
+			addMouseListener(mouseListener);
+		}
+		if (!Arrays.asList(getMouseMotionListeners()).contains(mouseListener)) {
+			addMouseMotionListener(mouseListener);
+		}
 	}
 
 	public void removeFGEMouseListener() {
 		removeMouseListener(mouseListener);
 		removeMouseMotionListener(mouseListener);
+	}
+
+	@Override
+	public void setEditable(boolean b) {
+		super.setEditable(b);
+		/*boolean isFloating = !(getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation)
+				|| ((ShapeGraphicalRepresentation<O>) getGraphicalRepresentation()).getIsFloatingLabel();*/
+
+		setDoubleBuffered(!b);
+		if (b) {
+			enableTextComponentMouseListeners();
+			if (getController() != null) {
+				getController().setEditedLabel(this);
+			}
+		} else {
+			disableTextComponentMouseListeners();
+			if (getController() != null) {
+				getController().resetEditedLabel(this);
+			}
+		}
 	}
 
 	public void startEdition() {
@@ -362,18 +428,13 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 		}
 
 		isEditing = true;
-		setDoubleBuffered(false);
-		setDoubleBuffered(false);
-		enableTextComponentMouseListeners();
 		((TextComponentCaret) getCaret()).setIgnoreNextAdjustVisibility(true);
 		setEditable(true);
 		requestFocus();
 		selectAll();
-		getController().setEditedLabel(this);
 		getGraphicalRepresentation().notifyLabelWillBeEdited();
 		getPaintManager().invalidate(getGraphicalRepresentation());
 		getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-		getPaintManager().repaint(getDrawingView());
 		repaint();
 	}
 
@@ -389,10 +450,6 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 
 		isEditing = false;
 		logger.info("Stop edition of " + getGraphicalRepresentation() + " getController()=" + getController());
-
-		if (getController() != null) {
-			getController().resetEditedLabel();
-		}
 		setEditable(false);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Stop edition of " + getGraphicalRepresentation());
@@ -401,9 +458,6 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 			return;
 		}
 		getGraphicalRepresentation().notifyLabelHasBeenEdited();
-
-		disableTextComponentMouseListeners();
-		setDoubleBuffered(true);
 		getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
 		getPaintManager().invalidate(getGraphicalRepresentation());
 		getPaintManager().repaint(getDrawingView());
@@ -519,6 +573,20 @@ public class LabelView<O> extends JTextPane implements FGEView<O> {
 	@Override
 	public String getToolTipText(MouseEvent event) {
 		return getController().getToolTipText();
+	}
+
+	@Override
+	public Dimension getScaledPreferredDimension(double scale) {
+		if (scale == getScale()) {
+			return ui.getPreferredSize(this);
+		} else {
+			Dimension d = ui.getPreferredSize(this);
+			d.width *= scale;
+			d.height *= scale;
+			d.width /= getScale();
+			d.height /= getScale();
+			return d;
+		}
 	}
 
 }

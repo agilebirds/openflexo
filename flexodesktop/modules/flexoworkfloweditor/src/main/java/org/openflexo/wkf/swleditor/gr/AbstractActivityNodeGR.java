@@ -68,7 +68,6 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 		setIsMultilineAllowed(true);
 		setAdjustMinimalWidthToLabelWidth(true);
 		setAdjustMinimalHeightToLabelHeight(true);
-		setTextAlignment(TextAlignment.CENTER);
 	}
 
 	@Override

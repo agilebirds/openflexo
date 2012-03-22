@@ -326,7 +326,8 @@ public class DrawingPalette {
 		@Override
 		public void dragOver(DropTargetDragEvent e) {
 			if (isDragFlavorSupported(e)) {
-				getController().getDrawingView().paintDraggedNode(e, _controller.getDrawingView().getActivePalette().getPaletteView());
+				getController().getDrawingView().updateCapturedDraggedNodeImagePosition(e,
+						_controller.getDrawingView().getActivePalette().getPaletteView());
 			}
 			if (!isDragOk(e)) {
 				if (getDragSourceContext() == null) {
@@ -466,6 +467,7 @@ public class DrawingPalette {
 				e.dropComplete(false);
 				return;
 			} finally {
+				// Resets the screenshot stored by the editable drawing view (not the palette drawing view).
 				getController().getDrawingView().resetCapturedNode();
 			}
 		}

@@ -307,7 +307,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
 		}
 
-		for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+		for (GraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
 			if (gr instanceof WKFObjectGR<?>) {
 				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
 			}

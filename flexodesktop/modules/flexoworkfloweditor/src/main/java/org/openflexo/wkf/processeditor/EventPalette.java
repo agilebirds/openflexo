@@ -24,7 +24,7 @@ import java.awt.Font;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation.TextAlignment;
+import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
@@ -98,11 +98,11 @@ public class EventPalette extends AbstractWKFPalette {
 			g.useForegroundStyle(ForegroundStyle.makeStyle(Color.BLACK));
 			g.useTextStyle(TextStyle.makeTextStyle(Color.black, FONT));
 			g.drawString(FlexoLocalization.localizedForKey("start"), GLOABAL_START_X + (GLOBAL_INTER1_X - GLOABAL_START_X) / 2, TOP_Y
-					+ OFFSET, TextAlignment.CENTER);
+					+ OFFSET, HorizontalTextAlignment.CENTER);
 			g.drawString(FlexoLocalization.localizedForKey("intermediate"), GLOBAL_INTER1_X + (GLOBAL_END_X - GLOBAL_INTER1_X) / 2, TOP_Y
-					+ OFFSET - 2, TextAlignment.CENTER);
+					+ OFFSET - 2, HorizontalTextAlignment.CENTER);
 			g.drawString(FlexoLocalization.localizedForKey("end"), GLOBAL_INTER2_X + (WIDTH - GLOBAL_INTER1bis_X) / 2, TOP_Y + OFFSET,
-					TextAlignment.CENTER);
+					HorizontalTextAlignment.CENTER);
 			g.drawLine(GLOBAL_INTER1_X - OFFSET, TOP_Y, GLOBAL_INTER1_X - OFFSET, g.getHeight() - OFFSET);
 			// g.drawLine(INTER2_X-OFFSET, TOP_Y, INTER2_X-OFFSET, g.getHeight()-OFFSET);
 			g.drawLine(GLOBAL_END_X - OFFSET, TOP_Y, GLOBAL_END_X - OFFSET, g.getHeight() - OFFSET);

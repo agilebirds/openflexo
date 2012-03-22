@@ -95,7 +95,8 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 			@Override
 			public void paintDecoration(org.openflexo.fge.graphics.FGEShapeDecorationGraphics g) {
 				g.useTextStyle(propertyTypeStyle);
-				g.drawString(getProperty().getTypeStringRepresentation(), g.getWidth() - PROPERTY_BORDER * 3, 20, TextAlignment.RIGHT);
+				g.drawString(getProperty().getTypeStringRepresentation(), g.getWidth() - PROPERTY_BORDER * 3, 20,
+						HorizontalTextAlignment.RIGHT);
 			};
 
 			@Override
@@ -173,7 +174,7 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 
 	@Override
 	public double getY() {
-		return (getIndex() * PROPERTY_HEIGHT) + HEADER_HEIGHT + PROPERTY_BORDER;
+		return getIndex() * PROPERTY_HEIGHT + HEADER_HEIGHT + PROPERTY_BORDER;
 	}
 
 	@Override

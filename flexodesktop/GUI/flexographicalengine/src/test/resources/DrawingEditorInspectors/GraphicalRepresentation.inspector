@@ -29,7 +29,17 @@
 		<property name="textStyle.backgroundColor" label="background_color" widget="COLOR" constraint="7">
 			<param name="columns" value="10"/>
 		</property>-->
-		<property name="textAlignment" label="text_alignment" widget="DROPDOWN" constraint="8">
+		<property name="horizontalTextAlignment" label="horizontal_text_alignment" widget="DROPDOWN" constraint="8">
+			<param name="formatter" value="name"/>
+			<param name="columns" value="10"/>
+			<param name="showReset" value="false"/>
+		</property>
+		<property name="verticalTextAlignment" label="vertical_text_alignment" widget="DROPDOWN" constraint="8">
+			<param name="formatter" value="name"/>
+			<param name="columns" value="10"/>
+			<param name="showReset" value="false"/>
+		</property>
+		<property name="paragraphAlignment" label="paragraph_alignment" widget="DROPDOWN" constraint="8">
 			<param name="formatter" value="name"/>
 			<param name="columns" value="10"/>
 			<param name="showReset" value="false"/>

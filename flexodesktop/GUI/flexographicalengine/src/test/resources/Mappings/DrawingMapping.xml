@@ -45,11 +45,11 @@
   	 <property name="isMultilineAllowed" xmlTag="isMultilineAllowed" attribute="YES"/>
   	 <property name="continuousTextEditing" xmlTag="continuousTextEditing" attribute="YES"/>
  	 <property name="textStyle" xmlTag="TextStyle"/>
-  	 <property name="relativeTextX" xmlTag="relativeTextX" attribute="YES"/>
-  	 <property name="relativeTextY" xmlTag="relativeTextY" attribute="YES"/>
   	 <property name="absoluteTextX" xmlTag="absoluteTextX" attribute="YES"/>
   	 <property name="absoluteTextY" xmlTag="absoluteTextY" attribute="YES"/>
-  	 <property name="textAlignment" xmlTag="textAlignment" attribute="YES"/>
+  	 <property name="paragraphAlignment" xmlTag="paragraphAlignment" attribute="YES"/>
+  	 <property name="horizontalTextAlignment" xmlTag="horizontalTextAlignment" attribute="YES"/>
+  	 <property name="verticalTextAlignment" xmlTag="verticalTextAlignment" attribute="YES"/>
   	 <property name="isSelectable" xmlTag="isSelectable" attribute="YES"/>
   	 <property name="isFocusable" xmlTag="isFocusable" attribute="YES"/>
   	 <property name="drawControlPointsWhenFocused" xmlTag="drawControlPointsWhenFocused" attribute="YES"/>
@@ -82,6 +82,8 @@
      <description>Shape graphical representation</description>
  	 <property name="x" xmlTag="x" attribute="YES"/>
    	 <property name="y" xmlTag="y" attribute="YES"/>
+   	 <property name="relativeTextX" xmlTag="relativeTextX" attribute="YES"/>
+     <property name="relativeTextY" xmlTag="relativeTextY" attribute="YES"/>
    	 <property name="width" xmlTag="width" attribute="YES"/>
    	 <property name="height" xmlTag="height" attribute="YES"/>
    	 <property name="minimalWidth" xmlTag="minimalWidth" attribute="YES"/>

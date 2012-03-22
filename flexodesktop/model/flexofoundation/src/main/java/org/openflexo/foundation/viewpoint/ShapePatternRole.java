@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
@@ -36,7 +37,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 
 	public void updateGraphicalRepresentation(Object graphicalRepresentation) {
 		if (_graphicalRepresentation != null) {
-			((ShapeGraphicalRepresentation) _graphicalRepresentation).setsWith((ShapeGraphicalRepresentation) graphicalRepresentation);
+			((ShapeGraphicalRepresentation<?>) _graphicalRepresentation).setsWith((GraphicalRepresentation<?>) graphicalRepresentation);
 			setChanged();
 			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
 		} else {

@@ -172,7 +172,7 @@ public class FGEPaintManager {
 		_paintBuffer = null;
 	}
 
-	public void repaint(FGEView view, Rectangle bounds) {
+	public void repaint(FGEView<?> view, Rectangle bounds) {
 		if (!_drawingView.contains(view)) {
 			return;
 		}
@@ -213,12 +213,7 @@ public class FGEPaintManager {
 		repaintManager.repaintTemporaryRepaintAreas(_drawingView);
 		((JComponent) view).repaint();
 		if (view.getGraphicalRepresentation().hasFloatingLabel()) {
-			LabelView<?> label = null;
-			if (view instanceof ConnectorView) {
-				label = ((ConnectorView<?>) view).getLabelView();
-			} else if (view instanceof ShapeView) {
-				label = ((ShapeView<?>) view).getLabelView();
-			}
+			LabelView<?> label = view.getLabelView();
 			if (label != null) {
 				label.repaint();
 			}
@@ -238,7 +233,7 @@ public class FGEPaintManager {
 			// Control points displayed focus or selection might changed, and to be refresh correctely
 			// we mut assume that a request to an extended area embedding those control points
 			// must be performed (in case of border is not sufficient)
-			ShapeGraphicalRepresentation<?> gr = ((ShapeView) view).getGraphicalRepresentation();
+			ShapeGraphicalRepresentation<?> gr = ((ShapeView<?>) view).getGraphicalRepresentation();
 			int requiredControlPointSpace = FGEConstants.CONTROL_POINT_SIZE;
 			if (gr.getBorder().top * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
@@ -277,7 +272,7 @@ public class FGEPaintManager {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("Called REPAINT for graphical representation " + gr);
 		}
-		FGEView view = _drawingView.viewForObject(gr);
+		FGEView<?> view = _drawingView.viewForObject(gr);
 		if (view != null) {
 			repaint(view);
 		}
@@ -293,8 +288,8 @@ public class FGEPaintManager {
 		Rectangle rect = new Rectangle(((JComponent) v).getX(), ((JComponent) v).getY(), ((JComponent) v).getWidth(),
 				((JComponent) v).getHeight());
 		if (v instanceof ShapeView) {
-			if (((ShapeView<?>) v).getLabelView() != null) {
-				rect = rect.union(((ShapeView<?>) v).getLabelView().getBounds());
+			if (v.getLabelView() != null) {
+				rect = rect.union(v.getLabelView().getBounds());
 			}
 		}
 		return getPaintBuffer().getSubimage(rect.x, rect.y, rect.width, rect.height);

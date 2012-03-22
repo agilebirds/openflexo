@@ -133,11 +133,11 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 	public void setSize(FGEDimension newSize) {
 		Point p = null;
 		if (getDrawing() != null && getDrawing().getGraphicalRepresentation(getModel()) == this) {
-			p = getLabelViewCenter(1.0);
+			p = getLabelLocation(1.0);
 		}
 		super.setSize(newSize);
 		if (p != null) {
-			setLabelViewCenter(p, 1.0);
+			setLabelLocation(p, 1.0);
 		}
 	}
 
@@ -228,9 +228,9 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		setIsMultilineAllowed(true);
 		// setTextStyle(TextStyle.makeTextStyle(getAnnotation().getTextColor(), getAnnotation().getTextFont().getTheFont()));
 		if (getAnnotation().getTextAlignment() == null) {
-			getAnnotation().setTextAlignment(GraphicalRepresentation.TextAlignment.CENTER);
+			getAnnotation().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.CENTER);
 		}
-		setTextAlignment((TextAlignment) getAnnotation().getTextAlignment());
+		setParagraphAlignment((ParagraphAlignment) getAnnotation().getTextAlignment());
 	}
 
 	@Override
