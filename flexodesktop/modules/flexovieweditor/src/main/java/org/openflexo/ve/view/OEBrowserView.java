@@ -35,8 +35,11 @@ import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.action.MoveView;
+import org.openflexo.foundation.view.action.MoveViewFolder;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.controller.OEBrowser;
 import org.openflexo.ve.controller.OEController;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Represents the view for the browser of this module
@@ -100,17 +103,28 @@ public class OEBrowserView extends BrowserView {
 					if (over == null || dragged == null) {
 						return false;
 					}
-					Vector<ViewDefinition> v = new Vector<ViewDefinition>();
-					v.add(dragged);
 					return (dragged.getFolder() != over);
 				} else if (targ instanceof ViewLibraryElement) {
 					ViewLibrary over = ((ViewLibraryElement) targ).getViewLibrary();
 					if (over == null || dragged == null) {
 						return false;
 					}
-					Vector<ViewDefinition> v = new Vector<ViewDefinition>();
-					v.add(dragged);
 					return (dragged.getFolder() != over.getRootFolder());
+				}
+			} else if (source instanceof ViewFolderElement) {
+				ViewFolder dragged = ((ViewFolderElement) source).getFolder();
+				if (targ instanceof ViewFolderElement) {
+					ViewFolder over = ((ViewFolderElement) targ).getFolder();
+					if (over == null || dragged == null) {
+						return false;
+					}
+					return MoveViewFolder.isFolderMovableTo(dragged, over);
+				} else if (targ instanceof ViewLibraryElement) {
+					ViewLibrary over = ((ViewLibraryElement) targ).getViewLibrary();
+					if (over == null || dragged == null) {
+						return false;
+					}
+					return MoveViewFolder.isFolderMovableTo(dragged, over.getRootFolder());
 				}
 			}
 			return false;
@@ -119,22 +133,45 @@ public class OEBrowserView extends BrowserView {
 		@Override
 		public boolean handleDrop(BrowserElement source, BrowserElement targ) {
 			if (targetAcceptsSource(targ, source)) {
-				ViewDefinition dragged = ((ViewDefinitionElement) source).getViewDefinition();
-				ViewFolder folder = null;
-				if (targ instanceof ViewFolderElement) {
-					folder = ((ViewFolderElement) targ).getFolder();
-				} else if (targ instanceof ViewLibraryElement) {
-					folder = ((ViewLibraryElement) targ).getViewLibrary().getRootFolder();
+				if (source instanceof ViewDefinitionElement) {
+					ViewDefinition dragged = ((ViewDefinitionElement) source).getViewDefinition();
+					ViewFolder folder = null;
+					if (targ instanceof ViewFolderElement) {
+						folder = ((ViewFolderElement) targ).getFolder();
+					} else if (targ instanceof ViewLibraryElement) {
+						folder = ((ViewLibraryElement) targ).getViewLibrary().getRootFolder();
+					}
+					if (folder == null) {
+						return false;
+					}
+					Vector<ViewDefinition> v = new Vector<ViewDefinition>();
+					v.add(dragged);
+					MoveView move = MoveView.actionType.makeNewAction(dragged, v, editor);
+					move.setFolder(folder);
+					move.doAction();
+					return move.hasActionExecutionSucceeded();
+				} else if (source instanceof ViewFolderElement) {
+					ViewFolder dragged = ((ViewFolderElement) source).getFolder();
+					ViewFolder folder = null;
+					if (targ instanceof ViewFolderElement) {
+						folder = ((ViewFolderElement) targ).getFolder();
+					} else if (targ instanceof ViewLibraryElement) {
+						folder = ((ViewLibraryElement) targ).getViewLibrary().getRootFolder();
+					}
+					if (folder == null) {
+						return false;
+					}
+					if (!MoveViewFolder.isFolderMovableTo(dragged, folder)) {
+						FlexoController.notify(FlexoLocalization.localizedForKey("cannot_move_folder_to_such_location"));
+						return false;
+					}
+					Vector<ViewFolder> v = new Vector<ViewFolder>();
+					v.add(dragged);
+					MoveViewFolder move = MoveViewFolder.actionType.makeNewAction(dragged, v, editor);
+					move.setFolder(folder);
+					move.doAction();
+					return move.hasActionExecutionSucceeded();
 				}
-				if (folder == null) {
-					return false;
-				}
-				Vector<ViewDefinition> v = new Vector<ViewDefinition>();
-				v.add(dragged);
-				MoveView move = MoveView.actionType.makeNewAction(dragged, v, editor);
-				move.setFolder(folder);
-				move.doAction();
-				return move.hasActionExecutionSucceeded();
 			} else {
 				if (source == null || targ == null) {
 					return false;

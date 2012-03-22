@@ -415,6 +415,10 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 			sub.setShemaLibrary(getShemaLibrary());
 			setChanged();
 			notifyObservers(new ShemaFolderInserted(sub));
+			if (isRootFolder()) {
+				getShemaLibrary().setChanged();
+				getShemaLibrary().notifyObservers(new ShemaFolderInserted(sub));
+			}
 		}
 	}
 
@@ -423,6 +427,10 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		FlexoIndexManager.reIndexObjectOfArray(getSubFolders().toArray(new ViewFolder[0]));
 		setChanged();
 		notifyObservers(new ShemaFolderDeleted(sub));
+		if (isRootFolder()) {
+			getShemaLibrary().setChanged();
+			getShemaLibrary().notifyObservers(new ShemaFolderDeleted(sub));
+		}
 	}
 
 	@Override

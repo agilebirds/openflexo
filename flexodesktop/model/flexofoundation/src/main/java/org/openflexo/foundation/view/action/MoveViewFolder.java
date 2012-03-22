@@ -26,36 +26,35 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 
-public class MoveView extends FlexoAction<MoveView, ViewDefinition, ViewDefinition> {
+public class MoveViewFolder extends FlexoAction<MoveViewFolder, ViewFolder, ViewFolder> {
 
-	private static final Logger logger = Logger.getLogger(MoveView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(MoveViewFolder.class.getPackage().getName());
 
-	public static final FlexoActionType<MoveView, ViewDefinition, ViewDefinition> actionType = new FlexoActionType<MoveView, ViewDefinition, ViewDefinition>(
-			"move_view") {
+	public static final FlexoActionType<MoveViewFolder, ViewFolder, ViewFolder> actionType = new FlexoActionType<MoveViewFolder, ViewFolder, ViewFolder>(
+			"move_view_folder") {
 
 		@Override
-		protected boolean isEnabledForSelection(ViewDefinition object, Vector<ViewDefinition> globalSelection) {
+		protected boolean isEnabledForSelection(ViewFolder object, Vector<ViewFolder> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewDefinition object, Vector<ViewDefinition> globalSelection) {
+		protected boolean isVisibleForSelection(ViewFolder object, Vector<ViewFolder> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public MoveView makeNewAction(ViewDefinition focusedObject, Vector<ViewDefinition> globalSelection, FlexoEditor editor) {
-			return new MoveView(focusedObject, globalSelection, editor);
+		public MoveViewFolder makeNewAction(ViewFolder focusedObject, Vector<ViewFolder> globalSelection, FlexoEditor editor) {
+			return new MoveViewFolder(focusedObject, globalSelection, editor);
 		}
 
 	};
 
 	private ViewFolder folder;
 
-	protected MoveView(ViewDefinition focusedObject, Vector<ViewDefinition> globalSelection, FlexoEditor editor) {
+	protected MoveViewFolder(ViewFolder focusedObject, Vector<ViewFolder> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -65,18 +64,16 @@ public class MoveView extends FlexoAction<MoveView, ViewDefinition, ViewDefiniti
 			logger.warning("Cannot move: null folder");
 			return;
 		}
-		for (ViewDefinition v : getGlobalSelection()) {
+		for (ViewFolder v : getGlobalSelection()) {
 			moveToFolder(v, folder);
 		}
 	}
 
-	private void moveToFolder(ViewDefinition v, ViewFolder folder) {
-		ViewFolder oldFolder = v.getFolder();
+	private void moveToFolder(ViewFolder folderToMove, ViewFolder newFatherFolder) {
+		ViewFolder oldFolder = folderToMove.getFatherFolder();
 		// Hack: we have first to load the view, to prevent a null value returned by FlexoOEShemaResource.getSchemaDefinition()
-		// After the view is removed from initial folder
-		v.getShema();
-		oldFolder.removeFromShemas(v);
-		folder.addToShemas(v);
+		oldFolder.removeFromSubFolders(folderToMove);
+		newFatherFolder.addToSubFolders(folderToMove);
 	}
 
 	public ViewFolder getFolder() {
@@ -85,5 +82,9 @@ public class MoveView extends FlexoAction<MoveView, ViewDefinition, ViewDefiniti
 
 	public void setFolder(ViewFolder folder) {
 		this.folder = folder;
+	}
+
+	public static boolean isFolderMovableTo(ViewFolder folderToMove, ViewFolder newLocation) {
+		return !folderToMove.isFatherOf(newLocation);
 	}
 }
