@@ -252,8 +252,6 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	}
 
 	private synchronized void updateDependingObjects() {
-		System.out.println("OK, ici j'ai mon label " + getPatternRole().getLabel());
-		// System.out.println("Widget "+getWidget()+" potential observable: "+getPotentialObservables());
 		ArrayList<TargetObject> newDependingObjects = new ArrayList<TargetObject>();
 		ArrayList<TargetObject> deletedDependingObjects = new ArrayList<TargetObject>();
 		deletedDependingObjects.addAll(dependingObjects);
@@ -331,6 +329,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	}
 
 	public void update() {
+		updateDependingObjects();
 		((GraphicalRepresentation) getGraphicalRepresentation()).notifyChange(GraphicalRepresentation.Parameters.text);
 	}
 

@@ -48,7 +48,7 @@ public class ShemaDefinitionElement extends BrowserElement {
 		return getShema().getName();
 	}
 
-	protected ViewDefinition getShema() {
+	public ViewDefinition getShema() {
 		return (ViewDefinition) getObject();
 	}
 

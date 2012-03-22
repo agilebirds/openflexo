@@ -49,7 +49,7 @@ public class OEShemaElement extends BrowserElement {
 		return getShema().getName();
 	}
 
-	protected View getShema() {
+	public View getShema() {
 		return (View) getObject();
 	}
 

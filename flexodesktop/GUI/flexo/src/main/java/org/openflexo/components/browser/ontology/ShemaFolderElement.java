@@ -52,7 +52,7 @@ public class ShemaFolderElement extends BrowserElement {
 		return getFolder().getName();
 	}
 
-	protected ViewFolder getFolder() {
+	public ViewFolder getFolder() {
 		return (ViewFolder) getObject();
 	}
 

@@ -53,7 +53,7 @@ public class ShemaLibraryElement extends BrowserElement {
 		return getProject().getProjectName();
 	}
 
-	protected ViewLibrary getShemaLibrary() {
+	public ViewLibrary getShemaLibrary() {
 		return (ViewLibrary) getObject();
 	}
 

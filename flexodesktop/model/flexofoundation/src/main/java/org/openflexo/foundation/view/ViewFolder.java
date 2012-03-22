@@ -82,8 +82,8 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 	// ================================
 	// ==========================================================================
 
-	public ViewFolder(ViewLibrary componentLibrary) {
-		super(componentLibrary);
+	public ViewFolder(ViewLibrary viewLibrary) {
+		super(viewLibrary);
 		_subFolders = new Vector<ViewFolder>();
 		_shemas = new Vector<ViewDefinition>();
 	}
@@ -358,6 +358,10 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		}
 		setChanged();
 		notifyObservers(new ShemaInserted(shema, this));
+		if (isRootFolder()) {
+			getShemaLibrary().setChanged();
+			getShemaLibrary().notifyObservers(new ShemaInserted(shema, this));
+		}
 	}
 
 	public void removeFromShemas(ViewDefinition sub) {
@@ -366,6 +370,10 @@ public class ViewFolder extends ViewLibraryObject implements InspectableObject, 
 		FlexoIndexManager.reIndexObjectOfArray(getShemas().toArray(new ViewDefinition[0]));
 		setChanged();
 		notifyObservers(new ShemaDeleted(sub));
+		if (isRootFolder()) {
+			getShemaLibrary().setChanged();
+			getShemaLibrary().notifyObservers(new ShemaDeleted(sub));
+		}
 	}
 
 	public Enumeration<ViewFolder> getSortedSubFolders() {

@@ -19,10 +19,22 @@
  */
 package org.openflexo.ve.view;
 
+import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.components.browser.BrowserElement;
+import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.components.browser.dnd.TreeDropTarget;
+import org.openflexo.components.browser.ontology.ShemaDefinitionElement;
+import org.openflexo.components.browser.ontology.ShemaFolderElement;
+import org.openflexo.components.browser.ontology.ShemaLibraryElement;
 import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.action.MoveView;
 import org.openflexo.ve.controller.OEBrowser;
 import org.openflexo.ve.controller.OEController;
 
@@ -54,6 +66,11 @@ public class OEBrowserView extends BrowserView {
 	}
 
 	@Override
+	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2, ProjectBrowser _browser2) {
+		return new OETreeDropTarget(treeView2, _browser2);
+	}
+
+	@Override
 	public void treeSingleClick(FlexoModelObject object) {
 	}
 
@@ -63,6 +80,92 @@ public class OEBrowserView extends BrowserView {
 			// Try to display object in view
 			_controller.selectAndFocusObject(object);
 		}
+	}
+
+	public class OETreeDropTarget extends TreeDropTarget {
+
+		private FlexoEditor editor;
+
+		public OETreeDropTarget(FlexoJTree tree, ProjectBrowser browser) {
+			super(tree, browser);
+			editor = tree.getEditor();
+		}
+
+		@Override
+		public boolean targetAcceptsSource(BrowserElement targ, BrowserElement source) {
+			if (source instanceof ShemaDefinitionElement) {
+				ViewDefinition dragged = ((ShemaDefinitionElement) source).getShema();
+				if (targ instanceof ShemaFolderElement) {
+					ViewFolder over = ((ShemaFolderElement) targ).getFolder();
+					if (over == null || dragged == null) {
+						return false;
+					}
+					Vector<ViewDefinition> v = new Vector<ViewDefinition>();
+					v.add(dragged);
+					return (dragged.getFolder() != over);
+				} else if (targ instanceof ShemaLibraryElement) {
+					ViewLibrary over = ((ShemaLibraryElement) targ).getShemaLibrary();
+					if (over == null || dragged == null) {
+						return false;
+					}
+					Vector<ViewDefinition> v = new Vector<ViewDefinition>();
+					v.add(dragged);
+					return (dragged.getFolder() != over.getRootFolder());
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public boolean handleDrop(BrowserElement source, BrowserElement targ) {
+			if (targetAcceptsSource(targ, source)) {
+				ViewDefinition dragged = ((ShemaDefinitionElement) source).getShema();
+				ViewFolder folder = null;
+				if (targ instanceof ShemaFolderElement) {
+					folder = ((ShemaFolderElement) targ).getFolder();
+				} else if (targ instanceof ShemaLibraryElement) {
+					folder = ((ShemaLibraryElement) targ).getShemaLibrary().getRootFolder();
+				}
+				if (folder == null) {
+					return false;
+				}
+				Vector<ViewDefinition> v = new Vector<ViewDefinition>();
+				v.add(dragged);
+				MoveView move = MoveView.actionType.makeNewAction(dragged, v, editor);
+				move.setFolder(folder);
+				move.doAction();
+				return move.hasActionExecutionSucceeded();
+			} else {
+				if (source == null || targ == null) {
+					return false;
+				}
+				if (source instanceof ShemaDefinitionElement) {
+					ViewDefinition dragged = ((ShemaDefinitionElement) source).getShema();
+					if (targ instanceof ShemaFolderElement) {
+						ViewFolder over = ((ShemaFolderElement) targ).getFolder();
+						if (over == null || dragged == null) {
+							return false;
+						}
+						/*if (over == dragged) {
+							FlexoController.notify(FlexoLocalization.localizedForKey("cannot_drop_entry_within_itself"));
+							return false;
+						}
+						if (over.isChildOf(dragged)) {
+							FlexoController.notify(FlexoLocalization.localizedForKey("cannot_drop_father_within_son"));
+							return false;
+						}
+						if (!over.canHaveChildrenWithDepth(dragged.getDepth())) {
+							FlexoController
+									.notify(FlexoLocalization.localizedForKey("maximum_toc_depth_is") + " " + TOCEntry.MAXIMUM_DEPTH);
+							return false;
+						}*/
+					}
+				}
+				// FlexoController.notify(FlexoLocalization.localizedForKey("drop_cannot_be_performed"));
+			}
+			return false;
+		}
+
 	}
 
 }
