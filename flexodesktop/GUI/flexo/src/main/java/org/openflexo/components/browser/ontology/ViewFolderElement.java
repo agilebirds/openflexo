@@ -19,11 +19,15 @@
  */
 package org.openflexo.components.browser.ontology;
 
+import javax.naming.InvalidNameException;
+
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.view.ViewFolder.DuplicateFolderNameException;
 
 /**
  * Browser element representing the ontology library
@@ -50,6 +54,23 @@ public class ViewFolderElement extends BrowserElement {
 	@Override
 	public String getName() {
 		return getFolder().getName();
+	}
+
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
+
+	@Override
+	public void setName(String aName) throws FlexoException {
+		try {
+			getFolder().setName(aName);
+		} catch (DuplicateFolderNameException e) {
+			// Abort
+			throw new FlexoException(e.getLocalizedMessage(), e);
+		} catch (InvalidNameException e) {
+			throw new FlexoException(e.getLocalizedMessage(), e);
+		}
 	}
 
 	public ViewFolder getFolder() {
