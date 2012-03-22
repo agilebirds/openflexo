@@ -19,24 +19,39 @@
  */
 package org.openflexo.foundation.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-public abstract class ViewElement extends ViewObject implements Bindable {
+public abstract class ViewElement extends ViewObject implements Bindable, PropertyChangeListener, Observer {
 
 	private static final Logger logger = Logger.getLogger(ViewElement.class.getPackage().getName());
+
+	private final Vector<TargetObject> dependingObjects = new Vector<TargetObject>();
+	private boolean dependingObjectsAreComputed = false;
 
 	/**
 	 * Constructor invoked during deserialization
@@ -62,6 +77,17 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 		if (getEditionPatternInstance() != null) {
 			getEditionPatternInstance().delete();
 		}
+		for (TargetObject o : dependingObjects) {
+			if (o.target instanceof HasPropertyChangeSupport) {
+				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
+				// logger.info("Widget "+getWidget()+" remove property change listener: "+o.target+" property:"+o.propertyName);
+				pcSupport.removePropertyChangeListener(o.propertyName, this);
+			} else if (o.target instanceof Observable) {
+				// logger.info("Widget "+getWidget()+" remove observable: "+o);
+				((Observable) o.target).deleteObserver(this);
+			}
+		}
+		dependingObjects.clear();
 		super.delete();
 	}
 
@@ -106,6 +132,9 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 
 	protected String getLabelValue() {
 		if (getPatternRole() != null) {
+			if (!dependingObjectsAreComputed) {
+				updateDependingObjects();
+			}
 			return (String) getPatternRole().getLabel().getBindingValue(getEditionPatternInstance());
 		}
 		return null;
@@ -220,6 +249,89 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 	public BindingModel getBindingModel() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private synchronized void updateDependingObjects() {
+		System.out.println("OK, ici j'ai mon label " + getPatternRole().getLabel());
+		// System.out.println("Widget "+getWidget()+" potential observable: "+getPotentialObservables());
+		ArrayList<TargetObject> newDependingObjects = new ArrayList<TargetObject>();
+		ArrayList<TargetObject> deletedDependingObjects = new ArrayList<TargetObject>();
+		deletedDependingObjects.addAll(dependingObjects);
+		if (getDependingObjects() != null) {
+			for (TargetObject o : getDependingObjects()) {
+				if (deletedDependingObjects.contains(o)) {
+					deletedDependingObjects.remove(o);
+				} else {
+					newDependingObjects.add(o);
+				}
+			}
+		}
+		for (TargetObject o : deletedDependingObjects) {
+			dependingObjects.remove(o);
+			if (o.target instanceof HasPropertyChangeSupport) {
+				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
+				System.out.println("Element " + this + " remove property change listener: " + o.target + " property:" + o.propertyName);
+				pcSupport.removePropertyChangeListener(o.propertyName, this);
+			} else if (o.target instanceof Observable) {
+				System.out.println("Element " + this + " remove observable: " + o);
+				((Observable) o.target).deleteObserver(this);
+			} else {
+				System.out.println("Element " + this + " cannot observe: " + o);
+			}
+		}
+		for (TargetObject o : newDependingObjects) {
+			dependingObjects.add(o);
+			if (o.target instanceof HasPropertyChangeSupport) {
+				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
+				System.out.println("Element " + this + " add property change listener: " + o.target + " property:" + o.propertyName);
+				pcSupport.addPropertyChangeListener(o.propertyName, this);
+			} else if (o.target instanceof Observable) {
+				System.out.println("Element " + this + " add observable: " + o);
+				((Observable) o.target).addObserver(this);
+			} else {
+				System.out.println("Element " + this + " cannot observe: " + o);
+			}
+		}
+
+		dependingObjectsAreComputed = true;
+	}
+
+	protected synchronized void appendToDependingObjects(ViewPointDataBinding binding, List<TargetObject> returned) {
+		if (binding.isSet()) {
+			List<TargetObject> list = binding.getBinding().getTargetObjects(getEditionPatternInstance());
+			/*for (String patternRole : getEditionPatternInstance().getActors().keySet()) {
+				list.add(new TargetObject(target, patternRole));
+			}*/
+			if (list != null) {
+				for (TargetObject t : list) {
+					if (!returned.contains(t)) {
+						returned.add(t);
+					}
+				}
+			}
+		}
+	}
+
+	public synchronized List<TargetObject> getDependingObjects() {
+		List<TargetObject> returned = new ArrayList<TargetObject>();
+		appendToDependingObjects(getPatternRole().getLabel(), returned);
+		return returned;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		System.out.println("**************> ViewElement " + this + " : receive notification " + o);
+		update();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		System.out.println("**************> ViewElement " + this + " : receive PropertyChangeEvent " + evt);
+		update();
+	}
+
+	public void update() {
+		((GraphicalRepresentation) getGraphicalRepresentation()).notifyChange(GraphicalRepresentation.Parameters.text);
 	}
 
 }

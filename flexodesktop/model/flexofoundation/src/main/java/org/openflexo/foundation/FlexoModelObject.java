@@ -1329,7 +1329,12 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole) {
 		EditionPatternReference referenceToRemove = getEditionPatternReference(editionPatternInstance);
 		if (referenceToRemove == null) {
-			logger.warning("Called for unregister EditionPatternReference for unexisting reference to edition pattern instance.");
+			logger.warning("Called for unregister EditionPatternReference for unexisting reference to edition pattern instance EP="
+					+ editionPatternInstance.getPattern().getName() + " id=" + editionPatternInstance.getInstanceId());
+			for (EditionPatternReference ref : getEditionPatternReferences()) {
+				logger.warning("* Reference:");
+				logger.warning(ref.debug());
+			}
 		} else {
 			removeFromEditionPatternReferences(referenceToRemove);
 			setChanged();

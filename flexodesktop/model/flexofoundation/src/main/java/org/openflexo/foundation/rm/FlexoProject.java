@@ -4036,7 +4036,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 * @param actorReference
 	 */
 	public void _addToPendingEditionPatternReferences(String conceptURI, ConceptActorReference actorReference) {
-		logger.info("Registering concept " + conceptURI + " as pending pattern object reference: " + actorReference);
+		logger.fine("Registering concept " + conceptURI + " as pending pattern object reference: " + actorReference);
 		List<ConceptActorReference> values = pendingEditionPatternReferences.get(conceptURI);
 		if (values == null) {
 			values = new Vector<ConceptActorReference>();

@@ -171,6 +171,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		@Override
 		public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
 			logger.warning("Implement me");
+			// individual.getPropertyChangeSupport().firePropertyChange(ontologyProperty.getName(), oldValue, value);
 		}
 	}
 
@@ -374,6 +375,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		@Override
 		public void setBindingValue(Literal value, Object target, BindingEvaluationContext context) {
 			logger.warning("Implement me");
+			// individual.getPropertyChangeSupport().firePropertyChange(ontologyProperty.getName(), oldValue, value);
 		}
 	}
 }
