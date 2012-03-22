@@ -91,7 +91,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	@Override
 	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
-		System.out.println("Called finalizeDeserialization() for EditionPatternReference ");
+		logger.fine("Called finalizeDeserialization() for EditionPatternReference ");
 		for (ActorReference ref : actors.values()) {
 			if (ref instanceof ConceptActorReference) {
 				getProject()._addToPendingEditionPatternReferences(((ConceptActorReference) ref)._getObjectURI(),
@@ -575,7 +575,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof EditionPatternChanged) {
+		if (dataModification instanceof EditionPatternActorChanged) {
 			update();
 		}
 	}
@@ -639,6 +639,18 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	@Override
 	public Object getValue(BindingVariable variable) {
 		return getEditionPatternInstance().getValue(variable);
+	}
+
+	public String debug() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Reference to EditionPattern with role : " + getPatternRole() + "\n");
+		sb.append("EditionPattern: " + getEditionPatternInstance().getPattern().getName() + "\n");
+		sb.append("Instance: " + instanceId + " hash=" + Integer.toHexString(hashCode()) + "\n");
+		for (String patternRole : actors.keySet()) {
+			FlexoModelObject object = actors.get(patternRole);
+			sb.append("Role: " + patternRole + " : " + object + "\n");
+		}
+		return sb.toString();
 	}
 
 }

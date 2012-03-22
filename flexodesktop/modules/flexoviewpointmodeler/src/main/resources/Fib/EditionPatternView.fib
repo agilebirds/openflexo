@@ -836,7 +836,7 @@
             </Custom>
           </Panel>
           <Panel layout="border" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" titleFont="SansSerif,0,11" darkLevel="0" data="EntryPanel.data" dataClassName="org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(EntryPanel.data.class.simpleName = &quot;IndividualInspectorEntry&quot;)" name="OntologyIndividualInspectorEntryPanel">
-            <Custom componentClassName="org.openflexo.components.widget.OntologyIndividualSelector" data="OntologyIndividualInspectorEntryPanel.data.concept" constraints="border(index=0;location=center)" localize="true" manageDynamicModel="true">
+            <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="OntologyIndividualInspectorEntryPanel.data.concept" constraints="border(index=0;location=center)" localize="true" manageDynamicModel="true">
               <Assignment variable="component.ontologyLibrary" value="OntologyIndividualInspectorEntryPanel.data.ontologyLibrary" />
               <Assignment variable="component.defaultHeight" value="200" />
             </Custom>

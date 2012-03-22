@@ -3968,8 +3968,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					root = new File(f, "OpenFlexo");
 				}
 			}
-		} else if (ToolBox.getPLATFORM()==ToolBox.LINUX) {
-			root = new File(System.getProperty("user.home"),".openflexo");
+		} else if (ToolBox.getPLATFORM() == ToolBox.LINUX) {
+			root = new File(System.getProperty("user.home"), ".openflexo");
 		}
 		File file = null;
 		boolean ok = false;
@@ -4036,8 +4036,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 * @param actorReference
 	 */
 	public void _addToPendingEditionPatternReferences(String conceptURI, ConceptActorReference actorReference) {
-		System.out.println("OK, j'enregistre le concept " + conceptURI + " associe a la reference " + actorReference);
-		logger.info("Registering as pending pattern object reference: " + conceptURI);
+		logger.info("Registering concept " + conceptURI + " as pending pattern object reference: " + actorReference);
 		List<ConceptActorReference> values = pendingEditionPatternReferences.get(conceptURI);
 		if (values == null) {
 			values = new Vector<ConceptActorReference>();
@@ -4057,11 +4056,19 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			for (ConceptActorReference actorReference : values) {
 				EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
 				PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
-				logger.info("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
+				logger.fine("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
 				object.registerEditionPatternReference(instance, pr);
 			}
 			values.clear();
 		}
 	}
 
+	public void resolvePendingEditionPatternReferences() {
+		for (String conceptURI : pendingEditionPatternReferences.keySet()) {
+			OntologyObject oo = (getProjectOntologyLibrary().getOntologyObject(conceptURI));
+			if (oo != null) {
+				_retrievePendingEditionPatternReferences(oo);
+			}
+		}
+	}
 }
