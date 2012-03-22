@@ -22,7 +22,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewObject;
 
 /**
  * Browser element representing the ontology library
@@ -30,26 +31,26 @@ import org.openflexo.foundation.view.ViewDefinition;
  * @author sguerin
  * 
  */
-public class ShemaDefinitionElement extends BrowserElement {
+public class ViewElement extends BrowserElement {
 
-	protected ShemaDefinitionElement(ViewDefinition definition, ProjectBrowser browser, BrowserElement parent) {
-		super(definition, BrowserElementType.OE_SHEMA_DEFINITION, browser, parent);
+	protected ViewElement(View shema, ProjectBrowser browser, BrowserElement parent) {
+		super(shema, BrowserElementType.OE_SHEMA, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		if (getShema().isLoaded()) {
-			addToChilds(getShema().getShema());
+		for (ViewObject o : getView().getChilds()) {
+			addToChilds(o);
 		}
 	}
 
 	@Override
 	public String getName() {
-		return getShema().getName();
+		return getView().getName();
 	}
 
-	public ViewDefinition getShema() {
-		return (ViewDefinition) getObject();
+	public View getView() {
+		return (View) getObject();
 	}
 
 }

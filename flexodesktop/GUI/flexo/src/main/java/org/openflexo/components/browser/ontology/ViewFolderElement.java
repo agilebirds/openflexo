@@ -24,7 +24,6 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
-import org.openflexo.foundation.view.ViewLibrary;
 
 /**
  * Browser element representing the ontology library
@@ -32,29 +31,29 @@ import org.openflexo.foundation.view.ViewLibrary;
  * @author sguerin
  * 
  */
-public class ShemaLibraryElement extends BrowserElement {
+public class ViewFolderElement extends BrowserElement {
 
-	protected ShemaLibraryElement(ViewLibrary library, ProjectBrowser browser, BrowserElement parent) {
-		super(library, BrowserElementType.OE_SHEMA_LIBRARY, browser, parent);
+	protected ViewFolderElement(ViewFolder folder, ProjectBrowser browser, BrowserElement parent) {
+		super(folder, BrowserElementType.OE_SHEMA_FOLDER, browser, parent);
 	}
 
 	@Override
 	protected void buildChildrenVector() {
-		for (ViewFolder subFolder : getShemaLibrary().getRootFolder().getSubFolders()) {
+		for (ViewFolder subFolder : getFolder().getSubFolders()) {
 			addToChilds(subFolder);
 		}
-		for (ViewDefinition def : getShemaLibrary().getRootFolder().getShemas()) {
+		for (ViewDefinition def : getFolder().getShemas()) {
 			addToChilds(def);
 		}
 	}
 
 	@Override
 	public String getName() {
-		return getProject().getProjectName();
+		return getFolder().getName();
 	}
 
-	public ViewLibrary getShemaLibrary() {
-		return (ViewLibrary) getObject();
+	public ViewFolder getFolder() {
+		return (ViewFolder) getObject();
 	}
 
 }

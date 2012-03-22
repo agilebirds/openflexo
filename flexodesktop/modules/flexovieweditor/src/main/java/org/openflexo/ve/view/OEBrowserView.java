@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
-import org.openflexo.components.browser.ontology.ShemaDefinitionElement;
-import org.openflexo.components.browser.ontology.ShemaFolderElement;
-import org.openflexo.components.browser.ontology.ShemaLibraryElement;
+import org.openflexo.components.browser.ontology.ViewDefinitionElement;
+import org.openflexo.components.browser.ontology.ViewFolderElement;
+import org.openflexo.components.browser.ontology.ViewLibraryElement;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -93,18 +93,18 @@ public class OEBrowserView extends BrowserView {
 
 		@Override
 		public boolean targetAcceptsSource(BrowserElement targ, BrowserElement source) {
-			if (source instanceof ShemaDefinitionElement) {
-				ViewDefinition dragged = ((ShemaDefinitionElement) source).getShema();
-				if (targ instanceof ShemaFolderElement) {
-					ViewFolder over = ((ShemaFolderElement) targ).getFolder();
+			if (source instanceof ViewDefinitionElement) {
+				ViewDefinition dragged = ((ViewDefinitionElement) source).getViewDefinition();
+				if (targ instanceof ViewFolderElement) {
+					ViewFolder over = ((ViewFolderElement) targ).getFolder();
 					if (over == null || dragged == null) {
 						return false;
 					}
 					Vector<ViewDefinition> v = new Vector<ViewDefinition>();
 					v.add(dragged);
 					return (dragged.getFolder() != over);
-				} else if (targ instanceof ShemaLibraryElement) {
-					ViewLibrary over = ((ShemaLibraryElement) targ).getShemaLibrary();
+				} else if (targ instanceof ViewLibraryElement) {
+					ViewLibrary over = ((ViewLibraryElement) targ).getViewLibrary();
 					if (over == null || dragged == null) {
 						return false;
 					}
@@ -119,12 +119,12 @@ public class OEBrowserView extends BrowserView {
 		@Override
 		public boolean handleDrop(BrowserElement source, BrowserElement targ) {
 			if (targetAcceptsSource(targ, source)) {
-				ViewDefinition dragged = ((ShemaDefinitionElement) source).getShema();
+				ViewDefinition dragged = ((ViewDefinitionElement) source).getViewDefinition();
 				ViewFolder folder = null;
-				if (targ instanceof ShemaFolderElement) {
-					folder = ((ShemaFolderElement) targ).getFolder();
-				} else if (targ instanceof ShemaLibraryElement) {
-					folder = ((ShemaLibraryElement) targ).getShemaLibrary().getRootFolder();
+				if (targ instanceof ViewFolderElement) {
+					folder = ((ViewFolderElement) targ).getFolder();
+				} else if (targ instanceof ViewLibraryElement) {
+					folder = ((ViewLibraryElement) targ).getViewLibrary().getRootFolder();
 				}
 				if (folder == null) {
 					return false;
@@ -139,10 +139,10 @@ public class OEBrowserView extends BrowserView {
 				if (source == null || targ == null) {
 					return false;
 				}
-				if (source instanceof ShemaDefinitionElement) {
-					ViewDefinition dragged = ((ShemaDefinitionElement) source).getShema();
-					if (targ instanceof ShemaFolderElement) {
-						ViewFolder over = ((ShemaFolderElement) targ).getFolder();
+				if (source instanceof ViewDefinitionElement) {
+					ViewDefinition dragged = ((ViewDefinitionElement) source).getViewDefinition();
+					if (targ instanceof ViewFolderElement) {
+						ViewFolder over = ((ViewFolderElement) targ).getFolder();
 						if (over == null || dragged == null) {
 							return false;
 						}
