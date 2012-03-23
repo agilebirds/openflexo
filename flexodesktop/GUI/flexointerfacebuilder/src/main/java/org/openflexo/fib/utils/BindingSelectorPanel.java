@@ -1815,7 +1815,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			iconLabel.setBackground(label.getBackground());
 			panel.setToolTipText(label.getToolTipText());
 			if (label.getParent() != panel) {
-				panel.add(label.getParent());
+				panel.add(label);
 			}
 			return panel;
 		}
