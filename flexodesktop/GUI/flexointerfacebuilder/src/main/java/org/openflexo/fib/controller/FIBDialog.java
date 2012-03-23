@@ -97,7 +97,7 @@ public class FIBDialog<T> extends JDialog {
 	 */
 	public void center() {
 		Dimension dim;
-		if (getOwner() != null) {
+		if (getOwner() != null && getOwner().isVisible()) {
 			dim = new Dimension(getOwner().getLocationOnScreen().x + getOwner().getWidth() / 2, getOwner().getLocationOnScreen().y
 					+ getOwner().getHeight() / 2);
 		} else {
