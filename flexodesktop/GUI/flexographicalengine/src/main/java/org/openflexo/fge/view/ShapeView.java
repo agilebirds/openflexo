@@ -479,10 +479,13 @@ public class ShapeView<O> extends FGELayeredView<O> {
 				// requestFocus();
 			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
 				updateVisibility();
-				if (getParentView() != null) {
-					getParentView().revalidate();
-					getPaintManager().repaint(getParentView());
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
 				}
+				getPaintManager().repaint(this);
+
 			} else {
 				// revalidate();
 				if (getPaintManager().isPaintingCacheEnabled()) {
