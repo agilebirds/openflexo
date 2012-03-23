@@ -22,6 +22,7 @@ package org.openflexo.application;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.Flexo;
 import org.openflexo.components.AboutDialog;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.module.ModuleLoader;
@@ -65,7 +66,7 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 	}
 
 	public void handleOpenFile(ApplicationEvent arg0) {
-		getModuleLoader().fileNameToOpen = arg0.getFilename();
+		Flexo.setFileNameToOpen(arg0.getFilename());
 	}
 
 	private ModuleLoader getModuleLoader() {

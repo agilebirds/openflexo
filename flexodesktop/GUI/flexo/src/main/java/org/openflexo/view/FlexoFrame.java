@@ -537,6 +537,9 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	}
 
 	protected void saveBoundsInPreference() {
+		if (getController() == null) {
+			return;
+		}
 		int state = getExtendedState();
 		if (state == -1 || (state & Frame.MAXIMIZED_BOTH) != Frame.MAXIMIZED_BOTH
 				&& (state & Frame.MAXIMIZED_HORIZ) != Frame.MAXIMIZED_HORIZ && (state & Frame.MAXIMIZED_VERT) != Frame.MAXIMIZED_VERT) {

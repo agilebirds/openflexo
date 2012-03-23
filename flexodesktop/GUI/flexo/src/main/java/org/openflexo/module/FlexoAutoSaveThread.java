@@ -58,6 +58,7 @@ import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.inspector.InspectableObject;
@@ -329,6 +330,9 @@ public class FlexoAutoSaveThread extends Thread {
 			FlexoController.notify("This shouldn't append since module is already loaded." + e.getMessage());
 		} catch (ProjectLoadingCancelledException e) {
 			return;
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			return;
 		}
 	}
 
@@ -570,7 +574,7 @@ public class FlexoAutoSaveThread extends Thread {
 						try {
 							ProgressWindow.showProgressWindow(null, FlexoLocalization.localizedForKey("project_restoration"), 4);
 							if (FlexoModule.getActiveModule() != null) {
-								ProgressWindow.instance().centerOnFrame(FlexoModule.getActiveModule().getFlexoFrame());
+								ProgressWindow.instance().center();
 							}
 							restoreAutoSaveProject(autoSaveFile, ProgressWindow.instance());
 						} catch (IOException e1) {

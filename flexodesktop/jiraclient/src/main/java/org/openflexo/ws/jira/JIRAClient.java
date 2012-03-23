@@ -74,7 +74,6 @@ public class JIRAClient {
 		connection.addRequestProperty(CONTENT_TYPE_HEADER, "application/json");
 		connection.connect();
 		String json = JIRAGson.getInstance().toJson(submit);
-		System.err.println(json);
 		byte[] bytes = json.getBytes("UTF-8");
 		for (int i = 0; i < bytes.length;) {
 			connection.getOutputStream().write(bytes, i, Math.min(4096, bytes.length - i));
@@ -101,7 +100,6 @@ public class JIRAClient {
 				baos.write(b, 0, read);
 			}
 			String json2 = new String(baos.toByteArray(), "UTF-8");
-			System.err.println(json2);
 			return JIRAGson.getInstance().fromJson(json2, submit.getResultClass());
 		} finally {
 			is.close();

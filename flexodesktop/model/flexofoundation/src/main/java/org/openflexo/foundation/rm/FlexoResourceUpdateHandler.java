@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
-import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 
 /**
  * Please comment this class
@@ -48,7 +48,7 @@ public abstract class FlexoResourceUpdateHandler implements ResourceUpdateHandle
 		UpdateFromDisk, Ignore
 	}
 
-	public abstract void reloadProject(FlexoStorageResource fileResource) throws FlexoException;
+	public abstract void reloadProject(FlexoStorageResource fileResource) throws FlexoException, ProjectInitializerException;
 
 	protected abstract OptionWhenStorageResourceFoundAsConflicting getOptionWhenStorageResourceFoundAsConflicting(
 			FlexoStorageResource resource);

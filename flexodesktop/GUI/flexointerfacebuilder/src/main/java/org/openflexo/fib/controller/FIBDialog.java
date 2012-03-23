@@ -40,8 +40,6 @@ public class FIBDialog<T> extends JDialog {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
 
-	private static FIBDialog _visibleDialog = null;
-
 	private FIBView view;
 
 	public static <T> FIBDialog<T> instanciateComponent(File componentFile, T data, JFrame frame, boolean modal) {
@@ -94,35 +92,24 @@ public class FIBDialog<T> extends JDialog {
 		return getController().getStatus();
 	}
 
-	protected void showDialog() {
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-		if (_visibleDialog == null) {
-			_visibleDialog = this;
-			setVisible(true);
-			toFront();
+	/**
+	 * @param flexoFrame
+	 */
+	public void center() {
+		Dimension dim;
+		if (getOwner() != null) {
+			dim = new Dimension(getOwner().getLocationOnScreen().x + getOwner().getWidth() / 2, getOwner().getLocationOnScreen().y
+					+ getOwner().getHeight() / 2);
 		} else {
-			logger.warning("An other dialog box is already opened");
-			// _waitingDialog.add(this);
+			dim = Toolkit.getDefaultToolkit().getScreenSize();
 		}
+		setLocation(dim.width - getSize().width / 2, dim.height - getSize().height / 2);
 	}
 
-	@Override
-	public void dispose() {
-		super.dispose();
-		if (_visibleDialog == this) {
-			_visibleDialog = null;
-		}
-	}
-
-	@Override
-	public void setVisible(boolean b) {
-		super.setVisible(b);
-		if (!b) {
-			if (_visibleDialog == this) {
-				_visibleDialog = null;
-			}
-		}
+	public void showDialog() {
+		center();
+		setVisible(true);
+		toFront();
 	}
 
 	public static <T> FIBDialog<T> instanciateComponent(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {

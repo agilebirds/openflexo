@@ -8,6 +8,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
 
 import org.openflexo.icon.FilesIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 
 public class FlexoFileChooserUtils {
@@ -152,7 +153,7 @@ public class FlexoFileChooserUtils {
 		@Override
 		public Icon getIcon(File f) {
 			if (f.getName().toLowerCase().endsWith(".prj")) {
-				return FilesIconLibrary.SMALL_UNKNOWN_FILE_ICON;
+				return IconLibrary.OPENFLEXO_NOTEXT_16;
 			} else {
 				return super.getIcon(f);
 			}

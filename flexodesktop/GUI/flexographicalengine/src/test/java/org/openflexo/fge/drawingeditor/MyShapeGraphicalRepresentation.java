@@ -33,7 +33,7 @@ public class MyShapeGraphicalRepresentation extends ShapeGraphicalRepresentation
 
 	// Called for LOAD
 	public MyShapeGraphicalRepresentation(DrawingBuilder builder) {
-		this(ShapeType.RECTANGLE, null, builder.drawing);
+		this(ShapeType.RECTANGLE, null, builder.drawing.getEditedDrawing());
 		initializeDeserialization();
 	}
 

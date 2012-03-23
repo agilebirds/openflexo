@@ -49,12 +49,14 @@ import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
@@ -65,6 +67,7 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Main class of the Flexo Application Suite
@@ -80,6 +83,8 @@ public class Flexo {
 	private static File outLogFile;
 
 	private static File errLogFile;
+
+	private static String fileNameToOpen;
 
 	private static String getResourcePath() {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -166,7 +171,7 @@ public class Flexo {
 		}
 		SplashWindow splashWindow = null;
 		if (!noSplash) {
-			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed, 10000);
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed);
 		}
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
@@ -195,16 +200,36 @@ public class Flexo {
 			 */
 			@Override
 			public void run() {
-				splashWindow2.setVisible(false);
-				splashWindow2.dispose();
-				if (getModuleLoader().fileNameToOpen == null) {
-					new WelcomeDialog();
+				if (fileNameToOpen == null) {
+					WelcomeDialog welcomeDialog = new WelcomeDialog();
+					if (splashWindow2 != null) {
+						splashWindow2.setVisible(false);
+						splashWindow2.dispose();
+					}
+					welcomeDialog.showDialog();
 				} else {
 					try {
-						getProjectLoader().loadProject(new File(getModuleLoader().fileNameToOpen));
+						File projectDirectory = new File(fileNameToOpen);
+						if (splashWindow2 != null) {
+							splashWindow2.setVisible(false);
+							splashWindow2.dispose();
+						}
+						getModuleLoader().openProject(projectDirectory, null);
 					} catch (ProjectLoadingCancelledException e) {
 						// project need a conversion, but user cancelled the conversion.
-						new WelcomeDialog();
+						WelcomeDialog welcomeDialog = new WelcomeDialog();
+						welcomeDialog.showDialog();
+					} catch (ModuleLoadingException e) {
+						e.printStackTrace();
+						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+						WelcomeDialog welcomeDialog = new WelcomeDialog();
+						welcomeDialog.showDialog();
+					} catch (ProjectInitializerException e) {
+						e.printStackTrace();
+						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+								+ e.getProjectDirectory().getAbsolutePath());
+						WelcomeDialog welcomeDialog = new WelcomeDialog();
+						welcomeDialog.showDialog();
 					}
 				}
 			}
@@ -429,6 +454,10 @@ public class Flexo {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file"));
 			e.printStackTrace();
 		}
+	}
+
+	public static void setFileNameToOpen(String filename) {
+		Flexo.fileNameToOpen = filename;
 	}
 
 }

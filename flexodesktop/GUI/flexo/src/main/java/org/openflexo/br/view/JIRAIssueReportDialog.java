@@ -17,6 +17,7 @@ import java.util.zip.Deflater;
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.ApplicationVersion;
 import org.openflexo.Flexo;
+import org.openflexo.FlexoCst;
 import org.openflexo.br.BugReportManager;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController.Status;
@@ -279,10 +280,11 @@ public class JIRAIssueReportDialog {
 			ReportProgress progressAdapter = new ReportProgress();
 			JIRAClient client = new JIRAClient(AdvancedPrefs.getBugReportUrl(), AdvancedPrefs.getBugReportUser(),
 					AdvancedPrefs.getBugReportPassword());
+			String buildid = "build.id = " + FlexoCst.BUILD_ID + "\n";
 			if (sendSystemProperties) {
-				issue.setSystemProperties(ToolBox.getSystemProperties());
+				issue.setSystemProperties(buildid + ToolBox.getSystemProperties());
 			} else {
-				issue.setSystemProperties(null);
+				issue.setSystemProperties(buildid);
 			}
 
 			if (getIssue().getIssuetype().getVersionField() != null) {
