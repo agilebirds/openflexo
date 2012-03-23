@@ -261,7 +261,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			private Point parentPosition;
 
 			public ParentPopupMoveListener() {
-				if (CustomJPopupMenu.this.getOwner().isVisible()) {
+				if (CustomJPopupMenu.this.getOwner() != null && CustomJPopupMenu.this.getOwner().isVisible()) {
 					parentPosition = CustomJPopupMenu.this.getOwner().getLocationOnScreen();
 				}
 			}
