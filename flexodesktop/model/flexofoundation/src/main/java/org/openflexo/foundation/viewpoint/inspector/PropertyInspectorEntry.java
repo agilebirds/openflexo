@@ -59,7 +59,9 @@ public abstract class PropertyInspectorEntry extends InspectorEntry {
 	}
 
 	public OntologyClass getDomain() {
-		getCalc().loadWhenUnloaded();
+		if (getCalc() != null) {
+			getCalc().loadWhenUnloaded();
+		}
 		return getOntologyLibrary().getClass(_getDomainURI());
 	}
 

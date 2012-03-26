@@ -51,7 +51,9 @@ public class IndividualInspectorEntry extends InspectorEntry {
 	}
 
 	public OntologyClass getConcept() {
-		getCalc().loadWhenUnloaded();
+		if (getCalc() != null) {
+			getCalc().loadWhenUnloaded();
+		}
 		return getOntologyLibrary().getClass(_getConceptURI());
 	}
 
