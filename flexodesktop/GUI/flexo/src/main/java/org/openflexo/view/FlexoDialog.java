@@ -116,21 +116,15 @@ public class FlexoDialog extends JDialog {
 	}
 
 	public void centerDialog() {
+		Point center;
 		if (getOwner() != null && getOwner().isVisible()) {
-			Point locationOnScreen = getOwner().getLocationOnScreen();
-			if (locationOnScreen.x < 0) {
-				locationOnScreen.x = 0;
-			}
-			if (locationOnScreen.y < 0) {
-				locationOnScreen.y = 0;
-			}
-			Dimension dim = new Dimension(locationOnScreen.x + getOwner().getWidth() / 2, locationOnScreen.y + getOwner().getHeight() / 2);
-			setLocation(dim.width - getSize().width / 2, dim.height - getSize().height / 2);
+			center = new Point(getOwner().getLocationOnScreen().x + getOwner().getWidth() / 2, getOwner().getLocationOnScreen().y
+					+ getOwner().getHeight() / 2);
 		} else {
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			center = new Point(screenSize.width / 2, screenSize.height / 2);
 		}
-
+		setLocation(Math.max(center.x - getSize().width / 2, 0), Math.max(center.y - getSize().height / 2, 0));
 	}
 
 	@Override
