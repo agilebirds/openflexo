@@ -6,7 +6,7 @@
  A BOTCompany is the top container for the whole organization.
  Related dropping scheme automatically perform creation and recording of a new individual of
  BOTCompany type, with a Shape connected to it.</description>
-    <DropScheme id="3" target="top" name="DropBOTCompanyAtTopLevel" skipConfirmationPanel="false">
+    <DropScheme id="3" target="top" name="DropBOTCompanyAtTopLevel" label="DropBOTCompanyAtTopLevel" skipConfirmationPanel="false">
       <TextFieldParameter id="4" name="companyName" label="company_name" defaultValue="&quot;My Company&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter company name while dropping concept</description>
       </TextFieldParameter>
@@ -19,284 +19,291 @@
       <AddShape id="8" container="topLevel" patternRole="shape" />
     </DropScheme>
     <ContainedIndividualPatternRole id="9" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany" patternRole="company" />
-    <ContainedShapePatternRole id="10" patternRole="shape" label="company.companyName" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="11" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="123.0" y="9.0" width="224.79787851510477" height="90.9883344883345" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="company.companyName" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="115.0" absoluteTextY="13.0" textAlignment="CENTER">
+    <ContainedShapePatternRole id="10" label="company.companyName" exampleLabel="label" readOnlyLabel="false" patternRole="shape">
+      <ShapeGraphicalRepresentation id="11" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="123.0" y="9.0" width="224.79787851510477" height="90.9883344883345" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="115.0" absoluteTextY="13.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="12" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorGradientBackgroundStyle id="13" color1="255,255,102" color2="255,204,204" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.5" />
         <Border id="14" top="5" bottom="5" left="5" right="5" />
-        <ShadowStyle id="15" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <RectangleShape id="16" isRounded="true" arcSize="15.0" />
+        <RectangleShape id="15" isRounded="true" arcSize="15.0" />
+        <ShadowStyle id="16" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
         <TextStyle id="17" font="SansSerif,0,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
+      <GRSpec id="18" featureName="label" value="company.companyName" readOnly="false" />
     </ContainedShapePatternRole>
     <PrimaryConceptIndividualPatternRole idref="9" />
     <PrimaryRepresentationShapePatternRole idref="10" />
-    <Inspector id="18" inspectorTitle="Company">
-      <TextField id="19" label="uri" name="uri" readOnly="false" data="company.uriName" />
-      <TextField id="20" label="company_name" name="company_name" readOnly="false" data="company.companyName" />
+    <Inspector id="19" inspectorTitle="Company">
+      <TextField id="20" label="uri" name="uri" readOnly="false" data="company.uriName" />
+      <TextField id="21" label="company_name" name="company_name" readOnly="false" data="company.companyName" />
     </Inspector>
   </EditionPattern>
-  <EditionPattern id="21" name="BOTDepartment">
+  <EditionPattern id="22" name="BOTDepartment">
     <description>Allows to define concept of department in a context of basic organization tree.
 A BOTDepartment is top container for BOTCompany
 Related dropping scheme automatically perform creation and recording of a new individual of
 BOTDepartment type, with a Shape connected to it.</description>
-    <DropScheme id="22" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany" name="DropBOTDepartmentInBOTCompany" skipConfirmationPanel="false">
+    <DropScheme id="23" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany" name="DropBOTDepartmentInBOTCompany" label="DropBOTDepartmentInBOTCompany" skipConfirmationPanel="false">
       <description>Creates new BOTDepartment inside a BOTCompany</description>
-      <TextFieldParameter id="23" name="departmentName" label="department_name" defaultValue="&quot;My Department&quot;" usePaletteLabelAsDefaultValue="false">
+      <TextFieldParameter id="24" name="departmentName" label="department_name" defaultValue="&quot;My Department&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter department name while dropping concept</description>
       </TextFieldParameter>
-      <URIParameter id="24" base="departmentName" name="departmentURI" label="uri" usePaletteLabelAsDefaultValue="false">
+      <URIParameter id="25" base="departmentName" name="departmentURI" label="uri" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <AddIndividual id="25" individualName="parameters.departmentURI" patternRole="department">
-        <DataPropertyAssertion id="26" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#name" value="parameters.departmentName" />
-        <ObjectPropertyAssertion id="27" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isContainedIn" object="target.company" />
+      <AddIndividual id="26" individualName="parameters.departmentURI" patternRole="department">
+        <DataPropertyAssertion id="27" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#name" value="parameters.departmentName" />
+        <ObjectPropertyAssertion id="28" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isContainedIn" object="target.company" />
       </AddIndividual>
-      <AddShape id="28" container="target.shape" patternRole="shape" />
+      <AddShape id="29" container="target.shape" patternRole="shape" />
     </DropScheme>
-    <ActionScheme id="29" conditional="(detailedShema = null)" name="DefineInNewShema" skipConfirmationPanel="true">
+    <ActionScheme id="30" conditional="(detailedShema = null)" name="DefineInNewShema" label="DefineInNewShema" skipConfirmationPanel="true">
       <description>Define details for this BOTDepartment in a new shema</description>
-      <AddShema id="30" shemaName="department.name" patternRole="detailedShema">
-        <ShapePatternRole id="31" patternRole="shape" label="department.name" readOnlyLabel="false">
-          <ShapeGraphicalRepresentation id="32" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="163.0" y="27.0" width="176.0" height="58.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="89.0" absoluteTextY="16.0" textAlignment="CENTER">
-            <ForegroundStyle id="33" noStroke="false" color="0,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-            <ColorGradientBackgroundStyle id="34" color1="0,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
-            <Border id="35" top="5" bottom="5" left="5" right="5" />
-            <ShadowStyle id="36" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <AddShema id="31" shemaName="department.name" patternRole="detailedShema">
+        <ShapePatternRole id="32" label="department.name" exampleLabel="label" readOnlyLabel="false" patternRole="shape">
+          <ShapeGraphicalRepresentation id="33" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="163.0" y="27.0" width="176.0" height="58.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="89.0" absoluteTextY="16.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+            <ForegroundStyle id="34" noStroke="false" color="0,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ColorGradientBackgroundStyle id="35" color1="0,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+            <Border id="36" top="5" bottom="5" left="5" right="5" />
             <RectangleShape id="37" isRounded="true" arcSize="15.0" />
-            <TextStyle id="38" font="SansSerif,0,11" color="0,51,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+            <ShadowStyle id="38" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <TextStyle id="39" font="SansSerif,0,11" color="0,51,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
           </ShapeGraphicalRepresentation>
+          <GRSpec id="40" featureName="label" value="department.name" readOnly="false" />
         </ShapePatternRole>
         <description>Creates the new shema.
 Used name is one generated from 'department' pattern role object</description>
       </AddShema>
     </ActionScheme>
-    <ActionScheme id="39" conditional="(detailedShema != null)" name="ShowDetails" skipConfirmationPanel="true">
+    <ActionScheme id="41" conditional="(detailedShema != null)" name="ShowDetails" label="ShowDetails" skipConfirmationPanel="true">
       <description>Switch to shema where details of this BOTDepartment are defined</description>
-      <GoToAction id="40" targetObject="detailedShema">
+      <GoToAction id="42" targetObject="detailedShema">
         <description>Switch to detailed shema, whithout doing anything on EditionPattern instance</description>
       </GoToAction>
     </ActionScheme>
-    <ContainedIndividualPatternRole id="41" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" patternRole="department" />
-    <ContainedShapePatternRole idref="31" />
-    <ContainedShemaPatternRole id="42" patternRole="detailedShema" />
-    <PrimaryConceptIndividualPatternRole idref="41" />
-    <PrimaryRepresentationShapePatternRole idref="31" />
-    <Inspector id="43" inspectorTitle="Department">
-      <TextField id="44" label="uri" name="uri" readOnly="false" data="department.uriName" />
-      <TextField id="45" label="department_name" name="department_name" readOnly="false" data="department.name" />
-      <TextField id="46" label="is_contained_in" name="is_contained_in" readOnly="false" data="department.isContainedIn.uriName" />
+    <ContainedIndividualPatternRole id="43" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" patternRole="department" />
+    <ContainedShapePatternRole idref="32" />
+    <ContainedShemaPatternRole id="44" patternRole="detailedShema" />
+    <PrimaryConceptIndividualPatternRole idref="43" />
+    <PrimaryRepresentationShapePatternRole idref="32" />
+    <Inspector id="45" inspectorTitle="Department">
+      <TextField id="46" label="uri" name="uri" readOnly="false" data="department.uriName" />
+      <TextField id="47" label="department_name" name="department_name" readOnly="false" data="department.name" />
+      <TextField id="48" label="is_contained_in" name="is_contained_in" readOnly="false" data="department.isContainedIn.uriName" />
     </Inspector>
   </EditionPattern>
-  <EditionPattern id="47" name="BOTSubDepartment">
+  <EditionPattern id="49" name="BOTSubDepartment">
     <description>Allows to define concept of sub-department in a context of basic organization tree.
 A BOTSubDepartment is contained in a BOTDepartment
 Related dropping scheme automatically perform creation and recording of a new individual of
 BOTSubDepartment type, with a Shape connected to it.</description>
-    <DropScheme id="48" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" name="DropBOTSubDepartmentInBOTDepartment" skipConfirmationPanel="false">
-      <TextFieldParameter id="49" name="subDepartmentName" label="sub_department_name" defaultValue="&quot;My sub-department&quot;" usePaletteLabelAsDefaultValue="false">
+    <DropScheme id="50" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" name="DropBOTSubDepartmentInBOTDepartment" label="DropBOTSubDepartmentInBOTDepartment" skipConfirmationPanel="false">
+      <TextFieldParameter id="51" name="subDepartmentName" label="sub_department_name" defaultValue="&quot;My sub-department&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter sub-department name while dropping concept</description>
       </TextFieldParameter>
-      <URIParameter id="50" base="subDepartmentName" name="subDepartmentURI" label="uri" usePaletteLabelAsDefaultValue="false">
+      <URIParameter id="52" base="subDepartmentName" name="subDepartmentURI" label="uri" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <AddIndividual id="51" individualName="parameters.subDepartmentURI" patternRole="subDepartment">
-        <DataPropertyAssertion id="52" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#name" value="parameters.subDepartmentName" />
-        <ObjectPropertyAssertion id="53" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isContainedIn" object="target.department" />
+      <AddIndividual id="53" individualName="parameters.subDepartmentURI" patternRole="subDepartment">
+        <DataPropertyAssertion id="54" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#name" value="parameters.subDepartmentName" />
+        <ObjectPropertyAssertion id="55" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isContainedIn" object="target.department" />
       </AddIndividual>
-      <AddShape id="54" container="target.shape" patternRole="shape" />
+      <AddShape id="56" container="target.shape" patternRole="shape" />
     </DropScheme>
-    <ContainedIndividualPatternRole id="55" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTSubDepartment" patternRole="subDepartment" />
-    <ContainedShapePatternRole id="56" patternRole="shape" label="subDepartment.name" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="57" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="147.0" y="28.0" width="176.0" height="58.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="87.0" absoluteTextY="15.0" textAlignment="CENTER">
-        <ForegroundStyle id="58" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorGradientBackgroundStyle id="59" color1="255,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
-        <Border id="60" top="5" bottom="5" left="5" right="5" />
-        <ShadowStyle id="61" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <RectangleShape id="62" isRounded="true" arcSize="15.0" />
-        <TextStyle id="63" font="SansSerif,0,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedIndividualPatternRole id="57" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTSubDepartment" patternRole="subDepartment" />
+    <ContainedShapePatternRole id="58" label="subDepartment.name" exampleLabel="label" readOnlyLabel="false" patternRole="shape">
+      <ShapeGraphicalRepresentation id="59" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="147.0" y="28.0" width="176.0" height="58.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="87.0" absoluteTextY="15.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="60" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="61" color1="255,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+        <Border id="62" top="5" bottom="5" left="5" right="5" />
+        <RectangleShape idref="37" />
+        <ShadowStyle id="63" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="64" font="SansSerif,0,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
+      <GRSpec id="65" featureName="label" value="subDepartment.name" readOnly="false" />
     </ContainedShapePatternRole>
-    <PrimaryConceptIndividualPatternRole idref="55" />
-    <PrimaryRepresentationShapePatternRole idref="56" />
-    <Inspector id="64" inspectorTitle="Sub-department">
-      <TextField id="65" label="uri" name="uri" readOnly="false" data="subDepartment.uriName" />
-      <TextField id="66" label="sub-department name" name="sub-department name" readOnly="false" data="subDepartment.name" />
-      <TextField id="67" label="is_contained_in" name="is_contained_in" readOnly="true" data="subDepartment.isContainedIn.uriName" />
+    <PrimaryConceptIndividualPatternRole idref="57" />
+    <PrimaryRepresentationShapePatternRole idref="58" />
+    <Inspector id="66" inspectorTitle="Sub-department">
+      <TextField id="67" label="uri" name="uri" readOnly="false" data="subDepartment.uriName" />
+      <TextField id="68" label="sub-department name" name="sub-department name" readOnly="false" data="subDepartment.name" />
+      <TextField id="69" label="is_contained_in" name="is_contained_in" readOnly="true" data="subDepartment.isContainedIn.uriName" />
     </Inspector>
   </EditionPattern>
-  <EditionPattern id="68" name="Employee">
+  <EditionPattern id="70" name="Employee">
     <description>Allows to define concept of employee in a context of basic organization tree</description>
-    <DropScheme id="69" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" name="DropEmployeeInOrganization" skipConfirmationPanel="false">
-      <TextFieldParameter id="70" name="roleName" label="role_name" usePaletteLabelAsDefaultValue="true">
+    <DropScheme id="71" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" name="DropEmployeeInOrganization" label="DropEmployeeInOrganization" skipConfirmationPanel="false">
+      <TextFieldParameter id="72" name="roleName" label="role_name" usePaletteLabelAsDefaultValue="true">
         <description>Allow to enter role name while dropping concept</description>
       </TextFieldParameter>
-      <URIParameter id="71" base="roleName" name="employeeURI" label="employee_uri" usePaletteLabelAsDefaultValue="false">
+      <URIParameter id="73" base="roleName" name="employeeURI" label="employee_uri" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <CheckBoxParameter id="72" name="isManager" label="is_manager" defaultValue="false" usePaletteLabelAsDefaultValue="false">
+      <CheckBoxParameter id="74" name="isManager" label="is_manager" defaultValue="false" usePaletteLabelAsDefaultValue="false">
         <description>When set to true, indicates that created employee concept will address a manager</description>
       </CheckBoxParameter>
-      <CheckBoxParameter id="73" name="isHeadOfOrganization" label="is_head_of_organization" defaultValue="false" usePaletteLabelAsDefaultValue="false" conditional="(isManager = true)">
+      <CheckBoxParameter id="75" name="isHeadOfOrganization" label="is_head_of_organization" defaultValue="false" usePaletteLabelAsDefaultValue="false" conditional="(isManager = true)">
         <description>When set to true, indicates that created employee is at the head of current organization cell</description>
       </CheckBoxParameter>
-      <CheckBoxParameter id="74" name="assignPerson" label="assign_employee" defaultValue="false" usePaletteLabelAsDefaultValue="false">
+      <CheckBoxParameter id="76" name="assignPerson" label="assign_employee" defaultValue="false" usePaletteLabelAsDefaultValue="false">
         <description>When set to true, indicates that created employee concept will be assigned to a given person</description>
       </CheckBoxParameter>
-      <TextFieldParameter id="75" name="employeeFirstName" label="employee_first_name" usePaletteLabelAsDefaultValue="false" conditional="(assignPerson = true)">
+      <TextFieldParameter id="77" name="employeeFirstName" label="employee_first_name" usePaletteLabelAsDefaultValue="false" conditional="(assignPerson = true)">
         <description>Employee first name</description>
       </TextFieldParameter>
-      <TextFieldParameter id="76" name="employeeLastName" label="employee_last_name" usePaletteLabelAsDefaultValue="false" conditional="(assignPerson = true)">
+      <TextFieldParameter id="78" name="employeeLastName" label="employee_last_name" usePaletteLabelAsDefaultValue="false" conditional="(assignPerson = true)">
         <description>Employee last name</description>
       </TextFieldParameter>
-      <URIParameter id="77" base="(employeeFirstName + employeeLastName)" name="personURI" label="person_uri" usePaletteLabelAsDefaultValue="false" conditional="(assignPerson = true)">
+      <URIParameter id="79" base="(employeeFirstName + employeeLastName)" name="personURI" label="person_uri" usePaletteLabelAsDefaultValue="false" conditional="(assignPerson = true)">
         <description>Allow to enter (unique) individual name used in Ontology</description>
       </URIParameter>
-      <AddIndividual id="78" individualName="parameters.employeeURI" patternRole="employeeAsManager" conditional="(parameters.isManager = true)">
-        <DataPropertyAssertion id="79" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#roleName" value="parameters.roleName" />
-        <ObjectPropertyAssertion id="80" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksIn" object="target.department" />
-        <ObjectPropertyAssertion id="81" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isHeadOf" object="target.department" conditional="(parameters.isHeadOfOrganization = true)" />
-        <ObjectPropertyAssertion id="82" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#jobPerformedBy" object="person" conditional="(parameters.assignPerson = true)" />
+      <AddIndividual id="80" individualName="parameters.employeeURI" patternRole="employeeAsManager" conditional="(parameters.isManager = true)">
+        <DataPropertyAssertion id="81" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#roleName" value="parameters.roleName" />
+        <ObjectPropertyAssertion id="82" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksIn" object="target.department" />
+        <ObjectPropertyAssertion id="83" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isHeadOf" object="target.department" conditional="(parameters.isHeadOfOrganization = true)" />
+        <ObjectPropertyAssertion id="84" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#jobPerformedBy" object="person" conditional="(parameters.assignPerson = true)" />
       </AddIndividual>
-      <AddIndividual id="83" individualName="parameters.employeeURI" patternRole="employeeAsWorker" conditional="(parameters.isManager = false)">
-        <DataPropertyAssertion id="84" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#roleName" value="parameters.roleName" />
-        <ObjectPropertyAssertion id="85" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksIn" object="target.department" />
-        <ObjectPropertyAssertion id="86" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#jobPerformedBy" object="person" conditional="(parameters.assignPerson = true)" />
+      <AddIndividual id="85" individualName="parameters.employeeURI" patternRole="employeeAsWorker" conditional="(parameters.isManager = false)">
+        <DataPropertyAssertion id="86" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#roleName" value="parameters.roleName" />
+        <ObjectPropertyAssertion id="87" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksIn" object="target.department" />
+        <ObjectPropertyAssertion id="88" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#jobPerformedBy" object="person" conditional="(parameters.assignPerson = true)" />
       </AddIndividual>
-      <AddIndividual id="87" individualName="personURI" patternRole="person" conditional="(assignPerson = true)">
-        <DataPropertyAssertion id="88" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#personFirstName" value="parameters.employeeFirstName" />
-        <DataPropertyAssertion id="89" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#personName" value="parameters.employeeLastName" />
-        <ObjectPropertyAssertion id="90" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksAs" object="employeeAsManager" conditional="(parameters.isManager = true)" />
-        <ObjectPropertyAssertion id="91" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksAs" object="employeeAsWorker" conditional="(parameters.isManager = false)" />
+      <AddIndividual id="89" individualName="personURI" patternRole="person" conditional="(assignPerson = true)">
+        <DataPropertyAssertion id="90" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#personFirstName" value="parameters.employeeFirstName" />
+        <DataPropertyAssertion id="91" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#personName" value="parameters.employeeLastName" />
+        <ObjectPropertyAssertion id="92" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksAs" object="employeeAsManager" conditional="(parameters.isManager = true)" />
+        <ObjectPropertyAssertion id="93" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksAs" object="employeeAsWorker" conditional="(parameters.isManager = false)" />
       </AddIndividual>
-      <AddShape id="92" container="target.shape" patternRole="managerAsShape" conditional="(parameters.isManager = true)" />
-      <AddShape id="93" container="target.shape" patternRole="workerAsShape" conditional="(parameters.isManager = false)" />
+      <AddShape id="94" container="target.shape" patternRole="managerAsShape" conditional="(parameters.isManager = true)" />
+      <AddShape id="95" container="target.shape" patternRole="workerAsShape" conditional="(parameters.isManager = false)" />
     </DropScheme>
-    <ContainedIndividualPatternRole id="94" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTManager" patternRole="employeeAsManager" />
-    <ContainedIndividualPatternRole id="95" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTWorker" patternRole="employeeAsWorker" />
-    <ContainedIndividualPatternRole id="96" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTPerson" patternRole="person" />
-    <ContainedShapePatternRole id="97" patternRole="managerAsShape" label="employeeAsManager.roleName" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="98" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="227.0" y="42.03462386947115" width="173.0" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="employeeAsManager.roleName" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="36.0" textAlignment="CENTER">
-        <ForegroundStyle id="99" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="100" imageFile="WorkerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="101" top="5" bottom="5" left="5" right="5" />
-        <ShadowStyle id="102" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <RectangleShape id="103" isRounded="false" arcSize="30.0" />
-        <TextStyle id="104" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedIndividualPatternRole id="96" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTManager" patternRole="employeeAsManager" />
+    <ContainedIndividualPatternRole id="97" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTWorker" patternRole="employeeAsWorker" />
+    <ContainedIndividualPatternRole id="98" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTPerson" patternRole="person" />
+    <ContainedShapePatternRole id="99" label="employeeAsManager.roleName" exampleLabel="label" readOnlyLabel="false" patternRole="managerAsShape">
+      <ShapeGraphicalRepresentation id="100" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="227.0" y="42.03462386947115" width="173.0" height="38.96537613052885" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="36.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="101" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="102" imageFile="WorkerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="103" top="5" bottom="5" left="5" right="5" />
+        <RectangleShape id="104" isRounded="false" arcSize="30.0" />
+        <ShadowStyle id="105" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="106" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
+      <GRSpec id="107" featureName="label" value="employeeAsManager.roleName" readOnly="false" />
+      <GRSpec id="108" featureName="x" value="12" readOnly="true" />
+      <GRSpec id="109" featureName="y" value="1" readOnly="true" />
+      <GRSpec id="110" featureName="width" value="3.141592654" readOnly="true" />
     </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="105" patternRole="workerAsShape" label="employeeAsWorker.roleName" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="106" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="136.0" y="41.03462386947115" width="165.0" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="employeeAsWorker.roleName" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="36.0" textAlignment="CENTER">
-        <ForegroundStyle id="107" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="108" imageFile="WorkerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="109" top="5" bottom="5" left="5" right="5" />
-        <ShadowStyle id="110" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <RectangleShape id="111" isRounded="false" arcSize="30.0" />
-        <TextStyle id="112" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedShapePatternRole id="111" label="employeeAsWorker.roleName" exampleLabel="label" readOnlyLabel="false" patternRole="workerAsShape">
+      <ShapeGraphicalRepresentation id="112" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="136.0" y="41.03462386947115" width="165.0" height="38.96537613052885" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="36.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="113" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="114" imageFile="WorkerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="115" top="5" bottom="5" left="5" right="5" />
+        <RectangleShape idref="104" />
+        <ShadowStyle id="116" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="117" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
+      <GRSpec id="118" featureName="label" value="employeeAsWorker.roleName" readOnly="false" />
     </ContainedShapePatternRole>
-    <PrimaryConceptIndividualPatternRole idref="94" />
-    <PrimaryRepresentationShapePatternRole idref="97" />
-    <Inspector id="113" />
+    <PrimaryConceptIndividualPatternRole idref="96" />
+    <PrimaryRepresentationShapePatternRole idref="99" />
+    <Inspector id="119" />
   </EditionPattern>
-  <EditionPattern id="114" name="EmployeeHierarchicalRelationship">
+  <EditionPattern id="120" name="EmployeeHierarchicalRelationship">
     <description>Allows to define hierarchical relationship between two employees</description>
-    <LinkScheme id="115" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#Employee" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#Employee" name="LinkTwoEmployeesByHierarchicalRelationship" skipConfirmationPanel="false">
-      <CheckBoxParameter id="116" name="makeInverseRelationship" label="make_inverse_relationship" defaultValue="makeInverseRelationship" usePaletteLabelAsDefaultValue="false">
+    <LinkScheme id="121" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#Employee" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#Employee" name="LinkTwoEmployeesByHierarchicalRelationship" label="LinkTwoEmployeesByHierarchicalRelationship" skipConfirmationPanel="false">
+      <CheckBoxParameter id="122" name="makeInverseRelationship" label="make_inverse_relationship" defaultValue="makeInverseRelationship" usePaletteLabelAsDefaultValue="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
       </CheckBoxParameter>
-      <AddObjectPropertyStatement id="117" object="toTarget.employeeAsWorker" patternRole="isResponsibleOf" subject="fromTarget.employeeAsManager" />
-      <AddObjectPropertyStatement id="118" object="fromTarget.employeeAsManager" patternRole="isUnderResponsabilityOf" conditional="(parameters.makeInverseRelationship = true)" subject="toTarget.employeeAsWorker" />
-      <AddConnector id="119" fromShape="fromTarget.managerAsShape" toShape="toTarget.workerAsShape" patternRole="connector" />
+      <AddObjectPropertyStatement id="123" object="toTarget.employeeAsWorker" patternRole="isResponsibleOf" subject="fromTarget.employeeAsManager" />
+      <AddObjectPropertyStatement id="124" object="fromTarget.employeeAsManager" patternRole="isUnderResponsabilityOf" conditional="(parameters.makeInverseRelationship = true)" subject="toTarget.employeeAsWorker" />
+      <AddConnector id="125" fromShape="fromTarget.managerAsShape" toShape="toTarget.workerAsShape" patternRole="connector" />
     </LinkScheme>
-    <ContainedObjectPropertyStatementPatternRole id="120" objectProperty="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isResponsibleOf" patternRole="isResponsibleOf" />
-    <ContainedObjectPropertyStatementPatternRole id="121" objectProperty="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isUnderResponsabilityOf" patternRole="isUnderResponsabilityOf" />
-    <ContainedConnectorPatternRole id="122" patternRole="connector" label="&quot;is responsible of&quot;" readOnlyLabel="true">
-      <ConnectorGraphicalRepresentation id="123" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-2.0" absoluteTextY="-14.0" textAlignment="CENTER">
-        <ForegroundStyle id="124" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <StartShapeGraphicalRepresentation id="125" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="89.0" y="43.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-          <ForegroundStyle id="126" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="127" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="128" top="5" bottom="5" left="5" right="5" />
-          <ShadowStyle id="129" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <CircleShape id="130" />
-          <TextStyle id="131" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </StartShapeGraphicalRepresentation>
-        <EndShapeGraphicalRepresentation id="132" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="359.0" y="43.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-          <ForegroundStyle id="133" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="134" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="135" top="5" bottom="5" left="5" right="5" />
-          <ShadowStyle id="136" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <CircleShape id="137" />
-          <TextStyle id="138" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </EndShapeGraphicalRepresentation>
-        <LineConnector id="139" lineConnectorType="MINIMAL_LENGTH" />
-        <TextStyle id="140" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedObjectPropertyStatementPatternRole id="126" objectProperty="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isResponsibleOf" patternRole="isResponsibleOf" />
+    <ContainedObjectPropertyStatementPatternRole id="127" objectProperty="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isUnderResponsabilityOf" patternRole="isUnderResponsabilityOf" />
+    <ContainedConnectorPatternRole id="128" label="&quot;is responsible of&quot;" exampleLabel="label" readOnlyLabel="true" patternRole="connector">
+      <ConnectorGraphicalRepresentation id="129" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="root" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-2.0" absoluteTextY="-14.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="130" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <LineConnector id="131" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="132" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation idref="125" />
-      <ArtifactToShapeGraphicalRepresentation idref="132" />
+      <ArtifactFromShapeGraphicalRepresentation id="133" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="89.0" y="43.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="134" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="135" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="136" top="5" bottom="5" left="5" right="5" />
+        <CircleShape id="137" />
+        <ShadowStyle id="138" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="139" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactFromShapeGraphicalRepresentation>
+      <ArtifactToShapeGraphicalRepresentation id="140" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="359.0" y="43.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="141" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="142" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="143" top="5" bottom="5" left="5" right="5" />
+        <CircleShape idref="137" />
+        <ShadowStyle id="144" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="145" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactToShapeGraphicalRepresentation>
+      <GRSpec id="146" featureName="label" value="&quot;is responsible of&quot;" readOnly="true" />
     </ContainedConnectorPatternRole>
-    <PrimaryConceptObjectPropertyStatementPatternRole idref="120" />
-    <PrimaryRepresentationConnectorPatternRole idref="122" />
-    <Inspector id="141" />
+    <PrimaryConceptObjectPropertyStatementPatternRole idref="126" />
+    <PrimaryRepresentationConnectorPatternRole idref="128" />
+    <Inspector id="147" />
   </EditionPattern>
-  <LocalizedDictionary id="142">
-    <Localized id="143" key="company_name" lang="en">Company name</Localized>
-    <Localized id="144" key="department_name" lang="en">Department name</Localized>
-    <Localized id="145" key="sub_department_name" lang="en">Sub-department name</Localized>
-    <Localized id="146" key="LinkTwoEmployeesByHierarchicalRelationship" lang="en">Is responsible of</Localized>
-    <Localized id="147" key="uri" lang="English">URI</Localized>
-    <Localized id="148" key="assign_employee" lang="English">Assign employee</Localized>
-    <Localized id="149" key="employee_last_name" lang="English">Employee last name</Localized>
-    <Localized id="150" key="employee_first_name" lang="English">Employee first name</Localized>
-    <Localized id="151" key="employee_role_name" lang="English">Employee role name</Localized>
-    <Localized id="152" key="employee_uri" lang="English">Employee URI</Localized>
-    <Localized id="153" key="first_name" lang="English">First name</Localized>
-    <Localized id="154" key="is_head_of_organization" lang="English">Is head of organization</Localized>
-    <Localized id="155" key="is_manager" lang="English">Is manager</Localized>
-    <Localized id="156" key="last_name" lang="English">Last name</Localized>
-    <Localized id="157" key="make_inverse_relationship" lang="English">Make inverse relationship</Localized>
-    <Localized id="158" key="manager_role_name" lang="English">Manager role name</Localized>
-    <Localized id="159" key="person_uri" lang="English">Person URI</Localized>
-    <Localized id="160" key="role_name" lang="English">Role name</Localized>
-    <Localized id="161" key="assign_employee" lang="French">Assigner un employé</Localized>
-    <Localized id="162" key="company_name" lang="French">Nom de la société</Localized>
-    <Localized id="163" key="DefineInNewShema" lang="English">Define in new shema</Localized>
-    <Localized id="164" key="DropBOTCompanyAtTopLevel" lang="English">Drop company at top level</Localized>
-    <Localized id="165" key="DropBOTDepartmentInBOTCompany" lang="English">Drop department in company</Localized>
-    <Localized id="166" key="DropBOTSubDepartmentInBOTDepartment" lang="English">Drop sub-department in department</Localized>
-    <Localized id="167" key="DropEmployeeInOrganization" lang="English">Drop employee in organization</Localized>
-    <Localized id="168" key="EmployeeHierarchicalRelationship" lang="English">Employee hierarchical relationship</Localized>
-    <Localized id="169" key="DefineInNewShema" lang="French">Définir dans un nouveau schéma</Localized>
-    <Localized id="170" key="BOTCompany" lang="English">Company</Localized>
-    <Localized id="171" key="BOTDepartment" lang="English">Department</Localized>
-    <Localized id="172" key="BOTSubDepartment" lang="English">Sub-department</Localized>
-    <Localized id="173" key="BOTCompany" lang="French">Société</Localized>
-    <Localized id="174" key="BOTDepartment" lang="French">Département</Localized>
-    <Localized id="175" key="BOTSubDepartment" lang="French">Sous-département</Localized>
-    <Localized id="176" key="department_name" lang="French">Nom du département</Localized>
-    <Localized id="177" key="DropBOTCompanyAtTopLevel" lang="French">Créer une société</Localized>
-    <Localized id="178" key="DropBOTDepartmentInBOTCompany" lang="French">Créer un département de la société</Localized>
-    <Localized id="179" key="DropBOTSubDepartmentInBOTDepartment" lang="French">Créer un sous-département pour ce département</Localized>
-    <Localized id="180" key="DropEmployeeInOrganization" lang="French">Créer un employé dans cette unité organisationnelle</Localized>
-    <Localized id="181" key="employee_first_name" lang="French">Prénom de l'employé</Localized>
-    <Localized id="182" key="employee_last_name" lang="French">Nom de l'employé</Localized>
-    <Localized id="183" key="employee_role_name" lang="French">Fonction de l'employé</Localized>
-    <Localized id="184" key="employee_uri" lang="French">URI de l'employé</Localized>
-    <Localized id="185" key="first_name" lang="French">Prénom</Localized>
-    <Localized id="186" key="EmployeeHierarchicalRelationship" lang="French">Relation hiérarchique entre employés</Localized>
-    <Localized id="187" key="is_head_of_organization" lang="French">A la tête de l'unité organisationnelle</Localized>
-    <Localized id="188" key="is_manager" lang="French">Est responsable</Localized>
-    <Localized id="189" key="last_name" lang="French">Nom</Localized>
-    <Localized id="190" key="LinkTwoEmployeesByHierarchicalRelationship" lang="French">Est responsable de</Localized>
-    <Localized id="191" key="make_inverse_relationship" lang="French">Créer la relation inverse</Localized>
-    <Localized id="192" key="manager_role_name" lang="French">Fonction du responsable</Localized>
-    <Localized id="193" key="person_uri" lang="French">URI de la personne</Localized>
-    <Localized id="194" key="role_name" lang="French">Fonction</Localized>
-    <Localized id="195" key="ShowDetails" lang="English">Show details</Localized>
-    <Localized id="196" key="ShowDetails" lang="French">Voir les détails</Localized>
-    <Localized id="197" key="sub_department_name" lang="French">Nom du sous-département</Localized>
+  <LocalizedDictionary id="148">
+    <Localized id="149" key="company_name" lang="en">Company name</Localized>
+    <Localized id="150" key="department_name" lang="en">Department name</Localized>
+    <Localized id="151" key="sub_department_name" lang="en">Sub-department name</Localized>
+    <Localized id="152" key="LinkTwoEmployeesByHierarchicalRelationship" lang="en">Is responsible of</Localized>
+    <Localized id="153" key="uri" lang="English">URI</Localized>
+    <Localized id="154" key="assign_employee" lang="English">Assign employee</Localized>
+    <Localized id="155" key="employee_last_name" lang="English">Employee last name</Localized>
+    <Localized id="156" key="employee_first_name" lang="English">Employee first name</Localized>
+    <Localized id="157" key="employee_role_name" lang="English">Employee role name</Localized>
+    <Localized id="158" key="employee_uri" lang="English">Employee URI</Localized>
+    <Localized id="159" key="first_name" lang="English">First name</Localized>
+    <Localized id="160" key="is_head_of_organization" lang="English">Is head of organization</Localized>
+    <Localized id="161" key="is_manager" lang="English">Is manager</Localized>
+    <Localized id="162" key="last_name" lang="English">Last name</Localized>
+    <Localized id="163" key="make_inverse_relationship" lang="English">Make inverse relationship</Localized>
+    <Localized id="164" key="manager_role_name" lang="English">Manager role name</Localized>
+    <Localized id="165" key="person_uri" lang="English">Person URI</Localized>
+    <Localized id="166" key="role_name" lang="English">Role name</Localized>
+    <Localized id="167" key="assign_employee" lang="French">Assigner un employé</Localized>
+    <Localized id="168" key="company_name" lang="French">Nom de la société</Localized>
+    <Localized id="169" key="DefineInNewShema" lang="English">Define in new shema</Localized>
+    <Localized id="170" key="DropBOTCompanyAtTopLevel" lang="English">Drop company at top level</Localized>
+    <Localized id="171" key="DropBOTDepartmentInBOTCompany" lang="English">Drop department in company</Localized>
+    <Localized id="172" key="DropBOTSubDepartmentInBOTDepartment" lang="English">Drop sub-department in department</Localized>
+    <Localized id="173" key="DropEmployeeInOrganization" lang="English">Drop employee in organization</Localized>
+    <Localized id="174" key="EmployeeHierarchicalRelationship" lang="English">Employee hierarchical relationship</Localized>
+    <Localized id="175" key="DefineInNewShema" lang="French">Définir dans un nouveau schéma</Localized>
+    <Localized id="176" key="BOTCompany" lang="English">Company</Localized>
+    <Localized id="177" key="BOTDepartment" lang="English">Department</Localized>
+    <Localized id="178" key="BOTSubDepartment" lang="English">Sub-department</Localized>
+    <Localized id="179" key="BOTCompany" lang="French">Société</Localized>
+    <Localized id="180" key="BOTDepartment" lang="French">Département</Localized>
+    <Localized id="181" key="BOTSubDepartment" lang="French">Sous-département</Localized>
+    <Localized id="182" key="department_name" lang="French">Nom du département</Localized>
+    <Localized id="183" key="DropBOTCompanyAtTopLevel" lang="French">Créer une société</Localized>
+    <Localized id="184" key="DropBOTDepartmentInBOTCompany" lang="French">Créer un département de la société</Localized>
+    <Localized id="185" key="DropBOTSubDepartmentInBOTDepartment" lang="French">Créer un sous-département pour ce département</Localized>
+    <Localized id="186" key="DropEmployeeInOrganization" lang="French">Créer un employé dans cette unité organisationnelle</Localized>
+    <Localized id="187" key="employee_first_name" lang="French">Prénom de l'employé</Localized>
+    <Localized id="188" key="employee_last_name" lang="French">Nom de l'employé</Localized>
+    <Localized id="189" key="employee_role_name" lang="French">Fonction de l'employé</Localized>
+    <Localized id="190" key="employee_uri" lang="French">URI de l'employé</Localized>
+    <Localized id="191" key="first_name" lang="French">Prénom</Localized>
+    <Localized id="192" key="EmployeeHierarchicalRelationship" lang="French">Relation hiérarchique entre employés</Localized>
+    <Localized id="193" key="is_head_of_organization" lang="French">A la tête de l'unité organisationnelle</Localized>
+    <Localized id="194" key="is_manager" lang="French">Est responsable</Localized>
+    <Localized id="195" key="last_name" lang="French">Nom</Localized>
+    <Localized id="196" key="LinkTwoEmployeesByHierarchicalRelationship" lang="French">Est responsable de</Localized>
+    <Localized id="197" key="make_inverse_relationship" lang="French">Créer la relation inverse</Localized>
+    <Localized id="198" key="manager_role_name" lang="French">Fonction du responsable</Localized>
+    <Localized id="199" key="person_uri" lang="French">URI de la personne</Localized>
+    <Localized id="200" key="role_name" lang="French">Fonction</Localized>
+    <Localized id="201" key="ShowDetails" lang="English">Show details</Localized>
+    <Localized id="202" key="ShowDetails" lang="French">Voir les détails</Localized>
+    <Localized id="203" key="sub_department_name" lang="French">Nom du sous-département</Localized>
   </LocalizedDictionary>
 </ViewPoint>
 

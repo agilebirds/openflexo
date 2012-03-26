@@ -36,67 +36,66 @@
       <AddShape id="17" container="topLevel" patternRole="shape" />
     </DropScheme>
     <ContainedIndividualPatternRole id="18" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="organizationUnit" />
-    <ContainedShapePatternRole id="19" patternRole="shape" label="organizationUnit.organizationUnitName" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="20" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="123.0" y="26.0" width="230.0" height="62.48711943793913" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="organizationUnit.organizationUnitName" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <ContainedShapePatternRole id="19" label="organizationUnit.organizationUnitName" exampleLabel="label" readOnlyLabel="false" patternRole="shape">
+      <ShapeGraphicalRepresentation id="20" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="123.0" y="26.0" width="230.0" height="62.48711943793913" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="21" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ImageBackgroundStyle id="22" imageFile="OrganizationUnit.gif" scaleX="1.7164179104477613" scaleY="0.7528568606980618" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
         <Border id="23" top="5" bottom="5" left="5" right="5" />
-        <ShadowStyle id="24" drawShadow="true" shadowDarkness="150" shadowDepth="1" shadowBlur="2" />
-        <RectangleShape id="25" isRounded="true" arcSize="6.0" />
+        <RectangleShape id="24" isRounded="true" arcSize="6.0" />
+        <ShadowStyle id="25" drawShadow="true" shadowDarkness="150" shadowDepth="1" shadowBlur="2" />
         <TextStyle id="26" font="Lucida Sans,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
+      <GRSpec id="27" featureName="label" value="organizationUnit.organizationUnitName" readOnly="false" />
     </ContainedShapePatternRole>
-    <ContainedFlexoModelObjectPatternRole id="27" flexoModelObjectType="Role" patternRole="role" />
+    <ContainedFlexoModelObjectPatternRole id="28" flexoModelObjectType="Role" patternRole="role" />
     <PrimaryConceptIndividualPatternRole idref="18" />
     <PrimaryRepresentationShapePatternRole idref="19" />
-    <Inspector id="28" />
+    <Inspector id="29" />
   </EditionPattern>
-  <EditionPattern id="29" name="LinkOrganizationUnitToParentOrganizationUnit">
+  <EditionPattern id="30" name="LinkOrganizationUnitToParentOrganizationUnit">
     <description>Allows to define a hierarchical link between an organization unit and a parent organization unit</description>
-    <LinkScheme id="30" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" name="LinkOrganizationUnitToParentOrganizationUnit" label="declare_as_parent_organizational_unit" skipConfirmationPanel="true">
+    <LinkScheme id="31" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" name="LinkOrganizationUnitToParentOrganizationUnit" label="declare_as_parent_organizational_unit" skipConfirmationPanel="true">
       <description>Allows to define a hierarchical link between an organization unit and a parent organization unit</description>
-      <DeclarePatternRole id="31" object="fromTarget.organizationUnit" patternRole="childOrganizationUnit" />
-      <DeclarePatternRole id="32" object="toTarget.organizationUnit" patternRole="parentOrganizationUnit" />
-      <AddObjectPropertyStatement id="33" object="toTarget.organizationUnit" patternRole="dependsOfOrganizationUnit" subject="fromTarget.organizationUnit" />
-      <AddObjectPropertyStatement id="34" object="fromTarget.organizationUnit" patternRole="hasSubOrganizationUnit" subject="toTarget.organizationUnit" />
-      <AddConnector id="35" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" />
+      <DeclarePatternRole id="32" object="fromTarget.organizationUnit" patternRole="childOrganizationUnit" />
+      <DeclarePatternRole id="33" object="toTarget.organizationUnit" patternRole="parentOrganizationUnit" />
+      <AddObjectPropertyStatement id="34" object="toTarget.organizationUnit" patternRole="dependsOfOrganizationUnit" subject="fromTarget.organizationUnit" />
+      <AddObjectPropertyStatement id="35" object="fromTarget.organizationUnit" patternRole="hasSubOrganizationUnit" subject="toTarget.organizationUnit" />
+      <AddConnector id="36" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" />
     </LinkScheme>
-    <ContainedIndividualPatternRole id="36" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="childOrganizationUnit" />
-    <ContainedIndividualPatternRole id="37" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="parentOrganizationUnit" />
-    <ContainedObjectPropertyStatementPatternRole id="38" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasParentOrgUnit" patternRole="dependsOfOrganizationUnit" />
-    <ContainedObjectPropertyStatementPatternRole id="39" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasSubOrgUnit" patternRole="hasSubOrganizationUnit" />
-    <ContainedConnectorPatternRole id="40" patternRole="connector" readOnlyLabel="false">
-      <ConnectorGraphicalRepresentation id="41" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="31.0" absoluteTextY="12.0" textAlignment="CENTER">
-        <ForegroundStyle id="42" noStroke="false" color="51,51,51" lineWidth="1.5999999999999999" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <StartShapeGraphicalRepresentation id="43" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="168.0" y="16.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-          <ForegroundStyle id="44" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="45" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="46" top="5" bottom="5" left="5" right="5" />
-          <ShadowStyle id="47" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <CircleShape id="48" />
-          <TextStyle id="49" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </StartShapeGraphicalRepresentation>
-        <EndShapeGraphicalRepresentation id="50" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="238.0" y="78.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-          <ForegroundStyle id="51" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="52" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="53" top="5" bottom="5" left="5" right="5" />
-          <ShadowStyle id="54" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <CircleShape id="55" />
-          <TextStyle id="56" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </EndShapeGraphicalRepresentation>
-        <RectPolylinConnector id="57" rectPolylinConstraints="VERTICAL_LAYOUT" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="NORTH" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
-        <TextStyle id="58" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedIndividualPatternRole id="37" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="childOrganizationUnit" />
+    <ContainedIndividualPatternRole id="38" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="parentOrganizationUnit" />
+    <ContainedObjectPropertyStatementPatternRole id="39" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasParentOrgUnit" patternRole="dependsOfOrganizationUnit" />
+    <ContainedObjectPropertyStatementPatternRole id="40" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasSubOrgUnit" patternRole="hasSubOrganizationUnit" />
+    <ContainedConnectorPatternRole id="41" exampleLabel="label" readOnlyLabel="false" patternRole="connector">
+      <ConnectorGraphicalRepresentation id="42" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="root" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="31.0" absoluteTextY="12.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="43" noStroke="false" color="51,51,51" lineWidth="1.5999999999999999" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <RectPolylinConnector id="44" rectPolylinConstraints="VERTICAL_LAYOUT" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="NORTH" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
+        <TextStyle id="45" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation idref="43" />
-      <ArtifactToShapeGraphicalRepresentation idref="50" />
+      <ArtifactFromShapeGraphicalRepresentation id="46" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="168.0" y="16.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="47" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="48" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="49" top="5" bottom="5" left="5" right="5" />
+        <CircleShape id="50" />
+        <ShadowStyle id="51" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="52" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactFromShapeGraphicalRepresentation>
+      <ArtifactToShapeGraphicalRepresentation id="53" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="238.0" y="78.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="54" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="55" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="56" top="5" bottom="5" left="5" right="5" />
+        <CircleShape idref="50" />
+        <ShadowStyle id="57" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="58" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactToShapeGraphicalRepresentation>
     </ContainedConnectorPatternRole>
-    <PrimaryConceptIndividualPatternRole idref="36" />
-    <PrimaryRepresentationConnectorPatternRole idref="40" />
+    <PrimaryConceptIndividualPatternRole idref="37" />
+    <PrimaryRepresentationConnectorPatternRole idref="41" />
     <Inspector id="59" />
   </EditionPattern>
   <EditionPattern id="60" name="OrganizationUnitPosition">
     <description>Allows to add a position for an organization unit</description>
-    <DropScheme id="61" target="top" name="DropPosition" skipConfirmationPanel="true">
+    <DropScheme id="61" target="top" name="DropPosition" label="DropPosition" skipConfirmationPanel="true">
       <TextFieldParameter id="62" name="positionName" label="position" defaultValue="&quot;Position&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for position</description>
       </TextFieldParameter>
@@ -113,65 +112,65 @@
       <AddShape id="68" container="topLevel" patternRole="shape" />
     </DropScheme>
     <ContainedIndividualPatternRole id="69" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Position" patternRole="position" />
-    <ContainedShapePatternRole id="70" patternRole="shape" label="position.positionName" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="71" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="168.0" y="23.480292989187305" width="139.59016393442622" height="70.5197070108127" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="position.positionName" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <ContainedShapePatternRole id="70" label="position.positionName" exampleLabel="label" readOnlyLabel="false" patternRole="shape">
+      <ShapeGraphicalRepresentation id="71" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="168.0" y="23.480292989187305" width="139.59016393442622" height="70.5197070108127" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="72" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ImageBackgroundStyle id="73" imageFile="People.gif" scaleX="1.049550104770122" scaleY="0.8496350242266589" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
         <Border id="74" top="5" bottom="5" left="5" right="5" />
-        <ShadowStyle id="75" drawShadow="true" shadowDarkness="150" shadowDepth="1" shadowBlur="2" />
-        <RectangleShape id="76" isRounded="true" arcSize="6.0" />
+        <RectangleShape id="75" isRounded="true" arcSize="6.0" />
+        <ShadowStyle id="76" drawShadow="true" shadowDarkness="150" shadowDepth="1" shadowBlur="2" />
         <TextStyle id="77" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
+      <GRSpec id="78" featureName="label" value="position.positionName" readOnly="false" />
     </ContainedShapePatternRole>
     <PrimaryConceptIndividualPatternRole idref="69" />
     <PrimaryRepresentationShapePatternRole idref="70" />
-    <Inspector id="78" inspectorTitle="Position">
-      <TextField id="79" label="uri" name="uri" readOnly="false" data="position.uriName" />
-      <TextField id="80" label="position" name="position" readOnly="false" data="position.positionName" />
-      <TextField id="81" label="description" name="description" readOnly="false" data="position.positionDescription" />
+    <Inspector id="79" inspectorTitle="Position">
+      <TextField id="80" label="uri" name="uri" readOnly="false" data="position.uriName" />
+      <TextField id="81" label="position" name="position" readOnly="false" data="position.positionName" />
+      <TextField id="82" label="description" name="description" readOnly="false" data="position.positionDescription" />
     </Inspector>
   </EditionPattern>
-  <EditionPattern id="82" name="LinkPositionToOrganizationUnit">
+  <EditionPattern id="83" name="LinkPositionToOrganizationUnit">
     <description>Allows to define a position inside an organization unit</description>
-    <LinkScheme id="83" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnitPosition" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" name="LinkPositionToOrganizationUnit" label="declare_inside_organizational_unit" skipConfirmationPanel="true">
+    <LinkScheme id="84" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnitPosition" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" name="LinkPositionToOrganizationUnit" label="declare_inside_organizational_unit" skipConfirmationPanel="true">
       <description>Allows to define a hierarchical link between an organization unit and a parent organization unit</description>
-      <DeclarePatternRole id="84" object="fromTarget.position" patternRole="position" />
-      <DeclarePatternRole id="85" object="toTarget.organizationUnit" patternRole="organizationUnit" />
-      <AddObjectPropertyStatement id="86" object="toTarget.organizationUnit" patternRole="isInvolvedInOrganizationUnit" subject="fromTarget.position" />
-      <AddObjectPropertyStatement id="87" object="fromTarget.position" patternRole="containsPosition" subject="toTarget.organizationUnit" />
-      <AddConnector id="88" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" />
+      <DeclarePatternRole id="85" object="fromTarget.position" patternRole="position" />
+      <DeclarePatternRole id="86" object="toTarget.organizationUnit" patternRole="organizationUnit" />
+      <AddObjectPropertyStatement id="87" object="toTarget.organizationUnit" patternRole="isInvolvedInOrganizationUnit" subject="fromTarget.position" />
+      <AddObjectPropertyStatement id="88" object="fromTarget.position" patternRole="containsPosition" subject="toTarget.organizationUnit" />
+      <AddConnector id="89" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" />
     </LinkScheme>
-    <ContainedIndividualPatternRole id="89" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="organizationUnit" />
-    <ContainedIndividualPatternRole id="90" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Position" patternRole="position" />
-    <ContainedObjectPropertyStatementPatternRole id="91" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#isInvolvedInOrganizationUnit" patternRole="isInvolvedInOrganizationUnit" />
-    <ContainedObjectPropertyStatementPatternRole id="92" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#containsPosition" patternRole="containsPosition" />
-    <ContainedConnectorPatternRole id="93" patternRole="connector" label="&quot;works in&quot;" readOnlyLabel="true">
-      <ConnectorGraphicalRepresentation id="94" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="&quot;works in&quot;" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="5.0" absoluteTextY="11.0" textAlignment="CENTER">
-        <ForegroundStyle id="95" noStroke="false" color="51,51,51" lineWidth="2.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <StartShapeGraphicalRepresentation id="96" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="226.0" y="72.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-          <ForegroundStyle id="97" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="98" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="99" top="5" bottom="5" left="5" right="5" />
-          <ShadowStyle id="100" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <CircleShape id="101" />
-          <TextStyle id="102" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </StartShapeGraphicalRepresentation>
-        <EndShapeGraphicalRepresentation id="103" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="154.0" y="18.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-          <ForegroundStyle id="104" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="105" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="106" top="5" bottom="5" left="5" right="5" />
-          <ShadowStyle id="107" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <CircleShape id="108" />
-          <TextStyle id="109" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </EndShapeGraphicalRepresentation>
-        <RectPolylinConnector id="110" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="WEST" endOrientation="SOUTH" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
-        <TextStyle id="111" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedIndividualPatternRole id="90" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="organizationUnit" />
+    <ContainedIndividualPatternRole id="91" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Position" patternRole="position" />
+    <ContainedObjectPropertyStatementPatternRole id="92" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#isInvolvedInOrganizationUnit" patternRole="isInvolvedInOrganizationUnit" />
+    <ContainedObjectPropertyStatementPatternRole id="93" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#containsPosition" patternRole="containsPosition" />
+    <ContainedConnectorPatternRole id="94" label="&quot;works in&quot;" exampleLabel="label" readOnlyLabel="true" patternRole="connector">
+      <ConnectorGraphicalRepresentation id="95" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="root" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="5.0" absoluteTextY="11.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="96" noStroke="false" color="51,51,51" lineWidth="2.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <RectPolylinConnector id="97" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="WEST" endOrientation="SOUTH" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
+        <TextStyle id="98" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation idref="96" />
-      <ArtifactToShapeGraphicalRepresentation idref="103" />
+      <ArtifactFromShapeGraphicalRepresentation id="99" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="226.0" y="72.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="100" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="101" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="102" top="5" bottom="5" left="5" right="5" />
+        <CircleShape idref="50" />
+        <ShadowStyle id="103" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="104" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactFromShapeGraphicalRepresentation>
+      <ArtifactToShapeGraphicalRepresentation id="105" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="154.0" y="18.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="root" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="106" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="107" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="108" top="5" bottom="5" left="5" right="5" />
+        <CircleShape idref="50" />
+        <ShadowStyle id="109" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="110" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactToShapeGraphicalRepresentation>
+      <GRSpec id="111" featureName="label" value="&quot;works in&quot;" readOnly="true" />
     </ContainedConnectorPatternRole>
-    <PrimaryConceptIndividualPatternRole idref="89" />
-    <PrimaryRepresentationConnectorPatternRole idref="93" />
+    <PrimaryConceptIndividualPatternRole idref="90" />
+    <PrimaryRepresentationConnectorPatternRole idref="94" />
     <Inspector id="112" inspectorTitle="Organization Unit">
       <TextField id="113" label="uri" name="uri" readOnly="false" data="organizationUnit.uriName" />
       <TextField id="114" label="organization unit" name="organization unit" readOnly="false" data="organizationUnit.organizationUnitName" />
