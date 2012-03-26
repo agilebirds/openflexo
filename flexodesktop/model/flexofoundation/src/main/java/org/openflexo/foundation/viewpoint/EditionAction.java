@@ -52,6 +52,7 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		AddShape,
 		AddShema,
 		DeclarePatternRole,
+		GraphicalAction,
 		GoToObject
 	}
 

@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.DuplicateURIException;
@@ -45,6 +45,7 @@ import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddClass;
@@ -59,6 +60,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.GoToAction;
+import org.openflexo.foundation.viewpoint.GraphicalAction;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -280,6 +282,15 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			}
 		}
 
+		// Now perform "normal actions"
+		for (EditionAction action : getEditionScheme().getActions()) {
+			if (action.evaluateCondition(this)) {
+				if (action instanceof GraphicalAction) {
+					performGraphicalAction((GraphicalAction) action);
+				}
+			}
+		}
+
 		// At this end, look after GoToAction
 		for (EditionAction action : getEditionScheme().getActions()) {
 			if (action.evaluateCondition(this)) {
@@ -319,15 +330,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	protected ViewShape finalizePerformAddShape(org.openflexo.foundation.viewpoint.AddShape action, ViewShape newShape) {
-		// Be sure that location/size constraints are ok
-		// ((ShapeGraphicalRepresentation) newShape.getGraphicalRepresentation()).updateConstraints();
-
-		// We need to renotify here because if label is bound to a semantic. In this case,
-		// while beeing created, shape didn't have sufficient data to retrieve a label
-		// which was null. Now, we are sure that the shape is bound, and label can be
-		// retrieved. That's why we notify this.
-		newShape.setChanged();
-		newShape.notifyObservers(new NameChanged(null, newShape.getName()));
+		// Be sure that the newly created shape is updated
+		newShape.update();
 		return newShape;
 	}
 
@@ -491,12 +495,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	protected ViewConnector finalizePerformAddConnector(org.openflexo.foundation.viewpoint.AddConnector action, ViewConnector newConnector) {
-		// We need to renotify here because if label is bound to a semantic. In this case,
-		// while beeing created, shape didn't have sufficient data to retrieve a label
-		// which was null. Now, we are sure that the shape is bound, and label can be
-		// retrieved. That's why we notify this.
-		newConnector.setChanged();
-		newConnector.notifyObservers(new NameChanged(null, newConnector.getName()));
+		// Be sure that the newly created shape is updated
+		newConnector.update();
 		return newConnector;
 	}
 
@@ -597,6 +597,16 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		FlexoModelObject target = action.getTargetObject(this);
 		logger.info("Focus and select object " + target);
 		getEditor().focusOn(target);
+	}
+
+	protected void performGraphicalAction(org.openflexo.foundation.viewpoint.GraphicalAction action) {
+		logger.info("Perform graphical action " + action);
+		ViewElement graphicalElement = (ViewElement) getEditionPatternInstance().getPatternActor(action.getPatternRole());
+		logger.fine("Element is " + graphicalElement);
+		logger.fine("Feature is " + action.getGraphicalFeature());
+		logger.fine("Value is " + action.getValue().getBindingValue(this));
+		action.getGraphicalFeature().applyToGraphicalRepresentation(
+				(GraphicalRepresentation<?>) graphicalElement.getGraphicalRepresentation(), action.getValue().getBindingValue(this));
 	}
 
 	@Override

@@ -26,16 +26,18 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
+import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.view.ConnectorInserted;
 import org.openflexo.foundation.view.ConnectorRemoved;
+import org.openflexo.foundation.view.ElementUpdated;
 import org.openflexo.foundation.view.ShapeInserted;
 import org.openflexo.foundation.view.ShapeRemoved;
 import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
@@ -65,8 +67,18 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 			aShape.addObserver(this);
 		}
 
+		if (aShape != null) {
+			aShape.update();
+		}
+
 		// setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
 
+	}
+
+	@Override
+	public void setValidated(boolean validated) {
+		super.setValidated(validated);
+		update();
 	}
 
 	@Override
@@ -98,10 +110,53 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof ConnectorRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			} else if (dataModification instanceof NameChanged) {
-				// logger.info("received NameChanged notification");
-				setText(getText());
-				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
+			} else if (dataModification instanceof ElementUpdated) {
+				update();
+			}
+		}
+	}
+
+	private boolean isUpdating = false;
+
+	/**
+	 * This method is called whenever a change has been detected in the object affecting this graphical representation. We iterate on all
+	 * GraphicalElementSpecification to update data.
+	 */
+	public void update() {
+		isUpdating = true;
+		if (getDrawable() != null && getDrawable().getPatternRole() != null) {
+			setIsLabelEditable(!getDrawable().getPatternRole().getReadOnlyLabel());
+			for (GraphicalElementSpecification grSpec : getDrawable().getPatternRole().getGrSpecifications()) {
+				if (grSpec.getValue().isValid()) {
+					grSpec.applyToGraphicalRepresentation(this, getDrawable());
+				}
+			}
+		}
+		isUpdating = false;
+
+		// setText(getDrawable().getLabelValue());
+	}
+
+	/**
+	 * This method is called whenever a change has been performed through GraphicalEdition framework. Notification is caught here. If the
+	 * model edition matches a non read-only feature
+	 * 
+	 */
+	@Override
+	protected void hasChanged(FGENotification notification) {
+		super.hasChanged(notification);
+		if (isUpdating) {
+			return;
+		}
+		if (isValidated()) {
+			if (getDrawable() != null && getDrawable().getPatternRole() != null) {
+				for (GraphicalElementSpecification grSpec : getDrawable().getPatternRole().getGrSpecifications()) {
+					if (grSpec.getFeature().getParameter() == notification.parameter && grSpec.getValue().isValid()
+							&& !grSpec.getReadOnly()) {
+						Object value = grSpec.applyToModel(this, getDrawable());
+						logger.info("Applying to model " + grSpec.getValue() + " new value=" + value);
+					}
+				}
 			}
 		}
 	}
@@ -111,7 +166,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		return false;
 	}*/
 
-	@Override
+	/*@Override
 	public String getText() {
 		if (getOEShape() != null) {
 			return getOEShape().getName();
@@ -124,7 +179,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		if (getOEShape() != null) {
 			getOEShape().setName(text);
 		}
-	}
+	}*/
 
 	private ConcatenedList<ControlArea> controlAreas;
 

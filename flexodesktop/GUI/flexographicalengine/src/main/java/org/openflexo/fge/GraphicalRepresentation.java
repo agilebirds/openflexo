@@ -1242,9 +1242,10 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
 			return;
 		}
-		propagateConstraintsAfterModification(parameter);
+		hasChanged(new FGENotification(parameter, oldValue, newValue));
+		/*propagateConstraintsAfterModification(parameter);
 		setChanged();
-		notifyObservers(new FGENotification(parameter, oldValue, newValue));
+		notifyObservers(new FGENotification(parameter, oldValue, newValue));*/
 	}
 
 	public void notifyChange(GRParameter parameter) {
@@ -1309,6 +1310,11 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		hasChanged(notification);
 	}
 
+	/**
+	 * This method is called whenever a notification is triggered from GR model
+	 * 
+	 * @param notification
+	 */
 	protected void hasChanged(FGENotification notification) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Change attribute " + notification.parameter + " for object " + this + " was: " + notification.oldValue

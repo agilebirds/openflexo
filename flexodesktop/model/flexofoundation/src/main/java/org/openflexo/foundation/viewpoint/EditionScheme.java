@@ -284,6 +284,12 @@ public abstract class EditionScheme extends ViewPointObject {
 		return newAction;
 	}
 
+	public GraphicalAction createGraphicalAction() {
+		GraphicalAction newAction = new GraphicalAction();
+		addToActions(newAction);
+		return newAction;
+	}
+
 	public AddShema createAddShemaAction() {
 		AddShema newAction = new AddShema();
 		addToActions(newAction);

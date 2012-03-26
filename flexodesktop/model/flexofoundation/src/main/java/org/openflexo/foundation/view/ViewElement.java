@@ -29,16 +29,12 @@ import java.util.Observer;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.naming.InvalidNameException;
-
 import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -91,7 +87,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		super.delete();
 	}
 
-	@Override
+	/*@Override
 	public String getName() {
 		if (isBoundInsideEditionPattern()) {
 			return getLabelValue();
@@ -115,7 +111,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 
 	// public abstract AddShemaElementAction getEditionAction();
 
@@ -130,21 +126,21 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		return (getPatternRole() != null);
 	}
 
-	protected String getLabelValue() {
+	/*public String getLabelValue() {
 		if (getPatternRole() != null) {
-			if (!dependingObjectsAreComputed) {
-				updateDependingObjects();
-			}
+			//if (!dependingObjectsAreComputed) {
+			//	updateDependingObjects();
+			//}
 			return (String) getPatternRole().getLabel().getBindingValue(getEditionPatternInstance());
 		}
 		return null;
 	}
 
-	protected void setLabelValue(String aValue) {
+	public void setLabelValue(String aValue) {
 		if (getPatternRole() != null && !getPatternRole().getReadOnlyLabel()) {
 			getPatternRole().getLabel().setBindingValue(aValue, getEditionPatternInstance());
 		}
-	}
+	}*/
 
 	public EditionPattern getEditionPattern() {
 		if (getEditionPatternInstance() != null) {
@@ -291,6 +287,14 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 			}
 		}
 
+		// debug
+		/*if (getPatternRole() != null && getPatternRole().getPatternRoleName().equals("conceptLabel")) {
+			System.out.println("Je suis le conceptLabel, je depends de: " + getPatternRole().getLabel());
+			for (TargetObject o : dependingObjects) {
+				System.out.println("> [" + o.propertyName + "] " + o.target);
+			}
+		}*/
+
 		dependingObjectsAreComputed = true;
 	}
 
@@ -312,7 +316,9 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	public synchronized List<TargetObject> getDependingObjects() {
 		List<TargetObject> returned = new ArrayList<TargetObject>();
-		appendToDependingObjects(getPatternRole().getLabel(), returned);
+		if (getPatternRole() != null) {
+			appendToDependingObjects(getPatternRole().getLabel(), returned);
+		}
 		return returned;
 	}
 
@@ -328,9 +334,21 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		update();
 	}
 
+	/**
+	 * This method is called whenever a change has been detected potentially affecting underlying graphical representation Depending objects
+	 * are recomputed, and notification of potential change is thrown, to be later caught by underlying GR (VEShapeGR or VEConnectorGR)
+	 */
 	public void update() {
+		// System.out.println("Update in ViewElement " + this + ", text=" + getLabelValue());
 		updateDependingObjects();
-		((GraphicalRepresentation) getGraphicalRepresentation()).notifyChange(GraphicalRepresentation.Parameters.text);
+		setChanged();
+		notifyObservers(new ElementUpdated(this));
+	}
+
+	@Override
+	public void setGraphicalRepresentation(Object graphicalRepresentation) {
+		super.setGraphicalRepresentation(graphicalRepresentation);
+		update();
 	}
 
 }

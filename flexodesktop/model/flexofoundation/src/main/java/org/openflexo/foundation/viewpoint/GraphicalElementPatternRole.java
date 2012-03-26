@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -7,6 +8,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
@@ -19,6 +21,19 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	private ViewPointDataBinding label;
 
 	private String exampleLabel = "label";
+
+	protected Vector<GraphicalElementSpecification<?, ?>> grSpecifications;
+
+	public GraphicalElementPatternRole() {
+		initDefaultSpecifications();
+	}
+
+	protected void initDefaultSpecifications() {
+		grSpecifications = new Vector<GraphicalElementSpecification<?, ?>>();
+		for (GraphicalFeature<?, ?> GF : AVAILABLE_FEATURES) {
+			grSpecifications.add(new GraphicalElementSpecification(this, GF, false, true));
+		}
+	}
 
 	public abstract Object getGraphicalRepresentation();
 
@@ -48,26 +63,24 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 		return LABEL;
 	}
 
+	// Convenient method to access spec for label feature
 	public ViewPointDataBinding getLabel() {
-		if (label == null) {
-			label = new ViewPointDataBinding(this, GraphicalElementBindingAttribute.label, getLabelBindingDefinition());
-		}
-		return label;
+		return getGraphicalElementSpecification(LABEL_FEATURE).getValue();
 	}
 
+	// Convenient method to access spec for label feature
 	public void setLabel(ViewPointDataBinding label) {
-		label.setOwner(this);
-		label.setBindingAttribute(GraphicalElementBindingAttribute.label);
-		label.setBindingDefinition(getLabelBindingDefinition());
-		this.label = label;
+		getGraphicalElementSpecification(LABEL_FEATURE).setValue(label);
 	}
 
+	// Convenient method to access read-only property for spec for label feature
 	public boolean getReadOnlyLabel() {
-		return readOnlyLabel;
+		return getGraphicalElementSpecification(LABEL_FEATURE).getReadOnly();
 	}
 
+	// Convenient method to access read-only property for spec for label feature
 	public void setReadOnlyLabel(boolean readOnlyLabel) {
-		this.readOnlyLabel = readOnlyLabel;
+		getGraphicalElementSpecification(LABEL_FEATURE).setReadOnly(readOnlyLabel);
 	}
 
 	@Override
@@ -128,5 +141,88 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	public void setExampleLabel(String exampleLabel) {
 		this.exampleLabel = exampleLabel;
 	}
+
+	public Vector<GraphicalElementSpecification<?, ?>> getGrSpecifications() {
+		return grSpecifications;
+	}
+
+	public GraphicalElementSpecification<?, ?> getGraphicalElementSpecification(String featureName) {
+		for (GraphicalElementSpecification<?, ?> spec : grSpecifications) {
+			if (spec.getFeatureName().equals(featureName)) {
+				return spec;
+			}
+		}
+		return null;
+	}
+
+	public GraphicalElementSpecification<?, ?> getGraphicalElementSpecification(GraphicalFeature<?, ?> feature) {
+		if (feature != null) {
+			return getGraphicalElementSpecification(feature.getName());
+		}
+		return null;
+	}
+
+	public Vector<GraphicalElementSpecification<?, ?>> _getDeclaredGRSpecifications() {
+		Vector<GraphicalElementSpecification<?, ?>> returned = new Vector<GraphicalElementSpecification<?, ?>>();
+		for (GraphicalElementSpecification<?, ?> spec : grSpecifications) {
+			if (spec.getValue().isSet()) {
+				returned.add(spec);
+			}
+		}
+		return returned;
+	}
+
+	public void _setDeclaredGRSpecifications(Vector<GraphicalElementSpecification<?, ?>> someSpecs) {
+		for (GraphicalElementSpecification<?, ?> s : someSpecs) {
+			_addToDeclaredGRSpecifications(s);
+		}
+	}
+
+	public void _addToDeclaredGRSpecifications(GraphicalElementSpecification<?, ?> aSpec) {
+		GraphicalElementSpecification<?, ?> existingSpec = getGraphicalElementSpecification(aSpec.getFeatureName());
+		if (existingSpec == null) {
+			logger.warning("Cannot find any GraphicalElementSpecification matching " + aSpec.getFeatureName() + ". Ignoring...");
+		} else {
+			existingSpec.setValue(aSpec.getValue());
+			existingSpec.setReadOnly(aSpec.getReadOnly());
+		}
+	}
+
+	public void _removeFromDeclaredGRSpecifications(GraphicalElementSpecification<?, ?> aSpec) {
+		GraphicalElementSpecification<?, ?> existingSpec = getGraphicalElementSpecification(aSpec.getFeatureName());
+		if (existingSpec == null) {
+			logger.warning("Cannot find any GraphicalElementSpecification matching " + aSpec.getFeatureName() + ". Ignoring...");
+		} else {
+			existingSpec.setValue(null);
+		}
+	}
+
+	public static GraphicalFeature<String, GraphicalRepresentation<?>> LABEL_FEATURE = new GraphicalFeature<String, GraphicalRepresentation<?>>(
+			"label", GraphicalRepresentation.Parameters.text, String.class) {
+		@Override
+		public String retrieveFromGraphicalRepresentation(GraphicalRepresentation<?> gr) {
+			return gr.getText();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(GraphicalRepresentation<?> gr, String value) {
+			gr.setText(value);
+		}
+	};
+
+	public static GraphicalFeature<Boolean, GraphicalRepresentation<?>> VISIBLE_FEATURE = new GraphicalFeature<Boolean, GraphicalRepresentation<?>>(
+			"visible", GraphicalRepresentation.Parameters.isVisible, Boolean.class) {
+		@Override
+		public Boolean retrieveFromGraphicalRepresentation(GraphicalRepresentation<?> gr) {
+			return gr.getIsVisible();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(GraphicalRepresentation<?> gr, Boolean value) {
+			gr.setIsVisible(value);
+		}
+	};
+
+	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { LABEL_FEATURE, VISIBLE_FEATURE };
 
 }

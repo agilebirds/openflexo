@@ -25,11 +25,13 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.view.ElementUpdated;
 import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ToolBox;
 
@@ -64,6 +66,12 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 	}
 
 	@Override
+	public void setValidated(boolean validated) {
+		super.setValidated(validated);
+		update();
+	}
+
+	@Override
 	public void delete() {
 		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
@@ -78,15 +86,62 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getOEConnector()) {
-			if (dataModification instanceof NameChanged) {
+			/*if (dataModification instanceof NameChanged) {
 				// logger.info("received NameChanged notification");
-				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
+				// notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 				// setText(getText());
+			} else*/if (dataModification instanceof ElementUpdated) {
+				update();
 			}
 		}
 	}
 
+	private boolean isUpdating = false;
+
+	/**
+	 * This method is called whenever a change has been detected in the object affecting this graphical representation. We iterate on all
+	 * GraphicalElementSpecification to update data.
+	 */
+	public void update() {
+		isUpdating = true;
+		if (getDrawable() != null && getDrawable().getPatternRole() != null) {
+			setIsLabelEditable(!getDrawable().getPatternRole().getReadOnlyLabel());
+			for (GraphicalElementSpecification grSpec : getDrawable().getPatternRole().getGrSpecifications()) {
+				if (grSpec.getValue().isValid()) {
+					grSpec.applyToGraphicalRepresentation(this, getDrawable());
+				}
+			}
+		}
+		isUpdating = false;
+
+		// setText(getDrawable().getLabelValue());
+	}
+
+	/**
+	 * This method is called whenever a change has been performed through GraphicalEdition framework. Notification is caught here. If the
+	 * model edition matches a non read-only feature
+	 * 
+	 */
 	@Override
+	protected void hasChanged(FGENotification notification) {
+		super.hasChanged(notification);
+		if (isUpdating) {
+			return;
+		}
+		if (isValidated()) {
+			if (getDrawable() != null && getDrawable().getPatternRole() != null) {
+				for (GraphicalElementSpecification grSpec : getDrawable().getPatternRole().getGrSpecifications()) {
+					if (grSpec.getFeature().getParameter() == notification.parameter && grSpec.getValue().isValid()
+							&& !grSpec.getReadOnly()) {
+						Object value = grSpec.applyToModel(this, getDrawable());
+						logger.info("Applying to model " + grSpec.getValue() + " new value=" + value);
+					}
+				}
+			}
+		}
+	}
+
+	/*@Override
 	public String getText() {
 		if (getOEConnector() != null) {
 			return getOEConnector().getName();
@@ -99,7 +154,7 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 		if (getOEConnector() != null) {
 			getOEConnector().setName(text);
 		}
-	}
+	}*/
 
 	/**
 	 * We dont want URI to be renamed all the time: we decide here to disable continuous text editing
