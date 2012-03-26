@@ -188,11 +188,10 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 						DGTemplateFileModuleView.this, _controller.getEditor());
 				FlexoActionButton refreshAction = new FlexoActionButton(RefreshTemplates.actionType, "reload",
 						DGTemplateFileModuleView.this, _controller.getEditor());
-				// actionButtons.add(editAction);
+				actionButtons.add(editAction);
 				actionButtons.add(saveAction);
 				actionButtons.add(cancelAction);
 				actionButtons.add(refreshAction);
-				editAction.doClick();
 				controlPanel.add(editAction);
 				controlPanel.add(saveAction);
 				controlPanel.add(cancelAction);
