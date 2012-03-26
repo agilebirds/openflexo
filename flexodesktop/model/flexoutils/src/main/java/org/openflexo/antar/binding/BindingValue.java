@@ -776,12 +776,13 @@ public class BindingValue extends AbstractBinding {
 
 		Object current = context.getValue(_bindingVariable);
 
+		returned.add(new TargetObject(context, _bindingVariable.getVariableName()));
+
 		if (current == null) {
 			return returned;
 		}
 
 		try {
-			returned.add(new TargetObject(context, _bindingVariable.getVariableName()));
 			for (BindingPathElement element : getBindingPath()) {
 				returned.add(new TargetObject(current, element.getLabel()));
 				current = element.getBindingValue(current, context);
