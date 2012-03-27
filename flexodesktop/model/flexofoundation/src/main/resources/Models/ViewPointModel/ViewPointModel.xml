@@ -197,6 +197,7 @@
 		xmlTag="LinkScheme">
 		<property name="fromTarget" xmlTag="fromTarget" attribute="YES" />
 		<property name="toTarget" xmlTag="toTarget" attribute="YES" />
+		<property name="isAvailableWithFloatingPalette" xmlTag="isAvailableWithFloatingPalette" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.ActionScheme"

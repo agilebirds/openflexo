@@ -30,6 +30,8 @@ public class LinkScheme extends EditionScheme {
 	private String fromTarget;
 	private String toTarget;
 
+	private boolean isAvailableWithFloatingPalette = true;
+
 	public LinkScheme() {
 		super();
 	}
@@ -139,6 +141,14 @@ public class LinkScheme extends EditionScheme {
 			}
 		}
 		return newAction;
+	}
+
+	public boolean getIsAvailableWithFloatingPalette() {
+		return isAvailableWithFloatingPalette;
+	}
+
+	public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette) {
+		this.isAvailableWithFloatingPalette = isAvailableWithFloatingPalette;
 	}
 
 }
