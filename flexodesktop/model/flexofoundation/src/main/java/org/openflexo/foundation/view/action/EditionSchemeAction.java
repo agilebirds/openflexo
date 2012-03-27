@@ -228,7 +228,12 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 					}
 				} else if (action instanceof DeclarePatternRole) {
 					logger.info("Declare object with patternRole=" + action.getPatternRole());
-					FlexoModelObject declaredObject = performDeclarePatternRole((DeclarePatternRole) action);
+					FlexoModelObject declaredObject = null;
+					try {
+						declaredObject = performDeclarePatternRole((DeclarePatternRole) action);
+					} catch (ClassCastException e) {
+						logger.warning("ClassCastException: found declared object: " + e.getMessage());
+					}
 					logger.info("Found declared object: " + declaredObject);
 					if (declaredObject != null) {
 						getEditionPatternInstance().setObjectForPatternRole(declaredObject, action.getPatternRole());

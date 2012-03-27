@@ -569,7 +569,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		_editionPatternInstance = getProject().getEditionPatternInstance(this);
 
 		// Warning: this is really important to keep synchro between EPInstance and EPReference
-		_editionPatternInstance.addObserver(this);
+		if (_editionPatternInstance != null) {
+			_editionPatternInstance.addObserver(this);
+		}
 		return _editionPatternInstance;
 	}
 

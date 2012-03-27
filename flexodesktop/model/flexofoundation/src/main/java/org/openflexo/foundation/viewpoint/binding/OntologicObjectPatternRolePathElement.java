@@ -51,6 +51,11 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 	private SimpleBindingPathElementImpl uriProperty;
 	protected List<BindingPathElement> allProperties;
 
+	@Override
+	public String toString() {
+		return "[" + getPatternRole() + "/" + getClass().getSimpleName() + "]";
+	}
+
 	public OntologicObjectPatternRolePathElement(OntologicObjectPatternRole aPatternRole, Bindable container) {
 		super(aPatternRole, container);
 		allProperties = new Vector<BindingPathElement>();
@@ -117,21 +122,44 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		public OntologicIndividualPatternRolePathElement(IndividualPatternRole aPatternRole, Bindable container) {
 			super(aPatternRole, container);
 			accessibleStatements = new Vector<StatementPathElement>();
+			// System.out.println("For role " + aPatternRole + " hash=" + Integer.toHexString(hashCode()));
+			// System.out.println("Ontologic type = " + aPatternRole.getOntologicType());
 			if (aPatternRole.getOntologicType() != null) {
-				for (final OntologyProperty property : aPatternRole.getOntologicType().getPropertiesTakingMySelfAsDomain()) {
-					StatementPathElement propertyPathElement = null;
-					if (property instanceof OntologyObjectProperty) {
-						propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
-								(OntologyObjectProperty) property, true);
-					} else if (property instanceof OntologyDataProperty) {
-						propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
-					}
-					if (propertyPathElement != null) {
-						accessibleStatements.add(propertyPathElement);
-						allProperties.add(propertyPathElement);
-					}
+				searchProperties();
+			}
+		}
+
+		boolean propertiesFound = false;
+
+		private void searchProperties() {
+			// System.out.println("Properties = "
+			// + ((IndividualPatternRole) getPatternRole()).getOntologicType().getPropertiesTakingMySelfAsDomain());
+			for (final OntologyProperty property : ((IndividualPatternRole) getPatternRole()).getOntologicType()
+					.getPropertiesTakingMySelfAsDomain()) {
+				StatementPathElement propertyPathElement = null;
+				if (property instanceof OntologyObjectProperty) {
+					propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
+							(OntologyObjectProperty) property, true);
+				} else if (property instanceof OntologyDataProperty) {
+					propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
+				}
+				if (propertyPathElement != null) {
+					// System.out.println("add " + propertyPathElement);
+					accessibleStatements.add(propertyPathElement);
+					allProperties.add(propertyPathElement);
 				}
 			}
+			propertiesFound = true;
+		}
+
+		@Override
+		public List<BindingPathElement> getAllProperties() {
+			if (!propertiesFound && ((IndividualPatternRole) getPatternRole()).getOntologicType() != null) {
+				searchProperties();
+			}
+			// System.out.println("For " + getPatternRole() + " hash=" + Integer.toHexString(hashCode()) + " of "
+			// + ((IndividualPatternRole) getPatternRole()).getOntologicType() + " have this " + super.getAllProperties());
+			return super.getAllProperties();
 		}
 	}
 
