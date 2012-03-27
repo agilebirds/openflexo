@@ -759,6 +759,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 	}
 
+	protected void writeDotVersion() {
+		writeDotVersion(FlexoXMLMappings.latestRelease());
+	}
+
 	private void writeDotVersion(FlexoVersion version) {
 		FileOutputStream fos = null;
 		File f = new File(projectDirectory, ".version");
@@ -829,6 +833,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			}
 			data.saveResourceData(clearModifiedStatus);
 		}
+		writeDotVersion();
 		// We save RM at the end so that all dates are always up-to-date and we also save the lastID which may have changed!
 		getFlexoRMResource().saveResourceData(clearModifiedStatus);
 	}
@@ -849,6 +854,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		for (FlexoStorageResource<? extends StorageResourceData> r : loaded) {
 			r.saveResourceData();
 		}
+		writeDotVersion();
 	}
 
 	/*
@@ -891,7 +897,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 		if (sortResources) {
 			DependencyAlgorithmScheme scheme = _dependancyScheme;
-			// Pessimistic dependancy scheme is cheaper and is not intended for this situation
+			// Pessimistic dependency scheme is cheaper and is not intended for this situation
 			setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
 			FlexoResource.sortResourcesWithDependancies(returned);
 			setDependancyScheme(scheme);
@@ -4072,7 +4078,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	public void resolvePendingEditionPatternReferences() {
 		for (String conceptURI : pendingEditionPatternReferences.keySet()) {
-			OntologyObject oo = (getProjectOntologyLibrary().getOntologyObject(conceptURI));
+			OntologyObject oo = getProjectOntologyLibrary().getOntologyObject(conceptURI);
 			if (oo != null) {
 				_retrievePendingEditionPatternReferences(oo);
 			}
