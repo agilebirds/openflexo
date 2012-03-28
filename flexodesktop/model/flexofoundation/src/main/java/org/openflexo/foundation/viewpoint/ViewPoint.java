@@ -91,7 +91,9 @@ public class ViewPoint extends ViewPointObject {
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(calcDir);
 				StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 				inputStream = new FileInputStream(xmlFile);
+				logger.info("Reading file " + xmlFile.getAbsolutePath());
 				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.get_VIEW_POINT_MODEL());
+				logger.info("DONE reading file " + xmlFile.getAbsolutePath());
 				returned.init(baseName, calcDir, xmlFile, library, folder);
 				return returned;
 			} catch (FileNotFoundException e) {

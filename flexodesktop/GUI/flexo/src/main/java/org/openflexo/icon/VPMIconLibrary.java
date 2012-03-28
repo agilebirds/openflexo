@@ -44,7 +44,7 @@ import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.ShemaPatternRole;
+import org.openflexo.foundation.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.viewpoint.StatementPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
@@ -159,7 +159,7 @@ public class VPMIconLibrary extends IconLibrary {
 			return CALC_CONNECTOR_ICON;
 		} else if (object instanceof ShapePatternRole) {
 			return CALC_SHAPE_ICON;
-		} else if (object instanceof ShemaPatternRole) {
+		} else if (object instanceof DiagramPatternRole) {
 			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;

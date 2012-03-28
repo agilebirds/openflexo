@@ -85,8 +85,13 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		this.resourceCenter = resourceCenter;
 	}
 
+	@Deprecated
 	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
 		return map.get(ontologyCalcUri);
+	}
+
+	public ViewPoint getViewPoint(String viewpointURI) {
+		return getOntologyCalc(viewpointURI);
 	}
 
 	public Vector<ViewPoint> getViewPoints() {

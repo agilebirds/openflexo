@@ -50,7 +50,7 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		AddRestrictionStatement,
 		AddConnector,
 		AddShape,
-		AddShema,
+		AddDiagram,
 		DeclarePatternRole,
 		GraphicalAction,
 		GoToObject
@@ -501,7 +501,7 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		restrictionType,
 		cardinality,
 		target,
-		shemaName
+		diagramName
 	}
 
 	private ViewPointDataBinding conditional;

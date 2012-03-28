@@ -219,9 +219,9 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return newPatternRole;
 	}
 
-	public ShemaPatternRole createShemaPatternRole() {
-		ShemaPatternRole newPatternRole = new ShemaPatternRole();
-		newPatternRole.setPatternRoleName(getAvailableRoleName("shema"));
+	public DiagramPatternRole createDiagramPatternRole() {
+		DiagramPatternRole newPatternRole = new DiagramPatternRole();
+		newPatternRole.setPatternRoleName(getAvailableRoleName("diagram"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
@@ -444,7 +444,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 						editionPattern = st.nextToken();
 						EditionPattern returned = calc.getEditionPattern(editionPattern);
 						if (calc == null) {
-							logger.warning("Could not find edition pattern " + editionPattern);
+							logger.warning("@@@@@@@@@@@@@@@@ Could not find edition pattern " + editionPattern);
 						} else {
 							return returned;
 						}
