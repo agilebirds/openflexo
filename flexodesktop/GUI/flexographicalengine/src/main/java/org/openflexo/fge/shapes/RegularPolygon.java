@@ -35,8 +35,6 @@ public class RegularPolygon extends Polygon {
 	private int npoints = 5;
 	private int startAngle = 90;
 
-	private List<FGEPoint> points;
-
 	// *******************************************************************************
 	// * Constructor *
 	// *******************************************************************************
@@ -51,7 +49,7 @@ public class RegularPolygon extends Polygon {
 
 	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
 		super(aGraphicalRepresentation);
-		this.points = new ArrayList<FGEPoint>(points);
+		setPoints(new ArrayList<FGEPoint>(points));
 	}
 
 	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
@@ -65,8 +63,8 @@ public class RegularPolygon extends Polygon {
 
 	@Override
 	public void updateShape() {
-		if (points != null) {
-			_polygon = new FGEPolygon(Filling.FILLED, points);
+		if (getPoints() != null) {
+			_polygon = new FGEPolygon(Filling.FILLED, getPoints());
 		} else {
 			_polygon = new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);
 		}
