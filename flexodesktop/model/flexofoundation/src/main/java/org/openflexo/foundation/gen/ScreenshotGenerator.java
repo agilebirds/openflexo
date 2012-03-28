@@ -303,7 +303,12 @@ public class ScreenshotGenerator {
 						i.trimInfo = new Rectangle(0, 0, bi.getWidth(), bi.getHeight());
 					}
 				}
+			} else {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("No module found to generate screenshot for object: " + object);
+				}
 			}
+
 		} catch (Throwable e) {
 			logger.severe("Failed to generate screenshot for " + object);
 			e.printStackTrace();
