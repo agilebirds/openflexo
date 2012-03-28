@@ -5,9 +5,9 @@
   <Author id="sguerin" identifier="sguerin" fullName="Noname" email="Nomail" />
   <DocItemFolder id="Folder: FlexoDocResourceCenter" primaryDocItemId="FlexoDocResourceCenter" identifier="FlexoDocResourceCenter">
     <description>Root folder for Flexo documentation</description>
-    <DocItemFolder id="Folder: FlexoModel" primaryDocItemId="FlexoModel" identifier="FlexoModel">
+    <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModel" primaryDocItemId="FlexoModel" identifier="FlexoModel">
       <description>Description of Flexo model</description>
-      <DocItemFolder id="Folder: CG" primaryDocItemId="CG" identifier="CG">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelCG" primaryDocItemId="CG" identifier="CG">
         <description>No description</description>
         <DocItem id="BeforeFirstRelease" identifier="BeforeFirstRelease" embedded="false" hidden="false">
           <description>No description</description>
@@ -699,7 +699,7 @@
         <DocItem idref="TOCRepository-useEmbeddedEvents" />
         <DocItem idref="TOCRepository-version" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: COMMON" primaryDocItemId="COMMON" identifier="COMMON">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelCOMMON" primaryDocItemId="COMMON" identifier="COMMON">
         <description>No description</description>
         <DocItem id="COMMON" identifier="COMMON" embedded="false" hidden="false">
           <description>No description</description>
@@ -1050,7 +1050,7 @@
         <DocItem idref="Project-statistics.tabCount" />
         <DocItem idref="Project-targetType" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: DG" primaryDocItemId="DG" identifier="DG">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelDG" primaryDocItemId="DG" identifier="DG">
         <description>No description</description>
         <DocItem id="DG" identifier="DG" embedded="false" hidden="true">
           <description>No description</description>
@@ -1059,7 +1059,7 @@
         <DocItem idref="DGDocxRepository-postBuildDirectory" />
         <DocItem idref="DGDocxRepository-postProductName" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: DM" primaryDocItemId="DM" identifier="DM">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelDM" primaryDocItemId="DM" identifier="DM">
         <description>No description</description>
         <DocItem id="DM" identifier="DM" embedded="false" hidden="false">
           <description>No description</description>
@@ -2252,7 +2252,7 @@
         <DocItem idref="ERDiagram-name" />
         <DocItem idref="ERDiagram-repository" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: DRE" primaryDocItemId="DRE" identifier="DRE">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelDRE" primaryDocItemId="DRE" identifier="DRE">
         <description>No description</description>
         <DocItem id="DRE" identifier="DRE" embedded="false" hidden="false">
           <description>No description</description>
@@ -2678,6 +2678,15 @@
               <description>No description</description>
             </EmbeddingChildDocItem>
           </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="ProcessFolder" identifier="ProcessFolder" embedded="false" hidden="true">
+            <description>No description</description>
+            <EmbeddingChildDocItem id="ProcessFolder-index" identifier="ProcessFolder-index" embedded="true" hidden="true">
+              <description>No description</description>
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ProcessFolder-name" identifier="ProcessFolder-name" embedded="true" hidden="true">
+              <description>No description</description>
+            </EmbeddingChildDocItem>
+          </InheritanceChildDocItem>
           <EmbeddingChildDocItem id="ModelObject-dontGenerate" identifier="ModelObject-dontGenerate" embedded="true" hidden="false">
             <description>No description</description>
           </EmbeddingChildDocItem>
@@ -2704,7 +2713,7 @@
         <DocItem idref="ModelObject-flexoID" />
         <DocItem idref="ModelObject-specificDescriptions" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: FPS" primaryDocItemId="FPS" identifier="FPS">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelFPS" primaryDocItemId="FPS" identifier="FPS">
         <description>No description</description>
         <DocItem id="CVSDirectory" identifier="CVSDirectory" embedded="false" hidden="false">
           <description>No description</description>
@@ -2997,7 +3006,7 @@
         <DocItem idref="SharedProject-repository" />
         <DocItem idref="SharedProject-userName" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: IE" primaryDocItemId="IE" identifier="IE">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelIE" primaryDocItemId="IE" identifier="IE">
         <description>No description</description>
         <DocItem id="AbstractWidget" identifier="AbstractWidget" embedded="false" hidden="true">
           <description>No description</description>
@@ -6976,6 +6985,9 @@ forward to the next nodes.</description>
                                   <EmbeddingChildDocItem id="Role-height('default')" identifier="Role-height('default')" embedded="true" hidden="true">
                                     <description>No description</description>
                                   </EmbeddingChildDocItem>
+                                  <EmbeddingChildDocItem id="Role-isAssignable" identifier="Role-isAssignable" embedded="true" hidden="true">
+                                    <description>No description</description>
+                                  </EmbeddingChildDocItem>
                                   <RelatedToDocItem idref="ActivityNode" />
                                   <RelatedToDocItem id="FlexoProcess" identifier="FlexoProcess" embedded="false" hidden="false">
                                     <description>No description</description>
@@ -7495,6 +7507,9 @@ forward to the next nodes.</description>
                                       <description>No description</description>
                                     </EmbeddingChildDocItem>
                                     <EmbeddingChildDocItem id="FlexoProcess-width('swl')" identifier="FlexoProcess-width('swl')" embedded="true" hidden="true">
+                                      <description>No description</description>
+                                    </EmbeddingChildDocItem>
+                                    <EmbeddingChildDocItem id="FlexoProcess-vectorIndex" identifier="FlexoProcess-vectorIndex" embedded="true" hidden="true">
                                       <description>No description</description>
                                     </EmbeddingChildDocItem>
                                     <RelatedToDocItem id="BeginActivityNode" identifier="BeginActivityNode" embedded="false" hidden="false">
@@ -8728,6 +8743,9 @@ forward to the next nodes.</description>
                                         <EmbeddingChildDocItem id="LoopSubProcessNode-conditionPrimitive" identifier="LoopSubProcessNode-conditionPrimitive" embedded="true" hidden="true">
                                           <description>No description</description>
                                         </EmbeddingChildDocItem>
+                                        <EmbeddingChildDocItem id="LoopSubProcessNode-condition" identifier="LoopSubProcessNode-condition" embedded="true" hidden="true">
+                                          <description>No description</description>
+                                        </EmbeddingChildDocItem>
                                         <title key="ENGLISH">Loop sub-process node</title>
                                         <DocItemVersion id="LoopSubProcessNode_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
                                         <DocItemAction id="SUBMITTED_ON_LoopSubProcessNode_1.0.0ENGLISH" authorId="gpolet" actionDate="HH:mm:ss dd/MM/yyyy,15:17:03 15/01/2009" actionType="SUBMITTED">
@@ -8753,6 +8771,9 @@ forward to the next nodes.</description>
                                         <EmbeddingChildDocItem id="MultipleInstanceSubProcessNode-isSequential" identifier="MultipleInstanceSubProcessNode-isSequential" embedded="true" hidden="true">
                                           <description>No description</description>
                                         </EmbeddingChildDocItem>
+                                        <EmbeddingChildDocItem id="MultipleInstanceSubProcessNode-displaySubProcessImage" identifier="MultipleInstanceSubProcessNode-displaySubProcessImage" embedded="true" hidden="true">
+                                          <description>No description</description>
+                                        </EmbeddingChildDocItem>
                                         <title key="ENGLISH">Multiple instance sub process node</title>
                                         <DocItemVersion id="MultipleInstanceSubProcessNode_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
                                         <DocItemAction id="SUBMITTED_ON_MultipleInstanceSubProcessNode_1.0.0ENGLISH" authorId="gpolet" actionDate="HH:mm:ss dd/MM/yyyy,15:16:20 15/01/2009" actionType="SUBMITTED">
@@ -8764,6 +8785,9 @@ forward to the next nodes.</description>
                                       </InheritanceChildDocItem>
                                       <InheritanceChildDocItem id="SingleInstanceSubProcessNode" identifier="SingleInstanceSubProcessNode" embedded="false" hidden="true">
                                         <description>No description</description>
+                                        <EmbeddingChildDocItem id="SingleInstanceSubProcessNode-displaySubProcessImage" identifier="SingleInstanceSubProcessNode-displaySubProcessImage" embedded="true" hidden="true">
+                                          <description>No description</description>
+                                        </EmbeddingChildDocItem>
                                         <title key="ENGLISH">Single instance sub-process node</title>
                                         <DocItemVersion id="SingleInstanceSubProcessNode_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
                                         <DocItemAction id="SUBMITTED_ON_SingleInstanceSubProcessNode_1.0.0ENGLISH" authorId="gpolet" actionDate="HH:mm:ss dd/MM/yyyy,15:17:41 15/01/2009" actionType="SUBMITTED">
@@ -9677,6 +9701,12 @@ forward to the next nodes.</description>
                           <description>No description</description>
                         </EmbeddingChildDocItem>
                         <EmbeddingChildDocItem id="AbstractActivityNode-roleC" identifier="AbstractActivityNode-roleC" embedded="true" hidden="true">
+                          <description>No description</description>
+                        </EmbeddingChildDocItem>
+                        <EmbeddingChildDocItem id="AbstractActivityNode-consultedRoles" identifier="AbstractActivityNode-consultedRoles" embedded="true" hidden="true">
+                          <description>No description</description>
+                        </EmbeddingChildDocItem>
+                        <EmbeddingChildDocItem id="AbstractActivityNode-informedRoles" identifier="AbstractActivityNode-informedRoles" embedded="true" hidden="true">
                           <description>No description</description>
                         </EmbeddingChildDocItem>
                         <title key="ENGLISH">Abstract  Activity</title>
@@ -11531,7 +11561,7 @@ forward to the next nodes.</description>
         <DocItem idref="Wysiwyg" />
         <DocItem idref="Wysiwyg-value" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: OE" primaryDocItemId="OE" identifier="OE">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelOE" primaryDocItemId="OE" identifier="OE">
         <description>No description</description>
         <DocItem idref="CalcLibrary" />
         <DocItem idref="CalcLibrary-helpText" />
@@ -11617,12 +11647,14 @@ forward to the next nodes.</description>
         <DocItem idref="ProjectOntology" />
         <DocItem idref="ProjectOntology-helpText" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: WKF" primaryDocItemId="WKF" identifier="WKF">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelWKF" primaryDocItemId="WKF" identifier="WKF">
         <description>No description</description>
         <DocItem idref="AbstractActivityNode" />
         <DocItem idref="AbstractActivityNode-acronym" />
+        <DocItem idref="AbstractActivityNode-consultedRoles" />
         <DocItem idref="AbstractActivityNode-cssSheet" />
         <DocItem idref="AbstractActivityNode-index" />
+        <DocItem idref="AbstractActivityNode-informedRoles" />
         <DocItem idref="AbstractActivityNode-isSelfActivated" />
         <DocItem idref="AbstractActivityNode-metricsValues" />
         <DocItem idref="AbstractActivityNode-reinitialisation" />
@@ -11834,6 +11866,7 @@ forward to the next nodes.</description>
         <DocItem idref="FlexoProcess-textColor" />
         <DocItem idref="FlexoProcess-textColor('bpe')" />
         <DocItem idref="FlexoProcess-textColor('swl')" />
+        <DocItem idref="FlexoProcess-vectorIndex" />
         <DocItem idref="FlexoProcess-width" />
         <DocItem idref="FlexoProcess-width('bpe')" />
         <DocItem idref="FlexoProcess-width('bpe',1000)" />
@@ -11945,6 +11978,7 @@ forward to the next nodes.</description>
         <DocItem idref="InternalMessageInEdge" />
         <DocItem idref="InternalMessageOutEdge" />
         <DocItem idref="LoopSubProcessNode" />
+        <DocItem idref="LoopSubProcessNode-condition" />
         <DocItem idref="LoopSubProcessNode-conditionPrimitive" />
         <DocItem idref="MailIn" />
         <DocItem idref="MailOut" />
@@ -11971,6 +12005,7 @@ forward to the next nodes.</description>
         <DocItem idref="MessageEdge-outputMessage.bindings" />
         <DocItem idref="MessageEdge-outputMessage.name" />
         <DocItem idref="MultipleInstanceSubProcessNode" />
+        <DocItem idref="MultipleInstanceSubProcessNode-displaySubProcessImage" />
         <DocItem idref="MultipleInstanceSubProcessNode-isSequential" />
         <DocItem idref="NewPort" />
         <DocItem idref="NewPortMap" />
@@ -12108,6 +12143,9 @@ forward to the next nodes.</description>
         <DocItem idref="PreCondition-initTokenNbr" />
         <DocItem idref="PreCondition-name" />
         <DocItem idref="PreCondition-triggerLevel" />
+        <DocItem idref="ProcessFolder" />
+        <DocItem idref="ProcessFolder-index" />
+        <DocItem idref="ProcessFolder-name" />
         <DocItem id="PseudoBeginNode" identifier="PseudoBeginNode" embedded="false" hidden="true">
           <description>No description</description>
           <EmbeddingChildDocItem id="PseudoBeginNode-selfactivated" identifier="PseudoBeginNode-selfactivated" embedded="true" hidden="false">
@@ -12149,6 +12187,7 @@ forward to the next nodes.</description>
         <DocItem idref="Role-integerParameter('swl_height',80)" />
         <DocItem idref="Role-integerParameter('swl_index',80)" />
         <DocItem idref="Role-integerParameter('swl_nb',1)" />
+        <DocItem idref="Role-isAssignable" />
         <DocItem idref="Role-isSystemRole" />
         <DocItem idref="Role-name" />
         <DocItem idref="Role-parentRoles" />
@@ -12214,6 +12253,7 @@ forward to the next nodes.</description>
         <DocItem idref="ServiceOperation-name" />
         <DocItem idref="ServiceOperation-port" />
         <DocItem idref="SingleInstanceSubProcessNode" />
+        <DocItem idref="SingleInstanceSubProcessNode-displaySubProcessImage" />
         <DocItem idref="StartEvent" />
         <DocItem idref="StartEvent-documentationUrl" />
         <DocItem idref="StartEvent-linkedProcess" />
@@ -12519,13 +12559,24 @@ forward to the next nodes.</description>
           <EmbeddingChildDocItem id="Workflow-operationFont" identifier="Workflow-operationFont" embedded="true" hidden="true">
             <description>No description</description>
           </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="Workflow-edgeFont" identifier="Workflow-edgeFont" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="Workflow-artefactFont" identifier="Workflow-artefactFont" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="Workflow-workflowName" identifier="Workflow-workflowName" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
         </DocItem>
         <DocItem idref="Workflow-actionFont" />
         <DocItem idref="Workflow-activityFont" />
         <DocItem idref="Workflow-activityMetricsDefinitions" />
+        <DocItem idref="Workflow-artefactFont" />
         <DocItem idref="Workflow-artefactMetricsDefinitions" />
         <DocItem idref="Workflow-componentFont" />
         <DocItem idref="Workflow-connectorRepresentation" />
+        <DocItem idref="Workflow-edgeFont" />
         <DocItem idref="Workflow-edgeMetricsDefinitions" />
         <DocItem idref="Workflow-eventFont" />
         <DocItem idref="Workflow-flexoID" />
@@ -12536,8 +12587,9 @@ forward to the next nodes.</description>
         <DocItem idref="Workflow-showShadows" />
         <DocItem idref="Workflow-showWOName" />
         <DocItem idref="Workflow-useTransparency" />
+        <DocItem idref="Workflow-workflowName" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: WKF-CG" primaryDocItemId="WKF-CG" identifier="WKF-CG">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelWKF-CG" primaryDocItemId="WKF-CG" identifier="WKF-CG">
         <description>No description</description>
         <DocItem id="EdgeControlFlowGraph" identifier="EdgeControlFlowGraph" embedded="false" hidden="false">
           <description>No description</description>
@@ -12658,7 +12710,7 @@ forward to the next nodes.</description>
           <description>No description</description>
         </DocItem>
       </DocItemFolder>
-      <DocItemFolder id="Folder: WSE" primaryDocItemId="WSE" identifier="WSE">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelWSE" primaryDocItemId="WSE" identifier="WSE">
         <description>No description</description>
         <DocItem idref="WSAbstractInPort" />
         <DocItem idref="WSAbstractInPort-inputMessageDefinition.entries" />
@@ -12767,10 +12819,10 @@ forward to the next nodes.</description>
       </DocItemFolder>
       <DocItem idref="FlexoModel" />
     </DocItemFolder>
-    <DocItemFolder id="Folder: FlexoToolSet" primaryDocItemId="FlexoToolSet" identifier="FlexoToolSet">
+    <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSet" primaryDocItemId="FlexoToolSet" identifier="FlexoToolSet">
       <description>Description for the FlexoToolSet application</description>
-      <DocItemFolder id="Folder: cg" primaryDocItemId="cg" identifier="cg">
-        <DocItemFolder id="Folder: cg-control-panel" primaryDocItemId="cg-control-panel" identifier="cg-control-panel">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcg" primaryDocItemId="cg" identifier="cg">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-control-panel" primaryDocItemId="cg-control-panel" identifier="cg-control-panel">
           <DocItem id="cg-control-panel" identifier="cg-control-panel" embedded="false" hidden="false">
             <description>No description</description>
             <EmbeddingChildDocItem id="cg-control-panel-available-objects" identifier="cg-control-panel-available-objects" embedded="false" hidden="false" />
@@ -12779,15 +12831,9 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="cg-control-panel-up" identifier="cg-control-panel-up" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="cg-control-panel-toggle-hide-show-left-panel" identifier="cg-control-panel-toggle-hide-show-left-panel" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="cg-control-panel-available-perspectives" identifier="cg-control-panel-available-perspectives" embedded="false" hidden="false">
-              <EmbeddingChildDocItem id="cg-control-panel-available-perspectives-code_generation" identifier="cg-control-panel-available-perspectives-code_generation" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="cg-control-panel-available-perspectives-versionning" identifier="cg-control-panel-available-perspectives-versionning" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="cg-control-panel-available-perspectives-model_reinjection" identifier="cg-control-panel-available-perspectives-model_reinjection" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
+              <EmbeddingChildDocItem id="cg-control-panel-available-perspectives-code_generation" identifier="cg-control-panel-available-perspectives-code_generation" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="cg-control-panel-available-perspectives-versionning" identifier="cg-control-panel-available-perspectives-versionning" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="cg-control-panel-available-perspectives-model_reinjection" identifier="cg-control-panel-available-perspectives-model_reinjection" embedded="false" hidden="true" />
             </EmbeddingChildDocItem>
             <EmbeddingChildDocItem id="cg-control-panel-close-module" identifier="cg-control-panel-close-module" embedded="false" hidden="true" />
           </DocItem>
@@ -12802,7 +12848,7 @@ forward to the next nodes.</description>
           <DocItem idref="cg-control-panel-toggle-hide-show-left-panel" />
           <DocItem idref="cg-control-panel-up" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: cg-left-view" primaryDocItemId="cg-left-view" identifier="cg-left-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-left-view" primaryDocItemId="cg-left-view" identifier="cg-left-view">
           <DocItem id="cg-left-view" identifier="cg-left-view" embedded="false" hidden="false">
             <description>No description</description>
             <EmbeddingChildDocItem id="cg-left-view-plus" identifier="cg-left-view-plus" embedded="false" hidden="false" />
@@ -12813,22 +12859,22 @@ forward to the next nodes.</description>
           <DocItem idref="cg-left-view-options" />
           <DocItem idref="cg-left-view-plus" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: cg-main-pane" primaryDocItemId="cg-main-pane" identifier="cg-main-pane">
-          <DocItemFolder id="Folder: DMEOEntityGeneratorPanel" primaryDocItemId="DMEOEntityGeneratorPanel" identifier="DMEOEntityGeneratorPanel">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-pane" primaryDocItemId="cg-main-pane" identifier="cg-main-pane">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-paneDMEOEntityGeneratorPanel" primaryDocItemId="DMEOEntityGeneratorPanel" identifier="DMEOEntityGeneratorPanel">
             <description>Documentation on that view</description>
             <DocItem id="DMEOEntityGeneratorPanel" identifier="DMEOEntityGeneratorPanel" embedded="false" hidden="false">
               <description>No description</description>
             </DocItem>
           </DocItemFolder>
-          <DocItemFolder id="Folder: OperationGeneratorPanel" primaryDocItemId="OperationGeneratorPanel" identifier="OperationGeneratorPanel">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-paneOperationGeneratorPanel" primaryDocItemId="OperationGeneratorPanel" identifier="OperationGeneratorPanel">
             <description>Documentation on that view</description>
             <DocItem id="OperationGeneratorPanel" identifier="OperationGeneratorPanel" embedded="false" hidden="false">
               <description>No description</description>
             </DocItem>
           </DocItemFolder>
-          <DocItemFolder id="Folder: cg-main-pane-default_perspective" primaryDocItemId="cg-main-pane-default_perspective" identifier="cg-main-pane-default_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panecg-main-pane-default_perspective" primaryDocItemId="cg-main-pane-default_perspective" identifier="cg-main-pane-default_perspective">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: GeneratorWindowPanel" primaryDocItemId="GeneratorWindowPanel" identifier="GeneratorWindowPanel">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panecg-main-pane-default_perspectiveGeneratorWindowPanel" primaryDocItemId="GeneratorWindowPanel" identifier="GeneratorWindowPanel">
               <description>Documentation on that view</description>
               <DocItem id="GeneratorWindowPanel" identifier="GeneratorWindowPanel" embedded="false" hidden="false">
                 <description>No description</description>
@@ -12841,9 +12887,9 @@ forward to the next nodes.</description>
             </DocItemFolder>
             <DocItem idref="cg-main-pane-default_perspective" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: code_generation" primaryDocItemId="code_generation" identifier="code_generation">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panecode_generation" primaryDocItemId="code_generation" identifier="code_generation">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: CGFileHistoryModuleView" primaryDocItemId="CGFileHistoryModuleView" identifier="CGFileHistoryModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panecode_generationCGFileHistoryModuleView" primaryDocItemId="CGFileHistoryModuleView" identifier="CGFileHistoryModuleView">
               <description>Documentation on that view</description>
               <DocItem id="CGFileHistoryModuleView" identifier="CGFileHistoryModuleView" embedded="false" hidden="false">
                 <description>Pas de description</description>
@@ -12946,13 +12992,13 @@ forward to the next nodes.</description>
               <DocItem idref="CGFileHistoryModuleView-revert_to_version" />
               <DocItem idref="CGFileHistoryModuleView-show_differences" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: DGFileHistoryModuleView" primaryDocItemId="DGFileHistoryModuleView" identifier="DGFileHistoryModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panecode_generationDGFileHistoryModuleView" primaryDocItemId="DGFileHistoryModuleView" identifier="DGFileHistoryModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="DGFileHistoryModuleView" />
               <DocItem idref="DGFileHistoryModuleView-revert_to_version" />
               <DocItem idref="DGFileHistoryModuleView-show_differences" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: DGFileModuleView" primaryDocItemId="DGFileModuleView" identifier="DGFileModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panecode_generationDGFileModuleView" primaryDocItemId="DGFileModuleView" identifier="DGFileModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="DGFileModuleView" />
               <DocItem idref="DGFileModuleView-accept_disk_version" />
@@ -12965,7 +13011,7 @@ forward to the next nodes.</description>
               <DocItem idref="DGFileModuleView-mark_as_merged" />
               <DocItem idref="DGFileModuleView-write_to_disk" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: DGRepositoryModuleView" primaryDocItemId="DGRepositoryModuleView" identifier="DGRepositoryModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panecode_generationDGRepositoryModuleView" primaryDocItemId="DGRepositoryModuleView" identifier="DGRepositoryModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="DGRepositoryModuleView" />
               <DocItem idref="DGRepositoryModuleView-generate_PDF" />
@@ -12975,7 +13021,7 @@ forward to the next nodes.</description>
               <DocItem idref="DGRepositoryModuleView-synchronize_code_generation" />
               <DocItem idref="DGRepositoryModuleView-synchronize_doc_generation" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: DGTemplateFileModuleView" primaryDocItemId="DGTemplateFileModuleView" identifier="DGTemplateFileModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panecode_generationDGTemplateFileModuleView" primaryDocItemId="DGTemplateFileModuleView" identifier="DGTemplateFileModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="DGTemplateFileModuleView" />
               <DocItem idref="DGTemplateFileModuleView-cancel_template_edition" />
@@ -12984,7 +13030,7 @@ forward to the next nodes.</description>
               <DocItem idref="DGTemplateFileModuleView-refresh" />
               <DocItem idref="DGTemplateFileModuleView-save_template" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: GeneratedDocModuleView" primaryDocItemId="GeneratedDocModuleView" identifier="GeneratedDocModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panecode_generationGeneratedDocModuleView" primaryDocItemId="GeneratedDocModuleView" identifier="GeneratedDocModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="GeneratedDocModuleView" />
               <DocItem idref="GeneratedDocModuleView-add_repository" />
@@ -12992,9 +13038,9 @@ forward to the next nodes.</description>
             </DocItemFolder>
             <DocItem idref="code_generation" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: default_perspective" primaryDocItemId="default_perspective" identifier="default_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panedefault_perspective" primaryDocItemId="default_perspective" identifier="default_perspective">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: CGFileModuleView" primaryDocItemId="CGFileModuleView" identifier="CGFileModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panedefault_perspectiveCGFileModuleView" primaryDocItemId="CGFileModuleView" identifier="CGFileModuleView">
               <description>Documentation on that view</description>
               <DocItem id="CGFileModuleView" identifier="CGFileModuleView" embedded="false" hidden="false">
                 <description>No description</description>
@@ -13070,11 +13116,11 @@ forward to the next nodes.</description>
               <DocItem idref="CGFileModuleView-save_file" />
               <DocItem idref="CGFileModuleView-write_to_disk" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: CGRepositoryModuleView" primaryDocItemId="CGRepositoryModuleView" identifier="CGRepositoryModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panedefault_perspectiveCGRepositoryModuleView" primaryDocItemId="CGRepositoryModuleView" identifier="CGRepositoryModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="CGRepositoryModuleView" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: CGTemplateFileModuleView" primaryDocItemId="CGTemplateFileModuleView" identifier="CGTemplateFileModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panedefault_perspectiveCGTemplateFileModuleView" primaryDocItemId="CGTemplateFileModuleView" identifier="CGTemplateFileModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="CGTemplateFileModuleView" />
               <DocItem idref="CGTemplateFileModuleView-cancel_template_edition" />
@@ -13083,32 +13129,32 @@ forward to the next nodes.</description>
               <DocItem idref="CGTemplateFileModuleView-refresh" />
               <DocItem idref="CGTemplateFileModuleView-save_template" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: DGDocumentView" primaryDocItemId="DGDocumentView" identifier="DGDocumentView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panedefault_perspectiveDGDocumentView" primaryDocItemId="DGDocumentView" identifier="DGDocumentView">
               <description>Documentation on that view</description>
               <DocItem idref="DGDocumentView" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: DMEOModelGeneratorPanel" primaryDocItemId="DMEOModelGeneratorPanel" identifier="DMEOModelGeneratorPanel">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panedefault_perspectiveDMEOModelGeneratorPanel" primaryDocItemId="DMEOModelGeneratorPanel" identifier="DMEOModelGeneratorPanel">
               <description>Documentation on that view</description>
               <DocItem idref="DMEOModelGeneratorPanel" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: GeneratedCodeModuleView" primaryDocItemId="GeneratedCodeModuleView" identifier="GeneratedCodeModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panedefault_perspectiveGeneratedCodeModuleView" primaryDocItemId="GeneratedCodeModuleView" identifier="GeneratedCodeModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="GeneratedCodeModuleView" />
               <DocItem idref="GeneratedCodeModuleView-add_repository" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: ProjectGeneratorPanel" primaryDocItemId="ProjectGeneratorPanel" identifier="ProjectGeneratorPanel">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panedefault_perspectiveProjectGeneratorPanel" primaryDocItemId="ProjectGeneratorPanel" identifier="ProjectGeneratorPanel">
               <description>Documentation on that view</description>
               <DocItem idref="ProjectGeneratorPanel" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: WKFGeneratorPanel" primaryDocItemId="WKFGeneratorPanel" identifier="WKFGeneratorPanel">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panedefault_perspectiveWKFGeneratorPanel" primaryDocItemId="WKFGeneratorPanel" identifier="WKFGeneratorPanel">
               <description>Documentation on that view</description>
               <DocItem idref="WKFGeneratorPanel" />
             </DocItemFolder>
             <DocItem idref="default_perspective" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: model_reinjection" primaryDocItemId="model_reinjection" identifier="model_reinjection">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panemodel_reinjection" primaryDocItemId="model_reinjection" identifier="model_reinjection">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: ParsedCGFileModuleView" primaryDocItemId="ParsedCGFileModuleView" identifier="ParsedCGFileModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-main-panemodel_reinjectionParsedCGFileModuleView" primaryDocItemId="ParsedCGFileModuleView" identifier="ParsedCGFileModuleView">
               <description>Documentation on that view</description>
               <DocItem id="ParsedCGFileModuleView" identifier="ParsedCGFileModuleView" embedded="false" hidden="false">
                 <description>Pas de description</description>
@@ -13161,7 +13207,7 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem idref="model_reinjection" />
           </DocItem>
         </DocItemFolder>
-        <DocItemFolder id="Folder: cg-right-view" primaryDocItemId="cg-right-view" identifier="cg-right-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetcgcg-right-view" primaryDocItemId="cg-right-view" identifier="cg-right-view">
           <DocItem id="cg-right-view" identifier="cg-right-view" embedded="false" hidden="false">
             <description>No description</description>
           </DocItem>
@@ -13175,8 +13221,8 @@ forward to the next nodes.</description>
           <title key="ENGLISH">Code Generator</title>
         </DocItem>
       </DocItemFolder>
-      <DocItemFolder id="Folder: dg" primaryDocItemId="dg" identifier="dg">
-        <DocItemFolder id="Folder: dg-control-panel" primaryDocItemId="dg-control-panel" identifier="dg-control-panel">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdg" primaryDocItemId="dg" identifier="dg">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-control-panel" primaryDocItemId="dg-control-panel" identifier="dg-control-panel">
           <DocItem id="dg-control-panel" identifier="dg-control-panel" embedded="false" hidden="false">
             <description>No description</description>
             <EmbeddingChildDocItem id="dg-control-panel-available-objects" identifier="dg-control-panel-available-objects" embedded="false" hidden="false" />
@@ -13185,12 +13231,8 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="dg-control-panel-forward" identifier="dg-control-panel-forward" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="dg-control-panel-toggle-hide-show-left-panel" identifier="dg-control-panel-toggle-hide-show-left-panel" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="dg-control-panel-available-perspectives" identifier="dg-control-panel-available-perspectives" embedded="false" hidden="false">
-              <EmbeddingChildDocItem id="dg-control-panel-available-perspectives-code_generation" identifier="dg-control-panel-available-perspectives-code_generation" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="dg-control-panel-available-perspectives-versionning" identifier="dg-control-panel-available-perspectives-versionning" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
+              <EmbeddingChildDocItem id="dg-control-panel-available-perspectives-code_generation" identifier="dg-control-panel-available-perspectives-code_generation" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="dg-control-panel-available-perspectives-versionning" identifier="dg-control-panel-available-perspectives-versionning" embedded="false" hidden="true" />
             </EmbeddingChildDocItem>
             <EmbeddingChildDocItem id="dg-control-panel-close-module" identifier="dg-control-panel-close-module" embedded="false" hidden="true" />
           </DocItem>
@@ -13204,7 +13246,7 @@ forward to the next nodes.</description>
           <DocItem idref="dg-control-panel-toggle-hide-show-left-panel" />
           <DocItem idref="dg-control-panel-up" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: dg-left-view" primaryDocItemId="dg-left-view" identifier="dg-left-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-left-view" primaryDocItemId="dg-left-view" identifier="dg-left-view">
           <DocItem id="dg-left-view" identifier="dg-left-view" embedded="false" hidden="false">
             <description>No description</description>
             <EmbeddingChildDocItem id="dg-left-view-plus" identifier="dg-left-view-plus" embedded="false" hidden="false" />
@@ -13215,10 +13257,10 @@ forward to the next nodes.</description>
           <DocItem idref="dg-left-view-options" />
           <DocItem idref="dg-left-view-plus" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: dg-main-pane" primaryDocItemId="dg-main-pane" identifier="dg-main-pane">
-          <DocItemFolder id="Folder: doc_editor" primaryDocItemId="doc_editor" identifier="doc_editor">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-main-pane" primaryDocItemId="dg-main-pane" identifier="dg-main-pane">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-main-panedoc_editor" primaryDocItemId="doc_editor" identifier="doc_editor">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: DEGeneratedDocModuleView" primaryDocItemId="DEGeneratedDocModuleView" identifier="DEGeneratedDocModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-main-panedoc_editorDEGeneratedDocModuleView" primaryDocItemId="DEGeneratedDocModuleView" identifier="DEGeneratedDocModuleView">
               <description>Documentation on that view</description>
               <DocItem id="DEGeneratedDocModuleView" identifier="DEGeneratedDocModuleView" embedded="false" hidden="false">
                 <description>No description</description>
@@ -13241,11 +13283,11 @@ forward to the next nodes.</description>
               </DocItem>
               <DocItem idref="DEGeneratedDocModuleView-add_repository" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: DERepositoryModuleView" primaryDocItemId="DERepositoryModuleView" identifier="DERepositoryModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-main-panedoc_editorDERepositoryModuleView" primaryDocItemId="DERepositoryModuleView" identifier="DERepositoryModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="DERepositoryModuleView" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: DETOCEntryModuleView" primaryDocItemId="DETOCEntryModuleView" identifier="DETOCEntryModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-main-panedoc_editorDETOCEntryModuleView" primaryDocItemId="DETOCEntryModuleView" identifier="DETOCEntryModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="DETOCEntryModuleView" />
             </DocItemFolder>
@@ -13265,7 +13307,7 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem idref="doc_editor" />
           </DocItem>
         </DocItemFolder>
-        <DocItemFolder id="Folder: dg-right-view" primaryDocItemId="dg-right-view" identifier="dg-right-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-right-view" primaryDocItemId="dg-right-view" identifier="dg-right-view">
           <DocItem id="dg-right-view" identifier="dg-right-view" embedded="false" hidden="false">
             <description>No description</description>
           </DocItem>
@@ -13279,8 +13321,8 @@ forward to the next nodes.</description>
           <title key="ENGLISH">Document Generator</title>
         </DocItem>
       </DocItemFolder>
-      <DocItemFolder id="Folder: dm" primaryDocItemId="dm" identifier="dm">
-        <DocItemFolder id="Folder: dm-control-panel" primaryDocItemId="dm-control-panel" identifier="dm-control-panel">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdm" primaryDocItemId="dm" identifier="dm">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-control-panel" primaryDocItemId="dm-control-panel" identifier="dm-control-panel">
           <DocItem id="dm-control-panel" identifier="dm-control-panel" embedded="false" hidden="false">
             <description>No description</description>
             <EmbeddingChildDocItem id="dm-control-panel-available-objects" identifier="dm-control-panel-available-objects" embedded="false" hidden="false" />
@@ -13289,18 +13331,10 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="dm-control-panel-up" identifier="dm-control-panel-up" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="dm-control-panel-toggle-hide-show-left-panel" identifier="dm-control-panel-toggle-hide-show-left-panel" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="dm-control-panel-available-perspectives" identifier="dm-control-panel-available-perspectives" embedded="false" hidden="false">
-              <EmbeddingChildDocItem id="dm-control-panel-available-perspectives-repository_perspective" identifier="dm-control-panel-available-perspectives-repository_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="dm-control-panel-available-perspectives-package_perspective" identifier="dm-control-panel-available-perspectives-package_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="dm-control-panel-available-perspectives-hierarchy_perspective" identifier="dm-control-panel-available-perspectives-hierarchy_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="dm-control-panel-available-perspectives-er_diagram_perspective" identifier="dm-control-panel-available-perspectives-er_diagram_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
+              <EmbeddingChildDocItem id="dm-control-panel-available-perspectives-repository_perspective" identifier="dm-control-panel-available-perspectives-repository_perspective" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="dm-control-panel-available-perspectives-package_perspective" identifier="dm-control-panel-available-perspectives-package_perspective" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="dm-control-panel-available-perspectives-hierarchy_perspective" identifier="dm-control-panel-available-perspectives-hierarchy_perspective" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="dm-control-panel-available-perspectives-er_diagram_perspective" identifier="dm-control-panel-available-perspectives-er_diagram_perspective" embedded="false" hidden="true" />
             </EmbeddingChildDocItem>
             <EmbeddingChildDocItem id="dm-control-panel-toggle-hide-show-right-panel" identifier="dm-control-panel-toggle-hide-show-right-panel" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="dm-control-panel-close-module" identifier="dm-control-panel-close-module" embedded="false" hidden="true" />
@@ -13318,7 +13352,7 @@ forward to the next nodes.</description>
           <DocItem idref="dm-control-panel-toggle-hide-show-right-panel" />
           <DocItem idref="dm-control-panel-up" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: dm-left-view" primaryDocItemId="dm-left-view" identifier="dm-left-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-left-view" primaryDocItemId="dm-left-view" identifier="dm-left-view">
           <DocItem id="dm-left-view" identifier="dm-left-view" embedded="false" hidden="false">
             <description>No description</description>
             <EmbeddingChildDocItem id="dm-left-view-plus" identifier="dm-left-view-plus" embedded="false" hidden="false" />
@@ -13338,8 +13372,8 @@ forward to the next nodes.</description>
           <DocItem idref="dm-left-view-options" />
           <DocItem idref="dm-left-view-plus" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: dm-main-pane" primaryDocItemId="dm-main-pane" identifier="dm-main-pane">
-          <DocItemFolder id="Folder: DMEOEntityView" primaryDocItemId="DMEOEntityView" identifier="DMEOEntityView">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-pane" primaryDocItemId="dm-main-pane" identifier="dm-main-pane">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-paneDMEOEntityView" primaryDocItemId="DMEOEntityView" identifier="DMEOEntityView">
             <description>Documentation on that view</description>
             <DocItem id="DMEOEntityView" identifier="DMEOEntityView" embedded="false" hidden="false">
               <description>No description</description>
@@ -13355,7 +13389,7 @@ forward to the next nodes.</description>
             <DocItem idref="DMEOEntityView-add_property" />
             <DocItem idref="DMEOEntityView-delete" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: DMEOModelView" primaryDocItemId="DMEOModelView" identifier="DMEOModelView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-paneDMEOModelView" primaryDocItemId="DMEOModelView" identifier="DMEOModelView">
             <description>Documentation on that view</description>
             <DocItem id="DMEOModelView" identifier="DMEOModelView" embedded="false" hidden="false">
               <description>No description</description>
@@ -13373,7 +13407,7 @@ forward to the next nodes.</description>
             <DocItem idref="DMEOModelView-add_property" />
             <DocItem idref="DMEOModelView-delete" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: DMEORepositoryView" primaryDocItemId="DMEORepositoryView" identifier="DMEORepositoryView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-paneDMEORepositoryView" primaryDocItemId="DMEORepositoryView" identifier="DMEORepositoryView">
             <description>Documentation on that view</description>
             <DocItem id="DMEORepositoryView" identifier="DMEORepositoryView" embedded="false" hidden="false">
               <description>No description</description>
@@ -13387,7 +13421,7 @@ forward to the next nodes.</description>
             <DocItem idref="DMEORepositoryView-delete" />
             <DocItem idref="DMEORepositoryView-import_eomodel" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: DMEntityView" primaryDocItemId="DMEntityView" identifier="DMEntityView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-paneDMEntityView" primaryDocItemId="DMEntityView" identifier="DMEntityView">
             <description>Documentation on that view</description>
             <DocItem id="DMEntityView" identifier="DMEntityView" embedded="false" hidden="false">
               <description>No description</description>
@@ -13399,7 +13433,7 @@ forward to the next nodes.</description>
             <DocItem idref="DMEntityView-add_property" />
             <DocItem idref="DMEntityView-delete" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: DMModelView" primaryDocItemId="DMModelView" identifier="DMModelView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-paneDMModelView" primaryDocItemId="DMModelView" identifier="DMModelView">
             <description>Documentation on that view</description>
             <DocItem id="DMModelView" identifier="DMModelView" embedded="false" hidden="false">
               <description>No description</description>
@@ -13411,7 +13445,7 @@ forward to the next nodes.</description>
             <DocItem idref="DMModelView-delete" />
             <DocItem idref="DMModelView-update_repository" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: DMPackageView" primaryDocItemId="DMPackageView" identifier="DMPackageView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-paneDMPackageView" primaryDocItemId="DMPackageView" identifier="DMPackageView">
             <description>Documentation on that view</description>
             <DocItem id="DMPackageView" identifier="DMPackageView" embedded="false" hidden="false">
               <description>No description</description>
@@ -13425,7 +13459,7 @@ forward to the next nodes.</description>
             <DocItem idref="DMPackageView-add_property" />
             <DocItem idref="DMPackageView-delete" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: DMRepositoryFolderView" primaryDocItemId="DMRepositoryFolderView" identifier="DMRepositoryFolderView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-paneDMRepositoryFolderView" primaryDocItemId="DMRepositoryFolderView" identifier="DMRepositoryFolderView">
             <description>Documentation on that view</description>
             <DocItem id="DMRepositoryFolderView" identifier="DMRepositoryFolderView" embedded="false" hidden="false">
               <description>No description</description>
@@ -13437,7 +13471,7 @@ forward to the next nodes.</description>
             <DocItem idref="DMRepositoryFolderView-delete" />
             <DocItem idref="DMRepositoryFolderView-update_repository" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: DMRepositoryView" primaryDocItemId="DMRepositoryView" identifier="DMRepositoryView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-paneDMRepositoryView" primaryDocItemId="DMRepositoryView" identifier="DMRepositoryView">
             <description>Documentation on that view</description>
             <DocItem id="DMRepositoryView" identifier="DMRepositoryView" embedded="false" hidden="false">
               <description>No description</description>
@@ -13449,7 +13483,7 @@ forward to the next nodes.</description>
             <DocItem idref="DMRepositoryView-add_package" />
             <DocItem idref="DMRepositoryView-delete" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: EOPrototypeRepositoryView" primaryDocItemId="EOPrototypeRepositoryView" identifier="EOPrototypeRepositoryView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-paneEOPrototypeRepositoryView" primaryDocItemId="EOPrototypeRepositoryView" identifier="EOPrototypeRepositoryView">
             <description>Documentation on that view</description>
             <DocItem id="EOPrototypeRepositoryView" identifier="EOPrototypeRepositoryView" embedded="false" hidden="false">
               <description>No description</description>
@@ -13459,13 +13493,13 @@ forward to the next nodes.</description>
             <DocItem idref="EOPrototypeRepositoryView-add_prototype" />
             <DocItem idref="EOPrototypeRepositoryView-delete" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: package_perspective" primaryDocItemId="package_perspective" identifier="package_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-panepackage_perspective" primaryDocItemId="package_perspective" identifier="package_perspective">
             <description>Documentation on that perspective</description>
             <DocItem id="package_perspective" identifier="package_perspective" embedded="false" hidden="false">
               <description>No description</description>
             </DocItem>
           </DocItemFolder>
-          <DocItemFolder id="Folder: repository_perspective" primaryDocItemId="repository_perspective" identifier="repository_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-main-panerepository_perspective" primaryDocItemId="repository_perspective" identifier="repository_perspective">
             <description>Documentation on that perspective</description>
             <DocItem id="repository_perspective" identifier="repository_perspective" embedded="false" hidden="false">
               <description>Pas de description</description>
@@ -13486,7 +13520,7 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem idref="package_perspective" />
           </DocItem>
         </DocItemFolder>
-        <DocItemFolder id="Folder: dm-right-view" primaryDocItemId="dm-right-view" identifier="dm-right-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdmdm-right-view" primaryDocItemId="dm-right-view" identifier="dm-right-view">
           <DocItem id="dm-right-view" identifier="dm-right-view" embedded="false" hidden="false">
             <description>No description</description>
           </DocItem>
@@ -13500,8 +13534,8 @@ forward to the next nodes.</description>
           <title key="ENGLISH">Data Model Editor</title>
         </DocItem>
       </DocItemFolder>
-      <DocItemFolder id="Folder: dre" primaryDocItemId="dre" identifier="dre">
-        <DocItemFolder id="Folder: dre-control-panel" primaryDocItemId="dre-control-panel" identifier="dre-control-panel">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdre" primaryDocItemId="dre" identifier="dre">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-control-panel" primaryDocItemId="dre-control-panel" identifier="dre-control-panel">
           <DocItem id="dre-control-panel" identifier="dre-control-panel" embedded="false" hidden="false">
             <description>No description</description>
             <EmbeddingChildDocItem id="dre-control-panel-available-objects" identifier="dre-control-panel-available-objects" embedded="false" hidden="false" />
@@ -13524,7 +13558,7 @@ forward to the next nodes.</description>
           <DocItem idref="dre-control-panel-toggle-hide-show-left-panel" />
           <DocItem idref="dre-control-panel-up" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: dre-left-view" primaryDocItemId="dre-left-view" identifier="dre-left-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-left-view" primaryDocItemId="dre-left-view" identifier="dre-left-view">
           <DocItem id="dre-left-view" identifier="dre-left-view" embedded="false" hidden="false">
             <description>No description</description>
             <EmbeddingChildDocItem id="dre-left-view-plus" identifier="dre-left-view-plus" embedded="false" hidden="false" />
@@ -13535,38 +13569,38 @@ forward to the next nodes.</description>
           <DocItem idref="dre-left-view-options" />
           <DocItem idref="dre-left-view-plus" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: dre-main-pane" primaryDocItemId="dre-main-pane" identifier="dre-main-pane">
-          <DocItemFolder id="Folder: DREViewExample" primaryDocItemId="DREViewExample" identifier="DREViewExample">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-main-pane" primaryDocItemId="dre-main-pane" identifier="dre-main-pane">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-main-paneDREViewExample" primaryDocItemId="DREViewExample" identifier="DREViewExample">
             <description>Documentation on that view</description>
             <DocItem id="DREViewExample" identifier="DREViewExample" embedded="false" hidden="false">
               <description>No description</description>
             </DocItem>
           </DocItemFolder>
-          <DocItemFolder id="Folder: DocCenterView" primaryDocItemId="DocCenterView" identifier="DocCenterView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-main-paneDocCenterView" primaryDocItemId="DocCenterView" identifier="DocCenterView">
             <description>Documentation on that view</description>
             <DocItem id="DocCenterView" identifier="DocCenterView" embedded="false" hidden="false">
               <description>No description</description>
             </DocItem>
           </DocItemFolder>
-          <DocItemFolder id="Folder: DocFolderView" primaryDocItemId="DocFolderView" identifier="DocFolderView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-main-paneDocFolderView" primaryDocItemId="DocFolderView" identifier="DocFolderView">
             <description>Documentation on that view</description>
             <DocItem id="DocFolderView" identifier="DocFolderView" embedded="false" hidden="false">
               <description>No description</description>
             </DocItem>
           </DocItemFolder>
-          <DocItemFolder id="Folder: DocItemView" primaryDocItemId="DocItemView" identifier="DocItemView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-main-paneDocItemView" primaryDocItemId="DocItemView" identifier="DocItemView">
             <description>Documentation on that view</description>
             <DocItem id="DocItemView" identifier="DocItemView" embedded="false" hidden="false">
               <description>No description</description>
             </DocItem>
           </DocItemFolder>
-          <DocItemFolder id="Folder: EmptyPanel" primaryDocItemId="EmptyPanel" identifier="EmptyPanel">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-main-paneEmptyPanel" primaryDocItemId="EmptyPanel" identifier="EmptyPanel">
             <description>Documentation on that view</description>
             <DocItem id="EmptyPanel" identifier="EmptyPanel" embedded="false" hidden="false">
               <description>No description</description>
             </DocItem>
           </DocItemFolder>
-          <DocItemFolder id="Folder: docresourceeditor_perspective" primaryDocItemId="docresourceeditor_perspective" identifier="docresourceeditor_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-main-panedocresourceeditor_perspective" primaryDocItemId="docresourceeditor_perspective" identifier="docresourceeditor_perspective">
             <description>Documentation on that perspective</description>
             <DocItem id="docresourceeditor_perspective" identifier="docresourceeditor_perspective" embedded="false" hidden="false">
               <description>No description</description>
@@ -13582,7 +13616,7 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem idref="docresourceeditor_perspective" />
           </DocItem>
         </DocItemFolder>
-        <DocItemFolder id="Folder: dre-right-view" primaryDocItemId="dre-right-view" identifier="dre-right-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdredre-right-view" primaryDocItemId="dre-right-view" identifier="dre-right-view">
           <DocItem id="dre-right-view" identifier="dre-right-view" embedded="false" hidden="false">
             <description>No description</description>
           </DocItem>
@@ -13596,8 +13630,8 @@ forward to the next nodes.</description>
           <title key="ENGLISH">Document Resource Editor</title>
         </DocItem>
       </DocItemFolder>
-      <DocItemFolder id="Folder: fps" primaryDocItemId="fps" identifier="fps">
-        <DocItemFolder id="Folder: fps-control-panel" primaryDocItemId="fps-control-panel" identifier="fps-control-panel">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetfps" primaryDocItemId="fps" identifier="fps">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetfpsfps-control-panel" primaryDocItemId="fps-control-panel" identifier="fps-control-panel">
           <DocItem id="fps-control-panel" identifier="fps-control-panel" embedded="false" hidden="false">
             <description>Pas de description</description>
             <EmbeddingChildDocItem id="fps-control-panel-available-objects" identifier="fps-control-panel-available-objects" embedded="false" hidden="false" />
@@ -13607,9 +13641,7 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="fps-control-panel-toggle-hide-show-left-panel" identifier="fps-control-panel-toggle-hide-show-left-panel" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="fps-control-panel-toggle-hide-show-right-panel" identifier="fps-control-panel-toggle-hide-show-right-panel" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="fps-control-panel-available-perspectives" identifier="fps-control-panel-available-perspectives" embedded="false" hidden="false" />
-            <EmbeddingChildDocItem id="fps-control-panel-close-module" identifier="fps-control-panel-close-module" embedded="false" hidden="true">
-              <description />
-            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="fps-control-panel-close-module" identifier="fps-control-panel-close-module" embedded="false" hidden="true" />
           </DocItem>
           <DocItem idref="fps-control-panel-available-objects" />
           <DocItem idref="fps-control-panel-available-perspectives" />
@@ -13620,7 +13652,7 @@ forward to the next nodes.</description>
           <DocItem idref="fps-control-panel-toggle-hide-show-right-panel" />
           <DocItem idref="fps-control-panel-up" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: fps-left-view" primaryDocItemId="fps-left-view" identifier="fps-left-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetfpsfps-left-view" primaryDocItemId="fps-left-view" identifier="fps-left-view">
           <DocItem id="fps-left-view" identifier="fps-left-view" embedded="false" hidden="false">
             <description>Pas de description</description>
             <EmbeddingChildDocItem id="fps-left-view-plus" identifier="fps-left-view-plus" embedded="false" hidden="false" />
@@ -13631,8 +13663,8 @@ forward to the next nodes.</description>
           <DocItem idref="fps-left-view-options" />
           <DocItem idref="fps-left-view-plus" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: fps-main-pane" primaryDocItemId="fps-main-pane" identifier="fps-main-pane">
-          <DocItemFolder id="Folder: CVSFileModuleView" primaryDocItemId="CVSFileModuleView" identifier="CVSFileModuleView">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetfpsfps-main-pane" primaryDocItemId="fps-main-pane" identifier="fps-main-pane">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetfpsfps-main-paneCVSFileModuleView" primaryDocItemId="CVSFileModuleView" identifier="CVSFileModuleView">
             <description>Documentation on that view</description>
             <DocItem id="CVSFileModuleView" identifier="CVSFileModuleView" embedded="false" hidden="false">
               <description>Pas de description</description>
@@ -13650,13 +13682,13 @@ forward to the next nodes.</description>
             <DocItem idref="CVSFileModuleView-revert_to_saved" />
             <DocItem idref="CVSFileModuleView-save_file" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: FPSViewExample" primaryDocItemId="FPSViewExample" identifier="FPSViewExample">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetfpsfps-main-paneFPSViewExample" primaryDocItemId="FPSViewExample" identifier="FPSViewExample">
             <description>Documentation on that view</description>
             <DocItem id="FPSViewExample" identifier="FPSViewExample" embedded="false" hidden="false">
               <description>Pas de description</description>
             </DocItem>
           </DocItemFolder>
-          <DocItemFolder id="Folder: all_files" primaryDocItemId="all_files" identifier="all_files">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetfpsfps-main-paneall_files" primaryDocItemId="all_files" identifier="all_files">
             <description>Documentation on that perspective</description>
             <DocItem id="all_files" identifier="all_files" embedded="false" hidden="false">
               <description>Pas de description</description>
@@ -13669,7 +13701,7 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem idref="all_files" />
           </DocItem>
         </DocItemFolder>
-        <DocItemFolder id="Folder: fps-right-view" primaryDocItemId="fps-right-view" identifier="fps-right-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetfpsfps-right-view" primaryDocItemId="fps-right-view" identifier="fps-right-view">
           <DocItem id="fps-right-view" identifier="fps-right-view" embedded="false" hidden="false">
             <description>Pas de description</description>
           </DocItem>
@@ -13683,7 +13715,7 @@ forward to the next nodes.</description>
           <title key="ENGLISH">Project Sharing</title>
         </DocItem>
       </DocItemFolder>
-      <DocItemFolder id="Folder: general module" primaryDocItemId="general module" identifier="general module">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetgeneral module" primaryDocItemId="general module" identifier="general module">
         <description>Description of what is a module</description>
         <DocItem id="general control panel" identifier="general control panel" embedded="false" hidden="false">
           <description>Description of what is the control panel</description>
@@ -13705,15 +13737,9 @@ forward to the next nodes.</description>
                   <DocItemVersion idref="ie-control-panel-available-perspectives-component_editor_perspective_1.0.0ENGLISH" />
                 </DocItemAction>
               </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="ie-control-panel-available-perspectives-default_values_perspective" identifier="ie-control-panel-available-perspectives-default_values_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="ie-control-panel-available-perspectives-menu_perspective" identifier="ie-control-panel-available-perspectives-menu_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="ie-control-panel-available-perspectives-dkv_perspective" identifier="ie-control-panel-available-perspectives-dkv_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
+              <EmbeddingChildDocItem id="ie-control-panel-available-perspectives-default_values_perspective" identifier="ie-control-panel-available-perspectives-default_values_perspective" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="ie-control-panel-available-perspectives-menu_perspective" identifier="ie-control-panel-available-perspectives-menu_perspective" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="ie-control-panel-available-perspectives-dkv_perspective" identifier="ie-control-panel-available-perspectives-dkv_perspective" embedded="false" hidden="true" />
               <title key="ENGLISH">Switch Between Perspectives</title>
               <DocItemVersion id="ie-control-panel-available-perspectives_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
               <DocItemVersion id="ie-control-panel-available-perspectives_1.0.1ENGLISH" languageId="ENGLISH" version="1.0.1" />
@@ -14291,23 +14317,15 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="wse-control-panel-up" identifier="wse-control-panel-up" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="wse-control-panel-toggle-hide-show-left-panel" identifier="wse-control-panel-toggle-hide-show-left-panel" embedded="false" hidden="false" />
             <EmbeddingChildDocItem id="wse-control-panel-available-perspectives" identifier="wse-control-panel-available-perspectives" embedded="false" hidden="false" />
-            <EmbeddingChildDocItem id="wse-control-panel-close-module" identifier="wse-control-panel-close-module" embedded="false" hidden="true">
-              <description />
-            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="wse-control-panel-close-module" identifier="wse-control-panel-close-module" embedded="false" hidden="true" />
           </InheritanceChildDocItem>
           <InheritanceChildDocItem idref="fps-control-panel" />
           <InheritanceChildDocItem id="oe-control-panel" identifier="oe-control-panel" embedded="false" hidden="true">
             <description>No description</description>
             <EmbeddingChildDocItem id="oe-control-panel-available-perspectives" identifier="oe-control-panel-available-perspectives" embedded="false" hidden="true">
-              <EmbeddingChildDocItem id="oe-control-panel-available-perspectives-shema_perspective" identifier="oe-control-panel-available-perspectives-shema_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="oe-control-panel-available-perspectives-ontology_perspective" identifier="oe-control-panel-available-perspectives-ontology_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
-              <EmbeddingChildDocItem id="oe-control-panel-available-perspectives-calc_perspective" identifier="oe-control-panel-available-perspectives-calc_perspective" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
+              <EmbeddingChildDocItem id="oe-control-panel-available-perspectives-shema_perspective" identifier="oe-control-panel-available-perspectives-shema_perspective" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="oe-control-panel-available-perspectives-ontology_perspective" identifier="oe-control-panel-available-perspectives-ontology_perspective" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="oe-control-panel-available-perspectives-calc_perspective" identifier="oe-control-panel-available-perspectives-calc_perspective" embedded="false" hidden="true" />
             </EmbeddingChildDocItem>
             <EmbeddingChildDocItem id="oe-control-panel-available-objects" identifier="oe-control-panel-available-objects" embedded="false" hidden="true" />
             <EmbeddingChildDocItem id="oe-control-panel-back" identifier="oe-control-panel-back" embedded="false" hidden="true" />
@@ -14315,9 +14333,7 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="oe-control-panel-forward" identifier="oe-control-panel-forward" embedded="false" hidden="true" />
             <EmbeddingChildDocItem id="oe-control-panel-toggle-hide-show-left-panel" identifier="oe-control-panel-toggle-hide-show-left-panel" embedded="false" hidden="true" />
             <EmbeddingChildDocItem id="oe-control-panel-toggle-hide-show-right-panel" identifier="oe-control-panel-toggle-hide-show-right-panel" embedded="false" hidden="true" />
-            <EmbeddingChildDocItem id="oe-control-panel-close-module" identifier="oe-control-panel-close-module" embedded="false" hidden="true">
-              <description />
-            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="oe-control-panel-close-module" identifier="oe-control-panel-close-module" embedded="false" hidden="true" />
           </InheritanceChildDocItem>
           <title key="ENGLISH">Panel Central Control</title>
           <DocItemVersion id="general control panel_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
@@ -14872,24 +14888,24 @@ forward to the next nodes.</description>
         </DocItem>
         <DocItem idref="general right view" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: ie" primaryDocItemId="ie" identifier="ie">
-        <DocItemFolder id="Folder: ie-control-panel" primaryDocItemId="ie-control-panel" identifier="ie-control-panel">
-          <DocItem idref="ie-control-panel-back" />
-          <DocItem idref="ie-control-panel-available-perspectives-component_editor_perspective" />
-          <DocItem idref="ie-control-panel-available-objects" />
-          <DocItem idref="ie-control-panel-forward" />
-          <DocItem idref="ie-control-panel-toggle-hide-show-left-panel" />
-          <DocItem idref="ie-control-panel-toggle-hide-show-right-panel" />
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetie" primaryDocItemId="ie" identifier="ie">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-control-panel" primaryDocItemId="ie-control-panel" identifier="ie-control-panel">
           <DocItem idref="ie-control-panel" />
-          <DocItem idref="ie-control-panel-available-perspectives" />
-          <DocItem idref="ie-control-panel-up" />
           <DocItem idref="ie-control-panel-auto-layout" />
+          <DocItem idref="ie-control-panel-available-objects" />
+          <DocItem idref="ie-control-panel-available-perspectives" />
+          <DocItem idref="ie-control-panel-available-perspectives-component_editor_perspective" />
           <DocItem idref="ie-control-panel-available-perspectives-default_values_perspective" />
           <DocItem idref="ie-control-panel-available-perspectives-dkv_perspective" />
           <DocItem idref="ie-control-panel-available-perspectives-menu_perspective" />
+          <DocItem idref="ie-control-panel-back" />
           <DocItem idref="ie-control-panel-close-module" />
+          <DocItem idref="ie-control-panel-forward" />
+          <DocItem idref="ie-control-panel-toggle-hide-show-left-panel" />
+          <DocItem idref="ie-control-panel-toggle-hide-show-right-panel" />
+          <DocItem idref="ie-control-panel-up" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: ie-left-view" primaryDocItemId="ie-left-view" identifier="ie-left-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-left-view" primaryDocItemId="ie-left-view" identifier="ie-left-view">
           <DocItem idref="ie-left-view" />
           <DocItem idref="ie-left-view-component-browser" />
           <DocItem idref="ie-left-view-component-browser-minus" />
@@ -14911,8 +14927,8 @@ forward to the next nodes.</description>
           <DocItem idref="ie-left-view-options" />
           <DocItem idref="ie-left-view-plus" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: ie-main-pane" primaryDocItemId="ie-main-pane" identifier="ie-main-pane">
-          <DocItemFolder id="Folder: DKVModelView" primaryDocItemId="DKVModelView" identifier="DKVModelView">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-pane" primaryDocItemId="ie-main-pane" identifier="ie-main-pane">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-paneDKVModelView" primaryDocItemId="DKVModelView" identifier="DKVModelView">
             <description>Documentation on that view</description>
             <DocItem idref="DKVModelView" />
             <DocItem idref="DKVModelView-add_domain" />
@@ -14920,49 +14936,49 @@ forward to the next nodes.</description>
             <DocItem idref="DKVModelView-add_language" />
             <DocItem idref="DKVModelView-delete" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: component_editor_perspective" primaryDocItemId="component_editor_perspective" identifier="component_editor_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panecomponent_editor_perspective" primaryDocItemId="component_editor_perspective" identifier="component_editor_perspective">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: FlexoMenuItemView" primaryDocItemId="FlexoMenuItemView" identifier="FlexoMenuItemView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panecomponent_editor_perspectiveFlexoMenuItemView" primaryDocItemId="FlexoMenuItemView" identifier="FlexoMenuItemView">
               <description>Documentation on that view</description>
               <DocItem idref="FlexoMenuItemView" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: FlexoMenuRootItemView" primaryDocItemId="FlexoMenuRootItemView" identifier="FlexoMenuRootItemView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panecomponent_editor_perspectiveFlexoMenuRootItemView" primaryDocItemId="FlexoMenuRootItemView" identifier="FlexoMenuRootItemView">
               <description>Documentation on that view</description>
               <DocItem idref="FlexoMenuRootItemView" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: IEEmptyPanel" primaryDocItemId="IEEmptyPanel" identifier="IEEmptyPanel">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panecomponent_editor_perspectiveIEEmptyPanel" primaryDocItemId="IEEmptyPanel" identifier="IEEmptyPanel">
               <description>Documentation on that view</description>
               <DocItem idref="IEEmptyPanel" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: IEWOComponentView" primaryDocItemId="IEWOComponentView" identifier="IEWOComponentView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panecomponent_editor_perspectiveIEWOComponentView" primaryDocItemId="IEWOComponentView" identifier="IEWOComponentView">
               <description>Documentation on that view</description>
               <DocItem idref="IEWOComponentView" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: ReusableWidgetComponentView" primaryDocItemId="ReusableWidgetComponentView" identifier="ReusableWidgetComponentView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panecomponent_editor_perspectiveReusableWidgetComponentView" primaryDocItemId="ReusableWidgetComponentView" identifier="ReusableWidgetComponentView">
               <description>Documentation on that view</description>
               <DocItem idref="ReusableWidgetComponentView" />
             </DocItemFolder>
             <DocItem idref="component_editor_perspective" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: default_values_perspective" primaryDocItemId="default_values_perspective" identifier="default_values_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panedefault_values_perspective" primaryDocItemId="default_values_perspective" identifier="default_values_perspective">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: IEExampleValuesView" primaryDocItemId="IEExampleValuesView" identifier="IEExampleValuesView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panedefault_values_perspectiveIEExampleValuesView" primaryDocItemId="IEExampleValuesView" identifier="IEExampleValuesView">
               <description>Documentation on that view</description>
               <DocItem idref="IEExampleValuesView" />
             </DocItemFolder>
             <DocItem idref="default_values_perspective" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: dkv_perspective" primaryDocItemId="dkv_perspective" identifier="dkv_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panedkv_perspective" primaryDocItemId="dkv_perspective" identifier="dkv_perspective">
             <description>Documentation on that perspective</description>
             <DocItem idref="dkv_perspective" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: menu_perspective" primaryDocItemId="menu_perspective" identifier="menu_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-main-panemenu_perspective" primaryDocItemId="menu_perspective" identifier="menu_perspective">
             <description>Documentation on that perspective</description>
             <DocItem idref="menu_perspective" />
           </DocItemFolder>
           <DocItem idref="ie-main-pane" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: ie-right-view" primaryDocItemId="ie-right-view" identifier="ie-right-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetieie-right-view" primaryDocItemId="ie-right-view" identifier="ie-right-view">
           <DocItem idref="ie-right-view" />
           <DocItem idref="ie-right-view-ie-palette" />
         </DocItemFolder>
@@ -14982,8 +14998,8 @@ forward to the next nodes.</description>
           </DocItemAction>
         </DocItem>
       </DocItemFolder>
-      <DocItemFolder id="Folder: oe" primaryDocItemId="oe" identifier="oe">
-        <DocItemFolder id="Folder: oe-control-panel" primaryDocItemId="oe-control-panel" identifier="oe-control-panel">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoe" primaryDocItemId="oe" identifier="oe">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-control-panel" primaryDocItemId="oe-control-panel" identifier="oe-control-panel">
           <DocItem idref="oe-control-panel" />
           <DocItem idref="oe-control-panel-available-objects" />
           <DocItem idref="oe-control-panel-available-perspectives" />
@@ -14997,32 +15013,32 @@ forward to the next nodes.</description>
           <DocItem idref="oe-control-panel-toggle-hide-show-right-panel" />
           <DocItem idref="oe-control-panel-up" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: oe-left-view" primaryDocItemId="oe-left-view" identifier="oe-left-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-left-view" primaryDocItemId="oe-left-view" identifier="oe-left-view">
           <DocItem idref="oe-left-view" />
           <DocItem idref="oe-left-view-minus" />
           <DocItem idref="oe-left-view-options" />
           <DocItem idref="oe-left-view-plus" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: oe-main-pane" primaryDocItemId="oe-main-pane" identifier="oe-main-pane">
-          <DocItemFolder id="Folder: calc_perspective" primaryDocItemId="calc_perspective" identifier="calc_perspective">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-pane" primaryDocItemId="oe-main-pane" identifier="oe-main-pane">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-panecalc_perspective" primaryDocItemId="calc_perspective" identifier="calc_perspective">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: CalcLibraryView" primaryDocItemId="CalcLibraryView" identifier="CalcLibraryView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-panecalc_perspectiveCalcLibraryView" primaryDocItemId="CalcLibraryView" identifier="CalcLibraryView">
               <description>Documentation on that view</description>
               <DocItem idref="CalcLibraryView" />
             </DocItemFolder>
             <DocItem idref="calc_perspective" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: ontology_perspective" primaryDocItemId="ontology_perspective" identifier="ontology_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-paneontology_perspective" primaryDocItemId="ontology_perspective" identifier="ontology_perspective">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: FlexoOntologyView" primaryDocItemId="FlexoOntologyView" identifier="FlexoOntologyView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-paneontology_perspectiveFlexoOntologyView" primaryDocItemId="FlexoOntologyView" identifier="FlexoOntologyView">
               <description>Documentation on that view</description>
               <DocItem idref="FlexoOntologyView" />
             </DocItemFolder>
             <DocItem idref="ontology_perspective" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: shema_perspective" primaryDocItemId="shema_perspective" identifier="shema_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-paneshema_perspective" primaryDocItemId="shema_perspective" identifier="shema_perspective">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: OEShemaModuleView" primaryDocItemId="OEShemaModuleView" identifier="OEShemaModuleView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-paneshema_perspectiveOEShemaModuleView" primaryDocItemId="OEShemaModuleView" identifier="OEShemaModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="OEShemaModuleView" />
             </DocItemFolder>
@@ -15030,30 +15046,30 @@ forward to the next nodes.</description>
           </DocItemFolder>
           <DocItem idref="oe-main-pane" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: oe-right-view" primaryDocItemId="oe-right-view" identifier="oe-right-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-right-view" primaryDocItemId="oe-right-view" identifier="oe-right-view">
           <DocItem idref="oe-right-view" />
         </DocItemFolder>
         <DocItem idref="oe" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: wkf" primaryDocItemId="wkf" identifier="wkf">
-        <DocItemFolder id="Folder: wkf-control-panel" primaryDocItemId="wkf-control-panel" identifier="wkf-control-panel">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkf" primaryDocItemId="wkf" identifier="wkf">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-control-panel" primaryDocItemId="wkf-control-panel" identifier="wkf-control-panel">
+          <DocItem idref="wkf-control-panel" />
+          <DocItem idref="wkf-control-panel-auto-layout" />
+          <DocItem idref="wkf-control-panel-available-objects" />
+          <DocItem idref="wkf-control-panel-available-perspectives" />
+          <DocItem idref="wkf-control-panel-available-perspectives-documentation" />
+          <DocItem idref="wkf-control-panel-available-perspectives-process_edition" />
+          <DocItem idref="wkf-control-panel-available-perspectives-role_editor" />
+          <DocItem idref="wkf-control-panel-available-perspectives-swimming_lanes" />
           <DocItem idref="wkf-control-panel-back" />
           <DocItem idref="wkf-control-panel-close-module" />
           <DocItem idref="wkf-control-panel-collapse-all" />
-          <DocItem idref="wkf-control-panel-available-perspectives-documentation" />
-          <DocItem idref="wkf-control-panel-available-objects" />
           <DocItem idref="wkf-control-panel-forward" />
           <DocItem idref="wkf-control-panel-toggle-hide-show-left-panel" />
           <DocItem idref="wkf-control-panel-toggle-hide-show-right-panel" />
-          <DocItem idref="wkf-control-panel-available-perspectives-process_edition" />
-          <DocItem idref="wkf-control-panel-auto-layout" />
-          <DocItem idref="wkf-control-panel-available-perspectives-role_editor" />
-          <DocItem idref="wkf-control-panel-available-perspectives-swimming_lanes" />
-          <DocItem idref="wkf-control-panel-available-perspectives" />
           <DocItem idref="wkf-control-panel-up" />
-          <DocItem idref="wkf-control-panel" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: wkf-left-view" primaryDocItemId="wkf-left-view" identifier="wkf-left-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-left-view" primaryDocItemId="wkf-left-view" identifier="wkf-left-view">
           <DocItem idref="wkf-left-view" />
           <DocItem idref="wkf-left-view-minus" />
           <DocItem idref="wkf-left-view-options" />
@@ -15067,42 +15083,42 @@ forward to the next nodes.</description>
           <DocItem idref="wkf-left-view-workflow-browser-options" />
           <DocItem idref="wkf-left-view-workflow-browser-plus" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: wkf-main-pane" primaryDocItemId="wkf-main-pane" identifier="wkf-main-pane">
-          <DocItemFolder id="Folder: documentation" primaryDocItemId="documentation" identifier="documentation">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-pane" primaryDocItemId="wkf-main-pane" identifier="wkf-main-pane">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-panedocumentation" primaryDocItemId="documentation" identifier="documentation">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: WKFDocumentationView" primaryDocItemId="WKFDocumentationView" identifier="WKFDocumentationView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-panedocumentationWKFDocumentationView" primaryDocItemId="WKFDocumentationView" identifier="WKFDocumentationView">
               <description>Documentation on that view</description>
               <DocItem idref="WKFDocumentationView" />
             </DocItemFolder>
             <DocItem idref="documentation" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: process_edition" primaryDocItemId="process_edition" identifier="process_edition">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneprocess_edition" primaryDocItemId="process_edition" identifier="process_edition">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: FlexoProcessView" primaryDocItemId="FlexoProcessView" identifier="FlexoProcessView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneprocess_editionFlexoProcessView" primaryDocItemId="FlexoProcessView" identifier="FlexoProcessView">
               <description>Documentation on that view</description>
               <DocItem idref="FlexoProcessView" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: ProcessView" primaryDocItemId="ProcessView" identifier="ProcessView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneprocess_editionProcessView" primaryDocItemId="ProcessView" identifier="ProcessView">
               <description>Documentation on that view</description>
               <DocItem idref="ProcessView" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: WKFDocumentationView2" primaryDocItemId="WKFDocumentationView2" identifier="WKFDocumentationView2">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneprocess_editionWKFDocumentationView2" primaryDocItemId="WKFDocumentationView2" identifier="WKFDocumentationView2">
               <description>Documentation on that view</description>
               <DocItem idref="WKFDocumentationView2" />
             </DocItemFolder>
             <DocItem idref="process_edition" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: role_editor" primaryDocItemId="role_editor" identifier="role_editor">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-panerole_editor" primaryDocItemId="role_editor" identifier="role_editor">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: RoleEditorView" primaryDocItemId="RoleEditorView" identifier="RoleEditorView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-panerole_editorRoleEditorView" primaryDocItemId="RoleEditorView" identifier="RoleEditorView">
               <description>Documentation on that view</description>
               <DocItem idref="RoleEditorView" />
             </DocItemFolder>
             <DocItem idref="role_editor" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: swimming_lanes" primaryDocItemId="swimming_lanes" identifier="swimming_lanes">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneswimming_lanes" primaryDocItemId="swimming_lanes" identifier="swimming_lanes">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: SwimmingLaneView" primaryDocItemId="SwimmingLaneView" identifier="SwimmingLaneView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneswimming_lanesSwimmingLaneView" primaryDocItemId="SwimmingLaneView" identifier="SwimmingLaneView">
               <description>Documentation on that view</description>
               <DocItem idref="SwimmingLaneView" />
             </DocItemFolder>
@@ -15110,14 +15126,14 @@ forward to the next nodes.</description>
           </DocItemFolder>
           <DocItem idref="wkf-main-pane" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: wkf-right-view" primaryDocItemId="wkf-right-view" identifier="wkf-right-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-right-view" primaryDocItemId="wkf-right-view" identifier="wkf-right-view">
           <DocItem idref="wkf-right-view" />
           <DocItem idref="wkf-right-view-wkf-palette" />
         </DocItemFolder>
         <DocItem idref="wkf" />
       </DocItemFolder>
-      <DocItemFolder id="Folder: wse" primaryDocItemId="wse" identifier="wse">
-        <DocItemFolder id="Folder: wse-control-panel" primaryDocItemId="wse-control-panel" identifier="wse-control-panel">
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwse" primaryDocItemId="wse" identifier="wse">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-control-panel" primaryDocItemId="wse-control-panel" identifier="wse-control-panel">
           <DocItem idref="wse-control-panel" />
           <DocItem idref="wse-control-panel-available-objects" />
           <DocItem idref="wse-control-panel-available-perspectives" />
@@ -15127,66 +15143,66 @@ forward to the next nodes.</description>
           <DocItem idref="wse-control-panel-toggle-hide-show-left-panel" />
           <DocItem idref="wse-control-panel-up" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: wse-left-view" primaryDocItemId="wse-left-view" identifier="wse-left-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-left-view" primaryDocItemId="wse-left-view" identifier="wse-left-view">
           <DocItem idref="wse-left-view" />
           <DocItem idref="wse-left-view-minus" />
           <DocItem idref="wse-left-view-options" />
           <DocItem idref="wse-left-view-plus" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: wse-main-pane" primaryDocItemId="wse-main-pane" identifier="wse-main-pane">
-          <DocItemFolder id="Folder: WSEDMPackageView" primaryDocItemId="WSEDMPackageView" identifier="WSEDMPackageView">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-pane" primaryDocItemId="wse-main-pane" identifier="wse-main-pane">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSEDMPackageView" primaryDocItemId="WSEDMPackageView" identifier="WSEDMPackageView">
             <description>Documentation on that view</description>
             <DocItem idref="WSEDMPackageView" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: WSEDMRepositoryView" primaryDocItemId="WSEDMRepositoryView" identifier="WSEDMRepositoryView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSEDMRepositoryView" primaryDocItemId="WSEDMRepositoryView" identifier="WSEDMRepositoryView">
             <description>Documentation on that view</description>
             <DocItem idref="WSEDMRepositoryView" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: WSEExternalWSFolderView" primaryDocItemId="WSEExternalWSFolderView" identifier="WSEExternalWSFolderView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSEExternalWSFolderView" primaryDocItemId="WSEExternalWSFolderView" identifier="WSEExternalWSFolderView">
             <description>Documentation on that view</description>
             <DocItem idref="WSEExternalWSFolderView" />
             <DocItem idref="WSEExternalWSFolderView-delete" />
             <DocItem idref="WSEExternalWSFolderView-ws_add_webservice..." />
           </DocItemFolder>
-          <DocItemFolder id="Folder: WSEInternalWSFolderView" primaryDocItemId="WSEInternalWSFolderView" identifier="WSEInternalWSFolderView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSEInternalWSFolderView" primaryDocItemId="WSEInternalWSFolderView" identifier="WSEInternalWSFolderView">
             <description>Documentation on that view</description>
             <DocItem idref="WSEInternalWSFolderView" />
             <DocItem idref="WSEInternalWSFolderView-delete" />
             <DocItem idref="WSEInternalWSFolderView-ws_add_webservice..." />
           </DocItemFolder>
-          <DocItemFolder id="Folder: WSELibraryView" primaryDocItemId="WSELibraryView" identifier="WSELibraryView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSELibraryView" primaryDocItemId="WSELibraryView" identifier="WSELibraryView">
             <description>Documentation on that view</description>
             <DocItem idref="WSELibraryView" />
             <DocItem idref="WSELibraryView-delete" />
             <DocItem idref="WSELibraryView-ws_add_webservice..." />
           </DocItemFolder>
-          <DocItemFolder id="Folder: WSEMessageView" primaryDocItemId="WSEMessageView" identifier="WSEMessageView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSEMessageView" primaryDocItemId="WSEMessageView" identifier="WSEMessageView">
             <description>Documentation on that view</description>
             <DocItem idref="WSEMessageView" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: WSEPortTypeFolderView" primaryDocItemId="WSEPortTypeFolderView" identifier="WSEPortTypeFolderView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSEPortTypeFolderView" primaryDocItemId="WSEPortTypeFolderView" identifier="WSEPortTypeFolderView">
             <description>Documentation on that view</description>
             <DocItem idref="WSEPortTypeFolderView" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: WSEPortTypeView" primaryDocItemId="WSEPortTypeView" identifier="WSEPortTypeView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSEPortTypeView" primaryDocItemId="WSEPortTypeView" identifier="WSEPortTypeView">
             <description>Documentation on that view</description>
             <DocItem idref="WSEPortTypeView" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: WSERepositoryFolderView" primaryDocItemId="WSERepositoryFolderView" identifier="WSERepositoryFolderView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSERepositoryFolderView" primaryDocItemId="WSERepositoryFolderView" identifier="WSERepositoryFolderView">
             <description>Documentation on that view</description>
             <DocItem idref="WSERepositoryFolderView" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: WSEServiceOperationView" primaryDocItemId="WSEServiceOperationView" identifier="WSEServiceOperationView">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-paneWSEServiceOperationView" primaryDocItemId="WSEServiceOperationView" identifier="WSEServiceOperationView">
             <description>Documentation on that view</description>
             <DocItem idref="WSEServiceOperationView" />
           </DocItemFolder>
-          <DocItemFolder id="Folder: webserviceeditor_perspective" primaryDocItemId="webserviceeditor_perspective" identifier="webserviceeditor_perspective">
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-panewebserviceeditor_perspective" primaryDocItemId="webserviceeditor_perspective" identifier="webserviceeditor_perspective">
             <description>Documentation on that perspective</description>
-            <DocItemFolder id="Folder: WSEDMEntityView" primaryDocItemId="WSEDMEntityView" identifier="WSEDMEntityView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-panewebserviceeditor_perspectiveWSEDMEntityView" primaryDocItemId="WSEDMEntityView" identifier="WSEDMEntityView">
               <description>Documentation on that view</description>
               <DocItem idref="WSEDMEntityView" />
             </DocItemFolder>
-            <DocItemFolder id="Folder: WSEServiceView" primaryDocItemId="WSEServiceView" identifier="WSEServiceView">
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-main-panewebserviceeditor_perspectiveWSEServiceView" primaryDocItemId="WSEServiceView" identifier="WSEServiceView">
               <description>Documentation on that view</description>
               <DocItem idref="WSEServiceView" />
             </DocItemFolder>
@@ -15194,7 +15210,7 @@ forward to the next nodes.</description>
           </DocItemFolder>
           <DocItem idref="wse-main-pane" />
         </DocItemFolder>
-        <DocItemFolder id="Folder: wse-right-view" primaryDocItemId="wse-right-view" identifier="wse-right-view">
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwsewse-right-view" primaryDocItemId="wse-right-view" identifier="wse-right-view">
           <DocItem idref="wse-right-view" />
         </DocItemFolder>
         <DocItem id="wse" identifier="wse" embedded="false" hidden="false">
