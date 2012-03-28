@@ -3963,7 +3963,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public FlexoResourceCenter getResourceCenter() {
 		if (resourceCenter == null) {
 			File file = getResourceCenterFile();
-			resourceCenter = new LocalResourceCenterImplementation(file);
+			setResourceCenter(new LocalResourceCenterImplementation(file));
 		}
 		// logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
 		return resourceCenter;
@@ -4016,11 +4016,22 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
-		logger.info(">>>>>>>>>>>>>>>>> setResourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
-
-		this.resourceCenter = resourceCenter;
-		EditionPatternConverter editionPatternConverter = new EditionPatternConverter(resourceCenter);
-		getStringEncoder()._addConverter(editionPatternConverter);
+		if (resourceCenter != null) {
+			if (resourceCenter == this.resourceCenter) {
+				logger.warning("Resource center is already set and the same as this new attempt. I will simply ignore the call.");
+				return;
+			}
+			logger.info(">>>>>>>>>>>>>>>>> setResourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
+			if (this.resourceCenter != null) {
+				logger.warning("Changing resource center on project " + getProjectName() + ". This is likely to cause problems.");
+			}
+			this.resourceCenter = resourceCenter;
+			EditionPatternConverter editionPatternConverter = new EditionPatternConverter(resourceCenter);
+			getStringEncoder()._addConverter(editionPatternConverter);
+		} else {
+			logger.warning("An attempt to set a null resource center was made. I will print a stacktrace to let you know where it came from but I am not setting the RC to null!");
+			new Exception("Attempt to set a null resource center on project " + getProjectName()).printStackTrace();
+		}
 	}
 
 	private Role testRole;
