@@ -631,6 +631,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				getProject().checkResourceIntegrity();
 			}
 			super.saveResourceData(clearIsModified);
+			if (getProject() != null) {
+				getProject().writeDotVersion();
+			}
 			saveTSFile();
 			if (!isInitializingProject && getProject() != null) {
 				getProject().deleteFilesToBeDeleted();
