@@ -368,6 +368,20 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return false;
 	}
 
+	public CreationScheme createCreationScheme() {
+		CreationScheme newCreationScheme = new CreationScheme();
+		newCreationScheme.setName("creation");
+		addToEditionSchemes(newCreationScheme);
+		return newCreationScheme;
+	}
+
+	public DeletionScheme createDeletionScheme() {
+		DeletionScheme newDeletionScheme = new DeletionScheme();
+		newDeletionScheme.setName("deletion");
+		addToEditionSchemes(newDeletionScheme);
+		return newDeletionScheme;
+	}
+
 	public DropScheme createDropScheme() {
 		DropScheme newDropScheme = new DropScheme();
 		newDropScheme.setName("drop");
@@ -387,6 +401,13 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		newActionScheme.setName("action");
 		addToEditionSchemes(newActionScheme);
 		return newActionScheme;
+	}
+
+	public NavigationScheme createNavigationScheme() {
+		NavigationScheme newNavigationScheme = new NavigationScheme();
+		newNavigationScheme.setName("navigation");
+		addToEditionSchemes(newNavigationScheme);
+		return newNavigationScheme;
 	}
 
 	public EditionScheme deleteEditionScheme(EditionScheme editionScheme) {

@@ -183,7 +183,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getScheme().getParametersBindingModel();
+		return getScheme().getBindingModel();
 	}
 
 	public ViewPointDataBinding getDefaultValue() {

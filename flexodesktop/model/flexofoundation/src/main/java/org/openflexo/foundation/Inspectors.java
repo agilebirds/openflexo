@@ -933,6 +933,9 @@ public class Inspectors {
 		public String DROP_SCHEME_INSPECTOR = "DropScheme.inspector";
 		public String LINK_SCHEME_INSPECTOR = "LinkScheme.inspector";
 		public String ACTION_SCHEME_INSPECTOR = "ActionScheme.inspector";
+		public String NAVIGATION_SCHEME_INSPECTOR = "NavigationScheme.inspector";
+		public String DELETION_SCHEME_INSPECTOR = "DeletionScheme.inspector";
+		public String CREATION_SCHEME_INSPECTOR = "CreationScheme.inspector";
 
 		public String ADD_SHAPE_INSPECTOR = "AddShape.inspector";
 		public String ADD_CONNECTOR_INSPECTOR = "AddConnector.inspector";

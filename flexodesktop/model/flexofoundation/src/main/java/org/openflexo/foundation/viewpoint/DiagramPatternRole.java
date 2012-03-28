@@ -15,6 +15,9 @@ public class DiagramPatternRole extends PatternRole {
 
 	@Override
 	public String getPreciseType() {
+		if (getViewpoint() != null) {
+			return getViewpoint().getName();
+		}
 		return FlexoLocalization.localizedForKey("diagram");
 	}
 
@@ -34,11 +37,17 @@ public class DiagramPatternRole extends PatternRole {
 	}
 
 	public ViewPoint getViewpoint() {
+		if (viewpoint == null && viewpointURI != null && getViewPointLibrary() != null) {
+			viewpoint = getViewPointLibrary().getViewPoint(viewpointURI);
+		}
 		return viewpoint;
 	}
 
 	public void setViewpoint(ViewPoint viewpoint) {
 		this.viewpoint = viewpoint;
+		if (viewpoint != null) {
+			viewpointURI = viewpoint.getURI();
+		}
 	}
 
 	public String _getViewpointURI() {

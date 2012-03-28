@@ -188,6 +188,10 @@
 			primary="yes" />
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.CreationScheme"
+		xmlTag="CreationScheme">
+	</entity>
+
 	<entity name="org.openflexo.foundation.viewpoint.DropScheme"
 		xmlTag="DropScheme">
 		<property name="target" xmlTag="target" attribute="YES" />
@@ -201,9 +205,20 @@
 		<property name="isAvailableWithFloatingPalette" xmlTag="isAvailableWithFloatingPalette" attribute="YES" />
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.AbstractActionScheme" abstract="YES">
+		<property name="conditional" xmlTag="conditional" attribute="YES" />
+	</entity>
+
 	<entity name="org.openflexo.foundation.viewpoint.ActionScheme"
 		xmlTag="ActionScheme">
-		<property name="conditional" xmlTag="conditional" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.NavigationScheme"
+		xmlTag="NavigationScheme">
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.DeletionScheme"
+		xmlTag="DeletionScheme">
 	</entity>
 
 	<entity

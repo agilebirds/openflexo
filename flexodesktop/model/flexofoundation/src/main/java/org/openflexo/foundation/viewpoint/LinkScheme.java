@@ -25,7 +25,7 @@ import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class LinkScheme extends EditionScheme {
+public class LinkScheme extends CreationScheme {
 
 	private String fromTarget;
 	private String toTarget;
@@ -98,6 +98,7 @@ public class LinkScheme extends EditionScheme {
 
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
+		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getFromTargetEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.FROM_TARGET,

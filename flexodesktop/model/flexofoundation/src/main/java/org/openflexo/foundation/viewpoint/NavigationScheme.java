@@ -22,24 +22,26 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 
-public class ActionScheme extends AbstractActionScheme {
+public class NavigationScheme extends AbstractActionScheme {
 
-	public ActionScheme() {
+	public NavigationScheme() {
 		super();
 	}
 
 	@Override
 	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.ActionScheme;
+		return EditionSchemeType.NavigationScheme;
 	}
 
 	@Override
 	public String getInspectorName() {
-		return Inspectors.VPM.ACTION_SCHEME_INSPECTOR;
+		return Inspectors.VPM.NAVIGATION_SCHEME_INSPECTOR;
 	}
 
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

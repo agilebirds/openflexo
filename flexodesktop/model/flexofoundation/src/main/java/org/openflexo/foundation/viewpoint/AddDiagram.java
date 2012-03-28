@@ -82,9 +82,11 @@ public class AddDiagram extends EditionAction<DiagramPatternRole> {
 	}
 
 	public void setDiagramName(ViewPointDataBinding aDiagramName) {
-		this.diagramName.setOwner(this);
-		this.diagramName.setBindingAttribute(EditionActionBindingAttribute.diagramName);
-		this.diagramName.setBindingDefinition(getDiagramNameBindingDefinition());
+		if (aDiagramName != null) {
+			aDiagramName.setOwner(this);
+			aDiagramName.setBindingAttribute(EditionActionBindingAttribute.diagramName);
+			aDiagramName.setBindingDefinition(getDiagramNameBindingDefinition());
+		}
 		this.diagramName = aDiagramName;
 	}
 
