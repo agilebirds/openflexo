@@ -160,6 +160,7 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 		if (getCalc() != null) {
 			getCalc().removeFromCalcPalettes(this);
 		}
+		logger.info("Deleting file " + _paletteFile);
 		_paletteFile.delete();
 		super.delete();
 		deleteObservers();
@@ -186,6 +187,14 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public void setName(String name) throws Exception {
+		super.setName(name);
+		if (_paletteFile != null && !_paletteFile.getName().startsWith(name)) {
+			FileUtils.rename(_paletteFile, new File(_paletteFile.getParentFile(), name + ".palette"));
+		}
 	}
 
 	@Override

@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.shapes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -48,6 +49,7 @@ public class RegularPolygon extends Polygon {
 
 	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
 		super(aGraphicalRepresentation);
+		setPoints(new ArrayList<FGEPoint>(points));
 	}
 
 	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {

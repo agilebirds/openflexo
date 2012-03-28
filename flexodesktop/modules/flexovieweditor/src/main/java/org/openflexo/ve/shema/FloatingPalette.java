@@ -361,7 +361,15 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 		}
 
-		if (availableConnectors.size() > 0) {
+		if (availableConnectors.size() == 1) {
+			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller).getOEController()
+					.getEditor());
+			action.setLinkScheme(availableConnectors.firstElement());
+			action.setFromShape(from);
+			action.setToShape(to);
+			action.escapeParameterRetrievingWhenValid = true;
+			action.doAction();
+		} else if (availableConnectors.size() > 1) {
 			JPopupMenu popup = new JPopupMenu();
 			for (final LinkScheme linkScheme : availableConnectors) {
 				// final CalcPaletteConnector connector = availableConnectors.get(linkScheme);
@@ -384,7 +392,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				menuItem.setToolTipText(linkScheme.getDescription());
 				popup.add(menuItem);
 			}
-			JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey("graphical_connector_only"));
+			/*JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey("graphical_connector_only"));
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -396,7 +404,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				}
 			});
 			menuItem.setToolTipText(FlexoLocalization.localizedForKey("draw_basic_graphical_connector_without_ontologic_semantic"));
-			popup.add(menuItem);
+			popup.add(menuItem);*/
 			popup.show((Component) controller.getDrawingView().viewForObject(controller.getGraphicalRepresentation(target)),
 					(int) dropLocation.x, (int) dropLocation.y);
 		} else {

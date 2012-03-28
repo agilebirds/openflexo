@@ -290,8 +290,8 @@ public abstract class EditionScheme extends ViewPointObject {
 		return newAction;
 	}
 
-	public AddShema createAddShemaAction() {
-		AddShema newAction = new AddShema();
+	public AddDiagram createAddShemaAction() {
+		AddDiagram newAction = new AddDiagram();
 		addToActions(newAction);
 		return newAction;
 	}

@@ -60,7 +60,9 @@ public abstract class PropertyParameter extends EditionSchemeParameter {
 	}
 
 	public OntologyProperty getParentProperty() {
-		getCalc().loadWhenUnloaded();
+		if (getCalc() != null) {
+			getCalc().loadWhenUnloaded();
+		}
 		return getOntologyLibrary().getProperty(_getParentPropertyURI());
 	}
 

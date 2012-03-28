@@ -122,7 +122,7 @@ public class AddViewInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddView>() {
 			@Override
 			public boolean run(ActionEvent e, AddView action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getNewShema());
+				getController().setCurrentEditedObjectAsModuleView(action.getNewDiagram());
 				return true;
 			}
 		};

@@ -20,7 +20,7 @@
         <AddAction method="data.createConnectorPatternRole" name="add_connector" />
         <AddAction method="data.createFlexoModelObjectPatternRole" name="add_flexo_model_object" />
         <AddAction method="data.createPrimitivePatternRole" name="add_primitive" />
-        <AddAction method="data.createShemaPatternRole" name="add_shema" />
+        <AddAction method="data.createDiagramPatternRole" name="add_diagram" />
         <AddAction method="data.createClassPatternRole" name="add_class" />
         <AddAction method="data.createIndividualPatternRole" name="add_individual" />
         <AddAction method="data.createObjectPropertyPatternRole" name="add_object_property" />
@@ -243,11 +243,17 @@
             <Label label="role_type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <TextField columns="6" text="TextField" data="RestrictionStatementPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
           </Panel>
-          <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.ShemaPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;Shema&quot;)" name="ShemaPatternRole">
+          <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.DiagramPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;Diagram&quot;)" name="DiagramPatternRole">
             <Label label="pattern_role" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <TextField columns="6" text="TextField" data="ShemaPatternRole.data.patternRoleName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
+            <TextField columns="6" text="TextField" data="DiagramPatternRole.data.patternRoleName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
             <Label label="type" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-            <TextField columns="6" text="TextField" data="ShemaPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
+            <TextField columns="6" text="TextField" data="DiagramPatternRole.data.type.toString" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" readOnly="true" localize="true" />
+            <Label label="viewpoint" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+              <LocalizedDictionary />
+            </Label>
+            <DropDown format="object.name" localize="true" name="dropdown" data="DiagramPatternRole.data.viewpoint" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" staticList="" list="DiagramPatternRole.data.viewPointLibrary.viewPoints" iteratorClassName="org.openflexo.foundation.viewpoint.ViewPoint" autoSelectFirstRow="false">
+              <LocalizedDictionary />
+            </DropDown>
           </Panel>
           <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;FlexoModelObject&quot;)" name="FlexoModelObjectPatternRole">
             <Label label="pattern_role" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -326,8 +332,12 @@
               <DropDown format="object.name" localize="true" name="dropdown" data="LinkSchemePanel.data.fromTargetEditionPattern" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" list="data.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="false" />
               <Label label="to" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
               <DropDown format="object.name" localize="true" name="dropdown" data="LinkSchemePanel.data.toTargetEditionPattern" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" list="data.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="false" />
-              <Label label="description" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-              <TextArea columns="6" rows="2" data="LinkSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
+              <CheckBox selected="true" localize="true" name="checkbox" data="LinkSchemePanel.data.isAvailableWithFloatingPalette" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=3;insetsRight=0;insetsTop=1;location=left)" />
+              <Label label="available with floating palette" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+                <LocalizedDictionary />
+              </Label>
+              <Label label="description" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+              <TextArea columns="6" rows="2" data="LinkSchemePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
             </Panel>
             <Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="ActionScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.ActionScheme" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionSchemeTable.selected.editionSchemeType = &quot;ActionScheme&quot;)" name="ActionSchemePanel">
               <Label label="action_scheme" align="right" localize="true" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -666,27 +676,27 @@
                 <Label label="description" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="DeclarePatternRolePanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
               </Panel>
-              <Panel layout="twocols" borderTitle="Panel" borderLeft="10" titleFont="SansSerif,0,11" darkLevel="0" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddShema" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddShema&quot;)" name="AddShemaPanel">
+              <Panel layout="twocols" borderTitle="Panel" borderLeft="10" titleFont="SansSerif,0,11" darkLevel="0" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddDiagram" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddDiagram&quot;)" name="AddDiagramPanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <TextField columns="6" text="TextField" data="AddShemaPanel.data.editionActionType.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" readOnly="true" localize="true" />
+                <TextField columns="6" text="TextField" data="AddDiagramPanel.data.editionActionType.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" readOnly="true" localize="true" />
                 <Label label="pattern_role" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <DropDown localize="true" data="AddShemaPanel.data.patternRole" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" list="AddShemaPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" autoSelectFirstRow="false" />
+                <DropDown localize="true" data="AddDiagramPanel.data.patternRole" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" list="AddDiagramPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" autoSelectFirstRow="false" />
                 <Label label="conditional" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddShemaPanel.data.conditional.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-                  <Assignment variable="component.bindable" value="AddShemaPanel.data" />
-                  <Assignment variable="component.bindingDefinition" value="AddShemaPanel.data.conditionalBindingDefinition" />
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddDiagramPanel.data.conditional.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+                  <Assignment variable="component.bindable" value="AddDiagramPanel.data" />
+                  <Assignment variable="component.bindingDefinition" value="AddDiagramPanel.data.conditionalBindingDefinition" />
                 </Custom>
-                <Label label="shema_name" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddShemaPanel.data.shemaName.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
-                  <Assignment variable="component.bindable" value="AddShemaPanel.data" />
-                  <Assignment variable="component.bindingDefinition" value="AddShemaPanel.data.shemaNameBindingDefinition" />
+                <Label label="diagram_name" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddDiagramPanel.data.diagramName.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+                  <Assignment variable="component.bindable" value="AddDiagramPanel.data" />
+                  <Assignment variable="component.bindingDefinition" value="AddDiagramPanel.data.diagramNameBindingDefinition" />
                 </Custom>
                 <Label label="shape_role" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
                   <LocalizedDictionary />
                 </Label>
-                <DropDown localize="true" data="AddShemaPanel.data.shapePatternRole" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" list="data.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="false" />
+                <DropDown localize="true" data="AddDiagramPanel.data.shapePatternRole" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" list="data.shapePatternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" autoSelectFirstRow="false" />
                 <Label label="description" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-                <TextArea columns="6" rows="2" text="TextArea" data="AddShemaPanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
+                <TextArea columns="6" rows="2" text="TextArea" data="AddDiagramPanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
               </Panel>
               <Panel layout="twocols" borderTitle="Panel" borderLeft="10" titleFont="SansSerif,0,11" darkLevel="0" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.GoToAction" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;GoToObject&quot;)" name="GoToActionPanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
@@ -803,7 +813,7 @@
                 <AddAction method="EditionSchemeTable.selected.createAddIsAPropertyAction" name="add_is_a_statement_action" />
                 <AddAction method="EditionSchemeTable.selected.createAddRestrictionAction" name="add_restriction_statement_action" />
                 <RemoveAction method="EditionSchemeTable.selected.deleteAction(selected)" name="delete" />
-                <AddAction method="EditionSchemeTable.selected.createAddShemaAction" name="add_shema_action" />
+                <AddAction method="EditionSchemeTable.selected.createAddDiagramAction" name="add_diagram_action" />
                 <AddAction method="EditionSchemeTable.selected.createGoToAction" name="add_go_to_action" />
                 <AddAction method="EditionSchemeTable.selected.createAddDataPropertyStatementAction" name="add_data_property_statement_action" />
                 <AddAction method="EditionSchemeTable.selected.createGraphicalAction" name="add_graphical_action" />
@@ -1137,13 +1147,13 @@
     <Localized key="skip_confirmation_panel_as_no_parameters_are_defined" lang="English">Skip confirmation panel as no parameters are defined</Localized>
     <Localized key="action_scheme" lang="French">Action scheme</Localized>
     <Localized key="action_scheme" lang="English">Action scheme</Localized>
-    <Localized key="shema_name" lang="French">Nom du shéma</Localized>
-    <Localized key="shema_name" lang="English">Shema name</Localized>
+    <Localized key="diagram_name" lang="French">Nom du diagramme</Localized>
+    <Localized key="diagram_name" lang="English">Diagram name</Localized>
     <Localized key="delete_scheme" lang="English">Delete scheme</Localized>
     <Localized key="delete_scheme" lang="French">Supprimer le mécanisme</Localized>
     <Localized key="delete_scheme" lang="Dutch">Delete scheme</Localized>
-    <Localized key="add_shema" lang="French">Ajouter un schéma</Localized>
-    <Localized key="add_shema" lang="English">Add shema</Localized>
+    <Localized key="add_diagram" lang="French">Ajouter un diagramme</Localized>
+    <Localized key="add_diagram" lang="English">Add diagram</Localized>
     <Localized key="shape_role" lang="French">Role de la forme</Localized>
     <Localized key="shape_role" lang="English">Shape role</Localized>
     <Localized key="top" lang="English">Top</Localized>

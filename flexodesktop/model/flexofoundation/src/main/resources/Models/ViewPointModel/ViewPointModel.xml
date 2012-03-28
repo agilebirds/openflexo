@@ -117,7 +117,8 @@
 		<property name="endShapePatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole" context="To"/>
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.ShemaPatternRole" xmlTag="ShemaPatternRole">
+	<entity name="org.openflexo.foundation.viewpoint.DiagramPatternRole" xmlTag="DiagramPatternRole">
+		<property name="viewpointURI" xmlTag="viewpointURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.GraphicalElementSpecification" xmlTag="GRSpec">
@@ -197,6 +198,7 @@
 		xmlTag="LinkScheme">
 		<property name="fromTarget" xmlTag="fromTarget" attribute="YES" />
 		<property name="toTarget" xmlTag="toTarget" attribute="YES" />
+		<property name="isAvailableWithFloatingPalette" xmlTag="isAvailableWithFloatingPalette" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.ActionScheme"
@@ -303,10 +305,9 @@
 		<property name="toShape" xmlTag="toShape" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddShema"
-		xmlTag="AddShema">
-		<property name="shemaName" xmlTag="shemaName" attribute="YES" />
-		<property name="shapePatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole"/>
+	<entity name="org.openflexo.foundation.viewpoint.AddDiagram"
+		xmlTag="AddDiagram">
+		<property name="diagramName" xmlTag="diagramName" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.GoToAction"

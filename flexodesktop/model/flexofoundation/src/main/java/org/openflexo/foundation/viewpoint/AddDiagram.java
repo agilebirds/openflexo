@@ -27,18 +27,16 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddShema extends EditionAction<ShemaPatternRole> {
+public class AddDiagram extends EditionAction<DiagramPatternRole> {
 
-	private static final Logger logger = Logger.getLogger(AddShema.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
-	private ShapePatternRole shapePatternRole;
-
-	public AddShema() {
+	public AddDiagram() {
 	}
 
 	@Override
 	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddShema;
+		return EditionActionType.AddDiagram;
 	}
 
 	@Override
@@ -46,12 +44,12 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 		return Inspectors.VPM.ADD_SHEMA_INSPECTOR;
 	}
 
-	public String getShemaName(EditionSchemeAction action) {
-		return (String) getShemaName().getBindingValue(action);
+	public String getDiagramName(EditionSchemeAction action) {
+		return (String) getDiagramName().getBindingValue(action);
 	}
 
 	@Override
-	public ShemaPatternRole getPatternRole() {
+	public DiagramPatternRole getPatternRole() {
 		try {
 			return super.getPatternRole();
 		} catch (ClassCastException e) {
@@ -64,46 +62,43 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(ShemaPatternRole patternRole) {
+	public void setPatternRole(DiagramPatternRole patternRole) {
 		super.setPatternRole(patternRole);
 	}
 
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-		if (getPatternRole() == null) {
-			return;
+	private ViewPointDataBinding diagramName;
+
+	private BindingDefinition DIAGRAM_NAME = new BindingDefinition("diagramName", String.class, BindingDefinitionType.GET, false);
+
+	public BindingDefinition getDiagramNameBindingDefinition() {
+		return DIAGRAM_NAME;
+	}
+
+	public ViewPointDataBinding getDiagramName() {
+		if (diagramName == null) {
+			diagramName = new ViewPointDataBinding(this, EditionActionBindingAttribute.diagramName, getDiagramNameBindingDefinition());
 		}
-	}*/
-
-	public ShapePatternRole getShapePatternRole() {
-		return shapePatternRole;
+		return diagramName;
 	}
 
-	public void setShapePatternRole(ShapePatternRole shapePatternRole) {
-		this.shapePatternRole = shapePatternRole;
+	public void setDiagramName(ViewPointDataBinding aDiagramName) {
+		this.diagramName.setOwner(this);
+		this.diagramName.setBindingAttribute(EditionActionBindingAttribute.diagramName);
+		this.diagramName.setBindingDefinition(getDiagramNameBindingDefinition());
+		this.diagramName = aDiagramName;
 	}
 
-	private ViewPointDataBinding shemaName;
-
-	private BindingDefinition SHEMA_NAME = new BindingDefinition("shemaName", String.class, BindingDefinitionType.GET, false);
-
-	public BindingDefinition getShemaNameBindingDefinition() {
-		return SHEMA_NAME;
-	}
-
-	public ViewPointDataBinding getShemaName() {
-		if (shemaName == null) {
-			shemaName = new ViewPointDataBinding(this, EditionActionBindingAttribute.shemaName, getShemaNameBindingDefinition());
+	public ViewPoint getViewpoint() {
+		if (getPatternRole() != null) {
+			return getPatternRole().getViewpoint();
 		}
-		return shemaName;
+		return null;
 	}
 
-	public void setShemaName(ViewPointDataBinding shemaName) {
-		shemaName.setOwner(this);
-		shemaName.setBindingAttribute(EditionActionBindingAttribute.shemaName);
-		shemaName.setBindingDefinition(getShemaNameBindingDefinition());
-		this.shemaName = shemaName;
+	public void setViewpoint(ViewPoint viewpoint) {
+		if (getPatternRole() != null) {
+			getPatternRole().setViewpoint(viewpoint);
+		}
 	}
 
 }

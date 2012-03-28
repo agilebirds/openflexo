@@ -70,8 +70,8 @@
       <Number numberType="IntegerType" data="data.vectorIndex" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" visible="(data.processNode.parentFolder != null)" name="VectorIndex" localize="true" />
     </Tab>
     <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="variable_name" localize="true" name="BusinessDataVariableNameLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="BusinessDataVariableName" data="data.businessDataVariableName" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
+      <Label label="variable_name" localize="true" name="BusinessDataVariableNameLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="BusinessDataVariableName" data="data.businessDataVariableName" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </TextField>
     </Tab>

@@ -209,7 +209,7 @@ public class FlexoResourceManager {
 			FlexoRMResource rmRes;
 			try {
 				rmRes = new FlexoRMResource(rmFile, aProjectDirectory);
-				project = rmRes.loadProject(progress, loadingHandler);
+				project = rmRes.loadProject(progress, loadingHandler, resourceCenter);
 			} catch (RuntimeException e1) {
 				e1.printStackTrace();
 				throw new ProjectInitializerException(e1.getMessage(), aProjectDirectory);

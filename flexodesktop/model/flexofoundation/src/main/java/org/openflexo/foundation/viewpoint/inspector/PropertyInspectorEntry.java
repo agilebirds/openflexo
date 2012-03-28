@@ -42,7 +42,9 @@ public abstract class PropertyInspectorEntry extends InspectorEntry {
 	}
 
 	public OntologyProperty getParentProperty() {
-		getCalc().loadWhenUnloaded();
+		if (getCalc() != null) {
+			getCalc().loadWhenUnloaded();
+		}
 		return getOntologyLibrary().getProperty(_getParentPropertyURI());
 	}
 

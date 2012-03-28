@@ -63,8 +63,6 @@ import org.openflexo.foundation.viewpoint.GoToAction;
 import org.openflexo.foundation.viewpoint.GraphicalAction;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterPathElement;
@@ -239,9 +237,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 						getEditionPatternInstance().setObjectForPatternRole(declaredObject, action.getPatternRole());
 						performedActions.put(action, declaredObject);
 					}
-				} else if (action instanceof org.openflexo.foundation.viewpoint.AddShema) {
+				} else if (action instanceof org.openflexo.foundation.viewpoint.AddDiagram) {
 					logger.info("Add shema with patternRole=" + action.getPatternRole());
-					View newShema = performAddShema((org.openflexo.foundation.viewpoint.AddShema) action);
+					View newShema = performAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action);
 					if (newShema != null) {
 						getEditionPatternInstance().setObjectForPatternRole(newShema, action.getPatternRole());
 						performedActions.put(action, newShema);
@@ -282,8 +280,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 				finalizePerformAddConnector((org.openflexo.foundation.viewpoint.AddConnector) action,
 						(ViewConnector) performedActions.get(action));
 			}
-			if (action instanceof org.openflexo.foundation.viewpoint.AddShema) {
-				finalizePerformAddShema((org.openflexo.foundation.viewpoint.AddShema) action, (View) performedActions.get(action));
+			if (action instanceof org.openflexo.foundation.viewpoint.AddDiagram) {
+				finalizePerformAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action, (View) performedActions.get(action));
 			}
 		}
 
@@ -553,16 +551,16 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		return restrictionStatement;
 	}
 
-	protected View performAddShema(org.openflexo.foundation.viewpoint.AddShema action) {
+	protected View performAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action) {
 		View initialShema = retrieveOEShema();
-		AddView addShemaAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
-		addShemaAction.newViewName = action.getShemaName(this);
-		addShemaAction.calc = initialShema.getCalc();
-		addShemaAction.setFolder(initialShema.getShemaDefinition().getFolder());
-		addShemaAction.doAction();
-		if (addShemaAction.hasActionExecutionSucceeded()) {
-			View newShema = addShemaAction.getNewShema().getShema();
-			ShapePatternRole shapePatternRole = action.getShapePatternRole();
+		AddView addDiagramAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
+		addDiagramAction.newViewName = action.getDiagramName(this);
+		addDiagramAction.viewpoint = initialShema.getCalc();
+		addDiagramAction.setFolder(initialShema.getShemaDefinition().getFolder());
+		addDiagramAction.doAction();
+		if (addDiagramAction.hasActionExecutionSucceeded()) {
+			View newShema = addDiagramAction.getNewDiagram().getShema();
+			/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
 			if (shapePatternRole == null) {
 				logger.warning("Sorry, shape pattern role is undefined");
 				return newShema;
@@ -588,13 +586,14 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 					newEditionPatternInstance.setObjectForPatternRole(patternActor, role);
 					patternActor.registerEditionPatternReference(newEditionPatternInstance, role);
 				}
-			}
+			}*/
+
 			return newShema;
 		}
 		return null;
 	}
 
-	protected View finalizePerformAddShema(org.openflexo.foundation.viewpoint.AddShema action, View newShema) {
+	protected View finalizePerformAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action, View newShema) {
 		return newShema;
 	}
 
