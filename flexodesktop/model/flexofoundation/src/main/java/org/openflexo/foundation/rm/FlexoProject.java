@@ -4062,9 +4062,19 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		} else {
 			for (ConceptActorReference actorReference : values) {
 				EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
-				PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
-				logger.fine("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
-				object.registerEditionPatternReference(instance, pr);
+				if (instance == null) {
+					logger.warning("Found null EditionPatternInstance, please investigate");
+				} else if (actorReference == null) {
+					logger.warning("Found null actorReference, please investigate");
+				} else if (actorReference.getPatternReference() == null) {
+					logger.warning("Found null actorReference.getPatternReference(), please investigate");
+				} else if (actorReference.getPatternReference().getEditionPattern() == null) {
+					logger.warning("Found null actorReference.getPatternReference().getEditionPattern(), please investigate");
+				} else {
+					PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
+					logger.fine("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
+					object.registerEditionPatternReference(instance, pr);
+				}
 			}
 			values.clear();
 		}
