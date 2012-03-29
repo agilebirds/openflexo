@@ -341,6 +341,16 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return returned;
 	}
 
+	public Vector<NavigationScheme> getNavigationSchemes() {
+		Vector<NavigationScheme> returned = new Vector<NavigationScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof NavigationScheme) {
+				returned.add((NavigationScheme) es);
+			}
+		}
+		return returned;
+	}
+
 	public boolean hasDropScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof DropScheme) {
@@ -362,6 +372,15 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	public boolean hasActionScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof ActionScheme) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasNavigationScheme() {
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof NavigationScheme) {
 				return true;
 			}
 		}

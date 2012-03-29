@@ -19,10 +19,22 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public class NavigationScheme extends AbstractActionScheme {
+
+	private ViewPointDataBinding targetDiagram;
+
+	public static enum NavigationSchemeBindingAttribute implements InspectorBindingAttribute {
+		targetDiagram
+	}
 
 	public NavigationScheme() {
 		super();
@@ -42,6 +54,34 @@ public class NavigationScheme extends AbstractActionScheme {
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private BindingDefinition TARGET_DIAGRAM = new BindingDefinition("targetDiagram", View.class, BindingDefinitionType.GET, false);
+
+	public BindingDefinition getTargetDiagramBindingDefinition() {
+		return TARGET_DIAGRAM;
+	}
+
+	public ViewPointDataBinding getTargetDiagram() {
+		if (targetDiagram == null) {
+			targetDiagram = new ViewPointDataBinding(this, NavigationSchemeBindingAttribute.targetDiagram,
+					getTargetDiagramBindingDefinition());
+		}
+		return targetDiagram;
+	}
+
+	public void setTargetDiagram(ViewPointDataBinding targetDiagram) {
+		targetDiagram.setOwner(this);
+		targetDiagram.setBindingAttribute(NavigationSchemeBindingAttribute.targetDiagram);
+		targetDiagram.setBindingDefinition(getTargetDiagramBindingDefinition());
+		this.targetDiagram = targetDiagram;
+	}
+
+	public View evaluateTargetDiagram(EditionPatternReference editionPatternReference) {
+		if (getTargetDiagram().isValid()) {
+			return (View) getTargetDiagram().getBindingValue(editionPatternReference);
+		}
+		return null;
 	}
 
 }

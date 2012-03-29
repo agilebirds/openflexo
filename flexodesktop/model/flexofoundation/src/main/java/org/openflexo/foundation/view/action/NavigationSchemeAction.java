@@ -27,24 +27,24 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.NavigationScheme;
 
-public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> {
+public class NavigationSchemeAction extends EditionSchemeAction<NavigationSchemeAction> {
 
-	private static final Logger logger = Logger.getLogger(ActionSchemeAction.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(NavigationSchemeAction.class.getPackage().getName());
 
-	private ActionSchemeActionType actionType;
+	private NavigationSchemeActionType actionType;
 
-	public ActionSchemeAction(ActionSchemeActionType actionType, FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
-			FlexoEditor editor) {
+	public NavigationSchemeAction(NavigationSchemeActionType actionType, FlexoModelObject focusedObject,
+			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		this.actionType = actionType;
 	}
 
-	public AbstractActionScheme getActionScheme() {
+	public NavigationScheme getNavigationScheme() {
 		if (actionType != null) {
-			return actionType.getActionScheme();
+			return actionType.getNavigationScheme();
 		}
 		return null;
 	}
@@ -59,16 +59,35 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 
 	@Override
 	public EditionScheme getEditionScheme() {
-		return getActionScheme();
+		return getNavigationScheme();
 	}
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Perform action " + actionType);
+		logger.info("Perform navigation " + actionType);
 
-		if (getActionScheme() != null && getActionScheme().evaluateCondition(actionType.getEditionPatternReference())) {
-			applyEditionActions();
+		if (evaluateCondition()) {
+			// If target diagram is not existant, we must create it
+			if (getTargetDiagram() == null) {
+				applyEditionActions();
+			}
 		}
+	}
+
+	public boolean evaluateCondition() {
+		if (getNavigationScheme() == null) {
+			logger.warning("No navigation scheme. Please investigate !");
+			return false;
+		}
+		return getNavigationScheme().evaluateCondition(actionType.getEditionPatternReference());
+	}
+
+	public View getTargetDiagram() {
+		if (getNavigationScheme() == null) {
+			logger.warning("No navigation scheme. Please investigate !");
+			return null;
+		}
+		return getNavigationScheme().evaluateTargetDiagram(actionType.getEditionPatternReference());
 	}
 
 	@Override

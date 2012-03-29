@@ -54,7 +54,9 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
+import org.openflexo.foundation.view.action.NavigationSchemeActionType;
 import org.openflexo.foundation.viewpoint.ActionScheme;
+import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.toolbox.ToolBox;
 
 public abstract class ContextualMenuManager {
@@ -264,6 +266,13 @@ public abstract class ContextualMenuManager {
 					if (epr.getEditionPattern().hasActionScheme()) {
 						for (ActionScheme as : epr.getEditionPattern().getActionSchemes()) {
 							contextualMenu.putAction(new ActionSchemeActionType(as, epr));
+						}
+					}
+				}
+				for (EditionPatternReference epr : focusedObject.getEditionPatternReferences()) {
+					if (epr.getEditionPattern().hasNavigationScheme()) {
+						for (NavigationScheme ns : epr.getEditionPattern().getNavigationSchemes()) {
+							contextualMenu.putAction(new NavigationSchemeActionType(ns, epr));
 						}
 					}
 				}

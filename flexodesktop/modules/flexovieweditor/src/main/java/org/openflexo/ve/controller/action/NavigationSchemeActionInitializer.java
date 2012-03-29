@@ -29,18 +29,18 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.view.action.ActionSchemeAction;
+import org.openflexo.foundation.view.action.NavigationSchemeAction;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class ActionSchemeActionInitializer extends ActionInitializer {
+public class NavigationSchemeActionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ActionSchemeActionInitializer(OEControllerActionInitializer actionInitializer) {
+	NavigationSchemeActionInitializer(OEControllerActionInitializer actionInitializer) {
 		super(null, actionInitializer);
 	}
 
@@ -50,30 +50,44 @@ public class ActionSchemeActionInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<ActionSchemeAction> getDefaultInitializer() {
-		return new FlexoActionInitializer<ActionSchemeAction>() {
+	protected FlexoActionInitializer<NavigationSchemeAction> getDefaultInitializer() {
+		return new FlexoActionInitializer<NavigationSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, ActionSchemeAction action) {
-				return ParametersRetriever.retrieveParameters(action, action.escapeParameterRetrievingWhenValid);
+			public boolean run(ActionEvent e, NavigationSchemeAction action) {
+				if (!action.evaluateCondition()) {
+					return false;
+				}
+
+				if (action.getTargetDiagram() == null) {
+					// If target diagram is not existant, we must create it
+					// First retrieve parameters
+					return ParametersRetriever.retrieveParameters(action, action.escapeParameterRetrievingWhenValid);
+				} else {
+					// Target diagram is already existing, finalizer will show it
+					// First retrieve parameters
+					return true;
+				}
+
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ActionSchemeAction> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<ActionSchemeAction>() {
+	protected FlexoActionFinalizer<NavigationSchemeAction> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<NavigationSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, ActionSchemeAction action) {
+			public boolean run(ActionEvent e, NavigationSchemeAction action) {
+				getEditor().focusOn(action.getTargetDiagram());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<ActionSchemeAction> getDefaultExceptionHandler() {
-		return new FlexoExceptionHandler<ActionSchemeAction>() {
+	protected FlexoExceptionHandler<NavigationSchemeAction> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<NavigationSchemeAction>() {
 			@Override
-			public boolean handleException(FlexoException exception, ActionSchemeAction action) {
+			public boolean handleException(FlexoException exception, NavigationSchemeAction action) {
 				if (exception instanceof NotImplementedException) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("not_implemented_yet"));
 					return true;
@@ -85,7 +99,7 @@ public class ActionSchemeActionInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VPMIconLibrary.ACTION_SCHEME_ICON;
+		return VPMIconLibrary.NAVIGATION_SCHEME_ICON;
 	}
 
 }
