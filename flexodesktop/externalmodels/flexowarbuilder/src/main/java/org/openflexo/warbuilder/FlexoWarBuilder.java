@@ -121,6 +121,12 @@ public class FlexoWarBuilder extends FlexoObservable {
 		}
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private String getWarProjectName() {
 		return "template-project";
 	}
@@ -271,7 +277,7 @@ public class FlexoWarBuilder extends FlexoObservable {
 					WO_DIR = new File(System.getenv("NEXT_ROOT"));
 				}
 				if (WO_DIR == null) {
-					if ((ToolBox.getPLATFORM() == ToolBox.WINDOWS)) {
+					if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 						File test = new File("c:\\System");
 						if (test.exists()) {
 							WO_DIR = test;

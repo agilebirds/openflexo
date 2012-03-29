@@ -72,6 +72,14 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 
 	public void delete() {
 		logger.warning("TODO: implements EditionPatternInstance deletion !");
+		// Also implement properly #getDeletedProperty()
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO: when delete will be implemented, a notification will need to be sent and this method should reflect the name of the
+		// property of that notification
+		return null;
 	}
 
 	public FlexoModelObject getPatternActor(String patternRole) {

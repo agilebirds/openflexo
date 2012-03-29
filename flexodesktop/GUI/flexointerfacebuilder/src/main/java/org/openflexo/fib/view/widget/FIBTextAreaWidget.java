@@ -28,8 +28,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -52,7 +55,7 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 
 	private JPanel panel;
 	private final JTextArea textArea;
-	// private final JScrollPane pane;
+	private JScrollPane scrollPane;
 	boolean validateOnReturn;
 
 	public FIBTextAreaWidget(FIBTextArea model, FIBController controller) {
@@ -72,14 +75,15 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 		} else {
 			textArea.setRows(DEFAULT_ROWS);
 		}
+		Border border;
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			panel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
-					RIGHT_COMPENSATING_BORDER));
-			textArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+			border = BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
+					RIGHT_COMPENSATING_BORDER);
 		} else {
-			panel.setBorder(BorderFactory.createEmptyBorder(2, 3, 2, 3));
-			textArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+			border = BorderFactory.createEmptyBorder(2, 3, 2, 3);
 		}
+		border = BorderFactory.createCompoundBorder(border, BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+		panel.setBorder(border);
 		/*else {
 				textArea.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
 				}*/
@@ -189,6 +193,29 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	@Override
 	public JTextArea getDynamicJComponent() {
 		return textArea;
+	}
+
+	/**
+	 * Return the effective component to be added to swing hierarchy This component may be the same as the one returned by
+	 * {@link #getJComponent()} or a encapsulation in a JScrollPane
+	 * 
+	 * @return JComponent
+	 */
+	@Override
+	public JComponent getResultingJComponent() {
+		if (getComponent().getUseScrollBar()) {
+			if (scrollPane == null) {
+				scrollPane = new JScrollPane(textArea, getComponent().getVerticalScrollbarPolicy().getPolicy(), getComponent()
+						.getHorizontalScrollbarPolicy().getPolicy());
+				scrollPane.setOpaque(false);
+				scrollPane.getViewport().setOpaque(false);
+				scrollPane.setBorder(BorderFactory.createEmptyBorder());
+			}
+			panel.add(scrollPane);
+			return panel;
+		} else {
+			return getJComponent();
+		}
 	}
 
 	@Override

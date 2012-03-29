@@ -42,6 +42,12 @@ public abstract class FlexoStatistics<T extends FlexoModelObject> extends FlexoO
 		refresh();
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public T getObject() {
 		return object;
 	}

@@ -33,7 +33,7 @@ public class SubsequenceRemoved extends DataModification {
 	 * @param newValue
 	 */
 	public SubsequenceRemoved(IESequence seq) {
-		super(-1, seq, null);
+		super(seq, null);
 		// TODO Auto-generated constructor stub
 	}
 

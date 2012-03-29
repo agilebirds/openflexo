@@ -214,17 +214,8 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			_topTitle.buttonPane.revalidate();
 			_topTitle.buttonPane.repaint();
 		}
-		if (modif.modificationType() == DataModification.BLOC_BG_CLOR_CHANGE) {
-			setBorder(BorderFactory.createLineBorder(getMainColor()));
-			_topTitle.setBackground(getMainColor());
-			_buttonPanel.setBackground(getMainColor());
-			_topTitle.setLabelBackground(getMainColor());
-		} else if (modif.modificationType() == DataModification.BLOC_FG_CLOR_CHANGE) {
-			_topTitle.setLabelForeground(getTextColor());
-		} else if (modif.modificationType() == DataModification.ATTRIBUTE && modif.propertyName().equals("title")) {
-			{
-				setTitle(getModel().getTitle());
-			}
+		if (IEBlocWidget.BLOC_TITLE_ATTRIBUTE_NAME.equals(modif.propertyName().equals("title"))) {
+			setTitle(getModel().getTitle());
 		} else if (modif instanceof InnerBlocInserted) {
 			updateInnerBlocInsertion((IEWidget) modif.newValue());
 			_topTitle.initButtonPane();

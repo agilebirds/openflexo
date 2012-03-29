@@ -124,8 +124,7 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 
 	protected void notifyModification(String key, Object oldValue, Object newValue, boolean isReentrant) {
 		setChanged();
-		int modifType = DataModification.ATTRIBUTE;
-		DataModification dataModification = new DataModification(modifType, key, oldValue, newValue);
+		DataModification dataModification = new DataModification(key, oldValue, newValue);
 		if (isReentrant) {
 			dataModification.setReentrant(isReentrant);
 		}

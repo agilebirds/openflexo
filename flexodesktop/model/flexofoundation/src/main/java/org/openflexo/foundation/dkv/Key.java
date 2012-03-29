@@ -144,7 +144,7 @@ public class Key extends DKVObject implements InspectableObject, Comparator, Sor
 		if (isDeserializing()) {
 			return;
 		}
-		DKVDataModification dm = new DKVDataModification(-1, "index", new Integer(old), new Integer(index));
+		DKVDataModification dm = new DKVDataModification("index", new Integer(old), new Integer(index));
 		setChanged();
 		notifyObservers(dm);
 		getDomain().getKeyList().setChanged();

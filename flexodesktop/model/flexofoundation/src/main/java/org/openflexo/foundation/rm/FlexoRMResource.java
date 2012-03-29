@@ -268,7 +268,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				return null;
 			}
 
-			project.setResourceCenter(resourceCenter);
+			if (resourceCenter != null) {
+				project.setResourceCenter(resourceCenter);
+			}
 
 			//
 			// !!!!!!!!!!!!!! BE CAREFUL BIG TRICK HERE !!!!!!!!!!!!!!!!

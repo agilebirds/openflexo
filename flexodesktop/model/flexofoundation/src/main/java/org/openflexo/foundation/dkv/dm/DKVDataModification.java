@@ -33,8 +33,8 @@ public class DKVDataModification extends DataModification {
 	 * @param oldValue
 	 * @param newValue
 	 */
-	public DKVDataModification(int modificationType, String propertyName, Object oldValue, Object newValue) {
-		super(modificationType, propertyName, oldValue, newValue);
+	public DKVDataModification(String propertyName, Object oldValue, Object newValue) {
+		super(propertyName, oldValue, newValue);
 	}
 
 }

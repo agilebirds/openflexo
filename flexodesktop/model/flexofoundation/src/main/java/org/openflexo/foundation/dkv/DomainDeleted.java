@@ -34,7 +34,7 @@ public class DomainDeleted extends DKVDataModification {
 	 * @param newValue
 	 */
 	public DomainDeleted(Domain oldValue) {
-		super(-1, "domain", oldValue, null);
+		super("domain", oldValue, null);
 		// TODO Auto-generated constructor stub
 	}
 

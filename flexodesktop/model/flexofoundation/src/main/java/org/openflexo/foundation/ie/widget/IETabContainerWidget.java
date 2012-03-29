@@ -100,7 +100,7 @@ public class IETabContainerWidget extends AbstractButtonedWidget implements IETo
 	private void deleteTabWidgets() {
 		Enumeration en = ((Vector) _tabWidgetList.clone()).elements();
 		while (en.hasMoreElements()) {
-			IETabWidget tab = ((IETabWidget) en.nextElement());
+			IETabWidget tab = (IETabWidget) en.nextElement();
 			removeTab(tab);
 			tab.delete();
 		}
@@ -188,7 +188,7 @@ public class IETabContainerWidget extends AbstractButtonedWidget implements IETo
 	public void setTitle(String title) {
 		_title = title;
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, BLOC_TITLE_ATTRIBUTE_NAME, null, title));
+		notifyObservers(new DataModification(BLOC_TITLE_ATTRIBUTE_NAME, null, title));
 	}
 
 	@Override

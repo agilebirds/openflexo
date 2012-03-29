@@ -34,6 +34,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -1091,5 +1092,29 @@ public class ToolBox {
 			}
 		}
 		return returned.toString();
+	}
+
+	public static List<?> getListFromIterable(Object iterable) {
+		if (iterable instanceof List) {
+			return (List<?>) iterable;
+		}
+		if (iterable instanceof Collection) {
+			return new ArrayList<Object>((Collection<?>) iterable);
+		}
+		if (iterable instanceof Iterable) {
+			List<Object> list = new ArrayList<Object>();
+			for (Object o : (Iterable) iterable) {
+				list.add(o);
+			}
+			return list;
+		}
+		if (iterable instanceof Enumeration) {
+			List<Object> list = new ArrayList<Object>();
+			for (Enumeration<?> en = (Enumeration<?>) iterable; en.hasMoreElements();) {
+				list.add(en.nextElement());
+			}
+			return list;
+		}
+		return null;
 	}
 }

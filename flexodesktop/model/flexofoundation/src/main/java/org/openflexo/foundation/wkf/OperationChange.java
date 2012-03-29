@@ -34,7 +34,7 @@ public class OperationChange extends DataModification {
 	 * @param newValue
 	 */
 	public OperationChange(OperationNode node) {
-		super(-1, node, node);
+		super(node, node);
 	}
 
 	public OperationNode getNode() {

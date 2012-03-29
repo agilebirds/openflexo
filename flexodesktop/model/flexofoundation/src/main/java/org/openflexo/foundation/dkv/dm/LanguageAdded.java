@@ -35,7 +35,7 @@ public class LanguageAdded extends DKVDataModification {
 	 * @param newValue
 	 */
 	public LanguageAdded(Language newValue) {
-		super(-1, "languages", null, newValue);
+		super("languages", null, newValue);
 		_addedLanguage = newValue;
 	}
 

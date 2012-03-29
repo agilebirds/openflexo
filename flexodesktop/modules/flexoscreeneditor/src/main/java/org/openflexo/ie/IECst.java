@@ -33,12 +33,6 @@ public class IECst {
 
 	public static final Color CONDITIONAL_COLOR = new Color(197, 217, 255);
 
-	public static final String IEPALETTE_FOLDER_PATH = "Config/IEPalette";
-
-	public static final String SMALL_BUTTONS_DIR = "Config/SmallButtons";
-
-	public static final String BIG_BUTTONS_DIR = "Config/BigButtons";
-
 	public static final String DEFAULT_PALETTE_TITLE = "gui_palette";
 
 	public static final int DEFAULT_PALETTE_WIDTH = 290;

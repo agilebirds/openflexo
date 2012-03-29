@@ -29,11 +29,11 @@ import org.openflexo.foundation.DataModification;
 public class IEDataModification extends DataModification {
 
 	public IEDataModification(Object oldValue, Object newValue) {
-		super(DataModification.IE_DM, oldValue, newValue);
+		super(oldValue, newValue);
 	}
 
 	public IEDataModification(String propertyName, Object oldValue, Object newValue) {
-		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+		super(propertyName, oldValue, newValue);
 	}
 
 }

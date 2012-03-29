@@ -63,7 +63,7 @@ public class RegularPolygon extends Polygon {
 
 	@Override
 	public void updateShape() {
-		if (getPoints() != null) {
+		if (getPoints() != null && getPoints().size() > 0) {
 			_polygon = new FGEPolygon(Filling.FILLED, getPoints());
 		} else {
 			_polygon = new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);

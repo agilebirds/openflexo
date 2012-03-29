@@ -98,9 +98,9 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 
 		// Finally, we remove the modified storage resources that have been modified by the embedded undoable actions
 		if (getProject() != null) {
-			Enumeration<FlexoAction> en = getEmbbededActionsExecutedDuringCore().elements();
+			Enumeration<FlexoAction<?, ?, ?>> en = getEmbbededActionsExecutedDuringCore().elements();
 			while (en.hasMoreElements()) {
-				FlexoAction action2 = en.nextElement();
+				FlexoAction<?, ?, ?> action2 = en.nextElement();
 				if (action2 instanceof FlexoUndoableAction) {
 					Iterator<FlexoStorageResource> i = ((FlexoUndoableAction) action2)._modifiedResources.keySet().iterator();
 					while (i.hasNext()) {
@@ -114,7 +114,7 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 
 			en = getEmbbededActionsExecutedDuringInitializer().elements();
 			while (en.hasMoreElements()) {
-				FlexoAction action2 = en.nextElement();
+				FlexoAction<?, ?, ?> action2 = en.nextElement();
 				if (action2 instanceof FlexoUndoableAction) {
 					Iterator<FlexoStorageResource> i = ((FlexoUndoableAction) action2)._modifiedResources.keySet().iterator();
 					// while (en.hasMoreElements()) {
@@ -129,7 +129,7 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 
 			en = getEmbbededActionsExecutedDuringFinalizer().elements();
 			while (en.hasMoreElements()) {
-				FlexoAction action2 = en.nextElement();
+				FlexoAction<?, ?, ?> action2 = en.nextElement();
 				if (action2 instanceof FlexoUndoableAction) {
 					Iterator<FlexoStorageResource> i = ((FlexoUndoableAction) action2)._modifiedResources.keySet().iterator();
 					// while (en.hasMoreElements()) {

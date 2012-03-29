@@ -197,7 +197,7 @@ public class IEBlocWidget extends AbstractButtonedWidget implements IETopCompone
 	public void setTitle(String title) {
 		_title = title;
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, BLOC_TITLE_ATTRIBUTE_NAME, null, title));
+		notifyObservers(new DataModification(BLOC_TITLE_ATTRIBUTE_NAME, null, title));
 	}
 
 	@Override

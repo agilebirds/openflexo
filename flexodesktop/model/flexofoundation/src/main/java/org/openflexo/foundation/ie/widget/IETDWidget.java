@@ -26,7 +26,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.HTMLListDescriptor;
 import org.openflexo.foundation.ie.IEObject;
@@ -241,31 +240,6 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 
 	public int getColIndex() {
 		return getIndex();
-	}
-
-	@Deprecated
-	public boolean canBeHidden() {
-		return !_isHidden && _sequenceWidget.getWidgetCount() == 0;
-	}
-
-	@Deprecated
-	public boolean getIsHidden() {
-		return _isHidden;
-	}
-
-	@Deprecated
-	public void setIsHidden(boolean v) {
-		if (canBeHidden() && v) {
-			_isHidden = true;
-			setChanged();
-			notifyObservers(new DataModification(DataModification.TD_HIDDEN, null, null));
-		} else {
-			if (_isHidden && !v) {
-				_isHidden = false;
-				setChanged();
-				notifyObservers(new DataModification(DataModification.TD_UNHIDDEN, null, null));
-			}
-		}
 	}
 
 	public void insertChild(IEWidget child, boolean updateIndex) {

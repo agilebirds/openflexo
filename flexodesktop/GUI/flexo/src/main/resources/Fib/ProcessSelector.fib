@@ -5,13 +5,19 @@
   </Panel>
   <Browser root="data.project.workflow" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedObject" showFooter="true" rootVisible="true" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" data="data.project" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" font="LucidaGrande,0,11" name="ProcessesBrowser" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()">
     <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoWorkflow" label="(Workflow.project.name + &quot;- Workflow&quot;)" icon="controller.iconForObject(Workflow)" isEditable="false" filtered="false" defaultVisible="true" name="Workflow">
-      <Children data="Workflow.topLevelFlexoProcesses" name="children" />
+      <Children data="Workflow.sortedTopLevelProcesses" name="children" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoProcess" label="Process.name" icon="controller.iconForObject(Process)" enabled="data.evaluateSelectableCondition(Process)" isEditable="false" filtered="false" defaultVisible="true" name="Process">
-      <Children data="Process.subProcesses" name="children" />
+      <Children data="Process.processNode.sortedFolders" name="children" />
+      <Children data="Process.processNode.sortedOrphanSubprocesses" name="children1" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.wkf.ProcessFolder" icon="controller.iconForObject(ProcessFolder)" isEditable="false" filtered="false" defaultVisible="true" name="ProcessFolder">
-      <Children data="ProcessFolder.folders" name="children" />
+    <BrowserElement dataClassName="org.openflexo.foundation.wkf.ProcessFolder" label="ProcessFolder.name" icon="controller.iconForObject(ProcessFolder)" isEditable="false" filtered="false" defaultVisible="true" name="ProcessFolder">
+      <Children data="ProcessFolder.sortedFolders" name="children" />
+      <Children data="ProcessFolder.processes" name="children1" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.wkf.FlexoProcessNode" label="ProcessNode.name" icon="controller.iconForObject(ProcessNode.process)" isEditable="true" editableLabel="ProcessNode.name" filtered="false" defaultVisible="true" name="ProcessNode">
+      <Children data="ProcessNode.sortedFolders" name="children" />
+      <Children data="ProcessNode.sortedOrphanSubprocesses" name="children1" />
     </BrowserElement>
   </Browser>
   <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" titleFont="LucidaGrande,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">

@@ -30,7 +30,7 @@ public class EditionPatternActorChanged extends DataModification {
 
 	public EditionPatternActorChanged(EditionPatternInstance editionPatternInstance, PatternRole patternRole, FlexoModelObject oldActor,
 			FlexoModelObject newActor) {
-		super(DataModification.ATTRIBUTE, oldActor, newActor);
+		super(oldActor, newActor);
 		this.editionPatternInstance = editionPatternInstance;
 		this.patternRole = patternRole;
 	}

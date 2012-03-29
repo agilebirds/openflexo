@@ -124,9 +124,7 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (modif.modificationType() == DataModification.BLOC_BG_CLOR_CHANGE) {
-			setBorder(BorderFactory.createLineBorder(getMainColor()));
-		} else if (modif instanceof TabInserted) {
+		if (modif instanceof TabInserted) {
 			updateTabInsertion((IETabWidget) modif.newValue());
 		} else if (modif instanceof TabReordered) {
 			updateTabReodering();

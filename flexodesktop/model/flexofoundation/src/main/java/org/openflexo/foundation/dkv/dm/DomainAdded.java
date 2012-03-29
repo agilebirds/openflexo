@@ -32,7 +32,7 @@ public class DomainAdded extends DKVDataModification {
 	 * @param newValue
 	 */
 	public DomainAdded(Object newValue) {
-		super(-1, "domains", null, newValue);
+		super("domains", null, newValue);
 	}
 
 }

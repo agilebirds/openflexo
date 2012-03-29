@@ -106,7 +106,7 @@ public class Language extends DKVObject implements InspectableObject {
 			}
 		}
 		setChanged();
-		notifyObservers(new DKVDataModification(-1, "isMain", old, new Boolean(b)));
+		notifyObservers(new DKVDataModification("isMain", old, new Boolean(b)));
 	}
 
 	public String getIsoCode() {
@@ -117,7 +117,7 @@ public class Language extends DKVObject implements InspectableObject {
 		String old = this.isoCode;
 		this.isoCode = isoCode;
 		setChanged();
-		notifyObservers(new DKVDataModification(-1, "isoCode", old, isoCode));
+		notifyObservers(new DKVDataModification("isoCode", old, isoCode));
 	}
 
 	/**
