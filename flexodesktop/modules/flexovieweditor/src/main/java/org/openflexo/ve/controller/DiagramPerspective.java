@@ -48,7 +48,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class ShemaPerspective extends FlexoPerspective<AbstractViewObject> {
+public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 
 	private final OEController _controller;
 
@@ -71,8 +71,8 @@ public class ShemaPerspective extends FlexoPerspective<AbstractViewObject> {
 	 *            TODO
 	 * @param name
 	 */
-	public ShemaPerspective(OEController controller) {
-		super("shema_perspective");
+	public DiagramPerspective(OEController controller) {
+		super("diagram_perspective");
 		_controller = controller;
 		_controllers = new Hashtable<View, VEShemaController>();
 		_splitPaneForProcess = new Hashtable<VEShemaController, JSplitPane>();
@@ -102,7 +102,7 @@ public class ShemaPerspective extends FlexoPerspective<AbstractViewObject> {
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, shemaBrowserView);
 		splitPane.setDividerLocation(0.7);
 		splitPane.setResizeWeight(0.7);
-		infoLabel = new JLabel("Shema perspective");
+		infoLabel = new JLabel("Diagram perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
 
