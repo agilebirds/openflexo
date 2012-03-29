@@ -26,7 +26,7 @@ import javax.swing.ImageIcon;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.viewpoint.CreationScheme;
+import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
@@ -34,6 +34,7 @@ import org.openflexo.foundation.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
@@ -134,7 +135,7 @@ public class VPMIconLibrary extends IconLibrary {
 			return DROP_SCHEME_ICON;
 		} else if (object instanceof LinkScheme) {
 			return LINK_SCHEME_ICON;
-		} else if (object instanceof CreationScheme) {
+		} else if (object instanceof AbstractCreationScheme) {
 			return CREATION_SCHEME_ICON;
 		} else if (object instanceof NavigationScheme) {
 			return NAVIGATION_SCHEME_ICON;
@@ -173,6 +174,8 @@ public class VPMIconLibrary extends IconLibrary {
 			return CALC_SHAPE_ICON;
 		} else if (object instanceof DiagramPatternRole) {
 			return EXAMPLE_DIAGRAM_ICON;
+		} else if (object instanceof EditionPatternPatternRole) {
+			return EDITION_PATTERN_ICON;
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;
 		} else if (object instanceof ClassPatternRole) {

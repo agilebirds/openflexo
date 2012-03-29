@@ -19,22 +19,11 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.Inspectors;
 
-public class CreationScheme extends AbstractCreationScheme {
+public abstract class AbstractCreationScheme extends EditionScheme {
 
-	public CreationScheme() {
+	public AbstractCreationScheme() {
 		super();
-	}
-
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.CreationScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CREATION_SCHEME_INSPECTOR;
 	}
 
 }

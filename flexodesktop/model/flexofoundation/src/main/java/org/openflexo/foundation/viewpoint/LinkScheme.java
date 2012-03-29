@@ -25,7 +25,7 @@ import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class LinkScheme extends CreationScheme {
+public class LinkScheme extends AbstractCreationScheme {
 
 	private String fromTarget;
 	private String toTarget;

@@ -233,6 +233,13 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return newPatternRole;
 	}
 
+	public EditionPatternPatternRole createEditionPatternPatternRole() {
+		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole();
+		newPatternRole.setPatternRoleName(getAvailableRoleName("editionPattern"));
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+
 	public ClassPatternRole createClassPatternRole() {
 		ClassPatternRole newPatternRole = new ClassPatternRole();
 		newPatternRole.setPatternRoleName(getAvailableRoleName("class"));
@@ -366,6 +373,26 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof NavigationScheme) {
 				returned.add((NavigationScheme) es);
+			}
+		}
+		return returned;
+	}
+
+	public Vector<AbstractCreationScheme> getAbstractCreationSchemes() {
+		Vector<AbstractCreationScheme> returned = new Vector<AbstractCreationScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof AbstractCreationScheme) {
+				returned.add((AbstractCreationScheme) es);
+			}
+		}
+		return returned;
+	}
+
+	public Vector<CreationScheme> getCreationSchemes() {
+		Vector<CreationScheme> returned = new Vector<CreationScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof CreationScheme) {
+				returned.add((CreationScheme) es);
 			}
 		}
 		return returned;

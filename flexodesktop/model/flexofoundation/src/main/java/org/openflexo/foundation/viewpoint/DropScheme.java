@@ -25,7 +25,7 @@ import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class DropScheme extends CreationScheme {
+public class DropScheme extends AbstractCreationScheme {
 
 	private String target;
 	private ShapePatternRole targetPatternRole;

@@ -43,6 +43,7 @@ public abstract class PatternRole extends ViewPointObject {
 		RestrictionStatement,
 		FlexoModelObject,
 		Diagram,
+		EditionPattern,
 		Primitive
 	}
 
