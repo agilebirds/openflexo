@@ -21,18 +21,18 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public class NavigationScheme extends AbstractActionScheme {
 
-	private ViewPointDataBinding targetDiagram;
+	private ViewPointDataBinding targetObject;
 
 	public static enum NavigationSchemeBindingAttribute implements InspectorBindingAttribute {
-		targetDiagram
+		targetObject
 	}
 
 	public NavigationScheme() {
@@ -49,30 +49,30 @@ public class NavigationScheme extends AbstractActionScheme {
 		return Inspectors.VPM.NAVIGATION_SCHEME_INSPECTOR;
 	}
 
-	private BindingDefinition TARGET_DIAGRAM = new BindingDefinition("targetDiagram", View.class, BindingDefinitionType.GET, false);
+	private BindingDefinition TARGET_OBJECT = new BindingDefinition("targetObject", FlexoModelObject.class, BindingDefinitionType.GET,
+			false);
 
-	public BindingDefinition getTargetDiagramBindingDefinition() {
-		return TARGET_DIAGRAM;
+	public BindingDefinition getTargetObjectBindingDefinition() {
+		return TARGET_OBJECT;
 	}
 
-	public ViewPointDataBinding getTargetDiagram() {
-		if (targetDiagram == null) {
-			targetDiagram = new ViewPointDataBinding(this, NavigationSchemeBindingAttribute.targetDiagram,
-					getTargetDiagramBindingDefinition());
+	public ViewPointDataBinding getTargetObject() {
+		if (targetObject == null) {
+			targetObject = new ViewPointDataBinding(this, NavigationSchemeBindingAttribute.targetObject, getTargetObjectBindingDefinition());
 		}
-		return targetDiagram;
+		return targetObject;
 	}
 
-	public void setTargetDiagram(ViewPointDataBinding targetDiagram) {
-		targetDiagram.setOwner(this);
-		targetDiagram.setBindingAttribute(NavigationSchemeBindingAttribute.targetDiagram);
-		targetDiagram.setBindingDefinition(getTargetDiagramBindingDefinition());
-		this.targetDiagram = targetDiagram;
+	public void setTargetObject(ViewPointDataBinding targetObject) {
+		targetObject.setOwner(this);
+		targetObject.setBindingAttribute(NavigationSchemeBindingAttribute.targetObject);
+		targetObject.setBindingDefinition(getTargetObjectBindingDefinition());
+		this.targetObject = targetObject;
 	}
 
-	public View evaluateTargetDiagram(EditionPatternReference editionPatternReference) {
-		if (getTargetDiagram().isValid()) {
-			return (View) getTargetDiagram().getBindingValue(editionPatternReference);
+	public FlexoModelObject evaluateTargetObject(EditionPatternReference editionPatternReference) {
+		if (getTargetObject().isValid()) {
+			return (FlexoModelObject) getTargetObject().getBindingValue(editionPatternReference);
 		}
 		return null;
 	}

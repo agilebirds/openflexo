@@ -220,7 +220,7 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.NavigationScheme"
 		xmlTag="NavigationScheme">
-		<property name="targetDiagram" xmlTag="targetDiagram" attribute="YES" />
+		<property name="targetObject" xmlTag="targetObject" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.DeletionScheme"

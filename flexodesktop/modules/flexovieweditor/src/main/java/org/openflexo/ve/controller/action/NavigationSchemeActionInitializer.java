@@ -58,7 +58,7 @@ public class NavigationSchemeActionInitializer extends ActionInitializer {
 					return false;
 				}
 
-				if (action.getTargetDiagram() == null) {
+				if (action.getTargetObject() == null) {
 					// If target diagram is not existant, we must create it
 					// First retrieve parameters
 					return ParametersRetriever.retrieveParameters(action, action.escapeParameterRetrievingWhenValid);
@@ -77,8 +77,13 @@ public class NavigationSchemeActionInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<NavigationSchemeAction>() {
 			@Override
 			public boolean run(ActionEvent e, NavigationSchemeAction action) {
-				getEditor().focusOn(action.getTargetDiagram());
-				return true;
+				if (action.getTargetObject() != null) {
+					// Editor will handle switch to right module and perspective, and select target object
+					getEditor().focusOn(action.getTargetObject());
+					return true;
+				} else {
+					return false;
+				}
 			}
 		};
 	}

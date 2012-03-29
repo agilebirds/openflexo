@@ -68,7 +68,7 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 
 		if (evaluateCondition()) {
 			// If target diagram is not existant, we must create it
-			if (getTargetDiagram() == null) {
+			if (getTargetObject() == null) {
 				applyEditionActions();
 			}
 		}
@@ -82,12 +82,12 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 		return getNavigationScheme().evaluateCondition(actionType.getEditionPatternReference());
 	}
 
-	public View getTargetDiagram() {
+	public FlexoModelObject getTargetObject() {
 		if (getNavigationScheme() == null) {
 			logger.warning("No navigation scheme. Please investigate !");
 			return null;
 		}
-		return getNavigationScheme().evaluateTargetDiagram(actionType.getEditionPatternReference());
+		return getNavigationScheme().evaluateTargetObject(actionType.getEditionPatternReference());
 	}
 
 	@Override
