@@ -35,7 +35,7 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
+import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -197,8 +197,8 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	@Override
-	public synchronized List<TargetObject> getDependingObjects() {
-		List<TargetObject> returned = super.getDependingObjects();
+	public List<AbstractBinding> getDependencyBindings() {
+		List<AbstractBinding> returned = super.getDependencyBindings();
 		appendToDependingObjects(getWidget().getSelected(), returned);
 		appendToDependingObjects(getWidget().getRoot(), returned);
 		return returned;

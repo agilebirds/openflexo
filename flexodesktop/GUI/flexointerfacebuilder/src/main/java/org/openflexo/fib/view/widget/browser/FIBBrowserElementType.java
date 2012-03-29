@@ -21,16 +21,16 @@ package org.openflexo.fib.view.widget.browser;
 
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
@@ -39,6 +39,7 @@ import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBBrowserElement.FIBBrowserElementChildren;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.ToolBox;
 
 public class FIBBrowserElementType implements BindingEvaluationContext, Observer {
 
@@ -105,25 +106,18 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	    return fibBrowserModel.elementAt(row);
 	}*/
 
-	private void appendToDependingObjects(DataBinding binding, List<TargetObject> returned) {
+	private void appendToDependingObjects(DataBinding binding, List<AbstractBinding> returned) {
 		if (binding.isSet()) {
-			List<TargetObject> list = binding.getBinding().getTargetObjects(this);
-			if (list != null) {
-				for (TargetObject t : list) {
-					if (!returned.contains(t)) {
-						returned.add(t);
-					}
-				}
-			}
+			returned.add(binding.getBinding());
 		}
 	}
 
-	public List<TargetObject> getDependingObjects(final Object object) {
+	public List<AbstractBinding> getDependencyBindings(final Object object) {
 		if (browserElementDefinition == null) {
 			return null;
 		}
 		iteratorObject = object;
-		List<TargetObject> returned = new ArrayList<TargetObject>();
+		List<AbstractBinding> returned = new ArrayList<AbstractBinding>();
 		appendToDependingObjects(browserElementDefinition.getLabel(), returned);
 		appendToDependingObjects(browserElementDefinition.getIcon(), returned);
 		appendToDependingObjects(browserElementDefinition.getTooltip(), returned);
@@ -200,13 +194,11 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		}
 	}
 
-	private Vector<?> EMPTY_LIST = new Vector();
-
 	public synchronized List<?> getChildrenFor(final Object object) {
 		if (browserElementDefinition == null) {
-			return EMPTY_LIST;
+			return Collections.EMPTY_LIST;
 		}
-		List returned = new ArrayList();
+		List<Object> returned = new ArrayList<Object>();
 		for (FIBBrowserElementChildren children : browserElementDefinition.getChildren()) {
 			if (children.isMultipleAccess()) {
 				// System.out.println("add all children for "+browserElementDefinition.getName()+" children "+children.getName()+" data="+children.getData());
@@ -256,7 +248,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 					return null;
 				}
 			}
-			return (List<?>) children.getData().getBindingValue(this);
+			Object bindingValue = children.getData().getBindingValue(this);
+			return ToolBox.getListFromIterable(bindingValue);
 		} else {
 			return null;
 		}

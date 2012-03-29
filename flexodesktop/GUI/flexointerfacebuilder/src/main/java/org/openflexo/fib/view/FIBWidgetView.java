@@ -27,13 +27,11 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,16 +39,17 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DependingObjects;
+import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBWidget;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
@@ -60,7 +59,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
  * @author sylvain
  */
 public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T> extends FIBView<M, J> implements FocusListener, Observer,
-		PropertyChangeListener {
+		PropertyChangeListener, HasDependencyBinding {
 
 	private static final Logger logger = Logger.getLogger(FIBWidgetView.class.getPackage().getName());
 
@@ -76,7 +75,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	private final DynamicFormatter formatter;
 
-	private final Vector<TargetObject> dependingObjects = new Vector<TargetObject>();
+	private DependingObjects dependingObjects;
 
 	protected FIBWidgetView(M model, FIBController aController) {
 		super(model, aController);
@@ -85,17 +84,10 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	@Override
 	public synchronized void delete() {
-		for (TargetObject o : dependingObjects) {
-			if (o.target instanceof HasPropertyChangeSupport) {
-				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
-				// logger.info("Widget "+getWidget()+" remove property change listener: "+o.target+" property:"+o.propertyName);
-				pcSupport.removePropertyChangeListener(o.propertyName, this);
-			} else if (o.target instanceof Observable) {
-				// logger.info("Widget "+getWidget()+" remove observable: "+o);
-				((Observable) o.target).deleteObserver(this);
-			}
+		if (dependingObjects != null) {
+			dependingObjects.stopObserving();
+			dependingObjects = null;
 		}
-		dependingObjects.clear();
 		super.delete();
 	}
 
@@ -234,46 +226,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	}
 
-	private boolean dependingObjectsAreComputed = false;
-
 	private synchronized void updateDependingObjects() {
-		// System.out.println("Widget "+getWidget()+" potential observable: "+getPotentialObservables());
-		ArrayList<TargetObject> newDependingObjects = new ArrayList<TargetObject>();
-		ArrayList<TargetObject> deletedDependingObjects = new ArrayList<TargetObject>();
-		deletedDependingObjects.addAll(dependingObjects);
-		if (getDependingObjects() != null) {
-			for (TargetObject o : getDependingObjects()) {
-				if (deletedDependingObjects.contains(o)) {
-					deletedDependingObjects.remove(o);
-				} else {
-					newDependingObjects.add(o);
-				}
-			}
+		if (dependingObjects == null) {
+			dependingObjects = new DependingObjects(this);
 		}
-		for (TargetObject o : deletedDependingObjects) {
-			dependingObjects.remove(o);
-			if (o.target instanceof HasPropertyChangeSupport) {
-				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
-				logger.fine("Widget " + getWidget() + " remove property change listener: " + o.target + " property:" + o.propertyName);
-				pcSupport.removePropertyChangeListener(o.propertyName, this);
-			} else if (o.target instanceof Observable) {
-				logger.fine("Widget " + getWidget() + " remove observable: " + o);
-				((Observable) o.target).deleteObserver(this);
-			}
-		}
-		for (TargetObject o : newDependingObjects) {
-			dependingObjects.add(o);
-			if (o.target instanceof HasPropertyChangeSupport) {
-				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
-				logger.fine("Widget " + getWidget() + " add property change listener: " + o.target + " property:" + o.propertyName);
-				pcSupport.addPropertyChangeListener(o.propertyName, this);
-			} else if (o.target instanceof Observable) {
-				logger.fine("Widget " + getWidget() + " add observable: " + o);
-				((Observable) o.target).addObserver(this);
-			}
-		}
-
-		dependingObjectsAreComputed = true;
+		dependingObjects.refreshObserving(getController());
 	}
 
 	@Override
@@ -304,21 +261,15 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		return true;
 	}
 
-	protected synchronized void appendToDependingObjects(DataBinding binding, List<TargetObject> returned) {
+	protected void appendToDependingObjects(DataBinding binding, List<AbstractBinding> returned) {
 		if (binding.isSet()) {
-			List<TargetObject> list = binding.getBinding().getTargetObjects(getController());
-			if (list != null) {
-				for (TargetObject t : list) {
-					if (!returned.contains(t)) {
-						returned.add(t);
-					}
-				}
-			}
+			returned.add(binding.getBinding());
 		}
 	}
 
-	public synchronized List<TargetObject> getDependingObjects() {
-		List<TargetObject> returned = new ArrayList<TargetObject>();
+	@Override
+	public List<AbstractBinding> getDependencyBindings() {
+		List<AbstractBinding> returned = new ArrayList<AbstractBinding>();
 		appendToDependingObjects(getWidget().getData(), returned);
 		appendToDependingObjects(getWidget().getVisible(), returned);
 		appendToDependingObjects(getWidget().getEnable(), returned);
@@ -337,7 +288,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				if (updateWidgetFromModel()) {
 					updateDependancies();
 				}
-			} else if (!dependingObjectsAreComputed && checkValidDataPath()) {
+			} else if ((dependingObjects == null || !dependingObjects.areDependingObjectsComputed()) && checkValidDataPath()) {
 				// Even if the component is not visible, its visibility may depend
 				// it self from some depending component (which in that situation,
 				// are very important to know, aren'they ?)

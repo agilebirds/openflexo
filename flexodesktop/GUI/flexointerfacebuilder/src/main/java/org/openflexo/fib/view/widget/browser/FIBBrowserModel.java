@@ -21,7 +21,7 @@ package org.openflexo.fib.view.widget.browser;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -38,12 +38,13 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
+import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.DependingObjects;
+import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionListener, TreeModel {
 
@@ -77,7 +78,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 
 	public void delete() {
 		for (FIBBrowserElement c : _elementTypes.keySet()) {
-			(_elementTypes.get(c)).delete();
+			_elementTypes.get(c).delete();
 		}
 
 		_footer.delete();
@@ -303,13 +304,14 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		return contents.get(representedObject);
 	}
 
-	public class BrowserCell implements TreeNode, Observer, PropertyChangeListener {
+	public class BrowserCell implements TreeNode, Observer, PropertyChangeListener, HasDependencyBinding {
 		private Object representedObject;
 		private FIBBrowserElementType browserElementType;
 		private BrowserCell father;
 		private final Vector<BrowserCell> children;
 		private boolean isDeleted = false;
 		private boolean isVisible = true;
+		private DependingObjects dependingObjects;
 
 		public BrowserCell(Object representedObject, BrowserCell father) {
 			// logger.info("Build new BrowserCell for "+representedObject);
@@ -318,22 +320,16 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 			this.father = father;
 			children = new Vector<BrowserCell>();
 
-			if (representedObject instanceof HasPropertyChangeSupport && getBrowserElementType() != null) {
-				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) representedObject).getPropertyChangeSupport();
-				List<TargetObject> dependingObjectList = getBrowserElementType().getDependingObjects(representedObject);
-				// System.out.println("For cell "+this+" target objects are: "+targetObjectList);
-				if (dependingObjectList != null) {
-					for (TargetObject targetObject : dependingObjectList) {
-						if (targetObject.target == representedObject) {
-							pcSupport.addPropertyChangeListener(targetObject.propertyName, this);
-						}
-					}
-				}
-			} else if (representedObject instanceof Observable) {
-				((Observable) representedObject).addObserver(this);
+			if (browserElementType != null) {
+				dependingObjects = new DependingObjects(this);
+				dependingObjects.refreshObserving(browserElementType);
 			}
-
 			update(false);
+		}
+
+		@Override
+		public List<AbstractBinding> getDependencyBindings() {
+			return getBrowserElementType().getDependencyBindings(representedObject);
 		}
 
 		public void delete() {
@@ -343,18 +339,8 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				c.delete();
 			}
 
-			if (representedObject instanceof HasPropertyChangeSupport) {
-				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) representedObject).getPropertyChangeSupport();
-				List<TargetObject> dependingObjectList = getBrowserElementType().getDependingObjects(representedObject);
-				if (dependingObjectList != null) {
-					for (TargetObject targetObject : dependingObjectList) {
-						if (targetObject.target == representedObject) {
-							pcSupport.removePropertyChangeListener(targetObject.propertyName, this);
-						}
-					}
-				}
-			} else if (representedObject instanceof Observable) {
-				((Observable) representedObject).deleteObserver(this);
+			if (dependingObjects != null) {
+				dependingObjects.stopObserving();
 			}
 
 			if (representedObject != null) {
@@ -388,13 +374,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				}
 			}
 
-			Vector<BrowserCell> oldChildren = new Vector<BrowserCell>();
-			Vector<BrowserCell> removedChildren = new Vector<BrowserCell>();
-			Vector<BrowserCell> newChildren = new Vector<BrowserCell>();
-			for (BrowserCell c : children) {
-				removedChildren.add(c);
-				oldChildren.add(c);
-			}
+			List<BrowserCell> oldChildren = new ArrayList<BrowserCell>(children);
+			List<BrowserCell> removedChildren = new ArrayList<BrowserCell>(children);
+			List<BrowserCell> newChildren = new ArrayList<BrowserCell>();
 			boolean isEnabled = browserElementType.isEnabled(representedObject);
 			List newChildrenObjects = /*(isEnabled ?*/browserElementType.getChildrenFor(representedObject) /*: new Vector())*/;
 			int index = 0;
@@ -535,6 +517,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		public TreePath getTreePath() {
 			return new TreePath(getPathToRoot(this));
 		}
+
 	}
 
 	/*@Override
