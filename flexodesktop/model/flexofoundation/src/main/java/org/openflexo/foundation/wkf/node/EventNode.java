@@ -198,7 +198,7 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	public void setTrigger(TriggerType trigger) {
 		this.trigger = trigger;
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "trigger", null, trigger));
+		notifyObservers(new DataModification("trigger", null, trigger));
 	}
 
 	public EVENT_TYPE getEventType() {
@@ -227,7 +227,7 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		}
 		this.eventType = eventType;
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "eventType", null, eventType));
+		notifyObservers(new DataModification("eventType", null, eventType));
 	}
 
 	/**

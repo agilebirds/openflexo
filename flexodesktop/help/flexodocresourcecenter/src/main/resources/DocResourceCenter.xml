@@ -266,9 +266,13 @@
           <EmbeddingChildDocItem id="CGTemplateFile-fileName" identifier="CGTemplateFile-fileName" embedded="true" hidden="false">
             <description>No description</description>
           </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="CGTemplateFile-templateName" identifier="CGTemplateFile-templateName" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
         </DocItem>
         <DocItem idref="CGTemplateFile-fileName" />
         <DocItem idref="CGTemplateFile-isCustomTemplate" />
+        <DocItem idref="CGTemplateFile-templateName" />
         <DocItem id="CGTemplates" identifier="CGTemplates" embedded="false" hidden="false">
           <description>No description</description>
           <EmbeddingChildDocItem id="CGTemplates-helpText" identifier="CGTemplates-helpText" embedded="true" hidden="false">
@@ -641,11 +645,15 @@
           <EmbeddingChildDocItem id="TOCEntry-includeStatusList" identifier="TOCEntry-includeStatusList" embedded="true" hidden="true">
             <description>No description</description>
           </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="TOCEntry-documentedRole" identifier="TOCEntry-documentedRole" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
         </DocItem>
         <DocItem idref="TOCEntry-depth" />
         <DocItem idref="TOCEntry-documentedDMEOEntity" />
         <DocItem idref="TOCEntry-documentedDiagram" />
         <DocItem idref="TOCEntry-documentedFlexoProcess" />
+        <DocItem idref="TOCEntry-documentedRole" />
         <DocItem idref="TOCEntry-identifier" />
         <DocItem idref="TOCEntry-includeStatusList" />
         <DocItem idref="TOCEntry-index" />
@@ -13233,12 +13241,16 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="dg-control-panel-available-perspectives" identifier="dg-control-panel-available-perspectives" embedded="false" hidden="false">
               <EmbeddingChildDocItem id="dg-control-panel-available-perspectives-code_generation" identifier="dg-control-panel-available-perspectives-code_generation" embedded="false" hidden="true" />
               <EmbeddingChildDocItem id="dg-control-panel-available-perspectives-versionning" identifier="dg-control-panel-available-perspectives-versionning" embedded="false" hidden="true" />
+              <EmbeddingChildDocItem id="dg-control-panel-available-perspectives-doc_generation" identifier="dg-control-panel-available-perspectives-doc_generation" embedded="false" hidden="true">
+                <description />
+              </EmbeddingChildDocItem>
             </EmbeddingChildDocItem>
             <EmbeddingChildDocItem id="dg-control-panel-close-module" identifier="dg-control-panel-close-module" embedded="false" hidden="true" />
           </DocItem>
           <DocItem idref="dg-control-panel-available-objects" />
           <DocItem idref="dg-control-panel-available-perspectives" />
           <DocItem idref="dg-control-panel-available-perspectives-code_generation" />
+          <DocItem idref="dg-control-panel-available-perspectives-doc_generation" />
           <DocItem idref="dg-control-panel-available-perspectives-versionning" />
           <DocItem idref="dg-control-panel-back" />
           <DocItem idref="dg-control-panel-close-module" />
@@ -13293,6 +13305,12 @@ forward to the next nodes.</description>
             </DocItemFolder>
             <DocItem idref="doc_editor" />
           </DocItemFolder>
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-main-panedoc_generation" primaryDocItemId="doc_generation" identifier="doc_generation">
+            <description>Documentation on that perspective</description>
+            <DocItem id="doc_generation" identifier="doc_generation" embedded="false" hidden="true">
+              <description>No description</description>
+            </DocItem>
+          </DocItemFolder>
           <DocItem id="dg-main-pane" identifier="dg-main-pane" embedded="false" hidden="false">
             <description>No description</description>
             <InheritanceChildDocItem idref="DGDocumentView" />
@@ -13305,6 +13323,7 @@ forward to the next nodes.</description>
             <InheritanceChildDocItem idref="DERepositoryModuleView" />
             <InheritanceChildDocItem idref="DETOCEntryModuleView" />
             <EmbeddingChildDocItem idref="doc_editor" />
+            <EmbeddingChildDocItem idref="doc_generation" />
           </DocItem>
         </DocItemFolder>
         <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetdgdg-right-view" primaryDocItemId="dg-right-view" identifier="dg-right-view">
@@ -14335,6 +14354,72 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="oe-control-panel-toggle-hide-show-right-panel" identifier="oe-control-panel-toggle-hide-show-right-panel" embedded="false" hidden="true" />
             <EmbeddingChildDocItem id="oe-control-panel-close-module" identifier="oe-control-panel-close-module" embedded="false" hidden="true" />
           </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="ve-control-panel" identifier="ve-control-panel" embedded="false" hidden="true">
+            <description>No description</description>
+            <EmbeddingChildDocItem id="ve-control-panel-available-perspectives" identifier="ve-control-panel-available-perspectives" embedded="false" hidden="true">
+              <description />
+              <EmbeddingChildDocItem id="ve-control-panel-available-perspectives-shema_perspective" identifier="ve-control-panel-available-perspectives-shema_perspective" embedded="false" hidden="true">
+                <description />
+              </EmbeddingChildDocItem>
+              <EmbeddingChildDocItem id="ve-control-panel-available-perspectives-ontology_perspective" identifier="ve-control-panel-available-perspectives-ontology_perspective" embedded="false" hidden="true">
+                <description />
+              </EmbeddingChildDocItem>
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ve-control-panel-available-objects" identifier="ve-control-panel-available-objects" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ve-control-panel-close-module" identifier="ve-control-panel-close-module" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ve-control-panel-back" identifier="ve-control-panel-back" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ve-control-panel-up" identifier="ve-control-panel-up" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ve-control-panel-forward" identifier="ve-control-panel-forward" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ve-control-panel-toggle-hide-show-left-panel" identifier="ve-control-panel-toggle-hide-show-left-panel" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ve-control-panel-toggle-hide-show-right-panel" identifier="ve-control-panel-toggle-hide-show-right-panel" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+          </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="vpm-control-panel" identifier="vpm-control-panel" embedded="false" hidden="true">
+            <description>No description</description>
+            <EmbeddingChildDocItem id="vpm-control-panel-available-perspectives" identifier="vpm-control-panel-available-perspectives" embedded="false" hidden="true">
+              <description />
+              <EmbeddingChildDocItem id="vpm-control-panel-available-perspectives-calc_perspective" identifier="vpm-control-panel-available-perspectives-calc_perspective" embedded="false" hidden="true">
+                <description />
+              </EmbeddingChildDocItem>
+              <EmbeddingChildDocItem id="vpm-control-panel-available-perspectives-ontology_perspective" identifier="vpm-control-panel-available-perspectives-ontology_perspective" embedded="false" hidden="true">
+                <description />
+              </EmbeddingChildDocItem>
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="vpm-control-panel-available-objects" identifier="vpm-control-panel-available-objects" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="vpm-control-panel-close-module" identifier="vpm-control-panel-close-module" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="vpm-control-panel-back" identifier="vpm-control-panel-back" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="vpm-control-panel-up" identifier="vpm-control-panel-up" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="vpm-control-panel-forward" identifier="vpm-control-panel-forward" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="vpm-control-panel-toggle-hide-show-left-panel" identifier="vpm-control-panel-toggle-hide-show-left-panel" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="vpm-control-panel-toggle-hide-show-right-panel" identifier="vpm-control-panel-toggle-hide-show-right-panel" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+          </InheritanceChildDocItem>
           <title key="ENGLISH">Panel Central Control</title>
           <DocItemVersion id="general control panel_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
           <DocItemAction id="SUBMITTED_ON_general control panel_1.0.0ENGLISH" authorId="dsnyers" actionDate="HH:mm:ss dd/MM/yyyy,21:45:38 11/06/2007" actionType="SUBMITTED">
@@ -14566,6 +14651,30 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="oe-left-view-minus" identifier="oe-left-view-minus" embedded="false" hidden="true" />
             <EmbeddingChildDocItem id="oe-left-view-options" identifier="oe-left-view-options" embedded="false" hidden="true" />
           </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="ve-left-view" identifier="ve-left-view" embedded="false" hidden="true">
+            <description>No description</description>
+            <EmbeddingChildDocItem id="ve-left-view-plus" identifier="ve-left-view-plus" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ve-left-view-minus" identifier="ve-left-view-minus" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="ve-left-view-options" identifier="ve-left-view-options" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+          </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="vpm-left-view" identifier="vpm-left-view" embedded="false" hidden="true">
+            <description>No description</description>
+            <EmbeddingChildDocItem id="vpm-left-view-plus" identifier="vpm-left-view-plus" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="vpm-left-view-minus" identifier="vpm-left-view-minus" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem id="vpm-left-view-options" identifier="vpm-left-view-options" embedded="false" hidden="true">
+              <description />
+            </EmbeddingChildDocItem>
+          </InheritanceChildDocItem>
           <title key="ENGLISH">Panel Left</title>
           <DocItemVersion id="general left view_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
           <DocItemAction id="SUBMITTED_ON_general left view_1.0.0ENGLISH" authorId="dsnyers" actionDate="HH:mm:ss dd/MM/yyyy,21:46:08 11/06/2007" actionType="SUBMITTED">
@@ -14775,6 +14884,10 @@ forward to the next nodes.</description>
                 <description>No description</description>
                 <RelatedToDocItem idref="OEShemaModuleView" />
                 <RelatedToDocItem idref="OEShemaModuleView" />
+                <RelatedToDocItem id="VEShemaModuleView" identifier="VEShemaModuleView" embedded="false" hidden="true">
+                  <description>No description</description>
+                  <RelatedToDocItem idref="shema_perspective" />
+                </RelatedToDocItem>
               </RelatedToDocItem>
             </InheritanceChildDocItem>
             <InheritanceChildDocItem id="FlexoOntologyView" identifier="FlexoOntologyView" embedded="false" hidden="true">
@@ -14797,6 +14910,13 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem idref="ontology_perspective" />
             <EmbeddingChildDocItem idref="calc_perspective" />
           </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="ve-main-pane" identifier="ve-main-pane" embedded="false" hidden="true">
+            <description>No description</description>
+            <InheritanceChildDocItem idref="VEShemaModuleView" />
+          </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="vpm-main-pane" identifier="vpm-main-pane" embedded="false" hidden="true">
+            <description>No description</description>
+          </InheritanceChildDocItem>
           <title key="ENGLISH">Panel Central</title>
           <DocItemVersion id="general main pane_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
           <DocItemAction id="SUBMITTED_ON_general main pane_1.0.0ENGLISH" authorId="dsnyers" actionDate="HH:mm:ss dd/MM/yyyy,21:46:51 11/06/2007" actionType="SUBMITTED">
@@ -14817,6 +14937,24 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="oe-right-view" identifier="oe-right-view" embedded="false" hidden="true">
               <description>No description</description>
             </EmbeddingChildDocItem>
+          </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="ve" identifier="ve" embedded="false" hidden="true">
+            <description>No description</description>
+            <EmbeddingChildDocItem idref="ve-main-pane" />
+            <EmbeddingChildDocItem idref="ve-control-panel" />
+            <EmbeddingChildDocItem idref="ve-left-view" />
+            <EmbeddingChildDocItem id="ve-right-view" identifier="ve-right-view" embedded="false" hidden="true">
+              <description>No description</description>
+            </EmbeddingChildDocItem>
+          </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="vpm" identifier="vpm" embedded="false" hidden="true">
+            <description>No description</description>
+            <EmbeddingChildDocItem idref="vpm-left-view" />
+            <EmbeddingChildDocItem id="vpm-right-view" identifier="vpm-right-view" embedded="false" hidden="true">
+              <description>No description</description>
+            </EmbeddingChildDocItem>
+            <EmbeddingChildDocItem idref="vpm-main-pane" />
+            <EmbeddingChildDocItem idref="vpm-control-panel" />
           </InheritanceChildDocItem>
           <EmbeddingChildDocItem idref="general main pane" />
           <EmbeddingChildDocItem idref="general control panel" />
@@ -14861,6 +14999,8 @@ forward to the next nodes.</description>
             </InheritanceChildDocItem>
             <InheritanceChildDocItem idref="fps-right-view" />
             <InheritanceChildDocItem idref="oe-right-view" />
+            <InheritanceChildDocItem idref="ve-right-view" />
+            <InheritanceChildDocItem idref="vpm-right-view" />
             <title key="ENGLISH">Panel Right</title>
             <DocItemVersion id="general right view_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
             <DocItemAction id="SUBMITTED_ON_general right view_1.0.0ENGLISH" authorId="dsnyers" actionDate="HH:mm:ss dd/MM/yyyy,21:48:38 11/06/2007" actionType="SUBMITTED">
@@ -15042,6 +15182,10 @@ forward to the next nodes.</description>
               <description>Documentation on that view</description>
               <DocItem idref="OEShemaModuleView" />
             </DocItemFolder>
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-paneshema_perspectiveVEShemaModuleView" primaryDocItemId="VEShemaModuleView" identifier="VEShemaModuleView">
+              <description>Documentation on that view</description>
+              <DocItem idref="VEShemaModuleView" />
+            </DocItemFolder>
             <DocItem idref="shema_perspective" />
           </DocItemFolder>
           <DocItem idref="oe-main-pane" />
@@ -15050,6 +15194,72 @@ forward to the next nodes.</description>
           <DocItem idref="oe-right-view" />
         </DocItemFolder>
         <DocItem idref="oe" />
+      </DocItemFolder>
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetve" primaryDocItemId="ve" identifier="ve">
+        <description />
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetveve-control-panel" primaryDocItemId="ve-control-panel" identifier="ve-control-panel">
+          <description />
+          <DocItem idref="ve-control-panel" />
+          <DocItem idref="ve-control-panel-available-objects" />
+          <DocItem idref="ve-control-panel-available-perspectives" />
+          <DocItem idref="ve-control-panel-available-perspectives-ontology_perspective" />
+          <DocItem idref="ve-control-panel-available-perspectives-shema_perspective" />
+          <DocItem idref="ve-control-panel-back" />
+          <DocItem idref="ve-control-panel-close-module" />
+          <DocItem idref="ve-control-panel-forward" />
+          <DocItem idref="ve-control-panel-toggle-hide-show-left-panel" />
+          <DocItem idref="ve-control-panel-toggle-hide-show-right-panel" />
+          <DocItem idref="ve-control-panel-up" />
+        </DocItemFolder>
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetveve-left-view" primaryDocItemId="ve-left-view" identifier="ve-left-view">
+          <description />
+          <DocItem idref="ve-left-view" />
+          <DocItem idref="ve-left-view-minus" />
+          <DocItem idref="ve-left-view-options" />
+          <DocItem idref="ve-left-view-plus" />
+        </DocItemFolder>
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetveve-main-pane" primaryDocItemId="ve-main-pane" identifier="ve-main-pane">
+          <description />
+          <DocItem idref="ve-main-pane" />
+        </DocItemFolder>
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetveve-right-view" primaryDocItemId="ve-right-view" identifier="ve-right-view">
+          <description />
+          <DocItem idref="ve-right-view" />
+        </DocItemFolder>
+        <DocItem idref="ve" />
+      </DocItemFolder>
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetvpm" primaryDocItemId="vpm" identifier="vpm">
+        <description />
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetvpmvpm-control-panel" primaryDocItemId="vpm-control-panel" identifier="vpm-control-panel">
+          <description />
+          <DocItem idref="vpm-control-panel" />
+          <DocItem idref="vpm-control-panel-available-objects" />
+          <DocItem idref="vpm-control-panel-available-perspectives" />
+          <DocItem idref="vpm-control-panel-available-perspectives-calc_perspective" />
+          <DocItem idref="vpm-control-panel-available-perspectives-ontology_perspective" />
+          <DocItem idref="vpm-control-panel-back" />
+          <DocItem idref="vpm-control-panel-close-module" />
+          <DocItem idref="vpm-control-panel-forward" />
+          <DocItem idref="vpm-control-panel-toggle-hide-show-left-panel" />
+          <DocItem idref="vpm-control-panel-toggle-hide-show-right-panel" />
+          <DocItem idref="vpm-control-panel-up" />
+        </DocItemFolder>
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetvpmvpm-left-view" primaryDocItemId="vpm-left-view" identifier="vpm-left-view">
+          <description />
+          <DocItem idref="vpm-left-view" />
+          <DocItem idref="vpm-left-view-minus" />
+          <DocItem idref="vpm-left-view-options" />
+          <DocItem idref="vpm-left-view-plus" />
+        </DocItemFolder>
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetvpmvpm-main-pane" primaryDocItemId="vpm-main-pane" identifier="vpm-main-pane">
+          <description />
+          <DocItem idref="vpm-main-pane" />
+        </DocItemFolder>
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetvpmvpm-right-view" primaryDocItemId="vpm-right-view" identifier="vpm-right-view">
+          <description />
+          <DocItem idref="vpm-right-view" />
+        </DocItemFolder>
+        <DocItem idref="vpm" />
       </DocItemFolder>
       <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkf" primaryDocItemId="wkf" identifier="wkf">
         <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-control-panel" primaryDocItemId="wkf-control-panel" identifier="wkf-control-panel">

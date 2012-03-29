@@ -24,7 +24,7 @@ import org.openflexo.foundation.DataModification;
 public class EditionPatternChanged extends DataModification {
 
 	public EditionPatternChanged(EditionPatternInstance editionPatternInstance) {
-		super(DataModification.UNDEFINED, null, editionPatternInstance);
+		super(null, editionPatternInstance);
 	}
 
 }

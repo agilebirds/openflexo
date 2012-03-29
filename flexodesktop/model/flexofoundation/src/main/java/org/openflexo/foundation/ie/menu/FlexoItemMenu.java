@@ -712,7 +712,7 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		if (getTabComponentName() != null && getTabComponentName().equals(aComponentName)) {
 			return;
 		}
-		if (_tabComponentInstance == null && ((aComponentName == null) || (aComponentName.trim().equals("")))) {
+		if (_tabComponentInstance == null && (aComponentName == null || aComponentName.trim().equals(""))) {
 			return;
 		}
 		ComponentDefinition foundComponent = getProject().getFlexoComponentLibrary().getComponentNamed(aComponentName);
@@ -744,7 +744,7 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	}
 
 	public void setTabComponent(TabComponentDefinition aComponentDefinition) {
-		if ((_tabComponentInstance != null) && (_tabComponentInstance.getComponentDefinition() == aComponentDefinition)) {
+		if (_tabComponentInstance != null && _tabComponentInstance.getComponentDefinition() == aComponentDefinition) {
 			return;
 		}
 		if (_tabComponentInstance != null && aComponentDefinition == null) {
@@ -767,7 +767,7 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 			_tabComponentInstance = tabComponentInstance;
 			_tabComponentInstance.setItemMenu(this);
 			setChanged();
-			notifyObservers(new DataModification(-1, "tabMenuComponentInstance", null, _tabComponentInstance));
+			notifyObservers(new DataModification("tabMenuComponentInstance", null, _tabComponentInstance));
 		} else if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("TabComponentInstance does not have a component definition for component named "
 					+ tabComponentInstance.getComponentName());
@@ -780,7 +780,7 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 			ComponentInstance oldComponentInstance = _tabComponentInstance;
 			_tabComponentInstance = null;
 			setChanged();
-			notifyObservers(new DataModification(-1, "tabMenuComponentInstance", oldComponentInstance, null));
+			notifyObservers(new DataModification("tabMenuComponentInstance", oldComponentInstance, null));
 		}
 	}
 

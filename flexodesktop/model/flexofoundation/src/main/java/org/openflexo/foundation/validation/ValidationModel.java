@@ -62,6 +62,12 @@ public abstract class ValidationModel extends FlexoListModel {
 		_inheritedRules = new Hashtable<Class, ValidationRuleSet>();
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * Validate supplied Validable object by returning boolean indicating if validation throw errors (warnings are not considered as invalid
 	 * model).
@@ -70,7 +76,7 @@ public abstract class ValidationModel extends FlexoListModel {
 	 * @return
 	 */
 	public boolean isValid(Validable object) {
-		return (validate(object).getErrorNb() == 0);
+		return validate(object).getErrorNb() == 0;
 	}
 
 	/**
@@ -158,7 +164,7 @@ public abstract class ValidationModel extends FlexoListModel {
 		setChanged();
 		notifyObservers(new ValidationFinishedNotification(object));
 
-		return (addedIssues == 0);
+		return addedIssues == 0;
 	}
 
 	private <V extends Validable> int performValidation(V next, ValidationReport report) {
@@ -212,7 +218,7 @@ public abstract class ValidationModel extends FlexoListModel {
 							+ ((ProblemIssue<R, V>) issue).getElementAt(0).getLocalizedMessage(), false));
 				} else if (issue instanceof CompoundIssue) {
 					for (ValidationIssue<R, V> containedIssue : ((CompoundIssue<R, V>) issue).getContainedIssues()) {
-						if ((containedIssue instanceof ProblemIssue) && (containedIssue.getSize() == 1)) {
+						if (containedIssue instanceof ProblemIssue && containedIssue.getSize() == 1) {
 							report.addToValidationIssues(containedIssue);
 							if (logger.isLoggable(Level.INFO)) {
 								logger.info("Fixing automatically...");
@@ -325,7 +331,7 @@ public abstract class ValidationModel extends FlexoListModel {
 			if (_project != null) {
 				for (Enumeration e2 = rulesForType.elements(); e2.hasMoreElements();) {
 					ValidationRule rule = (ValidationRule) e2.nextElement();
-					if ((!rule.isValidForTarget(getTargetType())) || ((filter != null) && !(filter.accept(rule)))) {
+					if (!rule.isValidForTarget(getTargetType()) || filter != null && !filter.accept(rule)) {
 						ruleSet.removeRule(rule);
 					}
 				}
@@ -336,7 +342,7 @@ public abstract class ValidationModel extends FlexoListModel {
 			Class type1 = e1.nextElement();
 			for (Enumeration<Class> e2 = _rules.keys(); e2.hasMoreElements();) {
 				Class type2 = e2.nextElement();
-				if (type1.isAssignableFrom(type2) && (type1 != type2)) {
+				if (type1.isAssignableFrom(type2) && type1 != type2) {
 					// type1 superclass for type2
 					ValidationRuleSet superRules = _inheritedRules.get(type1);
 					ValidationRuleSet childRules = _inheritedRules.get(type2);
@@ -373,7 +379,7 @@ public abstract class ValidationModel extends FlexoListModel {
 			while (st2.hasMoreTokens()) {
 				className2 = st2.nextToken();
 			}
-			if ((className1 != null) && (className2 != null)) {
+			if (className1 != null && className2 != null) {
 				return collator.compare(className1, className2);
 			}
 			return 0;

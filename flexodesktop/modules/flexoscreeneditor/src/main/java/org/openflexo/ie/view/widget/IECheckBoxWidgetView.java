@@ -138,20 +138,11 @@ public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBo
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(IECheckBoxWidget.ATTRIB_DEFAULTVALUE_NAME)) {
-				if (!isUpdatingModel) {
-					_jCheckBox.setSelected(getCheckBoxModel().getValue());
-				}
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				if (getParent() != null) {
-					getParent().doLayout();
-					((JComponent) getParent()).repaint();
-				}
-
+		if (IECheckBoxWidget.ATTRIB_DEFAULTVALUE_NAME.equals(modif.propertyName())) {
+			if (!isUpdatingModel) {
+				_jCheckBox.setSelected(getCheckBoxModel().getValue());
 			}
-		}
-		if (modif instanceof SpanChanged) {
+		} else if (modif instanceof SpanChanged) {
 			if (getParent() != null) {
 				getParent().doLayout();
 				((JComponent) getParent()).repaint();

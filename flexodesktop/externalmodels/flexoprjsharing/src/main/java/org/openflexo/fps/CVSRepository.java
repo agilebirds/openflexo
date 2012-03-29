@@ -189,11 +189,11 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 			this.passwd = passwd;
 		}
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "password", null, passwd));
+		notifyObservers(new DataModification("password", null, passwd));
 	}
 
 	public void setPassword(String passwd) {
-		setPassword(passwd, (getConnectionType() == ConnectionType.PServer));
+		setPassword(passwd, getConnectionType() == ConnectionType.PServer);
 	}
 
 	public String getPassword() {
@@ -417,7 +417,7 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 
 	@Override
 	public boolean isEnabled() {
-		return (isConnected() || (_explorer != null && !_explorer.isError()));
+		return isConnected() || _explorer != null && !_explorer.isError();
 	}
 
 	public void disconnect() {
@@ -568,7 +568,7 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 		}
 
 		try {
-			getProperties().storeToXML(new FileOutputStream(fileToSave), "CVS repository location stored on " + (new Date()));
+			getProperties().storeToXML(new FileOutputStream(fileToSave), "CVS repository location stored on " + new Date());
 		} catch (IOException e) {
 			e.printStackTrace();
 			logger.warning("Could not save " + fileToSave.getAbsolutePath());
@@ -621,8 +621,8 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 	public boolean equals(Object object) {
 		if (object instanceof CVSRepository) {
 			CVSRepository r = (CVSRepository) object;
-			return (getName().equals(r.getName()) && getHostName().equals(r.getHostName()) && getConnectionType() == r.getConnectionType()
-					&& getPort() == r.getPort() && getUserName().equals(r.getUserName()));
+			return getName().equals(r.getName()) && getHostName().equals(r.getHostName()) && getConnectionType() == r.getConnectionType()
+					&& getPort() == r.getPort() && getUserName().equals(r.getUserName());
 		} else {
 			return super.equals(object);
 		}
@@ -633,7 +633,7 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 		if (obj instanceof CVSRepositoryList) {
 			return ((CVSRepositoryList) obj).getCVSRepositories().contains(this);
 		}
-		return (obj == this);
+		return obj == this;
 	}
 
 	private CVSExplorer _explorer;

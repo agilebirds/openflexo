@@ -24,7 +24,7 @@ import org.openflexo.foundation.DataModification;
 public class ImportedObjectLibraryDeleted extends DataModification {
 
 	public ImportedObjectLibraryDeleted() {
-		super(-1, null, null);
+		super(null, null);
 	}
 
 }

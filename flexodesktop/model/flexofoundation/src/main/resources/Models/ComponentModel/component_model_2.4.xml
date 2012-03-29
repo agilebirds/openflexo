@@ -21,8 +21,6 @@
 
   <entity name="org.openflexo.foundation.ie.IEWOComponent" abstract="YES">
     <description>Represents an abstract WOComponent: root class for all objects representing a WOComponent</description>
-    <property name="mainColor" xmlTag="mainColor" attribute="YES" description="Defines component background color"/> 
-    <property name="textColor" xmlTag="textColor" attribute="YES" description="Defines component text color"/> 
     <property name="helpText" xmlTag="helpText" attribute="YES" description="Defines component help"/> 
     <!--<property name="description" xmlTag="description" attribute="YES" description="Defines component description"/> Stored in WOLib only -->
   </entity>
@@ -363,7 +361,6 @@
   
   <entity name="org.openflexo.foundation.ie.widget.IETDWidget" xmlTag="IETD" finalizer="finalizeDeserialization">
     <description>Represents a cell of a row of an HTML table</description>
-    <property name="isHidden" xmlTag="isHidden" attribute="YES" description=""/> 
     <property name="weightx" xmlTag="weightx" attribute="YES" description=""/>
     <property name="weighty" xmlTag="weighty" attribute="YES" description=""/>
     <property name="gridx" xmlTag="gridx" attribute="YES" description=""/>

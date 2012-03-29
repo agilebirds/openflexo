@@ -106,7 +106,7 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 
 	@Override
 	public IESequenceTab getRootParent() {
-		IESequenceTab root = ((IESequenceTab) getParent());
+		IESequenceTab root = (IESequenceTab) getParent();
 		while (root.getParent() != null && root.getParent() instanceof IESequenceTab) {
 			root = (IESequenceTab) root.getParent();
 		}
@@ -142,7 +142,7 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 	public void moveLeft() {
 		ITabWidget w = null;
 		if (((IESequenceTab) getParent()).isSubsequence()) {
-			w = ((IESequenceTab) getParent());
+			w = (IESequenceTab) getParent();
 		} else {
 			w = this;
 		}
@@ -157,7 +157,7 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 	public void moveRight() {
 		ITabWidget w = null;
 		if (((IESequenceTab) getParent()).isSubsequence()) {
-			w = ((IESequenceTab) getParent());
+			w = (IESequenceTab) getParent();
 		} else {
 			w = this;
 		}
@@ -200,7 +200,7 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 	public void setTitle(String title) {
 		this._title = title;
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, TAB_TITLE_ATTRIBUTE_NAME, null, title));
+		notifyObservers(new DataModification(TAB_TITLE_ATTRIBUTE_NAME, null, title));
 	}
 
 	public String getKey() {

@@ -21,8 +21,8 @@ package org.openflexo.fib.model;
 
 import java.awt.Font;
 import java.io.File;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -601,17 +601,6 @@ public class FIBBrowserElement extends FIBModelObject {
 			}
 		}
 
-		public ImageIcon getImageIcon() {
-			if (getBaseClass() == null) {
-				return null;
-			}
-			FIBBrowserElement e = getBrowser().elementForClass(getBaseClass());
-			if (e != null) {
-				return e.getImageIcon();
-			}
-			return null;
-		}
-
 		public Type getAccessedType() {
 			if (data != null && data.isSet()) {
 				return data.getBinding().getAccessedType();
@@ -626,21 +615,12 @@ public class FIBBrowserElement extends FIBModelObject {
 			System.out.println("accessedType instanceof ParameterizedType="+(getAccessedType() instanceof ParameterizedType));
 			System.out.println("((ParameterizedType)accessedType).getActualTypeArguments().length > 0="+(((ParameterizedType)getAccessedType()).getActualTypeArguments().length > 0));*/
 			Type accessedType = getAccessedType();
-			return accessedType != null && TypeUtils.isClassAncestorOf(List.class, TypeUtils.getBaseClass(accessedType))
-					&& accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0;
-			// ??? Too restrictive: type might be undefined, eg List
-		}
-
-		public Class getBaseClass() {
-			Type accessedType = getAccessedType();
 			if (accessedType == null) {
-				return null;
+				return false;
 			}
-			if (isMultipleAccess()) {
-				return TypeUtils.getBaseClass(((ParameterizedType) accessedType).getActualTypeArguments()[0]);
-			} else {
-				return TypeUtils.getBaseClass(getAccessedType());
-			}
+			boolean isIterable = TypeUtils.isClassAncestorOf(Iterable.class, TypeUtils.getBaseClass(accessedType))
+					|| TypeUtils.isClassAncestorOf(Enumeration.class, TypeUtils.getBaseClass(accessedType));
+			return isIterable;
 		}
 
 		@Override

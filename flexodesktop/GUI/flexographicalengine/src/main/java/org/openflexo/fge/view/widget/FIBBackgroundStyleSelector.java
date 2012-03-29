@@ -147,6 +147,12 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			return pcSupport;
 		}
 
+		@Override
+		public String getDeletedProperty() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 		public BackgroundStyle getBackgroundStyle() {
 			return backgroundStyle;
 		}

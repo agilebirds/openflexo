@@ -160,15 +160,15 @@ public class BindingValue extends AbstractBinding {
 			return false;
 		}
 
-		if ((getBindingDefinition() != null) && (getBindingDefinition().getIsSettable())) {
+		if (getBindingDefinition() != null && getBindingDefinition().getIsSettable()) {
 			if (getBindingPath().size() == 0) {
-				if (!(_bindingVariable.isSettable())) {
+				if (!_bindingVariable.isSettable()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it (binding variable not settable)");
 					}
 					return false;
 				}
-			} else if ((getBindingPathLastElement() == null) || (!(getBindingPathLastElement()).isSettable())) {
+			} else if (getBindingPathLastElement() == null || !getBindingPathLastElement().isSettable()) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it (last binding path not settable)");
 				}
@@ -231,13 +231,13 @@ public class BindingValue extends AbstractBinding {
 			return false;
 		}
 
-		if ((getBindingDefinition() != null) && (getBindingDefinition().getIsSettable())) {
+		if (getBindingDefinition() != null && getBindingDefinition().getIsSettable()) {
 			if (getBindingPath().size() == 0) {
-				if (!(_bindingVariable.isSettable())) {
+				if (!_bindingVariable.isSettable()) {
 					logger.info("Invalid binding because binding definition declared as settable and definition cannot satisfy it (binding variable not settable)");
 					return false;
 				}
-			} else if ((getBindingPathLastElement() == null) || (!(getBindingPathLastElement()).isSettable())) {
+			} else if (getBindingPathLastElement() == null || !getBindingPathLastElement().isSettable()) {
 				logger.info("Invalid binding because binding definition declared as settable and definition cannot satisfy it (last binding path not settable)");
 				return false;
 			}
@@ -377,7 +377,7 @@ public class BindingValue extends AbstractBinding {
 	 */
 	public void setBindingPathElementAtIndex(BindingPathElement element, int i) {
 		unparsableValue = null;
-		if ((i < _bindingPath.size()) && (_bindingPath.elementAt(i) == element)) {
+		if (i < _bindingPath.size() && _bindingPath.elementAt(i) == element) {
 			return;
 		}
 		if (logger.isLoggable(Level.FINE)) {
@@ -429,7 +429,7 @@ public class BindingValue extends AbstractBinding {
 		if (_bindingPath.size() < 1) {
 			return false;
 		}
-		return ((_bindingPath.lastElement() == element) && (index == _bindingPath.size() - 1));
+		return _bindingPath.lastElement() == element && index == _bindingPath.size() - 1;
 	}
 
 	public Type getBindingPathLastElementType() {
@@ -728,12 +728,12 @@ public class BindingValue extends AbstractBinding {
 			return EMPTY_LIST;
 		}
 
-		ArrayList<Object> returned = new ArrayList<Object>();
+		List<Object> returned = new ArrayList<Object>();
 
 		Object current = context.getValue(_bindingVariable);
 		returned.add(current);
 
-		for (BindingPathElement element : getBindingPath()) {
+		for (BindingPathElement<?> element : getBindingPath()) {
 			if (element != getBindingPath().lastElement()) {
 				// System.out.println("Apply "+element);
 				/*if (element instanceof KeyValueProperty) {

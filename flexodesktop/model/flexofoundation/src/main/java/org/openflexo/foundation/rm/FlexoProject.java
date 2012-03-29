@@ -429,7 +429,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (old != targetType) {
 			_targetType = targetType;
 			setChanged();
-			notifyObservers(new DataModification(DataModification.ATTRIBUTE, "targetType", old, targetType));
+			notifyObservers(new DataModification("targetType", old, targetType));
 			_ieValidationModel = null;
 			_dmValidationModel = null;
 			_wkfValidationModel = null;
@@ -1866,7 +1866,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		clearCachedFiles();
 		if (notify) {
 			setChanged();
-			notifyObservers(new DataModification(DataModification.ATTRIBUTE, "projectDirectory", null, projectDirectory));
+			notifyObservers(new DataModification("projectDirectory", null, projectDirectory));
 		}
 	}
 

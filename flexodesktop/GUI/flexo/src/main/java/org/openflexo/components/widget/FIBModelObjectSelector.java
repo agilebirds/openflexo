@@ -127,6 +127,11 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		return pcSupport;
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		return null;
+	}
+
 	// private String filteredName;
 
 	public String getFilteredName() {

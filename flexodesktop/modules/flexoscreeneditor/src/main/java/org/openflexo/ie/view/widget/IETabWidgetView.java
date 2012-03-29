@@ -114,7 +114,7 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 		if (!getTabVisibility()) {
 			return;
 		}
-		if (modif.modificationType() == DataModification.ATTRIBUTE && modif.propertyName().equals("title") && arg0 == getTabWidget()) {
+		if ("title".equals(modif.propertyName()) && arg0 == getTabWidget()) {
 			setName(getTabWidget().getTitle());
 			if (getParent() != null) {
 				((JTabbedPane) getParent()).setTitleAt(getTabWidget().getRootParent() == getTabWidget().getParent() ? getTabWidget()

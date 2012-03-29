@@ -42,6 +42,12 @@ public class ValidationRuleSet extends FlexoListModel {
 		_rules = new Vector<ValidationRule>();
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * @param type1
 	 * @param vector

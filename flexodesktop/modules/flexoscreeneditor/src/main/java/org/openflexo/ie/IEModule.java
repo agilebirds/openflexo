@@ -21,14 +21,12 @@ package org.openflexo.ie;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
@@ -39,13 +37,9 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.ie.view.IEReusableWidgetComponentView;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalIEController;
 import org.openflexo.module.external.ExternalIEModule;
-import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
@@ -84,14 +78,6 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 	@Override
 	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
-	}
-
-	public File getSmallButtonsDirectory() {
-		return new FileResource(IECst.SMALL_BUTTONS_DIR);
-	}
-
-	public File getBigButtonsDirectory() {
-		return new FileResource(IECst.BIG_BUTTONS_DIR);
 	}
 
 	public IEController getIEController() {

@@ -23,7 +23,7 @@ import org.openflexo.foundation.DataModification;
 
 public class LogAdded extends DataModification {
 	public LogAdded() {
-		super(LOG, null, null);
+		super(null, null);
 	}
 
 }

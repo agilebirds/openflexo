@@ -24,7 +24,7 @@ import org.openflexo.foundation.DataModification;
 public class ImportedRoleLibraryCreated extends DataModification {
 
 	public ImportedRoleLibraryCreated() {
-		super(-1, null, null);
+		super(null, null);
 	}
 
 }

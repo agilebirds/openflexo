@@ -28,7 +28,7 @@ import org.openflexo.foundation.dkv.Value;
 public class ValueRemoved extends DKVDataModification {
 
 	public ValueRemoved(Value removedValue) {
-		super(-1, "values", removedValue, null);
+		super("values", removedValue, null);
 	}
 
 }

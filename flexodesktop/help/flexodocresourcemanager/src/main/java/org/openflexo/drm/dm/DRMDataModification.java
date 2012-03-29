@@ -29,11 +29,11 @@ import org.openflexo.foundation.DataModification;
 public abstract class DRMDataModification extends DataModification {
 
 	public DRMDataModification(Object oldValue, Object newValue) {
-		super(DataModification.DM_DM, oldValue, newValue);
+		super(oldValue, newValue);
 	}
 
 	public DRMDataModification(String propertyName, Object oldValue, Object newValue) {
-		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+		super(propertyName, oldValue, newValue);
 	}
 
 }

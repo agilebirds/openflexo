@@ -19,6 +19,24 @@
  */
 package org.openflexo.ie.view.widget;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ie.dm.SortChanged;
@@ -30,23 +48,6 @@ import org.openflexo.ie.util.TriggerRepaintDocumentListener;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.listener.DoubleClickResponder;
-
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author bmangez
@@ -132,14 +133,12 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(BINDING_VALUE_NAME)) {
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals(BINDING_VALUE_NAME)) {
 				_jLabel.setText(getHeaderModel().getValue());
-			} else if (modif.propertyName().equals(ISSORTABLE_ATTRIBUTENAME) || modif.propertyName().equals(ISSORTED_ATTRIBUTENAME)) {
+			} else if (propertyName.equals(ISSORTABLE_ATTRIBUTENAME) || propertyName.equals(ISSORTED_ATTRIBUTENAME)) {
 				_jLabel.setIcon(getSortIcon());
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				getParent().doLayout();
-				((JComponent) getParent()).repaint();
 			}
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {

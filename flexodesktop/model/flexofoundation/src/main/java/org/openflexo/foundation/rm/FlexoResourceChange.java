@@ -31,7 +31,7 @@ public class FlexoResourceChange extends DataModification {
 	 * @param resource
 	 */
 	public FlexoResourceChange(FlexoResource resource) {
-		super(UNDEFINED, null, resource);
+		super(null, resource);
 	}
 
 }

@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdom.JDOMException;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ie.dm.PaletteHasChanged;
 import org.openflexo.foundation.ie.widget.IEWidget;
@@ -100,6 +101,12 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 			loadWidgets();
 		}
 		return widgets;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void refresh() {
@@ -189,7 +196,7 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 		}
 
 		public boolean hasScreenshot() {
-			return (getScreenshotFile(FlexoCSS.CONTENTO) != null) && getScreenshotFile(FlexoCSS.CONTENTO).exists();
+			return getScreenshotFile(FlexoCSS.CONTENTO) != null && getScreenshotFile(FlexoCSS.CONTENTO).exists();
 		}
 
 		public File getScreenshotFile(FlexoCSS css) {
@@ -203,7 +210,14 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 		public void deleteWidget() {
 			if (canDeleteWidget()) {
 				getWidgets().remove(this);
+				setChanged();
+				notifyObservers(new DataModification(DELETED_PROPERTY, this, null));
 			}
+		}
+
+		@Override
+		public String getDeletedProperty() {
+			return DELETED_PROPERTY;
 		}
 
 		public String getName() {

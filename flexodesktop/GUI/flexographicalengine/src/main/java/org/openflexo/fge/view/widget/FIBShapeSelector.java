@@ -152,6 +152,12 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 			return pcSupport;
 		}
 
+		@Override
+		public String getDeletedProperty() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 		public Shape getShape() {
 			return shape;
 		}
