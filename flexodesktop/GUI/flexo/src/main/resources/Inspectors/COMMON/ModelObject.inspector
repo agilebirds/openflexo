@@ -9,12 +9,19 @@
       <Label label="EP refs" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
         <LocalizedDictionary />
       </Label>
-      <Table iteratorClassName="org.openflexo.foundation.ontology.EditionPatternReference" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="data.editionPatternReferences" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)">
-        <TextFieldColumn data="iterator.instanceId" title="Id" columnWidth="30" resizable="true" displayTitle="true" />
-        <TextFieldColumn data="iterator.editionPattern.name" title="EditionPattern" columnWidth="100" resizable="true" displayTitle="true" />
-        <TextFieldColumn data="iterator.patternRole" title="PatternRole" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
-        <LocalizedDictionary />
-      </Table>
+      <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)">
+        <Table iteratorClassName="org.openflexo.foundation.ontology.EditionPatternReference" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="EPRefsTable" data="data.editionPatternReferences" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=5;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)">
+          <TextFieldColumn data="iterator.instanceId" title="Id" columnWidth="30" resizable="true" displayTitle="true" />
+          <TextFieldColumn data="iterator.editionPattern.name" title="EditionPattern" columnWidth="100" resizable="true" displayTitle="true" />
+          <TextFieldColumn data="iterator.patternRole" title="PatternRole" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
+          <LocalizedDictionary />
+        </Table>
+        <Table iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="EPRefsTable.selected.editionPattern.patternRoles" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+          <LabelColumn data="iterator.patternRoleName" title="pattern_role" columnWidth="60" resizable="true" displayTitle="true" name="label" />
+          <LabelColumn data="EPRefsTable.selected.editionPatternInstance.getPatternActor(iterator)" title="actor" columnWidth="150" resizable="true" displayTitle="true" name="label" />
+          <LocalizedDictionary />
+        </Table>
+      </Panel>
       <Label label="custom_properties" align="center" localize="true" name="CustomPropertiesLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=left)" />
       <Table iteratorClassName="org.openflexo.foundation.FlexoProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="CustomProperties" data="data.customProperties" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.name" title="name" columnWidth="150" resizable="true" displayTitle="true" />
