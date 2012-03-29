@@ -331,11 +331,31 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return returned;
 	}
 
+	public Vector<AbstractActionScheme> getAbstractActionSchemes() {
+		Vector<AbstractActionScheme> returned = new Vector<AbstractActionScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof AbstractActionScheme) {
+				returned.add((AbstractActionScheme) es);
+			}
+		}
+		return returned;
+	}
+
 	public Vector<ActionScheme> getActionSchemes() {
 		Vector<ActionScheme> returned = new Vector<ActionScheme>();
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof ActionScheme) {
 				returned.add((ActionScheme) es);
+			}
+		}
+		return returned;
+	}
+
+	public Vector<DeletionScheme> getDeletionSchemes() {
+		Vector<DeletionScheme> returned = new Vector<DeletionScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof DeletionScheme) {
+				returned.add((DeletionScheme) es);
 			}
 		}
 		return returned;

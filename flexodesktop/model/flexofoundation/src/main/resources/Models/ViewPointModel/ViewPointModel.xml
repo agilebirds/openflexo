@@ -99,10 +99,15 @@
 		<!--  <property name="label" xmlTag="label" attribute="YES"/> -->
 		<property name="exampleLabel" xmlTag="exampleLabel" attribute="YES"/>
 		<!--  <property name="readOnlyLabel" xmlTag="readOnlyLabel" attribute="YES"/> -->
+		<property name="actions" type="vector" contains="org.openflexo.foundation.viewpoint.GraphicalElementAction" />
 		<property name="declaredGRSpecifications" type="vector" contains="org.openflexo.foundation.viewpoint.GraphicalElementSpecification"
 			primary="yes" />
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.GraphicalElementAction" xmlTag="Action">
+		<property name="actionMask" xmlTag="actionMask" attribute="YES" />
+		<property name="abstractActionScheme" contains="org.openflexo.foundation.viewpoint.AbstractActionScheme" context="Executed" primary="no"/>
+	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.ShapePatternRole" xmlTag="ShapePatternRole" contexts="Parent,From,To,Context">
 		<property name="graphicalRepresentation" contains="org.openflexo.fge.GraphicalRepresentation" primary="yes" />
@@ -205,7 +210,7 @@
 		<property name="isAvailableWithFloatingPalette" xmlTag="isAvailableWithFloatingPalette" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AbstractActionScheme" abstract="YES">
+	<entity name="org.openflexo.foundation.viewpoint.AbstractActionScheme" abstract="YES" contexts="Executed">
 		<property name="conditional" xmlTag="conditional" attribute="YES" />
 	</entity>
 
@@ -215,6 +220,7 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.NavigationScheme"
 		xmlTag="NavigationScheme">
+		<property name="targetDiagram" xmlTag="targetDiagram" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.DeletionScheme"

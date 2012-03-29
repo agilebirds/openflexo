@@ -31,12 +31,15 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.view.ConnectorInserted;
 import org.openflexo.foundation.view.ConnectorRemoved;
 import org.openflexo.foundation.view.ElementUpdated;
 import org.openflexo.foundation.view.ShapeInserted;
 import org.openflexo.foundation.view.ShapeRemoved;
 import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.viewpoint.GraphicalElementAction;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ConcatenedList;
@@ -63,6 +66,8 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		}
 		addToMouseDragControls(new DrawEdgeControl());
 
+		registerMouseClickControls();
+
 		if (aShape != null) {
 			aShape.addObserver(this);
 		}
@@ -73,6 +78,18 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 
 		// setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
 
+	}
+
+	private void registerMouseClickControls() {
+		if (getDrawable() != null) {
+			EditionPatternReference epRef = getDrawable().getEditionPatternReference();
+			if (epRef != null) {
+				GraphicalElementPatternRole patternRole = (GraphicalElementPatternRole) epRef.getPatternRole();
+				for (GraphicalElementAction.ActionMask mask : patternRole.getReferencedMasks()) {
+					addToMouseClickControls(new VEMouseClickControl(mask, patternRole));
+				}
+			}
+		}
 	}
 
 	@Override

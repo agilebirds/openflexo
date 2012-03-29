@@ -1,5 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -9,7 +11,10 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
+import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionRemoved;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public abstract class GraphicalElementPatternRole extends PatternRole implements Bindable {
@@ -23,6 +28,8 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	private String exampleLabel = "label";
 
 	protected Vector<GraphicalElementSpecification<?, ?>> grSpecifications;
+
+	private Vector<GraphicalElementAction> actions;
 
 	public GraphicalElementPatternRole() {
 		initDefaultSpecifications();
@@ -140,6 +147,60 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 
 	public void setExampleLabel(String exampleLabel) {
 		this.exampleLabel = exampleLabel;
+	}
+
+	public Vector<GraphicalElementAction> getActions() {
+		return actions;
+	}
+
+	public void setActions(Vector<GraphicalElementAction> someActions) {
+		actions = someActions;
+	}
+
+	public void addToActions(GraphicalElementAction anAction) {
+		anAction.setGraphicalElementPatternRole(this);
+		actions.add(anAction);
+		setChanged();
+		notifyObservers(new GraphicalElementActionInserted(anAction, this));
+	}
+
+	public void removeFromActions(GraphicalElementAction anAction) {
+		anAction.setGraphicalElementPatternRole(null);
+		actions.remove(anAction);
+		setChanged();
+		notifyObservers(new GraphicalElementActionRemoved(anAction, this));
+	}
+
+	public List<GraphicalElementAction.ActionMask> getReferencedMasks() {
+		ArrayList<GraphicalElementAction.ActionMask> returned = new ArrayList<GraphicalElementAction.ActionMask>();
+		for (GraphicalElementAction a : getActions()) {
+			if (!returned.contains(a.getActionMask())) {
+				returned.add(a.getActionMask());
+			}
+		}
+		return returned;
+	}
+
+	public List<GraphicalElementAction> getActions(ActionMask mask) {
+		ArrayList<GraphicalElementAction> returned = new ArrayList<GraphicalElementAction>();
+		for (GraphicalElementAction a : getActions()) {
+			if (a.getActionMask() == mask) {
+				returned.add(a);
+			}
+		}
+		return returned;
+	}
+
+	public GraphicalElementAction createAction() {
+		GraphicalElementAction newAction = new GraphicalElementAction();
+		addToActions(newAction);
+		return newAction;
+	}
+
+	public GraphicalElementAction deleteAction(GraphicalElementAction anAction) {
+		removeFromActions(anAction);
+		anAction.delete();
+		return anAction;
 	}
 
 	public Vector<GraphicalElementSpecification<?, ?>> getGrSpecifications() {

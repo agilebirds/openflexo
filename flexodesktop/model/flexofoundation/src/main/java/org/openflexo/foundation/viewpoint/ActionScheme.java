@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 
 public class ActionScheme extends AbstractActionScheme {
@@ -36,10 +35,6 @@ public class ActionScheme extends AbstractActionScheme {
 	@Override
 	public String getInspectorName() {
 		return Inspectors.VPM.ACTION_SCHEME_INSPECTOR;
-	}
-
-	@Override
-	protected void appendContextualBindingVariables(BindingModel bindingModel) {
 	}
 
 }

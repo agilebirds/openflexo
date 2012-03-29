@@ -17,29 +17,23 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.viewpoint.dm;
 
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
+import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.viewpoint.GraphicalElementAction;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 
-public class DeletionScheme extends AbstractActionScheme {
+public class GraphicalElementActionRemoved extends OEDataModification {
 
-	public static enum DeletionSchemeBindingAttribute implements InspectorBindingAttribute {
-		conditional
+	private GraphicalElementPatternRole _parent;
+
+	public GraphicalElementActionRemoved(GraphicalElementAction action, GraphicalElementPatternRole parent) {
+		super(action, null);
+		_parent = parent;
 	}
 
-	public DeletionScheme() {
-		super();
-	}
-
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.DeletionScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.DELETION_SCHEME_INSPECTOR;
+	public GraphicalElementPatternRole getParent() {
+		return _parent;
 	}
 
 }

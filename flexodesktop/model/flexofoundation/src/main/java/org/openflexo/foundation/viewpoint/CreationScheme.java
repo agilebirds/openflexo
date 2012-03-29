@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 
 public class CreationScheme extends EditionScheme {
@@ -36,11 +35,6 @@ public class CreationScheme extends EditionScheme {
 	@Override
 	public String getInspectorName() {
 		return Inspectors.VPM.CREATION_SCHEME_INSPECTOR;
-	}
-
-	@Override
-	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		super.appendContextualBindingVariables(bindingModel);
 	}
 
 }

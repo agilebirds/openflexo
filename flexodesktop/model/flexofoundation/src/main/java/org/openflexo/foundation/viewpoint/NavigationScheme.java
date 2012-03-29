@@ -21,7 +21,6 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.view.View;
@@ -48,12 +47,6 @@ public class NavigationScheme extends AbstractActionScheme {
 	@Override
 	public String getInspectorName() {
 		return Inspectors.VPM.NAVIGATION_SCHEME_INSPECTOR;
-	}
-
-	@Override
-	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		// TODO Auto-generated method stub
-
 	}
 
 	private BindingDefinition TARGET_DIAGRAM = new BindingDefinition("targetDiagram", View.class, BindingDefinitionType.GET, false);
