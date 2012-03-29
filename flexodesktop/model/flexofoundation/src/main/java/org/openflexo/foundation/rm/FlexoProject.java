@@ -4088,7 +4088,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	public void resolvePendingEditionPatternReferences() {
-		for (String conceptURI : pendingEditionPatternReferences.keySet()) {
+		ArrayList<String> allKeys = new ArrayList<String>(pendingEditionPatternReferences.keySet());
+		for (String conceptURI : allKeys) {
 			OntologyObject oo = getProjectOntologyLibrary().getOntologyObject(conceptURI);
 			if (oo != null) {
 				_retrievePendingEditionPatternReferences(oo);
