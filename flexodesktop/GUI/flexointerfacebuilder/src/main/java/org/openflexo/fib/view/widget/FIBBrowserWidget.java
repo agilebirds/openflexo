@@ -22,6 +22,7 @@ package org.openflexo.fib.view.widget;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -33,6 +34,7 @@ import javax.swing.JTree;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.openflexo.antar.binding.AbstractBinding;
@@ -180,12 +182,21 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		}
 		// logger.info("---------------------> FIBBrowserWidget, setSelectedObject from "+getSelectedObject()+" to "+object);
 		if (object != null) {
-			BrowserCell cell = getBrowserModel().getBrowserCell(object);
+			Collection<BrowserCell> cells = getBrowserModel().getBrowserCell(object);
 			// logger.info("Select "+cell);
 			getTreeSelectionModel().clearSelection();
-			if (cell != null) {
-				getTreeSelectionModel().addSelectionPath(cell.getTreePath());
-				_tree.scrollPathToVisible(cell.getTreePath());
+			if (cells != null) {
+				TreePath scrollTo = null;
+				for (BrowserCell cell : cells) {
+					TreePath treePath = cell.getTreePath();
+					if (scrollTo == null) {
+						scrollTo = treePath;
+					}
+					getTreeSelectionModel().addSelectionPath(treePath);
+				}
+				if (scrollTo != null) {
+					_tree.scrollPathToVisible(scrollTo);
+				}
 			}
 		} else {
 			clearSelection();

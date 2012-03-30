@@ -28,6 +28,7 @@ import java.awt.image.RGBImageFilter;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -307,9 +308,9 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 			if (browserWidget == null) {
 				return null;
 			}
-			Enumeration<Object> e = browserWidget.getBrowserModel().retrieveContents();
-			while (e.hasMoreElements()) {
-				Object o = e.nextElement();
+			Iterator<Object> it = browserWidget.getBrowserModel().retrieveContents();
+			while (it.hasNext()) {
+				Object o = it.next();
 				if (getRepresentedType().isAssignableFrom(o.getClass())) {
 					returned.add((T) o);
 				}
