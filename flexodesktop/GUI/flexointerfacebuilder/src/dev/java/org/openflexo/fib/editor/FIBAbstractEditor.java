@@ -362,7 +362,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	 * 
 	 * @return
 	 */
-	public FIBController makeNewController() {
+	public FIBController makeNewController(FIBComponent component) {
 		return null;
 	}
 
@@ -400,7 +400,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	public void testFIB() {
 		FIBView view;
-		FIBController controller = makeNewController();
+		FIBController controller = makeNewController(fibComponent);
 		if (controller != null) {
 			view = FIBController.makeView(fibComponent, controller);
 		} else {

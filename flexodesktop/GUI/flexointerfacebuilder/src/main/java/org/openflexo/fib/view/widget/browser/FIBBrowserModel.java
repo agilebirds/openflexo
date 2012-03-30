@@ -279,6 +279,10 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 
 	private final Hashtable<Object, BrowserCell> contents;
 
+	public Enumeration<Object> retrieveContents() {
+		return contents.keys();
+	}
+
 	public BrowserCell retrieveBrowserCell(Object representedObject, BrowserCell father) {
 		BrowserCell returned = contents.get(representedObject);
 		if (returned != null) {
@@ -382,23 +386,25 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 			int index = 0;
 
 			for (Object o : newChildrenObjects) {
-				BrowserCell cell = retrieveBrowserCell(o, this);
-				FIBBrowserElementType childElementType = elementTypeForClass(o.getClass());
-				if (childElementType != null && childElementType.isVisible(o)) {
-					if (children.contains(cell)) {
-						// OK, child still here
-						removedChildren.remove(cell);
-						if (recursively) {
-							cell.update(true);
+				if (o != null && o != representedObject) {
+					BrowserCell cell = retrieveBrowserCell(o, this);
+					FIBBrowserElementType childElementType = elementTypeForClass(o.getClass());
+					if (childElementType != null && childElementType.isVisible(o)) {
+						if (children.contains(cell)) {
+							// OK, child still here
+							removedChildren.remove(cell);
+							if (recursively) {
+								cell.update(true);
+							}
+							index = children.indexOf(cell) + 1;
+						} else {
+							newChildren.add(cell);
+							children.insertElementAt(cell, index);
+							index++;
 						}
-						index = children.indexOf(cell) + 1;
 					} else {
-						newChildren.add(cell);
-						children.insertElementAt(cell, index);
-						index++;
+						cell.isVisible = false;
 					}
-				} else {
-					cell.isVisible = false;
 				}
 			}
 			for (BrowserCell c : removedChildren) {

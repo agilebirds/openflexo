@@ -94,6 +94,12 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		return getOntologyCalc(viewpointURI);
 	}
 
+	/**
+	 * Return all viewpoints contained in this library<br>
+	 * No consideration is performed on underlying organization structure
+	 * 
+	 * @return
+	 */
 	public Vector<ViewPoint> getViewPoints() {
 		return calcs;
 	}

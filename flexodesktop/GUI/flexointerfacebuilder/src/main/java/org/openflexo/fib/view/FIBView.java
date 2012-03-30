@@ -313,7 +313,10 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	public abstract void updateFont();
 
 	public String getLocalized(String key) {
-		return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		if (getController().getLocalizer() != null) {
+			return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		}
+		return key;
 	}
 
 	public boolean isSelectableComponent() {

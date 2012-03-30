@@ -402,7 +402,12 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	}
 
 	public FIBLocalizedDictionary getLocalizer() {
-		return getRootComponent().retrieveFIBLocalizedDictionary();
+		if (getRootComponent() != null) {
+			return getRootComponent().retrieveFIBLocalizedDictionary();
+		} else {
+			logger.warning("Could not find localizer");
+			return null;
+		}
 	}
 
 	public void switchToLanguage(Language language) {
