@@ -142,7 +142,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 
 		@Override
 		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Double value) {
-			gr.setX(value);
+			gr.setWidth(value);
 		}
 	};
 

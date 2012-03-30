@@ -38,8 +38,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 
-import com.ibm.icu.util.StringTokenizer;
-
 public class EditionPattern extends ViewPointObject implements StringConvertable<EditionPattern> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
@@ -88,6 +86,16 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	@Override
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public EditionScheme getEditionScheme(String editionSchemeName) {
+		for (EditionScheme es : editionSchemes) {
+			if (es.getName().equals(editionSchemeName)) {
+				return es;
+			}
+		}
+		logger.warning("Not found EditionScheme:" + editionSchemeName);
+		return null;
 	}
 
 	public Vector<EditionScheme> getEditionSchemes() {
@@ -494,11 +502,17 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		this.inspector = inspector;
 	}
 
-	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		return _calc;
 	}
 
+	@Override
+	@Deprecated
+	public ViewPoint getCalc() {
+		return getViewPoint();
+	}
+
+	@Deprecated
 	public void setCalc(ViewPoint calc) {
 		_calc = calc;
 	}
@@ -518,14 +532,15 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 		@Override
 		public EditionPattern convertFromString(String value) {
-			String calcURI;
+			return _resourceCenter.retrieveViewPointLibrary().getEditionPattern(value);
+			/*String viewPointURI;
 			String editionPattern;
 			StringTokenizer st = new StringTokenizer(value, "#");
 			if (st.hasMoreElements()) {
-				calcURI = st.nextToken();
-				ViewPoint calc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc(calcURI);
+				viewPointURI = st.nextToken();
+				ViewPoint calc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc(viewPointURI);
 				if (calc == null) {
-					logger.warning("Could not find calc " + calcURI);
+					logger.warning("Could not find calc " + viewPointURI);
 				} else {
 					if (st.hasMoreElements()) {
 						editionPattern = st.nextToken();
@@ -538,7 +553,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 					}
 				}
 			}
-			return null;
+			return null;*/
 		}
 
 		@Override

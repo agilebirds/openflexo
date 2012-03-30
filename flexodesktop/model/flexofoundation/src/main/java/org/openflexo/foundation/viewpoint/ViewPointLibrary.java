@@ -259,4 +259,16 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		return null;
 	}
 
+	public EditionScheme getEditionScheme(String editionSchemeURI) {
+		if (editionSchemeURI.lastIndexOf("#") > -1) {
+			String editionPatternURI = editionSchemeURI.substring(0, editionSchemeURI.lastIndexOf("#"));
+			EditionPattern ep = getEditionPattern(editionPatternURI);
+			if (ep != null) {
+				return ep.getEditionScheme(editionSchemeURI.substring(editionSchemeURI.lastIndexOf("#") + 1));
+			}
+		}
+		logger.warning("Cannot find edition scheme:" + editionSchemeURI);
+		return null;
+	}
+
 }

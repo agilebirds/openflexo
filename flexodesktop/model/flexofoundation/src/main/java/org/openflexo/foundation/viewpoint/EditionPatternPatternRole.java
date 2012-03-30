@@ -1,14 +1,12 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.view.View;
-import org.openflexo.toolbox.StringUtils;
 
 public class EditionPatternPatternRole extends PatternRole {
 
-	private ViewPoint viewpoint;
-	private String viewpointURI;
-	private String _editionPatternTypeURI;
+	private EditionPattern editionPatternType;
 	private CreationScheme creationScheme;
+	private String _creationSchemeURI;
 
 	@Override
 	public PatternRoleType getType() {
@@ -38,61 +36,45 @@ public class EditionPatternPatternRole extends PatternRole {
 		// Not relevant
 	}
 
-	public String _getEditionPatternTypeURI() {
-		return _editionPatternTypeURI;
-	}
-
-	public void _setEditionPatternTypeURI(String editionPatternTypeURI) {
-		this._editionPatternTypeURI = editionPatternTypeURI;
-	}
-
 	public EditionPattern getEditionPatternType() {
-		if (StringUtils.isEmpty(_getEditionPatternTypeURI())) {
-			return null;
+		if (getCreationScheme() != null) {
+			return getCreationScheme().getEditionPattern();
 		}
-		if (getViewPointLibrary() != null) {
-			return getViewPointLibrary().getEditionPattern(_getEditionPatternTypeURI());
-		}
-		return null;
+		return editionPatternType;
 	}
 
 	public void setEditionPatternType(EditionPattern editionPatternType) {
-		_setEditionPatternTypeURI(editionPatternType != null ? editionPatternType.getURI() : null);
-	}
-
-	public ViewPoint getViewpoint() {
-		if (viewpoint == null && viewpointURI != null && getViewPointLibrary() != null) {
-			viewpoint = getViewPointLibrary().getViewPoint(viewpointURI);
-		}
-		return viewpoint;
-	}
-
-	public void setViewpoint(ViewPoint viewpoint) {
-		this.viewpoint = viewpoint;
-		if (viewpoint != null) {
-			viewpointURI = viewpoint.getURI();
+		this.editionPatternType = editionPatternType;
+		if (getCreationScheme() != null && getCreationScheme().getEditionPattern() != editionPatternType) {
+			setCreationScheme(null);
 		}
 	}
 
-	public String _getViewpointURI() {
-		if (getViewpoint() != null)
-			return getViewpoint().getURI();
-		return viewpointURI;
+	public String _getCreationSchemeURI() {
+		if (getCreationScheme() != null)
+			return getCreationScheme().getURI();
+		return _creationSchemeURI;
 	}
 
-	public void _setViewpointURI(String uri) {
+	public void _setCreationSchemeURI(String uri) {
 		if (getViewPointLibrary() != null) {
-			viewpoint = getViewPointLibrary().getViewPoint(uri);
+			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(uri);
 		}
-		viewpointURI = uri;
+		_creationSchemeURI = uri;
 	}
 
 	public CreationScheme getCreationScheme() {
+		if (creationScheme == null && _creationSchemeURI != null && getViewPointLibrary() != null) {
+			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(_creationSchemeURI);
+		}
 		return creationScheme;
 	}
 
 	public void setCreationScheme(CreationScheme creationScheme) {
 		this.creationScheme = creationScheme;
+		if (creationScheme != null) {
+			_creationSchemeURI = creationScheme.getURI();
+		}
 	}
 
 }

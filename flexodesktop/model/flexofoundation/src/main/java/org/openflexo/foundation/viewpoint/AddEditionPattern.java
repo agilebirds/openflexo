@@ -19,37 +19,50 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
+import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public class AddEditionPattern extends EditionAction<DiagramPatternRole> {
+public class AddEditionPattern extends EditionAction<EditionPatternPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPattern.class.getPackage().getName());
+
+	private EditionPattern editionPatternType;
+	private CreationScheme creationScheme;
+	private String _creationSchemeURI;
 
 	public AddEditionPattern() {
 	}
 
 	@Override
 	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddDiagram;
+		return EditionActionType.AddEditionPattern;
+	}
+
+	@Override
+	public List<EditionPatternPatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(EditionPatternPatternRole.class);
 	}
 
 	@Override
 	public String getInspectorName() {
-		return Inspectors.VPM.ADD_SHEMA_INSPECTOR;
+		return null;
 	}
 
-	public String getDiagramName(EditionSchemeAction action) {
-		return (String) getDiagramName().getBindingValue(action);
+	public View getView(EditionSchemeAction action) {
+		return (View) getView().getBindingValue(action);
 	}
 
 	@Override
-	public DiagramPatternRole getPatternRole() {
+	public EditionPatternPatternRole getPatternRole() {
 		try {
 			return super.getPatternRole();
 		} catch (ClassCastException e) {
@@ -59,48 +72,234 @@ public class AddEditionPattern extends EditionAction<DiagramPatternRole> {
 		}
 	}
 
-	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
+	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddEditionPattern)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(DiagramPatternRole patternRole) {
+	public void setPatternRole(EditionPatternPatternRole patternRole) {
 		super.setPatternRole(patternRole);
 	}
 
-	private ViewPointDataBinding diagramName;
+	private ViewPointDataBinding view;
 
-	private BindingDefinition DIAGRAM_NAME = new BindingDefinition("diagramName", String.class, BindingDefinitionType.GET, false);
+	private BindingDefinition VIEW = new BindingDefinition("view", View.class, BindingDefinitionType.GET, false);
 
-	public BindingDefinition getDiagramNameBindingDefinition() {
-		return DIAGRAM_NAME;
+	public BindingDefinition getViewBindingDefinition() {
+		return VIEW;
 	}
 
-	public ViewPointDataBinding getDiagramName() {
-		if (diagramName == null) {
-			diagramName = new ViewPointDataBinding(this, EditionActionBindingAttribute.diagramName, getDiagramNameBindingDefinition());
+	public ViewPointDataBinding getView() {
+		if (view == null) {
+			view = new ViewPointDataBinding(this, EditionActionBindingAttribute.view, getViewBindingDefinition());
 		}
-		return diagramName;
+		return view;
 	}
 
-	public void setDiagramName(ViewPointDataBinding aDiagramName) {
-		if (aDiagramName != null) {
-			aDiagramName.setOwner(this);
-			aDiagramName.setBindingAttribute(EditionActionBindingAttribute.diagramName);
-			aDiagramName.setBindingDefinition(getDiagramNameBindingDefinition());
+	public void setView(ViewPointDataBinding aView) {
+		if (aView != null) {
+			aView.setOwner(this);
+			aView.setBindingAttribute(EditionActionBindingAttribute.view);
+			aView.setBindingDefinition(getViewBindingDefinition());
 		}
-		this.diagramName = aDiagramName;
+		this.view = aView;
 	}
 
-	public ViewPoint getViewpoint() {
+	public EditionPattern getEditionPatternType() {
+		if (getCreationScheme() != null) {
+			return getCreationScheme().getEditionPattern();
+		}
+		return editionPatternType;
+	}
+
+	public void setEditionPatternType(EditionPattern editionPatternType) {
+		this.editionPatternType = editionPatternType;
+		if (getCreationScheme() != null && getCreationScheme().getEditionPattern() != editionPatternType) {
+			setCreationScheme(null);
+		}
+	}
+
+	public String _getCreationSchemeURI() {
+		if (getCreationScheme() != null)
+			return getCreationScheme().getURI();
+		return _creationSchemeURI;
+	}
+
+	public void _setCreationSchemeURI(String uri) {
+		if (getViewPointLibrary() != null) {
+			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(uri);
+		}
+		_creationSchemeURI = uri;
+	}
+
+	public CreationScheme getCreationScheme() {
 		if (getPatternRole() != null) {
-			return getPatternRole().getViewpoint();
+			return getPatternRole().getCreationScheme();
+		}
+		if (creationScheme == null && _creationSchemeURI != null && getViewPointLibrary() != null) {
+			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(_creationSchemeURI);
+		}
+		return creationScheme;
+	}
+
+	public void setCreationScheme(CreationScheme creationScheme) {
+		this.creationScheme = creationScheme;
+		if (creationScheme != null) {
+			_creationSchemeURI = creationScheme.getURI();
+		}
+	}
+
+	private Vector<AddEditionPatternParameter> parameters = new Vector<AddEditionPattern.AddEditionPatternParameter>();
+
+	public Vector<AddEditionPatternParameter> getParameters() {
+		updateParameters();
+		return parameters;
+	}
+
+	public void setParameters(Vector<AddEditionPatternParameter> parameters) {
+		this.parameters = parameters;
+	}
+
+	public void addToParameters(AddEditionPatternParameter parameter) {
+		parameter.setAction(this);
+		parameters.add(parameter);
+	}
+
+	public void removeFromParameters(AddEditionPatternParameter parameter) {
+		parameter.setAction(null);
+		parameters.remove(parameter);
+	}
+
+	public AddEditionPatternParameter getParameter(EditionSchemeParameter p) {
+		for (AddEditionPatternParameter addEPParam : parameters) {
+			if (addEPParam.getParam() == p) {
+				return addEPParam;
+			}
 		}
 		return null;
 	}
 
-	public void setViewpoint(ViewPoint viewpoint) {
-		if (getPatternRole() != null) {
-			getPatternRole().setViewpoint(viewpoint);
+	private void updateParameters() {
+		Vector<AddEditionPatternParameter> parametersToRemove = new Vector<AddEditionPattern.AddEditionPatternParameter>(parameters);
+		if (getCreationScheme() != null) {
+			for (EditionSchemeParameter p : getCreationScheme().getParameters()) {
+				AddEditionPatternParameter existingParam = getParameter(p);
+				if (existingParam != null) {
+					parametersToRemove.remove(existingParam);
+				} else {
+					addToParameters(new AddEditionPatternParameter(p));
+				}
+			}
 		}
+		for (AddEditionPatternParameter removeThis : parametersToRemove) {
+			removeFromParameters(removeThis);
+		}
+	}
+
+	public static class AddEditionPatternParameter extends ViewPointObject implements Bindable {
+
+		@SuppressWarnings("unused")
+		private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());
+
+		private AddEditionPattern action;
+
+		private EditionSchemeParameter param;
+		private String paramName;
+		private ViewPointDataBinding value;
+		private BindingDefinition BD;
+
+		// Use it only for deserialization
+		public AddEditionPatternParameter() {
+			super();
+		}
+
+		public AddEditionPatternParameter(EditionSchemeParameter param) {
+			this.param = param;
+			BD = new BindingDefinition(param.getName(), param.getType(), BindingDefinitionType.GET, true);
+		}
+
+		public ViewPointDataBinding getValue() {
+			if (value == null) {
+				value = new ViewPointDataBinding(this, param, getBindingDefinition());
+			}
+			if (value.getBindingDefinition() == null) {
+				value.setBindingDefinition(getBindingDefinition());
+			}
+			return value;
+		}
+
+		public void setValue(ViewPointDataBinding value) {
+			if (value != null) {
+				value.setOwner(this);
+				value.setBindingAttribute(param);
+				value.setBindingDefinition(getBindingDefinition());
+			}
+			this.value = value;
+		}
+
+		public Object evaluateParameterValue(EditionSchemeAction action) {
+			if (getValue().isValid()) {
+				return getValue().getBindingValue(action);
+			} else {
+				System.out.println("C'est pas bon");
+				getValue().getBinding().debugIsBindingValid();
+			}
+			return null;
+		}
+
+		public BindingDefinition getBindingDefinition() {
+			if (BD == null && getParam() != null) {
+				BD = new BindingDefinition(getParam().getName(), getParam().getType(), BindingDefinitionType.GET, true);
+			}
+			return BD;
+		}
+
+		@Override
+		public String getInspectorName() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			if (getAction() != null) {
+				return getAction().getBindingModel();
+			}
+			return null;
+		}
+
+		@Override
+		public ViewPoint getCalc() {
+			if (getAction() != null) {
+				return getAction().getCalc();
+			}
+			return null;
+		}
+
+		public AddEditionPattern getAction() {
+			return action;
+		}
+
+		public void setAction(AddEditionPattern action) {
+			this.action = action;
+		}
+
+		public EditionSchemeParameter getParam() {
+			if (param == null && paramName != null && getAction() != null && getAction().getCreationScheme() != null) {
+				param = getAction().getCreationScheme().getParameter(paramName);
+			}
+			return param;
+		}
+
+		public String _getParamName() {
+			if (param != null) {
+				return param.getName();
+			}
+			return paramName;
+		}
+
+		public void _setParamName(String param) {
+			this.paramName = param;
+		}
+
 	}
 
 }

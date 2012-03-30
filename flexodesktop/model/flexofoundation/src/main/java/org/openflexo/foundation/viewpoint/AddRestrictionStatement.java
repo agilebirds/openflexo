@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -42,6 +43,11 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddRestrictionStatement;
+	}
+
+	@Override
+	public List<RestrictionStatementPatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(RestrictionStatementPatternRole.class);
 	}
 
 	public String _getPropertyURI() {

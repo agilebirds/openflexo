@@ -49,6 +49,7 @@ import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddClass;
+import org.openflexo.foundation.viewpoint.AddEditionPattern.AddEditionPatternParameter;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.AddIsAStatement;
 import org.openflexo.foundation.viewpoint.AddObjectPropertyStatement;
@@ -59,7 +60,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
-import org.openflexo.foundation.viewpoint.GoToAction;
 import org.openflexo.foundation.viewpoint.GraphicalAction;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
@@ -244,6 +244,15 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 						getEditionPatternInstance().setObjectForPatternRole(newShema, action.getPatternRole());
 						performedActions.put(action, newShema);
 					}
+				} else if (action instanceof org.openflexo.foundation.viewpoint.AddEditionPattern) {
+					logger.info("Add EditionPattern with patternRole=" + action.getPatternRole() + " EP="
+							+ ((org.openflexo.foundation.viewpoint.AddEditionPattern) action).getEditionPatternType());
+					EditionPatternInstance newEP = performAddEditionPattern((org.openflexo.foundation.viewpoint.AddEditionPattern) action);
+					if (newEP != null && action.getPatternRole() != null) {
+						logger.warning("EditionPatternInstance not declared as FlexoModelObject !!!");
+						// getEditionPatternInstance().setObjectForPatternRole(newEP, action.getPatternRole());
+						// performedActions.put(action, newEP);
+					}
 				}
 			}
 		}
@@ -294,14 +303,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 			}
 		}
 
-		// At this end, look after GoToAction
-		for (EditionAction action : getEditionScheme().getActions()) {
-			if (action.evaluateCondition(this)) {
-				if (action instanceof GoToAction) {
-					performGoToAction((GoToAction) action);
-				}
-			}
-		}
 	}
 
 	protected ViewShape performAddShape(org.openflexo.foundation.viewpoint.AddShape action) {
@@ -559,7 +560,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		addDiagramAction.setFolder(initialShema.getShemaDefinition().getFolder());
 		addDiagramAction.skipChoosePopup = true;
 		addDiagramAction.doAction();
-		if (addDiagramAction.hasActionExecutionSucceeded()) {
+		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
 			View newShema = addDiagramAction.getNewDiagram().getShema();
 			/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
 			if (shapePatternRole == null) {
@@ -598,10 +599,26 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		return newShema;
 	}
 
-	protected void performGoToAction(org.openflexo.foundation.viewpoint.GoToAction action) {
-		FlexoModelObject target = action.getTargetObject(this);
-		logger.info("Focus and select object " + target);
-		getEditor().focusOn(target);
+	protected EditionPatternInstance performAddEditionPattern(org.openflexo.foundation.viewpoint.AddEditionPattern action) {
+		logger.info("Perform performAddEditionPattern " + action);
+		View view = action.getView(this);
+		logger.info("View: " + view);
+		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(view, null, this);
+		creationSchemeAction.setCreationScheme(action.getCreationScheme());
+		for (AddEditionPatternParameter p : action.getParameters()) {
+			EditionSchemeParameter param = p.getParam();
+			Object value = p.evaluateParameterValue(this);
+			logger.info("For parameter " + param + " value is " + value);
+			if (value != null) {
+				creationSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(this));
+			}
+		}
+		creationSchemeAction.doAction();
+		if (creationSchemeAction.hasActionExecutionSucceeded()) {
+			logger.info("Successfully performed performAddEditionPattern " + action);
+			return creationSchemeAction.getEditionPatternInstance();
+		}
+		return null;
 	}
 
 	protected void performGraphicalAction(org.openflexo.foundation.viewpoint.GraphicalAction action) {

@@ -127,9 +127,7 @@
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.EditionPatternPatternRole" xmlTag="EditionPatternPatternRole">
-		<property name="viewpointURI" xmlTag="viewpointURI" attribute="YES" />
-		<property name="editionPatternTypeURI" xmlTag="editionPatternTypeURI" attribute="YES" />
-		<property name="creationScheme" contains="org.openflexo.foundation.viewpoint.CreationScheme" context="Executed"/>
+		<property name="creationSchemeURI" xmlTag="creationSchemeURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.GraphicalElementSpecification" xmlTag="GRSpec">
@@ -341,9 +339,16 @@
 		<property name="diagramName" xmlTag="diagramName" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.GoToAction"
-		xmlTag="GoToAction">
-		<property name="target" xmlTag="targetObject" attribute="YES" />
+	<entity name="org.openflexo.foundation.viewpoint.AddEditionPattern"
+		xmlTag="AddEditionPattern">
+		<property name="view" xmlTag="view" attribute="YES" />
+		<property name="creationSchemeURI" xmlTag="creationSchemeURI" attribute="YES" />
+		<property name="parameters" type="vector" contains="org.openflexo.foundation.viewpoint.AddEditionPattern$AddEditionPatternParameter" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.AddEditionPattern$AddEditionPatternParameter" xmlTag="AddEditionPatternParameter">
+		<property name="paramName" xmlTag="paramName" attribute="YES" />
+		<property name="value" xmlTag="value" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.GraphicalAction"

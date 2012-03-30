@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -38,6 +39,11 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddIsAStatement;
+	}
+
+	@Override
+	public List<IsAStatementPatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(IsAStatementPatternRole.class);
 	}
 
 	public OntologyObject getPropertyFather(EditionSchemeAction action) {

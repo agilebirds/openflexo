@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -37,6 +38,11 @@ public class AddDiagram extends EditionAction<DiagramPatternRole> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddDiagram;
+	}
+
+	@Override
+	public List<DiagramPatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(DiagramPatternRole.class);
 	}
 
 	@Override

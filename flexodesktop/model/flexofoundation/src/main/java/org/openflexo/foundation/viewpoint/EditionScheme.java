@@ -58,6 +58,11 @@ public abstract class EditionScheme extends ViewPointObject {
 		parameters = new Vector<EditionSchemeParameter>();
 	}
 
+	@Override
+	public String getURI() {
+		return getEditionPattern().getURI() + "#" + getName();
+	}
+
 	public abstract EditionSchemeType getEditionSchemeType();
 
 	@Override
@@ -221,12 +226,17 @@ public abstract class EditionScheme extends ViewPointObject {
 		return null;
 	}
 
-	@Override
-	public ViewPoint getCalc() {
+	public ViewPoint getViewPoint() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getCalc();
 		}
 		return null;
+	}
+
+	@Override
+	@Deprecated
+	public ViewPoint getCalc() {
+		return getViewPoint();
 	}
 
 	public AddShape createAddShapeAction() {
@@ -297,8 +307,8 @@ public abstract class EditionScheme extends ViewPointObject {
 		return newAction;
 	}
 
-	public GoToAction createGoToAction() {
-		GoToAction newAction = new GoToAction();
+	public AddEditionPattern createAddEditionPatternAction() {
+		AddEditionPattern newAction = new AddEditionPattern();
 		addToActions(newAction);
 		return newAction;
 	}

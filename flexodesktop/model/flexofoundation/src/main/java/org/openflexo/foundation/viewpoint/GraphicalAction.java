@@ -53,6 +53,11 @@ public class GraphicalAction extends EditionAction<GraphicalElementPatternRole> 
 	}
 
 	@Override
+	public List<GraphicalElementPatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(GraphicalElementPatternRole.class);
+	}
+
+	@Override
 	public String getInspectorName() {
 		// TODO Auto-generated method stub
 		return null;
