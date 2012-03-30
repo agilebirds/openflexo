@@ -43,10 +43,12 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
+import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconFactory;
@@ -195,9 +197,17 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	}
 
 	/**
+	 * This method is used to retrieve all potential values when implementing completion<br>
+	 * Completion will be performed on that selectable values<br>
+	 * Default implementation is to iterate on all values of browser, please take care to infinite loops.<br>
+	 * 
 	 * Override when required
 	 */
 	protected Enumeration<T> getAllSelectableValues() {
+		Vector<T> listByExploringTree = ((SelectorDetailsPanel) getCustomPanel()).getAllSelectableValues();
+		if (listByExploringTree != null) {
+			return listByExploringTree.elements();
+		}
 		return null;
 	}
 
@@ -289,6 +299,32 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		}
 
 		public void delete() {
+		}
+
+		protected Vector<T> getAllSelectableValues() {
+			Vector<T> returned = new Vector<T>();
+			FIBBrowserWidget browserWidget = retrieveFIBBrowserWidget();
+			if (browserWidget == null) {
+				return null;
+			}
+			Enumeration<Object> e = browserWidget.getBrowserModel().retrieveContents();
+			while (e.hasMoreElements()) {
+				Object o = e.nextElement();
+				if (getRepresentedType().isAssignableFrom(o.getClass())) {
+					returned.add((T) o);
+				}
+			}
+			return returned;
+		}
+
+		private FIBBrowserWidget retrieveFIBBrowserWidget() {
+			List<FIBComponent> listComponent = fibComponent.retrieveAllSubComponents();
+			for (FIBComponent c : listComponent) {
+				if (c instanceof FIBBrowser) {
+					return (FIBBrowserWidget) controller.viewForComponent(c);
+				}
+			}
+			return null;
 		}
 
 	}
