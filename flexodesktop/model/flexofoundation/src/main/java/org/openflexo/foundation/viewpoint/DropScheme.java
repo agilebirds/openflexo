@@ -25,7 +25,7 @@ import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class DropScheme extends EditionScheme {
+public class DropScheme extends AbstractCreationScheme {
 
 	private String target;
 	private ShapePatternRole targetPatternRole;
@@ -114,12 +114,13 @@ public class DropScheme extends EditionScheme {
 
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
+		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getTargetEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>(EditionScheme.TARGET, getTargetEditionPattern(),
 					this));
 		} else if (_getTarget() != null && !_getTarget().equals("top")) {
-			logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
+			// logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
 		}
 	}

@@ -4077,7 +4077,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			// No pending EditionPattern references for object
 			return;
 		} else {
-			for (ConceptActorReference actorReference : values) {
+			List<ConceptActorReference> clonedValues = new ArrayList<EditionPatternReference.ConceptActorReference>(values);
+			for (ConceptActorReference actorReference : clonedValues) {
 				EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
 				if (instance == null) {
 					logger.warning("Found null EditionPatternInstance, please investigate");
@@ -4098,7 +4099,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	}
 
 	public void resolvePendingEditionPatternReferences() {
-		for (String conceptURI : pendingEditionPatternReferences.keySet()) {
+		ArrayList<String> allKeys = new ArrayList<String>(pendingEditionPatternReferences.keySet());
+		for (String conceptURI : allKeys) {
 			OntologyObject oo = getProjectOntologyLibrary().getOntologyObject(conceptURI);
 			if (oo != null) {
 				_retrievePendingEditionPatternReferences(oo);

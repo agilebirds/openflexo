@@ -555,8 +555,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		View initialShema = retrieveOEShema();
 		AddView addDiagramAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
 		addDiagramAction.newViewName = action.getDiagramName(this);
-		addDiagramAction.viewpoint = initialShema.getCalc();
+		addDiagramAction.viewpoint = action.getPatternRole().getViewpoint();
 		addDiagramAction.setFolder(initialShema.getShemaDefinition().getFolder());
+		addDiagramAction.skipChoosePopup = true;
 		addDiagramAction.doAction();
 		if (addDiagramAction.hasActionExecutionSucceeded()) {
 			View newShema = addDiagramAction.getNewDiagram().getShema();

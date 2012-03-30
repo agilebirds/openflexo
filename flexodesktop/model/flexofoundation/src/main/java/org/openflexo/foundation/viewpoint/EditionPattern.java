@@ -233,6 +233,13 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return newPatternRole;
 	}
 
+	public EditionPatternPatternRole createEditionPatternPatternRole() {
+		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole();
+		newPatternRole.setPatternRoleName(getAvailableRoleName("editionPattern"));
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+
 	public ClassPatternRole createClassPatternRole() {
 		ClassPatternRole newPatternRole = new ClassPatternRole();
 		newPatternRole.setPatternRoleName(getAvailableRoleName("class"));
@@ -331,11 +338,61 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return returned;
 	}
 
+	public Vector<AbstractActionScheme> getAbstractActionSchemes() {
+		Vector<AbstractActionScheme> returned = new Vector<AbstractActionScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof AbstractActionScheme) {
+				returned.add((AbstractActionScheme) es);
+			}
+		}
+		return returned;
+	}
+
 	public Vector<ActionScheme> getActionSchemes() {
 		Vector<ActionScheme> returned = new Vector<ActionScheme>();
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof ActionScheme) {
 				returned.add((ActionScheme) es);
+			}
+		}
+		return returned;
+	}
+
+	public Vector<DeletionScheme> getDeletionSchemes() {
+		Vector<DeletionScheme> returned = new Vector<DeletionScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof DeletionScheme) {
+				returned.add((DeletionScheme) es);
+			}
+		}
+		return returned;
+	}
+
+	public Vector<NavigationScheme> getNavigationSchemes() {
+		Vector<NavigationScheme> returned = new Vector<NavigationScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof NavigationScheme) {
+				returned.add((NavigationScheme) es);
+			}
+		}
+		return returned;
+	}
+
+	public Vector<AbstractCreationScheme> getAbstractCreationSchemes() {
+		Vector<AbstractCreationScheme> returned = new Vector<AbstractCreationScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof AbstractCreationScheme) {
+				returned.add((AbstractCreationScheme) es);
+			}
+		}
+		return returned;
+	}
+
+	public Vector<CreationScheme> getCreationSchemes() {
+		Vector<CreationScheme> returned = new Vector<CreationScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof CreationScheme) {
+				returned.add((CreationScheme) es);
 			}
 		}
 		return returned;
@@ -368,6 +425,29 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return false;
 	}
 
+	public boolean hasNavigationScheme() {
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof NavigationScheme) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public CreationScheme createCreationScheme() {
+		CreationScheme newCreationScheme = new CreationScheme();
+		newCreationScheme.setName("creation");
+		addToEditionSchemes(newCreationScheme);
+		return newCreationScheme;
+	}
+
+	public DeletionScheme createDeletionScheme() {
+		DeletionScheme newDeletionScheme = new DeletionScheme();
+		newDeletionScheme.setName("deletion");
+		addToEditionSchemes(newDeletionScheme);
+		return newDeletionScheme;
+	}
+
 	public DropScheme createDropScheme() {
 		DropScheme newDropScheme = new DropScheme();
 		newDropScheme.setName("drop");
@@ -387,6 +467,13 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		newActionScheme.setName("action");
 		addToEditionSchemes(newActionScheme);
 		return newActionScheme;
+	}
+
+	public NavigationScheme createNavigationScheme() {
+		NavigationScheme newNavigationScheme = new NavigationScheme();
+		newNavigationScheme.setName("navigation");
+		addToEditionSchemes(newNavigationScheme);
+		return newNavigationScheme;
 	}
 
 	public EditionScheme deleteEditionScheme(EditionScheme editionScheme) {

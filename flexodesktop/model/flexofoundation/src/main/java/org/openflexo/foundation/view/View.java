@@ -203,4 +203,8 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		return "SHEMA";
 	}
 
+	@Override
+	public String toString() {
+		return "View[name=" + getName() + "/viewpoint=" + getCalc().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
+	}
 }

@@ -80,6 +80,8 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 	public String newViewName;
 	public ViewPoint viewpoint;
 
+	public boolean skipChoosePopup = false;
+
 	AddView(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
