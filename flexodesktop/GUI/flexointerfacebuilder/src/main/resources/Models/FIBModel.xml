@@ -248,6 +248,7 @@
   <entity name="org.openflexo.fib.model.FIBBrowserElement$FIBBrowserElementChildren" xmlTag="Children"> 
     <property name="data" xmlTag="data" attribute="YES"/> 
     <property name="visible" xmlTag="visible" attribute="YES"/> 
+    <property name="cast" xmlTag="cast" attribute="YES"/>
   </entity>
 
   <entity name="org.openflexo.fib.model.FIBBrowserAction" abstract="yes"> 

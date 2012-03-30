@@ -63,8 +63,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	private static final Logger logger = Logger.getLogger(FIBWidgetView.class.getPackage().getName());
 
-	public static Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
-	public static Font DEFAULT_MEDIUM_FONT = new Font("SansSerif", Font.PLAIN, 10);
+	public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
+	public static final Font DEFAULT_MEDIUM_FONT = new Font("SansSerif", Font.PLAIN, 10);
 
 	protected boolean modelUpdating = false;
 	protected boolean widgetUpdating = false;
@@ -366,10 +366,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				componentEnabled = (Boolean) isEnabled;
 			}
 		}
-		if (!componentEnabled) {
-			return false;
-		}
-		return true;
+		return componentEnabled;
 	}
 
 	private void updateDynamicTooltip() {

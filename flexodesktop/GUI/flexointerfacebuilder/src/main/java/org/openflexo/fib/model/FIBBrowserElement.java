@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.awt.Font;
 import java.io.File;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Enumeration;
 import java.util.List;
@@ -33,6 +34,7 @@ import javax.swing.ImageIcon;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.TypeUtils;
@@ -60,7 +62,7 @@ public class FIBBrowserElement extends FIBModelObject {
 		filtered,
 		defaultVisible,
 		children,
-		actions
+		actions;
 	}
 
 	public static BindingDefinition LABEL = new BindingDefinition("label", String.class, BindingDefinitionType.GET, false);
@@ -78,6 +80,7 @@ public class FIBBrowserElement extends FIBModelObject {
 	private DataBinding tooltip;
 	private DataBinding enabled;
 	private DataBinding visible;
+	private DataBinding format;
 	private File imageIconFile;
 	private ImageIcon imageIcon;
 	private boolean isEditable = false;
@@ -528,15 +531,75 @@ public class FIBBrowserElement extends FIBModelObject {
 		private FIBBrowserElement browserElement;
 		private DataBinding data;
 		private DataBinding visible;
+		private DataBinding cast;
+		private FIBChildBindable childBindable;
 
-		public BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);
-		public BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, BindingDefinitionType.GET, false);
+		public static BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);
+		public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, BindingDefinitionType.GET, false);
+		public static BindingDefinition CAST = new BindingDefinition("cast", Object.class, BindingDefinitionType.GET, false);
+
+		private class FIBChildBindable extends FIBModelObject implements Bindable {
+			private BindingModel childBindingModel = null;
+
+			@Override
+			public BindingFactory getBindingFactory() {
+				return FIBBrowserElementChildren.this.getBindingFactory();
+			}
+
+			@Override
+			public BindingModel getBindingModel() {
+				if (childBindingModel == null) {
+					createChildBindingModel();
+				}
+				return childBindingModel;
+			}
+
+			private void createChildBindingModel() {
+				childBindingModel = new BindingModel(FIBBrowserElementChildren.this.getBindingModel());
+				childBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "child", Object.class) {
+					@Override
+					public Type getType() {
+						if (getData().isSet()) {
+							Type type = getData().getBinding().getAccessedType();
+							if (isSupportedListType(type)) {
+								if (type instanceof ParameterizedType) {
+									return ((ParameterizedType) type).getActualTypeArguments()[0];
+								}
+								logger.warning("Found supported list type " + type
+										+ " but it is not parameterized so I can't guess its content");
+								return Object.class;
+							}
+							return type;
+						}
+						return Object.class;
+					}
+				});
+			}
+
+			@Override
+			public FIBComponent getRootComponent() {
+				return browserElement.getRootComponent();
+			}
+
+			@Override
+			public List<? extends FIBModelObject> getEmbeddedObjects() {
+				return null;
+			}
+
+		}
 
 		public static enum Parameters implements FIBModelAttribute {
-			data, visible
+			data, visible, cast;
 		}
 
 		public FIBBrowserElementChildren() {
+		}
+
+		public FIBChildBindable getChildBindable() {
+			if (childBindable == null) {
+				childBindable = new FIBChildBindable();
+			}
+			return childBindable;
 		}
 
 		public FIBBrowser getBrowser() {
@@ -569,6 +632,20 @@ public class FIBBrowserElement extends FIBModelObject {
 			visible.setBindingAttribute(Parameters.visible);
 			visible.setBindingDefinition(VISIBLE);
 			this.visible = visible;
+		}
+
+		public DataBinding getCast() {
+			if (cast == null) {
+				cast = new DataBinding(getChildBindable(), Parameters.cast, CAST);
+			}
+			return cast;
+		}
+
+		public void setCast(DataBinding cast) {
+			cast.setOwner(getChildBindable());
+			cast.setBindingAttribute(Parameters.cast);
+			cast.setBindingDefinition(CAST);
+			this.cast = cast;
 		}
 
 		public FIBBrowserElement getBrowserElement() {
@@ -618,9 +695,12 @@ public class FIBBrowserElement extends FIBModelObject {
 			if (accessedType == null) {
 				return false;
 			}
-			boolean isIterable = TypeUtils.isClassAncestorOf(Iterable.class, TypeUtils.getBaseClass(accessedType))
+			return isSupportedListType(accessedType);
+		}
+
+		private boolean isSupportedListType(Type accessedType) {
+			return TypeUtils.isClassAncestorOf(Iterable.class, TypeUtils.getBaseClass(accessedType))
 					|| TypeUtils.isClassAncestorOf(Enumeration.class, TypeUtils.getBaseClass(accessedType));
-			return isIterable;
 		}
 
 		@Override

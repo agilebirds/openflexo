@@ -41,7 +41,37 @@ import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 public class FIBBrowserElementType implements BindingEvaluationContext, Observer {
+
+	private final class CastFunction implements Function<Object, Object>, BindingEvaluationContext {
+		private final FIBBrowserElementChildren children;
+
+		private Object child;
+
+		private CastFunction(FIBBrowserElementChildren children) {
+			this.children = children;
+		}
+
+		@Override
+		public synchronized Object apply(Object arg0) {
+			child = arg0;
+			Object result = children.getCast().getBindingValue(this);
+			child = null;
+			return result;
+		}
+
+		@Override
+		public Object getValue(BindingVariable variable) {
+			if (variable.getVariableName().equals("child")) {
+				return child;
+			} else {
+				return FIBBrowserElementType.this.getValue(variable);
+			}
+		}
+	}
 
 	private static final Logger logger = Logger.getLogger(FIBBrowserElementType.class.getPackage().getName());
 
@@ -125,6 +155,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		appendToDependingObjects(browserElementDefinition.getVisible(), returned);
 		for (FIBBrowserElementChildren children : browserElementDefinition.getChildren()) {
 			appendToDependingObjects(children.getData(), returned);
+			appendToDependingObjects(children.getCast(), returned);
+			appendToDependingObjects(children.getVisible(), returned);
 		}
 		return returned;
 	}
@@ -232,13 +264,17 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 					return null;
 				}
 			}
-			return children.getData().getBindingValue(this);
+			Object result = children.getData().getBindingValue(this);
+			if (children.getCast().isSet()) {
+				return new CastFunction(children).apply(result);
+			}
+			return result;
 		} else {
 			return null;
 		}
 	}
 
-	protected synchronized List<?> getChildrenListFor(FIBBrowserElementChildren children, final Object object) {
+	protected synchronized List<?> getChildrenListFor(final FIBBrowserElementChildren children, final Object object) {
 		if (children.getData().isSet() && children.isMultipleAccess()) {
 			iteratorObject = object;
 			if (children.getVisible().isSet()) {
@@ -249,7 +285,11 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				}
 			}
 			Object bindingValue = children.getData().getBindingValue(this);
-			return ToolBox.getListFromIterable(bindingValue);
+			List<?> list = ToolBox.getListFromIterable(bindingValue);
+			if (children.getCast().isSet()) {
+				list = Lists.transform(list, new CastFunction(children));
+			}
+			return list;
 		} else {
 			return null;
 		}

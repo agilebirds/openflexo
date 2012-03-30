@@ -1231,7 +1231,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	@Override
 	public String toString() {
-		return getClass().getName() + "_" + getFlexoID();
+		return getClass().getSimpleName() + "_" + (getName() != null ? getName() : getFlexoID());
 	}
 
 	protected <T> boolean requireChange(T oldValue, T newValue) {
