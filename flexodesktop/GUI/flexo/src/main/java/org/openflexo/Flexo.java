@@ -147,6 +147,11 @@ public class Flexo {
 			}
 		}
 		ToolBox.setPlatform();
+
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+		}
+
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
