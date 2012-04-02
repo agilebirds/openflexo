@@ -100,15 +100,43 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		getTextField().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
+
+				// if command-key is pressed, do not open popup
+				if (e.isAltDown() || e.isAltGraphDown() || e.isControlDown() || e.isMetaDown()) {
+					return;
+				}
+
+				boolean requestFocus = (getTextField().hasFocus());
+				final int selectionStart = getTextField().getSelectionStart() + 1;
+				final int selectionEnd = getTextField().getSelectionEnd() + 1;
+				if (!popupIsShown()) {
+					openPopup();
+				}
+				updateMatchingValues();
+				if (requestFocus) {
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							getTextField().requestFocus();
+							getTextField().select(selectionStart, selectionEnd);
+						}
+					});
+				}
+
+				/*SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
+						int selectionStart = getTextField().getSelectionStart();
+						int selectionEnd = getTextField().getSelectionEnd();
+						System.out.println("Was selected: " + selectionStart + " and " + selectionEnd);
 						if (!popupIsShown()) {
 							openPopup();
 						}
 						updateMatchingValues();
+						System.out.println("Now select: " + selectionStart + " and " + selectionEnd);
+						getTextField().select(selectionStart, selectionEnd);
 					}
-				});
+				});*/
 			}
 		});
 	}
@@ -122,6 +150,7 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	@Override
 	public void openPopup() {
 		super.openPopup();
+		// System.out.println("Request focus now");
 		getTextField().requestFocus();
 	}
 
