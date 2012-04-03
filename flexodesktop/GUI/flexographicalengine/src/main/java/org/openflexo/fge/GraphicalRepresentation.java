@@ -2120,4 +2120,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		this.labelMetricsProvider = labelMetricsProvider;
 	}
 
+	public int getAvailableLabelWidth(double scale) {
+		return Integer.MAX_VALUE;
+	}
+
 }

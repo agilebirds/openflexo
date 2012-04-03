@@ -390,7 +390,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	 */
 	public void center() {
 		Dimension dim;
-		if (initOwner != null) {
+		if (initOwner != null && initOwner.isVisible()) {
 			dim = new Dimension(initOwner.getLocationOnScreen().x + initOwner.getWidth() / 2, initOwner.getLocationOnScreen().y
 					+ initOwner.getHeight() / 2);
 		} else {

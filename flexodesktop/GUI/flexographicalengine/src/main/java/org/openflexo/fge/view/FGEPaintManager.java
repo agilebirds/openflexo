@@ -170,6 +170,7 @@ public class FGEPaintManager {
 			paintRequestLogger.info("CALLED clear paint buffer on FGEPaintManager");
 		}
 		_paintBuffer = null;
+
 	}
 
 	public void repaint(FGEView<?> view, Rectangle bounds) {

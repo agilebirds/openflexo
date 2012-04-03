@@ -586,7 +586,11 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	public Dimension getNormalizedLabelSize() {
-		return labelMetricsProvider.getScaledPreferredDimension(1.0);
+		if (labelMetricsProvider != null) {
+			return labelMetricsProvider.getScaledPreferredDimension(1.0);
+		} else {
+			return new Dimension(0, 0);
+		}
 	}
 
 	public Rectangle getNormalizedLabelBounds() {
@@ -910,7 +914,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		return adjustBoundsToLabel;
 	}
 
-	public void setAjustBoundsToLabel(boolean adjustBoundsToLabel) {
+	public void setAdjustBoundsToLabel(boolean adjustBoundsToLabel) {
 		FGENotification notification = requireChange(Parameters.adjustBoundsToLabel, adjustBoundsToLabel);
 		if (notification != null) {
 			this.adjustBoundsToLabel = adjustBoundsToLabel;
@@ -2015,8 +2019,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			return new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
 		} else {
 			FGEPoint relativePosition = new FGEPoint(getRelativeTextX(), getRelativeTextY());
-			Dimension d = getLabelDimension(scale);
 			Point point = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getContainerGraphicalRepresentation(), scale);
+			Dimension d = getLabelDimension(scale);
 			switch (getHorizontalTextAlignment()) {
 			case CENTER:
 				point.x -= d.width / 2;
@@ -2041,6 +2045,24 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			}
 			return point;
 		}
+	}
+
+	@Override
+	public int getAvailableLabelWidth(double scale) {
+		if (getLineWrap()) {
+			FGEPoint relativePosition = new FGEPoint(getRelativeTextX(), getRelativeTextY());
+			Point point = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getContainerGraphicalRepresentation(), scale);
+			point.x -= getViewX(scale) + (border != null ? border.left : 0);
+			switch (getHorizontalTextAlignment()) {
+			case CENTER:
+				return Math.min(point.x, getViewWidth(scale) - (border != null ? border.right : 0) - point.x) * 2;
+			case LEFT:
+				return getViewWidth(scale) - (border != null ? border.right : 0) - point.x;
+			case RIGHT:
+				return point.x;
+			}
+		}
+		return super.getAvailableLabelWidth(scale);
 	}
 
 	@Override

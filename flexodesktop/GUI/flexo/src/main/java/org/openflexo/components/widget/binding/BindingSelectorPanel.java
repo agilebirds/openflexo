@@ -2280,10 +2280,14 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		}
 
 		private JComponent getIconLabelComponent(JLabel label, Icon icon) {
+			iconLabel.setVisible(true);
 			iconLabel.setIcon(icon);
 			iconLabel.setOpaque(label.isOpaque());
 			iconLabel.setBackground(label.getBackground());
-			panel.add(label);
+			panel.setToolTipText(label.getToolTipText());
+			if (label.getParent() != panel) {
+				panel.add(label);
+			}
 			return panel;
 		}
 

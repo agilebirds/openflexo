@@ -86,8 +86,8 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 			public void paintShape(FGEShapeGraphics g) {
 				g.setDefaultForeground(FOREGROUND);
 				g.useDefaultForegroundStyle();
-				g.drawLine(topFoldingPoint, foldingPoint);
-				g.drawLine(foldingPoint, rightFoldingPoint);
+				g.drawLine(topFoldingPoint, foldingPoint); // Vertical bar
+				g.drawLine(foldingPoint, rightFoldingPoint); // Horizontal bar
 			}
 		});
 		updateControlAreas();

@@ -19,6 +19,7 @@
  */
 package org.openflexo.toolbox;
 
+import java.awt.Desktop;
 import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,6 +30,8 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -653,58 +656,14 @@ public class ToolBox {
 	}
 
 	public static void openURL(String url) {
-		StringBuilder sb = new StringBuilder();
-		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-			String command = null;
-			String urlLC = url.toLowerCase();
-			if (urlLC.startsWith("https")) {
-				command = WindowsCommandRetriever.getCommandForFileType("https");
-			} else if (urlLC.startsWith("http")) {
-				command = WindowsCommandRetriever.getCommandForFileType("http");
-			}
-			if (command == null) {
-				command = WindowsCommandRetriever.commandForExtension(".html");
-			}
-			if (command.indexOf("%1") > -1) {
-				sb.append(command.substring(0, command.indexOf("%1")));
-				sb.append(url);
-				sb.append(command.substring(command.indexOf("%1") + "%1".length()));
-			} else {
-				sb.append(command).append(' ');
-				sb.append('"');
-				sb.append(url);
-				sb.append('"');
-			}
-		} else {
-			sb.append("open ");
-			sb.append(url);
-		}
 		try {
-			final Process p = Runtime.getRuntime().exec(sb.toString());
-			Thread readThread = new Thread(new Runnable() {
-				/**
-				 * Overrides run
-				 * 
-				 * @see java.lang.Runnable#run()
-				 */
-				@Override
-				public void run() {
-					InputStreamReader is = new InputStreamReader(p.getInputStream());
-					BufferedReader reader = new BufferedReader(is);
-					String line;
-					try {
-						while ((line = reader.readLine()) != null) {
-							System.err.println(line);
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			readThread.start();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			System.err.println("Error while executing " + sb.toString());
+			Desktop.getDesktop().browse(new URI(url));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -724,58 +683,11 @@ public class ToolBox {
 	}
 
 	public static boolean openFile(File fileToOpen) {
-		String path = fileToOpen.getAbsolutePath();
-		StringBuilder sb = new StringBuilder();
-		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-			String command = WindowsCommandRetriever.commandForExtension(path.substring(path.lastIndexOf(".")));
-			if (command == null) {
-				return false;// No program associated with extension docx
-			}
-			if (command.indexOf("%1") > -1) {
-				sb.append(command.substring(0, command.indexOf("%1")));
-				sb.append(path);
-				sb.append(command.substring(command.indexOf("%1") + "%1".length()));
-			} else {
-				sb.append(command).append(' ');
-				sb.append('"');
-				sb.append(path);
-				sb.append('"');
-			}
-		} else {
-			path = path.replace(" ", "%20");
-			sb.append("open file:");
-			// sb.append('\'');
-			sb.append(path);
-			// sb.append('\'');
-		}
 		try {
-			System.err.println(sb.toString());
-			final Process p = Runtime.getRuntime().exec(sb.toString());
-			Thread readThread = new Thread(new Runnable() {
-				/**
-				 * Overrides run
-				 * 
-				 * @see java.lang.Runnable#run()
-				 */
-				@Override
-				public void run() {
-					InputStreamReader is = new InputStreamReader(p.getInputStream());
-					BufferedReader reader = new BufferedReader(is);
-					String line;
-					try {
-						while ((line = reader.readLine()) != null) {
-							System.err.println(line);
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			readThread.start();
+			Desktop.getDesktop().open(fileToOpen);
 			return true;
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			System.err.println("Error while executing " + sb.toString());
+		} catch (IOException e2) {
+			e2.printStackTrace();
 			return false;
 		}
 	}

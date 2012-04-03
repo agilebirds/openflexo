@@ -17,27 +17,11 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.gen;
+package org.openflexo.fge.notifications;
 
-import org.openflexo.foundation.AttributeDataModification;
-import org.openflexo.foundation.FlexoObservable;
+public class LabelWillMove extends FGENotification {
 
-@Deprecated
-/**
- * This class should be removed as PPM is deprecated.
- *
- */
-public class FlexoProcessImageNotificationCenter extends FlexoObservable {
-
-	private static FlexoProcessImageNotificationCenter instance = new FlexoProcessImageNotificationCenter();
-
-	public static FlexoProcessImageNotificationCenter getInstance() {
-		return instance;
+	public LabelWillMove() {
+		super("location", null, null);
 	}
-
-	public void notifyNewImage() {
-		setChanged();
-		notifyObservers(new AttributeDataModification("displaySubProcessImage", null, null));
-	}
-
 }

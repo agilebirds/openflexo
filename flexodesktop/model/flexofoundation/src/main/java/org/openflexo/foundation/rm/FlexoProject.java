@@ -759,6 +759,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 	}
 
+	private void writeDotVersion() {
+		writeDotVersion(FlexoXMLMappings.latestRelease());
+	}
+
 	private void writeDotVersion(FlexoVersion version) {
 		FileOutputStream fos = null;
 		File f = new File(projectDirectory, ".version");
@@ -831,6 +835,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 		// We save RM at the end so that all dates are always up-to-date and we also save the lastID which may have changed!
 		getFlexoRMResource().saveResourceData(clearModifiedStatus);
+		writeDotVersion();
 	}
 
 	/**
@@ -3968,8 +3973,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					root = new File(f, "OpenFlexo");
 				}
 			}
-		} else if (ToolBox.getPLATFORM()==ToolBox.LINUX) {
-			root = new File(System.getProperty("user.home"),".openflexo");
+		} else if (ToolBox.getPLATFORM() == ToolBox.LINUX) {
+			root = new File(System.getProperty("user.home"), ".openflexo");
 		}
 		File file = null;
 		boolean ok = false;

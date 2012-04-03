@@ -1089,33 +1089,38 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 		@Override
 		public String getMessage() {
-			String returned = "LoadXMLResourceException caused by multiple exceptions:\n";
+			if (loadResourceExceptions.size() == 0) {
+				return super.getMessage();
+			}
+			StringBuilder sb = new StringBuilder("LoadXMLResourceException caused by multiple exceptions:\n");
 			for (XMLOperationException temp : loadResourceExceptions) {
-				returned += "Trying to load with version " + temp.getVersion() + " exception raised: " + temp.getMessage() + "\n";
+				sb.append("Trying to load with version ").append(temp.getVersion()).append(" exception raised: ").append(temp.getMessage())
+						.append('\n');
 				temp.exception.printStackTrace();
 			}
-			return returned;
+			return sb.toString();
 		}
 
 		public String getExtendedMessage() {
-			String returned = "LoadXMLResourceException caused by multiple exceptions:\n";
+			StringBuilder sb = new StringBuilder("LoadXMLResourceException caused by multiple exceptions:\n");
 			for (XMLOperationException temp : loadResourceExceptions) {
-				returned += "Trying to load with version " + temp.getVersion() + " exception raised: " + temp.getMessage() + "\n";
-				returned += "StackTrace:\n";
+				sb.append("Trying to load with version ").append(temp.getVersion()).append(" exception raised: ").append(temp.getMessage())
+						.append('\n');
+				sb.append("StackTrace:\n");
 				if (temp.getException().getStackTrace() != null) {
 					for (int i = 0; i < temp.getException().getStackTrace().length; i++) {
-						returned += "\tat " + temp.getException().getStackTrace()[i] + "\n";
+						sb.append("\tat ").append(temp.getException().getStackTrace()[i]).append('\n');
 					}
 				}
 				if (temp.getException() instanceof AccessorInvocationException) {
-					returned += "Caused by :\n";
+					sb.append("Caused by :\n");
 					for (int i = 0; i < ((AccessorInvocationException) temp.getException()).getTargetException().getStackTrace().length; i++) {
-						returned += "\tat " + ((AccessorInvocationException) temp.getException()).getTargetException().getStackTrace()[i]
-								+ "\n";
+						sb.append("\tat " + ((AccessorInvocationException) temp.getException()).getTargetException().getStackTrace()[i])
+								.append('\n');
 					}
 				}
 			}
-			return returned;
+			return sb.toString();
 		}
 	}
 

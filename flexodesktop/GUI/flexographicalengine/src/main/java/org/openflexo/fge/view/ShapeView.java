@@ -255,6 +255,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		if (_labelView != null) {
 			_labelView.setVisible(getGraphicalRepresentation().shouldBeDisplayed());
 		}
+
 		setVisible(getGraphicalRepresentation().shouldBeDisplayed());
 	}
 

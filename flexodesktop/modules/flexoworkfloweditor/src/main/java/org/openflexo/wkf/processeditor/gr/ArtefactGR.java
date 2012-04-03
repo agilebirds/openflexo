@@ -199,9 +199,9 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 		setIsMultilineAllowed(true);
 		setTextStyle(createTextStyle());
 		if (getDrawable().getTextAlignment() == null) {
-			getDrawable().setTextAlignment(GraphicalRepresentation.HorizontalTextAlignment.CENTER);
+			getDrawable().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.CENTER);
 		}
-		setHorizontalTextAlignment((HorizontalTextAlignment) getDrawable().getTextAlignment());
+		setParagraphAlignment((ParagraphAlignment) getDrawable().getTextAlignment());
 	}
 
 	protected TextStyle createTextStyle() {

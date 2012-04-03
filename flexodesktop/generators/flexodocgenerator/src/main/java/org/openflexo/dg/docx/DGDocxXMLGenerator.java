@@ -41,6 +41,7 @@ import org.openflexo.foundation.ie.IEPopupComponent;
 import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
@@ -176,6 +177,8 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 			s = "TAB-" + ((IETabComponent) object).getName();
 		} else if (object instanceof IEPageComponent) {
 			s = "PAGE-" + ((IEPageComponent) object).getName();
+		} else if (object instanceof View) {
+			s = "VIEW-" + ((View) object).getName();
 		} else {
 			s = object.getFullyQualifiedName();
 		}

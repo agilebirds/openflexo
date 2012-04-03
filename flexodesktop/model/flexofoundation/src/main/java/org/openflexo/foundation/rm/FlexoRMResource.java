@@ -63,7 +63,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 	protected static final Logger logger = Logger.getLogger(FlexoRMResource.class.getPackage().getName());
 
-	private static final String RM_TAG_REGEXP = "<RMResource[^/>]*?version\\s*=\\s*\"([0-9\\.]*)\"[^/>]*?>.*?</RMResource>";
+	private static final String RM_TAG_REGEXP = "<RMResource[^/>]*?version\\s*=\\s*\"([0-9.]*)\"[^/>]*?>.*?</RMResource>";
 
 	private static final Pattern RM_TAG_PATTERN = Pattern.compile(RM_TAG_REGEXP, Pattern.DOTALL);
 
@@ -626,7 +626,6 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				getProject().checkResourceIntegrity();
 			}
 			super.saveResourceData(clearIsModified);
-			saveTSFile();
 			if (!isInitializingProject && getProject() != null) {
 				getProject().deleteFilesToBeDeleted();
 			}
