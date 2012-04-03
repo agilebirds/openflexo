@@ -64,7 +64,7 @@ public class FlexoResourceCenterService {
 	}
 
 	public FlexoResourceCenter createAndSetFlexoResourceCenter(File dir) {
-		LocalResourceCenterImplementation rc = LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(dir);
+		FlexoResourceCenter rc = LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(dir);
 		installFlexoResourceCenter(rc);
 		return rc;
 	}
@@ -76,7 +76,8 @@ public class FlexoResourceCenterService {
 				if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 					AskLocalResourceCenterDirectory data = new AskLocalResourceCenterDirectory();
 					data.setLocalResourceDirectory(FlexoProject.getResourceCenterFile());
-					FIBDialog dialog = FIBDialog.instanciateComponent(AskLocalResourceCenterDirectory.FIB_FILE, data, null, true);
+					FIBDialog<AskLocalResourceCenterDirectory> dialog = FIBDialog.instanciateComponent(
+							AskLocalResourceCenterDirectory.FIB_FILE, data, null, true);
 					switch (dialog.getStatus()) {
 					case VALIDATED:
 						if (data.getLocalResourceDirectory() != null) {

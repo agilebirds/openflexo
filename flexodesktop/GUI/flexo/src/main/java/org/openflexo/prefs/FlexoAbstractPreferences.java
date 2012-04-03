@@ -82,7 +82,7 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 				logger.finest("Parent file = " + parentDir);
 			}
 			if (!parentDir.exists()) {
-				parentDir.mkdir();
+				parentDir.mkdirs();
 			}
 			if (!preferencesFile.exists()) {
 				preferencesFile.createNewFile();
