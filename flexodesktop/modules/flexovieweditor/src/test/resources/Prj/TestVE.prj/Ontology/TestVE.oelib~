@@ -2,6 +2,12 @@
 <ShemaLibrary id="SYL_440" userID="SYL" flexoID="440" dontGenerate="false" useSpecificDescriptions="false">
   <ShemaFolder id="SYL_441" docIndex="1" userID="SYL" flexoID="441" dontGenerate="false" useSpecificDescriptions="false">
     <folderName>TestVE</folderName>
+    <ShemaFolder id="SYL_785" docIndex="1" userID="SYL" flexoID="785" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+      <folderName>OrganizationalUnit</folderName>
+      <Shema id="SYL_683" name="TestOrganizationMap" calcURI="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalMap.owl" docIndex="2" userID="SYL" flexoID="683" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+      <Shema id="SYL_786" name="R&amp;DDefinition" calcURI="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl" docIndex="1" userID="SYL" flexoID="786" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+    </ShemaFolder>
+    <Shema id="SYL_538" name="BasicOrganization" calcURI="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl" docIndex="1" userID="SYL" flexoID="538" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
   </ShemaFolder>
 </ShemaLibrary>
 
