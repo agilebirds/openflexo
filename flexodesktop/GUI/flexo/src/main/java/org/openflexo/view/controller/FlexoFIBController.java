@@ -34,12 +34,14 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
+import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
@@ -125,6 +127,8 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 			return WKFIconLibrary.iconForObject((WKFObject) object);
 		} else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject) object);
+		} else if (object instanceof DMObject) {
+			return DMEIconLibrary.iconForObject((DMObject) object);
 		} else if (object instanceof ViewPointLibraryObject) {
 			return VPMIconLibrary.iconForObject((ViewPointLibraryObject) object);
 		} else if (object instanceof AbstractViewObject) {
