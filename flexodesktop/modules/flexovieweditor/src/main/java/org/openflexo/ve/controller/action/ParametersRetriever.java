@@ -392,9 +392,11 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			if (parameter instanceof URIParameter) {
 				URIPanel uriPanel = (URIPanel) widgets.get(parameter);
 				Vector<EditionSchemeParameter> dependancies = ((URIParameter) parameter).getDependancies();
-				for (EditionSchemeParameter dep : dependancies) {
-					FIBComponent dependingComponent = widgets.get(dep);
-					uriPanel.tf.addToExplicitDependancies(new FIBDependancy(dependingComponent));
+				if (dependancies != null) {
+					for (EditionSchemeParameter dep : dependancies) {
+						FIBComponent dependingComponent = widgets.get(dep);
+						uriPanel.tf.addToExplicitDependancies(new FIBDependancy(dependingComponent));
+					}
 				}
 			}
 		}
