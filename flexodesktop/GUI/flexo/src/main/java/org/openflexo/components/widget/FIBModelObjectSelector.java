@@ -22,6 +22,7 @@ package org.openflexo.components.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.RGBImageFilter;
@@ -50,11 +51,22 @@ import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
+import org.openflexo.foundation.DefaultFlexoEditor;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.action.FlexoAction;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoResourceManager;
+import org.openflexo.foundation.utils.ProjectInitializerException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
+import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
@@ -536,6 +548,61 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	// Used for computation of "isAcceptableValue()?"
 	public void setCandidateValue(T candidateValue) {
 		this.candidateValue = candidateValue;
+	}
+
+	protected static FlexoEditor loadProject(File prjDir) {
+		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+		FlexoEditor editor = null;
+		try {
+			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
+		} catch (ProjectLoadingCancelledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ProjectInitializerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		editor.getProject().setResourceCenter(getFlexoResourceCenterService().getFlexoResourceCenter(true));
+		if (editor == null)
+			System.exit(-1);
+		return editor;
+	}
+
+	private static FlexoResourceCenterService getFlexoResourceCenterService() {
+		return FlexoResourceCenterService.instance();
+	}
+
+	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
+		@Override
+		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
+			return new FlexoTestEditor(project);
+		}
+	};
+
+	public static class FlexoTestEditor extends DefaultFlexoEditor {
+		public FlexoTestEditor(FlexoProject project) {
+			super(project);
+		}
+
+		@Override
+		public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
+				FlexoActionType<A, T1, T2> actionType) {
+			FlexoActionInitializer<A> init = new FlexoActionInitializer<A>() {
+
+				@Override
+				public boolean run(ActionEvent event, A action) {
+					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),
+							FlexoTestEditor.this);
+					if (!reply) {
+						System.err.println("ACTION NOT ENABLED :" + action.getClass() + " on object "
+								+ (action.getFocusedObject() != null ? action.getFocusedObject().getClass() : "null focused object"));
+					}
+					return reply;
+				}
+
+			};
+			return init;
+		}
 	}
 
 	/*
