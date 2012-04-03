@@ -23,19 +23,24 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DefaultBindingFactory;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.TOCRepositoryChanged;
-import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
-import org.openflexo.foundation.cg.utils.DocConstants.ProcessDocSectionSubType;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
+import org.openflexo.foundation.toc.TOCDataBinding.TOCBindingAttribute;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
+import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
 import org.openflexo.foundation.toc.action.MoveTOCEntry;
 import org.openflexo.foundation.toc.action.RemoveTOCEntry;
 import org.openflexo.foundation.toc.action.RepairTOCEntry;
@@ -52,7 +57,9 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
-public class TOCEntry extends TOCObject implements Sortable, InspectableObject, ReferenceOwner {
+// Please rewrite this class conforming to new hierarchy
+@Deprecated
+public class TOCEntry extends TOCObject implements Sortable, InspectableObject, ReferenceOwner, Bindable {
 
 	public static final int MAXIMUM_DEPTH = 10;
 
@@ -69,8 +76,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	private boolean startOnANewPage = false;
 	private boolean recursionEnabled = true;
 	private boolean includeStatusList = true;
-	private DocSection identifier;
-	private ProcessDocSectionSubType subType;
+	private PredefinedSection.PredefinedSectionType identifier;
+	private ProcessSection.ProcessDocSectionSubType subType;
 
 	private CGRepositoryFileResource resource;
 
@@ -87,7 +94,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		tocEntries = new Vector<TOCEntry>();
 	}
 
-	public TOCEntry(TOCData generatedCode, DocSection identifier) {
+	public TOCEntry(TOCData generatedCode, PredefinedSection.PredefinedSectionType identifier) {
 		this(generatedCode);
 		this.identifier = identifier;
 	}
@@ -100,7 +107,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		isReadOnly = true;
 	}
 
-	public TOCEntry(TOCData generatedCode, FlexoModelObject modelObject, DocSection identifier) {
+	public TOCEntry(TOCData generatedCode, FlexoModelObject modelObject, PredefinedSection.PredefinedSectionType identifier) {
 		this(generatedCode, modelObject);
 		this.identifier = identifier;
 	}
@@ -173,6 +180,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
+		v.add(DeprecatedAddTOCEntry.actionType);
 		v.add(AddTOCEntry.actionType);
 		v.add(RemoveTOCEntry.actionType);
 		v.add(RepairTOCEntry.actionType);
@@ -262,25 +270,25 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	}
 
 	public boolean isProcessesSection() {
-		return identifier != null && identifier == DocSection.PROCESSES;
+		return identifier != null && identifier == PredefinedSection.PredefinedSectionType.PROCESSES;
 	}
 
-	public DocSection getIdentifier() {
+	public PredefinedSection.PredefinedSectionType getIdentifier() {
 		return identifier;
 	}
 
-	public void setIdentifier(DocSection identifier) {
+	public void setIdentifier(PredefinedSection.PredefinedSectionType identifier) {
 		if (!isDeserializing()) {
 			return;
 		}
 		this.identifier = identifier;
 	}
 
-	public ProcessDocSectionSubType getSubType() {
+	public ProcessSection.ProcessDocSectionSubType getSubType() {
 		return subType;
 	}
 
-	public void setSubType(ProcessDocSectionSubType subType) {
+	public void setSubType(ProcessSection.ProcessDocSectionSubType subType) {
 		this.subType = subType;
 	}
 
@@ -339,6 +347,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			setChanged();
 			notifyObservers(new TOCModification("tocEntries", null, entry));
+			rebuildBindingModel();
+			entry.rebuildBindingModel();
 		}
 	}
 
@@ -355,10 +365,12 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			setChanged();
 			notifyObservers(new TOCModification("tocEntries", entry, null));
+			rebuildBindingModel();
+			entry.rebuildBindingModel();
 		}
 	}
 
-	public TOCEntry getTOCEntryWithID(DocSection id) {
+	public TOCEntry getTOCEntryWithID(PredefinedSection.PredefinedSectionType id) {
 		if (id == null) {
 			return null;
 		}
@@ -587,27 +599,27 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	}
 
 	public boolean isDocSubType() {
-		return getSubType() == ProcessDocSectionSubType.Doc;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.Doc;
 	}
 
 	public boolean isRACISubType() {
-		return getSubType() == ProcessDocSectionSubType.RaciMatrix;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.RaciMatrix;
 	}
 
 	public boolean isSIPOC2SubType() {
-		return getSubType() == ProcessDocSectionSubType.SIPOCLevel2;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.SIPOCLevel2;
 	}
 
 	public boolean isSIPOC3SubType() {
-		return getSubType() == ProcessDocSectionSubType.SIPOCLevel3;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.SIPOCLevel3;
 	}
 
 	public boolean isOperationTableSubType() {
-		return getSubType() == ProcessDocSectionSubType.OperationTable;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.OperationTable;
 	}
 
 	public boolean isERDiagram() {
-		return getIdentifier() == DocSection.ER_DIAGRAM;
+		return getIdentifier() == PredefinedSection.PredefinedSectionType.ER_DIAGRAM;
 	}
 
 	public boolean isIndividualProcessOrProcessFolder() {
@@ -856,4 +868,42 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	public void objectSerializationIdChanged(FlexoModelObjectReference reference) {
 		setChanged();
 	}
+
+	public void notifyBindingChanged(TOCDataBinding binding) {
+	}
+
+	public void notifyChange(TOCBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding value) {
+	}
+
+	private BindingModel bindingModel = null;
+
+	@Override
+	public BindingModel getBindingModel() {
+		if (bindingModel == null) {
+			rebuildBindingModel();
+		}
+		return bindingModel;
+	}
+
+	protected void rebuildBindingModel() {
+		bindingModel = buildBindingModel();
+	}
+
+	protected BindingModel buildBindingModel() {
+		BindingModel returned;
+		if (getParent() == null) {
+			returned = new BindingModel();
+		} else {
+			returned = new BindingModel(getParent().getBindingModel());
+		}
+		return returned;
+	}
+
+	@Override
+	public BindingFactory getBindingFactory() {
+		return DEFAULT_BINDING_FACTORY;
+	}
+
+	public static BindingFactory DEFAULT_BINDING_FACTORY = new DefaultBindingFactory();
+
 }

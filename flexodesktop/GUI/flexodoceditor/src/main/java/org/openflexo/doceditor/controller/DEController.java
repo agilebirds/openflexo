@@ -74,6 +74,16 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 
 	protected DEKeyEventListener _generatorKeyEventListener;
 
+	@Override
+	public boolean useNewInspectorScheme() {
+		return true;
+	}
+
+	@Override
+	public boolean useOldInspectorScheme() {
+		return false;
+	}
+
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
@@ -174,7 +184,9 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		getDESelectionManager().addObserver(getSharedInspectorController());
+		if (useOldInspectorScheme()) {
+			getDESelectionManager().addObserver(getSharedInspectorController());
+		}
 	}
 
 	// =========================================================

@@ -212,7 +212,11 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 	public ResizablePanel getCustomPanel() {
 		if (_customPanel == null) {
-			_customPanel = createCustomPanel(getEditedObject());
+			try {
+				_customPanel = createCustomPanel(getEditedObject());
+			} catch (ClassCastException e) {
+				_customPanel = createCustomPanel(null);
+			}
 			_customPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		}
 		return _customPanel;
@@ -735,7 +739,11 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	}
 
 	public void fireEditedObjectChanged() {
-		updateCustomPanel(getEditedObject());
+		try {
+			updateCustomPanel(getEditedObject());
+		} catch (ClassCastException e) {
+			updateCustomPanel(null);
+		}
 	}
 
 	public abstract void updateCustomPanel(T editedObject);

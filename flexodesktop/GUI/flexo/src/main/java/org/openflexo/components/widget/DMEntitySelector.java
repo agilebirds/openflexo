@@ -38,6 +38,10 @@ public class DMEntitySelector<D extends DMEntity> extends AbstractBrowserSelecto
 	protected static final String EMPTY_STRING = "";
 	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
 
+	public DMEntitySelector(D entity) {
+		super(entity != null ? entity.getProject() : null, entity, (Class<D>) DMEntity.class);
+	}
+
 	public DMEntitySelector(FlexoProject project, D entity, Class<D> entityClass) {
 		super(project, entity, entityClass);
 	}

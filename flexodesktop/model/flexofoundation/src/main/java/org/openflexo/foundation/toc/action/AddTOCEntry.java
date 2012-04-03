@@ -24,16 +24,22 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.action.DuplicateSectionException;
 import org.openflexo.foundation.cg.action.InvalidLevelException;
-import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
-import org.openflexo.foundation.cg.utils.DocConstants.ProcessDocSectionSubType;
+import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.ERDiagram;
+import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.openflexo.foundation.toc.ModelObjectSection.ModelObjectType;
+import org.openflexo.foundation.toc.PredefinedSection;
+import org.openflexo.foundation.toc.ProcessSection;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.Role;
 
 public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> {
 
@@ -63,15 +69,59 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	};
 
-	private String tocEntryTitle;
-
 	AddTOCEntry(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	private DocSection section;
-	private ProcessDocSectionSubType subType;
-	private FlexoModelObject modelObject;
+	public static enum KindOfTocEntry {
+		NormalSection {
+			@Override
+			public String getDescriptionKey() {
+				return "normal_section_description";
+			}
+		},
+		PredefinedSection {
+			@Override
+			public String getDescriptionKey() {
+				return "predefined_section_description";
+			}
+		},
+		ModelObjectSection {
+			@Override
+			public String getDescriptionKey() {
+				return "model_object_section_description";
+			}
+		},
+		ControlSection {
+			@Override
+			public String getDescriptionKey() {
+				return "control_section_description";
+			}
+		};
+
+		public abstract String getDescriptionKey();
+	}
+
+	public KindOfTocEntry kindOfTocEntry = KindOfTocEntry.NormalSection;
+	private String tocEntryTitle;
+	private TOCEntry newEntry;
+
+	// Normal section
+	private String tocEntryContent;
+
+	// Predefined section
+	private PredefinedSection.PredefinedSectionType predefinedSectionType;
+
+	// Model object section
+	private ModelObjectType modelObjectType = ModelObjectType.Process;
+	public FlexoProcess selectedProcess;
+	public View selectedView;
+	public Role selectedRole;
+	public DMEntity selectedEntity;
+	public OperationComponentDefinition selectedOperationComponent;
+	public ERDiagram selectedERDiagram;
+
+	private ProcessSection.ProcessDocSectionSubType processDocSectionSubType = ProcessSection.ProcessDocSectionSubType.Doc;
 
 	public TOCRepository getRepository() {
 		return ((TOCEntry) getFocusedObject()).getRepository();
@@ -79,54 +129,44 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	@Override
 	protected void doAction(Object context) throws DuplicateSectionException, InvalidLevelException {
-		if (section != null) {
-			if (getRepository().getTOCEntryWithID(section) != null && modelObject == null) {
-				throw new DuplicateSectionException();
-			}
-		}
-		TOCEntry entry;
-		if (section != null || modelObject != null) {
-			if (section != null && modelObject != null) {
-				entry = getRepository().createObjectEntry(modelObject, section);
-			} else if (section != null) {
-				entry = getRepository().createDefaultEntry(section);
-			} else {
-				entry = getRepository().createObjectEntry(modelObject);
-			}
-			entry.setTitle(getTocEntryTitle());
-			if (subType != null) {
-				entry.setSubType(subType);
-			}
-			if (entry.getPreferredLevel() == -1) {
-				addEntryToFocusedObject(entry);
-			} else {
-				if (entry.getPreferredLevel() == 1) {
-					getRepository().addToTocEntries(entry);
-				} else {
-					if (getFocusedObject() instanceof TOCRepository
-							|| (((TOCEntry) getFocusedObject()).getLevel() + 1 < entry.getPreferredLevel())) {
-						throw new InvalidLevelException();
-					} else {
-						TOCEntry parent = ((TOCEntry) getFocusedObject());
-						while (parent.getLevel() >= entry.getPreferredLevel()) {
-							parent = parent.getParent();
-						}
-						parent.addToTocEntries(entry);
-					}
-				}
-			}
-		} else {
-			entry = new TOCEntry(getFocusedObject().getData());
-			if (subType != null) {
-				entry.setSubType(subType);
-			}
-			entry.setTitle(getTocEntryTitle());
-			addEntryToFocusedObject(entry);
-		}
-	}
 
-	private void addEntryToFocusedObject(TOCEntry entry) {
-		((TOCEntry) getFocusedObject()).addToTocEntries(entry);
+		switch (kindOfTocEntry) {
+		case NormalSection:
+			newEntry = getRepository().createNormalSection(getTocEntryTitle(), getTocEntryContent());
+			break;
+		case PredefinedSection:
+			newEntry = getRepository().createPredefinedSection(getTocEntryTitle(), getPredefinedSectionType());
+			break;
+		case ModelObjectSection:
+			switch (getModelObjectType()) {
+			case Process:
+				newEntry = getRepository().createProcessSection(getTocEntryTitle(), selectedProcess, null);
+				break;
+			case View:
+				newEntry = getRepository().createViewSection(getTocEntryTitle(), selectedView, null);
+				break;
+			case Role:
+				newEntry = getRepository().createRoleSection(getTocEntryTitle(), selectedRole, null);
+				break;
+			case Entity:
+				newEntry = getRepository().createEntitySection(getTocEntryTitle(), selectedEntity, null);
+				break;
+			case OperationScreen:
+				newEntry = getRepository().createOperationScreenSection(getTocEntryTitle(), selectedOperationComponent, null);
+				break;
+			case ERDiagram:
+				newEntry = getRepository().createERDiagramSection(getTocEntryTitle(), selectedERDiagram, null);
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+
+		((TOCEntry) getFocusedObject()).addToTocEntries(newEntry);
+
 	}
 
 	public String getTocEntryTitle() {
@@ -137,19 +177,45 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		this.tocEntryTitle = tocEntryTitle;
 	}
 
-	public void setSection(DocSection section) {
-		this.section = section;
+	public PredefinedSection.PredefinedSectionType getPredefinedSectionType() {
+		return predefinedSectionType;
 	}
 
-	public void setModelObject(FlexoModelObject modelObject) {
-		this.modelObject = modelObject;
+	public void setPredefinedSectionType(PredefinedSection.PredefinedSectionType predefinedSectionType) {
+		this.predefinedSectionType = predefinedSectionType;
 	}
 
-	public ProcessDocSectionSubType getSubType() {
-		return subType;
+	public ProcessSection.ProcessDocSectionSubType getProcessDocSectionSubType() {
+		return processDocSectionSubType;
 	}
 
-	public void setSubType(ProcessDocSectionSubType subType) {
-		this.subType = subType;
+	public void setProcessDocSectionSubType(ProcessSection.ProcessDocSectionSubType processDocSectionSubType) {
+		this.processDocSectionSubType = processDocSectionSubType;
 	}
+
+	public String getTocEntryContent() {
+		return tocEntryContent;
+	}
+
+	public void setTocEntryContent(String tocEntryContent) {
+		this.tocEntryContent = tocEntryContent;
+	}
+
+	public ModelObjectType getModelObjectType() {
+		return modelObjectType;
+	}
+
+	public void setModelObjectType(ModelObjectType modelObjectType) {
+		this.modelObjectType = modelObjectType;
+	}
+
+	/**
+	 * Return new entry being created
+	 * 
+	 * @return
+	 */
+	public TOCEntry getNewEntry() {
+		return newEntry;
+	}
+
 }

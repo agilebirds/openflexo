@@ -21,16 +21,12 @@ package org.openflexo.doceditormodule;
 
 import java.util.logging.Logger;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.doceditor.DEPreferences;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
