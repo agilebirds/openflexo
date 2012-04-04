@@ -35,4 +35,6 @@ public interface FlexoResourceCenter {
 
 	public File getNewCalcSandboxDirectory();
 
+	public void update();
+
 }

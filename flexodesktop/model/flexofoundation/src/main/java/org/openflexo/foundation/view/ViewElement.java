@@ -123,7 +123,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	 * @return
 	 */
 	public boolean isBoundInsideEditionPattern() {
-		return (getPatternRole() != null);
+		return getPatternRole() != null;
 	}
 
 	/*public String getLabelValue() {
@@ -151,7 +151,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	public GraphicalElementPatternRole getPatternRole() {
 		EditionPatternReference ref = getEditionPatternReference();
-		if ((ref != null) && (ref.getPatternRole() instanceof GraphicalElementPatternRole)) {
+		if (ref != null && ref.getPatternRole() instanceof GraphicalElementPatternRole) {
 			return (GraphicalElementPatternRole) ref.getPatternRole();
 		}
 		return null;
@@ -220,7 +220,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		if (getEditionPatternReference() != null) {
 			return getEditionPatternReference().getEditionPatternInstance();
 		}
-		if (getEditionPatternReferences().size() > 0) {
+		if (getEditionPatternReferences() != null && getEditionPatternReferences().size() > 0) {
 			return getEditionPatternReferences().get(0).getEditionPatternInstance();
 		}
 		return null;

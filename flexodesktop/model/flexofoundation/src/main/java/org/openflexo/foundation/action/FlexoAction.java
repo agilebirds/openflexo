@@ -228,8 +228,14 @@ public abstract class FlexoAction<A extends FlexoAction<?, T1, T2>, T1 extends F
 		try {
 			// In this case, we need to perform this verification so that disabled action aren't executed.
 			if (getActionType().isEnabled(getFocusedObject(), getGlobalSelection(), _editor)) {
-				doAction(e);
+				try {
+					logger.warning("Action type " + getActionType().getLocalizedName() + " " + getFocusedObject() + " "
+							+ getGlobalSelection());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
+			doAction(e);
 		} catch (FlexoException exception) {
 			// Warns about the exception
 			logger.warning("Exception raised: " + exception.getClass().getName() + " : " + exception.getMessage()

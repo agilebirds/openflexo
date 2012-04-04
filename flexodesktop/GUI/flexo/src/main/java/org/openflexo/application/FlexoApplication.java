@@ -90,6 +90,8 @@ public class FlexoApplication {
 
 	private static byte[] mem = new byte[1024 * 1024];
 
+	public static boolean DEMO = false;
+
 	public static void flushPendingEvents(boolean blockUserEvents) {
 		eventProcessor.flushPendingEvents(blockUserEvents);
 	}
@@ -332,6 +334,9 @@ public class FlexoApplication {
 		 * Determines if exception can be ignored.
 		 */
 		private boolean isIgnorable(Throwable exception) {
+			if (DEMO) {
+				return true;
+			}
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			exception.printStackTrace(pw);

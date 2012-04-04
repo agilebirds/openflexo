@@ -188,8 +188,7 @@ public class JIRAIssueReportDialog {
 								break;
 							}
 						}
-						dialog.getData().send();
-						ok = true;
+						ok = dialog.getData().send();
 					} catch (MalformedURLException e1) {
 						FlexoController.showError(FlexoLocalization.localizedForKey("could_not_send_bug_report") + " " + e.getMessage());
 					} catch (UnauthorizedJIRAAccessException e1) {
@@ -250,7 +249,7 @@ public class JIRAIssueReportDialog {
 		this.issue = issue;
 	}
 
-	public void send() throws IOException {
+	public boolean send() throws IOException {
 		int steps = 1;
 		if (sendProject) {
 			steps += 2;
@@ -282,7 +281,7 @@ public class JIRAIssueReportDialog {
 					AdvancedPrefs.getBugReportPassword());
 			String buildid = "build.id = " + FlexoCst.BUILD_ID + "\n";
 			if (sendSystemProperties) {
-				issue.setSystemProperties(buildid + ToolBox.getSystemProperties());
+				issue.setSystemProperties(buildid + ToolBox.getSystemProperties(true));
 			} else {
 				issue.setSystemProperties(buildid);
 			}
@@ -317,94 +316,103 @@ public class JIRAIssueReportDialog {
 				ProgressWindow.instance().setProgress(FlexoLocalization.localizedForKey("creating_issue"));
 				progressAdapter.resetCount();
 				JIRAResult submit = client.submit(new SubmitIssue(getIssue()), Method.POST, progressAdapter);
-				JIRAIssue result = new JIRAIssue();
-				result.setKey(submit.getKey());
-				report.setIssueLink(AdvancedPrefs.getBugReportUrl() + "/browse/" + submit.getKey());
-
-				if (sendLogs) {
-					ProgressWindow.instance().setProgress(FlexoLocalization.localizedForKey("sending_logs"));
-					progressAdapter.resetCount();
-					try {
-						client.attachFilesToIssue(result, progressAdapter, Flexo.getErrLogFile());
-					} catch (IOException e) {
-
+				if (submit.getErrorMessages() != null && submit.getErrorMessages().size() > 0) {
+					for (String error : submit.getErrorMessages()) {
+						report.addToErrors(error);
 					}
 				}
-				if (attachFile != null) {
-					ProgressWindow.instance().setProgress(
-							FlexoLocalization.localizedForKey("sending_file") + " " + attachFile.getAbsolutePath());
-					progressAdapter.resetCount();
-					try {
-						client.attachFilesToIssue(result, progressAdapter, attachFile);
-					} catch (IOException e) {
-						report.addToErrors(FlexoLocalization.localizedForKey("could_not_attach_file") + " " + attachFile.getAbsolutePath()
-								+ "\n\t" + e.getMessage());
-					}
-				}
-				if (sendProject) {
-					FlexoProject flexoProject = ModuleLoader.instance().getProject();
-					if (flexoProject != null) {
-						File projectDirectory = flexoProject.getProjectDirectory();
-						String directoryName = projectDirectory.getName();
-						File zipFile = new File(System.getProperty("java.io.tmpdir"),
-								directoryName.substring(0, directoryName.length() - 4) + ".zip");
-						FileFilter filter = new FileFilter() {
+				if (submit.getKey() != null) {
+					JIRAIssue result = new JIRAIssue();
+					result.setKey(submit.getKey());
+					report.setIssueLink(AdvancedPrefs.getBugReportUrl() + "/browse/" + submit.getKey());
 
-							@Override
-							public boolean accept(File pathname) {
-								return !pathname.getName().endsWith("~");
-							}
-						};
-						ProgressWindow.instance().setProgress(FlexoLocalization.localizedForKey("compressing_project"));
-						ProgressWindow.instance().resetSecondaryProgress(FileUtils.countFilesInDirectory(projectDirectory, true, filter));
+					if (sendLogs) {
+						ProgressWindow.instance().setProgress(FlexoLocalization.localizedForKey("sending_logs"));
+						progressAdapter.resetCount();
 						try {
-							ZipUtils.makeZip(zipFile, projectDirectory, new IProgress() {
-
-								@Override
-								public void setSecondaryProgress(String stepName) {
-									ProgressWindow.instance().setSecondaryProgress(stepName);
-								}
-
-								@Override
-								public void setProgress(String stepName) {
-
-								}
-
-								@Override
-								public void resetSecondaryProgress(int steps) {
-								}
-
-								@Override
-								public void hideWindow() {
-
-								}
-							}, filter, Deflater.BEST_COMPRESSION);
-							try {
-								ProgressWindow.instance().setProgress(FlexoLocalization.localizedForKey("sending_project"));
-								progressAdapter.resetCount();
-								client.attachFilesToIssue(result, progressAdapter, zipFile);
-							} catch (IOException e) {
-								report.addToErrors(FlexoLocalization.localizedForKey("could_not_attach_project") + " " + e.getMessage());
-							}
+							client.attachFilesToIssue(result, progressAdapter, Flexo.getErrLogFile());
 						} catch (IOException e) {
-							report.addToErrors(FlexoLocalization.localizedForKey("could_not_zip_project") + " " + e.getMessage());
+							report.addToErrors(FlexoLocalization.localizedForKey("could_not_attach_file") + " "
+									+ Flexo.getErrLogFile().getAbsolutePath() + "\n\t" + e.getMessage());
 						}
 					}
-				}
-				if (sendScreenshots) {
-					for (int i = 0; i < FlexoFrame.getFrames().length; i++) {
-						Frame frame = FlexoFrame.getFrames()[i];
-						if (frame instanceof FlexoFrame) {
-							ProgressWindow.instance().setProgress(
-									FlexoLocalization.localizedForKey("sending_screenshot") + " " + frame.getTitle());
-							progressAdapter.resetCount();
-							attachScreenshotToIssue(client, result, frame, frame.getTitle(), progressAdapter, report);
-							for (Window w : frame.getOwnedWindows()) {
-								if (w instanceof FlexoDialog || w instanceof FIBDialog) {
-									ProgressWindow.instance().setProgress(
-											FlexoLocalization.localizedForKey("sending_screenshot") + " " + ((Dialog) w).getTitle());
+					if (attachFile != null) {
+						ProgressWindow.instance().setProgress(
+								FlexoLocalization.localizedForKey("sending_file") + " " + attachFile.getAbsolutePath());
+						progressAdapter.resetCount();
+						try {
+							client.attachFilesToIssue(result, progressAdapter, attachFile);
+						} catch (IOException e) {
+							report.addToErrors(FlexoLocalization.localizedForKey("could_not_attach_file") + " "
+									+ attachFile.getAbsolutePath() + "\n\t" + e.getMessage());
+						}
+					}
+					if (sendProject) {
+						FlexoProject flexoProject = ModuleLoader.instance().getProject();
+						if (flexoProject != null) {
+							File projectDirectory = flexoProject.getProjectDirectory();
+							String directoryName = projectDirectory.getName();
+							File zipFile = new File(System.getProperty("java.io.tmpdir"), directoryName.substring(0,
+									directoryName.length() - 4) + ".zip");
+							FileFilter filter = new FileFilter() {
+
+								@Override
+								public boolean accept(File pathname) {
+									return !pathname.getName().endsWith("~");
+								}
+							};
+							ProgressWindow.instance().setProgress(FlexoLocalization.localizedForKey("compressing_project"));
+							ProgressWindow.instance().resetSecondaryProgress(
+									FileUtils.countFilesInDirectory(projectDirectory, true, filter));
+							try {
+								ZipUtils.makeZip(zipFile, projectDirectory, new IProgress() {
+
+									@Override
+									public void setSecondaryProgress(String stepName) {
+										ProgressWindow.instance().setSecondaryProgress(stepName);
+									}
+
+									@Override
+									public void setProgress(String stepName) {
+
+									}
+
+									@Override
+									public void resetSecondaryProgress(int steps) {
+									}
+
+									@Override
+									public void hideWindow() {
+
+									}
+								}, filter, Deflater.BEST_COMPRESSION);
+								try {
+									ProgressWindow.instance().setProgress(FlexoLocalization.localizedForKey("sending_project"));
 									progressAdapter.resetCount();
-									attachScreenshotToIssue(client, result, w, ((Dialog) w).getTitle(), progressAdapter, report);
+									client.attachFilesToIssue(result, progressAdapter, zipFile);
+								} catch (IOException e) {
+									report.addToErrors(FlexoLocalization.localizedForKey("could_not_attach_project") + " " + e.getMessage());
+								}
+							} catch (IOException e) {
+								report.addToErrors(FlexoLocalization.localizedForKey("could_not_zip_project") + " " + e.getMessage());
+							}
+						}
+					}
+					if (sendScreenshots) {
+						for (int i = 0; i < FlexoFrame.getFrames().length; i++) {
+							Frame frame = FlexoFrame.getFrames()[i];
+							if (frame instanceof FlexoFrame) {
+								ProgressWindow.instance().setProgress(
+										FlexoLocalization.localizedForKey("sending_screenshot") + " " + frame.getTitle());
+								progressAdapter.resetCount();
+								attachScreenshotToIssue(client, result, frame, frame.getTitle(), progressAdapter, report);
+								for (Window w : frame.getOwnedWindows()) {
+									if (w instanceof FlexoDialog || w instanceof FIBDialog) {
+										ProgressWindow.instance().setProgress(
+												FlexoLocalization.localizedForKey("sending_screenshot") + " " + ((Dialog) w).getTitle());
+										progressAdapter.resetCount();
+										attachScreenshotToIssue(client, result, w, ((Dialog) w).getTitle(), progressAdapter, report);
+									}
 								}
 							}
 						}
@@ -418,6 +426,7 @@ public class JIRAIssueReportDialog {
 			ProgressWindow.hideProgressWindow();
 		}
 		FIBDialog.instanciateComponent(REPORT_FIB_FILE, report, FlexoFrame.getActiveFrame(), true);
+		return !report.hasErrors();
 	}
 
 	private void attachScreenshotToIssue(JIRAClient client, JIRAIssue result, Window window, String title, Progress progress,

@@ -50,8 +50,8 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 		@Override
 		protected boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-			return object != null && (object instanceof RoleList && !((RoleList) object).isImportedRoleList())
-					|| (object instanceof Role && !((Role) object).isImported());
+			return object != null && object instanceof RoleList && !((RoleList) object).isImportedRoleList() || object instanceof Role
+					&& !((Role) object).isImported();
 		}
 
 		@Override
@@ -73,13 +73,17 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 	private Role _newRole;
 
+	static {
+		FlexoWorkflow.addActionForClass(actionType, FlexoWorkflow.class);
+	}
+
 	AddRole(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	public FlexoWorkflow getWorkflow() {
 		if (getFocusedObject() != null) {
-			return (getFocusedObject()).getWorkflow();
+			return getFocusedObject().getWorkflow();
 		}
 		return null;
 	}

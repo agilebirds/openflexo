@@ -52,21 +52,14 @@ import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResourceManager;
-import org.openflexo.foundation.utils.ProjectInitializerException;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
@@ -118,7 +111,7 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 					return;
 				}
 
-				boolean requestFocus = (getTextField().hasFocus());
+				boolean requestFocus = getTextField().hasFocus();
 				final int selectionStart = getTextField().getSelectionStart() + 1;
 				final int selectionEnd = getTextField().getSelectionEnd() + 1;
 				if (!popupIsShown()) {
@@ -549,35 +542,6 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	public void setCandidateValue(T candidateValue) {
 		this.candidateValue = candidateValue;
 	}
-
-	protected static FlexoEditor loadProject(File prjDir) {
-		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
-		FlexoEditor editor = null;
-		try {
-			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, resourceCenter);
-		} catch (ProjectLoadingCancelledException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ProjectInitializerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		editor.getProject().setResourceCenter(getFlexoResourceCenterService().getFlexoResourceCenter(true));
-		if (editor == null)
-			System.exit(-1);
-		return editor;
-	}
-
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-	}
-
-	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
-		@Override
-		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
-			return new FlexoTestEditor(project);
-		}
-	};
 
 	public static class FlexoTestEditor extends DefaultFlexoEditor {
 		public FlexoTestEditor(FlexoProject project) {
