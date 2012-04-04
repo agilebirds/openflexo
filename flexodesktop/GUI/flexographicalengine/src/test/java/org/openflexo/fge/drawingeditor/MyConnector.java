@@ -22,12 +22,12 @@ package org.openflexo.fge.drawingeditor;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 
-public class MyConnector extends MyDrawingElement {
+public class MyConnector extends MyDrawingElement<MyConnector, MyConnectorGraphicalRepresentation> {
 	private MyConnectorGraphicalRepresentation gr;
 
 	// Called for LOAD
 	public MyConnector(DrawingBuilder builder) {
-		super(builder.drawing.getModel());
+		super(builder.drawing);
 		initializeDeserialization();
 	}
 
@@ -37,16 +37,6 @@ public class MyConnector extends MyDrawingElement {
 		gr = new MyConnectorGraphicalRepresentation(ConnectorType.LINE,
 				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(from),
 				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(to), this, drawing);
-	}
-
-	@Override
-	public MyConnectorGraphicalRepresentation getGraphicalRepresentation() {
-		return gr;
-	}
-
-	public void setGraphicalRepresentation(MyConnectorGraphicalRepresentation aGR) {
-		aGR.setDrawable(this);
-		gr = aGR;
 	}
 
 	public MyShape getStartShape() {

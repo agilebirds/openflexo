@@ -41,10 +41,12 @@ import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.openflexo.logging.FlexoLogger;
 
 /**
  * Some File utilities
@@ -52,6 +54,8 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
  * @author sguerin
  */
 public class FileUtils {
+
+	private static final Logger logger = FlexoLogger.getLogger(FileUtils.class.getPackage().getName());
 
 	public static enum CopyStrategy {
 		REPLACE, REPLACE_OLD_ONLY, IGNORE_EXISTING
@@ -906,7 +910,9 @@ public class FileUtils {
 					}
 				}
 			} catch (IOException e) {
+				logger.warning("Could not read url " + url);
 				e.printStackTrace();
+
 			}
 		}
 		return fileContent;

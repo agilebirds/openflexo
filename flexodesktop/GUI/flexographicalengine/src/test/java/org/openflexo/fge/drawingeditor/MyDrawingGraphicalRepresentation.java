@@ -27,7 +27,7 @@ public class MyDrawingGraphicalRepresentation extends DrawingGraphicalRepresenta
 
 	// Called for LOAD
 	public MyDrawingGraphicalRepresentation(DrawingBuilder builder) {
-		this(builder.drawing);
+		this(builder.drawing.getEditedDrawing());
 		initializeDeserialization();
 	}
 

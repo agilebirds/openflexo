@@ -72,6 +72,14 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 
 	public void delete() {
 		logger.warning("TODO: implements EditionPatternInstance deletion !");
+		// Also implement properly #getDeletedProperty()
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO: when delete will be implemented, a notification will need to be sent and this method should reflect the name of the
+		// property of that notification
+		return null;
 	}
 
 	public FlexoModelObject getPatternActor(String patternRole) {
@@ -89,7 +97,7 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	}
 
 	public void setObjectForPatternRole(FlexoModelObject object, PatternRole patternRole) {
-		// logger.info(">>>>>>>> For patternRole: " + patternRole + " set " + object + " was " + getPatternActor(patternRole));
+		logger.info(">>>>>>>> For patternRole: " + patternRole + " set " + object + " was " + getPatternActor(patternRole));
 		FlexoModelObject oldObject = getPatternActor(patternRole);
 		if (object != oldObject) {
 			// Un-register last reference
@@ -104,8 +112,9 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 
 			actors.put(patternRole.getPatternRoleName(), object);
 			setChanged();
-			notifyObservers(new EditionPatternChanged(this));
+			notifyObservers(new EditionPatternActorChanged(this, patternRole, oldObject, object));
 			// System.out.println("EditionPatternInstance "+Integer.toHexString(hashCode())+" setObjectForPatternRole() actors="+actors);
+			getPropertyChangeSupport().firePropertyChange(patternRole.getPatternRoleName(), oldObject, object);
 		}
 	}
 

@@ -32,7 +32,7 @@ public class DomainRemoved extends DKVDataModification {
 	 * @param newValue
 	 */
 	public DomainRemoved(Object oldValue) {
-		super(-1, "domains", oldValue, null);
+		super("domains", oldValue, null);
 	}
 
 }

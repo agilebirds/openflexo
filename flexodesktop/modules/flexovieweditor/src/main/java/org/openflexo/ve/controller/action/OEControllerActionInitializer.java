@@ -22,6 +22,7 @@ package org.openflexo.ve.controller.action;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
+import org.openflexo.foundation.view.action.NavigationSchemeActionType;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.ve.controller.OESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -61,13 +62,14 @@ public class OEControllerActionInitializer extends ControllerActionInitializer {
 		(new AddViewInitializer(this)).init();
 		(new AddViewFolderInitializer(this)).init();
 
-		// Shema perspective
+		// Diagram perspective
 		(new AddShapeInitializer(this)).init();
 		(new AddConnectorInitializer(this)).init();
 		(new DeleteViewElementsInitializer(this)).init();
 		(new DropSchemeActionInitializer(this)).init();
 		(new LinkSchemeActionInitializer(this)).init();
 		(new ActionSchemeActionInitializer(this)).initForClass(ActionSchemeActionType.class);
+		(new NavigationSchemeActionInitializer(this)).initForClass(NavigationSchemeActionType.class);
 
 		// Ontology perspective
 		(new CreateOntologyClassInitializer(this)).init();

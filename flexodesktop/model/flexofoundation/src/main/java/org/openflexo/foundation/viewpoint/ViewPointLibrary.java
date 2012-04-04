@@ -85,10 +85,21 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		this.resourceCenter = resourceCenter;
 	}
 
+	@Deprecated
 	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
 		return map.get(ontologyCalcUri);
 	}
 
+	public ViewPoint getViewPoint(String viewpointURI) {
+		return getOntologyCalc(viewpointURI);
+	}
+
+	/**
+	 * Return all viewpoints contained in this library<br>
+	 * No consideration is performed on underlying organization structure
+	 * 
+	 * @return
+	 */
 	public Vector<ViewPoint> getViewPoints() {
 		return calcs;
 	}
@@ -245,6 +256,18 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 			}
 		}
 		logger.warning("Cannot find edition pattern:" + editionPatternURI);
+		return null;
+	}
+
+	public EditionScheme getEditionScheme(String editionSchemeURI) {
+		if (editionSchemeURI.lastIndexOf("#") > -1) {
+			String editionPatternURI = editionSchemeURI.substring(0, editionSchemeURI.lastIndexOf("#"));
+			EditionPattern ep = getEditionPattern(editionPatternURI);
+			if (ep != null) {
+				return ep.getEditionScheme(editionSchemeURI.substring(editionSchemeURI.lastIndexOf("#") + 1));
+			}
+		}
+		logger.warning("Cannot find edition scheme:" + editionSchemeURI);
 		return null;
 	}
 

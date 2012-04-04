@@ -24,11 +24,11 @@ import org.openflexo.foundation.DataModification;
 public class TOCModification extends DataModification {
 
 	public TOCModification(Object oldValue, Object newValue) {
-		super(DataModification.TOC_DM, oldValue, newValue);
+		super(oldValue, newValue);
 	}
 
 	public TOCModification(String propertyName, Object oldValue, Object newValue) {
-		super(DataModification.TOC_DM, propertyName, oldValue, newValue);
+		super(propertyName, oldValue, newValue);
 	}
 
 }

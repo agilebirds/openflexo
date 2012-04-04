@@ -13,6 +13,14 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 	private ShapePatternRole parentShapePatternRole;
 
 	@Override
+	protected void initDefaultSpecifications() {
+		super.initDefaultSpecifications();
+		for (GraphicalFeature<?, ?> GF : AVAILABLE_FEATURES) {
+			grSpecifications.add(new GraphicalElementSpecification(this, GF, false, true));
+		}
+	}
+
+	@Override
 	public PatternRoleType getType() {
 		return PatternRoleType.Shape;
 	}
@@ -98,5 +106,59 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 		}
 		return super.isIncludedInPrimaryRepresentationRole();
 	}
+
+	public static GraphicalFeature<Double, ShapeGraphicalRepresentation<?>> POS_X_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation<?>>(
+			"x", ShapeGraphicalRepresentation.Parameters.x, Double.class) {
+		@Override
+		public Double retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+			return gr.getX();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Double value) {
+			gr.setX(value);
+		}
+	};
+
+	public static GraphicalFeature<Double, ShapeGraphicalRepresentation<?>> POS_Y_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation<?>>(
+			"y", ShapeGraphicalRepresentation.Parameters.y, Double.class) {
+		@Override
+		public Double retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+			return gr.getY();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Double value) {
+			gr.setY(value);
+		}
+	};
+
+	public static GraphicalFeature<Double, ShapeGraphicalRepresentation<?>> WIDTH_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation<?>>(
+			"width", ShapeGraphicalRepresentation.Parameters.width, Double.class) {
+		@Override
+		public Double retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+			return gr.getWidth();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Double value) {
+			gr.setWidth(value);
+		}
+	};
+
+	public static GraphicalFeature<Double, ShapeGraphicalRepresentation<?>> HEIGHT_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation<?>>(
+			"height", ShapeGraphicalRepresentation.Parameters.height, Double.class) {
+		@Override
+		public Double retrieveFromGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr) {
+			return gr.getHeight();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(ShapeGraphicalRepresentation<?> gr, Double value) {
+			gr.setHeight(value);
+		}
+	};
+
+	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { POS_X_FEATURE, POS_Y_FEATURE, WIDTH_FEATURE, HEIGHT_FEATURE };
 
 }

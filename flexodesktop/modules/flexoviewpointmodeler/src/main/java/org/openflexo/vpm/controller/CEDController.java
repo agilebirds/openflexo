@@ -50,7 +50,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -335,6 +334,21 @@ public class CEDController extends FlexoController implements SelectionManagingC
 		}
 	}
 
+	public void unregisterResource(FlexoModelObject o) {
+		logger.info("Unregister " + o);
+		Vector<ResourceSavingInfo> deleteThis = new Vector<CEDController.ResourceSavingInfo>();
+		for (ResourceSavingInfo i : resourceSavingInfo) {
+			if (i.resource == o) {
+				deleteThis.add(i);
+			}
+		}
+		for (ResourceSavingInfo i : deleteThis) {
+			i.delete();
+			resourceSavingInfo.remove(i);
+		}
+
+	}
+
 	public Vector<ResourceSavingInfo> getResourceSavingInfo() {
 		return resourceSavingInfo;
 	}
@@ -357,6 +371,10 @@ public class CEDController extends FlexoController implements SelectionManagingC
 
 		public ResourceSavingInfo(FlexoModelObject r) {
 			resource = r;
+		}
+
+		public void delete() {
+			resource = null;
 		}
 
 		public Icon getIcon() {

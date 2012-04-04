@@ -19,22 +19,6 @@
  */
 package org.openflexo.ie.view.widget;
 
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ie.dm.ButtonRemoved;
-import org.openflexo.foundation.ie.dm.CustomButtonValueChanged;
-import org.openflexo.foundation.ie.widget.IECustomButtonWidget;
-import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
-import org.openflexo.ie.util.TriggerRepaintDocumentListener;
-import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.ie.view.listener.DoubleClickResponder;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -49,6 +33,23 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ie.dm.ButtonRemoved;
+import org.openflexo.foundation.ie.dm.CustomButtonValueChanged;
+import org.openflexo.foundation.ie.widget.IECustomButtonWidget;
+import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
+import org.openflexo.ie.view.IEWOComponentView;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.ie.view.listener.DoubleClickResponder;
 
 public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget> implements DoubleClickResponder, LabeledWidget {
 	private static final int ROUNDED_BORDER_SIZE = 1;
@@ -100,7 +101,7 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 			 */
 			@Override
 			public Dimension getPreferredSize() {
-				String s = getCustomButtonModel().getCustomButtonValue();
+				String s = getCustomButtonModel().getValue();
 				if (s == null) {
 					return new Dimension(30, 15);
 				} else {
@@ -118,8 +119,8 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 		_label.setBackground(color);
 		// setBackground(color);
 		_label.setForeground(Color.WHITE);
-		_label.setText(getModel().getCustomButtonValue());
-		if (getCustomButtonModel().getCustomButtonValue() == null || getCustomButtonModel().getCustomButtonValue().length() == 0) {
+		_label.setText(getModel().getValue());
+		if (getCustomButtonModel().getValue() == null || getCustomButtonModel().getValue().length() == 0) {
 			_label.setText("   ");
 
 		}

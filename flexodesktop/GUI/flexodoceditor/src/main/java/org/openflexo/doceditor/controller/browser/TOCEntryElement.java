@@ -30,6 +30,7 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceStatus;
+import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 
@@ -54,7 +55,7 @@ public class TOCEntryElement extends DEBrowserElement {
 
 	@Override
 	public Icon getIcon() {
-		ImageIcon icon = getElementType().getIcon();
+		ImageIcon icon = DEIconLibrary.iconForObject(getEntry());
 		if (getEntry().isReadOnly()) {
 			icon = IconFactory.getDisabledIcon(icon);
 		}

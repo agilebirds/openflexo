@@ -104,6 +104,7 @@
 		<property name="maven.classifier" value="packaging" />
 		<property name="maven.artifact.name" value="${maven.artifact.id}-${project.version}-${maven.classifier}.${maven.type}" />
 		<artifact:dependencies filesetId="maven.artifact" addArtifactFileSetRefs="true">
+			<localrepository id="local" path="${settings.localRepository}"/>
 			<dependency groupId="${maven.group.id}" artifactId="${maven.artifact.id}" version="${project.version}" type="${maven.type}" classifier="${maven.classifier}" />
 		</artifact:dependencies>
 		<copy todir="${artifact.dir}">
@@ -140,6 +141,7 @@
 
 	<target name="generateHelp">
 		<artifact:dependencies pathId="flexoant">
+			<localrepository id="local" path="${settings.localRepository}"/>
 			<dependency groupId="org.openflexo" artifactId="flexoant" version="${project.version}" type="jar" />
 		</artifact:dependencies>
 		<taskdef name="generatehelp" classname="org.openflexo.ant.GenerateHelpSetTask">

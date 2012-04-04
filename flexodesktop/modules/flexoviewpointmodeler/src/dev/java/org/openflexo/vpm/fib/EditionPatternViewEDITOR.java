@@ -49,11 +49,11 @@ public class EditionPatternViewEDITOR {
 				returned[1] = calc1.getEditionPattern("BOTDepartment");
 
 				ViewPoint calc2 = calcLibrary
-						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl");
+						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl");
 				calc2.loadWhenUnloaded();
-				returned[2] = calc2.getEditionPattern("RootOrganizationUnit");
-				returned[3] = calc2.getEditionPattern("PositionMission");
-				returned[12] = calc2.getEditionPattern("OrganizationUnitObjective");
+				returned[2] = calc2.getEditionPattern("OrganizationalUnit");
+				returned[3] = calc2.getEditionPattern("OrganizationalUnitPosition");
+				returned[12] = calc2.getEditionPattern("PositionTask");
 
 				ViewPoint calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 				calc3.loadWhenUnloaded();
@@ -71,10 +71,10 @@ public class EditionPatternViewEDITOR {
 				returned[8] = calc5.getEditionPattern("Actor");
 
 				ViewPoint calc6 = calcLibrary
-						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl");
+						.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalMap.owl");
 				calc6.loadWhenUnloaded();
-				returned[9] = calc6.getEditionPattern("LinkOrganizationUnitToParentOrganizationUnit");
-				returned[10] = calc6.getEditionPattern("LinkPositionToOrganizationUnit");
+				returned[9] = calc6.getEditionPattern("ContainsPositionLink");
+				returned[10] = calc6.getEditionPattern("SubOrganizationUnitLink");
 
 				ViewPoint calc7 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl");
 				calc7.loadWhenUnloaded();

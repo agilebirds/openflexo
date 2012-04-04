@@ -118,7 +118,7 @@ public class TestShemas extends FlexoTestCase {
 		addShema.doAction();
 
 		try {
-			addShema.getNewShema().getShemaResource().saveResourceData();
+			addShema.getNewDiagram().getShemaResource().saveResourceData();
 		} catch (SaveResourceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

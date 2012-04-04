@@ -1,8 +1,11 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 
 public class ObjectPropertyPatternRole extends PropertyPatternRole {
+
+	private String rangeURI;
 
 	@Override
 	public PatternRoleType getType() {
@@ -11,8 +14,8 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole {
 
 	@Override
 	public String getPreciseType() {
-		if (type != null) {
-			return type.getName();
+		if (getParentProperty() != null) {
+			return getParentProperty().getName();
 		}
 		return "";
 	}
@@ -22,14 +25,30 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole {
 		return OntologyObjectProperty.class;
 	}
 
-	private OntologyObjectProperty type;
-
-	public OntologyObjectProperty getOntologicType() {
-		return type;
+	@Override
+	public OntologyObjectProperty getParentProperty() {
+		return (OntologyObjectProperty) super.getParentProperty();
 	}
 
-	public void setOntologicType(OntologyObjectProperty ontologyProperty) {
-		type = ontologyProperty;
+	public void setParentProperty(OntologyObjectProperty ontologyProperty) {
+		super.setParentProperty(ontologyProperty);
+	}
+
+	public String _getRangeURI() {
+		return rangeURI;
+	}
+
+	public void _setRangeURI(String domainURI) {
+		this.rangeURI = domainURI;
+	}
+
+	public OntologyClass getRange() {
+		getCalc().loadWhenUnloaded();
+		return getOntologyLibrary().getClass(_getRangeURI());
+	}
+
+	public void setRange(OntologyClass c) {
+		_setRangeURI(c != null ? c.getURI() : null);
 	}
 
 }

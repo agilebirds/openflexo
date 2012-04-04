@@ -49,7 +49,7 @@
 	
   <entity name="org.openflexo.foundation.toc.TOCEntry" xmlTag="TOCEntry">
   	<description>Element of the hierarchy of a table of content</description>
-  	<property name="tocEntries" xmlTag="TOCEntry" primary="yes" type="vector" description="Sub elements of the hierarchy of a table of content"/>
+  	<property name="tocEntries" contains="org.openflexo.foundation.toc.TOCEntry" primary="yes" type="vector" description="Sub elements of the hierarchy of a table of content"/>
   	<property name="title" xmlTag="title" attribute="yes" description="The title of the entry of the table of content"/>
   	<property name="objectReference" xmlTag="modelObject" attribute="yes" description="The associated flexo model object reference"/>
   	<property name="identifier" xmlTag="identifier" attribute="yes" description="A unique identifier to be able to find back an automatically created entry."/>
@@ -64,5 +64,44 @@
   	<property name="lastUpdateDate" xmlTag="lastUpdate" attribute="yes" description="The last time this object was updated or one of its son"/>
   </entity>
 	
+  <entity name="org.openflexo.foundation.toc.NormalSection" xmlTag="NormalSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.PredefinedSection" xmlTag="PredefinedSection">
+  	<property name="type" xmlTag="type" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ModelObjectSection" abstract="yes">
+  	<property name="modelObjectReference" xmlTag="modelObjectReference" attribute="yes" description="The associated flexo model object reference"/>
+  	<property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ProcessSection" xmlTag="ProcessSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.RoleSection" xmlTag="RoleSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ViewSection" xmlTag="ViewSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.EntitySection" xmlTag="EntitySection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ERDiagramSection" xmlTag="ERDiagramSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.OperationScreenSection" xmlTag="OperationScreenSection">
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.ConditionalSection" xmlTag="ConditionalSection">
+  	<property name="condition" xmlTag="condition" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.IterationSection" xmlTag="IterationSection">
+  	<property name="iteratorName" xmlTag="iteratorName" attribute="yes"/>
+  	<property name="iteration" xmlTag="iteration" attribute="yes"/>
+  	<property name="condition" xmlTag="condition" attribute="yes"/>
+  </entity>
 
 </model>

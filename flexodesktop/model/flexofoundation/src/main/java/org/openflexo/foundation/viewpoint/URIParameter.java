@@ -125,9 +125,15 @@ public class URIParameter extends EditionSchemeParameter {
 			try {
 				Vector<Variable> variables = Expression.extractVariables(getBaseURI().toString());
 				for (Variable v : variables) {
-					EditionSchemeParameter p = getScheme().getParameter(v.getName());
+					String parameterName = v.getName().substring(v.getName().indexOf(".") + 1);
+					EditionSchemeParameter p = getScheme().getParameter(parameterName);
 					if (p != null) {
 						returned.add(p);
+					} else {
+						p = getScheme().getParameter(parameterName.substring(0, parameterName.indexOf(".")));
+						if (p != null) {
+							returned.add(p);
+						}
 					}
 				}
 			} catch (ParseException e) {

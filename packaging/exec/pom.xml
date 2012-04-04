@@ -21,7 +21,7 @@
     </modules>
     <properties>
         <main.class>org.openflexo.Flexo</main.class>
-        <vm.args>-Xmx512M</vm.args>
+        <vm.args>-Xmx512M -XX:MaxPermSize=128M</vm.args>
         <logging.args>-Djava.util.logging.config.file=Config/logging.properties</logging.args>
         <debug.args></debug.args>
     </properties>

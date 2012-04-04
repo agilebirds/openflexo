@@ -20,6 +20,7 @@
 package org.openflexo.fib.controller;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.File;
 import java.util.List;
@@ -39,8 +40,6 @@ import org.openflexo.fib.view.FIBView;
 public class FIBDialog<T> extends JDialog {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
-
-	private static FIBDialog _visibleDialog = null;
 
 	private FIBView view;
 
@@ -94,35 +93,25 @@ public class FIBDialog<T> extends JDialog {
 		return getController().getStatus();
 	}
 
-	protected void showDialog() {
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-		if (_visibleDialog == null) {
-			_visibleDialog = this;
-			setVisible(true);
-			toFront();
+	/**
+	 * @param flexoFrame
+	 */
+	public void center() {
+		Point center;
+		if (getOwner() != null && getOwner().isVisible()) {
+			center = new Point(getOwner().getLocationOnScreen().x + getOwner().getWidth() / 2, getOwner().getLocationOnScreen().y
+					+ getOwner().getHeight() / 2);
 		} else {
-			logger.warning("An other dialog box is already opened");
-			// _waitingDialog.add(this);
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			center = new Point(screenSize.width / 2, screenSize.height / 2);
 		}
+		setLocation(Math.max(center.x - getSize().width / 2, 0), Math.max(center.y - getSize().height / 2, 0));
 	}
 
-	@Override
-	public void dispose() {
-		super.dispose();
-		if (_visibleDialog == this) {
-			_visibleDialog = null;
-		}
-	}
-
-	@Override
-	public void setVisible(boolean b) {
-		super.setVisible(b);
-		if (!b) {
-			if (_visibleDialog == this) {
-				_visibleDialog = null;
-			}
-		}
+	public void showDialog() {
+		center();
+		setVisible(true);
+		toFront();
 	}
 
 	public static <T> FIBDialog<T> instanciateComponent(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {

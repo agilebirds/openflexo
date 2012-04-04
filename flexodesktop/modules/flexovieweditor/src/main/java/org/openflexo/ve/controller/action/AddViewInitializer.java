@@ -59,60 +59,13 @@ public class AddViewInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddView>() {
 			@Override
 			public boolean run(ActionEvent e, AddView action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.ADD_VIEW_DIALOG_FIB, action, null, true);
-				return (dialog.getStatus() == Status.VALIDATED);
-
-				/*if ((action.newShemaName != null) && (action.getFolder() != null))
+				if (action.skipChoosePopup) {
 					return true;
-
-				OEShemaFolder folder = action.getFolder();
-
-				if (folder != null) {
-
-					TextFieldParameter newShemaName = new TextFieldParameter("newShemaName", "name_of_shema", "MyShema");
-					final String CHOOSE_CALC = FlexoLocalization.localizedForKey("create_a_shema_using_an_ontology_calc");
-					final String MAKE_WITHOUT_CALC = FlexoLocalization.localizedForKey("create_a_shema_without_ontology_calc");
-					String[] modes = { CHOOSE_CALC, MAKE_WITHOUT_CALC };
-					final RadioButtonListParameter<String> modeSelector = new RadioButtonListParameter<String>("mode", "what_would_you_like_to_do", CHOOSE_CALC, modes);
-
-					final RadioButtonListParameter<OntologyCalc> availablesCalcs 
-					= new RadioButtonListParameter<OntologyCalc>(
-							"availablesCalcs",
-							"choose_a_calc",
-							ModuleLoader.getFlexoResourceCenter().retrieveCalcLibrary().getCalcs().firstElement(),
-							ModuleLoader.getFlexoResourceCenter().retrieveCalcLibrary().getCalcs());
-					availablesCalcs.setFormatter("name");
-					// This widget is visible if and only if mode is NEW_PROCESS
-					availablesCalcs.setDepends("mode");
-					availablesCalcs.setConditional("mode=" + '"' + CHOOSE_CALC + '"');
-
-					InfoLabelParameter calcInfo = new InfoLabelParameter("calcInfo", "", "") {
-						@Override
-						public String getValue() {
-							return availablesCalcs.getValue().getDescription();
-						}
-					};
-					calcInfo.setDepends("availablesCalcs,mode");
-					// This widget is visible if and only if mode is NEW_PROCESS
-					calcInfo.setDepends("mode");
-					calcInfo.setConditional("mode=" + '"' + CHOOSE_CALC + '"');
-
-					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization
-							.localizedForKey("create_new_ontology_shema"), FlexoLocalization
-							.localizedForKey("enter_parameters_for_the_new_shema"), 
-							newShemaName,
-							modeSelector,
-							availablesCalcs,
-							calcInfo);
-					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-						action.calc = availablesCalcs.getValue();
-						action.newShemaName = newShemaName.getValue();
-						return true;
-					} else {
-						return false;
-					}
+				} else {
+					FIBDialog dialog = FIBDialog.instanciateComponent(VECst.ADD_VIEW_DIALOG_FIB, action, null, true);
+					return (dialog.getStatus() == Status.VALIDATED);
 				}
-				return false;*/
+
 			}
 		};
 	}
@@ -122,7 +75,7 @@ public class AddViewInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddView>() {
 			@Override
 			public boolean run(ActionEvent e, AddView action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getNewShema());
+				getController().setCurrentEditedObjectAsModuleView(action.getNewDiagram());
 				return true;
 			}
 		};

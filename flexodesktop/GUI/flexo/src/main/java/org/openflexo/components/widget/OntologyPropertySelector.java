@@ -23,6 +23,7 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -95,7 +96,7 @@ public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyPr
 				setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
 				setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE, true);
 				setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE, true);
-				setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.HIDE);
+				setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.SHOW);
 				setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.HIDE);
 				setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.SHOW);
 				setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.SHOW);
@@ -105,7 +106,7 @@ public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyPr
 				setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
 				setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
 				setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
-				setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.HIDE);
+				setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.SHOW);
 				setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.HIDE);
 				setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.SHOW);
 				setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.SHOW);
@@ -126,8 +127,11 @@ public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyPr
 	}
 
 	@Override
-	public FlexoModelObject getRootObject() {
-		return getOntologyLibrary();
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		if (project != null && getOntologyLibrary() == null) {
+			setOntologyLibrary(project.getProjectOntologyLibrary());
+		}
 	}
 
 	private boolean hierarchicalMode = true;
@@ -138,6 +142,47 @@ public class OntologyPropertySelector extends AbstractBrowserSelector<OntologyPr
 
 	public void setHierarchicalMode(boolean hierarchicalMode) {
 		this.hierarchicalMode = hierarchicalMode;
+	}
+
+	@Override
+	public FlexoModelObject getRootObject() {
+		if (super.getRootObject() != null) {
+			return super.getRootObject();
+		} else if (getOntologyLibrary() != null) {
+			if (hierarchicalMode) {
+				return getOntologyLibrary().getRootClass();
+			} else {
+				return getOntologyLibrary();
+			}
+		}
+		return null;
+	}
+
+	public OntologyClass getDomainClass() {
+		if (getRootObject() instanceof OntologyClass) {
+			return (OntologyClass) getRootObject();
+		}
+		return null;
+	}
+
+	public void setDomainClass(OntologyClass aClass) {
+		super.setRootObject(aClass);
+	}
+
+	public String getDomainClassURI() {
+		if (getDomainClass() != null) {
+			return getDomainClass().getURI();
+		}
+		return null;
+	}
+
+	public void setDomainClassURI(String aDomainClassURI) {
+		if (getOntologyLibrary() != null) {
+			OntologyClass ontologyClass = getOntologyLibrary().getClass(aDomainClassURI);
+			if (ontologyClass != null) {
+				setDomainClass(ontologyClass);
+			}
+		}
 	}
 
 }

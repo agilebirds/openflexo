@@ -182,7 +182,7 @@ public class ViewShape extends ViewElement {
 
 			for (EditionPattern ep : calc.getEditionPatterns()) {
 				for (LinkScheme ls : ep.getLinkSchemes()) {
-					if (ls.getFromTargetEditionPattern() == getEditionPattern()) {
+					if (ls.getFromTargetEditionPattern() == getEditionPattern() && ls.getIsAvailableWithFloatingPalette()) {
 						// This candidate is acceptable
 						availableLinkSchemeFromThisShape.add(ls);
 					}

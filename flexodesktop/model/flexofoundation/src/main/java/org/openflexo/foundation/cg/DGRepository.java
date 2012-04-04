@@ -35,13 +35,14 @@ import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.PostBuildStart;
 import org.openflexo.foundation.cg.dm.PostBuildStop;
-import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
+import org.openflexo.foundation.toc.PredefinedSection;
+import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCModification;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.toc.action.AddTOCEntry;
+import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.localization.FlexoLocalization;
@@ -208,7 +209,7 @@ public class DGRepository extends GenerationRepository {
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
 		v.add(AddGeneratedCodeRepository.actionType);
-		v.add(AddTOCEntry.actionType);
+		v.add(DeprecatedAddTOCEntry.actionType);
 		return v;
 	}
 
@@ -429,7 +430,7 @@ public class DGRepository extends GenerationRepository {
 		return new File(getPostBuildDirectory(), getPostProductName());
 	}
 
-	public TOCEntry getTOCEntryWithID(DocSection id) {
+	public TOCEntry getTOCEntryWithID(PredefinedSection.PredefinedSectionType id) {
 		if (getTocRepository() != null) {
 			return getTocRepository().getTOCEntryWithID(id);
 		} else {

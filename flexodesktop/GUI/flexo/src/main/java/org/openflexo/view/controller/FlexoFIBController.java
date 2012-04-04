@@ -22,6 +22,7 @@ package org.openflexo.view.controller;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import javax.naming.InvalidNameException;
 import javax.swing.ImageIcon;
 
 import org.openflexo.Flexo;
@@ -33,12 +34,16 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
+import org.openflexo.icon.DEIconLibrary;
+import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
@@ -124,12 +129,16 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 			return WKFIconLibrary.iconForObject((WKFObject) object);
 		} else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject) object);
+		} else if (object instanceof DMObject) {
+			return DMEIconLibrary.iconForObject((DMObject) object);
 		} else if (object instanceof ViewPointLibraryObject) {
 			return VPMIconLibrary.iconForObject((ViewPointLibraryObject) object);
 		} else if (object instanceof AbstractViewObject) {
 			return VEIconLibrary.iconForObject((AbstractViewObject) object);
 		} else if (object instanceof AbstractOntologyObject) {
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
+		} else if (object instanceof TOCObject) {
+			return DEIconLibrary.iconForObject((TOCObject) object);
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
@@ -146,4 +155,21 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 		super.openFIBEditor(component, event);
 		ProgressWindow.hideProgressWindow();
 	}
+
+	/**
+	 * Called when a throwable has been raised during model code invocation.
+	 * 
+	 * @param t
+	 * @return true is exception was correctely handled
+	 */
+	@Override
+	public boolean handleException(Throwable t) {
+		if (t instanceof InvalidNameException) {
+			FlexoController.showError(FlexoLocalization.localizedForKey("invalid_name") + " : "
+					+ ((InvalidNameException) t).getExplanation());
+			return true;
+		}
+		return super.handleException(t);
+	}
+
 }

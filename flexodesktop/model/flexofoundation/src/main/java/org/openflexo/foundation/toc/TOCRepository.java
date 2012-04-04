@@ -27,16 +27,26 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
-import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
+import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.ERDiagram;
+import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
+import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.action.RemoveTOCEntry;
 import org.openflexo.foundation.toc.action.RemoveTOCRepository;
+import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.XMLDecoder;
@@ -214,12 +224,12 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public TOCEntry createObjectEntry(FlexoModelObject modelObject, DocSection identifier) {
+	public TOCEntry createObjectEntry(FlexoModelObject modelObject, PredefinedSection.PredefinedSectionType identifier) {
 		TOCEntry reply = new TOCEntry(getData(), modelObject, identifier);
 		return reply;
 	}
 
-	public TOCEntry createDefaultEntry(DocSection identifier) {
+	public TOCEntry createDefaultEntry(PredefinedSection.PredefinedSectionType identifier) {
 		TOCEntry entry = new TOCEntry(getData(), identifier);
 		entry.setTitle(identifier.getTitle());
 		entry.setIsReadOnly(identifier.getIsReadOnly());
@@ -365,5 +375,97 @@ public class TOCRepository extends TOCEntry {
 		this.logo = logo;
 		setChanged();
 		notifyObservers(new CGDataModification("logo", null, logo));
+	}
+
+	public NormalSection createNormalSection(String title, String content) {
+		NormalSection reply = new NormalSection(getData());
+		reply.setTitle(title);
+		reply.setContent(content);
+		return reply;
+	}
+
+	public PredefinedSection createPredefinedSection(String title, PredefinedSectionType predefinedSectionType) {
+		PredefinedSection reply = new PredefinedSection(getData());
+		reply.setTitle(title);
+		reply.setType(predefinedSectionType);
+		return reply;
+	}
+
+	public ConditionalSection createConditionalSection(String title, TOCDataBinding condition) {
+		ConditionalSection reply = new ConditionalSection(getData());
+		reply.setTitle(title);
+		reply.setCondition(condition);
+		return reply;
+	}
+
+	public IterationSection createIterationSection(String title, String iteratorName, TOCDataBinding iteration, TOCDataBinding condition) {
+		IterationSection reply = new IterationSection(getData());
+		reply.setTitle(title);
+		reply.setIteratorName(iteratorName);
+		reply.setIteration(iteration);
+		reply.setCondition(condition);
+		return reply;
+	}
+
+	public ProcessSection createProcessSection(String title, FlexoProcess process, TOCDataBinding value) {
+		ProcessSection reply = new ProcessSection(getData());
+		reply.setTitle(title);
+		reply.setModelObject(process);
+		reply.setValue(value);
+		return reply;
+	}
+
+	public ViewSection createViewSection(String title, ViewDefinition view, TOCDataBinding value) {
+		ViewSection reply = new ViewSection(getData());
+		reply.setTitle(title);
+		reply.setModelObject(view);
+		reply.setValue(value);
+		return reply;
+	}
+
+	public RoleSection createRoleSection(String title, Role role, TOCDataBinding value) {
+		RoleSection reply = new RoleSection(getData());
+		reply.setTitle(title);
+		reply.setModelObject(role);
+		reply.setValue(value);
+		return reply;
+	}
+
+	public EntitySection createEntitySection(String title, DMEntity entity, TOCDataBinding value) {
+		EntitySection reply = new EntitySection(getData());
+		reply.setTitle(title);
+		reply.setModelObject(entity);
+		reply.setValue(value);
+		return reply;
+	}
+
+	public OperationScreenSection createOperationScreenSection(String title, OperationComponentDefinition operationScreen,
+			TOCDataBinding value) {
+		OperationScreenSection reply = new OperationScreenSection(getData());
+		reply.setTitle(title);
+		reply.setModelObject(operationScreen);
+		reply.setValue(value);
+		return reply;
+	}
+
+	public ERDiagramSection createERDiagramSection(String title, ERDiagram diagram, TOCDataBinding value) {
+		ERDiagramSection reply = new ERDiagramSection(getData());
+		reply.setTitle(title);
+		reply.setModelObject(diagram);
+		reply.setValue(value);
+		return reply;
+	}
+
+	@Override
+	protected BindingModel buildBindingModel() {
+		BindingModel returned = new BindingModel();
+		returned.addToBindingVariables(new BindingVariableImpl(this, "project", FlexoProject.class) {
+			@Override
+			public Object getBindingValue(Object target, BindingEvaluationContext context) {
+				logger.info("What should i return for project ? target " + target + " context=" + context);
+				return super.getBindingValue(target, context);
+			}
+		});
+		return returned;
 	}
 }

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -40,6 +41,11 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddConnector;
+	}
+
+	@Override
+	public List<ConnectorPatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(ConnectorPatternRole.class);
 	}
 
 	@Override

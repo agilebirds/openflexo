@@ -19,22 +19,6 @@
  */
 package org.openflexo.ie.view.widget;
 
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
-import org.openflexo.foundation.ie.widget.IEEditableTextWidget;
-import org.openflexo.foundation.ie.widget.IETextAreaWidget;
-import org.openflexo.ie.IEPreferences;
-import org.openflexo.ie.util.TriggerRepaintDocumentListener;
-import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.logging.FlexoLogger;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.border.EtchedBorder;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -45,6 +29,22 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.BorderFactory;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.EtchedBorder;
+
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
+import org.openflexo.foundation.ie.widget.IEEditableTextWidget;
+import org.openflexo.foundation.ie.widget.IETextAreaWidget;
+import org.openflexo.ie.IEPreferences;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
+import org.openflexo.ie.view.IEWOComponentView;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author bmangez
@@ -183,7 +183,7 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 			Dimension d;
 			d = textArea.getPreferredScrollableViewportSize();
 			d.width = IETextAreaWidgetView.this.getSize().width - 2;
-			d.height += (getInsets().bottom + getInsets().top + textArea.getInsets().top + textArea.getInsets().bottom);
+			d.height += getInsets().bottom + getInsets().top + textArea.getInsets().top + textArea.getInsets().bottom;
 			return d;
 		}
 	}
@@ -211,21 +211,15 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(IEEditableTextWidget.BINDING_VALUE)) {
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals(IEEditableTextWidget.BINDING_VALUE)) {
 				updateDisplayedValue();
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				if (getParent() != null) {
-					getParent().doLayout();
-					resizeMySelf();
-					((JComponent) getParent()).repaint();
-				}
-
-			} else if (modif.propertyName().equals("value")) {
+			} else if (propertyName.equals("value")) {
 				if (getTextAreaModel().getBindingValue() == null) {
 					_jTextArea.setText(getTextAreaModel().getValue());
 				}
-			} else if (modif.propertyName().equals("rows")) {
+			} else if (propertyName.equals("rows")) {
 				resizeMySelf();
 			}
 		}

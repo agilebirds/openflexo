@@ -30,6 +30,7 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.view.action.ActionSchemeAction;
+import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -84,7 +85,7 @@ public class ActionSchemeActionInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return null;
+		return VPMIconLibrary.ACTION_SCHEME_ICON;
 	}
 
 }

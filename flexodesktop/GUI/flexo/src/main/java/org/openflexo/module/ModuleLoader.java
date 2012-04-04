@@ -37,7 +37,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.openflexo.AdvancedPrefs;
 import org.openflexo.ApplicationData;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.action.SubmitDocumentationAction;
@@ -51,6 +50,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
@@ -66,7 +66,6 @@ import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.ModuleBar;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.view.menu.WindowMenu;
 
@@ -87,8 +86,6 @@ public final class ModuleLoader implements IModuleLoader {
 	private Module switchingToModule = null;
 
 	private Module activeModule = null;
-
-	public String fileNameToOpen = null;
 
 	/**
 	 * Hashtable where are stored Module instances (instance of FlexoModule associated to a Module instance key.
@@ -123,7 +120,7 @@ public final class ModuleLoader implements IModuleLoader {
 		return _instance;
 	}
 
-	public void reloadProject() throws ProjectLoadingCancelledException, ModuleLoadingException {
+	public void reloadProject() throws ProjectLoadingCancelledException, ModuleLoadingException, ProjectInitializerException {
 		if (getProject() == null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No project currently loaded. Returning.");
@@ -145,19 +142,19 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 	}
 
-	public void openProject(File projectDirectory, Module module) throws ProjectLoadingCancelledException, ModuleLoadingException {
+	public void openProject(File projectDirectory, Module module) throws ProjectLoadingCancelledException, ModuleLoadingException,
+			ProjectInitializerException {
 		if (getProject() == null || getProjectLoader().saveProject(getProject(), true)) {
 			if (projectDirectory == null) {
 				projectDirectory = OpenProjectComponent.getProjectDirectory();
 			}
 			FlexoEditor editor = getProjectLoader().loadProject(projectDirectory);
 			FlexoProject project = editor.getProject();
-			module = loadModuleWithProject(module, project);
+			loadModuleWithProject(module, project);
 		}
 	}
 
-	private Module loadModuleWithProject(Module module, FlexoProject project) throws ModuleLoadingException,
-			ProjectLoadingCancelledException {
+	private void loadModuleWithProject(Module module, FlexoProject project) throws ModuleLoadingException, ProjectLoadingCancelledException {
 		if (module == null) {
 			if (activeModule != null) {
 				module = activeModule;
@@ -171,7 +168,6 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 		switchToModule(module, project);
 		GeneralPreferences.addToLastOpenedProjects(project.getProjectDirectory());
-		return module;
 	}
 
 	private ProjectLoader getProjectLoader() {
@@ -244,17 +240,6 @@ public final class ModuleLoader implements IModuleLoader {
 			if (module.getModuleClass() != null) {
 				registerModule(module);
 			}
-		}
-		try {
-			ModuleLoader.setLookAndFeel(AdvancedPrefs.getLookAndFeelString());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
 		}
 		if (GeneralPreferences.getLanguage() != null && GeneralPreferences.getLanguage().equals(Language.FRENCH)) {
 			Locale.setDefault(Locale.FRANCE);
@@ -570,30 +555,6 @@ public final class ModuleLoader implements IModuleLoader {
 			logger.info("Exiting FLEXO Application Suite... DONE");
 		}
 		System.exit(0);
-	}
-
-	/**
-	 * Loads the project located within <code>projectDirectory</code> and then switches automatically to the given module
-	 * <code> moduleToReload </code> or WKFModule if moduleToReload is null or not available.
-	 * 
-	 * @param editor
-	 *            the editor for the project. Cannot be null.
-	 * @param moduleToReload
-	 *            the module to reload. Can be null.
-	 * @return the editor of the loaded project. (i.e. argument editor)
-	 * @throws ModuleLoadingException
-	 *             when the module can't be loaded (various causes)
-	 */
-	public InteractiveFlexoEditor openProjectWithModule(InteractiveFlexoEditor editor, Module moduleToReload) throws ModuleLoadingException {
-		if (editor == null) {
-			return null;
-		}
-		if (moduleToReload == null || !isAvailable(moduleToReload)) {
-			moduleToReload = Module.WKF_MODULE;
-		}
-		activeModule = null;
-		switchToModule(moduleToReload, editor.getProject());
-		return editor;
 	}
 
 	/**

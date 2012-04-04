@@ -24,7 +24,7 @@ import org.openflexo.foundation.DataModification;
 public class ImportedProcessLibraryCreated extends DataModification {
 
 	public ImportedProcessLibraryCreated() {
-		super(-1, null, null);
+		super(null, null);
 	}
 
 }

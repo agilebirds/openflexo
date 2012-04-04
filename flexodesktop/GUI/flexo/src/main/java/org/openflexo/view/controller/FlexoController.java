@@ -1625,7 +1625,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 					action.setValue(value);
 					action.setLocalizedPropertyName(localizedPropertyName);
 					action.doAction();
-					return action.hasActionExecutionSucceeded();
+					return action.hasActionExecutionSucceeded() && action.getThrownException() == null;
 				} else if (target != null) {
 					target.setObjectForKey(value, key);
 				} else {
@@ -1790,7 +1790,6 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			WebServiceURLDialog data = new WebServiceURLDialog();
 			data.setClientParameter(params);
 			FIBDialog dialog = FIBDialog.instanciateComponent(WebServiceURLDialog.FIB_FILE, data, getFlexoFrame(), true);
-
 			if (dialog.getStatus() == Status.VALIDATED) {
 				if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
 					params.setWSURL(params.getWSInstance().getWSURL());
@@ -1816,8 +1815,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				if (params.getWSLogin() != null) {
 					AdvancedPrefs.setWebServiceLogin(params.getWSLogin());
 				}
-				if (params.getWSLogin() != null) {
-					AdvancedPrefs.setWebServiceMd5Password(params.getWSLogin());
+				if (params.getWSPassword() != null) {
+					AdvancedPrefs.setWebServiceMd5Password(params.getWSPassword());
 				}
 				AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(params.getRemember());
 				AdvancedPrefs.save();

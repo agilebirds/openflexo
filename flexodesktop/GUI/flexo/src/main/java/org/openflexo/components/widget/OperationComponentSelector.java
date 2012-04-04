@@ -36,6 +36,10 @@ import org.openflexo.view.controller.FlexoController;
  */
 public class OperationComponentSelector extends AbstractComponentSelector<OperationComponentDefinition> {
 
+	public OperationComponentSelector(OperationComponentDefinition operationComponent) {
+		this(operationComponent != null ? operationComponent.getProject() : null, operationComponent);
+	}
+
 	public OperationComponentSelector(FlexoProject project, OperationComponentDefinition operationComponent) {
 		super(project, operationComponent, OperationComponentDefinition.class);
 	}

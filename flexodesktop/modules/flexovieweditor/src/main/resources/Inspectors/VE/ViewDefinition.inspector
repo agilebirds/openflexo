@@ -5,8 +5,8 @@
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="calc" localize="true" name="CalcnameLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Calcname" data="data.calc.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+      <Label label="viewpoint" localize="true" name="ViewpointnameLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.calc.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -15,10 +15,10 @@
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="name" lang="French">Nom</Localized>
     <Localized key="name" lang="Dutch">Name</Localized>
-    <Localized key="calc" lang="English">Calc</Localized>
-    <Localized key="calc" lang="French">Calque</Localized>
-    <Localized key="calc" lang="Dutch">Calc</Localized>
+    <Localized key="viewpoint" lang="English">View point</Localized>
+    <Localized key="viewpoint" lang="French">Point de vue</Localized>
+    <Localized key="viewpoint" lang="Dutch">View point</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Shema" />
+  <Parameter name="title" value="View" />
 </Panel>
 

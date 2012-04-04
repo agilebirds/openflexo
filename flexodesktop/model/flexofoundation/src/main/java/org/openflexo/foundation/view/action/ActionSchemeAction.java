@@ -27,7 +27,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.viewpoint.ActionScheme;
+import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
 public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> {
@@ -42,7 +42,7 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 		this.actionType = actionType;
 	}
 
-	public ActionScheme getActionScheme() {
+	public AbstractActionScheme getActionScheme() {
 		if (actionType != null) {
 			return actionType.getActionScheme();
 		}

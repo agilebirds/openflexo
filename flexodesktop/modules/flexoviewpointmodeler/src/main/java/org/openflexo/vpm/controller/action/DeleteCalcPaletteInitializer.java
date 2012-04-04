@@ -19,14 +19,17 @@
  */
 package org.openflexo.vpm.controller.action;
 
+import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.viewpoint.action.DeleteViewPointPalette;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.vpm.controller.CEDController;
 
 public class DeleteCalcPaletteInitializer extends ActionInitializer {
 
@@ -44,6 +47,22 @@ public class DeleteCalcPaletteInitializer extends ActionInitializer {
 	@Override
 	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
+	}
+
+	@Override
+	public CEDController getController() {
+		return (CEDController) super.getController();
+	}
+
+	@Override
+	protected FlexoActionFinalizer<DeleteViewPointPalette> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeleteViewPointPalette>() {
+			@Override
+			public boolean run(ActionEvent e, DeleteViewPointPalette action) {
+				getController().unregisterResource(action.getFocusedObject());
+				return true;
+			}
+		};
 	}
 
 }

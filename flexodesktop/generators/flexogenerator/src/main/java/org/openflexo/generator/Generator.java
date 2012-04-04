@@ -136,6 +136,12 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public AbstractProjectGenerator<R> getProjectGenerator() {
 		return projectGenerator;
 	}
@@ -196,15 +202,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		context.put("falseValue", Boolean.FALSE);
 		context.put("toolbox", new ToolBox());
 		context.put("javaUtils", new JavaUtils());
-		context.put("globalVariableMap", new HashMap<String, Object>() {
-			@Override
-			public Object put(String key, Object value) {
-				if (value == null) {
-					System.err.println("coucou");
-				}
-				return super.put(key, value);
-			}
-		});
+		context.put("globalVariableMap", new HashMap<String, Object>());
 		context.put("today", new Date());
 		return context;
 	}
@@ -330,7 +328,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			CGTemplate template = templateWithName(templateRelativePath);
 
 			Velocity.setApplicationAttribute("templateLocator", getTemplateLocator());
-			Velocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
+			FlexoVelocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
 			Velocity.setApplicationAttribute("templateLocator", null);
 
 		} catch (TemplateNotFoundException e) {

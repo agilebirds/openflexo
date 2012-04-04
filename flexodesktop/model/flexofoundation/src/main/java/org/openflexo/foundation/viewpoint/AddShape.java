@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -39,6 +40,11 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddShape;
+	}
+
+	@Override
+	public List<ShapePatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(ShapePatternRole.class);
 	}
 
 	@Override

@@ -124,8 +124,7 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 
 	protected void notifyModification(String key, Object oldValue, Object newValue, boolean isReentrant) {
 		setChanged();
-		int modifType = DataModification.ATTRIBUTE;
-		DataModification dataModification = new DataModification(modifType, key, oldValue, newValue);
+		DataModification dataModification = new DataModification(key, oldValue, newValue);
 		if (isReentrant) {
 			dataModification.setReentrant(isReentrant);
 		}
@@ -244,13 +243,13 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 	 * @param classeToMatch
 	 * @return a Vector of all embedded IEWidget matching the classe specified: recursive method (Note must include itself in this vector)
 	 */
-	public Vector<IEWidget> getAllEmbeddedIEWidgets(Class<? extends IEWidget> classeToMatch) {
-		Vector<IEWidget> reply = new Vector<IEWidget>();
+	public <T extends IEWidget> Vector<T> getAllEmbeddedIEWidgets(Class<T> classeToMatch) {
+		Vector<T> reply = new Vector<T>();
 		Enumeration en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
 			if (classeToMatch.isAssignableFrom(widget.getClass())) {
-				reply.add((IEWidget) widget);
+				reply.add((T) widget);
 			}
 		}
 		return reply;

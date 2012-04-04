@@ -99,9 +99,7 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 				checkAndUpdateDimensionIfRequired();
 			} else if (dataModification instanceof ObjectLocationChanged) {
-				if (!isUpdatingPosition) {
-					handlePositionChanged();
-				}
+				handlePositionChanged();
 			} else if (dataModification instanceof LabelLocationChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
@@ -110,9 +108,17 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 	}
 
 	private void handlePositionChanged() {
-		checkAndUpdateLocationIfRequired();
-		notifyObjectMoved();
-		notifyShapeNeedsToBeRedrawn();
+		if (isUpdatingPosition) {
+			return;
+		}
+		isUpdatingPosition = true;
+		try {
+			checkAndUpdateLocationIfRequired();
+			notifyObjectMoved();
+			notifyShapeNeedsToBeRedrawn();
+		} finally {
+			isUpdatingPosition = false;
+		}
 	}
 
 	@Override

@@ -51,6 +51,7 @@ import org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -191,11 +192,19 @@ public class FIBInspector extends FIBPanel {
 		if (object.getEditionPatternReferences() != null) {
 			for (int refIndex = 0; refIndex < object.getEditionPatternReferences().size(); refIndex++) {
 				EditionPatternReference ref = object.getEditionPatternReferences().get(refIndex);
-				EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
-				FIBTab newTab = makeFIBTab(ref.getEditionPattern(), refIndex);
-				currentEditionPatterns.add(ref.getEditionPattern());
-				tabsForEP.put(ref.getEditionPattern(), newTab);
-				getTabPanel().addToSubComponents(newTab);
+				if (ref == null) {
+					logger.warning("Cannot find reference for EditionPattern refIndex=" + refIndex + ". Please investigate...");
+				} else {
+					if (ref.getEditionPattern() == null) {
+						logger.warning("Found reference for null EditionPattern refIndex=" + refIndex + ". Please investigate...");
+					} else {
+						EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
+						FIBTab newTab = makeFIBTab(ref.getEditionPattern(), refIndex);
+						currentEditionPatterns.add(ref.getEditionPattern());
+						tabsForEP.put(ref.getEditionPattern(), newTab);
+						getTabPanel().addToSubComponents(newTab);
+					}
+				}
 			}
 			updateBindingModel();
 		}
@@ -218,7 +227,7 @@ public class FIBInspector extends FIBPanel {
 		}
 	}
 
-	private FIBWidget makeWidget(InspectorEntry entry, FIBTab newTab, int index) {
+	private FIBWidget makeWidget(final InspectorEntry entry, FIBTab newTab, int index) {
 		if (entry instanceof TextFieldInspectorEntry) {
 			FIBTextField tf = new FIBTextField();
 			tf.validateOnReturn = true; // Avoid to many ontologies manipulations
@@ -246,13 +255,14 @@ public class FIBInspector extends FIBPanel {
 			individualSelector.setComponentClass(org.openflexo.components.widget.OntologyIndividualSelector.class);
 			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.project"),
 					new DataBinding("data.project"), true));
-			/*individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.ontologyClass"),
-					new DataBinding("parameters." + parameter.getName() + ".concept") {
+			// Quick and dirty hack to configure IndividualSelector: refactor this when new binding model will be in use
+			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.ontologyClassURI"),
+					new DataBinding('"' + ((IndividualInspectorEntry) entry)._getConceptURI() + '"') {
 						@Override
 						public BindingFactory getBindingFactory() {
-							return parameter.getBindingFactory();
+							return entry.getBindingFactory();
 						}
-					}, true));*/
+					}, true));
 			newTab.addToSubComponents(individualSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return individualSelector;
 		} else if (entry instanceof ClassInspectorEntry) {
@@ -260,15 +270,31 @@ public class FIBInspector extends FIBPanel {
 			classSelector.setComponentClass(org.openflexo.components.widget.OntologyClassSelector.class);
 			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.project"), new DataBinding(
 					"data.project"), true));
-			/*individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.ontologyClass"),
-					new DataBinding("parameters." + parameter.getName() + ".concept") {
+			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
+			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.parentClassURI"),
+					new DataBinding('"' + ((ClassInspectorEntry) entry)._getConceptURI() + '"') {
 						@Override
 						public BindingFactory getBindingFactory() {
-							return parameter.getBindingFactory();
+							return entry.getBindingFactory();
 						}
-					}, true));*/
+					}, true));
 			newTab.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return classSelector;
+		} else if (entry instanceof PropertyInspectorEntry) {
+			FIBCustom propertySelector = new FIBCustom();
+			propertySelector.setComponentClass(org.openflexo.components.widget.OntologyPropertySelector.class);
+			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.project"),
+					new DataBinding("data.project"), true));
+			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
+			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
+					new DataBinding('"' + ((PropertyInspectorEntry) entry)._getDomainURI() + '"') {
+						@Override
+						public BindingFactory getBindingFactory() {
+							return entry.getBindingFactory();
+						}
+					}, true));
+			newTab.addToSubComponents(propertySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			return propertySelector;
 		} else if (entry instanceof FlexoObjectInspectorEntry) {
 			FlexoObjectInspectorEntry foEntry = (FlexoObjectInspectorEntry) entry;
 			switch (foEntry.getFlexoObjectType()) {

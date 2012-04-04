@@ -204,7 +204,7 @@ public class IERadioButtonWidget extends IEControlWidget implements Serializable
 		this._value = value;
 		if (!isDeserializing()) {
 			setChanged();
-			notifyObservers(new DataModification(DataModification.ATTRIBUTE, ATTRIB_DEFAULTVALUE_NAME, null, null));
+			notifyObservers(new DataModification(ATTRIB_DEFAULTVALUE_NAME, null, null));
 		}
 	}
 

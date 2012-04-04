@@ -1,51 +1,90 @@
 <rdf:RDF
+    xmlns:j.0="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:j.0="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#"
+    xmlns:j.1="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-    xmlns:j.1="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#"
+    xmlns:j.2="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
-  <rdf:Description rdf:about="">
-    <owl:imports rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+  <rdf:Description rdf:about="#OrganizationalUnit2">
+    <j.0:organizationUnitName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Production</j.0:organizationUnitName>
+    <rdf:type rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnit"/>
   </rdf:Description>
-  <rdf:Description rdf:about="#Worker2">
-    <j.1:worksIn rdf:resource="#B"/>
-    <j.1:roleName>Worker2</j.1:roleName>
-    <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTWorker"/>
+  <rdf:Description rdf:about="#OrganizationalUnit1">
+    <j.0:containsPosition rdf:resource="#Position2"/>
+    <j.0:containsPosition rdf:resource="#Position1"/>
+    <j.0:organizationUnitName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">R&amp;D</j.0:organizationUnitName>
+    <rdf:type rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnit"/>
   </rdf:Description>
-  <rdf:Description rdf:about="#A">
-    <j.1:companyName>A</j.1:companyName>
-    <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#B">
-    <j.1:isContainedIn rdf:resource="#A"/>
-    <j.1:name>B</j.1:name>
-    <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment"/>
+  <rdf:Description rdf:about="#Position1">
+    <j.0:isInvolvedInOrganizationUnit rdf:resource="#OrganizationalUnit1"/>
+    <j.0:positionName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Manager</j.0:positionName>
+    <rdf:type rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position"/>
   </rdf:Description>
   <rdf:Description rdf:about="#X">
-    <j.1:isContainedIn rdf:resource="#B"/>
-    <j.1:name>X</j.1:name>
     <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTSubDepartment"/>
+    <j.2:name>X</j.2:name>
+    <j.2:isContainedIn rdf:resource="#B"/>
   </rdf:Description>
   <rdf:Description rdf:about="#Y">
-    <j.1:isContainedIn rdf:resource="#C"/>
-    <j.1:name>Y</j.1:name>
     <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTSubDepartment"/>
+    <j.2:name>Y</j.2:name>
+    <j.2:isContainedIn rdf:resource="#C"/>
   </rdf:Description>
-  <rdf:Description rdf:about="#Z">
-    <j.1:isContainedIn rdf:resource="#A"/>
-    <j.1:name>Z</j.1:name>
-    <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment"/>
+  <rdf:Description rdf:about="#Position2">
+    <j.0:isInvolvedInOrganizationUnit rdf:resource="#OrganizationalUnit1"/>
+    <j.0:positionName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Developer</j.0:positionName>
+    <rdf:type rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position"/>
   </rdf:Description>
   <rdf:Description rdf:about="#Worker">
-    <j.1:worksIn rdf:resource="#B"/>
-    <j.1:roleName>Worker</j.1:roleName>
     <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTWorker"/>
+    <j.2:roleName>Worker</j.2:roleName>
+    <j.2:worksIn rdf:resource="#B"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <owl:imports rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <owl:imports rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#OrganizationalUnit1Mission">
+    <j.0:missionDescription>&lt;Describe the mission here&gt;</j.0:missionDescription>
+    <j.0:missionName>Mission</j.0:missionName>
+    <rdf:type rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnitMission"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Worker2">
+    <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTWorker"/>
+    <j.2:roleName>Worker2</j.2:roleName>
+    <j.2:worksIn rdf:resource="#B"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#A">
+    <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany"/>
+    <j.2:companyName>A</j.2:companyName>
+  </rdf:Description>
+  <rdf:Description rdf:about="#OrganizationalUnit">
+    <j.0:containsPosition rdf:resource="#Position"/>
+    <j.0:hasSubOrgUnit rdf:resource="#OrganizationalUnit2"/>
+    <j.0:hasSubOrgUnit rdf:resource="#OrganizationalUnit1"/>
+    <j.0:organizationUnitName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AgileBirds</j.0:organizationUnitName>
+    <rdf:type rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#OrganizationalUnit"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#B">
+    <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment"/>
+    <j.2:name>B</j.2:name>
+    <j.2:isContainedIn rdf:resource="#A"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Position">
+    <j.0:positionName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CEO</j.0:positionName>
+    <j.0:isInvolvedInOrganizationUnit rdf:resource="#OrganizationalUnit"/>
+    <rdf:type rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Z">
+    <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment"/>
+    <j.2:name>Z</j.2:name>
+    <j.2:isContainedIn rdf:resource="#A"/>
   </rdf:Description>
   <rdf:Description rdf:about="#C">
-    <j.1:isContainedIn rdf:resource="#A"/>
-    <j.1:name>C</j.1:name>
     <rdf:type rdf:resource="/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment"/>
+    <j.2:name>C</j.2:name>
+    <j.2:isContainedIn rdf:resource="#A"/>
   </rdf:Description>
 </rdf:RDF>

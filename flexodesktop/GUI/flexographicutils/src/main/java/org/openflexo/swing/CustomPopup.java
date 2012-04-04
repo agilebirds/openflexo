@@ -116,9 +116,8 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	protected abstract JComponent buildFrontComponent();
 
 	public CustomPopup(T editedObject) {
-		super();
+		super(new BorderLayout());
 		_editedObject = editedObject;
-		setLayout(new BorderLayout());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			_downButton = new JButton(UtilsIconLibrary.CUSTOM_POPUP_BUTTON);
 		} else {
@@ -213,7 +212,11 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 	public ResizablePanel getCustomPanel() {
 		if (_customPanel == null) {
-			_customPanel = createCustomPanel(getEditedObject());
+			try {
+				_customPanel = createCustomPanel(getEditedObject());
+			} catch (ClassCastException e) {
+				_customPanel = createCustomPanel(null);
+			}
 			_customPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		}
 		return _customPanel;
@@ -262,7 +265,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			private Point parentPosition;
 
 			public ParentPopupMoveListener() {
-				if (CustomJPopupMenu.this.getOwner().isVisible()) {
+				if (CustomJPopupMenu.this.getOwner() != null && CustomJPopupMenu.this.getOwner().isVisible()) {
 					parentPosition = CustomJPopupMenu.this.getOwner().getLocationOnScreen();
 				}
 			}
@@ -447,6 +450,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
+					if (_popup == null) {
+						return;
+					}
 					Window oppositeWindow = e.getOppositeWindow();
 					if (!(oppositeWindow instanceof CustomPopup.CustomJPopupMenu) && oppositeWindow != null
 							&& oppositeWindow.getOwner() instanceof CustomPopup.CustomJPopupMenu) {
@@ -645,6 +651,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 				@Override
 				public void mouseMoved(MouseEvent e) {
+					if (_popup == null) {
+						return;
+					}
 					if (getResizeRectangle().contains(e.getPoint())) {
 						_popup.setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
 					} else {
@@ -659,6 +668,9 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 				}
 
 				public Rectangle getResizeRectangle() {
+					if (_popup == null) {
+						return new Rectangle();
+					}
 					Rectangle r = _popup.getBounds();
 					int size = 3 * (BULLET_SIZE + BULLET_SPACING);
 					r.x = r.width - size;
@@ -727,7 +739,11 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	}
 
 	public void fireEditedObjectChanged() {
-		updateCustomPanel(getEditedObject());
+		try {
+			updateCustomPanel(getEditedObject());
+		} catch (ClassCastException e) {
+			updateCustomPanel(null);
+		}
 	}
 
 	public abstract void updateCustomPanel(T editedObject);

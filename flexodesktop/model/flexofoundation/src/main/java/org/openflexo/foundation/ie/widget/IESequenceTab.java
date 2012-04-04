@@ -185,7 +185,7 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 	private void deleteTabWidgets() {
 		Enumeration en = ((Vector) getAllTabs().clone()).elements();
 		while (en.hasMoreElements()) {
-			IETabWidget tab = ((IETabWidget) en.nextElement());
+			IETabWidget tab = (IETabWidget) en.nextElement();
 			tab.delete();
 		}
 	}
@@ -294,7 +294,7 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 	public void setTitle(String title) {
 		_title = title;
 		setChanged();
-		notifyObservers(new DataModification(DataModification.ATTRIBUTE, "title", null, title));
+		notifyObservers(new DataModification("title", null, title));
 	}
 
 	@Override
@@ -331,7 +331,7 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 			index = size();
 		}
 		IETabWidget tabWidget = new IETabWidget(getWOComponent(), tabComponentDefinition, this, getProject());
-		tabWidget.setTitle((tabTitle == null || tabTitle.trim().length() == 0) ? tabComponentDefinition.getComponentName() : tabTitle);
+		tabWidget.setTitle(tabTitle == null || tabTitle.trim().length() == 0 ? tabComponentDefinition.getComponentName() : tabTitle);
 		tabWidget.setKey(tabComponentDefinition.getComponentName());
 		tabWidget.setIndex(index);
 		insertElementAt(tabWidget, index);

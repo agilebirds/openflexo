@@ -32,6 +32,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -428,6 +429,13 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	public void delete() {
 		isDeleted = true;
 		getProject().removeResource(this);
+		setChanged();
+		notifyObservers(new DataModification(DELETED_PROPERTY, this, null));
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return DELETED_PROPERTY;
 	}
 
 	public boolean isDeleted() {

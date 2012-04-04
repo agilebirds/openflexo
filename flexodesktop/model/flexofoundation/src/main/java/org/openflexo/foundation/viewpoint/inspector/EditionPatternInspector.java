@@ -167,6 +167,22 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 		return newEntry;
 	}
 
+	public ObjectPropertyInspectorEntry createNewObjectProperty() {
+		ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry();
+		newEntry.setName("property");
+		// newEntry.setLabel("class");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
+	public DataPropertyInspectorEntry createNewDataProperty() {
+		DataPropertyInspectorEntry newEntry = new DataPropertyInspectorEntry();
+		newEntry.setName("property");
+		// newEntry.setLabel("class");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
 	public FlexoObjectInspectorEntry createNewFlexoObject() {
 		FlexoObjectInspectorEntry newEntry = new FlexoObjectInspectorEntry();
 		newEntry.setName("flexoObject");

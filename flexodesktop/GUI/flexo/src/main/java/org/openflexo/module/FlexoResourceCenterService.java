@@ -20,6 +20,7 @@
 package org.openflexo.module;
 
 import java.io.File;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.GeneralPreferences;
@@ -64,7 +65,7 @@ public class FlexoResourceCenterService {
 	}
 
 	public FlexoResourceCenter createAndSetFlexoResourceCenter(File dir) {
-		LocalResourceCenterImplementation rc = LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(dir);
+		FlexoResourceCenter rc = LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(dir);
 		installFlexoResourceCenter(rc);
 		return rc;
 	}
@@ -76,7 +77,8 @@ public class FlexoResourceCenterService {
 				if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 					AskLocalResourceCenterDirectory data = new AskLocalResourceCenterDirectory();
 					data.setLocalResourceDirectory(FlexoProject.getResourceCenterFile());
-					FIBDialog dialog = FIBDialog.instanciateComponent(AskLocalResourceCenterDirectory.FIB_FILE, data, null, true);
+					FIBDialog<AskLocalResourceCenterDirectory> dialog = FIBDialog.instanciateComponent(
+							AskLocalResourceCenterDirectory.FIB_FILE, data, null, true);
 					switch (dialog.getStatus()) {
 					case VALIDATED:
 						if (data.getLocalResourceDirectory() != null) {
@@ -91,6 +93,7 @@ public class FlexoResourceCenterService {
 						}
 						break;
 					case CANCELED:
+						// I think that this should not be allowed.
 						break;
 					case QUIT:
 						try {
@@ -116,6 +119,13 @@ public class FlexoResourceCenterService {
 				}
 			} else if (flexoResourceCenter == null) {
 				flexoResourceCenter = new LocalResourceCenterImplementation(GeneralPreferences.getLocalResourceCenterDirectory());
+			}
+			if (flexoResourceCenter != null) {
+				flexoResourceCenter.update();
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("No resource center chosen. This is likely to cause problems.");
+				}
 			}
 		}
 		return flexoResourceCenter;

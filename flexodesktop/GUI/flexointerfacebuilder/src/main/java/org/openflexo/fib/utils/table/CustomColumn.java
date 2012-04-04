@@ -108,7 +108,7 @@ public abstract class CustomColumn<D extends Observable, T> extends AbstractColu
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			D rowObject = elementAt(row);
-			if ((isSelected) && (hasFocus)) {
+			if (isSelected && hasFocus) {
 				CustomPopup<T> returned = getViewSelector(rowObject, (T) value);
 				if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 					setComponentBackground(returned, hasFocus, isSelected, row, column);
@@ -156,6 +156,7 @@ public abstract class CustomColumn<D extends Observable, T> extends AbstractColu
 		public SelectorCellEditor() {
 			_selector = getEditSelector(null, null);
 			_selector.getTextField().setBorder(null);
+			_selector.setBorder(null);
 			_selector.addApplyCancelListener(this);
 		}
 
@@ -185,9 +186,10 @@ public abstract class CustomColumn<D extends Observable, T> extends AbstractColu
 					table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 				}
 			});
-			_selector.getTextField().setBorder(null);
 			setEditedRowObject(elementAt(row));
 			_selector = getEditSelector(elementAt(row), (T) value);
+			_selector.getTextField().setBorder(null);
+			_selector.setBorder(null);
 			/*
 			 * _selector.setEditedObject((T)value); _selector.setRevertValue((T)
 			 * value);

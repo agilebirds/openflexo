@@ -19,6 +19,23 @@
  */
 package org.openflexo.ie.view.widget;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ie.dm.CSSChanged;
@@ -31,22 +48,6 @@ import org.openflexo.ie.util.TriggerRepaintDocumentListener;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.listener.DoubleClickResponder;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JEditorPane;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author bmangez
@@ -137,17 +138,15 @@ public class IEStringWidgetView extends AbstractInnerTableWidgetView<IEStringWid
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
+		String propertyName = modif.propertyName();
 		if (modif instanceof CSSChanged) {
 			jLabel.setFont(getModel().getTextCSSClass().font());
-		} else if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(BINDING_VALUE_NAME) || modif.propertyName().equals("bindingValue")) {
+		} else if (propertyName != null) {
+			if (propertyName.equals(BINDING_VALUE_NAME) || propertyName.equals("bindingValue")) {
 				updateDisplayedValue();
-			} else if (modif.propertyName().equals("cssClass")) {
+			} else if (propertyName.equals("cssClass")) {
 				jLabel.setFont(getModel().getTextCSSClass().font());
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				getParent().doLayout();
-				((JComponent) getParent()).repaint();
-			} else if (modif.propertyName().equals("isHTML") || modif.propertyName().equals("fieldType")) {
+			} else if (propertyName.equals("isHTML") || propertyName.equals("fieldType")) {
 				updateDisplayedValue();
 			}
 		}

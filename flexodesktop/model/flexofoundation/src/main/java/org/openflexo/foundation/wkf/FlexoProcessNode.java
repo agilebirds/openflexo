@@ -231,6 +231,7 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 
 	public void clearOrphanProcesses() {
 		orphanProcesses = null;
+		getPropertyChangeSupport().firePropertyChange("sortedOrphanSubprocesses", this.orphanProcesses, null);
 	}
 
 	@Override
@@ -334,7 +335,7 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	}
 
 	public File getFile() {
-		if ((getProcess() != null) && (getProcess().getFlexoResource() != null)) {
+		if (getProcess() != null && getProcess().getFlexoResource() != null) {
 			return getProcess().getFlexoResource().getFile();
 		}
 		return null;

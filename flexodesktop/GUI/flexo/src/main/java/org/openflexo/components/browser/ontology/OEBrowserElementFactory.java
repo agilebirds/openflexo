@@ -89,13 +89,13 @@ public class OEBrowserElementFactory implements BrowserElementFactory {
 		} else if (object instanceof ExampleDrawingConnector) {
 			return new CalcDrawingConnectorBrowserElement((ExampleDrawingConnector) object, browser, parent);
 		} else if (object instanceof ViewLibrary) {
-			return new ShemaLibraryElement((ViewLibrary) object, browser, parent);
+			return new ViewLibraryElement((ViewLibrary) object, browser, parent);
 		} else if (object instanceof ViewFolder) {
-			return new ShemaFolderElement((ViewFolder) object, browser, parent);
+			return new ViewFolderElement((ViewFolder) object, browser, parent);
 		} else if (object instanceof ViewDefinition) {
-			return new ShemaDefinitionElement((ViewDefinition) object, browser, parent);
+			return new ViewDefinitionElement((ViewDefinition) object, browser, parent);
 		} else if (object instanceof View) {
-			return new OEShemaElement((View) object, browser, parent);
+			return new ViewElement((View) object, browser, parent);
 		} else if (object instanceof ViewShape) {
 			return new OEShapeElement((ViewShape) object, browser, parent);
 		} else if (object instanceof ViewConnector) {

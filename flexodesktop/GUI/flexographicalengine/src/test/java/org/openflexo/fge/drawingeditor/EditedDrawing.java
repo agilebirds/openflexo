@@ -28,21 +28,15 @@ import org.openflexo.logging.FlexoLogger;
 public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());
 
-	private MyDrawingGraphicalRepresentation gr;
 	private MyDrawingController controller;
 
 	public EditedDrawing(MyDrawing drawing) {
 		super(drawing);
-		gr = new MyDrawingGraphicalRepresentation(this);
 	}
 
 	@Override
 	public MyDrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
-		return gr;
-	}
-
-	public void setDrawingGraphicalRepresentation(MyDrawingGraphicalRepresentation aGR) {
-		gr = aGR;
+		return getModel().getGraphicalRepresentation();
 	}
 
 	@Override
@@ -57,7 +51,7 @@ public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 		if (aDrawable instanceof MyConnector) {
 			return (GraphicalRepresentation<O>) ((MyConnector) aDrawable).getGraphicalRepresentation();
 		}
-		(new Exception()).printStackTrace();
+		new Exception().printStackTrace();
 		return null;
 	}
 

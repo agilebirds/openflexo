@@ -33,12 +33,24 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionSchemeParameter extends ViewPointObject {
+public abstract class EditionSchemeParameter extends ViewPointObject implements InspectorBindingAttribute {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
 	public static enum WidgetType {
-		URI, TEXT_FIELD, LOCALIZED_TEXT_FIELD, TEXT_AREA, INTEGER, FLOAT, CHECKBOX, DROPDOWN, INDIVIDUAL, CLASS, FLEXO_OBJECT;
+		URI,
+		TEXT_FIELD,
+		LOCALIZED_TEXT_FIELD,
+		TEXT_AREA,
+		INTEGER,
+		FLOAT,
+		CHECKBOX,
+		DROPDOWN,
+		INDIVIDUAL,
+		CLASS,
+		OBJECT_PROPERTY,
+		DATA_PROPERTY,
+		FLEXO_OBJECT;
 	}
 
 	private String name;
@@ -171,7 +183,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getScheme().getParametersBindingModel();
+		return getScheme().getBindingModel();
 	}
 
 	public ViewPointDataBinding getDefaultValue() {

@@ -854,7 +854,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		if (aProcess == null) {
 			logger.warning("Null not authorized as root process !");
 			setChanged();
-			notifyObserversAsReentrantModification(new DataModification(-1, "rootProcess", getRootProcess(), getRootProcess()));
+			notifyObserversAsReentrantModification(new DataModification("rootProcess", getRootProcess(), getRootProcess()));
 			return;
 		}
 		_setRootProcessNode(aProcess.getProcessNode());

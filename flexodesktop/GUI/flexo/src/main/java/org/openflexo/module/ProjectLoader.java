@@ -34,7 +34,6 @@ import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.ch.FCH;
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveDialog;
 import org.openflexo.foundation.param.CheckboxParameter;
@@ -91,20 +90,6 @@ public final class ProjectLoader {
 		return _instance;
 	}
 
-	public InteractiveFlexoEditor askProjectDirectoryAndLoad() throws ProjectLoadingCancelledException {
-		InteractiveFlexoEditor loadedProject = null;
-		while (loadedProject == null) {
-			File projectDirectory = OpenProjectComponent.getProjectDirectory();
-			// The following line is the default line to call when we want
-			// to open a project from a GUI (Interactive mode) so that
-			// resource update handling is properly initialized. Additional
-			// small stuffs can be performed in that call so that projects
-			// are always opened the same way.
-			loadedProject = loadProject(projectDirectory);
-		}
-		return loadedProject;
-	}
-
 	/**
 	 * Loads the project located withing <code> projectDirectory </code>. The following method is the default methode to call when opening a
 	 * project from a GUI (Interactive mode) so that resource update handling is properly initialized. Additional small stuffs can be
@@ -115,10 +100,14 @@ public final class ProjectLoader {
 	 * @return the {@link InteractiveFlexoEditor} editor if the opening succeeded else <code>null</code>
 	 * @throws org.openflexo.foundation.utils.ProjectLoadingCancelledException
 	 *             whenever the load procedure is interrupted by the user or by Flexo.
+	 * @throws ProjectInitializerException
 	 */
-	public InteractiveFlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException {
-		if (projectDirectory == null || !projectDirectory.exists()) {
-			throw new IllegalArgumentException("Project directory cannot be null and must exists.");
+	public InteractiveFlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
+		if (projectDirectory == null) {
+			throw new IllegalArgumentException("Project directory cannot be null");
+		}
+		if (!projectDirectory.exists()) {
+			throw new ProjectInitializerException("project directory does not exist", projectDirectory);
 		}
 		FlexoVersion previousFlexoVersion = FlexoProjectUtil.getVersion(projectDirectory);
 		try {
@@ -162,12 +151,8 @@ public final class ProjectLoader {
 					}
 				}
 			}
-		} catch (ProjectInitializerException e) {
-			e.printStackTrace();
-			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
-					+ projectDirectory.getAbsolutePath());
+		} finally {
 			ProgressWindow.hideProgressWindow();
-			return null;
 		}
 		getAutoSaveService().conditionalStartOfAutoSaveThread(newEditor.isAutoSaveEnabledByDefault());
 		ProgressWindow.hideProgressWindow();
@@ -189,21 +174,7 @@ public final class ProjectLoader {
 				resourceUpdateHandler = new InteractiveFlexoResourceUpdateHandler(), InteractiveFlexoEditor.FACTORY,
 				getFlexoResourceCenterService().getFlexoResourceCenter());
 		getAutoSaveService().conditionalStartOfAutoSaveThread(returned.isAutoSaveEnabledByDefault());
-		// TODO : be carreful, I comment this line without knowing the effect !!!!
-		// activeModule = null;
 		return returned;
-	}
-
-	public InteractiveFlexoEditor reloadProject() throws ModuleLoadingException, ProjectLoadingCancelledException {
-		File projectDirectory = ModuleLoader.instance().getProject().getProjectDirectory();
-		if (projectDirectory != null) {
-			closeCurrentProject();
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Chosen " + projectDirectory.getAbsolutePath());
-			}
-			return loadProject(projectDirectory);
-		}
-		return null;
 	}
 
 	public void closeCurrentProject() {

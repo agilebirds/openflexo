@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project id="SYL_413" name="TestVE" projectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558" cssSheet="Contento" lastUniqueID="579" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,10:45:58 04/10/2011 322" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="413" dontGenerate="false" useSpecificDescriptions="false">
-  <resourcesCount>43</resourcesCount>
+<Project id="SYL_413" name="TestVE" projectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558" cssSheet="Contento" lastUniqueID="832" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,10:45:58 04/10/2011 000" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="413" dontGenerate="false" useSpecificDescriptions="false">
+  <resourcesCount>46</resourcesCount>
   No description
   <ComponentLibrary id="SYL_COMPONENT_LIBRARY.TestVE" userID="SYL" version="2.4" file="TestVE.wolib">
     <DependantResources id="SYL_COMPONENT_LIBRARY.TestVE_DR" />
@@ -31,6 +31,7 @@
       <RMResource idref="SYL_RM.TestVE" />
       <EOModel idref="SYL_EOMODEL.EOPrototypes.eomodeld" />
       <EOModel idref="SYL_EOMODEL.FlexoExecutionModel.eomodeld" />
+      <EOModel idref="SYL_EOMODEL.sdffdsfsd.eomodeld" />
     </SynchronizedResources>
   </DataModel>
   <DomainKeyValue id="SYL_DOMAIN_KEY_VALUE.TestVE" userID="SYL" file="DomainKeyValue/TestVE.dkv" version="0.2">
@@ -53,6 +54,13 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </EOModel>
+  <EOModel id="SYL_EOMODEL.sdffdsfsd.eomodeld" userID="SYL" file="DataModel/sdffdsfsd.eomodeld">
+    <DependantResources id="SYL_EOMODEL.sdffdsfsd.eomodeld_DR" />
+    <SynchronizedResources id="SYL_EOMODEL.sdffdsfsd.eomodeld_SR">
+      <DataModel idref="SYL_DATA_MODEL.TestVE" />
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </EOModel>
   <GeneratedCode id="SYL_GENERATED_CODE.TestVE" userID="SYL" file="GeneratedCode/TestVE.cg" version="0.1">
     <DependantResources id="SYL_GENERATED_CODE.TestVE_DR" />
     <SynchronizedResources id="SYL_GENERATED_CODE.TestVE_SR">
@@ -65,7 +73,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </GeneratedDoc>
-  <JAR id="SYL_JAR.DenaliConfigServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 439" userID="SYL" file="DataModel/DenaliConfigServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliConfigServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliConfigServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliConfigServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -74,7 +82,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliCore.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 669" userID="SYL" file="DataModel/DenaliCore.jar">
+  <JAR id="SYL_JAR.DenaliCore.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliCore.jar">
     <DependantResources id="SYL_JAR.DenaliCore.jar_DR">
       <JAR idref="SYL_JAR.JavaWebObjects.jar" />
       <JAR idref="SYL_JAR.DenaliExceptionServiceAPI.jar" />
@@ -92,7 +100,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliDBBusinessLogic.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 775" userID="SYL" file="DataModel/DenaliDBBusinessLogic.jar">
+  <JAR id="SYL_JAR.DenaliDBBusinessLogic.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliDBBusinessLogic.jar">
     <DependantResources id="SYL_JAR.DenaliDBBusinessLogic.jar_DR">
       <JAR idref="SYL_JAR.JavaEOControl.jar" />
       <JAR idref="SYL_JAR.DenaliCore.jar" />
@@ -102,7 +110,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliExceptionServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 421" userID="SYL" file="DataModel/DenaliExceptionServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliExceptionServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliExceptionServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliExceptionServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaWebObjects.jar" />
@@ -111,7 +119,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 392" userID="SYL" file="DataModel/DenaliFileMimeTypeServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliFileMimeTypeServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -121,7 +129,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliLanguageServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 359" userID="SYL" file="DataModel/DenaliLanguageServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliLanguageServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliLanguageServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliLanguageServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -130,7 +138,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliLocalizationServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 404" userID="SYL" file="DataModel/DenaliLocalizationServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliLocalizationServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliLocalizationServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -139,7 +147,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliMailServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 376" userID="SYL" file="DataModel/DenaliMailServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliMailServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliMailServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliMailServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -148,7 +156,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliResourcesAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 308" userID="SYL" file="DataModel/DenaliResourcesAPI.jar">
+  <JAR id="SYL_JAR.DenaliResourcesAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliResourcesAPI.jar">
     <DependantResources id="SYL_JAR.DenaliResourcesAPI.jar_DR">
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
     </DependantResources>
@@ -156,7 +164,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliRoleServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 457" userID="SYL" file="DataModel/DenaliRoleServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliRoleServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliRoleServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliRoleServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
@@ -165,13 +173,13 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliServiceManager.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 333" userID="SYL" file="DataModel/DenaliServiceManager.jar">
+  <JAR id="SYL_JAR.DenaliServiceManager.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliServiceManager.jar">
     <DependantResources id="SYL_JAR.DenaliServiceManager.jar_DR" />
     <SynchronizedResources id="SYL_JAR.DenaliServiceManager.jar_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliUserInCookieServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 470" userID="SYL" file="DataModel/DenaliUserInCookieServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliUserInCookieServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliUserInCookieServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliUserInCookieServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
@@ -181,7 +189,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.DenaliUserServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 489" userID="SYL" file="DataModel/DenaliUserServiceAPI.jar">
+  <JAR id="SYL_JAR.DenaliUserServiceAPI.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/DenaliUserServiceAPI.jar">
     <DependantResources id="SYL_JAR.DenaliUserServiceAPI.jar_DR">
       <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
       <JAR idref="SYL_JAR.JavaEOControl.jar" />
@@ -191,7 +199,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.JavaEOControl.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:45:59 04/10/2011 646" userID="SYL" file="DataModel/JavaEOControl.jar">
+  <JAR id="SYL_JAR.JavaEOControl.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:45:59 04/10/2011 000" userID="SYL" file="DataModel/JavaEOControl.jar">
     <DependantResources id="SYL_JAR.JavaEOControl.jar_DR">
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
     </DependantResources>
@@ -199,13 +207,13 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.JavaFoundation.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:45:59 04/10/2011 143" userID="SYL" file="DataModel/JavaFoundation.jar">
+  <JAR id="SYL_JAR.JavaFoundation.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:45:59 04/10/2011 000" userID="SYL" file="DataModel/JavaFoundation.jar">
     <DependantResources id="SYL_JAR.JavaFoundation.jar_DR" />
     <SynchronizedResources id="SYL_JAR.JavaFoundation.jar_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </JAR>
-  <JAR id="SYL_JAR.JavaWebObjects.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 204" userID="SYL" file="DataModel/JavaWebObjects.jar">
+  <JAR id="SYL_JAR.JavaWebObjects.jar" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" file="DataModel/JavaWebObjects.jar">
     <DependantResources id="SYL_JAR.JavaWebObjects.jar_DR">
       <JAR idref="SYL_JAR.JavaFoundation.jar" />
       <JAR idref="SYL_JAR.JavaEOControl.jar" />
@@ -235,7 +243,7 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </ProjectOntology>
-  <RMResource id="SYL_RM.TestVE" userID="SYL" version="4.1" file="TestVE.rmxml">
+  <RMResource id="SYL_RM.TestVE" userID="SYL" version="5.0" file="TestVE.rmxml">
     <DependantResources id="SYL_RM.TestVE_DR" />
     <SynchronizedResources id="SYL_RM.TestVE_SR">
       <RMResource idref="SYL_RM.TestVE" />
@@ -281,15 +289,11 @@
       <ProjectOntology idref="SYL_PROJECT_ONTOLOGY.TestVE" />
       <TOCResource idref="SYL_TOC_RESOURCE.TestVE" />
       <Shema idref="SYL_SHEMA.BasicOrganization" />
+      <Shema idref="SYL_SHEMA.TestOrganizationMap" />
+      <Shema idref="SYL_SHEMA.R&amp;DDefinition" />
+      <EOModel idref="SYL_EOMODEL.sdffdsfsd.eomodeld" />
     </SynchronizedResources>
   </RMResource>
-  <ShemaLibrary id="SYL_SHEMA_LIBRARY.TestVE" userID="SYL" version="1.0" file="Ontology/TestVE.oelib">
-    <DependantResources id="SYL_SHEMA_LIBRARY.TestVE_DR" />
-    <SynchronizedResources id="SYL_SHEMA_LIBRARY.TestVE_SR">
-      <RMResource idref="SYL_RM.TestVE" />
-      <Shema idref="SYL_SHEMA.BasicOrganization" />
-    </SynchronizedResources>
-  </ShemaLibrary>
   <Shema id="SYL_SHEMA.BasicOrganization" name="BasicOrganization" userID="SYL" version="1.0" file="Ontology/BasicOrganization.shema">
     <DependantResources id="SYL_SHEMA.BasicOrganization_DR" />
     <SynchronizedResources id="SYL_SHEMA.BasicOrganization_SR">
@@ -297,73 +301,96 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </Shema>
+  <Shema id="SYL_SHEMA.R&amp;DDefinition" name="R&amp;DDefinition" userID="SYL" version="1.0" file="Ontology/R&amp;DDefinition.shema">
+    <DependantResources id="SYL_SHEMA.R&amp;DDefinition_DR" />
+    <SynchronizedResources id="SYL_SHEMA.R&amp;DDefinition_SR">
+      <ShemaLibrary idref="SYL_SHEMA_LIBRARY.TestVE" />
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </Shema>
+  <Shema id="SYL_SHEMA.TestOrganizationMap" name="TestOrganizationMap" userID="SYL" version="1.0" file="Ontology/TestOrganizationMap.shema">
+    <DependantResources id="SYL_SHEMA.TestOrganizationMap_DR" />
+    <SynchronizedResources id="SYL_SHEMA.TestOrganizationMap_SR">
+      <ShemaLibrary idref="SYL_SHEMA_LIBRARY.TestVE" />
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </Shema>
+  <ShemaLibrary id="SYL_SHEMA_LIBRARY.TestVE" userID="SYL" version="1.0" file="Ontology/TestVE.oelib">
+    <DependantResources id="SYL_SHEMA_LIBRARY.TestVE_DR" />
+    <SynchronizedResources id="SYL_SHEMA_LIBRARY.TestVE_SR">
+      <RMResource idref="SYL_RM.TestVE" />
+      <Shema idref="SYL_SHEMA.BasicOrganization" />
+      <Shema idref="SYL_SHEMA.TestOrganizationMap" />
+      <Shema idref="SYL_SHEMA.R&amp;DDefinition" />
+    </SynchronizedResources>
+  </ShemaLibrary>
   <TOCResource id="SYL_TOC_RESOURCE.TestVE" userID="SYL" file="Documentation/TestVE.toc" version="0.1">
     <DependantResources id="SYL_TOC_RESOURCE.TestVE_DR" />
     <SynchronizedResources id="SYL_TOC_RESOURCE.TestVE_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </TOCResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.001-Dialog.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 477" userID="SYL" file="ImportedImages/001-Dialog.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.001-Dialog.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/001-Dialog.jpg">
     <DependantResources id="SYL_WEBSERVER.001-Dialog.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.001-Dialog.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.002-Information.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 479" userID="SYL" file="ImportedImages/002-Information.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.002-Information.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/002-Information.jpg">
     <DependantResources id="SYL_WEBSERVER.002-Information.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.002-Information.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.003-FillForm.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 480" userID="SYL" file="ImportedImages/003-FillForm.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.003-FillForm.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/003-FillForm.jpg">
     <DependantResources id="SYL_WEBSERVER.003-FillForm.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.003-FillForm.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.004-InformationComputer.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 481" userID="SYL" file="ImportedImages/004-InformationComputer.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.004-InformationComputer.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/004-InformationComputer.jpg">
     <DependantResources id="SYL_WEBSERVER.004-InformationComputer.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.004-InformationComputer.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.005-AssemblyLine.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 483" userID="SYL" file="ImportedImages/005-AssemblyLine.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.005-AssemblyLine.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/005-AssemblyLine.jpg">
     <DependantResources id="SYL_WEBSERVER.005-AssemblyLine.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.005-AssemblyLine.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.006-FlexoServerVideo.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 484" userID="SYL" file="ImportedImages/006-FlexoServerVideo.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.006-FlexoServerVideo.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/006-FlexoServerVideo.jpg">
     <DependantResources id="SYL_WEBSERVER.006-FlexoServerVideo.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.006-FlexoServerVideo.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.007-Audio.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 485" userID="SYL" file="ImportedImages/007-Audio.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.007-Audio.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/007-Audio.jpg">
     <DependantResources id="SYL_WEBSERVER.007-Audio.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.007-Audio.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.agileMapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 486" userID="SYL" file="ImportedImages/agileMapping.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.agileMapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/agileMapping.jpg">
     <DependantResources id="SYL_WEBSERVER.agileMapping.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.agileMapping.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.objective-process.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 487" userID="SYL" file="ImportedImages/objective-process.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.objective-process.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/objective-process.jpg">
     <DependantResources id="SYL_WEBSERVER.objective-process.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.objective-process.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.organisationStructure.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 489" userID="SYL" file="ImportedImages/organisationStructure.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.organisationStructure.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/organisationStructure.jpg">
     <DependantResources id="SYL_WEBSERVER.organisationStructure.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.organisationStructure.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWebServerFileResource>
-  <FlexoWebServerFileResource id="SYL_WEBSERVER.process-mapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 490" userID="SYL" file="ImportedImages/process-mapping.jpg">
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.process-mapping.jpg" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" userID="SYL" file="ImportedImages/process-mapping.jpg">
     <DependantResources id="SYL_WEBSERVER.process-mapping.jpg_DR" />
     <SynchronizedResources id="SYL_WEBSERVER.process-mapping.jpg_SR">
       <RMResource idref="SYL_RM.TestVE" />
@@ -382,6 +409,6 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </FlexoWSLibrary>
-  <DocType>Business,Technical,UserManual,Objectives</DocType>
+  <DocType>BusinessTechnical,UserManual,Objectives,BusinessTechnical,</DocType>
 </Project>
 

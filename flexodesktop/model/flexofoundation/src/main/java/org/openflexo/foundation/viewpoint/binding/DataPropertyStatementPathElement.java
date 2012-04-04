@@ -73,16 +73,19 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
 		logger.warning("Attempt to process setBindingValue with " + value);
 		if (target instanceof OntologyIndividual) {
+			Object oldValue = null;
 			OntologyIndividual individual = (OntologyIndividual) target;
 			PropertyStatement statement = individual.getPropertyStatement(ontologyProperty);
 			if (statement == null) {
 				individual.addDataPropertyStatement(ontologyProperty, value);
 			}
 			if (statement instanceof DataPropertyStatement) {
+				oldValue = ((DataPropertyStatement) statement).getValue();
 				((DataPropertyStatement) statement).setValue(value);
 			} else {
 				logger.warning("Unexpected statement " + statement + " while evaluateBinding()");
 			}
+			individual.getPropertyChangeSupport().firePropertyChange(ontologyProperty.getName(), oldValue, value);
 		} else {
 			logger.warning("Unexpected target " + target + " while evaluateBinding()");
 		}

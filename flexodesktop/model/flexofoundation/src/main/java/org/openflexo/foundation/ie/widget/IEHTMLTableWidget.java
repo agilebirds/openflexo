@@ -37,7 +37,7 @@ import org.openflexo.foundation.ie.action.TopComponentUp;
 import org.openflexo.foundation.ie.dm.ColumnInserted;
 import org.openflexo.foundation.ie.dm.ColumnRemoved;
 import org.openflexo.foundation.ie.dm.IEDataModification;
-import org.openflexo.foundation.ie.dm.PourcentageChanged;
+import org.openflexo.foundation.ie.dm.PercentageChanged;
 import org.openflexo.foundation.ie.dm.TRInserted;
 import org.openflexo.foundation.ie.dm.TRRemoved;
 import org.openflexo.foundation.ie.dm.table.DisplayBorderChanged;
@@ -926,7 +926,7 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 		}
 		_sequenceTR.activateDisplayRefresh();
 		_sequenceTR.setChanged();
-		_sequenceTR.notifyObservers(new PourcentageChanged(this));
+		_sequenceTR.notifyObservers(new PercentageChanged(this));
 	}
 
 	/**

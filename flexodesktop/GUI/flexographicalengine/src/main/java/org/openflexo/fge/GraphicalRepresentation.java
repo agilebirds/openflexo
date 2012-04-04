@@ -617,7 +617,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public void moveToTop(GraphicalRepresentation<?> gr) {
 		// TODO: something to do here
-		logger.warning("moveToTop temporarily desactivated");
+		logger.info("moveToTop temporarily desactivated");
 		/*if (!gr.isValidated()) {
 			logger.warning("GR " + gr + " is not validated");
 		}
@@ -1242,16 +1242,17 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
 			return;
 		}
-		propagateConstraintsAfterModification(parameter);
+		hasChanged(new FGENotification(parameter, oldValue, newValue));
+		/*propagateConstraintsAfterModification(parameter);
 		setChanged();
-		notifyObservers(new FGENotification(parameter, oldValue, newValue));
+		notifyObservers(new FGENotification(parameter, oldValue, newValue));*/
 	}
 
-	protected void notifyChange(GRParameter parameter) {
+	public void notifyChange(GRParameter parameter) {
 		notifyChange(parameter, null, null);
 	}
 
-	protected void notifyAttributeChange(GRParameter parameter) {
+	public void notifyAttributeChange(GRParameter parameter) {
 		notifyChange(parameter);
 	}
 
@@ -1309,6 +1310,11 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		hasChanged(notification);
 	}
 
+	/**
+	 * This method is called whenever a notification is triggered from GR model
+	 * 
+	 * @param notification
+	 */
 	protected void hasChanged(FGENotification notification) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Change attribute " + notification.parameter + " for object " + this + " was: " + notification.oldValue

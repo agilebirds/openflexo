@@ -19,12 +19,27 @@
  */
 package org.openflexo.ve.view;
 
+import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.components.browser.BrowserElement;
+import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.components.browser.dnd.TreeDropTarget;
+import org.openflexo.components.browser.ontology.ViewDefinitionElement;
+import org.openflexo.components.browser.ontology.ViewFolderElement;
+import org.openflexo.components.browser.ontology.ViewLibraryElement;
 import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.action.MoveView;
+import org.openflexo.foundation.view.action.MoveViewFolder;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.controller.OEBrowser;
 import org.openflexo.ve.controller.OEController;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Represents the view for the browser of this module
@@ -54,6 +69,11 @@ public class OEBrowserView extends BrowserView {
 	}
 
 	@Override
+	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2, ProjectBrowser _browser2) {
+		return new OETreeDropTarget(treeView2, _browser2);
+	}
+
+	@Override
 	public void treeSingleClick(FlexoModelObject object) {
 	}
 
@@ -63,6 +83,126 @@ public class OEBrowserView extends BrowserView {
 			// Try to display object in view
 			_controller.selectAndFocusObject(object);
 		}
+	}
+
+	public class OETreeDropTarget extends TreeDropTarget {
+
+		private FlexoEditor editor;
+
+		public OETreeDropTarget(FlexoJTree tree, ProjectBrowser browser) {
+			super(tree, browser);
+			editor = tree.getEditor();
+		}
+
+		@Override
+		public boolean targetAcceptsSource(BrowserElement targ, BrowserElement source) {
+			if (source instanceof ViewDefinitionElement) {
+				ViewDefinition dragged = ((ViewDefinitionElement) source).getViewDefinition();
+				if (targ instanceof ViewFolderElement) {
+					ViewFolder over = ((ViewFolderElement) targ).getFolder();
+					if (over == null || dragged == null) {
+						return false;
+					}
+					return (dragged.getFolder() != over);
+				} else if (targ instanceof ViewLibraryElement) {
+					ViewLibrary over = ((ViewLibraryElement) targ).getViewLibrary();
+					if (over == null || dragged == null) {
+						return false;
+					}
+					return (dragged.getFolder() != over.getRootFolder());
+				}
+			} else if (source instanceof ViewFolderElement) {
+				ViewFolder dragged = ((ViewFolderElement) source).getFolder();
+				if (targ instanceof ViewFolderElement) {
+					ViewFolder over = ((ViewFolderElement) targ).getFolder();
+					if (over == null || dragged == null) {
+						return false;
+					}
+					return MoveViewFolder.isFolderMovableTo(dragged, over);
+				} else if (targ instanceof ViewLibraryElement) {
+					ViewLibrary over = ((ViewLibraryElement) targ).getViewLibrary();
+					if (over == null || dragged == null) {
+						return false;
+					}
+					return MoveViewFolder.isFolderMovableTo(dragged, over.getRootFolder());
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public boolean handleDrop(BrowserElement source, BrowserElement targ) {
+			if (targetAcceptsSource(targ, source)) {
+				if (source instanceof ViewDefinitionElement) {
+					ViewDefinition dragged = ((ViewDefinitionElement) source).getViewDefinition();
+					ViewFolder folder = null;
+					if (targ instanceof ViewFolderElement) {
+						folder = ((ViewFolderElement) targ).getFolder();
+					} else if (targ instanceof ViewLibraryElement) {
+						folder = ((ViewLibraryElement) targ).getViewLibrary().getRootFolder();
+					}
+					if (folder == null) {
+						return false;
+					}
+					Vector<ViewDefinition> v = new Vector<ViewDefinition>();
+					v.add(dragged);
+					MoveView move = MoveView.actionType.makeNewAction(dragged, v, editor);
+					move.setFolder(folder);
+					move.doAction();
+					return move.hasActionExecutionSucceeded();
+				} else if (source instanceof ViewFolderElement) {
+					ViewFolder dragged = ((ViewFolderElement) source).getFolder();
+					ViewFolder folder = null;
+					if (targ instanceof ViewFolderElement) {
+						folder = ((ViewFolderElement) targ).getFolder();
+					} else if (targ instanceof ViewLibraryElement) {
+						folder = ((ViewLibraryElement) targ).getViewLibrary().getRootFolder();
+					}
+					if (folder == null) {
+						return false;
+					}
+					if (!MoveViewFolder.isFolderMovableTo(dragged, folder)) {
+						FlexoController.notify(FlexoLocalization.localizedForKey("cannot_move_folder_to_such_location"));
+						return false;
+					}
+					Vector<ViewFolder> v = new Vector<ViewFolder>();
+					v.add(dragged);
+					MoveViewFolder move = MoveViewFolder.actionType.makeNewAction(dragged, v, editor);
+					move.setFolder(folder);
+					move.doAction();
+					return move.hasActionExecutionSucceeded();
+				}
+			} else {
+				if (source == null || targ == null) {
+					return false;
+				}
+				if (source instanceof ViewDefinitionElement) {
+					ViewDefinition dragged = ((ViewDefinitionElement) source).getViewDefinition();
+					if (targ instanceof ViewFolderElement) {
+						ViewFolder over = ((ViewFolderElement) targ).getFolder();
+						if (over == null || dragged == null) {
+							return false;
+						}
+						/*if (over == dragged) {
+							FlexoController.notify(FlexoLocalization.localizedForKey("cannot_drop_entry_within_itself"));
+							return false;
+						}
+						if (over.isChildOf(dragged)) {
+							FlexoController.notify(FlexoLocalization.localizedForKey("cannot_drop_father_within_son"));
+							return false;
+						}
+						if (!over.canHaveChildrenWithDepth(dragged.getDepth())) {
+							FlexoController
+									.notify(FlexoLocalization.localizedForKey("maximum_toc_depth_is") + " " + TOCEntry.MAXIMUM_DEPTH);
+							return false;
+						}*/
+					}
+				}
+				// FlexoController.notify(FlexoLocalization.localizedForKey("drop_cannot_be_performed"));
+			}
+			return false;
+		}
+
 	}
 
 }

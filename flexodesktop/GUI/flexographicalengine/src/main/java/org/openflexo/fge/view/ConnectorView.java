@@ -356,6 +356,14 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 				getPaintManager().repaint(this);
 			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
 				updateLabelView();
+			} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
+				updateVisibility();
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
+						getPaintManager().invalidate(getGraphicalRepresentation());
+					}
+				}
+				getPaintManager().repaint(this);
 			} else if (notification.getParameter() == ConnectorGraphicalRepresentation.Parameters.applyForegroundToSymbols) {
 				getPaintManager().repaint(this);
 			} else if (notification instanceof ObjectWillMove) {

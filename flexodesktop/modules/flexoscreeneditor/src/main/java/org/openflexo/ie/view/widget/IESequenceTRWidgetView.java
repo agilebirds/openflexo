@@ -32,14 +32,13 @@ import javax.swing.border.CompoundBorder;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.DummyComponentInstance;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.dm.ActivateDisplayRefresh;
 import org.openflexo.foundation.ie.dm.DisplayNeedUpdate;
 import org.openflexo.foundation.ie.dm.HoldDisplayRefresh;
-import org.openflexo.foundation.ie.dm.PourcentageChanged;
+import org.openflexo.foundation.ie.dm.PercentageChanged;
 import org.openflexo.foundation.ie.dm.SubsequenceInserted;
 import org.openflexo.foundation.ie.dm.TDInserted;
 import org.openflexo.foundation.ie.dm.TDRemoved;
@@ -62,7 +61,7 @@ import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.controller.IEController;
 
-public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements FlexoObserver, IEContainer, IESelectable, ITableRowView {
+public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements IEContainer, IESelectable, ITableRowView {
 
 	private static final Logger logger = Logger.getLogger(IESequenceTRWidgetView.class.getPackage().getName());
 
@@ -81,7 +80,7 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 		}
 		setLayout(new IEHTMLTableLayout(htmlTable, this));
 		if (model.getParent() == htmlTable) {
-			htmlTable.addObserver(this);
+			new ObserverRegistation(this, htmlTable);
 		}
 		ITableRow itemTR = null;
 		Enumeration en = model.elements();
@@ -89,7 +88,7 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 			itemTR = (ITableRow) en.nextElement();
 			Object view = null;
 			if (itemTR instanceof IETRWidget) {
-				((IETRWidget) itemTR).getSequenceTD().addObserver(this);
+				new ObserverRegistation(this, ((IETRWidget) itemTR).getSequenceTD());
 				Enumeration<IETDWidget> en1 = ((IETRWidget) itemTR).getAllTD().elements();
 				while (en1.hasMoreElements()) {
 					IETDWidget td = en1.nextElement();
@@ -149,11 +148,11 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 			htmlTable = findHTMLTableForReusableRow(getModel(), _componentView);
 		}
 		// /sequenceView.setHTMLTableWidget(htmlTable);
-		add(sequenceView, (sequenceView.getModel()).constraints);
+		add(sequenceView, sequenceView.getModel().constraints);
 		sequenceView.getLayout().layoutContainer(sequenceView);
 		sequenceView.validate();
 		sequenceView.repaint();
-		sequenceView.getModel().addObserver(this);
+		new ObserverRegistation(this, sequenceView.getModel());
 	}
 
 	/*public void setHTMLTableWidget(IEHTMLTableWidget htmlTable) {
@@ -163,24 +162,6 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 		}
 		
 	}*/
-
-	Vector<IETDWidgetView> getAllTDView() {
-		Vector<IETDWidgetView> reply = new Vector<IETDWidgetView>();
-		for (int i = 0; i < getComponentCount(); i++) {
-			if (getComponent(i) instanceof IETDWidgetView) {
-				reply.add((IETDWidgetView) getComponent(i));
-			} else if (getComponent(i) instanceof IESequenceTRWidgetView) {
-				reply.addAll(((IESequenceTRWidgetView) getComponent(i)).getAllTDView());
-			} else if (getComponent(i) instanceof IEReusableWidgetView) {
-				// TODO: implement this when reusable sequence tr are implemented
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Implement me!");
-					// reply.addAll(((IEReusableWidgetView)getComponent(i)).getReusableWidgetComponentView().);
-				}
-			}
-		}
-		return reply;
-	}
 
 	public void add(IEReusableWidgetView reusableView) {
 		IEHTMLTableWidget htmlTable = getModel().htmlTable();
@@ -192,7 +173,7 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 		reusableView.getLayout().layoutContainer(reusableView);
 		reusableView.validate();
 		reusableView.repaint();
-		reusableView.getModel().addObserver(this);
+		new ObserverRegistation(this, reusableView.getModel());
 	}
 
 	private Vector<IESequenceWidgetWidgetView> getAllIESequenceWidgetWidgetView(Vector<IESequenceWidgetWidgetView> answer) {
@@ -220,7 +201,7 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (modif instanceof PourcentageChanged) {
+		if (modif instanceof PercentageChanged) {
 			Vector<IESequenceWidgetWidgetView> v = new Vector<IESequenceWidgetWidgetView>();
 			getAllIESequenceWidgetWidgetView(v);
 			Enumeration<IESequenceWidgetWidgetView> en = v.elements();
@@ -235,7 +216,7 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 		} else if (modif instanceof WidgetAddedToSequence && ((WidgetAddedToSequence) modif).newValue() instanceof ITableRowReusableWidget) {
 			ITableRowReusableWidget reusableRow = (ITableRowReusableWidget) ((WidgetAddedToSequence) modif).newValue();
 
-			add(((IEReusableWidgetView) _componentView.getViewForWidget(reusableRow, false)));
+			add((IEReusableWidgetView) _componentView.getViewForWidget(reusableRow, false));
 
 			validate();
 			doLayout();
@@ -258,7 +239,7 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 			repaint();*/
 
 		} else if (modif instanceof TRInserted && ((TRInserted) modif).getTR().getSequenceTR() == getModel()) {
-			((TRInserted) modif).getTR().getSequenceTD().addObserver(this);
+			new ObserverRegistation(this, ((TRInserted) modif).getTR().getSequenceTD());
 			Enumeration<IETDWidget> en1 = ((TRInserted) modif).getTR().getAllTD().elements();
 			while (en1.hasMoreElements()) {
 				IETDWidget td = en1.nextElement();
@@ -275,9 +256,9 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 			repaint();
 
 		} else if (modif instanceof WidgetRemovedFromSequence && arg0.equals(getModel())) {
-			Component viewToRemove = findViewForTR((ITableRow) ((WidgetRemovedFromSequence) modif).oldValue());
+			IEWidgetView<?> viewToRemove = findViewForTR((ITableRow) ((WidgetRemovedFromSequence) modif).oldValue());
 			if (viewToRemove != null) {
-				remove(viewToRemove);
+				viewToRemove.delete();
 				validate();
 				doLayout();
 				repaint();
@@ -295,7 +276,7 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 			while (en.hasMoreElements()) {
 				ITableRow widget = en.nextElement();
 				if (widget instanceof IETRWidget) {
-					((IETRWidget) widget).getSequenceTD().deleteObserver(this);
+					stopObserving(((IETRWidget) widget).getSequenceTD());
 				}
 			}
 			IESequenceTRWidgetView newView = (IESequenceTRWidgetView) _componentView.getViewForWidget(tr, false);
@@ -356,8 +337,7 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 		}
 		Dimension d = super.getPreferredSize();
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
-			d = new Dimension(((IESequenceWidgetWidgetView) getParent()).getAvailableWidth() - (2 * IEHTMLTableLayout.BORDER_SIZE),
-					d.height);
+			d = new Dimension(((IESequenceWidgetWidgetView) getParent()).getAvailableWidth() - 2 * IEHTMLTableLayout.BORDER_SIZE, d.height);
 		}
 		storePrefSize(d);
 		return d;
@@ -397,7 +377,7 @@ public class IESequenceTRWidgetView extends IEWidgetView<IEWidget> implements Fl
 		}
 	}
 
-	private Component findViewForTR(ITableRow tr) {
+	private IEWidgetView<?> findViewForTR(ITableRow tr) {
 		return _componentView.findViewForModel((IEObject) tr);
 	}
 

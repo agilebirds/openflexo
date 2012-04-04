@@ -32,7 +32,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
-import org.openflexo.foundation.cg.utils.DocConstants;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
@@ -41,6 +40,7 @@ import org.openflexo.foundation.ie.IEPopupComponent;
 import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
+import org.openflexo.foundation.toc.PredefinedSection;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
@@ -120,7 +120,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	@Override
 	protected VelocityContext defaultContext() {
 		VelocityContext context = super.defaultContext();
-		context.put("DocSection", DocConstants.DocSection.class);
+		context.put("DocSection", PredefinedSection.PredefinedSectionType.class);
 		return context;
 	}
 

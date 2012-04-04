@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -36,6 +37,11 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.DeclarePatternRole;
+	}
+
+	@Override
+	public List<PatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles();
 	}
 
 	@Override

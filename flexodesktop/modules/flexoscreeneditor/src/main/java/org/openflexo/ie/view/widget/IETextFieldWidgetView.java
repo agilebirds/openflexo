@@ -19,22 +19,6 @@
  */
 package org.openflexo.ie.view.widget;
 
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ie.dm.IETextFieldCssClassChange;
-import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
-import org.openflexo.foundation.ie.util.TextFieldClass;
-import org.openflexo.foundation.ie.widget.IEEditableTextWidget;
-import org.openflexo.foundation.ie.widget.IETextFieldWidget;
-import org.openflexo.ie.IEPreferences;
-import org.openflexo.ie.util.TriggerRepaintDocumentListener;
-import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.logging.FlexoLogger;
-
-import javax.swing.JComponent;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -48,6 +32,22 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ie.dm.IETextFieldCssClassChange;
+import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
+import org.openflexo.foundation.ie.util.TextFieldClass;
+import org.openflexo.foundation.ie.widget.IEEditableTextWidget;
+import org.openflexo.foundation.ie.widget.IETextFieldWidget;
+import org.openflexo.ie.IEPreferences;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
+import org.openflexo.ie.view.IEWOComponentView;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author bmangez
@@ -170,17 +170,13 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 		if (modif instanceof IETextFieldCssClassChange) {
 			applyCss();
 		}
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(IEEditableTextWidget.BINDING_VALUE) && arg0 == getTextFieldModel()) {
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals(IEEditableTextWidget.BINDING_VALUE) && arg0 == getTextFieldModel()) {
 				updateDisplayedValue();
-			} else if (modif.propertyName().equals(ATTRIB_DESCRIPTION_NAME)) {
+			} else if (propertyName.equals(ATTRIB_DESCRIPTION_NAME)) {
 				_jTextField.setToolTipText(getTextFieldModel().getDescription());
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				if (getParent() != null) {
-					getParent().doLayout();
-					((JComponent) getParent()).repaint();
-				}
-			} else if (modif.propertyName().equals("value")) {
+			} else if (propertyName.equals("value")) {
 				if (getTextFieldModel().getBindingValue() == null) {
 					_jTextField.setText(getTextFieldModel().getValue());
 					applyCss();

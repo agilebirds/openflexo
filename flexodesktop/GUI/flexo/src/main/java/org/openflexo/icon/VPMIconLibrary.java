@@ -26,11 +26,15 @@ import javax.swing.ImageIcon;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.DeletionScheme;
+import org.openflexo.foundation.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
@@ -39,12 +43,12 @@ import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
+import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.ShemaPatternRole;
 import org.openflexo.foundation.viewpoint.StatementPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
@@ -89,6 +93,9 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource ACTION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/ActionSchemeIcon.png");
 	public static final ImageIconResource DROP_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DropSchemeIcon.png");
 	public static final ImageIconResource LINK_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/LinkSchemeIcon.png");
+	public static final ImageIconResource CREATION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/CreationSchemeIcon.png");
+	public static final ImageIconResource DELETION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DeletionSchemeIcon.png");
+	public static final ImageIconResource NAVIGATION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/NavigationSchemeIcon.png");
 	public static final ImageIconResource EDITION_PATTERN_PARAMETER_ICON = new ImageIconResource("Icons/Model/VPM/ParameterIcon.png");
 	public static final ImageIconResource EDITION_PATTERN_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ActionIcon.png");
 	public static final ImageIconResource LOCALIZATION_ICON = new ImageIconResource("Icons/Model/VPM/LocalizationIcon.png");
@@ -128,6 +135,12 @@ public class VPMIconLibrary extends IconLibrary {
 			return DROP_SCHEME_ICON;
 		} else if (object instanceof LinkScheme) {
 			return LINK_SCHEME_ICON;
+		} else if (object instanceof AbstractCreationScheme) {
+			return CREATION_SCHEME_ICON;
+		} else if (object instanceof NavigationScheme) {
+			return NAVIGATION_SCHEME_ICON;
+		} else if (object instanceof DeletionScheme) {
+			return DELETION_SCHEME_ICON;
 		} else if (object instanceof ViewPoint) {
 			return CALC_ICON;
 		} else if (object instanceof PaletteElementPatternParameter) {
@@ -159,8 +172,10 @@ public class VPMIconLibrary extends IconLibrary {
 			return CALC_CONNECTOR_ICON;
 		} else if (object instanceof ShapePatternRole) {
 			return CALC_SHAPE_ICON;
-		} else if (object instanceof ShemaPatternRole) {
+		} else if (object instanceof DiagramPatternRole) {
 			return EXAMPLE_DIAGRAM_ICON;
+		} else if (object instanceof EditionPatternPatternRole) {
+			return EDITION_PATTERN_ICON;
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;
 		} else if (object instanceof ClassPatternRole) {

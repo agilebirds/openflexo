@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.toc.NormalSection" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab">
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="Normal section" />
+</Panel>
+

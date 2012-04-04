@@ -34,10 +34,11 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -1064,17 +1065,24 @@ public class ToolBox {
 	}
 
 	public static String getSystemProperties() {
+		return getSystemProperties(false);
+	}
+
+	public static String getSystemProperties(boolean replaceBackslashInClasspath) {
 		StringBuilder sb = new StringBuilder();
-		Iterator<Object> i = new TreeMap<Object, Object>(System.getProperties()).keySet().iterator();
-		while (i.hasNext()) {
-			String key = (String) i.next();
+		for (Entry<Object, Object> e : new TreeMap<Object, Object>(System.getProperties()).entrySet()) {
+			String key = (String) e.getKey();
 			if ("line.separator".equals(key)) {
-				String nl = System.getProperty(key);
+				String nl = (String) e.getValue();
 				nl = nl.replace("\r", "\\r");
 				nl = nl.replace("\n", "\\n");
 				sb.append(key).append(" = ").append(nl).append('\n');
+			} else if ("java.class.path".equals(key)) {
+				String nl = (String) e.getValue();
+				nl = nl.replace('\\', '/');
+				sb.append(key).append(" = ").append(nl).append('\n');
 			} else {
-				sb.append(key).append(" = ").append(System.getProperty(key)).append('\n');
+				sb.append(key).append(" = ").append(e.getValue()).append('\n');
 			}
 		}
 		return sb.toString();
@@ -1091,5 +1099,29 @@ public class ToolBox {
 			}
 		}
 		return returned.toString();
+	}
+
+	public static List<?> getListFromIterable(Object iterable) {
+		if (iterable instanceof List) {
+			return (List<?>) iterable;
+		}
+		if (iterable instanceof Collection) {
+			return new ArrayList<Object>((Collection<?>) iterable);
+		}
+		if (iterable instanceof Iterable) {
+			List<Object> list = new ArrayList<Object>();
+			for (Object o : (Iterable) iterable) {
+				list.add(o);
+			}
+			return list;
+		}
+		if (iterable instanceof Enumeration) {
+			List<Object> list = new ArrayList<Object>();
+			for (Enumeration<?> en = (Enumeration<?>) iterable; en.hasMoreElements();) {
+				list.add(en.nextElement());
+			}
+			return list;
+		}
+		return null;
 	}
 }

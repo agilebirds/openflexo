@@ -329,6 +329,9 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 		}
 
 		protected void refreshPanel() {
+			if (getSourceCode() == null) {
+				return;
+			}
 			boolean codeModified = !_textArea.getText().equals(getSourceCode().getCode());
 
 			int caretPos = 0;

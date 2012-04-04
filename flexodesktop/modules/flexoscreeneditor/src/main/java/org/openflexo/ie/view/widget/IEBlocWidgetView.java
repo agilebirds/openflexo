@@ -19,6 +19,30 @@
  */
 package org.openflexo.ie.view.widget;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -41,29 +65,6 @@ import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.listener.DoubleClickResponder;
 import org.openflexo.localization.FlexoLocalization;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author bmangez
@@ -96,13 +97,13 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		super(ieController, model, addDnDSupport, componentView);
 		setLayout(new BorderLayout());
 		setDefaultBorder();
-		model.getWOComponent().addObserver(this);
+		new ObserverRegistation(this, model.getWOComponent());
 		setBackground(Color.WHITE);
 		_topTitle = new TopTitle(model);
 		_buttonPanel = new ButtonPanel(getIEController(), model, _componentView);
 		_dropTableZone = new DropTableZone(getIEController(), this, _componentView);
 		if (model.getContent() instanceof FlexoModelObject) {
-			((FlexoModelObject) model.getContent()).addObserver(this);
+			new ObserverRegistation(this, (FlexoModelObject) model.getContent());
 		}
 		add(_topTitle, BorderLayout.NORTH);
 		add(_buttonPanel, BorderLayout.SOUTH);
@@ -119,16 +120,7 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		if (getModel().getContent() != null && getModel().getContent() instanceof FlexoModelObject) {
 			((FlexoModelObject) getModel().getContent()).deleteObserver(this);
 		}
-		if (getModel().getWOComponent() != null) {
-			getModel().getWOComponent().deleteObserver(this);
-		} else {
-			if (_componentView.getModel() != null) {
-				_componentView.getModel().deleteObserver(this);
-			} else if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Bloc widget view not removed from observers of WO. Memory will not be freed.");
-			}
-		}
-		getModel().deleteObserver(_buttonPanel);
+
 		if (_dropTableZone != null) {
 			_dropTableZone.delete();
 		}
@@ -170,12 +162,12 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		_dropTableZone.validate();
 		_dropTableZone.doLayout();
 		((JPanel) _dropTableZone.getParent()).repaint();
-		widget.addObserver(this);
+		new ObserverRegistation(this, widget);
 		handleContentResize();
 	}
 
 	private void updateInnerBlocRemoved(IEWidget widget) {
-		widget.deleteObserver(this);
+		stopObserving(widget);
 		if (widget.getParent() != null && widget.getParent() == getModel()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateHTMLTableRemoval");
@@ -222,17 +214,8 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			_topTitle.buttonPane.revalidate();
 			_topTitle.buttonPane.repaint();
 		}
-		if (modif.modificationType() == DataModification.BLOC_BG_CLOR_CHANGE) {
-			setBorder(BorderFactory.createLineBorder(getMainColor()));
-			_topTitle.setBackground(getMainColor());
-			_buttonPanel.setBackground(getMainColor());
-			_topTitle.setLabelBackground(getMainColor());
-		} else if (modif.modificationType() == DataModification.BLOC_FG_CLOR_CHANGE) {
-			_topTitle.setLabelForeground(getTextColor());
-		} else if (modif.modificationType() == DataModification.ATTRIBUTE && modif.propertyName().equals("title")) {
-			{
-				setTitle(getModel().getTitle());
-			}
+		if (IEBlocWidget.BLOC_TITLE_ATTRIBUTE_NAME.equals(modif.propertyName().equals("title"))) {
+			setTitle(getModel().getTitle());
 		} else if (modif instanceof InnerBlocInserted) {
 			updateInnerBlocInsertion((IEWidget) modif.newValue());
 			_topTitle.initButtonPane();

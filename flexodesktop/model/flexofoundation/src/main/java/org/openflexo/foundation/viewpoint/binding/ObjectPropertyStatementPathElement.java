@@ -170,7 +170,23 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
-			logger.warning("Implement me");
+			if (target instanceof OntologyIndividual) {
+				OntologyIndividual individual = (OntologyIndividual) target;
+				PropertyStatement statement = individual.getPropertyStatement(getOntologyProperty());
+				if (statement == null) {
+					individual.getOntResource().addProperty(getOntologyProperty().getOntProperty(), value.getOntResource());
+					individual.updateOntologyStatements();
+					individual.getPropertyChangeSupport().firePropertyChange(getOntologyProperty().getName(), null, value);
+				} else if (statement instanceof ObjectPropertyStatement) {
+					Object oldValue = ((ObjectPropertyStatement) statement).getStatementObject();
+					((ObjectPropertyStatement) statement).setStatementObject(value);
+					individual.getPropertyChangeSupport().firePropertyChange(getOntologyProperty().getName(), oldValue, value);
+				} else {
+					logger.warning("Unexpected statement " + statement + " while evaluating setBindingValue()");
+				}
+			} else {
+				logger.warning("Unexpected target " + target + " while evaluating setBindingValue()");
+			}
 		}
 	}
 
@@ -374,6 +390,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		@Override
 		public void setBindingValue(Literal value, Object target, BindingEvaluationContext context) {
 			logger.warning("Implement me");
+			// individual.getPropertyChangeSupport().firePropertyChange(ontologyProperty.getName(), oldValue, value);
 		}
 	}
 }

@@ -48,7 +48,10 @@ public abstract class AbstractAssertion extends ViewPointObject {
 
 	@Override
 	public ViewPoint getCalc() {
-		return getAction().getCalc();
+		if (getAction() != null) {
+			return getAction().getCalc();
+		}
+		return null;
 	}
 
 	public boolean evaluateCondition(EditionSchemeAction action) {
