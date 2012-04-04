@@ -478,7 +478,9 @@ public final class ProjectLoader {
 	 *            the project
 	 */
 	private void checkExternalRepositories(FlexoProject project) {
-		if (!UserType.isMaintainerRelease() && !UserType.isDevelopperRelease()) {
+		// Removed unnecessary blocking dialog. Most users asks that all stay disconnected.
+		// The code is left if we want to roll back this change.
+		if (true /*!UserType.isMaintainerRelease() && !UserType.isDevelopperRelease()*/) {
 			return;
 		}
 		for (ProjectExternalRepository repository : project.getExternalRepositories()) {
@@ -498,7 +500,7 @@ public final class ProjectLoader {
 					String CONNECT = FlexoLocalization.localizedForKey("connect_to_local_directory");
 					String[] choices = { KEEP_DISCONNECTED, KEEP_ALL_DISCONNECTED, CONNECT };
 					RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice",
-							"what_would_you_like_to_do", CONNECT, choices);
+							"what_would_you_like_to_do", KEEP_ALL_DISCONNECTED, choices);
 					DirectoryParameter dirParam = new DirectoryParameter("directory", "directory", repository.getDirectory());
 					dirParam.setDepends("choice");
 					dirParam.setConditional("choice=" + '"' + CONNECT + '"');
