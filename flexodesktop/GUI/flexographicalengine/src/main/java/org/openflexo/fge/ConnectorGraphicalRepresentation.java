@@ -839,4 +839,16 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		}
 	}
 
+	@Override
+	public ConnectorGraphicalRepresentation<O> clone() {
+		// logger.info("La GR "+this+" se fait cloner la");
+		try {
+			return (ConnectorGraphicalRepresentation<O>) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// cannot happen since we are clonable
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }
