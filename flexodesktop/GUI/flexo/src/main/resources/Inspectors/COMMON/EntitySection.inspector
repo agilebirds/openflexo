@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.toc.ProcessSection" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.toc.EntitySection" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab">
-    <Label label="process" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"  />
-    <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" data="data.process" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="processSelector" localize="true" manageDynamicModel="true">
+    <Label label="entity" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+    <Custom componentClassName="org.openflexo.components.widget.DMEntitySelector" data="data.entity" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="EntitySelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.defaultHeight" value="200" />
       <Assignment variable="component.project" value="data.project" />
     </Custom>
@@ -14,6 +14,6 @@
     </Custom>
     </Tab>
   </TabPanel>
-  <Parameter name="title" value="Process section" />
+  <Parameter name="title" value="Data entity section" />
 </Panel>
 

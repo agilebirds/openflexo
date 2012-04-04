@@ -887,6 +887,9 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	protected void rebuildBindingModel() {
 		bindingModel = buildBindingModel();
+		for (TOCEntry entry : getTocEntries()) {
+			entry.rebuildBindingModel();
+		}
 	}
 
 	protected BindingModel buildBindingModel() {

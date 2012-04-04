@@ -129,6 +129,7 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
 import org.openflexo.foundation.toc.TOCData;
+import org.openflexo.foundation.toc.TOCDataBinding;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
@@ -360,6 +361,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			_addConverter(objectReferenceConverter);
 			_addConverter(imageFileConverter);
 			_addConverter(new EditionPatternConverter(getResourceCenter()));
+			_addConverter(TOCDataBinding.CONVERTER);
 		}
 	}
 

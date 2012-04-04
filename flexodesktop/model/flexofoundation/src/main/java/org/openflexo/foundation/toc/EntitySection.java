@@ -19,4 +19,12 @@ public class EntitySection extends ModelObjectSection<DMEntity> {
 		return ModelObjectType.Entity;
 	}
 
+	public DMEntity getEntity() {
+		return getModelObject(true);
+	}
+
+	public void setEntity(DMEntity entity) {
+		setModelObject(entity);
+	}
+
 }

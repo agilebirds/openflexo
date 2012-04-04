@@ -19,4 +19,12 @@ public class RoleSection extends ModelObjectSection<Role> {
 		return ModelObjectType.Role;
 	}
 
+	public Role getRole() {
+		return getModelObject(true);
+	}
+
+	public void setRole(Role role) {
+		setModelObject(role);
+	}
+
 }

@@ -44,7 +44,7 @@ import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.action.RemoveTOCEntry;
 import org.openflexo.foundation.toc.action.RemoveTOCRepository;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
@@ -391,6 +391,22 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
+	public ConditionalSection createConditionalSection(String title, TOCDataBinding condition) {
+		ConditionalSection reply = new ConditionalSection(getData());
+		reply.setTitle(title);
+		reply.setCondition(condition);
+		return reply;
+	}
+
+	public IterationSection createIterationSection(String title, String iteratorName, TOCDataBinding iteration, TOCDataBinding condition) {
+		IterationSection reply = new IterationSection(getData());
+		reply.setTitle(title);
+		reply.setIteratorName(iteratorName);
+		reply.setIteration(iteration);
+		reply.setCondition(condition);
+		return reply;
+	}
+
 	public ProcessSection createProcessSection(String title, FlexoProcess process, TOCDataBinding value) {
 		ProcessSection reply = new ProcessSection(getData());
 		reply.setTitle(title);
@@ -399,7 +415,7 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public ViewSection createViewSection(String title, View view, TOCDataBinding value) {
+	public ViewSection createViewSection(String title, ViewDefinition view, TOCDataBinding value) {
 		ViewSection reply = new ViewSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(view);

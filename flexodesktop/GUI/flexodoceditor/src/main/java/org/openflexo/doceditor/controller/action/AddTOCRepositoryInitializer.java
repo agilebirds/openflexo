@@ -132,7 +132,7 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return DEIconLibrary.TOC_REPOSITORY;
+		return DEIconLibrary.TOC_REPOSITORY_ICON;
 	}
 
 	@Override

@@ -19,4 +19,12 @@ public class ERDiagramSection extends ModelObjectSection<ERDiagram> {
 		return ModelObjectType.ERDiagram;
 	}
 
+	public ERDiagram getDiagram() {
+		return getModelObject(true);
+	}
+
+	public void setDiagram(ERDiagram diagram) {
+		setModelObject(diagram);
+	}
+
 }

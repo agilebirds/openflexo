@@ -19,4 +19,12 @@ public class OperationScreenSection extends ModelObjectSection<OperationComponen
 		return ModelObjectType.OperationScreen;
 	}
 
+	public OperationComponentDefinition getOperationScreen() {
+		return getModelObject(true);
+	}
+
+	public void setOperationScreen(OperationComponentDefinition operationScreen) {
+		setModelObject(operationScreen);
+	}
+
 }

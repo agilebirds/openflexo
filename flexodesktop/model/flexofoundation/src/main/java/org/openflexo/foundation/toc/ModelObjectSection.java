@@ -19,7 +19,7 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 		View {
 			@Override
 			public Type getType() {
-				return org.openflexo.foundation.view.View.class;
+				return org.openflexo.foundation.view.ViewDefinition.class;
 			}
 		},
 		Process {

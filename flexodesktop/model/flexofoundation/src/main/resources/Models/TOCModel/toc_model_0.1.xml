@@ -94,4 +94,14 @@
   <entity name="org.openflexo.foundation.toc.OperationScreenSection" xmlTag="OperationScreenSection">
   </entity>
 
+  <entity name="org.openflexo.foundation.toc.ConditionalSection" xmlTag="ConditionalSection">
+  	<property name="condition" xmlTag="condition" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.toc.IterationSection" xmlTag="IterationSection">
+  	<property name="iteratorName" xmlTag="iteratorName" attribute="yes"/>
+  	<property name="iteration" xmlTag="iteration" attribute="yes"/>
+  	<property name="condition" xmlTag="condition" attribute="yes"/>
+  </entity>
+
 </model>

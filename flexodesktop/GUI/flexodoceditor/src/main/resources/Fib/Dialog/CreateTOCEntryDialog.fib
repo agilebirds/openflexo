@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.toc.action.AddTOCEntry" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="600" height="500">
+<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.toc.action.AddTOCEntry" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="700" height="500">
   <Label label="create_new_toc_entry" align="center" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" />
   <RadioButtonList format="object.name" localize="true" manageDynamicModel="true" name="PaletteRadioButtonList" data="data.kindOfTocEntry" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" staticList="" iteratorClassName="org.openflexo.foundation.toc.action.AddTOCEntry$KindOfTocEntry" autoSelectFirstRow="true">
     <LocalizedDictionary />
   </RadioButtonList>
   <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="LucidaGrande,0,13" darkLevel="0" data="(data.kindOfTocEntry.name + &quot;_description&quot;)" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=10;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,11" name="KindOfEntryDescriptionPanel">
-    <Label label="label" align="center" localize="true" data="(data.kindOfTocEntry.name + &quot;_description&quot;)" constraints="border(location=center)">
+    <Label label="label" align="center" localize="true" data="data.kindOfTocEntry.descriptionKey" constraints="border(location=center)">
       <LocalizedDictionary />
     </Label>
   </Panel>
@@ -68,8 +68,8 @@
     <RadioButtonList localize="true" manageDynamicModel="true" name="AccessType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="select_a_given_object,use_expression" iteratorClassName="java.lang.String" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </RadioButtonList>
-    <Label label="view" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.modelObjectType = &quot;View&quot;)" />
-    <Custom componentClassName="org.openflexo.components.widget.FIBViewSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.modelObjectType = &quot;View&quot;)" name="viewSelector" localize="true" manageDynamicModel="true">
+    <Label label="view" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.modelObjectType = &quot;View&quot;) &amp; (AccessType.selectedIndex = 0))" />
+    <Custom componentClassName="org.openflexo.components.widget.FIBViewSelector" data="data.selectedView" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.modelObjectType = &quot;View&quot;)" name="viewSelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.defaultHeight" value="200" />
       <Assignment variable="component.project" value="data.editor.project" />
     </Custom>
@@ -79,22 +79,22 @@
       <Assignment variable="component.project" value="data.editor.project" />
     </Custom>
     <Label label="role" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.modelObjectType = &quot;Role&quot;) &amp; (AccessType.selectedIndex = 0))" />
-    <Custom componentClassName="org.openflexo.components.widget.FIBRoleSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;Role&quot;) &amp; (AccessType.selectedIndex = 0))" name="roleSelector" localize="true" manageDynamicModel="true">
+    <Custom componentClassName="org.openflexo.components.widget.FIBRoleSelector" data="data.selectedRole" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;Role&quot;) &amp; (AccessType.selectedIndex = 0))" name="roleSelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.defaultHeight" value="200" />
       <Assignment variable="component.project" value="data.editor.project" />
       <Assignment variable="component.selectableCondition" />
     </Custom>
     <Label label="entity" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.modelObjectType = &quot;Entity&quot;) &amp; (AccessType.selectedIndex = 0))" />
-    <Custom componentClassName="org.openflexo.components.widget.DMEntitySelector" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;Entity&quot;) &amp; (AccessType.selectedIndex = 0))" name="entitySelector" localize="true" manageDynamicModel="true">
+    <Custom componentClassName="org.openflexo.components.widget.DMEntitySelector" data="data.selectedEntity" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;Entity&quot;) &amp; (AccessType.selectedIndex = 0))" name="entitySelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.project" value="data.editor.project" />
     </Custom>
     <Label label="operation_component" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.modelObjectType = &quot;OperationScreen&quot;) &amp; (AccessType.selectedIndex = 0))" />
-    <Custom componentClassName="org.openflexo.components.widget.OperationComponentSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;OperationScreen&quot;) &amp; (AccessType.selectedIndex = 0))" name="operationSelector" localize="true" manageDynamicModel="true">
+    <Custom componentClassName="org.openflexo.components.widget.OperationComponentSelector" data="data.selectedOperationComponent" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;OperationScreen&quot;) &amp; (AccessType.selectedIndex = 0))" name="operationSelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.defaultHeight" value="200" />
       <Assignment variable="component.project" value="data.editor.project" />
     </Custom>
     <Label label="er_diagram" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.modelObjectType = &quot;ERDiagram&quot;) &amp; (AccessType.selectedIndex = 0))" />
-    <Custom componentClassName="org.openflexo.components.widget.FIBERDiagramSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;ERDiagram&quot;) &amp; (AccessType.selectedIndex = 0))" name="diagramSelector" localize="true" manageDynamicModel="true">
+    <Custom componentClassName="org.openflexo.components.widget.FIBERDiagramSelector" data="data.selectedERDiagram" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;ERDiagram&quot;) &amp; (AccessType.selectedIndex = 0))" name="diagramSelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.defaultHeight" value="200" />
       <Assignment variable="component.project" value="data.editor.project" />
       <Assignment variable="component.selectableCondition" />
@@ -102,23 +102,41 @@
     <Label label="value" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(AccessType.selectedIndex = 1)">
       <LocalizedDictionary />
     </Label>
-    <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(AccessType.selectedIndex = 1)" localize="true" manageDynamicModel="true" />
-  </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 3)" name="ControlSectionPanel">
-    <Label label="label" align="center" localize="true" data="(data.patternChoice.name + &quot;_description&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" font="LucidaGrande,0,11" />
-    <Label label="pattern" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-    <DropDown format="object.name" localize="true" manageDynamicModel="true" name="patternChoice" data="data.patternChoice" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" iteratorClassName="org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern$NewEditionPatternChoices" autoSelectFirstRow="true" />
-    <Label label="ontologic_concept" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)" />
-    <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="conceptSelector" localize="true" manageDynamicModel="true">
-      <Assignment variable="component.ontologyLibrary" value="data.focusedObject.calc.ontologyLibrary" />
-      <Assignment variable="component.defaultHeight" value="200" />
+    <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="data.value.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(AccessType.selectedIndex = 1)" localize="true" manageDynamicModel="true">
+      <Assignment variable="component.bindable" value="data" />
+      <Assignment variable="component.bindingDefinition" value="data.valueBindingDefinition" />
     </Custom>
-    <Label label="new_edition_pattern_name" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-    <TextField columns="7" text="TextField" data="data.editionPatternName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="newEditionPatternName" localize="true">
-      <Dependancy componentName="viewSelector" />
-    </TextField>
   </Panel>
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" borderTop="10" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 3)" name="ConditionalSectionPanel">
+    <Label label="please_define_your_condition_here" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" font="LucidaGrande,0,11" />
+    <Label label="condition" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="data.condition.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+      <Assignment variable="component.bindable" value="data" />
+      <Assignment variable="component.bindingDefinition" value="data.conditionBindingDefinition" />
+    </Custom>
+  </Panel>
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 4)" name="IterationSectionPanel">
+    <Label label="please_define_your_iteration_here" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" font="LucidaGrande,0,11" />
+    <Label label="iterator_name" localize="true" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+    <TextField columns="7" text="TextField" data="data.iteratorName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="newEditionPatternName" localize="true" />
+    <Label label="iteration" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="data.iteration.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+      <Assignment variable="component.bindable" value="data" />
+      <Assignment variable="component.bindingDefinition" value="data.iterationBindingDefinition" />
+    </Custom>
+    <Label label="condition" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="data.condition.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+      <Assignment variable="component.bindable" value="data" />
+      <Assignment variable="component.bindingDefinition" value="data.conditionBindingDefinition" />
+    </Custom>
+  </Panel>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" borderTop="10" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
     <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" constraints="flow(index=0)" localize="true" enable="data.isValid">
       <Dependancy componentName="editionPatternDropdown" />
       <Dependancy componentName="patternRoleDropDown" />
@@ -192,6 +210,39 @@
     <Localized key="create_new_toc_entry" lang="French">Créer une nouvelle entrée de table des matières</Localized>
     <Localized key="create_new_toc_entry" lang="English">Create new Table Of Content entry</Localized>
     <Localized key="create_new_toc_entry" lang="Dutch">Create new Table Of Content entry</Localized>
+    <Localized key="normal_section_description" lang="English">&lt;html&gt;&lt;center&gt;Creates a new section with basic HTML contents.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="normal_section_description" lang="French">&lt;html&gt;&lt;center&gt;Creates a new section with basic HTML contents.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="normal_section_description" lang="Dutch">&lt;html&gt;&lt;center&gt;Creates a new section with basic HTML contents.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="predefined_section_description" lang="English">&lt;html&gt;&lt;center&gt;Creates a new section with predefined contents&lt;br&gt;(to be chosen in available items and templates)&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="predefined_section_description" lang="French">&lt;html&gt;&lt;center&gt;Creates a new section with predefined contents&lt;br&gt;(to be chosen in available items and templates)&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="predefined_section_description" lang="Dutch">&lt;html&gt;&lt;center&gt;Creates a new section with predefined contents&lt;br&gt;(to be chosen in available items and templates)&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="model_object_section_description" lang="English">&lt;html&gt;&lt;center&gt;Creates a new section documenting a particular&lt;br&gt; object from the model.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="model_object_section_description" lang="French">&lt;html&gt;&lt;center&gt;Creates a new section documenting a particular&lt;br&gt; object from the model.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="model_object_section_description" lang="Dutch">&lt;html&gt;&lt;center&gt;Creates a new section documenting a particular&lt;br&gt; object from the model.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="conditional_section_description" lang="English">&lt;html&gt;&lt;center&gt;Creates a new control structure which defines a conditional.&lt;br&gt;Contents of entry will be rendered only if condition is meet.&lt;br&gt;(expert users)&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="conditional_section_description" lang="French">&lt;html&gt;&lt;center&gt;Creates a new control structure which defines a conditional.&lt;br&gt;Contents of entry will be rendered only if condition is meet.&lt;br&gt;(expert users)&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="conditional_section_description" lang="Dutch">&lt;html&gt;&lt;center&gt;Creates a new control structure which defines a conditional.&lt;br&gt;Contents of entry will be rendered only if condition is meet.&lt;br&gt;(expert users)&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="iteration_section_description" lang="English">&lt;html&gt;&lt;center&gt;Creates a new control structure which defines a repetition.&lt;br&gt;Contents of entry will be iteratively rendered.&lt;br&gt;(expert users)&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="iteration_section_description" lang="French">&lt;html&gt;&lt;center&gt;Creates a new control structure which defines a repetition.&lt;br&gt;Contents of entry will be iteratively rendered.&lt;br&gt;(expert users)&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="iteration_section_description" lang="Dutch">&lt;html&gt;&lt;center&gt;Creates a new control structure which defines a repetition.&lt;br&gt;Contents of entry will be iteratively rendered.&lt;br&gt;(expert users)&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="NormalSection" lang="English">Normal section</Localized>
+    <Localized key="NormalSection" lang="French">Normal section</Localized>
+    <Localized key="NormalSection" lang="Dutch">Normal section</Localized>
+    <Localized key="new_entry" lang="English">new_entry</Localized>
+    <Localized key="new_entry" lang="French">new_entry</Localized>
+    <Localized key="new_entry" lang="Dutch">new_entry</Localized>
+    <Localized key="PredefinedSection" lang="English">Predefined section</Localized>
+    <Localized key="PredefinedSection" lang="French">Predefined section</Localized>
+    <Localized key="PredefinedSection" lang="Dutch">Predefined section_entry</Localized>
+    <Localized key="ModelObjectSection" lang="English">Model object section</Localized>
+    <Localized key="ModelObjectSection" lang="French">Model object section</Localized>
+    <Localized key="ModelObjectSection" lang="Dutch">Model object section</Localized>
+    <Localized key="ConditionalSection" lang="English">Conditional section</Localized>
+    <Localized key="ConditionalSection" lang="French">Conditional section</Localized>
+    <Localized key="ConditionalSection" lang="Dutch">Conditional section</Localized>
+    <Localized key="IterationSection" lang="English">Iteration section</Localized>
+    <Localized key="IterationSection" lang="French">Iteration section</Localized>
+    <Localized key="IterationSection" lang="Dutch">Iteration section</Localized>
   </LocalizedDictionary>
 </Panel>
 

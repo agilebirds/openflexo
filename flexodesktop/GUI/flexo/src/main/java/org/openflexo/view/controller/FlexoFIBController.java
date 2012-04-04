@@ -37,10 +37,12 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
+import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
@@ -135,6 +137,8 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 			return VEIconLibrary.iconForObject((AbstractViewObject) object);
 		} else if (object instanceof AbstractOntologyObject) {
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
+		} else if (object instanceof TOCObject) {
+			return DEIconLibrary.iconForObject((TOCObject) object);
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
