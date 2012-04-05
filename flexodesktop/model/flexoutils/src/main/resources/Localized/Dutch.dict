@@ -1,5 +1,5 @@
 #Dutch
-#Mon Apr 02 15:12:51 CEST 2012
+#Wed Apr 04 23:42:03 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -120,6 +120,7 @@ Border=Border
 Bounding\ box=Bounding box
 Browser=Browser
 Business=Business
+BusinessTechnical=BusinessTechnical
 Button=Button
 Buttons=Buttons
 Buttons\ container=Buttons container
@@ -617,6 +618,7 @@ Start_TIMER=Start timer
 Statement=Statement
 Stats=Stats
 Status=Status
+Step1=Step1
 String=String
 Stringd=Stringd
 Sub\ Process\ Node=Sub Process Node
@@ -880,6 +882,7 @@ add_to_informed_role=add_to_informed_role
 add_to_process_folder=Add to process folder
 add_toc=Add table of content
 add_toc_entry=Add table of content entry
+add_toc_entry_deprecated=add_toc_entry_deprecated
 add_transtyper=Add transtyper
 add_variable=Add variable
 adding_double_dot=adding '\:'

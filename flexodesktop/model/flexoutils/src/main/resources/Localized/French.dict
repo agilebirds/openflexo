@@ -1,5 +1,5 @@
 #French
-#Mon Apr 02 15:12:51 CEST 2012
+#Wed Apr 04 23:42:03 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -120,6 +120,7 @@ Border=Bord
 Bounding\ box=Entourage
 Browser=Navigateur
 Business=Business
+BusinessTechnical=BusinessTechnical
 Button=Bouton
 Buttons=Boutons
 Buttons\ container=Conteneur de boutons
@@ -617,6 +618,7 @@ Start_TIMER=Minuteur de d\u00E9but
 Statement=Statement
 Stats=Stats
 Status=Statut
+Step1=Step1
 String=Cha\u00EEne de caract\u00E8res
 Stringd=Stringd
 Sub\ Process\ Node=Noeud sous-processus
@@ -880,6 +882,7 @@ add_to_informed_role=add_to_informed_role
 add_to_process_folder=Ajouter au dossier de processus
 add_toc=Cr\u00E9er une table des mati\u00E8res
 add_toc_entry=Ajouter une entr\u00E9e \u00E0 la table des mati\u00E8res
+add_toc_entry_deprecated=add_toc_entry_deprecated
 add_transtyper=Ajouter un transtypeur
 add_variable=Ajout d'une variable
 adding_double_dot=ajouter '\:'
