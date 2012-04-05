@@ -803,6 +803,8 @@ name of the template corresponding to the specific toc_entry.
         docx_tocentry_processes.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.SCREENS)
         docx_tocentry_screens.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.VIEWS)
+        docx_tocentry_views.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.DATA_MODEL)
         docx_tocentry_datamodel.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.DEFINITIONS)
@@ -1342,6 +1344,10 @@ name of the template corresponding to the specific toc_entry.
 ##headersArray: contains a list of string which will be used as headers
 ##contents: contains a list of list of String which will be used to fill the table 
 #macro(renderDocxTable $headersArray $contents)
+#renderDocxTable2($headersArray $contents $falseValue)
+#end
+
+#macro(renderDocxTable2 $headersArray $contents $isRawContent)
 <!--Entering macro renderDocxTable -->
     <w:tbl>
         <w:tblPr>
@@ -1395,7 +1401,7 @@ name of the template corresponding to the specific toc_entry.
                                 <w:sz w:val="24"/>
                                 <w:szCs w:val="24"/>
                             </w:rPr>
-                            <w:t>$header</w:t>
+                            <w:t>#if(${isRawContent})#escape(${header})#else${header}#end</w:t>
                         </w:r>
                     </w:p>
                 </w:tc>
@@ -1418,7 +1424,17 @@ name of the template corresponding to the specific toc_entry.
                             #end
                         </w:tcPr>
                         #if($column.trim().length()>0)
-                            $column
+                            #if(${isRawContent})
+                            <w:p>
+                                <w:pPr><w:keepNext/></w:pPr>
+                                <w:r>
+                                    <w:t>#escape(${column})</w:t>
+                                </w:r>
+                            </w:p>
+                            #else
+                                ${column}
+                            #end
+                        
                         #else
                             <w:p>
                                 <w:pPr><w:keepNext/></w:pPr>
@@ -1434,6 +1450,7 @@ name of the template corresponding to the specific toc_entry.
     </w:tbl>
 <!-- Exiting macro renderDocxTable -->
 #end
+
 
 #*
 * This macro outputs a table environment with the metrics, with an introduction text.
