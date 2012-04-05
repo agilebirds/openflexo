@@ -214,7 +214,7 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			_topTitle.buttonPane.revalidate();
 			_topTitle.buttonPane.repaint();
 		}
-		if (IEBlocWidget.BLOC_TITLE_ATTRIBUTE_NAME.equals(modif.propertyName().equals("title"))) {
+		if (IEBlocWidget.BLOC_TITLE_ATTRIBUTE_NAME.equals(modif.propertyName())) {
 			setTitle(getModel().getTitle());
 		} else if (modif instanceof InnerBlocInserted) {
 			updateInnerBlocInsertion((IEWidget) modif.newValue());
