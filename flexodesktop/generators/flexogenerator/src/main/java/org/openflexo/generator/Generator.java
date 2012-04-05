@@ -45,6 +45,9 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeSingleton;
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -62,10 +65,12 @@ import org.openflexo.foundation.cg.templates.TemplateFileEdited;
 import org.openflexo.foundation.cg.templates.TemplateFileEditionCancelled;
 import org.openflexo.foundation.cg.templates.TemplateFileRedefined;
 import org.openflexo.foundation.cg.templates.TemplateFileSaved;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.TemplateNotFoundException;
 import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
@@ -695,6 +700,39 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	public static Integer getNumberAsInteger(Number number) {
 		if (number != null) {
 			return new Long(Math.round(number.doubleValue())).intValue();
+		}
+		return null;
+	}
+
+	public Object e(BindingEvaluationContext context, String bindingExpression) {
+		return evaluateBinding(context, bindingExpression);
+	}
+
+	public Object eval(BindingEvaluationContext context, String bindingExpression) {
+		return evaluateBinding(context, bindingExpression);
+	}
+
+	public Object evaluate(BindingEvaluationContext context, String bindingExpression) {
+		return evaluateBinding(context, bindingExpression);
+	}
+
+	public Object evaluateBinding(BindingEvaluationContext context, String bindingExpression) {
+		if (context == null) {
+			return null;
+		}
+		if (bindingExpression == null) {
+			return null;
+		}
+		if (context instanceof EditionPatternInstance) {
+			EditionPatternInstance epi = (EditionPatternInstance) context;
+			ViewPointDataBinding vpdb = new ViewPointDataBinding(bindingExpression);
+			vpdb.setOwner(epi.getPattern());
+			vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.GET, false));
+			return vpdb.getBindingValue(context);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Binding evaluation not implemented for objects of type " + context.getClass().getName());
+			}
 		}
 		return null;
 	}
