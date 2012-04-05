@@ -66,11 +66,16 @@ public class FIBDialog<T> extends JDialog {
 		view = FIBController.makeView(fibComponent);
 		getContentPane().add(view.getResultingJComponent());
 		List<FIBButton> def = fibComponent.getDefaultButtons();
+		boolean defaultButtonSet = false;
 		if (def.size() > 0) {
 			JButton button = (JButton) view.geDynamicJComponentForObject(def.get(0));
 			if (button != null) {
 				getRootPane().setDefaultButton(button);
+				defaultButtonSet = true;
 			}
+		}
+		if (!defaultButtonSet) {
+			// TODO: choose a button
 		}
 		validate();
 		pack();
