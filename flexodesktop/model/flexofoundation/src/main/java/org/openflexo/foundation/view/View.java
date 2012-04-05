@@ -19,12 +19,16 @@
  */
 package org.openflexo.foundation.view;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -70,6 +74,31 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		if (getCalc() != null) {
 			getCalc().loadWhenUnloaded();
 		}
+	}
+
+	public Collection<EditionPatternInstance> getEPInstances(String epName) {
+		Collection<ViewShape> shapes = getChildrenOfType(ViewShape.class);
+		Collection<ViewConnector> connectors = getChildrenOfType(ViewConnector.class);
+		List<EditionPatternInstance> epis = new ArrayList<EditionPatternInstance>();
+		for (ViewShape shape : shapes) {
+			EditionPatternInstance epi = shape.getEditionPatternInstance();
+			if (epi == null) {
+				continue;
+			}
+			if (epi.getPattern().getName().equals(epName)) {
+				epis.add(epi);
+			}
+		}
+		for (ViewConnector conn : connectors) {
+			EditionPatternInstance epi = conn.getEditionPatternInstance();
+			if (epi == null) {
+				continue;
+			}
+			if (epi.getPattern().getName().equals(epName)) {
+				epis.add(epi);
+			}
+		}
+		return epis;
 	}
 
 	public ViewDefinition getShemaDefinition() {
@@ -177,6 +206,10 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	@Override
 	public String getInspectorName() {
 		return Inspectors.VE.OE_SHEMA_INSPECTOR;
+	}
+
+	public ViewPoint getViewPoint() {
+		return getCalc();
 	}
 
 	public ViewPoint getCalc() {

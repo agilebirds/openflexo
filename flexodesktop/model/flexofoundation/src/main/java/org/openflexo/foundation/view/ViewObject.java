@@ -19,17 +19,21 @@
  */
 package org.openflexo.foundation.view;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.XMLMapping;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 
 public abstract class ViewObject extends AbstractViewObject {
 
@@ -137,6 +141,27 @@ public abstract class ViewObject extends AbstractViewObject {
 		if (aChild instanceof ViewConnector) {
 			notifyObservers(new ConnectorRemoved((ViewConnector) aChild));
 		}
+	}
+
+	public <T extends ViewObject> Collection<T> getChildrenOfType(final Class<T> type) {
+		return getChildrenOfType(type, true);
+	}
+
+	@SuppressWarnings("unchecked")
+	// We can remove the warning because the code performs the necessary checks
+	public <T extends ViewObject> Collection<T> getChildrenOfType(final Class<T> type, boolean recursive) {
+		Collection<T> objects = (Collection<T>) Collections2.filter(childs, new Predicate<ViewObject>() {
+			@Override
+			public boolean apply(ViewObject input) {
+				return type.isAssignableFrom(input.getClass());
+			}
+		});
+		if (recursive) {
+			for (T object : new ArrayList<T>(objects)) {
+				objects.addAll(object.getChildrenOfType(type, true));
+			}
+		}
+		return objects;
 	}
 
 	public ViewShape getShapeNamed(String name) {
