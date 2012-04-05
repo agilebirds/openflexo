@@ -83,7 +83,7 @@ public class DEIconLibrary extends IconLibrary {
 
 	public static final ImageIcon PREDEFINED_SECTION_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, PREDEFINED_SECTION_ICON_MARKER);
 
-	public static final ImageIcon DEPRECATED_TOC_ENTRY_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, IconLibrary.QUESTION);
+	public static final ImageIcon DEPRECATED_TOC_ENTRY_ICON = IconFactory.getImageIcon(TOC_ENTRY_ICON, IconLibrary.WARNING);
 
 	public static ImageIcon iconForObject(TOCObject object) {
 		if (object instanceof TOCRepository) {
