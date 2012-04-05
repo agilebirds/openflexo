@@ -74,16 +74,6 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 
 	protected DEKeyEventListener _generatorKeyEventListener;
 
-	@Override
-	public boolean useNewInspectorScheme() {
-		return true;
-	}
-
-	@Override
-	public boolean useOldInspectorScheme() {
-		return false;
-	}
-
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
