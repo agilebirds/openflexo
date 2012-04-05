@@ -99,7 +99,7 @@ public abstract class FlexoExternalMain {
 				logger.info("PreferredResourcePath is set to " + ResourceLocator.getPreferredResourcePath().getAbsolutePath());
 			}
 		}
-		FlexoObject.initialize();
+		FlexoObject.initialize(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching " + getName() + "...");
 		}

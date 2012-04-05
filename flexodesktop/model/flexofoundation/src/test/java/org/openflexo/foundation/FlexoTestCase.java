@@ -164,7 +164,7 @@ public abstract class FlexoTestCase extends TestCase {
 		if (System.getProperty("flexo.resources.location") != null) {
 			ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("flexo.resources.location")));
 		}
-		FlexoObject.initialize();
+		FlexoObject.initialize(false);
 	}
 
 	public File getResource(String resourceRelativeName) {

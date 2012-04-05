@@ -69,11 +69,11 @@ public abstract class FlexoObject extends KVCObject {
 	private static boolean isInitialized = false;
 
 	static {
-		initialize();
+		initialize(true);
 	}
 
-	public static void initialize() {
-		if (!isInitialized) {
+	public static void initialize(boolean force) {
+		if (!isInitialized || force) {
 			initialize(StringEncoder.getDefaultInstance());
 			isInitialized = true;
 		}
