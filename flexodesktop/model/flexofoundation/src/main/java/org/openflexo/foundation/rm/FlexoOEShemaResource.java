@@ -32,6 +32,8 @@ import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.toolbox.RelativePathFileConverter;
+import org.openflexo.xmlcode.StringEncoder;
 
 /**
  * Represents a shema resource
@@ -102,6 +104,17 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 		}
 
 		return _shemaDefinition;
+	}
+
+	private StringEncoder encoder;
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		if (encoder == null) {
+			return encoder = new StringEncoder(super.getStringEncoder(),
+					new RelativePathFileConverter(FlexoProject.getResourceCenterFile()));
+		}
+		return encoder;
 	}
 
 	@Override

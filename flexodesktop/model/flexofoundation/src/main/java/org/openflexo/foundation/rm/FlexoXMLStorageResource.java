@@ -48,6 +48,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.ModelEntity;
 import org.openflexo.xmlcode.ModelProperty;
 import org.openflexo.xmlcode.SerializationHandler;
+import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -834,7 +835,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			FlexoXMLSerializableObject dataToSerialize = (FlexoXMLSerializableObject) getResourceData();
 			dataToSerialize.initializeSerialization();
 			XMLCoder.encodeObjectWithMapping(dataToSerialize, getXmlMappings()
-					.getMappingForClassAndVersion(getResourceDataClass(), version), out, getProject().getStringEncoder(), handler);
+					.getMappingForClassAndVersion(getResourceDataClass(), version), out, getStringEncoder(), handler);
 			dataToSerialize.finalizeSerialization();
 			out.flush();
 			out.close();
@@ -845,6 +846,11 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			}
 			out = null;
 		}
+	}
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		return getProject().getStringEncoder();
 	}
 
 	protected abstract boolean isDuplicateSerializationIdentifierRepairable();
@@ -874,7 +880,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			if (hasBuilder() && mapping.hasBuilderClass()) {
 				if (getProject() != null) {
 					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, instanciateNewBuilder(),
-							getProject().getStringEncoder());
+							getStringEncoder());
 				} else {
 					if (!(this instanceof FlexoRMResource)) {
 						if (logger.isLoggable(Level.WARNING)) {
@@ -885,16 +891,16 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				}
 			} else {
 				if (getProject() != null) {
-					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getProject()
-							.getStringEncoder());
+					returned = (XMLRD) XMLDecoder
+							.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getStringEncoder());
 				} else {
 					if (!(this instanceof FlexoRMResource)) {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Project is not set on " + this.getFullyQualifiedName());
 						}
 					}
-					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getProject()
-							.getStringEncoder());
+					returned = (XMLRD) XMLDecoder
+							.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getStringEncoder());
 				}
 			}
 			if (logger.isLoggable(Level.FINE)) {
@@ -949,7 +955,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 	public String getResourceXMLRepresentation() throws XMLOperationException {
 		try {
-			return XMLCoder.encodeObjectWithMapping(getXMLResourceData(), getCurrentMapping(), getProject().getStringEncoder(), null);
+			return XMLCoder.encodeObjectWithMapping(getXMLResourceData(), getCurrentMapping(), getStringEncoder(), null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new XMLOperationException(e, _currentVersion);

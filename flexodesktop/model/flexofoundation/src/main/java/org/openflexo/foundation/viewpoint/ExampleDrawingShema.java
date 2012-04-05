@@ -32,20 +32,19 @@ import org.jdom.JDOMException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
-import org.openflexo.foundation.viewpoint.ViewPointPalette.RelativePathFileConverter;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLDecoder;
 
 public class ExampleDrawingShema extends ExampleDrawingObject {
@@ -54,16 +53,15 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 
 	public static ExampleDrawingShema instanciateShema(ViewPoint calc, File shemaFile) {
 		if (shemaFile.exists()) {
-			Converter<File> previousConverter = null;
 			FileInputStream inputStream = null;
 			try {
-				previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(shemaFile.getParentFile());
 				StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 				inputStream = new FileInputStream(shemaFile);
 				logger.info("Loading file " + shemaFile.getAbsolutePath());
 				ExampleDrawingShema returned = (ExampleDrawingShema) XMLDecoder.decodeObjectWithMapping(inputStream, calc
-						.getViewPointLibrary().get_EXAMPLE_DRAWING_MODEL());
+						.getViewPointLibrary().get_EXAMPLE_DRAWING_MODEL(), null, new StringEncoder(StringEncoder.getDefaultInstance(),
+						relativePathFileConverter));
 				returned.init(calc, shemaFile);
 				return returned;
 			} catch (FileNotFoundException e) {
@@ -88,7 +86,6 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 				try {
 					if (inputStream != null) {
 						inputStream.close();
@@ -147,12 +144,19 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		deleteObservers();
 	}
 
+	private StringEncoder encoder;
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		if (encoder == null) {
+			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
+		}
+		return encoder;
+	}
+
 	@Override
 	public void saveToFile(File aFile) {
-		Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
-		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 		super.saveToFile(aFile);
-		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 		clearIsModified(true);
 	}
 
