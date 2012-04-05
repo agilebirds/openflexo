@@ -59,8 +59,8 @@ public class TOCEntryElement extends DEBrowserElement {
 		if (getEntry().isReadOnly()) {
 			icon = IconFactory.getDisabledIcon(icon);
 		}
-		if ((getEntry().getObjectReference() != null) && (getEntry().getObjectReference().getStatus() != ReferenceStatus.UNRESOLVED)
-				&& (getEntry().getObjectReference().getStatus() != ReferenceStatus.RESOLVED)) {
+		if (getEntry().getObjectReference() != null && getEntry().getObjectReference().getStatus() != ReferenceStatus.UNRESOLVED
+				&& getEntry().getObjectReference().getStatus() != ReferenceStatus.RESOLVED) {
 			icon = IconFactory.getImageIcon(icon, IconLibrary.QUESTION);
 		}
 		return icon;
@@ -77,6 +77,6 @@ public class TOCEntryElement extends DEBrowserElement {
 	}
 
 	public TOCEntry getEntry() {
-		return ((TOCEntry) getObject());
+		return (TOCEntry) getObject();
 	}
 }
