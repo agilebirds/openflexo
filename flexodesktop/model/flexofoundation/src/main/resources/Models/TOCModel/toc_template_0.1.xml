@@ -49,9 +49,7 @@
   	<property name="recursionEnabled" xmlTag="recursionEnabled" attribute="yes" description="this entry may contains sub entries recursively deduced from the model (relevant for processes)"/>
   	<property name="includeStatusList" xmlTag="includeStatusList" attribute="yes" description="(relevant for processes)"/>
    	<property name="subType" xmlTag="subType" attribute="yes" description="(relevant for processes)"/>
-  	<property name="resourceName" xmlTag="resourceName" attribute="yes" description="The associated generated resource name (only if isReadOnly is true)"/>
   	<property name="content" xmlTag="content" attribute="yes" description="The content of this table of content entry (only if isReadOnly is false)"/>
   </entity>
-	
 
 </model>

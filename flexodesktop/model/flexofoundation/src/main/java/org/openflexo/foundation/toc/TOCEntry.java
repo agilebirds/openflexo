@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.toc;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -37,7 +38,6 @@ import org.openflexo.foundation.cg.dm.TOCRepositoryChanged;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.TOCDataBinding.TOCBindingAttribute;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
 import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
@@ -68,18 +68,15 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	private String title;
 	private int index = -1;
 	private boolean isReadOnly = false;
-	private String resourceName;
 	private String content;
 	private TOCEntry parent;
 	protected Vector<TOCEntry> tocEntries;
-	private FlexoModelObjectReference objectReference;
+	private FlexoModelObjectReference<?> objectReference;
 	private boolean startOnANewPage = false;
 	private boolean recursionEnabled = true;
 	private boolean includeStatusList = true;
 	private PredefinedSection.PredefinedSectionType identifier;
 	private ProcessSection.ProcessDocSectionSubType subType;
-
-	private CGRepositoryFileResource resource;
 
 	/**
 	 * Create a new GeneratedCodeRepository.
@@ -128,7 +125,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	@Override
 	public void delete() {
-		for (TOCEntry entry : (Vector<TOCEntry>) tocEntries.clone()) {
+		for (TOCEntry entry : new ArrayList<TOCEntry>(tocEntries)) {
 			entry.delete();
 		}
 		if (objectReference != null) {
@@ -235,21 +232,6 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		this.isReadOnly = isReadOnly;
 		setChanged();
 		notifyAttributeModification("isReadOnly", old, isReadOnly);
-	}
-
-	public String getResourceName() {
-		if (resource != null) {
-			return resource.getResourceIdentifier();
-		} else {
-			return null;
-		}
-	}
-
-	public void setResourceName(String resourceName) {
-		String old = resourceName;
-		this.resourceName = resourceName;
-		setChanged();
-		notifyAttributeModification("resourceName", old, resourceName);
 	}
 
 	public String getContent() {
@@ -651,7 +633,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return -1;
 	}
 
-	private static int preferredLevelForModelObjectClass(Class klass) {
+	private static int preferredLevelForModelObjectClass(Class<?> klass) {
 		if (klass.equals(FlexoProcess.class)) {
 			return 2;
 		}
@@ -661,11 +643,11 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return -1;
 	}
 
-	public FlexoModelObjectReference getObjectReference() {
+	public FlexoModelObjectReference<?> getObjectReference() {
 		return objectReference;
 	}
 
-	public void setObjectReference(FlexoModelObjectReference objectReference) {
+	public void setObjectReference(FlexoModelObjectReference<?> objectReference) {
 		if (this.objectReference != null) {
 			this.objectReference = null;
 		}
@@ -676,17 +658,17 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
+	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference reference) {
+	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
 		setChanged();
 		notifyObservers(new TOCModification(reference, null));
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference reference) {
+	public void objectDeleted(FlexoModelObjectReference<?> reference) {
 		setChanged();
 		notifyObservers(new TOCModification(reference, null));
 	}
@@ -865,7 +847,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	}
 
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference reference) {
+	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
 		setChanged();
 	}
 
