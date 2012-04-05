@@ -215,6 +215,11 @@ public class PredefinedSection extends TOCEntry {
 		super(data);
 	}
 
+	@Override
+	public PredefinedSectionType getIdentifier() {
+		return getType();
+	}
+
 	public PredefinedSectionType getType() {
 		return type;
 	}
