@@ -41,6 +41,7 @@ import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.PredefinedSection;
+import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
@@ -185,4 +186,29 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	public static String getValidReference(String label) {
 		return BAD_CHARACTERS_PATTERN.matcher(label).replaceAll("-");
 	}
+
+	public void beginTocEntry(TOCEntry tocEntry) {
+		System.out.println("BEGIN TOCEntry " + tocEntry.getClass().getSimpleName() + " : " + tocEntry);
+	}
+
+	public void endTocEntry(TOCEntry tocEntry) {
+		System.out.println("END TOCEntry " + tocEntry.getClass().getSimpleName() + " : " + tocEntry);
+	}
+
+	public void log(String s) {
+		System.out.println("LOG: " + s);
+	}
+
+	public void log(String s, Object o) {
+		System.out.println("LOG: " + s + " object=" + o);
+	}
+
+	public void logO(Object o) {
+		if (o == null) {
+			System.out.println("LOG: object=null");
+			return;
+		}
+		System.out.println("LOG: object=" + o + " of " + o.getClass().getSimpleName());
+	}
+
 }

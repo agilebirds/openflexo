@@ -63,6 +63,16 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 
 	public final FlexoPerspective<TOCObject> DOCEDITOR_PERSPECTIVE = new DocEditorPerspective();
 
+	@Override
+	public boolean useNewInspectorScheme() {
+		return true;
+	}
+
+	@Override
+	public boolean useOldInspectorScheme() {
+		return true;
+	}
+
 	// ==========================================================================
 	// ============================= Instance variables
 	// =========================

@@ -25,4 +25,8 @@ public class NormalSection extends TOCEntry {
 		this.content = content;
 	}
 
+	@Override
+	public String getDefaultTemplateName() {
+		return null;
+	}
 }

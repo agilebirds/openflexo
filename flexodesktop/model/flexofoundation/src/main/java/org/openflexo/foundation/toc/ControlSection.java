@@ -20,4 +20,9 @@ public abstract class ControlSection extends TOCEntry {
 		super(data);
 	}
 
+	@Override
+	public String getDefaultTemplateName() {
+		return null;
+	}
+
 }

@@ -161,7 +161,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		case ModelObjectSection:
 			switch (getModelObjectType()) {
 			case Process:
-				newEntry = getRepository().createProcessSection(getTocEntryTitle(), selectedProcess, null);
+				newEntry = getRepository().createProcessSection(getTocEntryTitle(), selectedProcess, getProcessDocSectionSubType(), null);
 				break;
 			case View:
 				newEntry = getRepository().createViewSection(getTocEntryTitle(), selectedView, null);

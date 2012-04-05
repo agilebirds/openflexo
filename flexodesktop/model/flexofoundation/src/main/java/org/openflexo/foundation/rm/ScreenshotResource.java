@@ -47,6 +47,7 @@ import org.openflexo.foundation.ie.dm.ComponentNameChanged;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;
@@ -187,8 +188,10 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			ret.setSource(o);
 		} else if (o instanceof FlexoWorkflow) {
 			ret.setSource(o);
-		} else if (o instanceof View) {
+		} else if (o instanceof ViewDefinition) {
 			ret.setSource(o);
+		} else if (o instanceof View) {
+			ret.setSource(((View) o).getShemaDefinition());
 		} else {
 			logger.warning("Could not create screenshot for " + o);
 			return null;
@@ -565,13 +568,10 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	 */
 	@Override
 	public void rebuildDependancies() {
-		if ("SCREENSHOT.WOComponent-Operation1".equals(toString())) {
-			System.out.println("here");
-		}
 		super.rebuildDependancies();
 		if (getModelObject() != null && getModelObject().getXMLResourceData() != null
 				&& getModelObject().getXMLResourceData().getFlexoResource() != null) {
-			if (!(getModelObject() instanceof ComponentDefinition)) {
+			if (!(getModelObject() instanceof ComponentDefinition) && !(getModelObject() instanceof ViewDefinition)) {
 				addToDependentResources(getModelObject().getXMLResourceData().getFlexoResource());
 			}
 		}
@@ -579,6 +579,12 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			FlexoComponentResource compRes = ((ComponentDefinition) getModelObject()).getComponentResource(false);
 			if (compRes != null) {
 				addToDependentResources(compRes);
+			}
+		}
+		if (getModelObject() instanceof ViewDefinition) {
+			FlexoOEShemaResource viewRes = ((ViewDefinition) getModelObject()).getShemaResource(false);
+			if (viewRes != null) {
+				addToDependentResources(viewRes);
 			}
 		}
 	}

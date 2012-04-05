@@ -5,6 +5,8 @@ import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
 public class OperationScreenSection extends ModelObjectSection<OperationComponentDefinition> {
 
+	protected static final String DOC_TEMPLATE = "docx_tocentry_screen.xml.vm";
+
 	public OperationScreenSection(FlexoTOCBuilder builder) {
 		this(builder.tocData);
 		initializeDeserialization(builder);
@@ -25,6 +27,11 @@ public class OperationScreenSection extends ModelObjectSection<OperationComponen
 
 	public void setOperationScreen(OperationComponentDefinition operationScreen) {
 		setModelObject(operationScreen);
+	}
+
+	@Override
+	public String getDefaultTemplateName() {
+		return DOC_TEMPLATE;
 	}
 
 }

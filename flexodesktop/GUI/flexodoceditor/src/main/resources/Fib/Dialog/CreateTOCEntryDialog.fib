@@ -68,8 +68,8 @@
     <RadioButtonList localize="true" manageDynamicModel="true" name="AccessType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="select_a_given_object,use_expression" iteratorClassName="java.lang.String" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </RadioButtonList>
-    <Label label="view" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.modelObjectType = &quot;View&quot;) &amp; (AccessType.selectedIndex = 0))" />
-    <Custom componentClassName="org.openflexo.components.widget.FIBViewSelector" data="data.selectedView" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.modelObjectType = &quot;View&quot;)" name="viewSelector" localize="true" manageDynamicModel="true">
+    <Label label="view" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.modelObjectType = &quot;View&quot;) &amp; (AccessType.selectedIndex = 0))" />
+    <Custom componentClassName="org.openflexo.components.widget.FIBViewSelector" data="data.selectedView" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;View&quot;) &amp; (AccessType.selectedIndex = 0))" name="viewSelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.defaultHeight" value="200" />
       <Assignment variable="component.project" value="data.editor.project" />
     </Custom>

@@ -14,11 +14,7 @@
       <TextField passwd="false" readOnly="true" localize="true" name="Identifier" data="data.identifier.toString" constraints="twocols(location=right;index=15;expandHorizontally=true;expandVertically=false)" useScrollBar="false">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
-      <Label label="subType" localize="true" name="SubTypeLabel" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" readOnly="true" localize="true" name="SubType" data="data.subType.toString" constraints="twocols(location=right;index=17;expandHorizontally=true;expandVertically=false)" useScrollBar="false">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
-      </TextField>
-    </Tab>
+     </Tab>
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab">
       <Label label="title" localize="true" name="TitleLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
       <TextField passwd="false" localize="true" name="Title" data="data.title" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
@@ -40,8 +36,6 @@
       <Custom componentClassName="org.openflexo.components.widget.FIBRoleSelector" data="data.documentedRole" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" visible="(data.isIndividualRole = true)" useScrollBar="false" name="DocumentedRole" localize="true">
         <Assignment variable="component.project" value="data.project" />
       </Custom>
-      <Label label="type" localize="true" name="SubTypeLabel" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" visible="(data.isIndividualProcessOrProcessFolder = true)" useScrollBar="false" />
-      <TextField passwd="false" readOnly="true" localize="true" name="SubType" data="data.subType.toString" constraints="twocols(location=right;index=17;expandHorizontally=true;expandVertically=false)" visible="(data.isIndividualProcessOrProcessFolder = true)" useScrollBar="false" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
