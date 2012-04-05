@@ -42,7 +42,7 @@ import java.util.StringTokenizer;
  */
 public class StringEncoder {
 
-	private static final StringEncoder defaultInstance = new StringEncoder();
+	private static StringEncoder defaultInstance = new StringEncoder();
 
 	public static String encodeBoolean(boolean aBoolean) {
 		return aBoolean ? "true" : "false";
@@ -213,6 +213,11 @@ public class StringEncoder {
 	}
 
 	public static void initialize() {
+		defaultInstance._initialize();
+	}
+
+	public static void reset() {
+		defaultInstance = new StringEncoder();
 		defaultInstance._initialize();
 	}
 
