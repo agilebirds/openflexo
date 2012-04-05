@@ -853,6 +853,20 @@ public class StringEncoder {
 
 	private boolean isInitialized = false;
 
+	private StringEncoder delegate;
+
+	public StringEncoder() {
+	}
+
+	public StringEncoder(StringEncoder delegate, Converter<?>... converters) {
+		super();
+		this.delegate = delegate;
+		for (Converter<?> converter : converters) {
+			_addConverter(converter);
+		}
+		isInitialized = true;
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T> T _decodeObject(String value, Class<T> objectType) {
 		if (!isInitialized) {
@@ -913,15 +927,17 @@ public class StringEncoder {
 		 * Converter: "+converter.getConverterClass().getName()); }
 		 */
 		Converter returned;
-		Class tryThis = objectType;
-		boolean iAmAtTheTop = false;
+		Class<? super T> tryThis = objectType;
 		do {
 			returned = converters.get(tryThis);
-			iAmAtTheTop = tryThis.equals(Object.class);
-			if (!iAmAtTheTop) {
-				tryThis = tryThis.getSuperclass();
+			if (tryThis.equals(Object.class)) {
+				break;
 			}
-		} while (returned == null && !iAmAtTheTop && tryThis != null);
+			tryThis = tryThis.getSuperclass();
+		} while (returned == null && tryThis != null);
+		if (returned == null && delegate != null) {
+			return delegate._converterForClass(objectType);
+		}
 		return returned;
 	}
 

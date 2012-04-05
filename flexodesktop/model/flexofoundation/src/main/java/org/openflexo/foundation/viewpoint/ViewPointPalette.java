@@ -42,19 +42,19 @@ import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
 public class ViewPointPalette extends ViewPointObject implements Comparable<ViewPointPalette> {
 
-	private static final Logger logger = Logger.getLogger(ViewPointPalette.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ViewPointPalette.class.getPackage().getName());
 
 	private int index;
 
@@ -73,16 +73,14 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 
 	public static ViewPointPalette instanciateCalcPalette(ViewPoint calc, File paletteFile) {
 		if (paletteFile.exists()) {
-			Converter<File> previousConverter = null;
 			FileInputStream inputStream = null;
 			try {
-				previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(paletteFile.getParentFile());
-				StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 				inputStream = new FileInputStream(paletteFile);
 				logger.info("Loading file " + paletteFile.getAbsolutePath());
 				ViewPointPalette returned = (ViewPointPalette) XMLDecoder.decodeObjectWithMapping(inputStream, calc.getViewPointLibrary()
-						.get_VIEW_POINT_PALETTE_MODEL());
+						.get_VIEW_POINT_PALETTE_MODEL(), null, new StringEncoder(StringEncoder.getDefaultInstance(),
+						relativePathFileConverter));
 				returned.init(calc, paletteFile);
 				return returned;
 			} catch (FileNotFoundException e) {
@@ -107,7 +105,6 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 				try {
 					if (inputStream != null) {
 						inputStream.close();
@@ -258,12 +255,19 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 		return getViewPointLibrary().get_VIEW_POINT_PALETTE_MODEL();
 	}
 
+	private StringEncoder encoder;
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		if (encoder == null) {
+			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
+		}
+		return encoder;
+	}
+
 	@Override
 	public void saveToFile(File aFile) {
-		Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
-		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 		super.saveToFile(aFile);
-		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 		clearIsModified(true);
 	}
 
@@ -306,31 +310,6 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 		newElement.setGraphicalRepresentation(graphicalRepresentation);
 		addToElements(newElement);
 		return newElement;
-	}
-
-	public static class RelativePathFileConverter extends Converter<File> {
-		private final File relativePath;
-
-		public RelativePathFileConverter(File aRelativePath) {
-			super(File.class);
-			relativePath = aRelativePath;
-		}
-
-		@Override
-		public File convertFromString(String value) {
-			return new File(relativePath, value);
-		}
-
-		@Override
-		public String convertToString(File value) {
-			try {
-				return FileUtils.makeFilePathRelativeToDir(value, relativePath);
-			} catch (IOException e) {
-				logger.warning("IOException while computing relative path for " + value + " relative to " + relativePath);
-				return value.getAbsolutePath();
-			}
-		}
-
 	}
 
 	@Override
