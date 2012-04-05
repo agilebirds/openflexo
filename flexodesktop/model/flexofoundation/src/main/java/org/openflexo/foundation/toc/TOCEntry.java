@@ -234,10 +234,42 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("isReadOnly", old, isReadOnly);
 	}
 
+	// Deprecated:
+	// This implementation is only temporary, please remove it when TOCEntry becomes abstract
+	public String getDefaultTemplateName() {
+		if (getIdentifier() != null) {
+			return getIdentifier().getDefaultTemplateName();
+		} else if (isIndividualProcessFolder()) {
+			return ProcessFolderSection.DOC_TEMPLATE;
+		} else if (isIndividualProcess()) {
+			if (isSIPOC2SubType()) {
+				return ProcessSection.SIPOC_LEVEL2_TEMPLATE;
+			} else if (isSIPOC3SubType()) {
+				return ProcessSection.SIPOC_LEVEL3_TEMPLATE;
+			} else if (isRACISubType()) {
+				return ProcessSection.RACI_MATRIX_TEMPLATE;
+			}
+			if (isOperationTableSubType()) {
+				return ProcessSection.OPERATION_TABLE_TEMPLATE;
+			} else {
+				return ProcessSection.DOC_TEMPLATE;
+			}
+		} else if (isIndividualRole()) {
+			return RoleSection.DOC_TEMPLATE;
+		} else if (isIndividualEntity()) {
+			return EntitySection.DOC_TEMPLATE;
+		} else if (isIndividualComponentDefinition()) {
+			return OperationScreenSection.DOC_TEMPLATE;
+		}
+		return null;
+	}
+
+	@Deprecated
 	public String getContent() {
 		return content;
 	}
 
+	@Deprecated
 	public void setContent(String content) throws IllegalAccessException {
 		if (isReadOnly) {
 			throw new IllegalAccessException("this entry is read only");
@@ -251,14 +283,17 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		}
 	}
 
+	@Deprecated
 	public boolean isProcessesSection() {
 		return identifier != null && identifier == PredefinedSection.PredefinedSectionType.PROCESSES;
 	}
 
+	@Deprecated
 	public PredefinedSection.PredefinedSectionType getIdentifier() {
 		return identifier;
 	}
 
+	@Deprecated
 	public void setIdentifier(PredefinedSection.PredefinedSectionType identifier) {
 		if (!isDeserializing()) {
 			return;
@@ -266,14 +301,17 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		this.identifier = identifier;
 	}
 
+	@Deprecated
 	public ProcessSection.ProcessDocSectionSubType getSubType() {
 		return subType;
 	}
 
+	@Deprecated
 	public void setSubType(ProcessSection.ProcessDocSectionSubType subType) {
 		this.subType = subType;
 	}
 
+	@Deprecated
 	public String getValidReference() {
 		return "TOC-" + getLevel() + "-" + getTitle();
 	}
@@ -552,10 +590,12 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		this.lastUpdateDate = lastUpdateDate;
 	}
 
+	@Deprecated
 	public FlexoModelObject getObject() {
 		return getObject(false);
 	}
 
+	@Deprecated
 	public FlexoModelObject getObject(boolean forceResourceLoad) {
 		if (getObjectReference() != null) {
 			return getObjectReference().getObject(forceResourceLoad);
@@ -564,6 +604,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		}
 	}
 
+	@Deprecated
 	public void setObject(FlexoModelObject object) {
 		if (objectReference != null) {
 			objectReference.delete();
@@ -580,50 +621,62 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		}
 	}
 
+	@Deprecated
 	public boolean isDocSubType() {
 		return getSubType() == ProcessSection.ProcessDocSectionSubType.Doc;
 	}
 
+	@Deprecated
 	public boolean isRACISubType() {
 		return getSubType() == ProcessSection.ProcessDocSectionSubType.RaciMatrix;
 	}
 
+	@Deprecated
 	public boolean isSIPOC2SubType() {
 		return getSubType() == ProcessSection.ProcessDocSectionSubType.SIPOCLevel2;
 	}
 
+	@Deprecated
 	public boolean isSIPOC3SubType() {
 		return getSubType() == ProcessSection.ProcessDocSectionSubType.SIPOCLevel3;
 	}
 
+	@Deprecated
 	public boolean isOperationTableSubType() {
 		return getSubType() == ProcessSection.ProcessDocSectionSubType.OperationTable;
 	}
 
+	@Deprecated
 	public boolean isERDiagram() {
 		return getIdentifier() == PredefinedSection.PredefinedSectionType.ER_DIAGRAM;
 	}
 
+	@Deprecated
 	public boolean isIndividualProcessOrProcessFolder() {
 		return getIdentifier() == null && (getObject() instanceof FlexoProcess || getObject() instanceof ProcessFolder);
 	}
 
+	@Deprecated
 	public boolean isIndividualProcess() {
 		return getIdentifier() == null && getObject() instanceof FlexoProcess;
 	}
 
+	@Deprecated
 	public boolean isIndividualProcessFolder() {
 		return getIdentifier() == null && getObject() instanceof ProcessFolder;
 	}
 
+	@Deprecated
 	public boolean isIndividualRole() {
 		return getIdentifier() == null && getObject() instanceof Role;
 	}
 
+	@Deprecated
 	public boolean isIndividualEntity() {
 		return getIdentifier() == null && getObject() instanceof DMEOEntity;
 	}
 
+	@Deprecated
 	public boolean isIndividualComponentDefinition() {
 		return getIdentifier() == null && getObject() instanceof ComponentDefinition;
 	}
@@ -643,10 +696,12 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return -1;
 	}
 
+	@Deprecated
 	public FlexoModelObjectReference<?> getObjectReference() {
 		return objectReference;
 	}
 
+	@Deprecated
 	public void setObjectReference(FlexoModelObjectReference<?> objectReference) {
 		if (this.objectReference != null) {
 			this.objectReference = null;
@@ -657,16 +712,19 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		}
 	}
 
+	@Deprecated
 	@Override
 	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
 	}
 
+	@Deprecated
 	@Override
 	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
 		setChanged();
 		notifyObservers(new TOCModification(reference, null));
 	}
 
+	@Deprecated
 	@Override
 	public void objectDeleted(FlexoModelObjectReference<?> reference) {
 		setChanged();
@@ -717,6 +775,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return includeStatusList;
 	}
 
+	@Deprecated
 	public RepresentableFlexoModelObject getDocumentedFlexoProcess() {
 		if (getObject() instanceof FlexoProcess || getObject() instanceof ProcessFolder) {
 			return (RepresentableFlexoModelObject) getObject();
@@ -724,6 +783,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public ERDiagram getDocumentedDiagram() {
 		if (isERDiagram()) {
 			return (ERDiagram) getObject();
@@ -731,6 +791,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public Role getDocumentedRole() {
 		if (isIndividualRole()) {
 			return (Role) getObject();
@@ -738,6 +799,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public DMEOEntity getDocumentedDMEOEntity() {
 		if (isIndividualEntity()) {
 			return (DMEOEntity) getObject();
@@ -745,6 +807,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public ComponentDefinition getDocumentedComponentDefinition() {
 		if (isIndividualComponentDefinition()) {
 			return (ComponentDefinition) getObject();
@@ -752,6 +815,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public void setDocumentedFlexoProcess(RepresentableFlexoModelObject object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -774,6 +838,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedFlexoProcess", null, object);
 	}
 
+	@Deprecated
 	public void setDocumentedRole(Role object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -791,6 +856,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedRole", null, object);
 	}
 
+	@Deprecated
 	public void setDocumentedDMEOEntity(DMEOEntity object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -808,6 +874,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedDMEOEntity", null, object);
 	}
 
+	@Deprecated
 	public void setDocumentedComponentDefinition(ComponentDefinition object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -825,6 +892,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedComponentDefinition", null, object);
 	}
 
+	@Deprecated
 	public void setDocumentedDiagram(ERDiagram object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -842,10 +910,12 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedDiagram", null, object);
 	}
 
+	@Deprecated
 	public Vector<ERDiagram> availableDiagrams() {
 		return getProject().getDataModel().getDiagrams();
 	}
 
+	@Deprecated
 	@Override
 	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
 		setChanged();

@@ -407,11 +407,13 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
-	public ProcessSection createProcessSection(String title, FlexoProcess process, TOCDataBinding value) {
+	public ProcessSection createProcessSection(String title, FlexoProcess process, ProcessSection.ProcessDocSectionSubType subType,
+			TOCDataBinding value) {
 		ProcessSection reply = new ProcessSection(getData());
 		reply.setTitle(title);
 		reply.setModelObject(process);
 		reply.setValue(value);
+		reply.setSubType(subType);
 		return reply;
 	}
 
@@ -467,5 +469,10 @@ public class TOCRepository extends TOCEntry {
 			}
 		});
 		return returned;
+	}
+
+	@Override
+	public String getDefaultTemplateName() {
+		return null;
 	}
 }

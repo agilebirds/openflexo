@@ -133,7 +133,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 			Enumeration<ViewDefinition> en5 = getProject().getShemaLibrary().retrieveAllShemas().elements();
 			while (en5.hasMoreElements()) {
 				ViewDefinition sd = en5.nextElement();
-				FlexoCopiedResource cdCopy = getResourceForShema(sd.getShema(), true);
+				FlexoCopiedResource cdCopy = getResourceForShema(sd, true);
 				resources.add(cdCopy);
 				newGenerators.put(cdCopy, (CopiedResourceGenerator) cdCopy.getGenerator());
 			}
@@ -193,7 +193,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		return getResourceForFlexoModelObject(cd, createIfNull);
 	}
 
-	private FlexoCopiedResource getResourceForShema(View sd, boolean createIfNull) {
+	private FlexoCopiedResource getResourceForShema(ViewDefinition sd, boolean createIfNull) {
 		return getResourceForFlexoModelObject(sd, createIfNull);
 	}
 
@@ -249,7 +249,9 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		} else if (o instanceof FlexoWorkflow) {
 			return getResourceForFlexoModelObject(o, false);
 		} else if (o instanceof View) {
-			return getResourceForFlexoModelObject(o, false);
+			return getResourceForShema(((View) o).getShemaDefinition(), false);
+		} else if (o instanceof ViewDefinition) {
+			return getResourceForShema((ViewDefinition) o, false);
 		}
 		return null;
 	}

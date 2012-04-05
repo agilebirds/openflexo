@@ -27,4 +27,9 @@ public class ERDiagramSection extends ModelObjectSection<ERDiagram> {
 		setModelObject(diagram);
 	}
 
+	@Override
+	public String getDefaultTemplateName() {
+		return null;
+	}
+
 }

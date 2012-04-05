@@ -101,6 +101,11 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 		this.value = value;
 	}
 
+	@Override
+	public FlexoModelObject getObject() {
+		return getModelObject(false);
+	}
+
 	public T getModelObject(boolean forceResourceLoad) {
 		if (getModelObjectReference() != null) {
 			return (T) getModelObjectReference().getObject(forceResourceLoad);
@@ -158,4 +163,7 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 		notifyObservers(new TOCModification(reference, null));
 	}
 
+	public boolean isModelObjectSection() {
+		return true;
+	}
 }
