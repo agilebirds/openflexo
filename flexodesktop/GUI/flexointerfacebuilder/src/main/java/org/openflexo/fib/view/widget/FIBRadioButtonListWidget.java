@@ -63,6 +63,7 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 		for (int i = 0; i < getListModel().getSize(); i++) {
 			Object object = getListModel().getElementAt(i);
 			JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
+			rb.setOpaque(false);
 			rb.addActionListener(new RadioButtonListener(rb, object, i));
 			radioButtonArray[i] = rb;
 			panel.add(rb);
