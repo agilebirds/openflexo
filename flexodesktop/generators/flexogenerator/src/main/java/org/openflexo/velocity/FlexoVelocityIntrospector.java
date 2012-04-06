@@ -65,7 +65,7 @@ public class FlexoVelocityIntrospector extends UberspectImpl {
 			return m != null ? new VelMethodImpl(m) : null;
 		}
 		// if it's an array
-		if (objClass instanceof Class) {
+		if (obj instanceof Class) {
 			m = introspector.getMethod((Class<?>) obj, methodName, args);
 			if (m != null) {
 				return new VelMethodImpl(m);
