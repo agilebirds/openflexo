@@ -127,9 +127,7 @@ public final class ModuleLoader implements IModuleLoader {
 			}
 			return;
 		}
-		if (getProjectLoader().saveProject(getProject(), true)) {
-			openProject(getProject().getProjectDirectory(), null);
-		}
+		openProject(getProject().getProjectDirectory(), null);
 	}
 
 	public void newProject(File projectDirectory, Module module) throws ProjectLoadingCancelledException, ModuleLoadingException {
