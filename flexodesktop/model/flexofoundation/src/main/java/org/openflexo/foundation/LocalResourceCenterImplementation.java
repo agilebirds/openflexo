@@ -59,6 +59,10 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	private static void copyViewPoints(File resourceCenterDirectory, CopyStrategy copyStrategy) {
+		if (CALC_LIBRARY_DIR.getParentFile().equals(resourceCenterDirectory)) {
+			return;
+		}
+
 		try {
 			FileUtils.copyDirToDir(CALC_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
 		} catch (IOException e) {
@@ -67,6 +71,9 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	private static void copyOntologies(File resourceCenterDirectory, CopyStrategy copyStrategy) {
+		if (ONTOLOGY_LIBRARY_DIR.getParentFile().equals(resourceCenterDirectory)) {
+			return;
+		}
 		try {
 			FileUtils.copyDirToDir(ONTOLOGY_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
 		} catch (IOException e) {
