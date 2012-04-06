@@ -111,8 +111,8 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 	@Override
 	public StringEncoder getStringEncoder() {
 		if (encoder == null) {
-			return encoder = new StringEncoder(super.getStringEncoder(),
-					new RelativePathFileConverter(FlexoProject.getResourceCenterFile()));
+			return encoder = new StringEncoder(super.getStringEncoder(), new RelativePathFileConverter(getShemaDefinition().getCalc()
+					.getViewPointDirectory()));
 		}
 		return encoder;
 	}
