@@ -61,6 +61,7 @@ public class OEControllerActionInitializer extends ControllerActionInitializer {
 		// Shema library perspective
 		(new AddViewInitializer(this)).init();
 		(new AddViewFolderInitializer(this)).init();
+		(new DeleteViewInitializer(this)).init();
 
 		// Diagram perspective
 		(new AddShapeInitializer(this)).init();

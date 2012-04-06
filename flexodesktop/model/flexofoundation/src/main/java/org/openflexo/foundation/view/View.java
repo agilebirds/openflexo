@@ -23,12 +23,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
+import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -240,4 +242,34 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	public String toString() {
 		return "View[name=" + getName() + "/viewpoint=" + getCalc().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
 	}
+
+	// ==========================================================================
+	// ================================= Delete ===============================
+	// ==========================================================================
+
+	@Override
+	public final void delete() {
+		// tests on this deleted object
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("delete: View " + getName());
+		}
+		if (getFlexoResource() != null) {
+			getFlexoResource().delete();
+		}
+
+		if (getShemaDefinition() != null) {
+			getShemaDefinition().delete();
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("View " + getName() + " has no ViewDefinition associated!");
+			}
+		}
+
+		super.delete();
+
+		setChanged();
+		notifyObservers(new ShemaDeleted(this.getShemaDefinition()));
+		deleteObservers();
+	}
+
 }
