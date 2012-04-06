@@ -20,12 +20,15 @@
 package org.openflexo.dg.docx;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.apache.velocity.VelocityContext;
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.dg.latex.DocGeneratorConstants;
 import org.openflexo.dg.rm.DocxXmlFileResource;
 import org.openflexo.foundation.FlexoModelObject;
@@ -41,6 +44,9 @@ import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
+import org.openflexo.foundation.toc.ConditionalSection;
+import org.openflexo.foundation.toc.IterationSection;
+import org.openflexo.foundation.toc.ModelObjectSection;
 import org.openflexo.foundation.toc.PredefinedSection;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -51,7 +57,8 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
 import org.openflexo.logging.FlexoLogger;
 
-public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T, DGRepository> implements IFlexoResourceGenerator {
+public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T, DGRepository> implements IFlexoResourceGenerator,
+		BindingEvaluationContext {
 	protected static final String BAD_CHARACTERS_REG_EXP = "['\"&}%#~\\s_?+:/\\\\]";
 	protected static final Pattern BAD_CHARACTERS_PATTERN = Pattern.compile(BAD_CHARACTERS_REG_EXP);
 
@@ -119,10 +126,16 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		stopGeneration();
 	}
 
+	private VelocityContext context;
+
 	@Override
 	protected VelocityContext defaultContext() {
-		VelocityContext context = super.defaultContext();
+		context = super.defaultContext();
 		context.put("DocSection", PredefinedSection.PredefinedSectionType.class);
+		return context;
+	}
+
+	public VelocityContext getVelocityContext() {
 		return context;
 	}
 
@@ -193,11 +206,75 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	}
 
 	public void beginTocEntry(TOCEntry tocEntry) {
-		System.out.println("BEGIN TOCEntry " + tocEntry.getClass().getSimpleName() + " : " + tocEntry);
+		logger.info("BEGIN TOCEntry " + tocEntry.getClass().getSimpleName() + " : " + tocEntry);
+		if (tocEntry instanceof IterationSection) {
+			IterationSection iteration = (IterationSection) tocEntry;
+			logger.info("Iteration " + iteration);
+		}
 	}
 
 	public void endTocEntry(TOCEntry tocEntry) {
-		System.out.println("END TOCEntry " + tocEntry.getClass().getSimpleName() + " : " + tocEntry);
+		logger.info("END TOCEntry " + tocEntry.getClass().getSimpleName() + " : " + tocEntry);
+		if (tocEntry instanceof IterationSection) {
+			IterationSection iteration = (IterationSection) tocEntry;
+			logger.info("Iteration " + iteration);
+			getVelocityContext().remove(iteration.getIteratorName());
+		}
+	}
+
+	public List<Object> getIterableObjects(IterationSection iteration) {
+		Object listValue = iteration.getIteration().getBindingValue(this);
+		logger.info("getIterableObjects = " + listValue);
+		if (listValue instanceof List) {
+			return (List) listValue;
+		}
+		return null;
+	}
+
+	public Object iterateOnItem(IterationSection iteration, Object item) {
+		logger.info("> Iterate on item " + item + " of " + item.getClass().getSimpleName());
+		getVelocityContext().put(iteration.getIteratorName(), item);
+		return item;
+	}
+
+	public Boolean getItemCondition(IterationSection iteration) {
+		if ((!iteration.getCondition().isSet()) || (!iteration.getCondition().isValid())) {
+			return true;
+		}
+		Object conditionValue = iteration.getCondition().getBindingValue(this);
+		logger.info("conditionValue = " + conditionValue);
+		return (Boolean) conditionValue;
+	}
+
+	public Boolean getCondition(ConditionalSection conditional) {
+		if ((!conditional.getCondition().isSet()) || (!conditional.getCondition().isValid())) {
+			return true;
+		}
+		Object conditionValue = conditional.getCondition().getBindingValue(this);
+		logger.info("conditionValue = " + conditionValue);
+		return (Boolean) conditionValue;
+	}
+
+	public <T extends FlexoModelObject> T getAccessedModelObject(ModelObjectSection<T> section) {
+		if (section.getObject() != null) {
+			return (T) section.getObject();
+		}
+		if ((!section.getValue().isSet()) || (!section.getValue().isValid())) {
+			return null;
+		}
+		Object objectValue = section.getValue().getBindingValue(this);
+		logger.info("objectValue = " + objectValue);
+		return (T) objectValue;
+	}
+
+	@Override
+	public Object getValue(BindingVariable variable) {
+		if (getVelocityContext() != null) {
+			System.out.println("For value " + variable.getVariableName() + " return "
+					+ getVelocityContext().get(variable.getVariableName()));
+			return getVelocityContext().get(variable.getVariableName());
+		}
+		return null;
 	}
 
 	public void log(String s) {
