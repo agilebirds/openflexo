@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project id="SYL_413" name="TestVE" projectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558" cssSheet="Contento" lastUniqueID="832" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,10:45:58 04/10/2011 000" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="413" dontGenerate="false" useSpecificDescriptions="false">
-  <resourcesCount>46</resourcesCount>
+<Project id="SYL_413" name="TestVE" projectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558" cssSheet="Contento" lastUniqueID="933" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,10:45:58 04/10/2011 000" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="413" dontGenerate="false" useSpecificDescriptions="false">
+  <resourcesCount>47</resourcesCount>
   No description
   <ComponentLibrary id="SYL_COMPONENT_LIBRARY.TestVE" userID="SYL" version="2.4" file="TestVE.wolib">
     <DependantResources id="SYL_COMPONENT_LIBRARY.TestVE_DR" />
@@ -228,6 +228,15 @@
       <RMResource idref="SYL_RM.TestVE" />
     </SynchronizedResources>
   </NavigationMenu>
+  <Process id="SYL_PROCESS.NewProcess" name="NewProcess" userID="SYL" version="6.0" file="Workflow/NewProcess.xml">
+    <DependantResources id="SYL_PROCESS.NewProcess_DR">
+      <DataModel idref="SYL_DATA_MODEL.TestVE" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_PROCESS.NewProcess_SR">
+      <Workflow idref="SYL_WORKFLOW.TestVE" />
+      <RMResource idref="SYL_RM.TestVE" />
+    </SynchronizedResources>
+  </Process>
   <Process id="SYL_PROCESS.TestVE" name="TestVE" userID="SYL" version="6.0" file="Workflow/TestVE.xml">
     <DependantResources id="SYL_PROCESS.TestVE_DR">
       <DataModel idref="SYL_DATA_MODEL.TestVE" />
@@ -292,6 +301,7 @@
       <Shema idref="SYL_SHEMA.TestOrganizationMap" />
       <Shema idref="SYL_SHEMA.R&amp;DDefinition" />
       <EOModel idref="SYL_EOMODEL.sdffdsfsd.eomodeld" />
+      <Process idref="SYL_PROCESS.NewProcess" />
     </SynchronizedResources>
   </RMResource>
   <Shema id="SYL_SHEMA.BasicOrganization" name="BasicOrganization" userID="SYL" version="1.0" file="Ontology/BasicOrganization.shema">
@@ -401,6 +411,7 @@
     <SynchronizedResources id="SYL_WORKFLOW.TestVE_SR">
       <RMResource idref="SYL_RM.TestVE" />
       <Process idref="SYL_PROCESS.TestVE" />
+      <Process idref="SYL_PROCESS.NewProcess" />
     </SynchronizedResources>
   </Workflow>
   <FlexoWSLibrary id="SYL_WS_LIBRARY.TestVE" userID="SYL" file="WebService/TestVE.ws" version="0.2">

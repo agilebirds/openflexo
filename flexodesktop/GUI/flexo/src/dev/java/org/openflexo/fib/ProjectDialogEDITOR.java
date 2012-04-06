@@ -39,7 +39,7 @@ import org.openflexo.module.ModuleLoader;
 
 public class ProjectDialogEDITOR {
 
-	protected static FlexoEditor loadProject(File prjDir) {
+	public static FlexoEditor loadProject(File prjDir) {
 		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
 		FlexoEditor editor = null;
 		try {

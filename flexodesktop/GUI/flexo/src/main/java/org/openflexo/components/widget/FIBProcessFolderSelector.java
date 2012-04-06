@@ -22,23 +22,29 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to select a ViewPoint
+ * Widget allowing to select a FlexoRole
  * 
  * @author sguerin
  * 
  */
-public class FIBViewSelector extends FIBModelObjectSelector<ViewDefinition> {
+public class FIBProcessFolderSelector extends FIBModelObjectSelector<ProcessFolder> {
 	@SuppressWarnings("hiding")
-	static final Logger logger = Logger.getLogger(FIBViewSelector.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBProcessFolderSelector.class.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource("Fib/ViewSelector.fib");
+	public static FileResource FIB_FILE = new FileResource("Fib/ProcessFolderSelector.fib");
 
-	public FIBViewSelector(ViewDefinition editedObject) {
+	public FIBProcessFolderSelector(ProcessFolder editedObject) {
 		super(editedObject);
+	}
+
+	@Override
+	protected boolean isAcceptableValue(FlexoModelObject o) {
+		return super.isAcceptableValue(o);
 	}
 
 	@Override
@@ -47,12 +53,12 @@ public class FIBViewSelector extends FIBModelObjectSelector<ViewDefinition> {
 	}
 
 	@Override
-	public Class<ViewDefinition> getRepresentedType() {
-		return ViewDefinition.class;
+	public Class<ProcessFolder> getRepresentedType() {
+		return ProcessFolder.class;
 	}
 
 	@Override
-	public String renderedString(ViewDefinition editedObject) {
+	public String renderedString(ProcessFolder editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
@@ -68,7 +74,7 @@ public class FIBViewSelector extends FIBModelObjectSelector<ViewDefinition> {
 			public Object[] getData() {
 				FlexoEditor editor = ProjectDialogEDITOR.loadProject(new FileResource("Prj/TestVE.prj"));
 				FlexoProject project = editor.getProject();
-				FIBViewSelector selector = new FIBViewSelector(null);
+				FIBProcessFolderSelector selector = new FIBProcessFolderSelector(null);
 				selector.setProject(project);
 				return makeArray(selector);
 			}
@@ -80,7 +86,7 @@ public class FIBViewSelector extends FIBModelObjectSelector<ViewDefinition> {
 
 			@Override
 			public FIBController makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewSelector>(component);
+				return new FlexoFIBController<FIBProcessFolderSelector>(component);
 			}
 		};
 		editor.launch();

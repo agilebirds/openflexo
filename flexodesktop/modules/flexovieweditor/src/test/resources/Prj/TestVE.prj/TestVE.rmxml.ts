@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project id="SYL_413" name="TestVE" userID="SYL" flexoID="413" dontEscapeLatex="false">
   <FlexoStorageResource id="SYL_COMPONENT_LIBRARY.TestVE" className="org.openflexo.foundation.rm.FlexoComponentLibraryResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" file="TestVE.wolib" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" userID="SYL" />
-  <FlexoStorageResource id="SYL_DATA_MODEL.TestVE" className="org.openflexo.foundation.rm.FlexoDMResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,13:19:37 03/04/2012 379" file="DataModel/TestVE.dm" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,13:19:54 03/04/2012 145" userID="SYL" />
+  <FlexoStorageResource id="SYL_DATA_MODEL.TestVE" className="org.openflexo.foundation.rm.FlexoDMResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,10:07:28 06/04/2012 310" file="DataModel/TestVE.dm" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:07:43 06/04/2012 881" userID="SYL" />
   <FlexoStorageResource id="SYL_DOMAIN_KEY_VALUE.TestVE" className="org.openflexo.foundation.rm.FlexoDKVResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" file="DomainKeyValue/TestVE.dkv" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" userID="SYL" />
   <FlexoStorageResource id="SYL_EOMODEL.EOPrototypes.eomodeld" className="org.openflexo.foundation.rm.FlexoEOModelResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" file="DataModel/EOPrototypes.eomodeld" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" />
   <FlexoStorageResource id="SYL_EOMODEL.FlexoExecutionModel.eomodeld" className="org.openflexo.foundation.rm.FlexoEOModelResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" file="DataModel/FlexoExecutionModel.eomodeld" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 000" userID="SYL" />
@@ -25,9 +25,14 @@
   <FlexoFileResource id="SYL_JAR.JavaFoundation.jar" className="org.openflexo.foundation.rm.FlexoJarResource" file="DataModel/JavaFoundation.jar" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:45:58 04/10/2011 000" userID="SYL" />
   <FlexoFileResource id="SYL_JAR.JavaWebObjects.jar" className="org.openflexo.foundation.rm.FlexoJarResource" file="DataModel/JavaWebObjects.jar" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:45:59 04/10/2011 000" userID="SYL" />
   <FlexoStorageResource id="SYL_NAVIGATION_MENU.TestVE" className="org.openflexo.foundation.rm.FlexoNavigationMenuResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" file="TestVE.menu" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" userID="SYL" />
-  <FlexoProcessResource id="SYL_PROCESS.TestVE" name="TestVE" file="Workflow/TestVE.xml" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" userID="SYL" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" />
+  <FlexoProcessResource id="SYL_PROCESS.NewProcess" name="NewProcess" file="Workflow/NewProcess.xml" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:07:43 06/04/2012 887" userID="SYL" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,10:07:28 06/04/2012 381" />
+  <FlexoProcessResource id="SYL_PROCESS.TestVE" name="TestVE" file="Workflow/TestVE.xml" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:07:44 06/04/2012 063" userID="SYL" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,10:07:28 06/04/2012 297">
+    <LastSynchronizedWithResourceEntry id="SYL_PROCESS.TestVE_SYL_DATA_MODEL.TestVE" date="HH:mm:ss dd/MM/yyyy SSS,10:05:54 06/04/2012 176">
+      <FlexoStorageResource idref="SYL_DATA_MODEL.TestVE" />
+    </LastSynchronizedWithResourceEntry>
+  </FlexoProcessResource>
   <FlexoStorageResource id="SYL_PROJECT_ONTOLOGY.TestVE" className="org.openflexo.foundation.rm.FlexoProjectOntologyResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,13:17:05 03/04/2012 502" file="Ontology/TestVE.owl" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,13:17:13 03/04/2012 878" userID="SYL" />
-  <FlexoStorageResource id="SYL_RM.TestVE" className="org.openflexo.foundation.rm.FlexoRMResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,13:18:13 03/04/2012 378" file="TestVE.rmxml" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,13:19:54 03/04/2012 163" userID="SYL" />
+  <FlexoStorageResource id="SYL_RM.TestVE" className="org.openflexo.foundation.rm.FlexoRMResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,10:07:28 06/04/2012 311" file="TestVE.rmxml" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:07:44 06/04/2012 171" userID="SYL" />
   <Shema id="SYL_SHEMA.BasicOrganization" name="BasicOrganization" file="Ontology/BasicOrganization.shema" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,13:16:39 03/04/2012 348" userID="SYL" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,12:47:32 03/04/2012 604" />
   <Shema id="SYL_SHEMA.R&amp;DDefinition" name="R&amp;DDefinition" file="Ontology/R&amp;DDefinition.shema" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,13:17:13 03/04/2012 910" userID="SYL" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,13:17:05 03/04/2012 543" />
   <Shema id="SYL_SHEMA.TestOrganizationMap" name="TestOrganizationMap" file="Ontology/TestOrganizationMap.shema" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,13:16:39 03/04/2012 377" userID="SYL" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,13:16:31 03/04/2012 861" />
@@ -44,7 +49,7 @@
   <FlexoWebServerFileResource id="SYL_WEBSERVER.objective-process.jpg" userID="SYL" file="ImportedImages/objective-process.jpg" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" />
   <FlexoWebServerFileResource id="SYL_WEBSERVER.organisationStructure.jpg" userID="SYL" file="ImportedImages/organisationStructure.jpg" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" />
   <FlexoWebServerFileResource id="SYL_WEBSERVER.process-mapping.jpg" userID="SYL" file="ImportedImages/process-mapping.jpg" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 000" />
-  <FlexoStorageResource id="SYL_WORKFLOW.TestVE" className="org.openflexo.foundation.rm.FlexoWorkflowResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" file="Workflow/TestVE.wkf" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" userID="SYL" />
+  <FlexoStorageResource id="SYL_WORKFLOW.TestVE" className="org.openflexo.foundation.rm.FlexoWorkflowResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,10:07:39 06/04/2012 699" file="Workflow/TestVE.wkf" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,10:07:43 06/04/2012 798" userID="SYL" />
   <FlexoStorageResource id="SYL_WS_LIBRARY.TestVE" className="org.openflexo.foundation.rm.FlexoWSLibraryResource" lastKnownMemoryUpdate="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" file="WebService/TestVE.ws" lastWrittenOnDisk="HH:mm:ss dd/MM/yyyy SSS,12:47:07 03/04/2012 000" userID="SYL" />
 </Project>
 

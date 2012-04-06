@@ -655,4 +655,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		return sb.toString();
 	}
 
+	public boolean isPrimaryRole() {
+		return getPatternRole() != null && getPatternRole().getIsPrimaryRole();
+	}
 }

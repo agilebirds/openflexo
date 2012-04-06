@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FlexoWorkflow id="SYL_385" name="TestVE" userID="SYL" flexoID="385" dontGenerate="false" useSpecificDescriptions="false">
-  <FlexoProcess id="SYL_393" processResourceName="TestVE" docIndex="1" userID="SYL" flexoID="393" dontGenerate="false" useSpecificDescriptions="false" />
+  <FlexoProcess id="SYL_393" processResourceName="TestVE" docIndex="1" userID="SYL" flexoID="393" dontGenerate="false" useSpecificDescriptions="false">
+    <FlexoProcess id="SYL_934" processResourceName="NewProcess" docIndex="1" userID="SYL" flexoID="934" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+    <ProcessFolder id="SYL_930" name="Folder1" docIndex="1" userID="SYL" flexoID="930" docFormat="HTML" dontGenerate="false" description="" useSpecificDescriptions="false">
+      <FlexoProcess idref="SYL_934" />
+      <ProcessFolder id="SYL_933" name="Folder3" docIndex="1" userID="SYL" flexoID="933" docFormat="HTML" dontGenerate="false" description="" useSpecificDescriptions="false" />
+    </ProcessFolder>
+    <ProcessFolder id="SYL_935" name="Folder2" docIndex="2" userID="SYL" flexoID="935" docFormat="HTML" dontGenerate="false" description="" useSpecificDescriptions="false" />
+  </FlexoProcess>
   <RootFlexoProcess idref="SYL_393" />
   <RoleList id="SYL_443" userID="SYL" flexoID="443" dontGenerate="false" useSpecificDescriptions="false">
     <DefaultRole id="SYL_444" label="No role" systemRole="true" isAssignable="true" docIndex="-1" isDeletedOnServer="false" userID="SYL" flexoID="444" dontGenerate="false" useSpecificDescriptions="false">
@@ -27,5 +34,19 @@
   <ArtefactMetricsDefinition id="SYL_408" name="Process time" type="TIME" alwaysDefined="false" userID="SYL" flexoID="408" dontGenerate="false" description="This is the actual time it takes to complete a process or a task" useSpecificDescriptions="false" />
   <ArtefactMetricsDefinition id="SYL_409" name="Lead time" type="TIME" alwaysDefined="false" userID="SYL" flexoID="409" dontGenerate="false" description="This is the elapsed time associated with completing a task (incl. queue time)" useSpecificDescriptions="false" />
   <ArtefactMetricsDefinition id="SYL_410" name="Percent Complete and Accurate" type="TEXT" alwaysDefined="false" userID="SYL" flexoID="410" dontGenerate="false" description="Describes how often an activity receives information that is complete and accurate from the perspective of the recipient" useSpecificDescriptions="false" />
+  <GraphicalProperties>
+    <actionFont className="org.openflexo.foundation.utils.FlexoFont">Lucida Grande,1,10</actionFont>
+    <activityFont className="org.openflexo.foundation.utils.FlexoFont">Lucida Grande,1,10</activityFont>
+    <artefactFont className="org.openflexo.foundation.utils.FlexoFont">Lucida Sans Typewriter,0,10</artefactFont>
+    <componentFont className="org.openflexo.foundation.utils.FlexoFont">Courier,0,8</componentFont>
+    <connectorRepresentation className="org.openflexo.wkf.processeditor.gr.EdgeGR$EdgeRepresentation">RECT_POLYLIN</connectorRepresentation>
+    <edgeFont className="org.openflexo.foundation.utils.FlexoFont">Lucida Sans Typewriter,0,10</edgeFont>
+    <eventFont className="org.openflexo.foundation.utils.FlexoFont">SansSerif,0,8</eventFont>
+    <operationFont className="org.openflexo.foundation.utils.FlexoFont">Lucida Grande,0,8</operationFont>
+    <roleFont className="org.openflexo.foundation.utils.FlexoFont">SansSerif,1,10</roleFont>
+    <showShadows className="java.lang.Boolean">true</showShadows>
+    <showWOName className="java.lang.Boolean">true</showWOName>
+    <useTransparency className="java.lang.Boolean">false</useTransparency>
+  </GraphicalProperties>
 </FlexoWorkflow>
 

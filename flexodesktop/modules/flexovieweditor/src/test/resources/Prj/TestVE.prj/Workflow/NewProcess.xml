@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoProcess id="SYL_931" name="NewProcess" isWebService="false" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:07:28 06/04/2012 381" isDeletedOnServer="false" userID="SYL" flexoID="931" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+  <StatusList id="SYL_932" DefaultStatus="NewProcess.STATUS.Default" userID="SYL" flexoID="932" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+    <Status id="SYL_941" userID="SYL" flexoID="941" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" docIndex="1">
+      <label>Default</label>
+    </Status>
+  </StatusList>
+  <ActivityPetriGraph id="SYL_942" userID="SYL" flexoID="942" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+    <GraphicalProperties>
+      <visible className="java.lang.Boolean">true</visible>
+    </GraphicalProperties>
+    <EventNode id="SYL_943" eventType="Start" trigger="NONE" isCatching="true" userID="SYL" flexoID="943" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" docIndex="1" nodeName="Start">
+      <GraphicalProperties>
+        <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+        <labely_bpe className="java.lang.Double">54.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">15.0</posx_bpe>
+        <posy_bpe className="java.lang.Double">200.0</posy_bpe>
+      </GraphicalProperties>
+      <IncomingInternalMessageInEdge idref="SYL_944" />
+    </EventNode>
+    <EventNode id="SYL_949" eventType="End" trigger="NONE" isCatching="true" userID="SYL" flexoID="949" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" docIndex="2" nodeName="End">
+      <GraphicalProperties>
+        <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+        <labely_bpe className="java.lang.Double">54.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">650.0</posx_bpe>
+        <posy_bpe className="java.lang.Double">200.0</posy_bpe>
+      </GraphicalProperties>
+      <IncomingInternalMessageInEdge idref="SYL_950" />
+      <OutgoingInternalMessageOutEdge id="SYL_955" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="955" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" name="Process terminated">
+        <OutputMessageBindings id="SYL_956" userID="SYL" flexoID="956" dontGenerate="false" useSpecificDescriptions="false" />
+        <Metrics id="SYL_957" metricsDefinition="WORKFLOW.TestVE#SYL_386" userID="SYL" flexoID="957" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <GraphicalProperties>
+          <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+        </GraphicalProperties>
+        <StartEventNode idref="SYL_949" />
+        <EndOutPort idref="SYL_958" />
+      </OutgoingInternalMessageOutEdge>
+    </EventNode>
+  </ActivityPetriGraph>
+  <PortRegistery id="SYL_960" isVisible="false" userID="SYL" flexoID="960" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+    <NewPort id="SYL_947" userID="SYL" flexoID="947" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" docIndex="0" nodeName="NewInstance">
+      <OutgoingInternalMessageInEdge id="SYL_944" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="944" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <InputMessageBindings id="SYL_945" userID="SYL" flexoID="945" dontGenerate="false" useSpecificDescriptions="false" />
+        <Metrics id="SYL_946" metricsDefinition="WORKFLOW.TestVE#SYL_386" userID="SYL" flexoID="946" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <GraphicalProperties>
+          <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+        </GraphicalProperties>
+        <StartNewPort idref="SYL_947" />
+        <EndEventNode idref="SYL_943" />
+      </OutgoingInternalMessageInEdge>
+      <InputMessageDefinition id="SYL_948" userID="SYL" flexoID="948" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+    </NewPort>
+    <DeletePort id="SYL_953" userID="SYL" flexoID="953" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" docIndex="1" nodeName="DeleteInstance">
+      <OutgoingInternalMessageInEdge id="SYL_950" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="950" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <InputMessageBindings id="SYL_951" userID="SYL" flexoID="951" dontGenerate="false" useSpecificDescriptions="false" />
+        <Metrics id="SYL_952" metricsDefinition="WORKFLOW.TestVE#SYL_386" userID="SYL" flexoID="952" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <GraphicalProperties>
+          <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+        </GraphicalProperties>
+        <StartDeletePort idref="SYL_953" />
+        <EndEventNode idref="SYL_949" />
+      </OutgoingInternalMessageInEdge>
+      <InputMessageDefinition id="SYL_954" userID="SYL" flexoID="954" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+    </DeletePort>
+    <OutPort id="SYL_958" userID="SYL" flexoID="958" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" docIndex="2" nodeName="OutPort">
+      <IncomingInternalMessageOutEdge idref="SYL_955" />
+      <OutputMessageDefinition id="SYL_959" userID="SYL" flexoID="959" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Output message name</label>
+      </OutputMessageDefinition>
+    </OutPort>
+    <GraphicalProperties>
+      <visible className="java.lang.Boolean">false</visible>
+    </GraphicalProperties>
+  </PortRegistery>
+  <GraphicalProperties>
+    <alignedOnGrid_bpe className="java.lang.Boolean">false</alignedOnGrid_bpe>
+    <bpe-gridSizeHasBeenSet className="java.lang.Boolean">true</bpe-gridSizeHasBeenSet>
+    <gridSize_bpe className="java.lang.Integer">15</gridSize_bpe>
+    <height_bpe className="java.lang.Double">1000.0</height_bpe>
+    <scale_bpe className="java.lang.Double">1.0</scale_bpe>
+    <width_bpe className="java.lang.Double">1000.0</width_bpe>
+  </GraphicalProperties>
+</FlexoProcess>
+

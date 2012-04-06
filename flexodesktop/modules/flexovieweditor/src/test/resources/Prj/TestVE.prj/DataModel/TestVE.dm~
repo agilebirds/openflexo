@@ -226,6 +226,34 @@
       <DMEOAttribute id="SYL_176" userID="SYL" flexoID="176" dontGenerate="false" useSpecificDescriptions="false" name="tokenID" propertyType="java.lang.Integer" cardinality="SINGLE" readOnly="true" settable="true" isStatic="false" implementationType="PUBLIC_ACCESSORS_ONLY" isStaticallyDefinedInTemplate="false" fieldName="tokenID" isUnderscoredAccessors="false" />
     </DMEOEntity>
   </ExecutionModelRepository>
+  <ProjectDatabaseRepository id="SYL_826" userID="SYL" flexoID="826" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" entitySubPath="src/main/java/EOTest" name="Test">
+    <DMEOModel id="SYL_827" EOModelFile="DataModel/sdffdsfsd.eomodeld" userID="SYL" flexoID="827" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+    <DMEOEntity id="SYL_828" userID="SYL" flexoID="828" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" name="A" entityClassName="A" entityPackageName="org.openflexo.tes.sdffdsfsd.db" parentType="com.webobjects.eocontrol.EOGenericRecord" readOnly="false" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,13:19:35 03/04/2012 908" isInterface="false" isEnumeration="false">
+      <ParentDMEOModel idref="SYL_827" />
+      <GraphicalProperties>
+        <posx_diagram_831 className="java.lang.Double">141.0</posx_diagram_831>
+        <posx_diagram_832 className="java.lang.Double">309.0</posx_diagram_832>
+        <posy_diagram_831 className="java.lang.Double">363.0</posy_diagram_831>
+        <posy_diagram_832 className="java.lang.Double">139.0</posy_diagram_832>
+      </GraphicalProperties>
+    </DMEOEntity>
+    <DMEOEntity id="SYL_829" userID="SYL" flexoID="829" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" name="B" entityClassName="B" entityPackageName="org.openflexo.tes.sdffdsfsd.db" parentType="com.webobjects.eocontrol.EOGenericRecord" readOnly="false" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,13:19:37 03/04/2012 379" isInterface="false" isEnumeration="false">
+      <ParentDMEOModel idref="SYL_827" />
+      <GraphicalProperties>
+        <posx_diagram_831 className="java.lang.Double">407.0</posx_diagram_831>
+        <posx_diagram_832 className="java.lang.Double">124.0</posx_diagram_832>
+        <posy_diagram_831 className="java.lang.Double">188.0</posy_diagram_831>
+        <posy_diagram_832 className="java.lang.Double">303.0</posy_diagram_832>
+      </GraphicalProperties>
+    </DMEOEntity>
+    <DMEOEntity id="SYL_830" userID="SYL" flexoID="830" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" name="C" entityClassName="C" entityPackageName="org.openflexo.tes.sdffdsfsd.db" parentType="com.webobjects.eocontrol.EOGenericRecord" readOnly="false" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,13:19:11 03/04/2012 452" isInterface="false" isEnumeration="false">
+      <ParentDMEOModel idref="SYL_827" />
+      <GraphicalProperties>
+        <posx_diagram_831 className="java.lang.Double">105.0</posx_diagram_831>
+        <posy_diagram_831 className="java.lang.Double">172.0</posy_diagram_831>
+      </GraphicalProperties>
+    </DMEOEntity>
+  </ProjectDatabaseRepository>
   <ExternalRepository id="SYL_177" jarFile="DataModel/JavaFoundation.jar" isImportedByUser="false" userID="SYL" flexoID="177" dontGenerate="false" useSpecificDescriptions="false" name="JavaFoundation.jar">
     <LoadableDMEntity id="SYL_179" userID="SYL" flexoID="179" dontGenerate="false" useSpecificDescriptions="false" name="NSArray" entityClassName="NSArray" entityPackageName="com.webobjects.foundation" parentType="java.lang.Object" readOnly="true" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:45:59 04/10/2011 165" isInterface="false" isEnumeration="false" implementedTypes="java.lang.Cloneable,java.io.Serializable,com.webobjects.foundation.NSCoding,com.webobjects.foundation.NSKeyValueCoding,com.webobjects.foundation.NSKeyValueCodingAdditions,com.webobjects.foundation._NSFoundationCollection,java.util.List" />
     <LoadableDMEntity id="SYL_180" userID="SYL" flexoID="180" dontGenerate="false" useSpecificDescriptions="false" name="NSCoding" entityClassName="NSCoding" entityPackageName="com.webobjects.foundation" readOnly="true" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:45:59 04/10/2011 144" isInterface="true" isEnumeration="false" />
@@ -466,6 +494,17 @@
     <LoadableDMEntity id="SYL_379" userID="SYL" flexoID="379" dontGenerate="false" useSpecificDescriptions="false" name="BusinessLogicFactoryException" entityClassName="BusinessLogicFactoryException" entityPackageName="be.denali.dbbusinesslogic" parentType="java.lang.RuntimeException" readOnly="true" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 782" isInterface="false" isEnumeration="false" />
     <LoadableDMEntity id="SYL_380" userID="SYL" flexoID="380" dontGenerate="false" useSpecificDescriptions="false" name="WDLBLComponent" entityClassName="WDLBLComponent" entityPackageName="be.denali.dbbusinesslogic" parentType="be.denali.core.woapp.WDLComponent" readOnly="true" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 775" isInterface="false" isEnumeration="false" />
   </ExternalRepository>
+  <ERDiagram id="SYL_831" name="New diagram" userID="SYL" flexoID="831" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+    <RepresentedDMEOEntity idref="SYL_828" />
+    <RepresentedDMEOEntity idref="SYL_829" />
+    <RepresentedDMEOEntity idref="SYL_830" />
+    <JDKRepository idref="SYL_3" />
+  </ERDiagram>
+  <ERDiagram id="SYL_832" name="New diagram-0" userID="SYL" flexoID="832" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+    <RepresentedDMEOEntity idref="SYL_828" />
+    <RepresentedDMEOEntity idref="SYL_829" />
+    <JDKRepository idref="SYL_3" />
+  </ERDiagram>
   <ProcessBusinessDataRepository id="SYL_381" name="process_business_data_repository" userID="SYL" flexoID="381" dontGenerate="false" useSpecificDescriptions="false">
     <ProcessBusinessDataDMEntity idref="SYL_382" />
     <DMEntity id="SYL_382" name="ProcessBusinessData" entityClassName="ProcessBusinessData" entityPackageName="org.openflexo.businessdata" parentType="com.webobjects.foundation.NSMutableDictionary" readOnly="false" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:00 04/10/2011 993" isInterface="false" isEnumeration="false" userID="SYL" flexoID="382" dontGenerate="false" useSpecificDescriptions="false" />
