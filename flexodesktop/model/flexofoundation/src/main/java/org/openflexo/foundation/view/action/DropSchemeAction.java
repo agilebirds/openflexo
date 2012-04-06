@@ -64,7 +64,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return (object instanceof ViewObject);
+			return object instanceof ViewObject;
 		}
 
 	};
@@ -197,9 +197,11 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 				}
 			}
 		} else if (action.getPatternRole().getParentShapeAsDefinedInAction()) {
-			ShapeGraphicalRepresentation<?> primaryGR = (ShapeGraphicalRepresentation<?>) action.getEditionPattern()
-					.getPrimaryRepresentationRole().getGraphicalRepresentation();
-			gr.setLocation(new FGEPoint(dropLocation.x + gr.getX() - primaryGR.getX(), dropLocation.y + gr.getY() - primaryGR.getY()));
+			Object graphicalRepresentation = action.getEditionPattern().getPrimaryRepresentationRole().getGraphicalRepresentation();
+			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation<?>) {
+				ShapeGraphicalRepresentation<?> primaryGR = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
+				gr.setLocation(new FGEPoint(dropLocation.x + gr.getX() - primaryGR.getX(), dropLocation.y + gr.getY() - primaryGR.getY()));
+			}
 		}
 		gr.updateConstraints();
 
