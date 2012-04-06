@@ -305,6 +305,14 @@ public class FIBInspector extends FIBPanel {
 						new DataBinding("data.project"), true));
 				newTab.addToSubComponents(processSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 				return processSelector;
+			case ProcessFolder:
+				FIBCustom processFolderSelector = new FIBCustom();
+				processFolderSelector.setComponentClass(org.openflexo.components.widget.FIBProcessFolderSelector.class);
+				processFolderSelector.addToAssignments(new FIBCustomAssignment(processFolderSelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+				newTab.addToSubComponents(processFolderSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false,
+						index));
+				return processFolderSelector;
 			case Role:
 				FIBCustom roleSelector = new FIBCustom();
 				roleSelector.setComponentClass(org.openflexo.components.widget.FIBRoleSelector.class);
