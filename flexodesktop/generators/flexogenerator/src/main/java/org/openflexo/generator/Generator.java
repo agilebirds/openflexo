@@ -46,8 +46,6 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -70,7 +68,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.TemplateNotFoundException;
 import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
@@ -608,6 +605,10 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return new Vector<Object>();
 	}
 
+	public List<Object> getNewList() {
+		return new ArrayList<Object>();
+	}
+
 	public Hashtable<Object, Object> getNewHashtable() {
 		return new Hashtable<Object, Object>();
 	}
@@ -724,11 +725,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			return null;
 		}
 		if (context instanceof EditionPatternInstance) {
-			EditionPatternInstance epi = (EditionPatternInstance) context;
-			ViewPointDataBinding vpdb = new ViewPointDataBinding(bindingExpression);
-			vpdb.setOwner(epi.getPattern());
-			vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.GET, false));
-			return vpdb.getBindingValue(context);
+			return ((EditionPatternInstance) context).evaluate(bindingExpression);
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Binding evaluation not implemented for objects of type " + context.getClass().getName());

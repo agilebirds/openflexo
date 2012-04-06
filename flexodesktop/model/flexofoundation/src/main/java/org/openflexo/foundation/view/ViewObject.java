@@ -150,7 +150,7 @@ public abstract class ViewObject extends AbstractViewObject {
 	@SuppressWarnings("unchecked")
 	// We can remove the warning because the code performs the necessary checks
 	public <T extends ViewObject> Collection<T> getChildrenOfType(final Class<T> type, boolean recursive) {
-		Collection<T> objects = (Collection<T>) Collections2.filter(childs, new Predicate<ViewObject>() {
+		Collection<T> objects = (Collection<T>) Collections2.filter(new ArrayList<ViewObject>(childs), new Predicate<ViewObject>() {
 			@Override
 			public boolean apply(ViewObject input) {
 				return type.isAssignableFrom(input.getClass());

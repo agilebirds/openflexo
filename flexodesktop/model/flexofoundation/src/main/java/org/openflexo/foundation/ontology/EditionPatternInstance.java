@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
@@ -34,6 +36,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 
 public class EditionPatternInstance extends FlexoObservable implements Bindable, BindingEvaluationContext {
@@ -174,6 +177,13 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	{
 		System.out.println("SET string value for "+inspectorEntryKey+" value: "+value);
 	}*/
+
+	public Object evaluate(String expression) {
+		ViewPointDataBinding vpdb = new ViewPointDataBinding(expression);
+		vpdb.setOwner(getPattern());
+		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.GET, false));
+		return vpdb.getBindingValue(this);
+	}
 
 	@Override
 	public BindingFactory getBindingFactory() {

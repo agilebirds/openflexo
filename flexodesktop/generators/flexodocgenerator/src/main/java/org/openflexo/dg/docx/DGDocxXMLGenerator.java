@@ -42,6 +42,7 @@ import org.openflexo.foundation.ie.IEPageComponent;
 import org.openflexo.foundation.ie.IEPopupComponent;
 import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.ConditionalSection;
 import org.openflexo.foundation.toc.IterationSection;
@@ -168,7 +169,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		return docxResources.get(docxResource).getTemplatePath();
 	}
 
-	public static String getReference(FlexoModelObject object) {
+	public static String getReference(Object object) {
 		String s = "";
 		if (object instanceof FlexoProcess) {
 			s = "PROCESS-" + ((FlexoProcess) object).getName();
@@ -177,9 +178,9 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		} else if (object instanceof DMEOEntity) {
 			s = "DMEOENTITY-" + ((DMEOEntity) object).getName();
 		} else if (object instanceof AbstractActivityNode) {
-			s = "ACTIVITY-" + ((AbstractActivityNode) object).getName() + "-" + object.getFlexoID();
+			s = "ACTIVITY-" + ((AbstractActivityNode) object).getName() + "-" + ((FlexoModelObject) object).getFlexoID();
 		} else if (object instanceof OperationNode) {
-			s = "OPERATION-" + ((OperationNode) object).getName() + "-" + object.getFlexoID();
+			s = "OPERATION-" + ((OperationNode) object).getName() + "-" + ((FlexoModelObject) object).getFlexoID();
 		} else if (object instanceof DKVModel) {
 			s = "DKVMODEL-" + ((DKVModel) object).getName();
 		} else if (object instanceof FlexoNavigationMenu) {
@@ -190,8 +191,12 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 			s = "TAB-" + ((IETabComponent) object).getName();
 		} else if (object instanceof IEPageComponent) {
 			s = "PAGE-" + ((IEPageComponent) object).getName();
+		} else if (object instanceof EditionPatternInstance) {
+			s = ((EditionPatternInstance) object).getPattern().getName() + "-" + ((EditionPatternInstance) object).getInstanceId();
+		} else if (object instanceof FlexoModelObject) {
+			s = ((FlexoModelObject) object).getFullyQualifiedName();
 		} else {
-			s = object.getFullyQualifiedName();
+			s = object.getClass().getName();
 		}
 		return getValidReference(DocGeneratorConstants.DG_LABEL_PREFIX + s);
 	}

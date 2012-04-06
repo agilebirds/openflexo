@@ -110,6 +110,17 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		return epis;
 	}
 
+	public List<EditionPatternInstance> getEPInstancesWithPropertyEqualsTo(String epName, String epProperty, Object value) {
+		List<EditionPatternInstance> returned = new ArrayList<EditionPatternInstance>();
+		Collection<EditionPatternInstance> epis = getEPInstances(epName);
+		for (EditionPatternInstance epi : epis) {
+			if (value == null && epi.evaluate(epProperty) == value || value != null && value.equals(epi.evaluate(epProperty))) {
+				returned.add(epi);
+			}
+		}
+		return returned;
+	}
+
 	public ViewDefinition getShemaDefinition() {
 		return _shemaDefinition;
 	}
