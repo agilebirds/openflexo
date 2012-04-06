@@ -210,7 +210,9 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionPatternPathElement) {
 			if (variable.getVariableName().equals(EditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null) {
-				return ((ViewShape) getParent()).getEditionPatternInstance();
+				if (getParent() instanceof ViewShape) {
+					return ((ViewShape) getParent()).getEditionPatternInstance();
+				}
 			}
 			return parameterValues;
 		}
