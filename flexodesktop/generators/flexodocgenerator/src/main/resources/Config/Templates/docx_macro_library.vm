@@ -757,7 +757,7 @@ if there is an associated screen make a hyperlink to the screen.
 
 #macro(tocEntry $_entry)
 <!--Entering macro tocEntry -->
-    ${generator.beginTocEntry($_entry)}
+    $!{generator.beginTocEntry($_entry)}
     #if(${_entry.getStartOnANewPage()})
         <w:p>
             <w:r>
@@ -779,8 +779,6 @@ if there is an associated screen make a hyperlink to the screen.
         #renderTocEntryTitle($_entry)
     </w:p>
     #renderTocEntryContent($_entry)
-    ${generator.logO($_entry)}
-    ${generator.log($templateName)}
     #if($templateName)
         #set($newEntryLevel = $_entry.getLevel() + 1)
     	${generator.logO($_entry.getObject())}
@@ -788,7 +786,7 @@ if there is an associated screen make a hyperlink to the screen.
         #render($_entry.getObject() $newEntryLevel $templateName $_entry)
     #end
     #subTocEntries($_entry)
-    ${generator.endTocEntry($_entry)}
+    $!{generator.endTocEntry($_entry)}
 <!-- Exiting macro tocEntry -->
 #end
 
