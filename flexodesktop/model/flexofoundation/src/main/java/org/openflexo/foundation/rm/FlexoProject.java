@@ -3965,7 +3965,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public FlexoResourceCenter getResourceCenter() {
 		if (resourceCenter == null) {
 			File file = getResourceCenterFile();
-			setResourceCenter(new LocalResourceCenterImplementation(file));
+			setResourceCenter(LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(file));
 		}
 		// logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
 		return resourceCenter;
