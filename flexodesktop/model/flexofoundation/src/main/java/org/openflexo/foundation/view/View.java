@@ -30,6 +30,7 @@ import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
+import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
@@ -38,6 +39,7 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -79,25 +81,30 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	}
 
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {
+		EditionPattern ep = getCalc().getEditionPattern(epName);
+		return getEPInstances(ep);
+	}
+
+	public Collection<EditionPatternInstance> getEPInstances(EditionPattern ep) {
 		Collection<ViewShape> shapes = getChildrenOfType(ViewShape.class);
 		Collection<ViewConnector> connectors = getChildrenOfType(ViewConnector.class);
 		List<EditionPatternInstance> epis = new ArrayList<EditionPatternInstance>();
 		for (ViewShape shape : shapes) {
-			EditionPatternInstance epi = shape.getEditionPatternInstance();
-			if (epi == null) {
+			EditionPatternReference epr = shape.getEditionPatternReference();
+			if (epr == null) {
 				continue;
 			}
-			if (epi.getPattern().getName().equals(epName)) {
-				epis.add(epi);
+			if (epr.isPrimaryRole() && epr.getEditionPattern() == ep) {
+				epis.add(epr.getEditionPatternInstance());
 			}
 		}
 		for (ViewConnector conn : connectors) {
-			EditionPatternInstance epi = conn.getEditionPatternInstance();
-			if (epi == null) {
+			EditionPatternReference epr = conn.getEditionPatternReference();
+			if (epr == null) {
 				continue;
 			}
-			if (epi.getPattern().getName().equals(epName)) {
-				epis.add(epi);
+			if (epr.isPrimaryRole() && epr.getEditionPattern() == ep) {
+				epis.add(epr.getEditionPatternInstance());
 			}
 		}
 		return epis;

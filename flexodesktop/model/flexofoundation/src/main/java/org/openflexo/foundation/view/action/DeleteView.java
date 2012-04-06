@@ -82,6 +82,7 @@ public class DeleteView extends FlexoAction<DeleteView, AbstractViewObject, View
 		} else if (getFocusedObject() instanceof ViewDefinition) {
 			((ViewDefinition) getFocusedObject()).getShema().delete();
 		}
+
 	}
 
 	public FlexoProject getProject() {
