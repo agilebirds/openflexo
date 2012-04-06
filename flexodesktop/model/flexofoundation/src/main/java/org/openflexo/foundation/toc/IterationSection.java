@@ -36,6 +36,11 @@ public class IterationSection extends ControlSection {
 		return ITERATION;
 	}
 
+	@Override
+	public boolean isIteration() {
+		return true;
+	}
+
 	public TOCDataBinding getIteration() {
 		if (iteration == null) {
 			iteration = new TOCDataBinding(this, ControlSectionBindingAttribute.iteration, getIterationBindingDefinition());

@@ -15,6 +15,11 @@ public class ConditionalSection extends ControlSection {
 		super(data);
 	}
 
+	@Override
+	public boolean isConditional() {
+		return true;
+	}
+
 	private TOCDataBinding condition;
 
 	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, false);

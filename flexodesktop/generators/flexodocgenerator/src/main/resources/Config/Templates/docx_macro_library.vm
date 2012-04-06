@@ -768,6 +768,26 @@ if there is an associated screen make a hyperlink to the screen.
     ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
     ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
     #set($templateName = ${_entry.getDefaultTemplateName()})
+    
+    #if(${_entry.isIteration()})
+    	${generator.log("Rendering iteration")}
+
+		#foreach($_item in ${generator.getIterableObjects($_entry)})
+			${generator.iterateOnItem($_entry,$_item)}
+			#if($generator.getItemCondition($_entry))
+    			${generator.log("Item is valid, performing rendering for this iteration")}
+    			#subTocEntries($_entry)
+			#end
+		#end
+    
+    #elseif(${_entry.isConditional()})
+    	${generator.log("Rendering conditional")}
+    	#if($generator.getCondition($_entry))
+    		${generator.log("Condition is true, performing rendering for this conditional")}
+    		#subTocEntries($_entry)
+		#end
+    
+    #else
     <w:p>
         <w:pPr>
             <w:keepNext/>
@@ -785,9 +805,12 @@ if there is an associated screen make a hyperlink to the screen.
         #set($newEntryLevel = $_entry.getLevel() + 1)
     	${generator.logO($_entry.getObject())}
     	${generator.log($templateName)}
-        #render($_entry.getObject() $newEntryLevel $templateName $_entry)
+        #render($generator.getAccessedModelObject($_entry) $newEntryLevel $templateName $_entry)
+        ##render($generator.getCondition($_entry) $newEntryLevel $templateName $_entry)
     #end
     #subTocEntries($_entry)
+    
+    #end
     ${generator.endTocEntry($_entry)}
 <!-- Exiting macro tocEntry -->
 #end

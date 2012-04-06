@@ -681,6 +681,14 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return getIdentifier() == null && getObject() instanceof ComponentDefinition;
 	}
 
+	public boolean isIteration() {
+		return false;
+	}
+
+	public boolean isConditional() {
+		return false;
+	}
+
 	public int getPreferredLevel() {
 		// with docx : all templates adapte themself immediatly :)
 		return -1;
