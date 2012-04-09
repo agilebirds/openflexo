@@ -19,6 +19,7 @@
  */
 package org.openflexo.toolbox;
 
+import java.awt.Desktop;
 import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.File;
@@ -725,6 +726,15 @@ public class ToolBox {
 	}
 
 	public static boolean openFile(File fileToOpen) {
+		if (true) {
+			try {
+				Desktop.getDesktop().open(fileToOpen);
+				return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
 		String path = fileToOpen.getAbsolutePath();
 		StringBuilder sb = new StringBuilder();
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
