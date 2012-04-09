@@ -9,8 +9,6 @@
 #set($viewDefinitions = ${project.getShemaLibrary().getAllShemaList()})
 #set($views = ${generator.getNewVector()})
 
-DEBUT cacaboudin
-
 #foreach($v in $viewDefinitions)
     #void(${views.add($v.getShema())})
 #end
