@@ -21,6 +21,7 @@ package org.openflexo.foundation.view;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -88,13 +89,13 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	public Collection<EditionPatternInstance> getEPInstances(EditionPattern ep) {
 		Collection<ViewShape> shapes = getChildrenOfType(ViewShape.class);
 		Collection<ViewConnector> connectors = getChildrenOfType(ViewConnector.class);
-		List<EditionPatternInstance> epis = new ArrayList<EditionPatternInstance>();
+		Collection<EditionPatternInstance> epis = new LinkedHashSet<EditionPatternInstance>();
 		for (ViewShape shape : shapes) {
 			EditionPatternReference epr = shape.getEditionPatternReference();
 			if (epr == null) {
 				continue;
 			}
-			if (epr.isPrimaryRole() && epr.getEditionPattern() == ep) {
+			if (/*epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
 				epis.add(epr.getEditionPatternInstance());
 			}
 		}
@@ -103,7 +104,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 			if (epr == null) {
 				continue;
 			}
-			if (epr.isPrimaryRole() && epr.getEditionPattern() == ep) {
+			if (/*epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
 				epis.add(epr.getEditionPatternInstance());
 			}
 		}
