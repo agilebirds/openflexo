@@ -733,4 +733,29 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 		return null;
 	}
+
+	public void log(String s) {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("LOG: " + s);
+		}
+	}
+
+	public void log(String s, Object o) {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("LOG: " + s + " object=" + o + (o != null ? "(" + o.getClass().getSimpleName() + ")" : ""));
+		}
+	}
+
+	public void logO(Object o) {
+		if (o == null) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("LOG: object=null");
+			}
+			return;
+		}
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("LOG: object=" + o + " of " + o.getClass().getSimpleName());
+		}
+	}
+
 }

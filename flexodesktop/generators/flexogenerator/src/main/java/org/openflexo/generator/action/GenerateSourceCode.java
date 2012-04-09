@@ -142,6 +142,7 @@ public class GenerateSourceCode extends MultipleFileGCAction<GenerateSourceCode>
 				}
 			}
 		}
+		generationSucceeded &= pg.getGenerationException() == null;
 		// waitForAllJobsToComplete();
 		end = System.currentTimeMillis();
 		if (repository instanceof CGRepository) {

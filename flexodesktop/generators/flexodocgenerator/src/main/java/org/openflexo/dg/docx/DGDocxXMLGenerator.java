@@ -238,7 +238,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	}
 
 	public Boolean getItemCondition(IterationSection iteration) {
-		if ((!iteration.getCondition().isSet()) || (!iteration.getCondition().isValid())) {
+		if (!iteration.getCondition().isSet() || !iteration.getCondition().isValid()) {
 			return true;
 		}
 		Object conditionValue = iteration.getCondition().getBindingValue(this);
@@ -247,7 +247,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	}
 
 	public Boolean getCondition(ConditionalSection conditional) {
-		if ((!conditional.getCondition().isSet()) || (!conditional.getCondition().isValid())) {
+		if (!conditional.getCondition().isSet() || !conditional.getCondition().isValid()) {
 			return true;
 		}
 		Object conditionValue = conditional.getCondition().getBindingValue(this);
@@ -255,11 +255,37 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		return (Boolean) conditionValue;
 	}
 
-	public <T extends FlexoModelObject> T getAccessedModelObject(ModelObjectSection<T> section) {
+	public FlexoModelObject getAccessedModelObject(TOCEntry section) {
+		if (section instanceof ModelObjectSection<?>) {
+			return getAccessedModelObject((ModelObjectSection<?>) section);
+		} else if (section.getObject() != null) {
+			return section.getObject();
+		} else if (section.getIdentifier() != null) {
+			switch (section.getIdentifier()) {
+			case DATA_MODEL:
+				return getProject().getDataModel();
+			case PROCESSES:
+				return getProject().getWorkflow();
+			case ROLES:
+				return getProject().getWorkflow().getRoleList();
+			case SCREENS:
+				return getProject().getFlexoComponentLibrary();
+			case VIEWS:
+				return getProject().getShemaLibrary();
+			}
+		}
+		if (logger.isLoggable(Level.SEVERE)) {
+			logger.severe("getAccessedModelObject invoked with a section that does not have an associated object: \"" + section.getTitle()
+					+ "\". Returning null that will probably create NPE");
+		}
+		return null;
+	}
+
+	private <T extends FlexoModelObject> T getAccessedModelObject(ModelObjectSection<T> section) {
 		if (section.getObject() != null) {
 			return (T) section.getObject();
 		}
-		if ((!section.getValue().isSet()) || (!section.getValue().isValid())) {
+		if (!section.getValue().isSet() || !section.getValue().isValid()) {
 			return null;
 		}
 		Object objectValue = section.getValue().getBindingValue(this);
@@ -275,22 +301,6 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 			return getVelocityContext().get(variable.getVariableName());
 		}
 		return null;
-	}
-
-	public void log(String s) {
-		System.out.println("LOG: " + s);
-	}
-
-	public void log(String s, Object o) {
-		System.out.println("LOG: " + s + " object=" + o);
-	}
-
-	public void logO(Object o) {
-		if (o == null) {
-			System.out.println("LOG: object=null");
-			return;
-		}
-		System.out.println("LOG: object=" + o + " of " + o.getClass().getSimpleName());
 	}
 
 }
