@@ -202,8 +202,9 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		context.put("n", StringUtils.LINE_SEPARATOR);
 		context.put("trueValue", Boolean.TRUE);
 		context.put("falseValue", Boolean.FALSE);
-		context.put("toolbox", new ToolBox());
-		context.put("javaUtils", new JavaUtils());
+		context.put("toolbox", ToolBox.class);
+		context.put("javaUtils", JavaUtils.class);
+		context.put("Math", Math.class);
 		context.put("globalVariableMap", new HashMap<String, Object>());
 		context.put("today", new Date());
 		return context;
