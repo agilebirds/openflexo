@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
@@ -30,12 +32,13 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLMapping;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-public abstract class ViewObject extends AbstractViewObject {
+public abstract class ViewObject extends AbstractViewObject implements PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(ViewObject.class.getPackage().getName());
 
@@ -182,13 +185,25 @@ public abstract class ViewObject extends AbstractViewObject {
 		return null;
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO: improve this.
+		setChanged();
+	}
+
 	public Object getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
 	public void setGraphicalRepresentation(Object graphicalRepresentation) {
+		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().removePropertyChangeListener(this);
+		}
 		_graphicalRepresentation = graphicalRepresentation;
 		setChanged();
+		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().addPropertyChangeListener(this);
+		}
 	}
 
 	private Vector<ViewObject> ancestors;

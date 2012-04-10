@@ -29,6 +29,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -69,12 +70,13 @@ import org.openflexo.fge.notifications.GraphicalRepresentationRemoved;
 import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.inspector.DefaultInspectableObject;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public abstract class GraphicalRepresentation<O> extends DefaultInspectableObject implements XMLSerializable, Bindable,
-		BindingEvaluationContext, Cloneable, FGEConstants, Observer {
+		BindingEvaluationContext, Cloneable, FGEConstants, Observer, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(GraphicalRepresentation.class.getPackage().getName());
 	private Stroke specificStroke = null;
@@ -145,6 +147,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	private Vector<MouseClickControl> mouseClickControls;
 	private Vector<MouseDragControl> mouseDragControls;
+
+	private PropertyChangeSupport pcSupport;
 
 	private String toolTipText = null;
 
@@ -1323,6 +1327,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		propagateConstraintsAfterModification(notification.parameter);
 		setChanged();
 		notifyObservers(notification);
+		getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
 	}
 
 	@Override
@@ -2189,6 +2194,19 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public void deleteVariable(GRVariable v) {
 		removeFromVariables(v);
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		if (pcSupport == null) {
+			pcSupport = new PropertyChangeSupport(this);
+		}
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return "delete";
 	}
 
 	private boolean validated = false;

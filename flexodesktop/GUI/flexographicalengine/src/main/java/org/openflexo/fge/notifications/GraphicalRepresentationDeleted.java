@@ -26,7 +26,7 @@ public class GraphicalRepresentationDeleted extends FGENotification {
 	private GraphicalRepresentation deletedGR;
 
 	public GraphicalRepresentationDeleted(GraphicalRepresentation gr) {
-		super("object", gr, null);
+		super("delete", gr, null);
 		deletedGR = gr;
 	}
 
