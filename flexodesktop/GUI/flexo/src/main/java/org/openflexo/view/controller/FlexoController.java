@@ -304,6 +304,9 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			}
 		}
 		_docInspectorController = new FlexoDocInspectorController(this);
+		if (this instanceof SelectionManagingController) {
+			((SelectionManagingController) this).getSelectionManager().addObserver(_docInspectorController);
+		}
 	}
 
 	protected MainInspectorController getMainInspectorController() {

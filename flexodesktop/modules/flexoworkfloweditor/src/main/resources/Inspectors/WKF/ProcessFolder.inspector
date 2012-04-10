@@ -2,8 +2,8 @@
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.ProcessFolder" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab index="2" title="Doc" layout="twocols" font="SansSerif,0,11" name="DocTab">
-      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <Number numberType="IntegerType" data="data.index" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" name="Index" localize="true" />
+      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="IntegerType" data="data.index" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="Index" localize="true" />
     </Tab>
     <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
