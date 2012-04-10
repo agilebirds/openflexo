@@ -186,6 +186,14 @@ public abstract class ViewObject extends AbstractViewObject implements PropertyC
 	}
 
 	@Override
+	public void delete() {
+		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().removePropertyChangeListener(this);
+		}
+		super.delete();
+	}
+
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO: improve this.
 		setChanged();
