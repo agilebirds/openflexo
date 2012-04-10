@@ -1230,7 +1230,7 @@ name of the template corresponding to the specific toc_entry.
     #set($currentTocEntry = ${currentTocEntry.get()})
     #if(${currentTocEntry.getRecursionEnabled()})
         #if(${processOrFolder.getClassNameKey()} == 'process_folder')
-            #set($subFolders = ${processOrFolder.getFolders()})
+            #set($subFolders = ${processOrFolder.getSortedFolders()})
             #set($subProcesses = ${processOrFolder.getProcesses()})
         #else
             #set($subFolders = ${processOrFolder.getProcessNode().getSortedFolders()})
