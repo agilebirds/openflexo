@@ -1949,7 +1949,7 @@ name of the template corresponding to the specific toc_entry.
 #set($activities=$generator.getNewVector())
 #foreach($subProcessNode in ${process.getSortedMeaningFullActivitiesAndSubProcessNode()})
     #void($activities.add($subProcessNode))
-    #if($subProcessNode.getSubProcess())
+    #if($subProcessNode.getSubProcess() && $falseValue)
     #foreach($a in $subProcessNode.getSubProcess().getSortedMeaningFullActivities())
         #if(!${a.getDontGenerate()})#void($activities.add($a))#end
     #end
