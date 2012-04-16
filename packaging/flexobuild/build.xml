@@ -11,19 +11,7 @@
 
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="classpath" reverseLoader="true" />
 
-	<target name="deploy">
-		<property name="deploy" value="true" />
-		<property name="deployment.root.folder" value="~/downloads/openflexo"/>
-		<property name="deployment.server.name" value="jenkins@downloads.openflexo.com" />
-		<property name="ssh.private.keyfile" value="${user.home}/.ssh/id_dsa" />
-		<property name="ssh.passphrase" value="" />
-		<tstamp>
-			<format property="daily_folder" pattern="yyyy-MM-dd" />
-		</tstamp>
-		<antcall target="copyPackagesOnServer" />
-	</target>
-
-	<target name="package">
+	<target name="defineProperties">
 		<!-- Remove '-SNAPSHOT' if any -->
 		<propertyregex property="flexo_version" input="${project.version}" regexp="-SNAPSHOT" replace="" />
 		<!-- Set a 3 digit version in normalized_version -->
@@ -39,6 +27,22 @@
 		<tstamp>
 			<format property="build.id" pattern="yyyy-MM-dd.HHmm" />
 		</tstamp>
+	</target>
+
+	<target name="deploy" depends="defineProperties">
+		<echo message="${flexo_version}"/>
+		<property name="deploy" value="true" />
+		<property name="deployment.root.folder" value="~/downloads/openflexo"/>
+		<property name="deployment.server.name" value="jenkins@downloads.openflexo.com" />
+		<property name="ssh.private.keyfile" value="${user.home}/.ssh/id_dsa" />
+		<property name="ssh.passphrase" value="" />
+		<tstamp>
+			<format property="daily_folder" pattern="yyyy-MM-dd" />
+		</tstamp>
+		<!--<antcall target="copyPackagesOnServer" />-->
+	</target>
+
+	<target name="package" depends="defineProperties">
 		<delete dir="${mac.app.dir}" failonerror="false" />
 		<mkdir dir="${mac.app.dir}" />
 		<antcall target="packageCustomer" />
@@ -167,7 +171,7 @@
 		<antcall target="generateInstallerScript" />
 		<antcall target="windowsPackaging" />
 	</target>
-	
+
 	<target name="windowsPackaging">
 		<exec executable="makensis" failonerror="true">
 			<arg value="${flexobuild.work.dir}/flexoinstaller.nsi" />
@@ -253,11 +257,11 @@
 	<target name="linux-packaging">
 		<tar destfile="${project.build.directory}/${product.name} ${productSuffix} ${flexo_version}.tar.gz" compression="gzip" longfile="gnu">
 			<tarfileset mode="755" dir="${dist.dir}">
-    			<exclude name="*.exe"/>
+				<exclude name="*.exe"/>
 				<include name="*.sh"/>
 			</tarfileset>
 			<tarfileset dir="${dist.dir}">
-    			<exclude name="*.exe"/>
+				<exclude name="*.exe"/>
 				<exclude name="*.sh"/>
 			</tarfileset>
 		</tar>
@@ -275,7 +279,7 @@
 	<target name="copyOnServerWindowsRelease" unless="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/${daily_folder}/Windows" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
 			<fileset dir="${project.build.directory}">
 				<include name="*.exe" />
 			</fileset>
@@ -285,7 +289,7 @@
 	<target name="copyOnServerMacRelease" unless="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/${daily_folder}/Mac" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
 			<fileset dir="${project.build.directory}">
 				<include name="*.dmg" />
 			</fileset>
@@ -295,7 +299,7 @@
 	<target name="copyOnServerLinuxRelease" unless="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/${daily_folder}/Linux" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
 			<fileset dir="${project.build.directory}">
 				<include name="*.tar.gz" />
 			</fileset>
@@ -305,7 +309,7 @@
 	<target name="copyOnServerWindowsNightly" if="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Windows" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
 			<fileset dir="${project.build.directory}">
 				<include name="*.exe" />
 			</fileset>
@@ -315,7 +319,7 @@
 	<target name="copyOnServerMacNightly" if="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Mac" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
 			<fileset dir="${project.build.directory}">
 				<include name="*.dmg" />
 			</fileset>
@@ -325,7 +329,7 @@
 	<target name="copyOnServerLinuxNightly" if="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Linux" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
 			<fileset dir="${project.build.directory}">
 				<include name="*.tar.gz" />
 			</fileset>
