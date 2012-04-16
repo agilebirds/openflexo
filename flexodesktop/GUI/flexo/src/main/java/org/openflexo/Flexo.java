@@ -228,7 +228,9 @@ public class Flexo {
 		}
 		getFlexoResourceCenterService().getFlexoResourceCenter();
 		final SplashWindow splashWindow2 = splashWindow;
-		registerShutdownHook();
+		if (!isDev) {
+			registerShutdownHook();
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			/**
 			 * Overrides run
