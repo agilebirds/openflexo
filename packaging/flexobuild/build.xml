@@ -30,7 +30,6 @@
 	</target>
 
 	<target name="deploy" depends="defineProperties">
-		<echo message="${flexo_version}"/>
 		<property name="deploy" value="true" />
 		<property name="deployment.root.folder" value="~/downloads/openflexo"/>
 		<property name="deployment.server.name" value="jenkins@downloads.openflexo.com" />
@@ -39,7 +38,7 @@
 		<tstamp>
 			<format property="daily_folder" pattern="yyyy-MM-dd" />
 		</tstamp>
-		<!--<antcall target="copyPackagesOnServer" />-->
+		<antcall target="copyPackagesOnServer" />
 	</target>
 
 	<target name="package" depends="defineProperties">
