@@ -245,8 +245,8 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 					e);
 		}
 
-		private void stopDragging() {
-			controlArea.stopDragging(getController());
+		private void stopDragging(GraphicalRepresentation focusedGR) {
+			controlArea.stopDragging(getController(), focusedGR);
 		}
 	}
 
@@ -417,7 +417,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		if (currentControlAreaDrag != null) {
-			currentControlAreaDrag.stopDragging();
+			GraphicalRepresentation focusedGR = getFocusRetriever().getFocusedObject(e);
+			// logger.info("Stop dragging, focused on " + focusedGR.getDrawable());
+			currentControlAreaDrag.stopDragging(focusedGR);
 			currentControlAreaDrag = null;
 			e.consume();
 		}
@@ -469,7 +471,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			boolean continueDragging = currentControlAreaDrag.moveTo(newPointLocation, e);
 			e.consume();
 			if (!continueDragging) {
-				currentControlAreaDrag.stopDragging();
+				GraphicalRepresentation focusedGR = getFocusRetriever().getFocusedObject(e);
+				// logger.info("Stop dragging, focused on " + focusedGR.getDrawable());
+				currentControlAreaDrag.stopDragging(focusedGR);
 				logger.fine("OK, stopping dragging point");
 				currentControlAreaDrag = null;
 			}

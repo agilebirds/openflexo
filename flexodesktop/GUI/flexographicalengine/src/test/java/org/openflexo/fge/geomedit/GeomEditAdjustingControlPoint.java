@@ -22,6 +22,7 @@ package org.openflexo.fge.geomedit;
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.GeometricGraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.GeometryAdjustingControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
@@ -57,7 +58,7 @@ public abstract class GeomEditAdjustingControlPoint<O extends FGEArea> extends G
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		// TODO Auto-generated method stub
 	}
 
