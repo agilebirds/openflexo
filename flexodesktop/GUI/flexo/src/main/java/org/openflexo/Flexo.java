@@ -69,6 +69,9 @@ import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
+
 /**
  * Main class of the Flexo Application Suite
  * 
@@ -119,6 +122,32 @@ public class Flexo {
 			return System.getProperty("user.dir");
 		}
 		return null;
+	}
+
+	@SuppressWarnings("restriction")
+	private static void registerShutdownHook() {
+		try {
+			Class.forName("sun.misc.Signal");
+			Class.forName("sun.misc.SignalHandler");
+			Signal.handle(new Signal("TERM"), new SignalHandler() {
+
+				@Override
+				public void handle(Signal arg0) {
+					FlexoFrame activeFrame = FlexoFrame.getActiveFrame(false);
+					if (activeFrame != null && activeFrame.getModule() != null) {
+						if (ProjectLoader.someResourcesNeedsSaving(activeFrame.getModule().getProject())) {
+							if (activeFrame.getModule().showSaveDialogAndClose()) {
+								System.exit(0);
+							}
+						}
+					}
+				}
+			});
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -199,6 +228,7 @@ public class Flexo {
 		}
 		getFlexoResourceCenterService().getFlexoResourceCenter();
 		final SplashWindow splashWindow2 = splashWindow;
+		registerShutdownHook();
 		SwingUtilities.invokeLater(new Runnable() {
 			/**
 			 * Overrides run

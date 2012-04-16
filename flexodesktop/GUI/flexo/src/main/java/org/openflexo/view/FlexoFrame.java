@@ -129,7 +129,12 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	private WindowListener windowListener;
 
 	public static FlexoFrame getActiveFrame() {
-		return FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame() : getDefaultFrame();
+		return getActiveFrame(true);
+	}
+
+	public static FlexoFrame getActiveFrame(boolean createDefaultIfNull) {
+		return FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame()
+				: createDefaultIfNull ? getDefaultFrame() : null;
 	}
 
 	public static Frame getOwner(Frame owner) {
