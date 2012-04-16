@@ -19,9 +19,7 @@
  */
 package org.openflexo.fge.view;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -38,8 +36,6 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
@@ -68,7 +64,7 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.LabelViewMouseListener;
 
-public class LabelView<O> extends JPanel implements FGEView<O>, LabelMetricsProvider {
+public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetricsProvider {
 
 	public class TextComponent extends JTextPane {
 		private class TextComponentCaret extends DefaultCaret {
@@ -99,7 +95,6 @@ public class LabelView<O> extends JPanel implements FGEView<O>, LabelMetricsProv
 			setEditable(false);
 			setAutoscrolls(false);
 			setFocusable(true);
-			setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
 		}
 
 		@Override
@@ -141,29 +136,22 @@ public class LabelView<O> extends JPanel implements FGEView<O>, LabelMetricsProv
 
 	private TextComponent textComponent;
 
-	private JScrollPane scrollPane;
-
 	private boolean initialized = false;
 
 	public LabelView(GraphicalRepresentation<O> graphicalRepresentation, DrawingController<?> controller, FGEView<?> delegateView) {
-		super(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		setOpaque(false);
 		this.controller = controller;
 		this.graphicalRepresentation = graphicalRepresentation;
 		this.delegateView = delegateView;
 		this.mouseListener = new LabelViewMouseListener(graphicalRepresentation, this);
 		this.textComponent = new TextComponent();
-		this.scrollPane = new JScrollPane(textComponent) {
-			@Override
-			public void doLayout() {
-				super.doLayout();
-			}
-		};
-		this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		this.scrollPane.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-		this.scrollPane.getViewport().setBorder(null);
-		this.scrollPane.setOpaque(false);
-		this.scrollPane.getViewport().setOpaque(false);
+		setViewportView(textComponent);
+		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		getViewport().setBorder(null);
+		setBorder(null);
+		setOpaque(false);
+		getViewport().setOpaque(false);
 		graphicalRepresentation.setLabelMetricsProvider(this);
 		LabelDocumentListener listener = new LabelDocumentListener();
 		textComponent.addKeyListener(listener);
@@ -173,7 +161,6 @@ public class LabelView<O> extends JPanel implements FGEView<O>, LabelMetricsProv
 		updateFont();
 		updateText();
 		getGraphicalRepresentation().addObserver(this);
-		add(scrollPane);
 		validate();
 		initialized = true;
 		textComponent.setEditable(false);
@@ -223,13 +210,13 @@ public class LabelView<O> extends JPanel implements FGEView<O>, LabelMetricsProv
 			if (ml == mouseListener) {
 				continue;
 			}
-			addMouseListener(ml);
+			textComponent.addMouseListener(ml);
 		}
 		for (MouseMotionListener mml : disabledMouseMotionListeners) {
 			if (mml == mouseListener) {
 				continue;
 			}
-			addMouseMotionListener(mml);
+			textComponent.addMouseMotionListener(mml);
 		}
 		removeFGEMouseListener();
 		disabledMouseListeners.clear();
@@ -243,19 +230,19 @@ public class LabelView<O> extends JPanel implements FGEView<O>, LabelMetricsProv
 		}
 		disabledMouseListeners.clear();
 		disabledMouseMotionListeners.clear();
-		for (MouseListener ml : getMouseListeners()) {
+		for (MouseListener ml : textComponent.getMouseListeners()) {
 			if (ml == mouseListener) {
 				continue;
 			}
 			disabledMouseListeners.add(ml);
-			removeMouseListener(ml);
+			textComponent.removeMouseListener(ml);
 		}
-		for (MouseMotionListener mml : getMouseMotionListeners()) {
+		for (MouseMotionListener mml : textComponent.getMouseMotionListeners()) {
 			if (mml == mouseListener) {
 				continue;
 			}
 			disabledMouseMotionListeners.add(mml);
-			removeMouseMotionListener(mml);
+			textComponent.removeMouseMotionListener(mml);
 		}
 		addFGEMouseListener();
 		textComponentMouseListenerEnabled = false;
@@ -375,13 +362,6 @@ public class LabelView<O> extends JPanel implements FGEView<O>, LabelMetricsProv
 		}
 	}
 
-	@Override
-	public void setBounds(Rectangle r) {
-		super.setBounds(r);
-		textComponent.setSize(r.getSize());
-		textComponent.invalidate();
-	}
-
 	protected void updateBounds() {
 		updateBounds(true);
 	}
@@ -401,7 +381,7 @@ public class LabelView<O> extends JPanel implements FGEView<O>, LabelMetricsProv
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				updateBounds(false);
+				updateBounds(true);
 			}
 		});
 	}
@@ -413,7 +393,7 @@ public class LabelView<O> extends JPanel implements FGEView<O>, LabelMetricsProv
 			textComponent.setSize(width, Short.MAX_VALUE);
 		}
 
-		Dimension preferredSize = textComponent.getPreferredSize();
+		Dimension preferredSize = textComponent.getPreferredScrollableViewportSize();
 		if (preferredSize.width > width) {
 			preferredSize.width = width;
 		}
