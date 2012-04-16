@@ -14867,12 +14867,23 @@ forward to the next nodes.</description>
               <RelatedToDocItem id="calc_perspective" identifier="calc_perspective" embedded="false" hidden="true">
                 <description>No description</description>
                 <RelatedToDocItem idref="CalcLibraryView" />
-                <RelatedToDocItem idref="CalcLibraryView" />
                 <RelatedToDocItem id="CalcView" identifier="CalcView" embedded="false" hidden="true">
                   <description>No description</description>
                   <RelatedToDocItem idref="calc_perspective" />
+                  <RelatedToDocItem idref="calc_perspective" />
                 </RelatedToDocItem>
                 <RelatedToDocItem id="EditionPatternView" identifier="EditionPatternView" embedded="false" hidden="true">
+                  <description>No description</description>
+                  <RelatedToDocItem idref="calc_perspective" />
+                  <RelatedToDocItem idref="calc_perspective" />
+                </RelatedToDocItem>
+                <RelatedToDocItem id="CalcPaletteModuleView" identifier="CalcPaletteModuleView" embedded="false" hidden="true">
+                  <description>No description</description>
+                  <RelatedToDocItem idref="calc_perspective" />
+                  <RelatedToDocItem idref="calc_perspective" />
+                </RelatedToDocItem>
+                <RelatedToDocItem idref="CalcLibraryView" />
+                <RelatedToDocItem id="CalcDrawingShemaModuleView" identifier="CalcDrawingShemaModuleView" embedded="false" hidden="true">
                   <description>No description</description>
                   <RelatedToDocItem idref="calc_perspective" />
                 </RelatedToDocItem>
@@ -14893,6 +14904,8 @@ forward to the next nodes.</description>
             <description>No description</description>
             <InheritanceChildDocItem idref="CalcView" />
             <InheritanceChildDocItem idref="EditionPatternView" />
+            <InheritanceChildDocItem idref="CalcPaletteModuleView" />
+            <InheritanceChildDocItem idref="CalcDrawingShemaModuleView" />
           </InheritanceChildDocItem>
           <title key="ENGLISH">Panel Central</title>
           <DocItemVersion id="general main pane_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
@@ -15139,9 +15152,17 @@ forward to the next nodes.</description>
         <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-pane" primaryDocItemId="oe-main-pane" identifier="oe-main-pane">
           <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-panecalc_perspective" primaryDocItemId="calc_perspective" identifier="calc_perspective">
             <description>Documentation on that perspective</description>
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-panecalc_perspectiveCalcDrawingShemaModuleView" primaryDocItemId="CalcDrawingShemaModuleView" identifier="CalcDrawingShemaModuleView">
+              <description>Documentation on that view</description>
+              <DocItem idref="CalcDrawingShemaModuleView" />
+            </DocItemFolder>
             <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-panecalc_perspectiveCalcLibraryView" primaryDocItemId="CalcLibraryView" identifier="CalcLibraryView">
               <description>Documentation on that view</description>
               <DocItem idref="CalcLibraryView" />
+            </DocItemFolder>
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-panecalc_perspectiveCalcPaletteModuleView" primaryDocItemId="CalcPaletteModuleView" identifier="CalcPaletteModuleView">
+              <description>Documentation on that view</description>
+              <DocItem idref="CalcPaletteModuleView" />
             </DocItemFolder>
             <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-panecalc_perspectiveCalcView" primaryDocItemId="CalcView" identifier="CalcView">
               <description>Documentation on that view</description>
