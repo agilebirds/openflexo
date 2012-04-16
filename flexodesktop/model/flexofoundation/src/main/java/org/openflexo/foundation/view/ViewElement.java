@@ -33,6 +33,7 @@ import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -330,8 +331,26 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// System.out.println("**************> ViewElement " + this + " : receive PropertyChangeEvent " + evt);
-		update();
+		// Note: this object observes two kind of objects
+		// - objects that are relevant in the context of the computing of their representation, such as label
+		// - they also observe their GR
+		// If the case of their GR observing, update() should not be invoked, only invoke setChanged() in order
+		// to resource to be flagged as modified
+		// logger.info("**************> ViewElement " + this + " : receive PropertyChangeEvent " + evt.getPropertyName() + " source="
+		// + evt.getSource().getClass().getSimpleName() + " evt=" + evt);
+		if (evt.getSource() == getGraphicalRepresentation()) {
+			// We just want here to track events such as object moving, just to flag the resource as modified
+			// Ignore focused or selected events, because goal here is to mark resource as modified
+			if (!evt.getPropertyName().equals(GraphicalRepresentation.Parameters.isFocused.name())
+					&& !evt.getPropertyName().equals(GraphicalRepresentation.Parameters.isSelected.name())) {
+				// System.out.println("setChanged() because of " + evt.getPropertyName() + " evt=" + evt);
+				setChanged();
+			}
+		} else {
+			// In this case, we really need to update object, because an object involved in the computing of
+			// the label for instance has changed
+			update();
+		}
 	}
 
 	/**
