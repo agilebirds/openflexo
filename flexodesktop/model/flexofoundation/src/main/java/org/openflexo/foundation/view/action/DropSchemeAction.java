@@ -155,56 +155,60 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	@Override
 	protected ViewShape performAddShape(AddShape action) {
 		ViewShape newShape = super.performAddShape(action);
-		ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) newShape.getGraphicalRepresentation();
-		if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
-			// Declare shape as new shape only if it is the primary representation role of the EP
+		if (newShape != null) {
+			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) newShape.getGraphicalRepresentation();
+			if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
+				// Declare shape as new shape only if it is the primary representation role of the EP
 
-			_primaryShape = newShape;
-			gr.setLocation(dropLocation);
+				_primaryShape = newShape;
+				gr.setLocation(dropLocation);
 
-			// Temporary comment this portion of code if child shapes are declared inside this shape
-			if (!action.getPatternRole().containsShapes() && action.getContainer().toString().equals(EditionScheme.TOP_LEVEL)) {
-				ShapeBorder border = gr.getBorder();
-				ShapeBorder newBorder = new ShapeBorder(border);
-				boolean requireNewBorder = false;
-				double deltaX = 0;
-				double deltaY = 0;
-				if (border.top < 25) {
-					requireNewBorder = true;
-					deltaY = border.top - 25;
-					newBorder.top = 25;
-				}
-				if (border.left < 25) {
-					requireNewBorder = true;
-					deltaX = border.left - 25;
-					newBorder.left = 25;
-				}
-				if (border.right < 25) {
-					requireNewBorder = true;
-					newBorder.right = 25;
-				}
-				if (border.bottom < 25) {
-					requireNewBorder = true;
-					newBorder.bottom = 25;
-				}
-				if (requireNewBorder) {
-					gr.setBorder(newBorder);
-					gr.setLocation(new FGEPoint(gr.getX() + deltaX, gr.getY() + deltaY));
-					if (gr.getIsFloatingLabel()) {
-						gr.setAbsoluteTextX(gr.getAbsoluteTextX() - deltaX);
-						gr.setAbsoluteTextY(gr.getAbsoluteTextY() - deltaY);
+				// Temporary comment this portion of code if child shapes are declared inside this shape
+				if (!action.getPatternRole().containsShapes() && action.getContainer().toString().equals(EditionScheme.TOP_LEVEL)) {
+					ShapeBorder border = gr.getBorder();
+					ShapeBorder newBorder = new ShapeBorder(border);
+					boolean requireNewBorder = false;
+					double deltaX = 0;
+					double deltaY = 0;
+					if (border.top < 25) {
+						requireNewBorder = true;
+						deltaY = border.top - 25;
+						newBorder.top = 25;
+					}
+					if (border.left < 25) {
+						requireNewBorder = true;
+						deltaX = border.left - 25;
+						newBorder.left = 25;
+					}
+					if (border.right < 25) {
+						requireNewBorder = true;
+						newBorder.right = 25;
+					}
+					if (border.bottom < 25) {
+						requireNewBorder = true;
+						newBorder.bottom = 25;
+					}
+					if (requireNewBorder) {
+						gr.setBorder(newBorder);
+						gr.setLocation(new FGEPoint(gr.getX() + deltaX, gr.getY() + deltaY));
+						if (gr.getIsFloatingLabel()) {
+							gr.setAbsoluteTextX(gr.getAbsoluteTextX() - deltaX);
+							gr.setAbsoluteTextY(gr.getAbsoluteTextY() - deltaY);
+						}
 					}
 				}
+			} else if (action.getPatternRole().getParentShapeAsDefinedInAction()) {
+				Object graphicalRepresentation = action.getEditionPattern().getPrimaryRepresentationRole().getGraphicalRepresentation();
+				if (graphicalRepresentation instanceof ShapeGraphicalRepresentation<?>) {
+					ShapeGraphicalRepresentation<?> primaryGR = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
+					gr.setLocation(new FGEPoint(dropLocation.x + gr.getX() - primaryGR.getX(), dropLocation.y + gr.getY()
+							- primaryGR.getY()));
+				}
 			}
-		} else if (action.getPatternRole().getParentShapeAsDefinedInAction()) {
-			Object graphicalRepresentation = action.getEditionPattern().getPrimaryRepresentationRole().getGraphicalRepresentation();
-			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation<?>) {
-				ShapeGraphicalRepresentation<?> primaryGR = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
-				gr.setLocation(new FGEPoint(dropLocation.x + gr.getX() - primaryGR.getX(), dropLocation.y + gr.getY() - primaryGR.getY()));
-			}
+			gr.updateConstraints();
+		} else {
+			logger.warning("Inconsistant data: shape has not been created");
 		}
-		gr.updateConstraints();
-
 		return newShape;
 	}
 
