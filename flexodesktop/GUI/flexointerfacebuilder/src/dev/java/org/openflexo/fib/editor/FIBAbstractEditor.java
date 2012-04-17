@@ -51,8 +51,7 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
-import org.openflexo.localization.LocalizedDelegate;
-import org.openflexo.localization.LocalizedDelegateImplementation;
+import org.openflexo.localization.LocalizedDelegateGUIImpl;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
@@ -68,7 +67,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBAbstractEditor.class.getPackage().getName());
 
-	public static LocalizedDelegate LOCALIZATION = new LocalizedDelegateImplementation(new FileResource("FIBEditorLocalized"));
+	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FIBEditorLocalized"), null);
 
 	public static File COMPONENT_LOCALIZATION_FIB = new FileResource("Fib/ComponentLocalization.fib");
 
@@ -290,7 +289,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		localizedItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLocalization.showLocalizedEditor();
+				LOCALIZATION.showLocalizedEditor();
 			}
 		});
 

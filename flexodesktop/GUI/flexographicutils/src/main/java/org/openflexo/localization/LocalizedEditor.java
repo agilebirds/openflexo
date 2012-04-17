@@ -52,6 +52,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class LocalizedEditor extends JDialog {
 	public static Color BACK_COLOR;
 
+	private LocalizedDelegateGUIImpl localizedDelegate;
+
 	protected Vector<Character> allFirstChar;
 	protected Hashtable<String, LocalizedEditorModel> _editorModels;
 	protected Hashtable<String, JTable> _tables;
@@ -66,8 +68,9 @@ public class LocalizedEditor extends JDialog {
 
 	protected JButton deleteEntryButton;
 
-	public LocalizedEditor() {
+	public LocalizedEditor(LocalizedDelegateGUIImpl localizedDelegate) {
 		super((Frame) null, FlexoLocalization.localizedForKey("localized_editor"));
+		this.localizedDelegate = localizedDelegate;
 
 		tabbedPane = new JTabbedPane();
 
@@ -77,7 +80,7 @@ public class LocalizedEditor extends JDialog {
 
 		int currentIndex = 0;
 
-		allFirstChar = FlexoLocalization.getAllFirstChar();
+		allFirstChar = localizedDelegate.getAllFirstChar();
 		Collections.sort(allFirstChar, new Comparator<Character>() {
 			@Override
 			public int compare(Character o1, Character o2) {
@@ -86,13 +89,13 @@ public class LocalizedEditor extends JDialog {
 		});
 
 		for (char aChar : allFirstChar) {
-			LocalizedEditorModel editorModel = new LocalizedEditorModel(aChar);
+			LocalizedEditorModel editorModel = new LocalizedEditorModel(localizedDelegate, aChar);
 			installEditorModel(editorModel, String.valueOf(aChar));
 			_charForIndexes.put(currentIndex, String.valueOf(aChar));
 			currentIndex++;
 		}
 
-		LocalizedEditorModel editorModel = new LocalizedEditorModel();
+		LocalizedEditorModel editorModel = new LocalizedEditorModel(localizedDelegate);
 		installEditorModel(editorModel, "warnings");
 		_charForIndexes.put(currentIndex, "warnings");
 
@@ -170,7 +173,7 @@ public class LocalizedEditor extends JDialog {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLocalization.saveAllDictionaries();
+				localizedDelegate.saveAllDictionaries();
 			}
 		});
 		saveButton.setOpaque(false);
@@ -182,12 +185,12 @@ public class LocalizedEditor extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (char aChar : allFirstChar) {
-					LocalizedEditorModel newModel = new LocalizedEditorModel(aChar);
+					LocalizedEditorModel newModel = new LocalizedEditorModel(localizedDelegate, aChar);
 					_tables.get(String.valueOf(aChar)).setModel(newModel);
 					_editorModels.put(String.valueOf(aChar), newModel);
 				}
 
-				LocalizedEditorModel editorModel = new LocalizedEditorModel();
+				LocalizedEditorModel editorModel = new LocalizedEditorModel(localizedDelegate);
 				_tables.get("warnings").setModel(editorModel);
 				_editorModels.put(String.valueOf("warnings"), editorModel);
 			}
@@ -202,8 +205,8 @@ public class LocalizedEditor extends JDialog {
 				String selectedChar = _charForIndexes.get(tabbedPane.getSelectedIndex());
 				LocalizedEditorModel editorModel = _editorModels.get(selectedChar);
 				JTable table = _tables.get(selectedChar);
-				FlexoLocalization.removeEntry((String) editorModel.getValueAt(selectedRow, 0));
-				LocalizedEditorModel newModel = new LocalizedEditorModel(String.valueOf(selectedChar));
+				localizedDelegate.removeEntry((String) editorModel.getValueAt(selectedRow, 0));
+				LocalizedEditorModel newModel = new LocalizedEditorModel(localizedDelegate, String.valueOf(selectedChar));
 				_editorModels.put(String.valueOf(selectedChar), newModel);
 				table.setModel(newModel);
 			}

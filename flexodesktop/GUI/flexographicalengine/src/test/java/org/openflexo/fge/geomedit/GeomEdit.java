@@ -42,6 +42,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.LocalizedDelegateGUIImpl;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.FlexoFileChooser;
@@ -72,6 +73,10 @@ public class GeomEdit {
 	private JFrame frame;
 	private FlexoFileChooser fileChooser;
 	private FIBInspectorController inspector;
+
+	// Retrieve default Openflexo locales
+	public static final String LOCALIZATION_DIRNAME = "Localized";
+	private static LocalizedDelegateGUIImpl MAIN_LOCALIZER = new LocalizedDelegateGUIImpl(new FileResource(LOCALIZATION_DIRNAME), null);
 
 	public GeomEdit() {
 		super();
@@ -260,7 +265,7 @@ public class GeomEdit {
 		localizedItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLocalization.showLocalizedEditor();
+				MAIN_LOCALIZER.showLocalizedEditor();
 			}
 		});
 

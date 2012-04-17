@@ -22,12 +22,6 @@ package org.openflexo.localization;
 import java.awt.Component;
 import java.awt.Frame;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
 import java.util.Vector;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
@@ -41,9 +35,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.TableColumn;
 
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.FlexoProperties;
-import org.openflexo.toolbox.Localized;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.KeyValueDecoder;
 
@@ -56,27 +47,11 @@ import org.openflexo.xmlcode.KeyValueDecoder;
  */
 public class FlexoLocalization {
 
-	static {
-		Localized.setInstance(new Localized() {
-			@Override
-			protected String getLocalizedForKey(String key) {
-				return FlexoLocalization.localizedForKey(key);
-			}
-		});
-	}
-
 	private static final Logger logger = Logger.getLogger(FlexoLocalization.class.getPackage().getName());
-
-	public static final String LOCALIZATION_DIRNAME = "Localized";
 
 	private static Language _currentLanguage;
 
 	private static Vector<LocalizationListener> localizationListeners = new Vector<LocalizationListener>();
-
-	/**
-	 * Directory where localized dictionnaries are stored
-	 */
-	private static File _localizedDirectory = null;
 
 	/**
 	 * This hashtable stores all the loaded dictionary for localized used among Flexo application. Value are
@@ -91,7 +66,7 @@ public class FlexoLocalization {
 	 * Language&lt;pre&gt; instances.
 	 * 
 	 */
-	private static Hashtable<Language, Properties> _localizedDictionaries = null;
+	// private static Hashtable<Language, Properties> _localizedDictionaries = null;
 
 	private static final WeakHashMap<Component, String> _storedLocalizedForComponents = new WeakHashMap<Component, String>();
 
@@ -101,29 +76,18 @@ public class FlexoLocalization {
 
 	private static final WeakHashMap<Component, String> _storedAdditionalStrings = new WeakHashMap<Component, String>();
 
-	private static final Vector<LocalizedDelegate> _delegates = new Vector<LocalizedDelegate>();
+	// private static final Vector<LocalizedDelegate> _delegates = new Vector<LocalizedDelegate>();
 
-	private static void createNewDictionary(Language language) {
+	/*private static void createNewDictionary(Language language) {
 		Properties newDict = new FlexoProperties();
 		saveDictionary(language, newDict);
 	}
 
 	public static File getDictionaryFileForLanguage(Language language) {
 		return new File(getLocalizedDirectory(), language.getName() + ".dict");
-	}
+	}*/
 
-	private static File getLocalizedDirectory() {
-		if (_localizedDirectory == null) {
-			_localizedDirectory = new FileResource(LOCALIZATION_DIRNAME);
-
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Setting localized directory" + _localizedDirectory.getAbsolutePath());
-			}
-		}
-		return _localizedDirectory;
-	}
-
-	private static void saveDictionary(Language language, Properties dict) {
+	/*private static void saveDictionary(Language language, Properties dict) {
 		File dictFile = getDictionaryFileForLanguage(language);
 		try {
 			if (!dictFile.exists()) {
@@ -136,9 +100,9 @@ public class FlexoLocalization {
 				// e.printStackTrace();
 			}
 		}
-	}
+	}*/
 
-	private static Properties loadDictionary(Language language) {
+	/*private static Properties loadDictionary(Language language) {
 		File dictFile = getDictionaryFileForLanguage(language);
 		Properties loadedDict = new FlexoProperties();
 		try {
@@ -149,9 +113,9 @@ public class FlexoLocalization {
 			}
 		}
 		return loadedDict;
-	}
+	}*/
 
-	private static void loadLocalizedDictionaries() {
+	/*private static void loadLocalizedDictionaries() {
 		_localizedDictionaries = new Hashtable<Language, Properties>();
 
 		for (Enumeration e = getAvailableLanguages().elements(); e.hasMoreElements();) {
@@ -181,9 +145,9 @@ public class FlexoLocalization {
 			dict.setProperty(key, value);
 			saveDictionary(language, dict);
 		}
-	}
+	}*/
 
-	public static void addEntry(String key) {
+	/*public static void addEntry(String key) {
 		// Add in all dictionaries, when required
 		for (Enumeration e = getAvailableLanguages().elements(); e.hasMoreElements();) {
 			Language nextLanguage = (Language) e.nextElement();
@@ -207,6 +171,103 @@ public class FlexoLocalization {
 			Properties dict = _localizedDictionaries.get(language);
 			saveDictionary(language, dict);
 		}
+	}*/
+
+	private static LocalizedDelegate mainLocalizer;
+
+	/**
+	 * Initialize localization given a supplied localization delegate
+	 * 
+	 * @param delegate
+	 */
+	public static void initWith(LocalizedDelegate delegate) {
+		mainLocalizer = delegate;
+	}
+
+	/**
+	 * Return a flag indicating if localization has been initialized
+	 * 
+	 * @return
+	 */
+	public static boolean isInitialized() {
+		return (mainLocalizer != null);
+	}
+
+	/**
+	 * Initialize localization given a supplied directory<br>
+	 * This directory will be used as the location of a main localizer that will be instanciated here, as an instance of
+	 * LocalizedDelegateImpl
+	 * 
+	 * @param localizedDirectory
+	 */
+	public static void initWith(File localizedDirectory) {
+		mainLocalizer = new LocalizedDelegateImpl(localizedDirectory, null);
+	}
+
+	/**
+	 * This is general and main method to use localized in Flexo.<br>
+	 * Applicable language is chosen from the one defined in Preferences.<br>
+	 * Use english names for keys, such as 'some_english_words'
+	 * 
+	 * @param key
+	 * @return localized String
+	 */
+	public static String localizedForKey(String key) {
+		if (mainLocalizer == null) {
+			logger.warning("FlexoLocalization not initialized, returning key as localized ");
+			return key;
+		}
+		return localizedForKey(mainLocalizer, key);
+	}
+
+	public static String localizedForKey(LocalizedDelegate delegate, String key) {
+		return localizedForKeyAndLanguage(delegate, key, getCurrentLanguage());
+	}
+
+	public static String localizedForKeyAndLanguage(String key, Language language) {
+		if (mainLocalizer == null) {
+			logger.warning("FlexoLocalization not initialized, returning key as localized ");
+			return key;
+		}
+		return localizedForKeyAndLanguage(mainLocalizer, key, language);
+	}
+
+	public static String localizedForKeyAndLanguage(LocalizedDelegate delegate, String key, Language language) {
+
+		if (key == null) {
+			return null;
+		}
+
+		String returned = delegate.getLocalizedForKeyAndLanguage(key, language);
+		if (returned == null) {
+			// Not found
+			if (delegate.handleNewEntry(key, language)) {
+				// We have to register this new entries
+				if (delegate.getParent() != null) {
+					// A parent exists, we will use its localized values in current localizer
+					for (Language l : Language.availableValues()) {
+						String value = localizedForKeyAndLanguage(delegate.getParent(), key, l);
+						delegate.registerNewEntry(key, l, value);
+					}
+					return localizedForKeyAndLanguage(delegate.getParent(), key, language);
+				} else {
+					// No parent exists, we will use keys
+					for (Language l : Language.availableValues()) {
+						delegate.registerNewEntry(key, l, key);
+					}
+					return key;
+				}
+			} else {
+				if (delegate.getParent() != null) {
+					return localizedForKeyAndLanguage(delegate.getParent(), key, language);
+				} else {
+					logger.warning("Not found and not handling new entries for localized for key " + key);
+					return key;
+				}
+			}
+		} else {
+			return returned;
+		}
 	}
 
 	/**
@@ -216,13 +277,13 @@ public class FlexoLocalization {
 	 * @param key
 	 * @return localized String
 	 */
-	public static String localizedForKey(String key) {
+	/*public static String localizedForKey(String key) {
 		return localizedForKeyAndLanguage(key, getCurrentLanguage());
 	}
 
 	public static String localizedForKey(LocalizedDelegate delegate, String key) {
 		return delegate.localizedForKeyAndLanguage(key, getCurrentLanguage());
-	}
+	}*/
 
 	public static String[] localizedForKey(String[] keys) {
 		String[] values = new String[keys.length];
@@ -233,17 +294,17 @@ public class FlexoLocalization {
 	}
 
 /**
-     * Same as {@link localizedForKey(String) plus an additional String (not
-     * localized)
-     *
-     * @param key
-     * @param additional
-     *            String
-     * @return localized String
-     */
-	public static String localizedForKey(String key, String additionalString) {
+	 * Same as {@link localizedForKey(String) plus an additional String (not
+	 * localized)
+	 *
+	 * @param key
+	 * @param additional
+	 *            String
+	 * @return localized String
+	 */
+	/*public static String localizedForKey(String key, String additionalString) {
 		return localizedForKeyAndLanguage(key, getCurrentLanguage()) + additionalString;
-	}
+	}*/
 
 	/**
 	 * Return localized related to specified key and language
@@ -252,9 +313,9 @@ public class FlexoLocalization {
 	 *            , language
 	 * @return localized String
 	 */
-	public static String localizedForKeyAndLanguage(String key, Language language) {
+	/*public static String localizedForKeyAndLanguage(String key, Language language) {
 		return localizedForKeyAndLanguage(key, language, true, true);
-	}
+	}*/
 
 	/**
 	 * Return localized related to specified key and language
@@ -263,7 +324,7 @@ public class FlexoLocalization {
 	 *            , language
 	 * @return localized String
 	 */
-	public static String localizedForKeyAndLanguage(String key, Language language, boolean createsEntry, boolean useDelegates) {
+	/*public static String localizedForKeyAndLanguage(String key, Language language, boolean createsEntry, boolean useDelegates) {
 		if (key == null) {
 			return null;
 		}
@@ -289,13 +350,6 @@ public class FlexoLocalization {
 		currentLanguageDict = _localizedDictionaries.get(language);
 		localized = currentLanguageDict.getProperty(key);
 
-		/* if (localized == null) {
-		 	// Not found, might be in delegates
-		 	for (LocalizedDelegate d : _delegates) {
-		 		localized = d.localizedForKeyAndLanguage(key, language);
-		 		if (localized != null) break;
-		 	}
-		 }*/
 
 		if (localized == null) {
 			// Add in all dictionaries, when required (only when no delegate handle it)
@@ -315,7 +369,7 @@ public class FlexoLocalization {
 		} else {
 			return localized;
 		}
-	}
+	}*/
 
 	/**
 	 * Sets localized related to specified key and language
@@ -325,18 +379,22 @@ public class FlexoLocalization {
 	 * @return localized String
 	 */
 	public static void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
-		Properties currentLanguageDict;
-		if (_localizedDictionaries == null) {
-			loadLocalizedDictionaries();
+		if (mainLocalizer == null) {
+			logger.warning("FlexoLocalization not initialized, cannot set localized ");
 		}
-		currentLanguageDict = _localizedDictionaries.get(language);
-		Object old = currentLanguageDict.setProperty(key, value);
-		if (language == Language.ENGLISH) {
-			if (key.equals(_localizedDictionaries.get(Language.DUTCH).get(key))
-					|| (old != null && old.equals(_localizedDictionaries.get(Language.DUTCH).get(key)))
-					|| (old == null && _localizedDictionaries.get(Language.DUTCH).get(key) == null)) {
-				_localizedDictionaries.get(Language.DUTCH).setProperty(key, value);
-			}
+		setLocalizedForKeyAndLanguage(mainLocalizer, key, value, language);
+	}
+
+	/**
+	 * Sets localized related to specified key and language
+	 * 
+	 * @param key
+	 *            , value, language
+	 * @return localized String
+	 */
+	public static void setLocalizedForKeyAndLanguage(LocalizedDelegate delegate, String key, String value, Language language) {
+		if (delegate.handleNewEntry(key, language)) {
+			delegate.registerNewEntry(key, language, value);
 		}
 	}
 
@@ -476,94 +534,6 @@ public class FlexoLocalization {
 		return Language.getAvailableLanguages();
 	}
 
-	public static Vector<String> buildAllKeys() {
-		Vector<String> returned = new Vector<String>();
-		for (Enumeration e1 = _localizedDictionaries.elements(); e1.hasMoreElements();) {
-			Properties next = (Properties) e1.nextElement();
-			for (Enumeration e2 = next.keys(); e2.hasMoreElements();) {
-				String nextKey = (String) e2.nextElement();
-				if (!returned.contains(nextKey)) {
-					returned.add(nextKey);
-				}
-			}
-		}
-		return returned;
-	}
-
-	public static Vector<String> buildAllKeys(char aChar) {
-		char lc = Character.toLowerCase(aChar);
-		char uc = Character.toUpperCase(aChar);
-		Vector<String> returned = new Vector<String>();
-		for (Enumeration e1 = _localizedDictionaries.elements(); e1.hasMoreElements();) {
-			Properties next = (Properties) e1.nextElement();
-			for (Enumeration e2 = next.keys(); e2.hasMoreElements();) {
-				String nextKey = (String) e2.nextElement();
-				if (nextKey.length() > 0) {
-					if ((!returned.contains(nextKey)) && ((nextKey.charAt(0) == lc) || (nextKey.charAt(0) == uc))) {
-						returned.add(nextKey);
-					}
-				}
-			}
-		}
-		return returned;
-	}
-
-	public static Vector<String> buildAllWarningKeys() {
-		Vector<String> returned = new Vector<String>();
-		for (Enumeration e1 = _localizedDictionaries.elements(); e1.hasMoreElements();) {
-			Properties next = (Properties) e1.nextElement();
-			for (Enumeration e2 = next.keys(); e2.hasMoreElements();) {
-				String nextKey = (String) e2.nextElement();
-				if (nextKey.length() > 0) {
-					if (!returned.contains(nextKey)) {
-						String value = next.getProperty(nextKey);
-						if (!LocalizedEditorModel.isKeyValid(nextKey)) {
-							returned.add(nextKey);
-						} else if (LocalizedEditorModel.isValueValid(nextKey, value)) {
-						} else {
-							returned.add(nextKey);
-						}
-					}
-				}
-			}
-		}
-		return returned;
-	}
-
-	public static Vector<Character> getAllFirstChar() {
-		Vector<Character> returned = new Vector<Character>();
-		for (Enumeration e1 = _localizedDictionaries.elements(); e1.hasMoreElements();) {
-			Properties next = (Properties) e1.nextElement();
-			for (Enumeration e2 = next.keys(); e2.hasMoreElements();) {
-				String nextKey = (String) e2.nextElement();
-				if (nextKey.length() > 0) {
-					char firstChar = Character.toUpperCase(nextKey.charAt(0));
-					if (!returned.contains(firstChar)) {
-						returned.add(firstChar);
-					}
-				}
-			}
-		}
-		return returned;
-	}
-
-	/*public static LocalizedEditorModel getEditorModel()
-	{
-	    if (_editorModel == null) {
-	        _editorModel = new LocalizedEditorModel();
-	    }
-	    return _editorModel;
-	}*/
-
-	public static void showLocalizedEditor() {
-		if (localizedEditor == null) {
-			localizedEditor = new LocalizedEditor();
-		}
-		localizedEditor.setVisible(true);
-	}
-
-	private static LocalizedEditor localizedEditor = null;
-
 	public static void setCurrentLanguage(Language language) {
 		_currentLanguage = language;
 		for (LocalizationListener l : localizationListeners) {
@@ -616,6 +586,10 @@ public class FlexoLocalization {
 	public static String localizedForKeyWithParams(LocalizedDelegate delegate, String key, String... params) {
 		String base = localizedForKey(delegate, key);
 		return replaceAllParamsInString(base, params);
+	}
+
+	public static LocalizedDelegate getMainLocalizer() {
+		return mainLocalizer;
 	}
 
 	public static void main(String[] args) {
@@ -725,7 +699,7 @@ public class FlexoLocalization {
 		_storedLocalizedForTableColumn.clear();
 	}
 
-	public static void addToLocalizedDelegates(LocalizedDelegate d) {
+	/*public static void addToLocalizedDelegates(LocalizedDelegate d) {
 		if (d == null) {
 			throw new NullPointerException();
 		}
@@ -737,7 +711,7 @@ public class FlexoLocalization {
 			throw new NullPointerException();
 		}
 		_delegates.remove(d);
-	}
+	}*/
 
 	public static void addToLocalizationListeners(LocalizationListener l) {
 		localizationListeners.add(l);

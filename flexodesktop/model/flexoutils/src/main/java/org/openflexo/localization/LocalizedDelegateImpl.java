@@ -38,14 +38,23 @@ import java.util.logging.Logger;
 import org.openflexo.toolbox.FlexoProperties;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-public class LocalizedDelegateImplementation extends Observable implements LocalizedDelegate {
+/**
+ * Provides a default implementation for a localized delegate.<br>
+ * Keys and values are managed and retrieved from a given directory
+ * 
+ * @author sylvain
+ * 
+ */
+public class LocalizedDelegateImpl extends Observable implements LocalizedDelegate {
 
-	private static final Logger logger = Logger.getLogger(LocalizedDelegateImplementation.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(LocalizedDelegateImpl.class.getPackage().getName());
 
+	private LocalizedDelegate parent;
 	private File _localizedDirectory;
 	private Hashtable<Language, Properties> _localizedDictionaries;
 
-	public LocalizedDelegateImplementation(File localizedDirectory) {
+	public LocalizedDelegateImpl(File localizedDirectory, LocalizedDelegate parent) {
+		this.parent = parent;
 		_localizedDirectory = localizedDirectory;
 		loadLocalizedDictionaries();
 	}
@@ -165,21 +174,23 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 	}
 
 	@Override
-	public String localizedForKeyAndLanguage(String key, Language language) {
+	public String getLocalizedForKeyAndLanguage(String key, Language language) {
 		if (_localizedDictionaries == null) {
 			loadLocalizedDictionaries();
 		}
 
 		Properties currentLanguageDict = getDictionary(language);
-		String localized = currentLanguageDict.getProperty(key);
+		// String localized = currentLanguageDict.getProperty(key);
 
-		if (localized == null) {
+		return currentLanguageDict.getProperty(key);
+
+		/*if (localized == null) {
 			addEntry(key);
 			save();
 			return currentLanguageDict.getProperty(key);
 		} else {
 			return localized;
-		}
+		}*/
 	}
 
 	public void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
@@ -207,7 +218,9 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		}
 
 		public String getEnglish() {
-			return localizedForKeyAndLanguage(key, Language.ENGLISH);
+			String localized = getLocalizedForKeyAndLanguage(key, Language.ENGLISH);
+			return (localized != null ? localized : key);
+			// return localizedForKeyAndLanguage(key, Language.ENGLISH);
 		}
 
 		public void setEnglish(String value) {
@@ -217,7 +230,9 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		}
 
 		public String getFrench() {
-			return localizedForKeyAndLanguage(key, Language.FRENCH);
+			String localized = getLocalizedForKeyAndLanguage(key, Language.FRENCH);
+			return (localized != null ? localized : key);
+			// return localizedForKeyAndLanguage(key, Language.FRENCH);
 		}
 
 		public void setFrench(String value) {
@@ -227,7 +242,9 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		}
 
 		public String getDutch() {
-			return localizedForKeyAndLanguage(key, Language.DUTCH);
+			String localized = getLocalizedForKeyAndLanguage(key, Language.DUTCH);
+			return (localized != null ? localized : key);
+			// return localizedForKeyAndLanguage(key, Language.DUTCH);
 		}
 
 		public void setDutch(String value) {
@@ -308,4 +325,20 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		englishTranslation = englishTranslation.substring(0, 1).toUpperCase() + englishTranslation.substring(1);
 		entry.setEnglish(englishTranslation);
 	}
+
+	@Override
+	public boolean registerNewEntry(String key, Language language, String value) {
+		addEntryInDictionary(language, key, value, true);
+		return true;
+	}
+
+	@Override
+	public LocalizedDelegate getParent() {
+		return parent;
+	}
+
+	protected Hashtable<Language, Properties> getLocalizedDictionaries() {
+		return _localizedDictionaries;
+	}
+
 }

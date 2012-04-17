@@ -65,8 +65,6 @@ import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
-import org.openflexo.localization.LocalizedDelegate;
-import org.openflexo.localization.LocalizedDelegateImplementation;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.ComponentBoundSaver;
@@ -199,8 +197,6 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditor.class.getPackage().getName());
-
-	public static LocalizedDelegate LOCALIZATION = new LocalizedDelegateImplementation(new FileResource("FIBEditorLocalized"));
 
 	public static File COMPONENT_LOCALIZATION_FIB = new FileResource("Fib/ComponentLocalization.fib");
 
@@ -462,7 +458,8 @@ public class FIBEditor implements FIBGenericEditor {
 
 		FIBView view = FIBController.makeView(componentLocalizationComponent);
 		view.getController().setDataObject(editorController.getController());
-		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(LOCALIZATION, "component_localization"), false);
+		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,
+				"component_localization"), false);
 		localizationInterface.getContentPane().add(view.getResultingJComponent());
 		localizationInterface.validate();
 		localizationInterface.pack();
@@ -703,7 +700,7 @@ public class FIBEditor implements FIBGenericEditor {
 			localizedItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					FlexoLocalization.showLocalizedEditor();
+					FIBAbstractEditor.LOCALIZATION.showLocalizedEditor();
 				}
 			});
 

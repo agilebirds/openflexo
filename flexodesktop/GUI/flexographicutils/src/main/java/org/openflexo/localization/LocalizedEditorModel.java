@@ -43,21 +43,25 @@ public class LocalizedEditorModel implements TableModel {
 
 	private Vector<String> _keys;
 
-	public LocalizedEditorModel(char aChar) {
+	private LocalizedDelegateGUIImpl localizedDelegate;
+
+	public LocalizedEditorModel(LocalizedDelegateGUIImpl localizedDelegate, char aChar) {
 		super();
+		this.localizedDelegate = localizedDelegate;
 		model = new DefaultTableModel();
-		_keys = FlexoLocalization.buildAllKeys(aChar);
+		_keys = localizedDelegate.buildAllKeys(aChar);
 		Collections.sort(_keys, Collator.getInstance());
 	}
 
-	public LocalizedEditorModel(String s) {
-		this(s.charAt(0));
+	public LocalizedEditorModel(LocalizedDelegateGUIImpl localizedDelegate, String s) {
+		this(localizedDelegate, s.charAt(0));
 	}
 
-	public LocalizedEditorModel() {
+	public LocalizedEditorModel(LocalizedDelegateGUIImpl localizedDelegate) {
 		super();
+		this.localizedDelegate = localizedDelegate;
 		model = new DefaultTableModel();
-		_keys = FlexoLocalization.buildAllWarningKeys();
+		_keys = localizedDelegate.buildAllWarningKeys();
 		Collections.sort(_keys, Collator.getInstance());
 	}
 

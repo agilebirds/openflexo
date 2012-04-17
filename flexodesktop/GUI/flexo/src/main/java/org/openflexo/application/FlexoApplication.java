@@ -43,6 +43,7 @@ import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.ch.DefaultHelpRetriever;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.drm.DocResourceManager;
+import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -101,6 +102,10 @@ public class FlexoApplication {
 			return;
 		}
 		isInitialized = true;
+
+		// First init localization with default location
+		FlexoLocalization.initWith(new FlexoMainLocalizer());
+
 		boolean isMacOS = ToolBox.getPLATFORM().equals(ToolBox.MACOS);
 		JEditTextArea.DIALOG_FACTORY = FlexoDialog.DIALOG_FACTORY;
 		eventProcessor = new EventProcessor();

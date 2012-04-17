@@ -106,11 +106,14 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	public String getDefaultValue(String key, Language language) {
 		// logger.info("Searched default value for key "+key+" return "+FlexoLocalization.localizedForKey(key));
-		return FlexoLocalization.localizedForKeyAndLanguage(key, language, false, false);
+		if (getParent() != null) {
+			return FlexoLocalization.localizedForKeyAndLanguage(getParent(), key, language);
+		}
+		return key;
 	}
 
 	@Override
-	public String localizedForKeyAndLanguage(String key, Language language) {
+	public String getLocalizedForKeyAndLanguage(String key, Language language) {
 		// if (isSearchingNewEntries) logger.info("-------> called localizedForKeyAndLanguage() key="+key+" lang="+language);
 		String returned = getDictForLang(language).get(key);
 		if (returned == null) {
@@ -175,7 +178,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		}
 
 		public String getEnglish() {
-			return localizedForKeyAndLanguage(key, Language.ENGLISH);
+			return getLocalizedForKeyAndLanguage(key, Language.ENGLISH);
 		}
 
 		public void setEnglish(String value) {
@@ -183,7 +186,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		}
 
 		public String getFrench() {
-			return localizedForKeyAndLanguage(key, Language.FRENCH);
+			return getLocalizedForKeyAndLanguage(key, Language.FRENCH);
 		}
 
 		public void setFrench(String value) {
@@ -191,7 +194,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		}
 
 		public String getDutch() {
-			return localizedForKeyAndLanguage(key, Language.DUTCH);
+			return getLocalizedForKeyAndLanguage(key, Language.DUTCH);
 		}
 
 		public void setDutch(String value) {
@@ -303,12 +306,24 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	private void checkAndRegisterLocalized(String key) {
 		handleNewEntry = true;
-		localizedForKeyAndLanguage(key, FlexoLocalization.getCurrentLanguage());
+		FlexoLocalization.localizedForKey(this, key);
+		// getLocalizedForKeyAndLanguage(key, FlexoLocalization.getCurrentLanguage());
 		handleNewEntry = false;
 	}
 
 	@Override
 	public BindingModel getBindingModel() {
 		return getCalc().getBindingModel();
+	}
+
+	@Override
+	public boolean registerNewEntry(String key, Language language, String value) {
+		setLocalizedForKeyAndLanguage(key, value, language);
+		return true;
+	}
+
+	@Override
+	public LocalizedDelegate getParent() {
+		return FlexoLocalization.getMainLocalizer();
 	}
 }
