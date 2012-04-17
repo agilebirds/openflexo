@@ -139,7 +139,6 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	private boolean initialized = false;
 
 	public LabelView(GraphicalRepresentation<O> graphicalRepresentation, DrawingController<?> controller, FGEView<?> delegateView) {
-		setOpaque(false);
 		this.controller = controller;
 		this.graphicalRepresentation = graphicalRepresentation;
 		this.delegateView = delegateView;
@@ -148,6 +147,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		setViewportView(textComponent);
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		// Note: if for debug purposes you add a Border to the textComponent, this could mess up the labels preferredSize computation.
 		getViewport().setBorder(null);
 		setBorder(null);
 		setOpaque(false);
@@ -164,6 +164,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		validate();
 		initialized = true;
 		textComponent.setEditable(false);
+	}
+
+	public TextComponent getTextComponent() {
+		return textComponent;
 	}
 
 	private boolean isDeleted = false;
@@ -301,7 +305,6 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			return;
 		}
 		super.paint(g);
-		System.err.println(getBounds());
 	}
 
 	@Override
@@ -467,6 +470,12 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	public void addFGEMouseListener() {
+		/*if (!Arrays.asList(getMouseListeners()).contains(mouseListener)) {
+			addMouseListener(mouseListener);
+		}
+		if (!Arrays.asList(getMouseMotionListeners()).contains(mouseListener)) {
+			addMouseMotionListener(mouseListener);
+		}*/
 		if (!Arrays.asList(textComponent.getMouseListeners()).contains(mouseListener)) {
 			textComponent.addMouseListener(mouseListener);
 		}
@@ -476,6 +485,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	public void removeFGEMouseListener() {
+		// removeMouseListener(mouseListener);
+		// removeMouseMotionListener(mouseListener);
 		textComponent.removeMouseListener(mouseListener);
 		textComponent.removeMouseMotionListener(mouseListener);
 	}

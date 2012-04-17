@@ -99,7 +99,7 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 				labelDgr = createDragGestureRecognizer();
 			}
 			getLabelView().disableTextComponentMouseListeners();
-			labelDgr.setComponent(getLabelView());
+			labelDgr.setComponent(getLabelView().getTextComponent());
 		}
 
 	}

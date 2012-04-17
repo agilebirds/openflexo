@@ -1181,9 +1181,94 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			double maxWidth = getMaximalWidth();
 			double maxHeight = getMaximalHeight();
 			if (hasText() && !getIsFloatingLabel()) {
+				Dimension normalizedLabelSize = getNormalizedLabelSize();
+				int labelWidth = normalizedLabelSize.width;
+				int labelHeight = normalizedLabelSize.height;
+				double requiredWidth = getRequiredWidth(labelWidth);
+				double requiredHeight = getRequiredHeight(labelHeight);
+				double rh = 0, rw = 0;
+				FGEPoint rp = new FGEPoint(getRelativeTextX(), getRelativeTextY());
+				switch (getVerticalTextAlignment()) {
+				case BOTTOM:
+					if (FGEUtils.doubleEquals(rp.y, 0.0)) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Impossible to handle BOTTOM alignement with relative y position set to 0!");
+						}
+					} else {
+						rh = labelHeight / rp.y;
+					}
+					break;
+				case MIDDLE:
+					if (FGEUtils.doubleEquals(rp.y, 0.0)) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Impossible to handle MIDDLE alignement with relative y position set to 0");
+						}
+					} else if (FGEUtils.doubleEquals(rp.y, 1.0)) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Impossible to handle MIDDLE alignement with relative y position set to 1");
+						}
+					} else {
+						if (rp.y > 0.5) {
+							rh = labelHeight / (2 * (1 - rp.y));
+						} else {
+							rh = labelHeight / (2 * rp.y);
+						}
+					}
+					break;
+				case TOP:
+					if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Impossible to handle TOP alignement with relative y position set to 1!");
+						}
+					} else {
+						rh = labelHeight / (1 - rp.y);
+					}
+					break;
+
+				}
+
+				switch (getHorizontalTextAlignment()) {
+				case RIGHT:
+					if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Impossible to handle RIGHT alignement with relative x position set to 0!");
+						}
+					} else {
+						rw = labelWidth / rp.x;
+					}
+				case CENTER:
+					if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Impossible to handle CENTER alignement with relative x position set to 0");
+						}
+					} else if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Impossible to handle CENTER alignement with relative x position set to 1");
+						}
+					} else {
+						if (rp.x > 0.5) {
+							rw = labelWidth / (2 * (1 - rp.x));
+						} else {
+							rw = labelWidth / (2 * rp.x);
+						}
+					}
+					break;
+				case LEFT:
+					if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Impossible to handle LEFT alignement with relative x position set to 1!");
+						}
+					} else {
+						rw = labelWidth / (1 - rp.x);
+					}
+					break;
+				}
+
+				requiredWidth = Math.max(rw, requiredWidth);
+				requiredHeight = Math.max(rh, requiredHeight);
+
 				if (getAdjustMinimalWidthToLabelWidth()) {
-					int labelWidth = getNormalizedLabelSize().width;
-					minWidth = Math.max(getRequiredWidth(labelWidth), minWidth);
+					minWidth = Math.max(requiredWidth, minWidth);
 					if (getWidth() < minWidth) {
 						newDimension.width = minWidth;
 						changed = true;
@@ -1191,8 +1276,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				}
 
 				if (getAdjustMinimalHeightToLabelHeight()) {
-					int labelHeight = getNormalizedLabelSize().height;
-					minHeight = Math.max(getRequiredHeight(labelHeight), minHeight);
+					minHeight = Math.max(requiredHeight, minHeight);
 					if (getHeight() < minHeight) {
 						newDimension.height = minHeight;
 						changed = true;
@@ -1200,8 +1284,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				}
 
 				if (getAdjustMaximalWidthToLabelWidth()) {
-					int labelWidth = getNormalizedLabelSize().width;
-					maxWidth = Math.min(getRequiredWidth(labelWidth), maxWidth);
+					maxWidth = Math.min(requiredWidth, maxWidth);
 					if (getWidth() > maxWidth) {
 						newDimension.width = maxWidth;
 						changed = true;
@@ -1209,8 +1292,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				}
 
 				if (getAdjustMaximalHeightToLabelHeight()) {
-					int labelHeight = getNormalizedLabelSize().height;
-					maxHeight = Math.min(getRequiredHeight(labelHeight), maxHeight);
+					maxHeight = Math.min(requiredHeight, maxHeight);
 					if (getHeight() > maxHeight) {
 						newDimension.height = maxHeight;
 						changed = true;
@@ -1241,7 +1323,6 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 					changed = true;
 				}
 			}
-
 			boolean useStepDimensionConstraints = getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED
 					&& getDimensionConstraintStep() != null;
 			if (useStepDimensionConstraints && hasText() && !isFloatingLabel) {
@@ -2050,8 +2131,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	@Override
 	public int getAvailableLabelWidth(double scale) {
 		if (getLineWrap()) {
-			FGEPoint relativePosition = new FGEPoint(getRelativeTextX(), getRelativeTextY());
-			Point point = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getContainerGraphicalRepresentation(), scale);
+			FGEPoint rp = new FGEPoint(getRelativeTextX(), getRelativeTextY());
+			/*Point point = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getContainerGraphicalRepresentation(), scale);
 			point.x -= getViewX(scale) + (border != null ? border.left : 0);
 			switch (getHorizontalTextAlignment()) {
 			case CENTER:
@@ -2060,9 +2141,57 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				return getViewWidth(scale) - (border != null ? border.right : 0) - point.x;
 			case RIGHT:
 				return point.x;
+			}*/
+			switch (getHorizontalTextAlignment()) {
+			case RIGHT:
+				if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+					return (int) (getWidth() * rp.x * scale);
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Impossible to handle RIGHT alignement with relative x position set to 0!");
+					}
+				}
+			case CENTER:
+				if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Impossible to handle CENTER alignement with relative x position set to 0");
+					}
+				} else if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Impossible to handle CENTER alignement with relative x position set to 1");
+					}
+				} else {
+					if (rp.x > 0.5) {
+						return (int) (getWidth() * 2 * (1 - rp.x) * scale);
+					} else {
+						return (int) (getWidth() * rp.x * scale);
+					}
+				}
+				break;
+			case LEFT:
+				if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Impossible to handle LEFT alignement with relative x position set to 1");
+					}
+				} else {
+					return (int) (getWidth() * (1 - rp.x) * scale);
+				}
+				break;
 			}
 		}
 		return super.getAvailableLabelWidth(scale);
+	}
+
+	@Override
+	public void setHorizontalTextAlignment(org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment horizontalTextAlignment) {
+		super.setHorizontalTextAlignment(horizontalTextAlignment);
+		checkAndUpdateDimensionBoundsIfRequired();
+	}
+
+	@Override
+	public void setVerticalTextAlignment(org.openflexo.fge.GraphicalRepresentation.VerticalTextAlignment verticalTextAlignment) {
+		super.setVerticalTextAlignment(verticalTextAlignment);
+		checkAndUpdateDimensionBoundsIfRequired();
 	}
 
 	@Override

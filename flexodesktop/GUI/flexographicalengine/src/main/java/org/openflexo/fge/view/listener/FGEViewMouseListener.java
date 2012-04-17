@@ -570,7 +570,6 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 					if (eventStack.isEmpty()) {
 						eventStack = null;
 					}
-					System.err.println("Event handled");
 					e.consume();
 					return true;
 				}

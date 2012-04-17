@@ -2120,6 +2120,12 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		this.labelMetricsProvider = labelMetricsProvider;
 	}
 
+	/**
+	 * Returns the number of pixels available for the label considering its positioning. This method is used in case of line wrapping.
+	 * 
+	 * @param scale
+	 * @return
+	 */
 	public int getAvailableLabelWidth(double scale) {
 		return Integer.MAX_VALUE;
 	}
