@@ -30,6 +30,7 @@ import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.view.LabelView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
@@ -280,7 +281,10 @@ public class EventPalette extends AbstractWKFPalette {
 		event.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		event.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		EventNodeGR eventNodeGR = new EventNodeGR(event, null, true);
+		LabelView<EventNode> labelMetricsProvider = new LabelView<EventNode>(eventNodeGR, null, null);
+		eventNodeGR.setLabelMetricsProvider(labelMetricsProvider);
 		int labelX = -x + eventNodeGR.getNormalizedLabelSize().width / 2;
+		labelMetricsProvider.delete();
 		event.setLabelX(labelX, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		event.setLabelY(EventNodeGR.EVENT_NODE_SIZE / 2, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 

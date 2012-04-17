@@ -30,6 +30,7 @@ import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.view.LabelView;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFAnnotation;
@@ -260,7 +261,10 @@ public class EventPalette extends AbstractWKFPalette {
 		event.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		event.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		EventNodeGR eventNodeGR = new EventNodeGR(event, null, true);
+		LabelView<EventNode> labelMetricsProvider = new LabelView<EventNode>(eventNodeGR, null, null);
+		eventNodeGR.setLabelMetricsProvider(labelMetricsProvider);
 		int labelX = -x + eventNodeGR.getNormalizedLabelSize().width / 2;
+		labelMetricsProvider.delete();
 		event.setLabelX(labelX, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		event.setLabelY(EventNodeGR.EVENT_NODE_SIZE / 2, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		event.setDescription(FlexoLocalization.localizedForKey("doc_event_" + event.getTrigger() + "_" + event.getEventType()));
