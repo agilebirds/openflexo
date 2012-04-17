@@ -86,7 +86,7 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 			throw new InvalidParameterException("folder is undefined");
 		}
 		if (getNewShapeName() == null && !isNameSetToNull()) {
-			throw new InvalidParameterException("shema name is undefined");
+			throw new InvalidParameterException("shape name is undefined");
 		}
 
 		_newShape = new ViewShape(getParent().getShema());
