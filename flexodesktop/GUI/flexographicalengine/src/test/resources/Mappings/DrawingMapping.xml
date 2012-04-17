@@ -92,7 +92,6 @@
    	 <property name="maximalHeight" xmlTag="maximalHeight" attribute="YES"/>
   	 <property name="locationConstraints" xmlTag="locationConstraints" attribute="YES"/>
   	 <property name="dimensionConstraints" xmlTag="dimensionConstraints" attribute="YES"/>
-  	 <property name="adjustBoundsToLabel" xmlTag="adjustBoundsToLabel" attribute="YES"/>
    	 <property name="adjustMinimalWidthToLabelWidth" xmlTag="adjustMinimalWidthToLabelWidth" attribute="YES"/>
    	 <property name="adjustMinimalHeightToLabelHeight" xmlTag="adjustMinimalHeightToLabelHeight" attribute="YES"/>
    	 <property name="adjustMaximalWidthToLabelWidth" xmlTag="adjustMaximalWidthToLabelWidth" attribute="YES"/>
