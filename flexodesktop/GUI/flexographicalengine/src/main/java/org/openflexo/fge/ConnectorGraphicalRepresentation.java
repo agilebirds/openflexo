@@ -591,31 +591,18 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		graphics.releaseGraphics();
 	}
 
-	/**
-	 * Return center of label, relative to container view
-	 * 
-	 * @param scale
-	 * @return
-	 */
 	@Override
-	public Point getLabelViewCenter(double scale) {
+	public Point getLabelLocation(double scale) {
 		Point connectorCenter = convertNormalizedPointToViewCoordinates(getConnector().getMiddleSymbolLocation(), scale);
 		return new Point((int) (connectorCenter.x + getAbsoluteTextX() * scale + getViewX(scale)), (int) (connectorCenter.y
 				+ getAbsoluteTextY() * scale + getViewY(scale)));
 	}
 
-	/**
-	 * Sets center of label, relative to container view
-	 * 
-	 * @param scale
-	 * @return
-	 */
 	@Override
-	public void setLabelViewCenter(Point aPoint, double scale) {
+	public void setLabelLocation(Point point, double scale) {
 		Point connectorCenter = convertNormalizedPointToViewCoordinates(getConnector().getMiddleSymbolLocation(), scale);
-		setAbsoluteTextX(((double) aPoint.x - connectorCenter.x - getViewX(scale)) / scale);
-		setAbsoluteTextY(((double) aPoint.y - connectorCenter.y - getViewY(scale)) / scale);
-
+		setAbsoluteTextX(((double) point.x - connectorCenter.x - getViewX(scale)) / scale);
+		setAbsoluteTextY(((double) point.y - connectorCenter.y - getViewY(scale)) / scale);
 	}
 
 	@Override

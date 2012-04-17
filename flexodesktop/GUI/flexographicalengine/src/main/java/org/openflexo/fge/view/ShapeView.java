@@ -255,6 +255,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		if (_labelView != null) {
 			_labelView.setVisible(getGraphicalRepresentation().shouldBeDisplayed());
 		}
+
 		setVisible(getGraphicalRepresentation().shouldBeDisplayed());
 	}
 
@@ -350,17 +351,16 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		if (aNotification instanceof FGENotification) {
 			FGENotification notification = (FGENotification) aNotification;
 			if (notification instanceof GraphicalRepresentationAdded) {
-				GraphicalRepresentation newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
+				GraphicalRepresentation<?> newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
 				logger.fine("ShapeView: Received ObjectAdded notification, creating view for " + newGR);
 				if (newGR instanceof ShapeGraphicalRepresentation) {
-					ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newGR;
-					ShapeView<?> newShapeView;
-					add(newShapeView = shapeGR.makeShapeView(getController()));
+					ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) newGR;
+					add(shapeGR.makeShapeView(getController()));
 					revalidate();
 					getPaintManager().repaint(this);
 					shapeGR.notifyShapeNeedsToBeRedrawn();
 				} else if (newGR instanceof ConnectorGraphicalRepresentation) {
-					ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) newGR;
+					ConnectorGraphicalRepresentation<?> connectorGR = (ConnectorGraphicalRepresentation<?>) newGR;
 					add(connectorGR.makeConnectorView(getController()));
 					revalidate();
 					getPaintManager().repaint(this);
@@ -397,7 +397,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 					getPaintManager().repaint(this);
 				}
 			} else if (notification instanceof GraphicalRepresentationDeleted) {
-				GraphicalRepresentation deletedGR = ((GraphicalRepresentationDeleted) notification).getDeletedGraphicalRepresentation();
+				GraphicalRepresentation<?> deletedGR = ((GraphicalRepresentationDeleted) notification).getDeletedGraphicalRepresentation();
 				// If was not removed, try to do it now
 				if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getContainerGraphicalRepresentation() != null
 						&& getGraphicalRepresentation().getContainerGraphicalRepresentation().contains(getGraphicalRepresentation())) {
@@ -503,6 +503,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		}
 	}
 
+	@Override
 	public LabelView<O> getLabelView() {
 		return _labelView;
 	}

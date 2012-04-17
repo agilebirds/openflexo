@@ -24,7 +24,6 @@ import java.awt.Point;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -176,12 +175,12 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 	}
 
 	@Override
-	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(ShapeGraphicalRepresentation container) {
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container) {
 		return container instanceof RoleContainerGR;
 	}
 
 	@Override
-	public boolean dragOutsideParentContainerInsideContainer(ShapeGraphicalRepresentation container, FGEPoint location) {
+	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container, FGEPoint location) {
 		if (container instanceof RoleContainerGR) {
 			resetLocationConstrainedArea();
 			getDrawing().setRepresentationRole(((RoleContainerGR) container).getRole(), getNode());

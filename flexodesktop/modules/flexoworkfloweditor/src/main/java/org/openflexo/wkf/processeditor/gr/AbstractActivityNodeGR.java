@@ -63,7 +63,6 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 		setIsMultilineAllowed(true);
 		setAdjustMinimalWidthToLabelWidth(true);
 		setAdjustMinimalHeightToLabelHeight(true);
-		setTextAlignment(TextAlignment.CENTER);
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 			// See also org.openflexo.wkf.swleditor.gr.RoleContainerGR.updateColors() and
 			// org.openflexo.wkf.roleeditor.RoleGR.getRoleColor() and
 			// org.openflexo.components.browser.wkf.RoleElement.buildCustomIcon(Color)
-			return (getAbstractActivityNode().getRole().getColor() != null ? getAbstractActivityNode().getRole().getColor() : Color.RED);
+			return getAbstractActivityNode().getRole().getColor() != null ? getAbstractActivityNode().getRole().getColor() : Color.RED;
 		}
 		return BG_COLOR;
 	}

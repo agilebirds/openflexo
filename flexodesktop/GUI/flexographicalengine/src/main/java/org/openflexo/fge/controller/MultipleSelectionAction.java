@@ -33,7 +33,7 @@ public class MultipleSelectionAction extends MouseClickControlAction {
 	public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
 		if (graphicalRepresentation.getIsSelectable()) {
 			MouseClickControlAction.logger.info("Multiple select " + graphicalRepresentation);
-			controller.toogleSelection(graphicalRepresentation);
+			controller.toggleSelection(graphicalRepresentation);
 			return true;
 		} else {
 			return false;

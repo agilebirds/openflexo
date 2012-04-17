@@ -48,7 +48,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 
 	private static final Logger logger = Logger.getLogger(ArtefactGR.class.getPackage().getName());
 
-	private ConcatenedList<ControlArea> concatenedList;
+	private ConcatenedList<ControlArea<?>> concatenedList;
 
 	// private boolean isUpdatingPosition = false;
 
@@ -61,7 +61,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 		} else if (getDrawable().getLevel() == FlexoLevel.ACTION) {
 			setLayer(ACTION_LAYER);
 		}
-		concatenedList = new ConcatenedList<ControlArea>();
+		concatenedList = new ConcatenedList<ControlArea<?>>();
 		concatenedList.addElementList(super.getControlAreas());
 		concatenedList.addElement(new NodePalette(this, annotation.getParentPetriGraph()));
 	}
@@ -116,7 +116,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 	}
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		return concatenedList;
 	}
 
@@ -199,9 +199,9 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 		setIsMultilineAllowed(true);
 		setTextStyle(createTextStyle());
 		if (getDrawable().getTextAlignment() == null) {
-			getDrawable().setTextAlignment(GraphicalRepresentation.TextAlignment.CENTER);
+			getDrawable().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.CENTER);
 		}
-		setTextAlignment((TextAlignment) getDrawable().getTextAlignment());
+		setParagraphAlignment((ParagraphAlignment) getDrawable().getTextAlignment());
 	}
 
 	protected TextStyle createTextStyle() {

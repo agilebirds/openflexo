@@ -61,5 +61,6 @@ ${generator.logO($view)}
 
 ${generator.log("fin du rendu d'une view")}
 
+
 ## macro is defined in docx_macro_library.vm: #macro(renderDocxTable $headersArray $contents)
 #renderDocxTable($headers $tableContents)

@@ -39,6 +39,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
@@ -58,6 +59,16 @@ public class TestDrawingEditor {
 	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());
 
 	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				init();
+			}
+		});
+	}
+
+	private static void init() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			ToolBox.setPlatform();
@@ -89,20 +100,6 @@ public class TestDrawingEditor {
 		TestDrawingEditor editor = new TestDrawingEditor();
 		editor.showPanel();
 		editor.newDrawing();
-
-		/*(new Thread(new Runnable() {
-			public void run()
-			{
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				logger.info("Stopping application");
-				System.exit(-1);
-			}
-		})).start();*/
 	}
 
 	private JFrame frame;

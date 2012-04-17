@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.shapes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;

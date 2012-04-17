@@ -364,17 +364,21 @@ public class AdvancedPrefs extends ContextPreferences {
 			try {
 				System.setProperty("java.net.useSystemProxies", String.valueOf(getUseDefaultProxySettings()));
 				if (!getUseDefaultProxySettings() && !getNoProxy()) {
-					if (getProxyHost() != null) {
-						System.setProperty("http.proxyHost", getProxyHost());
+					String proxyHost = getProxyHost();
+					if (proxyHost != null) {
+						System.setProperty("http.proxyHost", proxyHost);
 					}
-					if (getSProxyHost() != null) {
-						System.setProperty("https.proxyHost", getSProxyHost());
+					String sProxyHost = getSProxyHost();
+					if (sProxyHost != null) {
+						System.setProperty("https.proxyHost", sProxyHost);
 					}
-					if (getProxyPort() != null) {
-						System.setProperty("http.proxyPort", String.valueOf(getProxyPort()));
+					Integer proxyPort = getProxyPort();
+					if (proxyPort != null) {
+						System.setProperty("http.proxyPort", String.valueOf(proxyPort));
 					}
-					if (getSProxyPort() != null) {
-						System.setProperty("https.proxyPort", String.valueOf(getSProxyPort()));
+					Integer sProxyPort = getSProxyPort();
+					if (sProxyPort != null) {
+						System.setProperty("https.proxyPort", String.valueOf(sProxyPort));
 					}
 				} else {
 					System.clearProperty("http.proxyHost");

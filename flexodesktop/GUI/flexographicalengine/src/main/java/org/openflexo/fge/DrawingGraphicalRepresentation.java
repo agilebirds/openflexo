@@ -22,9 +22,9 @@ package org.openflexo.fge;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -355,27 +355,6 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 		decorationPainter = aPainter;
 	}
 
-	/**
-	 * Return center of label, relative to container view
-	 * 
-	 * @param scale
-	 * @return
-	 */
-	@Override
-	public Point getLabelViewCenter(double scale) {
-		return new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
-	}
-
-	/**
-	 * Sets center of label, relative to container view
-	 * 
-	 * @param scale
-	 * @return
-	 */
-	@Override
-	public void setLabelViewCenter(Point aPoint, double scale) {
-	}
-
 	@Override
 	public boolean hasText() {
 		return false;
@@ -515,7 +494,7 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 
 	private ShapeGraphicalRepresentation<?> getTopLevelShapeGraphicalRepresentation(GraphicalRepresentation<?> container, FGEPoint p) {
 
-		Vector<ShapeGraphicalRepresentation> enclosingShapes = new Vector<ShapeGraphicalRepresentation>();
+		List<ShapeGraphicalRepresentation<?>> enclosingShapes = new ArrayList<ShapeGraphicalRepresentation<?>>();
 
 		for (GraphicalRepresentation<?> gr : container.getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
@@ -524,9 +503,9 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 					enclosingShapes.add(child);
 				} else {
 					// Look if we are not contained in a child shape outside current shape
-					GraphicalRepresentation insideFocusedShape = getTopLevelShapeGraphicalRepresentation(child, p);
+					GraphicalRepresentation<?> insideFocusedShape = getTopLevelShapeGraphicalRepresentation(child, p);
 					if (insideFocusedShape != null && insideFocusedShape instanceof ShapeGraphicalRepresentation) {
-						enclosingShapes.add((ShapeGraphicalRepresentation) insideFocusedShape);
+						enclosingShapes.add((ShapeGraphicalRepresentation<?>) insideFocusedShape);
 					}
 				}
 			}
@@ -534,9 +513,9 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 
 		if (enclosingShapes.size() > 0) {
 
-			Collections.sort(enclosingShapes, new Comparator<ShapeGraphicalRepresentation>() {
+			Collections.sort(enclosingShapes, new Comparator<ShapeGraphicalRepresentation<?>>() {
 				@Override
-				public int compare(ShapeGraphicalRepresentation o1, ShapeGraphicalRepresentation o2) {
+				public int compare(ShapeGraphicalRepresentation<?> o1, ShapeGraphicalRepresentation<?> o2) {
 					if (o2.getLayer() == o1.getLayer() && o1.getParentGraphicalRepresentation() != null
 							&& o1.getParentGraphicalRepresentation() == o2.getParentGraphicalRepresentation()) {
 						return o1.getParentGraphicalRepresentation().getOrder(o1, o2);
@@ -545,7 +524,7 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 				}
 			});
 
-			ShapeGraphicalRepresentation focusedShape = enclosingShapes.firstElement();
+			ShapeGraphicalRepresentation<?> focusedShape = enclosingShapes.get(0);
 
 			ShapeGraphicalRepresentation<?> insideFocusedShape = getTopLevelShapeGraphicalRepresentation(focusedShape, p);
 

@@ -44,6 +44,7 @@ import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.toc.ConditionalSection;
 import org.openflexo.foundation.toc.IterationSection;
 import org.openflexo.foundation.toc.ModelObjectSection;
@@ -195,6 +196,8 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 			s = ((EditionPatternInstance) object).getPattern().getName() + "-" + ((EditionPatternInstance) object).getInstanceId();
 		} else if (object instanceof FlexoModelObject) {
 			s = ((FlexoModelObject) object).getFullyQualifiedName();
+		} else if (object instanceof View) {
+			s = "VIEW-" + ((View) object).getName();
 		} else {
 			s = object.getClass().getName();
 		}
