@@ -2116,6 +2116,37 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	@Override
+	public void setLabelLocation(Point point, double scale) {
+		if (getIsFloatingLabel()) {
+			Dimension d = getLabelDimension(scale);
+			switch (getHorizontalTextAlignment()) {
+			case CENTER:
+				point.x += d.width / 2;
+				break;
+			case LEFT:
+				break;
+			case RIGHT:
+				point.x += d.width;
+				break;
+
+			}
+			switch (getVerticalTextAlignment()) {
+			case BOTTOM:
+				point.y += d.height;
+				break;
+			case MIDDLE:
+				point.y += d.height / 2;
+				break;
+			case TOP:
+				break;
+			}
+			FGEPoint p = new FGEPoint((point.x - getViewX(scale)) / scale, (point.y - getViewY(scale)) / scale);
+			setAbsoluteTextX(p.x);
+			setAbsoluteTextY(p.y);
+		}
+	}
+
+	@Override
 	public int getAvailableLabelWidth(double scale) {
 		if (getLineWrap()) {
 			FGEPoint rp = new FGEPoint(getRelativeTextX(), getRelativeTextY());

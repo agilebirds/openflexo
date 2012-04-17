@@ -258,9 +258,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		private boolean started = false;
 
-		private FloatingLabelDrag(GraphicalRepresentation<?> aGraphicalRepresentation, MouseEvent e) {
+		private FloatingLabelDrag(GraphicalRepresentation<?> aGraphicalRepresentation, Point startMovingLocationInDrawingView) {
 			graphicalRepresentation = aGraphicalRepresentation;
-			startMovingLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
+			this.startMovingLocationInDrawingView = startMovingLocationInDrawingView;
 			logger.fine("FloatingLabelDrag: start pt = " + startMovingLocationInDrawingView);
 			startLabelPoint = graphicalRepresentation.getLabelLocation(view.getScale());
 		}
@@ -276,7 +276,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}
 			Point newLabelCenterPoint = new Point(startLabelPoint.x + newLocationInDrawingView.x - startMovingLocationInDrawingView.x,
 					startLabelPoint.y + newLocationInDrawingView.y - startMovingLocationInDrawingView.y);
-
+			System.err.println("Start location is " + startLabelPoint + " new one is: " + newLabelCenterPoint);
 			graphicalRepresentation.setLabelLocation(newLabelCenterPoint, view.getScale());
 
 			/*if (graphicalRepresentation instanceof ShapeGraphicalRepresentation
@@ -320,7 +320,8 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 		getController().stopEditionOfEditedLabelIfAny();
 		if (focusedObject.hasFloatingLabel() && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
-			currentFloatingLabelDrag = new FloatingLabelDrag(focusedObject, e);
+			currentFloatingLabelDrag = new FloatingLabelDrag(focusedObject, SwingUtilities.convertPoint((Component) e.getSource(),
+					e.getPoint(), view.getDrawingView()));
 			e.consume();
 			return;
 		} else {
