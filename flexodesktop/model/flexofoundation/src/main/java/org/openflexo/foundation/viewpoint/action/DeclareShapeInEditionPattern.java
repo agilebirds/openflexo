@@ -223,7 +223,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 						for (PropertyEntry e : propertyEntries) {
-							if (e.selectEntry) {
+							if (e != null && e.selectEntry) {
 								EditionSchemeParameter newParameter = null;
 								if (e.property instanceof OntologyDataProperty) {
 									switch (((OntologyDataProperty) e.property).getDataType()) {
