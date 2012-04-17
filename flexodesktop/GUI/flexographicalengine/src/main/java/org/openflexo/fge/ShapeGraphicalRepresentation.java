@@ -2149,50 +2149,40 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	@Override
 	public int getAvailableLabelWidth(double scale) {
 		if (getLineWrap()) {
-			FGEPoint rp = new FGEPoint(getRelativeTextX(), getRelativeTextY());
-			/*Point point = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getContainerGraphicalRepresentation(), scale);
-			point.x -= getViewX(scale) + (border != null ? border.left : 0);
-			switch (getHorizontalTextAlignment()) {
-			case CENTER:
-				return Math.min(point.x, getViewWidth(scale) - (border != null ? border.right : 0) - point.x) * 2;
-			case LEFT:
-				return getViewWidth(scale) - (border != null ? border.right : 0) - point.x;
-			case RIGHT:
-				return point.x;
-			}*/
+			double rpx = getRelativeTextX();
 			switch (getHorizontalTextAlignment()) {
 			case RIGHT:
-				if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+				if (FGEUtils.doubleEquals(rpx, 0.0)) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Impossible to handle RIGHT alignement with relative x position set to 0!");
 					}
 				} else {
-					return (int) (getWidth() * rp.x * scale);
+					return (int) (getWidth() * rpx * scale);
 				}
 			case CENTER:
-				if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+				if (FGEUtils.doubleEquals(rpx, 0.0)) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Impossible to handle CENTER alignement with relative x position set to 0");
 					}
-				} else if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+				} else if (FGEUtils.doubleEquals(rpx, 1.0)) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Impossible to handle CENTER alignement with relative x position set to 1");
 					}
 				} else {
-					if (rp.x > 0.5) {
-						return (int) (getWidth() * 2 * (1 - rp.x) * scale);
+					if (rpx > 0.5) {
+						return (int) (getWidth() * 2 * (1 - rpx) * scale);
 					} else {
-						return (int) (getWidth() * rp.x * scale);
+						return (int) (getWidth() * 2 * rpx * scale);
 					}
 				}
 				break;
 			case LEFT:
-				if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+				if (FGEUtils.doubleEquals(rpx, 1.0)) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Impossible to handle LEFT alignement with relative x position set to 1");
 					}
 				} else {
-					return (int) (getWidth() * (1 - rp.x) * scale);
+					return (int) (getWidth() * (1 - rpx) * scale);
 				}
 				break;
 			}

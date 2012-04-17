@@ -276,7 +276,6 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}
 			Point newLabelCenterPoint = new Point(startLabelPoint.x + newLocationInDrawingView.x - startMovingLocationInDrawingView.x,
 					startLabelPoint.y + newLocationInDrawingView.y - startMovingLocationInDrawingView.y);
-			System.err.println("Start location is " + startLabelPoint + " new one is: " + newLabelCenterPoint);
 			graphicalRepresentation.setLabelLocation(newLabelCenterPoint, view.getScale());
 
 			/*if (graphicalRepresentation instanceof ShapeGraphicalRepresentation
