@@ -2096,36 +2096,37 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	@Override
 	public Point getLabelLocation(double scale) {
+		Point point;
 		if (getIsFloatingLabel()) {
-			return new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
+			point = new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
 		} else {
 			FGEPoint relativePosition = new FGEPoint(getRelativeTextX(), getRelativeTextY());
-			Point point = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getContainerGraphicalRepresentation(), scale);
-			Dimension d = getLabelDimension(scale);
-			switch (getHorizontalTextAlignment()) {
-			case CENTER:
-				point.x -= d.width / 2;
-				break;
-			case LEFT:
-				break;
-			case RIGHT:
-				point.x -= d.width;
-				break;
-
-			}
-			switch (getVerticalTextAlignment()) {
-			case BOTTOM:
-				point.y -= d.height;
-				break;
-			case MIDDLE:
-				point.y -= d.height / 2;
-				break;
-			case TOP:
-				break;
-
-			}
-			return point;
+			point = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getContainerGraphicalRepresentation(), scale);
 		}
+		Dimension d = getLabelDimension(scale);
+		switch (getHorizontalTextAlignment()) {
+		case CENTER:
+			point.x -= d.width / 2;
+			break;
+		case LEFT:
+			break;
+		case RIGHT:
+			point.x -= d.width;
+			break;
+
+		}
+		switch (getVerticalTextAlignment()) {
+		case BOTTOM:
+			point.y -= d.height;
+			break;
+		case MIDDLE:
+			point.y -= d.height / 2;
+			break;
+		case TOP:
+			break;
+
+		}
+		return point;
 	}
 
 	@Override
@@ -2145,11 +2146,11 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			switch (getHorizontalTextAlignment()) {
 			case RIGHT:
 				if (FGEUtils.doubleEquals(rp.x, 0.0)) {
-					return (int) (getWidth() * rp.x * scale);
-				} else {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Impossible to handle RIGHT alignement with relative x position set to 0!");
 					}
+				} else {
+					return (int) (getWidth() * rp.x * scale);
 				}
 			case CENTER:
 				if (FGEUtils.doubleEquals(rp.x, 0.0)) {
