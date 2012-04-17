@@ -294,7 +294,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 	@Override
 	public double getScale() {
-		return getController().getScale();
+		if (getController() != null) {
+			return getController().getScale();
+		} else {
+			return 1.0;
+		}
 	}
 
 	@Override
@@ -370,6 +374,9 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	protected void updateBounds(boolean repeat) {
+		if (isDeleted) {
+			return;
+		}
 		Rectangle bounds = graphicalRepresentation.getLabelBounds(getScale());
 		if (!bounds.equals(getBounds())) {
 			setBounds(bounds);
@@ -537,7 +544,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		getGraphicalRepresentation().notifyLabelHasBeenEdited();
 		getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
 		getPaintManager().invalidate(getGraphicalRepresentation());
-		getPaintManager().repaint(getDrawingView());
+		getPaintManager().repaint(this);
 	}
 
 	class LabelDocumentListener extends KeyAdapter implements DocumentListener, CaretListener {
