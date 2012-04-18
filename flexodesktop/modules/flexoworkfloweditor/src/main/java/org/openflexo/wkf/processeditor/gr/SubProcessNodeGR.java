@@ -98,7 +98,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 					Dimension labelSize = getNormalizedLabelSize();
 					double vGap = getVerticalGap();
 					double absoluteRoleLabelCenterY = vGap * 2 + labelSize.height + getRoleFont().getSize() / 2 - 3 + getExtraSpaceAbove();
-					g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), TextAlignment.CENTER);
+					g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), HorizontalTextAlignment.CENTER);
 
 					FGERectangle expandingRect = getExpandingRect();
 					g.drawImage(WKFIconLibrary.EXPANDABLE_ICON.getImage(), new FGEPoint(expandingRect.x, expandingRect.y));
@@ -109,7 +109,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 						g.drawImage(typeIcon.getImage(), new FGEPoint(additionalSymbolRect.x, additionalSymbolRect.y));
 					}
 				} else {
-					g.drawImage(SwingUtils.scaleIt(cache, ((int) getWidth() - 13), (int) getHeight() - 13), new FGEPoint(10d / getWidth(),
+					g.drawImage(SwingUtils.scaleIt(cache, (int) getWidth() - 13, (int) getHeight() - 13), new FGEPoint(10d / getWidth(),
 							10d / getHeight()));
 					setBackground(BackgroundStyle.makeColoredBackground(Color.WHITE));
 					// setText("");

@@ -70,6 +70,7 @@ import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
+import org.openflexo.localization.FlexoLocalization;
 
 public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
@@ -459,7 +460,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 	private boolean _retrieveParameters2(final EditionSchemeAction<?> action) {
 
 		FIBComponent component = makeFIB(action);
-		FIBDialog dialog = FIBDialog.instanciateComponent(component, action, null, true);
+		FIBDialog dialog = FIBDialog.instanciateComponent(component, action, null, true, FlexoLocalization.getMainLocalizer());
 		return (dialog.getStatus() == Status.VALIDATED);
 	}
 

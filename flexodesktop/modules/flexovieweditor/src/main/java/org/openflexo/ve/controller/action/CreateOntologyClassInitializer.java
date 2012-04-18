@@ -30,6 +30,7 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ontology.action.CreateOntologyClass;
 import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.controller.ActionInitializer;
@@ -53,7 +54,8 @@ public class CreateOntologyClassInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateOntologyClass>() {
 			@Override
 			public boolean run(ActionEvent e, CreateOntologyClass action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.CREATE_ONTOLOGY_CLASS_DIALOG_FIB, action, null, true);
+				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.CREATE_ONTOLOGY_CLASS_DIALOG_FIB, action, null, true,
+						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};

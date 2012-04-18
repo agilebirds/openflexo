@@ -30,6 +30,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
@@ -97,14 +98,14 @@ public abstract class AbstractColumn<D extends Observable, T> {
 		if ((_title == null) || (!_displayTitle)) {
 			return " ";
 		}
-		return FlexoLocalization.localizedForKey(getTitle());
+		return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, getTitle());
 	}
 
 	public String getLocalizedTooltip() {
 		if (_title == null) {
 			return " ";
 		}
-		return FlexoLocalization.localizedForKey(_title);
+		return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, _title);
 	}
 
 	public int getDefaultWidth() {

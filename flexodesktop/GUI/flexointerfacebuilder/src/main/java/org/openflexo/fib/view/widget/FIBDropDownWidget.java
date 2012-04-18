@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBDropDown;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
@@ -54,7 +55,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		initJComboBox();
 		dropdownPanel = new JPanel(new BorderLayout());
 		resetButton = new JButton();
-		resetButton.setText(FlexoLocalization.localizedForKey("reset", resetButton));
+		resetButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "reset", resetButton));
 		resetButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

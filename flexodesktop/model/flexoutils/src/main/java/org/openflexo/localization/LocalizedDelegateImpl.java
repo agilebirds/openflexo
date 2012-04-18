@@ -40,7 +40,10 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * Provides a default implementation for a localized delegate.<br>
- * Keys and values are managed and retrieved from a given directory
+ * Keys and values are managed and retrieved from language-specific dictionaries stored in a given directory<br>
+ * 
+ * This class provides also a basic support for new entries management: this software part automatically add entries in all languages for
+ * all new entries, so provides an efficient and soft localized managing.
  * 
  * @author sylvain
  * 
@@ -113,7 +116,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 		for (Language language : Language.availableValues()) {
 			File dictFile = getDictionaryFileForLanguage(language);
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Checking dictionary for language " + language.getName());
+				logger.info("Checking dictionary for language " + language.getName() + " file=" + dictFile.getAbsolutePath());
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Looking for file " + dictFile.getAbsolutePath());

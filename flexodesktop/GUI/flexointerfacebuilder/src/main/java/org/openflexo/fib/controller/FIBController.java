@@ -90,6 +90,7 @@ import org.openflexo.fib.view.widget.FIBTextAreaWidget;
 import org.openflexo.fib.view.widget.FIBTextFieldWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
+import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
 public class FIBController<T> extends Observable implements BindingEvaluationContext, Observer {
@@ -103,6 +104,8 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	private FIBSelectable lastFocusedSelectable;
 
 	private FIBWidgetView focusedWidget;
+
+	private LocalizedDelegate parentLocalizer = null;
 
 	private FIBViewFactory viewFactory;
 
@@ -205,7 +208,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		}
 	}
 
-	public static FIBController instanciateController(FIBComponent fibComponent) {
+	public static FIBController instanciateController(FIBComponent fibComponent, LocalizedDelegate parentLocalizer) {
 		FIBController returned = null;
 		if (fibComponent.getControllerClass() != null) {
 			try {
@@ -228,11 +231,12 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		if (returned == null) {
 			returned = new FIBController(fibComponent);
 		}
+		returned.setParentLocalizer(parentLocalizer);
 		return returned;
 	}
 
-	public static FIBView makeView(FIBComponent fibComponent) {
-		return makeView(fibComponent, instanciateController(fibComponent));
+	public static FIBView makeView(FIBComponent fibComponent, LocalizedDelegate parentLocalizer) {
+		return makeView(fibComponent, instanciateController(fibComponent, parentLocalizer));
 	}
 
 	public static FIBView makeView(FIBComponent fibComponent, FIBController controller) {
@@ -403,11 +407,33 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	public FIBLocalizedDictionary getLocalizer() {
 		if (getRootComponent() != null) {
-			return getRootComponent().retrieveFIBLocalizedDictionary();
+			FIBLocalizedDictionary returned = getRootComponent().retrieveFIBLocalizedDictionary();
+			if (getParentLocalizer() != null) {
+				returned.setParent(getParentLocalizer());
+			}
+			return returned;
 		} else {
 			logger.warning("Could not find localizer");
 			return null;
 		}
+	}
+
+	/**
+	 * Return parent localizer for component localizer
+	 * 
+	 * @return
+	 */
+	public final LocalizedDelegate getParentLocalizer() {
+		return parentLocalizer;
+	}
+
+	/**
+	 * Sets parent localizer for component localizer
+	 * 
+	 * @param parentLocalizer
+	 */
+	public void setParentLocalizer(LocalizedDelegate parentLocalizer) {
+		this.parentLocalizer = parentLocalizer;
 	}
 
 	public void switchToLanguage(Language language) {

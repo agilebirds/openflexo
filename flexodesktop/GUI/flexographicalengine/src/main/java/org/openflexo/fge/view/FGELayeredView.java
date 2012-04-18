@@ -20,8 +20,8 @@
 package org.openflexo.fge.view;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.JLayeredPane;
@@ -79,17 +79,17 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		super.moveToBack((Component) c);
 	}
 
-	public List<FGEView> getViewsInLayer(int layer) {
-		Vector<FGEView> returned = new Vector<FGEView>();
+	public List<FGEView<?>> getViewsInLayer(int layer) {
+		List<FGEView<?>> returned = new ArrayList<FGEView<?>>();
 		for (Component c : super.getComponentsInLayer(layer)) {
 			if (c instanceof FGEView) {
-				returned.add((FGEView) c);
+				returned.add((FGEView<?>) c);
 			}
 		}
 		return returned;
 	}
 
-	public void add(ShapeView view) {
+	public void add(ShapeView<?> view) {
 		// logger.info("add "+view);
 		view.setBackground(getBackground());
 		if (view.getLabelView() != null) {
@@ -101,7 +101,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 	}
 
-	public void remove(ShapeView view) {
+	public void remove(ShapeView<?> view) {
 		if (view.getLabelView() != null) {
 			remove(view.getLabelView());
 		}
@@ -111,7 +111,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 	}
 
-	public void add(ConnectorView view) {
+	public void add(ConnectorView<?> view) {
 		view.setBackground(getBackground());
 		if (view.getLabelView() != null) {
 			add(view.getLabelView(), view.getLayer(), -1);
@@ -122,7 +122,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 	}
 
-	public void remove(ConnectorView view) {
+	public void remove(ConnectorView<?> view) {
 		if (view.getLabelView() != null) {
 			remove(view.getLabelView());
 		}

@@ -507,6 +507,10 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	public LocalizedDictionary getLocalizedDictionary() {
+		if (localizedDictionary == null) {
+			localizedDictionary = new LocalizedDictionary();
+			localizedDictionary.setCalc(this);
+		}
 		return localizedDictionary;
 	}
 

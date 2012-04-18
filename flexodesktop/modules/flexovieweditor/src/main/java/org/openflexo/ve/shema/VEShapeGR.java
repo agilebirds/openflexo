@@ -198,12 +198,12 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		}
 	}*/
 
-	private ConcatenedList<ControlArea> controlAreas;
+	private ConcatenedList<ControlArea<?>> controlAreas;
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		if (controlAreas == null) {
-			controlAreas = new ConcatenedList<ControlArea>();
+			controlAreas = new ConcatenedList<ControlArea<?>>();
 			controlAreas.addElementList(super.getControlAreas());
 			if (getOEShape().providesSupportAsPrimaryRole() && getOEShape().getAvailableLinkSchemeFromThisShape() != null
 					&& getOEShape().getAvailableLinkSchemeFromThisShape().size() > 0) {

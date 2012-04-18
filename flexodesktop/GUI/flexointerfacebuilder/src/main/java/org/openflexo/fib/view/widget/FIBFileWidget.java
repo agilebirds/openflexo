@@ -36,6 +36,7 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBFile;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.FlexoFileChooser;
@@ -80,7 +81,7 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 		fileChooserPanel = new JPanel(new BorderLayout());
 		fileChooserPanel.setOpaque(false);
 		chooseButton = new JButton();
-		chooseButton.setText(FlexoLocalization.localizedForKey("choose", chooseButton));
+		chooseButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "choose", chooseButton));
 		addActionListenerToChooseButton();
 		currentDirectoryLabel = new JTextField("");
 		currentDirectoryLabel.setColumns(model.columns != null ? model.columns : DEFAULT_COLUMNS);
@@ -93,7 +94,8 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 		fileChooserPanel.add(chooseButton, BorderLayout.EAST);
 		fileChooserPanel.addFocusListener(this);
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			fileChooserPanel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER, RIGHT_COMPENSATING_BORDER));
+			fileChooserPanel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER,
+					BOTTOM_COMPENSATING_BORDER, RIGHT_COMPENSATING_BORDER));
 		}
 		setFile(null);
 
@@ -103,16 +105,16 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 		if (!isDirectory) {
 			// System.out.println("Looking for files");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooser.setDialogTitle(StringUtils.isEmpty(title) ? FlexoLocalization.localizedForKey("select_a_file") : FlexoLocalization
-					.localizedForKey(getController().getLocalizer(), title));
+			chooser.setDialogTitle(StringUtils.isEmpty(title) ? FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+					"select_a_file") : FlexoLocalization.localizedForKey(getController().getLocalizer(), title));
 			chooser.setFileFilterAsString(filter);
 			chooser.setDialogType(mode.getMode());
 			System.setProperty("apple.awt.fileDialogForDirectories", "false");
 		} else {
 			// System.out.println("Looking for directories");
 			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			chooser.setDialogTitle(StringUtils.isEmpty(title) ? FlexoLocalization.localizedForKey("select_directory") : FlexoLocalization
-					.localizedForKey(getController().getLocalizer(), title));
+			chooser.setDialogTitle(StringUtils.isEmpty(title) ? FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+					"select_directory") : FlexoLocalization.localizedForKey(getController().getLocalizer(), title));
 			chooser.setFileFilterAsString(filter);
 			chooser.setDialogType(mode.getMode());
 			System.setProperty("apple.awt.fileDialogForDirectories", "true");
@@ -226,7 +228,7 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 			currentDirectoryLabel.setToolTipText(_file.getAbsolutePath());
 		} else {
 			currentDirectoryLabel.setEnabled(false);
-			currentDirectoryLabel.setText(FlexoLocalization.localizedForKey("no_file"));
+			currentDirectoryLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_file"));
 		}
 	}
 

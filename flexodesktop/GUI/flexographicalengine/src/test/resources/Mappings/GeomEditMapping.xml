@@ -637,8 +637,6 @@
   	 <property name="isSelectable" xmlTag="isSelectable" attribute="YES"/>
   	 <property name="isFocusable" xmlTag="isFocusable" attribute="YES"/>
  	 <property name="textStyle" xmlTag="TextStyle"/>
-  	 <property name="relativeTextX" xmlTag="relativeTextX" attribute="YES"/>
-  	 <property name="relativeTextY" xmlTag="relativeTextY" attribute="YES"/>
   	 <property name="absoluteTextX" xmlTag="absoluteTextX" attribute="YES"/>
   	 <property name="absoluteTextY" xmlTag="absoluteTextY" attribute="YES"/>
   </entity>

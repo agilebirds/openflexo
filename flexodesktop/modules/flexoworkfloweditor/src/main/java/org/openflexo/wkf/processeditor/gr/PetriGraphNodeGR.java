@@ -40,7 +40,7 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PetriGraphNodeGR.class.getPackage().getName());
 
-	private ConcatenedList<ControlArea> concatenedList;
+	private ConcatenedList<ControlArea<?>> concatenedList;
 	protected boolean isInPalette = false;
 
 	public PetriGraphNodeGR(O node, ShapeType shapeType, ProcessRepresentation aDrawing, boolean isInPalet) {
@@ -108,7 +108,7 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	}
 
 	public int getRightBorder() {
-		return (hasNodePalette() ? REQUIRED_SPACE_ON_RIGHT_FOR_PALETTE : REQUIRED_SPACE_ON_RIGHT);
+		return hasNodePalette() ? REQUIRED_SPACE_ON_RIGHT_FOR_PALETTE : REQUIRED_SPACE_ON_RIGHT;
 	}
 
 	public boolean hasNodePalette() {
@@ -131,10 +131,10 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	}*/
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		if (hasNodePalette()) {
 			if (concatenedList == null) {
-				concatenedList = new ConcatenedList<ControlArea>();
+				concatenedList = new ConcatenedList<ControlArea<?>>();
 				concatenedList.addElementList(super.getControlAreas());
 				concatenedList.addElement(new NodePalette(this, getDrawable().getParentPetriGraph()));
 			}

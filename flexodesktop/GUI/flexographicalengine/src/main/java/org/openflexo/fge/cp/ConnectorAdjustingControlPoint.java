@@ -67,7 +67,7 @@ public class ConnectorAdjustingControlPoint extends ControlPoint {
 	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		super.stopDragging(controller, focusedGR);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().resetTemporaryObjects();
+			controller.getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
 			controller.getPaintManager().invalidate(getGraphicalRepresentation());
 			controller.getPaintManager().repaint(controller.getDrawingView());
 		}

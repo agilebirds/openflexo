@@ -117,7 +117,7 @@ public class FlexoFIBView<O extends FlexoModelObject> extends JPanel implements 
 	 * @return the newly created FlexoFIBController
 	 */
 	protected FlexoFIBController<O> createFibController(FIBComponent fibComponent, FlexoController controller) {
-		FIBController returned = FIBController.instanciateController(fibComponent);
+		FIBController returned = FIBController.instanciateController(fibComponent, FlexoLocalization.getMainLocalizer());
 		if (returned instanceof FlexoFIBController) {
 			((FlexoFIBController) returned).setFlexoController(controller);
 			return (FlexoFIBController) returned;

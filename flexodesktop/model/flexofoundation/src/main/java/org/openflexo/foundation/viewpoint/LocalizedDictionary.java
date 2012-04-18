@@ -104,18 +104,20 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		return null;
 	}
 
-	public String getDefaultValue(String key, Language language) {
+	/*public String getDefaultValue(String key, Language language) {
 		// logger.info("Searched default value for key "+key+" return "+FlexoLocalization.localizedForKey(key));
 		if (getParent() != null) {
 			return FlexoLocalization.localizedForKeyAndLanguage(getParent(), key, language);
 		}
 		return key;
-	}
+	}*/
 
 	@Override
 	public String getLocalizedForKeyAndLanguage(String key, Language language) {
 		// if (isSearchingNewEntries) logger.info("-------> called localizedForKeyAndLanguage() key="+key+" lang="+language);
-		String returned = getDictForLang(language).get(key);
+		return getDictForLang(language).get(key);
+
+		/*String returned = getDictForLang(language).get(key);
 		if (returned == null) {
 			String defaultValue = getDefaultValue(key, language);
 			if (handleNewEntry(key, language)) {
@@ -130,7 +132,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 			}
 			return defaultValue;
 		}
-		return returned;
+		return returned;*/
 	}
 
 	public void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
@@ -305,6 +307,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 	}
 
 	private void checkAndRegisterLocalized(String key) {
+		System.out.println("checkAndRegisterLocalized for " + key);
 		handleNewEntry = true;
 		FlexoLocalization.localizedForKey(this, key);
 		// getLocalizedForKeyAndLanguage(key, FlexoLocalization.getCurrentLanguage());
@@ -318,6 +321,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	@Override
 	public boolean registerNewEntry(String key, Language language, String value) {
+		System.out.println("Register entry key=" + key + " lang=" + language + " value=" + value);
 		setLocalizedForKeyAndLanguage(key, value, language);
 		return true;
 	}

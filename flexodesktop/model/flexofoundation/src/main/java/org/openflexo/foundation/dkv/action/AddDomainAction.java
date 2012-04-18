@@ -104,6 +104,9 @@ public class AddDomainAction extends FlexoUndoableAction<AddDomainAction, DKVObj
 	}
 
 	public DKVModel getDkvModel() {
+		if (_dkvModel == null) {
+			return getFocusedObject().getDkvModel();
+		}
 		return _dkvModel;
 	}
 

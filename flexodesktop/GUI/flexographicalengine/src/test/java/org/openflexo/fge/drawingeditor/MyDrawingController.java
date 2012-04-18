@@ -50,8 +50,8 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super(aDrawing);
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
-			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
-					GraphicalRepresentation parentGraphicalRepresentation) {
+			public void performedDrawNewShape(ShapeGraphicalRepresentation<?> graphicalRepresentation,
+					GraphicalRepresentation<?> parentGraphicalRepresentation) {
 				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
 				MyShape newShape = new MyShape(graphicalRepresentation, graphicalRepresentation.getLocation(), getDrawing());

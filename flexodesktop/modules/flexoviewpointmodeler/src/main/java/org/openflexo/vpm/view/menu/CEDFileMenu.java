@@ -37,6 +37,7 @@ import org.openflexo.FlexoCst;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.vpm.CEDCst;
@@ -82,7 +83,8 @@ public class CEDFileMenu extends FileMenu {
 	@Override
 	public void quit() {
 		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true);
+		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true,
+				FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			getCEDController().saveModified();
 			if (logger.isLoggable(Level.INFO)) {
@@ -99,7 +101,8 @@ public class CEDFileMenu extends FileMenu {
 
 	public void closeModule() {
 		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true);
+		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true,
+				FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			getCEDController().saveModified();
 		}
@@ -107,7 +110,8 @@ public class CEDFileMenu extends FileMenu {
 
 	public void askAndSave() {
 		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.SAVE_VPM_DIALOG_FIB, getCEDController(), null, true);
+		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.SAVE_VPM_DIALOG_FIB, getCEDController(), null, true,
+				FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			getCEDController().saveModified();
 		}

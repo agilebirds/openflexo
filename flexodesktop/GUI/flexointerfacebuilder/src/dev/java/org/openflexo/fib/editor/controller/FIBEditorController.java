@@ -30,6 +30,7 @@ import javax.swing.JSplitPane;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBViewFactory;
+import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.editor.FIBGenericEditor;
 import org.openflexo.fib.editor.notifications.FocusedObjectChange;
 import org.openflexo.fib.editor.notifications.SelectedObjectChange;
@@ -124,7 +125,7 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 	}
 
 	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject) {
-		this(fibComponent, editor, dataObject, FIBController.instanciateController(fibComponent));
+		this(fibComponent, editor, dataObject, FIBController.instanciateController(fibComponent, FIBAbstractEditor.LOCALIZATION));
 	}
 
 	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject, FIBController controller) {

@@ -45,6 +45,7 @@ import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.fib.model.validation.ValidationRule;
 import org.openflexo.fib.model.validation.ValidationWarning;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class FIBComponent extends FIBModelObject implements TreeNode {
@@ -1122,7 +1123,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefinePreferredDimensions(boolean definePreferredDimensions) {
 		if (definePreferredDimensions) {
-			FIBView v = FIBController.makeView(this);
+			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
 			Dimension p = v.getJComponent().getPreferredSize();
 			setWidth(p.width);
 			setHeight(p.height);
@@ -1139,7 +1140,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefineMaxDimensions(boolean defineMaxDimensions) {
 		if (defineMaxDimensions) {
-			FIBView v = FIBController.makeView(this);
+			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
 			setMaxWidth(1024);
 			setMaxHeight(1024);
 			v.delete();
@@ -1155,7 +1156,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefineMinDimensions(boolean defineMinDimensions) {
 		if (defineMinDimensions) {
-			FIBView v = FIBController.makeView(this);
+			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
 			Dimension p = v.getJComponent().getMinimumSize();
 			setMinWidth(p.width);
 			setMinHeight(p.height);

@@ -133,7 +133,7 @@ public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> 
 	private PaletteElementGR buildGraphicalRepresentation(ViewPointPaletteElement element) {
 		if (element.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			PaletteElementGR graphicalRepresentation = new PaletteElementGR(element, this);
-			graphicalRepresentation.setsWith((ShapeGraphicalRepresentation) element.getGraphicalRepresentation(),
+			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) element.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			if (!readOnly) {
 				element.setGraphicalRepresentation(graphicalRepresentation);

@@ -228,6 +228,7 @@ public class FIBEditor implements FIBGenericEditor {
 			FlexoLoggingManager.initialize();
 			FlexoLoggingManager.setKeepLogTrace(true);
 			FlexoLoggingManager.setLogCount(-1);
+			FlexoLocalization.initWith(FIBAbstractEditor.LOCALIZATION);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -427,7 +428,7 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	public void testFIB() {
-		FIBView view = FIBController.makeView(editedFIB.fibComponent);
+		FIBView view = FIBController.makeView(editedFIB.fibComponent, FIBAbstractEditor.LOCALIZATION);
 
 		// Class testClass = null;
 		if (editedFIB.fibComponent.getDataClass() != null) {
@@ -454,9 +455,14 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	public void localizeFIB() {
+
+		if (editorController == null) {
+			return;
+		}
+
 		FIBComponent componentLocalizationComponent = FIBLibrary.instance().retrieveFIBComponent(COMPONENT_LOCALIZATION_FIB);
 
-		FIBView view = FIBController.makeView(componentLocalizationComponent);
+		FIBView view = FIBController.makeView(componentLocalizationComponent, FIBAbstractEditor.LOCALIZATION);
 		view.getController().setDataObject(editorController.getController());
 		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,
 				"component_localization"), false);

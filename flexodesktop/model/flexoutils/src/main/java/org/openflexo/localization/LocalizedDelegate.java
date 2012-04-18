@@ -20,7 +20,9 @@
 package org.openflexo.localization;
 
 /**
- * This interface is implemented by all classes implementing localization features
+ * This interface is implemented by all classes implementing localization features<br>
+ * A localized delegate is responsible for the localization of a set of keys<br>
+ * If no support is assumed for a given key, forward the responsability of translation to parent delegate.
  * 
  * @author sylvain
  * 

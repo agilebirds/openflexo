@@ -78,6 +78,7 @@ import org.openflexo.antar.binding.MethodDefinition;
 import org.openflexo.antar.binding.StaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.Typed;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.utils.BindingSelector.EditionMode;
 import org.openflexo.fib.utils.table.AbstractModel;
 import org.openflexo.fib.utils.table.BindingValueColumn;
@@ -400,7 +401,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		_controlPanel = new ButtonsControlPanel() {
 			@Override
 			public String localizedForKeyAndButton(String key, JButton component) {
-				return FlexoLocalization.localizedForKey(key, component);
+				return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, key, component);
 			}
 		};
 		_connectButton = _controlPanel.addButton("connect", new ActionListener() {
@@ -462,13 +463,17 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			if (_bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				showHideCompoundBindingsButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_ICON);
 				showHideCompoundBindingsButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey("specify_basic_binding"));
-				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey("specify_basic_binding") + "  ");
+				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+						"specify_basic_binding"));
+				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+						"specify_basic_binding") + "  ");
 			} else {
 				showHideCompoundBindingsButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
 				showHideCompoundBindingsButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey("specify_compound_binding"));
-				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey("specify_compound_binding") + "  ");
+				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+						"specify_compound_binding"));
+				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+						"specify_compound_binding") + "  ");
 			}
 
 			JPanel showHideCompoundBindingsButtonPanel = new JPanel();
@@ -487,11 +492,12 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			optionsPanel.add(optionsWestPanel, BorderLayout.WEST);
 		}
 
-		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey("no_type"), SwingConstants.LEFT);
+		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type"), SwingConstants.LEFT);
 		currentTypeLabel.setFont(new Font("SansSerif", Font.ITALIC, 10));
 		currentTypeLabel.setForeground(Color.GRAY);
 
-		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey("no_type") + "]", SwingConstants.LEFT);
+		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type") + "]",
+				SwingConstants.LEFT);
 		searchedTypeLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 		searchedTypeLabel.setForeground(Color.RED);
 
@@ -942,7 +948,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				updateMethodCallPanel();
 			}
 
-			currentTypeLabel.setText(FlexoLocalization.localizedForKey("no_type"));
+			currentTypeLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type"));
 			currentTypeLabel.setToolTipText(null);
 
 		}
@@ -1130,7 +1136,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		public String getTypeStringRepresentation() {
 			if (getResultingType() == null) {
-				return FlexoLocalization.localizedForKey("no_type");
+				return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type");
 			} else {
 				return TypeUtils.simpleRepresentation(getResultingType());
 			}

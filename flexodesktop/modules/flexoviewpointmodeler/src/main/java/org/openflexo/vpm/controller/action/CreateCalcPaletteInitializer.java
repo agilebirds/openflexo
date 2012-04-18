@@ -30,6 +30,7 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.action.CreateViewPointPalette;
 import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
@@ -62,7 +63,8 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 
 				action.graphicalRepresentation = makePaletteGraphicalRepresentation();
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_PALETTE_DIALOG_FIB, action, null, true);
+				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_PALETTE_DIALOG_FIB, action, null, true,
+						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};

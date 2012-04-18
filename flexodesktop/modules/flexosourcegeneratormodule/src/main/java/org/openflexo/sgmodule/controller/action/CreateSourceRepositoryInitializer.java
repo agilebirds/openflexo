@@ -58,7 +58,8 @@ public class CreateSourceRepositoryInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateSourceRepository action) {
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_SOURCE_REPOSITORY_DIALOG_FIB, action, null, true);
+				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_SOURCE_REPOSITORY_DIALOG_FIB, action, null, true,
+						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 

@@ -88,7 +88,7 @@
     <property name="icon" xmlTag="icon" attribute="YES"/> 
     <property name="tooltip" xmlTag="tooltip" attribute="YES"/> 
     <property name="tooltipText" xmlTag="tooltipText" attribute="YES"/> 
-    <property name="localize" xmlTag="localize" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="localize" xmlTag="localize" attribute="YES"/> 
     <property name="enable" xmlTag="enable" attribute="YES"/> 
     <property name="manageDynamicModel" xmlTag="manageDynamicModel" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="clickAction" xmlTag="clickAction" attribute="YES"/> 

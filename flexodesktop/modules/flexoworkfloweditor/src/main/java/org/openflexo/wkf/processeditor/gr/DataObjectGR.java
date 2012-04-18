@@ -71,7 +71,7 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 	public static final FGEPolygon fileShape = new FGEPolygon(Filling.FILLED, topLeftCorner, topFoldingPoint, rightFoldingPoint,
 			bottomRightCorner, bottomLeftCorner);
 
-	private ConcatenedList<ControlArea> controlAreas;
+	private ConcatenedList<ControlArea<?>> controlAreas;
 
 	public DataObjectGR(WKFDataObject dataSource, ProcessRepresentation aDrawing) {
 		super(dataSource, ShapeType.POLYGON, aDrawing);
@@ -86,8 +86,8 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 			public void paintShape(FGEShapeGraphics g) {
 				g.setDefaultForeground(FOREGROUND);
 				g.useDefaultForegroundStyle();
-				g.drawLine(topFoldingPoint, foldingPoint);
-				g.drawLine(foldingPoint, rightFoldingPoint);
+				g.drawLine(topFoldingPoint, foldingPoint); // Vertical bar
+				g.drawLine(foldingPoint, rightFoldingPoint); // Horizontal bar
 			}
 		});
 		updateControlAreas();
@@ -100,14 +100,14 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 	}
 
 	private void updateControlAreas() {
-		controlAreas = new ConcatenedList<ControlArea>();
+		controlAreas = new ConcatenedList<ControlArea<?>>();
 		controlAreas.addElementList(super.getControlAreas());
 		controlAreas.addElement(new ShapeResizingControlPoint(this, middleLeftPoint, CardinalDirection.WEST));
 		controlAreas.addElement(new ShapeResizingControlPoint(this, middleRightPoint, CardinalDirection.EAST));
 	}
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		return controlAreas;
 	}
 

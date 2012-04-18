@@ -176,7 +176,8 @@ public class JIRAIssueReportDialog {
 	public static void newBugReport(Exception e, Module module) {
 		try {
 			JIRAIssueReportDialog report = new JIRAIssueReportDialog(e);
-			FIBDialog<JIRAIssueReportDialog> dialog = FIBDialog.instanciateComponent(FIB_FILE, report, FlexoFrame.getActiveFrame(), true);
+			FIBDialog<JIRAIssueReportDialog> dialog = FIBDialog.instanciateComponent(FIB_FILE, report, FlexoFrame.getActiveFrame(), true,
+					FlexoLocalization.getMainLocalizer());
 			boolean ok = false;
 			while (!ok) {
 				if (dialog.getStatus() == Status.VALIDATED) {
@@ -425,7 +426,7 @@ public class JIRAIssueReportDialog {
 		} finally {
 			ProgressWindow.hideProgressWindow();
 		}
-		FIBDialog.instanciateComponent(REPORT_FIB_FILE, report, FlexoFrame.getActiveFrame(), true);
+		FIBDialog.instanciateComponent(REPORT_FIB_FILE, report, FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 		return !report.hasErrors();
 	}
 

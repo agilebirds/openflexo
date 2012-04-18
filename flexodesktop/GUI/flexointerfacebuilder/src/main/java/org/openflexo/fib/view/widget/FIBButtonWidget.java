@@ -71,6 +71,9 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 
 	public synchronized void buttonClicked() {
 		logger.info("Button " + getWidget() + " has clicked");
+		logger.info("Action: " + getWidget().getAction() + " valid=" + getWidget().getAction().isValid());
+		logger.info("Data: " + getController().getDataObject());
+		Object data = getController().getDataObject();
 		if (getWidget().getAction().isValid()) {
 			getWidget().getAction().execute(getController());
 		}

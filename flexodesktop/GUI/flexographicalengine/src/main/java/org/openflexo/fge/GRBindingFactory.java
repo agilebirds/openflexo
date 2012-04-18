@@ -28,12 +28,13 @@ public class GRBindingFactory extends DefaultBindingFactory {
 
 	private static final Logger logger = Logger.getLogger(GRBindingFactory.class.getPackage().getName());
 
-	private static GRParameter[] allowedPropertiesInBindings = { Parameters.layer, Parameters.text, Parameters.relativeTextX,
-			Parameters.relativeTextY, Parameters.absoluteTextX, Parameters.absoluteTextY, Parameters.isVisible,
-			ShapeGraphicalRepresentation.Parameters.x, ShapeGraphicalRepresentation.Parameters.y,
-			ShapeGraphicalRepresentation.Parameters.width, ShapeGraphicalRepresentation.Parameters.height,
-			ShapeGraphicalRepresentation.Parameters.minimalWidth, ShapeGraphicalRepresentation.Parameters.minimalHeight,
-			ShapeGraphicalRepresentation.Parameters.maximalWidth, ShapeGraphicalRepresentation.Parameters.maximalHeight };
+	private static GRParameter[] allowedPropertiesInBindings = { Parameters.layer, Parameters.text,
+			ShapeGraphicalRepresentation.Parameters.relativeTextX, ShapeGraphicalRepresentation.Parameters.relativeTextY,
+			Parameters.absoluteTextX, Parameters.absoluteTextY, Parameters.isVisible, ShapeGraphicalRepresentation.Parameters.x,
+			ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
+			ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.minimalWidth,
+			ShapeGraphicalRepresentation.Parameters.minimalHeight, ShapeGraphicalRepresentation.Parameters.maximalWidth,
+			ShapeGraphicalRepresentation.Parameters.maximalHeight };
 
 	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 

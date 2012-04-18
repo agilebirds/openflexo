@@ -47,8 +47,12 @@
       <Custom componentClassName="org.openflexo.fge.view.widget.FIBTextStyleSelector" data="data.textStyle" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" useScrollBar="false" name="TextStyle" localize="true" manageDynamicModel="true" />
       <Label label="multiple_lines" localize="true" name="IsMultilineAllowedLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
       <CheckBox selected="false" localize="true" name="IsMultilineAllowed" data="data.isMultilineAllowed" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <DropDown format="object.name.toLowerCase" localize="true" name="TextAlignment" data="data.textAlignment" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" useScrollBar="false" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" />
+      <Label label="horizontal_text_alignment" localize="true" name="HorizontalTextAlignmentLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <DropDown format="object.name.toLowerCase" localize="true" name="HorizontalTextAlignment" data="data.horizontalTextAlignment" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" useScrollBar="false" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$HorizontalTextAlignment" />
+      <Label label="vertical_text_alignment" localize="true" name="VerticaTextAlignmentLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <DropDown format="object.name.toLowerCase" localize="true" name="VerticalTextAlignment" data="data.verticalTextAlignment" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" width="150" useScrollBar="false" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$VerticalTextAlignment" />
+      <Label label="paragraph_alignment" localize="true" name="ParagraphAlignmentLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <DropDown format="object.name.toLowerCase" localize="true" name="ParagraphAlignment" data="data.paragraphAlignment" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" width="150" useScrollBar="false" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" />
     </Tab>
     <Tab index="4" title="Advanced" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="AdvancedTab">
       <Label label="identifier" localize="true" name="IdentifierLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
@@ -108,9 +112,15 @@
     <Localized key="right" lang="English">Right</Localized>
     <Localized key="right" lang="French">Droit</Localized>
     <Localized key="right" lang="Dutch">Right</Localized>
-    <Localized key="text_alignment" lang="English">Text alignment</Localized>
-    <Localized key="text_alignment" lang="French">Alignement du texte</Localized>
-    <Localized key="text_alignment" lang="Dutch">Text alignment</Localized>
+    <Localized key="horizontal_text_alignment" lang="English">Horizontal Text alignment</Localized>
+    <Localized key="horizontal_text_alignment" lang="French">Alignement horizontal du texte</Localized>
+    <Localized key="horizontal_text_alignment" lang="Dutch">Horizontal Text alignment</Localized>
+    <Localized key="vertical_text_alignment" lang="English">Vertical Text alignment</Localized>
+    <Localized key="vertical_text_alignment" lang="French">Alignement vertical du texte</Localized>
+    <Localized key="vertical_text_alignment" lang="Dutch">Vertical Text alignment</Localized>
+    <Localized key="paragraph_alignment" lang="English">Paragraph alignment</Localized>
+    <Localized key="paragraph_alignment" lang="French">Alignement du paragraph</Localized>
+    <Localized key="paragraph_alignment" lang="Dutch">Paragraph alignment</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Default" />
 </Panel>

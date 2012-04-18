@@ -60,6 +60,8 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 
 	public FlexoFIBController(FIBComponent component) {
 		super(component);
+		// Default parent localizer is the main localizer
+		setParentLocalizer(FlexoLocalization.getMainLocalizer());
 	}
 
 	public FlexoFIBController(FIBComponent component, FlexoController controller) {

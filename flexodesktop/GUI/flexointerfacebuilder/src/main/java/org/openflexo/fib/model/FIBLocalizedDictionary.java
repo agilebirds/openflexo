@@ -29,8 +29,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizedDelegate;
-import org.openflexo.localization.LocalizedDelegateImpl;
-import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
 
 public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedDelegate {
@@ -40,8 +38,8 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 	// This is a little "hack" to be removed from FIB
 	// Goal here is to use the default Openflexo locales to find default values when searching localized
 	// Otherwise, this FIBLocalizedDictionary should considered as root
-	public static final String LOCALIZATION_DIRNAME = "Localized";
-	private static LocalizedDelegate mainLocalizer = new LocalizedDelegateImpl(new FileResource(LOCALIZATION_DIRNAME), null);
+	// public static final String LOCALIZATION_DIRNAME = "Localized";
+	// private static LocalizedDelegate mainLocalizer = new LocalizedDelegateImpl(new FileResource(LOCALIZATION_DIRNAME), null);
 
 	private FIBComponent _component;
 	private Vector<FIBLocalizedEntry> _entries;
@@ -115,7 +113,7 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 		return dict;
 	}
 
-	public String getDefaultValue(String key, Language language) {
+	/*public String getDefaultValue(String key, Language language) {
 		if (mainLocalizer != null) {
 			return mainLocalizer.getLocalizedForKeyAndLanguage(key, language);
 		}
@@ -123,7 +121,7 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 		return key;
 		// logger.info("Searched default value for key "+key+" return "+FlexoLocalization.localizedForKey(key));
 		// return FlexoLocalization.localizedForKeyAndLanguage(key, language, false, false);
-	}
+	}*/
 
 	@Override
 	public String getLocalizedForKeyAndLanguage(String key, Language language) {
@@ -131,7 +129,10 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 			return null;
 		}
 		// if (isSearchingNewEntries) logger.info("-------> called localizedForKeyAndLanguage() key="+key+" lang="+language);
-		String returned = getDictForLang(language).get(key);
+
+		return getDictForLang(language).get(key);
+
+		/*String returned = getDictForLang(language).get(key);
 		if (returned == null) {
 			String defaultValue = getDefaultValue(key, language);
 			if (handleNewEntry(key, language)) {
@@ -146,7 +147,7 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 			}
 			return defaultValue;
 		}
-		return returned;
+		return returned;*/
 	}
 
 	public void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
@@ -316,9 +317,15 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 		return true;
 	}
 
+	private LocalizedDelegate parentLocalizedDelegate;
+
 	@Override
 	public LocalizedDelegate getParent() {
-		return mainLocalizer;
+		return parentLocalizedDelegate;
+	}
+
+	public void setParent(LocalizedDelegate parentLocalizedDelegate) {
+		this.parentLocalizedDelegate = parentLocalizedDelegate;
 	}
 
 }

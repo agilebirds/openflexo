@@ -34,6 +34,7 @@ import javax.swing.event.ListDataListener;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBMultipleValuesDynamicModel;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.FlexoLocalization;
@@ -225,11 +226,12 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				if (value != null) {
 					String stringRepresentation = getStringRepresentation(value);
 					if (stringRepresentation == null || stringRepresentation.length() == 0) {
-						stringRepresentation = "<html><i>" + FlexoLocalization.localizedForKey("empty_string") + "</i></html>";
+						stringRepresentation = "<html><i>" + FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "empty_string")
+								+ "</i></html>";
 					}
 					label.setText(stringRepresentation);
 				} else {
-					label.setText(FlexoLocalization.localizedForKey("no_selection"));
+					label.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_selection"));
 				}
 				label.setFont(FIBMultipleValueWidget.this.getFont());
 			} else {

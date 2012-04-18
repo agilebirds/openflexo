@@ -37,6 +37,7 @@ public class MyConnector extends MyDrawingElement<MyConnector, MyConnectorGraphi
 		gr = new MyConnectorGraphicalRepresentation(ConnectorType.LINE,
 				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(from),
 				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(to), this, drawing);
+		setGraphicalRepresentation(gr);
 	}
 
 	public MyShape getStartShape() {
