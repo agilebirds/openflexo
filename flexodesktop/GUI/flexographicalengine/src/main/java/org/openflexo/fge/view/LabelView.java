@@ -302,6 +302,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	@Override
+	public void rescale() {
+		updateFont();
+	}
+
+	@Override
 	public void paint(Graphics g) {
 		boolean skipPaint = getPaintManager().isPaintingCacheEnabled() && getPaintManager().getDrawingView().isBuffering()
 				&& (getPaintManager().isTemporaryObject(getGraphicalRepresentation()) || isEditing);
@@ -429,7 +434,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(ts.getOrientation())));
 		}
 		Font font = ts.getFont().deriveFont(at);
-		setFont(font);
+		textComponent.setFont(font);
 		SimpleAttributeSet set = new SimpleAttributeSet();
 		if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.CENTER) {
 			StyleConstants.setAlignment(set, StyleConstants.ALIGN_CENTER);
