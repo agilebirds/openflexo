@@ -19,23 +19,28 @@
  */
 package org.openflexo.foundation.toc;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DefaultBindingFactory;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.TOCRepositoryChanged;
-import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
-import org.openflexo.foundation.cg.utils.DocConstants.ProcessDocSectionSubType;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
+import org.openflexo.foundation.toc.TOCDataBinding.TOCBindingAttribute;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
+import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
 import org.openflexo.foundation.toc.action.MoveTOCEntry;
 import org.openflexo.foundation.toc.action.RemoveTOCEntry;
 import org.openflexo.foundation.toc.action.RepairTOCEntry;
@@ -52,7 +57,9 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
-public class TOCEntry extends TOCObject implements Sortable, InspectableObject, ReferenceOwner {
+// Please rewrite this class conforming to new hierarchy
+@Deprecated
+public class TOCEntry extends TOCObject implements Sortable, InspectableObject, ReferenceOwner, Bindable {
 
 	public static final int MAXIMUM_DEPTH = 10;
 
@@ -61,18 +68,15 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	private String title;
 	private int index = -1;
 	private boolean isReadOnly = false;
-	private String resourceName;
 	private String content;
 	private TOCEntry parent;
 	protected Vector<TOCEntry> tocEntries;
-	private FlexoModelObjectReference objectReference;
+	private FlexoModelObjectReference<?> objectReference;
 	private boolean startOnANewPage = false;
 	private boolean recursionEnabled = true;
 	private boolean includeStatusList = true;
-	private DocSection identifier;
-	private ProcessDocSectionSubType subType;
-
-	private CGRepositoryFileResource resource;
+	private PredefinedSection.PredefinedSectionType identifier;
+	private ProcessSection.ProcessDocSectionSubType subType;
 
 	/**
 	 * Create a new GeneratedCodeRepository.
@@ -87,7 +91,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		tocEntries = new Vector<TOCEntry>();
 	}
 
-	public TOCEntry(TOCData generatedCode, DocSection identifier) {
+	public TOCEntry(TOCData generatedCode, PredefinedSection.PredefinedSectionType identifier) {
 		this(generatedCode);
 		this.identifier = identifier;
 	}
@@ -100,7 +104,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		isReadOnly = true;
 	}
 
-	public TOCEntry(TOCData generatedCode, FlexoModelObject modelObject, DocSection identifier) {
+	public TOCEntry(TOCData generatedCode, FlexoModelObject modelObject, PredefinedSection.PredefinedSectionType identifier) {
 		this(generatedCode, modelObject);
 		this.identifier = identifier;
 	}
@@ -121,7 +125,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	@Override
 	public void delete() {
-		for (TOCEntry entry : (Vector<TOCEntry>) tocEntries.clone()) {
+		for (TOCEntry entry : new ArrayList<TOCEntry>(tocEntries)) {
 			entry.delete();
 		}
 		if (objectReference != null) {
@@ -173,6 +177,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
+		v.add(DeprecatedAddTOCEntry.actionType);
 		v.add(AddTOCEntry.actionType);
 		v.add(RemoveTOCEntry.actionType);
 		v.add(RepairTOCEntry.actionType);
@@ -229,25 +234,42 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("isReadOnly", old, isReadOnly);
 	}
 
-	public String getResourceName() {
-		if (resource != null) {
-			return resource.getResourceIdentifier();
-		} else {
-			return null;
+	// Deprecated:
+	// This implementation is only temporary, please remove it when TOCEntry becomes abstract
+	public String getDefaultTemplateName() {
+		if (getIdentifier() != null) {
+			return getIdentifier().getDefaultTemplateName();
+		} else if (isIndividualProcessFolder()) {
+			return ProcessFolderSection.DOC_TEMPLATE;
+		} else if (isIndividualProcess()) {
+			if (isSIPOC2SubType()) {
+				return ProcessSection.SIPOC_LEVEL2_TEMPLATE;
+			} else if (isSIPOC3SubType()) {
+				return ProcessSection.SIPOC_LEVEL3_TEMPLATE;
+			} else if (isRACISubType()) {
+				return ProcessSection.RACI_MATRIX_TEMPLATE;
+			}
+			if (isOperationTableSubType()) {
+				return ProcessSection.OPERATION_TABLE_TEMPLATE;
+			} else {
+				return ProcessSection.DOC_TEMPLATE;
+			}
+		} else if (isIndividualRole()) {
+			return RoleSection.DOC_TEMPLATE;
+		} else if (isIndividualEntity()) {
+			return EntitySection.DOC_TEMPLATE;
+		} else if (isIndividualComponentDefinition()) {
+			return OperationScreenSection.DOC_TEMPLATE;
 		}
+		return null;
 	}
 
-	public void setResourceName(String resourceName) {
-		String old = resourceName;
-		this.resourceName = resourceName;
-		setChanged();
-		notifyAttributeModification("resourceName", old, resourceName);
-	}
-
+	@Deprecated
 	public String getContent() {
 		return content;
 	}
 
+	@Deprecated
 	public void setContent(String content) throws IllegalAccessException {
 		if (isReadOnly) {
 			throw new IllegalAccessException("this entry is read only");
@@ -261,29 +283,35 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		}
 	}
 
+	@Deprecated
 	public boolean isProcessesSection() {
-		return identifier != null && identifier == DocSection.PROCESSES;
+		return identifier != null && identifier == PredefinedSection.PredefinedSectionType.PROCESSES;
 	}
 
-	public DocSection getIdentifier() {
+	@Deprecated
+	public PredefinedSection.PredefinedSectionType getIdentifier() {
 		return identifier;
 	}
 
-	public void setIdentifier(DocSection identifier) {
+	@Deprecated
+	public void setIdentifier(PredefinedSection.PredefinedSectionType identifier) {
 		if (!isDeserializing()) {
 			return;
 		}
 		this.identifier = identifier;
 	}
 
-	public ProcessDocSectionSubType getSubType() {
+	@Deprecated
+	public ProcessSection.ProcessDocSectionSubType getSubType() {
 		return subType;
 	}
 
-	public void setSubType(ProcessDocSectionSubType subType) {
+	@Deprecated
+	public void setSubType(ProcessSection.ProcessDocSectionSubType subType) {
 		this.subType = subType;
 	}
 
+	@Deprecated
 	public String getValidReference() {
 		return "TOC-" + getLevel() + "-" + getTitle();
 	}
@@ -339,6 +367,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			setChanged();
 			notifyObservers(new TOCModification("tocEntries", null, entry));
+			rebuildBindingModel();
+			entry.rebuildBindingModel();
 		}
 	}
 
@@ -355,10 +385,12 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			setChanged();
 			notifyObservers(new TOCModification("tocEntries", entry, null));
+			rebuildBindingModel();
+			entry.rebuildBindingModel();
 		}
 	}
 
-	public TOCEntry getTOCEntryWithID(DocSection id) {
+	public TOCEntry getTOCEntryWithID(PredefinedSection.PredefinedSectionType id) {
 		if (id == null) {
 			return null;
 		}
@@ -558,10 +590,12 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		this.lastUpdateDate = lastUpdateDate;
 	}
 
+	@Deprecated
 	public FlexoModelObject getObject() {
 		return getObject(false);
 	}
 
+	@Deprecated
 	public FlexoModelObject getObject(boolean forceResourceLoad) {
 		if (getObjectReference() != null) {
 			return getObjectReference().getObject(forceResourceLoad);
@@ -570,6 +604,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		}
 	}
 
+	@Deprecated
 	public void setObject(FlexoModelObject object) {
 		if (objectReference != null) {
 			objectReference.delete();
@@ -586,52 +621,72 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		}
 	}
 
+	@Deprecated
 	public boolean isDocSubType() {
-		return getSubType() == ProcessDocSectionSubType.Doc;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.Doc;
 	}
 
+	@Deprecated
 	public boolean isRACISubType() {
-		return getSubType() == ProcessDocSectionSubType.RaciMatrix;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.RaciMatrix;
 	}
 
+	@Deprecated
 	public boolean isSIPOC2SubType() {
-		return getSubType() == ProcessDocSectionSubType.SIPOCLevel2;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.SIPOCLevel2;
 	}
 
+	@Deprecated
 	public boolean isSIPOC3SubType() {
-		return getSubType() == ProcessDocSectionSubType.SIPOCLevel3;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.SIPOCLevel3;
 	}
 
+	@Deprecated
 	public boolean isOperationTableSubType() {
-		return getSubType() == ProcessDocSectionSubType.OperationTable;
+		return getSubType() == ProcessSection.ProcessDocSectionSubType.OperationTable;
 	}
 
+	@Deprecated
 	public boolean isERDiagram() {
-		return getIdentifier() == DocSection.ER_DIAGRAM;
+		return getIdentifier() == PredefinedSection.PredefinedSectionType.ER_DIAGRAM;
 	}
 
+	@Deprecated
 	public boolean isIndividualProcessOrProcessFolder() {
 		return getIdentifier() == null && (getObject() instanceof FlexoProcess || getObject() instanceof ProcessFolder);
 	}
 
+	@Deprecated
 	public boolean isIndividualProcess() {
 		return getIdentifier() == null && getObject() instanceof FlexoProcess;
 	}
 
+	@Deprecated
 	public boolean isIndividualProcessFolder() {
 		return getIdentifier() == null && getObject() instanceof ProcessFolder;
 	}
 
+	@Deprecated
 	public boolean isIndividualRole() {
 		return getIdentifier() == null && getObject() instanceof Role;
 	}
 
+	@Deprecated
 	public boolean isIndividualEntity() {
 		return getIdentifier() == null && getObject() instanceof DMEOEntity;
 	}
 
+	@Deprecated
 	public boolean isIndividualComponentDefinition() {
 		return getIdentifier() == null && getObject() instanceof ComponentDefinition;
+	}
+
+	public boolean isIteration() {
+		return false;
+	}
+
+	public boolean isConditional() {
+		return false;
 	}
 
 	public int getPreferredLevel() {
@@ -639,7 +694,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return -1;
 	}
 
-	private static int preferredLevelForModelObjectClass(Class klass) {
+	private static int preferredLevelForModelObjectClass(Class<?> klass) {
 		if (klass.equals(FlexoProcess.class)) {
 			return 2;
 		}
@@ -649,11 +704,13 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return -1;
 	}
 
-	public FlexoModelObjectReference getObjectReference() {
+	@Deprecated
+	public FlexoModelObjectReference<?> getObjectReference() {
 		return objectReference;
 	}
 
-	public void setObjectReference(FlexoModelObjectReference objectReference) {
+	@Deprecated
+	public void setObjectReference(FlexoModelObjectReference<?> objectReference) {
 		if (this.objectReference != null) {
 			this.objectReference = null;
 		}
@@ -663,18 +720,21 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		}
 	}
 
+	@Deprecated
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
+	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
 	}
 
+	@Deprecated
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference reference) {
+	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
 		setChanged();
 		notifyObservers(new TOCModification(reference, null));
 	}
 
+	@Deprecated
 	@Override
-	public void objectDeleted(FlexoModelObjectReference reference) {
+	public void objectDeleted(FlexoModelObjectReference<?> reference) {
 		setChanged();
 		notifyObservers(new TOCModification(reference, null));
 	}
@@ -723,6 +783,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return includeStatusList;
 	}
 
+	@Deprecated
 	public RepresentableFlexoModelObject getDocumentedFlexoProcess() {
 		if (getObject() instanceof FlexoProcess || getObject() instanceof ProcessFolder) {
 			return (RepresentableFlexoModelObject) getObject();
@@ -730,6 +791,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public ERDiagram getDocumentedDiagram() {
 		if (isERDiagram()) {
 			return (ERDiagram) getObject();
@@ -737,6 +799,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public Role getDocumentedRole() {
 		if (isIndividualRole()) {
 			return (Role) getObject();
@@ -744,6 +807,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public DMEOEntity getDocumentedDMEOEntity() {
 		if (isIndividualEntity()) {
 			return (DMEOEntity) getObject();
@@ -751,6 +815,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public ComponentDefinition getDocumentedComponentDefinition() {
 		if (isIndividualComponentDefinition()) {
 			return (ComponentDefinition) getObject();
@@ -758,6 +823,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return null;
 	}
 
+	@Deprecated
 	public void setDocumentedFlexoProcess(RepresentableFlexoModelObject object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -780,6 +846,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedFlexoProcess", null, object);
 	}
 
+	@Deprecated
 	public void setDocumentedRole(Role object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -797,6 +864,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedRole", null, object);
 	}
 
+	@Deprecated
 	public void setDocumentedDMEOEntity(DMEOEntity object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -814,6 +882,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedDMEOEntity", null, object);
 	}
 
+	@Deprecated
 	public void setDocumentedComponentDefinition(ComponentDefinition object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -831,6 +900,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedComponentDefinition", null, object);
 	}
 
+	@Deprecated
 	public void setDocumentedDiagram(ERDiagram object) {
 		if (object != null && object.equals(getObject())) {
 			return;
@@ -848,12 +918,55 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		notifyAttributeModification("documentedDiagram", null, object);
 	}
 
+	@Deprecated
 	public Vector<ERDiagram> availableDiagrams() {
 		return getProject().getDataModel().getDiagrams();
 	}
 
+	@Deprecated
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference reference) {
+	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
 		setChanged();
 	}
+
+	public void notifyBindingChanged(TOCDataBinding binding) {
+	}
+
+	public void notifyChange(TOCBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding value) {
+	}
+
+	private BindingModel bindingModel = null;
+
+	@Override
+	public BindingModel getBindingModel() {
+		if (bindingModel == null) {
+			rebuildBindingModel();
+		}
+		return bindingModel;
+	}
+
+	protected void rebuildBindingModel() {
+		bindingModel = buildBindingModel();
+		for (TOCEntry entry : getTocEntries()) {
+			entry.rebuildBindingModel();
+		}
+	}
+
+	protected BindingModel buildBindingModel() {
+		BindingModel returned;
+		if (getParent() == null) {
+			returned = new BindingModel();
+		} else {
+			returned = new BindingModel(getParent().getBindingModel());
+		}
+		return returned;
+	}
+
+	@Override
+	public BindingFactory getBindingFactory() {
+		return DEFAULT_BINDING_FACTORY;
+	}
+
+	public static BindingFactory DEFAULT_BINDING_FACTORY = new DefaultBindingFactory();
+
 }

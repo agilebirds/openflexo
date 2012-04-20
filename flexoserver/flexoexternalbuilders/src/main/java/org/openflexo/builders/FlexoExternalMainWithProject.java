@@ -61,7 +61,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		try {
 			editor = loadProject(projectDirectory);
 		} catch (ProjectLoadingCancelledException e) {
-			// Should not happend in external builder
+			// Should not happen in external builder
 			e.printStackTrace();
 			System.exit(PROJECT_CANCELED_FAILURE);
 		} catch (ProjectInitializerException e) {
@@ -71,7 +71,11 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		project = editor.getProject();
 		project.getGeneratedCode().setFactory(editor);
 		project.getGeneratedDoc().setFactory(editor);
-		// ModuleLoader.setProject(project);
+		/*************************** MEGA-WARNING ***************************/
+		/** ##### DO NOT UNDER ANY (AND I HIGHLY INSIST ON THE "ANY") ##### */
+		/** ########### CIRCUMSTANCES REMOVE THE NEXT LINE ################ */
+		/********************************************************************/
+		ModuleLoader.instance(); // <-- DO NOT REMOVE!!!!!!!!!!!!!!!!!!!!!!!
 	}
 
 	@Override

@@ -68,7 +68,7 @@ public class DMEntityElement extends DMElement {
 	@Override
 	public Icon getIcon() {
 		if (getDMEntity() != null) {
-			return decorateIcon(DMEIconLibrary.getIconFor(getDMEntity()));
+			return decorateIcon(DMEIconLibrary.iconForObject(getDMEntity()));
 		}
 		return super.getIcon();
 	}

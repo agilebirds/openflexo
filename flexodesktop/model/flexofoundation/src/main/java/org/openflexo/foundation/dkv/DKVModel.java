@@ -513,9 +513,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 	}
 
 	public Domain getDomainNamed(String name) {
-		Enumeration en = getDomains().elements();
+		Enumeration<Domain> en = getDomains().elements();
 		while (en.hasMoreElements()) {
-			Domain dom = (Domain) en.nextElement();
+			Domain dom = en.nextElement();
 			if (dom.getName().equals(name)) {
 				return dom;
 			}
@@ -537,9 +537,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 	}
 
 	public Language getLanguageNamed(String lg_name) {
-		Enumeration en = getLanguages().elements();
+		Enumeration<Language> en = getLanguages().elements();
 		while (en.hasMoreElements()) {
-			Language lg = (Language) en.nextElement();
+			Language lg = en.nextElement();
 			if (lg.getName().equals(lg_name)) {
 				return lg;
 			}

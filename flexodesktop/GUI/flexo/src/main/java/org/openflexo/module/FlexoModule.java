@@ -277,29 +277,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		boolean isLastModule = !getModuleLoader().isThereAnyLoadedModuleWithAProjectExcept(getModule());
 		if (isLastModule) {
 			if (ProjectLoader.someResourcesNeedsSaving(getProject())) {
-				try {
-					SaveDialog reviewer = new SaveDialog(getFlexoFrame());
-					if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
-						ProjectLoader.doSaveProject(_controller.getProject());
-						closeWithoutConfirmation();
-						return true;
-					} else if (reviewer.getRetval() == JOptionPane.NO_OPTION) {
-						closeWithoutConfirmation();
-						return true;
-					} else {
-						return false;
-					}
-
-				} catch (SaveResourceException e) {
-					e.printStackTrace();
-					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-							+ FlexoLocalization.localizedForKey("would_you_like_to_close_anyway"))) {
-						closeWithoutConfirmation();
-						return true;
-					} else {
-						return false;
-					}
-				}
+				return showSaveDialogAndClose();
 			} else {
 				if (FlexoController.confirm(FlexoLocalization.localizedForKey("really_quit"))) {
 					closeWithoutConfirmation();
@@ -314,6 +292,32 @@ public abstract class FlexoModule implements DataFlexoObserver {
 			// has other windows opened to access it, we
 			// close the module and that's it!!!
 			// }
+		}
+	}
+
+	public boolean showSaveDialogAndClose() {
+		try {
+			SaveDialog reviewer = new SaveDialog(getFlexoFrame());
+			if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
+				ProjectLoader.doSaveProject(_controller.getProject());
+				closeWithoutConfirmation();
+				return true;
+			} else if (reviewer.getRetval() == JOptionPane.NO_OPTION) {
+				closeWithoutConfirmation();
+				return true;
+			} else {
+				return false;
+			}
+
+		} catch (SaveResourceException e) {
+			e.printStackTrace();
+			if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_close_anyway"))) {
+				closeWithoutConfirmation();
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
@@ -344,7 +348,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		Enumeration<FlexoModule> leftModules = getModuleLoader().loadedModules();
 		if (leftModules.hasMoreElements()) {
 			try {
-				getModuleLoader().switchToModule(leftModules.nextElement().getModule(), null);
+				getModuleLoader().switchToModule(leftModules.nextElement().getModule(), ModuleLoader.instance().getProject());
 			} catch (ModuleLoadingException e) {
 				logger.severe("Module is loaded and so this exception CANNOT occurs. Please investigate and FIX.");
 				e.printStackTrace();

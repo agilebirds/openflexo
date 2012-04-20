@@ -120,7 +120,7 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 
 	private void addEntryInDictionary(Language language, String key, String value, boolean required) {
 		Properties dict = getDictionary(language);
-		if (((!required) && (dict.getProperty(key) == null)) || required) {
+		if (!required && dict.getProperty(key) == null || required) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Adding entry '" + key + "' in " + language + " dictionary, file "
 						+ getDictionaryFileForLanguage(language).getAbsolutePath());
@@ -192,6 +192,7 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 	}
 
 	public class Entry implements HasPropertyChangeSupport {
+		private static final String DELETED_PROPERTY = "deleted";
 		public String key;
 		private PropertyChangeSupport pcSupport;
 
@@ -233,6 +234,16 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 			String oldValue = getDutch();
 			setLocalizedForKeyAndLanguage(key, value, Language.DUTCH);
 			pcSupport.firePropertyChange("dutch", oldValue, value);
+		}
+
+		public void delete() {
+			removeEntry(key);
+			pcSupport.firePropertyChange(DELETED_PROPERTY, false, true);
+		}
+
+		@Override
+		public String getDeletedProperty() {
+			return DELETED_PROPERTY;
 		}
 	}
 
@@ -288,7 +299,7 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 	}
 
 	public void deleteEntry(Entry entry) {
-		removeEntry(entry.key);
+		entry.delete();
 	}
 
 	public void searchTranslation(Entry entry) {

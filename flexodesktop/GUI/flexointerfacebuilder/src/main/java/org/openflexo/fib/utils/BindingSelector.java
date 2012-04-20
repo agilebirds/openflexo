@@ -168,6 +168,12 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		shortcutsKeyAdapter = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+
+				// if command-key is pressed, do not open popup
+				if (e.isAltDown() || e.isAltGraphDown() || e.isControlDown() || e.isMetaDown()) {
+					return;
+				}
+
 				boolean isSignificativeKey = (e.getKeyCode() >= KeyEvent.VK_A && e.getKeyCode() <= KeyEvent.VK_Z)
 						|| (e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9);
 
@@ -371,10 +377,14 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			if (object.getOwner() != null) {
 				setBindable(object.getOwner());
 			}
-		} else {
+		}
+		// SGU: I suppress this code that was the cause for huge problems
+		// in BindingSelector, making it quite unusable
+		// I don't think this code was usefull, was it ?
+		/*else {
 			setBindingDefinition(null);
 			setBindable(null);
-		}
+			}*/
 	}
 
 	public void setEditedObject(AbstractBinding object, boolean updateBindingSelectionMode) {

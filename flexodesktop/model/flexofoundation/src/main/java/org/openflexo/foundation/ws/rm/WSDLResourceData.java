@@ -44,6 +44,12 @@ public class WSDLResourceData extends FlexoObservable implements ImportedResourc
 		_resource = resource;
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public FlexoProjectFile getWSDLFile() {
 		return _resource.getResourceFile();
 	}

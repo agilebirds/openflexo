@@ -35,8 +35,6 @@ import javax.swing.KeyStroke;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.components.NewProjectComponent;
-import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.foundation.action.ValidateProject;
 import org.openflexo.foundation.imported.action.RefreshImportedProcessAction;
 import org.openflexo.foundation.imported.action.RefreshImportedRoleAction;
@@ -45,12 +43,12 @@ import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
@@ -58,7 +56,6 @@ import org.openflexo.print.PrintManagingController;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
@@ -213,19 +210,12 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File projectDirectory = null;
 			try {
-				projectDirectory = NewProjectComponent.getProjectDirectory();
+				getModuleLoader().newProject(null, null);
 			} catch (ProjectLoadingCancelledException e) {
-				// user cancelled
-			}
-			InteractiveFlexoEditor editor = getProjectLoader().newProject(projectDirectory);
-
-			try {
-				getModuleLoader().getModuleInstance((Module) getModuleLoader().getActiveModule(), editor.getProject());
 			} catch (ModuleLoadingException e) {
-				FlexoController.notify("Cannot load module." + e.getMessage());
 				e.printStackTrace();
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
 			}
 		}
 	}
@@ -257,19 +247,15 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File projectDirectory = null;
-			InteractiveFlexoEditor editor = null;
 			try {
-				projectDirectory = OpenProjectComponent.getProjectDirectory();
-				editor = getProjectLoader().loadProject(projectDirectory);
-			} catch (ProjectLoadingCancelledException e1) {
-				// user abort
-			}
-			try {
-				getModuleLoader().getModuleInstance((Module) getModuleLoader().getActiveModule(), editor.getProject());
+				getModuleLoader().openProject(null, null);
+			} catch (ProjectLoadingCancelledException e) {
 			} catch (ModuleLoadingException e) {
-				FlexoController.notify("Cannot load module." + e.getMessage());
 				e.printStackTrace();
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+			} catch (ProjectInitializerException e) {
+				e.printStackTrace();
+
 			}
 		}
 	}
@@ -295,17 +281,16 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			InteractiveFlexoEditor editor = null;
 			try {
-				editor = getProjectLoader().loadProject(projectDirectory);
+				getModuleLoader().openProject(projectDirectory, null);
 			} catch (ProjectLoadingCancelledException e) {
-				return;
-			}
-			try {
-				getModuleLoader().openProjectWithModule(editor, (Module) getModuleLoader().getActiveModule());
 			} catch (ModuleLoadingException e) {
 				e.printStackTrace();
-				FlexoController.notify("Cannot load module." + e.getMessage());
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+			} catch (ProjectInitializerException e) {
+				e.printStackTrace();
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+						+ projectDirectory.getAbsolutePath());
 			}
 		}
 	}
@@ -409,8 +394,8 @@ public class FileMenu extends FlexoMenu {
 
 	private boolean saveForServerPreprocessing() {
 		FlexoProject project = _controller.getProject();
-		if ((project.getImportedProcessLibrary() != null && project.getImportedProcessLibrary().size() > 0)
-				|| (project.getImportedRoleList() != null && project.getImportedRoleList().size() > 0)) {
+		if (project.getImportedProcessLibrary() != null && project.getImportedProcessLibrary().size() > 0
+				|| project.getImportedRoleList() != null && project.getImportedRoleList().size() > 0) {
 			int i = FlexoController.confirmYesNoCancel(FlexoLocalization
 					.localizedForKey("would_you_like_to_refresh_imported_objects_first") + "?");
 			switch (i) {
@@ -545,13 +530,15 @@ public class FileMenu extends FlexoMenu {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
-				getProjectLoader().reloadProject();
+				getModuleLoader().reloadProject();
+			} catch (ProjectLoadingCancelledException e) {
 			} catch (ModuleLoadingException e) {
 				e.printStackTrace();
-				FlexoController.notify("Cannot load module." + e.getMessage());
-			} catch (ProjectLoadingCancelledException e) {
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+			} catch (ProjectInitializerException e) {
 				e.printStackTrace();
-				FlexoController.notify("Cannot reload project." + e.getMessage());
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+						+ e.getProjectDirectory().getAbsolutePath());
 			}
 		}
 
@@ -589,7 +576,6 @@ public class FileMenu extends FlexoMenu {
 			 * int state = controller.getInspectorWindow().getExtendedState(); state &= ~Frame.ICONIFIED;
 			 * controller.getInspectorWindow().setExtendedState(state);
 			 */
-			controller.getInspectorWindow().toFront();
 		}
 	}
 

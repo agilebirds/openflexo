@@ -28,6 +28,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +42,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
@@ -67,6 +70,28 @@ import org.openflexo.utils.DrawUtils;
 public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetView implements
 /* InspectableObjectView, */GraphicalFlexoObserver, IESelectable, Layoutable {
 
+	protected class ObserverRegistation {
+		private FlexoObservable observable;
+		private FlexoObserver observer;
+
+		protected ObserverRegistation(FlexoObserver observer, FlexoObservable observable) {
+			super();
+			this.observer = observer;
+			this.observable = observable;
+			observable.addObserver(observer);
+			observerRegistations.add(this);
+		}
+
+		protected void removeFromObservers() {
+			if (observable != null) {
+				observable.deleteObserver(observer);
+				observable = null;
+				observer = null;
+				observerRegistations.remove(this);
+			}
+		}
+	}
+
 	private static final Logger logger = Logger.getLogger(IEWidgetView.class.getPackage().getName());
 
 	public static final String ATTRIB_DESCRIPTION_NAME = "description";
@@ -81,6 +106,8 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 	// ============================= Variables
 	// ==================================
 	// ==========================================================================
+
+	private List<ObserverRegistation> observerRegistations;
 
 	private boolean _isSelected = false;
 
@@ -101,6 +128,7 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 
 	public IEWidgetView(IEController ieController, T model, boolean addDnDSupport, IEWOComponentView componentView) {
 		super(ieController, model, addDnDSupport);
+		observerRegistations = new ArrayList<IEWidgetView<T>.ObserverRegistation>();
 		_componentView = componentView;
 		_componentView.registerViewForWidget(model, this);
 		_model = model;
@@ -110,7 +138,7 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Add " + getClass().getName() + " to pending views");
 		}
-		model.addObserver(this);
+		new ObserverRegistation(this, model);
 		updateTooltip();
 		setIsSelected(false);
 		setIsFocused(false);
@@ -121,6 +149,18 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 				getIEController().getIESelectionManager().processMouseMoved(e);
 			}
 		});
+	}
+
+	protected void stopObserving(FlexoObservable observable) {
+		for (ObserverRegistation r : observerRegistations) {
+			if (r.observable == observable) {
+				r.removeFromObservers();
+				// Do not continue since we found the observer
+				// If you want to change this, duplicate the array or
+				// you will have a ConcurrentModificationException
+				break;
+			}
+		}
 	}
 
 	private String getTooltipFromModel() {
@@ -190,7 +230,9 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 	}
 
 	public void delete() {
-		_model.deleteObserver(this);
+		for (ObserverRegistation registration : new ArrayList<ObserverRegistation>(observerRegistations)) {
+			registration.removeFromObservers();
+		}
 		if (getParent() != null) {
 			getParent().remove(this);
 		}
@@ -301,9 +343,9 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 	}
 
 	protected void switchToModel(T model) {
-		_model.deleteObserver(this);
+		stopObserving(_model);
 		_model = model;
-		model.addObserver(this);
+		new ObserverRegistation(this, model);
 	}
 
 	public IEWidget getIEModel() {
@@ -362,7 +404,7 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 			c = c.getParent();
 		}
 		if (tr != null) {
-			(tr).updateConstraints();
+			tr.updateConstraints();
 			tr.doLayout();
 			tr.repaint();
 		}

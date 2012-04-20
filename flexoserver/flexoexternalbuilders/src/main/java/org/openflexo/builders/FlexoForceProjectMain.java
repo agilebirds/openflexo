@@ -22,10 +22,6 @@ public class FlexoForceProjectMain extends FlexoProjectMergeMain implements CVSE
 		launch(FlexoForceProjectMain.class, args);
 	}
 
-	public static FlexoForceProjectMain mainTest(String[] args) {
-		return launch(FlexoForceProjectMain.class, args);
-	}
-
 	private boolean explorationIsDone = false;
 
 	@Override
@@ -34,7 +30,7 @@ public class FlexoForceProjectMain extends FlexoProjectMergeMain implements CVSE
 	}
 
 	@Override
-	protected void run() throws FlexoRunException {
+	protected void doRun() throws FlexoRunException {
 		CVSFile.xmlDiff3MergeEnabled = true;
 		File checkoutDir = checkoutProject();
 		File cvsProjectDirectory = searchProjectDirectory(checkoutDir);

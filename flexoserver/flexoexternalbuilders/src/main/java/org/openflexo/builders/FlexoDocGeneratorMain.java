@@ -131,7 +131,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 	}
 
 	@Override
-	protected void run() {
+	protected void doRun() {
 		File output = null;
 		if (workingDir != null) {
 			output = new File(workingDir);
@@ -323,10 +323,6 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 
 	public static void main(String[] args) {
 		launch(FlexoDocGeneratorMain.class, args);
-	}
-
-	public static FlexoDocGeneratorMain mainTest(String[] args) {
-		return launch(FlexoDocGeneratorMain.class, args);
 	}
 
 	@Override

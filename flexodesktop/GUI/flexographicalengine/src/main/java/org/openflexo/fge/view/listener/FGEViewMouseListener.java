@@ -24,12 +24,13 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
-import javax.swing.text.JTextComponent;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -40,21 +41,19 @@ import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.FGEPaintManager;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.LabelView;
-import org.openflexo.fge.view.ShapeView;
 import org.openflexo.toolbox.ToolBox;
 
 public class FGEViewMouseListener implements MouseListener, MouseMotionListener {
 
 	private static final Logger logger = Logger.getLogger(FGEViewMouseListener.class.getPackage().getName());
 
-	private GraphicalRepresentation graphicalRepresentation;
+	private GraphicalRepresentation<?> graphicalRepresentation;
 	protected FGEView<?> view;
 
-	public FGEViewMouseListener(GraphicalRepresentation aGraphicalRepresentation, FGEView aView) {
+	public FGEViewMouseListener(GraphicalRepresentation<?> aGraphicalRepresentation, FGEView<?> aView) {
 		graphicalRepresentation = aGraphicalRepresentation;
 		view = aView;
 	}
@@ -111,7 +110,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}
 
 			if (focusedObject != null) {
-				ControlArea ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
+				ControlArea<?> ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
 				if (ca != null && ca.isClickable()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Click on control area " + ca);
@@ -170,7 +169,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		// SGU: I dont think that JTextComponent react to these event, but in case of, uncomment this
-
+		// GPO: Actually this is not the case because a mouse enter/exited event in one component does
+		// not make sense for another one. If we want to emulate those event, it should be done
+		// in the mouse moved event.
 		/*if (getController().hasEditedLabel()) {
 			GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
 			handleEventForEditedLabel(e, focusedObject);
@@ -185,7 +186,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		// SGU: I dont think that JTextComponent react to these event, but in case of, uncomment this
-
+		// GPO: Actually this is not the case because a mouse enter/exited event in one component does
+		// not make sense for another one. If we want to emulate those event, it should be done
+		// in the mouse moved event.
 		/*if (getController().hasEditedLabel()) {
 			GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
 			handleEventForEditedLabel(e, focusedObject);
@@ -231,46 +234,43 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		private boolean moveTo(Point newLocationInDrawingView, MouseEvent e) {
 
 			FGEPoint newAbsoluteLocation = new FGEPoint(startMovingPoint.x
-					+ ((newLocationInDrawingView.x - startMovingLocationInDrawingView.x)) / view.getScale(), startMovingPoint.y
-					+ ((newLocationInDrawingView.y - startMovingLocationInDrawingView.y)) / view.getScale());
+					+ (newLocationInDrawingView.x - startMovingLocationInDrawingView.x) / view.getScale(), startMovingPoint.y
+					+ (newLocationInDrawingView.y - startMovingLocationInDrawingView.y) / view.getScale());
 
 			FGEPoint newRelativeLocation = getGraphicalRepresentation().getDrawingGraphicalRepresentation()
 					.convertLocalViewCoordinatesToRemoteNormalizedPoint(newLocationInDrawingView, controlArea.getGraphicalRepresentation(),
 							view.getScale());
 
 			FGEPoint pointRelativeToInitialConfiguration = new FGEPoint(startMovingPoint.x
-					+ ((newLocationInDrawingView.x - startMovingLocationInDrawingView.x)) / initialWidth/* *view.getScale()*/,
-					startMovingPoint.y + ((newLocationInDrawingView.y - startMovingLocationInDrawingView.y)) / initialHeight/* *view.getScale()*/);
+					+ (newLocationInDrawingView.x - startMovingLocationInDrawingView.x) / initialWidth/* *view.getScale()*/,
+					startMovingPoint.y + (newLocationInDrawingView.y - startMovingLocationInDrawingView.y) / initialHeight/* *view.getScale()*/);
 			return controlArea.dragToPoint(newRelativeLocation, pointRelativeToInitialConfiguration, newAbsoluteLocation, startMovingPoint,
 					e);
 		}
 
-		private void stopDragging() {
-			controlArea.stopDragging(getController());
+		private void stopDragging(GraphicalRepresentation focusedGR) {
+			controlArea.stopDragging(getController(), focusedGR);
 		}
 	}
 
 	private FloatingLabelDrag currentFloatingLabelDrag = null;
 
 	private class FloatingLabelDrag {
-		private GraphicalRepresentation graphicalRepresentation;
+		private GraphicalRepresentation<?> graphicalRepresentation;
 		private Point startMovingLocationInDrawingView;
-		private Point startLabelCenterPoint;
+		private Point startLabelPoint;
 
 		private boolean started = false;
 
-		private FloatingLabelDrag(GraphicalRepresentation aGraphicalRepresentation, MouseEvent e) {
+		private FloatingLabelDrag(GraphicalRepresentation<?> aGraphicalRepresentation, Point startMovingLocationInDrawingView) {
 			graphicalRepresentation = aGraphicalRepresentation;
-			startMovingLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
+			this.startMovingLocationInDrawingView = startMovingLocationInDrawingView;
 			logger.fine("FloatingLabelDrag: start pt = " + startMovingLocationInDrawingView);
-			startLabelCenterPoint = graphicalRepresentation.getLabelViewCenter(view.getScale());
+			startLabelPoint = graphicalRepresentation.getLabelLocation(view.getScale());
 		}
 
 		private void startDragging() {
-			if (getPaintManager().isPaintingCacheEnabled()) {
-				getPaintManager().addToTemporaryObjects(graphicalRepresentation);
-				getPaintManager().invalidate(graphicalRepresentation);
-			}
+			graphicalRepresentation.notifyLabelWillMove();
 		}
 
 		private void moveTo(Point newLocationInDrawingView) {
@@ -278,11 +278,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 				startDragging();
 				started = true;
 			}
-			Point newLabelCenterPoint = new Point(
-					startLabelCenterPoint.x + newLocationInDrawingView.x - startMovingLocationInDrawingView.x, startLabelCenterPoint.y
-							+ newLocationInDrawingView.y - startMovingLocationInDrawingView.y);
-
-			graphicalRepresentation.setLabelViewCenter(newLabelCenterPoint, view.getScale());
+			Point newLabelCenterPoint = new Point(startLabelPoint.x + newLocationInDrawingView.x - startMovingLocationInDrawingView.x,
+					startLabelPoint.y + newLocationInDrawingView.y - startMovingLocationInDrawingView.y);
+			graphicalRepresentation.setLabelLocation(newLabelCenterPoint, view.getScale());
 
 			/*if (graphicalRepresentation instanceof ShapeGraphicalRepresentation
 					&& ((ShapeGraphicalRepresentation)graphicalRepresentation).isParentLayoutedAsContainer()) {
@@ -298,7 +296,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		private void stopDragging() {
 			if (getPaintManager().isPaintingCacheEnabled()) {
-				getPaintManager().resetTemporaryObjects();
+				getPaintManager().removeFromTemporaryObjects(graphicalRepresentation);
 				getPaintManager().invalidate(graphicalRepresentation);
 				getPaintManager().repaint(view.getDrawingView());
 			}
@@ -325,11 +323,12 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 		getController().stopEditionOfEditedLabelIfAny();
 		if (focusedObject.hasFloatingLabel() && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
-			currentFloatingLabelDrag = new FloatingLabelDrag(focusedObject, e);
+			currentFloatingLabelDrag = new FloatingLabelDrag(focusedObject, SwingUtilities.convertPoint((Component) e.getSource(),
+					e.getPoint(), view.getDrawingView()));
 			e.consume();
 			return;
 		} else {
-			ControlArea ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
+			ControlArea<?> ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
 			if (ca != null && ca.isDraggable()) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Starting drag of control point " + ca);
@@ -346,7 +345,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
-		Vector<MouseDragControl> applicableMouseDragControls = new Vector<MouseDragControl>();
+		List<MouseDragControl> applicableMouseDragControls = new ArrayList<MouseDragControl>();
 		for (MouseDragControl mouseDragControl : focusedObject.getMouseDragControls()) {
 			if (mouseDragControl.isApplicable(focusedObject, getController(), e)) {
 				applicableMouseDragControls.add(mouseDragControl);
@@ -371,7 +370,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		// Apply applicable mouse drag control
-		MouseDragControl currentMouseDrag = applicableMouseDragControls.firstElement();
+		MouseDragControl currentMouseDrag = applicableMouseDragControls.get(0);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Applying " + currentMouseDrag);
 		}
@@ -417,7 +416,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		if (currentControlAreaDrag != null) {
-			currentControlAreaDrag.stopDragging();
+			GraphicalRepresentation focusedGR = getFocusRetriever().getFocusedObject(e);
+			// logger.info("Stop dragging, focused on " + focusedGR.getDrawable());
+			currentControlAreaDrag.stopDragging(focusedGR);
 			currentControlAreaDrag = null;
 			e.consume();
 		}
@@ -441,7 +442,6 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (view.isDeleted()) {
 			return;
 		}
-
 		if (getController().hasEditedLabel()) {
 			GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
 			if (handleEventForEditedLabel(e, focusedObject)) {
@@ -469,7 +469,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			boolean continueDragging = currentControlAreaDrag.moveTo(newPointLocation, e);
 			e.consume();
 			if (!continueDragging) {
-				currentControlAreaDrag.stopDragging();
+				GraphicalRepresentation focusedGR = getFocusRetriever().getFocusedObject(e);
+				// logger.info("Stop dragging, focused on " + focusedGR.getDrawable());
+				currentControlAreaDrag.stopDragging(focusedGR);
 				logger.fine("OK, stopping dragging point");
 				currentControlAreaDrag = null;
 			}
@@ -519,6 +521,8 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 	}
 
+	private Stack<MouseEvent> eventStack;
+
 	/**
 	 * What happen here ? (SGU)
 	 * 
@@ -537,59 +541,57 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	 * @return
 	 */
 	private boolean handleEventForEditedLabel(MouseEvent e, GraphicalRepresentation<?> focusedObject) {
-		if (getController().getEditedLabel().getGraphicalRepresentation() == focusedObject) {
+		LabelView<?> labelView = getController().getEditedLabel();
+		Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), labelView);
+		if (labelView.getGraphicalRepresentation() == focusedObject) {
 
-			// Label beeing edited matches focused object:
+			// Label being edited matches focused object:
 			// We potentially need to redispatch this event
+			if (labelView.contains(pointRelativeToTextComponent)) {
+				if (!labelView.isMouseInsideLabel()) {
+					MouseEvent newEvent = new MouseEvent(labelView.getTextComponent(), MouseEvent.MOUSE_ENTERED, e.getWhen(),
+							e.getModifiers(), pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(),
+							e.isPopupTrigger());
+					labelView.getTextComponent().dispatchEvent(newEvent);
+				}
+				if (labelView.isEditing()) {
+					if (eventStack == null || eventStack.isEmpty() || eventStack.peek() != e) {
+						// This event effectively concerns related text component
+						// I will retarget it !
 
-			FGEView accessedView = getController().getDrawingView().viewForObject(focusedObject);
-
-			if (accessedView == null) {
-				logger.warning("Could not access view for " + focusedObject);
-				return false;
+						MouseEvent newEvent = new MouseEvent(labelView.getTextComponent(), e.getID(), e.getWhen(), e.getModifiers(),
+								pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
+						if (eventStack == null) {
+							eventStack = new Stack<MouseEvent>();
+						}
+						eventStack.add(newEvent);
+						labelView.getTextComponent().dispatchEvent(newEvent);
+						eventStack.pop();
+						if (eventStack.isEmpty()) {
+							eventStack = null;
+						}
+						e.consume();
+						return true;
+					}
+				}
+			} else {
+				triggerMouseExitedIfNeeded(e, labelView, pointRelativeToTextComponent);
 			}
-
-			LabelView labelView = null;
-			if (accessedView instanceof ShapeView) {
-				labelView = ((ShapeView) accessedView).getLabelView();
-			}
-			if (accessedView instanceof ConnectorView) {
-				labelView = ((ConnectorView) accessedView).getLabelView();
-			}
-
-			if (labelView == null) {
-				return false;
-			}
-			// Now retrieve the text component (which exists because editing)
-			JTextComponent textComponent = labelView.getTextComponent();
-
-			if (textComponent == null) {
-				logger.warning("Could not access textComponent for " + focusedObject);
-				return false;
-			}
-
-			Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), textComponent);
-
-			if (textComponent.contains(pointRelativeToTextComponent)) {
-
-				// This event effectively concerns related text component
-				// I will retarget it !
-
-				MouseEvent newEvent = new MouseEvent(textComponent, e.getID(), e.getWhen(), e.getModifiers(),
-						pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
-				textComponent.dispatchEvent(newEvent);
-
-				// System.out.println("Redispatched event "+newEvent+" to "+textComponent);
-
-				e.consume();
-				return true;
-			}
-
 			return false;
+		} else {
+			triggerMouseExitedIfNeeded(e, labelView, pointRelativeToTextComponent);
 		}
 
 		return false;
 
+	}
+
+	private void triggerMouseExitedIfNeeded(MouseEvent e, LabelView<?> labelView, Point pointRelativeToTextComponent) {
+		if (labelView.isMouseInsideLabel()) {
+			MouseEvent newEvent = new MouseEvent(labelView.getTextComponent(), MouseEvent.MOUSE_EXITED, e.getWhen(), e.getModifiers(),
+					pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
+			labelView.getTextComponent().dispatchEvent(newEvent);
+		}
 	}
 
 	public DrawingController<?> getController() {
@@ -604,11 +606,11 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		return getGraphicalRepresentation().getDrawable();
 	}
 
-	public FGEView getView() {
+	public FGEView<?> getView() {
 		return view;
 	}
 
-	public GraphicalRepresentation getGraphicalRepresentation() {
+	public GraphicalRepresentation<?> getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 

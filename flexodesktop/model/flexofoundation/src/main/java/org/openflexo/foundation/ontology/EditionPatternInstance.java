@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
@@ -34,6 +36,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 
 public class EditionPatternInstance extends FlexoObservable implements Bindable, BindingEvaluationContext {
@@ -72,6 +75,14 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 
 	public void delete() {
 		logger.warning("TODO: implements EditionPatternInstance deletion !");
+		// Also implement properly #getDeletedProperty()
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO: when delete will be implemented, a notification will need to be sent and this method should reflect the name of the
+		// property of that notification
+		return null;
 	}
 
 	public FlexoModelObject getPatternActor(String patternRole) {
@@ -84,22 +95,40 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		return actors.get(patternRole.getPatternRoleName());
 	}
 
-	public FlexoProject getProject() {
-		return _project;
+	public void setPatternActor(FlexoModelObject object, PatternRole patternRole) {
+		setObjectForPatternRole(object, patternRole);
 	}
 
 	public void setObjectForPatternRole(FlexoModelObject object, PatternRole patternRole) {
-		// logger.info(">>>>>>>> For patternRole: "+patternRole+" set "+object);
-		actors.put(patternRole.getPatternRoleName(), object);
-		setChanged();
-		notifyObservers(new EditionPatternChanged(this));
-		// System.out.println("EditionPatternInstance "+Integer.toHexString(hashCode())+" setObjectForPatternRole() actors="+actors);
+		logger.info(">>>>>>>> For patternRole: " + patternRole + " set " + object + " was " + getPatternActor(patternRole));
+		FlexoModelObject oldObject = getPatternActor(patternRole);
+		if (object != oldObject) {
+			// Un-register last reference
+			if (oldObject != null) {
+				oldObject.unregisterEditionPatternReference(this, patternRole);
+			}
+
+			// Un-register last reference
+			if (object != null) {
+				object.registerEditionPatternReference(this, patternRole);
+			}
+
+			actors.put(patternRole.getPatternRoleName(), object);
+			setChanged();
+			notifyObservers(new EditionPatternActorChanged(this, patternRole, oldObject, object));
+			// System.out.println("EditionPatternInstance "+Integer.toHexString(hashCode())+" setObjectForPatternRole() actors="+actors);
+			getPropertyChangeSupport().firePropertyChange(patternRole.getPatternRoleName(), oldObject, object);
+		}
+	}
+
+	public FlexoProject getProject() {
+		return _project;
 	}
 
 	public String debug() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("EditionPattern: " + pattern.getName() + "\n");
-		sb.append("Instance: " + instanceId + "\n");
+		sb.append("Instance: " + instanceId + " hash=" + Integer.toHexString(hashCode()) + "\n");
 		for (String patternRole : actors.keySet()) {
 			FlexoModelObject object = actors.get(patternRole);
 			sb.append("Role: " + patternRole + " : " + object + "\n");
@@ -148,6 +177,13 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	{
 		System.out.println("SET string value for "+inspectorEntryKey+" value: "+value);
 	}*/
+
+	public Object evaluate(String expression) {
+		ViewPointDataBinding vpdb = new ViewPointDataBinding(expression);
+		vpdb.setOwner(getPattern());
+		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.GET, false));
+		return vpdb.getBindingValue(this);
+	}
 
 	@Override
 	public BindingFactory getBindingFactory() {

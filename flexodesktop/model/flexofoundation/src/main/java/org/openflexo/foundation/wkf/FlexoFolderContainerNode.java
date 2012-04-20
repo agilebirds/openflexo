@@ -81,6 +81,7 @@ public abstract class FlexoFolderContainerNode extends WorkflowModelObject {
 				folder.setIndexValue(folders.size());
 				setChanged();
 				notifyObservers(new ProcessFolderAdded(folder));
+				getPropertyChangeSupport().firePropertyChange("sortedFolders", null, folder);
 			}
 		}
 	}
@@ -92,6 +93,7 @@ public abstract class FlexoFolderContainerNode extends WorkflowModelObject {
 			FlexoIndexManager.reIndexObjectOfArray(folders.toArray(new ProcessFolder[0]));
 			setChanged();
 			notifyObservers(new ProcessFolderRemoved(folder));
+			getPropertyChangeSupport().firePropertyChange("sortedFolders", folder, null);
 		}
 	}
 

@@ -22,6 +22,11 @@ package org.openflexo.foundation.gen;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoObservable;
 
+/**
+ * This class should be removed as PPM is deprecated.
+ *
+ */
+@Deprecated
 public class FlexoProcessImageNotificationCenter extends FlexoObservable {
 
 	private static FlexoProcessImageNotificationCenter instance = new FlexoProcessImageNotificationCenter();
@@ -35,4 +40,9 @@ public class FlexoProcessImageNotificationCenter extends FlexoObservable {
 		notifyObservers(new AttributeDataModification("displaySubProcessImage", null, null));
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

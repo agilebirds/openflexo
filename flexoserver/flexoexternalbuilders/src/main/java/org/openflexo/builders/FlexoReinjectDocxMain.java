@@ -50,7 +50,7 @@ public class FlexoReinjectDocxMain extends FlexoExternalMainWithProject {
 	}
 
 	@Override
-	protected void run() {
+	protected void doRun() {
 		if (project != null) {
 			ReinjectDocx docxAction = ReinjectDocx.actionType.makeNewAction(editor.getProject().getGeneratedDoc(), null, editor);
 			docxAction.setDocxToReinject(docxFile);
@@ -92,10 +92,6 @@ public class FlexoReinjectDocxMain extends FlexoExternalMainWithProject {
 
 	public static void main(String[] args) {
 		launch(FlexoReinjectDocxMain.class, args);
-	}
-
-	public static FlexoReinjectDocxMain mainTest(String[] args) {
-		return launch(FlexoReinjectDocxMain.class, args);
 	}
 
 	@Override

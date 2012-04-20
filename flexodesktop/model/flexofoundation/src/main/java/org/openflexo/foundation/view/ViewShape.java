@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -163,29 +164,72 @@ public class ViewShape extends ViewElement {
 		return "Shape" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
 	}
 
-	private Vector<LinkScheme> availableLinkSchemeFromThisShape = null;
+	public static class DropAndLinkScheme {
+		public DropAndLinkScheme(DropScheme dropScheme, LinkScheme linkScheme) {
+			super();
+			this.dropScheme = dropScheme;
+			this.linkScheme = linkScheme;
+		}
+
+		public DropScheme dropScheme;
+		public LinkScheme linkScheme;
+
+	}
+
+	public Vector<DropAndLinkScheme> getAvailableDropAndLinkSchemeFromThisShape(EditionPattern targetEditionPattern) {
+		if (getEditionPattern() == null) {
+			return null;
+		}
+
+		Vector<DropAndLinkScheme> availableLinkSchemeFromThisShape = null;
+
+		ViewPoint calc = getShema().getCalc();
+		if (calc == null) {
+			return null;
+		}
+		calc.loadWhenUnloaded();
+
+		availableLinkSchemeFromThisShape = new Vector<DropAndLinkScheme>();
+
+		for (EditionPattern ep1 : calc.getEditionPatterns()) {
+			for (DropScheme ds : ep1.getDropSchemes()) {
+				if (ds.getTargetEditionPattern() == targetEditionPattern || (ds.getTopTarget() && targetEditionPattern == null)) {
+					for (EditionPattern ep2 : calc.getEditionPatterns()) {
+						for (LinkScheme ls : ep2.getLinkSchemes()) {
+							if (ls.getFromTargetEditionPattern() == getEditionPattern()
+									&& ls.getToTargetEditionPattern() == ds.getEditionPattern() && ls.getIsAvailableWithFloatingPalette()) {
+								// This candidate is acceptable
+								availableLinkSchemeFromThisShape.add(new DropAndLinkScheme(ds, ls));
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return availableLinkSchemeFromThisShape;
+	}
 
 	public Vector<LinkScheme> getAvailableLinkSchemeFromThisShape() {
 		if (getEditionPattern() == null) {
 			return null;
 		}
 
-		if (availableLinkSchemeFromThisShape == null) {
+		Vector<LinkScheme> availableLinkSchemeFromThisShape = null;
 
-			ViewPoint calc = getShema().getCalc();
-			if (calc == null) {
-				return null;
-			}
-			calc.loadWhenUnloaded();
+		ViewPoint calc = getShema().getCalc();
+		if (calc == null) {
+			return null;
+		}
+		calc.loadWhenUnloaded();
 
-			availableLinkSchemeFromThisShape = new Vector<LinkScheme>();
+		availableLinkSchemeFromThisShape = new Vector<LinkScheme>();
 
-			for (EditionPattern ep : calc.getEditionPatterns()) {
-				for (LinkScheme ls : ep.getLinkSchemes()) {
-					if (ls.getFromTargetEditionPattern() == getEditionPattern()) {
-						// This candidate is acceptable
-						availableLinkSchemeFromThisShape.add(ls);
-					}
+		for (EditionPattern ep : calc.getEditionPatterns()) {
+			for (LinkScheme ls : ep.getLinkSchemes()) {
+				if (ls.getFromTargetEditionPattern() == getEditionPattern() && ls.getIsAvailableWithFloatingPalette()) {
+					// This candidate is acceptable
+					availableLinkSchemeFromThisShape.add(ls);
 				}
 			}
 		}

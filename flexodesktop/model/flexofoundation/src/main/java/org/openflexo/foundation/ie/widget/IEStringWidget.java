@@ -21,6 +21,7 @@ package org.openflexo.foundation.ie.widget;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
 import org.openflexo.foundation.DataModification;
@@ -42,12 +43,19 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
+import com.ibm.icu.text.SimpleDateFormat;
+
 /**
  * Represents a 'String' widget
  * 
  * @author bmangez
  */
 public class IEStringWidget extends IENonEditableTextWidget implements IEWidgetWithValueList {
+
+	private static final Random random = new Random();
+
+	private static final long YEAR_IN_MS = 365L * 24L * 3600L * 1000L;
+	private static final long HALF_YEAR_IN_MS = YEAR_IN_MS / 2;
 
 	/**
      *
@@ -135,6 +143,29 @@ public class IEStringWidget extends IENonEditableTextWidget implements IEWidgetW
 
 	@Override
 	public String getDefaultValue() {
+		if (_fieldType != null) {
+			switch (_fieldType) {
+			case DATE:
+				return new SimpleDateFormat(getProject().getProjectDateFormat().getJavaPattern()).format(new Date((long) (System
+						.currentTimeMillis() + YEAR_IN_MS - random.nextDouble() * HALF_YEAR_IN_MS)));
+			case DOUBLE:
+				return String.format("%1$.2f", random.nextDouble() * 100);
+			case FLOAT:
+				return String.format("%1$.2f", random.nextDouble() * 100);
+			case INTEGER:
+				return String.valueOf(random.nextInt(1000));
+			case KEYVALUE:
+				if (getDomain() != null && getDomain().getKeys().size() > 0) {
+					return getDomain().getKeys().get(random.nextInt(getDomain().getKeys().size())).getName();
+				}
+				break;
+			case STATUS_LIST:
+				break;
+			case TEXT:
+				break;
+
+			}
+		}
 		return "dynamic text";
 	}
 

@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation.TextAlignment;
+import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGECubicCurve;
@@ -299,8 +299,8 @@ public abstract class FGEGraphics {
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 		p.x -= size;
 		p.y -= size;
-		g2d.fillRect(p.x, p.y, (size * 2), (size * 2));
-		return new Rectangle(p.x, p.y, (size * 2), (size * 2));
+		g2d.fillRect(p.x, p.y, size * 2, size * 2);
+		return new Rectangle(p.x, p.y, size * 2, size * 2);
 	}
 
 	public void drawPoint(FGEPoint p) {
@@ -338,7 +338,7 @@ public abstract class FGEGraphics {
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 		p.x -= size;
 		p.y -= size;
-		g2d.drawOval(p.x, p.y, (size * 2), (size * 2));
+		g2d.drawOval(p.x, p.y, size * 2, size * 2);
 	}
 
 	public Rectangle drawControlPoint(FGEPoint p, int size) {
@@ -645,7 +645,7 @@ public abstract class FGEGraphics {
 		fillArc(p.x, p.y, d.width, d.height, angleStart, arcAngle);
 	}
 
-	public FGERectangle drawString(String text, FGEPoint location, int orientation, TextAlignment alignment) {
+	public FGERectangle drawString(String text, FGEPoint location, int orientation, HorizontalTextAlignment alignment) {
 		return drawString(text, location.x, location.y, orientation, alignment);
 	}
 
@@ -735,7 +735,7 @@ public abstract class FGEGraphics {
 		}
 	}
 
-	public FGERectangle drawString(String text, double x, double y, int orientation, TextAlignment alignment) {
+	public FGERectangle drawString(String text, double x, double y, int orientation, HorizontalTextAlignment alignment) {
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 		Font oldFont = g2d.getFont();
 		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
@@ -760,7 +760,7 @@ public abstract class FGEGraphics {
 			g2d.drawString(text, (int) (p.x - bounds.getWidth() / 2), (int) (p.y + bounds.getHeight() / 2));
 			break;
 		case LEFT:
-			g2d.drawString(text, (p.x), (int) (p.y + bounds.getHeight() / 2));
+			g2d.drawString(text, p.x, (int) (p.y + bounds.getHeight() / 2));
 			break;
 		case RIGHT:
 			g2d.drawString(text, (int) (p.x - bounds.getWidth()), (int) (p.y + bounds.getHeight() / 2));
@@ -774,11 +774,11 @@ public abstract class FGEGraphics {
 				(int) (bounds.getY() + p.y + bounds.getHeight() / 2), (int) bounds.getWidth(), (int) bounds.getHeight());
 	}
 
-	public FGERectangle drawString(String text, FGEPoint location, TextAlignment alignment) {
+	public FGERectangle drawString(String text, FGEPoint location, HorizontalTextAlignment alignment) {
 		return drawString(text, location.x, location.y, 0, alignment);
 	}
 
-	public FGERectangle drawString(String text, double x, double y, TextAlignment alignment) {
+	public FGERectangle drawString(String text, double x, double y, HorizontalTextAlignment alignment) {
 		return drawString(text, x, y, 0, alignment);
 	}
 

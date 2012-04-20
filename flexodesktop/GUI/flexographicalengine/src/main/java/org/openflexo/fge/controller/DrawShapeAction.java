@@ -27,6 +27,6 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 public abstract class DrawShapeAction {
 	static final Logger logger = Logger.getLogger(DrawShapeAction.class.getPackage().getName());
 
-	public abstract void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
-			GraphicalRepresentation parentGraphicalRepresentation);
+	public abstract void performedDrawNewShape(ShapeGraphicalRepresentation<?> graphicalRepresentation,
+			GraphicalRepresentation<?> parentGraphicalRepresentation);
 }

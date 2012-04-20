@@ -30,6 +30,7 @@ import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -59,7 +60,11 @@ public class AddShapeInitializer extends ActionInitializer {
 
 				ViewObject parent = action.getParent();
 				if (parent != null) {
-					action.setNewShapeName(FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_shape")));
+					String newName = FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_shape"));
+					if (newName == null || StringUtils.isEmpty(newName)) {
+						return false;
+					}
+					action.setNewShapeName(newName);
 					return true;
 				}
 				return false;

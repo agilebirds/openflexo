@@ -41,7 +41,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
+import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
 import org.openflexo.fib.controller.FIBTableDynamicModel;
@@ -148,7 +148,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List> implem
 			}
 
 			if (getValue() == null) {
-				getTableModel().setValues(EMPTY_VECTOR);
+				getTableModel().setValues(Collections.emptyList());
 			}
 			if (getValue() instanceof List && !getValue().equals(valuesBeforeUpdating)) {
 				getTableModel().setValues(getValue());
@@ -224,8 +224,8 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List> implem
 	}
 
 	@Override
-	public synchronized List<TargetObject> getDependingObjects() {
-		List<TargetObject> returned = super.getDependingObjects();
+	public List<AbstractBinding> getDependencyBindings() {
+		List<AbstractBinding> returned = super.getDependencyBindings();
 		appendToDependingObjects(getWidget().getSelected(), returned);
 		return returned;
 	}

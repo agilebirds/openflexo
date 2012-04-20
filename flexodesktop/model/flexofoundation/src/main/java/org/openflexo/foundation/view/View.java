@@ -19,12 +19,20 @@
  */
 package org.openflexo.foundation.view;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
+import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.dm.ShemaDeleted;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -32,6 +40,7 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -70,6 +79,47 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		if (getCalc() != null) {
 			getCalc().loadWhenUnloaded();
 		}
+	}
+
+	public Collection<EditionPatternInstance> getEPInstances(String epName) {
+		EditionPattern ep = getCalc().getEditionPattern(epName);
+		return getEPInstances(ep);
+	}
+
+	public Collection<EditionPatternInstance> getEPInstances(EditionPattern ep) {
+		Collection<ViewShape> shapes = getChildrenOfType(ViewShape.class);
+		Collection<ViewConnector> connectors = getChildrenOfType(ViewConnector.class);
+		Collection<EditionPatternInstance> epis = new LinkedHashSet<EditionPatternInstance>();
+		for (ViewShape shape : shapes) {
+			EditionPatternReference epr = shape.getEditionPatternReference();
+			if (epr == null) {
+				continue;
+			}
+			if (/*epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
+				epis.add(epr.getEditionPatternInstance());
+			}
+		}
+		for (ViewConnector conn : connectors) {
+			EditionPatternReference epr = conn.getEditionPatternReference();
+			if (epr == null) {
+				continue;
+			}
+			if (/*epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
+				epis.add(epr.getEditionPatternInstance());
+			}
+		}
+		return epis;
+	}
+
+	public List<EditionPatternInstance> getEPInstancesWithPropertyEqualsTo(String epName, String epProperty, Object value) {
+		List<EditionPatternInstance> returned = new ArrayList<EditionPatternInstance>();
+		Collection<EditionPatternInstance> epis = getEPInstances(epName);
+		for (EditionPatternInstance epi : epis) {
+			if (value == null && epi.evaluate(epProperty) == value || value != null && value.equals(epi.evaluate(epProperty))) {
+				returned.add(epi);
+			}
+		}
+		return returned;
 	}
 
 	public ViewDefinition getShemaDefinition() {
@@ -179,6 +229,10 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		return Inspectors.VE.OE_SHEMA_INSPECTOR;
 	}
 
+	public ViewPoint getViewPoint() {
+		return getCalc();
+	}
+
 	public ViewPoint getCalc() {
 		if (getShemaDefinition() != null) {
 			return getShemaDefinition().getCalc();
@@ -201,6 +255,40 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	 */
 	public static final String getTypeName() {
 		return "SHEMA";
+	}
+
+	@Override
+	public String toString() {
+		return "View[name=" + getName() + "/viewpoint=" + getCalc().getName() + "/hash=" + Integer.toHexString(hashCode()) + "]";
+	}
+
+	// ==========================================================================
+	// ================================= Delete ===============================
+	// ==========================================================================
+
+	@Override
+	public final void delete() {
+		// tests on this deleted object
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("delete: View " + getName());
+		}
+		if (getFlexoResource() != null) {
+			getFlexoResource().delete();
+		}
+
+		if (getShemaDefinition() != null) {
+			getShemaDefinition().delete();
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("View " + getName() + " has no ViewDefinition associated!");
+			}
+		}
+
+		super.delete();
+
+		setChanged();
+		notifyObservers(new ShemaDeleted(this.getShemaDefinition()));
+		deleteObservers();
 	}
 
 }

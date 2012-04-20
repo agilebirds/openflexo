@@ -207,6 +207,7 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 			return;
 		} else {
 			_children.remove(w);
+			w.setParent(null);
 			refreshIndexes();
 			setChanged();
 			notifyObservers(new WidgetRemovedFromSequence((IEObject) w));
@@ -430,7 +431,6 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 				E widget = _children.lastElement();
 				_children.remove(widget);
 				parentSequence.insertElementAt(widget, insertionIndex);
-				widget.setParent(parentSequence);
 			}
 			delete();
 		}
@@ -467,7 +467,7 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	public abstract boolean isSubsequence();
 
 	public boolean isRoot() {
-		return getParent() == null || !(getParent().getClass().isAssignableFrom(this.getClass()));
+		return getParent() == null || !getParent().getClass().isAssignableFrom(this.getClass());
 	}
 
 	public IEOperator getOperator() {

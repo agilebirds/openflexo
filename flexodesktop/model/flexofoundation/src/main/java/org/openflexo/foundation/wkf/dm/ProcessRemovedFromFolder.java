@@ -25,7 +25,7 @@ import org.openflexo.foundation.wkf.FlexoProcessNode;
 public class ProcessRemovedFromFolder extends DataModification {
 
 	public ProcessRemovedFromFolder(FlexoProcessNode process) {
-		super(-1, "processes", null, process);
+		super("processes", null, process);
 	}
 
 }

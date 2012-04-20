@@ -49,12 +49,14 @@ import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
@@ -65,6 +67,10 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.controller.FlexoController;
+
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 /**
  * Main class of the Flexo Application Suite
@@ -80,6 +86,8 @@ public class Flexo {
 	private static File outLogFile;
 
 	private static File errLogFile;
+
+	private static String fileNameToOpen;
 
 	private static String getResourcePath() {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -116,6 +124,32 @@ public class Flexo {
 		return null;
 	}
 
+	@SuppressWarnings("restriction")
+	private static void registerShutdownHook() {
+		try {
+			Class.forName("sun.misc.Signal");
+			Class.forName("sun.misc.SignalHandler");
+			Signal.handle(new Signal("TERM"), new SignalHandler() {
+
+				@Override
+				public void handle(Signal arg0) {
+					FlexoFrame activeFrame = FlexoFrame.getActiveFrame(false);
+					if (activeFrame != null && activeFrame.getModule() != null) {
+						if (ProjectLoader.someResourcesNeedsSaving(activeFrame.getModule().getProject())) {
+							if (activeFrame.getModule().showSaveDialogAndClose()) {
+								System.exit(0);
+							}
+						}
+					}
+				}
+			});
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Launch method to start Flexo in multimodule mode. Program args are in dev: -userType MAINTAINER Dev -nosplash otherwise see windows
 	 * launchers or build.xml for package args VM args: -Xmx512M (for big projects push it to 1024) For MacOS also add: -Xdock:name=Flexo
@@ -138,10 +172,17 @@ public class Flexo {
 					noSplash = true;
 				} else if (args[i].equalsIgnoreCase("DEV")) {
 					isDev = true;
+				} else if (args[i].equalsIgnoreCase("demo")) {
+
 				}
 			}
 		}
 		ToolBox.setPlatform();
+
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+		}
+
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
@@ -157,21 +198,21 @@ public class Flexo {
 		}
 		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
 		UserType.setCurrentUserType(userTypeNamed);
+		FlexoProperties.load();
+		initializeLoggingManager();
+		FlexoApplication.initialize();
+		initUILAF();
 		if (ToolBox.getFrame(null) != null) {
 			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
 		}
 		SplashWindow splashWindow = null;
 		if (!noSplash) {
-			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed, 10000);
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed);
 		}
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
 		}
-		FlexoProperties.load();
 		initProxyManagement();
-		initializeLoggingManager();
-		initUILAF();
-		FlexoApplication.initialize();
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting on " + ToolBox.getPLATFORM() + "... JVM version is " + System.getProperty("java.version"));
 		}
@@ -187,6 +228,9 @@ public class Flexo {
 		}
 		getFlexoResourceCenterService().getFlexoResourceCenter();
 		final SplashWindow splashWindow2 = splashWindow;
+		if (!isDev) {
+			registerShutdownHook();
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			/**
 			 * Overrides run
@@ -195,16 +239,36 @@ public class Flexo {
 			 */
 			@Override
 			public void run() {
-				splashWindow2.setVisible(false);
-				splashWindow2.dispose();
-				if (getModuleLoader().fileNameToOpen == null) {
-					new WelcomeDialog();
+				if (fileNameToOpen == null) {
+					WelcomeDialog welcomeDialog = new WelcomeDialog();
+					if (splashWindow2 != null) {
+						splashWindow2.setVisible(false);
+						splashWindow2.dispose();
+					}
+					welcomeDialog.showDialog();
 				} else {
 					try {
-						getProjectLoader().loadProject(new File(getModuleLoader().fileNameToOpen));
+						File projectDirectory = new File(fileNameToOpen);
+						if (splashWindow2 != null) {
+							splashWindow2.setVisible(false);
+							splashWindow2.dispose();
+						}
+						getModuleLoader().openProject(projectDirectory, null);
 					} catch (ProjectLoadingCancelledException e) {
 						// project need a conversion, but user cancelled the conversion.
-						new WelcomeDialog();
+						WelcomeDialog welcomeDialog = new WelcomeDialog();
+						welcomeDialog.showDialog();
+					} catch (ModuleLoadingException e) {
+						e.printStackTrace();
+						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+						WelcomeDialog welcomeDialog = new WelcomeDialog();
+						welcomeDialog.showDialog();
+					} catch (ProjectInitializerException e) {
+						e.printStackTrace();
+						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+								+ e.getProjectDirectory().getAbsolutePath());
+						WelcomeDialog welcomeDialog = new WelcomeDialog();
+						welcomeDialog.showDialog();
 					}
 				}
 			}
@@ -429,6 +493,10 @@ public class Flexo {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file"));
 			e.printStackTrace();
 		}
+	}
+
+	public static void setFileNameToOpen(String filename) {
+		Flexo.fileNameToOpen = filename;
 	}
 
 }

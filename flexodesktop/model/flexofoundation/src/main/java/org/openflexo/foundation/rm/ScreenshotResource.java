@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
@@ -46,6 +47,7 @@ import org.openflexo.foundation.ie.dm.ComponentNameChanged;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;
@@ -186,8 +188,10 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			ret.setSource(o);
 		} else if (o instanceof FlexoWorkflow) {
 			ret.setSource(o);
-		} else if (o instanceof View) {
+		} else if (o instanceof ViewDefinition) {
 			ret.setSource(o);
+		} else if (o instanceof View) {
+			ret.setSource(((View) o).getShemaDefinition());
 		} else {
 			logger.warning("Could not create screenshot for " + o);
 			return null;
@@ -305,7 +309,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	@Override
 	public boolean checkIntegrity() {
 		return getSourceReference() != null
-				&& (getModelObject() != null || (sourceReference.getResource() != null && sourceReference.getResource().getIsLoading()));
+				&& (getModelObject() != null || sourceReference.getResource() != null && sourceReference.getResource().getIsLoading());
 	}
 
 	public FlexoModelObject getModelObject() {
@@ -447,10 +451,11 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		}
 
 		/**
-         *
-         */
+		 * @throws FlexoException
+		 * 
+		 */
 		@Override
-		public void writeToFile(File aFile) {
+		public void writeToFile(File aFile) throws FlexoException {
 			if (data == null) {
 				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Called write to file without having called generate on screenshot resource data: " + getFlexoResource());
@@ -471,7 +476,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			try {
 				ImageUtils.saveImageToFile(data.image, image, SCREENSHOT_TYPE);
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw new FlexoException("Error while writing image to " + image.getAbsolutePath(), e);
 			}
 		}
 
@@ -496,12 +501,10 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof NameChanged) {
-			if ((getModelObject() == observable)
-					|| ((getModelObject() instanceof AbstractActivityNode) && (observable == ((AbstractActivityNode) getModelObject())
-							.getProcess()))
-					|| ((getModelObject() instanceof OperationNode) && (observable == ((OperationNode) getModelObject()).getProcess()))
-					|| ((getModelObject() instanceof OperationNode) && (observable == ((OperationNode) getModelObject())
-							.getAbstractActivityNode()))) {
+			if (getModelObject() == observable || getModelObject() instanceof AbstractActivityNode
+					&& observable == ((AbstractActivityNode) getModelObject()).getProcess() || getModelObject() instanceof OperationNode
+					&& observable == ((OperationNode) getModelObject()).getProcess() || getModelObject() instanceof OperationNode
+					&& observable == ((OperationNode) getModelObject()).getAbstractActivityNode()) {
 				checkResourceNameIsUpToDate();
 				if (logger.isLoggable(Level.FINEST)) {
 					logger.finest("Renamed screenshot due to a rename in the workflow");
@@ -565,13 +568,10 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	 */
 	@Override
 	public void rebuildDependancies() {
-		if ("SCREENSHOT.WOComponent-Operation1".equals(toString())) {
-			System.out.println("here");
-		}
 		super.rebuildDependancies();
 		if (getModelObject() != null && getModelObject().getXMLResourceData() != null
 				&& getModelObject().getXMLResourceData().getFlexoResource() != null) {
-			if (!(getModelObject() instanceof ComponentDefinition)) {
+			if (!(getModelObject() instanceof ComponentDefinition) && !(getModelObject() instanceof ViewDefinition)) {
 				addToDependentResources(getModelObject().getXMLResourceData().getFlexoResource());
 			}
 		}
@@ -579,6 +579,12 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			FlexoComponentResource compRes = ((ComponentDefinition) getModelObject()).getComponentResource(false);
 			if (compRes != null) {
 				addToDependentResources(compRes);
+			}
+		}
+		if (getModelObject() instanceof ViewDefinition) {
+			FlexoOEShemaResource viewRes = ((ViewDefinition) getModelObject()).getShemaResource(false);
+			if (viewRes != null) {
+				addToDependentResources(viewRes);
 			}
 		}
 	}

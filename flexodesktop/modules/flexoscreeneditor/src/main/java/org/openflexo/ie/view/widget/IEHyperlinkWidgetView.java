@@ -19,23 +19,6 @@
  */
 package org.openflexo.ie.view.widget;
 
-import org.openflexo.ColorCst;
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
-import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
-import org.openflexo.ie.IECst;
-import org.openflexo.ie.IEPreferences;
-import org.openflexo.ie.util.TriggerRepaintDocumentListener;
-import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.ie.view.listener.DoubleClickResponder;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -48,6 +31,24 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import org.openflexo.ColorCst;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
+import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
+import org.openflexo.ie.IECst;
+import org.openflexo.ie.IEPreferences;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
+import org.openflexo.ie.view.IEWOComponentView;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.ie.view.listener.DoubleClickResponder;
 
 /**
  * @author bmangez
@@ -135,10 +136,11 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(BINDING_VALUE_NAME) || modif.propertyName().equals("bindingValue")) {
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals(BINDING_VALUE_NAME) || propertyName.equals("bindingValue")) {
 				updateDisplayedValue();
-			} else if (modif.propertyName().equals("isCustomButton")) {
+			} else if (propertyName.equals("isCustomButton")) {
 				performLabelTransformation();
 				repaint();
 			}

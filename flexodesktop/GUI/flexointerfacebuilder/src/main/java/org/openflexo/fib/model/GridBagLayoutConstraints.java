@@ -148,6 +148,26 @@ public class GridBagLayoutConstraints extends ComponentConstraints {
 		setPadY(0);
 	}
 
+	public GridBagLayoutConstraints(int index, int gridX, int gridY, int gridWidth, int gridHeight, double weightX, double weightY,
+			AnchorType anchorType, FillType fillType, int insetsTop, int insetsBottom, int insetsLeft, int insetsRight, int padX, int padY) {
+		super();
+		setIndex(index);
+		setGridX(gridX);
+		setGridY(gridY);
+		setGridWidth(gridWidth);
+		setGridHeight(gridHeight);
+		setWeightX(weightX);
+		setWeightY(weightY);
+		setAnchor(anchorType);
+		setFill(fillType);
+		setInsetsTop(insetsTop);
+		setInsetsBottom(insetsBottom);
+		setInsetsLeft(insetsLeft);
+		setInsetsRight(insetsRight);
+		setPadX(padX);
+		setPadY(padY);
+	}
+
 	@Override
 	protected Layout getType() {
 		return Layout.gridbag;

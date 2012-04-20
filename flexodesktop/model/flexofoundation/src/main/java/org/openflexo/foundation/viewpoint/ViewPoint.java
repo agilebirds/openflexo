@@ -33,7 +33,6 @@ import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
-import org.openflexo.foundation.viewpoint.ViewPointPalette.RelativePathFileConverter;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
@@ -42,12 +41,12 @@ import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -84,14 +83,14 @@ public class ViewPoint extends ViewPointObject {
 		File xmlFile = new File(calcDir, baseName + ".xml");
 
 		if (xmlFile.exists()) {
-			Converter<File> previousConverter = null;
 			FileInputStream inputStream = null;
 			try {
-				previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(calcDir);
-				StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 				inputStream = new FileInputStream(xmlFile);
-				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.get_VIEW_POINT_MODEL());
+				logger.info("Reading file " + xmlFile.getAbsolutePath());
+				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.get_VIEW_POINT_MODEL(), null,
+						new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
+				logger.info("DONE reading file " + xmlFile.getAbsolutePath());
 				returned.init(baseName, calcDir, xmlFile, library, folder);
 				return returned;
 			} catch (FileNotFoundException e) {
@@ -116,7 +115,6 @@ public class ViewPoint extends ViewPointObject {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 				try {
 					if (inputStream != null) {
 						inputStream.close();
@@ -127,9 +125,7 @@ public class ViewPoint extends ViewPointObject {
 				}
 			}
 			return null;
-		}
-
-		else {
+		} else {
 			logger.severe("Not found: " + xmlFile);
 			// TODO: implement a search here (find the good XML file)
 			return null;
@@ -190,17 +186,45 @@ public class ViewPoint extends ViewPointObject {
 		}
 	}
 
+	private StringEncoder encoder;
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		if (encoder == null) {
+			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
+		}
+		return encoder;
+	}
+
 	@Override
 	public void saveToFile(File aFile) {
-		Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
-		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 		super.saveToFile(aFile);
-		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 		clearIsModified(true);
 	}
 
 	public void save() {
 		logger.info("Saving calc to " + xmlFile.getAbsolutePath() + "...");
+
+		// Following was used to debug (display purpose only)
+		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
+		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
+		try {
+			System.out.println("File: " + XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), getStringEncoder()));
+		} catch (InvalidObjectSpecificationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AccessorInvocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DuplicateSerializationIdentifierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
+		 */
 
 		File dir = xmlFile.getParentFile();
 		if (!dir.exists()) {
@@ -213,10 +237,10 @@ public class ViewPoint extends ViewPointObject {
 			saveToFile(temporaryFile);
 			FileUtils.rename(temporaryFile, xmlFile);
 			clearIsModified(true);
-			logger.info("Saved calc to " + xmlFile.getAbsolutePath() + ". Done.");
+			logger.info("Saved ViewPoint to " + xmlFile.getAbsolutePath() + ". Done.");
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.severe("Could not save calc to " + xmlFile.getAbsolutePath());
+			logger.severe("Could not save ViewPoint to " + xmlFile.getAbsolutePath());
 			if (temporaryFile != null) {
 				temporaryFile.delete();
 			}

@@ -91,7 +91,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 						double vGap = getVerticalGap();
 						double absoluteComponentLabelCenterY = vGap * 2 + labelSize.height + getComponentFont().getSize() / 2 - 3;
 						g.drawString(getOperationNode().getWOComponentName(),
-								new FGEPoint(0.5, absoluteComponentLabelCenterY / getHeight()), TextAlignment.CENTER);
+								new FGEPoint(0.5, absoluteComponentLabelCenterY / getHeight()), HorizontalTextAlignment.CENTER);
 					}
 					double r_width = SEIconLibrary.OPERATION_COMPONENT_ICON.getIconWidth() / getWidth();
 					double r_height = SEIconLibrary.OPERATION_COMPONENT_ICON.getIconHeight() / getHeight();
@@ -158,7 +158,6 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 		setIsMultilineAllowed(true);
 		setAdjustMinimalWidthToLabelWidth(true);
 		setAdjustMinimalHeightToLabelHeight(true);
-		setTextAlignment(TextAlignment.CENTER);
 	}
 
 	@Override

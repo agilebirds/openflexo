@@ -67,9 +67,11 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * 
  * 
  */
-public class FlexoObservable extends FlexoObject implements HasPropertyChangeSupport {
+public abstract class FlexoObservable extends FlexoObject implements HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(FlexoObservable.class.getPackage().getName());
+
+	protected static final String DELETED_PROPERTY = "deleted";
 
 	private boolean changed = false;
 
@@ -256,7 +258,7 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 						_flexoObservers.remove(arrLocal1[i]);
 						continue;
 					}
-					if ((observerClasses.get(o.getClass())).booleanValue()) {
+					if (observerClasses.get(o.getClass()).booleanValue()) {
 						o.update(this, arg);
 					}
 				}
@@ -483,4 +485,5 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 		}
 		return false;
 	}
+
 }

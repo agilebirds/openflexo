@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -45,6 +46,11 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddIndividual;
+	}
+
+	@Override
+	public List<IndividualPatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(IndividualPatternRole.class);
 	}
 
 	@Override

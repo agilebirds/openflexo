@@ -34,7 +34,6 @@ import javax.naming.InvalidNameException;
 
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -58,7 +57,6 @@ import org.openflexo.foundation.ie.dm.TopWidgetInserted;
 import org.openflexo.foundation.ie.dm.TopWidgetRemoved;
 import org.openflexo.foundation.ie.operator.ConditionalOperator;
 import org.openflexo.foundation.ie.operator.RepetitionOperator;
-import org.openflexo.foundation.ie.util.FlexoConceptualColor;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEBrowserWidget;
 import org.openflexo.foundation.ie.widget.IEButtonWidget;
@@ -90,7 +88,6 @@ import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.RMNotification;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoRadioManager;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
@@ -121,15 +118,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 
 	private transient FlexoProject _project;
 
-	private FlexoColor _mainColor;
-
-	private FlexoColor _textColor;
-
 	private String _helpText;
-
-	private FlexoConceptualColor _mainConceptualColor;
-
-	private FlexoConceptualColor _textConceptualColor;
 
 	public static final String WOCOMPONENT_NAME_ATTRIBUTENAME = "woComponentName";
 
@@ -433,48 +422,6 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		if (getComponentDefinition() != null) {
 			getComponentDefinition().setName(name);
 		}
-	}
-
-	public FlexoColor getMainColor() {
-		return _mainColor;
-	}
-
-	public void setMainColor(FlexoColor c) {
-		_mainColor = c;
-		setChanged();
-		notifyObservers(new DataModification(DataModification.BLOC_BG_CLOR_CHANGE, null, c));
-	}
-
-	public FlexoColor getTextColor() {
-		return _textColor;
-	}
-
-	public void setTextColor(FlexoColor c) {
-		_textColor = c;
-		setChanged();
-		notifyObservers(new DataModification(DataModification.BLOC_FG_CLOR_CHANGE, null, c));
-	}
-
-	public FlexoConceptualColor getConceptualMainColor() {
-		if (_mainConceptualColor == null) {
-			if (getMainColor() != null) {
-				_mainConceptualColor = new FlexoConceptualColor.CustomColor(getMainColor());
-			} else {
-				_mainConceptualColor = FlexoConceptualColor.MAIN_COLOR;
-			}
-		}
-		return _mainConceptualColor;
-	}
-
-	public FlexoConceptualColor getConceptualTextColor() {
-		if (_textConceptualColor == null) {
-			if (getTextColor() != null) {
-				_textConceptualColor = new FlexoConceptualColor.CustomColor(getTextColor());
-			} else {
-				_textConceptualColor = FlexoConceptualColor.TEXT_COLOR;
-			}
-		}
-		return _textConceptualColor;
 	}
 
 	@Override

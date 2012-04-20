@@ -1,9 +1,12 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 
 public class DataPropertyPatternRole extends PropertyPatternRole {
+
+	private OntologicDataType dataType;
 
 	@Override
 	public PatternRoleType getType() {
@@ -12,8 +15,8 @@ public class DataPropertyPatternRole extends PropertyPatternRole {
 
 	@Override
 	public String getPreciseType() {
-		if (type != null) {
-			return type.getName();
+		if (getParentProperty() != null) {
+			return getParentProperty().getName();
 		}
 		return "";
 	}
@@ -23,14 +26,21 @@ public class DataPropertyPatternRole extends PropertyPatternRole {
 		return OntologyObjectProperty.class;
 	}
 
-	private OntologyDataProperty type;
-
-	public OntologyDataProperty getOntologicType() {
-		return type;
+	@Override
+	public OntologyDataProperty getParentProperty() {
+		return (OntologyDataProperty) super.getParentProperty();
 	}
 
-	public void setOntologicType(OntologyDataProperty ontologyProperty) {
-		type = ontologyProperty;
+	public void setParentProperty(OntologyDataProperty ontologyProperty) {
+		super.setParentProperty(ontologyProperty);
+	}
+
+	public OntologicDataType getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(OntologicDataType dataType) {
+		this.dataType = dataType;
 	}
 
 }

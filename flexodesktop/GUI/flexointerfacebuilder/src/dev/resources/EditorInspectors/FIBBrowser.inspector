@@ -169,6 +169,15 @@
 							<ColumnAssignment variable="component.bindingDefinition"
 								value="iterator.VISIBLE" />
 						</CustomColumn>
+						<CustomColumn name="cast" title="cast"
+							data="iterator.cast.binding" 
+							componentClassName="org.openflexo.fib.utils.BindingSelector"
+							columnWidth="200">
+							<ColumnAssignment variable="component.bindable"
+								value="iterator.childBindable" />
+							<ColumnAssignment variable="component.bindingDefinition"
+								value="iterator.CAST" />
+						</CustomColumn>
 						<AddAction name="new_children" method="ElementsTable.selected.createChildren()" />
 						<RemoveAction name="delete_children" method="ElementsTable.selected.deleteChildren(selected)" />
 						<CustomAction name="move_to_top" method="ElementsTable.selected.moveToTop(selected)" available="((selected != null) &amp; (selected.index > 0))"/>

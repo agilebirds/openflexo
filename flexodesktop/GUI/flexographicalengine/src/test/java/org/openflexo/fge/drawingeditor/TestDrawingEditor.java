@@ -35,9 +35,13 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -55,7 +59,18 @@ public class TestDrawingEditor {
 	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());
 
 	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				init();
+			}
+		});
+	}
+
+	private static void init() {
 		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize();
 			FlexoLoggingManager.setKeepLogTrace(true);
@@ -66,26 +81,25 @@ public class TestDrawingEditor {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
 
 		TestDrawingEditor editor = new TestDrawingEditor();
 		editor.showPanel();
-
-		/*(new Thread(new Runnable() {
-			public void run()
-			{
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				logger.info("Stopping application");
-				System.exit(-1);
-			}
-		})).start();*/
+		editor.newDrawing();
 	}
 
 	private JFrame frame;
@@ -136,7 +150,9 @@ public class TestDrawingEditor {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					MyDrawingViewScrollPane c = (MyDrawingViewScrollPane) tabbedPane.getSelectedComponent();
-					drawingSwitched(c.drawingView.getDrawing().getModel());
+					if (c != null) {
+						drawingSwitched(c.drawingView.getDrawing().getModel());
+					}
 				}
 			});
 			mainPanel.add(tabbedPane, BorderLayout.CENTER);
@@ -332,7 +348,29 @@ public class TestDrawingEditor {
 	}
 
 	public void closeDrawing() {
-		logger.warning("Not implemented yet");
+		if (currentDrawing == null) {
+			return;
+		}
+		if (currentDrawing.hasChanged()) {
+			int result = JOptionPane.showOptionDialog(frame, "Would you like to save drawing changes?", "Save changes",
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, JOptionPane.YES_OPTION);
+			switch (result) {
+			case JOptionPane.YES_OPTION:
+				if (!currentDrawing.save()) {
+					return;
+				}
+				break;
+			case JOptionPane.NO_OPTION:
+				break;
+			default:
+				return;
+			}
+		}
+		_drawings.remove(currentDrawing);
+		tabbedPane.remove(tabbedPane.getSelectedIndex());
+		if (_drawings.size() == 0) {
+			newDrawing();
+		}
 	}
 
 	public void newDrawing() {
@@ -350,20 +388,20 @@ public class TestDrawingEditor {
 		}
 	}
 
-	public void saveDrawing() {
+	public boolean saveDrawing() {
 		if (currentDrawing == null) {
-			return;
+			return false;
 		}
 		if (currentDrawing.file == null) {
-			saveDrawingAs();
+			return saveDrawingAs();
 		} else {
-			currentDrawing.save();
+			return currentDrawing.save();
 		}
 	}
 
-	public void saveDrawingAs() {
+	public boolean saveDrawingAs() {
 		if (currentDrawing == null) {
-			return;
+			return false;
 		}
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
@@ -373,9 +411,9 @@ public class TestDrawingEditor {
 			currentDrawing.file = file;
 			updateFrameTitle();
 			updateTabTitle();
-			currentDrawing.save();
+			return currentDrawing.save();
 		} else {
-			return;
+			return false;
 		}
 	}
 }

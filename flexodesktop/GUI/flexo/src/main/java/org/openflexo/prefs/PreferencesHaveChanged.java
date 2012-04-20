@@ -30,11 +30,11 @@ import org.openflexo.foundation.DataModification;
 public class PreferencesHaveChanged extends DataModification {
 
 	public PreferencesHaveChanged(String key, String oldValue, String newValue) {
-		super(DataModification.ATTRIBUTE, key, oldValue, newValue);
+		super(key, oldValue, newValue);
 	}
 
 	@Override
 	public String toString() {
-		return ("PreferencesHaveChanged " + propertyName() + " old: " + oldValue() + " new: " + newValue());
+		return "PreferencesHaveChanged " + propertyName() + " old: " + oldValue() + " new: " + newValue();
 	}
 }

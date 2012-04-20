@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VEShema id="SYL_787" userID="SYL" flexoID="787" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+  <DrawingGraphicalRepresentation id="1" className="org.openflexo.ve.shema.VEShemaGR" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" identifier="root" layer="0" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+    <TextStyle id="2" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+  <ContainedVEShape id="SYL_789" userID="SYL" flexoID="789" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+    <ShapeGraphicalRepresentation id="3" className="org.openflexo.ve.shema.VEShapeGR" x="103.01" y="42.010000000000005" width="500.01" height="400.01" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" text="R&amp;D" isMultilineAllowed="false" continuousTextEditing="false" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="267.0" absoluteTextY="-12.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="4" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="5" color="221,249,221" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="6" top="5" bottom="5" left="5" right="5" />
+      <RectangleShape id="7" isRounded="true" arcSize="20.0" />
+      <ShadowStyle id="8" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="9" font="Lucida Sans,1,13" color="0,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedVEShape id="SYL_790" userID="SYL" flexoID="790" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+      <ShapeGraphicalRepresentation id="10" className="org.openflexo.ve.shema.VEShapeGR" x="38.0" y="245.0388349514563" width="396.18257261410787" height="80.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="false" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="11" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="12" color="255,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <Border id="13" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="14" isRounded="true" arcSize="20.0" />
+        <ShadowStyle id="15" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="16" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ContainedVEShape id="SYL_791" userID="SYL" flexoID="791" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <ShapeGraphicalRepresentation id="17" className="org.openflexo.ve.shema.VEShapeGR" x="5.0" y="5.0" width="386.18257261410787" height="25.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="5" yConstraints="5" widthConstraints="(parent.width - 10)" heightConstraints="25" identifier="object_0_0_0" layer="3" hasText="true" text="Mission" isMultilineAllowed="false" continuousTextEditing="false" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="18" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="19" color="204,204,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="20" top="20" bottom="20" left="20" right="20" />
+          <RectangleShape id="21" isRounded="true" arcSize="10.0" />
+          <ShadowStyle id="22" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="23" font="Lucida Sans,2,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <EditionPatternReference id="SYL_796" editionPattern="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" instanceId="788" patternRole="missionName" userID="SYL" flexoID="796" dontGenerate="false" useSpecificDescriptions="false">
+          <ConceptActorReference id="SYL_797" objectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558#OrganizationalUnit1" patternRole="organizationUnit" userID="SYL" flexoID="797" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ModelObjectActorReference id="SYL_798" objectReference="SHEMA.R&amp;DDefinition#SYL_789" patternRole="shape" userID="SYL" flexoID="798" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ModelObjectActorReference id="SYL_799" objectReference="SHEMA.R&amp;DDefinition#SYL_792" patternRole="missionDescription" userID="SYL" flexoID="799" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ModelObjectActorReference id="SYL_800" objectReference="SHEMA.R&amp;DDefinition#SYL_790" patternRole="missionContainer" userID="SYL" flexoID="800" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ModelObjectActorReference id="SYL_801" objectReference="SHEMA.R&amp;DDefinition#SYL_791" patternRole="missionName" userID="SYL" flexoID="801" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ConceptActorReference id="SYL_802" objectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558#OrganizationalUnit1Mission" patternRole="mission" userID="SYL" flexoID="802" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        </EditionPatternReference>
+      </ContainedVEShape>
+      <ContainedVEShape id="SYL_792" userID="SYL" flexoID="792" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <ShapeGraphicalRepresentation id="24" className="org.openflexo.ve.shema.VEShapeGR" x="5.0" y="35.0" width="386.18257261410787" height="40.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="5" yConstraints="35" widthConstraints="(parent.width - 10)" heightConstraints="(parent.height - 40)" identifier="object_0_0_1" layer="3" hasText="true" text="&lt;Describe the mission here&gt;" isMultilineAllowed="true" continuousTextEditing="false" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="25" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="26" color="204,204,204" useTransparency="true" transparencyLevel="0.35" />
+          <Border id="27" top="20" bottom="20" left="20" right="20" />
+          <RectangleShape id="28" isRounded="true" arcSize="10.0" />
+          <ShadowStyle id="29" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="30" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <EditionPatternReference id="SYL_803" editionPattern="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" instanceId="788" patternRole="missionDescription" userID="SYL" flexoID="803" dontGenerate="false" useSpecificDescriptions="false">
+          <ConceptActorReference id="SYL_804" objectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558#OrganizationalUnit1" patternRole="organizationUnit" userID="SYL" flexoID="804" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ModelObjectActorReference id="SYL_805" objectReference="SHEMA.R&amp;DDefinition#SYL_789" patternRole="shape" userID="SYL" flexoID="805" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ModelObjectActorReference id="SYL_806" objectReference="SHEMA.R&amp;DDefinition#SYL_792" patternRole="missionDescription" userID="SYL" flexoID="806" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ModelObjectActorReference id="SYL_807" objectReference="SHEMA.R&amp;DDefinition#SYL_790" patternRole="missionContainer" userID="SYL" flexoID="807" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ModelObjectActorReference id="SYL_808" objectReference="SHEMA.R&amp;DDefinition#SYL_791" patternRole="missionName" userID="SYL" flexoID="808" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+          <ConceptActorReference id="SYL_809" objectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558#OrganizationalUnit1Mission" patternRole="mission" userID="SYL" flexoID="809" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        </EditionPatternReference>
+      </ContainedVEShape>
+      <EditionPatternReference id="SYL_794" editionPattern="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" instanceId="788" patternRole="missionContainer" userID="SYL" flexoID="794" dontGenerate="false" useSpecificDescriptions="false">
+        <ConceptActorReference id="SYL_810" objectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558#OrganizationalUnit1" patternRole="organizationUnit" userID="SYL" flexoID="810" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <ModelObjectActorReference id="SYL_811" objectReference="SHEMA.R&amp;DDefinition#SYL_789" patternRole="shape" userID="SYL" flexoID="811" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <ModelObjectActorReference id="SYL_812" objectReference="SHEMA.R&amp;DDefinition#SYL_792" patternRole="missionDescription" userID="SYL" flexoID="812" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <ModelObjectActorReference id="SYL_813" objectReference="SHEMA.R&amp;DDefinition#SYL_790" patternRole="missionContainer" userID="SYL" flexoID="813" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <ModelObjectActorReference id="SYL_814" objectReference="SHEMA.R&amp;DDefinition#SYL_791" patternRole="missionName" userID="SYL" flexoID="814" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <ConceptActorReference id="SYL_815" objectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558#OrganizationalUnit1Mission" patternRole="mission" userID="SYL" flexoID="815" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+      </EditionPatternReference>
+    </ContainedVEShape>
+    <EditionPatternReference id="SYL_795" editionPattern="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl#OrganizationalUnit" instanceId="788" patternRole="shape" userID="SYL" flexoID="795" dontGenerate="false" useSpecificDescriptions="false">
+      <ConceptActorReference id="SYL_816" objectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558#OrganizationalUnit1" patternRole="organizationUnit" userID="SYL" flexoID="816" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+      <ModelObjectActorReference id="SYL_817" objectReference="SHEMA.R&amp;DDefinition#SYL_789" patternRole="shape" userID="SYL" flexoID="817" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+      <ModelObjectActorReference id="SYL_818" objectReference="SHEMA.R&amp;DDefinition#SYL_792" patternRole="missionDescription" userID="SYL" flexoID="818" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+      <ModelObjectActorReference id="SYL_819" objectReference="SHEMA.R&amp;DDefinition#SYL_790" patternRole="missionContainer" userID="SYL" flexoID="819" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+      <ModelObjectActorReference id="SYL_820" objectReference="SHEMA.R&amp;DDefinition#SYL_791" patternRole="missionName" userID="SYL" flexoID="820" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+      <ConceptActorReference id="SYL_821" objectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558#OrganizationalUnit1Mission" patternRole="mission" userID="SYL" flexoID="821" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+    </EditionPatternReference>
+  </ContainedVEShape>
+  <EditionPatternReference id="SYL_793" editionPattern="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalMap.owl#OrganizationalUnit" instanceId="687" patternRole="diagram" userID="SYL" flexoID="793" dontGenerate="false" useSpecificDescriptions="false">
+    <ModelObjectActorReference id="SYL_822" objectReference="SHEMA.TestOrganizationMap#SYL_688" patternRole="shape" userID="SYL" flexoID="822" dontGenerate="false" useSpecificDescriptions="false" />
+    <ModelObjectActorReference id="SYL_823" objectReference="SHEMA.R&amp;DDefinition#SYL_787" patternRole="diagram" userID="SYL" flexoID="823" dontGenerate="false" useSpecificDescriptions="false" />
+    <ConceptActorReference id="SYL_824" objectURI="http://www.agilebirds.com/projects/2011/10/TestVE_1317717961558#OrganizationalUnit1" patternRole="organizationalUnit" userID="SYL" flexoID="824" dontGenerate="false" useSpecificDescriptions="false" />
+  </EditionPatternReference>
+</VEShema>
+

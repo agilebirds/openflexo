@@ -1,0 +1,37 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+*#
+#set($viewDefinitions = ${project.getShemaLibrary().getAllShemaList()})
+#set($views = ${generator.getNewVector()})
+
+#foreach($v in $viewDefinitions)
+    #void(${views.add($v.getShema())})
+#end
+
+#foreach($v in $views)
+    #if(!$v.getDontGenerate())
+	    #set($view = $v)
+		<w:p>
+			<w:r>
+				<w:t xml:space="preserve">Voici la vue </w:t>
+            </w:r>
+		</w:p>
+	    <w:p>
+		<w:r>
+			<w:pPr>
+  				<w:pageBreakBefore/>
+			</w:pPr>
+		</w:r>
+	    </w:p>
+	    #set($newEntryLevel = $level+1)
+        #set($currentTocEntry = ${generator.getNewHolder()})
+        #getCurrentTocEntry($currentTocEntry)
+        #set($currentTocEntry = ${currentTocEntry.get()})
+        #** #render($v $newEntryLevel "#getProcessTemplateNameForTocEntry($currentTocEntry)" $null) *#
+	#end
+#end 

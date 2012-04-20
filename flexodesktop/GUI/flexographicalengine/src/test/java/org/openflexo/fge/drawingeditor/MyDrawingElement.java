@@ -19,32 +19,34 @@
  */
 package org.openflexo.fge.drawingeditor;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public abstract class MyDrawingElement implements XMLSerializable, Cloneable {
+public abstract class MyDrawingElement<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation<M>> extends Observable implements
+		XMLSerializable, Cloneable, Observer {
 
-	protected MyDrawing _drawing;
-	private Vector<MyDrawingElement> childs;
-
-	public abstract GraphicalRepresentation<? extends MyDrawingElement> getGraphicalRepresentation();
+	private MyDrawing _drawing;
+	private Vector<MyDrawingElement<?, ?>> childs;
+	private G graphicalRepresentation;
 
 	public MyDrawingElement(MyDrawing drawing) {
-		childs = new Vector<MyDrawingElement>();
+		childs = new Vector<MyDrawingElement<?, ?>>();
 		_drawing = drawing;
 	}
 
-	public Vector<MyDrawingElement> getChilds() {
+	public Vector<MyDrawingElement<?, ?>> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(Vector<MyDrawingElement> someChilds) {
+	public void setChilds(Vector<MyDrawingElement<?, ?>> someChilds) {
 		childs.addAll(someChilds);
 	}
 
-	public void addToChilds(MyDrawingElement aChild) {
+	public void addToChilds(MyDrawingElement<?, ?> aChild) {
 		childs.add(aChild);
 		// System.out.println("Add "+aChild+" isDeserializing="+isDeserializing());
 		if (!isDeserializing()) {
@@ -52,12 +54,22 @@ public abstract class MyDrawingElement implements XMLSerializable, Cloneable {
 		}
 	}
 
-	public void removeFromChilds(MyDrawingElement aChild) {
+	public void removeFromChilds(MyDrawingElement<?, ?> aChild) {
 		childs.remove(aChild);
 	}
 
 	public MyDrawing getDrawing() {
 		return _drawing;
+	}
+
+	public final G getGraphicalRepresentation() {
+		return graphicalRepresentation;
+	}
+
+	public void setGraphicalRepresentation(G graphicalRepresentation) {
+		this.graphicalRepresentation = graphicalRepresentation;
+		graphicalRepresentation.setDrawable((M) this);
+		graphicalRepresentation.addObserver(this);
 	}
 
 	private boolean isDeserializing = false;
@@ -78,13 +90,20 @@ public abstract class MyDrawingElement implements XMLSerializable, Cloneable {
 	}
 
 	@Override
-	public MyDrawingElement clone() {
+	public MyDrawingElement<M, G> clone() {
 		try {
-			return (MyDrawingElement) super.clone();
+			return (MyDrawingElement<M, G>) super.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 			// cannot happen since we are clonable
 			return null;
+		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (o == getGraphicalRepresentation()) {
+			getDrawing().setChanged();
 		}
 	}
 

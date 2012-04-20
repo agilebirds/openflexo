@@ -29,7 +29,7 @@ import org.openflexo.foundation.DataModification;
 public abstract class RMDataModification extends DataModification {
 
 	public RMDataModification(Object oldValue, Object newValue) {
-		super(DataModification.RM_DM, oldValue, newValue);
+		super(oldValue, newValue);
 	}
 
 }

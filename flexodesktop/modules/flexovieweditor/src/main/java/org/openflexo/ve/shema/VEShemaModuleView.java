@@ -28,7 +28,7 @@ import javax.swing.JScrollPane;
 
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
-import org.openflexo.ve.controller.ShemaPerspective;
+import org.openflexo.ve.controller.DiagramPerspective;
 import org.openflexo.view.ModuleView;
 
 public class VEShemaModuleView extends JPanel implements ModuleView<View> {
@@ -59,8 +59,8 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View> {
 	}
 
 	@Override
-	public ShemaPerspective getPerspective() {
-		return getController().getOEController().SHEMA_PERSPECTIVE;
+	public DiagramPerspective getPerspective() {
+		return getController().getOEController().DIAGRAM_PERSPECTIVE;
 	}
 
 	public FlexoProject getProject() {

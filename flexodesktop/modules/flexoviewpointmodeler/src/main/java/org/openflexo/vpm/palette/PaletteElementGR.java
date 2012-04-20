@@ -89,10 +89,10 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPale
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean getAllowToLeaveBounds() {
 		return false;
-	}
+	}*/
 
 	@Override
 	public String getText() {

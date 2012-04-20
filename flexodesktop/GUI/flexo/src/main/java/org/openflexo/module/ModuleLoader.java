@@ -21,12 +21,14 @@ package org.openflexo.module;
 
 import java.awt.Frame;
 import java.awt.Window;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,17 +37,21 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationData;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.action.SubmitDocumentationAction;
 import org.openflexo.ch.FCH;
+import org.openflexo.components.NewProjectComponent;
+import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveDialog;
 import org.openflexo.drm.DocResourceManager;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.ProjectInitializerException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -60,7 +66,6 @@ import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.ModuleBar;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.view.menu.WindowMenu;
 
@@ -82,13 +87,10 @@ public final class ModuleLoader implements IModuleLoader {
 
 	private Module activeModule = null;
 
-	public String fileNameToOpen = null;
-
 	/**
 	 * Hashtable where are stored Module instances (instance of FlexoModule associated to a Module instance key.
 	 */
-	// TODO : make private
-	Hashtable<Module, FlexoModule> _modules = new Hashtable<Module, FlexoModule>();
+	private Hashtable<Module, FlexoModule> _modules = new Hashtable<Module, FlexoModule>();
 
 	/**
 	 * Vector of Module instance representing all available modules
@@ -118,6 +120,58 @@ public final class ModuleLoader implements IModuleLoader {
 		return _instance;
 	}
 
+	public void reloadProject() throws ProjectLoadingCancelledException, ModuleLoadingException, ProjectInitializerException {
+		if (getProject() == null) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("No project currently loaded. Returning.");
+			}
+			return;
+		}
+		openProject(getProject().getProjectDirectory(), null);
+	}
+
+	public void newProject(File projectDirectory, Module module) throws ProjectLoadingCancelledException, ModuleLoadingException {
+		if (getProject() == null || getProjectLoader().saveProject(getProject(), true)) {
+			if (projectDirectory == null) {
+				projectDirectory = NewProjectComponent.getProjectDirectory();
+			}
+			FlexoProject project = getProjectLoader().newProject(projectDirectory).getProject();
+			loadModuleWithProject(module, project);
+		}
+	}
+
+	public void openProject(File projectDirectory, Module module) throws ProjectLoadingCancelledException, ModuleLoadingException,
+			ProjectInitializerException {
+		if (getProject() == null || getProjectLoader().saveProject(getProject(), true)) {
+			if (projectDirectory == null) {
+				projectDirectory = OpenProjectComponent.getProjectDirectory();
+			}
+			FlexoEditor editor = getProjectLoader().loadProject(projectDirectory);
+			FlexoProject project = editor.getProject();
+			loadModuleWithProject(module, project);
+		}
+	}
+
+	private void loadModuleWithProject(Module module, FlexoProject project) throws ModuleLoadingException, ProjectLoadingCancelledException {
+		if (module == null) {
+			if (activeModule != null) {
+				module = activeModule;
+			} else {
+				module = new ApplicationData().getFavoriteModule();
+			}
+		}
+		ProjectLoader.instance().closeCurrentProject();
+		for (FlexoModule fm : new ArrayList<FlexoModule>(_modules.values())) {
+			fm.closeWithoutConfirmation(false);
+		}
+		switchToModule(module, project);
+		GeneralPreferences.addToLastOpenedProjects(project.getProjectDirectory());
+	}
+
+	private ProjectLoader getProjectLoader() {
+		return ProjectLoader.instance();
+	}
+
 	/**
 	 * @param moduleClass
 	 *            a module implementation class
@@ -130,8 +184,8 @@ public final class ModuleLoader implements IModuleLoader {
 			}
 		}
 		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning(("Module for " + moduleClass.getName() + " is not available in " + UserType.getCurrentUserType()
-					.getBusinessName2()));
+			logger.warning("Module for " + moduleClass.getName() + " is not available in "
+					+ UserType.getCurrentUserType().getBusinessName2());
 		}
 		return null;
 	}
@@ -185,17 +239,6 @@ public final class ModuleLoader implements IModuleLoader {
 				registerModule(module);
 			}
 		}
-		try {
-			ModuleLoader.setLookAndFeel(AdvancedPrefs.getLookAndFeelString());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
 		if (GeneralPreferences.getLanguage() != null && GeneralPreferences.getLanguage().equals(Language.FRENCH)) {
 			Locale.setDefault(Locale.FRANCE);
 		} else {
@@ -223,7 +266,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 * @return Enumeration
 	 */
 	public Enumeration<FlexoModule> loadedModules() {
-		return _modules.elements();
+		return new Vector<FlexoModule>(_modules.values()).elements();
 	}
 
 	/**
@@ -278,6 +321,9 @@ public final class ModuleLoader implements IModuleLoader {
 				logger.warning("Unable to unload unloaded module " + module.getName());
 			}
 		}
+		if (activeModule == module) {
+			activeModule = null;
+		}
 	}
 
 	private FlexoModule loadModule(Module module, FlexoProject project) throws ModuleLoadingException {
@@ -325,7 +371,7 @@ public final class ModuleLoader implements IModuleLoader {
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not load module " + module.getName() + " : exception raised " + e.getClass().getName());
 		}
-		if (logger.isLoggable(Level.WARNING) && (e.getCause() != null)) {
+		if (logger.isLoggable(Level.WARNING) && e.getCause() != null) {
 			logger.warning("Caused by " + e.getCause().getClass().getName() + " " + e.getCause().getMessage());
 			e.getCause().printStackTrace();
 		}
@@ -354,7 +400,12 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 		if (isAvailable(module)) {
 			if (isLoaded(module)) {
-				return _modules.get(module);
+				FlexoModule flexoModule = _modules.get(module);
+				if (module.requireProject() && flexoModule.getProject() != project) {
+					throw new IllegalStateException(
+							"Cannot currently switch project for a loaded module. Close the module first and then load it with the chosen project.");
+				}
+				return flexoModule;
 			} else {
 				if (module.requireProject() && project == null) {
 					throw new IllegalArgumentException("Module " + module.getName() + " needs a project. project cannot be null");
@@ -502,30 +553,6 @@ public final class ModuleLoader implements IModuleLoader {
 			logger.info("Exiting FLEXO Application Suite... DONE");
 		}
 		System.exit(0);
-	}
-
-	/**
-	 * Loads the project located within <code>projectDirectory</code> and then switches automatically to the given module
-	 * <code> moduleToReload </code> or WKFModule if moduleToReload is null or not available.
-	 * 
-	 * @param editor
-	 *            the editor for the project. Cannot be null.
-	 * @param moduleToReload
-	 *            the module to reload. Can be null.
-	 * @return the editor of the loaded project. (i.e. argument editor)
-	 * @throws ModuleLoadingException
-	 *             when the module can't be loaded (various causes)
-	 */
-	public InteractiveFlexoEditor openProjectWithModule(InteractiveFlexoEditor editor, Module moduleToReload) throws ModuleLoadingException {
-		if (editor == null) {
-			return null;
-		}
-		if (moduleToReload == null || !isAvailable(moduleToReload)) {
-			moduleToReload = Module.WKF_MODULE;
-		}
-		activeModule = null;
-		switchToModule(moduleToReload, editor.getProject());
-		return editor;
 	}
 
 	/**

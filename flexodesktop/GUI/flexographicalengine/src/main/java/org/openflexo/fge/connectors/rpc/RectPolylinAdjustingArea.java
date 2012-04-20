@@ -28,6 +28,7 @@ import java.util.Hashtable;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEIconLibrary;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
@@ -99,10 +100,10 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller) {
-		super.stopDragging(controller);
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+		super.stopDragging(controller, focusedGR);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().resetTemporaryObjects();
+			controller.getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
 			controller.getPaintManager().invalidate(getGraphicalRepresentation());
 			controller.getPaintManager().repaint(controller.getDrawingView());
 		}

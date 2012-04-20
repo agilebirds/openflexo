@@ -24,12 +24,13 @@ import java.awt.Font;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation.TextAlignment;
+import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.view.LabelView;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFAnnotation;
@@ -98,11 +99,11 @@ public class EventPalette extends AbstractWKFPalette {
 			g.useForegroundStyle(ForegroundStyle.makeStyle(Color.BLACK));
 			g.useTextStyle(TextStyle.makeTextStyle(Color.black, FONT));
 			g.drawString(FlexoLocalization.localizedForKey("start"), GLOABAL_START_X + (GLOBAL_INTER1_X - GLOABAL_START_X) / 2, TOP_Y
-					+ OFFSET, TextAlignment.CENTER);
+					+ OFFSET, HorizontalTextAlignment.CENTER);
 			g.drawString(FlexoLocalization.localizedForKey("intermediate"), GLOBAL_INTER1_X + (GLOBAL_END_X - GLOBAL_INTER1_X) / 2, TOP_Y
-					+ OFFSET - 2, TextAlignment.CENTER);
+					+ OFFSET - 2, HorizontalTextAlignment.CENTER);
 			g.drawString(FlexoLocalization.localizedForKey("end"), GLOBAL_INTER2_X + (WIDTH - GLOBAL_INTER1bis_X) / 2, TOP_Y + OFFSET,
-					TextAlignment.CENTER);
+					HorizontalTextAlignment.CENTER);
 			g.drawLine(GLOBAL_INTER1_X - OFFSET, TOP_Y, GLOBAL_INTER1_X - OFFSET, g.getHeight() - OFFSET);
 			// g.drawLine(INTER2_X-OFFSET, TOP_Y, INTER2_X-OFFSET, g.getHeight()-OFFSET);
 			g.drawLine(GLOBAL_END_X - OFFSET, TOP_Y, GLOBAL_END_X - OFFSET, g.getHeight() - OFFSET);
@@ -115,7 +116,7 @@ public class EventPalette extends AbstractWKFPalette {
 	private static int deltaY = 39;
 
 	public EventPalette() {
-		super(WIDTH, !WKFPreferences.getUseSimpleEventPalette() ? 529 : (529 - (4 * deltaY)), "event");
+		super(WIDTH, !WKFPreferences.getUseSimpleEventPalette() ? 529 : 529 - 4 * deltaY, "event");
 		eventPaletteDecorationPainter = new EventPaletteDecorationPainter();
 
 		int y = TOP_Y;
@@ -200,29 +201,19 @@ public class EventPalette extends AbstractWKFPalette {
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			y = y + deltaY;
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.Start, true), START_X, y, "Esca-\nlation");
-			if (!WKFPreferences.getUseSimpleEventPalette()) {
-				makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
-			}
+			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
 					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
-			if (!WKFPreferences.getUseSimpleEventPalette()) {
-				makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y,
-						"", DROP_ON_ACTIVITY);
-			}
+			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "",
+					DROP_ON_ACTIVITY);
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.End, false), END_X, y, "");
-		}
-
-		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			y = y + deltaY;
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.Start, true), START_X, y, "Compen-\nsation");
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
 					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.End, false), END_X, y, "");
-		}
-
-		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			y = y + deltaY;
 
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.Start, true), START_X, y, "Multiple");
@@ -231,10 +222,8 @@ public class EventPalette extends AbstractWKFPalette {
 			}
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
 					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
-			if (!WKFPreferences.getUseSimpleEventPalette()) {
-				makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y,
-						"", DROP_ON_ACTIVITY);
-			}
+			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "",
+					DROP_ON_ACTIVITY);
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.End, false), END_X, y, "");
 
@@ -272,7 +261,10 @@ public class EventPalette extends AbstractWKFPalette {
 		event.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		event.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		EventNodeGR eventNodeGR = new EventNodeGR(event, null, true);
+		LabelView<EventNode> labelMetricsProvider = new LabelView<EventNode>(eventNodeGR, null, null);
+		eventNodeGR.setLabelMetricsProvider(labelMetricsProvider);
 		int labelX = -x + eventNodeGR.getNormalizedLabelSize().width / 2;
+		labelMetricsProvider.delete();
 		event.setLabelX(labelX, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		event.setLabelY(EventNodeGR.EVENT_NODE_SIZE / 2, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		event.setDescription(FlexoLocalization.localizedForKey("doc_event_" + event.getTrigger() + "_" + event.getEventType()));

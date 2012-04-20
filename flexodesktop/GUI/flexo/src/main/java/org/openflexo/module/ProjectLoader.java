@@ -24,7 +24,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +34,6 @@ import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.ch.FCH;
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveDialog;
 import org.openflexo.foundation.param.CheckboxParameter;
@@ -92,20 +90,6 @@ public final class ProjectLoader {
 		return _instance;
 	}
 
-	public InteractiveFlexoEditor askProjectDirectoryAndLoad() throws ProjectLoadingCancelledException {
-		InteractiveFlexoEditor loadedProject = null;
-		while (loadedProject == null) {
-			File projectDirectory = OpenProjectComponent.getProjectDirectory();
-			// The following line is the default line to call when we want
-			// to open a project from a GUI (Interactive mode) so that
-			// resource update handling is properly initialized. Additional
-			// small stuffs can be performed in that call so that projects
-			// are always opened the same way.
-			loadedProject = loadProject(projectDirectory);
-		}
-		return loadedProject;
-	}
-
 	/**
 	 * Loads the project located withing <code> projectDirectory </code>. The following method is the default methode to call when opening a
 	 * project from a GUI (Interactive mode) so that resource update handling is properly initialized. Additional small stuffs can be
@@ -116,10 +100,14 @@ public final class ProjectLoader {
 	 * @return the {@link InteractiveFlexoEditor} editor if the opening succeeded else <code>null</code>
 	 * @throws org.openflexo.foundation.utils.ProjectLoadingCancelledException
 	 *             whenever the load procedure is interrupted by the user or by Flexo.
+	 * @throws ProjectInitializerException
 	 */
-	public InteractiveFlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException {
-		if (projectDirectory == null || !projectDirectory.exists()) {
-			throw new IllegalArgumentException("Project directory cannot be null and must exists.");
+	public InteractiveFlexoEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
+		if (projectDirectory == null) {
+			throw new IllegalArgumentException("Project directory cannot be null");
+		}
+		if (!projectDirectory.exists()) {
+			throw new ProjectInitializerException("project directory does not exist", projectDirectory);
 		}
 		FlexoVersion previousFlexoVersion = FlexoProjectUtil.getVersion(projectDirectory);
 		try {
@@ -163,12 +151,8 @@ public final class ProjectLoader {
 					}
 				}
 			}
-		} catch (ProjectInitializerException e) {
-			e.printStackTrace();
-			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
-					+ projectDirectory.getAbsolutePath());
+		} finally {
 			ProgressWindow.hideProgressWindow();
-			return null;
 		}
 		getAutoSaveService().conditionalStartOfAutoSaveThread(newEditor.isAutoSaveEnabledByDefault());
 		ProgressWindow.hideProgressWindow();
@@ -190,28 +174,7 @@ public final class ProjectLoader {
 				resourceUpdateHandler = new InteractiveFlexoResourceUpdateHandler(), InteractiveFlexoEditor.FACTORY,
 				getFlexoResourceCenterService().getFlexoResourceCenter());
 		getAutoSaveService().conditionalStartOfAutoSaveThread(returned.isAutoSaveEnabledByDefault());
-		// TODO : be carreful, I comment this line without knowing the effect !!!!
-		// activeModule = null;
 		return returned;
-	}
-
-	public InteractiveFlexoEditor reloadProject() throws ModuleLoadingException, ProjectLoadingCancelledException {
-		Module moduleToReload = null;
-		if (ModuleLoader.instance().getProject() != null) {
-			moduleToReload = FlexoModule.getActiveModule().getModule();
-			if (!saveProject(ModuleLoader.instance().getProject(), true)) {
-				return null;
-			}
-		}
-		File projectDirectory = ModuleLoader.instance().getProject().getProjectDirectory();
-		if (projectDirectory != null) {
-			closeCurrentProject();
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Chosen " + projectDirectory.getAbsolutePath());
-			}
-			return ModuleLoader.instance().openProjectWithModule(loadProject(projectDirectory), moduleToReload);
-		}
-		return null;
 	}
 
 	public void closeCurrentProject() {
@@ -225,8 +188,7 @@ public final class ProjectLoader {
 			_rmWindow.dispose();
 			_rmWindow = null;
 		}
-		for (Enumeration<FlexoModule> e = new Hashtable<Module, FlexoModule>(ModuleLoader.instance()._modules).elements(); e
-				.hasMoreElements();) {
+		for (Enumeration<FlexoModule> e = ModuleLoader.instance().loadedModules(); e.hasMoreElements();) {
 			FlexoModule mod = e.nextElement();
 			mod.closeWithoutConfirmation(false);
 		}
@@ -484,7 +446,7 @@ public final class ProjectLoader {
 				doSaveProject(project);
 				return true;
 			} catch (SaveResourcePermissionDeniedException e) {
-				informUserAboutPermissionDeniedException((SaveResourcePermissionDeniedException) e);
+				informUserAboutPermissionDeniedException(e);
 				return false;
 			} catch (SaveResourceException e) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
@@ -516,7 +478,9 @@ public final class ProjectLoader {
 	 *            the project
 	 */
 	private void checkExternalRepositories(FlexoProject project) {
-		if (!UserType.isMaintainerRelease() && !UserType.isDevelopperRelease()) {
+		// Removed unnecessary blocking dialog. Most users asks that all stay disconnected.
+		// The code is left if we want to roll back this change.
+		if (true /*!UserType.isMaintainerRelease() && !UserType.isDevelopperRelease()*/) {
 			return;
 		}
 		for (ProjectExternalRepository repository : project.getExternalRepositories()) {
@@ -536,7 +500,7 @@ public final class ProjectLoader {
 					String CONNECT = FlexoLocalization.localizedForKey("connect_to_local_directory");
 					String[] choices = { KEEP_DISCONNECTED, KEEP_ALL_DISCONNECTED, CONNECT };
 					RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice",
-							"what_would_you_like_to_do", CONNECT, choices);
+							"what_would_you_like_to_do", KEEP_ALL_DISCONNECTED, choices);
 					DirectoryParameter dirParam = new DirectoryParameter("directory", "directory", repository.getDirectory());
 					dirParam.setDepends("choice");
 					dirParam.setConditional("choice=" + '"' + CONNECT + '"');

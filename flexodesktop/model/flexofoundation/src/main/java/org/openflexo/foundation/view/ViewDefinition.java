@@ -87,6 +87,14 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 	}
 
 	@Override
+	public void delete() {
+		if (getFolder() != null) {
+			getFolder().removeFromShemas(this);
+		}
+		super.delete();
+	}
+
+	@Override
 	public String getName() {
 		return _shemaName;
 	}

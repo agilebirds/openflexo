@@ -48,6 +48,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.ModelEntity;
 import org.openflexo.xmlcode.ModelProperty;
 import org.openflexo.xmlcode.SerializationHandler;
+import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -116,6 +117,8 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		if (_resourceData == null) {
 			try {
 				_resourceData = loadResourceData(progress, getLoadingHandler());
+				// Now that the resource is loaded, we try to resolve pending EP refs
+				getProject().resolvePendingEditionPatternReferences();
 			} catch (LoadXMLResourceException e) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.WARNING)) {
@@ -832,7 +835,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			FlexoXMLSerializableObject dataToSerialize = (FlexoXMLSerializableObject) getResourceData();
 			dataToSerialize.initializeSerialization();
 			XMLCoder.encodeObjectWithMapping(dataToSerialize, getXmlMappings()
-					.getMappingForClassAndVersion(getResourceDataClass(), version), out, getProject().getStringEncoder(), handler);
+					.getMappingForClassAndVersion(getResourceDataClass(), version), out, getStringEncoder(), handler);
 			dataToSerialize.finalizeSerialization();
 			out.flush();
 			out.close();
@@ -843,6 +846,11 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			}
 			out = null;
 		}
+	}
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		return getProject().getStringEncoder();
 	}
 
 	protected abstract boolean isDuplicateSerializationIdentifierRepairable();
@@ -872,7 +880,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			if (hasBuilder() && mapping.hasBuilderClass()) {
 				if (getProject() != null) {
 					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, instanciateNewBuilder(),
-							getProject().getStringEncoder());
+							getStringEncoder());
 				} else {
 					if (!(this instanceof FlexoRMResource)) {
 						if (logger.isLoggable(Level.WARNING)) {
@@ -883,16 +891,16 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				}
 			} else {
 				if (getProject() != null) {
-					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getProject()
-							.getStringEncoder());
+					returned = (XMLRD) XMLDecoder
+							.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getStringEncoder());
 				} else {
 					if (!(this instanceof FlexoRMResource)) {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Project is not set on " + this.getFullyQualifiedName());
 						}
 					}
-					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getProject()
-							.getStringEncoder());
+					returned = (XMLRD) XMLDecoder
+							.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getStringEncoder());
 				}
 			}
 			if (logger.isLoggable(Level.FINE)) {
@@ -947,7 +955,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 	public String getResourceXMLRepresentation() throws XMLOperationException {
 		try {
-			return XMLCoder.encodeObjectWithMapping(getXMLResourceData(), getCurrentMapping(), getProject().getStringEncoder(), null);
+			return XMLCoder.encodeObjectWithMapping(getXMLResourceData(), getCurrentMapping(), getStringEncoder(), null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new XMLOperationException(e, _currentVersion);
@@ -1089,33 +1097,38 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 		@Override
 		public String getMessage() {
-			String returned = "LoadXMLResourceException caused by multiple exceptions:\n";
+			if (loadResourceExceptions.size() == 0) {
+				return super.getMessage();
+			}
+			StringBuilder sb = new StringBuilder("LoadXMLResourceException caused by multiple exceptions:\n");
 			for (XMLOperationException temp : loadResourceExceptions) {
-				returned += "Trying to load with version " + temp.getVersion() + " exception raised: " + temp.getMessage() + "\n";
+				sb.append("Trying to load with version ").append(temp.getVersion()).append(" exception raised: ").append(temp.getMessage())
+						.append('\n');
 				temp.exception.printStackTrace();
 			}
-			return returned;
+			return sb.toString();
 		}
 
 		public String getExtendedMessage() {
-			String returned = "LoadXMLResourceException caused by multiple exceptions:\n";
+			StringBuilder sb = new StringBuilder("LoadXMLResourceException caused by multiple exceptions:\n");
 			for (XMLOperationException temp : loadResourceExceptions) {
-				returned += "Trying to load with version " + temp.getVersion() + " exception raised: " + temp.getMessage() + "\n";
-				returned += "StackTrace:\n";
+				sb.append("Trying to load with version ").append(temp.getVersion()).append(" exception raised: ").append(temp.getMessage())
+						.append('\n');
+				sb.append("StackTrace:\n");
 				if (temp.getException().getStackTrace() != null) {
 					for (int i = 0; i < temp.getException().getStackTrace().length; i++) {
-						returned += "\tat " + temp.getException().getStackTrace()[i] + "\n";
+						sb.append("\tat ").append(temp.getException().getStackTrace()[i]).append('\n');
 					}
 				}
 				if (temp.getException() instanceof AccessorInvocationException) {
-					returned += "Caused by :\n";
+					sb.append("Caused by :\n");
 					for (int i = 0; i < ((AccessorInvocationException) temp.getException()).getTargetException().getStackTrace().length; i++) {
-						returned += "\tat " + ((AccessorInvocationException) temp.getException()).getTargetException().getStackTrace()[i]
-								+ "\n";
+						sb.append("\tat " + ((AccessorInvocationException) temp.getException()).getTargetException().getStackTrace()[i])
+								.append('\n');
 					}
 				}
 			}
-			return returned;
+			return sb.toString();
 		}
 	}
 

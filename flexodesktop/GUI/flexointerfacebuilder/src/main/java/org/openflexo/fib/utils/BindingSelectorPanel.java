@@ -25,7 +25,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -961,7 +960,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		// Set connect button state
 		_connectButton.setEnabled(binding != null && binding.isBindingValid());
 		/*if (!binding.isBindingValid()) {
-			logger.info("Binding NOT valid: "+binding);
+			logger.info("Binding NOT valid: " + binding);
 			binding.debugIsBindingValid();
 		}*/
 		if (binding != null && binding.isBindingValid()) {
@@ -1645,11 +1644,23 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	protected class BindingSelectorCellRenderer extends DefaultListCellRenderer {
 
+		private JPanel panel;
+		private JLabel iconLabel;
+
+		public BindingSelectorCellRenderer() {
+			panel = new JPanel(new BorderLayout());
+			iconLabel = new JLabel();
+			panel.add(iconLabel, BorderLayout.EAST);
+			panel.add(this);
+		}
+
 		@Override
 		public Component getListCellRendererComponent(JList list, Object bce, int index, boolean isSelected, boolean cellHasFocus) {
-			Component returned = super.getListCellRendererComponent(list, bce, index, isSelected, cellHasFocus);
+			JComponent returned = (JComponent) super.getListCellRendererComponent(list, bce, index, isSelected, cellHasFocus);
 			if (returned instanceof JLabel) {
 				JLabel label = (JLabel) returned;
+				label.setToolTipText(null);
+				iconLabel.setVisible(false);
 				if (bce instanceof BindingColumnElement) {
 					BindingColumnElement columnElement = (BindingColumnElement) bce;
 					// Class resultingTypeBaseClass =
@@ -1657,10 +1668,10 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					Type resultingType = columnElement.getResultingType();
 					label.setText(columnElement.getLabel());
 					if (!(columnElement.getElement() instanceof FinalBindingPathElement)) {
-						setIcon(label, FIBIconLibrary.ARROW_RIGHT_ICON, list);
+						returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 					}
 					if (columnElement.getElement().getType() != null) {
-						label.setToolTipText(columnElement.getTooltipText());
+						returned.setToolTipText(columnElement.getTooltipText());
 					} else {
 						label.setForeground(Color.GRAY);
 					}
@@ -1670,13 +1681,13 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 						BindingValue bindingValue = (BindingValue) binding;
 						if (bindingValue.isConnected()
 								&& bindingValue.isLastBindingPathElement(columnElement.getElement(), _lists.indexOf(list) - 1)) {
-							setIcon(label, FIBIconLibrary.CONNECTED_ICON, list);
+							returned = getIconLabelComponent(label, FIBIconLibrary.CONNECTED_ICON);
 						} else if (columnElement.getResultingType() != null) {
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && _bindingSelector.getBindable() != null) {
 								// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
 								if (_bindingSelector.getBindable().getBindingFactory()
 										.getAccessibleBindingPathElements(columnElement.getElement()).size() > 0) {
-									setIcon(label, FIBIconLibrary.ARROW_RIGHT_ICON, list);
+									returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 								} else {
 									if (_bindingSelector.getBindingDefinition() != null
 											&& _bindingSelector.getBindingDefinition().getType() != null
@@ -1797,14 +1808,16 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			return returned;
 		}
 
-		private void setIcon(JLabel label, Icon icon, JList list) {
-			label.setIcon(icon);
-			label.setHorizontalAlignment(SwingConstants.LEFT);
-			label.setHorizontalTextPosition(SwingConstants.LEFT);
-			FontMetrics fm = label.getFontMetrics(label.getFont());
-			int labelLength = fm.stringWidth(label.getText() == null ? "" : label.getText());
-			// System.out.println("gap="+(list.getWidth() - 20 - labelLength));
-			label.setIconTextGap(list.getWidth() - 20 - labelLength);
+		private JComponent getIconLabelComponent(JLabel label, Icon icon) {
+			iconLabel.setVisible(true);
+			iconLabel.setIcon(icon);
+			iconLabel.setOpaque(label.isOpaque());
+			iconLabel.setBackground(label.getBackground());
+			panel.setToolTipText(label.getToolTipText());
+			if (label.getParent() != panel) {
+				panel.add(label);
+			}
+			return panel;
 		}
 	}
 
@@ -1814,9 +1827,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
+
 		AbstractBinding bindingValue = _bindingSelector.getEditedObject();
 		if (bindingValue == null) {
 			if (_bindingSelector.getBindingDefinition() != null && _bindingSelector.getBindable() != null) {

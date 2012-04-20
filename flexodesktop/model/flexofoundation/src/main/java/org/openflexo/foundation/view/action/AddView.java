@@ -78,7 +78,9 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 
 	public boolean useViewPoint = true;
 	public String newViewName;
-	public ViewPoint calc;
+	public ViewPoint viewpoint;
+
+	public boolean skipChoosePopup = false;
 
 	AddView(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -101,7 +103,7 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 
 		_newShema = new ViewDefinition(newViewName, getFolder().getShemaLibrary(), getFolder(), getProject(), true);
 		if (useViewPoint) {
-			_newShema.setCalc(calc);
+			_newShema.setCalc(viewpoint);
 		}
 		logger.info("Added view " + _newShema + " for project " + _newShema.getProject());
 		// Creates the resource here
@@ -115,7 +117,7 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 		return null;
 	}
 
-	public ViewDefinition getNewShema() {
+	public ViewDefinition getNewDiagram() {
 		return _newShema;
 	}
 
@@ -150,7 +152,7 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 		if (getFolder() == null) {
 			errorMessage = FlexoLocalization.localizedForKey("no_folder_defined");
 			return false;
-		} else if (calc == null && useViewPoint) {
+		} else if (viewpoint == null && useViewPoint) {
 			errorMessage = FlexoLocalization.localizedForKey("no_view_point_selected");
 			return false;
 		}

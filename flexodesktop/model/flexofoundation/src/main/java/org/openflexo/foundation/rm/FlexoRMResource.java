@@ -37,6 +37,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -151,7 +152,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				project = _resourceData;
 			} else {
 				try {
-					project = loadProject(null, getLoadingHandler());
+					logger.warning("You should retrieve a ResourceCenter here !!!");
+					project = loadProject(null, getLoadingHandler(), null);
 				} catch (ProjectLoadingCancelledException e) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.log(Level.WARNING, "Project loading cancel exception.", e);
@@ -237,8 +239,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 		return isInitializingProject;
 	}
 
-	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws RuntimeException,
-			ProjectLoadingCancelledException {
+	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler, FlexoResourceCenter resourceCenter)
+			throws RuntimeException, ProjectLoadingCancelledException {
 		FlexoRMResource rmRes = null;
 		try {
 			isInitializingProject = true;
@@ -265,6 +267,11 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				_loadProjectProgress = null;
 				return null;
 			}
+
+			if (resourceCenter != null) {
+				project.setResourceCenter(resourceCenter);
+			}
+
 			//
 			// !!!!!!!!!!!!!! BE CAREFUL BIG TRICK HERE !!!!!!!!!!!!!!!!
 			// We have here initialized a new RM resource in order to
@@ -626,6 +633,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 				getProject().checkResourceIntegrity();
 			}
 			super.saveResourceData(clearIsModified);
+			if (getProject() != null) {
+				getProject().writeDotVersion();
+			}
 			saveTSFile();
 			if (!isInitializingProject && getProject() != null) {
 				getProject().deleteFilesToBeDeleted();

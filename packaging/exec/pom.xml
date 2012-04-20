@@ -16,13 +16,12 @@
         <module>flexobusiness</module>
         <module>flexobusinessplus</module>
         <module>flexoenterprise</module>
-        <module>flexomaintainer</module>
         <module>flexosemantics</module>
         <module>flexosemanticsplus</module>
     </modules>
     <properties>
         <main.class>org.openflexo.Flexo</main.class>
-        <vm.args>-Xmx512M</vm.args>
+        <vm.args>-Xmx512M -XX:MaxPermSize=128M</vm.args>
         <logging.args>-Djava.util.logging.config.file=Config/logging.properties</logging.args>
         <debug.args></debug.args>
     </properties>

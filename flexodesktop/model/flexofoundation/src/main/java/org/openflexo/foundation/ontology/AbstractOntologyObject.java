@@ -40,6 +40,22 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 		return null;
 	}
 
+	/**
+	 * @return Returns the flexoID.
+	 */
+	@Override
+	public long getFlexoID() {
+		if (isBeingCloned()) {
+			return -1;
+		}
+		if (getFlexoOntology() instanceof ImportedOntology) {
+			// Special case for ontology objects declared in imported ontology
+			// They are not linked to any project and have no FlexoID
+			return -3;
+		}
+		return super.getFlexoID();
+	}
+
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
 		return null;

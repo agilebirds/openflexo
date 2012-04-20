@@ -110,11 +110,11 @@
   	 <property name="isMultilineAllowed" xmlTag="isMultilineAllowed" attribute="YES"/>
   	 <property name="continuousTextEditing" xmlTag="continuousTextEditing" attribute="YES"/>
  	 <property name="textStyle" xmlTag="TextStyle"/>
-  	 <property name="relativeTextX" xmlTag="relativeTextX" attribute="YES"/>
-  	 <property name="relativeTextY" xmlTag="relativeTextY" attribute="YES"/>
   	 <property name="absoluteTextX" xmlTag="absoluteTextX" attribute="YES"/>
   	 <property name="absoluteTextY" xmlTag="absoluteTextY" attribute="YES"/>
-  	 <property name="textAlignment" xmlTag="textAlignment" attribute="YES"/>
+     <property name="paragraphAlignment" xmlTag="paragraphAlignment" attribute="YES"/>
+     <property name="horizontalTextAlignment" xmlTag="horizontalTextAlignment" attribute="YES"/>
+     <property name="verticalTextAlignment" xmlTag="verticalTextAlignment" attribute="YES"/>
   	 <property name="isSelectable" xmlTag="isSelectable" attribute="YES"/>
   	 <property name="isFocusable" xmlTag="isFocusable" attribute="YES"/>
   	 <property name="drawControlPointsWhenFocused" xmlTag="drawControlPointsWhenFocused" attribute="YES"/>
@@ -153,6 +153,9 @@
    	 <property name="minimalHeight" xmlTag="minimalHeight" attribute="YES"/>
    	 <property name="maximalWidth" xmlTag="maximalWidth" attribute="YES"/>
    	 <property name="maximalHeight" xmlTag="maximalHeight" attribute="YES"/>
+     <property name="relativeTextX" xmlTag="relativeTextX" attribute="YES"/>
+     <property name="relativeTextY" xmlTag="relativeTextY" attribute="YES"/>
+     <property name="lineWrap" xmlTag="lineWrap" attribute="YES"/>
   	 <property name="locationConstraints" xmlTag="locationConstraints" attribute="YES"/>
   	 <property name="dimensionConstraints" xmlTag="dimensionConstraints" attribute="YES"/>
    	 <property name="adjustMinimalWidthToLabelWidth" xmlTag="adjustMinimalWidthToLabelWidth" attribute="YES"/>

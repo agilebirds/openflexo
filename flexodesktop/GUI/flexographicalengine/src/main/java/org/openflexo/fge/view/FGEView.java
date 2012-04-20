@@ -36,6 +36,8 @@ public interface FGEView<O> extends Observer, FGEConstants {
 
 	public DrawingView<?> getDrawingView();
 
+	public LabelView<O> getLabelView();
+
 	public double getScale();
 
 	public void registerPalette(DrawingPalette aPalette);
@@ -45,4 +47,6 @@ public interface FGEView<O> extends Observer, FGEConstants {
 	public void delete();
 
 	public boolean isDeleted();
+
+	public void rescale();
 }

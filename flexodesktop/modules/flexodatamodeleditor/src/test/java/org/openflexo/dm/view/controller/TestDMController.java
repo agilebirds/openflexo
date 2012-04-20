@@ -25,9 +25,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.security.auth.login.FailedLoginException;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.Flexo;
 import org.openflexo.FlexoModuleTestCase;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.dm.DMModule;
@@ -37,10 +37,8 @@ import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
-import org.openflexo.module.UserType;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.toolbox.ToolBox;
 
@@ -124,10 +122,10 @@ public class TestDMController extends FlexoModuleTestCase {
 		if (GeneralPreferences.getFavoriteModuleName() == null) {
 			GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		}
-		getModuleLoader().fileNameToOpen = projectDirectory.getAbsolutePath();
+		Flexo.setFileNameToOpen(projectDirectory.getAbsolutePath());
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");
-		} else
+		} else {
 			try {
 				if (ExternalModuleDelegater.getModuleLoader().getDMModuleInstance(project) == null) {
 					fail("WKF Module not on the classpath. Component screenshots cannot be generated");
@@ -136,6 +134,7 @@ public class TestDMController extends FlexoModuleTestCase {
 				fail("Fail to load WKF module. Component screenshots cannot be generated" + e.getMessage());
 				e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
 			}
+		}
 	}
 
 	/**

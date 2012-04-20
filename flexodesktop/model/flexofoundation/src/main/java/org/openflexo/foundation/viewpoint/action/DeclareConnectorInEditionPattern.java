@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -49,6 +50,7 @@ import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
+import org.openflexo.foundation.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -101,8 +103,10 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 	private String editionPatternName;
 	private OntologyClass concept;
+	private OntologyObjectProperty objectProperty;
 	private String individualPatternRoleName;
 	private String connectorPatternRoleName;
+	private String objectPropertyStatementPatternRoleName;
 
 	public EditionPattern fromEditionPattern;
 	public EditionPattern toEditionPattern;
@@ -131,226 +135,235 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				}
 				break;
 			case CREATES_EDITION_PATTERN:
-				switch (patternChoice) {
-				case MAP_SINGLE_INDIVIDUAL:
-				case BLANK_EDITION_PATTERN:
 
-					// Create new edition pattern
-					newEditionPattern = new EditionPattern();
-					newEditionPattern.setName(getEditionPatternName());
+				// Create new edition pattern
+				newEditionPattern = new EditionPattern();
+				newEditionPattern.setName(getEditionPatternName());
 
-					// Find best URI base candidate
-					PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
+				// Find best URI base candidate
+				PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
 
-					// Create individual pattern role
-					IndividualPatternRole individualPatternRole = new IndividualPatternRole();
-					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
-						individualPatternRole.setOntologicType(getConcept());
-						newEditionPattern.addToPatternRoles(individualPatternRole);
-						newEditionPattern.setPrimaryConceptRole(individualPatternRole);
-					}
-
-					// Create connector pattern role
-					newConnectorPatternRole = new ConnectorPatternRole();
-					newConnectorPatternRole.setPatternRoleName(getConnectorPatternRoleName());
-					if (mainPropertyDescriptor != null) {
-						newConnectorPatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
-								+ mainPropertyDescriptor.property.getName()));
-					} else {
-						newConnectorPatternRole.setReadOnlyLabel(true);
-						newConnectorPatternRole.setLabel(new ViewPointDataBinding("\"label\""));
-					}
-					newConnectorPatternRole.setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
-					newEditionPattern.addToPatternRoles(newConnectorPatternRole);
-					newEditionPattern.setPrimaryRepresentationRole(newConnectorPatternRole);
-
-					// Create other individual roles
-					Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
-					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						for (PropertyEntry e : propertyEntries) {
-							if (e.selectEntry) {
-								if (e.property instanceof OntologyObjectProperty) {
-									OntologyObject range = e.property.getRange();
-									if (range instanceof OntologyClass) {
-										IndividualPatternRole newPatternRole = new IndividualPatternRole();
-										newPatternRole.setPatternRoleName(e.property.getName());
-										newPatternRole.setOntologicType((OntologyClass) range);
-										newEditionPattern.addToPatternRoles(newPatternRole);
-										otherRoles.add(newPatternRole);
-									}
-								}
-							}
-						}
-					}
-
-					// Create new link scheme
-					LinkScheme newLinkScheme = new LinkScheme();
-					newLinkScheme.setName(getLinkSchemeName());
-					newLinkScheme.setFromTargetEditionPattern(fromEditionPattern);
-					newLinkScheme.setToTargetEditionPattern(toEditionPattern);
-
-					// Parameters
-					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
-						for (PropertyEntry e : propertyEntries) {
-							if (e.selectEntry) {
-								EditionSchemeParameter newParameter = null;
-								if (e.property instanceof OntologyDataProperty) {
-									switch (((OntologyDataProperty) e.property).getDataType()) {
-									case Boolean:
-										newParameter = new CheckboxParameter();
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										break;
-									case Byte:
-									case Integer:
-									case Long:
-									case Short:
-										newParameter = new IntegerParameter();
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										break;
-									case Double:
-									case Float:
-										newParameter = new FloatParameter();
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										break;
-									case String:
-										newParameter = new TextFieldParameter();
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										break;
-									default:
-										break;
-									}
-								} else if (e.property instanceof OntologyObjectProperty) {
-									OntologyObject range = e.property.getRange();
-									if (range instanceof OntologyClass) {
-										newParameter = new IndividualParameter();
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										((IndividualParameter) newParameter).setConcept((OntologyClass) range);
-									}
-								}
-								if (newParameter != null) {
-									newLinkScheme.addToParameters(newParameter);
-								}
-							}
-						}
-
-						URIParameter uriParameter = new URIParameter();
-						uriParameter.setName("uri");
-						uriParameter.setLabel("uri");
-						if (mainPropertyDescriptor != null) {
-							uriParameter.setBaseURI(new ViewPointDataBinding(mainPropertyDescriptor.property.getName()));
-						}
-						newLinkScheme.addToParameters(uriParameter);
-
-						// Declare pattern role
-						for (IndividualPatternRole r : otherRoles) {
-							DeclarePatternRole action = new DeclarePatternRole();
-							action.setPatternRole(r);
-							action.setObject(new ViewPointDataBinding("parameters." + r.getName()));
-							newLinkScheme.addToActions(action);
-						}
-
-						// Add individual action
-						AddIndividual newAddIndividual = new AddIndividual();
-						newAddIndividual.setPatternRole(individualPatternRole);
-						newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
-						for (PropertyEntry e : propertyEntries) {
-							if (e.selectEntry) {
-								if (e.property instanceof OntologyObjectProperty) {
-									OntologyObject range = e.property.getRange();
-									if (range instanceof OntologyClass) {
-										ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion();
-										propertyAssertion.setOntologyProperty(e.property);
-										propertyAssertion.setObject(new ViewPointDataBinding("parameters." + e.property.getName()));
-										newAddIndividual.addToObjectAssertions(propertyAssertion);
-									}
-								} else if (e.property instanceof OntologyDataProperty) {
-									DataPropertyAssertion propertyAssertion = new DataPropertyAssertion();
-									propertyAssertion.setOntologyProperty(e.property);
-									propertyAssertion.setValue(new ViewPointDataBinding("parameters." + e.property.getName()));
-									newAddIndividual.addToDataAssertions(propertyAssertion);
-								}
-							}
-						}
-						newLinkScheme.addToActions(newAddIndividual);
-					}
-
-					// Add connector action
-					AddConnector newAddConnector = new AddConnector();
-					newAddConnector.setPatternRole(newConnectorPatternRole);
-					newAddConnector.setFromShape(new ViewPointDataBinding(EditionScheme.FROM_TARGET + "."
-							+ fromEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-					newAddConnector.setToShape(new ViewPointDataBinding(EditionScheme.TO_TARGET + "."
-							+ toEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-
-					newLinkScheme.addToActions(newAddConnector);
-
-					// Add new drop scheme
-					newEditionPattern.addToEditionSchemes(newLinkScheme);
-
-					// Add inspector
-					EditionPatternInspector inspector = newEditionPattern.getInspector();
-					inspector.setInspectorTitle(getEditionPatternName());
-					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						for (PropertyEntry e : propertyEntries) {
-							if (e.selectEntry) {
-								if (e.property instanceof OntologyObjectProperty) {
-									OntologyObject range = e.property.getRange();
-									if (range instanceof OntologyClass) {
-										InspectorEntry newInspectorEntry = null;
-										newInspectorEntry = new TextFieldInspectorEntry();
-										newInspectorEntry.setName(e.property.getName());
-										newInspectorEntry.setLabel(e.label);
-										newInspectorEntry.setIsReadOnly(true);
-										newInspectorEntry.setData(new ViewPointDataBinding(e.property.getName() + ".uriName"));
-										inspector.addToEntries(newInspectorEntry);
-									}
-								} else if (e.property instanceof OntologyDataProperty) {
-									InspectorEntry newInspectorEntry = null;
-									switch (((OntologyDataProperty) e.property).getDataType()) {
-									case Boolean:
-										newInspectorEntry = new CheckboxInspectorEntry();
-										break;
-									case Byte:
-									case Integer:
-									case Long:
-									case Short:
-										newInspectorEntry = new IntegerInspectorEntry();
-										break;
-									case Double:
-									case Float:
-										newInspectorEntry = new FloatInspectorEntry();
-										break;
-									case String:
-										newInspectorEntry = new TextFieldInspectorEntry();
-										break;
-									default:
-										logger.warning("Not handled: " + ((OntologyDataProperty) e.property).getDataType());
-									}
-									if (newInspectorEntry != null) {
-										newInspectorEntry.setName(e.property.getName());
-										newInspectorEntry.setLabel(e.label);
-										newInspectorEntry.setData(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
-												+ e.property.getName()));
-										inspector.addToEntries(newInspectorEntry);
-									}
-								}
-							}
-						}
-					}
-
-					// And add the newly created edition pattern
-					getFocusedObject().getCalc().addToEditionPatterns(newEditionPattern);
-
-				default:
-					break;
+				// Create individual pattern role if required
+				IndividualPatternRole individualPatternRole = null;
+				if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
+					individualPatternRole = new IndividualPatternRole();
+					individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
+					individualPatternRole.setOntologicType(getConcept());
+					newEditionPattern.addToPatternRoles(individualPatternRole);
+					newEditionPattern.setPrimaryConceptRole(individualPatternRole);
 				}
+
+				// Create individual pattern role if required
+				ObjectPropertyStatementPatternRole objectPropertyStatementPatternRole = null;
+				if (patternChoice == NewEditionPatternChoices.MAP_OBJECT_PROPERTY) {
+					objectPropertyStatementPatternRole = new ObjectPropertyStatementPatternRole();
+					objectPropertyStatementPatternRole.setPatternRoleName(getObjectPropertyStatementPatternRoleName());
+					objectPropertyStatementPatternRole.setObjectProperty(getObjectProperty());
+					newEditionPattern.addToPatternRoles(objectPropertyStatementPatternRole);
+					newEditionPattern.setPrimaryConceptRole(objectPropertyStatementPatternRole);
+				}
+
+				// Create connector pattern role
+				newConnectorPatternRole = new ConnectorPatternRole();
+				newConnectorPatternRole.setPatternRoleName(getConnectorPatternRoleName());
+				if (mainPropertyDescriptor != null) {
+					newConnectorPatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
+							+ mainPropertyDescriptor.property.getName()));
+				} else {
+					newConnectorPatternRole.setReadOnlyLabel(true);
+					newConnectorPatternRole.setLabel(new ViewPointDataBinding("\"label\""));
+					newConnectorPatternRole.setExampleLabel(((ConnectorGraphicalRepresentation) getFocusedObject()
+							.getGraphicalRepresentation()).getText());
+				}
+				// We clone here the GR (fixed unfocusable GR bug)
+				newConnectorPatternRole.setGraphicalRepresentation(((ConnectorGraphicalRepresentation<?>) getFocusedObject()
+						.getGraphicalRepresentation()).clone());
+				newEditionPattern.addToPatternRoles(newConnectorPatternRole);
+				newEditionPattern.setPrimaryRepresentationRole(newConnectorPatternRole);
+
+				// Create other individual roles
+				Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
+				if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
+					for (PropertyEntry e : propertyEntries) {
+						if (e.selectEntry) {
+							if (e.property instanceof OntologyObjectProperty) {
+								OntologyObject range = e.property.getRange();
+								if (range instanceof OntologyClass) {
+									IndividualPatternRole newPatternRole = new IndividualPatternRole();
+									newPatternRole.setPatternRoleName(e.property.getName());
+									newPatternRole.setOntologicType((OntologyClass) range);
+									newEditionPattern.addToPatternRoles(newPatternRole);
+									otherRoles.add(newPatternRole);
+								}
+							}
+						}
+					}
+				}
+
+				// Create new link scheme
+				LinkScheme newLinkScheme = new LinkScheme();
+				newLinkScheme.setName(getLinkSchemeName());
+				newLinkScheme.setFromTargetEditionPattern(fromEditionPattern);
+				newLinkScheme.setToTargetEditionPattern(toEditionPattern);
+
+				// Parameters
+				if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
+					Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
+					for (PropertyEntry e : propertyEntries) {
+						if (e.selectEntry) {
+							EditionSchemeParameter newParameter = null;
+							if (e.property instanceof OntologyDataProperty) {
+								switch (((OntologyDataProperty) e.property).getDataType()) {
+								case Boolean:
+									newParameter = new CheckboxParameter();
+									newParameter.setName(e.property.getName());
+									newParameter.setLabel(e.label);
+									break;
+								case Byte:
+								case Integer:
+								case Long:
+								case Short:
+									newParameter = new IntegerParameter();
+									newParameter.setName(e.property.getName());
+									newParameter.setLabel(e.label);
+									break;
+								case Double:
+								case Float:
+									newParameter = new FloatParameter();
+									newParameter.setName(e.property.getName());
+									newParameter.setLabel(e.label);
+									break;
+								case String:
+									newParameter = new TextFieldParameter();
+									newParameter.setName(e.property.getName());
+									newParameter.setLabel(e.label);
+									break;
+								default:
+									break;
+								}
+							} else if (e.property instanceof OntologyObjectProperty) {
+								OntologyObject range = e.property.getRange();
+								if (range instanceof OntologyClass) {
+									newParameter = new IndividualParameter();
+									newParameter.setName(e.property.getName());
+									newParameter.setLabel(e.label);
+									((IndividualParameter) newParameter).setConcept((OntologyClass) range);
+								}
+							}
+							if (newParameter != null) {
+								newLinkScheme.addToParameters(newParameter);
+							}
+						}
+					}
+
+					URIParameter uriParameter = new URIParameter();
+					uriParameter.setName("uri");
+					uriParameter.setLabel("uri");
+					if (mainPropertyDescriptor != null) {
+						uriParameter.setBaseURI(new ViewPointDataBinding(mainPropertyDescriptor.property.getName()));
+					}
+					newLinkScheme.addToParameters(uriParameter);
+
+					// Declare pattern role
+					for (IndividualPatternRole r : otherRoles) {
+						DeclarePatternRole action = new DeclarePatternRole();
+						action.setPatternRole(r);
+						action.setObject(new ViewPointDataBinding("parameters." + r.getName()));
+						newLinkScheme.addToActions(action);
+					}
+
+					// Add individual action
+					AddIndividual newAddIndividual = new AddIndividual();
+					newAddIndividual.setPatternRole(individualPatternRole);
+					newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
+					for (PropertyEntry e : propertyEntries) {
+						if (e.selectEntry) {
+							if (e.property instanceof OntologyObjectProperty) {
+								OntologyObject range = e.property.getRange();
+								if (range instanceof OntologyClass) {
+									ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion();
+									propertyAssertion.setOntologyProperty(e.property);
+									propertyAssertion.setObject(new ViewPointDataBinding("parameters." + e.property.getName()));
+									newAddIndividual.addToObjectAssertions(propertyAssertion);
+								}
+							} else if (e.property instanceof OntologyDataProperty) {
+								DataPropertyAssertion propertyAssertion = new DataPropertyAssertion();
+								propertyAssertion.setOntologyProperty(e.property);
+								propertyAssertion.setValue(new ViewPointDataBinding("parameters." + e.property.getName()));
+								newAddIndividual.addToDataAssertions(propertyAssertion);
+							}
+						}
+					}
+					newLinkScheme.addToActions(newAddIndividual);
+				}
+
+				// Add connector action
+				AddConnector newAddConnector = new AddConnector();
+				newAddConnector.setPatternRole(newConnectorPatternRole);
+				newAddConnector.setFromShape(new ViewPointDataBinding(EditionScheme.FROM_TARGET + "."
+						+ fromEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+				newAddConnector.setToShape(new ViewPointDataBinding(EditionScheme.TO_TARGET + "."
+						+ toEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+
+				newLinkScheme.addToActions(newAddConnector);
+
+				// Add new drop scheme
+				newEditionPattern.addToEditionSchemes(newLinkScheme);
+
+				// Add inspector
+				EditionPatternInspector inspector = newEditionPattern.getInspector();
+				inspector.setInspectorTitle(getEditionPatternName());
+				if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
+					for (PropertyEntry e : propertyEntries) {
+						if (e.selectEntry) {
+							if (e.property instanceof OntologyObjectProperty) {
+								OntologyObject range = e.property.getRange();
+								if (range instanceof OntologyClass) {
+									InspectorEntry newInspectorEntry = null;
+									newInspectorEntry = new TextFieldInspectorEntry();
+									newInspectorEntry.setName(e.property.getName());
+									newInspectorEntry.setLabel(e.label);
+									newInspectorEntry.setIsReadOnly(true);
+									newInspectorEntry.setData(new ViewPointDataBinding(e.property.getName() + ".uriName"));
+									inspector.addToEntries(newInspectorEntry);
+								}
+							} else if (e.property instanceof OntologyDataProperty) {
+								InspectorEntry newInspectorEntry = null;
+								switch (((OntologyDataProperty) e.property).getDataType()) {
+								case Boolean:
+									newInspectorEntry = new CheckboxInspectorEntry();
+									break;
+								case Byte:
+								case Integer:
+								case Long:
+								case Short:
+									newInspectorEntry = new IntegerInspectorEntry();
+									break;
+								case Double:
+								case Float:
+									newInspectorEntry = new FloatInspectorEntry();
+									break;
+								case String:
+									newInspectorEntry = new TextFieldInspectorEntry();
+									break;
+								default:
+									logger.warning("Not handled: " + ((OntologyDataProperty) e.property).getDataType());
+								}
+								if (newInspectorEntry != null) {
+									newInspectorEntry.setName(e.property.getName());
+									newInspectorEntry.setLabel(e.label);
+									newInspectorEntry.setData(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
+											+ e.property.getName()));
+									inspector.addToEntries(newInspectorEntry);
+								}
+							}
+						}
+					}
+				}
+
+				// And add the newly created edition pattern
+				getFocusedObject().getCalc().addToEditionPatterns(newEditionPattern);
+
 			default:
 				logger.warning("Pattern not implemented");
 			}
@@ -373,6 +386,11 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
 						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && StringUtils.isNotEmpty(getConnectorPatternRoleName())
 						&& fromEditionPattern != null && toEditionPattern != null && StringUtils.isNotEmpty(getLinkSchemeName());
+			case MAP_OBJECT_PROPERTY:
+				return StringUtils.isNotEmpty(getEditionPatternName()) && objectProperty != null
+						&& StringUtils.isNotEmpty(getObjectPropertyStatementPatternRoleName())
+						&& StringUtils.isNotEmpty(getConnectorPatternRoleName()) && fromEditionPattern != null && toEditionPattern != null
+						&& StringUtils.isNotEmpty(getLinkSchemeName());
 			case BLANK_EDITION_PATTERN:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && StringUtils.isNotEmpty(getConnectorPatternRoleName())
 						&& fromEditionPattern != null && toEditionPattern != null && StringUtils.isNotEmpty(getLinkSchemeName());
@@ -419,6 +437,14 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 		}
 	}
 
+	public OntologyObjectProperty getObjectProperty() {
+		return objectProperty;
+	}
+
+	public void setObjectProperty(OntologyObjectProperty property) {
+		this.objectProperty = property;
+	}
+
 	public String getEditionPatternName() {
 		if (StringUtils.isEmpty(editionPatternName) && concept != null) {
 			return concept.getName();
@@ -439,6 +465,17 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 
 	public void setIndividualPatternRoleName(String individualPatternRoleName) {
 		this.individualPatternRoleName = individualPatternRoleName;
+	}
+
+	public String getObjectPropertyStatementPatternRoleName() {
+		if (StringUtils.isEmpty(objectPropertyStatementPatternRoleName) && objectProperty != null) {
+			return JavaUtils.getVariableName(objectProperty.getName()) + "Statement";
+		}
+		return objectPropertyStatementPatternRoleName;
+	}
+
+	public void setObjectPropertyStatementPatternRoleName(String objectPropertyStatementPatternRoleName) {
+		this.objectPropertyStatementPatternRoleName = objectPropertyStatementPatternRoleName;
 	}
 
 	public String getConnectorPatternRoleName() {
@@ -480,7 +517,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 		}
 
 		public String getRange() {
-			if (property instanceof OntologyDataProperty) {
+			if (property instanceof OntologyDataProperty && ((OntologyDataProperty) property).getDataType() != null) {
 				return ((OntologyDataProperty) property).getDataType().name();
 			}
 			if (property.getRange() != null) {

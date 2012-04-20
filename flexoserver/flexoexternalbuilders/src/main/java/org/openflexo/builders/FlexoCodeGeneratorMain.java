@@ -135,7 +135,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 	}
 
 	@Override
-	protected void run() throws FlexoRunException {
+	protected void doRun() throws FlexoRunException {
 		File output = null;
 		if (workingDir != null) {
 			output = new File(workingDir);
@@ -279,10 +279,6 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 
 	public static void main(String[] args) {
 		launch(FlexoCodeGeneratorMain.class, args);
-	}
-
-	public static FlexoCodeGeneratorMain mainTest(String[] args) {
-		return launch(FlexoCodeGeneratorMain.class, args);
 	}
 
 	@Override

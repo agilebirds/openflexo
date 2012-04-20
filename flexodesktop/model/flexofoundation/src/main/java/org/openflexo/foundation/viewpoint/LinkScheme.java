@@ -25,10 +25,12 @@ import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class LinkScheme extends EditionScheme {
+public class LinkScheme extends AbstractCreationScheme {
 
 	private String fromTarget;
 	private String toTarget;
+
+	private boolean isAvailableWithFloatingPalette = true;
 
 	public LinkScheme() {
 		super();
@@ -96,6 +98,7 @@ public class LinkScheme extends EditionScheme {
 
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
+		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getFromTargetEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.FROM_TARGET,
@@ -139,6 +142,14 @@ public class LinkScheme extends EditionScheme {
 			}
 		}
 		return newAction;
+	}
+
+	public boolean getIsAvailableWithFloatingPalette() {
+		return isAvailableWithFloatingPalette;
+	}
+
+	public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette) {
+		this.isAvailableWithFloatingPalette = isAvailableWithFloatingPalette;
 	}
 
 }

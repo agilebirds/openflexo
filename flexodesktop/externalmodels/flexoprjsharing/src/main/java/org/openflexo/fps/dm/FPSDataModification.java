@@ -24,11 +24,11 @@ import org.openflexo.foundation.DataModification;
 public class FPSDataModification extends DataModification {
 
 	public FPSDataModification(Object oldValue, Object newValue) {
-		super(DataModification.FPS_DM, oldValue, newValue);
+		super(oldValue, newValue);
 	}
 
 	public FPSDataModification(String propertyName, Object oldValue, Object newValue) {
-		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+		super(propertyName, oldValue, newValue);
 	}
 
 }

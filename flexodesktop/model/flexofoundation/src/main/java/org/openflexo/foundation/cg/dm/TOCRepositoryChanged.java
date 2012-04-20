@@ -25,7 +25,7 @@ import org.openflexo.foundation.toc.TOCRepository;
 public class TOCRepositoryChanged extends DataModification {
 
 	public TOCRepositoryChanged(TOCRepository oldValue, TOCRepository newValue) {
-		super(-1, "repository", oldValue, newValue);
+		super("repository", oldValue, newValue);
 	}
 
 }

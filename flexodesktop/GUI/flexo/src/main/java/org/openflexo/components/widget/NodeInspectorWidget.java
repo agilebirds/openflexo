@@ -43,11 +43,11 @@ public class NodeInspectorWidget extends CustomInspectorWidget<AbstractNode> {
 
 	protected static final Logger logger = Logger.getLogger(NodeInspectorWidget.class.getPackage().getName());
 
-	protected NodeSelector _selector;
+	protected NodeSelector<AbstractNode> _selector;
 
 	public NodeInspectorWidget(PropertyModel model, AbstractController controller) {
 		super(model, controller);
-		_selector = new NodeSelector(null, null) {
+		_selector = new NodeSelector(null, null, AbstractNode.class) {
 			@Override
 			public void apply() {
 				super.apply();

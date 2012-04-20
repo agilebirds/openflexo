@@ -8,9 +8,12 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
+import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.PropertyStatement;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
@@ -23,11 +26,11 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 	private OntologyObjectProperty ontologyProperty;
 
 	public static ObjectPropertyStatementPathElement makeObjectPropertyStatementPathElement(BindingPathElement aParent,
-			OntologyObjectProperty anOntologyProperty) {
+			OntologyObjectProperty anOntologyProperty, boolean recursive) {
 		if (anOntologyProperty.isLiteralRange()) {
 			return new ObjectPropertyStatementAccessingLiteralPathElement(aParent, anOntologyProperty);
 		} else {
-			return new ObjectPropertyStatementAccessingObjectPathElement(aParent, anOntologyProperty);
+			return new ObjectPropertyStatementAccessingObjectPathElement(aParent, anOntologyProperty, recursive);
 		}
 	}
 
@@ -61,7 +64,8 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		private SimpleBindingPathElementImpl<String> uriNameProperty;
 		private SimpleBindingPathElementImpl<String> uriProperty;
 
-		public ObjectPropertyStatementAccessingObjectPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty) {
+		public ObjectPropertyStatementAccessingObjectPathElement(BindingPathElement aParent, OntologyObjectProperty anOntologyProperty,
+				boolean recursive) {
 			super(aParent, anOntologyProperty);
 
 			uriNameProperty = new SimpleBindingPathElementImpl<String>(URINameChanged.URI_NAME_KEY, TypeUtils.getBaseClass(getType()),
@@ -110,6 +114,25 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				}
 			};
 			allProperties.add(uriProperty);
+
+			if (recursive) {
+				if (anOntologyProperty.getRange() instanceof OntologyClass) {
+					OntologyClass rangeClass = (OntologyClass) anOntologyProperty.getRange();
+					for (final OntologyProperty property : rangeClass.getPropertiesTakingMySelfAsDomain()) {
+						StatementPathElement propertyPathElement = null;
+						if (property instanceof OntologyObjectProperty) {
+							propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this,
+									(OntologyObjectProperty) property, false);
+						} else if (property instanceof OntologyDataProperty) {
+							propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty) property);
+						}
+						if (propertyPathElement != null) {
+							allProperties.add(propertyPathElement);
+						}
+					}
+				}
+			}
+
 		}
 
 		public BindingPathElement getUriNameProperty() {
@@ -147,7 +170,23 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 
 		@Override
 		public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) {
-			logger.warning("Implement me");
+			if (target instanceof OntologyIndividual) {
+				OntologyIndividual individual = (OntologyIndividual) target;
+				PropertyStatement statement = individual.getPropertyStatement(getOntologyProperty());
+				if (statement == null) {
+					individual.getOntResource().addProperty(getOntologyProperty().getOntProperty(), value.getOntResource());
+					individual.updateOntologyStatements();
+					individual.getPropertyChangeSupport().firePropertyChange(getOntologyProperty().getName(), null, value);
+				} else if (statement instanceof ObjectPropertyStatement) {
+					Object oldValue = ((ObjectPropertyStatement) statement).getStatementObject();
+					((ObjectPropertyStatement) statement).setStatementObject(value);
+					individual.getPropertyChangeSupport().firePropertyChange(getOntologyProperty().getName(), oldValue, value);
+				} else {
+					logger.warning("Unexpected statement " + statement + " while evaluating setBindingValue()");
+				}
+			} else {
+				logger.warning("Unexpected target " + target + " while evaluating setBindingValue()");
+			}
 		}
 	}
 
@@ -351,6 +390,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 		@Override
 		public void setBindingValue(Literal value, Object target, BindingEvaluationContext context) {
 			logger.warning("Implement me");
+			// individual.getPropertyChangeSupport().firePropertyChange(ontologyProperty.getName(), oldValue, value);
 		}
 	}
 }

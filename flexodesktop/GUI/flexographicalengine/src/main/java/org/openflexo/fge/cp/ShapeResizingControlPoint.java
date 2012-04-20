@@ -23,6 +23,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.controller.DrawingController;
@@ -273,7 +274,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		if (!isDraggable()) {
 			return;
 		}

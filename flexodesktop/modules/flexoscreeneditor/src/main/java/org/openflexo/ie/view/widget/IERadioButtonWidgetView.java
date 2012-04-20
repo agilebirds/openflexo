@@ -129,8 +129,9 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 	 */
 	@Override
 	public void update(FlexoObservable o, DataModification modif) {
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals(IERadioButtonWidget.ATTRIB_DEFAULTVALUE_NAME)) {
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals(IERadioButtonWidget.ATTRIB_DEFAULTVALUE_NAME)) {
 				if (!isUpdatingModel) {
 					button.setSelected(getRadioButtonModel().getValue());
 				}
@@ -138,21 +139,15 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 					getParent().doLayout();
 					((JComponent) getParent()).repaint();
 				}
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-				if (getParent() != null) {
-					getParent().doLayout();
-					((JComponent) getParent()).repaint();
-				}
-
-			} else if (modif.propertyName().equals("labelAlign")) {
+			} else if (propertyName.equals("labelAlign")) {
 				if (getRadioButtonModel().getLabelAlign()) {
 					button.setHorizontalTextPosition(SwingConstants.LEFT);
 				} else {
 					button.setHorizontalTextPosition(SwingConstants.RIGHT);
 				}
-			} else if (modif.propertyName().equals(IERadioButtonWidget.BUTTON_LABEL) && getRadioButtonModel().getDisplayLabel()) {
+			} else if (propertyName.equals(IERadioButtonWidget.BUTTON_LABEL) && getRadioButtonModel().getDisplayLabel()) {
 				button.setText(getRadioButtonModel().getButtonLabel());
-			} else if (modif.propertyName().equals("displayLabel")) {
+			} else if (propertyName.equals("displayLabel")) {
 				if (getRadioButtonModel().getDisplayLabel()) {
 					if (getRadioButtonModel().getLabelAlign()) {
 						button.setHorizontalTextPosition(SwingConstants.LEFT);

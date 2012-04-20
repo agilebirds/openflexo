@@ -191,11 +191,12 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 		try {
 			return _method.invoke(target, args);
 		} catch (IllegalArgumentException e) {
-			logger.warning("While evaluating method " + _method + " exception occured: " + e.getMessage());
-			logger.info("object = " + target);
+			StringBuffer warningMessage = new StringBuffer("While evaluating method " + _method + " exception occured: " + e.getMessage());
+			warningMessage.append(", object = " + target);
 			for (i = 0; i < _args.size(); i++) {
-				logger.info("arg[" + i + "] = " + args[i]);
+				warningMessage.append(", arg[" + i + "] = " + args[i]);
 			}
+			logger.warning(warningMessage.toString());
 			// e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block

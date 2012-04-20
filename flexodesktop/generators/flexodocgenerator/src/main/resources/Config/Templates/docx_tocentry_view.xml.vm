@@ -1,0 +1,66 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+* - objet: the view to generate
+*#
+
+
+#set($view = $object)
+
+#if($view)
+
+${generator.log("rendu d'une view")}
+${generator.logO($view)}
+
+<w:p>   
+    <w:pPr>
+        <w:pStyle w:val="Heading$level"/>
+    </w:pPr>
+    #mkbookMark(${view.getFlexoID()} ${generator.getReference($view)})
+    <w:r>
+        <w:t xml:space="preserve">View: </w:t>
+    </w:r>
+    #renderName($view)
+</w:p>
+
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:pStyle w:val="Heading$level"/>
+			<w:b/>
+			<w:u w:val="single"/>
+		</w:rPr>
+		<w:t xml:space="preserve">Description:</w:t>
+	</w:r>
+</w:p>
+	
+#description($view)
+
+
+	#renderScreenshotForObject($view)
+
+## Some dummy headers
+
+#set($headers = ["Name", "Description", "ID"])
+
+## Some dummy content
+###set($tableContents = ${generator.getNewVector()})
+
+##foreach($concept in $view.getConcepts()) ## each concept matches a row
+##    #set($row = ${generator.getNewVector()})
+##    #void(${row.add(${concept.getName()})})
+##    #void(${row.add(${concept.getDescription()})})
+##    #void(${row.add(${concept.getFlexoID()})})
+###end
+
+#end
+
+${generator.log("fin du rendu d'une view")}
+
+
+## macro is defined in docx_macro_library.vm: #macro(renderDocxTable $headersArray $contents)
+#renderDocxTable($headers $tableContents)

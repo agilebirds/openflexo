@@ -1,2 +1,2 @@
 #!/bin/bash
-java @vm.args@ -classpath lib/*.jar @main.class@ @program.args@
+java @vm.args@ -classpath lib/\* @main.class@ -userType @userType@

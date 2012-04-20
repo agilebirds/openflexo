@@ -27,7 +27,9 @@ package org.openflexo.foundation.view;
  */
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -227,7 +229,7 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 
 	public ViewFolder getFolderWithName(String folderName) {
 		for (Enumeration e = allFolders(); e.hasMoreElements();) {
-			ViewFolder folder = ((ViewFolder) e.nextElement());
+			ViewFolder folder = (ViewFolder) e.nextElement();
 
 			if (folder.getName().equals(folderName)) {
 				return folder;
@@ -278,6 +280,16 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 
 	public File getFile() {
 		return _resource.getResourceFile().getFile();
+	}
+
+	public List<View> getViewsForViewPointWithURI(String vpURI) {
+		List<View> views = new ArrayList<View>();
+		for (ViewDefinition vd : getAllShemaList()) {
+			if (vd.getCalc().getURI().equals(vpURI)) {
+				views.add(vd.getShema());
+			}
+		}
+		return views;
 	}
 
 	// ==========================================================================

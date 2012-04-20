@@ -20,6 +20,7 @@
 package org.openflexo.prefs;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ import java.util.logging.Logger;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
@@ -39,6 +41,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
  */
 public class FlexoPreferences extends FlexoAbstractPreferences {
 
+	private static final String FLEXO_PREFS_FILE_NAME = "Flexo.prefs";
 	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
 	private static File appDataDirectory;
 
@@ -73,12 +76,29 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 	// STATIC METHODS
 
 	private static FlexoPreferences loadPreferencesFromFile() {
-		return new FlexoPreferences(getPrefsFile());
+		File prefsFile = getPrefsFile();
+		if (!prefsFile.exists()) {
+			File oldFile = getOldPrefsFile();
+			if (oldFile.exists()) {
+				try {
+					FileUtils.copyFileToFile(oldFile, prefsFile);
+				} catch (IOException e) {
+					// Let's log it, but too bad, he's gonna loose his prefs.
+					e.printStackTrace();
+				}
+			}
+		}
+		return new FlexoPreferences(prefsFile);
+	}
+
+	private static File getOldPrefsFile() {
+		File prefDir = new File(new File(System.getProperty("user.home")), "Library/Flexo");
+		return new File(prefDir, FLEXO_PREFS_FILE_NAME);
 	}
 
 	public static File getApplicationDataDirectory() {
 		if (appDataDirectory == null) {
-			File prefDir = new File(new File(System.getProperty("user.home")), "Library/Flexo");
+			File prefDir = new File(new File(System.getProperty("user.home")), "Library/OpenFlexo");
 			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 				String appData = System.getenv("APPDATA");
 				if (appData != null) {
@@ -87,6 +107,8 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 						prefDir = new File(f, "OpenFlexo");
 					}
 				}
+			} else if (ToolBox.getPLATFORM() == ToolBox.LINUX) {
+				prefDir = new File(System.getProperty("user.home"), ".openflexo");
 			}
 			appDataDirectory = prefDir;
 		}
@@ -103,7 +125,7 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 	}
 
 	public static File getPrefsFile() {
-		return new File(getApplicationDataDirectory(), "Flexo.prefs");
+		return new File(getApplicationDataDirectory(), FLEXO_PREFS_FILE_NAME);
 	}
 
 	@Override
@@ -233,6 +255,12 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 	}
 
 	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public String getInspectorTitle() {
 		return null;
 	}
@@ -252,6 +280,8 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 					outputDir = new File(f, "OpenFlexo/Logs");
 				}
 			}
+		} else if (ToolBox.getPLATFORM() == ToolBox.LINUX) {
+			outputDir = new File("user.home", ".openflexo/logs");
 		}
 		return outputDir;
 	}

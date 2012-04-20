@@ -23,7 +23,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -512,6 +514,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
+	/**
+	 * Creates binding variable identified by "data"<br>
+	 * Default behaviour is to generate a binding variable with the java type identified by data class
+	 */
+	protected void createDataBindingVariable() {
+		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class));
+	}
+
 	protected void createBindingModel() {
 		_bindingModel = new BindingModel();
 
@@ -526,7 +536,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}*/
 		// if (dataClass == null) dataClass = Object.class;
 
-		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class));
+		createDataBindingVariable();
 
 		if (StringUtils.isNotEmpty(getName()) && getDynamicAccessType() != null) {
 			_bindingModel.addToBindingVariables(new BindingVariableImpl(this, getName(), getDynamicAccessType()));
@@ -769,8 +779,8 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + " ("
-				+ (getName() != null ? getName() : (getIdentifier() != null ? getIdentifier() : "unnamed")) + ")";
+		return getClass().getSimpleName() + " (" + (getName() != null ? getName() : getIdentifier() != null ? getIdentifier() : "unnamed")
+				+ ")";
 	}
 
 	public abstract String getIdentifier();
@@ -844,7 +854,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			if (!isRootComponent()) {
 				return getParent().retrieveValidFont();
 			} else {
-				return (new JLabel()).getFont(); // Use system default
+				return new JLabel().getFont(); // Use system default
 			}
 		}
 
@@ -1245,6 +1255,33 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		this.definitionFile = definitionFile;
 	}
 
+	public List<FIBButton> getDefaultButtons() {
+		List<FIBButton> defaultButtons = new ArrayList<FIBButton>();
+		if (this instanceof FIBContainer) {
+			List<FIBButton> buttons = getFIBButtons(((FIBContainer) this).getSubComponents());
+			if (buttons.size() > 0) {
+				for (FIBButton b : buttons) {
+					if (b.isDefault() != null && b.isDefault()) {
+						defaultButtons.add(b);
+					}
+				}
+			}
+		}
+		return defaultButtons;
+	}
+
+	private List<FIBButton> getFIBButtons(List<FIBComponent> subComponents) {
+		List<FIBButton> buttons = new ArrayList<FIBButton>();
+		for (FIBComponent c : subComponents) {
+			if (c instanceof FIBButton) {
+				buttons.add((FIBButton) c);
+			} else if (c instanceof FIBContainer) {
+				buttons.addAll(getFIBButtons(((FIBContainer) c).getSubComponents()));
+			}
+		}
+		return buttons;
+	}
+
 	@Override
 	protected void applyValidation(ValidationReport report) {
 		super.applyValidation(report);
@@ -1263,6 +1300,26 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			if (object.isRootComponent() && object.getDataClass() == null) {
 				return new ValidationWarning<RootComponentShouldHaveDataClass, FIBComponent>(this, object,
 						"component_($object.toString)_is_declared_as_root_but_does_not_have_any_data_class");
+			}
+			return null;
+		}
+
+	}
+
+	public static class RootComponentShouldHaveMaximumOneDefaultButton extends
+			ValidationRule<RootComponentShouldHaveMaximumOneDefaultButton, FIBComponent> {
+		public RootComponentShouldHaveMaximumOneDefaultButton() {
+			super(FIBModelObject.class, "root_component_should_have_maximum_one_default_button");
+		}
+
+		@Override
+		public ValidationIssue<RootComponentShouldHaveMaximumOneDefaultButton, FIBComponent> applyValidation(FIBComponent object) {
+			if (object.isRootComponent() && object instanceof FIBContainer) {
+				List<FIBButton> defaultButtons = object.getDefaultButtons();
+				if (defaultButtons.size() > 1) {
+					return new ValidationWarning<RootComponentShouldHaveMaximumOneDefaultButton, FIBComponent>(this, object,
+							"component_($object.toString)_has_more_than_one_default_button");
+				}
 			}
 			return null;
 		}

@@ -139,8 +139,7 @@
 
 	<tab name="Text" index="1" layout="DEFAULT">
 		
-		<property name="isFloatingLabel" label="floating_label" widget="CHECKBOX" constraint="10">
-		</property>
+		<property name="isFloatingLabel" label="floating_label" widget="CHECKBOX" constraint="10"/
 		<property name="absoluteTextX" label="absolute_text_x" widget="DOUBLE" constraint="11" depends="isFloatingLabel" conditional="isFloatingLabel=true">
 			<param name="increment" value="1"/>
 		</property>

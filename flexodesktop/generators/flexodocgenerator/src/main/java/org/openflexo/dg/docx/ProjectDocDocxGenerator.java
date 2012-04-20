@@ -49,6 +49,7 @@ import org.openflexo.foundation.cg.templates.TemplateFileNotification;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
+import org.openflexo.foundation.rm.ScreenshotResource;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -336,6 +337,13 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 			return new ImageIcon(r.getResourceToCopy().getFile().getAbsolutePath());
 		}
 
-		return new ImageIcon(o.getProject().getScreenshotResource(o, true).getFile().getAbsolutePath());
+		ScreenshotResource screenshotResource = o.getProject().getScreenshotResource(o, true);
+		if (screenshotResource == null) {
+			logger.warning("Cannot find screenshot for " + o + " of " + o.getClass().getSimpleName());
+			return null;
+		} else {
+			return new ImageIcon(screenshotResource.getFile().getAbsolutePath());
+		}
 	}
+
 }

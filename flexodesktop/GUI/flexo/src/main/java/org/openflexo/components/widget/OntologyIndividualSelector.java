@@ -113,8 +113,49 @@ public class OntologyIndividualSelector extends AbstractBrowserSelector<Ontology
 		STRING_REPRESENTATION_WHEN_NULL = aString;
 	}
 
+	@Override
+	public FlexoModelObject getRootObject() {
+		if (super.getRootObject() != null) {
+			return super.getRootObject();
+		} else if (getOntologyLibrary() != null) {
+			return getOntologyLibrary().getRootClass();
+		}
+		return null;
+	}
+
+	public OntologyClass getOntologyClass() {
+		if (getRootObject() instanceof OntologyClass) {
+			return (OntologyClass) getRootObject();
+		}
+		return null;
+	}
+
 	public void setOntologyClass(OntologyClass aClass) {
 		super.setRootObject(aClass);
+	}
+
+	public String getOntologyClassURI() {
+		if (getOntologyClass() != null) {
+			return getOntologyClass().getURI();
+		}
+		return null;
+	}
+
+	public void setOntologyClassURI(String aClassURI) {
+		if (getOntologyLibrary() != null) {
+			OntologyClass ontologyClass = getOntologyLibrary().getClass(aClassURI);
+			if (ontologyClass != null) {
+				setOntologyClass(ontologyClass);
+			}
+		}
+	}
+
+	@Override
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		if (project != null && getOntologyLibrary() == null) {
+			setOntologyLibrary(project.getProjectOntologyLibrary());
+		}
 	}
 
 }

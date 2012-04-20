@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -50,8 +51,10 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		AddRestrictionStatement,
 		AddConnector,
 		AddShape,
-		AddShema,
+		AddDiagram,
+		AddEditionPattern,
 		DeclarePatternRole,
+		GraphicalAction,
 		GoToObject
 	}
 
@@ -123,6 +126,8 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		_setPatternRoleName((patternRole != null) && (patternRole.getPatternRoleName() != null) ? patternRole.getPatternRoleName() : null);
 		// updatePatternRoleType();
 	}
+
+	public abstract List<R> getAvailablePatternRoles();
 
 	@Deprecated
 	protected final void updatePatternRoleType() {
@@ -500,7 +505,8 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		restrictionType,
 		cardinality,
 		target,
-		shemaName
+		diagramName,
+		view
 	}
 
 	private ViewPointDataBinding conditional;

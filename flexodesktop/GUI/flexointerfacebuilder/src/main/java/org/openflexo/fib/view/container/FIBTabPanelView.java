@@ -119,7 +119,10 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 		getResultingJComponent().removeAll();
 		buildSubComponents();
 		updateDataObject(getDataObject());
-		tabbedPane.setSelectedIndex(index);
+		index = Math.min(index, tabbedPane.getTabCount() - 1);
+		if (index > -1) {
+			tabbedPane.setSelectedIndex(index);
+		}
 	}
 
 	@Override

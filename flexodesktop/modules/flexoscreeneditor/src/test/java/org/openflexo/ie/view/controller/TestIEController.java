@@ -27,6 +27,9 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import junit.framework.Assert;
+
+import org.openflexo.Flexo;
 import org.openflexo.FlexoModuleTestCase;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
@@ -47,15 +50,11 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.ie.IEModule;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
-import org.openflexo.module.UserType;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
-
-import junit.framework.Assert;
 
 public class TestIEController extends FlexoModuleTestCase {
 
@@ -246,10 +245,10 @@ public class TestIEController extends FlexoModuleTestCase {
 		if (GeneralPreferences.getFavoriteModuleName() == null) {
 			GeneralPreferences.setFavoriteModuleName(Module.IE_MODULE.getName());
 		}
-		getModuleLoader().fileNameToOpen = projectDirectory.getAbsolutePath();
+		Flexo.setFileNameToOpen(projectDirectory.getAbsolutePath());
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");
-		} else
+		} else {
 			try {
 				if (ExternalModuleDelegater.getModuleLoader().getIEModuleInstance(project) == null) {
 					fail("IE Module not on the classpath. Component screenshots cannot be generated");
@@ -257,6 +256,7 @@ public class TestIEController extends FlexoModuleTestCase {
 			} catch (ModuleLoadingException e) {
 				Assert.fail("Fail to load IE module." + e.getMessage());
 			}
+		}
 	}
 
 	/**

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -39,6 +40,11 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddObjectPropertyStatement;
+	}
+
+	@Override
+	public List<ObjectPropertyStatementPatternRole> getAvailablePatternRoles() {
+		return getEditionPattern().getPatternRoles(ObjectPropertyStatementPatternRole.class);
 	}
 
 	public OntologyProperty getObjectProperty() {

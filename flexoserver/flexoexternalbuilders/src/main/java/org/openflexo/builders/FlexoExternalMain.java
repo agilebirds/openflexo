@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
 
 import org.openflexo.GeneralPreferences;
 import org.openflexo.builders.exception.FlexoRunException;
@@ -24,7 +27,7 @@ import org.openflexo.properties.FlexoProperties;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
 
-public abstract class FlexoExternalMain {
+public abstract class FlexoExternalMain implements Runnable {
 
 	public static final String CONSOLE_OUTPUT_ENCODING = "UTF-8";
 
@@ -48,9 +51,13 @@ public abstract class FlexoExternalMain {
 
 	public static final int CLASS_NOT_FOUND = -8;
 
+	public static final int UNEXPECTED_EXCEPTION = -100;
+
+	public static final int UNKNOWN_EXIT = -120;
+
 	public static final int TIMEOUT = -126;
 
-	private int exitCode = 0;
+	private volatile int exitCode = 0;
 
 	protected boolean isDev = false;
 
@@ -99,7 +106,7 @@ public abstract class FlexoExternalMain {
 				logger.info("PreferredResourcePath is set to " + ResourceLocator.getPreferredResourcePath().getAbsolutePath());
 			}
 		}
-		FlexoObject.initialize();
+		FlexoObject.initialize(false);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching " + getName() + "...");
 		}
@@ -110,7 +117,19 @@ public abstract class FlexoExternalMain {
 		return ModuleLoader.instance();
 	}
 
-	protected abstract void run() throws FlexoRunException;
+	@Override
+	public final void run() {
+		try {
+			doRun();
+		} catch (FlexoRunException e) {
+			e.printStackTrace();
+			if (exitCode == 0) {
+				setExitCode(UNEXPECTED_EXCEPTION);
+			}
+		}
+	}
+
+	protected abstract void doRun() throws FlexoRunException;
 
 	protected abstract String getName();
 
@@ -171,8 +190,12 @@ public abstract class FlexoExternalMain {
 			}
 		}
 		try {
-			run();
-		} catch (FlexoRunException e) {
+			SwingUtilities.invokeAndWait(this);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		cleanUp();
@@ -223,7 +246,7 @@ public abstract class FlexoExternalMain {
 		}
 	}
 
-	public static <A extends FlexoExternalMain> A launch(Class<A> builderClass, String[] args) {
+	public static <A extends FlexoExternalMain> void launch(Class<A> builderClass, String[] args) {
 		// The next line is very important for performance purposes. External mains can always be run with the smallest priority because
 		// they are not immediate
 		final Thread currentThread = Thread.currentThread();
@@ -246,7 +269,6 @@ public abstract class FlexoExternalMain {
 			A main = builderClass.newInstance();
 			try {
 				main.build(args);
-				return main;
 			} catch (Exception e) {
 				mem = null;
 				e.printStackTrace();
@@ -283,7 +305,7 @@ public abstract class FlexoExternalMain {
 		} finally {
 			timeout.interrupt();
 		}
-		return null;
+		System.exit(UNKNOWN_EXIT);
 	}
 
 	/**

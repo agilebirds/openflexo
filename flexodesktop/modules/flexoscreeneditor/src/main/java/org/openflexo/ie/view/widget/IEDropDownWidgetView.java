@@ -96,7 +96,7 @@ public class IEDropDownWidgetView extends AbstractInnerTableWidgetView<IEDropDow
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox) e.getSource();
-				(getModel()).setValue((String) cb.getSelectedItem());
+				getModel().setValue((String) cb.getSelectedItem());
 			}
 		});
 		_jComboBox.setRenderer(new DefaultListCellRenderer() {
@@ -154,15 +154,16 @@ public class IEDropDownWidgetView extends AbstractInnerTableWidgetView<IEDropDow
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (modif.modificationType() == DataModification.ATTRIBUTE) {
-			if (modif.propertyName().equals("value")) {
+		String propertyName = modif.propertyName();
+		if (propertyName != null) {
+			if (propertyName.equals("value")) {
 				if (getDropDownModel().getValue() != null) {
 					_jComboBox.setSelectedItem(getDropDownModel().getValue());
 				} else {
 					_jComboBox.setSelectedIndex(0);
 				}
 
-			} else if (modif.propertyName().equals(ATTRIB_EXAMPLELIST_NAME) || modif.propertyName().equals("domain")
+			} else if (propertyName.equals(ATTRIB_EXAMPLELIST_NAME) || propertyName.equals("domain")
 					|| modif instanceof ListOfValuesHasChanged) {
 				container.remove(_jComboBox);
 				_jComboBox = new JComboBox(new Vector<Object>(getModel().getValueList()));
@@ -176,7 +177,7 @@ public class IEDropDownWidgetView extends AbstractInnerTableWidgetView<IEDropDow
 				container.add(_jComboBox);
 				validate();
 				repaint();
-			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
+			} else if (propertyName.equals("colSpan") || propertyName.equals("rowSpan")) {
 				getParent().doLayout();
 				((JComponent) getParent()).repaint();
 			}

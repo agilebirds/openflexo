@@ -29,6 +29,7 @@ import org.openflexo.components.browser.ProjectBrowser.OEViewMode;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.icon.IconFactory;
 
@@ -70,9 +71,14 @@ public class OntologyClassElement extends BrowserElement {
 			}
 		}
 
+		for (OntologyProperty p : getOntologyClass().getDeclaredPropertiesTakingMySelfAsDomain()) {
+			addToChilds(p);
+		}
+
 		for (OntologyStatement s : getOntologyClass().getStatements()) {
 			addToChilds(s);
 		}
+
 	}
 
 	@Override

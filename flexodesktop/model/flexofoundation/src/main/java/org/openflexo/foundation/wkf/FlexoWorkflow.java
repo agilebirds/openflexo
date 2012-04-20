@@ -480,8 +480,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	private void addProcesses(Vector<FlexoProcessNode> temp, FlexoProcessNode process) {
 		temp.add(process);
-		for (Enumeration e = process.getSubProcesses().elements(); e.hasMoreElements();) {
-			FlexoProcessNode currentProcessNode = (FlexoProcessNode) e.nextElement();
+		for (Enumeration<FlexoProcessNode> e = process.getSubProcesses().elements(); e.hasMoreElements();) {
+			FlexoProcessNode currentProcessNode = e.nextElement();
 			addProcesses(temp, currentProcessNode);
 		}
 	}
@@ -516,8 +516,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 */
 	private Vector<FlexoProcessNode> getAllLocalProcessNodes() {
 		Vector<FlexoProcessNode> temp = new Vector<FlexoProcessNode>();
-		for (Enumeration en = _topLevelNodeProcesses.elements(); en.hasMoreElements();) {
-			FlexoProcessNode aTopLevelProcessNode = (FlexoProcessNode) en.nextElement();
+		for (Enumeration<FlexoProcessNode> en = _topLevelNodeProcesses.elements(); en.hasMoreElements();) {
+			FlexoProcessNode aTopLevelProcessNode = en.nextElement();
 			addProcesses(temp, aTopLevelProcessNode);
 		}
 		return temp;
@@ -540,8 +540,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	public Vector<FlexoProcess> getAllLocalFlexoProcesses() {
 		// TODO: optimize me
 		Vector<FlexoProcess> returned = new Vector<FlexoProcess>();
-		for (Enumeration e = allLocalProcessNodes(); e.hasMoreElements();) {
-			FlexoProcessNode currentProcessNode = (FlexoProcessNode) e.nextElement();
+		for (Enumeration<FlexoProcessNode> e = allLocalProcessNodes(); e.hasMoreElements();) {
+			FlexoProcessNode currentProcessNode = e.nextElement();
 			FlexoProcess process = currentProcessNode.getProcess();
 			if (process != null) {
 				if (!returned.contains(process)) {
@@ -575,8 +575,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 */
 	private Vector<FlexoProcessNode> getAllImportedProcessNodes() {
 		Vector<FlexoProcessNode> temp = new Vector<FlexoProcessNode>();
-		for (Enumeration en = importedRootNodeProcesses.elements(); en.hasMoreElements();) {
-			FlexoProcessNode aTopLevelProcessNode = (FlexoProcessNode) en.nextElement();
+		for (Enumeration<FlexoProcessNode> en = importedRootNodeProcesses.elements(); en.hasMoreElements();) {
+			FlexoProcessNode aTopLevelProcessNode = en.nextElement();
 			addProcesses(temp, aTopLevelProcessNode);
 		}
 		return temp;
@@ -599,8 +599,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	public Vector<FlexoProcess> getAllImportedFlexoProcesses() {
 		// TODO: optimize me
 		Vector<FlexoProcess> returned = new Vector<FlexoProcess>();
-		for (Enumeration e = allImportedProcessNodes(); e.hasMoreElements();) {
-			FlexoProcessNode currentProcessNode = (FlexoProcessNode) e.nextElement();
+		for (Enumeration<FlexoProcessNode> e = allImportedProcessNodes(); e.hasMoreElements();) {
+			FlexoProcessNode currentProcessNode = e.nextElement();
 			FlexoProcess process = currentProcessNode.getProcess();
 			if (process != null) {
 				if (!returned.contains(process)) {
@@ -675,8 +675,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	public Vector<FlexoProcess> getAllLocalTopLevelFlexoProcesses() {
 		Vector<FlexoProcess> returned = new Vector<FlexoProcess>();
-		for (Enumeration e = allLocalProcessNodes(); e.hasMoreElements();) {
-			FlexoProcessNode currentProcessNode = (FlexoProcessNode) e.nextElement();
+		for (Enumeration<FlexoProcessNode> e = allLocalProcessNodes(); e.hasMoreElements();) {
+			FlexoProcessNode currentProcessNode = e.nextElement();
 			FlexoProcess process = currentProcessNode.getProcess();
 			if (process != null) {
 				if (!returned.contains(process)) {
@@ -694,8 +694,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	public Vector<FlexoProcess> getAllImportedTopLevelFlexoProcesses() {
 		Vector<FlexoProcess> returned = new Vector<FlexoProcess>();
-		for (Enumeration e = allImportedProcessNodes(); e.hasMoreElements();) {
-			FlexoProcessNode currentProcessNode = (FlexoProcessNode) e.nextElement();
+		for (Enumeration<FlexoProcessNode> e = allImportedProcessNodes(); e.hasMoreElements();) {
+			FlexoProcessNode currentProcessNode = e.nextElement();
 			FlexoProcess process = currentProcessNode.getProcess();
 			if (process != null) {
 				if (!returned.contains(process)) {
@@ -713,8 +713,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	public Vector<FlexoProcess> getAllTopLevelFlexoProcesses() {
 		Vector<FlexoProcess> returned = new Vector<FlexoProcess>();
-		for (Enumeration e = allProcessNodes(); e.hasMoreElements();) {
-			FlexoProcessNode currentProcessNode = (FlexoProcessNode) e.nextElement();
+		for (Enumeration<FlexoProcessNode> e = allProcessNodes(); e.hasMoreElements();) {
+			FlexoProcessNode currentProcessNode = e.nextElement();
 			FlexoProcess process = currentProcessNode.getProcess();
 			if (process != null) {
 				if (!returned.contains(process)) {
@@ -748,8 +748,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public FlexoProcess getLocalFlexoProcessWithName(String name) {
-		for (Enumeration e = allLocalProcessNodes(); e.hasMoreElements();) {
-			FlexoProcess process = ((FlexoProcessNode) e.nextElement()).getProcess();
+		for (Enumeration<FlexoProcessNode> e = allLocalProcessNodes(); e.hasMoreElements();) {
+			FlexoProcess process = e.nextElement().getProcess();
 			if (process != null) {
 				if (process.getName().equals(name)) {
 					return process;
@@ -763,8 +763,8 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public FlexoProcess getLocalFlexoProcessWithFlexoID(long flexoID) {
-		for (Enumeration e = allLocalProcessNodes(); e.hasMoreElements();) {
-			FlexoProcess process = ((FlexoProcessNode) e.nextElement()).getProcess();
+		for (Enumeration<FlexoProcessNode> e = allLocalProcessNodes(); e.hasMoreElements();) {
+			FlexoProcess process = e.nextElement().getProcess();
 			if (process != null) {
 				if (process.getFlexoID() == flexoID) {
 					return process;
@@ -854,7 +854,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		if (aProcess == null) {
 			logger.warning("Null not authorized as root process !");
 			setChanged();
-			notifyObserversAsReentrantModification(new DataModification(-1, "rootProcess", getRootProcess(), getRootProcess()));
+			notifyObserversAsReentrantModification(new DataModification("rootProcess", getRootProcess(), getRootProcess()));
 			return;
 		}
 		_setRootProcessNode(aProcess.getProcessNode());

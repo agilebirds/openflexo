@@ -31,7 +31,7 @@ public abstract class ValidationNotification extends DataModification {
 	private Validable _rootObject;
 
 	public ValidationNotification(Validable rootObject) {
-		super(DataModification.UNDEFINED, null, null);
+		super(null, null);
 		_rootObject = rootObject;
 	}
 

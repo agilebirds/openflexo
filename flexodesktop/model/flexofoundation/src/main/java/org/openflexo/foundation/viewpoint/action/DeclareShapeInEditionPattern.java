@@ -23,6 +23,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -169,7 +170,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 												.setLabel(new ViewPointDataBinding("\"" + entry.graphicalObject.getName() + "\""));
 									}
 								}
-								newShapePatternRole.setGraphicalRepresentation(entry.graphicalObject.getGraphicalRepresentation());
+								newShapePatternRole.setExampleLabel(((ShapeGraphicalRepresentation) entry.graphicalObject
+										.getGraphicalRepresentation()).getText());
+								// We clone here the GR (fixed unfocusable GR bug)
+								newShapePatternRole.setGraphicalRepresentation(((ShapeGraphicalRepresentation<?>) entry.graphicalObject
+										.getGraphicalRepresentation()).clone());
+								// Forces GR to be displayed in view
+								((ShapeGraphicalRepresentation<?>) newShapePatternRole.getGraphicalRepresentation())
+										.setAllowToLeaveBounds(false);
 								newEditionPattern.addToPatternRoles(newShapePatternRole);
 								if (entry.getParentEntry() != null) {
 									newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles
@@ -215,7 +223,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 						for (PropertyEntry e : propertyEntries) {
-							if (e.selectEntry) {
+							if (e != null && e.selectEntry) {
 								EditionSchemeParameter newParameter = null;
 								if (e.property instanceof OntologyDataProperty) {
 									switch (((OntologyDataProperty) e.property).getDataType()) {

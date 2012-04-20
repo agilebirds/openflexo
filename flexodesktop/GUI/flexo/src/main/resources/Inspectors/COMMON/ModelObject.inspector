@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="AdvancedTab">
-      <Label label="flexo_id" localize="true" name="FlexoIDLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <TextField passwd="false" readOnly="true" localize="true" name="FlexoID" data="data.flexoID.toString" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" useScrollBar="false">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="2" title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="flexo_id" localize="true" name="FlexoIDLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+      <TextField data="data.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="FlexoID" readOnly="true" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </TextField>
-      <Label label="custom_properties" align="center" localize="true" name="CustomPropertiesLabel" constraints="twocols(location=center;index=200;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
-      <Table iteratorClassName="org.openflexo.foundation.FlexoProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.customProperties" constraints="twocols(location=right;index=201;expandHorizontally=true;expandVertically=true)" useScrollBar="false" name="CustomProperties" localize="true" manageDynamicModel="true">
+      <Label label="EP refs" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+        <LocalizedDictionary />
+      </Label>
+      <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)">
+        <Table iteratorClassName="org.openflexo.foundation.ontology.EditionPatternReference" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="EPRefsTable" data="data.editionPatternReferences" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=5;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)">
+          <TextFieldColumn data="iterator.instanceId" title="Id" columnWidth="30" resizable="true" displayTitle="true" />
+          <TextFieldColumn data="iterator.editionPattern.name" title="EditionPattern" columnWidth="100" resizable="true" displayTitle="true" />
+          <TextFieldColumn data="iterator.patternRole" title="PatternRole" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
+          <LocalizedDictionary />
+        </Table>
+        <Table iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="EPRefsTable.selected.editionPattern.patternRoles" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+          <LabelColumn data="iterator.patternRoleName" title="pattern_role" columnWidth="60" resizable="true" displayTitle="true" name="label" />
+          <LabelColumn data="EPRefsTable.selected.editionPatternInstance.getPatternActor(iterator)" title="actor" columnWidth="150" resizable="true" displayTitle="true" name="label" />
+          <LocalizedDictionary />
+        </Table>
+      </Panel>
+      <Label label="custom_properties" align="center" localize="true" name="CustomPropertiesLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=left)" />
+      <Table iteratorClassName="org.openflexo.foundation.FlexoProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="CustomProperties" data="data.customProperties" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.name" title="name" columnWidth="150" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.value" title="value" columnWidth="200" resizable="true" displayTitle="true" />
         <AddAction method="data.addProperty" name="new" />
@@ -15,9 +31,11 @@
         <CustomAction name="sort" />
       </Table>
     </Tab>
-    <Tab index="1" title="Doc" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="DocTab">
-      <Label label="dont_generate" localize="true" name="DontGenerateLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <CheckBox selected="false" localize="true" name="DontGenerate" data="data.dontGenerate" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+    <Tab index="1" title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DocTab">
+      <Label label="dont_generate" localize="true" name="DontGenerateLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;index=0)" />
+      <CheckBox selected="false" localize="true" name="DontGenerate" data="data.dontGenerate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;index=1)" />
+      <Label label="description" localize="true" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;index=2)" />
+      <TextArea localize="true" name="description" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

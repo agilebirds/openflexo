@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.DuplicateURIException;
@@ -45,9 +45,11 @@ import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddClass;
+import org.openflexo.foundation.viewpoint.AddEditionPattern.AddEditionPatternParameter;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.AddIsAStatement;
 import org.openflexo.foundation.viewpoint.AddObjectPropertyStatement;
@@ -58,22 +60,22 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
-import org.openflexo.foundation.viewpoint.GoToAction;
+import org.openflexo.foundation.viewpoint.GraphicalAction;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
+import org.openflexo.toolbox.StringUtils;
 
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> extends FlexoAction<A, FlexoModelObject, FlexoModelObject>
-		implements BindingEvaluationContext {
+		implements BindingEvaluationContext /*, BindingPathElement<Object>*/{
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
-	protected Hashtable<String, Object> parameterValues;
+	protected Hashtable<EditionSchemeParameter, Object> parameterValues;
 
 	public boolean escapeParameterRetrievingWhenValid = true;
 
@@ -82,7 +84,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	public EditionSchemeAction(FlexoActionType<A, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject focusedObject,
 			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		parameterValues = new Hashtable<String, Object>();
+		parameterValues = new Hashtable<EditionSchemeParameter, Object>();
 		overridenGraphicalRepresentations = new Hashtable<GraphicalElementPatternRole, Object>();
 	}
 
@@ -92,23 +94,14 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	 * 
 	 * @return
 	 */
+	// TODO: we must order this if dependancies are not resolved using basic sequence
 	public boolean retrieveDefaultParameters() {
 		boolean returned = true;
 		EditionScheme editionScheme = getEditionScheme();
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
-			Object defaultValue = parameter.getDefaultValue(this, new BindingEvaluationContext() {
-				@Override
-				public Object getValue(BindingVariable variable) {
-					if (variable instanceof EditionSchemeParameterPathElement) {
-						Object returned = parameterValues.get(((EditionSchemeParameterPathElement) variable).getParameter().getName());
-						return returned;
-					}
-					logger.warning("Unexpected " + variable);
-					return null;
-				}
-			});
-			if (defaultValue != null) {
-				parameterValues.put(parameter.getName(), defaultValue);
+			Object defaultValue = parameter.getDefaultValue(this);
+			if (defaultValue != null && !(parameter instanceof URIParameter)) {
+				parameterValues.put(parameter, defaultValue);
 			}
 			if (!parameter.isValid(this, defaultValue)) {
 				logger.info("Parameter " + parameter + " is not valid for value " + defaultValue);
@@ -132,8 +125,40 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		return null;
 	}
 
-	public Hashtable<String, Object> getParameterValues() {
+	/*public String getStringParameter(String parameterName) {
+		System.out.println("OK, on me demande le parametre " + parameterName + ", je retourne " + parameterValues.get(parameterName));
+		return (String) parameterValues.get(parameterName);
+	}
+
+	public String getURIParameter(String parameterName) {
+		System.out.println("OK, on me demande l'uri " + parameterName + ", je retourned " + parameterValues.get(parameterName));
+		return (String) parameterValues.get(parameterName);
+	}*/
+
+	/*public Hashtable<EditionSchemeParameter, Object> getParameterValues() {
 		return parameterValues;
+	}*/
+
+	public Object getParameterValue(EditionSchemeParameter parameter) {
+		/*System.out.println("On me demande la valeur du parametre " + parameter.getName() + " a priori c'est "
+				+ parameterValues.get(parameter));*/
+		if (parameter instanceof URIParameter) {
+			if (parameterValues.get(parameter) == null
+					|| (parameterValues.get(parameter) instanceof String && StringUtils.isEmpty((String) parameterValues.get(parameter)))) {
+				return ((URIParameter) parameter).getDefaultValue(this);
+			}
+		}
+		return parameterValues.get(parameter);
+	}
+
+	public void setParameterValue(EditionSchemeParameter parameter, Object value) {
+		// System.out.println("setParameterValue " + value + " for parameter " + parameter.getName());
+		parameterValues.put(parameter, value);
+		/*for (EditionSchemeParameter p : getEditionScheme().getParameters()) {
+			if (p instanceof URIParameter) {
+				// System.out.println("Hop, je recalcule l'uri, ici");
+			}
+		}*/
 	}
 
 	public abstract EditionScheme getEditionScheme();
@@ -201,18 +226,32 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 					}
 				} else if (action instanceof DeclarePatternRole) {
 					logger.info("Declare object with patternRole=" + action.getPatternRole());
-					FlexoModelObject declaredObject = performDeclarePatternRole((DeclarePatternRole) action);
+					FlexoModelObject declaredObject = null;
+					try {
+						declaredObject = performDeclarePatternRole((DeclarePatternRole) action);
+					} catch (ClassCastException e) {
+						logger.warning("ClassCastException: found declared object: " + e.getMessage());
+					}
 					logger.info("Found declared object: " + declaredObject);
 					if (declaredObject != null) {
 						getEditionPatternInstance().setObjectForPatternRole(declaredObject, action.getPatternRole());
 						performedActions.put(action, declaredObject);
 					}
-				} else if (action instanceof org.openflexo.foundation.viewpoint.AddShema) {
+				} else if (action instanceof org.openflexo.foundation.viewpoint.AddDiagram) {
 					logger.info("Add shema with patternRole=" + action.getPatternRole());
-					View newShema = performAddShema((org.openflexo.foundation.viewpoint.AddShema) action);
+					View newShema = performAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action);
 					if (newShema != null) {
 						getEditionPatternInstance().setObjectForPatternRole(newShema, action.getPatternRole());
 						performedActions.put(action, newShema);
+					}
+				} else if (action instanceof org.openflexo.foundation.viewpoint.AddEditionPattern) {
+					logger.info("Add EditionPattern with patternRole=" + action.getPatternRole() + " EP="
+							+ ((org.openflexo.foundation.viewpoint.AddEditionPattern) action).getEditionPatternType());
+					EditionPatternInstance newEP = performAddEditionPattern((org.openflexo.foundation.viewpoint.AddEditionPattern) action);
+					if (newEP != null && action.getPatternRole() != null) {
+						logger.warning("EditionPatternInstance not declared as FlexoModelObject !!!");
+						// getEditionPatternInstance().setObjectForPatternRole(newEP, action.getPatternRole());
+						// performedActions.put(action, newEP);
 					}
 				}
 			}
@@ -250,19 +289,20 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 				finalizePerformAddConnector((org.openflexo.foundation.viewpoint.AddConnector) action,
 						(ViewConnector) performedActions.get(action));
 			}
-			if (action instanceof org.openflexo.foundation.viewpoint.AddShema) {
-				finalizePerformAddShema((org.openflexo.foundation.viewpoint.AddShema) action, (View) performedActions.get(action));
+			if (action instanceof org.openflexo.foundation.viewpoint.AddDiagram) {
+				finalizePerformAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action, (View) performedActions.get(action));
 			}
 		}
 
-		// At this end, look after GoToAction
+		// Now perform "normal actions"
 		for (EditionAction action : getEditionScheme().getActions()) {
 			if (action.evaluateCondition(this)) {
-				if (action instanceof GoToAction) {
-					performGoToAction((GoToAction) action);
+				if (action instanceof GraphicalAction) {
+					performGraphicalAction((GraphicalAction) action);
 				}
 			}
 		}
+
 	}
 
 	protected ViewShape performAddShape(org.openflexo.foundation.viewpoint.AddShape action) {
@@ -294,15 +334,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	protected ViewShape finalizePerformAddShape(org.openflexo.foundation.viewpoint.AddShape action, ViewShape newShape) {
-		// Be sure that location/size constraints are ok
-		// ((ShapeGraphicalRepresentation) newShape.getGraphicalRepresentation()).updateConstraints();
-
-		// We need to renotify here because if label is bound to a semantic. In this case,
-		// while beeing created, shape didn't have sufficient data to retrieve a label
-		// which was null. Now, we are sure that the shape is bound, and label can be
-		// retrieved. That's why we notify this.
-		newShape.setChanged();
-		newShape.notifyObservers(new NameChanged(null, newShape.getName()));
+		// Be sure that the newly created shape is updated
+		newShape.update();
 		return newShape;
 	}
 
@@ -466,12 +499,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	protected ViewConnector finalizePerformAddConnector(org.openflexo.foundation.viewpoint.AddConnector action, ViewConnector newConnector) {
-		// We need to renotify here because if label is bound to a semantic. In this case,
-		// while beeing created, shape didn't have sufficient data to retrieve a label
-		// which was null. Now, we are sure that the shape is bound, and label can be
-		// retrieved. That's why we notify this.
-		newConnector.setChanged();
-		newConnector.notifyObservers(new NameChanged(null, newConnector.getName()));
+		// Be sure that the newly created shape is updated
+		newConnector.update();
 		return newConnector;
 	}
 
@@ -523,16 +552,17 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		return restrictionStatement;
 	}
 
-	protected View performAddShema(org.openflexo.foundation.viewpoint.AddShema action) {
+	protected View performAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action) {
 		View initialShema = retrieveOEShema();
-		AddView addShemaAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
-		addShemaAction.newViewName = action.getShemaName(this);
-		addShemaAction.calc = initialShema.getCalc();
-		addShemaAction.setFolder(initialShema.getShemaDefinition().getFolder());
-		addShemaAction.doAction();
-		if (addShemaAction.hasActionExecutionSucceeded()) {
-			View newShema = addShemaAction.getNewShema().getShema();
-			ShapePatternRole shapePatternRole = action.getShapePatternRole();
+		AddView addDiagramAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
+		addDiagramAction.newViewName = action.getDiagramName(this);
+		addDiagramAction.viewpoint = action.getPatternRole().getViewpoint();
+		addDiagramAction.setFolder(initialShema.getShemaDefinition().getFolder());
+		addDiagramAction.skipChoosePopup = true;
+		addDiagramAction.doAction();
+		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
+			View newShema = addDiagramAction.getNewDiagram().getShema();
+			/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
 			if (shapePatternRole == null) {
 				logger.warning("Sorry, shape pattern role is undefined");
 				return newShema;
@@ -558,26 +588,55 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 					newEditionPatternInstance.setObjectForPatternRole(patternActor, role);
 					patternActor.registerEditionPatternReference(newEditionPatternInstance, role);
 				}
-			}
+			}*/
+
 			return newShema;
 		}
 		return null;
 	}
 
-	protected View finalizePerformAddShema(org.openflexo.foundation.viewpoint.AddShema action, View newShema) {
+	protected View finalizePerformAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action, View newShema) {
 		return newShema;
 	}
 
-	protected void performGoToAction(org.openflexo.foundation.viewpoint.GoToAction action) {
-		FlexoModelObject target = action.getTargetObject(this);
-		logger.info("Focus and select object " + target);
-		getEditor().focusOn(target);
+	protected EditionPatternInstance performAddEditionPattern(org.openflexo.foundation.viewpoint.AddEditionPattern action) {
+		logger.info("Perform performAddEditionPattern " + action);
+		View view = action.getView(this);
+		logger.info("View: " + view);
+		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(view, null, this);
+		creationSchemeAction.setCreationScheme(action.getCreationScheme());
+		for (AddEditionPatternParameter p : action.getParameters()) {
+			EditionSchemeParameter param = p.getParam();
+			Object value = p.evaluateParameterValue(this);
+			logger.info("For parameter " + param + " value is " + value);
+			if (value != null) {
+				creationSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(this));
+			}
+		}
+		creationSchemeAction.doAction();
+		if (creationSchemeAction.hasActionExecutionSucceeded()) {
+			logger.info("Successfully performed performAddEditionPattern " + action);
+			return creationSchemeAction.getEditionPatternInstance();
+		}
+		return null;
+	}
+
+	protected void performGraphicalAction(org.openflexo.foundation.viewpoint.GraphicalAction action) {
+		logger.info("Perform graphical action " + action);
+		ViewElement graphicalElement = (ViewElement) getEditionPatternInstance().getPatternActor(action.getPatternRole());
+		logger.fine("Element is " + graphicalElement);
+		logger.fine("Feature is " + action.getGraphicalFeature());
+		logger.fine("Value is " + action.getValue().getBindingValue(this));
+		action.getGraphicalFeature().applyToGraphicalRepresentation(
+				(GraphicalRepresentation<?>) graphicalElement.getGraphicalRepresentation(), action.getValue().getBindingValue(this));
 	}
 
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionSchemeParameterListPathElement) {
-			return parameterValues;
+			return this;
+		} else if (variable instanceof EditionSchemeParameterPathElement) {
+			return getParameterValue(((EditionSchemeParameterPathElement) variable).getParameter());
 		} else if (variable instanceof ViewPathElement) {
 			if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) {
 				return retrieveOEShema();
@@ -590,11 +649,61 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	public Object getOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
-		return overridenGraphicalRepresentations.get(patternRole);
+		// return overridenGraphicalRepresentations.get(patternRole);
+		// TODO temporary desactivate overriden GR
+		return null;
 	}
 
 	public void setOverridenGraphicalRepresentation(GraphicalElementPatternRole patternRole, Object graphicalRepresentation) {
 		overridenGraphicalRepresentations.put(patternRole, graphicalRepresentation);
 	}
 
+	/*
+	@Override
+	public Class<?> getDeclaringClass() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Type getType() {
+		return getClass();
+	}
+
+	@Override
+	public String getSerializationRepresentation() {
+		return getEditionScheme().getName();
+	}
+
+	@Override
+	public boolean isBindingValid() {
+		return true;
+	}
+
+	@Override
+	public String getLabel() {
+		return getEditionScheme().getName();
+	}
+
+	@Override
+	public String getTooltipText(Type resultingType) {
+		return getEditionScheme().getDescription();
+	}
+
+	@Override
+	public boolean isSettable() {
+		return false;
+	}
+
+	@Override
+	public Object getBindingValue(Object target, BindingEvaluationContext context) {
+		System.out.println("On me demande la value pour " + target);
+		return null;
+	}
+
+	@Override
+	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
+		System.out.println("On set la value " + value + " pour " + target);
+	}
+	*/
 }

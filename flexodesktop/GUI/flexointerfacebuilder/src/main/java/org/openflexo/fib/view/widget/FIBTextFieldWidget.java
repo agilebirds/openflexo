@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -28,9 +29,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -79,6 +82,9 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 			panel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
 					RIGHT_COMPENSATING_BORDER));
 		}
+		/*else {
+		textField.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+		}*/
 
 		if (isReadOnly()) {
 			textField.setEditable(false);
@@ -132,6 +138,20 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				updateModelFromWidget();
+				final Window w = SwingUtilities.windowForComponent(textField);
+				if (w instanceof JDialog) {
+					if (((JDialog) w).getRootPane().getDefaultButton() != null) {
+						SwingUtilities.invokeLater(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+
+								((JDialog) w).getRootPane().getDefaultButton().doClick();
+							}
+						});
+					}
+				}
 			}
 		});
 		textField.addFocusListener(this);

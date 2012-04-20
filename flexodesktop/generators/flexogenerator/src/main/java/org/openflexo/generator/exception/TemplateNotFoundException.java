@@ -27,13 +27,13 @@ import org.openflexo.generator.AbstractProjectGenerator;
 public class TemplateNotFoundException extends TemplateReplacementException {
 	public TemplateNotFoundException(String templateName, String searchedDirectories,
 			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
-		super("Template not found", "template_not_found", "template name : " + templateName + "\n" + searchedDirectories, new Exception(),
-				projectGenerator);
+		super("Template not found: " + templateName, "template_not_found", "template name : " + templateName + "\n" + searchedDirectories,
+				new Exception(), projectGenerator);
 	}
 
 	public TemplateNotFoundException(String templateName, IOException ioException,
 			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
-		super("Template not found", "template_not_found", "template name : " + templateName + "\nIOException occured.", ioException,
-				projectGenerator);
+		super("Template not found: " + templateName, "template_not_found", "template name : " + templateName + "\nIOException occured.",
+				ioException, projectGenerator);
 	}
 }

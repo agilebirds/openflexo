@@ -39,7 +39,7 @@ import org.openflexo.foundation.rm.FlexoProject;
  */
 public abstract class TypeSelectorColumn<D extends FlexoModelObject> extends CustomColumn<D, DMType> {
 
-	protected String STRING_REPRESENTATION_WHEN_NULL = "coucou";
+	protected String STRING_REPRESENTATION_WHEN_NULL = "<null>";
 
 	protected static final Logger logger = Logger.getLogger(TypeSelectorColumn.class.getPackage().getName());
 

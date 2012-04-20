@@ -128,8 +128,8 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				g.fillRect(0, g.getHeight() - arcSize / 2 - 2 + CONTAINER_LABEL_HEIGHT, g.getWidth(), 3);
 
 				Rectangle labelBoundsRect = getNormalizedLabelBounds();
-				labelBoundsRect.x = labelBoundsRect.x - (int) (getX());
-				labelBoundsRect.y = labelBoundsRect.y - (int) (getY());
+				labelBoundsRect.x = labelBoundsRect.x - (int) getX();
+				labelBoundsRect.y = labelBoundsRect.y - (int) getY();
 
 				g.useBackgroundStyle(BackgroundStyle.makeColoredBackground(Color.WHITE));
 				g.fillRoundRect(labelBoundsRect.x, labelBoundsRect.y, labelBoundsRect.width, labelBoundsRect.height, 10, 10);
@@ -139,7 +139,8 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				Color bestColor = FGEUtils.chooseBestColor(mainColor, Color.WHITE, mainColor, FGEUtils.emphasizedColor(mainColor),
 						emphasizedMainColor);
 				g.useTextStyle(TextStyle.makeTextStyle(bestColor, FGEConstants.DEFAULT_TEXT_FONT));
-				g.drawString(getRole().getName(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT, TextAlignment.CENTER);
+				g.drawString(getRole().getName(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT,
+						HorizontalTextAlignment.CENTER);
 
 				g.useBackgroundStyle(decorationBackground);
 				g.fillCircle(new FGEPoint(15, 5), new FGEDimension(22, 22));
@@ -219,11 +220,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	}
 
 	@Override
-	public TextAlignment getTextAlignment() {
-		return TextAlignment.LEFT;
-	}
-
-	@Override
 	public String getText() {
 		return getRole().getName();
 	}
@@ -232,7 +228,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	public void setTextNoNotification(String text) {
 		if (!getRole().isImported()) {
 			try {
-				(getRole()).setName(text);
+				getRole().setName(text);
 				roleNameX = -1;
 			} catch (DuplicateRoleException e) {
 				// TODO Auto-generated catch block
@@ -256,7 +252,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 		setIsFloatingLabel(true);
 		setTextStyle(TextStyle.makeTextStyle(emphasizedMainColor, new Font("SansSerif", Font.BOLD, 12)));
-		setTextAlignment(TextAlignment.LEFT);
 
 		// Those are the styles used by border painter (not the one used for shape itself, which are empty)
 
@@ -474,13 +469,13 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	}
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		return concatenedList;
 	}
 
 	private FGEArea lanes;
-	private ControlArea lanesArea;
-	private ConcatenedList<ControlArea> concatenedList;
+	private ControlArea<?> lanesArea;
+	private ConcatenedList<ControlArea<?>> concatenedList;
 
 	private void updateControlArea() {
 		Vector<FGESegment> lines = new Vector<FGESegment>();
@@ -512,7 +507,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 			}
 		};
 		controlsArea = new SWLContainerControls(this);
-		concatenedList = new ConcatenedList<ControlArea>();
+		concatenedList = new ConcatenedList<ControlArea<?>>();
 		concatenedList.addElementList(super.getControlAreas());
 		concatenedList.addElement(lanesArea);
 		concatenedList.addElement(controlsArea);

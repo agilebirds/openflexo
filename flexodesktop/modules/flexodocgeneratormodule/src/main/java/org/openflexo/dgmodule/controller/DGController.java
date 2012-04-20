@@ -339,7 +339,9 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		getDGSelectionManager().addObserver(getSharedInspectorController());
+		if (useOldInspectorScheme()) {
+			getDGSelectionManager().addObserver(getSharedInspectorController());
+		}
 	}
 
 	// =========================================================

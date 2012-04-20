@@ -22,12 +22,14 @@ package org.openflexo.components.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.RGBImageFilter;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -43,11 +45,17 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
+import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.fib.view.widget.FIBBrowserWidget;
+import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.action.FlexoAction;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
@@ -97,15 +105,43 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		getTextField().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
+
+				// if command-key is pressed, do not open popup
+				if (e.isAltDown() || e.isAltGraphDown() || e.isControlDown() || e.isMetaDown()) {
+					return;
+				}
+
+				boolean requestFocus = getTextField().hasFocus();
+				final int selectionStart = getTextField().getSelectionStart() + 1;
+				final int selectionEnd = getTextField().getSelectionEnd() + 1;
+				if (!popupIsShown()) {
+					openPopup();
+				}
+				updateMatchingValues();
+				if (requestFocus) {
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							getTextField().requestFocus();
+							getTextField().select(selectionStart, selectionEnd);
+						}
+					});
+				}
+
+				/*SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
+						int selectionStart = getTextField().getSelectionStart();
+						int selectionEnd = getTextField().getSelectionEnd();
+						System.out.println("Was selected: " + selectionStart + " and " + selectionEnd);
 						if (!popupIsShown()) {
 							openPopup();
 						}
 						updateMatchingValues();
+						System.out.println("Now select: " + selectionStart + " and " + selectionEnd);
+						getTextField().select(selectionStart, selectionEnd);
 					}
-				});
+				});*/
 			}
 		});
 	}
@@ -119,12 +155,18 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	@Override
 	public void openPopup() {
 		super.openPopup();
+		// System.out.println("Request focus now");
 		getTextField().requestFocus();
 	}
 
 	@Override
 	public PropertyChangeSupport getPropertyChangeSupport() {
 		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return null;
 	}
 
 	// private String filteredName;
@@ -190,9 +232,17 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	}
 
 	/**
+	 * This method is used to retrieve all potential values when implementing completion<br>
+	 * Completion will be performed on that selectable values<br>
+	 * Default implementation is to iterate on all values of browser, please take care to infinite loops.<br>
+	 * 
 	 * Override when required
 	 */
 	protected Enumeration<T> getAllSelectableValues() {
+		Vector<T> listByExploringTree = ((SelectorDetailsPanel) getCustomPanel()).getAllSelectableValues();
+		if (listByExploringTree != null) {
+			return listByExploringTree.elements();
+		}
 		return null;
 	}
 
@@ -284,6 +334,32 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		}
 
 		public void delete() {
+		}
+
+		protected Vector<T> getAllSelectableValues() {
+			Vector<T> returned = new Vector<T>();
+			FIBBrowserWidget browserWidget = retrieveFIBBrowserWidget();
+			if (browserWidget == null) {
+				return null;
+			}
+			Iterator<Object> it = browserWidget.getBrowserModel().retrieveContents();
+			while (it.hasNext()) {
+				Object o = it.next();
+				if (getRepresentedType().isAssignableFrom(o.getClass())) {
+					returned.add((T) o);
+				}
+			}
+			return returned;
+		}
+
+		private FIBBrowserWidget retrieveFIBBrowserWidget() {
+			List<FIBComponent> listComponent = fibComponent.retrieveAllSubComponents();
+			for (FIBComponent c : listComponent) {
+				if (c instanceof FIBBrowser) {
+					return (FIBBrowserWidget) controller.viewForComponent(c);
+				}
+			}
+			return null;
 		}
 
 	}
@@ -465,6 +541,32 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	// Used for computation of "isAcceptableValue()?"
 	public void setCandidateValue(T candidateValue) {
 		this.candidateValue = candidateValue;
+	}
+
+	public static class FlexoTestEditor extends DefaultFlexoEditor {
+		public FlexoTestEditor(FlexoProject project) {
+			super(project);
+		}
+
+		@Override
+		public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
+				FlexoActionType<A, T1, T2> actionType) {
+			FlexoActionInitializer<A> init = new FlexoActionInitializer<A>() {
+
+				@Override
+				public boolean run(ActionEvent event, A action) {
+					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),
+							FlexoTestEditor.this);
+					if (!reply) {
+						System.err.println("ACTION NOT ENABLED :" + action.getClass() + " on object "
+								+ (action.getFocusedObject() != null ? action.getFocusedObject().getClass() : "null focused object"));
+					}
+					return reply;
+				}
+
+			};
+			return init;
+		}
 	}
 
 	/*

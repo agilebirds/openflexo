@@ -45,6 +45,7 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeSingleton;
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -62,6 +63,7 @@ import org.openflexo.foundation.cg.templates.TemplateFileEdited;
 import org.openflexo.foundation.cg.templates.TemplateFileEditionCancelled;
 import org.openflexo.foundation.cg.templates.TemplateFileRedefined;
 import org.openflexo.foundation.cg.templates.TemplateFileSaved;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.ResourceType;
@@ -136,6 +138,12 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public AbstractProjectGenerator<R> getProjectGenerator() {
 		return projectGenerator;
 	}
@@ -194,17 +202,10 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		context.put("n", StringUtils.LINE_SEPARATOR);
 		context.put("trueValue", Boolean.TRUE);
 		context.put("falseValue", Boolean.FALSE);
-		context.put("toolbox", new ToolBox());
-		context.put("javaUtils", new JavaUtils());
-		context.put("globalVariableMap", new HashMap<String, Object>() {
-			@Override
-			public Object put(String key, Object value) {
-				if (value == null) {
-					System.err.println("coucou");
-				}
-				return super.put(key, value);
-			}
-		});
+		context.put("toolbox", ToolBox.class);
+		context.put("javaUtils", JavaUtils.class);
+		context.put("Math", Math.class);
+		context.put("globalVariableMap", new HashMap<String, Object>());
 		context.put("today", new Date());
 		return context;
 	}
@@ -330,7 +331,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			CGTemplate template = templateWithName(templateRelativePath);
 
 			Velocity.setApplicationAttribute("templateLocator", getTemplateLocator());
-			Velocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
+			FlexoVelocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
 			Velocity.setApplicationAttribute("templateLocator", null);
 
 		} catch (TemplateNotFoundException e) {
@@ -605,6 +606,10 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return new Vector<Object>();
 	}
 
+	public List<Object> getNewList() {
+		return new ArrayList<Object>();
+	}
+
 	public Hashtable<Object, Object> getNewHashtable() {
 		return new Hashtable<Object, Object>();
 	}
@@ -700,4 +705,58 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 		return null;
 	}
+
+	public Object e(BindingEvaluationContext context, String bindingExpression) {
+		return evaluateBinding(context, bindingExpression);
+	}
+
+	public Object eval(BindingEvaluationContext context, String bindingExpression) {
+		return evaluateBinding(context, bindingExpression);
+	}
+
+	public Object evaluate(BindingEvaluationContext context, String bindingExpression) {
+		return evaluateBinding(context, bindingExpression);
+	}
+
+	public Object evaluateBinding(BindingEvaluationContext context, String bindingExpression) {
+		if (context == null) {
+			return null;
+		}
+		if (bindingExpression == null) {
+			return null;
+		}
+		if (context instanceof EditionPatternInstance) {
+			return ((EditionPatternInstance) context).evaluate(bindingExpression);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Binding evaluation not implemented for objects of type " + context.getClass().getName());
+			}
+		}
+		return null;
+	}
+
+	public void log(String s) {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("LOG: " + s);
+		}
+	}
+
+	public void log(String s, Object o) {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("LOG: " + s + " object=" + o + (o != null ? "(" + o.getClass().getSimpleName() + ")" : ""));
+		}
+	}
+
+	public void logO(Object o) {
+		if (o == null) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("LOG: object=null");
+			}
+			return;
+		}
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("LOG: object=" + o + " of " + o.getClass().getSimpleName());
+		}
+	}
+
 }

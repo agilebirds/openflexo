@@ -90,6 +90,34 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		controller = null;
 	}
 
+	public JComponent getJComponentForObject(FIBComponent component) {
+		if (getComponent() == component) {
+			return getJComponent();
+		} else {
+			for (FIBView v : getSubViews()) {
+				JComponent j = v.getJComponentForObject(component);
+				if (j != null) {
+					return j;
+				}
+			}
+		}
+		return null;
+	}
+
+	public JComponent geDynamicJComponentForObject(FIBComponent component) {
+		if (getComponent() == component) {
+			return getDynamicJComponent();
+		} else {
+			for (FIBView v : getSubViews()) {
+				JComponent j = v.geDynamicJComponentForObject(component);
+				if (j != null) {
+					return j;
+				}
+			}
+		}
+		return null;
+	}
+
 	public boolean isDeleted() {
 		return isDeleted;
 	}
@@ -251,16 +279,20 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 	public void notifyDynamicModelChanged() {
 		// System.out.println("notifyDynamicModelChanged()");
-		Iterator<FIBComponent> it = getComponent().getMayAltersIterator();
-		while (it.hasNext()) {
-			FIBComponent c = it.next();
-			logger.fine("Because dynamic model change, now update " + c);
-			FIBView view = getController().viewForComponent(c);
-			if (view != null) {
-				view.updateDataObject(getDataObject());
-			} else {
-				logger.warning("Unexpected null view when retrieving view for " + c);
+		if (getComponent() != null) {
+			Iterator<FIBComponent> it = getComponent().getMayAltersIterator();
+			while (it.hasNext()) {
+				FIBComponent c = it.next();
+				logger.fine("Because dynamic model change, now update " + c);
+				FIBView view = getController().viewForComponent(c);
+				if (view != null) {
+					view.updateDataObject(getDataObject());
+				} else {
+					logger.warning("Unexpected null view when retrieving view for " + c);
+				}
 			}
+		} else {
+			logger.warning("Unexpected null component");
 		}
 	}
 
@@ -285,7 +317,10 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	public abstract void updateFont();
 
 	public String getLocalized(String key) {
-		return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		if (getController().getLocalizer() != null) {
+			return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		}
+		return key;
 	}
 
 	public boolean isSelectableComponent() {

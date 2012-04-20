@@ -24,7 +24,7 @@ import org.openflexo.foundation.DataModification;
 public class MetricsDefinitionRemoved extends DataModification {
 
 	public MetricsDefinitionRemoved(MetricsDefinition old, String propertyName) {
-		super(-1, propertyName, old, null);
+		super(propertyName, old, null);
 	}
 
 }

@@ -132,10 +132,10 @@ public class DocxVelocityXmlFromHtml {
 			ensureIsWithinParagraph();
 			ensureIsWithinR();
 
-			sb.append(StringUtils.LINE_SEPARATOR + "<w:t xml:space=\"preserve\">");
+			sb.append(StringUtils.LINE_SEPARATOR).append("<w:t xml:space=\"preserve\">");
 			sb.append(StringEscapeUtils.escapeXml(XMLCoder.removeUnacceptableChars(new String(data))));
 			sb.append("</w:t>");
-			sb.append(StringUtils.LINE_SEPARATOR + "</w:r>");
+			sb.append(StringUtils.LINE_SEPARATOR).append("</w:r>");
 			withinR = false;
 		}
 
@@ -234,7 +234,7 @@ public class DocxVelocityXmlFromHtml {
 
 		private boolean ensureIsWithinParagraph(boolean isStartListItem) {
 			if (!withinParagraph) {
-				sb.append(StringUtils.LINE_SEPARATOR + "<w:p>");
+				sb.append(StringUtils.LINE_SEPARATOR).append("<w:p>");
 				withinParagraph = true;
 				sb.append(getCurrentpPr(isStartListItem));
 				return true;
@@ -245,15 +245,15 @@ public class DocxVelocityXmlFromHtml {
 		private void closeParagraph() {
 			if (withinParagraph) {
 				if (withinR) {
-					sb.append(StringUtils.LINE_SEPARATOR + "<w:t></w:t>");
-					sb.append(StringUtils.LINE_SEPARATOR + "</w:r>");
+					sb.append(StringUtils.LINE_SEPARATOR).append("<w:t></w:t>");
+					sb.append(StringUtils.LINE_SEPARATOR).append("</w:r>");
 					withinR = false;
 				} else if (sb.toString().endsWith("<w:p>")) {
-					sb.append(StringUtils.LINE_SEPARATOR + "<w:r>");
-					sb.append(StringUtils.LINE_SEPARATOR + "<w:t></w:t>");
-					sb.append(StringUtils.LINE_SEPARATOR + "</w:r>");
+					sb.append(StringUtils.LINE_SEPARATOR).append("<w:r>");
+					sb.append(StringUtils.LINE_SEPARATOR).append("<w:t></w:t>");
+					sb.append(StringUtils.LINE_SEPARATOR).append("</w:r>");
 				}
-				sb.append(StringUtils.LINE_SEPARATOR + "</w:p>");
+				sb.append(StringUtils.LINE_SEPARATOR).append("</w:p>");
 				withinParagraph = false;
 			}
 		}
@@ -264,9 +264,9 @@ public class DocxVelocityXmlFromHtml {
 
 				String rPr = rProperties.getCurrentDocxProperties();
 				if (rPr.length() > 0) {
-					sb.append(StringUtils.LINE_SEPARATOR + "<w:rPr>");
+					sb.append(StringUtils.LINE_SEPARATOR).append("<w:rPr>");
 					sb.append(rPr);
-					sb.append(StringUtils.LINE_SEPARATOR + "</w:rPr>");
+					sb.append(StringUtils.LINE_SEPARATOR).append("</w:rPr>");
 				}
 				withinR = true;
 			}
@@ -291,9 +291,9 @@ public class DocxVelocityXmlFromHtml {
 				currentNumberingId = getUniqueId();
 				currentNumberingLevel = 0;
 				if (tag == HTML.Tag.UL) {
-					bulletsIds.add("" + currentNumberingId);
+					bulletsIds.add(String.valueOf(currentNumberingId));
 				} else {
-					orderedBulletsIds.add("" + currentNumberingId);
+					orderedBulletsIds.add(String.valueOf(currentNumberingId));
 				}
 			} else {
 				currentNumberingLevel++;
@@ -365,46 +365,49 @@ public class DocxVelocityXmlFromHtml {
 			int uniqueID = getUniqueId();
 
 			StringBuilder imageXml = new StringBuilder();
-			imageXml.append(StringUtils.LINE_SEPARATOR + "<w:drawing>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "	<wp:inline distT=\"0\" distB=\"0\" distL=\"0\" distR=\"0\">");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "		<wp:extent cx=\"" + imageWidth + "\" cy=\"" + imageHeight + "\" />");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "		<wp:docPr id=\"" + uniqueID + "\" name=\"Picture\" />");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "		<wp:cNvGraphicFramePr>");
-			imageXml.append(StringUtils.LINE_SEPARATOR
-					+ "			<a:graphicFrameLocks xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" noChangeAspect=\"1\" />");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "		</wp:cNvGraphicFramePr>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "		<a:graphic xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">");
-			imageXml.append(StringUtils.LINE_SEPARATOR
-					+ "			<a:graphicData uri=\"http://schemas.openxmlformats.org/drawingml/2006/picture\">");
-			imageXml.append(StringUtils.LINE_SEPARATOR
-					+ "				<pic:pic xmlns:pic=\"http://schemas.openxmlformats.org/drawingml/2006/picture\">");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "					<pic:nvPicPr>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "						<pic:cNvPr id=\"0\" name=\"\" />");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "						<pic:cNvPicPr/>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "					</pic:nvPicPr>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "					<pic:blipFill>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "						<a:blip r:embed=\"" + projectDocxGenerator.getRIdForString(imageSubPath)
-					+ "\" />");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "						<a:stretch>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "							<a:fillRect/>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "						</a:stretch>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "					</pic:blipFill>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "					<pic:spPr>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "						<a:xfrm>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "							<a:off x=\"0\" y=\"0\" />");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "							<a:ext cx=\"" + imageWidth + "\" cy=\"" + imageHeight + "\" />");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "						</a:xfrm>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "						<a:prstGeom prst=\"rect\">");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "							<a:avLst/>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "						</a:prstGeom>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "					</pic:spPr>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "				</pic:pic>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "			</a:graphicData>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "		</a:graphic>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "	</wp:inline>");
-			imageXml.append(StringUtils.LINE_SEPARATOR + "</w:drawing>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("<w:drawing>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("	<wp:inline distT=\"0\" distB=\"0\" distL=\"0\" distR=\"0\">");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("		<wp:extent cx=\"").append(imageWidth).append("\" cy=\"")
+					.append(imageHeight).append("\" />");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("		<wp:docPr id=\"").append(uniqueID).append("\" name=\"Picture\" />");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("		<wp:cNvGraphicFramePr>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append(
+					"			<a:graphicFrameLocks xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" noChangeAspect=\"1\" />");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("		</wp:cNvGraphicFramePr>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append(
+					"		<a:graphic xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append(
+					"			<a:graphicData uri=\"http://schemas.openxmlformats.org/drawingml/2006/picture\">");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append(
+					"				<pic:pic xmlns:pic=\"http://schemas.openxmlformats.org/drawingml/2006/picture\">");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("					<pic:nvPicPr>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("						<pic:cNvPr id=\"0\" name=\"\" />");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("						<pic:cNvPicPr/>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("					</pic:nvPicPr>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("					<pic:blipFill>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("						<a:blip r:embed=\"")
+					.append(projectDocxGenerator.getRIdForString(imageSubPath)).append("\" />");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("						<a:stretch>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("							<a:fillRect/>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("						</a:stretch>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("					</pic:blipFill>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("					<pic:spPr>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("						<a:xfrm>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("							<a:off x=\"0\" y=\"0\" />");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("							<a:ext cx=\"").append(imageWidth).append("\" cy=\"")
+					.append(imageHeight).append("\" />");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("						</a:xfrm>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("						<a:prstGeom prst=\"rect\">");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("							<a:avLst/>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("						</a:prstGeom>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("					</pic:spPr>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("				</pic:pic>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("			</a:graphicData>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("		</a:graphic>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("	</wp:inline>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("</w:drawing>");
 
-			imageXml.append(StringUtils.LINE_SEPARATOR + "</w:r>");
+			imageXml.append(StringUtils.LINE_SEPARATOR).append("</w:r>");
 			sb.append(imageXml);
 			withinR = false;
 			String rel = "<Relationship Id=\"" + projectDocxGenerator.getRIdForString(imageSubPath)
@@ -458,10 +461,10 @@ public class DocxVelocityXmlFromHtml {
 				sb.append("<w:hyperlink");
 				isWithinA = true;
 				if (isAnchor) {
-					sb.append(" w:anchor=\"" + href.substring(1) + "\"");
+					sb.append(" w:anchor=\"").append(href.substring(1)).append("\"");
 				} else {
 					String rId = projectDocxGenerator.getRIdForString(href);
-					sb.append(" r:id=\"" + rId + "\"");
+					sb.append(" r:id=\"").append(rId).append("\"");
 
 					String rel = "<Relationship Id=\"" + rId
 							+ "\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink\" Target=\"" + href
@@ -469,10 +472,10 @@ public class DocxVelocityXmlFromHtml {
 					getAdditionalRelationships().add(rel);
 				}
 				if (target != null && target.length() > 0) {
-					sb.append(" w:tgtFrame=\"" + target + "\"");
+					sb.append(" w:tgtFrame=\"").append(target).append("\"");
 				}
 				if (title != null && title.length() > 0) {
-					sb.append(" w:tooltip=\"" + title + "\"");
+					sb.append(" w:tooltip=\"").append(title).append("\"");
 				}
 				sb.append(">");
 			}
@@ -502,12 +505,12 @@ public class DocxVelocityXmlFromHtml {
 		private String getCurrentpPr(boolean isStartListItem) {
 			StringBuilder tmpSb = new StringBuilder();
 			if (currentNumberingLevel != null) {
-				tmpSb.append(StringUtils.LINE_SEPARATOR + "<w:pStyle w:val=\"ListParagraph\"/>");
+				tmpSb.append(StringUtils.LINE_SEPARATOR).append("<w:pStyle w:val=\"ListParagraph\"/>");
 				if (isStartListItem) {
-					tmpSb.append(StringUtils.LINE_SEPARATOR + "<w:numPr>");
-					tmpSb.append(StringUtils.LINE_SEPARATOR + "<w:ilvl w:val=\"" + currentNumberingLevel + "\"/>");
-					tmpSb.append(StringUtils.LINE_SEPARATOR + "<w:numId w:val=\"" + currentNumberingId + "\"/>");
-					tmpSb.append(StringUtils.LINE_SEPARATOR + "</w:numPr>");
+					tmpSb.append(StringUtils.LINE_SEPARATOR).append("<w:numPr>");
+					tmpSb.append(StringUtils.LINE_SEPARATOR).append("<w:ilvl w:val=\"").append(currentNumberingLevel).append("\"/>");
+					tmpSb.append(StringUtils.LINE_SEPARATOR).append("<w:numId w:val=\"").append(currentNumberingId).append("\"/>");
+					tmpSb.append(StringUtils.LINE_SEPARATOR).append("</w:numPr>");
 				}
 			}
 
@@ -515,7 +518,7 @@ public class DocxVelocityXmlFromHtml {
 
 			if (tmpSb.length() > 0) {
 				tmpSb.insert(0, StringUtils.LINE_SEPARATOR + "<w:pPr>");
-				tmpSb.append(StringUtils.LINE_SEPARATOR + "</w:pPr>");
+				tmpSb.append(StringUtils.LINE_SEPARATOR).append("</w:pPr>");
 			}
 
 			return tmpSb.toString();
@@ -596,20 +599,20 @@ public class DocxVelocityXmlFromHtml {
 					} else if (tag == HTML.Tag.FONT) {
 						if (attributeName == Attribute.SIZE) {
 							if (attributeValue != null) {
-								computedStyle.append(CSS.Attribute.FONT_SIZE + ": "
-										+ HTMLUtils.getFontSizeInPointsFromFontValue(attributeValue.toString()) + "pt");
+								computedStyle.append(CSS.Attribute.FONT_SIZE).append(": ")
+										.append(HTMLUtils.getFontSizeInPointsFromFontValue(attributeValue.toString())).append("pt");
 							}
 						} else if (attributeName == Attribute.COLOR) {
-							computedStyle.append(CSS.Attribute.COLOR + ": " + attributeValue);
+							computedStyle.append(CSS.Attribute.COLOR).append(": ").append(attributeValue);
 						}
 					} else if (tag == HTML.Tag.P) {
 						if (attributeName == Attribute.ALIGN) {
-							computedStyle.append(CSS.Attribute.TEXT_ALIGN + ": " + attributeValue);
+							computedStyle.append(CSS.Attribute.TEXT_ALIGN).append(": ").append(attributeValue);
 						}
 					}
 
 					if (computedStyle.length() > 0 && !computedStyle.toString().endsWith(";")) {
-						computedStyle.append(";");
+						computedStyle.append(';');
 					}
 				}
 

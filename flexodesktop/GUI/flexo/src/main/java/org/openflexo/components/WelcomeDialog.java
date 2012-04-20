@@ -42,6 +42,5 @@ public class WelcomeDialog extends FIBDialog<ApplicationData> {
 	public WelcomeDialog() {
 		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new ApplicationData(), FlexoFrame.getActiveFrame(), true);
 		setResizable(false);
-		showDialog();
 	}
 }

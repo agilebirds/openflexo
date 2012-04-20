@@ -34,8 +34,7 @@ public class ResourceStatusModification extends DataModification {
 	 * @param newValue
 	 */
 	public ResourceStatusModification(Object oldValue, Object newValue) {
-		super(-1, "status", oldValue, newValue);
-		// TODO Auto-generated constructor stub
+		super("status", oldValue, newValue);
 	}
 
 }

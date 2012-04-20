@@ -173,8 +173,8 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 		patternRole.addObserver(this);
 		if (patternRole.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			EditionPatternPreviewShapeGR graphicalRepresentation = new EditionPatternPreviewShapeGR(patternRole, this);
-			((ShapeGraphicalRepresentation) patternRole.getGraphicalRepresentation()).setValidated(false);
-			graphicalRepresentation.setsWith((ShapeGraphicalRepresentation) patternRole.getGraphicalRepresentation(),
+			((ShapeGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation()).setValidated(false);
+			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) patternRole.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			patternRole._setGraphicalRepresentationNoNotification(graphicalRepresentation);
 			return graphicalRepresentation;
@@ -191,8 +191,8 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 		patternRole.addObserver(this);
 		if (patternRole.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
 			EditionPatternPreviewConnectorGR graphicalRepresentation = new EditionPatternPreviewConnectorGR(patternRole, this);
-			((ConnectorGraphicalRepresentation) patternRole.getGraphicalRepresentation()).setValidated(false);
-			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation) patternRole.getGraphicalRepresentation(),
+			((ConnectorGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation()).setValidated(false);
+			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			patternRole._setGraphicalRepresentationNoNotification(graphicalRepresentation);
 			return graphicalRepresentation;
@@ -246,8 +246,7 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 			if (gr == null || gr.isDeleted()) {
 				gr = new EditionPatternConnectorFromArtefactGR(this, EditionPatternPreviewRepresentation.this);
 				if (connector.getArtifactFromGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					ShapeGraphicalRepresentation storedGR = (ShapeGraphicalRepresentation) connector
-							.getArtifactFromGraphicalRepresentation();
+					GraphicalRepresentation<?> storedGR = (GraphicalRepresentation<?>) connector.getArtifactFromGraphicalRepresentation();
 					gr.setsWith(storedGR, GraphicalRepresentation.Parameters.text);
 				}
 				connector.setArtifactFromGraphicalRepresentation(gr);
@@ -270,7 +269,7 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 			if (gr == null || gr.isDeleted()) {
 				gr = new EditionPatternConnectorToArtefactGR(this, EditionPatternPreviewRepresentation.this);
 				if (connector.getArtifactToGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					gr.setsWith((ShapeGraphicalRepresentation) connector.getArtifactToGraphicalRepresentation(),
+					gr.setsWith((GraphicalRepresentation<?>) connector.getArtifactToGraphicalRepresentation(),
 							GraphicalRepresentation.Parameters.text);
 				}
 				connector.setArtifactToGraphicalRepresentation(gr);

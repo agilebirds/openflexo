@@ -245,8 +245,10 @@ public class DataBinding implements StringConvertable<DataBinding> {
 				logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
 						+ (getOwner() != null ? getOwner().getRootComponent() : null));
 				// Dev note: Uncomment following to get more informations
-				// logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootComponent():null));
-				// logger.info("BindingModel="+getOwner().getBindingModel());
+				// logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
+				// + (getOwner() != null ? (getOwner()).getRootComponent() : null));
+				// logger.info("BindingModel=" + getOwner().getBindingModel());
+				// logger.info("BindingFactory=" + getOwner().getBindingFactory());
 				// binding.debugIsBindingValid();
 				// BindingExpression.logger.setLevel(Level.FINE);
 				// binding = AbstractBinding.abstractBindingConverter.convertFromString(getUnparsedBinding());

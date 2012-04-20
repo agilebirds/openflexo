@@ -25,9 +25,10 @@ import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-public class DropScheme extends EditionScheme {
+public class DropScheme extends AbstractCreationScheme {
 
 	private String target;
+	private ShapePatternRole targetPatternRole;
 
 	public DropScheme() {
 		super();
@@ -88,19 +89,38 @@ public class DropScheme extends EditionScheme {
 		}
 	}
 
-	public boolean isValidTarget(EditionPattern aTarget) {
-		return getTargetEditionPattern() == aTarget;
+	public boolean targetHasMultipleRoles() {
+		return getTargetEditionPattern() != null && getTargetEditionPattern().getShapePatternRoles().size() > 1;
+	}
 
+	public ShapePatternRole getTargetPatternRole() {
+		return targetPatternRole;
+	}
+
+	public void setTargetPatternRole(ShapePatternRole targetPatternRole) {
+		this.targetPatternRole = targetPatternRole;
+	}
+
+	public boolean isValidTarget(EditionPattern aTarget, PatternRole contextRole) {
+		if (getTargetEditionPattern() == aTarget) {
+			if (targetHasMultipleRoles()) {
+				return getTargetPatternRole() == null || (getTargetPatternRole() == contextRole);
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
+		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getTargetEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>(EditionScheme.TARGET, getTargetEditionPattern(),
 					this));
 		} else if (_getTarget() != null && !_getTarget().equals("top")) {
-			logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
+			// logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
 		}
 	}

@@ -22,7 +22,6 @@ package org.openflexo.view;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -32,9 +31,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
@@ -88,7 +88,7 @@ public class ModuleBar extends JPanel {
 	public void notifySwitchToModule(Module m) {
 		refresh();
 		if (moduleButtons.get(m) != null) {
-			(moduleButtons.get(m)).setAsActive();
+			moduleButtons.get(m).setAsActive();
 		}
 	}
 
@@ -134,25 +134,30 @@ public class ModuleBar extends JPanel {
 				 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
 				 */
 				@Override
-				public void mouseClicked(MouseEvent e) {
-					FlexoProject project = getModuleLoader().getProject();
-					if (project == null && module.requireProject()) {
-						File projectDirectory;
+				public void mouseClicked(MouseEvent event) {
+					FlexoProject currentProject = getModuleLoader().getProject();
+					if (currentProject == null && module.requireProject()) {
 						try {
-							projectDirectory = OpenProjectComponent.getProjectDirectory();
-							project = getProjectLoader().loadProject(projectDirectory).getProject();
-						} catch (ProjectLoadingCancelledException e1) {
+							ModuleLoader.instance().openProject(null, module);
+						} catch (ProjectLoadingCancelledException e) {
+							e.printStackTrace();
+						} catch (ModuleLoadingException e) {
+							e.printStackTrace();
+							FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
+						} catch (ProjectInitializerException e) {
+							e.printStackTrace();
+							FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+									+ e.getProjectDirectory().getAbsolutePath());
+						}
+					} else {
+						try {
+							getModuleLoader().switchToModule(module, currentProject);
+						} catch (ModuleLoadingException e) {
+							FlexoController.notify("Cannot load module." + e.getMessage());
 							return;
 						}
 					}
 
-					try {
-						getModuleLoader().switchToModule(module, project);
-					} catch (ModuleLoadingException e1) {
-						logger.warning("Error while loading module :" + e1.getModule() + "." + e1.getMessage());
-						e1.printStackTrace();
-						FlexoController.notify("Error while loading module :" + e1.getModule() + "." + e1.getMessage());
-					}
 				}
 
 				/**

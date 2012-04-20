@@ -757,6 +757,7 @@ if there is an associated screen make a hyperlink to the screen.
 
 #macro(tocEntry $_entry)
 <!--Entering macro tocEntry -->
+    $!{generator.beginTocEntry($_entry)}
     #if(${_entry.getStartOnANewPage()})
         <w:p>
             <w:r>
@@ -764,8 +765,29 @@ if there is an associated screen make a hyperlink to the screen.
             </w:r>
         </w:p>
     #end
-    #set($templateName = "#getTemplateNameForTocEntry($_entry)")
-    #set($templateType = "#getTemplateTypeForTocEntry($_entry)")
+    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
+    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
+    #set($templateName = ${_entry.getDefaultTemplateName()})
+    
+    #if(${_entry.isIteration()})
+    	${generator.log("Rendering iteration")}
+
+		#foreach($_item in ${generator.getIterableObjects($_entry)})
+			${generator.iterateOnItem($_entry,$_item)}
+			#if($generator.getItemCondition($_entry))
+    			${generator.log("Item is valid, performing rendering for this iteration")}
+    			#subTocEntries($_entry)
+			#end
+		#end
+    
+    #elseif(${_entry.isConditional()})
+    	${generator.log("Rendering conditional")}
+    	#if($generator.getCondition($_entry))
+    		${generator.log("Condition is true, performing rendering for this conditional")}
+    		#subTocEntries($_entry)
+		#end
+    
+    #else
     <w:p>
         <w:pPr>
             <w:keepNext/>
@@ -777,11 +799,17 @@ if there is an associated screen make a hyperlink to the screen.
         #renderTocEntryTitle($_entry)
     </w:p>
     #renderTocEntryContent($_entry)
-    #if($templateName.trim().length()>0)
+    #if($templateName)
         #set($newEntryLevel = $_entry.getLevel() + 1)
-        #render($_entry.getObject() $newEntryLevel $templateName $_entry)
+        #set($passedObject = $generator.getAccessedModelObject($_entry)))
+    	${generator.log($templateName, $passedObject)}
+        #render($passedObject $newEntryLevel $templateName $_entry)
+        ##render($generator.getCondition($_entry) $newEntryLevel $templateName $_entry)
     #end
     #subTocEntries($_entry)
+    #end
+    ${generator.endTocEntry($_entry)}
+
 <!-- Exiting macro tocEntry -->
 #end
 
@@ -799,10 +827,13 @@ name of the template corresponding to the specific toc_entry.
 !!!in particular, no debug info should be written out!!!!!
 *#
 #macro(getTemplateNameForTocEntry $_tocEntry)
-    #if(${_tocEntry.getIdentifier()} == $DocSection.PROCESSES)
+#parse(${_tocEntry.getDefaultTemplateName()})
+    #** #if(${_tocEntry.getIdentifier()} == $DocSection.PROCESSES)
         docx_tocentry_processes.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.SCREENS)
         docx_tocentry_screens.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.VIEWS)
+        docx_tocentry_views.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.DATA_MODEL)
         docx_tocentry_datamodel.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.DEFINITIONS)
@@ -811,6 +842,8 @@ name of the template corresponding to the specific toc_entry.
         docx_tocentry_roles.xml.vm
     #elseif(${_tocEntry.getIdentifier()} == $DocSection.RACI)
         docx_tocentry_raci_full.xml.vm
+    #elseif(${_tocEntry.getIdentifier()} == $DocSection.VIEWS)
+        docx_tocentry_views.xml.vm
     #elseif(${_tocEntry.isIndividualProcessFolder()})
         docx_tocentry_processfolder.xml.vm
     #elseif(${_tocEntry.isIndividualProcess()})
@@ -823,7 +856,7 @@ name of the template corresponding to the specific toc_entry.
         docx_tocentry_individualrole.xml.vm
     #elseif($_tocEntry.isIndividualComponentDefinition())
         docx_tocentry_screen.xml.vm
-    #end
+    #end *#
 #end
 
 #macro(getProcessTemplateNameForTocEntry $_tocEntry)
@@ -840,6 +873,8 @@ name of the template corresponding to the specific toc_entry.
     #end
 #end
 
+
+#**
 #macro(getTemplateTypeForTocEntry $_tocEntry)
     #if(${_tocEntry.getIdentifier()} == $DocSection.PROCESSES)
         tocentry_processes
@@ -877,6 +912,8 @@ name of the template corresponding to the specific toc_entry.
         tocentry_screen
     #end
 #end
+
+*#
 
 #macro(addAdditionalRels $rels)
 <!--Entering macro addAdditionalRels -->
@@ -1193,7 +1230,7 @@ name of the template corresponding to the specific toc_entry.
     #set($currentTocEntry = ${currentTocEntry.get()})
     #if(${currentTocEntry.getRecursionEnabled()})
         #if(${processOrFolder.getClassNameKey()} == 'process_folder')
-            #set($subFolders = ${processOrFolder.getFolders()})
+            #set($subFolders = ${processOrFolder.getSortedFolders()})
             #set($subProcesses = ${processOrFolder.getProcesses()})
         #else
             #set($subFolders = ${processOrFolder.getProcessNode().getSortedFolders()})
@@ -1342,6 +1379,10 @@ name of the template corresponding to the specific toc_entry.
 ##headersArray: contains a list of string which will be used as headers
 ##contents: contains a list of list of String which will be used to fill the table 
 #macro(renderDocxTable $headersArray $contents)
+#renderDocxTable2($headersArray $contents $falseValue)
+#end
+
+#macro(renderDocxTable2 $headersArray $contents $isRawContent)
 <!--Entering macro renderDocxTable -->
     <w:tbl>
         <w:tblPr>
@@ -1395,7 +1436,7 @@ name of the template corresponding to the specific toc_entry.
                                 <w:sz w:val="24"/>
                                 <w:szCs w:val="24"/>
                             </w:rPr>
-                            <w:t>$header</w:t>
+                            <w:t>#if(${isRawContent})#escape(${header})#else${header}#end</w:t>
                         </w:r>
                     </w:p>
                 </w:tc>
@@ -1418,7 +1459,17 @@ name of the template corresponding to the specific toc_entry.
                             #end
                         </w:tcPr>
                         #if($column.trim().length()>0)
-                            $column
+                            #if(${isRawContent})
+                            <w:p>
+                                <w:pPr><w:keepNext/></w:pPr>
+                                <w:r>
+                                    <w:t>#escape(${column})</w:t>
+                                </w:r>
+                            </w:p>
+                            #else
+                                ${column}
+                            #end
+                        
                         #else
                             <w:p>
                                 <w:pPr><w:keepNext/></w:pPr>
@@ -1434,6 +1485,7 @@ name of the template corresponding to the specific toc_entry.
     </w:tbl>
 <!-- Exiting macro renderDocxTable -->
 #end
+
 
 #*
 * This macro outputs a table environment with the metrics, with an introduction text.
@@ -1897,7 +1949,7 @@ name of the template corresponding to the specific toc_entry.
 #set($activities=$generator.getNewVector())
 #foreach($subProcessNode in ${process.getSortedMeaningFullActivitiesAndSubProcessNode()})
     #void($activities.add($subProcessNode))
-    #if($subProcessNode.getSubProcess())
+    #if($subProcessNode.getSubProcess() && $falseValue)
     #foreach($a in $subProcessNode.getSubProcess().getSortedMeaningFullActivities())
         #if(!${a.getDontGenerate()})#void($activities.add($a))#end
     #end

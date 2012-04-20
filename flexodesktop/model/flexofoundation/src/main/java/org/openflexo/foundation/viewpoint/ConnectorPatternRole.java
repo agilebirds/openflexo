@@ -16,6 +16,14 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 	private Object artifactToGraphicalRepresentation;
 
 	@Override
+	protected void initDefaultSpecifications() {
+		super.initDefaultSpecifications();
+		for (GraphicalFeature<?, ?> GF : AVAILABLE_FEATURES) {
+			grSpecifications.add(new GraphicalElementSpecification(this, GF, false, true));
+		}
+	}
+
+	@Override
 	public PatternRoleType getType() {
 		return PatternRoleType.Connector;
 	}
@@ -165,5 +173,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 	public Class<?> getAccessedClass() {
 		return ViewConnector.class;
 	}
+
+	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = {};
 
 }

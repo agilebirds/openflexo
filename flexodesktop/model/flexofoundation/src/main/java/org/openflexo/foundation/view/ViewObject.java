@@ -19,6 +19,10 @@
  */
 package org.openflexo.foundation.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -28,9 +32,13 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLMapping;
 
-public abstract class ViewObject extends AbstractViewObject {
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+
+public abstract class ViewObject extends AbstractViewObject implements PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(ViewObject.class.getPackage().getName());
 
@@ -138,6 +146,27 @@ public abstract class ViewObject extends AbstractViewObject {
 		}
 	}
 
+	public <T extends ViewObject> Collection<T> getChildrenOfType(final Class<T> type) {
+		return getChildrenOfType(type, true);
+	}
+
+	@SuppressWarnings("unchecked")
+	// We can remove the warning because the code performs the necessary checks
+	public <T extends ViewObject> Collection<T> getChildrenOfType(final Class<T> type, boolean recursive) {
+		Collection<T> objects = (Collection<T>) Collections2.filter(new ArrayList<ViewObject>(childs), new Predicate<ViewObject>() {
+			@Override
+			public boolean apply(ViewObject input) {
+				return type.isAssignableFrom(input.getClass());
+			}
+		});
+		if (recursive) {
+			for (T object : new ArrayList<T>(objects)) {
+				objects.addAll(object.getChildrenOfType(type, true));
+			}
+		}
+		return objects;
+	}
+
 	public ViewShape getShapeNamed(String name) {
 		for (ViewObject o : childs) {
 			if (o instanceof ViewShape && o.getName() != null && o.getName().equals(name)) {
@@ -156,13 +185,33 @@ public abstract class ViewObject extends AbstractViewObject {
 		return null;
 	}
 
+	@Override
+	public void delete() {
+		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().removePropertyChangeListener(this);
+		}
+		super.delete();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO: improve this.
+		setChanged();
+	}
+
 	public Object getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
 	public void setGraphicalRepresentation(Object graphicalRepresentation) {
+		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().removePropertyChangeListener(this);
+		}
 		_graphicalRepresentation = graphicalRepresentation;
 		setChanged();
+		if (this._graphicalRepresentation instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) this._graphicalRepresentation).getPropertyChangeSupport().addPropertyChangeListener(this);
+		}
 	}
 
 	private Vector<ViewObject> ancestors;

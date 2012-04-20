@@ -29,6 +29,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Represents an inspector entry (a data related to an edition pattern which can be inspected)
@@ -108,10 +109,16 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	}
 
 	public String getLabel() {
+		if (label == null || StringUtils.isEmpty(label)) {
+			return getName();
+		}
 		return label;
 	}
 
 	public void setLabel(String label) {
+		if (label != null && label.equals(name)) {
+			return;
+		}
 		this.label = label;
 	}
 

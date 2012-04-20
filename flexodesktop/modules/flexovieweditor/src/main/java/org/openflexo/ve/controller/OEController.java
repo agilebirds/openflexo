@@ -63,7 +63,7 @@ public class OEController extends FlexoController implements SelectionManagingCo
 	protected OEKeyEventListener _oeKeyEventListener;
 	private OESelectionManager _selectionManager;
 
-	public final ShemaPerspective SHEMA_PERSPECTIVE;
+	public final DiagramPerspective DIAGRAM_PERSPECTIVE;
 	public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
 
 	@Override
@@ -93,10 +93,10 @@ public class OEController extends FlexoController implements SelectionManagingCo
 		// At this point the InspectorController is not yet loaded
 		_selectionManager = new OESelectionManager(this);
 
-		addToPerspectives(SHEMA_PERSPECTIVE = new ShemaPerspective(this));
+		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
 
-		setDefaultPespective(SHEMA_PERSPECTIVE);
+		setDefaultPespective(DIAGRAM_PERSPECTIVE);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -217,8 +217,8 @@ public class OEController extends FlexoController implements SelectionManagingCo
 
 	@Override
 	public String getWindowTitleforObject(FlexoModelObject object) {
-		if (getCurrentPerspective() == SHEMA_PERSPECTIVE) {
-			return SHEMA_PERSPECTIVE.getWindowTitleforObject(object);
+		if (getCurrentPerspective() == DIAGRAM_PERSPECTIVE) {
+			return DIAGRAM_PERSPECTIVE.getWindowTitleforObject(object);
 		}
 		if (getCurrentPerspective() == ONTOLOGY_PERSPECTIVE) {
 			return ONTOLOGY_PERSPECTIVE.getWindowTitleforObject(object);

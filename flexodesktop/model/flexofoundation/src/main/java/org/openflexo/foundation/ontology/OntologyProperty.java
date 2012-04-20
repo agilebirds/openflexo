@@ -20,8 +20,10 @@
 package org.openflexo.foundation.ontology;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -37,6 +39,13 @@ public abstract class OntologyProperty extends OntologyObject {
 
 	private DomainStatement domainStatement;
 	private RangeStatement rangeStatement;
+	private List<DomainStatement> domainStatementList;
+	private List<RangeStatement> rangeStatementList;
+	private List<OntologyObject> domainList;
+	private List<OntologyObject> rangeList;
+
+	private boolean superDomainStatementWereAppened = false;
+	private boolean superRangeStatementWereAppened = false;
 
 	private final Vector<OntologyProperty> superProperties;
 	private final Vector<OntologyProperty> subProperties;
@@ -49,6 +58,10 @@ public abstract class OntologyProperty extends OntologyObject {
 		superProperties = new Vector<OntologyProperty>();
 		subProperties = new Vector<OntologyProperty>();
 		isAnnotationProperty = anOntProperty.isAnnotationProperty();
+		domainStatementList = new ArrayList<DomainStatement>();
+		rangeStatementList = new ArrayList<RangeStatement>();
+		domainList = null;
+		rangeList = null;
 	}
 
 	protected void init() {
@@ -190,16 +203,29 @@ public abstract class OntologyProperty extends OntologyObject {
 	@Override
 	public void updateOntologyStatements() {
 		super.updateOntologyStatements();
+		superDomainStatementWereAppened = false;
+		superRangeStatementWereAppened = false;
+		domainStatementList.clear();
+		rangeStatementList.clear();
+		domainList = null;
+		rangeList = null;
 		for (OntologyStatement s : getSemanticStatements()) {
 			if (s instanceof DomainStatement) {
 				domainStatement = (DomainStatement) s;
+				domainStatementList.add(domainStatement);
 			}
 			if (s instanceof RangeStatement) {
 				rangeStatement = (RangeStatement) s;
+				rangeStatementList.add(rangeStatement);
 			}
 		}
 	}
 
+	/**
+	 * Return domain statement, asserting there is only one domain statement
+	 * 
+	 * @return
+	 */
 	public DomainStatement getDomainStatement() {
 		if (domainStatement == null) {
 			for (OntologyProperty p : getSuperProperties()) {
@@ -213,6 +239,11 @@ public abstract class OntologyProperty extends OntologyObject {
 		return domainStatement;
 	}
 
+	/**
+	 * Return range statement, asserting there is only one range statement
+	 * 
+	 * @return
+	 */
 	public RangeStatement getRangeStatement() {
 		if (rangeStatement == null) {
 			for (OntologyProperty p : getSuperProperties()) {
@@ -226,6 +257,11 @@ public abstract class OntologyProperty extends OntologyObject {
 		return rangeStatement;
 	}
 
+	/**
+	 * Return domain as ontology object, asserting there is only one domain statement
+	 * 
+	 * @return
+	 */
 	public OntologyObject getDomain() {
 		/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
 		//			System.out.println("Pour "+getURI()+" le domain statement est "+getDomainStatement());
@@ -260,6 +296,11 @@ public abstract class OntologyProperty extends OntologyObject {
 		return getDomainStatement().getDomain();
 	}
 
+	/**
+	 * Return range as ontology object, asserting there is only one range statement
+	 * 
+	 * @return
+	 */
 	public OntologyObject getRange() {
 		/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
 					System.out.println("Pour "+getURI()+" le range statement est "+getRangeStatement());
@@ -270,4 +311,52 @@ public abstract class OntologyProperty extends OntologyObject {
 		return getRangeStatement().getRange();
 	}
 
+	/**
+	 * Return list of DomainStatement
+	 * 
+	 * @return
+	 */
+	public List<DomainStatement> getDomainStatementList() {
+		if (!superDomainStatementWereAppened) {
+			for (OntologyProperty p : getSuperProperties()) {
+				domainStatementList.addAll(p.getDomainStatementList());
+			}
+			superDomainStatementWereAppened = true;
+		}
+		return domainStatementList;
+	}
+
+	public List<RangeStatement> getRangeStatementList() {
+		if (!superRangeStatementWereAppened) {
+			for (OntologyProperty p : getSuperProperties()) {
+				rangeStatementList.addAll(p.getRangeStatementList());
+			}
+			superRangeStatementWereAppened = true;
+		}
+		return rangeStatementList;
+	}
+
+	public List<OntologyObject> getDomainList() {
+		if (domainList == null) {
+			domainList = new ArrayList<OntologyObject>();
+			for (DomainStatement s : getDomainStatementList()) {
+				if (s.getDomain() != null) {
+					domainList.add(s.getDomain());
+				}
+			}
+		}
+		return domainList;
+	}
+
+	public List<OntologyObject> getRangeList() {
+		if (rangeList == null) {
+			rangeList = new ArrayList<OntologyObject>();
+			for (RangeStatement s : getRangeStatementList()) {
+				if (s.getRange() != null) {
+					rangeList.add(s.getRange());
+				}
+			}
+		}
+		return rangeList;
+	}
 }

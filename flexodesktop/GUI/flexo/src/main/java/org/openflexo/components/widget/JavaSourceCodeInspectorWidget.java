@@ -132,21 +132,21 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 			_textArea.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
 				public void changedUpdate(DocumentEvent e) {
-					if ((!validateOnReturn) && (!widgetUpdating)) {
+					if (!validateOnReturn && !widgetUpdating) {
 						updateModelFromWidget();
 					}
 				}
 
 				@Override
 				public void insertUpdate(DocumentEvent e) {
-					if ((!validateOnReturn) && (!widgetUpdating)) {
+					if (!validateOnReturn && !widgetUpdating) {
 						updateModelFromWidget();
 					}
 				}
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
-					if ((!validateOnReturn) && (!widgetUpdating)) {
+					if (!validateOnReturn && !widgetUpdating) {
 						updateModelFromWidget();
 					}
 				}
@@ -167,7 +167,7 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 			});
 			_textArea.addFocusListener(new WidgetFocusListener(JavaSourceCodeInspectorWidget.this));
 
-			_textArea.setAutoscrolls(true);
+			// _textArea.setAutoscrolls(true);
 			_textArea.setBorder(BorderFactory.createLoweredBevelBorder());
 			_textArea.setEnabled(true);
 
@@ -275,6 +275,10 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 			add(_textArea, BorderLayout.CENTER);
 			add(errorLabel, BorderLayout.SOUTH);
 
+			editionRequested = true;
+			showDiffMode = false;
+			refreshPanel();
+
 			validate();
 			doLayout();
 		}
@@ -325,6 +329,9 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 		}
 
 		protected void refreshPanel() {
+			if (getSourceCode() == null) {
+				return;
+			}
 			boolean codeModified = !_textArea.getText().equals(getSourceCode().getCode());
 
 			int caretPos = 0;

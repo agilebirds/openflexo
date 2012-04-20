@@ -119,10 +119,47 @@ public class OntologyClassSelector extends AbstractBrowserSelector<OntologyClass
 
 	@Override
 	public FlexoModelObject getRootObject() {
-		if (getOntologyLibrary() != null) {
+		if (super.getRootObject() != null) {
+			return super.getRootObject();
+		} else if (getOntologyLibrary() != null) {
 			return getOntologyLibrary().getRootClass();
 		}
 		return null;
+	}
+
+	public OntologyClass getParentClass() {
+		if (getRootObject() instanceof OntologyClass) {
+			return (OntologyClass) getRootObject();
+		}
+		return null;
+	}
+
+	public void setParentClass(OntologyClass aClass) {
+		super.setRootObject(aClass);
+	}
+
+	public String getParentClassURI() {
+		if (getParentClass() != null) {
+			return getParentClass().getURI();
+		}
+		return null;
+	}
+
+	public void setParentClassURI(String aParentClassURI) {
+		if (getOntologyLibrary() != null) {
+			OntologyClass ontologyClass = getOntologyLibrary().getClass(aParentClassURI);
+			if (ontologyClass != null) {
+				setParentClass(ontologyClass);
+			}
+		}
+	}
+
+	@Override
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		if (project != null && getOntologyLibrary() == null) {
+			setOntologyLibrary(project.getProjectOntologyLibrary());
+		}
 	}
 
 }
