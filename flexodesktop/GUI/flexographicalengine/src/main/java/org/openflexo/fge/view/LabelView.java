@@ -19,6 +19,8 @@
  */
 package org.openflexo.fge.view;
 
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -26,13 +28,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,6 +67,34 @@ import org.openflexo.fge.view.listener.LabelViewMouseListener;
 
 public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetricsProvider {
 
+	private boolean mouseInsideLabel = false;
+
+	/**
+	 * This class tries to keep trace if the mouse is inside the label or not. This partially works but it heavily relies on the fact that
+	 * FGEViewMouseListener will simulate mouse in/out events. In some cases, this may not work.
+	 * 
+	 * @author Guillaume
+	 * 
+	 */
+	private class InOutMouseListener extends MouseAdapter {
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			mouseInsideLabel = true;
+			textComponent.updateCursor();
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			mouseInsideLabel = false;
+			textComponent.updateCursor();
+		}
+	}
+
+	public boolean isMouseInsideLabel() {
+		return mouseInsideLabel;
+	}
+
 	public class TextComponent extends JTextPane {
 		private class TextComponentCaret extends DefaultCaret {
 
@@ -89,6 +116,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			public void setIgnoreNextAdjustVisibility(boolean ignoreNextAdjustVisibility) {
 				this.ignoreNextAdjustVisibility = ignoreNextAdjustVisibility;
 			}
+
 		}
 
 		public TextComponent() {
@@ -99,6 +127,18 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			setFocusable(true);
 		}
 
+		protected void updateCursor() {
+			if (getDrawingView() != null) {
+				getDrawingView().setCursor(isMouseInsideLabel() ? getCursor() : null);
+			}
+		}
+
+		@Override
+		public void setCursor(Cursor cursor) {
+			super.setCursor(cursor);
+			updateCursor();
+		}
+
 		@Override
 		public boolean getScrollableTracksViewportWidth() {
 			return true;
@@ -107,17 +147,19 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		@Override
 		public void setEditable(boolean b) {
 			super.setEditable(b);
+			setEnabled(b);
 			if (!initialized) {
 				return;
 			}
 			setDoubleBuffered(!b);
 			if (b) {
 				((TextComponentCaret) getCaret()).setIgnoreNextAdjustVisibility(true);
-				enableTextComponentMouseListeners();
+				// enableTextComponentMouseListeners();
+				removeFGEMouseListener();
 				requestFocus();
 				selectAll();
 			} else {
-				disableTextComponentMouseListeners();
+				addFGEMouseListener();
 			}
 		}
 
@@ -131,11 +173,6 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	private FGEView<?> delegateView;
 	private boolean isEditing = false;
 
-	private List<MouseListener> disabledMouseListeners = new ArrayList<MouseListener>();
-	private List<MouseMotionListener> disabledMouseMotionListeners = new ArrayList<MouseMotionListener>();
-
-	private boolean textComponentMouseListenerEnabled = true;
-
 	private TextComponent textComponent;
 
 	private boolean initialized = false;
@@ -146,6 +183,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		this.delegateView = delegateView;
 		this.mouseListener = new LabelViewMouseListener(graphicalRepresentation, this);
 		this.textComponent = new TextComponent();
+		textComponent.addMouseListener(new InOutMouseListener());
 		setViewportView(textComponent);
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -220,49 +258,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	public void enableTextComponentMouseListeners() {
-		if (textComponentMouseListenerEnabled || disabledMouseListeners == null) {
-			return;
-		}
-		for (MouseListener ml : disabledMouseListeners) {
-			if (ml == mouseListener) {
-				continue;
-			}
-			textComponent.addMouseListener(ml);
-		}
-		for (MouseMotionListener mml : disabledMouseMotionListeners) {
-			if (mml == mouseListener) {
-				continue;
-			}
-			textComponent.addMouseMotionListener(mml);
-		}
 		removeFGEMouseListener();
-		disabledMouseListeners.clear();
-		disabledMouseMotionListeners.clear();
-		textComponentMouseListenerEnabled = true;
 	}
 
 	public void disableTextComponentMouseListeners() {
-		if (!textComponentMouseListenerEnabled || disabledMouseListeners == null) {
-			return;
-		}
-		disabledMouseListeners.clear();
-		disabledMouseMotionListeners.clear();
-		for (MouseListener ml : textComponent.getMouseListeners()) {
-			if (ml == mouseListener) {
-				continue;
-			}
-			disabledMouseListeners.add(ml);
-			textComponent.removeMouseListener(ml);
-		}
-		for (MouseMotionListener mml : textComponent.getMouseMotionListeners()) {
-			if (mml == mouseListener) {
-				continue;
-			}
-			disabledMouseMotionListeners.add(mml);
-			textComponent.removeMouseMotionListener(mml);
-		}
 		addFGEMouseListener();
-		textComponentMouseListenerEnabled = false;
 	}
 
 	@Override
@@ -465,9 +465,12 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		if (font.isItalic()) {
 			StyleConstants.setItalic(set, true);
 		}
-		if (ts.getColor() != null) {
-			StyleConstants.setForeground(set, ts.getColor());
+		Color color = ts.getColor();
+		if (color == null) {
+			color = Color.BLACK;
 		}
+		StyleConstants.setForeground(set, color);
+		textComponent.setForeground(color);
 		textComponent.setParagraphAttributes(set, true);
 		textComponent.validate();
 		updateBounds();
@@ -511,7 +514,6 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	public void removeFGEMouseListener() {
 		// removeMouseListener(mouseListener);
 		// removeMouseMotionListener(mouseListener);
-		System.err.println("Removing mouse listener " + mouseListener);
 		textComponent.removeMouseListener(mouseListener);
 		textComponent.removeMouseMotionListener(mouseListener);
 	}
