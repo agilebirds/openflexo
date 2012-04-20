@@ -424,7 +424,6 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		if (preferredSize.width > width) {
 			preferredSize.width = width;
 		}
-		System.err.println(preferredSize.width);
 		if (scale == getScale()) {
 			return preferredSize;
 		} else {
