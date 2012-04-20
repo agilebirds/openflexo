@@ -466,14 +466,14 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			statusCountPanel.add(conflictsLabel);
 			statusCountPanel.add(new JLabel(UtilsIconLibrary.CONFLICT_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			statusCountPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			needsMemoryGenerationLabel = new JLabel("1");
 			needsMemoryGenerationLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusCountPanel.add(needsMemoryGenerationLabel);
 			statusCountPanel.add(new JLabel(GeneratorIconLibrary.GENERATE_CODE_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			statusCountPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			errorsLabel = new JLabel("0");
 			errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
@@ -482,14 +482,14 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			add(statusCountPanel);
 
 			editorInfoPanel = new JPanel(new FlowLayout());
-			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			cursorPositionLabel = new JLabel("-:-", SwingConstants.CENTER);
 			cursorPositionLabel.setPreferredSize(new Dimension(50, 16));
 			cursorPositionLabel.setFont(FlexoCst.MEDIUM_FONT);
 			editorInfoPanel.add(cursorPositionLabel);
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 			editorStatusLabel = new JLabel("");
 			editorStatusLabel.setFont(FlexoCst.MEDIUM_FONT);

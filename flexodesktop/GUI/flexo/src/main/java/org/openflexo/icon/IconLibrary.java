@@ -131,19 +131,6 @@ public class IconLibrary {
 	public static final Icon AUTO_LAYOUT_ICON = new ImageIconResource("Icons/GUI/Actions/AutoLayout.png");
 	public static final Icon CLOSE_ICON = new ImageIconResource("Icons/GUI/Actions/Close.png");
 
-	// Utils icons
-
-	public static final ImageIcon OK_ICON = new ImageIconResource("Icons/Utils/OK.gif");
-	public static final ImageIcon WARNING_ICON = new ImageIconResource("Icons/Utils/Warning.gif");
-	public static final ImageIcon ERROR_ICON = new ImageIconResource("Icons/Utils/Error.gif");
-
-	public static final ImageIcon MOVE_UP_ICON = new ImageIconResource("Icons/Utils/Up.gif");
-	public static final ImageIcon MOVE_DOWN_ICON = new ImageIconResource("Icons/Utils/Down.gif");
-	public static final ImageIcon MOVE_LEFT_ICON = new ImageIconResource("Icons/Utils/Left.gif");
-	public static final ImageIcon MOVE_RIGHT_ICON = new ImageIconResource("Icons/Utils/Right.gif");
-	public static final ImageIcon CLOCK_ICON = new ImageIconResource("Icons/Utils/Clock.gif");
-	public static final ImageIcon SEPARATOR_ICON = new ImageIconResource("Icons/Utils/Separator.gif");
-
 	// Markers
 	public static final IconMarker POSITIVE_MARKER = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Plus.png"), 0, 0);
 	public static final IconMarker NEGATIVE_MARKER = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Minus.png"), 0, 0);

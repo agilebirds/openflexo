@@ -82,4 +82,17 @@ public class UtilsIconLibrary {
 	public static final IconMarker RIGHT_REMOVAL = new IconMarker(RIGHT_REMOVAL_ICON, 12, 7);
 	public static final IconMarker CONFLICT = new IconMarker(CONFLICT_ICON, 12, 7);
 
+	// Utils icons
+
+	public static final ImageIcon OK_ICON = new ImageIconResource("Icons/Utils/OK.gif");
+	public static final ImageIcon WARNING_ICON = new ImageIconResource("Icons/Utils/Warning.gif");
+	public static final ImageIcon ERROR_ICON = new ImageIconResource("Icons/Utils/Error.gif");
+
+	public static final ImageIcon MOVE_UP_ICON = new ImageIconResource("Icons/Utils/Up.gif");
+	public static final ImageIcon MOVE_DOWN_ICON = new ImageIconResource("Icons/Utils/Down.gif");
+	public static final ImageIcon MOVE_LEFT_ICON = new ImageIconResource("Icons/Utils/Left.gif");
+	public static final ImageIcon MOVE_RIGHT_ICON = new ImageIconResource("Icons/Utils/Right.gif");
+	public static final ImageIcon CLOCK_ICON = new ImageIconResource("Icons/Utils/Clock.gif");
+	public static final ImageIcon SEPARATOR_ICON = new ImageIconResource("Icons/Utils/Separator.gif");
+
 }

@@ -28,7 +28,7 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.foundation.ie.menu.action.MoveMenuUp;
-import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -79,7 +79,7 @@ public class MoveMenuUpInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return IconLibrary.MOVE_UP_ICON;
+		return UtilsIconLibrary.MOVE_UP_ICON;
 	}
 
 }
