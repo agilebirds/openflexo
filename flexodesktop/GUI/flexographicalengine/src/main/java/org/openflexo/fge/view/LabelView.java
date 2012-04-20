@@ -22,6 +22,7 @@ package org.openflexo.fge.view;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -38,6 +39,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -164,6 +166,17 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		validate();
 		initialized = true;
 		textComponent.setEditable(false);
+	}
+
+	@Override
+	protected JViewport createViewport() {
+		return new JViewport() {
+			@Override
+			public void setViewPosition(Point p) {
+				// We don't want to scroll so we prevent the view port
+				// from moving.
+			}
+		};
 	}
 
 	public TextComponent getTextComponent() {
@@ -317,11 +330,6 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	@Override
-	public void print(Graphics g) {
-		super.print(g);
-	}
-
-	@Override
 	public DrawingController<?> getController() {
 		return controller;
 	}
@@ -383,6 +391,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			return;
 		}
 		Rectangle bounds = graphicalRepresentation.getLabelBounds(getScale());
+		if (bounds.isEmpty() || bounds.width < 5) {
+			bounds.width = 20;
+			bounds.height = getFont().getSize();
+		}
 		if (!bounds.equals(getBounds())) {
 			setBounds(bounds);
 			validate();
