@@ -52,7 +52,7 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 	}
 
 	@Override
-	protected void run() throws FlexoRunException {
+	protected void doRun() throws FlexoRunException {
 		CodeType target = CodeType.get(codeType);
 		if (target == null) {
 			target = CodeType.PROTOTYPE;
@@ -150,10 +150,6 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 
 	public static void main(String[] args) {
 		launch(FlexoConsistencyCheckerMain.class, args);
-	}
-
-	public static FlexoConsistencyCheckerMain mainTest(String[] args) {
-		return launch(FlexoConsistencyCheckerMain.class, args);
 	}
 
 }
