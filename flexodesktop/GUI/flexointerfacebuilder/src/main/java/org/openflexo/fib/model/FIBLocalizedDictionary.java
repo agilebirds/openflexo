@@ -35,12 +35,6 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 
 	private static final Logger logger = Logger.getLogger(FIBLocalizedDictionary.class.getPackage().getName());
 
-	// This is a little "hack" to be removed from FIB
-	// Goal here is to use the default Openflexo locales to find default values when searching localized
-	// Otherwise, this FIBLocalizedDictionary should considered as root
-	// public static final String LOCALIZATION_DIRNAME = "Localized";
-	// private static LocalizedDelegate mainLocalizer = new LocalizedDelegateImpl(new FileResource(LOCALIZATION_DIRNAME), null);
-
 	private FIBComponent _component;
 	private Vector<FIBLocalizedEntry> _entries;
 	private Hashtable<Language, Hashtable<String, String>> _values;

@@ -152,6 +152,7 @@ public class PaletteElement {
 		logger.info("Element dragged with component: " + target.getFIBComponent() + " place holder: " + target.getPlaceHolder());
 
 		FIBComponent newComponent = (FIBComponent) Cloner.cloneObjectWithMapping(component, FIBLibrary.getFIBMapping());
+		newComponent.setLocalizedDictionary(null);
 		newComponent.clearParameters();
 
 		try {
