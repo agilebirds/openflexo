@@ -136,13 +136,11 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 				@Override
 				public void componentMoved(ComponentEvent e) {
-					System.err.println("Move");
 					center();
 				}
 
 				@Override
 				public void componentResized(ComponentEvent e) {
-					System.err.println("Resize");
 					center();
 				}
 			});
