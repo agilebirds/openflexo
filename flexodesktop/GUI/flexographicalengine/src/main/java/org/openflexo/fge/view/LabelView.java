@@ -511,6 +511,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	public void removeFGEMouseListener() {
 		// removeMouseListener(mouseListener);
 		// removeMouseMotionListener(mouseListener);
+		System.err.println("Removing mouse listener " + mouseListener);
 		textComponent.removeMouseListener(mouseListener);
 		textComponent.removeMouseMotionListener(mouseListener);
 	}

@@ -62,6 +62,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		System.err.println("Mouse clicked " + this);
 		if (view.isDeleted()) {
 			return;
 		}
@@ -539,7 +540,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	private boolean handleEventForEditedLabel(MouseEvent e, GraphicalRepresentation<?> focusedObject) {
 		if (getController().getEditedLabel().getGraphicalRepresentation() == focusedObject) {
 
-			// Label beeing edited matches focused object:
+			// Label being edited matches focused object:
 			// We potentially need to redispatch this event
 
 			FGEView<?> accessedView = getController().getDrawingView().viewForObject(focusedObject);
@@ -563,13 +564,13 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 					// This event effectively concerns related text component
 					// I will retarget it !
 
-					MouseEvent newEvent = new MouseEvent(labelView, e.getID(), e.getWhen(), e.getModifiers(),
+					MouseEvent newEvent = new MouseEvent(labelView.getTextComponent(), e.getID(), e.getWhen(), e.getModifiers(),
 							pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
 					if (eventStack == null) {
 						eventStack = new Stack<MouseEvent>();
 					}
 					eventStack.add(newEvent);
-					labelView.dispatchEvent(newEvent);
+					labelView.getTextComponent().dispatchEvent(newEvent);
 					eventStack.pop();
 					if (eventStack.isEmpty()) {
 						eventStack = null;
