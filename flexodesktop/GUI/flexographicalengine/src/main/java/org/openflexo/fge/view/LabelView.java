@@ -424,6 +424,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		if (preferredSize.width > width) {
 			preferredSize.width = width;
 		}
+		System.err.println(preferredSize.width);
 		if (scale == getScale()) {
 			return preferredSize;
 		} else {
@@ -457,6 +458,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		} else if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.JUSTIFY) {
 			StyleConstants.setAlignment(set, StyleConstants.ALIGN_JUSTIFIED);
 		}
+		textComponent.setOpaque(ts.getIsBackgroundColored());
+		textComponent.setBackground(ts.getBackgroundColor());
 		StyleConstants.setFontFamily(set, font.getFamily());
 		StyleConstants.setFontSize(set, (int) (ts.getFont().getSize() * getScale()));
 		if (font.isBold()) {
