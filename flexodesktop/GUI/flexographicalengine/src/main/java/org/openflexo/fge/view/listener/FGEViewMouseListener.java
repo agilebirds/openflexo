@@ -169,7 +169,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		// SGU: I dont think that JTextComponent react to these event, but in case of, uncomment this
-
+		// GPO: Actually this is not the case because a mouse enter/exited event in one component does
+		// not make sense for another one. If we want to emulate those event, it should be done
+		// in the mouse moved event.
 		/*if (getController().hasEditedLabel()) {
 			GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
 			handleEventForEditedLabel(e, focusedObject);
@@ -184,7 +186,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		// SGU: I dont think that JTextComponent react to these event, but in case of, uncomment this
-
+		// GPO: Actually this is not the case because a mouse enter/exited event in one component does
+		// not make sense for another one. If we want to emulate those event, it should be done
+		// in the mouse moved event.
 		/*if (getController().hasEditedLabel()) {
 			GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
 			handleEventForEditedLabel(e, focusedObject);
@@ -537,53 +541,57 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	 * @return
 	 */
 	private boolean handleEventForEditedLabel(MouseEvent e, GraphicalRepresentation<?> focusedObject) {
-		if (getController().getEditedLabel().getGraphicalRepresentation() == focusedObject) {
+		LabelView<?> labelView = getController().getEditedLabel();
+		Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), labelView);
+		if (labelView.getGraphicalRepresentation() == focusedObject) {
 
-			// Label beeing edited matches focused object:
+			// Label being edited matches focused object:
 			// We potentially need to redispatch this event
-
-			FGEView<?> accessedView = getController().getDrawingView().viewForObject(focusedObject);
-
-			if (accessedView == null) {
-				logger.warning("Could not access view for " + focusedObject);
-				return false;
-			}
-
-			LabelView<?> labelView = accessedView.getLabelView();
-
-			if (labelView == null) {
-				return false;
-			}
-			// Now retrieve the text component (which exists because editing)
-
-			Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), labelView);
-
-			if (labelView.contains(pointRelativeToTextComponent) && labelView.isEditing()) {
-				if (eventStack == null || eventStack.isEmpty() || eventStack.peek() != e) {
-					// This event effectively concerns related text component
-					// I will retarget it !
-
-					MouseEvent newEvent = new MouseEvent(labelView, e.getID(), e.getWhen(), e.getModifiers(),
-							pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
-					if (eventStack == null) {
-						eventStack = new Stack<MouseEvent>();
-					}
-					eventStack.add(newEvent);
-					labelView.dispatchEvent(newEvent);
-					eventStack.pop();
-					if (eventStack.isEmpty()) {
-						eventStack = null;
-					}
-					e.consume();
-					return true;
+			if (labelView.contains(pointRelativeToTextComponent)) {
+				if (!labelView.isMouseInsideLabel()) {
+					MouseEvent newEvent = new MouseEvent(labelView.getTextComponent(), MouseEvent.MOUSE_ENTERED, e.getWhen(),
+							e.getModifiers(), pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(),
+							e.isPopupTrigger());
+					labelView.getTextComponent().dispatchEvent(newEvent);
 				}
-			}
+				if (labelView.isEditing()) {
+					if (eventStack == null || eventStack.isEmpty() || eventStack.peek() != e) {
+						// This event effectively concerns related text component
+						// I will retarget it !
 
+						MouseEvent newEvent = new MouseEvent(labelView.getTextComponent(), e.getID(), e.getWhen(), e.getModifiers(),
+								pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
+						if (eventStack == null) {
+							eventStack = new Stack<MouseEvent>();
+						}
+						eventStack.add(newEvent);
+						labelView.getTextComponent().dispatchEvent(newEvent);
+						eventStack.pop();
+						if (eventStack.isEmpty()) {
+							eventStack = null;
+						}
+						e.consume();
+						return true;
+					}
+				}
+			} else {
+				triggerMouseExitedIfNeeded(e, labelView, pointRelativeToTextComponent);
+			}
 			return false;
+		} else {
+			triggerMouseExitedIfNeeded(e, labelView, pointRelativeToTextComponent);
 		}
 
 		return false;
 
+	}
+
+	private void triggerMouseExitedIfNeeded(MouseEvent e, LabelView<?> labelView, Point pointRelativeToTextComponent) {
+		if (labelView.isMouseInsideLabel()) {
+			MouseEvent newEvent = new MouseEvent(labelView.getTextComponent(), MouseEvent.MOUSE_EXITED, e.getWhen(), e.getModifiers(),
+					pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
+			labelView.getTextComponent().dispatchEvent(newEvent);
+		}
 	}
 
 	public DrawingController<?> getController() {

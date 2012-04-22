@@ -100,10 +100,6 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		launch(FlexoProjectMergeMain.class, args);
 	}
 
-	public static FlexoProjectMergeMain mainTest(String[] args) {
-		return launch(FlexoProjectMergeMain.class, args);
-	}
-
 	@Override
 	protected void init(String[] args) throws MissingArgumentException {
 		super.init(args);
@@ -188,7 +184,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 	}
 
 	@Override
-	protected void run() throws FlexoRunException {
+	protected void doRun() throws FlexoRunException {
 		CVSFile.xmlDiff3MergeEnabled = true;
 		SharedProject project = null;
 		if (isFirstCommit) {

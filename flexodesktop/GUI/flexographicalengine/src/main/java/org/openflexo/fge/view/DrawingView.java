@@ -211,13 +211,12 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		return r.getSize();
 	}
 
+	@Override
 	public void rescale() {
-		for (FGEView v : contents.values()) {
-			if (v instanceof ShapeView) {
-				((ShapeView) v).rescale();
-			}
-			if (v instanceof ConnectorView) {
-				((ConnectorView) v).rescale();
+		for (FGEView<?> v : contents.values()) {
+			v.rescale();
+			if (v.getLabelView() != null) {
+				v.getLabelView().rescale();
 			}
 		}
 		resizeView();

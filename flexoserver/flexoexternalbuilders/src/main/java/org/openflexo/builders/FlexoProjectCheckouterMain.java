@@ -135,7 +135,7 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 	}
 
 	@Override
-	protected void run() throws FlexoRunException {
+	protected void doRun() throws FlexoRunException {
 		CVSFile.xmlDiff3MergeEnabled = true;
 		CVSModule module = cvsRepository.getModuleNamed(moduleName);
 		if (module == null) {
@@ -212,10 +212,6 @@ public class FlexoProjectCheckouterMain extends FlexoExternalMain implements CVS
 	 */
 	public static void main(String[] args) {
 		launch(FlexoProjectCheckouterMain.class, args);
-	}
-
-	public static FlexoProjectCheckouterMain mainTest(String[] args) {
-		return launch(FlexoProjectCheckouterMain.class, args);
 	}
 
 }
