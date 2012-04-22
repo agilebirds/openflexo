@@ -157,10 +157,6 @@ public class IconLibrary {
 	public static final ImageIcon CLOSE_EDITION_ICON = new ImageIconResource("Icons/Actions/Palette/CloseEdition.gif");
 	public static final ImageIcon CLOSE_EDITION_DISABLED_ICON = new ImageIconResource("Icons/Actions/Palette/CloseEditionDisabled.gif");
 
-	// Flags
-	public static final Icon UK_FLAG = new ImageIconResource("Icons/Utils/Lang/uk-flag.gif");
-	public static final Icon FR_FLAG = new ImageIconResource("Icons/Utils/Lang/fr-flag.gif");
-
 	// Model icons
 	public static final ImageIcon PROJECT_ICON = new ImageIconResource("Icons/Model/Project.gif");
 

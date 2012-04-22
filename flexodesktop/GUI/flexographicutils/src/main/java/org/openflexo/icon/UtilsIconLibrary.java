@@ -95,4 +95,9 @@ public class UtilsIconLibrary {
 	public static final ImageIcon CLOCK_ICON = new ImageIconResource("Icons/Utils/Clock.gif");
 	public static final ImageIcon SEPARATOR_ICON = new ImageIconResource("Icons/Utils/Separator.gif");
 
+	// Flags
+	public static final ImageIcon UK_FLAG = new ImageIconResource("Icons/Lang/uk-flag.gif");
+	public static final ImageIcon FR_FLAG = new ImageIconResource("Icons/Lang/fr-flag.gif");
+	public static final ImageIcon NE_FLAG = new ImageIconResource("Icons/Lang/ne-flag.gif");
+
 }
