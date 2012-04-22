@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.view.widget.table;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.util.Observable;
 import java.util.Observer;
@@ -227,10 +228,18 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	}
 
 	public String getTooltip(Object object) {
-		/*
-		 * if (getModel()!=null && tooltipKey!=null) return (String)
-		 * object.objectForKey(tooltipKey);
-		 */
+		if (columnModel.getTooltip().isSet() && columnModel.getTooltip().isValid()) {
+			iteratorObject = object;
+			return (String) columnModel.getTooltip().getBindingValue(this);
+		}
+		return null;
+	}
+
+	public Color getSpecificColor(Object object) {
+		if (columnModel.getColor().isSet() && columnModel.getColor().isValid()) {
+			iteratorObject = object;
+			return (Color) columnModel.getColor().getBindingValue(this);
+		}
 		return null;
 	}
 
