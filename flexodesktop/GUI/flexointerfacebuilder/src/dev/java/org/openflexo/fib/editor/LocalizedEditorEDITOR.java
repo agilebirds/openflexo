@@ -21,19 +21,21 @@ package org.openflexo.fib.editor;
 
 import java.io.File;
 
-import org.openflexo.toolbox.FileResource;
-
+import org.openflexo.fib.localization.LocalizedDelegateGUIImpl;
 
 public class LocalizedEditorEDITOR {
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
+			@Override
 			public Object[] getData() {
 				return makeArray(FIBAbstractEditor.LOCALIZATION);
+				// return makeArray(new LocalizedDelegateGUIImpl(new FileResource("Localized"), null));
 			}
+
+			@Override
 			public File getFIBFile() {
-				return new FileResource("Fib/LocalizedEditor.fib");
+				return LocalizedDelegateGUIImpl.LOCALIZED_EDITOR_FIB;
 			}
 		};
 		editor.launch();

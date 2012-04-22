@@ -52,7 +52,6 @@ import org.openflexo.inspector.InspectorCst;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
-import org.openflexo.localization.LocalizedEditor;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.viewer.FlexoLoggingViewerWindow;
 import org.openflexo.module.FlexoModule;
@@ -149,7 +148,7 @@ public class FlexoApplication {
 			e.printStackTrace();
 		}
 		FlexoLoggingViewerWindow.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
-		LocalizedEditor.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
+		// LocalizedEditor.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
 		InspectorCst.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
 		FlexoModelObject.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
 		AdvancedPrefs.getEnableUndoManager(); // just load advanced prefs

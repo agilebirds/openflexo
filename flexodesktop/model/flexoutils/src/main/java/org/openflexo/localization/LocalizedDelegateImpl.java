@@ -36,7 +36,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.toolbox.FlexoProperties;
+import org.openflexo.toolbox.HTMLUtils;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Provides a default implementation for a localized delegate.<br>
@@ -55,6 +57,14 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 	private LocalizedDelegate parent;
 	private File _localizedDirectory;
 	private Hashtable<Language, Properties> _localizedDictionaries;
+
+	private Vector<Entry> entries;
+	private Vector<Entry> issuesEntries;
+	private Vector<Entry> matchingEntries;
+
+	public static enum SearchMode {
+		Contains, BeginsWith, EndsWith
+	}
 
 	public LocalizedDelegateImpl(File localizedDirectory, LocalizedDelegate parent) {
 		this.parent = parent;
@@ -207,7 +217,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 
 	public class Entry implements HasPropertyChangeSupport {
 		private static final String DELETED_PROPERTY = "deleted";
-		public String key;
+		private String key;
 		private PropertyChangeSupport pcSupport;
 
 		public Entry(String aKey) {
@@ -227,6 +237,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 		}
 
 		public void setEnglish(String value) {
+			// System.out.println("setEnglish with " + value);
 			String oldValue = getEnglish();
 			setLocalizedForKeyAndLanguage(key, value, Language.ENGLISH);
 			pcSupport.firePropertyChange("english", oldValue, value);
@@ -239,6 +250,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 		}
 
 		public void setFrench(String value) {
+			// System.out.println("setFrench with " + value);
 			String oldValue = getFrench();
 			setLocalizedForKeyAndLanguage(key, value, Language.FRENCH);
 			pcSupport.firePropertyChange("french", oldValue, value);
@@ -251,6 +263,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 		}
 
 		public void setDutch(String value) {
+			// System.out.println("setDutch with " + value);
 			String oldValue = getDutch();
 			setLocalizedForKeyAndLanguage(key, value, Language.DUTCH);
 			pcSupport.firePropertyChange("dutch", oldValue, value);
@@ -265,9 +278,125 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 		public String getDeletedProperty() {
 			return DELETED_PROPERTY;
 		}
-	}
 
-	private Vector<Entry> entries;
+		public String getKey() {
+			return key;
+		}
+
+		public void setKey(String aNewKey) {
+			String oldKey = key;
+			for (Language l : Language.availableValues()) {
+				Properties dict = getDictionary(l);
+				String oldValue = dict.getProperty(oldKey);
+				dict.remove(oldKey);
+				if (oldValue != null) {
+					dict.setProperty(aNewKey, oldValue);
+				}
+			}
+			key = aNewKey;
+			entries = null;
+		}
+
+		public boolean hasInvalidValue() {
+			return !isFrenchValueValid() || !isEnglishValueValid() || !isDutchValueValid();
+		}
+
+		public boolean isFrenchValueValid() {
+			return isValueValid(getKey(), getFrench());
+		}
+
+		public boolean isEnglishValueValid() {
+			return isValueValid(getKey(), getEnglish());
+		}
+
+		public boolean isDutchValueValid() {
+			return isValueValid(getKey(), getDutch());
+		}
+
+		public boolean isValueValid(String aKey, String aValue) {
+			if ((aValue == null) || (aValue.length() == 0)) {
+				return false;
+			} // null or empty value is not valid
+			if (aValue.equals(aKey)) {
+				return false;
+			} // not the same value > means not translated
+			if (aValue.lastIndexOf("_") > -1) {
+				return false;
+			} // should not contains UNDERSCORE char
+			return true;
+		}
+
+		public boolean getIsHTML() {
+			return getFrench().startsWith("<html>") || getEnglish().startsWith("<html>") || getDutch().startsWith("<html>");
+		}
+
+		public void setIsHTML(boolean flag) {
+			if (flag) {
+				setEnglish(addHTMLSupport(getEnglish()));
+				setFrench(addHTMLSupport(getFrench()));
+				setDutch(addHTMLSupport(getDutch()));
+			} else {
+				setEnglish(removeHTMLSupport(getEnglish()));
+				setFrench(removeHTMLSupport(getFrench()));
+				setDutch(removeHTMLSupport(getDutch()));
+			}
+		}
+
+		private String addHTMLSupport(String value) {
+			return "<html>" + StringUtils.LINE_SEPARATOR + "<head>" + StringUtils.LINE_SEPARATOR + "</head>" + StringUtils.LINE_SEPARATOR
+					+ "<body>" + StringUtils.LINE_SEPARATOR + value + StringUtils.LINE_SEPARATOR + "</body>" + StringUtils.LINE_SEPARATOR
+					+ "</html>";
+		}
+
+		private String removeHTMLSupport(String value) {
+			return HTMLUtils.convertHTMLToPlainText(HTMLUtils.extractBodyContent(value, true).trim(), true);
+			/*System.out.println("From " + value);
+			System.out.println("To" + HTMLUtils.extractSourceFromEmbeddedTag(value));
+			return HTMLUtils.extractSourceFromEmbeddedTag(value);*/
+		}
+
+		private boolean contains(String s) {
+			if (s == null)
+				return false;
+			if (getKey().indexOf(s) >= 0)
+				return true;
+			if (getEnglish().indexOf(s) >= 0)
+				return true;
+			if (getFrench().indexOf(s) >= 0)
+				return true;
+			if (getDutch().indexOf(s) >= 0)
+				return true;
+			return false;
+		}
+
+		private boolean startsWith(String s) {
+			if (s == null)
+				return false;
+			if (getKey().startsWith(s))
+				return true;
+			if (getEnglish().startsWith(s))
+				return true;
+			if (getFrench().startsWith(s))
+				return true;
+			if (getDutch().startsWith(s))
+				return true;
+			return false;
+		}
+
+		private boolean endsWith(String s) {
+			if (s == null)
+				return false;
+			if (getKey().endsWith(s))
+				return true;
+			if (getEnglish().endsWith(s))
+				return true;
+			if (getFrench().endsWith(s))
+				return true;
+			if (getDutch().endsWith(s))
+				return true;
+			return false;
+		}
+	}
 
 	public Vector<Entry> getEntries() {
 		if (entries == null) {
@@ -287,8 +416,66 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 					return Collator.getInstance().compare(o1.key, o2.key);
 				}
 			});
+			computeIssuesEntries();
 		}
 		return entries;
+	}
+
+	public Vector<Entry> getIssuesEntries() {
+		if (issuesEntries == null) {
+			issuesEntries = computeIssuesEntries();
+		}
+		return issuesEntries;
+	}
+
+	private Vector<Entry> computeIssuesEntries() {
+		if (_localizedDictionaries == null) {
+			loadLocalizedDictionaries();
+		}
+		issuesEntries = new Vector<Entry>();
+		for (Entry e : entries) {
+			if (e.hasInvalidValue()) {
+				issuesEntries.add(e);
+			}
+		}
+		return issuesEntries;
+	}
+
+	public Vector<Entry> getMatchingEntries() {
+		if (matchingEntries == null) {
+			matchingEntries = new Vector<Entry>();
+		}
+		return matchingEntries;
+	}
+
+	protected Vector<Entry> computeMatchingEntries(String text, SearchMode searchMode) {
+		if (_localizedDictionaries == null) {
+			loadLocalizedDictionaries();
+		}
+		matchingEntries = new Vector<Entry>();
+		for (Entry e : entries) {
+			switch (searchMode) {
+			case Contains:
+				if (e.contains(text)) {
+					matchingEntries.add(e);
+				}
+				break;
+			case BeginsWith:
+				if (e.startsWith(text)) {
+					matchingEntries.add(e);
+				}
+				break;
+			case EndsWith:
+				if (e.endsWith(text)) {
+					matchingEntries.add(e);
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+		return matchingEntries;
 	}
 
 	private Entry getEntry(String key) {
@@ -323,10 +510,37 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 	}
 
 	public void searchTranslation(Entry entry) {
-		String englishTranslation = entry.key.toString();
+		if (getParent() != null) {
+			String englishTranslation = FlexoLocalization.localizedForKeyAndLanguage(parent, entry.key, Language.ENGLISH);
+			if (entry.key.equals(englishTranslation)) {
+				englishTranslation = automaticEnglishTranslation(entry.key);
+			}
+			entry.setEnglish(englishTranslation);
+			String dutchTranslation = FlexoLocalization.localizedForKeyAndLanguage(parent, entry.key, Language.DUTCH);
+			if (entry.key.equals(dutchTranslation)) {
+				dutchTranslation = automaticDutchTranslation(entry.key);
+			}
+			entry.setDutch(dutchTranslation);
+			String frenchTranslation = FlexoLocalization.localizedForKeyAndLanguage(parent, entry.key, Language.FRENCH);
+			entry.setFrench(frenchTranslation);
+		} else {
+			String englishTranslation = entry.key.toString();
+			englishTranslation = englishTranslation.replace("_", " ");
+			englishTranslation = englishTranslation.substring(0, 1).toUpperCase() + englishTranslation.substring(1);
+			entry.setEnglish(englishTranslation);
+			entry.setDutch(englishTranslation);
+		}
+	}
+
+	private String automaticEnglishTranslation(String key) {
+		String englishTranslation = key.toString();
 		englishTranslation = englishTranslation.replace("_", " ");
 		englishTranslation = englishTranslation.substring(0, 1).toUpperCase() + englishTranslation.substring(1);
-		entry.setEnglish(englishTranslation);
+		return englishTranslation;
+	}
+
+	private String automaticDutchTranslation(String key) {
+		return automaticEnglishTranslation(key);
 	}
 
 	@Override
@@ -340,8 +554,30 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 		return parent;
 	}
 
+	public void translateAll() {
+		for (Entry entry : getEntries()) {
+			searchTranslation(entry);
+		}
+	}
+
 	protected Hashtable<Language, Properties> getLocalizedDictionaries() {
 		return _localizedDictionaries;
+	}
+
+	public File getLocalizedDirectory() {
+		return _localizedDirectory;
+	}
+
+	public String getParentDelegateDescription() {
+		if (getParent() == null)
+			return "none";
+		else
+			return getParent().toString();
+	}
+
+	@Override
+	public String toString() {
+		return "Localization stored in " + getLocalizedDirectory().getAbsolutePath();
 	}
 
 }

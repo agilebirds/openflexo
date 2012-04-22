@@ -41,8 +41,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.fib.localization.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.localization.LocalizedDelegateGUIImpl;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.FlexoFileChooser;

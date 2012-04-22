@@ -145,6 +145,9 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 	}
 
 	public void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
+		if (value == null) {
+			value = key;
+		}
 		getDictForLang(language).put(key, value);
 		FIBLocalizedEntry entry = getEntry(language, key);
 		if (entry == null) {
