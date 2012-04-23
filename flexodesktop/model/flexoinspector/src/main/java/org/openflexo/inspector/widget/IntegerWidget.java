@@ -119,12 +119,10 @@ public class IntegerWidget extends DenaliWidget<Integer> {
 	@Override
 	public synchronized void updateWidgetFromModel() {
 		widgetUpdating = true;
-		Integer currentValue = null;
-
-		if (getObjectValue() == null) {
-			setObjectValue(new Integer(0));
+		Integer currentValue = getObjectValue();
+		if (currentValue == null) {
+			currentValue = 0;
 		}
-		currentValue = getObjectValue();
 
 		ignoreTextfieldChanges = true;
 
@@ -147,8 +145,8 @@ public class IntegerWidget extends DenaliWidget<Integer> {
 			return;
 		}
 		modelUpdating = true;
-		int currentValue = (Integer) valueChooser.getValue();
-		setObjectValue(currentValue);
+		Number currentValue = (Number) valueChooser.getValue();
+		setObjectValue(currentValue != null ? currentValue.intValue() : null);
 		modelUpdating = false;
 	}
 
