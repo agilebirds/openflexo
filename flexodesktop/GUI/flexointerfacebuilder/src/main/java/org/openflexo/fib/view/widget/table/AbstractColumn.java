@@ -106,7 +106,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 	public String getLocalized(String key) {
 		if (getController() != null) {
-			return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+			return FlexoLocalization.localizedForKey(getController().getLocalizerForComponent(getTableWidget().getTable()), key);
 		} else {
 			logger.warning("Controller not defined");
 			return key;

@@ -405,7 +405,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		this.status = status;
 	}
 
-	public FIBLocalizedDictionary getLocalizer() {
+	public FIBLocalizedDictionary getLocalizerForComponent(FIBComponent component) {
 		if (getRootComponent() != null) {
 			FIBLocalizedDictionary returned = getRootComponent().retrieveFIBLocalizedDictionary();
 			if (getParentLocalizer() != null) {

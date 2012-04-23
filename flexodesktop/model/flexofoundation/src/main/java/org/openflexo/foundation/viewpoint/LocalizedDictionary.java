@@ -292,7 +292,8 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		for (EditionPattern ep : getCalc().getEditionPatterns()) {
 			checkAndRegisterLocalized(ep.getName());
 			for (EditionScheme es : ep.getEditionSchemes()) {
-				checkAndRegisterLocalized(es.getName());
+				checkAndRegisterLocalized(es.getLabel());
+				checkAndRegisterLocalized(es.getDescription());
 				for (EditionSchemeParameter p : es.getParameters()) {
 					checkAndRegisterLocalized(p.getLabel());
 				}
@@ -307,7 +308,6 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 	}
 
 	private void checkAndRegisterLocalized(String key) {
-		System.out.println("checkAndRegisterLocalized for " + key);
 		handleNewEntry = true;
 		FlexoLocalization.localizedForKey(this, key);
 		// getLocalizedForKeyAndLanguage(key, FlexoLocalization.getCurrentLanguage());

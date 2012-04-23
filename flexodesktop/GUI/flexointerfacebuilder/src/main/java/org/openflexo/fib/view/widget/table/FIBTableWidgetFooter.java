@@ -409,7 +409,7 @@ public class FIBTableWidgetFooter extends JPanel {
 	}
 
 	public String getLocalized(String key) {
-		return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		return FlexoLocalization.localizedForKey(getController().getLocalizerForComponent(_fibTable), key);
 	}
 
 }

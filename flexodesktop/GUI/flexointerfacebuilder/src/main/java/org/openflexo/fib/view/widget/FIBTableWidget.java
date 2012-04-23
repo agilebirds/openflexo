@@ -78,6 +78,10 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List> implem
 		buildTable();
 	}
 
+	public FIBTable getTable() {
+		return _fibTable;
+	}
+
 	public FIBTableModel getTableModel() {
 		if (_tableModel == null) {
 			_tableModel = new FIBTableModel(_fibTable, this, getController());

@@ -35,6 +35,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBAttributeNotification;
+import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBBrowserElement.FIBBrowserElementChildren;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
@@ -119,8 +120,12 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		return controller;
 	}
 
+	public FIBBrowser getBrowser() {
+		return browserElementDefinition.getBrowser();
+	}
+
 	public String getLocalized(String key) {
-		return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		return FlexoLocalization.localizedForKey(getController().getLocalizerForComponent(getBrowser()), key);
 	}
 
 	protected void setModel(FIBBrowserModel model) {

@@ -26,6 +26,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
+import org.openflexo.localization.LocalizedDelegate;
 
 public class NavigationSchemeActionType extends FlexoActionType<NavigationSchemeAction, FlexoModelObject, FlexoModelObject> {
 
@@ -36,6 +37,11 @@ public class NavigationSchemeActionType extends FlexoActionType<NavigationScheme
 		super(navigationScheme.getName(), FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE);
 		this.navigationScheme = navigationScheme;
 		this.editionPatternReference = editionPatternReference;
+	}
+
+	@Override
+	public LocalizedDelegate getLocalizer() {
+		return navigationScheme.getLocalizedDictionary();
 	}
 
 	@Override
