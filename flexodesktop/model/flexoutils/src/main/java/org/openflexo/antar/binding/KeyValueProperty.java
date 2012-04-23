@@ -83,6 +83,11 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 		return super.equals(obj);
 	}
 
+	@Override
+	public int hashCode() {
+		return name.hashCode() + (field != null ? field.getDeclaringClass().hashCode() : getMethod.getDeclaringClass().hashCode());
+	}
+
 	/**
 	 * Initialize this property, given a propertyName.<br>
 	 * This method is called during constructor invokation. NB: to be valid, a property should be identified by at least the field or the
@@ -336,9 +341,9 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	 * 
 	 * @see AccessorMethod
 	 */
-	protected TreeSet searchMethodsWithNameAndParamsNumber(String[] searchedNames, int paramNumber) {
+	protected TreeSet<AccessorMethod> searchMethodsWithNameAndParamsNumber(String[] searchedNames, int paramNumber) {
 
-		TreeSet returnedTreeSet = new TreeSet();
+		TreeSet<AccessorMethod> returnedTreeSet = new TreeSet<AccessorMethod>();
 		Method[] allMethods = declaringClass.getMethods();
 
 		for (int i = 0; i < allMethods.length; i++) {

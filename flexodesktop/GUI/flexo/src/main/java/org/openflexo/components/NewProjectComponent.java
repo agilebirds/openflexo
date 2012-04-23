@@ -92,7 +92,8 @@ public class NewProjectComponent extends ProjectChooserComponent {
 	 * @return
 	 */
 	public static boolean isValidProjectName(String fileName) {
-		boolean notEmpty = fileName != null && fileName.trim().length() > 0;
+		String trimmed = fileName.trim();
+		boolean notEmpty = fileName != null && trimmed.length() > 0;
 		if (!notEmpty) {
 			return false;
 		}
@@ -100,18 +101,11 @@ public class NewProjectComponent extends ProjectChooserComponent {
 		if (containsInvalidChar) {
 			return false;
 		}
-		boolean isTooSmall = fileName.trim().length() < 3;
+		boolean isTooSmall = trimmed.length() < 3;
 		if (isTooSmall) {
 			return false;
 		}
-		String firstChar = fileName.trim().substring(0, 1);
-		try {
-			int test = new Integer(firstChar);
-			return false;
-		} catch (Exception e) {
-
-		}
-		return true;
+		return !Character.isDigit(trimmed.charAt(0));
 	}
 
 	public static void main(String[] args) {

@@ -1319,13 +1319,13 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 				try {
 					switch (type) {
 					case DOUBLE:
-						result.add(new Double(valueString));
+						result.add(Double.valueOf(valueString));
 						break;
 					case FLOAT:
-						result.add(new Float(valueString));
+						result.add(Float.valueOf(valueString));
 						break;
 					case INTEGER:
-						result.add(new Integer(valueString));
+						result.add(Integer.valueOf(valueString));
 						break;
 					}
 				} catch (NumberFormatException e) {

@@ -304,7 +304,7 @@ public class StringEncoder {
 
 		@Override
 		public Boolean convertFromString(String value) {
-			return new Boolean(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("yes"));
+			return Boolean.valueOf(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("yes"));
 		}
 
 		@Override
@@ -375,7 +375,7 @@ public class StringEncoder {
 
 		@Override
 		public Integer convertFromString(String value) {
-			return new Integer(value);
+			return Integer.valueOf(value);
 		}
 
 		@Override
@@ -398,7 +398,7 @@ public class StringEncoder {
 
 		@Override
 		public Short convertFromString(String value) {
-			return new Short(value);
+			return Short.valueOf(value);
 		}
 
 		@Override
@@ -421,7 +421,7 @@ public class StringEncoder {
 
 		@Override
 		public Long convertFromString(String value) {
-			return new Long(value);
+			return Long.valueOf(value);
 		}
 
 		@Override
@@ -444,7 +444,7 @@ public class StringEncoder {
 
 		@Override
 		public Float convertFromString(String value) {
-			return new Float(value);
+			return Float.valueOf(value);
 		}
 
 		@Override
@@ -467,7 +467,7 @@ public class StringEncoder {
 
 		@Override
 		public Double convertFromString(String value) {
-			return new Double(value);
+			return Double.valueOf(value);
 		}
 
 		@Override
@@ -644,7 +644,7 @@ public class StringEncoder {
 		}
 
 		@Override
-		public Class convertFromString(String value) {
+		public Class<?> convertFromString(String value) {
 			if (value == null || value.isEmpty()) {
 				return null;
 			}
@@ -854,7 +854,7 @@ public class StringEncoder {
 	 * Hereunder are all the non-static elements of this class. Only those should be used.
 	 */
 
-	private Hashtable<Class, Converter> converters = new Hashtable<Class, Converter>();
+	private Hashtable<Class<?>, Converter<?>> converters = new Hashtable<Class<?>, Converter<?>>();
 
 	private boolean isInitialized = false;
 
@@ -902,7 +902,7 @@ public class StringEncoder {
 		if (object == null) {
 			return null;
 		}
-		Converter converter = _converterForClass(object.getClass());
+		Converter<T> converter = (Converter<T>) _converterForClass(object.getClass());
 		if (converter != null) {
 			return converter.convertToString(object);
 		} else {
@@ -914,7 +914,7 @@ public class StringEncoder {
 					return converter.convertToString(object);
 				}
 			} else if (object instanceof Enum) {
-				return ((Enum) object).name();
+				return ((Enum<?>) object).name();
 			}
 			throw new InvalidDataException("Supplied value has no converter for type " + object.getClass().getName());
 		}
@@ -931,7 +931,7 @@ public class StringEncoder {
 		 * (Converter)converters.get(key); System.out.println ("Key: "+key+"
 		 * Converter: "+converter.getConverterClass().getName()); }
 		 */
-		Converter returned;
+		Converter<?> returned;
 		Class<? super T> tryThis = objectType;
 		do {
 			returned = converters.get(tryThis);
@@ -943,7 +943,7 @@ public class StringEncoder {
 		if (returned == null && delegate != null) {
 			return delegate._converterForClass(objectType);
 		}
-		return returned;
+		return (Converter<T>) returned;
 	}
 
 	public <T> boolean _isConvertable(Class<T> objectType) {
@@ -986,7 +986,7 @@ public class StringEncoder {
 	/**
 	 * @param converter
 	 */
-	public void _removeConverter(Converter converter) {
+	public void _removeConverter(Converter<?> converter) {
 		converters.remove(converter.getConverterClass());
 	}
 
