@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.binding;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -30,7 +31,7 @@ import java.util.Vector;
  */
 public class BindingModel {
 
-	private Vector<BindingVariable> _bindingVariables;
+	private List<BindingVariable> _bindingVariables;
 
 	public BindingModel() {
 		super();
@@ -51,7 +52,7 @@ public class BindingModel {
 	}
 
 	public BindingVariable getBindingVariableAt(int index) {
-		return _bindingVariables.elementAt(index);
+		return _bindingVariables.get(index);
 	}
 
 	public void addToBindingVariables(BindingVariable variable) {
