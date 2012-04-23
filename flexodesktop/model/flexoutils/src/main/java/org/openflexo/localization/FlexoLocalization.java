@@ -86,7 +86,7 @@ public class FlexoLocalization {
 	 * @return
 	 */
 	public static boolean isInitialized() {
-		return (mainLocalizer != null);
+		return mainLocalizer != null;
 	}
 
 	/**
@@ -428,7 +428,7 @@ public class FlexoLocalization {
 		}
 		Pattern p = Pattern.compile("\\(\\$([0-9]*)\\)");
 		Matcher m = p.matcher(aString);
-		String returned = "";
+		StringBuilder returned = new StringBuilder();
 		int lastIndex = 0;
 		while (m.find()) {
 			int nextIndex = m.start(0);
@@ -445,7 +445,7 @@ public class FlexoLocalization {
 				try {
 					suffixValue = Integer.valueOf(suffix);
 					String replacementString = params[suffixValue];
-					returned += aString.substring(lastIndex, nextIndex) + replacementString;
+					returned.append(aString.substring(lastIndex, nextIndex)).append(replacementString);
 					lastIndex = nextIndex + foundPattern.length();
 				} catch (NumberFormatException e) {
 					logger.warning("Could not parse " + suffix + " as integer");
@@ -455,17 +455,22 @@ public class FlexoLocalization {
 
 			}
 		}
-		returned += aString.substring(lastIndex, aString.length());
+		returned.append(aString.substring(lastIndex, aString.length()));
 		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("Returning " + returned);
 		}
-		return returned;
+		return returned.toString();
 	}
 
 	private static String valueForKeyAndObject(String key, Object object) {
 
 		try {
-			return (String) KeyValueDecoder.objectForKey(object, key);
+			Object objectForKey = KeyValueDecoder.valueForKey(object, key);
+			if (objectForKey != null) {
+				return objectForKey.toString();
+			} else {
+				return "";
+			}
 		} catch (InvalidObjectSpecificationException e) {
 			logger.warning(e.getMessage());
 			return key;
