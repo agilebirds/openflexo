@@ -1,5 +1,5 @@
 #French
-#Wed Apr 04 23:42:03 CEST 2012
+#Mon Apr 23 00:52:02 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -1545,7 +1545,7 @@ create_pre_condition=Cr\u00E9er une pr\u00E9condition
 create_process_folder=Cr\u00E9er un dossier de processus
 create_source_repository=create_source_repository
 create_status_property=cr\u00E9er une propri\u00E9t\u00E9 statut
-create_view=Cr\u00E9er une vue ontologique
+create_view=Cr\u00E9er une vue
 create_view_folder=Cr\u00E9er un r\u00E9pertoire de vues
 create_view_point=create_view_point
 creates=Creer

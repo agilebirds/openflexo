@@ -27,6 +27,7 @@ import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPath
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.StringUtils;
 
 public abstract class EditionScheme extends ViewPointObject {
 
@@ -76,8 +77,9 @@ public abstract class EditionScheme extends ViewPointObject {
 	}
 
 	public String getLabel() {
-		if (label == null)
+		if (label == null || StringUtils.isEmpty(label) || label.equals(name)) {
 			return getName();
+		}
 		return label;
 	}
 

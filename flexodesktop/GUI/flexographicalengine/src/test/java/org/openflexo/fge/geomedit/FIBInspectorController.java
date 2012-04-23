@@ -94,7 +94,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 			FIBInspector inspector = inspectors.get(c);
 			inspector.recursivelyReorderComponents();
 
-			FIBView inspectorView = FIBController.makeView(inspector);
+			FIBView inspectorView = FIBController.makeView(inspector, GeomEdit.LOCALIZATION);
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
 			logger.info("Initialized inspector for " + inspector.getDataClass());

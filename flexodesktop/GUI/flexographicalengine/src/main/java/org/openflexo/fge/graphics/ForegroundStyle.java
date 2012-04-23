@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.fge.FGEIconLibrary;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.inspector.HasIcon;
@@ -402,7 +403,7 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 
 	public String toNiceString() {
 		if (getNoStroke()) {
-			return FlexoLocalization.localizedForKey("no_stroke");
+			return FlexoLocalization.localizedForKey(GraphicalRepresentation.LOCALIZATION, "no_stroke");
 		} else {
 			return lineWidth + "pt, " + color;
 		}

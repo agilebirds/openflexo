@@ -34,6 +34,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.print.PrinterException;
@@ -417,6 +419,9 @@ public class MetaphaseEditorPanel extends JPanel {
 	private javax.swing.JPanel aboutPanel;
 	private javax.swing.JButton aboutButton;
 
+	public void documentWasEdited() {
+	}
+
 	/** Creates new form MetaphaseEditorPanel */
 	public MetaphaseEditorPanel(MetaphaseEditorConfiguration configuration) {
 		initComponents();
@@ -428,6 +433,20 @@ public class MetaphaseEditorPanel extends JPanel {
 		htmlTextArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
 		htmlTextPane.setContentType("text/html");
+		htmlTextPane.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				super.focusGained(e);
+				System.out.println("Je chope le focus");
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				super.focusLost(e);
+				System.out.println("Je perds le focus");
+				documentWasEdited();
+			}
+		});
 
 		findReplaceAction = new FindReplaceAction("Find/Replace", htmlTextPane);
 
@@ -609,7 +628,7 @@ public class MetaphaseEditorPanel extends JPanel {
 
 		startNewDocument();
 
-		initSpellChecker();
+		// initSpellChecker();
 	}
 
 	// The following two methods allow us to find an

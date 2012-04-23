@@ -19,10 +19,49 @@
  */
 package org.openflexo.localization;
 
+/**
+ * This interface is implemented by all classes implementing localization features<br>
+ * A localized delegate is responsible for the localization of a set of keys<br>
+ * If no support is assumed for a given key, forward the responsability of translation to parent delegate.
+ * 
+ * @author sylvain
+ * 
+ */
 public interface LocalizedDelegate {
 
-	public String localizedForKeyAndLanguage(String key, Language language);
+	/**
+	 * Return String matching specified key and language<br>
+	 * If this key is not localized, this method MUST return null, in order to forward request to parent delegate
+	 * 
+	 * @param key
+	 * @param language
+	 * @return
+	 */
+	public String getLocalizedForKeyAndLanguage(String key, Language language);
 
+	/**
+	 * Return a boolean indicating if this delegate handle creation of new entries
+	 * 
+	 * @param key
+	 * @param language
+	 * @return
+	 */
 	public boolean handleNewEntry(String key, Language language);
 
+	/**
+	 * Register new localization entry with supplied value for specified key and language
+	 * 
+	 * @param key
+	 * @param language
+	 * @param value
+	 * @return boolean indicating if registration was successfully performed
+	 */
+	public boolean registerNewEntry(String key, Language language, String value);
+
+	/**
+	 * Return the parent delegate to which the localization request should be forwarded if no value is defined for a given localization key
+	 * 
+	 * @return
+	 */
+	public LocalizedDelegate getParent();
 }

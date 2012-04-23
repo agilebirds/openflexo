@@ -161,7 +161,7 @@ public class MainInspectorController implements Observer, ChangeListener {
 			 * System.exit(-1); }
 			 */
 
-			FIBView inspectorView = FIBController.makeView(inspector);
+			FIBView inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
 			((FIBInspectorController) inspectorView.getController()).setEditor(editor);
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);

@@ -30,6 +30,7 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.icon.SGIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.controller.action.SGControllerActionInitializer;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.view.controller.ActionInitializer;
@@ -54,7 +55,8 @@ public class CreateHibernateModelActionInitializer extends
 		return new FlexoActionInitializer<CreateHibernateModelAction>() {
 			@Override
 			public boolean run(ActionEvent e, CreateHibernateModelAction action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(HIBERNATE_CREATEMODEL_DIALOG_FIB_RESOURCE_PATH, action, null, true);
+				FIBDialog dialog = FIBDialog.instanciateComponent(HIBERNATE_CREATEMODEL_DIALOG_FIB_RESOURCE_PATH, action, null, true,
+						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};

@@ -23,7 +23,6 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -113,9 +112,10 @@ public class ValidationReport {
 	public String getLocalizedTitle() {
 		if (_localizedTitle == null) {
 			if (_rootObject == null) {
-				return FlexoLocalization.localizedForKey("no_validation_report");
+				return FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, "no_validation_report");
 			} else {
-				return FlexoLocalization.localizedForKey("validation_report_for") + " " + _rootObject;
+				return FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, "validation_report_for") + " "
+						+ _rootObject;
 			}
 		} else {
 			return _localizedTitle;
@@ -127,8 +127,8 @@ public class ValidationReport {
 	}
 
 	public String getLocalizedSubTitle() {
-		return ("" + getErrorNb() + " " + FlexoLocalization.localizedForKey("errors") + ", " + getWarningNb() + " " + FlexoLocalization
-				.localizedForKey("warnings"));
+		return ("" + getErrorNb() + " " + FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, "errors") + ", "
+				+ getWarningNb() + " " + FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, "warnings"));
 	}
 
 	public int getInfosNb() {

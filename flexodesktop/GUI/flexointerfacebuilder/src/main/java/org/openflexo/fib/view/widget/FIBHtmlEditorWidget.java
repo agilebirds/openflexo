@@ -46,7 +46,13 @@ public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseE
 
 	public FIBHtmlEditorWidget(FIBHtmlEditor model, FIBController controller) {
 		super(model, controller);
-		_editor = new MetaphaseEditorPanel(_editorConfiguration = buildConfiguration());
+		_editor = new MetaphaseEditorPanel(_editorConfiguration = buildConfiguration()) {
+			@Override
+			public void documentWasEdited() {
+				super.documentWasEdited();
+				updateModelFromWidget();
+			}
+		};
 		/* _editor.getDocument().addDocumentListener(new DocumentListener() {
 		     public void changedUpdate(DocumentEvent e)
 		     {
@@ -117,6 +123,7 @@ public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseE
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
+		// System.out.println("updateModelFromWidget() with " + _editor.getDocument());
 		if (notEquals(getValue(), _editor.getDocument())) {
 			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE)) {

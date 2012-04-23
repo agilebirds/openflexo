@@ -87,7 +87,7 @@ public class GeometricSet implements XMLSerializable, Cloneable, TreeNode {
 		if (file != null) {
 			return file.getName();
 		} else {
-			return FlexoLocalization.localizedForKey("untitled") + "-" + index;
+			return FlexoLocalization.localizedForKey(GeomEdit.LOCALIZATION, "untitled") + "-" + index;
 		}
 	}
 

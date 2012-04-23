@@ -991,6 +991,47 @@ public class HTMLUtils {
 		return sb.toString();
 	}
 
+	/**
+	 * Return a new string containing plain text defined in supplied HTML text. All HTML tags will be removed, but contents of them are kept
+	 * in the returned string
+	 * 
+	 * @param s
+	 * @param removeNewLine
+	 * @return
+	 */
+	public static String convertHTMLToPlainText(String s, boolean removeNewLine) {
+		if (s == null) {
+			return null;
+		}
+		StringBuffer sb = new StringBuffer();
+		int n = s.length();
+		boolean keepText = true;
+		for (int i = 0; i < n; i++) {
+			char c = s.charAt(i);
+			switch (c) {
+			case '<':
+				keepText = false;
+				break;
+			case '>':
+				keepText = true;
+				break;
+			case '\n':
+				if (!removeNewLine) {
+					sb.append('\n');
+				} else {
+					sb.append(' ');
+				}
+				break;
+			default:
+				if (keepText) {
+					sb.append(c);
+				}
+				break;
+			}
+		}
+		return sb.toString();
+	}
+
 	public static boolean isEmtpyParagraph(String html) {
 		return html != null && EMPTY_PARAGRAPH_PATTERN.matcher(html).matches();
 	}

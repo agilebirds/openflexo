@@ -32,6 +32,7 @@ import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.LocalizedDelegate;
 
 public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> extends
 		AbstractAction {
@@ -163,16 +164,20 @@ public abstract class FlexoActionType<A extends FlexoAction<?, T1, T2>, T1 exten
 		return _actionName;
 	}
 
+	public LocalizedDelegate getLocalizer() {
+		return FlexoLocalization.getMainLocalizer();
+	}
+
 	public String getLocalizedName() {
-		return FlexoLocalization.localizedForKey(_actionName);
+		return FlexoLocalization.localizedForKey(getLocalizer(), _actionName);
 	}
 
 	public String getLocalizedName(Component component) {
-		return FlexoLocalization.localizedForKey(_actionName, component);
+		return FlexoLocalization.localizedForKey(getLocalizer(), _actionName, component);
 	}
 
 	public String getLocalizedDescription() {
-		return FlexoLocalization.localizedForKey(_actionName + "_description");
+		return FlexoLocalization.localizedForKey(getLocalizer(), _actionName + "_description");
 	}
 
 	/**

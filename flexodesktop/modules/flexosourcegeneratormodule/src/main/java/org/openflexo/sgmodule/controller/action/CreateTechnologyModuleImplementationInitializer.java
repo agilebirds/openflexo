@@ -33,6 +33,7 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.sg.implmodel.CreateTechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 import org.openflexo.icon.SGIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.SGCst;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -57,7 +58,7 @@ public class CreateTechnologyModuleImplementationInitializer extends ActionIniti
 			@Override
 			public boolean run(ActionEvent e, CreateTechnologyModuleImplementation action) {
 				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB, action, null,
-						true);
+						true, FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};

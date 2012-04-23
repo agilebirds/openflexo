@@ -34,6 +34,8 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import org.openflexo.localization.FlexoLocalization;
+
 public class ZipUtils {
 
 	private static final void copyInputStream(InputStream in, OutputStream out) throws IOException {
@@ -74,7 +76,7 @@ public class ZipUtils {
 		while (entries.hasMoreElements()) {
 			ZipEntry entry = (ZipEntry) entries.nextElement();
 			if (progress != null) {
-				progress.setSecondaryProgress(Localized.localizedForKey("unzipping") + " " + entry.getName());
+				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("unzipping") + " " + entry.getName());
 			}
 			if (entry.isDirectory()) {
 				// Assume directories are stored parents first then
@@ -243,7 +245,7 @@ public class ZipUtils {
 		byte[] readBuffer = new byte[4096];
 		int bytesIn = 0;
 		if (progress != null) {
-			progress.setSecondaryProgress(Localized.localizedForKey("zipping_file") + " "
+			progress.setSecondaryProgress(FlexoLocalization.localizedForKey("zipping_file") + " "
 					+ fileToZip.getAbsolutePath().substring(pathPrefixSize));
 		}
 		FileInputStream fis = new FileInputStream(fileToZip);

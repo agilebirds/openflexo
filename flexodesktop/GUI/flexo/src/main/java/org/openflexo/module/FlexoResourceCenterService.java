@@ -30,6 +30,7 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.localization.FlexoLocalization;
 
 public class FlexoResourceCenterService {
 
@@ -78,7 +79,7 @@ public class FlexoResourceCenterService {
 					AskLocalResourceCenterDirectory data = new AskLocalResourceCenterDirectory();
 					data.setLocalResourceDirectory(FlexoProject.getResourceCenterFile());
 					FIBDialog<AskLocalResourceCenterDirectory> dialog = FIBDialog.instanciateComponent(
-							AskLocalResourceCenterDirectory.FIB_FILE, data, null, true);
+							AskLocalResourceCenterDirectory.FIB_FILE, data, null, true, FlexoLocalization.getMainLocalizer());
 					switch (dialog.getStatus()) {
 					case VALIDATED:
 						if (data.getLocalResourceDirectory() != null) {

@@ -83,7 +83,7 @@ public class MyDrawing extends MyDrawingElement<MyDrawing, MyDrawingGraphicalRep
 		if (file != null) {
 			return file.getName();
 		} else {
-			return FlexoLocalization.localizedForKey("untitled") + "-" + index;
+			return FlexoLocalization.localizedForKey(TestDrawingEditor.LOCALIZATION, "untitled") + "-" + index;
 		}
 	}
 

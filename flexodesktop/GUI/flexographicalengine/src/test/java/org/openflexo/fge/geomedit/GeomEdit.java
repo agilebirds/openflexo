@@ -41,6 +41,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.fib.localization.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -51,11 +52,21 @@ public class GeomEdit {
 
 	private static final Logger logger = FlexoLogger.getLogger(GeomEdit.class.getPackage().getName());
 
+	// Retrieve default Openflexo locales
+	public static final String LOCALIZATION_DIRNAME = "Localized";
+	private static LocalizedDelegateGUIImpl MAIN_LOCALIZER = new LocalizedDelegateGUIImpl(new FileResource(LOCALIZATION_DIRNAME), null);
+
+	// Instanciate a new localizer in directory src/dev/resources/FIBEditorLocalizer
+	// linked to parent localizer (which is Openflexo main localizer)
+	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("GeomEditLocalized"),
+			MAIN_LOCALIZER);
+
 	public static void main(String[] args) {
 		try {
 			FlexoLoggingManager.initialize();
 			FlexoLoggingManager.setKeepLogTrace(true);
 			FlexoLoggingManager.setLogCount(-1);
+			FlexoLocalization.initWith(LOCALIZATION);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -179,12 +190,12 @@ public class GeomEdit {
 		mainPanel = new JPanel(new BorderLayout());
 
 		JMenuBar mb = new JMenuBar();
-		JMenu fileMenu = new JMenu(FlexoLocalization.localizedForKey("file"));
-		JMenu editMenu = new JMenu(FlexoLocalization.localizedForKey("edit"));
-		JMenu toolsMenu = new JMenu(FlexoLocalization.localizedForKey("tools"));
-		JMenu helpMenu = new JMenu(FlexoLocalization.localizedForKey("help"));
+		JMenu fileMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "file"));
+		JMenu editMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "edit"));
+		JMenu toolsMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "tools"));
+		JMenu helpMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "help"));
 
-		JMenuItem newItem = new JMenuItem(FlexoLocalization.localizedForKey("new_drawing"));
+		JMenuItem newItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "new_drawing"));
 		newItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -192,7 +203,7 @@ public class GeomEdit {
 			}
 		});
 
-		JMenuItem loadItem = new JMenuItem(FlexoLocalization.localizedForKey("open_drawing"));
+		JMenuItem loadItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "open_drawing"));
 		loadItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -200,7 +211,7 @@ public class GeomEdit {
 			}
 		});
 
-		JMenuItem saveItem = new JMenuItem(FlexoLocalization.localizedForKey("save_drawing"));
+		JMenuItem saveItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "save_drawing"));
 		saveItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -208,7 +219,7 @@ public class GeomEdit {
 			}
 		});
 
-		JMenuItem saveAsItem = new JMenuItem(FlexoLocalization.localizedForKey("save_drawing_as"));
+		JMenuItem saveAsItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "save_drawing_as"));
 		saveAsItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -216,7 +227,7 @@ public class GeomEdit {
 			}
 		});
 
-		JMenuItem closeItem = new JMenuItem(FlexoLocalization.localizedForKey("close_drawing"));
+		JMenuItem closeItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "close_drawing"));
 		closeItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -224,7 +235,7 @@ public class GeomEdit {
 			}
 		});
 
-		JMenuItem quitItem = new JMenuItem(FlexoLocalization.localizedForKey("quit"));
+		JMenuItem quitItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "quit"));
 		quitItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -240,7 +251,7 @@ public class GeomEdit {
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);
 
-		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey("inspect"));
+		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "inspect"));
 		inspectItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -248,7 +259,7 @@ public class GeomEdit {
 			}
 		});
 
-		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey("logs"));
+		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "logs"));
 		logsItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -256,11 +267,11 @@ public class GeomEdit {
 			}
 		});
 
-		JMenuItem localizedItem = new JMenuItem(FlexoLocalization.localizedForKey("localized_editor"));
+		JMenuItem localizedItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "localized_editor"));
 		localizedItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLocalization.showLocalizedEditor();
+				LOCALIZATION.showLocalizedEditor();
 			}
 		});
 

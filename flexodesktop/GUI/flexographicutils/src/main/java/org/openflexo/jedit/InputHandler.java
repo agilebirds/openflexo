@@ -42,7 +42,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.text.BadLocationException;
 
-import org.openflexo.toolbox.Localized;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -1081,7 +1081,7 @@ public abstract class InputHandler extends KeyAdapter {
 			textArea.toggleSyntaxColoring();
 			if (evt.getSource() instanceof JMenuItem) {
 				((JMenuItem) evt.getSource())
-						.setText(Localized.localizedForKey(textArea.isSyntaxColoringEnabled() ? "disable_syntax_coloring"
+						.setText(FlexoLocalization.localizedForKey(textArea.isSyntaxColoringEnabled() ? "disable_syntax_coloring"
 								: "enable_syntax_coloring"));
 			}
 		}

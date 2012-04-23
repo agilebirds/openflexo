@@ -85,7 +85,7 @@ public class FIBIconLibrary {
 	public static final ImageIcon SQRT_ICON = new ImageIconResource("Icons/BindingSelector/Operators/SQRT.gif");
 
 	// Misc
-	public static final ImageIconResource LOCALIZATION_ICON = new ImageIconResource("Resources/CED/LocalizationIcon.gif");
+	public static final ImageIconResource LOCALIZATION_ICON = new ImageIconResource("Icons/Model/VPM/LocalizationIcon.png");
 	public static final ImageIcon DROP_OK_CURSOR = new ImageIconResource("Icons/Cursors/DropOKCursor.gif");
 	public static final ImageIcon DROP_KO_CURSOR = new ImageIconResource("Icons/Cursors/DropKOCursor.gif");
 

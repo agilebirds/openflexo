@@ -35,6 +35,7 @@ import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.localization.LocalizedDelegate;
 
 @SuppressWarnings("serial")
 public class FIBDialog<T> extends JDialog {
@@ -43,27 +44,28 @@ public class FIBDialog<T> extends JDialog {
 
 	private FIBView view;
 
-	public static <T> FIBDialog<T> instanciateComponent(File componentFile, T data, JFrame frame, boolean modal) {
+	public static <T> FIBDialog<T> instanciateComponent(File componentFile, T data, JFrame frame, boolean modal, LocalizedDelegate localizer) {
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(componentFile);
 		if (fibComponent == null) {
 			logger.warning("FileNotFoundException: " + componentFile.getAbsolutePath());
 			return null;
 		}
-		return instanciateComponent(fibComponent, data, frame, modal);
+		return instanciateComponent(fibComponent, data, frame, modal, localizer);
 	}
 
-	public static <T> FIBDialog<T> instanciateComponent(String fibResourcePath, T data, JFrame frame, boolean modal) {
+	public static <T> FIBDialog<T> instanciateComponent(String fibResourcePath, T data, JFrame frame, boolean modal,
+			LocalizedDelegate localizer) {
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibResourcePath);
 		if (fibComponent == null) {
 			logger.warning("ResourceNotFoundException: " + fibResourcePath);
 			return null;
 		}
-		return instanciateComponent(fibComponent, data, frame, modal);
+		return instanciateComponent(fibComponent, data, frame, modal, localizer);
 	}
 
-	private FIBDialog(JFrame frame, boolean modal, FIBComponent fibComponent) {
+	private FIBDialog(JFrame frame, boolean modal, FIBComponent fibComponent, LocalizedDelegate localizer) {
 		super(frame, fibComponent.getParameter("title"), modal);
-		view = FIBController.makeView(fibComponent);
+		view = FIBController.makeView(fibComponent, localizer);
 		getContentPane().add(view.getResultingJComponent());
 		List<FIBButton> def = fibComponent.getDefaultButtons();
 		boolean defaultButtonSet = false;
@@ -81,8 +83,8 @@ public class FIBDialog<T> extends JDialog {
 		pack();
 	}
 
-	protected FIBDialog(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {
-		this(frame, modal, fibComponent);
+	protected FIBDialog(FIBComponent fibComponent, T data, JFrame frame, boolean modal, LocalizedDelegate localizer) {
+		this(frame, modal, fibComponent, localizer);
 		getController().setDataObject(data);
 	}
 
@@ -119,8 +121,9 @@ public class FIBDialog<T> extends JDialog {
 		toFront();
 	}
 
-	public static <T> FIBDialog<T> instanciateComponent(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {
-		FIBDialog<T> dialog = new FIBDialog<T>(fibComponent, data, frame, modal);
+	public static <T> FIBDialog<T> instanciateComponent(FIBComponent fibComponent, T data, JFrame frame, boolean modal,
+			LocalizedDelegate localizer) {
+		FIBDialog<T> dialog = new FIBDialog<T>(fibComponent, data, frame, modal, localizer);
 		dialog.showDialog();
 		return dialog;
 	}

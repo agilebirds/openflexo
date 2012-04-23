@@ -21,50 +21,81 @@
 				minValue="5" maxValue="100" increment="1" columns="3"
 				constraints="twocols(location=right)" />
 
+			<CheckBox data="data.autoSelectFirstRow" constraints="twocols(location=left)" />
+			<Label label="select_first_row" constraints="twocols(location=right)" />
+
+			<CheckBox data="data.createNewRowOnClick" constraints="twocols(location=left)" />
+			<Label label="create_new_row_on_click" constraints="twocols(location=right)" />
+
+			<CheckBox data="data.showFooter" constraints="twocols(location=left)"/>
+			<Label label="show_footer" constraints="twocols(location=right)"/>
+
 		</Tab>
 
 		<Tab name="AdvancedTab" title="Table" index="1" layout="twocols" font="SansSerif,0,11" >
 
 			<TabPanel constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)">
-				<Tab title="Columns" index="0" layout="border">
-					<Table name="ColumnsTable" iteratorClassName="org.openflexo.fib.model.FIBTableColumn"
-						data="data.columns"
-						constraints="border(location=center)"
-						visibleRowCount="5" rowHeight="18" font="SansSerif,0,11">
-						<TextFieldColumn name="title" data="iterator.title"
-							title="title" columnWidth="200" resizable="true" />
-						<LabelColumn name="type" data="iterator.columnType"
-							title="type" columnWidth="150" resizable="true" />
-						<CheckBoxColumn name="resizable" data="iterator.resizable"
-							title="Resize" columnWidth="50" resizable="false" />
-						<CheckBoxColumn name="displayTitle" data="iterator.displayTitle"
-							title="title" columnWidth="50" resizable="false" />
-						<NumberColumn name="columnWidth" numberType="IntegerType"
-							data="iterator.columnWidth" title="width" columnWidth="100"
-							resizable="true" />
-						<CustomColumn name="visibleValue" title="Data"
-							data="iterator.data.binding" componentClassName="org.openflexo.fib.utils.BindingSelector"
-							columnWidth="300" constraints="twocols(location=right;expandHorizontally=true)"
-							columns="15">
-							<ColumnAssignment variable="component.bindable"
-								value="iterator" />
-							<ColumnAssignment variable="component.bindingDefinition"
-								value="iterator.DATA" />
-						</CustomColumn>
-						<AddAction name="new_label_column" method="data.createLabelColumn()" />
-						<AddAction name="new_textfield_column" method="data.createTextFieldColumn()" />
-						<AddAction name="new_checkbox_column" method="data.createCheckBoxColumn()" />
-						<AddAction name="new_dropdown_column" method="data.createDropDownColumn()" />
-						<AddAction name="new_number_column" method="data.createNumberColumn()" />
-						<AddAction name="new_icon_column" method="data.createIconColumn()" />
-						<AddAction name="new_custom_column" method="data.createCustomColumn()" />
-						<RemoveAction name="delete_column" method="data.deleteColumn(selected)" />
-						<CustomAction name="move_to_top" method="data.moveToTop(selected)" available="((selected != null) &amp; (selected.index > 0))"/>
-						<CustomAction name="move_up" method="data.moveUp(selected)" />
-						<CustomAction name="move_down" method="data.moveDown(selected)" />
-						<CustomAction name="move_to_bottom" method="data.moveToBottom(selected)" />
-					</Table>
-				</Tab>
+        <Tab index="0" title="Columns" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
+          <Table iteratorClassName="org.openflexo.fib.model.FIBTableColumn" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ColumnsTable" data="data.columns" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" font="SansSerif,0,11">
+            <TextFieldColumn data="iterator.title" title="title" columnWidth="200" resizable="true" displayTitle="true" name="title" />
+            <LabelColumn data="iterator.columnType" title="type" columnWidth="150" resizable="true" displayTitle="true" name="type" />
+            <CheckBoxColumn data="iterator.resizable" title="Resize" columnWidth="50" resizable="false" displayTitle="true" name="resizable" />
+            <CheckBoxColumn data="iterator.displayTitle" title="title" columnWidth="50" resizable="false" displayTitle="true" name="displayTitle" />
+            <NumberColumn numberType="IntegerType" data="iterator.columnWidth" title="width" columnWidth="100" resizable="true" displayTitle="true" name="columnWidth" />
+            <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.data.binding" title="Data" columnWidth="300" resizable="true" displayTitle="true" name="visibleValue">
+              <ColumnAssignment variable="component.bindable" value="iterator" />
+              <ColumnAssignment variable="component.bindingDefinition" value="iterator.dataBindingDefinition" />
+            </CustomColumn>
+            <AddAction method="data.createLabelColumn()" name="new_label_column" />
+            <AddAction method="data.createTextFieldColumn()" name="new_textfield_column" />
+            <AddAction method="data.createCheckBoxColumn()" name="new_checkbox_column" />
+            <AddAction method="data.createDropDownColumn()" name="new_dropdown_column" />
+            <AddAction method="data.createNumberColumn()" name="new_number_column" />
+            <AddAction method="data.createIconColumn()" name="new_icon_column" />
+            <AddAction method="data.createCustomColumn()" name="new_custom_column" />
+            <RemoveAction method="data.deleteColumn(selected)" name="delete_column" />
+            <CustomAction method="data.moveToTop(selected)" name="move_to_top" />
+            <CustomAction method="data.moveUp(selected)" name="move_up" />
+            <CustomAction method="data.moveDown(selected)" name="move_down" />
+            <CustomAction method="data.moveToBottom(selected)" name="move_to_bottom" />
+          </Table>
+          <Panel visible="ColumnsTable.selected != null" layout="twocols" border="none" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+            <Label label="title" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <TextField columns="7" text="TextField" data="ColumnsTable.selected.title" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
+            <Label label="type" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <TextField columns="7" readOnly="true" data="ColumnsTable.selected.columnType.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
+            <Label label="data" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ColumnsTable.selected.data.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.bindable" value="ColumnsTable.selected" />
+              <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.dataBindingDefinition" />
+            </Custom>
+            <Label label="tooltip" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ColumnsTable.selected.tooltip.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.bindable" value="ColumnsTable.selected" />
+              <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.tooltipBindingDefinition" />
+            </Custom>
+            <Label label="format" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ColumnsTable.selected.format.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.bindable" value="ColumnsTable.selected.formatter" />
+              <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.formatBindingDefinition" />
+            </Custom>
+            <Label label="value_changed_action" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ColumnsTable.selected.valueChangedAction.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.bindable" value="ColumnsTable.selected" />
+              <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.valueChangedActionBindingDefinition" />
+            </Custom>
+            <Label label="specific_color" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ColumnsTable.selected.color.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.bindable" value="ColumnsTable.selected" />
+              <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.colorBindingDefinition" />
+            </Custom>
+            <Label label="define_specific_font" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+			<Panel layout="flow" border="none" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=21;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)">
+    		      <CheckBox data="ColumnsTable.selected.hasSpecificFont"  />
+    		      <Font data="ColumnsTable.selected.font" enable="ColumnsTable.selected != null &amp; ColumnsTable.selected.hasSpecificFont" localize="true" />
+ 			</Panel>
+          </Panel>
+        </Tab>
 				<Tab title="Actions" index="1" layout="border">
 					<Table name="ActionsTable" iteratorClassName="org.openflexo.fib.model.FIBTableAction"
 						data="data.actions"
@@ -100,15 +131,6 @@
 				</Tab>
 
 			</TabPanel>
-
-			<CheckBox data="data.autoSelectFirstRow" constraints="twocols(location=left)" />
-			<Label label="select_first_row" constraints="twocols(location=right)" />
-
-			<CheckBox data="data.createNewRowOnClick" constraints="twocols(location=left)" />
-			<Label label="create_new_row_on_click" constraints="twocols(location=right)" />
-
-			<CheckBox data="data.showFooter" constraints="twocols(location=left)"/>
-			<Label label="show_footer" constraints="twocols(location=right)"/>
 
 		</Tab>
 

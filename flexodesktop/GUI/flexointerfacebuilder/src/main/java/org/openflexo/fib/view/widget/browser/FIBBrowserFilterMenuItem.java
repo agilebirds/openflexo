@@ -33,8 +33,8 @@ public class FIBBrowserFilterMenuItem extends JCheckBoxMenuItem implements Actio
 	protected FIBBrowserElementType _elementType;
 
 	public FIBBrowserFilterMenuItem(FIBBrowserElementType elementType) {
-		super(FlexoLocalization.localizedForKey(elementType.getController().getLocalizer(), elementType.getBrowserElement().getName()),
-				elementType.getBrowserElement().getImageIcon(), !elementType.isFiltered());
+		super(FlexoLocalization.localizedForKey(elementType.getController().getLocalizerForComponent(elementType.getBrowser()), elementType
+				.getBrowserElement().getName()), elementType.getBrowserElement().getImageIcon(), !elementType.isFiltered());
 		_elementType = elementType;
 		addActionListener(this);
 	}

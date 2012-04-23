@@ -1,5 +1,5 @@
 #Dutch
-#Wed Apr 04 23:42:03 CEST 2012
+#Mon Apr 23 00:52:02 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -1545,7 +1545,7 @@ create_pre_condition=Create pre-condition
 create_process_folder=Create process folder
 create_source_repository=create_source_repository
 create_status_property=create status property
-create_view=Create ontologic view
+create_view=Create view
 create_view_folder=Create view folder
 create_view_point=create_view_point
 creates=Create

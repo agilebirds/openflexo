@@ -62,7 +62,8 @@ public class AddViewInitializer extends ActionInitializer {
 				if (action.skipChoosePopup) {
 					return true;
 				} else {
-					FIBDialog dialog = FIBDialog.instanciateComponent(VECst.ADD_VIEW_DIALOG_FIB, action, null, true);
+					FIBDialog dialog = FIBDialog.instanciateComponent(VECst.ADD_VIEW_DIALOG_FIB, action, null, true,
+							FlexoLocalization.getMainLocalizer());
 					return (dialog.getStatus() == Status.VALIDATED);
 				}
 

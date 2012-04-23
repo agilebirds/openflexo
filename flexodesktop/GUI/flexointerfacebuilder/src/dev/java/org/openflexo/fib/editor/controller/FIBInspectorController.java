@@ -37,6 +37,7 @@ import javax.swing.event.ChangeListener;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
 import org.openflexo.fib.editor.notifications.FIBEditorNotification;
 import org.openflexo.fib.editor.notifications.SelectedObjectChange;
@@ -94,7 +95,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 			FIBInspector inspector = inspectors.get(c);
 			inspector.recursivelyReorderComponents();
 
-			FIBView inspectorView = FIBController.makeView(inspector);
+			FIBView inspectorView = FIBController.makeView(inspector, FIBAbstractEditor.LOCALIZATION);
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
 			logger.info("Initialized inspector for " + inspector.getDataClass());

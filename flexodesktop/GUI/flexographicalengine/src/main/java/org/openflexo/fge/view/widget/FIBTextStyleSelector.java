@@ -293,7 +293,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			textGR.setHeight(20);
 			textGR.setX(0);
 			textGR.setY(0);
-			textGR.setText(FlexoLocalization.localizedForKey("no_font_selected"));
+			textGR.setText(FlexoLocalization.localizedForKey(GraphicalRepresentation.LOCALIZATION, "no_font_selected"));
 			textGR.setIsFloatingLabel(false);
 			textGR.setRelativeTextX(0.5);
 			textGR.setRelativeTextY(0.35);

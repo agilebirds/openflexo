@@ -190,6 +190,7 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.JavaIconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.icon.WKFIconLibrary;
@@ -366,7 +367,7 @@ public enum BrowserElementType {
 	CVS_REPOSITORY_LIST("cvs_repository_list", null/*Used outside this scope*/, FPSIconLibrary.CVS_REPOSITORY_LIST_ICON),
 	CVS_REPOSITORY("cvs_repository", null/*Used outside this scope*/, FPSIconLibrary.CVS_REPOSITORY_ICON),
 	CVS_MODULE("cvs_module", null/*Used outside this scope*/, FPSIconLibrary.CVS_MODULE_ICON),
-	CVS_EXPLORER("cvs_explorer", null/*Used outside this scope*/, IconLibrary.CLOCK_ICON),
+	CVS_EXPLORER("cvs_explorer", null/*Used outside this scope*/, UtilsIconLibrary.CLOCK_ICON),
 	SHARED_PROJECT("shared_project", null/*Used outside this scope*/, IconLibrary.PROJECT_ICON),
 	CVS_DIRECTORY("cvs_directory", null/*Used outside this scope*/, IconLibrary.FOLDER_ICON),
 	CVS_FILE("cvs_file", null/*Used outside this scope*/, FilesIconLibrary.SMALL_MISC_FILE_ICON),

@@ -89,7 +89,7 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusLis
 		statusCountPanel.add(conflictsLabel);
 		statusCountPanel.add(new JLabel(UtilsIconLibrary.CONFLICT_ICON));
 		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-		statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+		statusCountPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		needsMemoryGenerationLabel = new JLabel("1");
 		needsMemoryGenerationLabel.setFont(FlexoCst.MEDIUM_FONT);
@@ -101,7 +101,7 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusLis
 		statusCountPanel.add(needsReinjectionLabel);
 		statusCountPanel.add(new JLabel(GeneratorIconLibrary.NEEDS_MODEL_REINJECTION_ICON));
 		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-		statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+		statusCountPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		errorsLabel = new JLabel("0");
 		errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
@@ -110,14 +110,14 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusLis
 		add(statusCountPanel);
 
 		editorInfoPanel = new JPanel(new FlowLayout());
-		editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+		editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 		editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		cursorPositionLabel = new JLabel("-:-", SwingConstants.CENTER);
 		cursorPositionLabel.setPreferredSize(new Dimension(50, 16));
 		cursorPositionLabel.setFont(FlexoCst.MEDIUM_FONT);
 		editorInfoPanel.add(cursorPositionLabel);
 		editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-		editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+		editorInfoPanel.add(new JLabel(UtilsIconLibrary.SEPARATOR_ICON));
 		editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		editorStatusLabel = new JLabel("");
 		editorStatusLabel.setFont(FlexoCst.MEDIUM_FONT);

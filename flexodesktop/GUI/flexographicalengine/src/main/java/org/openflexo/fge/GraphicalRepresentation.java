@@ -66,7 +66,9 @@ import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.fib.localization.LocalizedDelegateGUIImpl;
 import org.openflexo.inspector.DefaultInspectableObject;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLSerializable;
@@ -75,6 +77,12 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		BindingEvaluationContext, Cloneable, FGEConstants, Observer, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(GraphicalRepresentation.class.getPackage().getName());
+
+	// Instanciate a new localizer in directory src/dev/resources/FGELocalized
+	// Little hack to be removed: linked to parent localizer (which is Openflexo main localizer)
+	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FGELocalized"),
+			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null));
+
 	private Stroke specificStroke = null;
 
 	private static BindingFactory BINDING_FACTORY = new GRBindingFactory();
@@ -1745,7 +1753,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	public void notifyLabelHasBeenEdited() {
 		setChanged();
 		notifyObservers(new LabelHasEdited());
-		}
+	}
 
 	public void notifyLabelWillMove() {
 		setChanged();

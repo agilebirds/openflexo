@@ -34,6 +34,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.localization.LocalizedDelegateGUIImpl;
 import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.ProblemIssue;
 import org.openflexo.fib.model.validation.ValidationError;
@@ -41,6 +42,7 @@ import org.openflexo.fib.model.validation.ValidationIssue;
 import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.fib.model.validation.ValidationRule;
 import org.openflexo.fib.model.validation.ValidationWarning;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.KeyValueDecoder;
 import org.openflexo.xmlcode.XMLSerializable;
@@ -48,6 +50,11 @@ import org.openflexo.xmlcode.XMLSerializable;
 public abstract class FIBModelObject extends Observable implements Bindable, XMLSerializable {
 
 	private static final Logger logger = Logger.getLogger(FIBModelObject.class.getPackage().getName());
+
+	// Instanciate a new localizer in directory src/dev/resources/FIBLocalizer
+	// Little hack to be removed: linked to parent localizer (which is Openflexo main localizer)
+	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FIBLocalized"),
+			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null));
 
 	public static interface FIBModelAttribute {
 		public String name();

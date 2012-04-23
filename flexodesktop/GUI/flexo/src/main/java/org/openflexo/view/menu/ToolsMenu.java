@@ -38,6 +38,7 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.validation.ConsistencyCheckDialog;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.validation.ValidationFinishedNotification;
@@ -165,7 +166,7 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			FlexoLocalization.showLocalizedEditor();
+			((FlexoMainLocalizer) FlexoLocalization.getMainLocalizer()).showLocalizedEditor();
 		}
 
 	}

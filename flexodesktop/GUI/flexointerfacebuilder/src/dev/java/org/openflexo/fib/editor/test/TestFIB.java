@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -35,57 +36,55 @@ import org.openflexo.toolbox.ToolBox;
 
 /**
  * Dialog allowing to automatically ask and edit parameters
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class TestFIB extends JPanel
-{
+public class TestFIB extends JPanel {
 
 	static final Logger logger = Logger.getLogger(TestFIB.class.getPackage().getName());
 
 	/*  private TabModelView paramsPanel;
-    private InspectableObject _inspected;
+	private InspectableObject _inspected;
 
-    public FIBPanel(TabModel model, InspectableObject inspected)
-    {
-    	super();
-    	_inspected = inspected;
-    	setLayout(new BorderLayout());
-    	paramsPanel = new TabModelView(model,null,FIBController.instance());
-    	paramsPanel.performObserverSwitch(inspected);
-    	paramsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    	paramsPanel.valueChange(inspected);
-    	add(paramsPanel,BorderLayout.CENTER);
-    	SwingUtilities.invokeLater(new Runnable() {
-    		public void run() {
-        		paramsPanel.requestFocusInFirstWidget();
-        	}
-        });
-   }
+	public FIBPanel(TabModel model, InspectableObject inspected)
+	{
+		super();
+		_inspected = inspected;
+		setLayout(new BorderLayout());
+		paramsPanel = new TabModelView(model,null,FIBController.instance());
+		paramsPanel.performObserverSwitch(inspected);
+		paramsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		paramsPanel.valueChange(inspected);
+		add(paramsPanel,BorderLayout.CENTER);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+	    		paramsPanel.requestFocusInFirstWidget();
+	    	}
+	    });
+	}
 
-    public DenaliWidget getInspectorWidgetForParameter (ParameterDefinition parameterDefinition)
-    {
-    	return paramsPanel.getInspectorWidgetFor(parameterDefinition.getName());
-    }
+	public DenaliWidget getInspectorWidgetForParameter (ParameterDefinition parameterDefinition)
+	{
+		return paramsPanel.getInspectorWidgetFor(parameterDefinition.getName());
+	}
 
-    public void update()
-    {
-        paramsPanel.valueChange(_inspected);
-        paramsPanel.performObserverSwitch(_inspected);
-    }
+	public void update()
+	{
+	    paramsPanel.valueChange(_inspected);
+	    paramsPanel.performObserverSwitch(_inspected);
+	}
 
-    public void setBackground(Color aColor)
-    {
-        super.setBackground(aColor);
-        if (paramsPanel != null)
-            paramsPanel.setBackground(aColor);
-    }
+	public void setBackground(Color aColor)
+	{
+	    super.setBackground(aColor);
+	    if (paramsPanel != null)
+	        paramsPanel.setBackground(aColor);
+	}
 
 	 */
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		try {
 			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize();
@@ -102,13 +101,13 @@ public class TestFIB extends JPanel
 		JFrame frame = new JFrame();
 
 		FileResource fibFile = new FileResource("TestFIB/Test.fib");
-		System.out.println("Fib: "+fibFile.getAbsolutePath());
+		System.out.println("Fib: " + fibFile.getAbsolutePath());
 
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
 
 		Coucou coucou = new Coucou();
-		
-		FIBView testFibPanel = FIBController.makeView(fibComponent);
+
+		FIBView testFibPanel = FIBController.makeView(fibComponent, FIBAbstractEditor.LOCALIZATION);
 		testFibPanel.getController().setDataObject(coucou);
 
 		frame.getContentPane().add(testFibPanel.getResultingJComponent());

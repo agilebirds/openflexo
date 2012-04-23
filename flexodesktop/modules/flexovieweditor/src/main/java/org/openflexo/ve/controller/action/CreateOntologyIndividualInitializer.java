@@ -30,6 +30,7 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ontology.action.CreateOntologyIndividual;
 import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.controller.ActionInitializer;
@@ -53,7 +54,8 @@ public class CreateOntologyIndividualInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<CreateOntologyIndividual>() {
 			@Override
 			public boolean run(ActionEvent e, CreateOntologyIndividual action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB, action, null, true);
+				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB, action, null, true,
+						FlexoLocalization.getMainLocalizer());
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};

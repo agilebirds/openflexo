@@ -40,11 +40,13 @@ import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.ValidationIssue;
 import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.fib.model.validation.ValidationRule;
 import org.openflexo.fib.model.validation.ValidationWarning;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class FIBComponent extends FIBModelObject implements TreeNode {
@@ -1122,7 +1124,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefinePreferredDimensions(boolean definePreferredDimensions) {
 		if (definePreferredDimensions) {
-			FIBView v = FIBController.makeView(this);
+			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
 			Dimension p = v.getJComponent().getPreferredSize();
 			setWidth(p.width);
 			setHeight(p.height);
@@ -1139,7 +1141,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefineMaxDimensions(boolean defineMaxDimensions) {
 		if (defineMaxDimensions) {
-			FIBView v = FIBController.makeView(this);
+			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
 			setMaxWidth(1024);
 			setMaxHeight(1024);
 			v.delete();
@@ -1155,7 +1157,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefineMinDimensions(boolean defineMinDimensions) {
 		if (defineMinDimensions) {
-			FIBView v = FIBController.makeView(this);
+			FIBView v = FIBController.makeView(this, (LocalizedDelegate) null);
 			Dimension p = v.getJComponent().getMinimumSize();
 			setMinWidth(p.width);
 			setMinHeight(p.height);
@@ -1239,7 +1241,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public void setLocalizedDictionary(FIBLocalizedDictionary localizedDictionary) {
-		localizedDictionary.setComponent(this);
+		if (localizedDictionary != null) {
+			localizedDictionary.setComponent(this);
+		}
 		this.localizedDictionary = localizedDictionary;
 	}
 
@@ -1288,6 +1292,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		performValidation(RootComponentShouldHaveDataClass.class, report);
 		performValidation(DataBindingMustBeValid.class, report);
 		performValidation(VisibleBindingMustBeValid.class, report);
+		performValidation(NonRootComponentShouldNotHaveLocalizedDictionary.class, report);
 	}
 
 	public static class RootComponentShouldHaveDataClass extends ValidationRule<RootComponentShouldHaveDataClass, FIBComponent> {
@@ -1302,6 +1307,38 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 						"component_($object.toString)_is_declared_as_root_but_does_not_have_any_data_class");
 			}
 			return null;
+		}
+
+	}
+
+	public static class NonRootComponentShouldNotHaveLocalizedDictionary extends
+			ValidationRule<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> {
+		public NonRootComponentShouldNotHaveLocalizedDictionary() {
+			super(FIBModelObject.class, "non_root_component_should_not_have_localized_dictionary");
+		}
+
+		@Override
+		public ValidationIssue<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> applyValidation(FIBComponent object) {
+			if (!object.isRootComponent() && object.getLocalizedDictionary() != null) {
+				RemoveExtraLocalizedDictionary fixProposal = new RemoveExtraLocalizedDictionary();
+				return new ValidationWarning<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent>(this, object,
+						"component_($object.toString)_has_a_localized_dictionary_but_is_not_root_component", fixProposal);
+			}
+			return null;
+		}
+
+	}
+
+	protected static class RemoveExtraLocalizedDictionary extends
+			FixProposal<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> {
+
+		public RemoveExtraLocalizedDictionary() {
+			super("remove_extra_dictionary");
+		}
+
+		@Override
+		protected void fixAction() {
+			getObject().setLocalizedDictionary(null);
 		}
 
 	}

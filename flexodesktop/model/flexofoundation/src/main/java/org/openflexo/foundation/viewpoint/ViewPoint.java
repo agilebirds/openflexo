@@ -39,7 +39,6 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -312,9 +311,10 @@ public class ViewPoint extends ViewPointObject {
 			calcOntology.loadWhenUnloaded();
 		}
 
-		if (getLocalizedDictionary() != null) {
+		// Deprecated code
+		/*if (getLocalizedDictionary() != null) {
 			FlexoLocalization.addToLocalizedDelegates(getLocalizedDictionary());
-		}
+		}*/
 
 		if (calcOntology != null) {
 			isLoaded = true;
@@ -507,6 +507,10 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	public LocalizedDictionary getLocalizedDictionary() {
+		if (localizedDictionary == null) {
+			localizedDictionary = new LocalizedDictionary();
+			localizedDictionary.setCalc(this);
+		}
 		return localizedDictionary;
 	}
 

@@ -60,4 +60,8 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	public void notifyBindingModelChanged() {
 		getPropertyChangeSupport().firePropertyChange(BindingModelChanged.BINDING_MODEL_CHANGED, null, null);
 	}
+
+	public LocalizedDictionary getLocalizedDictionary() {
+		return getCalc().getLocalizedDictionary();
+	}
 }
