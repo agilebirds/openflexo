@@ -69,35 +69,12 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 		super.doLayout();
 	}
 
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		if (!getTabVisibility()) {
-			return;
-		}
-		super.propagateResize();
-	}
-
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		if (!getTabVisibility()) {
 			return new Dimension(0, 0);
 		}
-		Dimension d = getReusableWidgetComponentView().getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
+		return getReusableWidgetComponentView().getPreferredSize();
 	}
 
 	public IETabWidget getTabWidget() {
@@ -121,28 +98,12 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 						.getIndex() : getTabWidget().getParent().getIndex(), getTabWidget().getTitle());
 			}
 		} else if (modif instanceof ContentSizeChanged) {
-			getReusableWidgetComponentView().validate();
-			getReusableWidgetComponentView().doLayout();
-			getReusableWidgetComponentView().repaint();
-			doLayout();
+			revalidate();
 			repaint();
-			if (getParent() != null) {
-				getParent().validate();
-				getParent().doLayout();
-				getParent().repaint();
-			}
 		} else if (modif instanceof TopComponentInserted) {
 			new ObserverRegistation(this, (IEObject) ((TopComponentInserted) modif).newValue());
-			getReusableWidgetComponentView().validate();
-			getReusableWidgetComponentView().doLayout();
-			getReusableWidgetComponentView().repaint();
-			doLayout();
+			revalidate();
 			repaint();
-			if (getParent() != null) {
-				getParent().validate();
-				getParent().doLayout();
-				getParent().repaint();
-			}
 		} else {
 			super.update(arg0, modif);
 		}
@@ -155,8 +116,8 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 	public void setTabVisibility(boolean isVisible) {
 		this.tabVisibility = isVisible;
 		if (isVisible) {
-			validate();
-			doLayout();
+			revalidate();
+			repaint();
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Building tab: " + getTabWidget().getTitle());
 			}

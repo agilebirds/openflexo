@@ -21,7 +21,6 @@ package org.openflexo.ie.view.widget;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 
 import org.openflexo.foundation.DataModification;
@@ -33,7 +32,6 @@ import org.openflexo.foundation.ie.cl.PartialComponentDefinition;
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
 import org.openflexo.ie.view.IEReusableWidgetComponentView;
 import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.controller.IEController;
 
 public class IEReusableWidgetView<D extends IEReusableWidget<C, CI>, CI extends PartialComponentInstance, C extends PartialComponentDefinition>
@@ -63,33 +61,9 @@ public class IEReusableWidgetView<D extends IEReusableWidget<C, CI>, CI extends 
 		super.delete();
 	}
 
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		Component[] c = getComponents();
-		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof Layoutable) {
-				((Layoutable) c[i]).propagateResize();
-			}
-		}
-	}
-
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		Dimension d = _reusableWidgetComponentView.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
 		return d;
 	}
 

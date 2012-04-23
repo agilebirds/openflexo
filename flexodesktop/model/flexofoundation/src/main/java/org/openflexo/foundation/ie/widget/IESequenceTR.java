@@ -28,8 +28,6 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.action.ExportWidgetToPalette;
-import org.openflexo.foundation.ie.dm.ActivateDisplayRefresh;
-import org.openflexo.foundation.ie.dm.HoldDisplayRefresh;
 import org.openflexo.foundation.ie.dm.TRInserted;
 import org.openflexo.foundation.ie.util.TRCSSType;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -85,7 +83,7 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 		if (size() == 0) {
 			return null;
 		}
-		return (get(0)).getFirstTR();
+		return get(0).getFirstTR();
 	}
 
 	@Override
@@ -134,7 +132,7 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 		// We take the first row available and asks for how many columns are
 		// inside of it;
 		if (size() > 0) {
-			return (get(0)).getColCount();
+			return get(0).getColCount();
 		}
 		return 0;
 	}
@@ -403,32 +401,6 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 			v.addAll(tr.getAllInnerTableWidget());
 		}
 		return v;
-	}
-
-	public void holdDisplayRefresh() {
-		Enumeration<ITableRow> en = elements();
-		while (en.hasMoreElements()) {
-			ITableRow r = en.nextElement();
-			if (r instanceof IESequenceTR) {
-				((IESequenceTR) r).holdDisplayRefresh();
-			}
-		}
-		setChanged();
-		notifyObservers(new HoldDisplayRefresh());
-		disableObserving();
-	}
-
-	public void activateDisplayRefresh() {
-		Enumeration<ITableRow> en = elements();
-		while (en.hasMoreElements()) {
-			ITableRow r = en.nextElement();
-			if (r instanceof IESequenceTR) {
-				((IESequenceTR) r).activateDisplayRefresh();
-			}
-		}
-		enableObserving();
-		setChanged();
-		notifyObservers(new ActivateDisplayRefresh());
 	}
 
 }

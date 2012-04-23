@@ -94,12 +94,6 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		Dimension d;
 		if (getModel().getUsePercentage()) {
 			int width, height;
@@ -108,9 +102,6 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 			d = new Dimension(width, height);
 		} else {
 			d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
-		}
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
 		}
 		return d;
 	}
@@ -133,8 +124,8 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 		} else if (getModel() == arg0
 				&& (arg1.propertyName() == "heightPixel" || arg1.propertyName() == "widthPixel" || arg1.propertyName() == "usePercentage" || arg1
 						.propertyName() == "percentage")) {
-			doLayout();
-			paintImmediately(getBounds());
+			revalidate();
+			repaint();
 		} else if (getModel() == arg0 && "graphType".equals(arg1.propertyName())) {
 			computeImage();
 			repaint();
@@ -153,7 +144,7 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 		if (getModel().getUsePercentage()) {
 			int percentage = getModel().getPercentage();
 			int w = getWidth();
-			int newPercentage = percentage + (int) (((double) deltaX / (double) w) * 100);
+			int newPercentage = percentage + (int) ((double) deltaX / (double) w * 100);
 			if (newPercentage != percentage) {
 				getModel().setPercentage(newPercentage);
 			}

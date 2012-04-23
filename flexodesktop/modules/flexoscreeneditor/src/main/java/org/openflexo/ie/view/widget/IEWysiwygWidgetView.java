@@ -132,10 +132,8 @@ public class IEWysiwygWidgetView extends AbstractInnerTableWidgetView<IEWysiwygW
 		if (propertyName != null) {
 			if (propertyName.equals(BINDING_VALUE_NAME)) {
 				_jEditorPane.setText(getValue());
-				if (getParent() != null) {
-					getParent().doLayout();
-					getParent().repaint();
-				}
+				revalidate();
+				repaint();
 			} else if (propertyName.equals("cssClass")) {
 				_jEditorPane.setFont(getWysiwygModel().getTextCSSClass().font());
 			}
@@ -151,11 +149,6 @@ public class IEWysiwygWidgetView extends AbstractInnerTableWidgetView<IEWysiwygW
 		return false;
 	}
 
-	@Override
-	public boolean getHoldsNextComputedPreferredSize() {
-		return false;
-	}
-
 	/**
 	 * Overrides getPreferredSize
 	 * 
@@ -163,18 +156,9 @@ public class IEWysiwygWidgetView extends AbstractInnerTableWidgetView<IEWysiwygW
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		Dimension d = _jEditorPane.getPreferredSize();
 		d.width += 4;
 		d.height += 6;
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
 		return d;
 	}
 

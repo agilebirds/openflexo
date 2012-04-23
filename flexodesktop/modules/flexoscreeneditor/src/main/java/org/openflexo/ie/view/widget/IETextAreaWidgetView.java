@@ -134,17 +134,6 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 		updateDisplayedValue();
 	}
 
-	/**
-	 * Overrides doLayout
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		super.doLayout();
-		scrollPane.doLayout();
-	}
-
 	public IETextAreaWidget getTextAreaModel() {
 		return getModel();
 	}
@@ -159,18 +148,6 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 		public TextAreaPane(JTextArea textArea) {
 			super(textArea, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_NEVER);
 			this.textArea = textArea;
-		}
-
-		/**
-		 * Overrides doLayout
-		 * 
-		 * @see java.awt.Container#doLayout()
-		 */
-		@Override
-		public void doLayout() {
-			super.doLayout();
-			getViewport().doLayout();
-			this.textArea.doLayout();
 		}
 
 		/**
@@ -235,14 +212,8 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 		if (labelEditing && _jLabelTextArea != null) {
 			_jLabelTextArea.setRows(_jTextArea.getRows());
 		}
-		doLayout();
+		revalidate();
 		repaint();
-		scrollPane.doLayout();
-		scrollPane.repaint();
-		scrollPane.getViewport().doLayout();
-		scrollPane.getViewport().repaint();
-		_jTextArea.doLayout();
-		_jTextArea.repaint();
 	}
 
 	// public Dimension getFavoriteDimension()
@@ -260,12 +231,6 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		IESequenceWidgetWidgetView parentSequenceView = null;
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
 			parentSequenceView = (IESequenceWidgetWidgetView) getParent();
@@ -274,9 +239,6 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 		if (parentSequenceView != null) {
 			int width = parentSequenceView.getAvailableWidth();
 			d.width = width;
-		}
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
 		}
 		return d;
 	}

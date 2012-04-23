@@ -269,7 +269,7 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 			if (getCustomButtonModel().getCustomButtonValue() == null || getCustomButtonModel().getCustomButtonValue().length() == 0) {
 				_label.setText("   ");
 			}
-			doLayout();
+			revalidate();
 			repaint();
 		} else {
 			super.update(arg0, arg1);

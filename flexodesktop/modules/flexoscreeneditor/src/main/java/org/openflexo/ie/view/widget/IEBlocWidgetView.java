@@ -139,18 +139,6 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		}
 	}
 
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		super.propagateResize();
-		_buttonPanel.propagateResize();
-		_dropTableZone.propagateResize();
-	}
-
 	// ==========================================================================
 	// ============================= Observer
 	// ===================================
@@ -159,8 +147,8 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		IEWidgetView view = _componentView.getViewForWidget(widget, true);
 		_dropTableZone.add(view, BorderLayout.CENTER);
 		_dropTableZone.setTableView(view);
-		_dropTableZone.validate();
-		_dropTableZone.doLayout();
+		revalidate();
+		repaint();
 		((JPanel) _dropTableZone.getParent()).repaint();
 		new ObserverRegistation(this, widget);
 		handleContentResize();
@@ -177,8 +165,8 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			}
 			_dropTableZone.removeAll();// (_dropTableZone.getTableView());
 			_dropTableZone.removeTableView();
-			_dropTableZone.validate();
-			((JPanel) _dropTableZone.getParent()).repaint();
+			revalidate();
+			repaint();
 		}
 	}
 
@@ -235,7 +223,7 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		}
 		_dropTableZone.setPreferredSize(new Dimension(_dropTableZone.getPreferredSize().width,
 				_dropTableZone.getPreferredSize().height + 24));
-		doLayout();
+		revalidate();
 		repaint();
 	}
 
@@ -264,12 +252,6 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		// int k = getModel().getParent() instanceof IETDWidget ? 8 : 0;
 		IESequenceWidgetWidgetView parentSequenceView = null;
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
@@ -284,9 +266,6 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			Dimension d = new Dimension(width, _dropTableZone.getComponentCount() > 0 ? new Double(_dropTableZone.getComponent(0)
 					.getPreferredSize().getHeight()).intValue()
 					+ titleAndButtonPanelHeight : 24 + titleAndButtonPanelHeight);
-			if (getHoldsNextComputedPreferredSize()) {
-				storePrefSize(d);
-			}
 			return d;
 		}
 		int parentInsetsWidth = getParent().getInsets().left + getParent().getInsets().right;
@@ -300,9 +279,6 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		Dimension dim = new Dimension(getDropZoneWith() - totalWidth, _dropTableZone.getComponentCount() > 0 ? new Double(_dropTableZone
 				.getComponent(0).getPreferredSize().getHeight()).intValue()
 				+ titleAndButtonPanelHeight : 24 + titleAndButtonPanelHeight);
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(dim);
-		}
 		return dim;
 	}
 

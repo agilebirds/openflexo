@@ -34,6 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -53,7 +54,6 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.ie.view.IESelectable;
 import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.utils.DrawUtils;
 
@@ -68,7 +68,7 @@ import org.openflexo.utils.DrawUtils;
  * @author bmangez, sguerin
  */
 public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetView implements
-/* InspectableObjectView, */GraphicalFlexoObserver, IESelectable, Layoutable {
+/* InspectableObjectView, */GraphicalFlexoObserver, IESelectable {
 
 	protected class ObserverRegistation {
 		private FlexoObservable observable;
@@ -204,31 +204,6 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 		return colorFromConceptualColor(FlexoConceptualColor.TEXT_COLOR, getFlexoCSS());
 	}
 
-	/**
-	 * Overrides doLayout
-	 * 
-	 * @see java.awt.Container#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		_componentView.notifyAllViewsToHoldTheirNextComputedPreferredSize(this);
-		if (getParent() instanceof Layoutable) {
-			((Layoutable) getParent()).doLayout();
-		}
-		super.doLayout();
-		_componentView.resetAllViewsPreferredSize(this);
-	}
-
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		// Does nothing by default
-	}
-
 	public void delete() {
 		for (ObserverRegistation registration : new ArrayList<ObserverRegistation>(observerRegistations)) {
 			registration.removeFromObservers();
@@ -244,6 +219,11 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 		}
 		_componentView.removeFrowWidgetViews(getModel());
 		removeAll();
+		if (getParent() instanceof JComponent) {
+			((JComponent) getParent()).revalidate();
+			getParent().repaint();
+		}
+
 	}
 
 	public void setDefaultBorder() {
@@ -405,8 +385,8 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 		}
 		if (tr != null) {
 			tr.updateConstraints();
-			tr.doLayout();
-			tr.repaint();
+			revalidate();
+			repaint();
 		}
 	}
 
@@ -419,35 +399,11 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getModel() && dataModification instanceof DisplayNeedsRefresh) {
-			doLayout();
+			revalidate();
 			repaint();
 		} else if (observable == getModel() && dataModification.propertyName() != null && dataModification.propertyName().equals("tooltip")) {
 			updateTooltip();
 		}
 	}
 
-	@Override
-	public boolean getHoldsNextComputedPreferredSize() {
-		return _componentView.holdsNextComputedPreferredSize;
-		// return holdsNextComputedPreferredSize;
-	}
-
-	@Override
-	public void setHoldsNextComputedPreferredSize() {
-		// holdsNextComputedPreferredSize = true;
-	}
-
-	@Override
-	public void resetPreferredSize() {
-		// preferredSize = null;
-		// holdsNextComputedPreferredSize = false;
-	}
-
-	public void storePrefSize(Dimension value) {
-		_componentView.storePrefSize(this, value);
-	}
-
-	public Dimension storedPrefSize() {
-		return _componentView.storedPrefSize(this);
-	}
 }

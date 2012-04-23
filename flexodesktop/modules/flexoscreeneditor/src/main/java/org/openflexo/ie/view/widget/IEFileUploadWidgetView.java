@@ -19,7 +19,6 @@
  */
 package org.openflexo.ie.view.widget;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -97,26 +96,6 @@ public class IEFileUploadWidgetView extends AbstractInnerTableWidgetView<IEFileU
 	// ============================= Observer
 	// ===================================
 	// ==========================================================================
-
-	/**
-	 * Overrides getPreferredSize
-	 * 
-	 * @see javax.swing.JComponent#getPreferredSize()
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
-		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
-	}
 
 	/*
 	 * (non-Javadoc)

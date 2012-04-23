@@ -15,9 +15,6 @@
 			<param name="columns" value="10"/>
 		</property>
 		<property name="percentage" label="width (%)" widget="INTEGER" constraint="5"/>
-		<property name="isHidden" label="is_hidden" widget="CHECKBOX" constraint="6">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
-		</property>
 		<hidden name="tooltip"/>
 	</tab>
 

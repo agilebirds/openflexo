@@ -116,7 +116,7 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 		pane.validate();
 		pane.doLayout();
 		pane.repaint();
-		answer.dropZone.propagateResize();
+		answer.dropZone.revalidate();
 		componentView = answer;
 		return pane;
 	}

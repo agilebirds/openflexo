@@ -94,9 +94,6 @@ public class IETDWidget extends IEWidget implements WidgetsContainer, ITableData
 
 	public static final String VALIGN_BOTTOM = "bottom";
 
-	@Deprecated
-	private boolean _isHidden = false;
-
 	private int _colSpan = 1;
 
 	private int _rowSpan = 1;

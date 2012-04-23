@@ -19,7 +19,6 @@
  */
 package org.openflexo.ie.view.widget;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -76,8 +75,8 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		layout.setVgap(4);
 		setLayout(layout);
 		_jLabel = new JLabel(getLabelModel().getValue());
-		_jLabel.setFont(getLabelModel().getTextCSSClass() != null ? getLabelModel().getTextCSSClass().font()
-				: TextCSSClass.BLOC_BODY_TITLE.font());
+		_jLabel.setFont(getLabelModel().getTextCSSClass() != null ? getLabelModel().getTextCSSClass().font() : TextCSSClass.BLOC_BODY_TITLE
+				.font());
 		_jLabel.setAlignmentY(0.5f);
 		_jLabel.setOpaque(false);
 		TransparentMouseListener tml = new TransparentMouseListener(_jLabel, this);
@@ -202,26 +201,6 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		revalidate();
 		repaint();
 		// getIEController().clearEditedNodeLabel();
-	}
-
-	/**
-	 * Overrides getPreferredSize
-	 * 
-	 * @see javax.swing.JComponent#getPreferredSize()
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
-		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
 	}
 
 }

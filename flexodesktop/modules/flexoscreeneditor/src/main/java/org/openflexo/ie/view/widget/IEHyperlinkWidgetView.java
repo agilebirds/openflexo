@@ -162,8 +162,8 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 
 	private void refreshView() {
 		_jLabel.setText(getModel().getIsHTML() ? spanMyText(getModel().getValue()) : getModel().getValue());
-		_jLabel.doLayout();
-		_jLabel.repaint();
+		revalidate();
+		repaint();
 	}
 
 	private static final String SPAN_OPEN = "<html><body><div><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" SIZE=3>";// SIZE is not
@@ -274,21 +274,12 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		Dimension d;
 		if (getModel().isCustomButton()) {
 			d = new Dimension(
 					(int) (labelEditing ? _jLabelTextField.getPreferredSize().getWidth() : _jLabel.getPreferredSize().getWidth()) + 2, 17);
 		} else {
 			d = super.getPreferredSize();
-		}
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
 		}
 		return d;
 	}

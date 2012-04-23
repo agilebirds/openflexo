@@ -276,14 +276,14 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 	public void update(FlexoObservable arg0, DataModification modif) {
 		if (modif instanceof AlignementChanged) {
 			((FlowLayout) getLayout()).setAlignment(alignement(getSequenceModel().getAlignement()));
-			doLayout();
+			revalidate();
 			repaint();
 		} else if (modif instanceof VerticalAlignementChanged) {
 			((IETDFlowLayout) getLayout()).setVerticalAlignement(findVerticalAlignement(td()));
-			doLayout();
+			revalidate();
 			repaint();
 		} else if (modif instanceof PercentageChanged) {
-			doLayout();
+			revalidate();
 			repaint();
 		} else if (modif.propertyName() != null && modif.propertyName().equals("rowIndex")) {
 			setBackground(getBackground());
@@ -293,8 +293,7 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 				Component component = c[i];
 				remove(component);
 			}
-			validate();
-			doLayout();
+			revalidate();
 			repaint();
 			switchToModel(((SequenceOfTDChanged) modif).getTD().getSequenceWidget());
 		} else if (modif instanceof ColSpanIncrease || modif instanceof ColSpanDecrease) {

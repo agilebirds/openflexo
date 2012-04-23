@@ -120,17 +120,6 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 		updateDisplayedValue();
 	}
 
-	/**
-	 * Overrides doLayout
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		super.doLayout();
-		_jTextField.doLayout();
-	}
-
 	public IETextFieldWidget getTextFieldModel() {
 		return getModel();
 	}
@@ -141,8 +130,7 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 	// ==========================================================================
 
 	private void applyCss() {
-		getPreferredSize();
-		doLayout();
+		revalidate();
 		repaint();
 	}
 

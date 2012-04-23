@@ -105,18 +105,6 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 		return getModel();
 	}
 
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		super.propagateResize();
-		_dropTabZone.propagateResize();
-		_buttonPanel.propagateResize();
-	}
-
 	// ==========================================================================
 	// ============================= Observer
 	// ===================================
@@ -190,12 +178,6 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		IESequenceWidgetWidgetView parentSequenceView = null;
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
 			parentSequenceView = (IESequenceWidgetWidgetView) getParent();
@@ -206,9 +188,6 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 			if (d.height < 20) {
 				d.height = 20;
 			}
-		}
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
 		}
 		return d;
 	}
