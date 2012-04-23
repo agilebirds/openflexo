@@ -4,7 +4,7 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,8 +13,6 @@ import org.openflexo.xmlcode.StringEncoder;
 
 public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBinding> implements BindingFactory {
 	static final Logger logger = Logger.getLogger(DefaultBindingFactory.class.getPackage().getName());
-
-	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 
 	boolean warnOnFailure = true;
 
@@ -168,7 +166,7 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 	@Override
 	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father) {
 		if (father instanceof FinalBindingPathElement) {
-			return EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		if (father.getType() != null) {
 			if (TypeUtils.getBaseClass(father.getType()) == null) {
@@ -186,7 +184,7 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 	@Override
 	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father) {
 		if (father instanceof FinalBindingPathElement) {
-			return EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		if (father.getType() != null) {
 			if (TypeUtils.getBaseClass(father.getType()) == null) {
