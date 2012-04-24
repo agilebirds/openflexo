@@ -71,6 +71,8 @@ public class FlexoLocalization {
 
 	private static LocalizedDelegate mainLocalizer;
 
+	private static boolean uninitalizedLocalizationWarningDone = false;
+
 	/**
 	 * Initialize localization given a supplied localization delegate
 	 * 
@@ -110,7 +112,10 @@ public class FlexoLocalization {
 	 */
 	public static String localizedForKey(String key) {
 		if (mainLocalizer == null) {
-			logger.warning("FlexoLocalization not initialized, returning key as localized key=" + key);
+			if (!uninitalizedLocalizationWarningDone) {
+				logger.warning("FlexoLocalization not initialized, returning key as localized key=" + key);
+				uninitalizedLocalizationWarningDone = true;
+			}
 			return key;
 		}
 		return localizedForKey(mainLocalizer, key);
@@ -122,7 +127,10 @@ public class FlexoLocalization {
 
 	public static String localizedForKeyAndLanguage(String key, Language language) {
 		if (mainLocalizer == null) {
-			logger.warning("FlexoLocalization not initialized, returning key as localized ");
+			if (!uninitalizedLocalizationWarningDone) {
+				logger.warning("FlexoLocalization not initialized, returning key as localized key=" + key);
+				uninitalizedLocalizationWarningDone = true;
+			}
 			return key;
 		}
 		return localizedForKeyAndLanguage(mainLocalizer, key, language);
@@ -214,7 +222,10 @@ public class FlexoLocalization {
 	 */
 	public static void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
 		if (mainLocalizer == null) {
-			logger.warning("FlexoLocalization not initialized, cannot set localized ");
+			if (!uninitalizedLocalizationWarningDone) {
+				logger.warning("FlexoLocalization not initialized, returning key as localized key=" + key);
+				uninitalizedLocalizationWarningDone = true;
+			}
 		}
 		setLocalizedForKeyAndLanguage(mainLocalizer, key, value, language);
 	}
