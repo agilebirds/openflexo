@@ -147,6 +147,10 @@ public class FlexoLocalization {
 			return null;
 		}
 
+		if (delegate == null) {
+			return key;
+		}
+
 		String returned = delegate.getLocalizedForKeyAndLanguage(key, language);
 		if (returned == null) {
 			// Not found
