@@ -23,6 +23,8 @@ public class NormalSection extends TOCEntry {
 	@Override
 	public void setContent(String content) {
 		this.content = content;
+		setChanged();
+		notifyAttributeModification("content", null, content);
 	}
 
 	@Override
