@@ -94,7 +94,7 @@ public class LoggingConfigurationWindow {
 		String LOG_FINEST = FlexoLocalization.localizedForKey("log_finest");
 		String[] logLevel = { LOG_SEVERE, LOG_WARNING, LOG_INFO, LOG_FINE, LOG_FINER, LOG_FINEST };
 		logLevelSelector = new RadioButtonListParameter<String>("logLevel", "select_a_choice", getDefaultRadioValue(FlexoProperties
-				.instance().getDefaultLoggingLevel()), logLevel);
+				.instance().getDefaultLoggingLevel().getName()), logLevel);
 		parameters[3] = logLevelSelector;
 		parameters[3].setDepends("mode");
 		parameters[3].setConditional("mode=" + '"' + USE_DEFAULT_LOG_CONFIG + '"');
@@ -158,7 +158,7 @@ public class LoggingConfigurationWindow {
 				}
 				reloadLoggingFile(new FileResource("Config/logging_" + fileName + ".properties").getAbsolutePath());
 				FlexoProperties.instance().setLoggingFileName(null);
-				FlexoProperties.instance().setDefaultLoggingLevel(fileName);
+				// FlexoProperties.instance().setDefaultLoggingLevel(fileName);
 
 			} else {
 				reloadLoggingFile(((File) dialog.parameterValueWithName("selectedCustomFile")).getAbsolutePath());

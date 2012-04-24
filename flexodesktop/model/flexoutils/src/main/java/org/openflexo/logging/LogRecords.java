@@ -20,6 +20,7 @@
 package org.openflexo.logging;
 
 import java.util.LinkedList;
+import java.util.logging.Level;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -36,7 +37,11 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 public class LogRecords extends KVCObject implements XMLSerializable, TableModel {
 
-	public LinkedList<LogRecord> records;
+	private LinkedList<LogRecord> records;
+
+	private int totalLogs = 0;
+	private int warningLogs = 0;
+	private int severeLogs = 0;
 
 	private DefaultTableModel model;
 
@@ -52,6 +57,13 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 				records.remove(0);
 			}
 			records.add(record);
+			if (record.level == Level.WARNING) {
+				warningLogs++;
+			}
+			if (record.level == Level.SEVERE) {
+				severeLogs++;
+			}
+			totalLogs++;
 		}
 		model.fireTableDataChanged();
 	}
@@ -177,6 +189,22 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 	@Override
 	public void removeTableModelListener(TableModelListener arg0) {
 		model.removeTableModelListener(arg0);
+	}
+
+	public LinkedList<LogRecord> getRecords() {
+		return records;
+	}
+
+	public int getTotalLogs() {
+		return totalLogs;
+	}
+
+	public int getWarningLogs() {
+		return warningLogs;
+	}
+
+	public int getSevereLogs() {
+		return severeLogs;
 	}
 
 }
