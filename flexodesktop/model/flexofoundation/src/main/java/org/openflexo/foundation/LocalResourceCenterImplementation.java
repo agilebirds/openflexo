@@ -147,7 +147,9 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		}
 		for (File f : dir.listFiles()) {
 			if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
-				viewPointLibrary.importViewPoint(f, folder);
+				if (f.listFiles().length > 0) {
+					viewPointLibrary.importViewPoint(f, folder);
+				}
 			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
 				ViewPointFolder newFolder = new ViewPointFolder(f.getName(), folder, viewPointLibrary);
 				findViewPoints(f, newFolder);

@@ -1930,7 +1930,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		} else {
 			prefix = getProjectName().toUpperCase();
 		}
-		return ToolBox.getJavaName(prefix);
+		return ToolBox.getJavaName(prefix, true, false);
 	}
 
 	private DateFormatType _dateFormat = DateFormatType.EUDEFAULT;

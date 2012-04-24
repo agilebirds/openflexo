@@ -111,13 +111,12 @@ public class FloatWidget extends DenaliWidget<Float> {
 	@Override
 	public synchronized void updateWidgetFromModel() {
 		widgetUpdating = true;
-		Float currentValue = null;
-		if (getObjectValue() == null) {
-			setObjectValue(new Float(0));
+		Float currentValue = getObjectValue();
+		if (currentValue == null) {
+			currentValue = Float.valueOf(0);
 		}
-		currentValue = getObjectValue();
 		ignoreTextfieldChanges = true;
-
+		valueChooser.setValue(currentValue);
 		ignoreTextfieldChanges = false;
 		widgetUpdating = false;
 	}
@@ -129,8 +128,7 @@ public class FloatWidget extends DenaliWidget<Float> {
 	public synchronized void updateModelFromWidget() {
 		modelUpdating = true;
 		Number value = (Number) valueChooser.getValue();
-		float currentValue = value.floatValue();
-		setObjectValue(currentValue);
+		setObjectValue(value != null ? value.floatValue() : null);
 		modelUpdating = false;
 	}
 

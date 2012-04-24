@@ -1,4 +1,4 @@
-<inspector title = "Browser" inheritsfrom ="DropDown.inspector">
+<inspector title = "Browser" inheritsfrom ="AbstractList.inspector">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<hidden name="value"/>

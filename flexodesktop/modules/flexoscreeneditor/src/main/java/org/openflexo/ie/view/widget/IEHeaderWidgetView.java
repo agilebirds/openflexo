@@ -100,12 +100,6 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		IESequenceWidgetWidgetView parentSequenceView = null;
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
 			parentSequenceView = (IESequenceWidgetWidgetView) getParent();
@@ -114,16 +108,9 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 			int width = parentSequenceView.getAvailableWidth();
 			Dimension d = super.getPreferredSize();
 			d = new Dimension(width, d.height);
-			if (getHoldsNextComputedPreferredSize()) {
-				storePrefSize(d);
-			}
 			return d;
 		}
-		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
+		return super.getPreferredSize();
 	}
 
 	/*

@@ -53,7 +53,6 @@ import org.openflexo.foundation.ie.widget.OperatorChanged;
 import org.openflexo.ie.view.IEContainer;
 import org.openflexo.ie.view.IEViewUtils;
 import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.IEDTListener;
 
@@ -103,24 +102,6 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 		return FlowLayout.LEFT;
 	}
 
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		Component[] c = getComponents();
-		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof Layoutable) {
-				((Layoutable) c[i]).propagateResize();
-			}
-		}
-		invalidate();
-		doLayout();
-		repaint();
-	}
-
 	public int getAvailableWidth() {
 		Dimension d = getMaximumSize();
 		Insets i = getInsets();
@@ -150,7 +131,7 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 		} else if (p instanceof IEWOComponentView) {
 			Dimension d = ((IEWOComponentView) p).getMaximumSize();
 			int subsequenceCount = getModel().getSequenceDepth();
-			d.width = ((IEWOComponentView) p).getMaxWidth() - (subsequenceCount * getHorizontalGap() * 2);
+			d.width = ((IEWOComponentView) p).getMaxWidth() - subsequenceCount * getHorizontalGap() * 2;
 			return d;
 		} else if (p instanceof ButtonPanel) {
 			return p.getMaximumSize();
@@ -161,21 +142,12 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		Dimension d = super.getPreferredSize();
 		if (d.height < IETDWidget.MIN_HEIGHT) {
 			d.height = IETDWidget.MIN_HEIGHT;
 		}
 		if (d.width < IETDWidget.MIN_WIDTH) {
 			d.width = IETDWidget.MIN_WIDTH;
-		}
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
 		}
 		return d;
 	}
@@ -217,7 +189,7 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 	protected void handleWidgetInserted(IEWidget widget) {
 		add(_componentView.getViewForWidget(widget, true), widget.getIndex());
 		validate();
-		doLayout();
+		revalidate();
 		repaint();
 	}
 
@@ -228,8 +200,7 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 		Component v = findView(widget);
 		if (v != null) {
 			remove(v);
-			validate();
-			doLayout();
+			revalidate();
 			repaint();
 		}
 
@@ -244,10 +215,8 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 	public void update(FlexoObservable arg0, DataModification modif) {
 		if (modif instanceof DisplayNeedUpdate || modif instanceof ConstraintUpdated || modif instanceof ColSpanDecrease
 				|| modif instanceof RowSpanDecrease || modif instanceof ColSpanIncrease || modif instanceof RowSpanIncrease) {
-			if (getParent() != null) {
-				doLayout();
-				repaint();
-			}
+			revalidate();
+			repaint();
 		} else if (modif instanceof WidgetAddedToSequence && arg0 == getModel()) {
 			handleWidgetInserted((IEWidget) modif.newValue());
 		} else if (modif instanceof WidgetRemovedFromSequence && arg0 == getModel()) {
@@ -258,7 +227,6 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 			}
 		} else if (modif instanceof DisplayNeedsRefresh && arg0 == getModel()) {
 			revalidate();
-			doLayout();
 			repaint();
 		} else {
 			super.update(arg0, modif);

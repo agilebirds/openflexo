@@ -26,7 +26,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openflexo.foundation.DataModification;
@@ -80,10 +79,7 @@ public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBo
 		container = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 4));
 		container.setOpaque(false);
 		container.add(_jCheckBox);
-		container.validate();
-		container.doLayout();
 		add(container);
-
 		_jCheckBox.setEnabled(true);
 		_jCheckBox.setFocusable(false);
 		_jCheckBox.setOpaque(false);
@@ -96,6 +92,7 @@ public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBo
 		_jCheckBox.setSelected(getCheckBoxModel().getValue());
 		_jCheckBox.setBackground(getBackgroundColor());
 		setBackground(getBackgroundColor());
+		revalidate();
 	}
 
 	public IECheckBoxWidget getCheckBoxModel() {
@@ -104,25 +101,13 @@ public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBo
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		if (getModel().getParent() instanceof IETDWidget) {
 			Dimension d = container.getPreferredSize();
 			d.width += 2;
 			d.height += 2;
-			if (getHoldsNextComputedPreferredSize()) {
-				storePrefSize(d);
-			}
 			return d;
 		}
 		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
 		return d;
 	}
 
@@ -143,10 +128,8 @@ public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBo
 				_jCheckBox.setSelected(getCheckBoxModel().getValue());
 			}
 		} else if (modif instanceof SpanChanged) {
-			if (getParent() != null) {
-				getParent().doLayout();
-				((JComponent) getParent()).repaint();
-			}
+			revalidate();
+			repaint();
 		} else if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
 		} else {

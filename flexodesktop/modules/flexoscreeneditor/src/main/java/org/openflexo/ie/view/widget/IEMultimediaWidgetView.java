@@ -82,25 +82,15 @@ public class IEMultimediaWidgetView extends AbstractInnerTableWidgetView<IEMulti
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
-		Dimension d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
+		return new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((getModel() == observable)
-				&& ((dataModification.propertyName() == "heightPixel") || (dataModification.propertyName() == "widthPixel"))) {
-			doLayout();
-			paintImmediately(getBounds());
+		if (getModel() == observable
+				&& (dataModification.propertyName() == "heightPixel" || dataModification.propertyName() == "widthPixel")) {
+			revalidate();
+			repaint();
 		}
 		super.update(observable, dataModification);
 	}

@@ -125,25 +125,13 @@ public class IEDropDownWidgetView extends AbstractInnerTableWidgetView<IEDropDow
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
 		if (getModel().getParent() instanceof IETDWidget) {
 			Dimension d = container.getPreferredSize();
 			d.width += 2;
 			d.height += 2;
-			if (getHoldsNextComputedPreferredSize()) {
-				storePrefSize(d);
-			}
 			return d;
 		}
 		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
 		return d;
 	}
 
@@ -178,7 +166,7 @@ public class IEDropDownWidgetView extends AbstractInnerTableWidgetView<IEDropDow
 				validate();
 				repaint();
 			} else if (propertyName.equals("colSpan") || propertyName.equals("rowSpan")) {
-				getParent().doLayout();
+				((JComponent) getParent()).revalidate();
 				((JComponent) getParent()).repaint();
 			}
 		}

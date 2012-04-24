@@ -73,18 +73,6 @@ public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserW
 		}
 
 		/**
-		 * Overrides doLayout
-		 * 
-		 * @see java.awt.Container#doLayout()
-		 */
-		@Override
-		public void doLayout() {
-			super.doLayout();
-			getViewport().doLayout();
-			this.jList.doLayout();
-		}
-
-		/**
 		 * Overrides getPreferredSize
 		 * 
 		 * @see javax.swing.JComponent#getPreferredSize()
@@ -96,45 +84,14 @@ public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserW
 			if (getBrowserModel().getSize() == 0) {
 				d.width = 30;// Minimal size
 			} else {
-				d.width += (getInsets().left + getInsets().right + jList.getInsets().left + jList.getInsets().right);
+				d.width += getInsets().left + getInsets().right + jList.getInsets().left + jList.getInsets().right;
 				if (getVerticalScrollBar() != null && getVerticalScrollBar().isVisible()) {
 					d.width += getVerticalScrollBar().getWidth();
 				}
 			}
-			d.height += (jList.getInsets().top + jList.getInsets().bottom);
+			d.height += jList.getInsets().top + jList.getInsets().bottom;
 			return d;
 		}
-	}
-
-	/**
-	 * Overrides doLayout
-	 * 
-	 * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		scrollPane.doLayout();
-		super.doLayout();
-	}
-
-	/**
-	 * Overrides getPreferredSize
-	 * 
-	 * @see javax.swing.JComponent#getPreferredSize()
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
-		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
 	}
 
 	public IEBrowserWidget getBrowserModel() {
@@ -145,7 +102,7 @@ public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserW
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification.propertyName() != null && dataModification.propertyName().equals("visibleRows")) {
 			_jList.setVisibleRowCount(getBrowserModel().getVisibleRows());
-			doLayout();
+			revalidate();
 			repaint();
 		} else {
 			super.update(observable, dataModification);
@@ -159,7 +116,7 @@ public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserW
 	 */
 	@Override
 	public void contentsChanged(ListDataEvent e) {
-		doLayout();
+		revalidate();
 		repaint();
 	}
 
@@ -170,7 +127,7 @@ public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserW
 	 */
 	@Override
 	public void intervalAdded(ListDataEvent e) {
-		doLayout();
+		revalidate();
 		repaint();
 	}
 
@@ -181,7 +138,7 @@ public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserW
 	 */
 	@Override
 	public void intervalRemoved(ListDataEvent e) {
-		doLayout();
+		revalidate();
 		repaint();
 	}
 

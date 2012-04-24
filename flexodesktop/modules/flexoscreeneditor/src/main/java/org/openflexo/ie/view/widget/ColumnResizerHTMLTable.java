@@ -126,7 +126,7 @@ public class ColumnResizerHTMLTable extends MouseMotionAdapter implements MouseL
 		startX = arg0.getPoint().x;
 		startFromEnd = startX > 10;
 		if (arg0.getSource() instanceof IETDWidgetView) {
-			view = ((IETDWidgetView) arg0.getSource());
+			view = (IETDWidgetView) arg0.getSource();
 		}
 	}
 
@@ -150,7 +150,7 @@ public class ColumnResizerHTMLTable extends MouseMotionAdapter implements MouseL
 					newWidth = IETDWidget.MIN_WIDTH;
 				}
 				view.adjustPourcentage(delta, startFromEnd);
-				view.doLayout();
+				view.revalidate();
 				view.repaint();
 				if (startFromEnd) {
 					startX = arg0.getPoint().x;

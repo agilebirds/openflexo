@@ -53,12 +53,11 @@ import org.openflexo.ie.view.IEContainer;
 import org.openflexo.ie.view.IEPanel;
 import org.openflexo.ie.view.IEViewUtils;
 import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.Layoutable;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.IEDTListener;
 import org.openflexo.toolbox.ToolBox;
 
-public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoObserver, Layoutable {
+public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoObserver {
 	private static final Logger logger = Logger.getLogger(ButtonPanel.class.getPackage().getName());
 
 	// private final AbstractColoredWidgetView _view;
@@ -145,36 +144,15 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 	}
 
 	/**
-	 * Overrides doLayout
-	 * 
-	 * @see java.awt.Container#doLayout()
-	 */
-	@Override
-	public void doLayout() {
-		_componentView.notifyAllViewsToHoldTheirNextComputedPreferredSize(this);
-		if (getParent() instanceof Layoutable) {
-			((Layoutable) getParent()).doLayout();
-		}
-		super.doLayout();
-		_componentView.resetAllViewsPreferredSize(this);
-	}
-
-	/**
 	 * Overrides getPreferredSize
 	 * 
 	 * @see javax.swing.JComponent#getPreferredSize()
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize() && preferredSize != null) {
-			return preferredSize;
-		}
 		Dimension d = super.getPreferredSize();
 		if (d.height < 18) {
 			d.height = 18;
-		}
-		if (getHoldsNextComputedPreferredSize()) {
-			preferredSize = d;
 		}
 		return d;
 	}
@@ -236,20 +214,14 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 			IEWidgetView view = findViewForModel((IEWidget) modif.oldValue());
 			if (view != null) {
 				remove(view);
-				validate();
-				doLayout();
+				revalidate();
 				repaint();
-				if (getParent() != null) {
-					getParent().doLayout();
-					getParent().repaint();
-				}
 			}
 		} else if (modif instanceof WidgetAddedToSequence && observable == getButtonedWidgetModel().getSequenceWidget()) {
 			IEWidgetView view = _componentView.getViewForWidget((IEWidget) modif.newValue(), true);
 			if (view != null) {
 				add(view, ((WidgetAddedToSequence) modif).getIndex());
-				validate();
-				doLayout();
+				revalidate();
 				repaint();
 			}
 		}
@@ -288,55 +260,6 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 	@Override
 	public IEWidget getContainerModel() {
 		return (IEWidget) getButtonedWidgetModel();
-	}
-
-	/**
-	 * Overrides propagateResize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#propagateResize()
-	 */
-	@Override
-	public void propagateResize() {
-		doLayout();
-		Component[] c = getComponents();
-		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof Layoutable) {
-				((Layoutable) c[i]).propagateResize();
-			}
-		}
-		repaint();
-
-	}
-
-	/**
-	 * Overrides getHoldsNextComputedPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#getHoldsNextComputedPreferredSize()
-	 */
-	@Override
-	public boolean getHoldsNextComputedPreferredSize() {
-		return holdsNextComputedPreferredSize;
-	}
-
-	/**
-	 * Overrides resetPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#resetPreferredSize()
-	 */
-	@Override
-	public void resetPreferredSize() {
-		holdsNextComputedPreferredSize = false;
-		preferredSize = null;
-	}
-
-	/**
-	 * Overrides setHoldsNextComputedPreferredSize
-	 * 
-	 * @see org.openflexo.ie.view.Layoutable#setHoldsNextComputedPreferredSize()
-	 */
-	@Override
-	public void setHoldsNextComputedPreferredSize() {
-		holdsNextComputedPreferredSize = true;
 	}
 
 	@Override

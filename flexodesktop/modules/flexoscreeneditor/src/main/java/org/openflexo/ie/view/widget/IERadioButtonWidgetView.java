@@ -19,13 +19,11 @@
  */
 package org.openflexo.ie.view.widget;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
@@ -101,26 +99,6 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 		return getModel();
 	}
 
-	/**
-	 * Overrides getPreferredSize
-	 * 
-	 * @see javax.swing.JComponent#getPreferredSize()
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize()) {
-			Dimension storedSize = storedPrefSize();
-			if (storedSize != null) {
-				return storedSize;
-			}
-		}
-		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize()) {
-			storePrefSize(d);
-		}
-		return d;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -135,10 +113,8 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 				if (!isUpdatingModel) {
 					button.setSelected(getRadioButtonModel().getValue());
 				}
-				if (getParent() != null) {
-					getParent().doLayout();
-					((JComponent) getParent()).repaint();
-				}
+				revalidate();
+				repaint();
 			} else if (propertyName.equals("labelAlign")) {
 				if (getRadioButtonModel().getLabelAlign()) {
 					button.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -161,10 +137,8 @@ public class IERadioButtonWidgetView extends AbstractInnerTableWidgetView<IERadi
 			}
 		}
 		if (modif instanceof SpanChanged) {
-			if (getParent() != null) {
-				getParent().doLayout();
-				((JComponent) getParent()).repaint();
-			}
+			revalidate();
+			repaint();
 		} else if (modif instanceof WidgetRemovedFromTable && o == getRadioButtonModel()) {
 			delete();
 		} else {

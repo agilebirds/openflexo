@@ -26,7 +26,7 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public class FlexoVersion implements StringConvertable {
+public class FlexoVersion implements StringConvertable<FlexoVersion> {
 	public static final StringEncoder.Converter<FlexoVersion> converter = new Converter<FlexoVersion>(FlexoVersion.class) {
 
 		@Override
@@ -50,7 +50,7 @@ public class FlexoVersion implements StringConvertable {
 		if (st.hasMoreTokens()) {
 			String next = st.nextToken();
 			try {
-				new Integer(next);
+				Integer.valueOf(next);
 			} catch (NumberFormatException e) {
 				return false;
 			}
@@ -58,7 +58,7 @@ public class FlexoVersion implements StringConvertable {
 		if (st.hasMoreTokens()) {
 			String next = st.nextToken();
 			try {
-				new Integer(next);
+				Integer.valueOf(next);
 			} catch (NumberFormatException e) {
 				try {
 					new FlexoVersion(version).parseAlphaBetaRC(version, next);
@@ -105,7 +105,7 @@ public class FlexoVersion implements StringConvertable {
 		if (st.hasMoreTokens()) {
 			String next = st.nextToken();
 			try {
-				major = (new Integer(next)).intValue();
+				major = Integer.valueOf(next).intValue();
 			} catch (NumberFormatException e) {
 				System.err.println("Invalid major number: " + next + " is not valid (" + versionAsString + ")");
 				major = 0;
@@ -114,13 +114,13 @@ public class FlexoVersion implements StringConvertable {
 		if (st.hasMoreTokens()) {
 			String next = st.nextToken();
 			try {
-				minor = (new Integer(next)).intValue();
+				minor = Integer.valueOf(next).intValue();
 			} catch (NumberFormatException e) {
 				try {
 					minor = parseAlphaBetaRC(versionAsString, next);
 				} catch (NumberFormatException e2) {
 					minor = 0;
-					(new NumberFormatException("Invalid minor number: " + next + " is not valid (" + versionAsString + ")"))
+					new NumberFormatException("Invalid minor number: " + next + " is not valid (" + versionAsString + ")")
 							.printStackTrace();
 				}
 			}
@@ -169,7 +169,7 @@ public class FlexoVersion implements StringConvertable {
 							+ " is not valid (" + versionAsString + ")");
 				}
 			} else {
-				returned = (new Integer(token)).intValue();
+				returned = Integer.valueOf(token).intValue();
 				rc = -1;
 			}
 		}
@@ -220,7 +220,7 @@ public class FlexoVersion implements StringConvertable {
 	}
 
 	@Override
-	public StringEncoder.Converter getConverter() {
+	public StringEncoder.Converter<FlexoVersion> getConverter() {
 		return converter;
 	}
 

@@ -73,7 +73,7 @@ public class CGVersionIdentifier extends FlexoObject implements StringConvertabl
 		if (st.hasMoreTokens()) {
 			String unparsed = st.nextToken();
 			try {
-				major = (new Integer(unparsed)).intValue();
+				major = Integer.valueOf(unparsed).intValue();
 			} catch (NumberFormatException e) {
 				logger.warning("Cannot parse " + unparsed);
 				throw new InvalidVersionFormatException();
@@ -82,7 +82,7 @@ public class CGVersionIdentifier extends FlexoObject implements StringConvertabl
 		if (st.hasMoreTokens()) {
 			String unparsed = st.nextToken();
 			try {
-				minor = (new Integer(unparsed)).intValue();
+				minor = Integer.valueOf(unparsed).intValue();
 			} catch (NumberFormatException e) {
 				logger.warning("Cannot parse " + unparsed);
 				throw new InvalidVersionFormatException();
@@ -91,7 +91,7 @@ public class CGVersionIdentifier extends FlexoObject implements StringConvertabl
 		if (st.hasMoreTokens()) {
 			String unparsed = st.nextToken();
 			try {
-				patch = (new Integer(unparsed)).intValue();
+				patch = Integer.valueOf(unparsed).intValue();
 			} catch (NumberFormatException e) {
 				logger.warning("Cannot parse " + unparsed);
 				throw new InvalidVersionFormatException();
@@ -185,15 +185,15 @@ public class CGVersionIdentifier extends FlexoObject implements StringConvertabl
 	}
 
 	public boolean isLesserThan(CGVersionIdentifier version) {
-		return (COMPARATOR.compare(this, version) < 0);
+		return COMPARATOR.compare(this, version) < 0;
 	}
 
 	public boolean isGreaterThan(CGVersionIdentifier version) {
-		return (COMPARATOR.compare(this, version) > 0);
+		return COMPARATOR.compare(this, version) > 0;
 	}
 
 	@Override
-	public StringEncoder.Converter getConverter() {
+	public StringEncoder.Converter<CGVersionIdentifier> getConverter() {
 		return converter;
 	}
 

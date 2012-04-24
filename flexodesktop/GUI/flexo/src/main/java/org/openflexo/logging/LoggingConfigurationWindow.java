@@ -122,8 +122,8 @@ public class LoggingConfigurationWindow {
 							return false;
 						}
 						try {
-							new Integer(logCountTextField.getValue());
-						} catch (Exception e) {
+							Integer.valueOf(logCountTextField.getValue());
+						} catch (NumberFormatException e) {
 							errorMessage = FlexoLocalization.localizedForKey("please_indicate_an_integer_as_logcount");
 							return false;
 						}
@@ -133,7 +133,7 @@ public class LoggingConfigurationWindow {
 
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			System.out.println(dialog.parameterValueWithName("includeTraces"));
-			FlexoProperties.instance().setMaxLogCount(new Integer((String) dialog.parameterValueWithName("logCount")));
+			FlexoProperties.instance().setMaxLogCount(Integer.valueOf((String) dialog.parameterValueWithName("logCount")));
 			FlexoProperties.instance().setIsLoggingTrace((Boolean) dialog.parameterValueWithName("includeTraces"));
 			if (dialog.parameterValueWithName("mode").equals(USE_DEFAULT_LOG_CONFIG)) {
 				String fileName = "SEVERE";

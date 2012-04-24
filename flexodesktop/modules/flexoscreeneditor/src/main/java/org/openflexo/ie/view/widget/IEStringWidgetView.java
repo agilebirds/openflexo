@@ -111,10 +111,9 @@ public class IEStringWidgetView extends AbstractInnerTableWidgetView<IEStringWid
 			jLabel.setToolTipText(getModel().getDescription());
 		}
 		add(jLabel);
-		doLayout();
 		updateDisplayedValue();
 		setBackground(getBackgroundColor());
-
+		revalidate();
 	}
 
 	private static final String SPAN_OPEN = "<html><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" SIZE=2>";// SIZE is not pixel for

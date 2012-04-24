@@ -31,10 +31,11 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
 public class CVSRevisionIdentifier extends FlexoObject implements StringConvertable, Cloneable {
 	protected static final Logger logger = Logger.getLogger(CVSRevisionIdentifier.class.getPackage().getName());
 
-	private static Converter converter = StringEncoder.addConverter(new Converter(CVSRevisionIdentifier.class) {
+	private static Converter<CVSRevisionIdentifier> converter = StringEncoder.addConverter(new Converter<CVSRevisionIdentifier>(
+			CVSRevisionIdentifier.class) {
 
 		@Override
-		public Object convertFromString(String value) {
+		public CVSRevisionIdentifier convertFromString(String value) {
 			try {
 				return new CVSRevisionIdentifier(value);
 			} catch (InvalidVersionFormatException e) {
@@ -44,8 +45,8 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 		}
 
 		@Override
-		public String convertToString(Object value) {
-			return ((CVSRevisionIdentifier) value).toString();
+		public String convertToString(CVSRevisionIdentifier value) {
+			return value.toString();
 		}
 
 	});
@@ -72,7 +73,7 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 			if (st.hasMoreTokens()) {
 				String unparsed = st.nextToken();
 				try {
-					major = (new Integer(unparsed)).intValue();
+					major = Integer.valueOf(unparsed).intValue();
 				} catch (NumberFormatException e) {
 					logger.warning("Cannot parse " + unparsed);
 					throw new InvalidVersionFormatException();
@@ -81,7 +82,7 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 			if (st.hasMoreTokens()) {
 				String unparsed = st.nextToken();
 				try {
-					minor = (new Integer(unparsed)).intValue();
+					minor = Integer.valueOf(unparsed).intValue();
 				} catch (NumberFormatException e) {
 					logger.warning("Cannot parse " + unparsed);
 					throw new InvalidVersionFormatException();
@@ -90,7 +91,7 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 			if (st.hasMoreTokens()) {
 				String unparsed = st.nextToken();
 				try {
-					patch = (new Integer(unparsed)).intValue();
+					patch = Integer.valueOf(unparsed).intValue();
 				} catch (NumberFormatException e) {
 					logger.warning("Cannot parse " + unparsed);
 					throw new InvalidVersionFormatException();
@@ -99,7 +100,7 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 			if (st.hasMoreTokens()) {
 				String unparsed = st.nextToken();
 				try {
-					minorPatch = (new Integer(unparsed)).intValue();
+					minorPatch = Integer.valueOf(unparsed).intValue();
 				} catch (NumberFormatException e) {
 					logger.warning("Cannot parse " + unparsed);
 					throw new InvalidVersionFormatException();
@@ -118,7 +119,7 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 	}
 
 	public boolean isLast() {
-		return (major == Integer.MAX_VALUE);
+		return major == Integer.MAX_VALUE;
 	}
 
 	@Override
@@ -158,15 +159,15 @@ public class CVSRevisionIdentifier extends FlexoObject implements StringConverta
 	}
 
 	public boolean isLesserThan(CVSRevisionIdentifier version) {
-		return (COMPARATOR.compare(this, version) < 0);
+		return COMPARATOR.compare(this, version) < 0;
 	}
 
 	public boolean isGreaterThan(CVSRevisionIdentifier version) {
-		return (COMPARATOR.compare(this, version) > 0);
+		return COMPARATOR.compare(this, version) > 0;
 	}
 
 	@Override
-	public StringEncoder.Converter getConverter() {
+	public StringEncoder.Converter<CVSRevisionIdentifier> getConverter() {
 		return converter;
 	}
 

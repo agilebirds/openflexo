@@ -254,7 +254,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 		setBorder(new ShapeBorder(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
 		setIsMultilineAllowed(true);
 		setTextStyle(createTextStyle());
-		if (getDrawable().getTextAlignment() == null) {
+		if (getDrawable().getTextAlignment() == null || !(getDrawable().getTextAlignment() instanceof ParagraphAlignment)) {
 			getDrawable().setTextAlignment(GraphicalRepresentation.ParagraphAlignment.CENTER);
 		}
 		setParagraphAlignment((ParagraphAlignment) getDrawable().getTextAlignment());

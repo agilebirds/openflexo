@@ -2,6 +2,7 @@ package org.openflexo.fge;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -36,11 +37,10 @@ public class GRBindingFactory extends DefaultBindingFactory {
 			ShapeGraphicalRepresentation.Parameters.minimalHeight, ShapeGraphicalRepresentation.Parameters.maximalWidth,
 			ShapeGraphicalRepresentation.Parameters.maximalHeight };
 
-	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
-
 	private static Class<? extends GraphicalRepresentation<?>> DECLARING_CLASS;
 
 	static {
+		// Hack to have a grab on the Type Class<? extends GraphicalRepresentation<?>
 		try {
 			DECLARING_CLASS = (Class<? extends GraphicalRepresentation<?>>) Class.forName(GraphicalRepresentation.class.getName());
 		} catch (ClassNotFoundException e) {
@@ -389,9 +389,9 @@ public class GRBindingFactory extends DefaultBindingFactory {
 	@Override
 	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father) {
 		if (father instanceof ComponentsBindingVariable) {
-			return EMPTY_LIST;
+			return Collections.emptyList();
 		} else if (father instanceof ComponentPathElement) {
-			return EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		return super.getAccessibleCompoundBindingPathElements(father);
 	}
