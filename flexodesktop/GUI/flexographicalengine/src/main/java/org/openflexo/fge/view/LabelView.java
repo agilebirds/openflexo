@@ -64,6 +64,7 @@ import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.LabelViewMouseListener;
+import org.openflexo.toolbox.ToolBox;
 
 public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetricsProvider {
 
@@ -142,6 +143,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		@Override
 		public boolean getScrollableTracksViewportWidth() {
 			return true;
+		}
+
+		@Override
+		public void setDoubleBuffered(boolean aFlag) {
+			super.setDoubleBuffered(aFlag && ToolBox.getPLATFORM() == ToolBox.MACOS);
 		}
 
 		@Override
