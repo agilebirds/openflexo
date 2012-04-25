@@ -17,7 +17,7 @@
 		<w:p>
 			<w:pPr>
   				<w:keepNext/>
-                <w:pStyle w:val="Heading${subLevel}"/>
+                <w:pStyle w:val="Heading${level}"/>
 			</w:pPr>
 			<w:r>
 				<w:t xml:space="preserve">$heading: ${view.getName()}</w:t>
@@ -68,7 +68,7 @@
             <w:p>
                 <w:pPr>
                     <w:keepNext/>
-                    <w:pStyle w:val="Heading${subsubLevel}"/>
+                    <w:pStyle w:val="Heading${subLevel}"/>
                 </w:pPr>
                 <w:r>
                     <w:t>$heading</w:t>
