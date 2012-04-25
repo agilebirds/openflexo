@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -35,6 +37,7 @@ import org.openflexo.dg.rm.GeneratedFileResourceFactory;
 import org.openflexo.dg.rm.ProjectDocxXmlFileResource;
 import org.openflexo.docxparser.flexotag.FlexoContentTag;
 import org.openflexo.docxparser.flexotag.FlexoDescriptionTag;
+import org.openflexo.docxparser.flexotag.FlexoEPITag;
 import org.openflexo.docxparser.flexotag.FlexoNameTag;
 import org.openflexo.docxparser.flexotag.FlexoTitleTag;
 import org.openflexo.foundation.DataModification;
@@ -46,12 +49,14 @@ import org.openflexo.foundation.cg.dm.CustomTemplateRepositoryChanged;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.TemplateFileNotification;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.ScreenshotResource;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.TOCEntry;
+import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.generator.PackagedResourceToCopyGenerator;
 import org.openflexo.generator.exception.GenerationException;
@@ -208,7 +213,7 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification.propertyName() != null) && dataModification.propertyName().equals("docType")) {
+		if (dataModification.propertyName() != null && dataModification.propertyName().equals("docType")) {
 			getTemplateLocator().notifyTemplateModified();
 		}
 		if (dataModification instanceof TemplateFileNotification) {
@@ -223,8 +228,8 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 	public List<CGRepositoryFileResource> getAllMediaResources() {
 		List<CGRepositoryFileResource> mediaResources = new ArrayList<CGRepositoryFileResource>();
 		for (CGFile file : getRepository().getFiles()) {
-			if ((file.getResource() instanceof FlexoCopiedResource)
-					|| ((CGRepositoryFileResource) file.getResource() instanceof FlexoCopyOfFileResource)) {
+			if (file.getResource() instanceof FlexoCopiedResource
+					|| (CGRepositoryFileResource) file.getResource() instanceof FlexoCopyOfFileResource) {
 				mediaResources.add(file.getResource());
 			}
 		}
@@ -270,7 +275,7 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 			imagePath = imagePath.replace('\\', '/');
 			String importedImageDirName = '/' + importedImageDir.getName() + '/';
 			int indexOfImportedImageDir = imagePath.indexOf(importedImageDirName);
-			if ((indexOfImportedImageDir != -1) && (imagePath.length() > indexOfImportedImageDir + importedImageDirName.length())) {
+			if (indexOfImportedImageDir != -1 && imagePath.length() > indexOfImportedImageDir + importedImageDirName.length()) {
 				imageFile = new File(importedImageDir.getAbsolutePath() + '/'
 						+ imagePath.substring(indexOfImportedImageDir + importedImageDirName.length()));
 			}
@@ -302,6 +307,23 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 		return FlexoNameTag.buildFlexoNameTag(String.valueOf(object.getFlexoID()), object.getUserIdentifier());
 	}
 
+	public String getEPITag(EditionPatternInstance object, String bindingPath) {
+		if (object == null) {
+			return null;
+		}
+		TreeMap<String, FlexoModelObject> treeMap = new TreeMap<String, FlexoModelObject>(object.getActors());
+		String modelObjectReference = null;
+		for (Entry<String, FlexoModelObject> e : treeMap.entrySet()) {
+			if (e.getValue().getXMLResourceData() != null) {
+				modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(object.getProject(), e.getValue())
+						.getStringRepresentation();
+				break;
+			}
+		}
+		return FlexoEPITag.buildFlexoEPITag(String.valueOf(object.getInstanceId()), object.getPattern().getURI(), bindingPath,
+				modelObjectReference);
+	}
+
 	public String getTocEntryContentTag(TOCEntry tocEntry) {
 		return FlexoContentTag.buildFlexoContentTag(String.valueOf(tocEntry.getFlexoID()), tocEntry.getUserIdentifier());
 	}
@@ -320,7 +342,7 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 	public String getMediaRelativePath(String filePath) {
 		filePath = filePath.replace('\\', '/');
 		int index = filePath.lastIndexOf("word/");
-		if ((index != -1) && (filePath.length() > index + "word/".length())) {
+		if (index != -1 && filePath.length() > index + "word/".length()) {
 			return filePath.substring(index + "word/".length());
 		}
 

@@ -73,6 +73,8 @@ public class FlexoReinjectDocxMain extends FlexoExternalMainWithProject {
 						+ docxAction.getNumberOfTocEntryContentUpdated());
 				sb.append("\n" + FlexoLocalization.localizedForKey("number_of_not_found_object") + ": "
 						+ docxAction.getNumberOfObjectNotFound());
+				sb.append("\n" + FlexoLocalization.localizedForKey("number_of_updated_edition_pattern") + ": "
+						+ docxAction.getNumberOfEPIUpdated());
 				if (docxAction.hasError()) {
 					sb.append("\n" + FlexoLocalization.localizedForKey("reinject_docx_warnings") + ":\n" + docxAction.getErrorReport());
 				}

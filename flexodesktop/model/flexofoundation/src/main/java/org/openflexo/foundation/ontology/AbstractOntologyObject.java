@@ -57,7 +57,10 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 	}
 
 	@Override
-	public XMLStorageResourceData getXMLResourceData() {
+	public final XMLStorageResourceData getXMLResourceData() {
+		// These objects are never serialized therefore they should never return an XMLResourceData.
+		// If that was to ever change, consider also modifying
+		// org.openflexo.dg.docx.ProjectDocDocxGenerator.getEPITag(EditionPatternInstance)
 		return null;
 	}
 

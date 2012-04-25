@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,6 +46,14 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeSingleton;
+import org.apache.velocity.tools.generic.AlternatorTool;
+import org.apache.velocity.tools.generic.ComparisonDateTool;
+import org.apache.velocity.tools.generic.ConversionTool;
+import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.DisplayTool;
+import org.apache.velocity.tools.generic.EscapeTool;
+import org.apache.velocity.tools.generic.RenderTool;
+import org.apache.velocity.tools.generic.SortTool;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
@@ -83,6 +92,9 @@ import org.openflexo.velocity.PostVelocityParser;
 
 public abstract class Generator<T extends FlexoModelObject, R extends GenerationRepository> extends FlexoObservable implements
 		DataFlexoObserver {
+
+	private static final List<Class<?>> TOOL_CLASSES = Arrays.asList(AlternatorTool.class, ComparisonDateTool.class, ConversionTool.class,
+			DateTool.class, DisplayTool.class, EscapeTool.class, RenderTool.class, SortTool.class);
 
 	public static class Holder<T> {
 		private T value;
@@ -207,6 +219,18 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		context.put("Math", Math.class);
 		context.put("globalVariableMap", new HashMap<String, Object>());
 		context.put("today", new Date());
+		context.put("stringUtils", org.apache.commons.lang.StringUtils.class);
+		for (Class<?> klass : TOOL_CLASSES) {
+			try {
+				context.put(klass.getSimpleName(), klass.newInstance());
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return context;
 	}
 

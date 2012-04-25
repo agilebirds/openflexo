@@ -44,18 +44,19 @@ import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.toc.ConditionalSection;
 import org.openflexo.foundation.toc.IterationSection;
 import org.openflexo.foundation.toc.ModelObjectSection;
 import org.openflexo.foundation.toc.PredefinedSection;
 import org.openflexo.foundation.toc.TOCEntry;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.generator.Generator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
+import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
 
 public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T, DGRepository> implements IFlexoResourceGenerator,
@@ -133,6 +134,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	protected VelocityContext defaultContext() {
 		context = super.defaultContext();
 		context.put("DocSection", PredefinedSection.PredefinedSectionType.class);
+		context.put("Language", Language.class);
 		return context;
 	}
 

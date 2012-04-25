@@ -342,6 +342,10 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	public void _setViewPointURI(String vpURI) {
+		if (vpURI != null) {
+			// We prevent ',' so that we can use it as a delimiter in tags.
+			vpURI = vpURI.replace(",", "");
+		}
 		this.viewPointURI = vpURI;
 	}
 
@@ -506,6 +510,7 @@ public class ViewPoint extends ViewPointObject {
 		notifyObservers(new EditionPatternDeleted(pattern));
 	}
 
+	@Override
 	public LocalizedDictionary getLocalizedDictionary() {
 		if (localizedDictionary == null) {
 			localizedDictionary = new LocalizedDictionary();

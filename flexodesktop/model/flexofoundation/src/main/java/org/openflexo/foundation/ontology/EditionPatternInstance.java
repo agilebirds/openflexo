@@ -48,6 +48,11 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	private long instanceId;
 	private Hashtable<String, FlexoModelObject> actors;
 
+	/**
+	 * 
+	 * @param aPattern
+	 */
+
 	public EditionPatternInstance(EditionPatternReference aPattern) {
 		super();
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init1> actors="+actors);
@@ -183,6 +188,18 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		vpdb.setOwner(getPattern());
 		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.GET, false));
 		return vpdb.getBindingValue(this);
+	}
+
+	public boolean setBindingValue(String binding, Object value) {
+		ViewPointDataBinding vpdb = new ViewPointDataBinding(binding);
+		vpdb.setOwner(getPattern());
+		vpdb.setBindingDefinition(new BindingDefinition("epi", Object.class, BindingDefinitionType.SET, false));
+		if (vpdb.getBinding().isBindingValid() && vpdb.getBinding().isSettable()) {
+			vpdb.setBindingValue(value, this);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override

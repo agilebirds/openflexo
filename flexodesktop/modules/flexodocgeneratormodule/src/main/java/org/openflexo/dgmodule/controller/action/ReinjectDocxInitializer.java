@@ -94,6 +94,10 @@ public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGO
 						+ ": "
 						+ action.getNumberOfTocEntryContentUpdated()
 						+ "\n"
+						+ FlexoLocalization.localizedForKey("number_of_updated_edition_pattern")
+						+ ": "
+						+ action.getNumberOfEPIUpdated()
+						+ "\n"
 						+ FlexoLocalization.localizedForKey("number_of_not_found_object")
 						+ ": "
 						+ action.getNumberOfObjectNotFound()

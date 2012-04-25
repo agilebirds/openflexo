@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.velocity.util.introspection.Info;
-import org.apache.velocity.util.introspection.UberspectImpl;
+import org.apache.velocity.util.introspection.SecureUberspector;
 import org.apache.velocity.util.introspection.VelMethod;
 import org.apache.velocity.util.introspection.VelPropertyGet;
 import org.openflexo.antar.binding.BindingDefinition;
@@ -33,7 +33,7 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 
-public class FlexoVelocityIntrospector extends UberspectImpl {
+public class FlexoVelocityIntrospector extends SecureUberspector {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoVelocityIntrospector.class.getPackage().getName());
 

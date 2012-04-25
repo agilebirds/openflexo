@@ -792,6 +792,11 @@
 				<version>1.7</version>
 			</dependency>
 			<dependency>
+				<groupId>velocity-tools</groupId>
+				<artifactId>velocity-tools</artifactId>
+				<version>2.0-beta1</version>
+			</dependency>
+			<dependency>
 				<groupId>commons-collections</groupId>
 				<artifactId>commons-collections</artifactId>
 				<version>3.2</version>

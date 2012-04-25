@@ -63,21 +63,24 @@ public abstract class AbstractFlexoTag {
 
 		int indexOfStartUserId = indexOfEndFlexoId + 1;
 		if (tagValue.length() <= indexOfStartUserId) {
-			throw new FlexoTagFormatException("Tag value '" + tagValue + "' doesn't contain an User id");
+			throw new FlexoTagFormatException("Tag value '" + tagValue + "' doesn't contain a User id");
 		}
 
 		int indexOfEndUserId = tagValue.indexOf('_', indexOfStartUserId);
 		if (indexOfEndUserId == -1) {
 			this.userId = tagValue.substring(indexOfStartUserId);
-		} else if (indexOfEndUserId == indexOfStartUserId) {
-			throw new FlexoTagFormatException("Tag value '" + tagValue + "' doesn't contain an User id");
 		} else {
 			this.userId = tagValue.substring(indexOfStartUserId, indexOfEndUserId);
 
 			if (tagValue.length() > indexOfEndUserId + 1) {
 				this.optionalInfo = tagValue.substring(indexOfEndUserId + 1);
+				parseOptionalInfo(optionalInfo);
 			}
 		}
+	}
+
+	protected void parseOptionalInfo(String optionalInfo) {
+
 	}
 
 	public String getFlexoId() {

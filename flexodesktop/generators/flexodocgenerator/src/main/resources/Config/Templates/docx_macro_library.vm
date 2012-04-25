@@ -2080,6 +2080,80 @@ name of the template corresponding to the specific toc_entry.
 <!--Exiting macro raciTable -->
 #end ##raciTable
 
+#macro(renderEPIWithTag $_epi $_bindingPath $_enclosingTag)
+    #set($_a = "")
+    #foreach($entry in ${_epi.getPattern().getInspector().getEntries()})
+        #if($entry.getData().toString() == $_bindingPath)
+            #set($_a = ${_epi.getPattern().getViewPoint().getLocalizedDictionary().getLocalizedForKeyAndLanguage($entry.getLabel(), ${Language.ENGLISH})})
+            #if(!$_a)
+               #set($_a = $entry.getLabel())
+            #end
+            #break
+        #end
+    #end
+    #renderEPIWithTagAndAlias($_epi $_bindingPath $_enclosingTag $_a)
+#end
+
+#macro(renderEPIWithTagAndAlias $_epi $_bindingPath $_enclosingTag $_alias)
+#set($_text = $_epi.evaluate($_bindingPath))
+#set($muliline = $_text.contains($n))
+#if(!$multiline)
+    #foreach($patternRole in ${_epi.getPattern().getPatternRoles()})
+        #if(${patternRole.getLabel().toString()}==$_bindingPath)
+            #set($muliline = ${patternRole.getGraphicalRepresentation().getIsMultilineAllowed()})
+            #break
+        #end
+    #end
+#end
+#if(!$multiline)
+    #foreach($entry in ${_epi.getPattern().getInspector().getEntries()})
+        #if(${entry.getData()}==$_bindingPath)
+            #set($muliline = ${entry.getWidgetName().equals("TextArea")})
+            #break
+        #end
+    #end
+#end
+#set($_hasText = $falseValue)
+#if($_text && ${_text.trim().length()}>0)
+    #set($_hasText = $trueValue)
+#end
+#set($_ot="") ## opening tags
+#set($_ct="") ## closing tags
+#if($_enclosingTag=="w:tr")
+    #set($_ot="<w:tr><w:tc><w:p><w:r><w:t>")
+    #set($_ct="</w:t></w:r></w:p></w:tc></w:tr>")
+#elseif($_enclosingTag=="w:r")
+    #set($_ot="<w:r><w:t>")
+    #set($_ct="</w:t></w:r>")
+#elseif($_enclosingTag=="w:p")
+    #set($_ot="<w:p><w:r><w:t>")
+    #set($_ct="</w:t></w:r></w:p>")
+#else
+    #set($_ot="<${_enclosingTag}><w:p><w:r><w:t>")
+    #set($_ct="</w:t></w:r></w:p></${_enclosingTag}>")
+#end
+   <w:sdt>
+        <w:sdtPr>
+            <w:alias w:val="#escape($_alias)"/>
+            <w:tag w:val="#escape(${projectGenerator.getEPITag($_epi, $_bindingPath)})" />
+            <w:lock w:val="sdtLocked" />
+            <w:text w:multiLine="$muliline"/>
+            #if(!$_hasText)
+                <w:showingPlcHdr/>
+            #end
+        </w:sdtPr>
+        <w:sdtContent>
+            $_ot
+            #if($_hasText)
+                #escape($_text)
+            #else
+                Click here to fill the $_alias
+            #end
+            $_ct
+        </w:sdtContent>
+    </w:sdt>
+#end
+
 #macro(displayFormattedToday)#set($dateFormat = ${generator.getNewHolder()})#getDateFormat($dateFormat)#set($dateFormat = ${dateFormat.get()})${dateFormat.format($today)}#end
 
 ##Global variables macro access ##

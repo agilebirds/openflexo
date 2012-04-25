@@ -22,6 +22,7 @@ package org.openflexo.docxparser;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -38,17 +39,40 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openflexo.docxparser.dto.ParsedDocx;
 import org.openflexo.docxparser.dto.ParsedHtml;
+import org.openflexo.docxparser.dto.api.IParsedDocx;
 import org.openflexo.docxparser.dto.api.IParsedFlexoContent;
 import org.openflexo.docxparser.dto.api.IParsedFlexoDescription;
 import org.openflexo.docxparser.dto.api.IParsedFlexoName;
 import org.openflexo.docxparser.dto.api.IParsedFlexoTitle;
 import org.openflexo.docxparser.flexotag.FlexoContentTag;
 import org.openflexo.docxparser.flexotag.FlexoDescriptionTag;
+import org.openflexo.docxparser.flexotag.FlexoEPITag;
 import org.openflexo.docxparser.flexotag.FlexoNameTag;
 import org.openflexo.docxparser.flexotag.FlexoTitleTag;
+import org.openflexo.toolbox.StringUtils;
 
 public class DocxFileParser {
 	protected static final Logger logger = Logger.getLogger(DocxFileParser.class.getPackage().toString());
+
+	private static final List<String> TAGS = Arrays.asList(FlexoDescriptionTag.FLEXODESCRIPTIONTAG, FlexoNameTag.FLEXONAMETAG,
+			FlexoTitleTag.FLEXOTITLETAG, FlexoContentTag.FLEXOCONTENTTAG, FlexoEPITag.EPI_TAG);
+
+	private static final String XPATH;
+	static {
+		StringBuilder sb = new StringBuilder();
+		for (String tag : TAGS) {
+			if (sb.length() == 0) {
+				sb.append("//w:sdt/w:sdtPr[not(w:showingPlcHdr)]/w:tag[");
+			} else {
+				sb.append(" or ");
+			}
+			sb.append("starts-with(@w:val, '");
+			sb.append(tag);
+			sb.append("')");
+		}
+		sb.append(']');
+		XPATH = sb.toString();
+	}
 
 	private Set<String> availableCssClasses;
 	private String resourcesDirectory;
@@ -97,23 +121,19 @@ public class DocxFileParser {
 		}
 	}
 
-	public ParsedDocx getParsedDocx() {
+	public IParsedDocx getParsedDocx() {
 		ParsedDocx parsedDocx = new ParsedDocx();
 
-		List<?> resultList = getDocumentXml().selectNodes(
-				"//w:sdt/w:sdtPr[not(w:showingPlcHdr)]/w:tag[" + "starts-with(@w:val, '" + FlexoDescriptionTag.FLEXODESCRIPTIONTAG
-						+ "') or " + "starts-with(@w:val, '" + FlexoNameTag.FLEXONAMETAG + "') or " + "starts-with(@w:val, '"
-						+ FlexoTitleTag.FLEXOTITLETAG + "') or " + "starts-with(@w:val, '" + FlexoContentTag.FLEXOCONTENTTAG + "')" + "]");
+		List<?> resultList = getDocumentXml().selectNodes(XPATH);
 		for (Iterator<?> iterator = resultList.iterator(); iterator.hasNext();) {
 			Element element = (Element) iterator.next();
 			String tagValue = element.attributeValue(DocxQName.getQName(OpenXmlTag.w_val));
+			Element sdtElement = element.getParent().getParent(); // On w:sdt
+			Element sdtContentElement = sdtElement.element(DocxQName.getQName(OpenXmlTag.w_sdtContent));
 
 			try {
 				if (tagValue.startsWith(FlexoDescriptionTag.FLEXODESCRIPTIONTAG)) {
 					FlexoDescriptionTag descTag = new FlexoDescriptionTag(tagValue);
-
-					element = element.getParent().getParent(); // On w:sdt
-					Element sdtContentElement = element.element(DocxQName.getQName(OpenXmlTag.w_sdtContent));
 
 					ParsedHtml parsedHtml = OpenXml2Html.getHtml(sdtContentElement, getDocumentPart(), availableCssClasses,
 							resourcesDirectory);
@@ -122,44 +142,33 @@ public class DocxFileParser {
 							descTag.getUserId());
 					parsedFlexoDescription.addHtmlDescription(descTag.getTarget(), parsedHtml);
 				} else if (tagValue.startsWith(FlexoNameTag.FLEXONAMETAG)) {
+
+					String text = extractTextContent(sdtContentElement);
+
 					FlexoNameTag nameTag = new FlexoNameTag(tagValue);
-
-					element = element.getParent().getParent(); // On w:sdt
-					Element sdtContentElement = element.element(DocxQName.getQName(OpenXmlTag.w_sdtContent));
-
-					StringBuilder sb = new StringBuilder();
-					Iterator<?> iteratorWt = sdtContentElement.selectNodes("descendant::w:t").iterator();
-					while (iteratorWt.hasNext()) {
-						Element textElement = (Element) iteratorWt.next();
-						sb.append(textElement.getText());
-					}
-
-					if (sb.toString().trim().length() > 0) {
+					if (text.length() > 0) {
 						IParsedFlexoName parsedFlexoName = parsedDocx.getOrCreateParsedName(nameTag.getFlexoId(), nameTag.getUserId());
-						parsedFlexoName.setFlexoName(sb.toString().trim());
+						parsedFlexoName.setFlexoName(text);
 					}
 				} else if (tagValue.startsWith(FlexoTitleTag.FLEXOTITLETAG)) {
-					FlexoTitleTag TitleTag = new FlexoTitleTag(tagValue);
+					FlexoTitleTag titleTag = new FlexoTitleTag(tagValue);
 
-					element = element.getParent().getParent(); // On w:sdt
-					Element sdtContentElement = element.element(DocxQName.getQName(OpenXmlTag.w_sdtContent));
+					String text = extractTextContent(sdtContentElement);
 
-					StringBuilder sb = new StringBuilder();
-					Iterator<?> iteratorWt = sdtContentElement.selectNodes("descendant::w:t").iterator();
-					while (iteratorWt.hasNext()) {
-						Element textElement = (Element) iteratorWt.next();
-						sb.append(textElement.getText());
+					if (text.length() > 0) {
+						IParsedFlexoTitle parsedFlexoTitle = parsedDocx.getOrCreateParsedTitle(titleTag.getFlexoId(), titleTag.getUserId());
+						parsedFlexoTitle.setFlexoTitle(text);
 					}
+				} else if (tagValue.startsWith(FlexoEPITag.EPI_TAG)) {
+					FlexoEPITag epiTag = new FlexoEPITag(tagValue);
 
-					if (sb.toString().trim().length() > 0) {
-						IParsedFlexoTitle parsedFlexoTitle = parsedDocx.getOrCreateParsedTitle(TitleTag.getFlexoId(), TitleTag.getUserId());
-						parsedFlexoTitle.setFlexoTitle(sb.toString().trim());
+					String text = extractTextContent(sdtContentElement);
+
+					if (text.length() > 0) {
+						parsedDocx.createParsedFlexoEPI(epiTag, text);
 					}
 				} else if (tagValue.startsWith(FlexoContentTag.FLEXOCONTENTTAG)) {
 					FlexoContentTag contentTag = new FlexoContentTag(tagValue);
-
-					element = element.getParent().getParent(); // On w:sdt
-					Element sdtContentElement = element.element(DocxQName.getQName(OpenXmlTag.w_sdtContent));
 
 					ParsedHtml parsedHtml = OpenXml2Html.getHtml(sdtContentElement, getDocumentPart(), availableCssClasses,
 							resourcesDirectory);
@@ -167,13 +176,26 @@ public class DocxFileParser {
 					IParsedFlexoContent parsedFlexoContent = parsedDocx.getOrCreateParsedContent(contentTag.getFlexoId(),
 							contentTag.getUserId());
 					parsedFlexoContent.setFlexoContent(parsedHtml);
-				}
+				} // else if (tagValue.startsWith(FlexoContentTag.FLEXOEPTAG))
 			} catch (FlexoDescriptionTag.FlexoTagFormatException e) {
 				logger.log(Level.WARNING, "Cannot parse tag from a building block which seems to be a Flexo Tag", e);
 			}
 		}
 
 		return parsedDocx;
+	}
+
+	public String extractTextContent(Element sdtContentElement) {
+		StringBuilder sb = new StringBuilder();
+		Iterator<?> iteratorWt = sdtContentElement.selectNodes("descendant::w:t").iterator();
+		while (iteratorWt.hasNext()) {
+			Element textElement = (Element) iteratorWt.next();
+			if (sb.length() > 0) {
+				sb.append(StringUtils.LINE_SEPARATOR);
+			}
+			sb.append(textElement.getText());
+		}
+		return sb.toString().trim();
 	}
 
 	public void close() {

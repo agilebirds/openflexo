@@ -28,15 +28,20 @@ import java.util.Map;
 import org.openflexo.docxparser.dto.api.IParsedDocx;
 import org.openflexo.docxparser.dto.api.IParsedFlexoContent;
 import org.openflexo.docxparser.dto.api.IParsedFlexoDescription;
+import org.openflexo.docxparser.dto.api.IParsedFlexoEPI;
 import org.openflexo.docxparser.dto.api.IParsedFlexoName;
 import org.openflexo.docxparser.dto.api.IParsedFlexoObject;
 import org.openflexo.docxparser.dto.api.IParsedFlexoTitle;
+import org.openflexo.docxparser.flexotag.FlexoEPITag;
 
 public class ParsedDocx implements IParsedDocx {
 	private Map<String, IParsedFlexoObject> parsedFlexoObjectsByFlexoIdAndUserId;
 
+	private List<IParsedFlexoEPI> parsedFlexoEPIs;
+
 	public ParsedDocx() {
 		this.parsedFlexoObjectsByFlexoIdAndUserId = new HashMap<String, IParsedFlexoObject>();
+		this.parsedFlexoEPIs = new ArrayList<IParsedFlexoEPI>();
 	}
 
 	@Override
@@ -181,5 +186,16 @@ public class ParsedDocx implements IParsedDocx {
 			}
 		}
 		return list;
+	}
+
+	public IParsedFlexoEPI createParsedFlexoEPI(FlexoEPITag tag, String value) {
+		IParsedFlexoEPI parsedFlexoEPI = new ParsedFlexoEPI(tag, value);
+		parsedFlexoEPIs.add(parsedFlexoEPI);
+		return parsedFlexoEPI;
+	}
+
+	@Override
+	public List<IParsedFlexoEPI> getAllParsedEPIs() {
+		return parsedFlexoEPIs;
 	}
 }

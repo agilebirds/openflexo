@@ -85,6 +85,10 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 	@Override
 	public void setName(String name) {
+		if (name != null) {
+			// We prevent ',' so that we can use it as a delimiter in tags.
+			name = name.replace(",", "");
+		}
 		this.name = name;
 	}
 
@@ -206,7 +210,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	public String getAvailableRoleName(String baseName) {
 		String testName = baseName;
 		int index = 2;
-		while ((getPatternRole(testName)) != null) {
+		while (getPatternRole(testName) != null) {
 			testName = baseName + index;
 			index++;
 		}
@@ -319,7 +323,7 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 	public PatternRole getPatternRole(String patternRole) {
 		for (PatternRole pr : patternRoles) {
-			if ((pr.getPatternRoleName() != null) && pr.getPatternRoleName().equals(patternRole)) {
+			if (pr.getPatternRoleName() != null && pr.getPatternRoleName().equals(patternRole)) {
 				return pr;
 			}
 		}

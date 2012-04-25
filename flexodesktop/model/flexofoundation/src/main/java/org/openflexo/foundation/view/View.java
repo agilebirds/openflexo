@@ -115,7 +115,8 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		List<EditionPatternInstance> returned = new ArrayList<EditionPatternInstance>();
 		Collection<EditionPatternInstance> epis = getEPInstances(epName);
 		for (EditionPatternInstance epi : epis) {
-			if (value == null && epi.evaluate(epProperty) == value || value != null && value.equals(epi.evaluate(epProperty))) {
+			Object evaluate = epi.evaluate(epProperty);
+			if (value == null && evaluate == value || value != null && value.equals(evaluate)) {
 				returned.add(epi);
 			}
 		}
