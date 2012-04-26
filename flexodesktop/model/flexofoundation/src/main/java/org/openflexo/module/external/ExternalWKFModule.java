@@ -43,4 +43,6 @@ public interface ExternalWKFModule extends ExternalModule {
 	public void finalizeScreenshotGeneration();
 
 	public Object getProcessRepresentation(FlexoProcess process, boolean showAll);
+
+	public void disposeProcessRepresentation(Object processRepresentation);
 }

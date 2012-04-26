@@ -27,9 +27,9 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
+import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
@@ -56,10 +56,7 @@ import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -143,11 +140,10 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 			if (object == target) {
 				return true;
 			} else if (object instanceof FlexoPetriGraph) {
-				return ((FlexoPetriGraph) object).getContainer() == target
-						|| ((object instanceof ActivityPetriGraph) && ((ActivityPetriGraph) object).getContainer() instanceof FlexoProcess)
-						|| ((target instanceof PetriGraphNode) && (((PetriGraphNode) target)
-								.isEmbeddedInPetriGraph((FlexoPetriGraph) object)))
-						|| ((target instanceof WKFArtefact) && (((WKFArtefact) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object)));
+				return ((FlexoPetriGraph) object).getContainer() == target || object instanceof ActivityPetriGraph
+						&& ((ActivityPetriGraph) object).getContainer() instanceof FlexoProcess || target instanceof PetriGraphNode
+						&& ((PetriGraphNode) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object) || target instanceof WKFArtefact
+						&& ((WKFArtefact) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object);
 			} else if (object instanceof FlexoPort) {
 				return isVisible(((FlexoPort) object).getPortRegistery());
 			} else if (object instanceof FlexoPortMap) {
@@ -186,8 +182,8 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 						}
 					}
 				}
-				return ((!(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject))
-						&& firstVisibleStartObject != null && firstVisibleEndObject != null);
+				return !(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject)
+						&& firstVisibleStartObject != null && firstVisibleEndObject != null;
 			} else if (object instanceof ActivityGroup) {
 				if (target instanceof PetriGraphNode) {
 					if (((PetriGraphNode) target).isGrouped()) {
@@ -222,11 +218,10 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 					&& ((PetriGraphNode) object).getParentPetriGraph() == object.getProcess().getActivityPetriGraph()) {
 				return true;
 			} else if (object instanceof FlexoPetriGraph) {
-				return ((FlexoPetriGraph) object).getContainer() == target
-						|| ((object instanceof ActivityPetriGraph) && ((ActivityPetriGraph) object).getContainer() instanceof FlexoProcess)
-						|| ((target instanceof PetriGraphNode) && (((PetriGraphNode) target)
-								.isEmbeddedInPetriGraph((FlexoPetriGraph) object)))
-						|| ((target instanceof WKFArtefact) && (((WKFArtefact) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object)));
+				return ((FlexoPetriGraph) object).getContainer() == target || object instanceof ActivityPetriGraph
+						&& ((ActivityPetriGraph) object).getContainer() instanceof FlexoProcess || target instanceof PetriGraphNode
+						&& ((PetriGraphNode) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object) || target instanceof WKFArtefact
+						&& ((WKFArtefact) target).isEmbeddedInPetriGraph((FlexoPetriGraph) object);
 			} else if (object instanceof FlexoPort) {
 				return isVisible(((FlexoPort) object).getPortRegistery());
 			} else if (object instanceof FlexoPortMap) {
@@ -265,8 +260,8 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 						}
 					}
 				}
-				return ((!(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject))
-						&& firstVisibleStartObject != null && firstVisibleEndObject != null);
+				return !(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject)
+						&& firstVisibleStartObject != null && firstVisibleEndObject != null;
 			} else if (object instanceof ActivityGroup) {
 				if (target instanceof PetriGraphNode) {
 					if (((PetriGraphNode) target).isGrouped()) {
@@ -435,4 +430,10 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 		}
 	}
 
+	@Override
+	public void disposeProcessRepresentation(Object processRepresentation) {
+		if (processRepresentation instanceof DefaultDrawing<?>) {
+			((DefaultDrawing<?>) processRepresentation).delete();
+		}
+	}
 }
