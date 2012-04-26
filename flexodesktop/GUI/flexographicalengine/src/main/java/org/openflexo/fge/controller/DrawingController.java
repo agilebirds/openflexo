@@ -711,6 +711,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (drawingView != null) {
 			drawingView.delete();
 		}
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("TODO: Delete palettes");
+		}
 		storedSelection = null;
 		drawingView = null;
 	}

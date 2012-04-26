@@ -383,7 +383,6 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	private long cumulatedRepaintTime = 0;
 
 	private boolean isBuffering = false;
-	private Graphics2D bufferingGraphics;
 	private boolean bufferingHasBeenStartedAgain = false;
 
 	private boolean paintTemporary;
@@ -395,7 +394,6 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 	 */
 	protected synchronized void prepareForBuffering(Graphics2D g) {
 		isBuffering = true;
-		bufferingGraphics = g;
 	}
 
 	public synchronized boolean isBuffering() {
@@ -417,7 +415,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		forcePaintObjects(fatherGraphicalRepresentation, g, false);
 	}
 
-	private void forcePaintObjects(GraphicalRepresentation<?> fatherGraphicalRepresentation, Graphics g, boolean temporaryObjectsOnly) {
+	private void forcePaintObjects(GraphicalRepresentation<?> fatherGraphicalRepresentation, final Graphics g, boolean temporaryObjectsOnly) {
 		List<? extends GraphicalRepresentation<?>> containedGR = fatherGraphicalRepresentation
 				.getOrderedContainedGraphicalRepresentations();
 		if (containedGR == null) {
