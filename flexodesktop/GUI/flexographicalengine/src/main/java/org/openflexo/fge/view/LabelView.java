@@ -487,7 +487,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 	@Override
 	public void setDoubleBuffered(boolean aFlag) {
-		super.setDoubleBuffered(aFlag);
+		super.setDoubleBuffered(aFlag && ToolBox.getPLATFORM() == ToolBox.MACOS);
 		if (textComponent != null) {
 			textComponent.setDoubleBuffered(aFlag);
 		}
