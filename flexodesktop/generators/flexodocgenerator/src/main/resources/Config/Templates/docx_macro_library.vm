@@ -786,8 +786,8 @@ if there is an associated screen make a hyperlink to the screen.
     		${generator.log("Condition is true, performing rendering for this conditional")}
     		#subTocEntries($_entry)
 		#end
-    
     #else
+    #if(${_entry.getRenderSectionTitle()})
     <w:p>
         <w:pPr>
             <w:keepNext/>
@@ -798,9 +798,14 @@ if there is an associated screen make a hyperlink to the screen.
         #end
         #renderTocEntryTitle($_entry)
     </w:p>
-    #renderTocEntryContent($_entry)
+	#end
+    #if(${_entry.getRenderContent()})
+    	#renderTocEntryContent($_entry)
+	#end
     #if($templateName)
-        #set($newEntryLevel = $_entry.getLevel() + 1)
+    	#if(${_entry.getRenderSectionTitle()})
+        	#set($newEntryLevel = $_entry.getLevel() + 1)
+        #end
         #set($passedObject = $generator.getAccessedModelObject($_entry)))
     	${generator.log($templateName, $passedObject)}
         #render($passedObject $newEntryLevel $templateName $_entry)

@@ -166,4 +166,10 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 	public boolean isModelObjectSection() {
 		return true;
 	}
+
+	@Override
+	public boolean getRenderContent() {
+		return false;
+	}
+
 }

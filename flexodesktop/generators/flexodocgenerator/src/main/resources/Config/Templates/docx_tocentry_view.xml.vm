@@ -8,7 +8,6 @@
 * - objet: the view to generate
 *#
 
-
 #set($view = $object)
 
 #if($view)

@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
@@ -87,10 +88,6 @@ public class FlexoProperties {
 		return "true".equals(applicationProperties.getProperty(KEEPLOGTRACE));
 	}
 
-	public int getMaxLogCount() {
-		return applicationProperties.getProperty(LOGCOUNT) == null ? 0 : Integer.valueOf(applicationProperties.getProperty(LOGCOUNT));
-	}
-
 	public String getLoggingFileName() {
 		return applicationProperties.getProperty(CUSTOM_LOG_CONFIG_FILE);
 	}
@@ -110,17 +107,41 @@ public class FlexoProperties {
 		return new File(getLoggingFileName());
 	}
 
-	public String getDefaultLoggingLevel() {
-		return applicationProperties.getProperty(DEFAULT_LOG_LEVEL);
+	public Level getDefaultLoggingLevel() {
+		String returned = applicationProperties.getProperty(DEFAULT_LOG_LEVEL);
+		if (returned == null)
+			return null;
+		else if (returned.equals("SEVERE")) {
+			return Level.SEVERE;
+		} else if (returned.equals("WARNING")) {
+			return Level.WARNING;
+		} else if (returned.equals("INFO")) {
+			return Level.INFO;
+		} else if (returned.equals("FINE")) {
+			return Level.FINE;
+		} else if (returned.equals("FINER")) {
+			return Level.FINER;
+		} else if (returned.equals("FINEST")) {
+			return Level.FINEST;
+		}
+		return null;
 	}
 
-	public void setDefaultLoggingLevel(String l) {
-		applicationProperties.setProperty(DEFAULT_LOG_LEVEL, l);
+	public void setDefaultLoggingLevel(Level l) {
+		applicationProperties.setProperty(DEFAULT_LOG_LEVEL, l.getName());
+	}
+
+	public boolean getIsLoggingTrace() {
+		return applicationProperties.getProperty(KEEPLOGTRACE).equalsIgnoreCase("true");
 	}
 
 	public void setIsLoggingTrace(boolean b) {
 		applicationProperties.setProperty(KEEPLOGTRACE, b ? "true" : "false");
 		FlexoLoggingManager.setKeepLogTrace(b);
+	}
+
+	public int getMaxLogCount() {
+		return applicationProperties.getProperty(LOGCOUNT) == null ? 0 : Integer.valueOf(applicationProperties.getProperty(LOGCOUNT));
 	}
 
 	public void setMaxLogCount(int c) {
