@@ -826,18 +826,27 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			progress.setProgress(FlexoLocalization.localizedForKey("saving_modified_resources"));
 			progress.resetSecondaryProgress(unsaved.size() + 1);
 		}
-		for (FlexoStorageResource<? extends StorageResourceData> data : unsaved) {
-			if (progress != null) {
-				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + data.getName());
+		boolean resourceSaved = false;
+		try {
+			for (FlexoStorageResource<? extends StorageResourceData> data : unsaved) {
+				if (progress != null) {
+					progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + data.getName());
+				}
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Saving " + data.getResourceIdentifier() + " file: " + data.getFileName());
+				}
+				data.saveResourceData(clearModifiedStatus);
+				resourceSaved = true;
 			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Saving " + data.getResourceIdentifier() + " file: " + data.getFileName());
+		} finally {
+			if (resourceSaved) {
+				// If at least one resource has been saved, let's try to save the RM so that the lastID is also saved, avoiding possible
+				// duplication of flexoID's.
+				writeDotVersion();
+				// We save RM at the end so that all dates are always up-to-date and we also save the lastID which may have changed!
+				getFlexoRMResource().saveResourceData(clearModifiedStatus);
 			}
-			data.saveResourceData(clearModifiedStatus);
 		}
-		writeDotVersion();
-		// We save RM at the end so that all dates are always up-to-date and we also save the lastID which may have changed!
-		getFlexoRMResource().saveResourceData(clearModifiedStatus);
 	}
 
 	/**
@@ -1025,7 +1034,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	@Override
 	public Iterator<FlexoResource<? extends FlexoResourceData>> iterator() {
-		return resources.values().iterator();
+		return new ArrayList<FlexoResource<? extends FlexoResourceData>>(resources.values()).iterator();
 	}
 
 	public FlexoResource<? extends FlexoResourceData> resourceForKey(String fullQualifiedResourceIdentifier) {
