@@ -105,6 +105,16 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 	public final FlexoPerspective<FlexoModelObject> VERSIONNING_PERSPECTIVE = new VersionningPerspective(this);
 
+	@Override
+	public boolean useNewInspectorScheme() {
+		return true;
+	}
+
+	@Override
+	public boolean useOldInspectorScheme() {
+		return true;
+	}
+
 	// ==========================================================================
 	// ============================= Instance variables
 	// =========================

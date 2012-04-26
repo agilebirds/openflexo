@@ -315,4 +315,16 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		return (FIBMultipleValuesDynamicModel<T, Object>) super.getDynamicModel();
 	}
 
+	@Override
+	public void updateLanguage() {
+		super.updateLanguage();
+		if (getComponent().getLocalize()) {
+			FIBMultipleValueModel mvModel = getListModel();
+			for (int i = 0; i < mvModel.getSize(); i++) {
+				String s = getStringRepresentation(mvModel.getElementAt(i));
+				getLocalized(s);
+			}
+		}
+	}
+
 }

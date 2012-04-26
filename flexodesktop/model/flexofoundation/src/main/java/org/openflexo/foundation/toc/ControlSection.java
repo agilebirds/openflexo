@@ -25,4 +25,13 @@ public abstract class ControlSection extends TOCEntry {
 		return null;
 	}
 
+	@Override
+	public boolean getRenderSectionTitle() {
+		return false;
+	}
+
+	@Override
+	public boolean getRenderContent() {
+		return false;
+	}
 }

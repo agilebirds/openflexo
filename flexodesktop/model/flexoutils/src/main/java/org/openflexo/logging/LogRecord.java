@@ -21,6 +21,7 @@ package org.openflexo.logging;
 
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.StringEncoder;
@@ -49,7 +50,7 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 
 	public String message;
 
-	public String level;
+	public Level level;
 
 	public StackTraceElement[] stackTrace;
 
@@ -82,7 +83,7 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 		if (message != null) {
 			message = message.intern();
 		}
-		level = record.getLevel().toString();
+		level = record.getLevel();
 		if (FlexoLoggingManager.getKeepLogTrace()) {
 			stackTrace = (new Exception()).getStackTrace();
 		}
@@ -148,7 +149,8 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 				beginAt = 6;
 			}
 			for (int i = beginAt; i < stackTrace.length; i++) {
-				returned += ("\tat " + stackTrace[i] + "\n");
+				// returned += ("\tat " + stackTrace[i] + "\n");
+				returned += ("at " + stackTrace[i] + "\n");
 			}
 		} else if (_stackTraceAsString != null) {
 			returned = _stackTraceAsString;

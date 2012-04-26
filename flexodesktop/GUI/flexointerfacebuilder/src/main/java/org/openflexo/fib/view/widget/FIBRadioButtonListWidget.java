@@ -69,6 +69,7 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			panel.add(rb);
 			buttonGroup.add(rb);
 		}
+		updateFont();
 		panel.validate();
 	}
 

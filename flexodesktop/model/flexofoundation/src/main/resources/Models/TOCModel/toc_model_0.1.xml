@@ -55,6 +55,7 @@
   	<property name="identifier" xmlTag="identifier" attribute="yes" description="A unique identifier to be able to find back an automatically created entry."/>
   	<property name="index" xmlTag="index" attribute="yes" description="The index order of this toc entry (they should be serialized correctly, but for sure, we add this argument)"/>
   	<property name="isReadOnly" xmlTag="isReadOnly" attribute="yes" description="Wheter this entry can be edited or not"/>
+  	<property name="renderSectionTitle" xmlTag="renderSectionTitle" attribute="yes" description="this entry must be titled as a section"/>
   	<property name="startOnANewPage" xmlTag="startOnANewPage" attribute="yes" description="this entry must start on a new page"/>
   	<property name="includeStatusList" xmlTag="includeStatusList" attribute="yes" description="(relevant for processes)"/>
   	<property name="subType" xmlTag="subType" attribute="yes" description="(relevant for processes)"/>
