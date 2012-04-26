@@ -185,16 +185,7 @@
 		</copy>
 	</target>
 
-	<target name="generateFlexoLauncher"  depends="defineProperties">
-		<loadproperties srcfile="semantics.properties" />
-	      <property name="qualified_app_name" value="${product.name} ${productSuffix}" />
-	        <property name="qualified_and_versioned_app_name" value="${qualified_app_name} ${flexo_version}" />
-	        <!--<propertyregex property="package_name" input="${app_name} Setup" regexp="\s+" replace="_" global="true"/>-->
-	        <property name="mac.app.dir.versioned" value="${mac.app.dir}/${versionType}" />
-	        <property name="package_name" value="${qualified_and_versioned_app_name} Setup" />
-	        <property name="program.args" value="-userType ${userType}" />
-
-		<echoproperties destfile="${build.properties}" />
+	<target name="generateFlexoLauncher">
 		<copy file="Windows/flexolauncher.nsi.tpl" tofile="${flexobuild.work.dir}/flexolauncher.nsi" filtering="true" overwrite="true">
 			<filterset>
 				<filtersfile file="${build.properties}" />

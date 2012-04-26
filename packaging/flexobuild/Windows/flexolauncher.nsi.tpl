@@ -46,7 +46,6 @@ Section ""
   StrCpy $0 '"$R0" @vm.args@ -classpath "${CLASSPATH}" ${CLASS} $1 @program.args@'
  
   SetOutPath $EXEDIR
-  MessageBox MB_OK 'CMD: "$0" EXECDIR: "$EXEDIR"'
   Exec $0
 SectionEnd
  
