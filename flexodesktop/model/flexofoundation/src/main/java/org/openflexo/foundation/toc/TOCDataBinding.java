@@ -114,6 +114,7 @@ public class TOCDataBinding implements StringConvertable<TOCDataBinding> {
 	}*/
 
 	public void setBinding(AbstractBinding value) {
+		System.out.println("TOCDataBinding: Set binding with " + value);
 		AbstractBinding oldValue = this.binding;
 		if (oldValue == null) {
 			if (value == null) {

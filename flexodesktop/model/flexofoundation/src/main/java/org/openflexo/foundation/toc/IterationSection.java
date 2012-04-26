@@ -53,6 +53,7 @@ public class IterationSection extends ControlSection {
 		iteration.setBindingAttribute(ControlSectionBindingAttribute.iteration);
 		iteration.setBindingDefinition(getIterationBindingDefinition());
 		this.iteration = iteration;
+		rebuildBindingModel();
 	}
 
 	private TOCDataBinding condition;
@@ -106,7 +107,20 @@ public class IterationSection extends ControlSection {
 				logger.info("What should i return for " + getIteratorName() + " ? target " + target + " context=" + context);
 				return super.getBindingValue(target, context);
 			}
+
+			@Override
+			public Type getType() {
+				return getItemType();
+			}
 		});
 		return returned;
 	}
+
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+		getIteration().finalizeDeserialization();
+		getCondition().finalizeDeserialization();
+	}
+
 }

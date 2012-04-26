@@ -29,4 +29,10 @@ public class NormalSection extends TOCEntry {
 	public String getDefaultTemplateName() {
 		return null;
 	}
+
+	@Override
+	public boolean getRenderContent() {
+		return false;
+	}
+
 }

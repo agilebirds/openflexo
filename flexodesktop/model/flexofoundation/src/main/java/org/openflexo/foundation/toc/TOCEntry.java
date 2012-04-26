@@ -77,6 +77,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	private boolean includeStatusList = true;
 	private PredefinedSection.PredefinedSectionType identifier;
 	private ProcessSection.ProcessDocSectionSubType subType;
+	private boolean renderSectionTitle = true;
+	private boolean renderContent = true;
 
 	/**
 	 * Create a new GeneratedCodeRepository.
@@ -689,6 +691,22 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		return false;
 	}
 
+	public boolean getRenderSectionTitle() {
+		return renderSectionTitle;
+	}
+
+	public void setRenderSectionTitle(boolean renderSectionTitle) {
+		this.renderSectionTitle = renderSectionTitle;
+	}
+
+	public boolean getRenderContent() {
+		return renderContent;
+	}
+
+	public void setRenderContent(boolean renderContent) {
+		this.renderContent = renderContent;
+	}
+
 	public int getPreferredLevel() {
 		// with docx : all templates adapte themself immediatly :)
 		return -1;
@@ -930,6 +948,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	}
 
 	public void notifyBindingChanged(TOCDataBinding binding) {
+		setChanged();
+		rebuildBindingModel();
 	}
 
 	public void notifyChange(TOCBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding value) {
@@ -969,4 +989,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	public static BindingFactory DEFAULT_BINDING_FACTORY = new DefaultBindingFactory();
 
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+	}
 }

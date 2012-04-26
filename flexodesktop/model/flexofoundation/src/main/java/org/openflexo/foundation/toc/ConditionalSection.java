@@ -44,4 +44,10 @@ public class ConditionalSection extends ControlSection {
 		}
 	}
 
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+		getCondition().finalizeDeserialization();
+	}
+
 }
