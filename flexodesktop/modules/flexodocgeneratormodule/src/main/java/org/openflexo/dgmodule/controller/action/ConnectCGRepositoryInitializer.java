@@ -88,9 +88,27 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 					repository.setTocRepository(repositoryParam.getValue());
 					// try {
 					repository.setDisplayName(paramName.getValue());
-					repository.setDirectory(paramDir.getValue());
+					File dir = paramDir.getValue();
+					if (dir != null && !dir.exists()) {
+						if (!FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + dir.getAbsolutePath() + " "
+								+ FlexoLocalization.localizedForKey("does_not_exist") + " "
+								+ FlexoLocalization.localizedForKey("would_you_like_to_create_it") + "?")) {
+							return false;
+						}
+						dir.mkdirs();
+					}
+					repository.setDirectory(dir);
 					repository.setPostProductName(paramWarName.getValue());
-					repository.setPostBuildDirectory(paramWarDir.getValue());
+					File value = paramWarDir.getValue();
+					if (value != null && !value.exists()) {
+						if (!FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + value.getAbsolutePath() + " "
+								+ FlexoLocalization.localizedForKey("does_not_exist") + " "
+								+ FlexoLocalization.localizedForKey("would_you_like_to_create_it") + "?")) {
+							return false;
+						}
+						value.mkdirs();
+					}
+					repository.setPostBuildDirectory(value);
 					// } catch (DuplicateCodeRepositoryNameException e2) {
 					// e2.printStackTrace();
 					// FlexoController.notify(FlexoLocalization.localizedForKey("wrong_name"));
