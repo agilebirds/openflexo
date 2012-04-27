@@ -24,8 +24,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,6 +76,8 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 	protected BackgroundStyleDetailsPanel _selectorPanel;
 
+	private BackgroundStylePreviewPanel backgroundStylePreviewPanel;
+
 	public FIBBackgroundStyleSelector(BackgroundStyle editedObject) {
 		super(editedObject);
 		setRevertValue(editedObject != null ? editedObject.clone() : null);
@@ -84,6 +86,13 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 	@Override
 	public void init(FIBCustom component, FIBController controller) {
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		backgroundStylePreviewPanel.delete();
+		_selectorPanel.delete();
 	}
 
 	@Override
@@ -129,6 +138,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 	 * 
 	 */
 	public static class BackgroundStyleFactory implements HasPropertyChangeSupport {
+		private static final String DELETED = "deleted";
 		private BackgroundStyle backgroundStyle;
 		private Color color1 = Color.RED;
 		private Color color2 = Color.WHITE;
@@ -147,10 +157,14 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			return pcSupport;
 		}
 
+		public void delete() {
+			getPropertyChangeSupport().firePropertyChange(DELETED, false, true);
+			pcSupport = null;
+		}
+
 		@Override
 		public String getDeletedProperty() {
-			// TODO Auto-generated method stub
-			return null;
+			return DELETED;
 		}
 
 		public BackgroundStyle getBackgroundStyle() {
@@ -236,7 +250,6 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			setLayout(new BorderLayout());
 			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
-
 		}
 
 		public void update() {
@@ -251,6 +264,13 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 		}
 
 		public void delete() {
+			controller.delete();
+			fibView.delete();
+			bsFactory.delete();
+			fibComponent = null;
+			controller = null;
+			fibView = null;
+			bsFactory = null;
 		}
 
 		public class CustomFIBController extends FIBController<BackgroundStyleFactory> {
@@ -329,7 +349,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 	@Override
 	protected BackgroundStylePreviewPanel buildFrontComponent() {
-		return new BackgroundStylePreviewPanel();
+		return backgroundStylePreviewPanel = new BackgroundStylePreviewPanel();
 	}
 
 	@Override
@@ -366,8 +386,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			rect = new Object();
 
-			final Vector<Object> singleton = new Vector<Object>();
-			singleton.add(rect);
+			final List<Object> singleton = Collections.singletonList(rect);
 
 			drawing = new Drawing<BackgroundStylePreviewPanel>() {
 				@Override
@@ -428,6 +447,17 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
+		}
+
+		public void delete() {
+			drawingGR.delete();
+			rectGR.delete();
+			controller.delete();
+			drawing = null;
+			controller = null;
+			drawingGR = null;
+			rectGR = null;
+			rect = null;
 		}
 
 		protected void update() {

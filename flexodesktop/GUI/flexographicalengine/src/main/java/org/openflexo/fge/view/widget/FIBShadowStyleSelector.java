@@ -66,10 +66,19 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 	protected ShadowStyleDetailsPanel _selectorPanel;
 
+	private ShadowStylePreviewPanel shadowStylePreviewPanel;
+
 	public FIBShadowStyleSelector(ShadowStyle editedObject) {
 		super(editedObject);
 		setRevertValue(editedObject != null ? editedObject.clone() : null);
 		setFocusable(true);
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		_selectorPanel.delete();
+		shadowStylePreviewPanel.delete();
 	}
 
 	@Override
@@ -141,6 +150,11 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 		}
 
 		public void delete() {
+			controller.delete();
+			fibView.delete();
+			fibComponent = null;
+			controller = null;
+			fibView = null;
 		}
 
 		public class CustomFIBController extends FIBController<ShadowStyle> {
@@ -201,7 +215,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 	@Override
 	protected ShadowStylePreviewPanel buildFrontComponent() {
-		return new ShadowStylePreviewPanel();
+		return shadowStylePreviewPanel = new ShadowStylePreviewPanel();
 	}
 
 	@Override
@@ -304,6 +318,13 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
 
+		}
+
+		public void delete() {
+			controller.delete();
+			drawingGR.delete();
+			shapeGR.delete();
+			drawing = null;
 		}
 
 		protected void update() {

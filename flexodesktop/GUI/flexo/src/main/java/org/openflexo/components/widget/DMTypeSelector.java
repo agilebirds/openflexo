@@ -157,8 +157,8 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 					}
 				}
 
-				if ((!e.isActionKey()) && (e.getKeyCode() != KeyEvent.VK_SHIFT) && (e.getKeyCode() != KeyEvent.VK_ENTER)
-						&& (e.getKeyCode() != KeyEvent.VK_TAB)) {
+				if (!e.isActionKey() && e.getKeyCode() != KeyEvent.VK_SHIFT && e.getKeyCode() != KeyEvent.VK_ENTER
+						&& e.getKeyCode() != KeyEvent.VK_TAB) {
 					getCustomPanel();
 					if (!popupIsShown()) {
 						openPopup();
@@ -193,6 +193,22 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			}
 		};
 		getTextField().addKeyListener(completionListKeyAdapter);
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+			_selectorPanel = null;
+		}
+		if (unambigousEntities != null) {
+			unambigousEntities.clear();
+			unambigousEntities = null;
+		}
+		_owner = null;
+		_editor = null;
+		_project = null;
 	}
 
 	@Override
@@ -291,7 +307,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 	@Override
 	public String renderedString(DMType editedObject) {
 		if (editedObject != null) {
-			return (_displayTypeAsSimplified ? editedObject.getSimplifiedStringRepresentation() : editedObject.getStringRepresentation());
+			return _displayTypeAsSimplified ? editedObject.getSimplifiedStringRepresentation() : editedObject.getStringRepresentation();
 		} else {
 			return STRING_REPRESENTATION_WHEN_NULL;
 		}
@@ -570,7 +586,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			// private DMModel _dmModel;
 
 			protected DataModelBrowser(/* DMModel dataModel */) {
-				super((getDataModel() != null ? getDataModel().getProject() : null), false);
+				super(getDataModel() != null ? getDataModel().getProject() : null, false);
 				init();
 				setDMViewMode(DMViewMode.Packages);
 				setRowHeight(16);
@@ -641,7 +657,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			if (oldValue == null && newValue == null) {
 				return;
 			}
-			if ((oldValue == null && newValue != null) || (oldValue != null && !oldValue.equals(newValue))) {
+			if (oldValue == null && newValue != null || oldValue != null && !oldValue.equals(newValue)) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("dataChanged() for DMType old=" + oldValue + " new=" + newValue);
 				}
@@ -1220,7 +1236,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			logger.fine("activateBasicTypeMode() getEditedObject()=" + getEditedObject() + " editionMode=" + editionMode
 					+ " popupIsShown()=" + popupIsShown() + " _selectorPanel=" + _selectorPanel);
 		}
-		if ((_selectorPanel != null) && (editionMode != EditionMode.BASIC_TYPE)) {
+		if (_selectorPanel != null && editionMode != EditionMode.BASIC_TYPE) {
 			editionMode = EditionMode.BASIC_TYPE;
 			boolean showAgain = false;
 			if (popupIsShown()) {
@@ -1248,7 +1264,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			logger.fine("activateComplexTypeMode() getEditedObject()=" + getEditedObject() + " editionMode=" + editionMode
 					+ " popupIsShown()=" + popupIsShown() + " _selectorPanel=" + _selectorPanel);
 		}
-		if ((_selectorPanel != null) && (editionMode != EditionMode.COMPLEX_TYPE)) {
+		if (_selectorPanel != null && editionMode != EditionMode.COMPLEX_TYPE) {
 			editionMode = EditionMode.COMPLEX_TYPE;
 			boolean showAgain = false;
 			if (_editedObject == null && _selectorPanel instanceof BasicDMTypeSelectorPanel) {

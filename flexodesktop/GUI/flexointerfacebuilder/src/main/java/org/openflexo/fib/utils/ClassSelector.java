@@ -60,6 +60,16 @@ public class ClassSelector extends TextFieldCustomPopup<Class> implements FIBCus
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		if (_selectorPanel != null) {
+			_selectorPanel.delete();
+			_selectorPanel = null;
+		}
+
+	}
+
+	@Override
 	public void init(FIBCustom component, FIBController controller) {
 	}
 
@@ -118,6 +128,13 @@ public class ClassSelector extends TextFieldCustomPopup<Class> implements FIBCus
 
 		}
 
+		public void delete() {
+			controller.delete();
+			fibView.delete();
+			controller = null;
+			fibView = null;
+		}
+
 		public void update() {
 			controller.setDataObject(LoadedClassesInfo.instance(getEditedObject()));
 		}
@@ -125,9 +142,6 @@ public class ClassSelector extends TextFieldCustomPopup<Class> implements FIBCus
 		@Override
 		public Dimension getDefaultSize() {
 			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
-		}
-
-		public void delete() {
 		}
 
 		public class CustomFIBController extends FIBController<LoadedClassesInfo> {

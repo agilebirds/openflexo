@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -99,7 +100,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	private T dataObject;
 	private final FIBComponent rootComponent;
-	private final Hashtable<FIBComponent, FIBView> views;
+	private final Hashtable<FIBComponent, FIBView<?, ?>> views;
 	private FIBSelectable selectionLeader;
 	private FIBSelectable lastFocusedSelectable;
 
@@ -120,12 +121,29 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	private MouseEvent mouseEvent;
 
+	private boolean deleted = false;
+
 	public FIBController(FIBComponent rootComponent) {
 		this.rootComponent = rootComponent;
-		views = new Hashtable<FIBComponent, FIBView>();
+		views = new Hashtable<FIBComponent, FIBView<?, ?>>();
 		selectionListeners = new Vector<FIBSelectionListener>();
 		mouseClickListeners = new Vector<FIBMouseClickListener>();
 		viewFactory = new DefaultFIBViewFactory();
+	}
+
+	public void delete() {
+		if (!deleted) {
+			getRootView().delete();
+			// Next for-block should not be necessary because deletion is recursive, but just to be sure
+			for (FIBView<?, ?> view : new ArrayList<FIBView<?, ?>>(views.values())) {
+				view.delete();
+			}
+			if (dataObject instanceof Observable) {
+				((Observable) dataObject).deleteObserver(this);
+			}
+			dataObject = null;
+			deleted = true;
+		}
 	}
 
 	public FIBView<FIBComponent, ?> buildView() {
@@ -140,19 +158,19 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		this.viewFactory = viewFactory;
 	}
 
-	public void registerView(FIBView view) {
+	public void registerView(FIBView<?, ?> view) {
 		views.put(view.getComponent(), view);
 	}
 
-	public void unregisterView(FIBView view) {
+	public void unregisterView(FIBView<?, ?> view) {
 		views.remove(view.getComponent());
 	}
 
-	public FIBView viewForComponent(FIBComponent component) {
+	public FIBView<?, ?> viewForComponent(FIBComponent component) {
 		return views.get(component);
 	}
 
-	public Enumeration<FIBView> getViews() {
+	public Enumeration<FIBView<?, ?>> getViews() {
 		return views.elements();
 	}
 
@@ -517,9 +535,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 					objectsToAddToSelection.add(o);
 				}
 			}
-			Enumeration<FIBView> en = getViews();
+			Enumeration<FIBView<?, ?>> en = getViews();
 			while (en.hasMoreElements()) {
-				FIBView v = en.nextElement();
+				FIBView<?, ?> v = en.nextElement();
 				if (v.isSelectableComponent() && v.getSelectableComponent() != selectionLeader
 						&& v.getSelectableComponent().synchronizedWithSelection()) {
 					for (Object o : objectsToAddToSelection) {
@@ -539,9 +557,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	public void objectAddedToSelection(Object o) {
 		logger.fine("FIBController: objectAddedToSelection(): " + o);
-		Enumeration<FIBView> en = getViews();
+		Enumeration<FIBView<?, ?>> en = getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
+			FIBView<?, ?> v = en.nextElement();
 			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				if (v.getSelectableComponent().mayRepresent(o)) {
 					v.getSelectableComponent().objectAddedToSelection(o);
@@ -555,9 +573,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	public void objectRemovedFromSelection(Object o) {
 		logger.fine("FIBController: objectRemovedFromSelection(): " + o);
-		Enumeration<FIBView> en = getViews();
+		Enumeration<FIBView<?, ?>> en = getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
+			FIBView<?, ?> v = en.nextElement();
 			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				if (v.getSelectableComponent().mayRepresent(o)) {
 					v.getSelectableComponent().objectRemovedFromSelection(o);
@@ -568,9 +586,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	public void selectionCleared() {
 		logger.fine("FIBController: selectionCleared()");
-		Enumeration<FIBView> en = getViews();
+		Enumeration<FIBView<?, ?>> en = getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
+			FIBView<?, ?> v = en.nextElement();
 			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				v.getSelectableComponent().selectionResetted();
 			}

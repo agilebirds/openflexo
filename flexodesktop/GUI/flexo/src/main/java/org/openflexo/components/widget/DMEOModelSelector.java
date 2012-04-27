@@ -43,6 +43,12 @@ public class DMEOModelSelector extends AbstractBrowserSelector<DMEOModel> {
 		super(project, eomodel, DMEOModel.class, cols);
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		_repository = null;
+	}
+
 	public ProjectDatabaseRepository getCVSRepositoryList() {
 		return _repository;
 	}

@@ -22,8 +22,8 @@ package org.openflexo.fge.view.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,10 +69,19 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 	protected TextStyleDetailsPanel _selectorPanel;
 
+	private TextStylePreviewPanel textStylePreviewPanel;
+
 	public FIBTextStyleSelector(TextStyle editedObject) {
 		super(editedObject);
 		setRevertValue(editedObject != null ? editedObject.clone() : null);
 		setFocusable(true);
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		_selectorPanel.delete();
+		textStylePreviewPanel.delete();
 	}
 
 	@Override
@@ -144,6 +153,11 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 		}
 
 		public void delete() {
+			controller.delete();
+			fibView.delete();
+			fibComponent = null;
+			controller = null;
+			fibView = null;
 		}
 
 		public class CustomFIBController extends FIBController<TextStyle> {
@@ -204,7 +218,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 	@Override
 	protected TextStylePreviewPanel buildFrontComponent() {
-		return new TextStylePreviewPanel();
+		return textStylePreviewPanel = new TextStylePreviewPanel();
 	}
 
 	@Override
@@ -242,8 +256,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 			text = new Object();
 
-			final Vector<Object> singleton = new Vector<Object>();
-			singleton.add(text);
+			final List<Object> singleton = Collections.singletonList(text);
 
 			drawing = new Drawing<TextStylePreviewPanel>() {
 				@Override
@@ -311,6 +324,16 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			add(controller.getDrawingView());
 
 			update();
+		}
+
+		public void delete() {
+			controller.delete();
+			drawingGR.delete();
+			textGR.delete();
+			controller = null;
+			drawingGR = null;
+			textGR = null;
+			drawing = null;
 		}
 
 		protected void update() {

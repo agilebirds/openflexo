@@ -49,6 +49,14 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 		_bindingSelector = bindingSelector;
 	}
 
+	@Override
+	public void delete() {
+		if (_expressionPanel != null) {
+			_expressionPanel.delete();
+			_expressionPanel = null;
+		}
+	}
+
 	protected ButtonsControlPanel _controlPanel;
 	protected JButton _applyButton;
 	protected JButton _cancelButton;
@@ -210,8 +218,8 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 		BindingExpression bindingExpression = (BindingExpression) _bindingSelector.getEditedObject();
 
 		// Update apply button state
-		_applyButton.setEnabled((bindingExpression != null) && (bindingExpression.isBindingValid()));
-		if ((bindingExpression != null) && (bindingExpression.isBindingValid())) {
+		_applyButton.setEnabled(bindingExpression != null && bindingExpression.isBindingValid());
+		if (bindingExpression != null && bindingExpression.isBindingValid()) {
 			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				_applyButton.setSelected(true);
 			}

@@ -76,6 +76,15 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 		}
 	}
 
+	@Override
+	public void delete() {
+		if (_csm != null) {
+			_csm.removeChangeListener(this);
+		}
+		_csm = null;
+		super.delete();
+	}
+
 	public Color getRevertValue() {
 		return _revertValue;
 	}

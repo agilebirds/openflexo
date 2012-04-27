@@ -92,6 +92,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			_controller.DIAGRAM_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
+		getDrawing().delete();
 	}
 
 	@Override
@@ -129,7 +130,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
 			for (ViewPointPalette palette : orderedPalettes) {
-				paletteView.add(palette.getName(), (_contextualPalettes.get(palette)).getPaletteView());
+				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteView());
 			}
 			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
 					.getPaletteView());

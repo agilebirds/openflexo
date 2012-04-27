@@ -88,6 +88,14 @@ public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectF
 		dialogType = aDialogType;
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		_project = null;
+		_oldValue = null;
+		_fileFilter = null;
+	}
+
 	public FlexoProjectFile getEditedFile() {
 		return getEditedObject();
 	}
@@ -106,7 +114,7 @@ public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectF
 
 	@Override
 	protected ResizablePanel createCustomPanel(FlexoProjectFile editedObject) {
-		fileChooserPanel = new FileChooserPanel((editedObject != null ? editedObject.getFile() : new File(System.getProperty("user.home"))));
+		fileChooserPanel = new FileChooserPanel(editedObject != null ? editedObject.getFile() : new File(System.getProperty("user.home")));
 		if (_fileFilter != null) {
 			fileChooserPanel.setFileFilter(_fileFilter);
 		}

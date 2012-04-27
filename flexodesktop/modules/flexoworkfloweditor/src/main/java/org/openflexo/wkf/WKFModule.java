@@ -22,6 +22,8 @@ package org.openflexo.wkf;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +31,6 @@ import javax.swing.JComponent;
 
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
@@ -78,6 +79,8 @@ import org.openflexo.wkf.view.WorkflowBrowserView;
  */
 public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.WKF };
+
+	private Map<Drawing<FlexoProcess>, DrawingController<? extends Drawing<FlexoProcess>>> drawingControllers = new HashMap<Drawing<FlexoProcess>, DrawingController<? extends Drawing<FlexoProcess>>>();
 
 	public static enum ProcessRepresentation {
 		BASIC_EDITOR, SWIMMING_LANE;
@@ -418,13 +421,20 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	public void moduleWillClose() {
 		super.moduleWillClose();
 		WKFPreferences.reset();
+		finalizeScreenshotGeneration();
+		for (DrawingController<? extends Drawing<FlexoProcess>> drawingController : drawingControllers.values()) {
+			drawingController.delete();
+		}
+		drawingControllers.clear();
 	}
 
 	@Override
 	public Object getProcessRepresentation(FlexoProcess process, boolean showAll) {
 		try {
 			process.setIgnoreNotifications();
-			return getProcessRepresentationController(process, showAll).getDrawing();
+			DrawingController<? extends Drawing<FlexoProcess>> controller = getProcessRepresentationController(process, showAll);
+			drawingControllers.put(controller.getDrawing(), controller);
+			return controller.getDrawing();
 		} finally {
 			process.resetIgnoreNotifications();
 		}
@@ -432,8 +442,9 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 
 	@Override
 	public void disposeProcessRepresentation(Object processRepresentation) {
-		if (processRepresentation instanceof DefaultDrawing<?>) {
-			((DefaultDrawing<?>) processRepresentation).delete();
+		DrawingController<? extends Drawing<FlexoProcess>> drawingController = drawingControllers.remove(processRepresentation);
+		if (drawingController != null) {
+			drawingController.delete();
 		}
 	}
 }

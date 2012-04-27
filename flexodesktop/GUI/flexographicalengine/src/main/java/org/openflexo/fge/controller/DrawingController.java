@@ -311,7 +311,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			super(/* new FlowLayout(FlowLayout.LEFT, 10, 0) */);
 			scaleTF = new JTextField(5);
 			int currentScale = (int) (getScale() * 100);
-			scaleTF.setText("" + currentScale + "%");
+			scaleTF.setText(currentScale + "%");
 			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
 			slider.setMajorTickSpacing(100);
 			slider.setMinorTickSpacing(20);
@@ -708,12 +708,19 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (drawing instanceof DefaultDrawing<?>) {
 			((DefaultDrawing<?>) drawing).deleteObserver(this);
 		}
+		for (DrawingPalette palette : palettes) {
+			palette.delete();
+		}
 		if (drawingView != null) {
 			drawingView.delete();
+		}
+		if (toolbox != null) {
+			toolbox.delete();
 		}
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("TODO: Delete palettes");
 		}
+		palettes = null;
 		storedSelection = null;
 		drawingView = null;
 	}

@@ -50,6 +50,12 @@ public class CVSRepositorySelector extends AbstractBrowserSelector<CVSRepository
 		super(project, repository, CVSRepository.class, cols);
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		_repositoryList = null;
+	}
+
 	public CVSRepositoryList getCVSRepositoryList() {
 		return _repositoryList;
 	}

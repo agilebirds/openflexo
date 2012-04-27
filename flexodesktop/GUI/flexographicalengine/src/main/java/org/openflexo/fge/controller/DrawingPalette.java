@@ -92,6 +92,15 @@ public class DrawingPalette {
 		logger.info("Build palette " + title + " " + Integer.toHexString(hashCode()) + " of " + getClass().getName());
 	}
 
+	public void delete() {
+		_paletteController.delete();
+		for (PaletteElement element : elements) {
+			element.getGraphicalRepresentation().delete();
+		}
+		_paletteDrawing.getDrawingGraphicalRepresentation().delete();
+		elements = null;
+	}
+
 	public String getTitle() {
 		return title;
 	}

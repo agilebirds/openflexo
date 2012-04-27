@@ -79,6 +79,12 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		_selectorPanel.delete();
+	}
+
+	@Override
 	public void init(FIBCustom component, FIBController controller) {
 	}
 
@@ -127,6 +133,8 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	 * 
 	 */
 	public static class ShapeFactory implements HasPropertyChangeSupport {
+		private static final String DELETED = "deleted";
+
 		private Shape shape;
 
 		private Rectangle rectangle;
@@ -152,10 +160,14 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 			return pcSupport;
 		}
 
+		public void delete() {
+			pcSupport.firePropertyChange(DELETED, false, true);
+			pcSupport = null;
+		}
+
 		@Override
 		public String getDeletedProperty() {
-			// TODO Auto-generated method stub
-			return null;
+			return DELETED;
 		}
 
 		public Shape getShape() {
@@ -287,6 +299,13 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 		}
 
 		public void delete() {
+			controller.delete();
+			fibView.delete();
+			shapeFactory.delete();
+			fibComponent = null;
+			controller = null;
+			fibView = null;
+			shapeFactory = null;
 		}
 
 		public class CustomFIBController extends FIBController<ShapeFactory> {

@@ -169,6 +169,18 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		_lists = new Vector<FilteredJList>();
 	}
 
+	@Override
+	public void delete() {
+		for (JList list : _lists) {
+			list.removeListSelectionListener(this);
+			list.setModel(null);
+		}
+		_lists.clear();
+		_listModels.clear();
+		_rootBindingColumnListModel = null;
+		currentFocused = null;
+	}
+
 	public int getIndexOfList(BindingColumnListModel model) {
 		for (int i = 0; i < _lists.size(); i++) {
 			FilteredJList l = _lists.get(i);

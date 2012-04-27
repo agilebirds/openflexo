@@ -50,6 +50,12 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 		return (FlattenRelationshipDefinition) super.getEditedObject();
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		_flattenRelationshipDefinitionInfo = null;
+	}
+
 	protected class FlattenRelationshipDefinitionInfo extends BindingModel implements Bindable {
 		private DMEOEntity _sourceEntity;
 		private BindingVariable _bindingVariable;
@@ -236,13 +242,13 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 					if (i + 1 == getVisibleColsCount()) {
 						makeNewJList();
 					}
-					if (!((bindingValue.isConnected()) && (bindingValue.isLastBindingPathElement(pathElement, i)))) {
+					if (!(bindingValue.isConnected() && bindingValue.isLastBindingPathElement(pathElement, i))) {
 						listAtIndex(i + 1).setModel(getListModelFor(pathElement.getType()));
 						lastUpdatedList = i + 1;
 					}
 					listAtIndex(i).removeListSelectionListener(this);
 					if (pathElement instanceof DMProperty) {
-						BindingColumnElement propertyElementToSelect = (listAtIndex(i).getModel()).getElementFor(pathElement);
+						BindingColumnElement propertyElementToSelect = listAtIndex(i).getModel().getElementFor(pathElement);
 						listAtIndex(i).setSelectedValue(propertyElementToSelect, true);
 						// listAtIndex(i).setSelectedValue(pathElement, true);
 					}
@@ -271,7 +277,7 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 			}
 
 			// Set connect button state
-			_connectButton.setEnabled((bindingValue != null) && (bindingValue.isBindingValid()));
+			_connectButton.setEnabled(bindingValue != null && bindingValue.isBindingValid());
 
 			if (bindingValue != null) {
 				getTextField().setForeground(bindingValue.isBindingValid() ? Color.BLACK : Color.RED);
