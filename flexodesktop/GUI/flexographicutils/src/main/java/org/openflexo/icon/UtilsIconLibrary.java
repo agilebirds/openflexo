@@ -92,7 +92,7 @@ public class UtilsIconLibrary {
 	public static final ImageIcon MOVE_DOWN_ICON = new ImageIconResource("Icons/Utils/Down.gif");
 	public static final ImageIcon MOVE_LEFT_ICON = new ImageIconResource("Icons/Utils/Left.gif");
 	public static final ImageIcon MOVE_RIGHT_ICON = new ImageIconResource("Icons/Utils/Right.gif");
-	public static final ImageIcon CLOCK_ICON = new ImageIconResource("Icons/Utils/Clock.gif");
+	public static final ImageIcon CLOCK_ICON = new ImageIconResource("Icons/Clock.gif");
 	public static final ImageIcon SEPARATOR_ICON = new ImageIconResource("Icons/Utils/Separator.gif");
 
 	// Flags
