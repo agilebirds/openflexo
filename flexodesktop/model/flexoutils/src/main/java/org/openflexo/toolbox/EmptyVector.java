@@ -100,5 +100,6 @@ public class EmptyVector<T> extends Vector<T> {
 	}
 
 	public EmptyVector() {
+		super(0);
 	}
 }
