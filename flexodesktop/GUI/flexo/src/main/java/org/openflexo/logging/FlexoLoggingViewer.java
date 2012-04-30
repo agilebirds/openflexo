@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -14,10 +15,12 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.icon.UtilsIconLibrary;
+import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.properties.FlexoProperties;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.controller.FlexoController;
 
 public class FlexoLoggingViewer implements HasPropertyChangeSupport {
@@ -35,6 +38,9 @@ public class FlexoLoggingViewer implements HasPropertyChangeSupport {
 	private File configurationFile;
 	private Level logLevel = Level.WARNING;
 
+	public Vector<LoggingFilter> filters = new Vector<LoggingFilter>();
+	public String searchedText;
+
 	public boolean displayLogLevel = false;
 	public boolean displayPackage = true;
 	public boolean displayClass = true;
@@ -48,13 +54,9 @@ public class FlexoLoggingViewer implements HasPropertyChangeSupport {
 		_pcSupport = new PropertyChangeSupport(this);
 		this.records = records;
 		logLevel = FlexoProperties.instance().getDefaultLoggingLevel();
-		System.out.println("logLevel=" + logLevel);
 		keepLogTraceInMemory = FlexoProperties.instance().getIsLoggingTrace();
-		System.out.println("keepLogTraceInMemory=" + keepLogTraceInMemory);
 		numberOfLogsToKeep = FlexoProperties.instance().getMaxLogCount();
-		System.out.println("numberOfLogsToKeep=" + numberOfLogsToKeep);
 		String loggingFileName = FlexoProperties.instance().getLoggingFileName();
-		System.out.println("loggingFileName=" + loggingFileName);
 		if (loggingFileName != null && (new File(loggingFileName)).exists()) {
 			setConfigurationFile(new File(loggingFileName));
 		}
@@ -67,6 +69,10 @@ public class FlexoLoggingViewer implements HasPropertyChangeSupport {
 	public void showLoggingViewer() {
 		FIBComponent loggingViewerComponent = FIBLibrary.instance().retrieveFIBComponent(LOGGING_VIEWER_FIB);
 		FIBDialog dialog = FIBDialog.instanciateComponent(loggingViewerComponent, this, null, true, FlexoLocalization.getMainLocalizer());
+	}
+
+	public Icon getIconForFilter(LoggingFilter filter) {
+		return VPMIconLibrary.ACTION_SCHEME_ICON;
 	}
 
 	public Icon getIconForLogRecord(LogRecord record) {
@@ -203,5 +209,33 @@ public class FlexoLoggingViewer implements HasPropertyChangeSupport {
 		}
 		System.err.println("Stack trace for '" + record.message + "':");
 		System.err.println(record.getStackTraceAsString());
+	}
+
+	public LoggingFilter createFilter() {
+		LoggingFilter newFilter = new LoggingFilter("New filter");
+		filters.add(newFilter);
+		return newFilter;
+	}
+
+	public void deleteFilter(LoggingFilter filter) {
+		filters.remove(filter);
+	}
+
+	public void applyFilters() {
+		records.applyFilters(filters);
+	}
+
+	public void dismissFilters() {
+		records.dismissFilters();
+	}
+
+	public void searchText() {
+		if (StringUtils.isNotEmpty(searchedText)) {
+			records.searchText(searchedText);
+		}
+	}
+
+	public void dismissSearchText() {
+		records.dismissSearchText();
 	}
 }

@@ -42,6 +42,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonClicked();
+				// updateDependancies();
 			}
 		});
 		updateLabel();

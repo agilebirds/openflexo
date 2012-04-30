@@ -19,7 +19,10 @@
  */
 package org.openflexo.logging;
 
+import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.swing.event.TableModelListener;
@@ -27,6 +30,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import org.openflexo.kvc.KVCObject;
+import org.openflexo.logging.LoggingFilter.FilterType;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
@@ -35,33 +40,56 @@ import org.openflexo.xmlcode.XMLSerializable;
  * 
  * @author sguerin
  */
-public class LogRecords extends KVCObject implements XMLSerializable, TableModel {
+public class LogRecords extends KVCObject implements XMLSerializable, TableModel, HasPropertyChangeSupport {
 
-	private LinkedList<LogRecord> records;
+	private LinkedList<LogRecord> allRecords;
+	private ArrayList<LogRecord> filteredRecords = new ArrayList<LogRecord>();
+	private List<LogRecord> records;
 
 	private int totalLogs = 0;
-	private int warningLogs = 0;
-	private int severeLogs = 0;
+	private int totalWarningLogs = 0;
+	private int totalSevereLogs = 0;
+
+	private int logCount = 0;
+	private int warningCount = 0;
+	private int severeCount = 0;
 
 	private DefaultTableModel model;
 
+	private boolean filtersApplied = false;
+	private boolean textSearchApplied = false;
+
+	private PropertyChangeSupport pcSupport;
+
 	public LogRecords() {
 		super();
-		records = new LinkedList<LogRecord>();
+		pcSupport = new PropertyChangeSupport(this);
+		allRecords = new LinkedList<LogRecord>();
+		records = allRecords;
 		model = new DefaultTableModel();
 	}
 
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return null;
+	}
+
 	public void add(LogRecord record) {
-		synchronized (records) {
-			if (FlexoLoggingManager.getLogCount() > -1 && records.size() > FlexoLoggingManager.getLogCount()) {
-				records.remove(0);
+		synchronized (allRecords) {
+			if (FlexoLoggingManager.getLogCount() > -1 && allRecords.size() > FlexoLoggingManager.getLogCount()) {
+				allRecords.remove(0);
 			}
-			records.add(record);
+			allRecords.add(record);
 			if (record.level == Level.WARNING) {
-				warningLogs++;
+				totalWarningLogs++;
 			}
 			if (record.level == Level.SEVERE) {
-				severeLogs++;
+				totalSevereLogs++;
 			}
 			totalLogs++;
 		}
@@ -69,12 +97,12 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 	}
 
 	public LogRecord elementAt(int row) {
-		return records.get(row);
+		return allRecords.get(row);
 	}
 
 	@Override
 	public int getRowCount() {
-		return records.size();
+		return allRecords.size();
 	}
 
 	@Override
@@ -135,7 +163,7 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 	 */
 	@Override
 	public Object getValueAt(int row, int col) {
-		LogRecord record = records.get(row);
+		LogRecord record = allRecords.get(row);
 		switch (col) {
 		case 0:
 			return record.level;
@@ -191,7 +219,7 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 		model.removeTableModelListener(arg0);
 	}
 
-	public LinkedList<LogRecord> getRecords() {
+	public List<LogRecord> getRecords() {
 		return records;
 	}
 
@@ -200,11 +228,131 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 	}
 
 	public int getWarningLogs() {
-		return warningLogs;
+		return totalWarningLogs;
 	}
 
 	public int getSevereLogs() {
-		return severeLogs;
+		return totalSevereLogs;
+	}
+
+	public int getLogCount() {
+		if (!filtersApplied && !textSearchApplied) {
+			return totalLogs;
+		}
+		return logCount;
+	}
+
+	public int getWarningCount() {
+		if (!filtersApplied && !textSearchApplied) {
+			return totalWarningLogs;
+		}
+		return warningCount;
+	}
+
+	public int getSevereCount() {
+		if (!filtersApplied && !textSearchApplied) {
+			return totalSevereLogs;
+		}
+		return severeCount;
+	}
+
+	public void applyFilters(List<LoggingFilter> filters) {
+		logCount = 0;
+		warningCount = 0;
+		severeCount = 0;
+		filtersApplied = true;
+		filteredRecords.clear();
+		boolean onlyKeep = false;
+		for (LoggingFilter f : filters) {
+			if (f.type == FilterType.OnlyKeep) {
+				onlyKeep = true;
+			}
+		}
+		for (LogRecord r : allRecords) {
+			boolean keepRecord = !onlyKeep;
+			for (LoggingFilter f : filters) {
+				if (f.filterDoesApply(r)) {
+					if (f.type == FilterType.OnlyKeep) {
+						keepRecord = true;
+					}
+				}
+			}
+			for (LoggingFilter f : filters) {
+				if (f.filterDoesApply(r)) {
+					if (f.type == FilterType.Dismiss) {
+						keepRecord = false;
+					}
+				}
+			}
+			if (keepRecord) {
+				filteredRecords.add(r);
+				logCount++;
+				if (r.level == Level.WARNING) {
+					warningCount++;
+				} else if (r.level == Level.SEVERE) {
+					severeCount++;
+				}
+			}
+		}
+		records = filteredRecords;
+		notifyFilteringChange();
+	}
+
+	public void dismissFilters() {
+		filtersApplied = false;
+		records = allRecords;
+		notifyFilteringChange();
+	}
+
+	public void searchText(String someText) {
+		logCount = 0;
+		warningCount = 0;
+		severeCount = 0;
+		textSearchApplied = true;
+		records = new ArrayList<LogRecord>();
+		LoggingFilter f = new LoggingFilter("search");
+		f.setHasFilteredMessage(true);
+		f.filteredContent = someText;
+		for (LogRecord r : filtersApplied() ? filteredRecords : allRecords) {
+			if (f.filterDoesApply(r)) {
+				records.add(r);
+				logCount++;
+				if (r.level == Level.WARNING) {
+					warningCount++;
+				} else if (r.level == Level.SEVERE) {
+					severeCount++;
+				}
+			}
+		}
+		notifyFilteringChange();
+	}
+
+	public void dismissSearchText() {
+		textSearchApplied = false;
+		if (filtersApplied()) {
+			records = filteredRecords;
+			notifyFilteringChange();
+		} else {
+			records = allRecords;
+			notifyFilteringChange();
+		}
+	}
+
+	private void notifyFilteringChange() {
+		pcSupport.firePropertyChange("logCount", -1, logCount);
+		pcSupport.firePropertyChange("warningCount", -1, warningCount);
+		pcSupport.firePropertyChange("severeCount", -1, severeCount);
+		pcSupport.firePropertyChange("records", null, records);
+		pcSupport.firePropertyChange("filtersApplied", false, true);
+		pcSupport.firePropertyChange("textSearchApplied", false, true);
+	}
+
+	public boolean filtersApplied() {
+		return filtersApplied;
+	}
+
+	public boolean textSearchApplied() {
+		return textSearchApplied;
 	}
 
 }

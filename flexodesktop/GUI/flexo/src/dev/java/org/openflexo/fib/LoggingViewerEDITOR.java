@@ -44,7 +44,6 @@ public class LoggingViewerEDITOR {
 		}
 		FlexoLoggingManager.setKeepLogTrace(true);
 		FlexoLoggingManager.setLogCount(-1);
-		logger.info("coucou");
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
