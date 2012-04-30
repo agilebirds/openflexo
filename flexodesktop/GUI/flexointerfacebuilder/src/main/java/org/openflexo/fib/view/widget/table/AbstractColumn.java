@@ -243,6 +243,14 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		return null;
 	}
 
+	public Color getSpecificBgColor(Object object) {
+		if (columnModel.getBgColor().isSet() && columnModel.getBgColor().isValid()) {
+			iteratorObject = object;
+			return (Color) columnModel.getBgColor().getBindingValue(this);
+		}
+		return null;
+	}
+
 	/**
 	 * Must be overriden if required
 	 * 

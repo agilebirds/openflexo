@@ -90,6 +90,11 @@ class FIBTableCellRenderer<T> extends DefaultTableCellRenderer {
 			setForeground(specificColor);
 		}
 
+		Color specificBgColor = this.column.getSpecificBgColor(getTableModel().elementAt(row));
+		if (specificBgColor != null) {
+			setBackground(specificBgColor);
+		}
+
 		return returned;
 	}
 
