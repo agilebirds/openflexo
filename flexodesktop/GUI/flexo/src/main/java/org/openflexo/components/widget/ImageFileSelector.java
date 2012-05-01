@@ -76,6 +76,14 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 		this.revertValue = docItem;
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		importer = null;
+		revertValue = null;
+		project = null;
+	}
+
 	public FlexoProject getProject() {
 		return project;
 	}

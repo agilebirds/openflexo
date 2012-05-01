@@ -152,10 +152,13 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	 * @return
 	 */
 	public synchronized boolean isLoaded() {
-		return (_resourceData != null);
+		return _resourceData != null;
 	}
 
 	public final void saveResourceData() throws SaveResourceException {
+		if (!isLoaded()) {
+			return;
+		}
 		getProject().saveResourceData(this, true);
 	}
 
@@ -168,7 +171,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	 * @return
 	 */
 	public SRD getResourceData() {
-		if (_resourceData == null) {
+		if (_resourceData == null && isLoadable()) {
 			try {
 				_resourceData = loadResourceData();
 			} catch (FlexoException e) {
@@ -295,6 +298,9 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	protected boolean _resolveDependanciesSchemeRunningForThisResource = false;
 
 	protected final SRD performLoadResourceData() throws LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException {
+		if (!isLoadable()) {
+			return null;
+		}
 		boolean wasLoaded = isLoaded();
 		if (!wasLoaded) {
 			notifyListenersResourceWillBeLoaded();
@@ -309,9 +315,16 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 	protected abstract SRD performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
 			throws LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException;
 
+	protected boolean isLoadable() {
+		return true;
+	}
+
 	public final SRD loadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws FlexoException {
+		if (!isLoadable()) {
+			return null;
+		}
 		if (_resolveDependanciesSchemeRunningForThisResource) {
-			(new Exception("Loop in dependancies")).printStackTrace();
+			new Exception("Loop in dependancies").printStackTrace();
 			logger.warning("Found loop in dependancies. Automatic rebuild dependancies is required !");
 			getProject().setRebuildDependanciesIsRequired();
 			boolean wasLoaded = isLoaded();
@@ -393,20 +406,20 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData> exte
 					logger.warning("Time stamps not loaded yet!!! Impossible to say if we have to do something or not");
 				}
 			}
-			if ((lastBackSynchronizationDate == null) || (resource.getLastUpdate().after(lastBackSynchronizationDate))) {
+			if (lastBackSynchronizationDate == null || resource.getLastUpdate().after(lastBackSynchronizationDate)) {
 				if (lastBackSynchronizationDate != null) {
 					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("Resource " + this + " is to be backward synchronized for " + resource + " because "
-								+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(resource.getLastUpdate()) + " is more recent than "
-								+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(lastBackSynchronizationDate));
+								+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(resource.getLastUpdate()) + " is more recent than "
+								+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(lastBackSynchronizationDate));
 					}
 				}
 				return true;
 			} else {
 				if (logger.isLoggable(Level.FINER)) {
 					logger.finer("NOT: Resource " + this + " must NOT be BS with " + resource + " because "
-							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(resource.getLastUpdate()) + " is more anterior than "
-							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(lastBackSynchronizationDate));
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(resource.getLastUpdate()) + " is more anterior than "
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(lastBackSynchronizationDate));
 				}
 			}
 		}

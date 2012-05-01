@@ -83,7 +83,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 	public JComponent _frontComponent;
 
-	private final List<ApplyCancelListener> applyCancelListener;
+	private List<ApplyCancelListener> applyCancelListener;
 
 	private int posX;
 
@@ -547,6 +547,14 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	 */
 	private Window getWindow(Component c) {
 		return SwingUtilities.getWindowAncestor(c);
+	}
+
+	public void delete() {
+		closePopup();
+		deletePopup(); // just to be sure
+		setEditedObject(null);
+		setRevertValue(null);
+		applyCancelListener = null;
 	}
 
 	protected void deletePopup() {

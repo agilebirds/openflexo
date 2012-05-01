@@ -102,6 +102,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 			_controller.SWIMMING_LANE_PERSPECTIVE.removeProcessController(this);
 		}
 		super.delete();
+		getDrawing().delete();
 	}
 
 	@Override

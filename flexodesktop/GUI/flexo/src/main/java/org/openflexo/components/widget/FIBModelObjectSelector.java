@@ -76,6 +76,8 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBModelObjectSelector.class.getPackage().getName());
 
+	private static final String DELETED = "deleted";
+
 	public abstract File getFIBFile();
 
 	private T _revertValue;
@@ -91,7 +93,7 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	private FIBCustom component;
 	private FIBController controller;
 
-	private final PropertyChangeSupport pcSupport;
+	private PropertyChangeSupport pcSupport;
 
 	public static BindingDefinition SELECTABLE = new BindingDefinition("selectable", Boolean.class, BindingDefinitionType.GET, false);
 
@@ -147,6 +149,17 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		pcSupport.firePropertyChange(DELETED, false, true);
+		matchingValues.clear();
+		pcSupport = null;
+		selectedObject = null;
+		selectedValue = null;
+		project = null;
+	}
+
+	@Override
 	public void init(FIBCustom component, FIBController controller) {
 		this.component = component;
 		this.controller = controller;
@@ -166,7 +179,7 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 
 	@Override
 	public String getDeletedProperty() {
-		return null;
+		return DELETED;
 	}
 
 	// private String filteredName;

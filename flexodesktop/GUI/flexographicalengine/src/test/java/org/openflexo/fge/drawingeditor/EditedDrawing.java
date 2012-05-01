@@ -51,21 +51,11 @@ public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 		if (aDrawable instanceof MyConnector) {
 			return (GraphicalRepresentation<O>) ((MyConnector) aDrawable).getGraphicalRepresentation();
 		}
-		new Exception().printStackTrace();
 		return null;
 	}
 
 	public void init() {
 		controller = new MyDrawingController(this);
-		_palette = new MyDrawingPalette();
-		controller.registerPalette(_palette);
-		controller.activatePalette(_palette);
-	}
-
-	private MyDrawingPalette _palette;
-
-	public MyDrawingPalette getPalette() {
-		return _palette;
 	}
 
 	public MyDrawingController getController() {

@@ -65,6 +65,33 @@ public class EditorToolbox {
 		this.controller = controller;
 	}
 
+	public void delete() {
+		if (backgroundSelector != null) {
+			backgroundSelector.delete();
+			backgroundSelector = null;
+		}
+		if (foregroundSelector != null) {
+			foregroundSelector.delete();
+			foregroundSelector = null;
+		}
+		if (shadowStyleSelector != null) {
+			shadowStyleSelector.delete();
+			shadowStyleSelector = null;
+		}
+		if (shapeSelector != null) {
+			shapeSelector.delete();
+			shapeSelector = null;
+		}
+		if (textStyleSelector != null) {
+			textStyleSelector.delete();
+			textStyleSelector = null;
+		}
+		selectedShapes.clear();
+		selectedConnectors.clear();
+		selectedGR.clear();
+		controller = null;// Don't delete, we did not create it
+	}
+
 	public class ToolPanel extends JPanel {
 		private ToolButton selectionToolButton;
 		private ToolButton drawShapeToolButton;

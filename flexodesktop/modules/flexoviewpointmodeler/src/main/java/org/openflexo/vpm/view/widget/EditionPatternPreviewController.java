@@ -20,6 +20,7 @@
 package org.openflexo.vpm.view.widget;
 
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.view.DrawingView;
@@ -33,7 +34,7 @@ public class EditionPatternPreviewController extends SelectionManagingDrawingCon
 
 	// We share here instances of EditionPatternPreviewRepresentation because they can be accessed from multiple
 	// EditionPatternPreviewComponent
-	private static final Hashtable<EditionPattern, EditionPatternPreviewRepresentation> editionPatternPreviewRepresentations = new Hashtable<EditionPattern, EditionPatternPreviewRepresentation>();
+	private static final Map<EditionPattern, EditionPatternPreviewRepresentation> editionPatternPreviewRepresentations = new Hashtable<EditionPattern, EditionPatternPreviewRepresentation>();
 
 	/**
 	 * Obtain or build stored EditionPatternPreviewRepresentation (they are all shared because they can be accessed from multiple

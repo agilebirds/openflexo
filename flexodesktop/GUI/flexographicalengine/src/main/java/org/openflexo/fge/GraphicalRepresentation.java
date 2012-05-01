@@ -328,6 +328,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (textStyle != null) {
 			textStyle.deleteObserver(this);
 		}
+		_bindingModel = null;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationDeleted(this));
 		deleteObservers();

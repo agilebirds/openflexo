@@ -1,5 +1,5 @@
 #French
-#Mon Apr 23 00:52:02 CEST 2012
+#Thu Apr 26 14:13:49 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -5143,6 +5143,7 @@ would_you_like_to_check_your_project_consistency_first=Voulez-vous valider votre
 would_you_like_to_close_anyway=Souhaitez-vous vraiment fermer?
 would_you_like_to_continue_anyway=Voulez-vous quand m\u00EAme continuer
 would_you_like_to_convert_entire_project_to_new_version_of_flexo_(recommanded)=Souhaitez-vous convertir ce projet dans la version la plus r\u00E9cente de OpenFlexo (recommand\u00E9) ?
+would_you_like_to_create_it=Voulez-vous le cr\u00E9er
 would_you_like_to_create_it_and_continue?=Voulez-vous le cr\u00E9er et continuer?
 would_you_like_to_cut_those_objects=Confirmez vous la suppression de ces objets ?
 would_you_like_to_delete_service_interface_used_in_ws_and_remove_it_from_ws=Cette service interface est utilis\u00E9e par un service web. Confirmez vous la suppression? (L'interface sera aussi supprim\u00E9e du service)e)

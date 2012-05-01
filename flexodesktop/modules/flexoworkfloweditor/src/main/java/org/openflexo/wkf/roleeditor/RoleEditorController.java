@@ -53,6 +53,7 @@ public class RoleEditorController extends SelectionManagingDrawingController<Rol
 			_controller.ROLE_EDITOR_PERSPECTIVE.removeFromRoleController(this);
 		}
 		super.delete();
+		getDrawing().delete();
 	}
 
 	@Override

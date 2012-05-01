@@ -54,6 +54,12 @@ public class OntologyClassSelector extends AbstractBrowserSelector<OntologyClass
 		setOntologyLibrary(ontologyLibrary);
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		setOntologyLibrary(null);
+	}
+
 	public OntologyLibrary getOntologyLibrary() {
 		return ontologyLibrary;
 	}
@@ -90,7 +96,7 @@ public class OntologyClassSelector extends AbstractBrowserSelector<OntologyClass
 	protected class OntologyBrowser extends ProjectBrowser {
 
 		protected OntologyBrowser() {
-			super((getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null), false);
+			super(getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null, false);
 			init();
 		}
 

@@ -81,6 +81,14 @@ public class FileSelector extends TextFieldCustomPopup<File> {
 		dialogType = aDialogType;
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		_fileFilter = null;
+		fileChooserPanel = null;
+
+	}
+
 	public File getEditedFile() {
 		return getEditedObject();
 	}
@@ -112,7 +120,7 @@ public class FileSelector extends TextFieldCustomPopup<File> {
 	@Override
 	public String renderedString(File editedObject) {
 		if (editedObject != null) {
-			return (getFile(editedObject)).getName();
+			return getFile(editedObject).getName();
 		} else {
 			return EMPTY_STRING;
 		}

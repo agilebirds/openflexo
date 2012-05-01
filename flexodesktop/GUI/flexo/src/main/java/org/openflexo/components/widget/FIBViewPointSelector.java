@@ -44,6 +44,12 @@ public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPoint> {
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		viewPointLibrary = null;
+	}
+
+	@Override
 	public File getFIBFile() {
 		return FIB_FILE;
 	}

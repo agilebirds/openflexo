@@ -75,7 +75,6 @@ import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.action.WKFControllerActionInitializer;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
-import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.processeditor.ProcessView;
 import org.openflexo.wkf.processeditor.gr.EdgeGR;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
@@ -150,13 +149,7 @@ public class WKFController extends FlexoController implements SelectionManagingC
 	public final FlexoPerspective WKF_INVADERS = new DocumentationPerspective(this, "wkf_invaders") {
 		@Override
 		public ModuleView<FlexoProcess> createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-			ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, process) {
-				@Override
-				public DrawingView<ProcessRepresentation> makeDrawingView(ProcessRepresentation drawing) {
-					// TODO Auto-generated method stub
-					return super.makeDrawingView(drawing);
-				}
-			};
+			ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, process);
 			return null;
 			// return new WKFInvaders(process,(WKFController)controller);
 		}

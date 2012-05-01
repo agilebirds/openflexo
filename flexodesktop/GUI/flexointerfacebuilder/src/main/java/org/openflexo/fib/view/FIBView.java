@@ -73,19 +73,24 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public void delete() {
-		logger.fine("Delete view for component " + getComponent());
-		for (FIBView v : subViews) {
-			v.delete();
+		if (isDeleted) {
+			return;
 		}
-		subViews.clear();
-		subViews = null;
-		isDeleted = true;
+		logger.fine("Delete view for component " + getComponent());
+		if (subViews != null) {
+			for (FIBView v : subViews) {
+				v.delete();
+			}
+			subViews.clear();
+			subViews = null;
+		}
 		if (controller != null) {
 			controller.unregisterView(this);
 		}
 		if (dynamicModel != null) {
 			dynamicModel.delete();
 		}
+		isDeleted = true;
 		component = null;
 		controller = null;
 	}

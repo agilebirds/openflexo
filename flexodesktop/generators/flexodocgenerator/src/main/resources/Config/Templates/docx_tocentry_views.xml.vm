@@ -20,7 +20,7 @@
                 <w:pStyle w:val="Heading${level}"/>
 			</w:pPr>
 			<w:r>
-				<w:t xml:space="preserve">$heading: ${view.getName()}</w:t>
+				<w:t xml:space="preserve">#escape("$heading: ${view.getName()}")</w:t>
             </w:r>
 		</w:p>
 		
@@ -45,36 +45,43 @@
                      #if(!$label)
                         #set($label = $entry.getLabel())
                      #end
-                     #set($h = "#escape($label)")
-                     #void($headers.add($h))
+                     #void($headers.add("#escape($label)"))
                 #end
             #end
 		    
 		    #set($tag = "w:p")
-		    #set($epis =$view.getEPInstances($pattern))
+		    #set($epis = $view.getEPInstances($pattern))
 		    #if($epis.size()>0)
-            #foreach($epi in $epis)
-              #set($row = $generator.getNewList())
-              #if($labelPath)
-	              #set($label = "#renderEPIWithTag($epi $labelPath $tag)")
-	              #void($row.add($label))
-              #end
-              #foreach($entry in $entries)
-                  #set($path = ${entry.getData().toString()})
-                  #void($row.add("#renderEPIWithTag($epi $path $tag)"))
-              #end
-              #void($rows.add($row))
-            #end
-            <w:p>
-                <w:pPr>
-                    <w:keepNext/>
-                    <w:pStyle w:val="Heading${subLevel}"/>
-                </w:pPr>
-                <w:r>
-                    <w:t>$heading</w:t>
-                </w:r>
-            </w:p>
-            #renderDocxTable2($headers $rows $falseValue)
+	                #foreach($epi in $epis)
+	                  #set($row = $generator.getNewList())
+	                  #if($labelPath)
+		                  #set($label = "#renderEPIWithTag($epi $labelPath $tag)")
+		                  #void($row.add($label))
+	                  #end
+	                  #foreach($entry in $entries)
+	                      #set($path = ${entry.getData().toString()})
+	                      #void($row.add("#renderEPIWithTag($epi $path $tag)"))
+	                  #end
+	                  #void($rows.add($row))
+	                #end
+	                <w:p>
+	                    <w:pPr>
+	                        <w:keepNext/>
+	                        <w:pStyle w:val="Heading${subLevel}"/>
+	                    </w:pPr>
+	                    <w:r>
+	                        <w:t>#escape($heading)</w:t>
+	                    </w:r>
+	                </w:p>
+		        #if($headers.size()>0)
+	                #renderDocxTable2($headers $rows $falseValue)
+	            #else
+	                <w:p>
+                        <w:r>
+                            <w:t>#escape("No relevant information to display.")</w:t>
+                        </w:r>
+                    </w:p>
+	            #end
             #end
 		#end
 	#end

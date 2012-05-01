@@ -99,7 +99,20 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 			}
 		});
 		contextualMenu.add(cutItem);
+		initPalette();
+	}
 
+	private void initPalette() {
+		// TODO Auto-generated method stub
+		_palette = new MyDrawingPalette();
+		registerPalette(_palette);
+		activatePalette(_palette);
+	}
+
+	private MyDrawingPalette _palette;
+
+	public MyDrawingPalette getPalette() {
+		return _palette;
 	}
 
 	public void addNewShape(MyShape aShape, MyDrawingElement father) {

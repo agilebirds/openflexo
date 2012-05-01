@@ -1,5 +1,5 @@
 #English
-#Mon Apr 23 00:52:01 CEST 2012
+#Thu Apr 26 14:13:49 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -5146,6 +5146,7 @@ would_you_like_to_check_your_project_consistency_first=Would you like to check y
 would_you_like_to_close_anyway=Would you like to close anyway?
 would_you_like_to_continue_anyway=Would you like to continue anyway
 would_you_like_to_convert_entire_project_to_new_version_of_flexo_(recommanded)=Would you like to convert entire project to new version of OpenFlexo (recommanded) ?
+would_you_like_to_create_it=Would you like to create it
 would_you_like_to_create_it_and_continue?=Would you like to create it and continue?
 would_you_like_to_cut_those_objects=Would you like to cut those objects ?
 would_you_like_to_delete_service_interface_used_in_ws_and_remove_it_from_ws=This interface is used in a web service. Would you really like to delete it? (The interface will be removed from the service))

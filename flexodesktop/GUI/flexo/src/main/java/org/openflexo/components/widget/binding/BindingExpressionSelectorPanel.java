@@ -56,6 +56,14 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 	private BindingExpressionPanel _expressionPanel;
 
 	@Override
+	public void delete() {
+		if (_expressionPanel != null) {
+			_expressionPanel.delete();
+			_expressionPanel = null;
+		}
+	}
+
+	@Override
 	public Dimension getDefaultSize() {
 		return new Dimension(520, 380);
 	}
@@ -200,8 +208,8 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 		BindingExpression bindingExpression = (BindingExpression) _bindingSelector.getEditedObject();
 
 		// Update apply button state
-		_applyButton.setEnabled((bindingExpression != null) && (bindingExpression.isBindingValid()));
-		if ((bindingExpression != null) && (bindingExpression.isBindingValid())) {
+		_applyButton.setEnabled(bindingExpression != null && bindingExpression.isBindingValid());
+		if (bindingExpression != null && bindingExpression.isBindingValid()) {
 			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				_applyButton.setSelected(true);
 			}

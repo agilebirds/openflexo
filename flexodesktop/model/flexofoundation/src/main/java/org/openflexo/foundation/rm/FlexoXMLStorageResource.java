@@ -162,6 +162,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			// already loaded
 			return _resourceData;
 		}
+		if (!isLoadable()) {
+			return null;
+		}
 		_isLoading = true;
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading") + " " + this.getName());

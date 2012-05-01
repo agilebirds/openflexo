@@ -54,7 +54,7 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 	protected FontDetailsPanel _selectorPanel;
 	protected FontSelectionModel _fsm;
 
-	public static Font DEFAULT_FONT = (new JPanel()).getFont();
+	public static Font DEFAULT_FONT = new JPanel().getFont();
 
 	public FontSelector(FontSelectionModel fsm) {
 		super(fsm.getSelectedFont() != null ? fsm.getSelectedFont() : DEFAULT_FONT);
@@ -66,6 +66,12 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 		setRevertValue(fsm.getSelectedFont());
 		setFocusable(true);
 		getFrontComponent().update();
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		_fsm.removeChangeListener(this);
 	}
 
 	@Override

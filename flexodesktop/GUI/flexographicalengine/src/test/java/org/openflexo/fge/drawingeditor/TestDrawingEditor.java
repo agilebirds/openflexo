@@ -232,7 +232,7 @@ public class TestDrawingEditor {
 		mainPanel.revalidate();
 		mainPanel.repaint();
 		paletteDialog.getContentPane().removeAll();
-		paletteDialog.getContentPane().add(drawing.getEditedDrawing().getPalette().getPaletteView());
+		paletteDialog.getContentPane().add(drawing.getEditedDrawing().getController().getPalette().getPaletteView());
 		paletteDialog.pack();
 	}
 

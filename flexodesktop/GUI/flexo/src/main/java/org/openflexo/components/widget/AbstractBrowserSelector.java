@@ -91,16 +91,15 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extend
 						_selectorPanel.processDownPressed();
 						e.consume();
 					}
-				} else if ((!e.isActionKey()) && (e.getKeyCode() != KeyEvent.VK_SHIFT) && (e.getKeyCode() != KeyEvent.VK_ENTER)
-						&& (e.getKeyCode() != KeyEvent.VK_CONTROL) && (e.getKeyCode() != KeyEvent.VK_META)
-						&& (e.getKeyCode() != KeyEvent.VK_TAB)) {
+				} else if (!e.isActionKey() && e.getKeyCode() != KeyEvent.VK_SHIFT && e.getKeyCode() != KeyEvent.VK_ENTER
+						&& e.getKeyCode() != KeyEvent.VK_CONTROL && e.getKeyCode() != KeyEvent.VK_META && e.getKeyCode() != KeyEvent.VK_TAB) {
 
 					// if command-key is pressed, do not open popup
 					if (e.isAltDown() || e.isAltGraphDown() || e.isControlDown() || e.isMetaDown()) {
 						return;
 					}
 
-					boolean requestFocus = (getTextField().hasFocus());
+					boolean requestFocus = getTextField().hasFocus();
 					final int selectionStart = getTextField().getSelectionStart() + 1;
 					final int selectionEnd = getTextField().getSelectionEnd() + 1;
 					getCustomPanel();
@@ -123,6 +122,14 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extend
 		};
 		getTextField().addKeyListener(completionListKeyAdapter);
 		_downButton.addMouseWheelListener(new BrowserSelectorMouseWheelListener());
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		setProject(null);
+		_rootObject = null;
+		_editor = null;
 	}
 
 	@Override
