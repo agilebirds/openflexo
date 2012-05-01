@@ -101,6 +101,14 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 
 	}
 
+	@Override
+	public void updateFont() {
+		super.updateFont();
+		if (getFont() != null) {
+			chooseButton.setFont(getFont());
+		}
+	}
+
 	protected void configureFileChooser(FlexoFileChooser chooser) {
 		if (!isDirectory) {
 			// System.out.println("Looking for files");
