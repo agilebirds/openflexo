@@ -23,10 +23,12 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
 import org.openflexo.diff.ComputeDiff;
 import org.openflexo.diff.ComputeDiff.DiffReport;
 import org.openflexo.diff.DiffSource;
@@ -142,7 +144,7 @@ public class TestRoundTrip extends CGTestCase {
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_RT, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");

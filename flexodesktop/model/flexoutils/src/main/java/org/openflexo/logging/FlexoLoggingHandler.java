@@ -30,7 +30,6 @@ public class FlexoLoggingHandler extends Handler {
 
 	public FlexoLoggingHandler() {
 		super();
-		FlexoLoggingManager.setFlexoLoggingHandler(this);
 	}
 
 	/*
@@ -40,15 +39,16 @@ public class FlexoLoggingHandler extends Handler {
 	 */
 	@Override
 	public void publish(java.util.logging.LogRecord record) {
-		if (FlexoLoggingManager.isInitialized()) {
-			org.openflexo.logging.LogRecord flexoRecord = new org.openflexo.logging.LogRecord(record);
-			FlexoLoggingManager.logRecords.add(flexoRecord);
+		if (FlexoLoggingManager.instance(this) != null) {
+			org.openflexo.logging.LogRecord flexoRecord = new org.openflexo.logging.LogRecord(record, FlexoLoggingManager.instance(this));
+			FlexoLoggingManager.instance(this).logRecords.add(flexoRecord, FlexoLoggingManager.instance());
 		}
 	}
 
 	public void publishUnhandledException(java.util.logging.LogRecord record, Exception e) {
-		if (FlexoLoggingManager.isInitialized()) {
-			FlexoLoggingManager.logRecords.add(new org.openflexo.logging.LogRecord(record, e));
+		if (FlexoLoggingManager.instance(this) != null) {
+			FlexoLoggingManager.instance(this).logRecords.add(
+					new org.openflexo.logging.LogRecord(record, e, FlexoLoggingManager.instance(this)), FlexoLoggingManager.instance());
 		}
 	}
 

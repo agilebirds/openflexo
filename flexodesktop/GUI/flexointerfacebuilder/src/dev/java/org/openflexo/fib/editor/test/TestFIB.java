@@ -20,6 +20,7 @@
 package org.openflexo.fib.editor.test;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
@@ -87,9 +88,7 @@ public class TestFIB extends JPanel {
 	public static void main(String[] args) {
 		try {
 			ToolBox.setPlatform();
-			FlexoLoggingManager.initialize();
-			FlexoLoggingManager.setKeepLogTrace(true);
-			FlexoLoggingManager.setLogCount(-1);
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

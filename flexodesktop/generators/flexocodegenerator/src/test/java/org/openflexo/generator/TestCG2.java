@@ -21,9 +21,13 @@ package org.openflexo.generator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DefaultFlexoEditor;
@@ -73,9 +77,6 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 public class TestCG2 extends CGTestCase {
 
 	public TestCG2(String arg0) {
@@ -112,7 +113,7 @@ public class TestCG2 extends CGTestCase {
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_CG2, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");

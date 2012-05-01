@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
@@ -62,6 +63,7 @@ import org.openflexo.fib.editor.controller.FIBInspectorController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Layout;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -225,9 +227,7 @@ public class FIBEditor implements FIBGenericEditor {
 
 		try {
 			ToolBox.setPlatform();
-			FlexoLoggingManager.initialize();
-			FlexoLoggingManager.setKeepLogTrace(true);
-			FlexoLoggingManager.setLogCount(-1);
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 			FlexoLocalization.initWith(FIBAbstractEditor.LOCALIZATION);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
@@ -698,7 +698,7 @@ public class FIBEditor implements FIBGenericEditor {
 			logsItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					FlexoLoggingManager.showLoggingViewer();
+					FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
 				}
 			});
 

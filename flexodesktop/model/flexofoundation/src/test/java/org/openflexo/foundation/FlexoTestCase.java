@@ -110,7 +110,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	static {
 		try {
-			FlexoLoggingManager.initialize();
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -191,7 +191,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected FlexoEditor createProject(String projectName, FlexoResourceCenter resourceCenter) {
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		File _projectDirectory = null;
 		try {
 			File tempFile = File.createTempFile(projectName, "");

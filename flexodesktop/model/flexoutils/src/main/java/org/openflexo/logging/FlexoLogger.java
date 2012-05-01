@@ -33,23 +33,18 @@ public class FlexoLogger extends Logger {
 	}
 
 	public void unhandledException(Exception e) {
-		System.out.println("unhandledException " + e);
 		FlexoLoggingHandler flexoLoggingHandler = getFlexoLoggingHandler();
 		if (flexoLoggingHandler != null) {
-			System.out.println("hop-1 " + e);
 			flexoLoggingHandler.publishUnhandledException(new java.util.logging.LogRecord(java.util.logging.Level.WARNING,
 					"Unhandled exception occured: " + e.getClass().getName()), e);
 		} else {
-			System.out.println("hop-2 " + e);
 			warning("Unexpected exception occured: " + e.getClass().getName());
 		}
 	}
 
 	public FlexoLoggingHandler getFlexoLoggingHandler() {
-		System.out.println("getFlexoLoggingHandler");
 		Handler[] handlers = getHandlers();
 		for (int i = 0; i < handlers.length; i++) {
-			System.out.println("Handler: " + handlers[i].getClass().getName());
 			if (handlers[i] instanceof FlexoLoggingHandler) {
 				return (FlexoLoggingHandler) handlers[i];
 			}

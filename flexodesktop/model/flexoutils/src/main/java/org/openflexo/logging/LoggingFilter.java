@@ -3,6 +3,8 @@ package org.openflexo.logging;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.toolbox.StringUtils;
+
 public class LoggingFilter {
 
 	static final Logger logger = Logger.getLogger(LoggingFilter.class.getPackage().getName());
@@ -129,6 +131,9 @@ public class LoggingFilter {
 	}
 
 	private boolean messageMatches(LogRecord record) {
+		if (StringUtils.isEmpty(record.message)) {
+			return true;
+		}
 		switch (messageFilterType) {
 		case Contains:
 			if (record.message.contains(filteredContent)) {

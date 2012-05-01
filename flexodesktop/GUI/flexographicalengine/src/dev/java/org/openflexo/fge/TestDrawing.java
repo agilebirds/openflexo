@@ -32,6 +32,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
@@ -51,6 +52,7 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.ShapeView;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.inspector.selection.MultipleSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
@@ -64,9 +66,7 @@ public class TestDrawing {
 
 	public static void main(String[] args) {
 		try {
-			FlexoLoggingManager.initialize();
-			FlexoLoggingManager.setKeepLogTrace(true);
-			FlexoLoggingManager.setLogCount(-1);
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -175,7 +175,7 @@ public class TestDrawing {
 		logButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingManager.showLoggingViewer();
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
 			}
 		});
 

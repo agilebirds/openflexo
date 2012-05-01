@@ -37,6 +37,7 @@ import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.validation.ConsistencyCheckDialog;
 import org.openflexo.drm.DocResourceManager;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoObservable;
@@ -52,7 +53,6 @@ import org.openflexo.foundation.validation.ValidationSecondaryProgressNotificati
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.logging.LoggingConfigurationWindow;
 import org.openflexo.module.AutoSaveService;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
@@ -88,8 +88,6 @@ public class ToolsMenu extends FlexoMenu {
 
 	public JMenuItem timeTraveler;
 
-	public LogConfiguratorItem logConfig;
-
 	public SaveDocSubmissionItem saveDocSubmissions;
 
 	public ToolsMenu(FlexoController controller) {
@@ -111,10 +109,6 @@ public class ToolsMenu extends FlexoMenu {
 			add(repairProject = new RepairProjectItem());
 		}
 		add(timeTraveler = new TimeTraveler());
-		addSeparator();
-		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
-			add(logConfig = new LogConfiguratorItem());
-		}
 	}
 
 	public void addSpecificItems() {
@@ -141,9 +135,8 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			FlexoLoggingManager.showLoggingViewer();
+			FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
 		}
-
 	}
 
 	// ==========================================================================
@@ -174,30 +167,6 @@ public class ToolsMenu extends FlexoMenu {
 	// ===================================================
 	// ================== Licence Manager ===============
 	// ===================================================
-
-	// ===================================================
-	// ================== Log Config =====================
-	// ===================================================
-
-	public class LogConfiguratorItem extends FlexoMenuItem {
-
-		public LogConfiguratorItem() {
-			super(new LogConfiguratorAction(), "Configure logging...", null, getController(), true);
-		}
-
-	}
-
-	public class LogConfiguratorAction extends AbstractAction {
-		public LogConfiguratorAction() {
-			super();
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			new LoggingConfigurationWindow().askLoggingConfiguration();
-		}
-
-	}
 
 	// ===================================================
 	// ================== Resource Manager ===============

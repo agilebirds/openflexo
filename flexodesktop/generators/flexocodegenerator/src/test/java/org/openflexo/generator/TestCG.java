@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import junit.framework.Test;
@@ -149,7 +150,7 @@ public class TestCG extends CGTestCase {
 	public void test0CreateProject() {
 		log("test0CreateProject");
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_CG, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");

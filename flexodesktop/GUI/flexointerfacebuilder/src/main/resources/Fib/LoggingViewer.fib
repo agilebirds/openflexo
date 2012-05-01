@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" borderTop="5" borderLeft="0" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.logging.FlexoLoggingViewer" width="1000" height="600" name="LocalizedEditor">
+<Panel layout="gridbag" borderTop="5" borderLeft="0" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.fib.utils.FlexoLoggingViewer" width="1000" height="700" name="LocalizedEditor">
   <TabPanel constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
     <Tab index="1" title="logs" layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0">
       <Panel layout="gridbag" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="LucidaGrande,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,11">
@@ -9,15 +9,15 @@
         <Button action="data.dismissSearchText()" buttonType="Trigger" label="done" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.records.textSearchApplied" name="DoneButton" localize="true" />
       </Panel>
       <Table iteratorClassName="org.openflexo.logging.LogRecord" visibleRowCount="5" rowHeight="16" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="LogsTable" data="data.records.records" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=4.0;x=0;y=0)" font="Lucida Grande,0,11">
-        <IconColumn data="data.getIconForLogRecord(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
-        <LabelColumn data="iterator.message" title="message" columnWidth="500" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" name="label" />
-        <LabelColumn data="iterator.logger" title="package" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" name="label" />
-        <LabelColumn data="iterator.classAsString" title="class" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" name="label" />
-        <LabelColumn data="iterator.methodName" title="method" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" name="label" />
-        <LabelColumn data="iterator.sequenceAsString" title="seq" columnWidth="30" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" name="label" />
-        <LabelColumn data="iterator.dateAsString" title="date" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" name="label" />
-        <LabelColumn data="iterator.millisAsString" title="millis" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" name="label" />
-        <LabelColumn data="iterator.threadAsString" title="thread" columnWidth="50" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" name="label" />
+        <IconColumn data="data.getIconForLogRecord(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" bgColor="data.getBgColorForLogRecord(iterator)" name="icon" />
+        <LabelColumn data="iterator.message" title="message" columnWidth="500" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" bgColor="data.getBgColorForLogRecord(iterator)" name="label" />
+        <LabelColumn data="iterator.logger" title="package" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" bgColor="data.getBgColorForLogRecord(iterator)" name="label" />
+        <LabelColumn data="iterator.classAsString" title="class" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" bgColor="data.getBgColorForLogRecord(iterator)" name="label" />
+        <LabelColumn data="iterator.methodName" title="method" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" bgColor="data.getBgColorForLogRecord(iterator)" name="label" />
+        <LabelColumn data="iterator.sequenceAsString" title="seq" columnWidth="30" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" bgColor="data.getBgColorForLogRecord(iterator)" name="label" />
+        <LabelColumn data="iterator.dateAsString" title="date" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" bgColor="data.getBgColorForLogRecord(iterator)" name="label" />
+        <LabelColumn data="iterator.millisAsString" title="millis" columnWidth="80" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" bgColor="data.getBgColorForLogRecord(iterator)" name="label" />
+        <LabelColumn data="iterator.threadAsString" title="thread" columnWidth="50" resizable="true" displayTitle="true" color="data.getColorForLogRecord(iterator)" bgColor="data.getBgColorForLogRecord(iterator)" name="label" />
         <AddAction method="data.addEntry" name="add" />
         <RemoveAction method="data.deleteEntry(selected)" name="remove" />
         <CustomAction method="data.refresh()" name="refresh" />
@@ -76,9 +76,15 @@
         <Label label="configuration" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
         <RadioButtonList localize="true" name="DefaultCustomChoice" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="use_default_logging_configuration,use_a_custom_logging_configuration" iteratorClassName="java.lang.String" autoSelectFirstRow="true" />
         <Label label="configuration_file" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(DefaultCustomChoice.selectedIndex = 1)" />
-        <File isDirectory="false" data="data.configurationFile" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(DefaultCustomChoice.selectedIndex = 1)" localize="true" />
-        <Label label="log_level" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(DefaultCustomChoice.selectedIndex = 0)" />
-        <RadioButtonList format="(object.toString + &quot;_description&quot;)" localize="true" name="PaletteRadioButtonList" data="data.logLevel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(DefaultCustomChoice.selectedIndex = 0)" staticList="" array="data.availableLevels" iteratorClassName="java.util.logging.Level" autoSelectFirstRow="true" />
+        <Label label="default_configuration_file" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(DefaultCustomChoice.selectedIndex = 0)" />
+        <File isDirectory="false" data="data.configurationFile" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(DefaultCustomChoice.selectedIndex = 0)" localize="true" enable="false" />
+        <Label label="log_level" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(DefaultCustomChoice.selectedIndex = 0)" />
+        <RadioButtonList format="(object.toString + &quot;_description&quot;)" localize="true" name="PaletteRadioButtonList" data="data.logLevel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(DefaultCustomChoice.selectedIndex = 0)" staticList="" array="data.availableLevels" iteratorClassName="java.util.logging.Level" autoSelectFirstRow="true" />
+        <Panel layout="border" borderTitle="Panel" titleFont="LucidaGrande,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(DefaultCustomChoice.selectedIndex = 1)">
+          <File isDirectory="false" data="data.configurationFile" constraints="border(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" localize="true" />
+          <Button buttonType="Trigger" label="reload" constraints="border(location=east)" localize="true" />
+          <LocalizedDictionary />
+        </Panel>
       </Panel>
       <Panel layout="twocols" border="rounded3d" borderTitle="Open logs file..." borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Dialog,1,11" darkLevel="1" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
         <File isDirectory="false" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
@@ -420,6 +426,18 @@
     <Localized key="filter_sequence" lang="English">filter_sequence</Localized>
     <Localized key="filter_sequence" lang="French">filter_sequence</Localized>
     <Localized key="filter_sequence" lang="Dutch">filter_sequence</Localized>
+    <Localized key="default_configuration_file" lang="English">Default configuration file</Localized>
+    <Localized key="default_configuration_file" lang="French">Fichier de configuration par défaut</Localized>
+    <Localized key="default_configuration_file" lang="Dutch">Default configuration file</Localized>
+    <Localized key="reload" lang="English">Reload</Localized>
+    <Localized key="reload" lang="French">Recharger</Localized>
+    <Localized key="reload" lang="Dutch">Reload</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="OnlyKeep" lang="English">OnlyKeep</Localized>
+    <Localized key="OnlyKeep" lang="French">OnlyKeep</Localized>
+    <Localized key="OnlyKeep" lang="Dutch">OnlyKeep</Localized>
   </LocalizedDictionary>
 </Panel>
 

@@ -21,6 +21,7 @@ package org.openflexo.foundation.cg;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
@@ -56,7 +57,7 @@ public class TestCGFoundation extends FlexoTestCase {
 	public void test0CreateProject() {
 		logger.info("test0CreateProject");
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_CG, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");

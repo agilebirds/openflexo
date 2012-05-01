@@ -21,7 +21,7 @@ package org.openflexo.fib.editor;
 
 import java.io.File;
 
-import org.openflexo.fib.localization.LocalizedDelegateGUIImpl;
+import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 
 public class LocalizedEditorEDITOR {
 

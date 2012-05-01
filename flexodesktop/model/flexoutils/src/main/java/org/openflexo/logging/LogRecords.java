@@ -25,22 +25,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.logging.LoggingFilter.FilterType;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * This class is used to encode all log records of a session (current or expired) of Flexo. An instance of LogRecords can be represented in
- * a FlexoLoggingViewerWindow.
+ * This class is used to encode all log records of a session (current or expired) of Flexo.<br>
+ * An instance of LogRecords can be represented in a FlexoLoggingViewer.
  * 
  * @author sguerin
  */
-public class LogRecords extends KVCObject implements XMLSerializable, TableModel, HasPropertyChangeSupport {
+public class LogRecords extends KVCObject implements XMLSerializable, HasPropertyChangeSupport {
 
 	private LinkedList<LogRecord> allRecords;
 	private ArrayList<LogRecord> filteredRecords = new ArrayList<LogRecord>();
@@ -54,8 +50,6 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 	private int warningCount = 0;
 	private int severeCount = 0;
 
-	private DefaultTableModel model;
-
 	private boolean filtersApplied = false;
 	private boolean textSearchApplied = false;
 
@@ -66,7 +60,6 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 		pcSupport = new PropertyChangeSupport(this);
 		allRecords = new LinkedList<LogRecord>();
 		records = allRecords;
-		model = new DefaultTableModel();
 	}
 
 	@Override
@@ -79,9 +72,9 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 		return null;
 	}
 
-	public void add(LogRecord record) {
+	public void add(LogRecord record, FlexoLoggingManager loggingManager) {
 		synchronized (allRecords) {
-			if (FlexoLoggingManager.getLogCount() > -1 && allRecords.size() > FlexoLoggingManager.getLogCount()) {
+			if (loggingManager.getMaxLogCount() > -1 && allRecords.size() > loggingManager.getMaxLogCount()) {
 				allRecords.remove(0);
 			}
 			allRecords.add(record);
@@ -93,13 +86,13 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 			}
 			totalLogs++;
 		}
-		model.fireTableDataChanged();
 	}
 
 	public LogRecord elementAt(int row) {
 		return allRecords.get(row);
 	}
 
+	/*
 	@Override
 	public int getRowCount() {
 		return allRecords.size();
@@ -136,31 +129,16 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.table.TableModel#getColumnClass(int)
-	 */
 	@Override
 	public Class<String> getColumnClass(int arg0) {
 		return String.class;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
-	 */
 	@Override
 	public boolean isCellEditable(int arg0, int arg1) {
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.table.TableModel#getValueAt(int, int)
-	 */
 	@Override
 	public Object getValueAt(int row, int col) {
 		LogRecord record = allRecords.get(row);
@@ -188,36 +166,22 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
-	 */
 	@Override
 	public void setValueAt(Object arg0, int arg1, int arg2) {
 		// do nothing : a log record is not editable
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.table.TableModel#addTableModelListener(javax.swing.event.TableModelListener)
-	 */
 	@Override
 	public void addTableModelListener(TableModelListener arg0) {
 		model.addTableModelListener(arg0);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.table.TableModel#removeTableModelListener(javax.swing.event.TableModelListener)
-	 */
 	@Override
 	public void removeTableModelListener(TableModelListener arg0) {
 		model.removeTableModelListener(arg0);
 	}
+	*/
 
 	public List<LogRecord> getRecords() {
 		return records;

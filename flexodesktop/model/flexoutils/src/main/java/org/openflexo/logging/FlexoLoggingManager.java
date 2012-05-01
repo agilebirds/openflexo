@@ -21,12 +21,12 @@ package org.openflexo.logging;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.openflexo.logging.viewer.FlexoLoggingViewerWindow;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
@@ -34,57 +34,94 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.xml.sax.SAXException;
 
 /**
- * Flexo logging manager: manages logs for the application above java.util.logging Also read and parse logs of an expired session of Flexo
+ * Flexo logging manager: manages logs for the application above java.util.logging<br>
+ * Also read and parse logs of an expired session of Flexo
  * 
  * @author sguerin
  */
 public class FlexoLoggingManager {
 
+	static final Logger logger = Logger.getLogger(FlexoLoggingManager.class.getPackage().getName());
+
 	private static XMLMapping _loggingMapping = null;
+	private static FlexoLoggingManager _instance;
 
-	private static boolean _isInitialized = false;
+	public LogRecords logRecords = null;
 
-	private static boolean _isLoggingWindowShowed = false;
+	private FlexoLoggingHandler _flexoLoggingHandler;
 
-	public static LogRecords logRecords = null;
+	private LoggingManagerDelegate _delegate;
 
-	private static FlexoLoggingViewerWindow viewer = null;
+	private boolean _keepLogTrace;
+	private int _maxLogCount;
+	private Level _loggingLevel;
+	private String _configurationFile;
 
-	private static FlexoLoggingHandler _flexoLoggingHandler;
+	public static interface LoggingManagerDelegate {
+		public void setKeepLogTrace(boolean logTrace);
 
-	public static void forceInitialize() {
-		try {
-			initialize();
-		} catch (Exception e) {
-			e.printStackTrace();
-			_isInitialized = true;
-			_isLoggingWindowShowed = false;
-			logRecords = new LogRecords();
-			viewer = null;
-		}
+		public void setMaxLogCount(Integer maxLogCount);
+
+		public void setDefaultLoggingLevel(Level lev);
+
+		public void setConfigurationFileName(String configurationFile);
 	}
 
-	public static void initialize() throws SecurityException, IOException {
-		File f = new File(System.getProperty("user.home"), "Library/Logs/Flexo/");
-		if (!f.exists()) {
-			f.mkdirs();
+	public static FlexoLoggingManager initialize(int numberOfLogsToKeep, boolean keepLogTraceInMemory, File configurationFile,
+			Level logLevel, LoggingManagerDelegate delegate) throws SecurityException, IOException {
+		if (isInitialized()) {
+			return _instance;
 		}
-		_isLoggingWindowShowed = false;
-		logRecords = new LogRecords();
-		viewer = null;
-		LogManager.getLogManager().readConfiguration();
-		_isInitialized = true;
+		return forceInitialize(numberOfLogsToKeep, keepLogTraceInMemory, configurationFile, logLevel, delegate);
+	}
+
+	public static FlexoLoggingManager forceInitialize(int numberOfLogsToKeep, boolean keepLogTraceInMemory, File configurationFile,
+			Level logLevel, LoggingManagerDelegate delegate) {
+		_instance = new FlexoLoggingManager();
+		_instance._delegate = delegate;
+		_instance._maxLogCount = numberOfLogsToKeep;
+		_instance._keepLogTrace = keepLogTraceInMemory;
+		_instance._loggingLevel = logLevel;
+		if (configurationFile != null) {
+			_instance._configurationFile = configurationFile.getAbsolutePath();
+			File f = new File(System.getProperty("user.home"), "Library/Logs/Flexo/");
+			if (!f.exists()) {
+				f.mkdirs();
+			}
+		}
+		_instance.logRecords = new LogRecords();
+		try {
+			LogManager.getLogManager().readConfiguration();
+		} catch (SecurityException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning(e.getMessage());
+			}
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning(e.getMessage());
+			}
+		}
+		return _instance;
 	}
 
 	public static boolean isInitialized() {
-		return _isInitialized;
+		return _instance != null;
 	}
 
-	public static boolean isLoggingWindowShowed() {
-		return _isLoggingWindowShowed;
+	public static FlexoLoggingManager instance() {
+		return _instance;
 	}
 
-	public static void unhandledException(Exception e) {
+	public static FlexoLoggingManager instance(FlexoLoggingHandler handler) {
+		if (_instance != null) {
+			_instance.setFlexoLoggingHandler(handler);
+		}
+		return _instance;
+	}
+
+	public void unhandledException(Exception e) {
 		FlexoLoggingHandler flexoLoggingHandler = getFlexoLoggingHandler();
 		if (flexoLoggingHandler != null) {
 			flexoLoggingHandler.publishUnhandledException(new java.util.logging.LogRecord(java.util.logging.Level.WARNING,
@@ -94,11 +131,11 @@ public class FlexoLoggingManager {
 		}
 	}
 
-	public static void setFlexoLoggingHandler(FlexoLoggingHandler handler) {
+	public void setFlexoLoggingHandler(FlexoLoggingHandler handler) {
 		_flexoLoggingHandler = handler;
 	}
 
-	public static FlexoLoggingHandler getFlexoLoggingHandler() {
+	public FlexoLoggingHandler getFlexoLoggingHandler() {
 		return _flexoLoggingHandler;
 	}
 
@@ -125,13 +162,7 @@ public class FlexoLoggingManager {
 		return _loggingMapping;
 	}
 
-	public static void showLoggingViewer() {
-		viewer = new FlexoLoggingViewerWindow(logRecords);
-		_isLoggingWindowShowed = true;
-		viewer.setVisible(true);
-	}
-
-	public static String logsReport() {
+	public String logsReport() {
 		try {
 			return XMLCoder.encodeObjectWithMapping(logRecords, getLoggingMapping(), StringEncoder.getDefaultInstance());
 		} catch (Exception e) {
@@ -140,24 +171,91 @@ public class FlexoLoggingManager {
 		}
 	}
 
-	private static boolean _keepLogTrace;
-
-	public static boolean getKeepLogTrace() {
+	public boolean getKeepLogTrace() {
 		return _keepLogTrace;
 	}
 
-	public static void setKeepLogTrace(boolean logTrace) {
+	public void setKeepLogTrace(boolean logTrace) {
 		_keepLogTrace = logTrace;
+		if (_delegate != null) {
+			_delegate.setKeepLogTrace(logTrace);
+		}
 	}
 
-	private static int _logCount;
-
-	public static void setLogCount(Integer logCount) {
-		_logCount = logCount;
+	public int getMaxLogCount() {
+		return _maxLogCount;
 	}
 
-	public static int getLogCount() {
-		return _logCount;
+	public void setMaxLogCount(Integer maxLogCount) {
+		_maxLogCount = maxLogCount;
+		if (_delegate != null) {
+			_delegate.setMaxLogCount(maxLogCount);
+		}
+	}
+
+	public Level getDefaultLoggingLevel() {
+		return _loggingLevel;
+	}
+
+	public void setDefaultLoggingLevel(Level lev) {
+		_loggingLevel = lev;
+		if (_delegate != null) {
+			_delegate.setDefaultLoggingLevel(lev);
+		}
+		String fileName = "SEVERE";
+		if (lev == Level.SEVERE) {
+			fileName = "SEVERE";
+		}
+		if (lev == Level.WARNING) {
+			fileName = "WARNING";
+		}
+		if (lev == Level.INFO) {
+			fileName = "INFO";
+		}
+		if (lev == Level.FINE) {
+			fileName = "FINE";
+		}
+		if (lev == Level.FINER) {
+			fileName = "FINER";
+		}
+		if (lev == Level.FINEST) {
+			fileName = "FINEST";
+		}
+		File newConfigurationFile = new FileResource("Config/logging_" + fileName + ".properties");
+		_configurationFile = newConfigurationFile.getAbsolutePath();
+		if (_delegate != null) {
+			_delegate.setConfigurationFileName(_configurationFile);
+		}
+		reloadLoggingFile(newConfigurationFile.getAbsolutePath());
+	}
+
+	public String getConfigurationFileName() {
+		return _configurationFile;
+	}
+
+	public void setConfigurationFileName(String configurationFile) {
+		_configurationFile = configurationFile;
+		if (_delegate != null) {
+			_delegate.setConfigurationFileName(configurationFile);
+		}
+		reloadLoggingFile(configurationFile);
+	}
+
+	private boolean reloadLoggingFile(String filePath) {
+		logger.info("reloadLoggingFile with " + filePath);
+		System.setProperty("java.util.logging.config.file", filePath);
+		try {
+			LogManager.getLogManager().readConfiguration();
+		} catch (SecurityException e) {
+			logger.warning("The specified logging configuration file can't be read (not enough privileges).");
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			logger.warning("The specified logging configuration file cannot be read.");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 }

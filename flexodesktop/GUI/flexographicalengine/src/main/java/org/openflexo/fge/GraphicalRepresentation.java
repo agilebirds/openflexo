@@ -66,7 +66,7 @@ import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.fge.notifications.LabelWillMove;
-import org.openflexo.fib.localization.LocalizedDelegateGUIImpl;
+import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.inspector.DefaultInspectableObject;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;

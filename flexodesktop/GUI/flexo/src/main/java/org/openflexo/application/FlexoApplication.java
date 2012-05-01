@@ -53,7 +53,6 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.logging.viewer.FlexoLoggingViewerWindow;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
@@ -147,8 +146,6 @@ public class FlexoApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		FlexoLoggingViewerWindow.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
-		// LocalizedEditor.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
 		InspectorCst.BACK_COLOR = ColorCst.GUI_BACK_COLOR;
 		FlexoModelObject.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
 		AdvancedPrefs.getEnableUndoManager(); // just load advanced prefs
@@ -240,7 +237,7 @@ public class FlexoApplication {
 					// all uncaught awt thread exceptions will ultimately be
 					// caught here
 					if (exception instanceof Exception) {
-						FlexoLoggingManager.unhandledException((Exception) exception);
+						FlexoLoggingManager.instance().unhandledException((Exception) exception);
 					}
 					// FlexoLoggingManager.getMainLogger().unhandledException(exception);
 					if (logger.isLoggable(Level.SEVERE)) {
