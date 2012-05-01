@@ -76,7 +76,7 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
 		logger.info("Create EditionPatternInstance using CreationScheme");
 
-		getEditionPattern().getCalc().getCalcOntology().loadWhenUnloaded();
+		getEditionPattern().getCalc().getViewpointOntology().loadWhenUnloaded();
 
 		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 

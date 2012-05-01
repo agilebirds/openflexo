@@ -147,7 +147,7 @@ public class TestOntologies extends FlexoTestCase {
 		thesaurusEditorCalc.loadWhenUnloaded();
 
 		try {
-			_project.getProjectOntology().importOntology(basicOrganizationTreeEditorCalc.getCalcOntology());
+			_project.getProjectOntology().importOntology(basicOrganizationTreeEditorCalc.getViewpointOntology());
 		} catch (OntologyNotFoundException e) {
 			fail(e.getMessage());
 		}

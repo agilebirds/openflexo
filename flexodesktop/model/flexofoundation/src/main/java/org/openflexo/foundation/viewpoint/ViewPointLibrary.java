@@ -104,15 +104,15 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		return calcs;
 	}
 
-	public ViewPoint importViewPoint(File calcDirectory, ViewPointFolder folder) {
-		logger.info("Import view point " + calcDirectory.getAbsolutePath());
-		ViewPoint calc = ViewPoint.openViewPoint(calcDirectory, this, folder);
-		if (calc != null) {
-			registerViewPoint(calc);
-			return calc;
+	public ViewPoint importViewPoint(File viewpointDirectory, ViewPointFolder folder) {
+		logger.info("********* Import viewpoint " + viewpointDirectory.getAbsolutePath());
+		ViewPoint viewpoint = ViewPoint.openViewPoint(viewpointDirectory, this, folder);
+		if (viewpoint != null) {
+			registerViewPoint(viewpoint);
+			return viewpoint;
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Coult not open VP in " + calcDirectory.getAbsolutePath());
+				logger.warning("Coult not open VP in " + viewpointDirectory.getAbsolutePath());
 			}
 			return null;
 		}
