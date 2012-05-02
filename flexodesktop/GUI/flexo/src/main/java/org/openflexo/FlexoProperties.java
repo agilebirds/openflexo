@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.properties;
+package org.openflexo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,14 +26,13 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.ScenarioRecorder;
 
 /**
- * This class is intented to modelize preferences of Flexo application To be accessed through all the application, all methods are
- * statically defined.
+ * This class is intented to modelize preferences of Flexo application<br>
+ * To be accessed through all the application, all methods are statically defined.
  * 
  * @author sguerin
  */
@@ -137,7 +136,6 @@ public class FlexoProperties {
 
 	public void setIsLoggingTrace(boolean b) {
 		applicationProperties.setProperty(KEEPLOGTRACE, b ? "true" : "false");
-		FlexoLoggingManager.setKeepLogTrace(b);
 	}
 
 	public int getMaxLogCount() {
@@ -146,7 +144,6 @@ public class FlexoProperties {
 
 	public void setMaxLogCount(int c) {
 		applicationProperties.setProperty(LOGCOUNT, String.valueOf(c));
-		FlexoLoggingManager.setLogCount(c);
 	}
 
 	public boolean getAllowsDocSubmission() {
@@ -157,8 +154,8 @@ public class FlexoProperties {
 		applicationProperties.setProperty(ALLOWSDOCSUBMISSION, String.valueOf(b));
 	}
 
-	public static void load() {
-		instance();
+	public static FlexoProperties load() {
+		return instance();
 	}
 
 	public static FlexoProperties instance() {

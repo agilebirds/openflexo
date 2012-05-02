@@ -235,7 +235,7 @@ public class TestPDF extends DGTestCase {
 
 		log("Build PDF: " + name + " for target " + docTypeString);
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		File outputDir = null;
 		try {
 			File f = File.createTempFile("TestPDFBuilding_", null);

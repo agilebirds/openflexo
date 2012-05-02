@@ -84,13 +84,18 @@
               <Assignment variable="component.bindable" value="ColumnsTable.selected" />
               <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.valueChangedActionBindingDefinition" />
             </Custom>
-            <Label label="specific_color" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <Label label="foreground_color" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
             <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ColumnsTable.selected.color.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
               <Assignment variable="component.bindable" value="ColumnsTable.selected" />
               <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.colorBindingDefinition" />
             </Custom>
-            <Label label="define_specific_font" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-			<Panel layout="flow" border="none" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=21;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)">
+            <Label label="background_color" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ColumnsTable.selected.bgColor.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" manageDynamicModel="true">
+              <Assignment variable="component.bindable" value="ColumnsTable.selected" />
+              <Assignment variable="component.bindingDefinition" value="ColumnsTable.selected.bgColorBindingDefinition" />
+            </Custom>
+            <Label label="define_specific_font" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+			<Panel layout="flow" border="none" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=23;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)">
     		      <CheckBox data="ColumnsTable.selected.hasSpecificFont"  />
     		      <Font data="ColumnsTable.selected.font" enable="ColumnsTable.selected != null &amp; ColumnsTable.selected.hasSpecificFont" localize="true" />
  			</Panel>

@@ -307,6 +307,7 @@
     <property name="displayTitle" xmlTag="displayTitle" attribute="YES"/> 
     <property name="font" xmlTag="font" attribute="YES"/> 
     <property name="color" xmlTag="color" attribute="YES"/> 
+    <property name="bgColor" xmlTag="bgColor" attribute="YES"/> 
     <property name="tooltip" xmlTag="tooltip" attribute="YES"/> 
     <property name="tooltipText" xmlTag="tooltipText" attribute="YES"/> 
     <property name="valueChangedAction" xmlTag="valueChangedAction" attribute="YES"/> 

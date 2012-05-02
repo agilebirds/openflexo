@@ -72,14 +72,14 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> im
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), getSelectedFont())) {
-			if (isReadOnly()) {
-				return false;
-			}
-			setValue(_selector.getEditedObject());
-			return true;
+		// if (notEquals(getValue(), getSelectedFont())) {
+		if (isReadOnly()) {
+			return false;
 		}
-		return false;
+		setValue(_selector.getEditedObject());
+		return true;
+		// }
+		// return false;
 	}
 
 	@Override

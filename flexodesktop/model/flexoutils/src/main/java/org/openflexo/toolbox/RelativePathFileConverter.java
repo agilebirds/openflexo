@@ -20,7 +20,9 @@ public class RelativePathFileConverter extends Converter<File> {
 
 	@Override
 	public File convertFromString(String value) {
-		logger.info("********* convertFromString " + value + " return " + (new File(relativePath, value)).getAbsolutePath());
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("********* convertFromString " + value + " return " + (new File(relativePath, value)).getAbsolutePath());
+		}
 		return new File(relativePath, value);
 	}
 

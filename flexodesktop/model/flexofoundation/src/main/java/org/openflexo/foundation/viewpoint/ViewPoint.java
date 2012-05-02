@@ -64,7 +64,7 @@ public class ViewPoint extends ViewPointObject {
 	private Vector<EditionPattern> editionPatterns;
 	private LocalizedDictionary localizedDictionary;
 
-	private ImportedOntology calcOntology;
+	private ImportedOntology viewpointOntology;
 
 	private Vector<ViewPointPalette> palettes;
 	private Vector<ExampleDrawingShema> shemas;
@@ -131,15 +131,15 @@ public class ViewPoint extends ViewPointObject {
 		}
 	}
 
-	public static ViewPoint newViewPoint(String baseName, String calcURI, File owlFile, File calcDir, ViewPointLibrary library,
+	public static ViewPoint newViewPoint(String baseName, String viewpointURI, File owlFile, File viewpointDir, ViewPointLibrary library,
 			ViewPointFolder folder) {
-		File xmlFile = new File(calcDir, baseName + ".xml");
-		ViewPoint calc = new ViewPoint();
-		calc.owlFile = owlFile;
-		calc._setViewPointURI(calcURI);
-		calc.init(baseName, calcDir, xmlFile, library, folder);
-		calc.save();
-		return calc;
+		File xmlFile = new File(viewpointDir, baseName + ".xml");
+		ViewPoint viewpoint = new ViewPoint();
+		viewpoint.owlFile = owlFile;
+		viewpoint._setViewPointURI(viewpointURI);
+		viewpoint.init(baseName, viewpointDir, xmlFile, library, folder);
+		viewpoint.save();
+		return viewpoint;
 	}
 
 	// Used during deserialization, do not use it
@@ -148,11 +148,11 @@ public class ViewPoint extends ViewPointObject {
 		editionPatterns = new Vector<EditionPattern>();
 	}
 
-	private void init(String baseName, File calcDir, File xmlFile, ViewPointLibrary library, ViewPointFolder folder) {
+	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ViewPointFolder folder) {
 		logger.info("Registering calc " + baseName + " URI=" + getViewPointURI());
 
 		name = baseName;
-		viewPointDirectory = calcDir;
+		viewPointDirectory = viewpointDir;
 		_library = library;
 
 		folder.addToViewPoints(this);
@@ -162,13 +162,13 @@ public class ViewPoint extends ViewPointObject {
 		this.xmlFile = xmlFile;
 
 		if (owlFile == null) {
-			owlFile = new File(calcDir, baseName + ".owl");
+			owlFile = new File(viewpointDir, baseName + ".owl");
 		}
 
 		if (owlFile.exists()) {
 			logger.info("Found " + owlFile);
-			calcOntology = _library.getOntologyLibrary().importOntology(viewPointURI, owlFile);
-			calcOntology.setIsReadOnly(false);
+			viewpointOntology = _library.getOntologyLibrary().importOntology(viewPointURI, owlFile);
+			viewpointOntology.setIsReadOnly(false);
 		}
 
 		else {
@@ -294,7 +294,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	public void loadWhenUnloaded() {
-		if (!isLoaded && !isLoading) {
+		if (!isLoaded && !isLoading && viewpointOntology != null) {
 			load();
 		}
 	}
@@ -305,10 +305,11 @@ public class ViewPoint extends ViewPointObject {
 
 		isLoading = true;
 
-		// logger.info("calcOntology="+calcOntology.getURI());
-		// logger.info(calcOntology.getURI()+" isLoaded="+calcOntology.isLoaded()+" isLoading="+calcOntology.isLoading());
-		if (calcOntology != null) {
-			calcOntology.loadWhenUnloaded();
+		logger.info("viewpointOntology=" + viewpointOntology);
+		if (viewpointOntology != null) {
+			logger.info(viewpointOntology.getURI() + " isLoaded=" + viewpointOntology.isLoaded() + " isLoading="
+					+ viewpointOntology.isLoading());
+			viewpointOntology.loadWhenUnloaded();
 		}
 
 		// Deprecated code
@@ -316,14 +317,15 @@ public class ViewPoint extends ViewPointObject {
 			FlexoLocalization.addToLocalizedDelegates(getLocalizedDictionary());
 		}*/
 
-		if (calcOntology != null) {
+		if (viewpointOntology != null) {
 			isLoaded = true;
 		}
 		isLoading = false;
 
-		/*logger.info("Loaded ViewPoint "+calcURI);
-		for (OntologyClass clazz : getOntologyLibrary().getAllClasses()) {
-			System.out.println("Found: "+clazz);
+		logger.info("Loaded ViewPoint " + viewPointURI);
+
+		/*for (OntologyClass clazz : getOntologyLibrary().getAllClasses()) {
+			System.out.println("Found: " + clazz);
 		}*/
 
 	}
@@ -369,12 +371,12 @@ public class ViewPoint extends ViewPointObject {
 		this.description = description;
 	}
 
-	public FlexoOntology getCalcOntology() {
-		return calcOntology;
+	public FlexoOntology getViewpointOntology() {
+		return viewpointOntology;
 	}
 
-	public void setCalcOntology(ImportedOntology calcOntology) {
-		this.calcOntology = calcOntology;
+	public void setViewpointOntology(ImportedOntology viewpointOntology) {
+		this.viewpointOntology = viewpointOntology;
 	}
 
 	@Override

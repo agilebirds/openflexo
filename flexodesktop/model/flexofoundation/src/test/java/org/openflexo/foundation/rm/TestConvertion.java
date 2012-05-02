@@ -21,6 +21,7 @@ package org.openflexo.foundation.rm;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipException;
 
@@ -65,7 +66,7 @@ public class TestConvertion extends FlexoTestCase {
 	private void openAndRunValidation(String name, String zipName, String prjName, CodeType codeType) {
 		log("Convert : " + name);
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		File outputDir = null;
 		try {
 			File f = File.createTempFile("TestConvertion_", null);

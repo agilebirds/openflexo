@@ -36,6 +36,7 @@ public class DependingObjects {
 	}
 
 	public synchronized void refreshObserving(BindingEvaluationContext context) {
+
 		List<TargetObject> updatedDependingObjects = new ArrayList<AbstractBinding.TargetObject>();
 		for (AbstractBinding binding : observerObject.getDependencyBindings()) {
 			List<TargetObject> targetObjects = binding.getTargetObjects(context);

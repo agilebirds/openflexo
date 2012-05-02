@@ -7,10 +7,12 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.FlexoProperties;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.builders.exception.FlexoRunException;
 import org.openflexo.builders.exception.MissingArgumentException;
@@ -20,10 +22,11 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
-import org.openflexo.properties.FlexoProperties;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
 
@@ -137,17 +140,79 @@ public abstract class FlexoExternalMain implements Runnable {
 
 	}
 
-	private void initializeLoggingManager() {
+	public static FlexoLoggingManager initializeLoggingManager() {
 		try {
-			FlexoLoggingManager.initialize();
+			FlexoProperties properties = FlexoProperties.load();
+			return FlexoLoggingManager.initialize(properties.getMaxLogCount(), properties.getIsLoggingTrace(),
+					properties.getCustomLoggingFile(), properties.getDefaultLoggingLevel(), new LoggingManagerDelegate() {
+						@Override
+						public void setMaxLogCount(Integer maxLogCount) {
+							FlexoProperties.instance().setMaxLogCount(maxLogCount);
+						}
+
+						@Override
+						public void setKeepLogTrace(boolean logTrace) {
+							FlexoProperties.instance().setIsLoggingTrace(logTrace);
+						}
+
+						@Override
+						public void setDefaultLoggingLevel(Level lev) {
+							String fileName = "SEVERE";
+							if (lev == Level.SEVERE) {
+								fileName = "SEVERE";
+							}
+							if (lev == Level.WARNING) {
+								fileName = "WARNING";
+							}
+							if (lev == Level.INFO) {
+								fileName = "INFO";
+							}
+							if (lev == Level.FINE) {
+								fileName = "FINE";
+							}
+							if (lev == Level.FINER) {
+								fileName = "FINER";
+							}
+							if (lev == Level.FINEST) {
+								fileName = "FINEST";
+							}
+							reloadLoggingFile(new FileResource("Config/logging_" + fileName + ".properties").getAbsolutePath());
+							FlexoProperties.instance().setLoggingFileName(null);
+						}
+
+						@Override
+						public void setConfigurationFileName(String configurationFile) {
+							reloadLoggingFile(configurationFile);
+							FlexoProperties.instance().setLoggingFileName(configurationFile);
+						}
+					});
 		} catch (SecurityException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file")
 					+ "\nIt seems the file has read access protection.");
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file"));
 			e.printStackTrace();
+			return null;
 		}
+	}
+
+	private static boolean reloadLoggingFile(String filePath) {
+		logger.info("reloadLoggingFile with " + filePath);
+		System.setProperty("java.util.logging.config.file", filePath);
+		try {
+			LogManager.getLogManager().readConfiguration();
+		} catch (SecurityException e) {
+			logger.warning("The specified logging configuration file can't be read (not enough privileges).");
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			logger.warning("The specified logging configuration file cannot be read.");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action, File fileToOpen) {

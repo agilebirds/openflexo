@@ -1,4 +1,4 @@
-package org.openflexo.fib.localization;
+package org.openflexo.fib.utils;
 
 import java.awt.Color;
 import java.awt.Image;

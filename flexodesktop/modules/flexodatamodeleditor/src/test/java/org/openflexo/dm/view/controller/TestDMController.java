@@ -64,7 +64,7 @@ public class TestDMController extends FlexoModuleTestCase {
 	 */
 	public void test0CreateProject() throws InterruptedException, InvocationTargetException {
 		ToolBox.setPlatform();
-		FlexoLoggingManager.forceInitialize();
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		try {
 			File tempFile = File.createTempFile(TEST_REUSABLE_COMPONENT_VIEW, "");
 			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");

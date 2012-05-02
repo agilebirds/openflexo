@@ -70,7 +70,7 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 		super();
 	}
 
-	public LogRecord(java.util.logging.LogRecord record) {
+	public LogRecord(java.util.logging.LogRecord record, FlexoLoggingManager loggingManager) {
 		super();
 		date = new Date();
 		millis = record.getMillis();
@@ -84,14 +84,14 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 			message = message.intern();
 		}
 		level = record.getLevel();
-		if (FlexoLoggingManager.getKeepLogTrace()) {
+		if (loggingManager != null && loggingManager.getKeepLogTrace()) {
 			stackTrace = (new Exception()).getStackTrace();
 		}
 		isUnhandledException = false;
 	}
 
-	public LogRecord(java.util.logging.LogRecord record, Exception e) {
-		this(record);
+	public LogRecord(java.util.logging.LogRecord record, Exception e, FlexoLoggingManager loggingManager) {
+		this(record, loggingManager);
 		stackTrace = e.getStackTrace();
 		className = stackTrace[0].getClassName();
 		methodName = stackTrace[0].getMethodName();

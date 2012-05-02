@@ -47,8 +47,9 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.controller.FIBEditorPalette;
 import org.openflexo.fib.editor.controller.FIBInspectorController;
-import org.openflexo.fib.localization.LocalizedDelegateGUIImpl;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
+import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -118,9 +119,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			ToolBox.setPlatform();
-			FlexoLoggingManager.initialize();
-			FlexoLoggingManager.setKeepLogTrace(true);
-			FlexoLoggingManager.setLogCount(-1);
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 			FlexoLocalization.initWith(LOCALIZATION);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
@@ -285,7 +284,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		logsItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingManager.showLoggingViewer();
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
 			}
 		});
 

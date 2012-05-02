@@ -38,6 +38,7 @@ import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -54,14 +55,15 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
-import org.openflexo.properties.FlexoProperties;
 import org.openflexo.ssl.DenaliSecurityProvider;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
@@ -482,17 +484,84 @@ public class Flexo {
 		return out;
 	}
 
-	public static void initializeLoggingManager() {
+	public static FlexoLoggingManager initializeLoggingManager() {
 		try {
-			FlexoLoggingManager.initialize();
+			FlexoProperties properties = FlexoProperties.load();
+			logger.info("Default logging config file " + System.getProperty("java.util.logging.config.file"));
+			return FlexoLoggingManager.initialize(
+					properties.getMaxLogCount(),
+					properties.getIsLoggingTrace(),
+					properties.getCustomLoggingFile() != null ? properties.getCustomLoggingFile() : new File(System
+							.getProperty("java.util.logging.config.file")), properties.getDefaultLoggingLevel(),
+					new LoggingManagerDelegate() {
+						@Override
+						public void setMaxLogCount(Integer maxLogCount) {
+							FlexoProperties.instance().setMaxLogCount(maxLogCount);
+						}
+
+						@Override
+						public void setKeepLogTrace(boolean logTrace) {
+							FlexoProperties.instance().setIsLoggingTrace(logTrace);
+						}
+
+						@Override
+						public void setDefaultLoggingLevel(Level lev) {
+							String fileName = "SEVERE";
+							if (lev == Level.SEVERE) {
+								fileName = "SEVERE";
+							}
+							if (lev == Level.WARNING) {
+								fileName = "WARNING";
+							}
+							if (lev == Level.INFO) {
+								fileName = "INFO";
+							}
+							if (lev == Level.FINE) {
+								fileName = "FINE";
+							}
+							if (lev == Level.FINER) {
+								fileName = "FINER";
+							}
+							if (lev == Level.FINEST) {
+								fileName = "FINEST";
+							}
+							reloadLoggingFile(new FileResource("Config/logging_" + fileName + ".properties").getAbsolutePath());
+							FlexoProperties.instance().setLoggingFileName(null);
+						}
+
+						@Override
+						public void setConfigurationFileName(String configurationFile) {
+							reloadLoggingFile(configurationFile);
+							FlexoProperties.instance().setLoggingFileName(configurationFile);
+						}
+					});
 		} catch (SecurityException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file")
 					+ "\nIt seems the file has read access protection.");
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file"));
 			e.printStackTrace();
+			return null;
 		}
+	}
+
+	private static boolean reloadLoggingFile(String filePath) {
+		logger.info("reloadLoggingFile with " + filePath);
+		System.setProperty("java.util.logging.config.file", filePath);
+		try {
+			LogManager.getLogManager().readConfiguration();
+		} catch (SecurityException e) {
+			logger.warning("The specified logging configuration file can't be read (not enough privileges).");
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			logger.warning("The specified logging configuration file cannot be read.");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	public static void setFileNameToOpen(String filename) {

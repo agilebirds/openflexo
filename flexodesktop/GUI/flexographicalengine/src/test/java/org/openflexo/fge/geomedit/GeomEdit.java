@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
@@ -41,7 +42,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.fib.localization.LocalizedDelegateGUIImpl;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
+import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -63,9 +65,7 @@ public class GeomEdit {
 
 	public static void main(String[] args) {
 		try {
-			FlexoLoggingManager.initialize();
-			FlexoLoggingManager.setKeepLogTrace(true);
-			FlexoLoggingManager.setLogCount(-1);
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 			FlexoLocalization.initWith(LOCALIZATION);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
@@ -263,7 +263,7 @@ public class GeomEdit {
 		logsItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingManager.showLoggingViewer();
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance());
 			}
 		});
 

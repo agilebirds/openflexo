@@ -20,35 +20,26 @@
 package org.openflexo.fib;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.openflexo.Flexo;
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.logging.FlexoLoggingViewer;
 
 public class LoggingViewerEDITOR {
 
 	private static final Logger logger = FlexoLogger.getLogger(LoggingViewerEDITOR.class.getPackage().getName());
 
 	public static void main(String[] args) {
-		try {
-			FlexoLoggingManager.initialize();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		FlexoLoggingManager.setKeepLogTrace(true);
-		FlexoLoggingManager.setLogCount(-1);
-		logger.info("coucou");
+		final FlexoLoggingManager loggingManager = Flexo.initializeLoggingManager();
+		loggingManager.setKeepLogTrace(true);
+		loggingManager.setMaxLogCount(-1);
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				return makeArray(new FlexoLoggingViewer(FlexoLoggingManager.logRecords));
+				return makeArray(new FlexoLoggingViewer(loggingManager));
 			}
 
 			@Override

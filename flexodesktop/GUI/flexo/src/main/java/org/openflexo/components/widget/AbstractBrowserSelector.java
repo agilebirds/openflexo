@@ -273,7 +273,6 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extend
 	@Override
 	public void openPopup() {
 		super.openPopup();
-		System.out.println("Request focus now");
 		getTextField().requestFocus();
 	}
 
