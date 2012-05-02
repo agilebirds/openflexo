@@ -1542,7 +1542,12 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.foreground, aForeground);
+		/*if (aForeground.owner != null && aForeground.owner != this) {
+			logger.warning("££££££££££££££££££ OK, c'est la que c'est n'importe quoi, on essaie d'associer le FS a " + this
+					+ " alors qu'il est deja asocie a " + aForeground.owner);
+		}*/
+		// aForeground.owner = this;
+		FGENotification notification = requireChange(Parameters.foreground, aForeground, false);
 		if (notification != null) {
 			if (foreground != null) {
 				foreground.deleteObserver(this);
@@ -1568,7 +1573,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	}
 
 	public void setBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(Parameters.background, aBackground);
+		FGENotification notification = requireChange(Parameters.background, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (background != null) {

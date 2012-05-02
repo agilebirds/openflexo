@@ -43,6 +43,9 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		color, lineWidth, capStyle, joinStyle, dashStyle, noStroke, useTransparency, transparencyLevel
 	}
 
+	// TODO: remove this, debug only
+	// public ShapeGraphicalRepresentation owner;
+
 	private boolean noStroke = false;
 
 	private Color color;
@@ -396,9 +399,9 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 
 	@Override
 	public String toString() {
-		return "ForegroundStyle[noStroke=" + noStroke + ",lineWidth=" + lineWidth + ",color=" + color + ",joinStyle=" + joinStyle
-				+ ",capStyle=" + capStyle + ",dashStyle=" + dashStyle + ",useTransparency=" + useTransparency + ",transparencyLevel="
-				+ transparencyLevel + "]";
+		return "ForegroundStyle " + Integer.toHexString(hashCode()) + " [noStroke=" + noStroke + ",lineWidth=" + lineWidth + ",color="
+				+ color + ",joinStyle=" + joinStyle + ",capStyle=" + capStyle + ",dashStyle=" + dashStyle + ",useTransparency="
+				+ useTransparency + ",transparencyLevel=" + transparencyLevel + "]";
 	}
 
 	public String toNiceString() {
@@ -412,6 +415,7 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ForegroundStyle) {
+			logger.info("Equals called for ForegroundStyle !!!!!!!!!");
 			ForegroundStyle fs = (ForegroundStyle) obj;
 			return (getNoStroke() == fs.getNoStroke() && getLineWidth() == fs.getLineWidth() && getColor() == fs.getColor()
 					&& getJoinStyle() == fs.getJoinStyle() && getCapStyle() == fs.getCapStyle() && getDashStyle() == fs.getDashStyle()
