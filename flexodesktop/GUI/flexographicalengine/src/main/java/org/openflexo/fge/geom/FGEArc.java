@@ -309,15 +309,17 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 		double angle_extent = getRadianAngleExtent();
 
 		if (angle_extent > 0) {
-			return ((radianAngle >= angle_start - EPSILON && radianAngle <= angle_start + angle_extent + EPSILON)
-					|| (radianAngle + 2 * Math.PI >= angle_start - EPSILON && radianAngle + 2 * Math.PI <= angle_start + angle_extent
-							+ EPSILON) || (radianAngle - 2 * Math.PI >= angle_start - EPSILON && radianAngle - 2 * Math.PI <= angle_start
-					+ angle_extent + EPSILON));
+			return radianAngle >= angle_start - EPSILON && radianAngle <= angle_start + angle_extent + EPSILON
+					|| radianAngle + 2 * Math.PI >= angle_start - EPSILON
+					&& radianAngle + 2 * Math.PI <= angle_start + angle_extent + EPSILON
+					|| radianAngle - 2 * Math.PI >= angle_start - EPSILON
+					&& radianAngle - 2 * Math.PI <= angle_start + angle_extent + EPSILON;
 		} else if (angle_extent < 0) {
-			return ((radianAngle <= angle_start + EPSILON && radianAngle >= angle_start + angle_extent - EPSILON)
-					|| (radianAngle + 2 * Math.PI <= angle_start + EPSILON && radianAngle + 2 * Math.PI >= angle_start + angle_extent
-							- EPSILON) || (radianAngle - 2 * Math.PI <= angle_start + EPSILON && radianAngle - 2 * Math.PI >= angle_start
-					+ angle_extent - EPSILON));
+			return radianAngle <= angle_start + EPSILON && radianAngle >= angle_start + angle_extent - EPSILON
+					|| radianAngle + 2 * Math.PI <= angle_start + EPSILON
+					&& radianAngle + 2 * Math.PI >= angle_start + angle_extent - EPSILON
+					|| radianAngle - 2 * Math.PI <= angle_start + EPSILON
+					&& radianAngle - 2 * Math.PI >= angle_start + angle_extent - EPSILON;
 		}
 		return false;
 
@@ -520,8 +522,8 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 					return new FGESegment(p1, p2);
 				}
 			}
-			FGEArea pp1 = (new FGESegment(getCenter(), getStartPoint())).intersect(line);
-			FGEArea pp2 = (new FGESegment(getCenter(), getEndPoint())).intersect(line);
+			FGEArea pp1 = new FGESegment(getCenter(), getStartPoint()).intersect(line);
+			FGEArea pp2 = new FGESegment(getCenter(), getEndPoint()).intersect(line);
 			if (pp1 instanceof FGEEmptyArea && pp2 instanceof FGEEmptyArea) {
 				// Nothing
 				return new FGEEmptyArea();
@@ -831,11 +833,11 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 			return outlinePoint.equals(p);
 		}
 
-		else if ((new FGESegment(getCenter(), outlinePoint)).containsPoint(p)) {
+		else if (new FGESegment(getCenter(), outlinePoint).containsPoint(p)) {
 			if (getFGEArcType() == ArcType.PIE) {
 				return true;
 			} else if (getFGEArcType() == ArcType.CHORD) {
-				return !((new FGEPolygon(Filling.FILLED, getCenter(), getStartPoint(), getEndPoint())).contains(p));
+				return !new FGEPolygon(Filling.FILLED, getCenter(), getStartPoint(), getEndPoint()).contains(p);
 			}
 		}
 
@@ -848,19 +850,19 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 
 	@Override
 	public boolean containsLine(FGEAbstractLine l) {
-		return (containsPoint(l.getP1()) && containsPoint(l.getP2()) && (l instanceof FGESegment));
+		return containsPoint(l.getP1()) && containsPoint(l.getP2()) && l instanceof FGESegment;
 	}
 
 	@Override
 	public boolean containsArea(FGEArea a) {
 		if (a instanceof FGEArc && ((FGEArc) a).overlap(this)) {
 			FGEArea arc1 = _equivalentForArcIn1D(this, false);
-			FGEArea arc2 = _equivalentForArcIn1D(((FGEArc) a), false);
+			FGEArea arc2 = _equivalentForArcIn1D((FGEArc) a, false);
 			if (arc1.containsArea(arc2)) {
 				return true;
 			}
 			arc1 = _equivalentForArcIn1D(this, true);
-			arc2 = _equivalentForArcIn1D(((FGEArc) a), true);
+			arc2 = _equivalentForArcIn1D((FGEArc) a, true);
 			if (arc1.containsArea(arc2)) {
 				return true;
 			}
@@ -884,8 +886,8 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 
 		// TODO: this implementation is not correct if AffineTransform contains rotation
 
-		FGEPoint p1 = (new FGEPoint(getX(), getY())).transform(t);
-		FGEPoint p2 = (new FGEPoint(getX() + getWidth(), getY() + getHeight())).transform(t);
+		FGEPoint p1 = new FGEPoint(getX(), getY()).transform(t);
+		FGEPoint p2 = new FGEPoint(getX() + getWidth(), getY() + getHeight()).transform(t);
 
 		// TODO: if transformation contains a rotation, change angle start, with and heigth are not correct either
 		return new FGEArc(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y), Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y), getAngleStart(),
@@ -915,12 +917,12 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 		g.useDefaultForegroundStyle();
 		Stroke defaultForegroundStroke = null;
 		if (g.getGraphicalRepresentation().getSpecificStroke() != null) {
-			defaultForegroundStroke = g.g2d.getStroke();
-			g.g2d.setStroke(g.getGraphicalRepresentation().getSpecificStroke());
+			defaultForegroundStroke = g.getGraphics().getStroke();
+			g.getGraphics().setStroke(g.getGraphicalRepresentation().getSpecificStroke());
 		}
 		g.drawArc(getX(), getY(), getWidth(), getHeight(), getAngleStart(), getAngleExtent());
 		if (defaultForegroundStroke != null) {
-			g.g2d.setStroke(defaultForegroundStroke);
+			g.getGraphics().setStroke(defaultForegroundStroke);
 		}
 	}
 
@@ -988,10 +990,10 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 			if (getFGEArcType() != p.getFGEArcType()) {
 				return false;
 			}
-			return ((Math.abs(getX() - p.getX()) <= EPSILON) && (Math.abs(getY() - p.getY()) <= EPSILON)
-					&& (Math.abs(getWidth() - p.getWidth()) <= EPSILON) && (Math.abs(getHeight() - p.getHeight()) <= EPSILON)
-					&& (Math.abs(normalizeDegAngle(getAngleStart()) - normalizeDegAngle(p.getAngleStart())) <= EPSILON) && (Math
-					.abs(getAngleExtent() - p.getAngleExtent()) <= EPSILON));
+			return Math.abs(getX() - p.getX()) <= EPSILON && Math.abs(getY() - p.getY()) <= EPSILON
+					&& Math.abs(getWidth() - p.getWidth()) <= EPSILON && Math.abs(getHeight() - p.getHeight()) <= EPSILON
+					&& Math.abs(normalizeDegAngle(getAngleStart()) - normalizeDegAngle(p.getAngleStart())) <= EPSILON
+					&& Math.abs(getAngleExtent() - p.getAngleExtent()) <= EPSILON;
 		}
 		return super.equals(obj);
 	}
@@ -1000,8 +1002,8 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 		if (getFGEArcType() != arc.getFGEArcType()) {
 			return false;
 		}
-		return ((Math.abs(getX() - arc.getX()) <= EPSILON) && (Math.abs(getY() - arc.getY()) <= EPSILON)
-				&& (Math.abs(getWidth() - arc.getWidth()) <= EPSILON) && (Math.abs(getHeight() - arc.getHeight()) <= EPSILON));
+		return Math.abs(getX() - arc.getX()) <= EPSILON && Math.abs(getY() - arc.getY()) <= EPSILON
+				&& Math.abs(getWidth() - arc.getWidth()) <= EPSILON && Math.abs(getHeight() - arc.getHeight()) <= EPSILON;
 	}
 
 	@Override
@@ -1185,7 +1187,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 			FGEUnionArea union = new FGEUnionArea(returned);
 
 			if (returned.size() == 2 && returned.get(0) instanceof FGEArc && returned.get(1) instanceof FGEPoint) {
-				(new Exception("------------ Ca vient de la ce truc bizarre !!!")).printStackTrace();
+				new Exception("------------ Ca vient de la ce truc bizarre !!!").printStackTrace();
 				logger.info("Area=" + anArea);
 			}
 
@@ -1394,7 +1396,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 			logger.warning("getMiddle() invoked for an ellips");
 			return getCenter();
 		} else {
-			double angle = (getAngleStart() + getAngleExtent() / 2);
+			double angle = getAngleStart() + getAngleExtent() / 2;
 			return getPointAtAngle(angle);
 		}
 	}

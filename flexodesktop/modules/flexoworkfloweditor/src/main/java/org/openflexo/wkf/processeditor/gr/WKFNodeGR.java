@@ -19,8 +19,9 @@
  */
 package org.openflexo.wkf.processeditor.gr;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -224,14 +225,14 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	 * Performs dumb layout to try not to be on other views of this level
 	 */
 	protected void doLayoutMethod3(double x, double y) {
-		Enumeration<GraphicalRepresentation<?>> en = null;
+		Iterator<GraphicalRepresentation<?>> en = null;
 		double attemptX = x, attemptY = y;
 		boolean found = false;
 		while (!found) {
-			en = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().elements();
+			en = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().iterator();
 			found = true;
-			while (en.hasMoreElements()) {
-				GraphicalRepresentation<?> gr = en.nextElement();
+			while (en.hasNext()) {
+				GraphicalRepresentation<?> gr = en.next();
 				if (gr instanceof WKFNodeGR<?>) {
 					WKFNodeGR<?> rgr = (WKFNodeGR<?>) gr;
 					if (rgr != this) {
@@ -272,11 +273,11 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 		}
 	}
 
-	protected Vector<WKFNodeGR<?>> getFromInterestingNodeGR() {
-		Vector<WKFNodeGR<?>> v = new Vector<WKFNodeGR<?>>();
-		Enumeration<GraphicalRepresentation<?>> en = getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations().elements();
-		while (en.hasMoreElements()) {
-			GraphicalRepresentation<?> gr = en.nextElement();
+	protected List<WKFNodeGR<?>> getFromInterestingNodeGR() {
+		List<WKFNodeGR<?>> v = new ArrayList<WKFNodeGR<?>>();
+		Iterator<GraphicalRepresentation<?>> en = getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations().iterator();
+		while (en.hasNext()) {
+			GraphicalRepresentation<?> gr = en.next();
 			if (gr instanceof ConnectorGraphicalRepresentation<?>) {
 				ConnectorGraphicalRepresentation<?> connector = (ConnectorGraphicalRepresentation<?>) gr;
 				if (connector.getEndObject() == this && connector.getStartObject() instanceof WKFObjectGR<?>) {
@@ -287,11 +288,11 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 		return v;
 	}
 
-	protected Vector<WKFNodeGR<?>> getToInterestingNodeGR() {
-		Vector<WKFNodeGR<?>> v = new Vector<WKFNodeGR<?>>();
-		Enumeration<GraphicalRepresentation<?>> en = getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations().elements();
-		while (en.hasMoreElements()) {
-			GraphicalRepresentation<?> gr = en.nextElement();
+	protected List<WKFNodeGR<?>> getToInterestingNodeGR() {
+		List<WKFNodeGR<?>> v = new ArrayList<WKFNodeGR<?>>();
+		Iterator<GraphicalRepresentation<?>> en = getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations().iterator();
+		while (en.hasNext()) {
+			GraphicalRepresentation<?> gr = en.next();
 			if (gr instanceof ConnectorGraphicalRepresentation<?>) {
 				ConnectorGraphicalRepresentation<?> connector = (ConnectorGraphicalRepresentation<?>) gr;
 				if (connector.getStartObject() == this && connector.getEndObject() instanceof WKFObjectGR<?>) {
@@ -302,7 +303,7 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 		return v;
 	}
 
-	protected void findSiblingGRFromNodeAndAddToVector(WKFObjectGR<?> gr, Vector<WKFNodeGR<?>> vector) {
+	protected void findSiblingGRFromNodeAndAddToVector(WKFObjectGR<?> gr, List<WKFNodeGR<?>> list) {
 		while (gr != null && gr.getParentGraphicalRepresentation() != getParentGraphicalRepresentation()) {
 			if (gr.getParentGraphicalRepresentation() instanceof WKFObjectGR<?>) {
 				gr = (WKFObjectGR<?>) gr.getParentGraphicalRepresentation();
@@ -310,8 +311,8 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 				gr = null;
 			}
 		}
-		if (gr != null && gr instanceof WKFNodeGR<?> && !vector.contains(gr)) {
-			vector.add((WKFNodeGR<?>) gr);
+		if (gr != null && gr instanceof WKFNodeGR<?> && !list.contains(gr)) {
+			list.add((WKFNodeGR<?>) gr);
 		}
 	}
 

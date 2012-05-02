@@ -1106,9 +1106,9 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	 */
 	protected void checkAndUpdateDimensionIfRequired() {
 		if (getDimensionConstraints() == DimensionConstraints.CONTAINER) {
-			Vector<? extends GraphicalRepresentation<?>> childs = getContainedGraphicalRepresentations();
+			List<? extends GraphicalRepresentation<?>> childs = getContainedGraphicalRepresentations();
 			if (childs != null && childs.size() > 0) {
-				ShapeGraphicalRepresentation<?> first = (ShapeGraphicalRepresentation<?>) childs.firstElement();
+				ShapeGraphicalRepresentation<?> first = (ShapeGraphicalRepresentation<?>) childs.get(0);
 				updateRequiredBoundsForChildGRLocation(first, first.getLocation());
 			}
 		} else {

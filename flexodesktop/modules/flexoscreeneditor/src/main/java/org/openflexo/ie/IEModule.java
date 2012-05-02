@@ -130,7 +130,7 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 			if (componentView.getParent() != null) {
 				componentView.getParent().remove(componentView);
 			}
-			componentView.deleteModuleView();
+			componentView.delete();
 		}
 		componentView = null;
 	}

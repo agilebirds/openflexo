@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -645,13 +646,15 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 	public void delete() {
 		logger.info("deleting drawing " + this + " " + Integer.toHexString(hashCode()));
 		if (_hashMap != null) {
-			Vector<Object> drawableList = new Vector<Object>();
-			drawableList.addAll(_hashMap.keySet());
-			for (Object drawable : drawableList) {
-				DrawingTreeNode<?> dtn = _hashMap.get(drawable);
+			for (Entry<Object, DrawingTreeNode<?>> e : new ArrayList<Entry<Object, DrawingTreeNode<?>>>(_hashMap.entrySet())) {
+				DrawingTreeNode<?> dtn = e.getValue();
 				if (dtn != null) {
 					if (dtn.graphicalRepresentation != null) {
 						dtn.graphicalRepresentation.delete();
+					} else {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("No GR for " + e.getKey());
+						}
 					}
 					dtn.delete();
 				}

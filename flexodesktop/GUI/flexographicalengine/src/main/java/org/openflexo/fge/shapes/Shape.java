@@ -309,7 +309,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 		Area a = new Area(getGraphicalRepresentation().getShape().getShape());
 		a.transform(getGraphicalRepresentation().convertNormalizedPointToViewCoordinatesAT(g.getScale()));
 		clipArea.subtract(a);
-		g.g2d.clip(clipArea);
+		g.getGraphics().clip(clipArea);
 
 		Color shadowColor = new Color(darkness, darkness, darkness);
 		ForegroundStyle foreground = ForegroundStyle.makeStyle(shadowColor);
@@ -366,7 +366,7 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 	public boolean equals(Object object) {
 		if (object instanceof Shape && getShape() != null) {
 			return getShape().equals(((Shape) object).getShape())
-					&& (areDimensionConstrained() == ((Shape) object).areDimensionConstrained());
+					&& areDimensionConstrained() == ((Shape) object).areDimensionConstrained();
 		}
 		return super.equals(object);
 	}

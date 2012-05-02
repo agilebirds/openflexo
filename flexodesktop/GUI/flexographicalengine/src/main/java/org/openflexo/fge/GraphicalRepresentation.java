@@ -29,6 +29,7 @@ import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -87,8 +88,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	private static BindingFactory BINDING_FACTORY = new GRBindingFactory();
 
-	private static Vector<Object> EMPTY_VECTOR = new Vector<Object>();
-	private static Vector<GraphicalRepresentation<?>> EMPTY_GR_VECTOR = new Vector<GraphicalRepresentation<?>>();
+	private static final List<Object> EMPTY_VECTOR = Collections.emptyList();
+	private static final List<GraphicalRepresentation<?>> EMPTY_GR_VECTOR = Collections.emptyList();
 
 	// *******************************************************************************
 	// * Parameters *
@@ -581,13 +582,13 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		return getDrawing().getContainedObjects(getDrawable());
 	}
 
-	public Vector<GraphicalRepresentation<?>> getContainedGraphicalRepresentations() {
+	public List<GraphicalRepresentation<?>> getContainedGraphicalRepresentations() {
 		// Indirection added to separate callers that require an ordered list of contained GR and those who do not care. Wa may then later
 		// reimplement these methods to optimizer perfs.
 		return getOrderedContainedGraphicalRepresentations();
 	}
 
-	public Vector<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations() {
+	public List<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations() {
 		if (!isValidated()) {
 			return EMPTY_GR_VECTOR;
 		}
@@ -621,15 +622,15 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		return orderedContainedGR;
 	}
 
-	private Vector<GraphicalRepresentation<?>> orderedContainedGR = null;
+	private List<GraphicalRepresentation<?>> orderedContainedGR = null;
 
-	private Vector<GraphicalRepresentation<?>> getOrderedContainedGR() {
+	private List<GraphicalRepresentation<?>> getOrderedContainedGR() {
 		if (!isValidated()) {
 			logger.warning("GR " + this + " is not validated");
 			return EMPTY_GR_VECTOR;
 		}
 		if (orderedContainedGR == null) {
-			orderedContainedGR = new Vector<GraphicalRepresentation<?>>();
+			orderedContainedGR = new ArrayList<GraphicalRepresentation<?>>();
 			for (GraphicalRepresentation<?> c : getOrderedContainedGraphicalRepresentations()) {
 				if (!orderedContainedGR.contains(c)) {
 					orderedContainedGR.add(c);
@@ -731,14 +732,14 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		return getContainedGraphicalRepresentations().contains(getGraphicalRepresentation(drawable));
 	}
 
-	public Vector<Object> getAncestors() {
+	public List<Object> getAncestors() {
 		if (!isValidated()) {
 			return EMPTY_VECTOR;
 		}
 		return getAncestors(false);
 	}
 
-	public Vector<Object> getAncestors(boolean forceRecompute) {
+	public List<Object> getAncestors(boolean forceRecompute) {
 		if (!isValidated()) {
 			return EMPTY_VECTOR;
 		}
@@ -809,16 +810,16 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (!child2.isValidated()) {
 			return null;
 		}
-		Vector<Object> ancestors1 = child1.getAncestors(true);
+		List<Object> ancestors1 = child1.getAncestors(true);
 		if (includeCurrent) {
-			ancestors1.insertElementAt(child1, 0);
+			ancestors1.add(0, child1);
 		}
-		Vector<Object> ancestors2 = child2.getAncestors(true);
+		List<Object> ancestors2 = child2.getAncestors(true);
 		if (includeCurrent) {
-			ancestors2.insertElementAt(child2, 0);
+			ancestors2.add(0, child2);
 		}
 		for (int i = 0; i < ancestors1.size(); i++) {
-			Object o1 = ancestors1.elementAt(i);
+			Object o1 = ancestors1.get(i);
 			if (ancestors2.contains(o1)) {
 				return child1.getGraphicalRepresentation(o1);
 			}
@@ -1980,16 +1981,16 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		logger.fine("notifyBindingChanged() for " + binding);
 	}
 
-	public Vector<GraphicalRepresentation<?>> retrieveAllContainedGR() {
+	public List<GraphicalRepresentation<?>> retrieveAllContainedGR() {
 		if (!isValidated()) {
 			return EMPTY_GR_VECTOR;
 		}
-		Vector<GraphicalRepresentation<?>> returned = new Vector<GraphicalRepresentation<?>>();
+		List<GraphicalRepresentation<?>> returned = new ArrayList<GraphicalRepresentation<?>>();
 		addAllContainedGR(this, returned);
 		return returned;
 	}
 
-	private void addAllContainedGR(GraphicalRepresentation<?> gr, Vector<GraphicalRepresentation<?>> returned) {
+	private void addAllContainedGR(GraphicalRepresentation<?> gr, List<GraphicalRepresentation<?>> returned) {
 		if (gr.getContainedGraphicalRepresentations() == null) {
 			return;
 		}
@@ -2000,16 +2001,16 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public Iterator<GraphicalRepresentation<?>> allGRIterator() {
-		Vector<GraphicalRepresentation<?>> returned = getRootGraphicalRepresentation().retrieveAllContainedGR();
+		List<GraphicalRepresentation<?>> returned = getRootGraphicalRepresentation().retrieveAllContainedGR();
 		if (!isValidated()) {
 			return returned.iterator();
 		}
-		returned.insertElementAt(getRootGraphicalRepresentation(), 0);
+		returned.add(0, getRootGraphicalRepresentation());
 		return returned.iterator();
 	}
 
 	public Iterator<GraphicalRepresentation<?>> allContainedGRIterator() {
-		Vector<GraphicalRepresentation<?>> allGR = retrieveAllContainedGR();
+		List<GraphicalRepresentation<?>> allGR = retrieveAllContainedGR();
 		if (!isValidated()) {
 			return allGR.iterator();
 		}

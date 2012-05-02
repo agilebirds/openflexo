@@ -55,9 +55,9 @@ public class WriteModifiedGeneratedFiles extends MultipleFileGCAction<WriteModif
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.isCodeGenerationAvailable() && !file.hasGenerationErrors() && file.getResource() != null
-					&& file.getResource().needsGeneration() && file.getGenerationStatus() != GenerationStatus.ConflictingUnMerged)
-					|| (file.isMarkedForDeletion());
+			return file.isCodeGenerationAvailable() && !file.hasGenerationErrors() && file.getResource() != null
+					&& file.getResource().needsGeneration() && file.getGenerationStatus() != GenerationStatus.ConflictingUnMerged
+					|| file.isMarkedForDeletion();
 		}
 
 	};

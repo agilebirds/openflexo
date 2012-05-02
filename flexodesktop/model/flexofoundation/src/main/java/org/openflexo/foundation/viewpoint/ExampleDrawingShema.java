@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 
 import org.jdom.JDOMException;
 import org.openflexo.foundation.Inspectors;
@@ -173,8 +175,8 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 			temporaryFile = File.createTempFile("temp", ".xml", dir);
 			saveToFile(temporaryFile);
 			FileUtils.rename(temporaryFile, _drawingFile);
-			clearIsModified(true);
 			buildAndSaveScreenshotImage();
+			clearIsModified(true);
 			logger.info("Saved shema to " + _drawingFile.getAbsolutePath() + ". Done.");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -250,7 +252,14 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		logger.info("Building " + getExpectedScreenshotImageFile().getAbsolutePath());
 
 		JComponent c = cedModule.createScreenshotForShema(this);
-
+		c.setOpaque(true);
+		c.setBackground(Color.WHITE);
+		JFrame frame = new JFrame();
+		frame.setBackground(Color.WHITE);
+		frame.setUndecorated(true);
+		frame.getContentPane().add(c);
+		frame.pack();
+		c.validate();
 		BufferedImage bi = ImageUtils.createImageFromComponent(c);
 
 		screenshotImage = ScreenshotGenerator.trimImage(bi);
@@ -261,11 +270,9 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 			e.printStackTrace();
 			logger.warning("Could not save " + getExpectedScreenshotImageFile().getAbsolutePath());
 		}
-
 		cedModule.finalizeScreenshotGeneration();
-
 		screenshotModified = false;
-
+		getPropertyChangeSupport().firePropertyChange("screenshotImage", null, screenshotImage);
 		return screenshotImage;
 
 	}

@@ -92,6 +92,13 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		parentGR = null;
+		parentOutline = null;
+	}
+
+	@Override
 	protected boolean supportShadow() {
 		return false;
 	}
@@ -130,8 +137,8 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getFlexoPreCondition()) {
 			if (dataModification instanceof WKFAttributeDataModification) {
-				if ((((WKFAttributeDataModification) dataModification).getAttributeName().equals("posX"))
-						|| (((WKFAttributeDataModification) dataModification).getAttributeName().equals("posY"))) {
+				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("posX")
+						|| ((WKFAttributeDataModification) dataModification).getAttributeName().equals("posY")) {
 					if (!isUpdatingPosition) {
 						// logger.info("----------------- "+dataModification);
 						notifyObjectMoved();
@@ -157,10 +164,10 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 	@Override
 	public void update(Observable observable, Object dataModification) {
 		if (observable == getContainerGraphicalRepresentation()) {
-			if ((dataModification instanceof ObjectWillMove) || (dataModification instanceof ObjectWillResize)
-					|| (dataModification instanceof ObjectHasMoved) || (dataModification instanceof ObjectHasResized)
-					|| (dataModification instanceof ObjectMove) || (dataModification instanceof ObjectResized)
-					|| (dataModification instanceof ShapeChanged)) {
+			if (dataModification instanceof ObjectWillMove || dataModification instanceof ObjectWillResize
+					|| dataModification instanceof ObjectHasMoved || dataModification instanceof ObjectHasResized
+					|| dataModification instanceof ObjectMove || dataModification instanceof ObjectResized
+					|| dataModification instanceof ShapeChanged) {
 				// Reinit parent outline that will change
 				parentGR = null;
 			}

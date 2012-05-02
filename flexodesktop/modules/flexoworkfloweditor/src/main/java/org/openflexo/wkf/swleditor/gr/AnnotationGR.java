@@ -20,7 +20,7 @@
 package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Point;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,14 +111,14 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		if (getAnnotation().isAnnotation()) {
 			super.doLayoutMethod3(x, y);
 		} else {
-			Enumeration<GraphicalRepresentation<?>> en = null;
+			Iterator<GraphicalRepresentation<?>> i = null;
 			double attemptX = x, attemptY = y;
 			boolean found = false;
 			while (!found) {
-				en = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().elements();
+				i = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().iterator();
 				found = true;
-				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+				while (i.hasNext()) {
+					GraphicalRepresentation<?> gr = i.next();
 					if (gr instanceof AnnotationGR && ((AnnotationGR) gr).getDrawable().isBoundingBox()) {
 						AnnotationGR rgr = (AnnotationGR) gr;
 						if (rgr != this) {

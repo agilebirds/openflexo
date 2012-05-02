@@ -14882,8 +14882,13 @@ forward to the next nodes.</description>
                   <RelatedToDocItem idref="calc_perspective" />
                   <RelatedToDocItem idref="calc_perspective" />
                 </RelatedToDocItem>
-                <RelatedToDocItem idref="CalcLibraryView" />
                 <RelatedToDocItem id="CalcDrawingShemaModuleView" identifier="CalcDrawingShemaModuleView" embedded="false" hidden="true">
+                  <description>No description</description>
+                  <RelatedToDocItem idref="calc_perspective" />
+                  <RelatedToDocItem idref="calc_perspective" />
+                </RelatedToDocItem>
+                <RelatedToDocItem idref="CalcLibraryView" />
+                <RelatedToDocItem id="OntologyView" identifier="OntologyView" embedded="false" hidden="true">
                   <description>No description</description>
                   <RelatedToDocItem idref="calc_perspective" />
                 </RelatedToDocItem>
@@ -14906,6 +14911,7 @@ forward to the next nodes.</description>
             <InheritanceChildDocItem idref="EditionPatternView" />
             <InheritanceChildDocItem idref="CalcPaletteModuleView" />
             <InheritanceChildDocItem idref="CalcDrawingShemaModuleView" />
+            <InheritanceChildDocItem idref="OntologyView" />
           </InheritanceChildDocItem>
           <title key="ENGLISH">Panel Central</title>
           <DocItemVersion id="general main pane_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
@@ -15171,6 +15177,10 @@ forward to the next nodes.</description>
             <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-panecalc_perspectiveEditionPatternView" primaryDocItemId="EditionPatternView" identifier="EditionPatternView">
               <description>Documentation on that view</description>
               <DocItem idref="EditionPatternView" />
+            </DocItemFolder>
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetoeoe-main-panecalc_perspectiveOntologyView" primaryDocItemId="OntologyView" identifier="OntologyView">
+              <description>Documentation on that view</description>
+              <DocItem idref="OntologyView" />
             </DocItemFolder>
             <DocItem idref="calc_perspective" />
           </DocItemFolder>

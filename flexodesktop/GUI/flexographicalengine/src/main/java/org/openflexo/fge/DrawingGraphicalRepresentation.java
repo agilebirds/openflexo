@@ -119,6 +119,17 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		if (graphics != null) {
+			graphics.delete();
+		}
+		graphics = null;
+		decorationGraphics = null;
+		decorationPainter = null;
+	}
+
+	@Override
 	public Vector<GRParameter> getAllParameters() {
 		Vector<GRParameter> returned = super.getAllParameters();
 		Parameters[] allParams = Parameters.values();

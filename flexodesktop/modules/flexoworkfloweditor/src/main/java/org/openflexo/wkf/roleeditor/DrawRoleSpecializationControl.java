@@ -83,8 +83,8 @@ public class DrawRoleSpecializationControl extends MouseDragControl {
 		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 				MouseEvent event) {
 			if (drawEdge) {
-				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof RoleGR && gr != fromRole && !(fromRole.getAncestors().contains(gr.getDrawable()))) {
+				GraphicalRepresentation<?> gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
+				if (gr instanceof RoleGR && gr != fromRole && !fromRole.getAncestors().contains(gr.getDrawable())) {
 					toRole = (RoleGR) gr;
 				} else {
 					toRole = null;
@@ -97,7 +97,7 @@ public class DrawRoleSpecializationControl extends MouseDragControl {
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController controller) {
+		public void paint(Graphics g, DrawingController<?> controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						fromRole.getShape().getShape().getCenter(), fromRole, controller.getScale());

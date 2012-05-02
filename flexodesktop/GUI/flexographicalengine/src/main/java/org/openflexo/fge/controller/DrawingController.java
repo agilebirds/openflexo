@@ -708,8 +708,10 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (drawing instanceof DefaultDrawing<?>) {
 			((DefaultDrawing<?>) drawing).deleteObserver(this);
 		}
-		for (DrawingPalette palette : palettes) {
-			palette.delete();
+		if (palettes != null) {
+			for (DrawingPalette palette : palettes) {
+				palette.delete();
+			}
 		}
 		if (drawingView != null) {
 			drawingView.delete();
@@ -717,9 +719,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (toolbox != null) {
 			toolbox.delete();
 		}
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("TODO: Delete palettes");
-		}
+		toolbox = null;
 		palettes = null;
 		storedSelection = null;
 		drawingView = null;

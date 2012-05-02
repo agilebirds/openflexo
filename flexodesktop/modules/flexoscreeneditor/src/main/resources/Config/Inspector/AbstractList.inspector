@@ -1,4 +1,4 @@
-<inspector title = "DropDown" inheritsfrom ="ControlWidget.inspector">
+<inspector title = "AbstractList" inheritsfrom ="ControlWidget.inspector">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="value" label="value" widget="TEXT_FIELD" constraint="2">

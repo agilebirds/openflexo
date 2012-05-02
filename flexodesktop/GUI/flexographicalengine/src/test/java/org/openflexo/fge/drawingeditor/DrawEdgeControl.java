@@ -80,9 +80,8 @@ public class DrawEdgeControl extends MouseDragControl {
 		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 				MouseEvent event) {
 			if (drawEdge) {
-				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof MyShapeGraphicalRepresentation && gr != fromShape
-						&& !(fromShape.getAncestors().contains(gr.getDrawable()))) {
+				GraphicalRepresentation<?> gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
+				if (gr instanceof MyShapeGraphicalRepresentation && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
 					toShape = (MyShapeGraphicalRepresentation) gr;
 				} else {
 					toShape = null;
@@ -95,7 +94,7 @@ public class DrawEdgeControl extends MouseDragControl {
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController controller) {
+		public void paint(Graphics g, DrawingController<?> controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());

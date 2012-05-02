@@ -25,7 +25,8 @@ package org.openflexo.vpm.controller;
  * Flexo Application Suite
  * (c) Denali 2003-2006
  */
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -116,7 +117,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 		_frame = new CEDFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _cedKeyEventListener, _cedMenuBar);
 		init(_frame, _cedKeyEventListener, _cedMenuBar);
 
-		resourceSavingInfo = new Vector<ResourceSavingInfo>();
+		resourceSavingInfo = new ArrayList<ResourceSavingInfo>();
 
 		_selectionManager = new CEDSelectionManager(this);
 
@@ -320,7 +321,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	// ============ Resources management ==============
 	// ================================================
 
-	private final Vector<ResourceSavingInfo> resourceSavingInfo;
+	private final List<ResourceSavingInfo> resourceSavingInfo;
 
 	public void manageResource(FlexoModelObject o) {
 		boolean alreadyRegistered = false;
@@ -336,7 +337,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 
 	public void unregisterResource(FlexoModelObject o) {
 		logger.info("Unregister " + o);
-		Vector<ResourceSavingInfo> deleteThis = new Vector<CEDController.ResourceSavingInfo>();
+		List<ResourceSavingInfo> deleteThis = new ArrayList<CEDController.ResourceSavingInfo>();
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			if (i.resource == o) {
 				deleteThis.add(i);
@@ -349,7 +350,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 
 	}
 
-	public Vector<ResourceSavingInfo> getResourceSavingInfo() {
+	public List<ResourceSavingInfo> getResourceSavingInfo() {
 		return resourceSavingInfo;
 	}
 

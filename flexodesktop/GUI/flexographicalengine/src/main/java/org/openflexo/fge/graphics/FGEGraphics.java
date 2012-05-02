@@ -62,9 +62,9 @@ public abstract class FGEGraphics {
 
 	private static final Logger logger = Logger.getLogger(FGEGraphics.class.getPackage().getName());
 
-	private DrawingController _controller;
-	private GraphicalRepresentation gr;
-	public Graphics2D g2d;
+	private DrawingController<?> _controller;
+	private GraphicalRepresentation<?> gr;
+	private Graphics2D g2d;
 
 	private ForegroundStyle defaultForeground = ForegroundStyle.makeDefault();
 	private BackgroundStyle defaultBackground = BackgroundStyle.makeEmptyBackground();
@@ -74,16 +74,16 @@ public abstract class FGEGraphics {
 	protected BackgroundStyle currentBackground = defaultBackground;
 	private TextStyle currentTextStyle = defaultTextStyle;
 
-	public FGEGraphics(GraphicalRepresentation aGraphicalRepresentation) {
+	public FGEGraphics(GraphicalRepresentation<?> aGraphicalRepresentation) {
 		super();
 		gr = aGraphicalRepresentation;
 	}
 
-	public GraphicalRepresentation getGraphicalRepresentation() {
+	public GraphicalRepresentation<?> getGraphicalRepresentation() {
 		return gr;
 	}
 
-	public DrawingController getController() {
+	public DrawingController<?> getController() {
 		return _controller;
 	}
 
@@ -91,12 +91,18 @@ public abstract class FGEGraphics {
 		return getController().getScale();
 	}
 
+	public void delete() {
+		gr = null;
+		_controller = null;
+		g2d = null;
+	}
+
 	/**
 	 * 
 	 * @param graphics2D
 	 * @param controller
 	 */
-	public void createGraphics(Graphics2D graphics2D, DrawingController controller) {
+	public void createGraphics(Graphics2D graphics2D, DrawingController<?> controller) {
 		g2d = (Graphics2D) graphics2D.create();
 		_controller = controller;
 	}
@@ -407,7 +413,7 @@ public abstract class FGEGraphics {
 			
 		}*/
 		if (getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) getGraphicalRepresentation();
+			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation();
 			at.concatenate(AffineTransform.getTranslateInstance(gr.getBorder().left, gr.getBorder().top));
 		}
 		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
