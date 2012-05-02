@@ -58,13 +58,13 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (notEquals(getValue(), _selector.getEditedObject())) {
-			widgetUpdating = true;
-			setColor(getValue());
-			widgetUpdating = false;
-			return true;
-		}
-		return false;
+		// if (notEquals(getValue(), _selector.getEditedObject())) {
+		widgetUpdating = true;
+		setColor(getValue());
+		widgetUpdating = false;
+		return true;
+		// }
+		// return false;*/
 	}
 
 	/**
@@ -72,14 +72,14 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), getSelectedColor())) {
-			if (isReadOnly()) {
-				return false;
-			}
-			setValue(_selector.getEditedObject());
-			return true;
+		// if (notEquals(getValue(), getSelectedColor())) {
+		if (isReadOnly()) {
+			return false;
 		}
-		return false;
+		setValue(_selector.getEditedObject());
+		return true;
+		// }
+		// return false;
 	}
 
 	@Override
