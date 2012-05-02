@@ -44,7 +44,10 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 
 	@Override
 	public List<ShapePatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(ShapePatternRole.class);
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getPatternRoles(ShapePatternRole.class);
+		} else
+			return null;
 	}
 
 	@Override
