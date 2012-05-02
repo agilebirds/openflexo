@@ -415,7 +415,7 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ForegroundStyle) {
-			logger.info("Equals called for ForegroundStyle !!!!!!!!!");
+			// logger.info("Equals called for ForegroundStyle !!!!!!!!!");
 			ForegroundStyle fs = (ForegroundStyle) obj;
 			return (getNoStroke() == fs.getNoStroke() && getLineWidth() == fs.getLineWidth() && getColor() == fs.getColor()
 					&& getJoinStyle() == fs.getJoinStyle() && getCapStyle() == fs.getCapStyle() && getDashStyle() == fs.getDashStyle()
