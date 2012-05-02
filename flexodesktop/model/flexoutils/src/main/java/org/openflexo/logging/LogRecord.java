@@ -140,7 +140,10 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 	}
 
 	public String getStackTraceAsString() {
-		String returned = "";
+		if (_stackTraceAsString != null) {
+			return _stackTraceAsString;
+		}
+		StringBuffer returned = new StringBuffer();
 		if (stackTrace != null) {
 			int beginAt;
 			if (isUnhandledException) {
@@ -150,14 +153,13 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 			}
 			for (int i = beginAt; i < stackTrace.length; i++) {
 				// returned += ("\tat " + stackTrace[i] + "\n");
-				returned += ("at " + stackTrace[i] + "\n");
+				returned.append("at " + stackTrace[i] + "\n");
 			}
-		} else if (_stackTraceAsString != null) {
-			returned = _stackTraceAsString;
+			_stackTraceAsString = returned.toString();
+			return _stackTraceAsString;
 		} else {
-			returned = "StackTrace not available";
+			return "StackTrace not available";
 		}
-		return returned;
 	}
 
 	private String _stackTraceAsString;
