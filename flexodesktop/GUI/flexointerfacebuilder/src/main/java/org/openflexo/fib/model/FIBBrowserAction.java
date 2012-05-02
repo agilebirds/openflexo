@@ -20,6 +20,7 @@
 package org.openflexo.fib.model;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -100,7 +101,9 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 
 	@Override
 	public void finalizeDeserialization() {
-		logger.fine("finalizeDeserialization() for FIBTableAction " + getName());
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("finalizeDeserialization() for FIBTableAction " + getName());
+		}
 		super.finalizeDeserialization();
 		if (method != null) {
 			method.finalizeDeserialization();
