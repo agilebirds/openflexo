@@ -56,7 +56,7 @@ public class ForceRegenerateSourceCode extends MultipleFileGCAction<ForceRegener
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.getResource() != null);
+			return file.getResource() != null;
 		}
 
 	};

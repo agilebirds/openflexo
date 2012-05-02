@@ -47,12 +47,12 @@ public class SaveGeneratedFile extends GCAction<SaveGeneratedFile, CGFile> {
 
 		@Override
 		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return (object instanceof AbstractCGFile);
+			return object instanceof AbstractCGFile;
 		}
 
 		@Override
 		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return ((object != null) && (object.hasVersionOnDisk()) && (object.isEdited()));
+			return object != null && object.hasVersionOnDisk() && object.isEdited();
 		}
 
 	};
