@@ -144,6 +144,10 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
+		/*if (getWidget().getComponentClass().getName().endsWith("FIBForegroundStyleSelector")) {
+			logger.info("SET updateModelFromWidget() with " + getValue() + " for " + customComponent);
+		}*/
+
 		if (notEquals(getValue(), customComponent.getEditedObject())) {
 			setValue(customComponent.getEditedObject());
 			return true;
@@ -178,7 +182,9 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 		// if (notEquals(getValue(), customComponent.getEditedObject())) {
 
-		// logger.info("updateWidgetFromModel() with "+getValue()+" for "+customComponent);
+		/*if (getWidget().getComponentClass().getName().endsWith("FIBForegroundStyleSelector")) {
+			logger.info("GET updateWidgetFromModel() with " + getValue() + " for " + customComponent);
+		}*/
 
 		if (customComponent != null) {
 
