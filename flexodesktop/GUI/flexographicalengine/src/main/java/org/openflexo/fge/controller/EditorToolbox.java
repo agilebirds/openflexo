@@ -263,6 +263,9 @@ public class EditorToolbox {
 		selectedShapes.clear();
 		selectedConnectors.clear();
 		selectedGR.clear();
+		if (controller.getSelectedObjects() == null) {
+			return;
+		}
 		for (GraphicalRepresentation gr : controller.getSelectedObjects()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
 				selectedGR.add(gr);
