@@ -27,6 +27,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -110,12 +111,9 @@ import org.openflexo.view.SelectionSynchronizedModuleView;
 public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver, IEViewManaging,
 		SelectionSynchronizedModuleView<ComponentInstance>, ChangeListener {
 
-	public boolean holdsNextComputedPreferredSize = false;
-	private Hashtable<IEWidgetView, Dimension> _storedPrefSize;
 	public JLabel title;
-	private Hashtable<IEObject, IEWidgetView> _widgetViews;
+	private Hashtable<IEObject, IEWidgetView<?>> _widgetViews;
 	private Hashtable<IEReusableWidget, IEReusableWidgetView> _reusableWidgetViews;
-	private boolean isDisplayed = false;
 	private IEWOComponent _model;
 	private ComponentInstance _instance;
 	// CommentZone commentZone;
@@ -132,8 +130,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		super(iecontroller);
 		int widgetsCount = ci.getComponentDefinition().getWOComponent().getAllEmbeddedIEObjects().size();
 		int over = widgetsCount / 5;
-		_storedPrefSize = new Hashtable<IEWidgetView, Dimension>(widgetsCount + over, 0.4f);
-		_widgetViews = new Hashtable<IEObject, IEWidgetView>(widgetsCount + over, 0.4f);
+		_widgetViews = new Hashtable<IEObject, IEWidgetView<?>>(widgetsCount + over, 0.4f);
 		_reusableWidgetViews = new Hashtable<IEReusableWidget, IEReusableWidgetView>();
 		_instance = ci;
 		IEWOComponent model = ci.getComponentDefinition().getWOComponent();
@@ -182,6 +179,13 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	@Override
 	public void deleteModuleView() {
 		getIEController().removeModuleView(this);
+		delete();
+	}
+
+	public void delete() {
+		for (IEWidgetView<?> view : new ArrayList<IEWidgetView<?>>(_widgetViews.values())) {
+			view.delete();
+		}
 		getModel().deleteObserver(this);
 		logger.info("Component view deleted !");
 		if (dropZone != null) {
@@ -189,30 +193,11 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		}
 	}
 
-	public void clearPrefSize() {
-		_storedPrefSize.clear();
-	}
-
-	public void storePrefSize(IEWidgetView view, Dimension value) {
-		_storedPrefSize.put(view, value);
-	}
-
-	public Dimension storedPrefSize(IEWidgetView view) {
-		return _storedPrefSize.get(view);
-	}
-
-	public void removeStoredSizeForWidgetView(IEWidgetView view) {
-		_storedPrefSize.remove(view);
-	}
-
 	public void removeFrowWidgetViews(IEWidget w) {
-		if (_widgetViews.containsKey(w)) {
-			removeStoredSizeForWidgetView(_widgetViews.get(w));
-			_widgetViews.remove(w);
-		}
+		_widgetViews.remove(w);
 	}
 
-	public void registerViewForWidget(IEWidget w, IEWidgetView v) {
+	public void registerViewForWidget(IEWidget w, IEWidgetView<?> v) {
 		_widgetViews.put(w, v);
 		if (w instanceof IEReusableWidget) {
 			_reusableWidgetViews.put((IEReusableWidget) w, (IEReusableWidgetView) v);
@@ -220,13 +205,12 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	}
 
 	@Override
-	public IEWidgetView findViewForModel(IEObject object) {
-		IEWidgetView reply = _widgetViews.get(object);
-		return reply;
+	public IEWidgetView<?> findViewForModel(IEObject object) {
+		return _widgetViews.get(object);
 	}
 
-	public IEWidgetView getViewForWidget(IEWidget insertedWidget, boolean addDnDSupport) {
-		IEWidgetView view = _widgetViews.get(insertedWidget);
+	public IEWidgetView<?> getViewForWidget(IEWidget insertedWidget, boolean addDnDSupport) {
+		IEWidgetView<?> view = _widgetViews.get(insertedWidget);
 		if (view == null) {
 			view = createView(getIEController(), insertedWidget, addDnDSupport);
 			if (view != null) {
@@ -241,7 +225,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		return view;
 	}
 
-	public IEWidgetView createView(IEController controller, IEWidget insertedWidget, boolean addDnDSupport) {
+	public IEWidgetView<?> createView(IEController controller, IEWidget insertedWidget, boolean addDnDSupport) {
 
 		if (insertedWidget == null) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -361,7 +345,6 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		}
 		revalidate();
 		repaint();
-		isDisplayed = true;
 	}
 
 	/**
@@ -371,14 +354,13 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	 */
 	@Override
 	public void willHide() {
-		isDisplayed = false;
 	}
 
 	// ===============================================================
 	// ======== SelectionSynchronizedModuleView implementation =======
 	// ===============================================================
 
-	private Vector<IESelectable> _selectedViews = new Vector<IESelectable>();
+	private List<IESelectable> _selectedViews = new Vector<IESelectable>();
 
 	/**
 	 * Return all the views representing current selection represented IN THIS VIEW (this is not the selection of the selection manager), as
@@ -386,7 +368,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	 * 
 	 * @return a Vector of IESelectable
 	 */
-	public Vector<IESelectable> getSelectedViews() {
+	public List<IESelectable> getSelectedViews() {
 		return _selectedViews;
 	}
 
@@ -423,7 +405,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	@Override
 	public void fireObjectDeselected(FlexoModelObject object) {
 		if (object instanceof IEWidget) {
-			IEWidgetView view = findViewForModel((IEObject) object);
+			IEWidgetView<?> view = findViewForModel((IEObject) object);
 			if (view != null) {
 				view.setIsSelected(false);
 				if (_selectedViews.contains(view)) {
@@ -438,8 +420,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	 */
 	@Override
 	public void fireResetSelection() {
-		for (Enumeration en = _selectedViews.elements(); en.hasMoreElements();) {
-			IESelectable next = (IESelectable) en.nextElement();
+		for (IESelectable next : _selectedViews) {
 			next.setIsSelected(false);
 		}
 		_selectedViews.clear();
@@ -587,7 +568,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	}
 
 	public void notifyDisplayPrefHasChanged() {
-		for (IEWidgetView widgetView : _widgetViews.values()) {
+		for (IEWidgetView<?> widgetView : _widgetViews.values()) {
 			if (widgetView instanceof DisplayableBindingValue) {
 				((DisplayableBindingValue) widgetView).updateDisplayedValue();
 			}

@@ -39,7 +39,7 @@ public class PrintComponentPreviewDialog extends PrintPreviewDialog {
 		super.dispose();
 		if (!isDisposed) {
 			isDisposed = true;
-			((PrintableIEWOComponentView) getPrintableComponent()).deleteModuleView();
+			((PrintableIEWOComponentView) getPrintableComponent()).delete();
 		}
 	}
 

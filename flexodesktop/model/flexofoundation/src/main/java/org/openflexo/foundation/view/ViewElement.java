@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.TargetObject;
@@ -179,17 +180,25 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 						GraphicalElementPatternRole grPatternRole = (GraphicalElementPatternRole) r.getPatternRole();
 						if (grPatternRole.getIsPrimaryRepresentationRole()) {
 							if (returned != null) {
-								logger.warning("More than one edition pattern reference where element plays a primary role 1 !!!!");
+								if (logger.isLoggable(Level.WARNING)) {
+									logger.warning("More than one edition pattern reference where element plays a primary role 1 !!!!");
+								}
 								for (EditionPatternReference r2 : getEditionPatternReferences()) {
-									logger.warning("> " + r2.getEditionPatternInstance().debug());
+									if (logger.isLoggable(Level.WARNING)) {
+										logger.warning("> " + r2.getEditionPatternInstance().debug());
+									}
 								}
 							}
 							returned = r;
 						} else if (grPatternRole.isIncludedInPrimaryRepresentationRole()) {
 							if (returned != null) {
-								logger.warning("More than one edition pattern reference where element plays a primary role 2 !!!!");
+								if (logger.isLoggable(Level.WARNING)) {
+									logger.warning("More than one edition pattern reference where element plays a primary role 2 !!!!");
+								}
 								for (EditionPatternReference r2 : getEditionPatternReferences()) {
-									logger.warning("> " + r2.getEditionPatternInstance().debug());
+									if (logger.isLoggable(Level.WARNING)) {
+										logger.warning("> " + r2.getEditionPatternInstance().debug());
+									}
 								}
 							}
 							returned = r;
@@ -271,7 +280,9 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 				// System.out.println("Element " + this + " remove observable: " + o);
 				((Observable) o.target).deleteObserver(this);
 			} else {
-				logger.warning("Element " + this + " cannot stop observe: " + o);
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Element " + this + " cannot stop observe: " + o);
+				}
 			}
 		}
 		for (TargetObject o : newDependingObjects) {
@@ -284,7 +295,9 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 				// System.out.println("Element " + this + " add observable: " + o);
 				((Observable) o.target).addObserver(this);
 			} else {
-				logger.warning("Element " + this + " cannot observe: " + o);
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Element " + this + " cannot observe: " + o);
+				}
 			}
 		}
 

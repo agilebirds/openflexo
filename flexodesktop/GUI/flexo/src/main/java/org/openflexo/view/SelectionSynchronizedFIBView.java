@@ -21,6 +21,7 @@ package org.openflexo.view;
 
 import java.io.File;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fib.FIBLibrary;
@@ -160,7 +161,9 @@ public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends Fl
 				newSelection.add((FlexoModelObject) o);
 			}
 		}
-		logger.fine("FlexoFIBView now impose new selection : " + newSelection);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("FlexoFIBView now impose new selection : " + newSelection);
+		}
 		ignoreFiredSelectionEvents = true;
 		getSelectionManager().setSelectedObjects(newSelection);
 		ignoreFiredSelectionEvents = false;

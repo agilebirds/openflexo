@@ -64,7 +64,7 @@ public abstract class FGEGraphics {
 
 	private DrawingController<?> _controller;
 	private GraphicalRepresentation<?> gr;
-	public Graphics2D g2d;
+	private Graphics2D g2d;
 
 	private ForegroundStyle defaultForeground = ForegroundStyle.makeDefault();
 	private BackgroundStyle defaultBackground = BackgroundStyle.makeEmptyBackground();
@@ -89,6 +89,12 @@ public abstract class FGEGraphics {
 
 	public double getScale() {
 		return getController().getScale();
+	}
+
+	public void delete() {
+		gr = null;
+		_controller = null;
+		g2d = null;
 	}
 
 	/**

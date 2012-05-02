@@ -121,6 +121,9 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 	@Override
 	public void delete() {
 		super.delete();
+		if (graphics != null) {
+			graphics.delete();
+		}
 		graphics = null;
 		decorationGraphics = null;
 		decorationPainter = null;

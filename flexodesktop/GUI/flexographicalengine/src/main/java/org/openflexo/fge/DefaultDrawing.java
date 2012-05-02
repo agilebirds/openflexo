@@ -648,10 +648,16 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 		if (_hashMap != null) {
 			for (Entry<Object, DrawingTreeNode<?>> e : new ArrayList<Entry<Object, DrawingTreeNode<?>>>(_hashMap.entrySet())) {
 				DrawingTreeNode<?> dtn = e.getValue();
-				if (dtn.graphicalRepresentation != null) {
-					dtn.graphicalRepresentation.delete();
+				if (dtn != null) {
+					if (dtn.graphicalRepresentation != null) {
+						dtn.graphicalRepresentation.delete();
+					} else {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("No GR for " + e.getKey());
+						}
+					}
+					dtn.delete();
 				}
-				dtn.delete();
 			}
 			_hashMap.clear();
 		}

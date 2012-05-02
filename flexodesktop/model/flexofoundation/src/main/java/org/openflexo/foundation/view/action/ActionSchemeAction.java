@@ -20,6 +20,7 @@
 package org.openflexo.foundation.view.action;
 
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
@@ -64,7 +65,9 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Perform action " + actionType);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Perform action " + actionType);
+		}
 
 		if (getActionScheme() != null && getActionScheme().evaluateCondition(actionType.getEditionPatternReference())) {
 			applyEditionActions();

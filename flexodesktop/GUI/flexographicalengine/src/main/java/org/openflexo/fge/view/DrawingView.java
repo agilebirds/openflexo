@@ -650,7 +650,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 		}
 
 		if (selected.hasFloatingLabel()) {
-			paintFocusedFloatingLabel(selected, graphics.g2d);
+			paintFocusedFloatingLabel(selected, graphics.getGraphics());
 		}
 
 		graphics.releaseClonedGraphics(oldGraphics);
@@ -719,7 +719,7 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			}
 		}
 		if (focused.hasFloatingLabel()) {
-			paintFocusedFloatingLabel(focused, graphics.g2d);
+			paintFocusedFloatingLabel(focused, graphics.getGraphics());
 		}
 		/*
 		 * else if (focused instanceof GeometricGraphicalRepresentation) {
@@ -840,6 +840,13 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			// logger.info("Deleted view "+v);
 		}
 		contents.clear();
+		getGraphicalRepresentation().deleteObserver(this);
+
+		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+			if (gr instanceof GeometricGraphicalRepresentation) {
+				((GeometricGraphicalRepresentation<?>) gr).deleteObserver(this);
+			}
+		}
 		isDeleted = true;
 	}
 

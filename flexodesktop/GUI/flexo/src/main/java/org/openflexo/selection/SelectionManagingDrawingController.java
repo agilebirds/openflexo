@@ -60,6 +60,15 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		}
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		if (_selectionManager != null) {
+			_selectionManager.removeFromSelectionListeners(this);
+		}
+		_selectionManager = null;
+	}
+
 	public SelectionManager getSelectionManager() {
 		return _selectionManager;
 	}
