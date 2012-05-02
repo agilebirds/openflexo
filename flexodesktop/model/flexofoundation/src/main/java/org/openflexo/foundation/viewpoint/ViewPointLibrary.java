@@ -105,7 +105,7 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 	}
 
 	public ViewPoint importViewPoint(File viewpointDirectory, ViewPointFolder folder) {
-		logger.info("********* Import viewpoint " + viewpointDirectory.getAbsolutePath());
+		logger.info("Import viewpoint " + viewpointDirectory.getAbsolutePath());
 		ViewPoint viewpoint = ViewPoint.openViewPoint(viewpointDirectory, this, folder);
 		if (viewpoint != null) {
 			registerViewPoint(viewpoint);

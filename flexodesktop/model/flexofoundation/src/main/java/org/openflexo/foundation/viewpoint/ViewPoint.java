@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdom.JDOMException;
@@ -86,10 +87,14 @@ public class ViewPoint extends ViewPointObject {
 			try {
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(calcDir);
 				inputStream = new FileInputStream(xmlFile);
-				logger.info("Reading file " + xmlFile.getAbsolutePath());
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Reading file " + xmlFile.getAbsolutePath());
+				}
 				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.get_VIEW_POINT_MODEL(), null,
 						new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
-				logger.info("DONE reading file " + xmlFile.getAbsolutePath());
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("DONE reading file " + xmlFile.getAbsolutePath());
+				}
 				returned.init(baseName, calcDir, xmlFile, library, folder);
 				return returned;
 			} catch (FileNotFoundException e) {
@@ -149,7 +154,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ViewPointFolder folder) {
-		logger.info("Registering calc " + baseName + " URI=" + getViewPointURI());
+		logger.info("Registering viewpoint " + baseName + " URI=" + getViewPointURI());
 
 		name = baseName;
 		viewPointDirectory = viewpointDir;
@@ -166,7 +171,7 @@ public class ViewPoint extends ViewPointObject {
 		}
 
 		if (owlFile.exists()) {
-			logger.info("Found " + owlFile);
+			logger.fine("Found " + owlFile);
 			viewpointOntology = _library.getOntologyLibrary().importOntology(viewPointURI, owlFile);
 			viewpointOntology.setIsReadOnly(false);
 		}
