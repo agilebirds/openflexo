@@ -85,8 +85,10 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 			EditionPatternReference epRef = getDrawable().getEditionPatternReference();
 			if (epRef != null) {
 				GraphicalElementPatternRole patternRole = (GraphicalElementPatternRole) epRef.getPatternRole();
-				for (GraphicalElementAction.ActionMask mask : patternRole.getReferencedMasks()) {
-					addToMouseClickControls(new VEMouseClickControl(mask, patternRole));
+				if (patternRole != null) {
+					for (GraphicalElementAction.ActionMask mask : patternRole.getReferencedMasks()) {
+						addToMouseClickControls(new VEMouseClickControl(mask, patternRole));
+					}
 				}
 			}
 		}

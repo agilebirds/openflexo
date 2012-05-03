@@ -460,6 +460,11 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				// An ArrayIndexOutOfBoundsException might be raised here
 				// We should investigate further, but since no real consequences are raised here, we just ignore exception
 				logger.warning("Unexpected ArrayIndexOutOfBoundsException when refreshing browser, no severity but please investigate");
+			} catch (NullPointerException e) {
+				// Might happen when a structural modification will call parent's nodeChanged()
+				// An NullPointerException might be raised here
+				// We should investigate further, but since no real consequences are raised here, we just ignore exception
+				logger.warning("Unexpected NullPointerException when refreshing browser, no severity but please investigate");
 			}
 		}
 
