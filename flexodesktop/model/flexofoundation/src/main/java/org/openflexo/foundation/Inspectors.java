@@ -347,8 +347,6 @@ public class Inspectors {
 
 		public String ROLE_LIST_INSPECTOR = "RoleList.inspector";
 
-		public String DEADLINE_INSPECTOR = "DeadLine.inspector";
-
 		public String EDGE_INSPECTOR = "Edge.inspector";
 
 		public String ASSOCIATION_INSPECTOR = "Association.inspector";
@@ -489,6 +487,8 @@ public class Inspectors {
 		public String REUSABLE_COMPONENT_DEFINITION_INSPECTOR = "ReusableComponentDefinition.inspector";
 
 		public String ABSTRACT_WIDGET_INSPECTOR = "AbstractWidget.inspector";
+
+		public String ABSTRACT_LIST_INSPECTOR = "AbstractList.inspector";
 
 		public String BLOC_INSPECTOR = "Bloc.inspector";
 
