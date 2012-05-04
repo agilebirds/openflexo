@@ -866,6 +866,10 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			paintImmediately(rect2D.getBounds());
 			capturedDraggedNodeImage = null;
 		}
+
+		public BrowserView getBrowserView() {
+			return BrowserView.this;
+		}
 	}
 
 	public JScrollPane getTreeScrollPane() {
