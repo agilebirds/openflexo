@@ -242,24 +242,23 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				}
 			}
 
-			for (Enumeration en = getFlexoProcess().getAllEmbeddedOperationNodes().elements(); en.hasMoreElements();) {
-				OperationNode node = (OperationNode) en.nextElement();
-				if (node.getComponentInstance() != null && node.getComponentInstance().getComponentDefinition() != null) {
+			for (OperationNode operation : getFlexoProcess().getAllEmbeddedOperationNodes()) {
+				if (operation.getComponentInstance() != null && operation.getComponentInstance().getComponentDefinition() != null) {
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Found dependancy between " + this + " and "
-								+ node.getComponentInstance().getComponentDefinition().getComponentResource());
+								+ operation.getComponentInstance().getComponentDefinition().getComponentResource());
 					}
-					node.getComponentInstance().rebuildDependancies();
-					if (node.getTabOperationComponentInstance() != null
-							&& node.getTabOperationComponentInstance().getComponentDefinition() != null) {
+					operation.getComponentInstance().rebuildDependancies();
+					if (operation.getTabOperationComponentInstance() != null
+							&& operation.getTabOperationComponentInstance().getComponentDefinition() != null) {
 						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Found dependancy between " + this + " and "
-									+ node.getTabOperationComponentInstance().getComponentDefinition().getComponentResource());
+									+ operation.getTabOperationComponentInstance().getComponentDefinition().getComponentResource());
 						}
-						node.getTabOperationComponentInstance().rebuildDependancies();
+						operation.getTabOperationComponentInstance().rebuildDependancies();
 					}
 				}
-				for (ActionNode action : node.getAllActionNodes()) {
+				for (ActionNode action : operation.getAllActionNodes()) {
 					if (action.getTabActionComponentInstance() != null
 							&& action.getTabActionComponentInstance().getComponentDefinition() != null) {
 						if (logger.isLoggable(Level.INFO)) {
