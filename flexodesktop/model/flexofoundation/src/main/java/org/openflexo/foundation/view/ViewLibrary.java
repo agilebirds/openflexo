@@ -285,7 +285,7 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	public List<View> getViewsForViewPointWithURI(String vpURI) {
 		List<View> views = new ArrayList<View>();
 		for (ViewDefinition vd : getAllShemaList()) {
-			if (vd.getCalc().getURI().equals(vpURI)) {
+			if (vd.getViewPoint() != null && vd.getViewPoint().getURI().equals(vpURI)) {
 				views.add(vd.getShema());
 			}
 		}
