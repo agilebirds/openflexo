@@ -340,37 +340,11 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 	protected void paintImmediately(final JComponent component) {
 		if (!SwingUtilities.isEventDispatchThread()) {
-			/*Thread t = new Thread() {
-
-				public void run() {
-					try {*/
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					paintImmediately(component);
-				}
-			});
-			/*} catch (InterruptedException e) {
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						e.printStackTrace();
-					}
-				};
-			};
-			t.start();*/
-			/*try {
-				t.join(50);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}*/
+			repaint();
 			return;
 		}
 		try {
 			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-				/*
-				 * if ((Frame.getFrames().length < 2 || !backgroundIsPainted) && component != getContentPane()) {
-				 * mainPane.paintImmediately(mainPane.getBounds()); backgroundIsPainted = true; } else { }
-				 */
 				mainPane.paintImmediately(mainPane.getBounds());
 			} else {
 				Rectangle r = component.getBounds();
