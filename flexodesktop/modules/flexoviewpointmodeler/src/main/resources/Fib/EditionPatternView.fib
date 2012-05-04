@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="SansSerif,0,11" width="800" height="800" name="main">
-  <Panel layout="border" borderTitle="Panel" borderTop="2" borderBottom="5" borderLeft="10" borderRight="13" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=north)">
+<Panel layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="SansSerif,0,11" name="main">
+  <Panel layout="border" borderTitle="Panel" borderTop="2" borderBottom="5" borderLeft="10" borderRight="13" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=north;padX=0;padY=0;weightX=1.0;weightY=0.0)" width="200" height="150">
     <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderTop="2" borderBottom="3" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=north)">
       <Label label="edition_pattern" localize="true" constraints="border(index=0;location=west)" font="SansSerif,1,13" />
       <TextField columns="6" text="TextField" data="data.name" constraints="border(index=1;location=center)" font="SansSerif,0,13" localize="true" />
       <Button action="data.save()" buttonType="Trigger" label="save" constraints="border(index=2;location=east)" localize="true" />
     </Panel>
     <TextArea columns="6" rows="5" text="TextArea" data="data.description" constraints="border(index=1;location=center)" localize="true" />
+    <LocalizedDictionary />
   </Panel>
-  <Panel layout="border" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" constraints="border(index=1;location=center)" width="80" height="60">
+  <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" width="200" height="150">
+    <Custom componentClassName="org.openflexo.vpm.view.widget.EditionPatternPreviewComponent" data="data" constraints="border(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+      <Assignment variable="component.selectionManager" value="controller.selectionManager" />
+    </Custom>
+  </Panel>
+  <Panel layout="border" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" width="80" height="60">
     <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" borderTitle="Roles" borderTop="0" borderBottom="5" borderRight="4" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(index=0;location=north)">
       <Table iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" visibleRowCount="7" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="PatternRoleTable" data="data.patternRoles" constraints="gridbag(anchor=west;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=10;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0;x=0;y=0)">
         <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
@@ -33,12 +39,7 @@
         <AddAction method="data.createEditionPatternPatternRole" name="add_edition_pattern" />
       </Table>
       <TabPanel constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
-        <Tab index="0" title="representation" layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" titleFont="SansSerif,0,11" darkLevel="0">
-          <Custom componentClassName="org.openflexo.vpm.view.widget.EditionPatternPreviewComponent" data="data" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" manageDynamicModel="true">
-            <Assignment variable="component.selectionManager" value="controller.selectionManager" />
-          </Custom>
-        </Tab>
-        <Tab index="1" title="data" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
+        <Tab index="0" title="data" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
           <Panel layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="(PatternRoleTable.selected.type = &quot;Shape&quot;)" name="ShapePatternRole">
             <Label label="pattern_role" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
             <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=6;insetsRight=7;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)">
@@ -285,7 +286,7 @@
           </Panel>
           <Panel layout="none" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=14;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0;x=0;y=0)" width="80" height="60" name="Spacer" />
         </Tab>
-        <Tab index="2" title="advanced" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
+        <Tab index="1" title="advanced" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
           <Panel layout="border" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.GraphicalElementPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((PatternRoleTable.selected.type = &quot;Shape&quot;) | (PatternRoleTable.selected.type = &quot;Connector&quot;))" name="GraphicalElementPatternRolePanel">
             <Table iteratorClassName="org.openflexo.foundation.viewpoint.GraphicalElementSpecification" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="GraphicalElementPatternRolePanel.data.grSpecifications" constraints="border(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
               <CheckBoxColumn data="iterator.mandatory" title="mandatory" columnWidth="20" resizable="false" displayTitle="false" name="checkbox" />
@@ -299,7 +300,7 @@
             </Table>
           </Panel>
         </Tab>
-        <Tab index="3" title="actions" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
+        <Tab index="2" title="actions" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0">
           <Panel layout="border" titleFont="SansSerif,0,11" darkLevel="0" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.GraphicalElementPatternRole" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((PatternRoleTable.selected.type = &quot;Shape&quot;) | (PatternRoleTable.selected.type = &quot;Connector&quot;))" name="GraphicalElementPatternRolePanel2">
             <Table iteratorClassName="org.openflexo.foundation.viewpoint.GraphicalElementAction" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="GraphicalElementPatternRolePanel2.data.actions" constraints="border(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
               <IconColumn data="controller.iconForObject(iterator.abstractActionScheme)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
