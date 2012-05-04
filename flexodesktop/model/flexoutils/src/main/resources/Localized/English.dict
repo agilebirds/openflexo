@@ -1,5 +1,5 @@
 #English
-#Thu Apr 26 14:13:49 CEST 2012
+#Fri May 04 11:15:44 CEST 2012
 =
 \ =\ 
 \ into\ =\ into 
@@ -1464,6 +1464,7 @@ copying_images=Copying images...
 could_not_attach_screenshot=Could not attach screenshot
 could_not_connect_to_web_sevice=Could not connect to web service
 could_not_load_module=Could not load module
+could_not_load_view=Could not load view
 could_not_modify_read_only_eomodel=Could not modify\: read-only Data Model
 could_not_move_process_inconsistent_process_hierarchy=Could not move process\: inconsistent process hierarchy \!
 could_not_open_file=Could not open file
@@ -2815,6 +2816,7 @@ in_port_must_be_linked_to_at_least_an_activity_node_description=To be valid, Inp
 in_port_name=InPort
 in_service_operation=In service operation
 in_template_repository=In template repository
+in_your_resource_center=in your resource center
 inc_type_choice=Version increment
 include_begin_end=Include begin and end nodes
 include_in_generation=Include in generation
@@ -3227,6 +3229,7 @@ make_normal_section=Make normal section
 make_partial_component=Make partial screen...
 make_relationship_($object.name)_not_mandatory=make relationship ($object.name) not mandatory
 make_separate_section_for_events=Make a separate section for events
+make_sure_you_have_the_view_point_with_uri=Make sure you have the view point with uri
 manage_history=Manage history for this repository
 manager_role_name=manager_role_name
 mandatory=Mandatory

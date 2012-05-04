@@ -1,5 +1,5 @@
 #French
-#Thu Apr 26 14:13:49 CEST 2012
+#Fri May 04 11:15:44 CEST 2012
 =
 \ =\ 
 \ into\ =\ dans 
@@ -1464,6 +1464,7 @@ copying_images=Copie des images...
 could_not_attach_screenshot=La capture d'\u00E9cran n'a pu \u00EAtre attach\u00E9e
 could_not_connect_to_web_sevice=Impossible de se connecter au web service
 could_not_load_module=Impossible de charger le module
+could_not_load_view=Impossible de charger la vue
 could_not_modify_read_only_eomodel=Impossible de modifier un Mod\u00E8le de donn\u00E9es en lecture seule
 could_not_move_process_inconsistent_process_hierarchy=Impossible de d\u00E9placer ce processus\: hi\u00E9rarchie des processus inconsistante \!
 could_not_open_file=Impossible d'ouvrir le fichier
@@ -2813,6 +2814,7 @@ in_port_must_be_linked_to_at_least_an_activity_node_description=Pour \u00EAtre v
 in_port_name=Port d'entr\u00E9e
 in_service_operation=Op\u00E9ration de service In
 in_template_repository=Dans le r\u00E9pertoire 'template'
+in_your_resource_center=dans votre centre de ressources
 inc_type_choice=Incr\u00E9ment de version
 include_begin_end=Inclure les noeuds d\u00E9but et fin
 include_in_generation=Inclure dans la g\u00E9n\u00E9ration
@@ -3225,6 +3227,7 @@ make_normal_section=Transformer en section normale
 make_partial_component=Cr\u00E9er un \u00E9cran partiel...
 make_relationship_($object.name)_not_mandatory=Rendre la relation ($object.name) facultative
 make_separate_section_for_events=Cr\u00E9\u00E9er une section s\u00E9par\u00E9e pour les \u00E9venements
+make_sure_you_have_the_view_point_with_uri=Assurez-vous que le point de vue avec l'URI
 manage_history=Gestion de l'historique pour ce repository
 manager_role_name=manager_role_name
 mandatory=Obligatoire
