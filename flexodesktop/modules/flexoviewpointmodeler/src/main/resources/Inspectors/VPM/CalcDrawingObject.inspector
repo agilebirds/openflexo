@@ -13,7 +13,7 @@
           <Label label="multiple_lines" localize="true" name="IsMultilineAllowedLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
           <CheckBox selected="false" localize="true" name="IsMultilineAllowed" data="GRTab.data.isMultilineAllowed" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
           <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-          <DropDown format="object.name.toLowerCase" localize="true" name="TextAlignment" data="GRTab.data.textAlignment" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" />
+          <DropDown format="object.name.toLowerCase" localize="true" name="TextAlignment" data="GRTab.data.paragraphAlignment" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" />
         </Tab>
         <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
           <Label label="read_only" localize="true" name="IsReadOnlyLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
