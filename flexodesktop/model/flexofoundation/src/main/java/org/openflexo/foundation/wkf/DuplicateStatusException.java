@@ -32,7 +32,7 @@ public class DuplicateStatusException extends FlexoException {
 	private String name;
 
 	public DuplicateStatusException(Status aStatus, String aName) {
-		super(null);
+		super((String) null);
 		name = aName;
 	}
 
