@@ -85,7 +85,7 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 		}
 		level = record.getLevel();
 		if (loggingManager != null && loggingManager.getKeepLogTrace()) {
-			stackTrace = (new Exception()).getStackTrace();
+			stackTrace = new Exception().getStackTrace();
 		}
 		isUnhandledException = false;
 	}
@@ -109,7 +109,7 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 	}
 
 	public String classAsString() {
-		if ((_classAsString == null) && (className != null)) {
+		if (_classAsString == null && className != null) {
 			StringTokenizer st = new StringTokenizer(className, ".");
 			while (st.hasMoreTokens()) {
 				_classAsString = st.nextToken();
@@ -140,8 +140,8 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 	}
 
 	public String getStackTraceAsString() {
-		String returned = "";
 		if (stackTrace != null) {
+			StringBuilder returned = new StringBuilder();
 			int beginAt;
 			if (isUnhandledException) {
 				beginAt = 0;
@@ -150,14 +150,14 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 			}
 			for (int i = beginAt; i < stackTrace.length; i++) {
 				// returned += ("\tat " + stackTrace[i] + "\n");
-				returned += ("at " + stackTrace[i] + "\n");
+				returned.append("\t").append("at ").append(stackTrace[i]).append('\n');
 			}
+			return returned.toString();
 		} else if (_stackTraceAsString != null) {
-			returned = _stackTraceAsString;
+			return _stackTraceAsString;
 		} else {
-			returned = "StackTrace not available";
+			return "StackTrace not available";
 		}
-		return returned;
 	}
 
 	private String _stackTraceAsString;
