@@ -41,6 +41,10 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 
 	static final Logger logger = Logger.getLogger(InspectorEntry.class.getPackage().getName());
 
+	public static enum InspectorEntryBindingAttribute implements InspectorBindingAttribute {
+		data, conditional, domainValue, rangeValue, parentClassValue
+	}
+
 	public static BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
 	private BindingDefinition DATA;
 
@@ -170,10 +174,6 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 		conditional.setBindingAttribute(InspectorEntryBindingAttribute.conditional);
 		conditional.setBindingDefinition(CONDITIONAL);
 		this.conditional = conditional;
-	}
-
-	public static enum InspectorEntryBindingAttribute implements InspectorBindingAttribute {
-		data, conditional
 	}
 
 	@Override

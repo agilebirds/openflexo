@@ -60,12 +60,35 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 
 	private EditionScheme _scheme;
 
+	private ViewPointDataBinding conditional;
+	private ViewPointDataBinding defaultValue;
+
+	public static enum ParameterBindingAttribute implements InspectorBindingAttribute {
+		conditional, baseURI, defaultValue, domainValue, rangeValue, parentClassValue
+	}
+
 	public EditionSchemeParameter() {
 	}
 
 	public abstract Type getType();
 
 	public abstract WidgetType getWidget();
+
+	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, BindingDefinitionType.GET, false) {
+		@Override
+		public Type getType() {
+			return EditionSchemeParameter.this.getType();
+		};
+	};
+
+	public BindingDefinition getConditionalBindingDefinition() {
+		return CONDITIONAL;
+	}
+
+	public BindingDefinition getDefaultValueBindingDefinition() {
+		return DEFAULT_VALUE;
+	}
 
 	public void setScheme(EditionScheme scheme) {
 		_scheme = scheme;
@@ -138,29 +161,6 @@ public abstract class EditionSchemeParameter extends ViewPointObject implements 
 
 	public int getIndex() {
 		return getScheme().getParameters().indexOf(this);
-	}
-
-	private ViewPointDataBinding conditional;
-	private ViewPointDataBinding defaultValue;
-
-	public static enum ParameterBindingAttribute implements InspectorBindingAttribute {
-		conditional, baseURI, defaultValue
-	}
-
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, BindingDefinitionType.GET, false) {
-		@Override
-		public Type getType() {
-			return EditionSchemeParameter.this.getType();
-		};
-	};
-
-	public BindingDefinition getConditionalBindingDefinition() {
-		return CONDITIONAL;
-	}
-
-	public BindingDefinition getDefaultValueBindingDefinition() {
-		return DEFAULT_VALUE;
 	}
 
 	public ViewPointDataBinding getConditional() {
