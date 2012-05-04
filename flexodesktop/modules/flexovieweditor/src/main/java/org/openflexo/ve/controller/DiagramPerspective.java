@@ -143,7 +143,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof AbstractViewObject);
+		return object instanceof AbstractViewObject;
 	}
 
 	@Override
@@ -152,7 +152,15 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 			return getControllerForShema((View) object).getModuleView();
 		}
 		if (object instanceof ViewDefinition) {
-			return getControllerForShema(((ViewDefinition) object).getShema()).getModuleView();
+			ViewDefinition viewDefinition = (ViewDefinition) object;
+			View shema = viewDefinition.getShema();
+			if (shema == null) {
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_view") + " " + viewDefinition.getName() + ". "
+						+ FlexoLocalization.localizedForKey("make_sure_you_have_the_view_point_with_uri") + " "
+						+ viewDefinition._getCalcURI() + " " + FlexoLocalization.localizedForKey("in_your_resource_center"));
+			} else {
+				return getControllerForShema(shema).getModuleView();
+			}
 		}
 		return new EmptyPanel<AbstractViewObject>(controller, this, object);
 	}
@@ -181,7 +189,7 @@ public class DiagramPerspective extends FlexoPerspective<AbstractViewObject> {
 	}
 
 	public VEShemaModuleView getCurrentShemaModuleView() {
-		if ((_controller != null) && (_controller.getCurrentModuleView() instanceof VEShemaModuleView)) {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof VEShemaModuleView) {
 			return (VEShemaModuleView) _controller.getCurrentModuleView();
 		}
 		return null;

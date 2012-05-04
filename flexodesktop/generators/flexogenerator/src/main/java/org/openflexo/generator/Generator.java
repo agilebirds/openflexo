@@ -471,7 +471,9 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	}
 
 	public void notifyTemplateRequired(CGTemplate templateFile) {
-		logger.info("notifyTemplateRequired " + templateFile.getRelativePath() + " for " + this);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("notifyTemplateRequired " + templateFile.getRelativePath() + " for " + this);
+		}
 		if (!_usedTemplates.contains(templateFile)) {
 			_usedTemplates.add(templateFile);
 			templateFile.addObserver(this);
@@ -728,6 +730,18 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			return new Long(Math.round(number.doubleValue())).intValue();
 		}
 		return null;
+	}
+
+	public boolean isInstance(Object object, String className) {
+		try {
+			Class<?> klass = Class.forName(className);
+			return klass.isInstance(object);
+		} catch (ClassNotFoundException e) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not find class with name '" + className + "'");
+			}
+			return false;
+		}
 	}
 
 	public Object e(BindingEvaluationContext context, String bindingExpression) {
