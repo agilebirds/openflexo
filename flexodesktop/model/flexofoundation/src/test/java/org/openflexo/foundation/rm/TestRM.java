@@ -728,7 +728,7 @@ public class TestRM extends FlexoTestCase {
 		}
 
 		protected void assertBackSynchronizationCount(int count) {
-			assertEquals(getBackSynchronizationCount(), count);
+			assertEquals(count, getBackSynchronizationCount());
 		}
 
 		protected int getBackSynchronizationCount() {
