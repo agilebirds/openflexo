@@ -743,6 +743,18 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	}
 
 	/**
+	 * Return a flag indicating if equals() method should be used to determine equality.<br>
+	 * If this method return false (should be overriden), equality lookup is performed using references (pointer equality) Default behaviour
+	 * is to use equals() lookup method, please override this method (and return false) whenever a CustomPopup is used to edit a value and
+	 * not only choose a value
+	 * 
+	 * @return true
+	 */
+	protected boolean useEqualsLookup() {
+		return true;
+	}
+
+	/**
 	 * Sets edited object<br>
 	 * Before to set edited object, an equality test is performed to determine if setting is required. When not, just return.<br>
 	 * Default behaviour is to use the equals(Object) method to see if a change is required or not. Therefore, if the edited object type
@@ -764,16 +776,6 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 	public void setRevertValue(T oldValue) {
 		// Not implemented here, implement in sub-classes
-	}
-
-	/**
-	 * Return a flag indicating if equals() method should be used to determine equality.<br>
-	 * If this method return false (should be overriden), equality lookup is performed using references (pointer equality)
-	 * 
-	 * @return
-	 */
-	public boolean useEqualsLookup() {
-		return true;
 	}
 
 	public void fireEditedObjectChanged() {

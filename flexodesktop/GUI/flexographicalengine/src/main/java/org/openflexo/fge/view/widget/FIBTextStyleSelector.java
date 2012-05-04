@@ -88,6 +88,18 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 	public void init(FIBCustom component, FIBController controller) {
 	}
 
+	/**
+	 * Return a flag indicating if equals() method should be used to determine equality.<br>
+	 * For the FIBForegroundStyleSelector implementation, we MUST return false, because we can otherwise switch between ForegroundStyle
+	 * which are equals, and then start to share TextStyle between many GraphicalRepresentation
+	 * 
+	 * @return false
+	 */
+	@Override
+	public boolean useEqualsLookup() {
+		return false;
+	}
+
 	@Override
 	public void setRevertValue(TextStyle oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!

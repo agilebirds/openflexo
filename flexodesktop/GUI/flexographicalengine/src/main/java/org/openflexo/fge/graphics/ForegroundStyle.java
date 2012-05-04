@@ -43,9 +43,6 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		color, lineWidth, capStyle, joinStyle, dashStyle, noStroke, useTransparency, transparencyLevel
 	}
 
-	// TODO: remove this, debug only
-	// public ShapeGraphicalRepresentation owner;
-
 	private boolean noStroke = false;
 
 	private Color color;

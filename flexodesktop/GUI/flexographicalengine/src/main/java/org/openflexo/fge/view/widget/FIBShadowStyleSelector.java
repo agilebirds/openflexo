@@ -85,6 +85,18 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 	public void init(FIBCustom component, FIBController controller) {
 	}
 
+	/**
+	 * Return a flag indicating if equals() method should be used to determine equality.<br>
+	 * For the FIBForegroundStyleSelector implementation, we MUST return false, because we can otherwise switch between ForegroundStyle
+	 * which are equals, and then start to share ShadowStyle between many GraphicalRepresentation
+	 * 
+	 * @return false
+	 */
+	@Override
+	public boolean useEqualsLookup() {
+		return false;
+	}
+
 	@Override
 	public void setRevertValue(ShadowStyle oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!
